@@ -4,7 +4,7 @@
 //
 // File: guides-intake/<slug>/coverage.v2.json (beside V1's coverage.json, never replacing it).
 
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -34,10 +34,12 @@ export async function readCoverage(slug, { intakeDir = INTAKE_DIR } = {}) {
     );
   }
   assertVersionCompatible(raw.schemaVersion, COVERAGE_SCHEMA, { file });
-  return parseOrThrow(coverageDocSchema, raw, { file, what: "V2 coverage artifact" });
+  const doc = parseOrThrow(coverageDocSchema, raw, { file, what: "V2 coverage artifact" });
+  if (doc.slug !== slug) throw new ContractError(`coverage artifact at ${file} belongs to "${doc.slug}", not "${slug}"`, { file });
+  return doc;
 }
 
-export async function requireCoverage(slug, { intakeDir = INTAKE_DIR } = {}) {
+export async function requireCoverage(slug, { intakeDir = INTAKE_DIR, runId = null } = {}) {
   const doc = await readCoverage(slug, { intakeDir });
   if (!doc) {
     throw new ContractError(
@@ -46,6 +48,8 @@ export async function requireCoverage(slug, { intakeDir = INTAKE_DIR } = {}) {
       { file: coveragePath(slug, intakeDir) },
     );
   }
+  if (doc.slug !== slug) throw new ContractError(`coverage artifact belongs to "${doc.slug}", not "${slug}"`);
+  if (runId && doc.runId !== runId) throw new ContractError(`coverage artifact for ${slug} belongs to run ${doc.runId}, not active run ${runId}`);
   return doc;
 }
 
@@ -53,6 +57,7 @@ export async function writeCoverage(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
   const validated = parseOrThrow(coverageDocSchema, { schemaVersion: COVERAGE_SCHEMA, ...doc }, {
     file: coveragePath(slug, intakeDir), what: "V2 coverage artifact (on write)",
   });
+  if (validated.slug !== slug) throw new ContractError(`refusing to write ${validated.slug} coverage into ${slug}'s run directory`);
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(coveragePath(slug, intakeDir), JSON.stringify(validated, null, 2) + "\n");
   return validated;
@@ -63,7 +68,7 @@ export async function writeCoverage(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
 /** Coverage problems: a covered ask with no structured refs, an excluded ask with no reason,
     refs into groups the guide doesn't have, duplicate ask ids. `groups` = the guide's real
     NN-<group>.json filenames (pass null to skip existence checking). */
-export function coverageProblems(doc, { groups = null } = {}) {
+export function coverageProblems(doc, { groups = null, groupAnchors = null, expectedAskIds = null, evidenceIds = null } = {}) {
   const problems = [];
   const seen = new Set();
   for (const ask of doc.asks) {
@@ -74,17 +79,64 @@ export function coverageProblems(doc, { groups = null } = {}) {
         problems.push(`ask "${ask.id}" (${ask.ask.slice(0, 60)}) claims covered with no group refs — a claim of coverage is not proof of coverage`);
       } else if (groups) {
         for (const ref of ask.where) {
-          const file = ref.split("#")[0];
+          const [file, anchor] = ref.split("#");
           if (!groups.includes(file)) {
             problems.push(`ask "${ask.id}" points at ${file}, which is not a group file of this guide (${groups.join(", ") || "none"})`);
+          } else if (!anchor) {
+            problems.push(`ask "${ask.id}" points only at ${file} — coverage needs a #slugified-title anchor inside the file`);
+          } else if (groupAnchors && !groupAnchors.get(file)?.has(anchor)) {
+            problems.push(`ask "${ask.id}" points at ${file}#${anchor}, but that anchor does not identify any title/name/label in the file`);
           }
         }
+      }
+      if (evidenceIds) {
+        for (const id of ask.evidenceIds) if (!evidenceIds.has(id)) problems.push(`ask "${ask.id}" cites unknown evidence id "${id}"`);
       }
     }
     if (ask.status === "excluded" && !(ask.reason && ask.reason.trim())) {
       problems.push(`ask "${ask.id}" (${ask.ask.slice(0, 60)}) is excluded with no reason — an honest exclusion names why`);
     }
   }
+  if (expectedAskIds) {
+    for (const id of expectedAskIds) if (!seen.has(id)) problems.push(`material intake ask "${id}" is missing from coverage`);
+  }
   if (!doc.asks.length) problems.push("coverage document lists no asks — the intake's material asks were never enumerated");
   return problems;
+}
+
+function slugifyAnchor(value) {
+  return String(value).toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function collectAnchors(value, out = new Set()) {
+  if (Array.isArray(value)) {
+    for (const item of value) collectAnchors(item, out);
+  } else if (value && typeof value === "object") {
+    for (const [key, item] of Object.entries(value)) {
+      if (["id", "title", "name", "label", "heading", "day"].includes(key) && typeof item === "string") {
+        const anchor = slugifyAnchor(item);
+        if (anchor) out.add(anchor);
+      }
+      collectAnchors(item, out);
+    }
+  }
+  return out;
+}
+
+/** Build the real relational context used by reconcile/landing. */
+export async function loadCoverageContext(slug, { intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides") } = {}) {
+  const guideDir = path.join(guidesDir, slug);
+  const groups = (await readdir(guideDir)).filter((name) => /^\d\d-[a-z0-9-]+\.json$/.test(name)).sort();
+  const groupAnchors = new Map();
+  for (const name of groups) {
+    const doc = JSON.parse(await readFile(path.join(guideDir, name), "utf8"));
+    groupAnchors.set(name, collectAnchors(doc));
+  }
+  let expectedAskIds = null;
+  try {
+    const legacy = JSON.parse(await readFile(path.join(intakeDir, slug, "coverage.json"), "utf8"));
+    expectedAskIds = new Set((legacy.asks || []).map((ask) => ask.id).filter(Boolean));
+  } catch { /* older manually-created scaffold: the V2 document still cannot be empty */ }
+  return { groups, groupAnchors, expectedAskIds };
 }

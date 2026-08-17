@@ -380,8 +380,11 @@ export function buildCoverageMatrix(answers, slug) {
   add("travel-style", "Travel style", answers.travelStyle);
   add("budget", "Budget target", answers.budget);
   add("party", "Party description", answers.party);
+  add("travelers", "Number of travelers", answers.travelers);
+  add("constraints", "Binding mobility / dietary / sensory constraints", answers.constraints);
   add("passport-countries", "Passport countries", answers.passportCountries);
-  add("comments", "Comments / constraints", answers.comments);
+  add("departure-airport", "Departure airport", answers.departureAirport);
+  add("comments", "Additional comments", answers.comments);
   return { slug, generatedAt: new Date().toISOString(), asks };
 }
 

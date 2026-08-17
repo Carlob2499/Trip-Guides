@@ -6,15 +6,15 @@ Section focus: {{section}}
 You are stage 3 of four independent agent sessions in the V2 pipeline. You merge two
 independent research passes into one guide and drive it through offline verification. A
 fresh-context critic runs after you; landing, the networked gate and publication are the
-workflow's job — **you do not run git, you do not checkpoint, and you never touch the `draft`
+workflow's job — **you have no shell or git tool, you do not checkpoint, and you never touch the `draft`
 flag.**
 
 ## Read first
 
-- `.claude/skills/waypoint-guide-author/SKILL.md` — Reconcile (AGREE / A-only / B-only /
+- `.agents/skills/waypoint-guide-author/SKILL.md` — Reconcile (AGREE / A-only / B-only /
   CONFLICT), authenticity woven into existing bodies, the done gate's self-correction loop.
-- `references/verification-rules.md`, `references/research-efficiency.md`,
-  `references/research-depth.md`, `references/block-types.md`, `references/image-sourcing.md`.
+- `.agents/skills/waypoint-guide-author/references/verification-rules.md`, `.agents/skills/waypoint-guide-author/references/research-efficiency.md`,
+  `.agents/skills/waypoint-guide-author/references/research-depth.md`, `.agents/skills/waypoint-guide-author/references/block-types.md`, `.agents/skills/waypoint-guide-author/references/image-sourcing.md`.
 
 ## Stage contract
 
@@ -37,10 +37,9 @@ flag.**
   `disagreements[]` reconciliation surfaced.
 - A fork reconciliation reveals goes to `## Questions for the traveler` in `ledger.md` with the
   assumption you proceeded on. Research never waits for an answer.
-- SELF-CORRECTION LOOP (offline only — the workflow owns the networked gate): iterate
-  `npm run verify -- --slug {{slug}}` + `npm run build`, fixing each blocking ⚠ against a
-  primary source, up to 4 rounds. Never silence a flag you cannot source — downgrade to `⚠` or
-  omit.
+- Apply the deterministic constraints you can prove from the artifacts. The workflow runs offline
+  verify and build after your output; never silence a flag you cannot source — downgrade to `⚠`
+  or omit.
 - STOP when the merge, dispositions, coverage and offline verify are done. Do not run the
   networked verify, do not commit, do not land.
 - Touch nothing outside `src/content/guides/{{slug}}/` and `guides-intake/{{slug}}/`.

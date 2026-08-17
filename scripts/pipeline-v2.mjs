@@ -25,7 +25,7 @@
 //   restore-critic --slug <s>                        restore them
 //   validate --slug <s> [--scoped]                   the full artifact validation (fail closed)
 
-import { existsSync, appendFileSync } from "node:fs";
+import { existsSync, appendFileSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -34,13 +34,13 @@ import { isMain } from "./audit/lib.mjs";
 import { ContractError } from "./pipeline/v2/contracts.mjs";
 import {
   initRunV2, readRunStateV2, nextStageV2, stageStart, stageComplete, stageFail,
-  bumpRunAttempt, recordAutoRetry, recordTelemetry, V2_RESEARCH_STAGES,
+  bumpRunAttempt, recordAutoRetry, recordTelemetry, markLandingGate, V2_RESEARCH_STAGES,
 } from "./pipeline/v2/run-state.mjs";
 import { readEvidence, requireEvidence, evidenceProblems } from "./pipeline/v2/evidence.mjs";
 import { researchRuleProblems } from "./pipeline/v2/research-rules.mjs";
-import { requireCoverage, coverageProblems } from "./pipeline/v2/coverage.mjs";
+import { requireCoverage, coverageProblems, loadCoverageContext } from "./pipeline/v2/coverage.mjs";
 import {
-  preparePassBWorkspace, collectPassB, prepareCriticInput, restoreCriticInput, verifyPassBWorkspace,
+  preparePassBWorkspace, collectPassB, collectStageOutput, prepareCriticInput, restoreCriticInput, verifyPassBWorkspace,
 } from "./pipeline/v2/workspace.mjs";
 import { emptyTelemetry, stageFacts, countsFromEvidence, mergeTelemetry } from "./pipeline/v2/telemetry.mjs";
 
@@ -53,6 +53,23 @@ function emit(key, value) {
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `${key}=${value}\n`);
 }
 
+function criticFetchTools(slug) {
+  const domains = new Set();
+  const roots = [path.join(GUIDES_DIR, slug), path.join(INTAKE_DIR, slug, "ledger.md")];
+  const visit = (target) => {
+    if (!existsSync(target)) return;
+    if (statSync(target).isDirectory()) return readdirSync(target).forEach((name) => visit(path.join(target, name)));
+    for (const match of readFileSync(target, "utf8").matchAll(/https?:\/\/[^\s"'<>)}\]]+/g)) {
+      try {
+        const host = new URL(match[0]).hostname.toLowerCase();
+        if (!/(^|\.)github\.com$|(^|\.)githubusercontent\.com$/.test(host)) domains.add(host);
+      } catch { /* malformed source is caught by the evidence gate */ }
+    }
+  };
+  roots.forEach(visit);
+  return ["Read(/workspace/**)", "Write(/workspace/**)", "Edit(/workspace/**)", "Glob(/workspace/**)", "Grep(/workspace/**)", "WebSearch", ...[...domains].sort().map((d) => `WebFetch(domain:${d})`)].join(",");
+}
+
 function git(args, { cwd = ROOT } = {}) {
   return execFileSync("git", args, { cwd, encoding: "utf8" });
 }
@@ -61,9 +78,54 @@ function commitAndPush(paths, message, { branch = null, cwd = ROOT } = {}) {
   const dirty = git(["status", "--porcelain", "--", ...paths], { cwd }).trim();
   if (!dirty) return null;
   git(["add", "--", ...paths], { cwd });
-  git(["commit", "-m", message], { cwd });
+  // --only prevents an unrelated pre-staged path from hitchhiking into a control-plane commit.
+  git(["commit", "--only", "-m", message, "--", ...paths], { cwd });
   if (branch) git(["push", "origin", `HEAD:${branch}`], { cwd });
   return git(["rev-parse", "HEAD"], { cwd }).trim();
+}
+
+export function allowedStagePaths(slug, stage) {
+  const guide = `src/content/guides/${slug}`;
+  const intake = `guides-intake/${slug}`;
+  const byStage = {
+    passA: [guide, `${intake}/ledger.md`, `${intake}/evidence.v2.json`],
+    passB: [`${intake}/passB.v2.json`],
+    reconcile: [guide, `${intake}/ledger.md`, `${intake}/evidence.v2.json`, `${intake}/coverage.v2.json`],
+    critic: [guide, `${intake}/ledger.md`, `${intake}/pipeline-patterns.fragment.md`, "docs/evidence/pipeline-patterns.md"],
+  };
+  return byStage[stage] || [];
+}
+
+function dirtyPaths({ cwd = ROOT } = {}) {
+  const raw = git(["status", "--porcelain=v1", "-z"], { cwd });
+  const entries = raw.split("\0").filter(Boolean);
+  const paths = [];
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const status = entry.slice(0, 2);
+    const name = entry.slice(3).replace(/\\/g, "/");
+    paths.push(name);
+    if (status.includes("R") || status.includes("C")) {
+      paths.push((entries[++i] || name).replace(/\\/g, "/"));
+    }
+  }
+  return paths;
+}
+
+export function stageScopeProblems(slug, stage, paths) {
+  const allowed = allowedStagePaths(slug, stage);
+  return paths.filter((file) => !allowed.some((root) => file === root || file.startsWith(root + "/")))
+    .map((file) => `stage ${stage} touched forbidden path ${file}`);
+}
+
+export function validateSectionInput(value) {
+  const section = String(value || "");
+  if (section.length > 200) return "section focus exceeds 200 characters";
+  if ([...section].some((char) => {
+    const code = char.charCodeAt(0);
+    return code <= 31 || code === 127;
+  })) return "section focus contains control characters";
+  return null;
 }
 
 // ── stage validation (pure-ish: filesystem reads only) ───────────────────────
@@ -82,7 +144,11 @@ export async function validateStageOutput(slug, stage, { intakeDir = INTAKE_DIR,
       // Fail-closed read: malformed throws (a ContractError is a validation verdict, not a crash).
       const doc = await readEvidence(slug, { intakeDir });
       if (!doc) problems.push(`Pass A owes the evidence artifact: guides-intake/${slug}/evidence.v2.json`);
-      else if (!doc.evidence.some((e) => e.origin === "passA")) problems.push("evidence artifact carries no Pass-A records — a pass that verified nothing is void");
+      else {
+        const state = await readRunStateV2(slug, { intakeDir });
+        if (doc.slug !== slug || (state && doc.runId !== state.runId)) problems.push(`Pass-A evidence identity does not match ${slug}/${state?.runId || "active run"}`);
+        if (!doc.evidence.some((e) => e.origin === "passA")) problems.push("evidence artifact carries no Pass-A records — a pass that verified nothing is void");
+      }
       break;
     }
     case "passB": {
@@ -92,13 +158,15 @@ export async function validateStageOutput(slug, stage, { intakeDir = INTAKE_DIR,
       break;
     }
     case "reconcile": {
-      const doc = await readEvidence(slug, { intakeDir });
+      const state = await readRunStateV2(slug, { intakeDir });
+      const doc = await requireEvidence(slug, { intakeDir, runId: state?.runId });
       if (!doc) { problems.push(`reconcile owes the merged evidence artifact: guides-intake/${slug}/evidence.v2.json`); break; }
       problems.push(...evidenceProblems(doc, { fullPass: !scoped }));
       problems.push(...researchRuleProblems(doc));
       try {
-        const coverage = await requireCoverage(slug, { intakeDir });
-        problems.push(...coverageProblems(coverage));
+        const coverage = await requireCoverage(slug, { intakeDir, runId: state?.runId });
+        const context = await loadCoverageContext(slug, { intakeDir, guidesDir });
+        problems.push(...coverageProblems(coverage, { ...context, evidenceIds: new Set(doc.evidence.map((e) => e.id)) }));
       } catch (err) {
         problems.push(err.message.split("\n")[0]);
       }
@@ -112,6 +180,7 @@ export async function validateStageOutput(slug, stage, { intakeDir = INTAKE_DIR,
       const { readFile } = await import("node:fs/promises");
       const missing = missingArtifacts(await readFile(ledger, "utf8"), "critic");
       problems.push(...missing.map((m) => `critic artifact missing from ledger: '${m}'`));
+      if (!existsSync(path.join(intakeDir, slug, "pipeline-patterns.fragment.md"))) problems.push("critic owes pipeline-patterns.fragment.md (an honest blank is still evidence)");
       break;
     }
     default:
@@ -132,6 +201,8 @@ async function run(cmd, get, has) {
 
   switch (cmd) {
     case "init": {
+      const sectionProblem = validateSectionInput(get("--section"));
+      if (sectionProblem) { console.error(`[pipeline-v2] ${sectionProblem}`); return 1; }
       // A V2 run REQUIRES an existing scaffold (new-guide.yml owns scaffolding). The baseline
       // commit recorded on the scaffold stage is what Pass B's clean checkout derives from.
       const scaffoldProblems = await validateStageOutput(slug, "scaffold");
@@ -140,7 +211,12 @@ async function run(cmd, get, has) {
         for (const p of scaffoldProblems) console.error(`  · ${p}`);
         return 1;
       }
-      let state = await initRunV2(slug);
+      let state = await initRunV2(slug, { inputs: {
+        section: get("--section") || "",
+        model: get("--model") || "claude-sonnet-5",
+        effort: get("--effort") || "high",
+        criticModel: get("--critic-model") || "claude-opus-5",
+      } });
       if (state.stages.scaffold.status !== "complete") {
         const head = git(["rev-parse", "HEAD"]).trim();
         await stageStart(slug, "scaffold");
@@ -201,7 +277,9 @@ async function run(cmd, get, has) {
       } catch (err) {
         problems = [err.message.split("\n")[0]];
       }
-      const dirty = git(["status", "--porcelain"]).trim();
+      const changed = dirtyPaths();
+      problems.push(...stageScopeProblems(slug, stage, changed));
+      const dirty = changed.length > 0;
       if (problems.length) {
         const isVoid = !dirty; // nothing produced at all — the classic void run
         await stageFail(slug, stage, {
@@ -217,8 +295,9 @@ async function run(cmd, get, has) {
       // Commit the stage's work (the WORKFLOW commits, never the agent), then checkpoint.
       let workCommit = null;
       if (dirty) {
-        git(["add", "-A"]);
-        git(["commit", "-m", `research-v2(${slug}): ${stage}`]);
+        const paths = allowedStagePaths(slug, stage);
+        git(["add", "-A", "--", ...paths]);
+        git(["commit", "--only", "-m", `research-v2(${slug}): ${stage}`, "--", ...paths]);
         if (branch) git(["push", "origin", `HEAD:${branch}`]);
         workCommit = git(["rev-parse", "HEAD"]).trim();
       }
@@ -229,6 +308,7 @@ async function run(cmd, get, has) {
       const telemetry = mergeTelemetry(state.telemetry || emptyTelemetry(), {
         stages: { [stage]: stageFacts({ startedAt: st.startedAt, endedAt: st.endedAt, model: st.model, effort: st.effort, retries: st.attempts > 1 ? st.attempts - 1 : null }) },
         counts: countsFromEvidence(evidenceDoc),
+        totalDurationSec: Math.max(0, Math.round((Date.parse(state.updatedAt) - Date.parse(state.createdAt)) / 1000)),
       });
       await recordTelemetry(slug, telemetry);
       commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): ${stage} complete`, { branch });
@@ -244,6 +324,13 @@ async function run(cmd, get, has) {
       commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): ${stage} FAILED`, { branch });
       console.error(`[pipeline-v2] ${slug} — stage "${stage}" recorded as failed (${get("--class") || "unknown"}); branch stays manually resumable.`);
       return 0;
+    }
+
+    case "landing-gate": {
+      const passed = get("--status") === "passed";
+      await markLandingGate(slug, { passed, detail: get("--detail") });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): landing gate ${passed ? "PASS" : "FAIL"}`, { branch });
+      return passed ? 0 : 1;
     }
 
     case "auto-retry": {
@@ -274,8 +361,21 @@ async function run(cmd, get, has) {
     case "collect-passb": {
       const from = get("--from");
       if (!from) { console.error("[pipeline-v2] collect-passb needs --from <dir>"); return 1; }
-      const { dest } = await collectPassB(slug, { fromDir: from });
+      const state = await readRunStateV2(slug);
+      const { dest } = await collectPassB(slug, { fromDir: from, runId: state?.runId });
       console.log(`[pipeline-v2] ${slug} — Pass B artifact validated and transferred to ${dest}.`);
+      return 0;
+    }
+
+    case "collect-stage": {
+      const stage = get("--stage");
+      const from = get("--from");
+      if (!V2_RESEARCH_STAGES.includes(stage) || !from) {
+        console.error("[pipeline-v2] collect-stage needs --stage <stage> --from <dir>"); return 1;
+      }
+      const copied = await collectStageOutput({ fromDir: path.resolve(from), paths: allowedStagePaths(slug, stage) });
+      if (!copied.length) throw new ContractError(`stage ${stage} produced no owned artifacts`);
+      console.log(`[pipeline-v2] ${slug} — collected ${stage}: ${copied.join(", ")}`);
       return 0;
     }
 
@@ -283,6 +383,40 @@ async function run(cmd, get, has) {
       const { deleted } = prepareCriticInput(slug);
       emit("deleted", deleted.join(","));
       console.log(`[pipeline-v2] ${slug} — critic input prepared; removed: ${deleted.join(", ") || "(nothing present)"}`);
+      return 0;
+    }
+
+    case "critic-fetch-tools": {
+      const tools = criticFetchTools(slug);
+      emit("tools", tools);
+      console.log(`[pipeline-v2] ${slug} — critic fetch policy permits only source domains already present in its blind input.`);
+      return 0;
+    }
+
+    case "compound-patterns": {
+      const fragment = path.join(INTAKE_DIR, slug, "pipeline-patterns.fragment.md");
+      const target = path.join(ROOT, "docs", "evidence", "pipeline-patterns.md");
+      if (!existsSync(fragment)) throw new ContractError(`missing critic process-memory fragment for ${slug}`);
+      const state = await readRunStateV2(slug);
+      const marker = `<!-- pipeline-v2:${state.runId} -->`;
+      const current = readFileSync(target, "utf8");
+      if (!current.includes(marker)) {
+        const rows = readFileSync(fragment, "utf8").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+        if (!rows.length || rows.length > 10) throw new ContractError("critic process-memory fragment must contain 1–10 table rows");
+        const date = /^\d{4}-\d{2}-\d{2}$/;
+        for (const row of rows) {
+          const cells = row.split("|").slice(1, -1).map((cell) => cell.trim());
+          if (row.length > 1200 || cells.length !== 6 || !date.test(cells[0]) || cells[1] !== slug || cells[2] !== "[critic]" || !cells[3] || !cells[4] || cells[5] !== "open") {
+            throw new ContractError(`malformed pipeline-pattern row; expected Date | ${slug} | [critic] | rubric/lens | distilled pattern | open`);
+          }
+        }
+        const commentEnd = current.indexOf("-->", current.indexOf("## Finding ledger"));
+        if (commentEnd < 0) throw new ContractError("pipeline-patterns ledger insertion point is missing");
+        const at = commentEnd + 3;
+        const next = `${current.slice(0, at)}\n${marker}\n${rows.join("\n")}${current.slice(at)}`;
+        const { writeFile } = await import("node:fs/promises");
+        await writeFile(target, next);
+      }
       return 0;
     }
 
@@ -296,12 +430,14 @@ async function run(cmd, get, has) {
       // The full pre-landing artifact validation, fail closed. M5 layers the research-rule
       // checks on top of the structural ones.
       try {
-        const evidence = await requireEvidence(slug);
-        const coverage = await requireCoverage(slug);
+        const state = await readRunStateV2(slug);
+        const evidence = await requireEvidence(slug, { runId: state?.runId });
+        const coverage = await requireCoverage(slug, { runId: state?.runId });
+        const context = await loadCoverageContext(slug);
         const problems = [
           ...evidenceProblems(evidence, { fullPass: !has("--scoped") }),
           ...researchRuleProblems(evidence),
-          ...coverageProblems(coverage),
+          ...coverageProblems(coverage, { ...context, evidenceIds: new Set(evidence.evidence.map((e) => e.id)) }),
         ];
         if (problems.length) {
           console.error(`[pipeline-v2] ${slug} — V2 artifacts do not hold up:`);
@@ -329,7 +465,7 @@ if (isMain(import.meta.url)) {
   const has = (flag) => argv.includes(flag);
   const cmd = argv[0];
   if (!cmd || cmd.startsWith("--")) {
-    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|prepare-critic|restore-critic|validate> --slug <slug> …");
+    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|prepare-critic|restore-critic|validate> --slug <slug> …");
     process.exit(1);
   }
   try {

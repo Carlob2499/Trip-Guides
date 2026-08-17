@@ -15,19 +15,17 @@
 //   CRITIC   Product blindness, not an incoherent file ban: the critic may read the finished
 //            guide, frozen intake, the Guide Author skill, the rubric and the human ledger. It
 //            may NOT read the raw evidence artifacts, V2 run state, or prior git history.
-//            prepareCriticInput() deletes the forbidden files from the working tree before the
-//            agent runs (the CI job also checks out with fetch-depth 1, so prior history is
-//            mechanically absent); restoreCriticInput() puts them back afterwards so the
-//            workflow's own bookkeeping still works. A Bash-equipped agent could in principle
-//            dig a current-commit blob out of git — the boundary is the prepared input plus the
-//            prompt contract, enforced as far as is practical (the execution prompt's own bar).
+//            prepareCriticInput() deletes the forbidden files before the agent runs. CI then
+//            removes `.git` entirely and gives the critic no shell; a fresh credentialed checkout
+//            collects only the guide + ledger afterward. Current-commit blobs are therefore not
+//            part of the critic's filesystem boundary.
 
 import { existsSync, rmSync } from "node:fs";
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, cp, lstat, readdir, rm } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ContractError, EVIDENCE_SCHEMA, evidenceDocSchema, parseOrThrow, assertVersionCompatible } from "./contracts.mjs";
+import { ContractError, EVIDENCE_SCHEMA, evidenceDocSchema, coverageDocSchema, parseOrThrow, assertVersionCompatible } from "./contracts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
@@ -96,7 +94,7 @@ export function removePassBWorkspace(destDir, { cwd = ROOT } = {}) {
 
 /** Validate Pass B's output artifact and transfer it into the control-plane checkout. The
     WORKFLOW calls this after the agent returns — Pass B itself never commits. */
-export async function collectPassB(slug, { fromDir, intoDir = ROOT }) {
+export async function collectPassB(slug, { fromDir, intoDir = ROOT, runId = null }) {
   const rel = path.join("guides-intake", slug, "passB.v2.json");
   const src = path.join(fromDir, rel);
   if (!existsSync(src)) {
@@ -112,6 +110,8 @@ export async function collectPassB(slug, { fromDir, intoDir = ROOT }) {
   }
   assertVersionCompatible(raw.schemaVersion, EVIDENCE_SCHEMA, { file: src });
   const doc = parseOrThrow(evidenceDocSchema, raw, { file: src, what: "Pass B artifact" });
+  if (doc.slug !== slug) throw new ContractError(`Pass B artifact belongs to "${doc.slug}", not "${slug}"`, { file: src });
+  if (runId && doc.runId !== runId) throw new ContractError(`Pass B artifact belongs to run ${doc.runId}, not active run ${runId}`, { file: src });
   // Independence cuts both ways: a Pass-B artifact may carry ONLY Pass-B findings, and it never
   // reconciles anything — that is the reconcile stage's job on the other side of the wall.
   const foreign = doc.evidence.filter((e) => e.origin !== "passB");
@@ -128,10 +128,55 @@ export async function collectPassB(slug, { fromDir, intoDir = ROOT }) {
       { file: src },
     );
   }
+  if (!doc.evidence.length && !doc.passB?.noYieldReason?.trim()) {
+    throw new ContractError("Pass B produced no evidence and no typed passB.noYieldReason — empty output is not an independent pass", { file: src });
+  }
+  const audit = doc.passB?.nativeLanguage;
+  if (!audit?.why?.trim() || (audit.used && (!audit.searchClasses.length || !audit.yield?.trim()))) {
+    throw new ContractError("Pass B native-language audit is missing or incomplete", { file: src });
+  }
   const dest = path.join(intoDir, rel);
   await mkdir(path.dirname(dest), { recursive: true });
   await writeFile(dest, JSON.stringify(doc, null, 2) + "\n");
   return { doc, dest };
+}
+
+async function rejectSymlinks(target) {
+  const stat = await lstat(target);
+  if (stat.isSymbolicLink()) throw new ContractError(`refusing agent output containing a symlink: ${target}`);
+  if (!stat.isDirectory()) return;
+  for (const entry of await readdir(target)) await rejectSymlinks(path.join(target, entry));
+}
+
+/** Copy only stage-owned artifacts from an untrusted agent workspace into a fresh trusted
+    checkout. No code, package metadata, git configuration, or workflow file can cross. */
+export async function collectStageOutput({ fromDir, intoDir = ROOT, paths }) {
+  const copied = [];
+  for (const rel of paths) {
+    const src = path.resolve(fromDir, rel);
+    const dest = path.resolve(intoDir, rel);
+    if (!src.startsWith(path.resolve(fromDir) + path.sep) || !dest.startsWith(path.resolve(intoDir) + path.sep)) {
+      throw new ContractError(`stage output path escapes its workspace: ${rel}`);
+    }
+    if (!existsSync(src)) continue;
+    await rejectSymlinks(src);
+    await rm(dest, { recursive: true, force: true });
+    await mkdir(path.dirname(dest), { recursive: true });
+    await cp(src, dest, { recursive: true, force: true, errorOnExist: false });
+    // Contract JSON crosses the trust boundary as a canonical parsed projection, never as the
+    // raw bytes an agent supplied. Nested unknown telemetry/source fields are stripped here.
+    const schema = rel.endsWith("/evidence.v2.json") ? evidenceDocSchema
+      : rel.endsWith("/coverage.v2.json") ? coverageDocSchema : null;
+    if (schema) {
+      let raw;
+      try { raw = JSON.parse(await readFile(dest, "utf8")); }
+      catch (err) { throw new ContractError(`collected contract is invalid JSON: ${rel} (${err.message})`); }
+      const projected = parseOrThrow(schema, raw, { file: dest, what: "collected stage artifact" });
+      await writeFile(dest, JSON.stringify(projected, null, 2) + "\n");
+    }
+    copied.push(rel);
+  }
+  return copied;
 }
 
 /** Delete the critic's forbidden files from the working tree. Returns what was deleted so the

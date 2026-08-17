@@ -54,39 +54,38 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-17 — Pipeline V2 backend implemented end to end, M0–M8 on `codex/pipeline-v2`)
+## Snapshot (2026-08-17 — Pipeline V2 implementation adversarially audited and hardened)
 
-**Eight milestones, one commit each, all pushed.** `docs/pipeline v2/IMPLEMENTATION_STATE.md`
-is the durable per-milestone record (baseline → publication-safety fixes → fail-closed V2
-contracts → adaptive doctrine → job-per-stage V2 workflow with mechanical Pass-B isolation →
-research rules → lifecycle correctness → honest progress adapters). Authority chain honored:
-DECISIONS.md → FABLE_IMPLEMENTATION_PROMPT.md → repo behavior.
+Fable's M0–M8 implementation was reviewed from fixed base `9f1599b` by independent code,
+specification, and security lanes, then corrected to convergence. The durable technical record
+is `docs/pipeline v2/IMPLEMENTATION_STATE.md`. Delivery timeline:
+`docs/pipeline v2/IMPLEMENTATION_PLAN.md` — Claude must read and follow it for sequencing,
+kill dates, freezes, and Codex/Fable roles.
 
-**What V1 gained immediately (shared code):** landing now runs the REAL evidence gate (build +
-networked verify — it ran verify alone and asserted the pass); compose/integrity/artifacts run
-BEFORE landing and downgrade it to a draft PR; the contradiction preflight commits the ledger
-it writes (was intake.md — findings were lost with the runner); change attempts are run-scoped
-(3 successful runs no longer trip the breaker for the 4th); research+change share one
-`guide-<slug>` concurrency group; mid-run answers route onto the active research branch's
-ledger; pretrip watches `change/<slug>-*` (the dead `recert/<slug>` check detected nothing);
-recert partial-dispatch failures exit red.
+V2 remains manual, draft-only, and beside V1. Agents now execute in pinned Docker/Claude CLI
+boundaries with workspace-only filesystem tools, explicit system-path denials, no host token,
+no runner command files, no git remote/history, and canonical path-scoped artifact collection.
+Pass B remains baseline-isolated; critic source fetches are restricted to pre-verified domains.
+Run scope/model settings are durable across resumes; usage/void retries are bounded; stuck state
+cannot reset itself; malformed artifacts/state fail closed; intake coverage is relational and
+includes constraints, traveler count, and departure airport; the real landing gate is durable
+and is the only event that clears the UI's Verify station.
 
-**What V2 adds beside V1 (manual, draft-only):** `research-pass-v2.yml` (job-per-stage; Pass B
-runs in a baseline checkout that mechanically excludes Pass A; the critic gets depth-1 history
-and a working tree stripped of evidence/run-state; the workflow — never the agent — validates,
-commits and checkpoints every stage; one bounded void auto-retry; landing is ALWAYS a draft
-PR). Contracts under `scripts/pipeline/v2/` fail closed (`wp-run/2.0` · `wp-evidence/2.0` ·
-`wp-coverage/2.0` · telemetry with honest nulls). Quota floors are GONE repo-wide — the earned
-saturation stop replaced them (DECISIONS "Research breadth").
+V1's numeric breadth safeguards remain intact only for V1. V2 explicitly selects adaptive mode,
+where the typed earned-saturation gate replaces quotas while structural anti-padding checks stay.
+Critic findings now produce validated, provenance-complete newest-first process-memory rows.
+Answers route atomically back to active or complete-unmerged research branches with the original
+run inputs. Public issue spend and short owner keys fail closed.
 
 ## Where we left off
 
-**Branch `codex/pipeline-v2`, all gates green, everything pushed.** Build 9 pages · lint 0 ·
-typecheck 0 errors/19 hints · 165 test files, 2566 + 1 todo · offline verify PASS on both
-published guides with legacy `n/a` rows intact · preview checked at 375px + desktop + dark ·
-dist grep clean (old "live on the site" label gone; V2 adapters compiled in).
+**Branch `codex/pipeline-v2`; final audited commit is the handoff point.** Local gates are green:
+all workflow YAML parses; build, lint, typecheck and full tests pass; targeted V2/progress suites
+pass; production preview was checked desktop plus 375px dark/reduced-motion with no overflow or
+browser errors; compiled output carries `landingGate` and no synthetic live-publication copy.
 
-**Codex reviews next — do NOT merge to main, switch dispatch, publish, or delete V1.** The
-final-handoff section of IMPLEMENTATION_STATE.md carries the manual canary command, required
-secrets, and every unverified external boundary (Actions dispatch paths, gh/worker calls, the
-claude-code-action jobs — none exercised from here).
+**Next: the Phase 1 manual canary in IMPLEMENTATION_PLAN — not cutover.** First canary must prove
+the live Docker permission denial (`Read /proc/self/environ`), cancellation/resume, configured
+Places/Routes gate, draft-PR-only landing, Worker answer routing, and branch protection. Do not
+merge V2 to main, switch `/new`, publish, delete V1, or begin the secondary UI/UX pass until its
+timeline gate explicitly allows it.

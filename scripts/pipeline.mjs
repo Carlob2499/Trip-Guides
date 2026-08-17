@@ -290,18 +290,33 @@ async function runSubcommand(cmd, rest, get) {
       let published;
       try { published = exists(metaPath) && !JSON.parse(readFileSync(metaPath, "utf8")).draft; } catch { published = false; }
 
-      const { readAnyRunState } = await import("./pipeline/v2/run-state.mjs");
-      const { version, state } = await readAnyRunState(slug);
-      const researchActive = version > 0 && state.lifecycle === "research" && !!state.resume?.nextStage;
-
       let researchBranch = null;
-      if (researchActive && !published) {
-        for (const b of version === 2 ? [`research-v2/${slug}`, `research/${slug}`] : [`research/${slug}`, `research-v2/${slug}`]) {
+      let researchActive = false;
+      if (!published) {
+        // The active truth lives on the research branch, not main. Prefer V2 only when its own
+        // committed run record says it still has a resume stage; a stale branch is not active.
+        for (const [b, stateFile] of [
+          [`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`],
+          [`research/${slug}`, `guides-intake/${slug}/state.json`],
+        ]) {
+          let existsOnOrigin = false;
           try {
             execFileSync("git", ["ls-remote", "--exit-code", "--heads", "origin", b], { cwd: ROOT, stdio: "pipe" });
-            researchBranch = b;
-            break;
+            existsOnOrigin = true;
           } catch { /* branch absent — try the next namespace */ }
+          if (!existsOnOrigin) continue;
+          try {
+            execFileSync("git", ["fetch", "--depth=1", "origin", b], { cwd: ROOT, stdio: "pipe" });
+            const raw = execFileSync("git", ["show", `FETCH_HEAD:${stateFile}`], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+            const remoteState = JSON.parse(raw);
+            const active = b.startsWith("research-v2/")
+              ? ["pending", "running", "paused", "failed", "complete"].includes(remoteState.status)
+              : ["passA", "passB", "reconcile", "verified"].some((stage) => !remoteState.stages?.[stage]);
+            if (active) { researchBranch = b; researchActive = true; break; }
+          } catch (err) {
+            console.error(`[answers-route] ${b} exists but its committed state is unreadable: ${err.message}`);
+            return 1;
+          }
         }
       }
 

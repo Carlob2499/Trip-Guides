@@ -1,19 +1,13 @@
-// Tests for the candidates-table gate (standards S2/S3, adaptive since Pipeline V2).
-//
-// Assertion classification for the V2 change (docs/pipeline v2/FABLE_IMPLEMENTATION_PROMPT.md):
-//   PRESERVE  pre-standard guides are n/a; an empty table on a post-standard guide FAILS; a
-//             "shipped" row whose name appears nowhere in the guide is a finding; shipped ⊆
-//             shortlist (D3); legacy 2-column tables are never gated on shortlist.
-//   CHANGE    the numeric per-priority floors (16/8 · 10/5 · 6/3) and the `researchFloors`
-//             override are deliberately GONE — DECISIONS.md "Research breadth": breadth is
-//             adaptive, and the V2 saturation record (scripts/pipeline/v2/evidence.mjs, its
-//             own suite) is the replacement protection against a lazy stop. Thin-but-honest
-//             tables now pass here; ZERO consideration still fails.
+// Tests for the candidates-table gate (standards S2/S3). The behaviors worth pinning:
+// pre-standard guides are n/a (never retro-failed); an empty section on a post-standard
+// guide FAILS; floors come from defaults unless the guide overrides; and a "shipped" row
+// whose name appears nowhere in the guide is a finding — that cross-check is what makes
+// padding the table to hit a floor expensive.
 
 // @protects-file Proposed venues are checked before they can enter a guide.
 
 import { describe, it, expect } from "vitest";
-import { parseCandidates, judgeCandidates } from "../check-candidates.mjs";
+import { parseCandidates, judgeCandidates, DEFAULT_FLOORS } from "../check-candidates.mjs";
 
 const table = (rank, name, rows) =>
   `### Priority ${rank}: ${name}\n\n| Candidate | Verdict |\n|-----------|---------|\n` +
@@ -47,52 +41,65 @@ describe("parseCandidates", () => {
   });
 });
 
-describe("judgeCandidates — adaptive breadth, structural honesty", () => {
+describe("judgeCandidates", () => {
   const rows = (n, shipped) => Array.from({ length: n }, (_, i) => [`Cand ${i}`, i < shipped ? "shipped" : "rejected: no source"]);
   const bigTable = parseCandidates(doc(table(1, "Food", rows(16, 8))));
   const guideText = rows(16, 8).filter(([, v]) => v === "shipped").map(([c]) => c).join(" ");
 
-  it("passes a deep table with every shipped name present in the guide", () => {
+  it("passes a table meeting the default floors, with every shipped name present in the guide", () => {
     const r = judgeCandidates(bigTable, { guideText });
     expect(r.status).toBe("pass");
     expect(r.summary[0]).toMatchObject({ considered: 16, shipped: 8 });
   });
 
-  it("CHANGE (V2): a thin-but-honest table PASSES — breadth is adaptive, not a quota", () => {
-    // Under the old floors this failed on count alone. The replacement protection is the V2
-    // saturation record (an unearned stop fails scripts/pipeline/v2/evidence.mjs's gate).
-    const r = judgeCandidates(parseCandidates(doc(table(1, "Food", rows(5, 3)))), { guideText: "Cand 0 Cand 1 Cand 2" });
-    expect(r.status).toBe("pass");
-    expect(r.summary[0]).toMatchObject({ considered: 5, shipped: 3 }); // counts stay visible
-  });
-
-  it("PRESERVE: an EMPTY priority table still fails — zero consideration is no research", () => {
-    const r = judgeCandidates(parseCandidates(doc(table(1, "Food", []))), { guideText: "" });
+  it("fails a thin consideration set by count, naming the floor", () => {
+    const r = judgeCandidates(parseCandidates(doc(table(1, "Food", rows(5, 5)))), { guideText: "Cand 0 Cand 1 Cand 2 Cand 3 Cand 4" });
     expect(r.status).toBe("fail");
-    expect(r.findings.join("\n")).toMatch(/table is empty/);
+    expect(r.findings.join("\n")).toMatch(/5 candidate\(s\) considered, floor is 16/);
   });
 
-  it("PRESERVE: a shipped row that appears nowhere in the guide fails — the anti-padding cross-check", () => {
+  it("fails a shipped row that appears nowhere in the guide — the anti-padding cross-check", () => {
     const r = judgeCandidates(bigTable, { guideText: guideText.replace("Cand 0", "") });
     expect(r.status).toBe("fail");
     expect(r.findings.join("\n")).toMatch(/"Cand 0" is marked shipped but appears nowhere/);
   });
 
-  it("summaries cover every table, including bonus ranks past 3", () => {
+  it("honors per-guide researchFloors over the defaults — the tabBudget precedent", () => {
+    const small = parseCandidates(doc(table(1, "Food", rows(6, 3))));
+    const text = "Cand 0 Cand 1 Cand 2";
+    expect(judgeCandidates(small, { guideText: text }).status).toBe("fail"); // default floor bites
+    expect(judgeCandidates(small, { floors: { 1: { considered: 6, shipped: 3 } }, guideText: text }).status).toBe("pass");
+  });
+
+  it("V2 adaptive mode keeps structural checks but does not apply V1 numeric floors", () => {
+    const small = parseCandidates(doc(table(1, "Food", rows(3, 2))));
+    const r = judgeCandidates(small, { adaptive: true, guideText: "Cand 0 Cand 1" });
+    expect(r.status).toBe("pass");
+    expect(r.summary[0].floor).toBeNull();
+  });
+
+  it("gates only ranks 1-3; a fourth table is bonus depth", () => {
     const t = parseCandidates(doc(table(1, "Food", rows(16, 8)), table(4, "Bonus", [["X", "shipped"]])));
     const r = judgeCandidates(t, { guideText: guideText + " X" });
     expect(r.status).toBe("pass");
-    expect(r.summary).toHaveLength(2);
   });
 
-  it("PRESERVE: FAILS an empty section on a post-standard guide", () => {
+  it("FAILS an empty section on a post-standard guide — the thinness this exists to measure", () => {
     const r = judgeCandidates([], { guideText: "" });
     expect(r.status).toBe("fail");
     expect(r.findings[0]).toMatch(/no priority tables/);
   });
+
+  it("default floors are the documented 16/8 · 10/5 · 6/3", () => {
+    expect(DEFAULT_FLOORS).toEqual({
+      1: { considered: 16, shipped: 8 },
+      2: { considered: 10, shipped: 5 },
+      3: { considered: 6, shipped: 3 },
+    });
+  });
 });
 
-describe("judgeCandidates — D3 shortlist stage (shipped ⊆ shortlist ⊆ considered) [PRESERVE]", () => {
+describe("judgeCandidates — D3 shortlist stage (shipped ⊆ shortlist ⊆ considered)", () => {
   const rows3 = (n, shipped, shortlistExtra = 0) =>
     Array.from({ length: n }, (_, i) => [
       `Cand ${i}`,
@@ -130,5 +137,17 @@ describe("judgeCandidates — D3 shortlist stage (shipped ⊆ shortlist ⊆ cons
     expect(t[0].rows.every((r) => r.shortlisted === null)).toBe(true);
     const r = judgeCandidates(t, { guideText: names(8) });
     expect(r.status).toBe("pass");
+  });
+
+  it("honors an optional per-rank `shortlist` floor via researchFloors, on top of considered/shipped", () => {
+    const t = parseCandidates(doc(table3(1, "Food", rows3(16, 8, 0))));
+    const passing = judgeCandidates(t, { guideText: names(8) });
+    expect(passing.status).toBe("pass");
+    const withFloor = judgeCandidates(t, {
+      floors: { 1: { considered: 16, shipped: 8, shortlist: 10 } },
+      guideText: names(8),
+    });
+    expect(withFloor.status).toBe("fail");
+    expect(withFloor.findings.join("\n")).toMatch(/8 shortlisted, floor is 10/);
   });
 });

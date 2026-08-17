@@ -180,6 +180,16 @@ jobs:
           git fetch origin "$RBRANCH"
           git checkout "$RBRANCH"
           node scripts/pipeline.mjs answers-apply --slug "$SLUG" --branch "$RBRANCH"
+          if [[ "$RBRANCH" == research-v2/* ]]; then
+            SECTION=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.section')
+            MODEL=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.model')
+            EFFORT=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.effort')
+            CRITIC=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.criticModel')
+            gh workflow run research-pass-v2.yml -f slug="$SLUG" -f section="$SECTION" \
+              -f model="$MODEL" -f effort="$EFFORT" -f critic_model="$CRITIC"
+          else
+            gh workflow run research-pass.yml -f slug="$SLUG"
+          fi
 
       # Separate branch namespace from research/<slug>; the guide-<slug> concurrency group is
       # what stops the two lifecycles landing concurrently on one guide.
@@ -362,4 +372,3 @@ jobs:
           node scripts/pipeline.mjs report --issue "$ISSUE" \
             --outcome "$OUTCOME" --pr "$PR" \
             --summary /tmp/change-summary.md
-

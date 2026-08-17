@@ -131,7 +131,8 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       // V2 first: run.v2.json on the V2 research branch (each stage job commits it there). The
       // raw text is fetched separately from its parse so "file exists but is not a run" reads
       // as MALFORMED — the fail-closed rule — while "no file" falls through to V1 honestly.
-      const v2Text = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`));
+      const v2Text = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`))
+        ?? await getText(raw(baseBranch, `guides-intake/${slug}/run.v2.json`));
       if (v2Text != null) {
         let parsed: unknown;
         try { parsed = JSON.parse(v2Text); } catch { parsed = null; }
@@ -163,8 +164,10 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
     },
     async fetchQuestions(slug) {
       // Questions and forks are research state, so they live in the ledger — intake.md is
-      // frozen intent.
-      const md = await getText(raw(`research/${slug}`, `guides-intake/${slug}/ledger.md`));
+      // frozen intent. Prefer the V2 branch; a stale V1 branch must not hide the active run's
+      // questions.
+      const v2 = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/ledger.md`));
+      const md = v2 ?? await getText(raw(`research/${slug}`, `guides-intake/${slug}/ledger.md`));
       if (md == null) return [];
       return parseQuestionsFromIntake(md);
     },
@@ -185,9 +188,9 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       // events would live on research-v2/<slug>. A 404 becomes EMPTY_RUN_EVENTS via
       // parseRunEvents(null); the UI keeps LOOKING while the run is active (probeEventsThisTick
       // in model/run-events.ts), just less often, so telemetry that starts late still surfaces.
-      const v1 = await getJson(raw(`research/${slug}`, `guides-intake/${slug}/events.json`));
-      if (v1) return parseRunEvents(v1);
-      return parseRunEvents(await getJson(raw(`research-v2/${slug}`, `guides-intake/${slug}/events.json`)));
+      const v2 = await getJson(raw(`research-v2/${slug}`, `guides-intake/${slug}/events.json`));
+      if (v2) return parseRunEvents(v2);
+      return parseRunEvents(await getJson(raw(`research/${slug}`, `guides-intake/${slug}/events.json`)));
     },
   };
 }

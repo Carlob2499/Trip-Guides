@@ -77,3 +77,11 @@ map/budget blocks rehomed); index.astro's inline hub script → `src/scripts/atl
 (name collisions); single-letter-variable rename sweep over the 6 worst files (274→185 repo-wide).
 Dedup: esc/reducedMotion → scripts/util.js; scripts gained lib/cli.mjs + lib/geo.mjs; og/recap
 share pages/og/_card.ts. d3 → 3 submodules (~200KB less shipped); geo-tz → devDependencies.
+
+## Snapshot (2026-08-17 — Fable's initial Pipeline V2 implementation, before Codex final audit)
+
+M0–M8 were implemented and pushed on `codex/pipeline-v2` through `af876c3`. V2 was manual and
+draft-only beside V1, with versioned run/evidence/coverage contracts, stage checkpointing,
+Pass-B baseline isolation, adaptive research doctrine, connected answer routing, and initial
+progress adapters. Codex's next task was the promised independent adversarial audit; no V2
+canary, cutover, merge, or publication had occurred.

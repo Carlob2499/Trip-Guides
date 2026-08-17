@@ -280,7 +280,7 @@ export async function verify({ slug = null, network = false } = {}) {
   const { checkCandidates } = await import("./check-candidates.mjs");
   const candidatesBySlug = {};
   for (const t of targets) {
-    candidatesBySlug[t.slug] = await checkCandidates(t.slug);
+    candidatesBySlug[t.slug] = await checkCandidates(t.slug, { researchFloors: t.guide.researchFloors ?? null });
   }
 
   // S5: source-mix measurement — pure text analysis over the same raw the link sweep scans.

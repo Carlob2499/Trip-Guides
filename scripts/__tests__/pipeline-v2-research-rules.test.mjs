@@ -7,13 +7,15 @@
 import { describe, it, expect } from "vitest";
 import {
   evidenceKindProblems, corroborationProblems, yearSafetyProblems, freshnessProblems,
-  reservationProblems, transportProblems, researchRuleProblems,
+  objectiveFreshnessProblems, reservationProblems, transportProblems, researchRuleProblems,
+  disagreementProblems,
 } from "../pipeline/v2/research-rules.mjs";
 
 const record = (over = {}) => ({
   id: "e-1", candidateId: "c-daruma", claim: "Open 11:00–22:00", kind: "objective", origin: "passA",
   source: { url: "https://official.example", kind: "official", language: "ja", publishedAt: "2026-07-01", family: null, independent: null },
   verifiedOn: "2026-08-01", firsthand: null,
+  freshness: { perishable: true, shelfLife: "hours", recheckOn: "2026-10-30" },
   ...over,
 });
 
@@ -21,7 +23,15 @@ const doc = (over = {}) => ({
   schemaVersion: "wp-evidence/2.0", slug: "x", runId: "r",
   candidates: [{ id: "c-daruma", name: "Daruma", branch: null, priority: "food", status: "shipped", shortlisted: true, reason: null, worth: null }],
   evidence: [], reservations: [], transport: [], disagreements: [],
-  saturation: null, passB: null, reconciliation: [],
+  saturation: null,
+  depth: {
+    reservations: { requiredCandidateIds: [], notApplicableReason: "no bookable anchor in this fixture" },
+    transport: { requiredRouteIds: [], notApplicableReason: "no fragile route in this fixture" },
+  },
+  passB: {
+    nativeLanguage: { used: false, why: "rule fixture does not model destination-language research", searchClasses: [], yield: null },
+    noYieldReason: "rule fixture does not model Pass B",
+  }, reconciliation: [],
   ...over,
 });
 
@@ -55,9 +65,11 @@ describe("experiential corroboration on shipped candidates (≥2 independent fir
     firsthand: true,
   });
 
-  it("two records from distinct (or unknown) families pass", () => {
+  it("two records from distinct families pass; unknown independence does not", () => {
     expect(corroborationProblems(doc({ evidence: [exp("e-1", "blogA"), exp("e-2", "forumB")] }))).toEqual([]);
-    expect(corroborationProblems(doc({ evidence: [exp("e-1", null), exp("e-2", null)] }))).toEqual([]);
+    expect(corroborationProblems(doc({ evidence: [exp("e-1", null), exp("e-2", null)] })).join()).toMatch(/unproven-independent/);
+    const explicit = [exp("e-1", null), exp("e-2", null)].map((e) => ({ ...e, source: { ...e.source, independent: true } }));
+    expect(corroborationProblems(doc({ evidence: explicit }))).toEqual([]);
   });
 
   it("a single experiential source on a shipped candidate fails", () => {
@@ -83,7 +95,13 @@ describe("recurring-event year safety (DECISIONS: 'Freshness')", () => {
     const bad = yearSafetyProblems(doc({
       evidence: [record({ claim: "Festival runs Oct 10–12, 2027", source: { ...record().source, publishedAt: "2026-05-01" } })],
     }));
-    expect(bad.join()).toMatch(/never a confirmed future-year date/);
+    expect(bad.join()).toMatch(/appliesToYears/);
+  });
+
+  it("a current official advance announcement can explicitly support the future season", () => {
+    expect(yearSafetyProblems(doc({
+      evidence: [record({ claim: "Festival runs Oct 10–12, 2027", source: { ...record().source, publishedAt: "2026-05-01", appliesToYears: [2027] } })],
+    }))).toEqual([]);
   });
 
   it("a current-year announcement of a current-year date passes", () => {
@@ -92,21 +110,29 @@ describe("recurring-event year safety (DECISIONS: 'Freshness')", () => {
     }))).toEqual([]);
   });
 
-  it("an unknowable publish date is not judged — unknown stays unknown", () => {
+  it("an undated source cannot confirm a future season without explicit applicability", () => {
     expect(yearSafetyProblems(doc({
       evidence: [record({ claim: "Festival runs Oct 10–12, 2027", source: { ...record().source, publishedAt: null } })],
-    }))).toEqual([]);
+    })).join()).toMatch(/appliesToYears/);
   });
 });
 
 describe("experiential freshness (category-specific aging)", () => {
-  it("a firsthand report older than the stale window fails; recent passes; unknown passes", () => {
+  it("a firsthand report older than the stale window fails; recent passes; unknown recency cannot ship", () => {
     const old = record({ kind: "experiential", source: { ...record().source, kind: "firsthand", publishedAt: "2023-01-01" }, verifiedOn: "2026-08-01" });
     expect(freshnessProblems(doc({ evidence: [old] })).join()).toMatch(/lead to re-verify/);
     const recent = record({ kind: "experiential", source: { ...record().source, kind: "firsthand", publishedAt: "2026-01-01" }, verifiedOn: "2026-08-01" });
     expect(freshnessProblems(doc({ evidence: [recent] }))).toEqual([]);
     const unknown = record({ kind: "experiential", source: { ...record().source, kind: "firsthand", publishedAt: null } });
-    expect(freshnessProblems(doc({ evidence: [unknown] }))).toEqual([]);
+    expect(freshnessProblems(doc({ evidence: [unknown] })).join()).toMatch(/recency is unproven/);
+  });
+});
+
+describe("objective freshness classification", () => {
+  it("requires category + future recheck for perishable facts", () => {
+    expect(objectiveFreshnessProblems(doc({ evidence: [record({ freshness: null })] })).join()).toMatch(/no freshness classification/);
+    expect(objectiveFreshnessProblems(doc({ evidence: [record({ freshness: { perishable: true, shelfLife: "hours", recheckOn: null } })] })).join()).toMatch(/shelfLife/);
+    expect(objectiveFreshnessProblems(doc({ evidence: [record()] }))).toEqual([]);
   });
 });
 
@@ -133,7 +159,11 @@ describe("reservation depth by importance (DECISIONS: 'Reservations')", () => {
     expect(bad.join()).toMatch(/no release window or action date/);
     expect(bad.join()).toMatch(/no fallback/);
     const good = reservationProblems(doc({
-      reservations: [reservation({ importance: "anchor", actionDate: "2026-09-01", fallback: "walk-in at 17:00 opening" })],
+      reservations: [reservation({
+        importance: "anchor", actionDate: "2026-09-01", fallback: "backup venue",
+        partyRules: "up to six", deposit: "none", cancellation: "24 hours",
+        foreignFriction: "foreign cards accepted", walkIn: "possible at 17:00",
+      })],
     }));
     expect(good).toEqual([]);
   });
@@ -159,7 +189,7 @@ describe("high-risk transport robustness (DECISIONS: 'Transportation')", () => {
   const route = (over = {}) => ({
     id: "t-1", route: "Airport → mountain ryokan", risk: 3,
     doorToDoor: "3h10 incl. transfer", transferReality: "8-min platform change with stairs",
-    groupLuggageMobility: null, buffer: "25-min buffer", missedConnection: "next bus +3h",
+    groupLuggageMobility: "six travelers with luggage need the lift route", buffer: "25-min buffer", missedConnection: "next bus +3h",
     nextService: null, lastPracticalReturn: null, fallback: "taxi ¥18,000 flat",
     ...over,
   });
@@ -177,6 +207,12 @@ describe("high-risk transport robustness (DECISIONS: 'Transportation')", () => {
 
   it("a complete R4 route passes", () => {
     expect(transportProblems(doc({ transport: [route({ risk: 4 })] }))).toEqual([]);
+  });
+});
+
+describe("recommendation-changing disagreement", () => {
+  it("must resolve before reconciliation can finish", () => {
+    expect(disagreementProblems(doc({ disagreements: [{ id: "d-1", topic: "queue reality", impact: "recommendation-changing", investigation: "sources diverged", resolution: null }] })).join()).toMatch(/no resolution/);
   });
 });
 

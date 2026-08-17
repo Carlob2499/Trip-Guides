@@ -725,12 +725,16 @@ const guides = defineCollection({
     // superRefine below holds every named group to the Panel contract: it must exist,
     // and every section in it must be a Panel-hostable carded type with a title.
     panelGroups: z.array(z.string()).optional(),
-    // researchFloors (S3, 2026-08-02) was REMOVED with Pipeline V2 (2026-08-17): fixed
-    // candidate quotas are replaced by the adaptive saturation record (DECISIONS.md
-    // "Research breadth", scripts/pipeline/v2/evidence.mjs) — research scales to the
-    // destination, and the stop is justified, not counted. check-candidates.mjs keeps every
-    // structural anti-padding check (shipped ⊆ shortlist, shipped-name cross-check, empty
-    // table fails). No shipped guide ever declared the field.
+    researchFloors: z.record(
+      z.string().regex(/^[1-3]$/),
+      z.object({
+        considered: z.number().int().positive(),
+        shipped: z.number().int().positive(),
+        shortlist: z.number().int().positive().optional(),
+      }),
+    ).optional(),
+    // V1 keeps per-guide breadth overrides while it remains live beside V2. V2 uses the
+    // adaptive saturation record instead; removing this field before cutover breaks V1.
     // R5 — per-group voice descriptors (design decision №4: "labels literal, always;
     // warmth demoted to the descriptors"). Keyed by EXACT group name (superRefine below
     // rejects keys no section uses, so a group rename can't silently orphan its line).

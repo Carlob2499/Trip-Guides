@@ -77,7 +77,7 @@ export function parseOrThrow(schema, doc, { file = null, what = "V2 artifact" } 
 
 // ── shared fragments ─────────────────────────────────────────────────────────
 
-const iso = z.string().min(1);
+const iso = z.string().datetime({ offset: true });
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "expected YYYY-MM-DD");
 const nullableInt = z.number().int().min(0).nullable();
 
@@ -94,7 +94,7 @@ const failure = z.object({
 // cannot trust stays null. `tokens`/`costUsd` are ONLY ever set from a trustworthy source (the
 // action's own reported usage) — never inferred from output size or guessed.
 
-const stageTelemetry = z.looseObject({
+const stageTelemetry = z.object({
   durationSec: z.number().min(0).nullable().default(null),
   model: z.string().nullable().default(null),
   effort: z.string().nullable().default(null),
@@ -104,10 +104,10 @@ const stageTelemetry = z.looseObject({
   fetches: nullableInt.default(null),
 });
 
-export const telemetrySchema = z.looseObject({
+export const telemetrySchema = z.object({
   schemaVersion: z.string(),
   stages: z.record(z.string(), stageTelemetry).default({}),
-  counts: z.looseObject({
+  counts: z.object({
     candidatesConsidered: nullableInt.default(null),
     candidatesDeepVerified: nullableInt.default(null),
     factsVerified: nullableInt.default(null),
@@ -115,7 +115,7 @@ export const telemetrySchema = z.looseObject({
     nativeLanguageSearches: nullableInt.default(null),
   }).default({}),
   totalDurationSec: z.number().min(0).nullable().default(null),
-  tokens: z.looseObject({ input: nullableInt.default(null), output: nullableInt.default(null) }).nullable().default(null),
+  tokens: z.object({ input: nullableInt.default(null), output: nullableInt.default(null) }).nullable().default(null),
   costUsd: z.number().min(0).nullable().default(null),
 });
 
@@ -123,7 +123,7 @@ export const telemetrySchema = z.looseObject({
 
 export const STAGE_STATUSES = ["queued", "running", "complete", "failed"];
 
-const stageState = z.looseObject({
+const stageState = z.object({
   status: z.enum(STAGE_STATUSES),
   startedAt: iso.nullable().default(null),
   endedAt: iso.nullable().default(null),
@@ -132,43 +132,78 @@ const stageState = z.looseObject({
   effort: z.string().nullable().default(null),
   // The last commit that made this stage durable, when known. Null is honest — a stage that has
   // not committed yet has no durable commit to name.
-  commit: z.string().nullable().default(null),
+  commit: z.string().regex(/^[0-9a-f]{40}$/i, "expected a full 40-character git commit SHA").nullable().default(null),
   failure,
+}).superRefine((stage, ctx) => {
+  if (stage.status === "queued" && (stage.startedAt || stage.endedAt)) {
+    ctx.addIssue({ code: "custom", message: "a queued stage cannot have start/end timestamps" });
+  }
+  if (["running", "complete", "failed"].includes(stage.status) && !stage.startedAt) {
+    ctx.addIssue({ code: "custom", message: `${stage.status} stage requires startedAt` });
+  }
+  if (["complete", "failed"].includes(stage.status) && !stage.endedAt) {
+    ctx.addIssue({ code: "custom", message: `${stage.status} stage requires endedAt` });
+  }
+  if (stage.status === "failed" && !stage.failure) {
+    ctx.addIssue({ code: "custom", message: "failed stage requires failure detail" });
+  }
 });
 
 export const runStateSchema = z.looseObject({
   schemaVersion: z.string(),
   slug: z.string().min(1),
-  // Immutable per run. A resumed run keeps its runId; a fresh dispatch after completion/stuck
-  // mints a new one.
-  runId: z.string().min(1),
+  // Immutable per run. Ordinary redispatch always keeps it; a deliberately forced new run is a
+  // separate operator decision with a fresh branch.
+  runId: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*-\d{8}-[0-9a-f]{6}$/, "expected canonical <slug>-YYYYMMDD-<hex> run id"),
   lifecycle: z.enum(["research", "change"]),
+  inputs: z.object({
+    section: z.string().max(200),
+    model: z.string().min(1),
+    effort: z.string().min(1),
+    criticModel: z.string().min(1),
+  }),
   status: z.enum(["pending", "running", "paused", "complete", "failed", "stuck"]),
   createdAt: iso,
   updatedAt: iso,
   stageOrder: z.array(z.string().min(1)).min(1),
   stages: z.record(z.string(), stageState),
-  attempts: z.looseObject({
+  attempts: z.object({
     total: z.number().int().min(0).default(0),
     cap: z.number().int().min(1),
     autoRetries: z.number().int().min(0).default(0),
     autoRetryCap: z.number().int().min(0).default(1),
   }),
   // Where a resumed run picks up: the interrupted stage itself, never a stage ahead of it.
-  resume: z.looseObject({
+  resume: z.object({
     nextStage: z.string().nullable(),
     action: z.string(),
   }),
   failure,
   // Publication and deployed-live are DISTINCT facts: a merge to main is not "live", and the
   // progress surface must never conflate them. null deployedLive = not yet known (honest).
-  publication: z.looseObject({
+  publication: z.object({
     published: z.boolean().default(false),
     publishedAt: iso.nullable().default(null),
     deployedLive: z.boolean().nullable().default(null),
     deployedAt: iso.nullable().default(null),
   }),
+  landingGate: z.object({
+    status: z.enum(["pending", "passed", "failed"]),
+    checkedAt: iso.nullable().default(null),
+    failure: z.string().nullable().default(null),
+  }).superRefine((gate, ctx) => {
+    if (gate.status === "pending" && (gate.checkedAt || gate.failure)) ctx.addIssue({ code: "custom", message: "pending landing gate cannot have result fields" });
+    if (gate.status === "passed" && (!gate.checkedAt || gate.failure)) ctx.addIssue({ code: "custom", message: "passed landing gate requires checkedAt and no failure" });
+    if (gate.status === "failed" && (!gate.checkedAt || !gate.failure?.trim())) ctx.addIssue({ code: "custom", message: "failed landing gate requires checkedAt and failure" });
+  }).default({ status: "pending", checkedAt: null, failure: null }),
   telemetry: telemetrySchema.nullable().default(null),
+}).superRefine((state, ctx) => {
+  if (!state.runId.startsWith(`${state.slug}-`)) ctx.addIssue({ code: "custom", message: "runId must be prefixed by slug" });
+  const statuses = state.stageOrder.map((stage) => state.stages[stage]?.status);
+  if (state.status === "complete" && statuses.some((s) => s !== "complete")) ctx.addIssue({ code: "custom", message: "complete run requires every stage complete" });
+  if (state.status === "failed" && !state.failure) ctx.addIssue({ code: "custom", message: "failed run requires failure detail" });
+  if (state.publication.published !== Boolean(state.publication.publishedAt)) ctx.addIssue({ code: "custom", message: "published and publishedAt must agree" });
+  if (state.publication.deployedLive === true && !state.publication.deployedAt) ctx.addIssue({ code: "custom", message: "deployedLive requires deployedAt" });
 });
 
 // ── research evidence + candidates ───────────────────────────────────────────
@@ -194,8 +229,8 @@ const candidate = z.looseObject({
   worth: z.enum(WORTH_LABELS).nullable().default(null),
 });
 
-const evidenceSource = z.looseObject({
-  url: z.string().nullable().default(null),
+const evidenceSource = z.object({
+  url: z.string().url().refine((url) => /^https?:\/\//i.test(url), "expected an http(s) source URL"),
   kind: z.enum(SOURCE_KINDS),
   language: z.string().nullable().default(null),
   publishedAt: z.string().nullable().default(null),
@@ -203,9 +238,13 @@ const evidenceSource = z.looseObject({
   // family key; null = independence not knowable (honest, not assumed independent).
   family: z.string().nullable().default(null),
   independent: z.boolean().nullable().default(null),
+  // For recurring events, this is the explicit season/year the current source actually
+  // announces. Publication year alone cannot distinguish a valid advance announcement from
+  // last year's schedule being extrapolated.
+  appliesToYears: z.array(z.number().int().min(2000).max(2200)).default([]),
 });
 
-const evidenceRecord = z.looseObject({
+const evidenceRecord = z.object({
   id: z.string().min(1),
   candidateId: z.string().nullable().default(null),
   claim: z.string().min(1),
@@ -214,9 +253,14 @@ const evidenceRecord = z.looseObject({
   source: evidenceSource,
   verifiedOn: isoDate,
   firsthand: z.boolean().nullable().default(null),
+  freshness: z.object({
+    perishable: z.boolean(),
+    shelfLife: z.enum(["fx", "transit", "hours", "venue", "default"]).nullable().default(null),
+    recheckOn: isoDate.nullable().default(null),
+  }).nullable().default(null),
 });
 
-const reservationFinding = z.looseObject({
+const reservationFinding = z.object({
   candidateId: z.string().min(1),
   importance: z.enum(["casual", "important", "anchor"]),
   bookingUrl: z.string().nullable().default(null),
@@ -230,7 +274,7 @@ const reservationFinding = z.looseObject({
   walkIn: z.string().nullable().default(null),
   // A local report that concierge/alternative booking may work, not officially confirmed. It
   // stays a labeled lead until current evidence confirms it — never silently promoted.
-  leads: z.array(z.looseObject({
+  leads: z.array(z.object({
     claim: z.string().min(1),
     status: z.enum(["unconfirmed-lead", "confirmed"]),
     source: evidenceSource.nullable().default(null),
@@ -240,7 +284,7 @@ const reservationFinding = z.looseObject({
   fallback: z.string().nullable().default(null),
 });
 
-const transportFinding = z.looseObject({
+const transportFinding = z.object({
   id: z.string().min(1),
   route: z.string().min(1),
   risk: z.number().int().min(0).max(4),
@@ -254,7 +298,7 @@ const transportFinding = z.looseObject({
   fallback: z.string().nullable().default(null),
 });
 
-const disagreement = z.looseObject({
+const disagreement = z.object({
   id: z.string().min(1),
   topic: z.string().min(1),
   impact: z.enum(["recommendation-changing", "minor"]),
@@ -263,7 +307,7 @@ const disagreement = z.looseObject({
 });
 
 // The adaptive-search stop record (replaces fixed quotas — DECISIONS.md "Research breadth").
-const saturation = z.looseObject({
+const saturation = z.object({
   stopped: z.boolean(),
   // What the last searches were producing when the run stopped (or why it hasn't stopped).
   trend: z.enum(["novel", "duplicates", "weaker"]),
@@ -281,17 +325,28 @@ export const evidenceDocSchema = z.looseObject({
   reservations: z.array(reservationFinding).default([]),
   transport: z.array(transportFinding).default([]),
   disagreements: z.array(disagreement).default([]),
+  depth: z.object({
+    reservations: z.object({
+      requiredCandidateIds: z.array(z.string().min(1)).default([]),
+      notApplicableReason: z.string().min(20).nullable().default(null),
+    }),
+    transport: z.object({
+      requiredRouteIds: z.array(z.string().min(1)).default([]),
+      notApplicableReason: z.string().min(20).nullable().default(null),
+    }),
+  }).nullable().default(null),
   saturation: saturation.nullable().default(null),
-  passB: z.looseObject({
-    nativeLanguage: z.looseObject({
+  passB: z.object({
+    nativeLanguage: z.object({
       used: z.boolean(),
       why: z.string().nullable().default(null),
       searchClasses: z.array(z.string()).default([]),
       yield: z.string().nullable().default(null),
     }).nullable().default(null),
+    noYieldReason: z.string().nullable().default(null),
   }).nullable().default(null),
   // Every independent (Pass-B origin) finding gets exactly one typed disposition, linked by id.
-  reconciliation: z.array(z.looseObject({
+  reconciliation: z.array(z.object({
     findingId: z.string().min(1),
     disposition: z.enum(DISPOSITIONS),
     note: z.string().min(1),
@@ -304,7 +359,7 @@ export const evidenceDocSchema = z.looseObject({
 
 const GROUP_REF = /^\d\d-[a-z0-9-]+\.json(#.+)?$/;
 
-export const coverageAskSchema = z.looseObject({
+export const coverageAskSchema = z.object({
   id: z.string().min(1),
   ask: z.string().min(1),
   status: z.enum(["covered", "excluded"]),
@@ -315,7 +370,7 @@ export const coverageAskSchema = z.looseObject({
   reason: z.string().nullable().default(null),
 });
 
-export const coverageDocSchema = z.looseObject({
+export const coverageDocSchema = z.object({
   schemaVersion: z.string(),
   slug: z.string().min(1),
   runId: z.string().min(1),

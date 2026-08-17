@@ -43,6 +43,9 @@ export const EXPERIENTIAL_STALE_MONTHS = 24;
 export function evidenceKindProblems(doc) {
   const problems = [];
   for (const e of doc.evidence || []) {
+    if (!e.source?.url || !/^https?:\/\//i.test(e.source.url)) {
+      problems.push(`evidence "${e.id}" has no usable http(s) source URL — a typed source kind is not evidence`);
+    }
     if (e.kind === "objective" && !OBJECTIVE_SOURCE_KINDS.has(e.source?.kind)) {
       problems.push(
         `objective claim "${e.claim.slice(0, 60)}" (${e.id}) cites a ${e.source?.kind ?? "missing"} source — ` +
@@ -59,31 +62,39 @@ export function evidenceKindProblems(doc) {
   return problems;
 }
 
-/** Rule: experiential corroboration on shipped candidates — ≥2 records, distinct families. */
+/** Rule: every experiential claim that enters the artifact is potentially guide-bearing, so it
+    owes ≥2 independent firsthand records even when it is cross-cutting or later rejected. */
 export function corroborationProblems(doc) {
   const problems = [];
-  const shipped = new Map((doc.candidates || []).filter((c) => c.status === "shipped").map((c) => [c.id, c]));
-  const byCandidate = new Map();
+  const candidates = new Map((doc.candidates || []).map((c) => [c.id, c]));
+  const guideBearing = new Set((doc.candidates || []).filter((c) => ["shipped", "detour"].includes(c.status)).map((c) => c.id));
+  const byClaim = new Map();
   for (const e of doc.evidence || []) {
-    if (e.kind !== "experiential" || !e.candidateId) continue;
-    if (!byCandidate.has(e.candidateId)) byCandidate.set(e.candidateId, []);
-    byCandidate.get(e.candidateId).push(e);
+    if (e.kind !== "experiential" || (e.candidateId && !guideBearing.has(e.candidateId))) continue;
+    const claimKey = String(e.claim).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+    const key = `${e.candidateId || "general"}\u0000${claimKey}`;
+    if (!byClaim.has(key)) byClaim.set(key, []);
+    byClaim.get(key).push(e);
   }
-  for (const [candidateId, records] of byCandidate) {
-    const candidate = shipped.get(candidateId);
-    if (!candidate) continue; // corroboration is owed where the claim SHIPS
-    // Records sharing a known family count once; null families can't be collapsed (honesty
-    // limit: unknown independence is not assumed shared OR independent — each stands alone).
-    const families = new Set();
-    let unknowns = 0;
-    for (const r of records) {
-      if (r.source?.family) families.add(r.source.family);
-      else unknowns += 1;
+  for (const [key, records] of byClaim) {
+    const candidateId = key.split("\u0000")[0];
+    const candidate = candidates.get(candidateId);
+    const candidateName = candidate?.name || "General guide claim";
+    const nonFirsthand = records.filter((r) => r.source?.kind !== "firsthand" || r.firsthand !== true);
+    if (nonFirsthand.length) {
+      problems.push(`"${candidateName}" (${candidateId}) experiential claim "${records[0].claim.slice(0, 60)}" includes non-firsthand evidence — firsthand must be explicit`);
     }
-    const independentCount = families.size + unknowns;
+    const families = new Set();
+    const explicitlyIndependent = new Set();
+    for (const r of records) {
+      if (r.source?.kind !== "firsthand" || r.firsthand !== true) continue;
+      if (r.source?.family) families.add(r.source.family);
+      else if (r.source?.independent === true && r.source?.url) explicitlyIndependent.add(r.source.url);
+    }
+    const independentCount = families.size + explicitlyIndependent.size;
     if (independentCount < 2) {
       problems.push(
-        `"${candidate.name}" (${candidateId}) ships on ${records.length === 1 ? "a single" : "one family of"} experiential source(s) — ` +
+        `"${candidateName}" (${candidateId}) claim "${records[0].claim.slice(0, 60)}" relies on ${records.length === 1 ? "a single" : "unproven-independent"} experiential source set — ` +
           `crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once)`,
       );
     }
@@ -98,13 +109,15 @@ export function yearSafetyProblems(doc) {
     if (e.kind !== "objective") continue;
     const published = e.source?.publishedAt;
     const pubYear = published ? Number(String(published).slice(0, 4)) : null;
-    if (!pubYear || !Number.isFinite(pubYear)) continue; // unknowable — no invented verdict
+    const verifiedYear = Number(String(e.verifiedOn).slice(0, 4));
     for (const m of String(e.claim).matchAll(/\b(20\d{2})\b/g)) {
       const claimYear = Number(m[1]);
-      if (claimYear > pubYear) {
+      const isFuture = Number.isFinite(verifiedYear) && claimYear > verifiedYear;
+      const laterThanKnownPublication = Number.isFinite(pubYear) && claimYear > pubYear;
+      if ((isFuture || laterThanKnownPublication) && !(e.source?.appliesToYears || []).includes(claimYear)) {
         problems.push(
-          `"${e.claim.slice(0, 70)}" (${e.id}) names ${claimYear} but its source was published in ${pubYear} — ` +
-            `a prior-year source is a LEAD for a recurring event, never a confirmed future-year date`,
+          `"${e.claim.slice(0, 70)}" (${e.id}) names ${claimYear}${Number.isFinite(pubYear) ? ` but its source was published in ${pubYear}` : " without a dated publication"} — ` +
+            `a prior-year source is a LEAD unless it explicitly records appliesToYears:[${claimYear}]`,
         );
         break;
       }
@@ -116,14 +129,47 @@ export function yearSafetyProblems(doc) {
 /** Rule: experiential freshness — a known-old firsthand report cannot carry a current claim. */
 export function freshnessProblems(doc, { staleMonths = EXPERIENTIAL_STALE_MONTHS } = {}) {
   const problems = [];
+  const shipped = new Set((doc.candidates || []).filter((c) => c.status === "shipped").map((c) => c.id));
   for (const e of doc.evidence || []) {
-    if (e.kind !== "experiential" || !e.source?.publishedAt) continue;
+    if (e.kind !== "experiential") continue;
+    if (!e.source?.publishedAt) {
+      if (e.candidateId && shipped.has(e.candidateId)) {
+        problems.push(`experiential claim "${e.claim.slice(0, 60)}" (${e.id}) has no source date — recency is unproven for a shipped recommendation`);
+      }
+      continue;
+    }
     const age = monthsBetween(e.source.publishedAt, e.verifiedOn);
     if (age !== null && age > staleMonths) {
       problems.push(
         `experiential claim "${e.claim.slice(0, 60)}" (${e.id}) rests on a source ~${Math.round(age)} months old — ` +
           `crowd/queue/atmosphere reality older than ${staleMonths} months is a lead to re-verify, not current evidence`,
       );
+    }
+  }
+  return problems;
+}
+
+export function objectiveFreshnessProblems(doc) {
+  const problems = [];
+  const maxDays = { fx: 7, transit: 90, hours: 90, venue: 180, default: 90 };
+  const today = new Date().toISOString().slice(0, 10);
+  for (const e of doc.evidence || []) {
+    if (e.kind !== "objective") continue;
+    if (!e.freshness) {
+      problems.push(`objective evidence "${e.id}" has no freshness classification — perishable facts need a category and recheck date`);
+      continue;
+    }
+    if (e.freshness.perishable) {
+      if (!e.freshness.shelfLife || !e.freshness.recheckOn) {
+        problems.push(`perishable objective evidence "${e.id}" needs shelfLife + recheckOn`);
+      } else if (Date.parse(e.freshness.recheckOn) <= Date.parse(e.verifiedOn)) {
+        problems.push(`objective evidence "${e.id}" recheckOn must be after verifiedOn`);
+      } else {
+        const limit = maxDays[e.freshness.shelfLife];
+        const days = Math.round((Date.parse(e.freshness.recheckOn) - Date.parse(e.verifiedOn)) / 86_400_000);
+        if (days > limit) problems.push(`objective evidence "${e.id}" ${e.freshness.shelfLife} recheck window is ${days} days; maximum is ${limit}`);
+        if (e.freshness.recheckOn < today) problems.push(`objective evidence "${e.id}" recheck date ${e.freshness.recheckOn} has expired`);
+      }
     }
   }
   return problems;
@@ -149,6 +195,13 @@ export function reservationProblems(doc) {
     if (r.importance === "anchor" && !r.fallback) {
       problems.push(`anchor reservation for ${r.candidateId} has no fallback — the anchor failing is the trip failing`);
     }
+    if (r.importance === "anchor") {
+      for (const [field, label] of [
+        ["partyRules", "party-size rules"], ["deposit", "deposit/prepayment terms"],
+        ["cancellation", "cancellation/no-show terms"], ["foreignFriction", "foreign-user friction"],
+      ]) if (!r[field]) problems.push(`anchor reservation for ${r.candidateId} has no ${label}`);
+      if (!(r.walkIn || r.alternatives)) problems.push(`anchor reservation for ${r.candidateId} has no walk-in verdict or alternative booking method`);
+    }
     for (const lead of r.leads || []) {
       if (lead.status === "confirmed" && !(lead.verifiedOn && lead.source)) {
         problems.push(
@@ -161,12 +214,61 @@ export function reservationProblems(doc) {
   return problems;
 }
 
+/** Full-pass depth cannot disappear by omitting every reservation/transport row. The agent must
+    enumerate required ids or state why the class is not applicable; required ids must resolve. */
+export function depthScopeProblems(doc) {
+  const problems = [];
+  const depth = doc.depth;
+  if (!depth) return ["research depth assessment is missing — reservation/transport obligations were never enumerated"];
+  const candidateIds = new Set((doc.candidates || []).map((c) => c.id));
+  const reservationIds = new Set((doc.reservations || []).map((r) => r.candidateId));
+  const requiredReservations = depth.reservations?.requiredCandidateIds || [];
+  if (!requiredReservations.length && !depth.reservations?.notApplicableReason?.trim()) {
+    problems.push("reservation depth lists no required candidates and no not-applicable reason");
+  }
+  for (const id of requiredReservations) {
+    if (!candidateIds.has(id)) problems.push(`reservation depth requires unknown candidate "${id}"`);
+    if (!reservationIds.has(id)) problems.push(`reservation depth requires "${id}" but no reservation record exists`);
+  }
+  const routeIds = new Set((doc.transport || []).map((t) => t.id));
+  const requiredRoutes = depth.transport?.requiredRouteIds || [];
+  if (!requiredRoutes.length && !depth.transport?.notApplicableReason?.trim()) {
+    problems.push("transport depth lists no required routes and no not-applicable reason");
+  }
+  for (const id of requiredRoutes) if (!routeIds.has(id)) problems.push(`transport depth requires route "${id}" but no transport record exists`);
+  return problems;
+}
+
+export function passBSubstanceProblems(doc) {
+  const audit = doc.passB?.nativeLanguage;
+  const problems = [];
+  if (!audit) problems.push("Pass B native-language audit is missing");
+  else if (!audit.why?.trim()) problems.push("Pass B native-language audit does not explain why local-language research was or was not used");
+  else if (audit.used && (!audit.searchClasses.length || !audit.yield?.trim())) {
+    problems.push("Pass B says native-language research was used but records no search classes or useful yield");
+  }
+  const passBRecords = (doc.evidence || []).filter((e) => e.origin === "passB");
+  if (!passBRecords.length && !doc.passB?.noYieldReason?.trim()) {
+    problems.push("Pass B produced no evidence and no typed noYieldReason — a missing resident angle cannot pass as an empty array");
+  }
+  return problems;
+}
+
+export function disagreementProblems(doc) {
+  return (doc.disagreements || [])
+    .filter((d) => d.impact === "recommendation-changing" && !d.resolution?.trim())
+    .map((d) => `recommendation-changing disagreement "${d.topic}" (${d.id}) has no resolution`);
+}
+
 /** Rule: high-risk transport owes the physical reality; routine transit owes nothing. */
 export function transportProblems(doc) {
   const problems = [];
   for (const t of doc.transport || []) {
     if (t.risk < 3) continue; // forgiving transport stays simple — by design
     const missing = [];
+    if (!t.doorToDoor) missing.push("door-to-door route");
+    if (!t.transferReality) missing.push("physical transfer reality");
+    if (!t.groupLuggageMobility) missing.push("group/luggage/mobility effect");
     if (!t.fallback) missing.push("fallback");
     if (!t.missedConnection) missing.push("missed-connection consequence");
     if (!(t.buffer || t.nextService || t.lastPracticalReturn)) missing.push("buffer / next service / last practical return");
@@ -187,7 +289,11 @@ export function researchRuleProblems(doc) {
     ...corroborationProblems(doc),
     ...yearSafetyProblems(doc),
     ...freshnessProblems(doc),
+    ...objectiveFreshnessProblems(doc),
     ...reservationProblems(doc),
     ...transportProblems(doc),
+    ...depthScopeProblems(doc),
+    ...passBSubstanceProblems(doc),
+    ...disagreementProblems(doc),
   ];
 }

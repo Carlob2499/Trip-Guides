@@ -12,11 +12,11 @@ job after you finish.**
 
 ## Read first
 
-- `.claude/skills/waypoint-guide-author/SKILL.md` — the bar test, the **vibe lens** (pacing arc
+- `.agents/skills/waypoint-guide-author/SKILL.md` — the bar test, the **vibe lens** (pacing arc
   · geography · meals & energy · tone · inclement cover · common sense), the citation audit,
   the continuity sweep.
-- `references/verification-rules.md`, `references/research-depth.md`,
-  `references/block-types.md`.
+- `.agents/skills/waypoint-guide-author/references/verification-rules.md`, `.agents/skills/waypoint-guide-author/references/research-depth.md`,
+  `.agents/skills/waypoint-guide-author/references/block-types.md`.
 - `docs/standards/guide-rubric.md` — the rows you score (#6 anchor · #8 priority depth · #9
   party fit · #12 authenticity carry your first four scans; the vibe lens is the fifth).
 
@@ -24,14 +24,16 @@ job after you finish.**
 
 Read ONLY the finished guide (`src/content/guides/{{slug}}/`), the frozen intake
 (`guides-intake/{{slug}}/intake.md`), the human ledger (`guides-intake/{{slug}}/ledger.md` —
-you append to it), the skill files above and the rubric.
+you append to it), `docs/evidence/pipeline-patterns.md`, the skill files above and the rubric.
 
 Findings that say "consider adding X" are not findings. Each one states what's wrong, WHERE
 (group file + item), the rubric row or lens it violates, and a researched replacement — and you
-implement it yourself: edit the group files, extend `ledger.md`, and re-run
-`npm run verify -- --slug {{slug}}` + `npm run build` until clean (≤3 rounds). Anything NEW you
+implement it yourself: edit the group files and extend `ledger.md`; the workflow runs verification
+and build after you return. Anything NEW you
 introduce is verified to the same bar as any other fact (objective → primary source;
-experiential → corroborated), or it does not ship.
+experiential → corroborated), or it does not ship. Web fetching is mechanically restricted to
+source domains the preceding passes already verified; if a genuinely new authority is needed,
+flag the exact drift and source lead instead of pretending you fetched it.
 
 Write these to `guides-intake/{{slug}}/ledger.md` — the workflow fails the run without them:
 
@@ -42,8 +44,13 @@ Write these to `guides-intake/{{slug}}/ledger.md` — the workflow fails the run
 - `#### Continuity sweep — critic execution` — whenever you edited the guide: greps run ·
   ripples found & fixed · deferred to human ("none" stated explicitly). A clean pass edits
   nothing and owes no sweep.
+- `guides-intake/{{slug}}/pipeline-patterns.fragment.md` — distilled reusable process findings
+  for this run as 1–10 exact table rows: `| YYYY-MM-DD | {{slug}} | [critic] | rubric row or lens | distilled pattern | open |`.
+  A clean run writes `| YYYY-MM-DD | {{slug}} | [critic] | — | clean run — no findings | open |`.
+  No headings or raw findings; the workflow validates and inserts these newest-first.
 
 STOP there. The workflow restores its bookkeeping, runs palette + composition + the networked
 evidence gate, and lands the branch as a draft PR — publication is not this run's decision.
 
-Touch nothing outside `src/content/guides/{{slug}}/` and `guides-intake/{{slug}}/ledger.md`.
+Touch nothing outside `src/content/guides/{{slug}}/`, `guides-intake/{{slug}}/ledger.md`, and
+`guides-intake/{{slug}}/pipeline-patterns.fragment.md`.

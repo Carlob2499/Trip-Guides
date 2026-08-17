@@ -23,6 +23,8 @@ import { renderModifyIssueBody, MODIFY_LABEL } from "../../src/lib/modify-schema
 // unified — one parser reads both the modify and revise templates.)
 import { parseChangeIssue } from "../pipeline/issue.mjs";
 
+const STRONG_KEY = "s".repeat(OWNER_KEY_MIN_LEN);
+
 describe("owner auth gate", () => {
   it("503s when OWNER_KEY is unset — fails CLOSED, never open", () => {
     for (const unset of ["", null, undefined]) {
@@ -38,12 +40,16 @@ describe("owner auth gate", () => {
   });
 
   it("401s on a wrong or missing key, identically", () => {
-    expect(ownerGate("s3cret", "wrong")).toEqual({ ok: false, status: 401, error: "unauthorized" });
-    expect(ownerGate("s3cret", null)).toEqual({ ok: false, status: 401, error: "unauthorized" });
+    expect(ownerGate(STRONG_KEY, "wrong")).toEqual({ ok: false, status: 401, error: "unauthorized" });
+    expect(ownerGate(STRONG_KEY, null)).toEqual({ ok: false, status: 401, error: "unauthorized" });
   });
 
   it("passes the matching key", () => {
-    expect(ownerGate("s3cret", "s3cret")).toEqual({ ok: true });
+    expect(ownerGate(STRONG_KEY, STRONG_KEY)).toEqual({ ok: true });
+  });
+
+  it("fails closed when OWNER_KEY is configured below the minimum", () => {
+    expect(ownerGate("s3cret", "s3cret")).toMatchObject({ ok: false, status: 503 });
   });
 
   it("compares every character, not a prefix", () => {
@@ -99,10 +105,8 @@ describe("ownerKeyHealth — what /health may say about the key", () => {
     expect(ownerKeyHealth("k".repeat(OWNER_KEY_MIN_LEN))).toBe("configured");
   });
 
-  it("the SERVER's minimum is the authority, and it is stricter than the paste guard", () => {
-    // src/scripts/owner-key.js's OWNER_KEY_MIN (16) stops a mis-paste at the input box. It is not
-    // the boundary: this endpoint is reachable without that page, and a key that only satisfies
-    // the client check is reported WEAK here.
+  it("the SERVER's minimum is the authority for every caller", () => {
+    // The browser mirrors 32 for useful feedback, but this endpoint is reachable without it.
     expect(OWNER_KEY_MIN_LEN).toBe(32);
     expect(ownerKeyHealth("k".repeat(16))).toBe("WEAK");
   });

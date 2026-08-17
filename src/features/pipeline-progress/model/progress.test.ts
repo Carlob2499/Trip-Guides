@@ -315,7 +315,7 @@ import { adaptV2Snapshot } from "./progress";
 const v2Run = (over: Record<string, unknown> = {}) => ({
   schemaVersion: "wp-run/2.0",
   slug: "testland",
-  runId: "r-1",
+  runId: "testland-20260817-abcdef",
   lifecycle: "research",
   status: "running",
   createdAt: "2026-08-17T10:00:00Z",
@@ -327,6 +327,7 @@ const v2Run = (over: Record<string, unknown> = {}) => ({
   },
   attempts: { total: 1, cap: 5 },
   publication: { published: false, deployedLive: null },
+  landingGate: { status: "pending", checkedAt: null, failure: null },
   failure: null,
   ...over,
 });
@@ -336,14 +337,15 @@ describe("adaptV2Snapshot (M7)", () => {
     const snap = adaptV2Snapshot(v2Run({
       status: "complete",
       stages: {
-        scaffold: { status: "complete", endedAt: "a" }, passA: { status: "complete", endedAt: "b" },
-        passB: { status: "complete", endedAt: "c" }, reconcile: { status: "complete", endedAt: "d" },
-        critic: { status: "complete", endedAt: "e" },
+        scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" }, passA: { status: "complete", endedAt: "2026-08-17T10:02:00Z" },
+        passB: { status: "complete", endedAt: "2026-08-17T10:03:00Z" }, reconcile: { status: "complete", endedAt: "2026-08-17T10:04:00Z" },
+        critic: { status: "complete", endedAt: "2026-08-17T10:05:00Z" },
       },
+      landingGate: { status: "passed", checkedAt: "2026-08-17T10:06:00Z", failure: null },
     }));
     expect(snap.version).toBe(2);
     expect(snap.malformed).toBe(false);
-    expect(snap.state?.stages).toEqual({ scaffold: "a", passA: "b", passB: "c", reconcile: "d", verified: "e" });
+    expect(snap.state?.stages).toEqual({ scaffold: "2026-08-17T10:01:00Z", passA: "2026-08-17T10:02:00Z", passB: "2026-08-17T10:03:00Z", reconcile: "2026-08-17T10:04:00Z", verified: "2026-08-17T10:05:00Z" });
     expect(snap.runStatus).toBe("complete");
   });
 

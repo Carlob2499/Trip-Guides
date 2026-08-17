@@ -19,6 +19,7 @@ import {
   RUN_SCHEMA, TELEMETRY_SCHEMA, runStateSchema, parseOrThrow, assertVersionCompatible, ContractError,
 } from "./contracts.mjs";
 import { readState as readStateV1, STAGE_ORDER as V1_STAGE_ORDER } from "../../pipeline.mjs";
+import { isValidSlug } from "../../lib/slug.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const INTAKE_DIR = path.join(ROOT, "guides-intake");
@@ -34,7 +35,11 @@ export const V2_ATTEMPT_CAP = 5;
 export const V2_AUTO_RETRY_CAP = 1;
 
 export function runStatePath(slug, intakeDir = INTAKE_DIR) {
-  return path.join(intakeDir, slug, "run.v2.json");
+  if (!isValidSlug(slug)) throw new ContractError(`invalid run-state slug "${slug}"`);
+  const root = path.resolve(intakeDir);
+  const file = path.resolve(root, slug, "run.v2.json");
+  if (!file.startsWith(root + path.sep)) throw new ContractError(`run-state path escapes ${root}`);
+  return file;
 }
 
 export function newRunId(slug, { now = new Date() } = {}) {
@@ -57,14 +62,27 @@ export async function readRunStateV2(slug, { intakeDir = INTAKE_DIR } = {}) {
     );
   }
   assertVersionCompatible(raw.schemaVersion, RUN_SCHEMA, { file });
-  return parseOrThrow(runStateSchema, raw, { file, what: "V2 run state" });
+  const state = parseOrThrow(runStateSchema, raw, { file, what: "V2 run state" });
+  if (state.slug !== slug) {
+    throw new ContractError(`V2 run state at ${file} belongs to "${state.slug}", not requested slug "${slug}"`, { file });
+  }
+  if (JSON.stringify(state.stageOrder) !== JSON.stringify(V2_RESEARCH_STAGES) ||
+      Object.keys(state.stages).sort().join("|") !== [...V2_RESEARCH_STAGES].sort().join("|")) {
+    throw new ContractError(`V2 research run ${state.runId} has a non-canonical stage order/key set`, { file });
+  }
+  if (state.resume.nextStage !== nextStageV2(state)) {
+    throw new ContractError(`V2 run ${state.runId} resume.nextStage disagrees with its stage statuses`, { file });
+  }
+  return state;
 }
 
 async function save(state, intakeDir = INTAKE_DIR) {
   state.updatedAt = state.updatedAt || new Date().toISOString();
-  await mkdir(path.join(intakeDir, state.slug), { recursive: true });
-  await writeFile(runStatePath(state.slug, intakeDir), JSON.stringify(state, null, 2) + "\n");
-  return state;
+  const file = runStatePath(state.slug, intakeDir);
+  const validated = parseOrThrow(runStateSchema, state, { file, what: "V2 run state (on write)" });
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, JSON.stringify(validated, null, 2) + "\n");
+  return validated;
 }
 
 function touch(state, now) {
@@ -99,17 +117,27 @@ export async function initRunV2(slug, {
   now = new Date().toISOString(),
   intakeDir = INTAKE_DIR,
   force = false,
+  inputs = { section: "", model: "claude-sonnet-5", effort: "high", criticModel: "claude-opus-5" },
 } = {}) {
   const existing = await readRunStateV2(slug, { intakeDir });
   if (existing && !force) {
-    const done = !nextStageV2(existing);
-    if (!done && existing.status !== "stuck") return existing; // resume, never restart
+    // Complete and stuck records are deliberately durable too. A redispatch may re-run landing
+    // or surface the stuck state, but it must not silently mint a new run whose "baseline"
+    // already contains the prior run's evidence. Starting over requires an explicit --force
+    // decision and a deliberately fresh branch.
+    if (JSON.stringify(existing.inputs) !== JSON.stringify(inputs)) {
+      throw new ContractError(
+        `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel recorded in run.v2.json`,
+      );
+    }
+    return existing;
   }
   const state = {
     schemaVersion: RUN_SCHEMA,
     slug,
     runId: newRunId(slug, { now: new Date(now) }),
     lifecycle,
+    inputs,
     status: "pending",
     createdAt: now,
     updatedAt: now,
@@ -121,6 +149,7 @@ export async function initRunV2(slug, {
     resume: { nextStage: stages[0], action: `run stage "${stages[0]}"` },
     failure: null,
     publication: { published: false, publishedAt: null, deployedLive: null, deployedAt: null },
+    landingGate: { status: "pending", checkedAt: null, failure: null },
     telemetry: null,
   };
   return save(state, intakeDir);
@@ -146,6 +175,13 @@ function requireStage(state, stage) {
 export async function stageStart(slug, stage, { model = null, effort = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
   const st = requireStage(state, stage);
+  const next = nextStageV2(state);
+  if (stage !== next) {
+    throw new ContractError(`cannot start stage "${stage}" — the durable next stage is "${next || "none"}"`);
+  }
+  if (state.status === "stuck") {
+    throw new ContractError(`cannot start stage "${stage}" — run ${state.runId} is stuck at its attempt cap`);
+  }
   st.status = "running";
   st.startedAt = now;
   st.endedAt = null;
@@ -166,6 +202,9 @@ export async function stageStart(slug, stage, { model = null, effort = null, now
 export async function stageComplete(slug, stage, { commit = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
   const st = requireStage(state, stage);
+  if (st.status !== "running") {
+    throw new ContractError(`cannot complete stage "${stage}" from status "${st.status}" — checkpoint its start first`);
+  }
   st.status = "complete";
   st.endedAt = now;
   st.failure = null;
@@ -179,6 +218,10 @@ export async function stageComplete(slug, stage, { commit = null, now = new Date
 export async function stageFail(slug, stage, { failureClass = "unknown", detail = "", now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
   const st = requireStage(state, stage);
+  if (st.status === "failed") return state;
+  // Setup/control-plane failures can occur before the durable begin checkpoint. Preserve them
+  // honestly instead of producing a failed stage that violates its own timestamp contract.
+  if (!st.startedAt) st.startedAt = now;
   st.status = "failed";
   st.endedAt = now;
   st.failure = { class: failureClass, detail, at: now };
@@ -192,6 +235,12 @@ export async function stageFail(slug, stage, { failureClass = "unknown", detail 
     caller checks `overCap`. */
 export async function bumpRunAttempt(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
+  if (state.status === "complete") {
+    return { state, overCap: false, attempts: state.attempts.total, cap: state.attempts.cap };
+  }
+  if (state.status === "stuck") {
+    return { state, overCap: true, attempts: state.attempts.total, cap: state.attempts.cap };
+  }
   state.attempts.total += 1;
   const overCap = state.attempts.total > state.attempts.cap;
   if (overCap) state.status = "stuck";
@@ -204,7 +253,9 @@ export async function bumpRunAttempt(slug, { now = new Date().toISOString(), int
 export async function recordAutoRetry(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
   state.attempts.autoRetries += 1;
-  const allowed = state.attempts.autoRetries <= state.attempts.autoRetryCap;
+  const allowed = state.status !== "stuck" &&
+    state.attempts.total < state.attempts.cap &&
+    state.attempts.autoRetries <= state.attempts.autoRetryCap;
   await save(touch(state, now), intakeDir);
   return { state, allowed, autoRetries: state.attempts.autoRetries, cap: state.attempts.autoRetryCap };
 }
@@ -221,6 +272,14 @@ export async function markDeployedLive(slug, { now = new Date().toISOString(), i
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
   state.publication.deployedLive = true;
   state.publication.deployedAt = now;
+  return save(touch(state, now), intakeDir);
+}
+
+export async function markLandingGate(slug, { passed, detail = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+  const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
+  state.landingGate = { status: passed ? "passed" : "failed", checkedAt: now, failure: passed ? null : (detail || "landing evidence gate failed") };
+  state.status = passed ? "complete" : "failed";
+  state.failure = passed ? null : { class: "gate-failure", detail: state.landingGate.failure, at: now };
   return save(touch(state, now), intakeDir);
 }
 

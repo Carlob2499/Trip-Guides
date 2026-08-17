@@ -70,7 +70,7 @@ between a wrong key and the right one is how many wrong ones fit in an hour. The
 the same `RATE` namespace as the intake limiter; with no KV bound the throttle is skipped but the
 key is still checked (never the other way around).
 
-**A key shorter than 32 characters still works, and `/health` says `ownerEndpoints: "WEAK"`.**
+**A key shorter than 32 characters is rejected with 503, and `/health` says `ownerEndpoints: "WEAK"` until it is rotated.**
 The server-side minimum is the authority — the site's own paste check is a mis-paste guard, not a
 security boundary.
 

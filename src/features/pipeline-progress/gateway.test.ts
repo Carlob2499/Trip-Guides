@@ -19,7 +19,7 @@ function stubFetch(routes: Record<string, unknown>, status = 200) {
     return {
       ok: key !== undefined && status < 400,
       status: key === undefined ? 404 : status,
-      text: async () => JSON.stringify(body),
+      text: async () => typeof body === "string" ? body : JSON.stringify(body),
       json: async () => body,
     } as unknown as Response;
   });
@@ -173,22 +173,22 @@ describe("createGithubGateway().fetchRunEvents", () => {
     const out = await gw.fetchRunEvents("testland");
 
     expect(calls).toHaveLength(1);
-    expect(calls[0].url).toContain("/research/testland/guides-intake/testland/events.json");
+    expect(calls[0].url).toContain("/research-v2/testland/guides-intake/testland/events.json");
     expect(out.available).toBe(true);
     expect(out.counters).toEqual({ pages: 148, facts: 62, kept: 51, dropped: 11 });
   });
 
   it("returns an honestly-empty result on the 404 that is today's every-single-case", async () => {
     // Nothing in the pipeline writes events.json yet. BOTH generations' branches are tried
-    // (research/, then research-v2/) and nothing falls back to `main`: telemetry is a
+    // (research-v2/, then research/) and nothing falls back to `main`: telemetry is a
     // property of a run, and a run lives on its branch.
     const { impl, calls } = stubFetch({});
     const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
 
     await expect(gw.fetchRunEvents("testland")).resolves.toEqual(EMPTY_RUN_EVENTS);
     expect(calls).toHaveLength(2);
-    expect(calls[0].url).toContain("/research/testland/");
-    expect(calls[1].url).toContain("/research-v2/testland/");
+    expect(calls[0].url).toContain("/research-v2/testland/");
+    expect(calls[1].url).toContain("/research/testland/");
   });
 
   it("returns an honestly-empty result rather than throwing on a file it cannot read", async () => {
@@ -216,6 +216,7 @@ const V2_RUN = {
   },
   attempts: { total: 2, cap: 5 },
   publication: { published: false, deployedLive: null },
+  landingGate: { status: "pending", checkedAt: null, failure: null },
   failure: null,
 };
 
@@ -257,6 +258,17 @@ describe("createGithubGateway().fetchRun (M7)", () => {
     const run = await gw.fetchRun("testland");
     expect(run.version).toBe(0);
     expect(run.state).toBe(null);
+  });
+});
+
+describe("createGithubGateway().fetchQuestions", () => {
+  it("prefers the active V2 ledger so a stale V1 branch cannot hide questions", async () => {
+    const ledger = "## Questions for the traveler\n\n### Q1\n- **Q:** Early dinner?\n- **Assumed:** yes\n- **Context:** day 2\n- **Status:** open\n";
+    const { impl, calls } = stubFetch({ "ledger.md": ledger });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const questions = await gw.fetchQuestions("testland");
+    expect(calls[0].url).toContain("/research-v2/testland/");
+    expect(questions).toHaveLength(1);
   });
 });
 

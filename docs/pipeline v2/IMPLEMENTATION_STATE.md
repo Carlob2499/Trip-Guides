@@ -6,11 +6,10 @@
 
 ## Position
 
-- **Last completed milestone:** M8 — Full verification and handoff (IMPLEMENTATION COMPLETE)
-- **Current milestone:** none — awaiting Codex review (see "Final handoff to Codex" below)
-- **Exact next action (Codex):** review the branch diff, run independent checks, then decide
-  whether a manual V2 canary is allowed (command below). Do not merge to main, switch dispatch,
-  publish, or delete V1.
+- **Last completed milestone:** Codex adversarial correction pass after M8
+- **Current milestone:** local implementation complete; Phase 1 manual canary is next
+- **Exact next action:** run the timeline's manual draft-only canary and prove the external
+  boundaries listed below. Do not merge to main, switch dispatch, publish, or delete V1.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
 delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
@@ -338,3 +337,24 @@ no historical guide data rewritten.
 
 **Non-goals honored:** no UI redesign, no GPT, no new APIs/DBs/queues, no cutover, no V1
 deletion, no live publication, no live V2 run.
+
+## Codex final audit addendum (2026-08-17)
+
+Independent specification, code, and security reviews found and closed the post-M8 seams. Major
+corrections: pinned containerized Claude CLI with workspace-only tools and explicit system-path
+denials; fresh canonical artifact collection; durable immutable resume inputs; honest failure and
+landing-gate state; bounded retries from the trusted checkout; complete intake coverage; stronger
+evidence/corroboration/freshness/depth rules; V1-only numeric floors plus explicit V2 adaptive
+mode; atomic answer application and complete-unmerged branch routing; validated critic process
+memory; public-spend/owner-key fail-closed behavior; and progress UI truth tied to the real landing
+gate rather than critic completion.
+
+Local proof: all 13 workflow files parse; build/lint/typecheck pass; full suite passed except one
+stale fixture, then the corrected affected suites passed 183/183 (the prior full run had 2,578
+passing tests); production preview passed desktop and 375px dark/reduced-motion with no overflow
+or browser errors. The final commit reruns the complete suite before push.
+
+Still external by design: first canary must negatively prove `/proc/self/environ` is denied inside
+the live container, force cancellation/resume, exercise configured Places/Routes, confirm only a
+draft PR is created, and smoke the Worker answer path. No canary or external mutation was run in
+this audit session.

@@ -7,7 +7,7 @@ You are stage 1 of four independent agent sessions (Pass A → Pass B → Reconc
 the V2 pipeline. Pass B runs next in a mechanically clean workspace that cannot contain your
 output; a third agent reconciles both; a fourth judges the result.
 
-**You do not run git and you do not checkpoint.** The workflow validates your output, commits
+**You have no shell or git tool and you do not checkpoint.** The workflow validates your output, commits
 it, and records the stage — a stage whose owed artifact is missing is recorded as a void
 failure, so the artifact below is your deliverable, not a courtesy.
 
@@ -16,13 +16,13 @@ failure, so the artifact below is your deliverable, not a courtesy.
 The `waypoint-guide-author` skill is the single source of truth for how to research and what
 "done" means. Read and follow it — do not work from any summary of it:
 
-- `.claude/skills/waypoint-guide-author/SKILL.md` — Pass A, fact discipline, the Living Atlas
+- `.agents/skills/waypoint-guide-author/SKILL.md` — Pass A, fact discipline, the Living Atlas
   duties, the deterministic lookup scripts.
-- `references/verification-rules.md` (objective vs experiential evidence, source families),
-  `references/research-efficiency.md` (adaptive stopping rule — no fixed candidate quotas),
-  `references/research-depth.md` (reservation depth, transport robustness, disagreement
-  investigation, recurring-event year safety), `references/block-types.md`,
-  `references/image-sourcing.md`.
+- `.agents/skills/waypoint-guide-author/references/verification-rules.md` (objective vs experiential evidence, source families),
+  `.agents/skills/waypoint-guide-author/references/research-efficiency.md` (adaptive stopping rule — no fixed candidate quotas),
+  `.agents/skills/waypoint-guide-author/references/research-depth.md` (reservation depth, transport robustness, disagreement
+  investigation, recurring-event year safety), `.agents/skills/waypoint-guide-author/references/block-types.md`,
+  `.agents/skills/waypoint-guide-author/references/image-sourcing.md`.
 
 ## Stage contract
 
@@ -41,10 +41,18 @@ The `waypoint-guide-author` skill is the single source of truth for how to resea
   - `evidence[]` — one record per verified claim: `{ id, candidateId|null, claim, kind
     (objective|experiential), origin: "passA", source { url, kind
     (official|operator|firsthand|press|reference|aggregator), language, publishedAt|null,
-    family|null, independent|null }, verifiedOn (YYYY-MM-DD), firsthand|null }`.
+    family|null, independent|null, appliesToYears[] }, verifiedOn (YYYY-MM-DD), firsthand|null }`.
+    For a recurring event dated after its source publication year, `appliesToYears` names the
+    exact season the current official announcement supports; last year's pattern is only a lead.
+    Each objective record also carries `freshness { perishable, shelfLife
+    (fx|transit|hours|venue|default)|null, recheckOn|null }`; perishable facts require the
+    category and next recheck date.
   - `reservations[]` for important finalists and `transport[]` for risky routes, per
     `research-depth.md` — casual stops owe nothing here.
   - `disagreements[]` where evidence conflicted and it mattered.
+  - `depth` — explicitly enumerate the candidate ids requiring reservation depth and route ids
+    requiring R3+ transport depth. If either class is genuinely inapplicable, record a concrete
+    `notApplicableReason`; an omitted/empty obligation is not accepted.
   - `saturation` — the adaptive stop record: `{ stopped, trend (novel|duplicates|weaker),
     unresolvedCouldChange (bool — must be answered to stop), note }`. A stop is EARNED:
     duplicates/weaker trend AND unresolvedCouldChange false, or keep researching.
@@ -52,6 +60,7 @@ The `waypoint-guide-author` skill is the single source of truth for how to resea
 - The anchor event is verified against a T0 source FIRST, before any other research.
 - A fork research cannot resolve becomes a question card under `## Questions for the traveler`
   in `ledger.md` (SKILL.md's format). Proceed on the stated assumption — never wait.
-- STOP when Pass A's research is written and `evidence.v2.json` is complete. Do not run Pass B,
+- STOP when Pass A's research is written and `evidence.v2.json` is complete. The workflow runs
+  deterministic verification; do not run Pass B,
   do not reconcile, do not verify-loop, do not commit.
 - Touch nothing outside `src/content/guides/{{slug}}/` and `guides-intake/{{slug}}/`.

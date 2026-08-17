@@ -125,7 +125,9 @@ export async function applyAnswersToLedger(slug, answers, { intakeDir = INTAKE_D
   if (!existsSync(ledgerFile)) return { applied: [], missing: (answers || []).map((a) => a.id), noLedger: true };
   const { writeFile } = await import("node:fs/promises");
   const result = applyAnswers(await readFile(ledgerFile, "utf8"), answers);
-  if (result.applied.some((a) => !a.already)) await writeFile(ledgerFile, result.text);
+  // Atomic batch: a stale sibling id must not partially commit valid answers and then prevent
+  // the research redispatch. The caller can refresh and resubmit the whole coherent batch.
+  if (!result.missing.length && result.applied.some((a) => !a.already)) await writeFile(ledgerFile, result.text);
   return result;
 }
 

@@ -24,7 +24,7 @@ import {
   removePassBWorkspace, collectPassB, prepareCriticInput, restoreCriticInput,
 } from "../pipeline/v2/workspace.mjs";
 import { ContractError } from "../pipeline/v2/contracts.mjs";
-import { validateStageOutput } from "../pipeline-v2.mjs";
+import { validateStageOutput, stageScopeProblems } from "../pipeline-v2.mjs";
 import { initRunV2, readRunStateV2 } from "../pipeline/v2/run-state.mjs";
 import { writeEvidence } from "../pipeline/v2/evidence.mjs";
 import { writeCoverage } from "../pipeline/v2/coverage.mjs";
@@ -46,7 +46,7 @@ async function writeRepoFile(rel, content) {
 const passBDoc = (extra = {}) => ({
   schemaVersion: "wp-evidence/2.0",
   slug: SLUG,
-  runId: `${SLUG}-passb`,
+  runId: `${SLUG}-20260817-abc123`,
   candidates: [{ id: "c-hidden-izakaya", name: "Hidden Izakaya", branch: null, priority: "food", status: "shortlisted", shortlisted: true, reason: null, worth: null }],
   evidence: [{
     id: "b-1", candidateId: "c-hidden-izakaya", claim: "Queue-free after 20:30 on weekdays",
@@ -55,6 +55,10 @@ const passBDoc = (extra = {}) => ({
     verifiedOn: "2026-08-01", firsthand: true,
   }],
   reservations: [], transport: [], disagreements: [],
+  depth: {
+    reservations: { requiredCandidateIds: [], notApplicableReason: "no booking obligation in fixture" },
+    transport: { requiredRouteIds: [], notApplicableReason: "no fragile route in fixture" },
+  },
   saturation: { stopped: true, trend: "duplicates", unresolvedCouldChange: false, note: "resident sources converged" },
   passB: { nativeLanguage: { used: true, why: "English coverage was listicles", searchClasses: ["tabelog"], yield: "one izakaya" } },
   reconciliation: [],
@@ -160,6 +164,15 @@ describe("collectPassB — the workflow transfers, Pass B never commits", () => 
     await expect(collectPassB(SLUG, { fromDir: from, intoDir: into })).rejects.toThrow(/void Pass B/);
   });
 
+  it("an empty artifact needs a typed no-yield explanation", async () => {
+    const empty = passBDoc({ evidence: [], candidates: [], passB: { nativeLanguage: { used: false, why: "local-language search was not relevant", searchClasses: [], yield: null }, noYieldReason: null } });
+    await writeArtifact(empty);
+    await expect(collectPassB(SLUG, { fromDir: from, intoDir: into })).rejects.toThrow(/no typed passB.noYieldReason/);
+    empty.passB.noYieldReason = "All local results duplicated official Pass-A candidates; no defensible novel experiential claim survived.";
+    await writeArtifact(empty);
+    await expect(collectPassB(SLUG, { fromDir: from, intoDir: into })).resolves.toBeTruthy();
+  });
+
   it("REFUSES an artifact testifying for other passes (foreign origin)", async () => {
     const doc = passBDoc();
     doc.evidence[0].origin = "passA";
@@ -220,6 +233,7 @@ describe("validateStageOutput — the void check with teeth", () => {
     await mkdir(path.join(dir, "src", "content", "guides", SLUG), { recursive: true });
     await writeFile(path.join(dir, "guides-intake", SLUG, "intake.md"), "# intake");
     await writeFile(path.join(dir, "src", "content", "guides", SLUG, "_guide.json"), "{}");
+    await writeFile(path.join(dir, "src", "content", "guides", SLUG, "01-plan.json"), JSON.stringify({ sections: [{ title: "Food" }] }));
   };
 
   it("scaffold: named problems when the scaffold is missing; clean when present", async () => {
@@ -231,14 +245,14 @@ describe("validateStageOutput — the void check with teeth", () => {
   it("passA: no evidence artifact OR no passA-origin records = a void pass", async () => {
     await scaffold();
     expect((await validateStageOutput(SLUG, "passA", opts())).join()).toMatch(/owes the evidence artifact/);
-    await writeEvidence(SLUG, passBDoc({ runId: "r1" }), { intakeDir: opts().intakeDir });
+    await writeEvidence(SLUG, passBDoc(), { intakeDir: opts().intakeDir });
     expect((await validateStageOutput(SLUG, "passA", opts())).join()).toMatch(/no Pass-A records/);
   });
 
   it("reconcile: undispositioned findings and missing coverage are named", async () => {
     await scaffold();
     // merged evidence with a passB record but NO disposition and NO coverage doc
-    await writeEvidence(SLUG, passBDoc({ runId: "r1" }), { intakeDir: opts().intakeDir });
+    await writeEvidence(SLUG, passBDoc(), { intakeDir: opts().intakeDir });
     const problems = await validateStageOutput(SLUG, "reconcile", opts());
     expect(problems.join()).toMatch(/no reconciliation disposition/);
     expect(problems.join()).toMatch(/coverage/);
@@ -246,12 +260,12 @@ describe("validateStageOutput — the void check with teeth", () => {
 
   it("reconcile: clean when dispositions + coverage are complete", async () => {
     await scaffold();
-    const doc = passBDoc({ runId: "r1" });
+    const doc = passBDoc();
     doc.reconciliation = [{ findingId: "b-1", disposition: "adopt", note: "woven in" }];
     await writeEvidence(SLUG, doc, { intakeDir: opts().intakeDir });
     await writeCoverage(SLUG, {
-      slug: SLUG, runId: "r1",
-      asks: [{ id: "ask-1", ask: "food", status: "covered", where: ["01-plan.json"], evidenceIds: [], reason: null }],
+      slug: SLUG, runId: doc.runId,
+      asks: [{ id: "ask-1", ask: "food", status: "covered", where: ["01-plan.json#food"], evidenceIds: ["b-1"], reason: null }],
     }, { intakeDir: opts().intakeDir });
     expect(await validateStageOutput(SLUG, "reconcile", opts())).toEqual([]);
   });
@@ -265,6 +279,7 @@ describe("validateStageOutput — the void check with teeth", () => {
       path.join(dir, "guides-intake", SLUG, "ledger.md"),
       "## Critic findings\n\nNone — guide passes the bar test.\n\n## Citation audit\n\n5 sampled, all support.\n",
     );
+    await writeFile(path.join(dir, "guides-intake", SLUG, "pipeline-patterns.fragment.md"), "- Honest blank — no reusable process finding.\n");
     expect(await validateStageOutput(SLUG, "critic", opts())).toEqual([]);
   });
 });
@@ -316,6 +331,7 @@ describe("research-pass-v2.yml — wiring", () => {
     expect(job).toContain("fetch-depth: 1");
     expect(job).toContain("verify-passb-workspace");
     expect(job).toContain("rm -rf .control"); // the control-plane world is gone before the agent
+    expect(job).toContain("rm -rf .git");
     // the collection checkout happens AFTER the agent step
     const agentIdx = job.indexOf("Run research agent — Pass B");
     const collectIdx = job.indexOf("Checkout the run branch for collection");
@@ -324,22 +340,39 @@ describe("research-pass-v2.yml — wiring", () => {
     expect(job).toContain("collect-passb");
   });
 
-  it("the critic job is depth-1 and prepares/restores the blind input around the agent", () => {
+  it("agents receive no Bash, no explicit GitHub token, and control-plane output is path-scoped", () => {
+    expect(text).not.toContain("--allowedTools Bash");
+    expect(text).not.toContain("github_token:");
+    expect(text).toContain("--mount type=bind,src=\"$GITHUB_WORKSPACE\",dst=/workspace");
+    expect(text).toContain("Read(/workspace/**)");
+    expect(text).toContain("Read(/proc/**)");
+    expect(text).toContain("@anthropic-ai/claude-code@2.1.233");
+    expect(text).toContain("node:22-bookworm-slim@sha256:");
+    expect(stageScopeProblems(SLUG, "passA", [`.github/workflows/pwn.yml`]).join()).toMatch(/forbidden path/);
+    expect(stageScopeProblems(SLUG, "passA", [`src/content/guides/${SLUG}/01-plan.json`])).toEqual([]);
+    expect(stageScopeProblems(SLUG, "passA", [`guides-intake/${SLUG}/intake.md`]).join()).toMatch(/forbidden path/);
+  });
+
+  it("the critic job removes forbidden input AND git objects, then collects in a fresh checkout", () => {
     const job = text.split(/^ {2}critic:/m)[1].split(/^ {2}land:/m)[0];
     expect(job).toContain("fetch-depth: 1");
     const prepare = job.indexOf("prepare-critic");
     const agent = job.indexOf("Run research agent — Critic");
-    const restore = job.indexOf("restore-critic");
+    const removeGit = job.indexOf("rm -rf .git");
+    const collect = job.indexOf("path: collect");
     expect(prepare).toBeGreaterThan(0);
     expect(agent).toBeGreaterThan(prepare);
-    expect(restore).toBeGreaterThan(agent);
+    expect(removeGit).toBeGreaterThan(prepare);
+    expect(removeGit).toBeLessThan(agent);
+    expect(collect).toBeGreaterThan(agent);
+    expect(job).not.toContain("restore-critic");
   });
 
   it("every stage job checkpoints start BEFORE its agent and validates AFTER (begin/finish)", () => {
     for (const stage of ["passA", "reconcile"]) {
       const job = text.split(new RegExp(`^  ${stage}:`, "m"))[1].split(/^ {2}[a-zA-Z]+:$/m)[0];
       const begin = job.indexOf("begin-stage");
-      const agent = job.indexOf("anthropics/claude-code-action");
+      const agent = job.indexOf("Run research agent");
       const finish = job.indexOf("finish-stage");
       expect(begin).toBeGreaterThan(0);
       expect(agent).toBeGreaterThan(begin);

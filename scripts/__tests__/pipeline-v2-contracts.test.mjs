@@ -70,14 +70,17 @@ describe("run state — valid lifecycle", () => {
   it("start → complete records timing, model/effort, attempt count and the durable commit", async () => {
     await initRunV2("korea", opts());
     await stageStart("korea", "scaffold", { model: "claude-sonnet-5", effort: "high", ...opts() });
-    let state = await stageComplete("korea", "scaffold", { commit: "abc1234", ...opts() });
-    expect(state.stages.scaffold).toMatchObject({ status: "complete", model: "claude-sonnet-5", effort: "high", attempts: 1, commit: "abc1234" });
+    const sha = "a".repeat(40);
+    let state = await stageComplete("korea", "scaffold", { commit: sha, ...opts() });
+    expect(state.stages.scaffold).toMatchObject({ status: "complete", model: "claude-sonnet-5", effort: "high", attempts: 1, commit: sha });
     expect(state.resume.nextStage).toBe("passA");
     expect(state.status).toBe("running");
   });
 
   it("a running stage IS the resume point — a resumed run repeats it, never skips ahead", async () => {
     await initRunV2("korea", opts());
+    await stageStart("korea", "scaffold", opts());
+    await stageComplete("korea", "scaffold", opts());
     const state = await stageStart("korea", "passA", opts());
     expect(state.resume.nextStage).toBe("passA");
     expect(state.resume.action).toMatch(/re-run it if incomplete|validate its output/);
@@ -104,6 +107,10 @@ describe("run state — valid lifecycle", () => {
     const sixth = await bumpRunAttempt("korea", opts());
     expect(sixth.overCap).toBe(true);
     expect(sixth.state.status).toBe("stuck");
+    const redispatched = await initRunV2("korea", opts());
+    expect(redispatched.runId).toBe(sixth.state.runId);
+    expect(redispatched.attempts.total).toBe(6);
+    expect((await bumpRunAttempt("korea", opts())).attempts).toBe(6);
   });
 
   it("auto-retry is allowed exactly once", async () => {
@@ -130,6 +137,9 @@ describe("run state — valid lifecycle", () => {
     const state = await readRunStateV2("korea", opts());
     expect(state.status).toBe("complete");
     expect(nextStageV2(state)).toBe(null);
+    const redispatched = await initRunV2("korea", opts());
+    expect(redispatched.runId).toBe(state.runId);
+    expect((await bumpRunAttempt("korea", opts())).attempts).toBe(state.attempts.total);
   });
 });
 
@@ -211,7 +221,8 @@ const validEvidence = () => ({
   ],
   evidence: [
     { id: "e-1", candidateId: "c-daruma", claim: "Open Tue–Sun 11:00–22:00", kind: "objective", origin: "passA",
-      source: { url: "https://example.com", kind: "official", language: "ja", publishedAt: null, family: null, independent: null }, verifiedOn: "2026-08-01", firsthand: null },
+      source: { url: "https://example.com", kind: "official", language: "ja", publishedAt: null, family: null, independent: null }, verifiedOn: "2026-08-01", firsthand: null,
+      freshness: { perishable: true, shelfLife: "hours", recheckOn: "2026-10-30" } },
     { id: "e-2", candidateId: "c-daruma", claim: "Queue clears by 14:00 on weekdays", kind: "experiential", origin: "passB",
       source: { url: "https://example.com/blog", kind: "firsthand", language: "ja", publishedAt: "2026-05-01", family: null, independent: true }, verifiedOn: "2026-08-02", firsthand: true },
   ],
@@ -226,12 +237,15 @@ describe("evidence — valid / structural rules", () => {
     const doc = await requireEvidence("korea", opts());
     expect(doc.schemaVersion).toBe("wp-evidence/2.0");
     expect(evidenceProblems(doc)).toEqual([]);
+    await expect(requireEvidence("korea", { ...opts(), runId: "korea-20260817-ffffff" })).rejects.toThrow(/active run/);
   });
 
   it("candidateId is stable and deterministic, branch included", () => {
     expect(candidateId("Daruma")).toBe("c-daruma");
     expect(candidateId("Ichiran", "Dotonbori")).toBe("c-ichiran--dotonbori");
     expect(candidateId("Café Ñoño")).toBe(candidateId("Café Ñoño"));
+    expect(candidateId("だるま")).toMatch(/^c-u-[0-9a-f]{10}$/);
+    expect(candidateId("だるま")).not.toBe(candidateId("一蘭"));
   });
 
   it("shipped-but-never-shortlisted is a named violation — no side door", () => {
@@ -270,7 +284,8 @@ describe("evidence — valid / structural rules", () => {
 
     const searching = validEvidence();
     searching.saturation = { stopped: false, trend: "novel", unresolvedCouldChange: null, note: "still finding new options" };
-    expect(saturationProblems(searching)).toEqual([]);
+    expect(saturationProblems(searching).join()).toMatch(/still searching/);
+    expect(saturationProblems(searching, { fullPass: false })).toEqual([]);
   });
 
   it("a full pass with NO stop record is a violation; a scoped re-run is excused", () => {
@@ -315,7 +330,7 @@ describe("evidence — missing / malformed / forward-compatible", () => {
 const validCoverage = () => ({
   slug: "korea", runId: "korea-20260817-abc123",
   asks: [
-    { id: "ask-food", ask: "Food & dining is priority #1", status: "covered", where: ["05-food.json", "04-days.json#day-2"], evidenceIds: ["e-1"], reason: null },
+    { id: "ask-food", ask: "Food & dining is priority #1", status: "covered", where: ["05-food.json#food-dining", "04-days.json#day-2"], evidenceIds: ["e-1"], reason: null },
     { id: "ask-niche", ask: "Vinyl record shopping", status: "excluded", where: [], evidenceIds: [], reason: "no verifiable vinyl shops found in the trip's neighborhoods; two candidates rejected as closed" },
   ],
 });
@@ -342,6 +357,19 @@ describe("coverage — valid / rules / missing / malformed", () => {
   it("a ref into a group the guide doesn't have is named", () => {
     const doc = validCoverage();
     expect(coverageProblems(doc, { groups: ["01-plan.json"] }).join()).toMatch(/not a group file/);
+  });
+
+  it("binds coverage to real anchors, material intake asks and evidence ids", () => {
+    const doc = validCoverage();
+    const problems = coverageProblems(doc, {
+      groups: ["05-food.json", "04-days.json"],
+      groupAnchors: new Map([["05-food.json", new Set(["different-title"])], ["04-days.json", new Set(["day-2"])]]),
+      expectedAskIds: new Set(["ask-food", "ask-missing"]),
+      evidenceIds: new Set(["e-other"]),
+    }).join("\n");
+    expect(problems).toMatch(/anchor does not identify/);
+    expect(problems).toMatch(/ask-missing/);
+    expect(problems).toMatch(/unknown evidence id/);
   });
 
   it("excluded with no reason is a violation — honest exclusions name why", () => {

@@ -63,7 +63,7 @@ export const EMPTY_SNAPSHOT: RunSnapshot = {
 /** V2 stage keys → this page's stations. The critic IS the verify station: it runs the verify
     loop and is the last research stage before landing. */
 const V2_STAGE_TO_STATION: Record<string, PipelineStage> = {
-  scaffold: "scaffold", passA: "passA", passB: "passB", reconcile: "reconcile", critic: "verified",
+  scaffold: "scaffold", passA: "passA", passB: "passB", reconcile: "reconcile",
 };
 
 /**
@@ -76,18 +76,38 @@ export function adaptV2Snapshot(raw: unknown): RunSnapshot {
     return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
   }
   const r = raw as Record<string, unknown>;
-  if (!/^wp-run\/2\./.test(String(r.schemaVersion ?? "")) || !r.stages || typeof r.stages !== "object") {
+  const validStatuses = ["pending", "running", "paused", "complete", "failed", "stuck"] as const;
+  const iso = (value: unknown) => typeof value === "string" && !Number.isNaN(Date.parse(value));
+  const attemptsDoc = r.attempts as Record<string, unknown> | null;
+  const publicationDoc = r.publication as Record<string, unknown> | null;
+  if (!/^wp-run\/2\./.test(String(r.schemaVersion ?? "")) || !r.stages || typeof r.stages !== "object" ||
+      typeof r.slug !== "string" || !r.slug || typeof r.runId !== "string" || !String(r.runId).startsWith(`${r.slug}-`) ||
+      !iso(r.createdAt) || !iso(r.updatedAt) || !validStatuses.includes(r.status as typeof validStatuses[number]) ||
+      !attemptsDoc || !Number.isInteger(attemptsDoc.total) || !publicationDoc || typeof publicationDoc.published !== "boolean") {
     return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
   }
   const v2Stages = r.stages as Record<string, { status?: string; endedAt?: string | null } | undefined>;
+  const canonicalStages = ["scaffold", "passA", "passB", "reconcile", "critic"];
+  if (canonicalStages.some((key) => {
+    const stage = v2Stages[key];
+    return !stage || !["queued", "running", "complete", "failed"].includes(String(stage.status)) ||
+      ((stage.status === "complete" || stage.status === "failed") && !iso(stage.endedAt));
+  })) return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
   const stages = {} as Record<PipelineStage, string | null>;
   for (const key of PIPELINE_STAGE_ORDER) stages[key] = null;
   for (const [v2Key, station] of Object.entries(V2_STAGE_TO_STATION)) {
     const st = v2Stages[v2Key];
     if (st?.status === "complete") stages[station] = st.endedAt ?? "";
   }
+  const landingGate = r.landingGate as { status?: string; checkedAt?: string | null; failure?: string | null } | null;
+  if (!landingGate || !["pending", "passed", "failed"].includes(String(landingGate.status)) ||
+      (landingGate.status !== "pending" && !iso(landingGate.checkedAt)) ||
+      (landingGate.status === "failed" && typeof landingGate.failure !== "string")) {
+    return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
+  }
+  if (landingGate?.status === "passed") stages.verified = String(r.updatedAt);
   const publication = (r.publication ?? {}) as { deployedLive?: boolean | null };
-  const status = String(r.status ?? "");
+  const status = landingGate.status === "failed" ? "failed" : String(r.status);
   const failure = r.failure as { class?: string } | null | undefined;
   return {
     version: 2,
@@ -99,8 +119,8 @@ export function adaptV2Snapshot(raw: unknown): RunSnapshot {
       attempts: Number((r.attempts as { total?: number } | undefined)?.total ?? 0) || 0,
       notes: [],
     },
-    runStatus: (["pending", "running", "paused", "complete", "failed", "stuck"] as const).find((s) => s === status) ?? null,
-    failureClass: failure?.class ?? null,
+    runStatus: validStatuses.find((s) => s === status) ?? null,
+    failureClass: landingGate.status === "failed" ? "gate-failure" : (failure?.class ?? null),
     deployedLive: typeof publication.deployedLive === "boolean" ? publication.deployedLive : null,
     malformed: false,
   };
@@ -274,7 +294,7 @@ const STAGE_ACTIVITY: Record<Stage, string> = {
   passB: "gathering local, on-the-ground knowledge",
   reconcile: "resolving where the two passes disagree",
   verified: "re-checking every perishable fact",
-  published: "putting the finished guide live",
+  published: "confirming the merged guide's site deploy",
 };
 
 /** The five shapes the whole page takes. Everything else on it is derived from this one word. */

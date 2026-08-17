@@ -14,9 +14,9 @@ name: Research pass (V2)
 #     (fetch-depth 1): Pass A's outputs are absent from its world, not merely forbidden. The
 #     collect step then checks out the run branch separately, validates passB.v2.json
 #     (fail-closed schema + origin/reconciliation rules) and transfers it.
-#   · MECHANICAL CRITIC BLINDNESS. The critic job checks out with fetch-depth 1 (no prior
-#     history) and prepare-critic deletes the evidence/run-state artifacts from its working tree
-#     before the agent runs; restore-critic puts the tracked ones back afterwards.
+#   · MECHANICAL CRITIC BLINDNESS. The critic input excludes evidence/run state and its fetch
+#     permissions name only pre-verified source domains. Every agent runs in a pinned container
+#     that mounts only /workspace; a fresh host checkout collects only stage-owned artifacts.
 #   · NO PUBLICATION. Landing always opens a DRAFT PR (--land pr) with the real evidence-gate
 #     scorecard as its body. V2 does not remove `draft`, does not auto-merge, and V1 dispatch
 #     (new-guide.yml → research-pass.yml) is untouched.
@@ -72,6 +72,11 @@ permissions:
   issues: write
   actions: write # the bounded auto-retry re-dispatches this workflow
 
+env:
+  WAYPOINT_PIPELINE_V2: "1"
+  SLUG: ${{ inputs.slug }}
+  SECTION: ${{ inputs.section }}
+
 # SAME guide-<slug> group as V1 research AND the change lifecycle, deliberately: any two runs
 # on one slug — V1 research, V2 research, or a change — queue behind each other instead of
 # interleaving (M6's exclusion boundary).
@@ -79,13 +84,13 @@ concurrency:
   group: guide-${{ inputs.slug }}
   cancel-in-progress: false
 
-env:
-  SLUG: ${{ inputs.slug }}
-
 jobs:
   # ── setup: branch, init/resume, budget, route ──────────────────────────────
   setup:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
     outputs:
       branch: ${{ steps.branch.outputs.name }}
       should_run: ${{ steps.budget.outputs.should_run }}
@@ -96,10 +101,10 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       SLUG: ${{ inputs.slug }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
@@ -116,7 +121,10 @@ jobs:
       - name: Init or resume the V2 run
         env:
           BRANCH: ${{ steps.branch.outputs.name }}
-        run: node scripts/pipeline-v2.mjs init --slug "$SLUG" --branch "$BRANCH"
+        run: |
+          node scripts/pipeline-v2.mjs init --slug "$SLUG" --section "$SECTION" --branch "$BRANCH" \
+            --model "${{ inputs.model || 'claude-sonnet-5' }}" --effort "${{ inputs.effort || 'high' }}" \
+            --critic-model "${{ inputs.critic_model || 'claude-opus-5' }}"
 
       - name: Attempt budget (bounded)
         id: budget
@@ -144,17 +152,19 @@ jobs:
     needs: setup
     if: needs.setup.outputs.should_run == 'true' && needs.setup.outputs.next == 'passA'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     env:
-      GH_TOKEN: ${{ github.token }}
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
-      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ needs.setup.outputs.branch }}
           fetch-depth: 0
-      - uses: actions/setup-node@v7
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
@@ -165,11 +175,20 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Checkpoint stage start
+        env:
+          PUSH_TOKEN: ${{ github.token }}
         run: |
+          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
           node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage passA \
             --model "${{ inputs.model || 'claude-sonnet-5' }}" \
             --effort "${{ inputs.effort || 'high' }}" \
             --branch "$BRANCH"
+
+      - name: Remove repository credentials before untrusted research input is read
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
 
       - name: Compose Pass A prompt
         id: prompt
@@ -178,46 +197,79 @@ jobs:
           WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
         run: node scripts/pipeline.mjs prompt prompts/research-passA-v2.md > /dev/null
 
+      - name: Replace repository history with an unprivileged local workspace
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
+
       - name: Run research agent — Pass A
-        uses: anthropics/claude-code-action@v1
+        id: agent
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
+          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
+          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**)
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+
+      - name: Checkout a fresh control-plane copy after Pass A
+        if: always()
+        id: collect
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_bots: "github-actions[bot]"
-          show_full_output: true
-          claude_args: |
-            --model ${{ inputs.model || 'claude-sonnet-5' }}
-            --effort ${{ inputs.effort || 'high' }}
-            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: ${{ steps.prompt.outputs.text }}
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: collect
 
       # Validate the owed artifact, commit the work, checkpoint completion — or record the
       # failure (void → one bounded auto-retry below).
       - name: Validate, commit, checkpoint
         id: finish
+        working-directory: collect
         run: |
+          npm ci
+          git config user.name "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v2.mjs collect-stage --slug "$SLUG" --stage passA --from "$GITHUB_WORKSPACE"
           SCOPED=()
-          if [ -n "${{ inputs.section }}" ]; then SCOPED=(--scoped); fi
+          if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
           node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage passA \
             --branch "$BRANCH" "${SCOPED[@]}"
 
       - name: Record agent failure honestly
-        if: failure() && steps.finish.conclusion != 'failure'
+        if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
+        working-directory: collect
         run: |
+          CLASS=gate-failure
+          DETAIL="control-plane step failed; branch resumes this stage"
+          if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
+          if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
           node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage passA \
-            --class agent-failure --detail "agent step failed; branch is manually resumable" \
+            --class "$CLASS" --detail "$DETAIL" \
             --branch "$BRANCH"
 
       - name: Bounded auto-retry after a void stage
         if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
         id: retry
+        working-directory: collect
         run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
 
       - name: Re-dispatch once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run research-pass-v2.yml -f slug="$SLUG" \
-            -f section="${{ inputs.section }}" -f model="${{ inputs.model }}" \
+            -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
 
@@ -229,22 +281,24 @@ jobs:
       always() && needs.setup.outputs.should_run == 'true' &&
       (needs.passA.result == 'success' || (needs.passA.result == 'skipped' && needs.setup.outputs.next == 'passB'))
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     env:
-      GH_TOKEN: ${{ github.token }}
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
-      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
     steps:
       # Control-plane world, used ONLY to checkpoint stage start; deleted before the agent.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ needs.setup.outputs.branch }}
           fetch-depth: 0
           path: .control
-      - uses: actions/setup-node@v7
+      # No `cache: npm` here: this job's first checkout lands in .control/, so there is no
+      # package-lock.json at the workspace root and the cache resolver would fail the job.
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
-          cache: npm
       - name: Checkpoint stage start (control-plane checkout)
         working-directory: .control
         run: |
@@ -260,43 +314,52 @@ jobs:
       # THE ISOLATION: the agent's entire world is the baseline commit — Pass A's outputs are
       # not in the tree and (fetch-depth 1) not in history either.
       - name: Checkout the clean baseline workspace
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ needs.setup.outputs.baseline }}
           fetch-depth: 1
+          persist-credentials: false
       - run: npm ci
       - name: Verify the prepared workspace excludes Pass-A outputs
         run: node scripts/pipeline-v2.mjs verify-passb-workspace --slug "$SLUG" --dest .
-
-      - name: Install yt-dlp (best-effort)
-        continue-on-error: true
-        run: python3 -m pip install --upgrade yt-dlp
 
       - name: Compose Pass B prompt
         id: prompt
         env:
           WP_SLUG: ${{ inputs.slug }}
+          WP_RUN_ID: ${{ needs.setup.outputs.run_id }}
         run: node scripts/pipeline.mjs prompt prompts/research-passB-v2.md > /dev/null
 
+      - name: Replace git history with a local-only sandbox repository
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
+
       - name: Run research agent — Pass B (isolated)
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_bots: "github-actions[bot]"
-          show_full_output: true
-          claude_args: |
-            --model claude-sonnet-5
-            --effort ${{ inputs.effort || 'high' }}
-            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: ${{ steps.prompt.outputs.text }}
+        id: agent
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: claude-sonnet-5
+          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
+          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**),WebFetch(domain:github.com),WebFetch(domain:api.github.com),WebFetch(domain:raw.githubusercontent.com),WebFetch(domain:githubusercontent.com)
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
 
       # The workflow — not Pass B — validates and transfers the artifact, then commits. The
       # control-plane checkout happens AFTER the agent (always(), so failure recording has a
       # world to write to even when the agent step failed).
       - name: Checkout the run branch for collection
         if: always()
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ needs.setup.outputs.branch }}
           fetch-depth: 0
@@ -309,18 +372,26 @@ jobs:
           npm ci
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          set +e
           node scripts/pipeline-v2.mjs collect-passb --slug "$SLUG" --from "$GITHUB_WORKSPACE"
+          COLLECT=$?
           node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage passB --branch "$BRANCH"
+          FINISH=$?
+          if [ "$COLLECT" -ne 0 ] || [ "$FINISH" -ne 0 ]; then exit 1; fi
 
       - name: Record agent failure honestly
-        if: failure() && steps.transfer.conclusion != 'failure'
+        if: (failure() || cancelled()) && steps.transfer.conclusion != 'failure'
         working-directory: collect
         run: |
           npm ci
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          CLASS=gate-failure
+          DETAIL="control-plane step failed; branch resumes this stage"
+          if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
+          if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
           node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage passB \
-            --class agent-failure --detail "agent step failed; branch is manually resumable" \
+            --class "$CLASS" --detail "$DETAIL" \
             --branch "$BRANCH"
 
       - name: Bounded auto-retry after a void stage
@@ -331,9 +402,11 @@ jobs:
 
       - name: Re-dispatch once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run research-pass-v2.yml -f slug="$SLUG" \
-            -f section="${{ inputs.section }}" -f model="${{ inputs.model }}" \
+            -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
 
@@ -344,17 +417,19 @@ jobs:
       always() && needs.setup.outputs.should_run == 'true' &&
       (needs.passB.result == 'success' || (needs.passB.result == 'skipped' && needs.setup.outputs.next == 'reconcile'))
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     env:
-      GH_TOKEN: ${{ github.token }}
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
-      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ needs.setup.outputs.branch }}
           fetch-depth: 0
-      - uses: actions/setup-node@v7
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
@@ -365,10 +440,19 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Checkpoint stage start
+        env:
+          PUSH_TOKEN: ${{ github.token }}
         run: |
+          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
           node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage reconcile \
             --model "${{ inputs.model || 'claude-sonnet-5' }}" \
             --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
+
+      - name: Remove repository credentials before untrusted research input is read
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
 
       - name: Compose reconcile prompt
         id: prompt
@@ -377,44 +461,82 @@ jobs:
           WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
         run: node scripts/pipeline.mjs prompt prompts/research-reconcile-v2.md > /dev/null
 
+      - name: Replace repository history with an unprivileged local workspace
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
+
       - name: Run research agent — Reconcile
-        uses: anthropics/claude-code-action@v1
+        id: agent
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
+          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
+          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**)
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+
+      - name: Checkout a fresh control-plane copy after reconcile
+        if: always()
+        id: collect
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_bots: "github-actions[bot]"
-          show_full_output: true
-          claude_args: |
-            --model ${{ inputs.model || 'claude-sonnet-5' }}
-            --effort ${{ inputs.effort || 'high' }}
-            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: ${{ steps.prompt.outputs.text }}
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: collect
+
+      - name: Offline verification
+        working-directory: collect
+        run: |
+          npm ci
+          node scripts/pipeline-v2.mjs collect-stage --slug "$SLUG" --stage reconcile --from "$GITHUB_WORKSPACE"
+          npm run verify -- --slug "$SLUG"
 
       - name: Validate, commit, checkpoint
         id: finish
+        working-directory: collect
         run: |
+          git config user.name "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           SCOPED=()
-          if [ -n "${{ inputs.section }}" ]; then SCOPED=(--scoped); fi
+          if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
           node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage reconcile \
             --branch "$BRANCH" "${SCOPED[@]}"
 
       - name: Record agent failure honestly
-        if: failure() && steps.finish.conclusion != 'failure'
+        if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
+        working-directory: collect
         run: |
+          CLASS=gate-failure
+          DETAIL="control-plane step failed; branch resumes this stage"
+          if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
+          if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
           node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage reconcile \
-            --class agent-failure --detail "agent step failed; branch is manually resumable" \
+            --class "$CLASS" --detail "$DETAIL" \
             --branch "$BRANCH"
 
       - name: Bounded auto-retry after a void stage
         if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
         id: retry
+        working-directory: collect
         run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
 
       - name: Re-dispatch once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run research-pass-v2.yml -f slug="$SLUG" \
-            -f section="${{ inputs.section }}" -f model="${{ inputs.model }}" \
+            -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
 
@@ -425,18 +547,20 @@ jobs:
       always() && needs.setup.outputs.should_run == 'true' &&
       (needs.reconcile.result == 'success' || (needs.reconcile.result == 'skipped' && needs.setup.outputs.next == 'critic'))
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     env:
-      GH_TOKEN: ${{ github.token }}
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
-      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
     steps:
       # fetch-depth 1: prior git history is mechanically absent from the critic's world.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ needs.setup.outputs.branch }}
           fetch-depth: 1
-      - uses: actions/setup-node@v7
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
@@ -447,13 +571,26 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Checkpoint stage start
+        env:
+          PUSH_TOKEN: ${{ github.token }}
         run: |
+          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
           node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage critic \
             --model "${{ inputs.critic_model || 'claude-opus-5' }}" \
             --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
 
+      - name: Build the critic's source-domain fetch policy
+        id: fetch_policy
+        run: node scripts/pipeline-v2.mjs critic-fetch-tools --slug "$SLUG"
+
       - name: Prepare the critic's blind input
         run: node scripts/pipeline-v2.mjs prepare-critic --slug "$SLUG"
+
+      - name: Remove repository credentials before the blind critic runs
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
 
       - name: Compose critic prompt
         id: prompt
@@ -461,52 +598,91 @@ jobs:
           WP_SLUG: ${{ inputs.slug }}
         run: node scripts/pipeline.mjs prompt prompts/research-critic-v2.md > /dev/null
 
-      - name: Run research agent — Critic
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_bots: "github-actions[bot]"
-          show_full_output: true
-          claude_args: |
-            --model ${{ inputs.critic_model || 'claude-opus-5' }}
-            --effort ${{ inputs.effort || 'high' }}
-            --allowedTools Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch
-          prompt: ${{ steps.prompt.outputs.text }}
+      - name: Replace git history with a local-only sandbox repository
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
 
-      - name: Restore the control plane's files
-        run: node scripts/pipeline-v2.mjs restore-critic --slug "$SLUG"
+      - name: Run research agent — Critic
+        id: agent
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: ${{ inputs.critic_model || 'claude-opus-5' }}
+          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_TOOLS: ${{ steps.fetch_policy.outputs.tools }}
+          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**)
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+
+      - name: Checkout a fresh control-plane copy after the critic
+        if: always()
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: collect
 
       # Deterministic tail the V1 critic used to run itself: palette + composition are code.
-      - name: Extract palette + compose
-        run: |
-          npm run extract-palette -- --slug "$SLUG"
-          node scripts/compose-guide.mjs --slug "$SLUG" --write
-
-      - name: Validate, commit, checkpoint
+      - name: Collect allowed output, compose, validate, commit, checkpoint
         id: finish
+        working-directory: collect
         run: |
-          node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage critic \
-            --branch "$BRANCH"
+          set +e
+          npm ci
+          RC=$?
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ "$RC" -eq 0 ]; then rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/pipeline-patterns.fragment.md" "guides-intake/$SLUG/pipeline-patterns.fragment.md"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then node scripts/pipeline-v2.mjs compound-patterns --slug "$SLUG"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then npm run extract-palette -- --slug "$SLUG"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then node scripts/compose-guide.mjs --slug "$SLUG" --write; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then npm run verify -- --slug "$SLUG"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then
+            node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage critic --branch "$BRANCH"
+          else
+            node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage critic --class gate-failure \
+              --detail "critic collection, process-memory, compose, or offline verification failed" --branch "$BRANCH"
+            exit 1
+          fi
 
       - name: Record agent failure honestly
-        if: failure() && steps.finish.conclusion != 'failure'
+        if: (failure() || cancelled())
+        working-directory: collect
         run: |
-          node scripts/pipeline-v2.mjs restore-critic --slug "$SLUG" || true
+          npm ci
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          CLASS=gate-failure
+          DETAIL="control-plane step failed; branch resumes this stage"
+          if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
+          if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
           node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage critic \
-            --class agent-failure --detail "agent step failed; branch is manually resumable" \
+            --class "$CLASS" --detail "$DETAIL" \
             --branch "$BRANCH"
 
       - name: Bounded auto-retry after a void stage
         if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
         id: retry
+        working-directory: collect
         run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
 
       - name: Re-dispatch once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run research-pass-v2.yml -f slug="$SLUG" \
-            -f section="${{ inputs.section }}" -f model="${{ inputs.model }}" \
+            -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
 
@@ -517,17 +693,22 @@ jobs:
       always() && needs.setup.outputs.should_run == 'true' &&
       (needs.critic.result == 'success' || (needs.critic.result == 'skipped' && needs.setup.outputs.next == ''))
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     env:
       GH_TOKEN: ${{ github.token }}
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+      GOOGLE_ROUTES_KEY: ${{ secrets.GOOGLE_ROUTES_KEY }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ needs.setup.outputs.branch }}
           fetch-depth: 0
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
@@ -540,15 +721,27 @@ jobs:
       # Fail-closed artifact validation BEFORE landing: evidence, dispositions, saturation,
       # coverage. A malformed or missing artifact blocks here.
       - name: Validate V2 artifacts
+        id: artifacts
         run: |
           SCOPED=()
-          if [ -n "${{ inputs.section }}" ]; then SCOPED=(--scoped); fi
+          if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
           node scripts/pipeline-v2.mjs validate --slug "$SLUG" "${SCOPED[@]}"
 
       # The REAL evidence gate (build + networked verify) runs inside `land --gate`; the
       # scorecard becomes the PR body. --land pr: a V2 run NEVER auto-merges or publishes.
       - name: Land as a draft PR
+        id: evidence_gate
         run: |
           node scripts/pipeline.mjs land --slug "$SLUG" \
             --branch "$BRANCH" --gate --land pr \
             --title "Research pass (V2): $SLUG"
+
+      - name: Record the real landing gate PASS
+        if: success()
+        run: node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status passed --branch "$BRANCH"
+
+      - name: Record the real landing gate failure
+        if: failure()
+        run: |
+          node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status failed \
+            --detail "artifact, build, or configured network evidence gate failed" --branch "$BRANCH" || true

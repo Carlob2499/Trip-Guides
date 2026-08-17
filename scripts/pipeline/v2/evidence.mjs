@@ -14,6 +14,7 @@
 
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -31,7 +32,12 @@ export function evidencePath(slug, intakeDir = INTAKE_DIR) {
 export function candidateId(name, branch = null) {
   const kebab = (s) => String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-  return `c-${kebab(name)}${branch ? `--${kebab(branch)}` : ""}`;
+  const stablePart = (value) => {
+    const ascii = kebab(value);
+    if (ascii) return ascii;
+    return `u-${createHash("sha256").update(String(value).normalize("NFKC")).digest("hex").slice(0, 10)}`;
+  };
+  return `c-${stablePart(name)}${branch ? `--${stablePart(branch)}` : ""}`;
 }
 
 /** Fail-closed read. Returns null ONLY when the file does not exist. */
@@ -49,11 +55,13 @@ export async function readEvidence(slug, { intakeDir = INTAKE_DIR } = {}) {
     );
   }
   assertVersionCompatible(raw.schemaVersion, EVIDENCE_SCHEMA, { file });
-  return parseOrThrow(evidenceDocSchema, raw, { file, what: "V2 evidence artifact" });
+  const doc = parseOrThrow(evidenceDocSchema, raw, { file, what: "V2 evidence artifact" });
+  if (doc.slug !== slug) throw new ContractError(`evidence artifact at ${file} belongs to "${doc.slug}", not "${slug}"`, { file });
+  return doc;
 }
 
 /** The blocking form: the artifact must exist AND validate. */
-export async function requireEvidence(slug, { intakeDir = INTAKE_DIR } = {}) {
+export async function requireEvidence(slug, { intakeDir = INTAKE_DIR, runId = null } = {}) {
   const doc = await readEvidence(slug, { intakeDir });
   if (!doc) {
     throw new ContractError(
@@ -62,6 +70,9 @@ export async function requireEvidence(slug, { intakeDir = INTAKE_DIR } = {}) {
       { file: evidencePath(slug, intakeDir) },
     );
   }
+  if (runId && doc.runId !== runId) {
+    throw new ContractError(`evidence artifact for ${slug} belongs to run ${doc.runId}, not active run ${runId}`);
+  }
   return doc;
 }
 
@@ -69,6 +80,7 @@ export async function writeEvidence(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
   const validated = parseOrThrow(evidenceDocSchema, { schemaVersion: EVIDENCE_SCHEMA, ...doc }, {
     file: evidencePath(slug, intakeDir), what: "V2 evidence artifact (on write)",
   });
+  if (validated.slug !== slug) throw new ContractError(`refusing to write ${validated.slug} evidence into ${slug}'s run directory`);
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(evidencePath(slug, intakeDir), JSON.stringify(validated, null, 2) + "\n");
   return validated;
@@ -84,6 +96,11 @@ export function candidateProblems(doc) {
   for (const c of doc.candidates) {
     if (seen.has(c.id)) problems.push(`duplicate candidate id "${c.id}"`);
     seen.add(c.id);
+    const expectedId = candidateId(c.name, c.branch);
+    if (c.id !== expectedId) problems.push(`candidate "${c.name}" has unstable id "${c.id}" — expected "${expectedId}" from name + branch`);
+    if (c.status === "shortlisted" && !c.shortlisted) {
+      problems.push(`"${c.name}" (${c.id}) has status shortlisted but shortlisted=false`);
+    }
     if (c.status === "shipped" && !c.shortlisted) {
       problems.push(`"${c.name}" (${c.id}) is shipped but never shortlisted — shipped is not a side door around the shortlist stage`);
     }
@@ -121,6 +138,27 @@ export function dispositionProblems(doc) {
   return problems;
 }
 
+/** Evidence records must be unique and relationally attached to real candidates. */
+export function evidenceRecordProblems(doc) {
+  const problems = [];
+  const evidenceIds = new Set();
+  const candidateIds = new Set(doc.candidates.map((c) => c.id));
+  for (const e of doc.evidence) {
+    if (evidenceIds.has(e.id)) problems.push(`duplicate evidence id "${e.id}"`);
+    evidenceIds.add(e.id);
+    if (e.candidateId && !candidateIds.has(e.candidateId)) {
+      problems.push(`evidence "${e.id}" points at unknown candidate "${e.candidateId}"`);
+    }
+  }
+  const reservationIds = new Set();
+  for (const r of doc.reservations) {
+    if (!candidateIds.has(r.candidateId)) problems.push(`reservation points at unknown candidate "${r.candidateId}"`);
+    if (reservationIds.has(r.candidateId)) problems.push(`duplicate reservation record for "${r.candidateId}"`);
+    reservationIds.add(r.candidateId);
+  }
+  return problems;
+}
+
 /** The adaptive stop record must EARN its stop (DECISIONS.md "Research breadth"): stopped=true
     requires (1) trend duplicates|weaker, and (2) unresolvedCouldChange answered false. A run
     still searching (stopped=false) owes nothing further. Also: a full pass owes the record. */
@@ -130,6 +168,9 @@ export function saturationProblems(doc, { fullPass = true } = {}) {
   if (!s) {
     if (fullPass) problems.push("no adaptive-search stop record — a full pass must record why searching stopped (or why it hasn't)");
     return problems;
+  }
+  if (fullPass && !s.stopped) {
+    problems.push("full-pass research is explicitly still searching — final reconciliation cannot complete until saturation is earned");
   }
   if (s.stopped) {
     if (s.trend === "novel") {
@@ -150,6 +191,7 @@ export function saturationProblems(doc, { fullPass = true } = {}) {
 export function evidenceProblems(doc, { fullPass = true } = {}) {
   return [
     ...candidateProblems(doc),
+    ...evidenceRecordProblems(doc),
     ...dispositionProblems(doc),
     ...saturationProblems(doc, { fullPass }),
   ];

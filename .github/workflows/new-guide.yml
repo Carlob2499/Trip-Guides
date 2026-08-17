@@ -29,7 +29,12 @@ concurrency:
 
 jobs:
   scaffold:
-    if: github.event.label.name == 'new-guide'
+    # The public issue form auto-labels submissions. Only the owner/collaborators may turn that
+    # label into a write-token scaffold + Claude spend; outsider issues remain readable for a
+    # maintainer to dispatch deliberately.
+    if: >-
+      github.event.label.name == 'new-guide' &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
