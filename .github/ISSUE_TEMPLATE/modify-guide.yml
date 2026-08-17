@@ -6,11 +6,12 @@ body:
   - type: markdown
     attributes:
       value: |
-        Anyone can file this — filing it does **not** change anything. It's a
-        request for the site owner to review. Nothing runs until the owner
-        applies the `modify-approved` label (which requires write access to
-        this repo), at which point a scoped edit pass verifies and applies
-        just this change, then lands it the same way a research pass does.
+        Anyone can file this. Requests filed by the owner or a repository
+        collaborator start the scoped change run immediately; the
+        `modify-request` label on this form is the trigger. Requests from
+        anyone else remain inert in the owner's triage queue until the owner
+        starts them. A passing run verifies and applies only the requested
+        change, then lands it through the same evidence gate as other changes.
   - type: input
     id: slug
     attributes:

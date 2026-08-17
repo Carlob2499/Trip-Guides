@@ -6,11 +6,12 @@ body:
   - type: markdown
     attributes:
       value: |
-        Anyone can file this — filing it does **not** change anything. Nothing runs
-        until the owner applies the `revision-approved` label (write access required),
-        at which point the revise pipeline plans the revision, re-researches the
-        affected sections, sweeps the whole guide for continuity, and lands the result
-        the same way a research pass does.
+        Anyone can file this. Revisions filed by the owner or a repository
+        collaborator start when this form applies its `revision-request` label.
+        Revisions from anyone else remain inert in the owner's triage queue until
+        the owner starts them. The change pipeline plans the scope, re-researches
+        the affected sections, checks the whole guide for continuity, and sends the
+        result through the normal evidence gate.
 
         Most requests don't need this form — the "Request a change" button on the
         guide covers single fact fixes. This one exists for feedback-driven auto-filed

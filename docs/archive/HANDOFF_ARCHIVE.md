@@ -9,6 +9,23 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-17 — outside audit complete; pre-implementation cleanup started)
+
+**`main` was at `faa4946`; PLAN_PIPELINE_SURFACES was merged and live.** The deployed Atlas and
+empty Pipeline surfaces were visually inspected against the source. The Atlas was mature; the
+Pipeline's checkpoint display was real, while its sources, decisions, nuggets, and counters were
+honest placeholders because no producer wrote `events.json` yet.
+
+**The research spine was strong but the finalized doctrine was not fully actualized.** Immediate
+gaps included adaptive native-language escalation, bounded reservation/concierge investigation,
+Worth the Effort/Detour output, explicit critic state, and Intake-to-Finished token/time/cost
+measurement. Four-agent architecture and Opus use had to earn their place through
+quality-per-token evaluation; Claude remained the production backbone through September.
+
+**Deadline remained unchanged:** research and engineering freeze by September 30, followed by UI
+binding and finalization October 1–7. The next work was alignment and baseline verification, not
+another product questionnaire or broad rewrite.
+
 ## Snapshot (2026-08-15 — guide-deepening list, items 1/3/4/5 closed)
 
 **Korea geocode backfill.** `PLACES_API_KEY` lives in `.env` but nothing sources it into the
@@ -52,16 +69,6 @@ map/budget blocks rehomed); index.astro's inline hub script → `src/scripts/atl
 (name collisions); single-letter-variable rename sweep over the 6 worst files (274→185 repo-wide).
 Dedup: esc/reducedMotion → scripts/util.js; scripts gained lib/cli.mjs + lib/geo.mjs; og/recap
 share pages/og/_card.ts. d3 → 3 submodules (~200KB less shipped); geo-tz → devDependencies.
-
-## Snapshot (2026-08-14 — dark-mode focus-ring contrast fixed)
-
-**Fixed, not deferred.** The prior entry's "`--accent-ink` would break light (≈2.70:1)" was wrong
-— `accentTokens()` derives it to clear ≥4.5:1 on every light AND dark surface by construction, so
-no fork existed. 53 `:focus`/`:focus-visible` rules painting identity `--accent` (19 `src/styles/`
-files, 6 feature silos, `progress-preview`) now paint `--accent-ink` instead, same fix already
-applied to accent link text. Verified in preview: Korea's dark ring 2.48:1 → 5.23:1, light
-unchanged; `.pin-flash`/`[data-selected]` left alone. Ship loop green: build/lint/typecheck,
-vitest 2009/2009, `a11y.spec.ts` 69/69, drift unchanged.
 
 > **Rolled off since**, in order, each one commit further back than the last: the
 > "both design-reconciliation forks are closed" snapshot (2026-08-15 — the rate-fallback
