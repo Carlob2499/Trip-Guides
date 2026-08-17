@@ -6,11 +6,12 @@
 
 ## Position
 
-- **Last completed milestone:** M1 — Repair current publication safety
-- **Current milestone:** M2 — Versioned V2 contracts
-- **Exact next action:** Design and implement `scripts/pipeline/v2/` runtime-validated contracts
-  (run state, evidence/candidates, coverage, reconciliation dispositions, telemetry) + fail-closed
-  validation + V1 readers + contract tests (valid/missing/malformed/legacy/forward-compatible).
+- **Last completed milestone:** M2 — Versioned V2 contracts
+- **Current milestone:** M3 — Guide Author and prompt contracts
+- **Exact next action:** Update SKILL.md + references for the locked decisions (adaptive
+  saturation replaces fixed floors; objective-vs-experiential evidence; adaptive native-language;
+  source independence; reservation depth; transport robustness; category freshness), align
+  `.agents` skill copy via parity test, update the four research prompts to the V2 artifacts.
 
 ## Branch
 
@@ -71,6 +72,35 @@ All four gates green on `main` @ 9f1599b before any V2 work:
   workflow step-order and downgrade-guard text checks for both workflows, enforce wiring.
 - Checks: targeted 6 suites (153 ✓) · full `npm test` 156 files / 2413 ✓ · eslint clean on
   changed files.
+
+## M2 — done (contracts + tests)
+
+New: `scripts/pipeline/v2/{contracts,run-state,evidence,coverage,telemetry}.mjs` +
+`scripts/__tests__/pipeline-v2-contracts.test.mjs` (41 tests).
+
+- **Versioning:** `wp-run/2.0`, `wp-evidence/2.0`, `wp-coverage/2.0`, `wp-telemetry/2.0`. Same
+  major (any minor) accepted; documents parsed loose (zod `looseObject`) so unknown fields
+  survive round trips (forward-compatible); different major refused with migration named.
+- **Fail closed:** `ContractError` with file + field-level issues. A malformed mandatory artifact
+  throws; ONLY a missing file reads as absent, and `require*` makes even absence blocking.
+- **Run state** (`guides-intake/<slug>/run.v2.json`): immutable runId, lifecycle, per-stage
+  status/start/end/attempts/model/effort/commit/failure-class, bounded attempts (cap 5 preserved)
+  + one auto-retry, resume points at the interrupted stage (never skips ahead), publication vs
+  deployed-live as distinct facts (deployedLive null = unknown), telemetry summary. V2 research
+  stages: scaffold→passA→passB→reconcile→critic (verification is the landing gate's job, not a
+  pseudo-stage; V1's `verified` remains in the V1 spine untouched).
+- **V1 adapter:** `adaptV1RunState`/`readAnyRunState` — view-only, never rewrites state.json.
+- **Evidence** (`evidence.v2.json`): stable candidate ids (`candidateId()` deterministic), funnel
+  invariant shipped⊆shortlisted, rejection reasons required, typed dispositions
+  (agree/adopt/replace/reject/conflict-resolved/detour) required for every passB-origin finding,
+  adaptive saturation record must EARN a stop (duplicates/weaker trend + unresolvedCouldChange
+  answered false), reservations (with labeled unconfirmed leads), transport risk 0–4,
+  disagreements w/ impact, Pass-B native-language audit summary.
+- **Coverage** (`coverage.v2.json`): covered ⇒ structured `NN-<group>.json[#anchor]` refs
+  (schema-enforced — arbitrary strings rejected); excluded ⇒ honest reason.
+- **Telemetry:** all-null empty state, stage facts from workflow boundaries, counts derived only
+  from what the evidence artifact proves, tokens/cost never inferred, merge never lets a late
+  unknown erase a known value.
 
 ## Decisions made within engineering discretion
 
