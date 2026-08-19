@@ -105,9 +105,9 @@ jobs:
       # a dispatch on that ref cannot start research (and spends nothing). The escape hatch is a
       # deliberate repository variable — the cutover switch, set only after independent review.
       - name: Guard — research never starts from the default branch
-        if: github.ref_name == github.event.repository.default_branch && vars.WAYPOINT_V2_ON_DEFAULT != 'true'
+        if: github.ref_name == github.event.repository.default_branch && vars.WAYPOINT_RESEARCH_ENGINE != 'v2'
         run: |
-          echo "::error::research-pass-v2 was dispatched on the default branch. The default-branch copy of this workflow is an inert registration stub; run the real pipeline from its feature branch, or set the WAYPOINT_V2_ON_DEFAULT repository variable after an accepted cutover. No research was started and nothing was spent."
+          echo "::error::research-pass-v2 was dispatched on the default branch. The default-branch copy of this workflow is an inert registration stub; run the real pipeline from its feature branch, or set the WAYPOINT_RESEARCH_ENGINE repository variable to v2 after an accepted cutover. No research was started and nothing was spent."
           exit 1
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:

@@ -383,8 +383,8 @@ pages ✓ · lint 0/0 ✓ · typecheck 0 errors + 21 pre-existing hints ✓ · t
   exists on the default branch. Bootstrap PR #59 (inert stub, `permissions: {}`, spends
   nothing, exits green) merged to main — the one authorized early merge; inert proof run
   32259552278 (7s, success, zero side effects). The real workflow gained a first-step runtime
-  guard refusing default-branch dispatch unless the `WAYPOINT_V2_ON_DEFAULT` repository
-  variable is deliberately set (the cutover switch). NOTE: the squash-merge push produced no
+  guard refusing default-branch dispatch unless the `WAYPOINT_RESEARCH_ENGINE` repository
+  variable is deliberately set to `v2` (the cutover switch). NOTE: the squash-merge push produced no
   Actions events (platform hiccup); a whitespace nudge commit to main (`14c2411`) re-triggered
   indexing and registered the workflow.
 

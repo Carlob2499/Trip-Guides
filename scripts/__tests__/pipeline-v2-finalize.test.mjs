@@ -557,7 +557,7 @@ describe("canary scar — agent permission rules use the syntax the CLI actually
 describe("P4 — an accidental default-branch dispatch cannot start research", () => {
   it("the setup job's FIRST step refuses default-branch runs before any spend", () => {
     expect(WORKFLOW).toContain("github.ref_name == github.event.repository.default_branch");
-    expect(WORKFLOW).toContain("WAYPOINT_V2_ON_DEFAULT");
+    expect(WORKFLOW).toContain("WAYPOINT_RESEARCH_ENGINE");
     const guardAt = WORKFLOW.indexOf("Guard — research never starts from the default branch");
     const firstCheckout = WORKFLOW.indexOf("uses: actions/checkout", WORKFLOW.indexOf("jobs:"));
     expect(guardAt).toBeGreaterThan(0);
