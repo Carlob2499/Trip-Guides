@@ -344,7 +344,7 @@ describe("research-pass-v2.yml — wiring", () => {
     expect(text).not.toContain("--allowedTools Bash");
     expect(text).not.toContain("github_token:");
     expect(text).toContain("--mount type=bind,src=\"$GITHUB_WORKSPACE\",dst=/workspace");
-    expect(text).toContain("Read(/workspace/**)");
+    expect(text).toContain("Read(//workspace/**)");
     expect(text).toContain("Read(/proc/**)");
     expect(text).toContain("@anthropic-ai/claude-code@2.1.233");
     expect(text).toContain("node:22-bookworm-slim@sha256:");

@@ -231,8 +231,8 @@ jobs:
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
           WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
           WP_EFFORT: ${{ inputs.effort || 'high' }}
-          WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
-          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+          WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
@@ -283,10 +283,15 @@ jobs:
 
       - name: Re-dispatch once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        # working-directory: the workspace root's .git was replaced by the agent sandbox (no
+        # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
+        # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
+        # on canary run 32260514104.
+        working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run research-pass-v2.yml -f slug="$SLUG" \
+          gh workflow run research-pass-v2.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
@@ -376,8 +381,8 @@ jobs:
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
           WP_MODEL: claude-sonnet-5
           WP_EFFORT: ${{ inputs.effort || 'high' }}
-          WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
-          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**),WebFetch(domain:github.com),WebFetch(domain:api.github.com),WebFetch(domain:raw.githubusercontent.com),WebFetch(domain:githubusercontent.com),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+          WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:github.com),WebFetch(domain:api.github.com),WebFetch(domain:raw.githubusercontent.com),WebFetch(domain:githubusercontent.com),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
@@ -432,10 +437,15 @@ jobs:
 
       - name: Re-dispatch once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        # working-directory: the workspace root's .git was replaced by the agent sandbox (no
+        # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
+        # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
+        # on canary run 32260514104.
+        working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run research-pass-v2.yml -f slug="$SLUG" \
+          gh workflow run research-pass-v2.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
@@ -517,8 +527,8 @@ jobs:
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
           WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
           WP_EFFORT: ${{ inputs.effort || 'high' }}
-          WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
-          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+          WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
@@ -572,10 +582,15 @@ jobs:
 
       - name: Re-dispatch once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        # working-directory: the workspace root's .git was replaced by the agent sandbox (no
+        # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
+        # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
+        # on canary run 32260514104.
+        working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run research-pass-v2.yml -f slug="$SLUG" \
+          gh workflow run research-pass-v2.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
@@ -716,7 +731,7 @@ jobs:
           WP_MODEL: ${{ inputs.critic_model || 'claude-opus-5' }}
           WP_EFFORT: ${{ inputs.effort || 'high' }}
           WP_TOOLS: ${{ steps.fetch_policy.outputs.tools }}
-          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**)
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**)
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
@@ -779,10 +794,15 @@ jobs:
 
       - name: Re-dispatch once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        # working-directory: the workspace root's .git was replaced by the agent sandbox (no
+        # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
+        # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
+        # on canary run 32260514104.
+        working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run research-pass-v2.yml -f slug="$SLUG" \
+          gh workflow run research-pass-v2.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true

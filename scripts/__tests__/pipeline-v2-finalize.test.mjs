@@ -450,6 +450,28 @@ describe("canary scar — pipeline.mjs gate cannot deadlock its own module graph
   });
 });
 
+// ── canary scar: permission-rule syntax ──────────────────────────────────────
+
+describe("canary scar — agent permission rules use the syntax the CLI actually consults", () => {
+  // The first canary's Pass A researched for 15 minutes and could not write ONE file: a
+  // single-leading-slash rule path is settings-relative (never matches /workspace), and
+  // Write()/Glob()/Grep() path rules are accepted but ignored. Verified against
+  // code.claude.com/docs/en/permissions (2026-08-19): absolute = double slash; Edit(//…)
+  // covers Write/MultiEdit/NotebookEdit.
+  it("the workflow carries no single-slash /workspace rule and no ignored Write() rule", () => {
+    expect(WORKFLOW).not.toMatch(/\((?:\/workspace|\/proc|\/sys|\/dev)\//);
+    expect(WORKFLOW).not.toContain("Write(");
+    expect(WORKFLOW).toContain("Edit(//workspace/**)");
+    expect(WORKFLOW).toContain("Read(//proc/**)");
+  });
+
+  it("the critic's generated fetch policy uses the same corrected syntax", async () => {
+    const text = readFileSync(path.join(ROOT, "scripts", "pipeline-v2.mjs"), "utf8");
+    expect(text).toContain('"Read(//workspace/**)", "Edit(//workspace/**)"');
+    expect(text).not.toContain('"Write(/workspace/**)"');
+  });
+});
+
 // ── P4: dispatch guard ───────────────────────────────────────────────────────
 
 describe("P4 — an accidental default-branch dispatch cannot start research", () => {
