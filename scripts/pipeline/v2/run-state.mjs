@@ -108,6 +108,44 @@ function recomputeResume(state) {
   return state;
 }
 
+// ── per-attempt history (wp-run/2.1) ─────────────────────────────────────────
+// Every attempt keeps its own start/end/status record so a retried stage's real cost stays
+// visible — the last attempt's timestamps no longer silently overwrite the first's.
+
+function openAttempt(st, now) {
+  st.history = st.history || [];
+  st.history.push({ attempt: st.attempts, startedAt: now, endedAt: null, status: "running", failureClass: null, durationSec: null });
+}
+
+function closeAttempt(st, now, status, failureClass = null) {
+  st.history = st.history || [];
+  let open = [...st.history].reverse().find((h) => h.status === "running");
+  if (!open) {
+    // A control-plane failure before begin-stage still deserves an honest record.
+    open = { attempt: Math.max(1, st.attempts), startedAt: st.startedAt || now, endedAt: null, status: "running", failureClass: null, durationSec: null };
+    st.history.push(open);
+  }
+  open.endedAt = now;
+  open.status = status;
+  open.failureClass = failureClass;
+  const ms = Date.parse(now) - Date.parse(open.startedAt);
+  open.durationSec = Number.isFinite(ms) && ms >= 0 ? Math.round(ms / 1000) : null;
+}
+
+/** What the attempts actually cost: successful / failed / cumulative seconds (null = unknown). */
+export function stageAttemptStats(st) {
+  const history = st?.history || [];
+  const sum = (rows) => {
+    const known = rows.filter((h) => h.durationSec !== null);
+    return known.length ? known.reduce((total, h) => total + h.durationSec, 0) : null;
+  };
+  return {
+    successfulSec: sum(history.filter((h) => h.status === "complete")),
+    failedSec: sum(history.filter((h) => h.status === "failed")),
+    cumulativeSec: sum(history.filter((h) => h.status !== "running")),
+  };
+}
+
 /** Create a fresh V2 run. Refuses to clobber an existing one unless force. */
 export async function initRunV2(slug, {
   lifecycle = "research",
@@ -187,6 +225,7 @@ export async function stageStart(slug, stage, { model = null, effort = null, now
   st.endedAt = null;
   st.failure = null;
   st.attempts += 1;
+  openAttempt(st, now);
   if (model) st.model = model;
   if (effort) st.effort = effort;
   state.status = "running";
@@ -208,6 +247,7 @@ export async function stageComplete(slug, stage, { commit = null, now = new Date
   st.status = "complete";
   st.endedAt = now;
   st.failure = null;
+  closeAttempt(st, now, "complete");
   if (commit) st.commit = commit;
   recomputeResume(state);
   state.status = nextStageV2(state) ? "running" : "complete";
@@ -225,6 +265,7 @@ export async function stageFail(slug, stage, { failureClass = "unknown", detail 
   st.status = "failed";
   st.endedAt = now;
   st.failure = { class: failureClass, detail, at: now };
+  closeAttempt(st, now, "failed", failureClass);
   state.status = "failed";
   state.failure = { class: failureClass, detail, at: now };
   recomputeResume(state);

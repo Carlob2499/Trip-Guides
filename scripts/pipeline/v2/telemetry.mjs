@@ -29,13 +29,13 @@ export function emptyTelemetry() {
 
 /** Stage facts the workflow boundary can always produce: wall-clock duration + model + effort.
     Anything not supplied stays null. */
-export function stageFacts({ startedAt = null, endedAt = null, model = null, effort = null, retries = null } = {}) {
+export function stageFacts({ startedAt = null, endedAt = null, model = null, effort = null, retries = null, failedDurationSec = null, cumulativeDurationSec = null } = {}) {
   let durationSec = null;
   if (startedAt && endedAt) {
     const ms = Date.parse(endedAt) - Date.parse(startedAt);
     if (Number.isFinite(ms) && ms >= 0) durationSec = Math.round(ms / 1000);
   }
-  return { durationSec, model, effort, retries, toolCalls: null, searches: null, fetches: null };
+  return { durationSec, failedDurationSec, cumulativeDurationSec, model, effort, retries, toolCalls: null, searches: null, fetches: null };
 }
 
 /** Derive the count facts the evidence artifact actually proves. Null when the artifact cannot

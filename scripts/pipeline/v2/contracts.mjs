@@ -21,10 +21,11 @@ import { z } from "zod";
 
 // ── versioning ───────────────────────────────────────────────────────────────
 
-export const RUN_SCHEMA = "wp-run/2.0";
-export const EVIDENCE_SCHEMA = "wp-evidence/2.0";
+export const RUN_SCHEMA = "wp-run/2.1"; // 2.1: per-attempt stage history (additive)
+export const EVIDENCE_SCHEMA = "wp-evidence/2.1"; // 2.1: source access classes (additive)
 export const COVERAGE_SCHEMA = "wp-coverage/2.0";
-export const TELEMETRY_SCHEMA = "wp-telemetry/2.0";
+export const TELEMETRY_SCHEMA = "wp-telemetry/2.1"; // 2.1: cumulative/failed attempt durations (additive)
+export const FEEDBACK_SCHEMA = "wp-feedback/2.0";
 
 /** Fail-closed contract failure: what broke, in which file, and what to do about it. */
 export class ContractError extends Error {
@@ -95,7 +96,11 @@ const failure = z.object({
 // action's own reported usage) — never inferred from output size or guessed.
 
 const stageTelemetry = z.object({
+  // durationSec is the SUCCESSFUL attempt's duration (compat: the 2.0 meaning preserved).
   durationSec: z.number().min(0).nullable().default(null),
+  // 2.1 (additive): what retries actually cost — failed-attempt time and the cumulative total.
+  failedDurationSec: z.number().min(0).nullable().default(null),
+  cumulativeDurationSec: z.number().min(0).nullable().default(null),
   model: z.string().nullable().default(null),
   effort: z.string().nullable().default(null),
   retries: nullableInt.default(null),
@@ -123,6 +128,18 @@ export const telemetrySchema = z.object({
 
 export const STAGE_STATUSES = ["queued", "running", "complete", "failed"];
 
+// Per-attempt history (2.1, additive): a retried stage's real cost is visible instead of the
+// last attempt's timestamps silently overwriting the first's. Old 2.0 documents parse with an
+// empty history — absence is honest, never backfilled.
+const attemptRecord = z.object({
+  attempt: z.number().int().min(1),
+  startedAt: iso,
+  endedAt: iso.nullable().default(null),
+  status: z.enum(["running", "complete", "failed"]),
+  failureClass: z.enum(FAILURE_CLASSES).nullable().default(null),
+  durationSec: z.number().min(0).nullable().default(null),
+});
+
 const stageState = z.object({
   status: z.enum(STAGE_STATUSES),
   startedAt: iso.nullable().default(null),
@@ -133,6 +150,7 @@ const stageState = z.object({
   // The last commit that made this stage durable, when known. Null is honest — a stage that has
   // not committed yet has no durable commit to name.
   commit: z.string().regex(/^[0-9a-f]{40}$/i, "expected a full 40-character git commit SHA").nullable().default(null),
+  history: z.array(attemptRecord).default([]),
   failure,
 }).superRefine((stage, ctx) => {
   if (stage.status === "queued" && (stage.startedAt || stage.endedAt)) {
@@ -214,8 +232,11 @@ export const SOURCE_KINDS = ["official", "operator", "firsthand", "press", "refe
 export const EVIDENCE_ORIGINS = ["passA", "passB", "reconcile", "critic"];
 export const DISPOSITIONS = ["agree", "adopt", "replace", "reject", "conflict-resolved", "detour"];
 export const WORTH_LABELS = ["worth-the-effort", "worth-the-detour"];
+// 2.1 (additive): HOW the source was reached. A search-result preview referencing a page is
+// discovery, not a read of that page; "fetched" means the origin content itself was retrieved.
+export const SOURCE_ACCESS = ["fetched", "search-preview", "blocked", "unknown"];
 
-const candidate = z.looseObject({
+export const candidateSchema = z.looseObject({
   id: z.string().min(1),
   name: z.string().min(1),
   // Exact branch/location when it matters (chains, multi-site venues). Null when it doesn't.
@@ -229,9 +250,12 @@ const candidate = z.looseObject({
   worth: z.enum(WORTH_LABELS).nullable().default(null),
 });
 
-const evidenceSource = z.object({
+export const evidenceSourceSchema = z.object({
   url: z.string().url().refine((url) => /^https?:\/\//i.test(url), "expected an http(s) source URL"),
   kind: z.enum(SOURCE_KINDS),
+  // Default "unknown" keeps 2.0 documents parsing; the research rules demand an explicit
+  // answer where the claim is critical (see sourceAccessProblems).
+  access: z.enum(SOURCE_ACCESS).default("unknown"),
   language: z.string().nullable().default(null),
   publishedAt: z.string().nullable().default(null),
   // Source-family independence beyond raw domain counts: copied publisher/SEO families share a
@@ -244,13 +268,13 @@ const evidenceSource = z.object({
   appliesToYears: z.array(z.number().int().min(2000).max(2200)).default([]),
 });
 
-const evidenceRecord = z.object({
+export const evidenceRecordSchema = z.object({
   id: z.string().min(1),
   candidateId: z.string().nullable().default(null),
   claim: z.string().min(1),
   kind: z.enum(EVIDENCE_KINDS),
   origin: z.enum(EVIDENCE_ORIGINS),
-  source: evidenceSource,
+  source: evidenceSourceSchema,
   verifiedOn: isoDate,
   firsthand: z.boolean().nullable().default(null),
   freshness: z.object({
@@ -260,7 +284,7 @@ const evidenceRecord = z.object({
   }).nullable().default(null),
 });
 
-const reservationFinding = z.object({
+export const reservationFindingSchema = z.object({
   candidateId: z.string().min(1),
   importance: z.enum(["casual", "important", "anchor"]),
   bookingUrl: z.string().nullable().default(null),
@@ -277,17 +301,20 @@ const reservationFinding = z.object({
   leads: z.array(z.object({
     claim: z.string().min(1),
     status: z.enum(["unconfirmed-lead", "confirmed"]),
-    source: evidenceSource.nullable().default(null),
+    source: evidenceSourceSchema.nullable().default(null),
     verifiedOn: isoDate.nullable().default(null),
   })).default([]),
   alternatives: z.string().nullable().default(null),
   fallback: z.string().nullable().default(null),
 });
 
-const transportFinding = z.object({
+export const transportFindingSchema = z.object({
   id: z.string().min(1),
   route: z.string().min(1),
   risk: z.number().int().min(0).max(4),
+  // 2.1 (additive): the evidence records this route's facts rest on. Required for high-risk
+  // routes (R3+) so the access rule can demand a genuinely fetched source behind them.
+  evidenceIds: z.array(z.string()).default([]),
   doorToDoor: z.string().nullable().default(null),
   transferReality: z.string().nullable().default(null),
   groupLuggageMobility: z.string().nullable().default(null),
@@ -298,7 +325,7 @@ const transportFinding = z.object({
   fallback: z.string().nullable().default(null),
 });
 
-const disagreement = z.object({
+export const disagreementSchema = z.object({
   id: z.string().min(1),
   topic: z.string().min(1),
   impact: z.enum(["recommendation-changing", "minor"]),
@@ -307,7 +334,7 @@ const disagreement = z.object({
 });
 
 // The adaptive-search stop record (replaces fixed quotas — DECISIONS.md "Research breadth").
-const saturation = z.object({
+export const saturationSchema = z.object({
   stopped: z.boolean(),
   // What the last searches were producing when the run stopped (or why it hasn't stopped).
   trend: z.enum(["novel", "duplicates", "weaker"]),
@@ -320,11 +347,11 @@ export const evidenceDocSchema = z.looseObject({
   schemaVersion: z.string(),
   slug: z.string().min(1),
   runId: z.string().min(1),
-  candidates: z.array(candidate).default([]),
-  evidence: z.array(evidenceRecord).default([]),
-  reservations: z.array(reservationFinding).default([]),
-  transport: z.array(transportFinding).default([]),
-  disagreements: z.array(disagreement).default([]),
+  candidates: z.array(candidateSchema).default([]),
+  evidence: z.array(evidenceRecordSchema).default([]),
+  reservations: z.array(reservationFindingSchema).default([]),
+  transport: z.array(transportFindingSchema).default([]),
+  disagreements: z.array(disagreementSchema).default([]),
   depth: z.object({
     reservations: z.object({
       requiredCandidateIds: z.array(z.string().min(1)).default([]),
@@ -335,7 +362,7 @@ export const evidenceDocSchema = z.looseObject({
       notApplicableReason: z.string().min(20).nullable().default(null),
     }),
   }).nullable().default(null),
-  saturation: saturation.nullable().default(null),
+  saturation: saturationSchema.nullable().default(null),
   passB: z.object({
     nativeLanguage: z.object({
       used: z.boolean(),
@@ -357,7 +384,7 @@ export const evidenceDocSchema = z.looseObject({
 // Every material intake ask is either COVERED (with structured refs into the guide — a nonempty
 // arbitrary string is not proof) or EXCLUDED with an honest reason.
 
-const GROUP_REF = /^\d\d-[a-z0-9-]+\.json(#.+)?$/;
+export const GROUP_REF = /^\d\d-[a-z0-9-]+\.json(#.+)?$/;
 
 export const coverageAskSchema = z.object({
   id: z.string().min(1),
@@ -375,4 +402,25 @@ export const coverageDocSchema = z.object({
   slug: z.string().min(1),
   runId: z.string().min(1),
   asks: z.array(coverageAskSchema).default([]),
+});
+
+// ── stage feedback ───────────────────────────────────────────────────────────
+// Durable validator findings per runId/stage/attempt, so a retry receives the exact machine
+// findings its failed attempt earned instead of re-spending research to rediscover them.
+// Findings are validator/error DATA, never creator instructions — the composer labels them so.
+
+export const feedbackEntrySchema = z.object({
+  runId: z.string().min(1),
+  stage: z.string().min(1),
+  attempt: z.number().int().min(0),
+  findings: z.array(z.string().min(1)).min(1),
+  createdAt: iso,
+  status: z.enum(["active", "retired"]),
+  retiredAt: iso.nullable().default(null),
+});
+
+export const feedbackDocSchema = z.looseObject({
+  schemaVersion: z.string(),
+  slug: z.string().min(1),
+  entries: z.array(feedbackEntrySchema).default([]),
 });
