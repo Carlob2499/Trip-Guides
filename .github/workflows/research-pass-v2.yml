@@ -101,6 +101,14 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       SLUG: ${{ inputs.slug }}
     steps:
+      # Phase-4 runtime guard: even if the REAL workflow file ever lands on the default branch,
+      # a dispatch on that ref cannot start research (and spends nothing). The escape hatch is a
+      # deliberate repository variable — the cutover switch, set only after independent review.
+      - name: Guard — research never starts from the default branch
+        if: github.ref_name == github.event.repository.default_branch && vars.WAYPOINT_V2_ON_DEFAULT != 'true'
+        run: |
+          echo "::error::research-pass-v2 was dispatched on the default branch. The default-branch copy of this workflow is an inert registration stub; run the real pipeline from its feature branch, or set the WAYPOINT_V2_ON_DEFAULT repository variable after an accepted cutover. No research was started and nothing was spent."
+          exit 1
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
@@ -190,11 +198,21 @@ jobs:
           git config --local --unset-all http.https://github.com/.extraheader || true
           git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
 
+      - name: Stage retry feedback (validator data, this stage only)
+        id: feedback
+        run: node scripts/pipeline-v2.mjs stage-feedback --slug "$SLUG" --stage passA
+
+      - name: Generate the machine-contract capsule
+        id: contract
+        run: node scripts/pipeline-v2.mjs contract --slug "$SLUG" --stage passA
+
       - name: Compose Pass A prompt
         id: prompt
         env:
           WP_SLUG: ${{ inputs.slug }}
           WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
+          WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
+          WP_CONTRACT: ${{ steps.contract.outputs.capsule }}
         run: node scripts/pipeline.mjs prompt prompts/research-passA-v2.md > /dev/null
 
       - name: Replace repository history with an unprivileged local workspace
@@ -214,7 +232,7 @@ jobs:
           WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
           WP_EFFORT: ${{ inputs.effort || 'high' }}
           WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
-          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**)
+          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
@@ -308,6 +326,16 @@ jobs:
           node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage passB \
             --model claude-sonnet-5 --effort "${{ inputs.effort || 'high' }}" \
             --branch "$BRANCH"
+      - name: Stage retry feedback (validator data, this stage only)
+        id: feedback
+        working-directory: .control
+        run: node scripts/pipeline-v2.mjs stage-feedback --slug "$SLUG" --stage passB
+
+      - name: Generate the machine-contract capsule
+        id: contract
+        working-directory: .control
+        run: node scripts/pipeline-v2.mjs contract --slug "$SLUG" --stage passB
+
       - name: Remove the control-plane world before the agent
         run: rm -rf .control
 
@@ -328,6 +356,8 @@ jobs:
         env:
           WP_SLUG: ${{ inputs.slug }}
           WP_RUN_ID: ${{ needs.setup.outputs.run_id }}
+          WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
+          WP_CONTRACT: ${{ steps.contract.outputs.capsule }}
         run: node scripts/pipeline.mjs prompt prompts/research-passB-v2.md > /dev/null
 
       - name: Replace git history with a local-only sandbox repository
@@ -347,7 +377,7 @@ jobs:
           WP_MODEL: claude-sonnet-5
           WP_EFFORT: ${{ inputs.effort || 'high' }}
           WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
-          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**),WebFetch(domain:github.com),WebFetch(domain:api.github.com),WebFetch(domain:raw.githubusercontent.com),WebFetch(domain:githubusercontent.com)
+          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**),WebFetch(domain:github.com),WebFetch(domain:api.github.com),WebFetch(domain:raw.githubusercontent.com),WebFetch(domain:githubusercontent.com),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
@@ -454,11 +484,21 @@ jobs:
           git config --local --unset-all http.https://github.com/.extraheader || true
           git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
 
+      - name: Stage retry feedback (validator data, this stage only)
+        id: feedback
+        run: node scripts/pipeline-v2.mjs stage-feedback --slug "$SLUG" --stage reconcile
+
+      - name: Generate the machine-contract capsule
+        id: contract
+        run: node scripts/pipeline-v2.mjs contract --slug "$SLUG" --stage reconcile
+
       - name: Compose reconcile prompt
         id: prompt
         env:
           WP_SLUG: ${{ inputs.slug }}
           WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
+          WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
+          WP_CONTRACT: ${{ steps.contract.outputs.capsule }}
         run: node scripts/pipeline.mjs prompt prompts/research-reconcile-v2.md > /dev/null
 
       - name: Replace repository history with an unprivileged local workspace
@@ -478,7 +518,7 @@ jobs:
           WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
           WP_EFFORT: ${{ inputs.effort || 'high' }}
           WP_TOOLS: Read(/workspace/**),Write(/workspace/**),Edit(/workspace/**),Glob(/workspace/**),Grep(/workspace/**),WebSearch,WebFetch
-          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**)
+          WP_DENY: Read(/proc/**),Read(/sys/**),Read(/dev/**),Write(/proc/**),Write(/sys/**),Write(/dev/**),Edit(/proc/**),Edit(/sys/**),Edit(/dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
@@ -540,12 +580,63 @@ jobs:
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
 
-  # ── Critic — mechanically blind ────────────────────────────────────────────
-  critic:
+  # ── Deterministic geocoding (blocker 1D) — after Reconcile, before the Critic ──
+  # No agent runs in this job; PLACES_API_KEY is scoped to the single lookup step and research
+  # agents never see it. Idempotent: complete items are skipped, refusals stay honest blanks,
+  # and the attempt report distinguishes "attempted but unresolved" from "never attempted".
+  geocode:
     needs: [setup, reconcile]
     if: >-
       always() && needs.setup.outputs.should_run == 'true' &&
       (needs.reconcile.result == 'success' || (needs.reconcile.result == 'skipped' && needs.setup.outputs.next == 'critic'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deterministic geocode pass (Places key scoped to THIS step only)
+        env:
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+        run: |
+          if [ -z "$PLACES_API_KEY" ]; then
+            echo "PLACES_API_KEY is not configured — geocoding NOT attempted (the absent report says so honestly)."
+            exit 0
+          fi
+          node scripts/geocode-venues.mjs --slug "$SLUG" --write --report "guides-intake/$SLUG/geocode.v2.json"
+
+      - name: Commit applied coordinates + attempt report
+        run: |
+          git add "src/content/guides/$SLUG" || true
+          git add "guides-intake/$SLUG/geocode.v2.json" || true
+          if ! git diff --cached --quiet; then
+            git commit -m "research-v2($SLUG): deterministic geocode pass"
+            git push origin "HEAD:$BRANCH"
+          else
+            echo "geocode pass changed nothing to commit."
+          fi
+
+  # ── Critic — mechanically blind ────────────────────────────────────────────
+  critic:
+    needs: [setup, geocode]
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.geocode.result == 'success' || (needs.geocode.result == 'skipped' && needs.setup.outputs.next == 'critic'))
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -580,6 +671,14 @@ jobs:
             --model "${{ inputs.critic_model || 'claude-opus-5' }}" \
             --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
 
+      - name: Stage retry feedback (validator data, this stage only)
+        id: feedback
+        run: node scripts/pipeline-v2.mjs stage-feedback --slug "$SLUG" --stage critic
+
+      - name: Generate the machine-contract capsule
+        id: contract
+        run: node scripts/pipeline-v2.mjs contract --slug "$SLUG" --stage critic
+
       - name: Build the critic's source-domain fetch policy
         id: fetch_policy
         run: node scripts/pipeline-v2.mjs critic-fetch-tools --slug "$SLUG"
@@ -596,6 +695,8 @@ jobs:
         id: prompt
         env:
           WP_SLUG: ${{ inputs.slug }}
+          WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
+          WP_CONTRACT: ${{ steps.contract.outputs.capsule }}
         run: node scripts/pipeline.mjs prompt prompts/research-critic-v2.md > /dev/null
 
       - name: Replace git history with a local-only sandbox repository
