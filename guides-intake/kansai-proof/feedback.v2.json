@@ -41,6 +41,24 @@
         "✗ priority 1: \"Kushikatsu Daruma (Dotonbori)\" is marked shipped but appears nowhere in the guide"
       ],
       "createdAt": "2026-08-19T23:38:21.221Z",
+      "status": "retired",
+      "retiredAt": "2026-08-19T23:54:15.318Z"
+    },
+    {
+      "runId": "kansai-proof-20260819-36127b",
+      "stage": "reconcile",
+      "attempt": 2,
+      "findings": [
+        "P1 candidates · FAIL — the consideration set is thin or unverifiable",
+        "✗ priority 3: \"Nara Park deer\" is marked shipped but appears nowhere in the guide",
+        "P0 risk-gates · FAIL — 1 finding(s) (draft: these BLOCK publishing):",
+        "⚠ [advisory-not-surfaced] destination config declares a travel advisory (https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html) but the guide carries no typed `advisory` object — an R4 safety claim in prose is invisible to recert and never renders the advisory pill",
+        "P0 uncertainty· FAIL — 1 finding(s) (draft: these BLOCK publishing):",
+        "⚠ [regulatory-change-unregistered] §\"Money & currency\" states a rule change around Nov 1 (\"changes on\") with no facts.json row — a plan-critical change nothing will re-check or expire",
+        "⚠ [leg-duration-unverified] 3 of 10 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Top sights\", \"What to eat\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run"
+      ],
+      "createdAt": "2026-08-19T23:54:15.318Z",
       "status": "active",
       "retiredAt": null
     }

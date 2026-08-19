@@ -42,19 +42,49 @@
       "text": "Pass B (independent research) complete in 14m"
     },
     {
-      "at": "2026-08-19T22:38:02.820Z",
-      "kind": "decision",
-      "text": "Candidate funnel: 53 evaluated · 32 shortlisted · 23 shipped · 24 rejected · 4 kept as detours"
+      "at": "2026-08-19T22:38:26.010Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 1 of 5)"
     },
     {
-      "at": "2026-08-19T22:38:02.820Z",
+      "at": "2026-08-19T23:39:23.824Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 1 failed (unknown) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-19T23:39:23.824Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-19T23:54:16.586Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-19T23:54:16.586Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 62 evaluated · 40 shortlisted · 27 shipped · 28 rejected · 4 kept as detours"
+    },
+    {
+      "at": "2026-08-19T23:54:16.586Z",
+      "kind": "decision",
+      "text": "Reconcile dispositioned 15 independent finding(s): 3 agree · 4 reject · 8 adopt"
+    },
+    {
+      "at": "2026-08-19T23:54:16.586Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-19T22:38:02.820Z",
+      "at": "2026-08-19T23:54:16.586Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether the intake's assumed anchor event (Kiyomizu-dera autumn night illumination) actually falls within the trip's Nov 13-17, 2026 dates"
+    },
+    {
+      "at": "2026-08-19T23:54:16.586Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Whether Toji's autumn illumination (Pass B, T0-verified, fully covers Nov 13-17) should be woven into Day 3 (Sun Nov 15) as a substitute for the anchor event the intake assumed but that isn't running"
     }
   ],
   "nuggets": [],
