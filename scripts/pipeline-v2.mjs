@@ -39,6 +39,7 @@ import {
 } from "./pipeline/v2/run-state.mjs";
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
+import { emitRunEvents, readGeocodeReport } from "./pipeline/v2/events.mjs";
 import { readEvidence, requireEvidence, evidenceProblems } from "./pipeline/v2/evidence.mjs";
 import { researchRuleProblems, isProxyHost } from "./pipeline/v2/research-rules.mjs";
 import { requireCoverage, coverageProblems, loadCoverageContext } from "./pipeline/v2/coverage.mjs";
@@ -320,7 +321,8 @@ async function run(cmd, get, has) {
             if (branch) git(["push", "origin", `HEAD:${branch}`]);
           }
         }
-        commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`], `research-v2(${slug}): ${stage} FAILED (${isVoid ? "void" : "invalid output"})`, { branch });
+        await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
+        commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (${isVoid ? "void" : "invalid output"})`, { branch });
         emit("void", String(isVoid));
         console.error(`[pipeline-v2] ${slug} — stage "${stage}" output does not hold up:`);
         for (const p of problems) console.error(`  · ${p}`);
@@ -352,7 +354,9 @@ async function run(cmd, get, has) {
         totalDurationSec: Math.max(0, Math.round((Date.parse(state.updatedAt) - Date.parse(state.createdAt)) / 1000)),
       });
       await recordTelemetry(slug, telemetry);
-      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`], `research-v2(${slug}): ${stage} complete`, { branch });
+      // Phase 9: rebuild the truthful Progress event log from the durable artifacts.
+      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: evidenceDoc, geocode: await readGeocodeReport(slug) });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} complete`, { branch });
       emit("void", "false");
       emit("next", nextStageV2(state) || "");
       console.log(`[pipeline-v2] ${slug} — stage "${stage}" complete${workCommit ? ` (work at ${workCommit.slice(0, 7)})` : ""}; next: ${nextStageV2(state) || "(none)"}`);
@@ -362,7 +366,8 @@ async function run(cmd, get, has) {
     case "fail-stage": {
       const stage = get("--stage");
       await stageFail(slug, stage, { failureClass: get("--class") || "unknown", detail: get("--detail") || "" });
-      commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): ${stage} FAILED`, { branch });
+      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED`, { branch });
       console.error(`[pipeline-v2] ${slug} — stage "${stage}" recorded as failed (${get("--class") || "unknown"}); branch stays manually resumable.`);
       return 0;
     }
@@ -370,7 +375,8 @@ async function run(cmd, get, has) {
     case "landing-gate": {
       const passed = get("--status") === "passed";
       await markLandingGate(slug, { passed, detail: get("--detail") });
-      commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): landing gate ${passed ? "PASS" : "FAIL"}`, { branch });
+      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): landing gate ${passed ? "PASS" : "FAIL"}`, { branch });
       return passed ? 0 : 1;
     }
 
