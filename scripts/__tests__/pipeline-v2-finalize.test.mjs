@@ -426,6 +426,30 @@ describe("1C — verify's coverage gate consumes coverage.v2.json fail-closed", 
   });
 });
 
+// ── canary scar: CLI module-graph deadlock ───────────────────────────────────
+
+describe("canary scar — pipeline.mjs gate cannot deadlock its own module graph", () => {
+  // The first live canary died at `gate preflight` with Node exit 13 ("unsettled top-level
+  // await"): pipeline.mjs's CLI used top-level await, gate.mjs statically imports pipeline.mjs
+  // back, and the dynamic import of gate.mjs waited forever on the suspended evaluation. This
+  // spawns the REAL CLI through the REAL cycle — an unknown gate kind exercises the import path
+  // with zero side effects and must exit 1 (the dispatcher's refusal), never 13.
+  it("`pipeline.mjs gate <unknown> --slug x` exits 1, not 13 (the deadlock exit)", async () => {
+    const { execFile } = await import("node:child_process");
+    const code = await new Promise((resolve) => {
+      execFile(process.execPath, [path.join(ROOT, "scripts", "pipeline.mjs"), "gate", "definitely-not-a-gate", "--slug", "korea"], { cwd: ROOT }, (err) => resolve(err?.code ?? 0));
+    });
+    expect(code).toBe(1);
+  }, 30_000);
+
+  it("both CLI entries run through the non-TLA cliMain wrapper (the deadlock precondition removed)", () => {
+    for (const file of ["scripts/pipeline.mjs", "scripts/pipeline-v2.mjs"]) {
+      const text = readFileSync(path.join(ROOT, file), "utf8");
+      expect(text, `${file} must invoke its CLI as a plain promise, never top-level await`).toContain("cliMain().catch");
+    }
+  });
+});
+
 // ── P4: dispatch guard ───────────────────────────────────────────────────────
 
 describe("P4 — an accidental default-branch dispatch cannot start research", () => {
