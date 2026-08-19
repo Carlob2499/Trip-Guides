@@ -9,9 +9,9 @@
     "effort": "high",
     "criticModel": "claude-opus-5"
   },
-  "status": "failed",
+  "status": "running",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-19T22:21:01.177Z",
+  "updatedAt": "2026-08-19T22:21:31.402Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -41,10 +41,10 @@
       "failure": null
     },
     "passA": {
-      "status": "failed",
-      "startedAt": "2026-08-19T21:44:54.213Z",
-      "endedAt": "2026-08-19T22:16:45.568Z",
-      "attempts": 1,
+      "status": "running",
+      "startedAt": "2026-08-19T22:21:31.402Z",
+      "endedAt": null,
+      "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
       "commit": null,
@@ -56,13 +56,17 @@
           "status": "failed",
           "failureClass": "agent-failure",
           "durationSec": 1911
+        },
+        {
+          "attempt": 2,
+          "startedAt": "2026-08-19T22:21:31.402Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
         }
       ],
-      "failure": {
-        "class": "agent-failure",
-        "detail": "reservations.0.leads.0.claim: Invalid input: expected string, received undefined",
-        "at": "2026-08-19T22:16:45.568Z"
-      }
+      "failure": null
     },
     "passB": {
       "status": "queued",
@@ -106,13 +110,9 @@
   },
   "resume": {
     "nextStage": "passA",
-    "action": "re-run stage \"passA\" (failed: agent-failure) — a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "stage \"passA\" was running — validate its output; re-run it if incomplete"
   },
-  "failure": {
-    "class": "agent-failure",
-    "detail": "reservations.0.leads.0.claim: Invalid input: expected string, received undefined",
-    "at": "2026-08-19T22:16:45.568Z"
-  },
+  "failure": null,
   "publication": {
     "published": false,
     "publishedAt": null,
