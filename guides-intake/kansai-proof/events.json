@@ -1,0 +1,27 @@
+{
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-19T21:44:27.021Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-19T21:44:27.029Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-19T21:44:54.213Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-19T22:16:45.568Z",
+      "kind": "reject",
+      "text": "Pass A (canonical research) attempt 1 failed (agent-failure) — deterministic findings recorded for the retry"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}

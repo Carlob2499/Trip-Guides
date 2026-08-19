@@ -10,6 +10,17 @@
         "collected stage artifact at /home/runner/work/Trip-Guides/Trip-Guides/collect/guides-intake/kansai-proof/evidence.v2.json is malformed — refusing to treat it as absent:\n  · reservations.0.leads.0.claim: Invalid input: expected string, received undefined\nFix the document (or restore it from git) before resuming; a malformed mandatory artifact is a blocking failure."
       ],
       "createdAt": "2026-08-19T22:16:43.952Z",
+      "status": "retired",
+      "retiredAt": "2026-08-19T22:16:45.573Z"
+    },
+    {
+      "runId": "kansai-proof-20260819-36127b",
+      "stage": "passA",
+      "attempt": 1,
+      "findings": [
+        "reservations.0.leads.0.claim: Invalid input: expected string, received undefined"
+      ],
+      "createdAt": "2026-08-19T22:16:45.573Z",
       "status": "active",
       "retiredAt": null
     }
