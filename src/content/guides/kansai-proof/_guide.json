@@ -1,11 +1,23 @@
 {
-  "kicker": "Field guide",
-  "title": "Osaka, Kyoto & Japan",
-  "dek": "",
+  "kicker": "Osaka · Kyoto · Nara — Nov 13–17, 2026",
+  "title": "Osaka, Kyoto & Nara",
+  "dek": "Five days on a food-first swing through Kansai: an Osaka crawl, a Kyoto temple-and-kaiseki stretch, and a Nara day trip — with the autumn-illumination anchor swapped out once research found it doesn't fall inside these dates.",
   "country": "Japan",
+  "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Draft — Pass A (canonical/verified research) only. Backbone, transit, entry, and a first cut of food/sights/days are researched and sourced below; Pass B (local/authentic angle) and reconciliation have not yet run. Re-check before travel: the USD/JPY rate, Houshoan's booking window, Kiyomizu-dera's exact November closing time, and the Nara day-trip's last-train times.",
   "provenance": "strict",
   "roomId": "eoobzeguiykwitl2",
-  "footer": ""
+  "footer": "Location facts sourced to official venue/operator sites where reachable; see Sources & further reading.",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, stays up to 90 days. No advance application needed.",
+      "passportValidity": "Japan's own rule only requires validity through your date of entry; 6+ months remaining is still the safer international standard to fly on.",
+      "note": "Assumed US passports — the intake didn't state a passport country. Complete the digital arrival/customs declaration via Visit Japan Web before landing (recommended) or the paper form on the flight.",
+      "source_url": "https://www.japan.travel/en/plan/visa-info/",
+      "verified_on": "2026-08-19"
+    }
+  ],
+  "tabBudget": 10
 }

@@ -3,25 +3,31 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "body": "<p>KIX arrivals on Nov 13 land in the evening, so plan for immigration + baggage, then a straight transfer into Osaka — no sightseeing scheduled for day one.</p><p>The JR Haruka limited express runs from the airport terminal direct to Osaka Station/Shin-Osaka (≈{{fact:haruka-kix-shin-osaka-1800-yen}} one-way) or on to Kyoto Station (≈{{fact:haruka-kix-kyoto-2200-yen}}). Basing in Osaka first, as this itinerary does, means the shorter ride. The Nankai Rapi:t express is the faster option into Namba if a hotel sits on that side of the city instead.</p><p>Buy an ICOCA IC card at a KIX ticket machine on arrival — it taps onto every train, subway and bus used on this trip, Osaka Castle vending machines included. ⚠ Confirm on arrival that physical-card sales are still running as usual; a 2023–24 chip shortage suspended some other operators' cards and coverage of ICOCA specifically was inconsistent in research — a phone-based mobile IC card (Apple/Google Wallet) is the fallback if the counter is out.</p>",
+    "source_url": "https://www.westjr.co.jp/travel-information/en/tickets-passes/oneway/haruka/",
+    "verified_on": "2026-08-19",
+    "shelf_life": "transit"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "body": "<p>Plugs are Type A/B, 100V — US devices work without a converter, just possibly slower on a hair dryer or kettle. Tipping isn't practised anywhere on this itinerary, restaurants included; leaving cash on the table more often confuses staff than pleases them.</p><p>Japan is still more cash-forward than its reputation suggests — IC cards (ICOCA) cover trains and convenience stores, but several of the food picks below (Kushikatsu Daruma, Abaraya, Kakinohazushi Tanaka) are cash-only or card-uncertain in practice. Carry cash for meals.</p>"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "body": "<p>US passport holders enter Japan visa-free for tourism, up to 90 days — no advance application. This assumes a US passport since the intake didn't state one; if either traveler carries a different passport, check that country's own entry rule before booking, since not every nationality gets the same 90-day allowance.</p><p>Complete the digital arrival/customs declaration on Visit Japan Web before landing — it speeds up the immigration line noticeably versus the paper form.</p>",
+    "source_url": "https://www.japan.travel/en/plan/visa-info/",
+    "verified_on": "2026-08-19",
+    "shelf_life": "default"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "body": "<p>⚠ Not yet priced or verified against a current provider page — a prepaid data eSIM (Ubigi, Airalo, Sakura Mobile) or an airport pocket-wifi rental both cover this itinerary's needs. Confirm and book before departure.</p>"
   },
   {
     "type": "panel",
@@ -30,10 +36,11 @@
     "body": "",
     "checklist": [
       "Flights",
-      "Accommodation",
-      "Airport transfer",
+      "Accommodation (Osaka base; confirm walkability to a JR or subway station)",
+      "Airport transfer — Haruka or Rapi:t ticket, or buy on arrival",
       "Travel insurance",
-      "Any timed tickets"
+      "Houshoan (Pontocho kaiseki/wagyu-sukiyaki) — reserve via its own site; booking window and foreign-card acceptance are unconfirmed, so call ahead too",
+      "ICOCA IC card or a mobile IC wallet set up before landing"
     ]
   },
   {

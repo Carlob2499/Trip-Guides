@@ -4,7 +4,27 @@
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
-    "steps": []
+    "steps": [
+      "<b>KIX → Osaka Station/Shin-Osaka</b>: JR Haruka limited express, ≈{{fact:haruka-kix-shin-osaka-1800-yen}}, direct from the airport terminal.",
+      "<b>KIX → Namba</b>: Nankai Rapi:t limited express, from ≈{{fact:nankai-rapit-kix-namba-700-yen}}, ~34 min minimum — the faster pick if your hotel sits on the Namba side of Osaka.",
+      "<b>Osaka Station ↔ Kyoto Station</b>: JR Special Rapid Service (Shin-Kaisoku), {{fact:jr-special-rapid-osaka-kyoto-580-yen}}, ~28–30 min, no transfer, roughly every 15 min.",
+      "<b>Kyoto Station → Nara Station</b>: JR Nara Line \"Miyakoji Rapid\", {{fact:jr-nara-line-kyoto-nara-720-yen}}, ~45 min, about every 30 min through the day.",
+      "<b>Osaka-Namba → Kintetsu-Nara Station</b>: Kintetsu Nara Line Limited Express, {{fact:kintetsu-nara-ltd-express-1200-yen}}, ~35–40 min; the non-limited-express Rapid/Express service covers the same route on the base ¥680 fare alone, a few minutes slower, no reservation.",
+      "Both Nara routes run every 15–30 min into the evening — the day trip is not a tight last-train connection; no need to build the day around a single return service."
+    ],
+    "source_url": "https://www.westjr.co.jp/travel-information/en/",
+    "verified_on": "2026-08-19",
+    "shelf_life": "transit"
+  },
+  {
+    "type": "panel",
+    "group": "Transit",
+    "title": "IC card & rail passes",
+    "body": "<p>ICOCA (JR West's IC card) is the right call for this trip — it taps onto every train, subway and bus used across Osaka, Kyoto and Nara, on both JR and non-JR (Kintetsu, Nankai) lines. Buy one at a KIX ticket machine on arrival.</p><p>Skip the multi-day rail passes for this itinerary. The Kansai Railway Pass Lite (formerly the Kansai Thru Pass) sells and is valid only from Apr 1 to Oct 2, 2026 for its 2026 edition — it does not cover this trip's Nov 13–17 dates at all, and it excludes JR lines entirely regardless. The JR West Kansai Area Pass (from ¥2,800/day) covers JR lines including the Haruka, but not the Kintetsu Nara Line used for the day trip — priced against this trip's actual mix of ~4 medium-length rides, pay-as-you-go ICOCA plus single Haruka tickets comes out roughly even or cheaper.</p>",
+    "phase": "daily",
+    "source_url": "https://www.surutto.com/kansai_rwpl/en/krp.html",
+    "verified_on": "2026-08-19",
+    "shelf_life": "transit"
   },
   {
     "type": "map",

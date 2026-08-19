@@ -3,44 +3,27 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
-    "phase": "arrival"
+    "body": "<p>Japan runs on the yen (¥); at research time {{fact:usd-jpy-approx-158}}. Card rates and airport-counter cash rates both run a few percent worse than this mid-market figure — check again close to departure, since this rate moves week to week.</p><p>7-Eleven ATMs (Seven Bank) are the most reliable way to pull cash on a foreign card — nearly every store has one, most open 00:05–23:50 daily. The per-withdrawal limit is ¥100,000 for a foreign-issued card (¥30,000 on a magnetic-stripe card); fees vary by card network on top of whatever your home bank charges.</p><p>Japan's tax-free shopping system changes on Nov 1, 2026 — just before this trip — from an instant discount at the register to a refund claimed at departure instead. Budget the full sticker price at checkout on this trip and claim the refund at the airport, not the old on-the-spot discount.</p>",
+    "phase": "arrival",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/card.html",
+    "verified_on": "2026-08-19",
+    "shelf_life": "fx"
   },
   {
     "type": "budget",
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "intro": "Per-person, mid-range estimates built from the food and sights picks below — Dotonbori/Kuromon-tier food, mid-range lodging, no long-distance Shinkansen leg. Flights not estimated (too dependent on origin/booking window).",
     "currency": "¥",
     "days": 5,
     "budgetTarget": "Mid-range",
     "items": [
-      {
-        "label": "Lodging, per night",
-        "basis": "day",
-        "est": 0
-      },
-      {
-        "label": "Food & drink, per day",
-        "basis": "day",
-        "est": 0
-      },
-      {
-        "label": "Local transport, per day",
-        "basis": "day",
-        "est": 0
-      },
-      {
-        "label": "Sights & activities, per day",
-        "basis": "day",
-        "est": 0
-      },
-      {
-        "label": "Flights — round trip",
-        "basis": "trip",
-        "est": 0
-      }
+      { "label": "Lodging, per night (mid-range, per person)", "basis": "day", "est": 9000, "low": 6000, "high": 14000, "per": "person" },
+      { "label": "Food & drink, per day", "basis": "day", "est": 6500, "low": 4000, "high": 10000, "per": "person", "note": "A Dotonbori crawl day or the Pontocho kaiseki night runs the high end" },
+      { "label": "Local transport, per day (ICOCA pay-as-you-go)", "basis": "day", "est": 1500, "low": 800, "high": 2500, "per": "person" },
+      { "label": "Sights & activities, per day", "basis": "day", "est": 1800, "low": 500, "high": 3000, "per": "person" },
+      { "label": "Nara day-trip transit (round trip)", "basis": "trip", "est": 2400, "per": "person", "note": "Kintetsu Limited Express from Osaka; cheaper via JR Nara Line rapid from Kyoto (≈¥1,440 round trip)" }
     ]
   }
 ]

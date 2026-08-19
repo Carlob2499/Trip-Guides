@@ -4,6 +4,104 @@
     "group": "Food & shopping",
     "title": "What to eat",
     "phase": "daily",
-    "items": []
+    "intro": "Osaka's food identity is takoyaki, okonomiyaki and kushikatsu — the crawl below sticks to those rather than padding in a ramen stop; reviews on Osaka's famous ramen chains (Kinryu, Ichiran) run mixed, and neither is a specifically Osaka dish. Kani Doraku's giant crab sign is a photo stop, not a booking — ¥5,000–10,000/person for reviews that call the ingredients hit-or-miss.",
+    "items": [
+      {
+        "name": "Mizuno",
+        "area": "Dotonbori, Osaka",
+        "address": "1-4-15 Dotonbori, Chuo-ku, Osaka",
+        "phone": "06-6212-6360",
+        "hours": "11:00–22:00 (last order 21:00)",
+        "book": "walk-in",
+        "how": "2 min walk from Namba Station exit B22",
+        "price": "≈¥1,500–2,500/person",
+        "crowd_tip": "Walk-in only — queues daily, worse on weekends. Arrive at open or budget a 30–60 min wait.",
+        "why": "Michelin Bib Gourmand okonomiyaki with a yamaimo (mountain yam) batter — natural umami instead of the usual thick-sauce version.",
+        "source_url": "https://www.mizuno-osaka.com/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Kushikatsu Daruma",
+        "area": "Dotonbori branch, Osaka",
+        "hours": "11:00–22:30 weekdays, 10:30–22:30 weekends (last order 30 min before close)",
+        "book": "call",
+        "how": "In the Dotonbori arcade, a few minutes' walk from Namba Station",
+        "price": "≈¥2,000–3,000/person for a skewer set",
+        "crowd_tip": "Reservable weekdays 11am–6pm for parties of 2+; call ahead or use the site. Evenings and weekends are walk-in and can queue.",
+        "why": "The standard-bearer kushikatsu chain — the 'no double-dipping the shared sauce' rule is half the fun. The original 1929 Shinsekai flagship is further out (Naniwa-ku), walk-in only, worth it as a separate pilgrimage rather than a swap for this stop.",
+        "source_url": "https://kushikatu-daruma.com/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Wanaka",
+        "area": "Dotonbori, Osaka",
+        "address": "1-6-7 Dotonbori, Chuo-ku, Osaka",
+        "phone": "06-6213-6110",
+        "hours": "Mon–Fri 11:00–21:00; Sat–Sun 10:30–21:00",
+        "book": "walk-in",
+        "how": "In the Dotonbori arcade, a short walk from Namba Station",
+        "price": "≈¥600–900/person",
+        "crowd_tip": "⚠ Address/hours above are aggregator-corroborated only — the official site returned a certificate error on the attempted fetch. Confirm before relying on them. A Kuromon Ichiba branch exists too — worth a stop there instead if visiting the market anyway, best before 11am to dodge the lines that build by midday.",
+        "why": "Crispy-outside, fluffy-inside takoyaki — order 'half & half' to try two sauce styles at once."
+      },
+      {
+        "name": "Abaraya",
+        "area": "Namba Sennichimae, Osaka",
+        "address": "2-14 Namba Sennichimae, Chuo-ku, Osaka",
+        "phone": "050-5593-7620",
+        "hours": "Mon–Sat 16:00–23:00 (last order 22:30) — closed Sundays",
+        "book": "call",
+        "how": "A block off the Namba tourist strip, in Sennichimae",
+        "price": "≈¥1,300 (half, 10pc) – ¥4,400 (course)/person",
+        "crowd_tip": "Genuinely local clientele despite sitting a block from the Namba tourist strip. No English menu — point-and-order is normal here.",
+        "why": "Battera (pressed, vinegared mackerel sushi) — Osaka's own sushi style, easy to miss next to the takoyaki/okonomiyaki circuit.",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Houshoan",
+        "area": "Pontocho, Kyoto",
+        "hours": "17:00–23:00 (last order 22:30) — closed Mondays",
+        "book": "url",
+        "book_url": "https://houshoan.kyoshikian-kyoto.com/en/",
+        "how": "In the Pontocho alley, walking distance from Kawaramachi or Gion-Shijo Station",
+        "price": "≈¥10,000–13,000/person (season-dependent course)",
+        "crowd_tip": "Book via the site's online form. Booking window, cancellation policy and foreign-card acceptance aren't stated on the page — a follow-up call is worth it before counting on the reservation.",
+        "why": "Kaiseki or wagyu-sukiyaki in a Pontocho alley — the reservation-depth pick for the trip's one dedicated splurge dinner.",
+        "source_url": "https://houshoan.kyoshikian-kyoto.com/en/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Nakamura Tokichi Honten",
+        "area": "Uji, Kyoto (day-trip detour from central Kyoto)",
+        "address": "10 Uji Ichiban, Uji, Kyoto",
+        "phone": "0774-22-7800",
+        "book": "walk-in",
+        "how": "2 min walk from JR Uji Station — a ~20 min JR Nara Line ride from Kyoto Station, not on this itinerary's main loop",
+        "price": "Café menu, mid-range per person",
+        "crowd_tip": "Walk-in only for regular café seating (numbered tickets from 10am) — real waits are normal; a reservation-only weekend 'zashiki' room exists separately.",
+        "why": "Matcha specialist since 1854, 7th generation — a detour worth it only if a Uji side-trip is already on the table; skip if the itinerary stays inside Osaka/Kyoto/Nara proper.",
+        "source_url": "https://global.tokichi.jp/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Kakinohazushi Tanaka",
+        "area": "Nara (Head Shop)",
+        "address": "5-2 Higashimuki-nakamachi, Nara — 2 min from Kintetsu Nara Station",
+        "hours": "9:30–19:00, open year-round",
+        "book": "walk-in",
+        "how": "2 min walk from Kintetsu Nara Station",
+        "price": "Mid-range, per set",
+        "why": "Kakinoha-zushi (persimmon-leaf-wrapped sushi), a Nara specialty since 1903 — has an in-store tea room for eating in rather than taking away.",
+        "source_url": "https://visitnara.jp/venues/D00067/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      }
+    ],
+    "verified_on": "2026-08-19"
   }
 ]

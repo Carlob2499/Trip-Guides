@@ -4,7 +4,62 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
-    "items": []
+    "items": [
+      {
+        "name": "Fushimi Inari Taisha",
+        "kicker": "Thousands of vermilion torii, climbing the hillside",
+        "body": "<p>Free, open 24 hours. Genuinely empty 6:30–8am; the base is crowded by mid-morning and stays that way until the tour buses leave in the late afternoon. Go to the Yotsutsuji junction (~30–45 min up) — most day visitors turn back there, and the crowd thins sharply past it.</p>",
+        "dwell_min": 60,
+        "source_url": "https://inari.jp/en/",
+        "verified_on": "2026-08-19"
+      },
+      {
+        "name": "Kiyomizu-dera",
+        "kicker": "The wooden stage over Higashiyama, daytime visit",
+        "body": "<p>Opens 6:00am; regular closing time shifts by season (≈18:00 outside special night-viewing windows) — check the posted hours on arrival. Admission {{fact:kiyomizu-dera-admission-500-yen}}. The 2026 autumn night illumination runs Nov 21–30 — after this trip's dates — so this is a daytime visit only.</p>",
+        "dwell_min": 75,
+        "source_url": "https://www.kiyomizudera.or.jp/event/yakan.php",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Arashiyama Bamboo Grove & Tenryu-ji",
+        "kicker": "A green-lit path, then a UNESCO garden next door",
+        "body": "<p>The grove itself is a free public path — empty before 8am, packed by 9:30. Tenryu-ji's Sogenchi garden next door gives the visit more substance than the grove alone: garden admission {{fact:tenryuji-garden-500-yen}} (+¥300 for building access), 8:30am–5:00pm (7:30am garden opening Nov 15–30).</p>",
+        "dwell_min": 90,
+        "source_url": "https://www.tenryuji.com/en/visit/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Todai-ji",
+        "kicker": "A 15-metre bronze Buddha, and the deer outside",
+        "body": "<p>The Daibutsuden (Great Buddha Hall) is open 8:00am–5:00pm in November, admission {{fact:todaiji-admission-800-yen}}. Nara Park's deer cluster densest — and pushiest — right at the Nandaimon gate; the calmer, less crowded deer are along the approach path toward Kasuga Taisha instead.</p>",
+        "dwell_min": 60,
+        "closed_days": [],
+        "source_url": "https://www.todaiji.or.jp/en/information/haikan/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Kasuga Taisha",
+        "kicker": "Nara's lantern-lined shrine",
+        "body": "<p>Main sanctuary worship is free; the inner special-worship area is {{fact:kasuga-taisha-inner-700-yen}}. Open 7:00am–5:00pm in November. Pairs naturally with Todai-ji on the Nara day trip — the connecting path is a pleasant walk, not a detour.</p>",
+        "dwell_min": 45,
+        "source_url": "https://www.kasugataisha.or.jp/en/about_en/basic/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Osaka Castle",
+        "kicker": "The keep and its moat, in the middle of the city",
+        "body": "<p>The keep is open 9:00am–6:00pm (last entry 5:30pm), admission {{fact:osaka-castle-admission-1200-yen}}; the surrounding park is free to walk. A late-morning visit avoids the sharpest crowds without needing an early start.</p>",
+        "dwell_min": 90,
+        "source_url": "https://www.osakacastle.net/guide/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      }
+    ]
   },
   {
     "type": "divergences",
@@ -13,8 +68,30 @@
     "phase": "daily",
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "Kiyomizu-dera's autumn illumination is a highlight of any November Kyoto trip.",
+        "correction": "The 2026 autumn night-viewing dates are Nov 21–30, confirmed on the temple's own event page — this trip's Nov 13–17 window ends before it starts. The intake's assumed anchor event doesn't actually happen during the trip; Kiyomizu-dera is a daytime visit here instead.",
+        "category": "outdated",
+        "source_url": "https://www.kiyomizudera.or.jp/event/yakan.php",
+        "verified_on": "2026-08-19"
+      },
+      {
+        "claim": "The Kansai Thru Pass (or its newer name, Kansai Railway Pass Lite) is a good multi-day pass for a Kansai trip.",
+        "correction": "Its 2026 sales and validity window runs Apr 1–Oct 2 only — it isn't sold or usable at all in November. It also excludes JR lines entirely (no Haruka, no JR Special Rapid, no JR Nara Line), which limits it even in-season for an itinerary built on JR routes.",
+        "category": "outdated",
+        "source_url": "https://www.surutto.com/kansai_rwpl/en/krp.html",
+        "verified_on": "2026-08-19"
+      },
+      {
+        "claim": "Fushimi Inari's torii tunnel means hiking the full mountain loop to the summit.",
+        "correction": "Most of the crowd — and most of the photogenic tunnel — sits below the Yotsutsuji junction, a 30–45 minute climb. The summit loop adds 1.5–2 more hours for a view most visitors rate as a marginal payoff.",
+        "category": "misleading"
+      },
+      {
+        "claim": "Gion is fully open for wandering and photographing geiko/maiko on the street.",
+        "correction": "Since May 2024, private alleys around Kosode Koji carry a posted ¥10,000 fine for entry or photography — a response to tourists chasing and touching performers. The main public streets (Hanamikoji, Yasaka Shrine) remain open as normal.",
+        "category": "outdated",
+        "source_url": "https://www.ktv.jp/news/feature/240529-maiko/",
+        "verified_on": "2026-08-19"
       }
     ]
   }
