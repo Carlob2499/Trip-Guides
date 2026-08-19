@@ -95,7 +95,13 @@ export function judgeCandidates(tables, { floors = {}, guideText = "", adaptive 
     for (const r of shipped) {
       // The cross-check that makes a padded table expensive: a shipped name must exist in
       // the guide. Case-insensitive substring — names appear inside prose and item fields.
-      if (guideText && !guideText.toLowerCase().includes(r.name.toLowerCase())) {
+      // A ledger row may qualify the name with a branch/location parenthetical the guide
+      // legitimately omits — "Wanaka (Dotonbori)" ships as "Wanaka" — so the base name (the
+      // part before a trailing parenthetical) also satisfies the check. First seen live on
+      // the V2 canary, where all 14 "missing" shipped candidates were qualifier mismatches.
+      const base = r.name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+      const present = (name) => name && guideText.toLowerCase().includes(name.toLowerCase());
+      if (guideText && !present(r.name) && !present(base)) {
         findings.push(`priority ${t.rank}: "${r.name}" is marked shipped but appears nowhere in the guide`);
       }
       // shipped ⊆ shortlist (D3): a table using the 3-column format must mark every shipped
