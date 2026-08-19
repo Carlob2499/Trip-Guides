@@ -161,10 +161,33 @@ promised them. The census found no dead V1 code files beyond these.
 - Historical `state.json` display strategy once V1 rendering paths retire
 - V2 workflow gaining the `issue` notification input `/new` currently threads to V1
 
-## Current authority set (target end-state)
+## Current authority set (post-census)
 
-_(pending — the census names the winners; conflicting docs get resolved or archived)_
+One home per topic; everything else is record, working state, or archived:
+
+| Topic | Authority |
+|---|---|
+| What Waypoint is + working rules | `CLAUDE.md` (project) stacked on the global rules |
+| Product definition | `PRODUCT.md` |
+| Pipeline policy (two lifecycles) | `docs/reference/pipeline.md` |
+| V2 research decisions (locked) | `docs/pipeline v2/DECISIONS.md` |
+| V2 acceptance bar | `docs/pipeline v2/PIPELINE_VALIDATION_PACK.md` |
+| Delivery plan / tracker | `docs/pipeline v2/IMPLEMENTATION_PLAN.md` + `SEPTEMBER_TRACKER.md` |
+| V2 build + finalization record | `docs/pipeline v2/IMPLEMENTATION_STATE.md` |
+| Architecture | `docs/reference/architecture.md` |
+| Design system | `docs/design-handoff/DESIGN.md` (+ `enforcement/`) |
+| Motion | `docs/reference/motion.md` |
+| Quality bar | `docs/standards/guide-rubric.md` |
+| Content discipline | the `waypoint-guide-author` skill (`.claude`/`.agents`, parity-gated) |
+| Glossary + standing rulings | `CONTEXT.md` |
+
+The executed V2 build prompt was archived out of this set (`docs/archive/INDEX.md →
+FABLE_IMPLEMENTATION_PROMPT`); `CODEX_HANDOFF.md` remains as the recorded dependency contract.
 
 ## Remaining cleanup that cannot yet happen safely
 
-_(pending)_
+- Everything in the **KEEP UNTIL CUTOVER** class above — blocked on independent V2 acceptance.
+- `guides-intake/korea/` V1 run state and the V1 progress adapters — historical record for a
+  published guide; retiring them is a post-cutover display decision, not a deletion.
+- The canary's own test data (`canary/kansai-proof` branch, its research branch and draft PR)
+  — deliberately quarantined on branches; deleted whole once the canary evidence is accepted.
