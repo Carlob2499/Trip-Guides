@@ -6,11 +6,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        Anyone can file this — filing it does **not** change anything. Nothing runs
-        until the owner applies the `revision-approved` label (write access required),
-        at which point the revise pipeline plans the revision, re-researches the
-        affected sections, sweeps the whole guide for continuity, and lands the result
-        the same way a research pass does.
+        Anyone can file this. If the filer is the site owner or a collaborator, the
+        change pipeline starts automatically on submit — it plans the revision,
+        re-researches the affected sections, sweeps the whole guide for continuity,
+        and lands the result the same way a research pass does. A request from anyone
+        else stays a readable request until the owner deliberately dispatches it.
 
         Most requests don't need this form — the "Request a change" button on the
         guide covers single fact fixes. This one exists for feedback-driven auto-filed

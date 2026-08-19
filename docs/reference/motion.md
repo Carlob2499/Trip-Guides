@@ -45,8 +45,8 @@ Anything new that wants to be flashy must strengthen this signature, not compete
 | Story-mode day slide/bounce | CSS keyframes toggled by class | `story-mode.css` |
 | Section flight, micro-interactions | existing modules | `section-flight.js`, `micro.js` |
 | Reading progress | scroll listener → `#readProg` | `guide-ui.js` |
-| Overture auto-glide + recede (hub intro → guide grid) | JS-owned: eased auto-scroll + scroll-linked scale/fade/parallax/route-draw, all cancelable | `overture.js` + `hub-motion.css` |
-| Atlas card hover glow + tinted border | per-guide `--accent` via `color-mix` (border + `:hover`/`:focus` box-shadow halo) | `hub-motion.css` |
+| Atlas hub hover/focus states (toggle, chips, index rows, quick CTA) | plain CSS `:hover`/`:focus-visible` color/border transitions on per-guide `--accent` tokens | `atlas.css` / `atlas-world.css` / `atlas-mobile.css` |
+| Atlas world map drag/inertia | d3-drag/d3-geo inside the atlas silo | `src/features/atlas/ui/atlas-map.js` |
 | Atlas card scroll reveal | existing native `view()` (reveal.js fallback) — unchanged | `scroll-motion.css` / `reveal.js` |
 | Progress route: plane + flown line | rAF frame-by-frame `transform` + `stroke-dashoffset` from one `t`; damped lerp toward the last CLEARED station, sine drift only while live, synchronous frame on every state change | `pipeline-progress/ui/progress.js` + `route-geometry.ts` |
 | Progress route: todo-dash march, current-station ping | CSS keyframes `pg-march` / `pg-ping`, both gated on `.pg-route[data-live="1"]` | `progress.css` |

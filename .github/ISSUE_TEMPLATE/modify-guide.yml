@@ -6,11 +6,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        Anyone can file this — filing it does **not** change anything. It's a
-        request for the site owner to review. Nothing runs until the owner
-        applies the `modify-approved` label (which requires write access to
-        this repo), at which point a scoped edit pass verifies and applies
-        just this change, then lands it the same way a research pass does.
+        Anyone can file this. If the filer is the site owner or a collaborator,
+        a scoped edit pass starts automatically on submit — it verifies and
+        applies just this change, then lands it the same way a research pass
+        does. A request from anyone else stays a readable request until the
+        owner deliberately dispatches it; filing alone never spends anything.
   - type: input
     id: slug
     attributes:

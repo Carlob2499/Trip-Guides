@@ -1,4 +1,4 @@
-// M1 of Pipeline V2 (docs/pipeline v2/FABLE_IMPLEMENTATION_PROMPT.md) — publication-safety
+// M1 of Pipeline V2 (the archived V2 build prompt: docs/archive/INDEX.md → FABLE_IMPLEMENTATION_PROMPT) — publication-safety
 // repairs to the CURRENT (V1/shared) landing code, pinned so they cannot regress:
 //
 //   1. `pipeline land --gate` runs the REAL evidence gate — build first, then the networked
