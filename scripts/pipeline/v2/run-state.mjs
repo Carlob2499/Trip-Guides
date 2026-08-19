@@ -114,6 +114,17 @@ function recomputeResume(state) {
 
 function openAttempt(st, now) {
   st.history = st.history || [];
+  // An attempt still "running" when a new one starts was interrupted without a recorded
+  // failure (runner death, aborted step). Close it honestly rather than leaving it open forever.
+  for (const h of st.history) {
+    if (h.status === "running") {
+      h.status = "failed";
+      h.failureClass = "unknown";
+      h.endedAt = now;
+      const ms = Date.parse(now) - Date.parse(h.startedAt);
+      h.durationSec = Number.isFinite(ms) && ms >= 0 ? Math.round(ms / 1000) : null;
+    }
+  }
   st.history.push({ attempt: st.attempts, startedAt: now, endedAt: null, status: "running", failureClass: null, durationSec: null });
 }
 
