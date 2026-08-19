@@ -131,6 +131,36 @@ _(pending — nothing is deleted before the canary is green)_
 | `.agents/` mirror of the Guide Author skill | Different agent products resolve different skill paths | V2 prompts point agents at `.agents/skills/...`; parity gated by `pipeline-v2-skill-parity.test.mjs` | A single-consumer world, or a build step that generates one from the other |
 | Inert `research-pass-v2.yml` stub on `main` | workflow_dispatch registration requires the path on the default branch (verified 2026-08-19) | canary dispatch on feature refs | The final PR merge replaces it with the real workflow |
 
+## V1 retirement map (final V1 retirement stays Carlo/Codex's decision)
+
+**KEEP UNTIL CUTOVER** — removable immediately after accepted V2 cutover:
+- `research-pass.yml` and the four V1 prompts (`research-passA/B/reconcile/critic.md`)
+- `check-passb-coverage.mjs` (consumed only via `gate coverage` on the V1 research path)
+- `pipeline.mjs`'s research checkpoint discipline (`--checkpoint` predecessor-commit refusal)
+  as a research-agent-facing surface (the change lifecycle does not use it)
+- The V1 research branch namespace handling (`research/<slug>`)
+
+**SHARED** — required by current V2/product behavior regardless of V1's fate:
+- `pipeline.mjs` subcommand spine (branch · prompt · gate · land · scaffold · publish ·
+  answers-route/apply · questions · plan · report) — V2's workflow calls it throughout
+- `gate.mjs` (budget/preflight/stuck/artifacts/compose/integrity/enforce/forks) — V2 + change
+- `state.json` read/write (`readState`/`initState`) — the change lifecycle's attempt counters
+  live there; V2's `readAnyRunState` adapter reads it for published guides' history
+- `check-run-integrity.mjs` — change.yml keeps it post-cutover
+- `check-candidates.mjs` (n/a-posture form; the numeric floors are already gone)
+- Progress UI's V1 adapter chain — korea/denmark carry V1 run history forever
+- V1 `coverage.json` as the material-ask registry (scaffolder writes it; V2 derives ask ids
+  from it; the verifier falls back to it for V1 guides)
+
+**ALREADY DEAD** — removed this session: the three approval labels
+(`modify-approved`/`revision-approved`/`graduate-approved`) and the template prose that
+promised them. The census found no dead V1 code files beyond these.
+
+**POST-CUTOVER MIGRATION** — needs a data/design decision first:
+- Scaffolder emitting a V2-native ask registry (retires legacy `coverage.json` writes)
+- Historical `state.json` display strategy once V1 rendering paths retire
+- V2 workflow gaining the `issue` notification input `/new` currently threads to V1
+
 ## Current authority set (target end-state)
 
 _(pending — the census names the winners; conflicting docs get resolved or archived)_
