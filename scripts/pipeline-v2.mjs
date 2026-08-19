@@ -35,9 +35,12 @@ import { ContractError } from "./pipeline/v2/contracts.mjs";
 import {
   initRunV2, readRunStateV2, nextStageV2, stageStart, stageComplete, stageFail,
   bumpRunAttempt, recordAutoRetry, recordTelemetry, markLandingGate, V2_RESEARCH_STAGES,
+  stageAttemptStats,
 } from "./pipeline/v2/run-state.mjs";
+import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock } from "./pipeline/v2/feedback.mjs";
+import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
 import { readEvidence, requireEvidence, evidenceProblems } from "./pipeline/v2/evidence.mjs";
-import { researchRuleProblems } from "./pipeline/v2/research-rules.mjs";
+import { researchRuleProblems, isProxyHost } from "./pipeline/v2/research-rules.mjs";
 import { requireCoverage, coverageProblems, loadCoverageContext } from "./pipeline/v2/coverage.mjs";
 import {
   preparePassBWorkspace, collectPassB, collectStageOutput, prepareCriticInput, restoreCriticInput, verifyPassBWorkspace,
@@ -53,6 +56,14 @@ function emit(key, value) {
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `${key}=${value}\n`);
 }
 
+// Multiline step output, GitHub's heredoc form (the composePrompt precedent).
+function emitMultiline(key, value) {
+  if (!process.env.GITHUB_OUTPUT) return;
+  const marker = "WAYPOINT_V2_OUTPUT_EOF";
+  if (String(value).includes(marker)) throw new Error(`step output "${key}" contains the output delimiter ${marker}`);
+  appendFileSync(process.env.GITHUB_OUTPUT, `${key}<<${marker}\n${value}\n${marker}\n`);
+}
+
 function criticFetchTools(slug) {
   const domains = new Set();
   const roots = [path.join(GUIDES_DIR, slug), path.join(INTAKE_DIR, slug, "ledger.md")];
@@ -62,7 +73,8 @@ function criticFetchTools(slug) {
     for (const match of readFileSync(target, "utf8").matchAll(/https?:\/\/[^\s"'<>)}\]]+/g)) {
       try {
         const host = new URL(match[0]).hostname.toLowerCase();
-        if (!/(^|\.)github\.com$|(^|\.)githubusercontent\.com$/.test(host)) domains.add(host);
+        // Proxy/mirror hosts never enter the critic's fetch policy — a mirror is not the origin.
+        if (!/(^|\.)github\.com$|(^|\.)githubusercontent\.com$/.test(host) && !isProxyHost(match[0])) domains.add(host);
       } catch { /* malformed source is caught by the evidence gate */ }
     }
   };
@@ -282,11 +294,27 @@ async function run(cmd, get, has) {
       const dirty = changed.length > 0;
       if (problems.length) {
         const isVoid = !dirty; // nothing produced at all — the classic void run
-        await stageFail(slug, stage, {
+        const failed = await stageFail(slug, stage, {
           failureClass: isVoid ? "void-run" : "agent-failure",
           detail: problems.join(" · "),
         });
-        commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): ${stage} FAILED (${isVoid ? "void" : "invalid output"})`, { branch });
+        // 1B: persist the exact machine findings so THIS stage's retry receives them instead of
+        // re-spending research to rediscover a contract defect.
+        await recordStageFeedback(slug, { runId: failed.runId, stage, attempt: failed.stages[stage]?.attempts || 0, findings: problems });
+        // Retain the attempt's IN-SCOPE output on the run branch so a retry can repair the
+        // artifact in place. Scope violations are NOT committed; every downstream gate
+        // (finish-stage, validate, landing) still fails closed on this content.
+        if (dirty) {
+          const allowed = allowedStagePaths(slug, stage);
+          const inScope = changed.filter((file) => allowed.some((root) => file === root || file.startsWith(root + "/")));
+          if (inScope.length) {
+            git(["add", "-A", "--", ...allowed]);
+            try { git(["commit", "--only", "-m", `research-v2(${slug}): ${stage} attempt output (INVALID — retained for repair)`, "--", ...allowed]); }
+            catch { /* nothing staged in scope */ }
+            if (branch) git(["push", "origin", `HEAD:${branch}`]);
+          }
+        }
+        commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`], `research-v2(${slug}): ${stage} FAILED (${isVoid ? "void" : "invalid output"})`, { branch });
         emit("void", String(isVoid));
         console.error(`[pipeline-v2] ${slug} — stage "${stage}" output does not hold up:`);
         for (const p of problems) console.error(`  · ${p}`);
@@ -302,16 +330,23 @@ async function run(cmd, get, has) {
         workCommit = git(["rev-parse", "HEAD"]).trim();
       }
       const state = await stageComplete(slug, stage, { commit: workCommit });
-      // Telemetry from the workflow boundary: stage duration/model/effort + evidence counts.
+      // 1B: this stage's active feedback is resolved — retire it, keep the audit history.
+      await retireFeedback(slug, { stage });
+      // Telemetry from the workflow boundary: stage duration/model/effort + per-attempt truth.
       const st = state.stages[stage];
+      const attemptStats = stageAttemptStats(st);
       const evidenceDoc = await readEvidence(slug).catch(() => null);
       const telemetry = mergeTelemetry(state.telemetry || emptyTelemetry(), {
-        stages: { [stage]: stageFacts({ startedAt: st.startedAt, endedAt: st.endedAt, model: st.model, effort: st.effort, retries: st.attempts > 1 ? st.attempts - 1 : null }) },
+        stages: { [stage]: stageFacts({
+          startedAt: st.startedAt, endedAt: st.endedAt, model: st.model, effort: st.effort,
+          retries: st.attempts > 1 ? st.attempts - 1 : null,
+          failedDurationSec: attemptStats.failedSec, cumulativeDurationSec: attemptStats.cumulativeSec,
+        }) },
         counts: countsFromEvidence(evidenceDoc),
         totalDurationSec: Math.max(0, Math.round((Date.parse(state.updatedAt) - Date.parse(state.createdAt)) / 1000)),
       });
       await recordTelemetry(slug, telemetry);
-      commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): ${stage} complete`, { branch });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`], `research-v2(${slug}): ${stage} complete`, { branch });
       emit("void", "false");
       emit("next", nextStageV2(state) || "");
       console.log(`[pipeline-v2] ${slug} — stage "${stage}" complete${workCommit ? ` (work at ${workCommit.slice(0, 7)})` : ""}; next: ${nextStageV2(state) || "(none)"}`);
@@ -362,9 +397,18 @@ async function run(cmd, get, has) {
       const from = get("--from");
       if (!from) { console.error("[pipeline-v2] collect-passb needs --from <dir>"); return 1; }
       const state = await readRunStateV2(slug);
-      const { dest } = await collectPassB(slug, { fromDir: from, runId: state?.runId });
-      console.log(`[pipeline-v2] ${slug} — Pass B artifact validated and transferred to ${dest}.`);
-      return 0;
+      try {
+        const { dest } = await collectPassB(slug, { fromDir: from, runId: state?.runId });
+        console.log(`[pipeline-v2] ${slug} — Pass B artifact validated and transferred to ${dest}.`);
+        return 0;
+      } catch (err) {
+        // 1B: the collection validator's exact finding is what the retry needs to see.
+        if (err instanceof ContractError && state) {
+          await recordStageFeedback(slug, { runId: state.runId, stage: "passB", attempt: state.stages?.passB?.attempts || 0, findings: [err.message] });
+          commitAndPush([`guides-intake/${slug}/feedback.v2.json`], `research-v2(${slug}): passB validator findings recorded`, { branch });
+        }
+        throw err;
+      }
     }
 
     case "collect-stage": {
@@ -373,9 +417,46 @@ async function run(cmd, get, has) {
       if (!V2_RESEARCH_STAGES.includes(stage) || !from) {
         console.error("[pipeline-v2] collect-stage needs --stage <stage> --from <dir>"); return 1;
       }
-      const copied = await collectStageOutput({ fromDir: path.resolve(from), paths: allowedStagePaths(slug, stage) });
-      if (!copied.length) throw new ContractError(`stage ${stage} produced no owned artifacts`);
-      console.log(`[pipeline-v2] ${slug} — collected ${stage}: ${copied.join(", ")}`);
+      try {
+        const copied = await collectStageOutput({ fromDir: path.resolve(from), paths: allowedStagePaths(slug, stage) });
+        if (!copied.length) throw new ContractError(`stage ${stage} produced no owned artifacts`);
+        console.log(`[pipeline-v2] ${slug} — collected ${stage}: ${copied.join(", ")}`);
+        return 0;
+      } catch (err) {
+        if (err instanceof ContractError) {
+          const state = await readRunStateV2(slug).catch(() => null);
+          if (state) {
+            await recordStageFeedback(slug, { runId: state.runId, stage, attempt: state.stages?.[stage]?.attempts || 0, findings: [err.message] });
+            commitAndPush([`guides-intake/${slug}/feedback.v2.json`], `research-v2(${slug}): ${stage} validator findings recorded`, { branch });
+          }
+        }
+        throw err;
+      }
+    }
+
+    case "stage-feedback": {
+      // 1B: emit THIS stage's active validator findings for its retry — labeled DATA, never
+      // instructions; other stages' findings never leak into this prompt.
+      const stage = get("--stage");
+      if (!V2_RESEARCH_STAGES.includes(stage)) {
+        console.error("[pipeline-v2] stage-feedback needs --stage <stage>"); return 1;
+      }
+      const state = await readRunStateV2(slug);
+      const findings = state ? await activeFeedback(slug, { runId: state.runId, stage }) : [];
+      const block = renderFeedbackBlock(findings);
+      emitMultiline("findings", block);
+      console.log(`[pipeline-v2] ${slug} — ${stage} retry feedback: ${findings.length} finding(s).`);
+      return 0;
+    }
+
+    case "contract": {
+      // 1A: the generated, stage-relevant machine-contract capsule, derived from the SAME
+      // modules that validate the artifacts. The workflow substitutes it as {{contract}}.
+      const stage = get("--stage");
+      const state = await readRunStateV2(slug);
+      const capsule = await generateContractCapsule(stage, { slug, runId: state?.runId || get("--run-id") || "<run-id>" });
+      emitMultiline("capsule", capsule);
+      console.log(`[pipeline-v2] ${slug} — ${stage} contract capsule generated (${capsule.length} chars).`);
       return 0;
     }
 

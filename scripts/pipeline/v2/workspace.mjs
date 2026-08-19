@@ -41,12 +41,14 @@ export function forbiddenForPassB(slug) {
     `guides-intake/${slug}/run.v2.json`,
     `guides-intake/${slug}/coverage.v2.json`,
     `guides-intake/${slug}/passB.v2.json`,
+    `guides-intake/${slug}/feedback.v2.json`,
   ];
 }
 
 export function forbiddenForCritic(slug) {
   return [
     ...forbiddenForPassB(slug),
+    `guides-intake/${slug}/geocode.v2.json`,
     `guides-intake/${slug}/state.json`,
     `guides-intake/${slug}/passB.json`,
     `guides-intake/${slug}/coverage.json`,
