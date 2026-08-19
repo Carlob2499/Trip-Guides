@@ -21,8 +21,8 @@
         "reservations.0.leads.0.claim: Invalid input: expected string, received undefined"
       ],
       "createdAt": "2026-08-19T22:16:45.573Z",
-      "status": "active",
-      "retiredAt": null
+      "status": "retired",
+      "retiredAt": "2026-08-19T22:23:22.325Z"
     }
   ]
 }
