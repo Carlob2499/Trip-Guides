@@ -79,7 +79,11 @@ function criticFetchTools(slug) {
     }
   };
   roots.forEach(visit);
-  return ["Read(/workspace/**)", "Write(/workspace/**)", "Edit(/workspace/**)", "Glob(/workspace/**)", "Grep(/workspace/**)", "WebSearch", ...[...domains].sort().map((d) => `WebFetch(domain:${d})`)].join(",");
+  // Rule-syntax law (verified against code.claude.com/docs/en/permissions, 2026-08-19, after the
+  // first canary's writes were ALL denied): absolute paths need a double slash — `/workspace/**`
+  // is settings-relative and never matches. Edit(//…) covers Write/MultiEdit/NotebookEdit;
+  // Write()/Glob()/Grep() path rules are accepted but never consulted.
+  return ["Read(//workspace/**)", "Edit(//workspace/**)", "Glob", "Grep", "WebSearch", ...[...domains].sort().map((d) => `WebFetch(domain:${d})`)].join(",");
 }
 
 function git(args, { cwd = ROOT } = {}) {
