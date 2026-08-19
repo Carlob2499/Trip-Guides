@@ -72,3 +72,4 @@ jobs:
           echo "To run the real V2 pipeline, dispatch it on the branch that carries it, e.g.:"
           echo "  gh workflow run research-pass-v2.yml --ref <v2-branch> -f slug=<slug>"
           echo "done=inert (safe exit)"
+
