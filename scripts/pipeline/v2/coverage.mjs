@@ -109,7 +109,7 @@ function slugifyAnchor(value) {
     .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
-function collectAnchors(value, out = new Set()) {
+export function collectAnchors(value, out = new Set()) {
   if (Array.isArray(value)) {
     for (const item of value) collectAnchors(item, out);
   } else if (value && typeof value === "object") {
