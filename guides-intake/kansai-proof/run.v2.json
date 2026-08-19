@@ -11,7 +11,7 @@
   },
   "status": "running",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-19T22:23:22.330Z",
+  "updatedAt": "2026-08-19T22:23:51.051Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -69,14 +69,23 @@
       "failure": null
     },
     "passB": {
-      "status": "queued",
-      "startedAt": null,
+      "status": "running",
+      "startedAt": "2026-08-19T22:23:51.051Z",
       "endedAt": null,
-      "attempts": 0,
-      "model": null,
-      "effort": null,
+      "attempts": 1,
+      "model": "claude-sonnet-5",
+      "effort": "high",
       "commit": null,
-      "history": [],
+      "history": [
+        {
+          "attempt": 1,
+          "startedAt": "2026-08-19T22:23:51.051Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
+        }
+      ],
       "failure": null
     },
     "reconcile": {
@@ -110,7 +119,7 @@
   },
   "resume": {
     "nextStage": "passB",
-    "action": "run stage \"passB\""
+    "action": "stage \"passB\" was running — validate its output; re-run it if incomplete"
   },
   "failure": null,
   "publication": {
