@@ -54,3 +54,9 @@ evidence gate, and lands the branch as a draft PR — publication is not this ru
 
 Touch nothing outside `src/content/guides/{{slug}}/`, `guides-intake/{{slug}}/ledger.md`, and
 `guides-intake/{{slug}}/pipeline-patterns.fragment.md`.
+
+## Validator feedback from the previous attempt of THIS stage
+
+{{feedback}}
+
+{{contract}}

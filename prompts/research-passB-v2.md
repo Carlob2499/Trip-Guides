@@ -49,3 +49,16 @@ checkpoint.**
   an entry you would not defend is one you should not write.
 - STOP when `passB.v2.json` is complete. Do not edit the guide, do not touch the ledger's
   reconciliation table, do not commit.
+
+- **Source access is recorded, never inflated.** `source.access` says how you reached the source:
+  `fetched` only when you retrieved and read the origin page itself; a search-result snippet is
+  `search-preview` (discovery, not verification); a refused/failed origin is `blocked` — record the
+  block and seek a legitimate alternative rather than promoting a preview. Reader/mirror/proxy
+  services (r.jina.ai, Google cache, 12ft.io, archive snapshots, translation proxies) are NEVER the
+  origin — cite the true origin you actually fetched, or record it blocked.
+
+## Validator feedback from the previous attempt of THIS stage
+
+{{feedback}}
+
+{{contract}}

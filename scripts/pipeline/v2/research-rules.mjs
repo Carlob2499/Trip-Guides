@@ -29,6 +29,31 @@
 const OBJECTIVE_SOURCE_KINDS = new Set(["official", "operator", "reference"]);
 const EXPERIENTIAL_FORBIDDEN = new Set(["official", "operator"]);
 
+// Reader/mirror/proxy services: useful for discovery, never the origin. Kept NARROW and exact —
+// ordinary first-party sites and CDNs must not be swept up. web.archive.org is a legitimate
+// snapshot archive, but a snapshot is not the live origin for a perishable claim.
+export const PROXY_HOSTS = [
+  "r.jina.ai",
+  "webcache.googleusercontent.com",
+  "cachedview.nl",
+  "12ft.io",
+  "web.archive.org",
+  "translate.googleusercontent.com",
+];
+
+export function isProxyHost(url) {
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return PROXY_HOSTS.some((p) => host === p || host.endsWith(`.${p}`));
+  } catch {
+    return false;
+  }
+}
+
+// Objective recheck windows by shelf-life class (exported so the generated agent contract and
+// the validator can never drift apart — one map, two consumers).
+export const OBJECTIVE_RECHECK_MAX_DAYS = { fx: 7, transit: 90, hours: 90, venue: 180, default: 90 };
+
 /** Months between two YYYY-MM-DD / ISO strings; null when either is unparseable. */
 function monthsBetween(a, b) {
   const ta = Date.parse(a);
@@ -151,7 +176,7 @@ export function freshnessProblems(doc, { staleMonths = EXPERIENTIAL_STALE_MONTHS
 
 export function objectiveFreshnessProblems(doc) {
   const problems = [];
-  const maxDays = { fx: 7, transit: 90, hours: 90, venue: 180, default: 90 };
+  const maxDays = OBJECTIVE_RECHECK_MAX_DAYS;
   const today = new Date().toISOString().slice(0, 10);
   for (const e of doc.evidence || []) {
     if (e.kind !== "objective") continue;
@@ -260,7 +285,74 @@ export function disagreementProblems(doc) {
     .map((d) => `recommendation-changing disagreement "${d.topic}" (${d.id}) has no resolution`);
 }
 
-/** Rule: high-risk transport owes the physical reality; routine transit owes nothing. */
+/** Rule: a search-result preview is discovery, not a read of the page (Core Proof finding).
+    Citing official/operator authority requires the origin to have actually been fetched — or
+    the block recorded honestly. A mirror/proxy URL is never the origin. */
+export function sourceAccessProblems(doc) {
+  const problems = [];
+  const evidence = doc.evidence || [];
+  const byId = new Map(evidence.map((e) => [e.id, e]));
+
+  for (const e of evidence) {
+    const access = e.source?.access || "unknown";
+    if (e.source?.url && isProxyHost(e.source.url)) {
+      problems.push(
+        `evidence "${e.id}" cites a reader/mirror/proxy URL (${new URL(e.source.url).hostname}) as its source — ` +
+          `a mirror cannot count as the origin; cite the true origin (fetched) or record it blocked`,
+      );
+    }
+    if (e.kind === "objective" && ["official", "operator"].includes(e.source?.kind) && !["fetched", "blocked"].includes(access)) {
+      problems.push(
+        `objective claim "${e.claim.slice(0, 60)}" (${e.id}) cites an ${e.source.kind} source with access "${access}" — ` +
+          `a search preview referencing the official page is not a read of it; fetch the origin or record the block`,
+      );
+    }
+    if (e.kind === "objective" && (e.source?.appliesToYears || []).length && access !== "fetched") {
+      problems.push(
+        `event-date claim "${e.claim.slice(0, 60)}" (${e.id}) records appliesToYears without access "fetched" — ` +
+          `an announced date must come from an announcement that was actually read`,
+      );
+    }
+  }
+
+  // Important/anchor reservation mechanics rest on at least one genuinely fetched objective
+  // record for that candidate — or an honestly recorded block.
+  for (const r of doc.reservations || []) {
+    if (!["anchor", "important"].includes(r.importance)) continue;
+    const records = evidence.filter((e) => e.candidateId === r.candidateId && e.kind === "objective");
+    if (!records.length) continue; // reservationProblems already polices missing answers
+    const ok = records.some((e) => e.source?.access === "fetched")
+      || records.some((e) => e.source?.access === "blocked");
+    if (!ok) {
+      problems.push(
+        `${r.importance} reservation for ${r.candidateId} rests only on search-preview/unknown-access sources — ` +
+          `booking mechanics need a fetched origin or a recorded block`,
+      );
+    }
+  }
+
+  // High-risk transport facts name their evidence and at least one record was genuinely read.
+  for (const t of doc.transport || []) {
+    if (t.risk < 3) continue;
+    const ids = t.evidenceIds || [];
+    if (!ids.length) {
+      problems.push(`high-risk route "${t.route}" (${t.id}, R${t.risk}) names no evidence records — R3+ transport facts must cite the evidence they rest on`);
+      continue;
+    }
+    const missing = ids.filter((id) => !byId.has(id));
+    for (const id of missing) problems.push(`high-risk route "${t.route}" (${t.id}) cites unknown evidence id "${id}"`);
+    const resolved = ids.filter((id) => byId.has(id)).map((id) => byId.get(id));
+    if (resolved.length && !resolved.some((e) => e.source?.access === "fetched")) {
+      problems.push(
+        `high-risk route "${t.route}" (${t.id}, R${t.risk}) has no evidence with a fetched origin — ` +
+          `a trip-critical connection cannot rest on search previews alone`,
+      );
+    }
+  }
+  return problems;
+}
+
+/** Rule: high-risk transport owes the physical reality; routine transit stays simple. */
 export function transportProblems(doc) {
   const problems = [];
   for (const t of doc.transport || []) {
@@ -291,6 +383,7 @@ export function researchRuleProblems(doc) {
     ...freshnessProblems(doc),
     ...objectiveFreshnessProblems(doc),
     ...reservationProblems(doc),
+    ...sourceAccessProblems(doc),
     ...transportProblems(doc),
     ...depthScopeProblems(doc),
     ...passBSubstanceProblems(doc),
