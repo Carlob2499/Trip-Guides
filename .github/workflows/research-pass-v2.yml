@@ -570,7 +570,14 @@ jobs:
           node scripts/pipeline-v2.mjs collect-stage --slug "$SLUG" --stage reconcile --from "$GITHUB_WORKSPACE" --branch "$BRANCH"
           COLLECT=$?
           if [ "$COLLECT" -eq 0 ]; then
-            npm run verify -- --slug "$SLUG" || exit 1
+            npm run verify -- --slug "$SLUG" 2>&1 | tee "$RUNNER_TEMP/verify-scorecard.txt"
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              # Keep the retry cheap: findings become durable stage feedback, in-scope work is
+              # retained on the branch, the stage fails honestly (verify-failed does all three).
+              node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage reconcile \
+                --file "$RUNNER_TEMP/verify-scorecard.txt" --branch "$BRANCH"
+              exit 1
+            fi
           fi
           SCOPED=()
           if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi

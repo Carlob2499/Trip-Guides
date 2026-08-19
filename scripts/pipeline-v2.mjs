@@ -446,6 +446,42 @@ async function run(cmd, get, has) {
       }
     }
 
+    case "verify-failed": {
+      // The offline verify blocked this stage's output. Keep everything the retry needs:
+      // the scorecard's findings as durable stage feedback, the in-scope work retained on the
+      // branch for repair (fail-closed gates still guard it downstream), and an honest failed
+      // stage record. Without this, a verify failure discarded the stage's work and told the
+      // retry nothing (observed live: 19 minutes of reconcile re-spent for want of a scorecard).
+      const stage = get("--stage");
+      const file = get("--file");
+      if (!V2_RESEARCH_STAGES.includes(stage) || !file || !existsSync(file)) {
+        console.error("[pipeline-v2] verify-failed needs --stage <stage> --file <scorecard>"); return 1;
+      }
+      const scorecard = readFileSync(file, "utf8");
+      const findings = scorecard.split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter((line) => /^[⚠✗]/.test(line) || /·\s*FAIL/.test(line))
+        .map((line) => line.slice(0, 400));
+      const state = await readRunStateV2(slug);
+      await recordStageFeedback(slug, {
+        runId: state.runId, stage, attempt: state.stages?.[stage]?.attempts || 0,
+        findings: findings.length ? findings : ["offline verify failed — see the run log scorecard"],
+      });
+      const changed = dirtyPaths();
+      const allowed = allowedStagePaths(slug, stage);
+      if (changed.some((f) => allowed.some((root) => f === root || f.startsWith(root + "/")))) {
+        git(["add", "-A", "--", ...allowed]);
+        try { git(["commit", "--only", "-m", `research-v2(${slug}): ${stage} attempt output (verify FAILED — retained for repair)`, "--", ...allowed]); }
+        catch { /* nothing staged in scope */ }
+        if (branch) git(["push", "origin", `HEAD:${branch}`]);
+      }
+      await stageFail(slug, stage, { failureClass: "gate-failure", detail: `offline verify failed: ${findings.length} finding(s)` });
+      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (offline verify)`, { branch });
+      console.error(`[pipeline-v2] ${slug} — ${stage} failed offline verify; ${findings.length} finding(s) recorded for the retry; work retained.`);
+      return 0;
+    }
+
     case "stage-feedback": {
       // 1B: emit THIS stage's active validator findings for its retry — labeled DATA, never
       // instructions; other stages' findings never leak into this prompt.
