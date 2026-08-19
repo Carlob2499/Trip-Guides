@@ -1,0 +1,72 @@
+{
+  "slug": "kansai-proof",
+  "generatedAt": "2026-08-19T13:34:45.204Z",
+  "asks": [
+    {
+      "id": "anchor",
+      "label": "Anchor event",
+      "value": "Kiyomizu-dera autumn night illumination in Kyoto — 2026 dates not yet officially announced; may conflict with the evening schedule",
+      "coveredBy": null
+    },
+    {
+      "id": "cities",
+      "label": "Cities",
+      "value": "Osaka, Kyoto",
+      "coveredBy": null
+    },
+    {
+      "id": "dates",
+      "label": "Trip dates",
+      "value": "2026-11-13 – 2026-11-17",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-1",
+      "label": "Priority #1",
+      "value": "Food",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-2",
+      "label": "Priority #2",
+      "value": "Culture",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-3",
+      "label": "Priority #3",
+      "value": "Nature",
+      "coveredBy": null
+    },
+    {
+      "id": "pace",
+      "label": "Pace",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "budget",
+      "label": "Budget target",
+      "value": "Mid-range",
+      "coveredBy": null
+    },
+    {
+      "id": "party",
+      "label": "Party description",
+      "value": "couple",
+      "coveredBy": null
+    },
+    {
+      "id": "travelers",
+      "label": "Number of travelers",
+      "value": "2",
+      "coveredBy": null
+    },
+    {
+      "id": "comments",
+      "label": "Additional comments",
+      "value": "TEST CANARY (Pipeline V2 draft-only proof — not a real trip). Evening arrival at KIX on Nov 13. Wants a Nara day trip. Rain is a concern in mid-November; itinerary needs wet-weather cover.",
+      "coveredBy": null
+    }
+  ]
+}
