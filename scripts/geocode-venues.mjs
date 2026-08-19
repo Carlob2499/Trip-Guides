@@ -218,12 +218,24 @@ function guideMeta(slug) {
   try { return JSON.parse(fs.readFileSync(p, "utf8")); } catch { return {}; }
 }
 
+/* Honest attempt record (Pipeline V2, blocker 1D): "lookup attempted but unresolved" and
+   "lookup never attempted" are different facts. The report file existing proves the pass RAN;
+   its `unresolved` rows carry the exact refusal reason for every honest blank. No sentinel is
+   ever written into guide content — an unresolved venue simply stays blank. */
+export function writeReport(reportPath, doc) {
+  if (!reportPath) return;
+  fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+  fs.writeFileSync(reportPath, JSON.stringify(doc, null, 2) + "\n");
+  console.log(`\nAttempt report written to ${reportPath}.`);
+}
+
 async function main(argv) {
   const slug = argv[argv.indexOf("--slug") + 1];
   const write = argv.includes("--write");
   const showRejected = argv.includes("--include-rejected");
-  if (!slug || slug.startsWith("--")) {
-    console.error("Usage: node scripts/geocode-venues.mjs --slug <guide> [--write] [--include-rejected]");
+  const reportPath = argv.includes("--report") ? argv[argv.indexOf("--report") + 1] : null;
+  if (!slug || slug.startsWith("--") || (reportPath && reportPath.startsWith("--"))) {
+    console.error("Usage: node scripts/geocode-venues.mjs --slug <guide> [--write] [--include-rejected] [--report <path>]");
     process.exit(2);
   }
 
@@ -234,6 +246,7 @@ async function main(argv) {
 
   if (!pending.length) {
     console.log(`${slug}: every place already has coordinates and a Place ID — nothing to do.`);
+    writeReport(reportPath, { slug, attemptedAt: new Date().toISOString(), applied: write, pending: 0, resolved: [], unresolved: [] });
     return;
   }
   console.log(`${slug}: ${pending.length} place(s) to resolve (country hint: ${ctx.country || "none"})\n`);
@@ -272,6 +285,15 @@ async function main(argv) {
       if (showRejected && r.res && r.res.lat) console.log(`      near-miss was: ${r.res.name} @ ${r.res.lat}, ${r.res.lng}`);
     }
   }
+
+  writeReport(reportPath, {
+    slug,
+    attemptedAt: new Date().toISOString(),
+    applied: write,
+    pending: pending.length,
+    resolved: accepted.map((r) => ({ name: r.item.name, file: r.file })),
+    unresolved: rejected.map((r) => ({ name: r.item.name, file: r.file, why: r.why })),
+  });
 
   if (!write) {
     console.log(`\nProposal only. Re-run with --write to apply the ${accepted.length} accepted match(es).`);
