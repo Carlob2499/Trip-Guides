@@ -9,9 +9,9 @@
     "effort": "high",
     "criticModel": "claude-opus-5"
   },
-  "status": "failed",
+  "status": "running",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-19T23:56:29.603Z",
+  "updatedAt": "2026-08-19T23:56:55.018Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -89,10 +89,10 @@
       "failure": null
     },
     "reconcile": {
-      "status": "failed",
-      "startedAt": "2026-08-19T23:39:23.824Z",
-      "endedAt": "2026-08-19T23:54:16.586Z",
-      "attempts": 2,
+      "status": "running",
+      "startedAt": "2026-08-19T23:56:55.018Z",
+      "endedAt": null,
+      "attempts": 3,
       "model": "claude-sonnet-5",
       "effort": "high",
       "commit": null,
@@ -112,13 +112,17 @@
           "status": "failed",
           "failureClass": "gate-failure",
           "durationSec": 893
+        },
+        {
+          "attempt": 3,
+          "startedAt": "2026-08-19T23:56:55.018Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
         }
       ],
-      "failure": {
-        "class": "gate-failure",
-        "detail": "offline verify failed: 8 finding(s)",
-        "at": "2026-08-19T23:54:16.586Z"
-      }
+      "failure": null
     },
     "critic": {
       "status": "queued",
@@ -140,13 +144,9 @@
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "re-run stage \"reconcile\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
   },
-  "failure": {
-    "class": "gate-failure",
-    "detail": "offline verify failed: 8 finding(s)",
-    "at": "2026-08-19T23:54:16.586Z"
-  },
+  "failure": null,
   "publication": {
     "published": false,
     "publishedAt": null,
