@@ -790,8 +790,11 @@ jobs:
   # ── Land — always a draft PR while V2 is being proven ──────────────────────
   land:
     needs: [setup, critic]
+    # needs.setup.result guards the canary-observed case: setup fails AFTER its budget step has
+    # already emitted should_run=true (outputs of failed jobs remain readable), which used to
+    # start a doomed landing job on a run that never routed.
     if: >-
-      always() && needs.setup.outputs.should_run == 'true' &&
+      always() && needs.setup.result == 'success' && needs.setup.outputs.should_run == 'true' &&
       (needs.critic.result == 'success' || (needs.critic.result == 'skipped' && needs.setup.outputs.next == ''))
     runs-on: ubuntu-latest
     permissions:
