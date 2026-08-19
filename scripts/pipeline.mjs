@@ -566,7 +566,13 @@ async function runSubcommand(cmd, rest, get) {
 //   land --slug <s> --branch <b> …       publish (draft flip) + open/merge the PR
 //   scaffold --slug <s> --issue <n>      commit a new scaffold to main, reply, close the issue
 //   publish --slug <s>                   manual override: the same evidence gate, then the flip
-if (isMain(import.meta.url)) {
+// NO top-level await in this block, deliberately. Subcommand modules (gate.mjs) statically
+// import THIS module back; a top-level await here suspends this module's evaluation, the
+// dynamic import of the subcommand then waits on that evaluation, and the process deadlocks
+// and drains (Node exit 13, "unsettled top-level await") — the exact failure the first live
+// V2 canary hit at `gate preflight`. An async main invoked as a plain promise lets module
+// evaluation finish immediately, so the cycle resolves.
+async function cliMain() {
   const argv = process.argv.slice(2);
   const get = (flag) => (argv.includes(flag) ? argv[argv.indexOf(flag) + 1] : null);
 
@@ -638,4 +644,11 @@ if (isMain(import.meta.url)) {
     if (asJson) console.log(JSON.stringify(statusJson(slug, state)));
     else console.log(statusLines(slug, state).join("\n"));
   }
+}
+
+if (isMain(import.meta.url)) {
+  cliMain().catch((err) => {
+    console.error(`[pipeline] ${err?.message || err}`);
+    process.exit(1);
+  });
 }

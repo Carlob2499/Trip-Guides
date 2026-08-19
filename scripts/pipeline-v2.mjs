@@ -540,13 +540,15 @@ async function run(cmd, get, has) {
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
-if (isMain(import.meta.url)) {
+// No top-level await here (the pipeline.mjs lesson): a subcommand's dynamic import that
+// reaches back into a mid-evaluation module would deadlock the graph and exit 13.
+async function cliMain() {
   const argv = process.argv.slice(2);
   const get = (flag) => (argv.includes(flag) ? argv[argv.indexOf(flag) + 1] : null);
   const has = (flag) => argv.includes(flag);
   const cmd = argv[0];
   if (!cmd || cmd.startsWith("--")) {
-    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|prepare-critic|restore-critic|validate> --slug <slug> …");
+    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate> --slug <slug> …");
     process.exit(1);
   }
   try {
@@ -559,4 +561,11 @@ if (isMain(import.meta.url)) {
     console.error(`[pipeline-v2] ${err?.message || err}`);
     process.exit(1);
   }
+}
+
+if (isMain(import.meta.url)) {
+  cliMain().catch((err) => {
+    console.error(`[pipeline-v2] ${err?.message || err}`);
+    process.exit(1);
+  });
 }
