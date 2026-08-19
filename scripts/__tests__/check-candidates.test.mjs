@@ -64,6 +64,16 @@ describe("judgeCandidates", () => {
     expect(r.findings.join("\n")).toMatch(/"Cand 0" is marked shipped but appears nowhere/);
   });
 
+  it("a branch-qualified ledger name matches its base name in the guide (V2 canary scar)", () => {
+    // "Wanaka (Dotonbori)" in the ledger ships as plain "Wanaka" in the guide — the qualifier
+    // must not read as a phantom recommendation; a genuinely absent name must still fail.
+    const table1 = table(1, "Food", [["Wanaka (Dotonbori)", "shipped"], ...rows(16, 8).slice(1)]);
+    const present = judgeCandidates(parseCandidates(doc(table1)), { guideText: `Wanaka ${guideText}` });
+    expect(present.findings.join("\n")).not.toMatch(/Wanaka/);
+    const absent = judgeCandidates(parseCandidates(doc(table1)), { guideText });
+    expect(absent.findings.join("\n")).toMatch(/"Wanaka \(Dotonbori\)" is marked shipped but appears nowhere/);
+  });
+
   it("honors per-guide researchFloors over the defaults — the tabBudget precedent", () => {
     const small = parseCandidates(doc(table(1, "Food", rows(6, 3))));
     const text = "Cand 0 Cand 1 Cand 2";
