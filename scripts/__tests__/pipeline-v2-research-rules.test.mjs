@@ -13,7 +13,7 @@ import {
 
 const record = (over = {}) => ({
   id: "e-1", candidateId: "c-daruma", claim: "Open 11:00–22:00", kind: "objective", origin: "passA",
-  source: { url: "https://official.example", kind: "official", language: "ja", publishedAt: "2026-07-01", family: null, independent: null },
+  source: { url: "https://official.example", kind: "official", language: "ja", publishedAt: "2026-07-01", family: null, independent: null, access: "fetched" },
   verifiedOn: "2026-08-01", firsthand: null,
   freshness: { perishable: true, shelfLife: "hours", recheckOn: "2026-10-30" },
   ...over,

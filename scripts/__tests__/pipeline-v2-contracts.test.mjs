@@ -10,7 +10,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { ContractError, parseSchemaVersion, assertVersionCompatible, RUN_SCHEMA } from "../pipeline/v2/contracts.mjs";
+import { ContractError, parseSchemaVersion, assertVersionCompatible, RUN_SCHEMA, EVIDENCE_SCHEMA } from "../pipeline/v2/contracts.mjs";
 import {
   V2_RESEARCH_STAGES, initRunV2, readRunStateV2, readAnyRunState, adaptV1RunState,
   stageStart, stageComplete, stageFail, bumpRunAttempt, recordAutoRetry,
@@ -235,7 +235,7 @@ describe("evidence — valid / structural rules", () => {
   it("writes, validates and reads back a valid document", async () => {
     await writeEvidence("korea", validEvidence(), opts());
     const doc = await requireEvidence("korea", opts());
-    expect(doc.schemaVersion).toBe("wp-evidence/2.0");
+    expect(doc.schemaVersion).toBe(EVIDENCE_SCHEMA);
     expect(evidenceProblems(doc)).toEqual([]);
     await expect(requireEvidence("korea", { ...opts(), runId: "korea-20260817-ffffff" })).rejects.toThrow(/active run/);
   });
