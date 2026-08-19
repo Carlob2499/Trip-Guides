@@ -8,8 +8,9 @@ name: Research pass (V2)
 #     commits it, and checkpoints run.v2.json (begin-stage before the agent, finish-stage after).
 #     A stage that produced nothing durable is a recorded VOID failure with one bounded
 #     auto-retry; any other agent failure is recorded honestly as `agent-failure` and the branch
-#     stays manually resumable (usage-limit failures are not reliably identifiable from here, so
-#     they are never guessed at).
+#     stays manually resumable. A usage-limit interruption is classified from the CLI's own
+#     printed "hit your session limit" line in the captured agent output — machine output, not
+#     a guess (first seen live on canary run 32266140623).
 #   · MECHANICAL PASS-B ISOLATION. The passB job checks out the run's recorded BASELINE commit
 #     (fetch-depth 1): Pass A's outputs are absent from its world, not merely forbidden. The
 #     collect step then checks out the run branch separately, validates passB.v2.json
@@ -237,7 +238,7 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
-            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"' 2>&1 | tee "$RUNNER_TEMP/agent-output.log"
 
       - name: Checkout a fresh control-plane copy after Pass A
         if: always()
@@ -274,10 +275,13 @@ jobs:
         if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
         working-directory: collect
         run: |
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           CLASS=gate-failure
           DETAIL="control-plane step failed; branch resumes this stage"
           if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
           if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
+          if grep -q "hit your session limit" "$RUNNER_TEMP/agent-output.log" 2>/dev/null; then CLASS=usage-limit; DETAIL="Claude session limit reached mid-stage; re-dispatch after the window resets"; fi
           node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage passA \
             --class "$CLASS" --detail "$DETAIL" \
             --branch "$BRANCH"
@@ -394,7 +398,7 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
-            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"' 2>&1 | tee "$RUNNER_TEMP/agent-output.log"
 
       # The workflow — not Pass B — validates and transfers the artifact, then commits. The
       # control-plane checkout happens AFTER the agent (always(), so failure recording has a
@@ -432,6 +436,7 @@ jobs:
           DETAIL="control-plane step failed; branch resumes this stage"
           if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
           if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
+          if grep -q "hit your session limit" "$RUNNER_TEMP/agent-output.log" 2>/dev/null; then CLASS=usage-limit; DETAIL="Claude session limit reached mid-stage; re-dispatch after the window resets"; fi
           node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage passB \
             --class "$CLASS" --detail "$DETAIL" \
             --branch "$BRANCH"
@@ -540,7 +545,7 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
-            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"' 2>&1 | tee "$RUNNER_TEMP/agent-output.log"
 
       - name: Checkout a fresh control-plane copy after reconcile
         if: always()
@@ -578,10 +583,13 @@ jobs:
         if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
         working-directory: collect
         run: |
+          git config user.name  "waypoint-research-v2[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           CLASS=gate-failure
           DETAIL="control-plane step failed; branch resumes this stage"
           if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
           if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
+          if grep -q "hit your session limit" "$RUNNER_TEMP/agent-output.log" 2>/dev/null; then CLASS=usage-limit; DETAIL="Claude session limit reached mid-stage; re-dispatch after the window resets"; fi
           node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage reconcile \
             --class "$CLASS" --detail "$DETAIL" \
             --branch "$BRANCH"
@@ -748,7 +756,7 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
-            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"' 2>&1 | tee "$RUNNER_TEMP/agent-output.log"
 
       - name: Checkout a fresh control-plane copy after the critic
         if: always()
@@ -794,6 +802,7 @@ jobs:
           DETAIL="control-plane step failed; branch resumes this stage"
           if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
           if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
+          if grep -q "hit your session limit" "$RUNNER_TEMP/agent-output.log" 2>/dev/null; then CLASS=usage-limit; DETAIL="Claude session limit reached mid-stage; re-dispatch after the window resets"; fi
           node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage critic \
             --class "$CLASS" --detail "$DETAIL" \
             --branch "$BRANCH"
