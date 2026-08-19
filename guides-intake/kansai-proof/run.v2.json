@@ -11,7 +11,7 @@
   },
   "status": "running",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-19T23:38:55.028Z",
+  "updatedAt": "2026-08-19T23:39:23.824Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -90,9 +90,9 @@
     },
     "reconcile": {
       "status": "running",
-      "startedAt": "2026-08-19T22:38:26.010Z",
+      "startedAt": "2026-08-19T23:39:23.824Z",
       "endedAt": null,
-      "attempts": 1,
+      "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
       "commit": null,
@@ -100,6 +100,14 @@
         {
           "attempt": 1,
           "startedAt": "2026-08-19T22:38:26.010Z",
+          "endedAt": "2026-08-19T23:39:23.824Z",
+          "status": "failed",
+          "failureClass": "unknown",
+          "durationSec": 3658
+        },
+        {
+          "attempt": 2,
+          "startedAt": "2026-08-19T23:39:23.824Z",
           "endedAt": null,
           "status": "running",
           "failureClass": null,
