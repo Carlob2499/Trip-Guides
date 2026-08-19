@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "kansai-proof",
+  "runId": "kansai-proof-20260819-36127b",
+  "asks": [
+    {
+      "id": "anchor",
+      "ask": "Kiyomizu-dera autumn night illumination in Kyoto — 2026 dates not yet officially announced; may conflict with the evening schedule",
+      "status": "covered",
+      "where": [
+        "07-sights.json#what-generic-guides-get-wrong",
+        "07-sights.json#top-sights",
+        "06-days.json#kyoto-fushimi-inari-at-dawn-higashiyama-gion-pontocho"
+      ],
+      "evidenceIds": [
+        "ev-kiyomizu-illumination-2026-dates",
+        "ev-kiyomizu-illumination-corroboration",
+        "ev-kiyomizu-illumination-dates-2026",
+        "ev-eikando-illumination-dates-2026",
+        "ev-toji-illumination-dates-2026"
+      ],
+      "reason": null
+    },
+    {
+      "id": "cities",
+      "ask": "Osaka, Kyoto",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "05-transit.json#key-transit-routes"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "2026-11-13 – 2026-11-17",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Food",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "06-days.json#osaka-castle-kuromon-ichiba-dotonbori-food-crawl"
+      ],
+      "evidenceIds": [
+        "ev-mizuno-hours-price",
+        "ev-daruma-dotonbori-hours-booking",
+        "ev-wanaka-address-hours",
+        "ev-abaraya-hours-closed",
+        "ev-houshoan-hours-price-booking",
+        "ev-kakinohazushi-tanaka-info",
+        "ev-nakamura-tokichi-founding-info",
+        "ev-dotonbori-tourist-trap-a",
+        "ev-dotonbori-tourist-trap-b",
+        "ev-kougaryu-hours-official"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-2",
+      "ask": "Culture",
+      "status": "covered",
+      "where": [
+        "07-sights.json#top-sights",
+        "07-sights.json#kiyomizu-dera",
+        "07-sights.json#fushimi-inari-taisha",
+        "07-sights.json#todai-ji",
+        "07-sights.json#kasuga-taisha",
+        "07-sights.json#osaka-castle"
+      ],
+      "evidenceIds": [
+        "ev-fushimi-inari-hours-fee",
+        "ev-todaiji-hours-fee",
+        "ev-kasuga-taisha-hours-fee",
+        "ev-osaka-castle-hours-fee",
+        "ev-toji-illumination-dates-2026",
+        "ev-gion-private-road-ban",
+        "ev-gion-private-road-photo-ban"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-3",
+      "ask": "Nature",
+      "status": "covered",
+      "where": [
+        "07-sights.json#arashiyama-bamboo-grove-tenryu-ji",
+        "06-days.json#nara-day-trip"
+      ],
+      "evidenceIds": [
+        "ev-bamboo-grove-crowd-timing",
+        "ev-nara-deer-feeding-etiquette",
+        "ev-nara-deer-rut-season-risk",
+        "ev-asajigahara-quiet-a",
+        "ev-asajigahara-quiet-b",
+        "ev-nanzenji-hours-official",
+        "ev-nanzenji-suirokaku-quiet-a",
+        "ev-nanzenji-suirokaku-quiet-b"
+      ],
+      "reason": null
+    },
+    {
+      "id": "pace",
+      "ask": "balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "budget",
+      "ask": "Mid-range",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs",
+        "02-money-and-budget.json#lodging-per-night-mid-range-per-person"
+      ],
+      "evidenceIds": [
+        "ev-usd-jpy-fx-rate",
+        "ev-kintetsu-nara-line-fare",
+        "ev-jr-nara-line-fare"
+      ],
+      "reason": null
+    },
+    {
+      "id": "party",
+      "ask": "couple",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs",
+        "08-food-and-shopping.json#houshoan"
+      ],
+      "evidenceIds": [
+        "ev-houshoan-hours-price-booking"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "2",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "comments",
+      "ask": "TEST CANARY (Pipeline V2 draft-only proof — not a real trip). Evening arrival at KIX on Nov 13. Wants a Nara day trip. Rain is a concern in mid-November; itinerary needs wet-weather cover.",
+      "status": "covered",
+      "where": [
+        "06-days.json#arrival-at-kix-transfer-to-osaka",
+        "06-days.json#nara-day-trip",
+        "06-days.json#kyoto-fushimi-inari-at-dawn-higashiyama-gion-pontocho",
+        "07-sights.json#top-sights"
+      ],
+      "evidenceIds": [
+        "ev-haruka-fares",
+        "ev-jr-nara-line-fare",
+        "ev-kintetsu-nara-line-fare",
+        "ev-nanzenji-hours-official",
+        "ev-nanzenji-suirokaku-quiet-a",
+        "ev-nanzenji-suirokaku-quiet-b",
+        "ev-nishiki-market-eating-manner"
+      ],
+      "reason": null
+    }
+  ]
+}

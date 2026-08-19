@@ -4,7 +4,7 @@
     "group": "Food & shopping",
     "title": "What to eat",
     "phase": "daily",
-    "intro": "Osaka's food identity is takoyaki, okonomiyaki and kushikatsu — the crawl below sticks to those rather than padding in a ramen stop; reviews on Osaka's famous ramen chains (Kinryu, Ichiran) run mixed, and neither is a specifically Osaka dish. Kani Doraku's giant crab sign is a photo stop, not a booking — ¥5,000–10,000/person for reviews that call the ingredients hit-or-miss.",
+    "intro": "Osaka's food identity is takoyaki, okonomiyaki and kushikatsu — the crawl below sticks to those rather than padding in a ramen stop; reviews on Osaka's famous ramen chains (Kinryu, Ichiran) run mixed, and neither is a specifically Osaka dish. Kani Doraku's giant crab sign is a photo stop, not a booking — ¥5,000–10,000/person for reviews that call the ingredients hit-or-miss. Two independent resident food bloggers make the same point about Dotonbori's biggest-signage shops generally: the flashier the storefront, the more it's priced for tourists and queued accordingly — Kouga-ryu below is one of their tested alternatives.",
     "items": [
       {
         "name": "Mizuno",
@@ -47,6 +47,20 @@
         "why": "Crispy-outside, fluffy-inside takoyaki — order 'half & half' to try two sauce styles at once."
       },
       {
+        "name": "Kouga-ryu",
+        "area": "Amerikamura main store, Osaka",
+        "address": "2-18-4 Nishishinsaibashi, Chuo-ku, Osaka",
+        "hours": "10:30–20:30 daily (10:30–21:30 Saturdays and the day before public holidays)",
+        "book": "walk-in",
+        "how": "In Amerikamura, a short walk from the Dotonbori strip — not on the canal-front tourist row itself",
+        "price": "≈¥600–900/person",
+        "crowd_tip": "Two independent resident food bloggers name this their tested alternative to the queued, tourist-priced takoyaki shops fronting the Dotonbori canal.",
+        "why": "Takoyaki a few minutes off the main strip, at local prices without the wait.",
+        "source_url": "https://kougaryu.jp/shop/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "hours"
+      },
+      {
         "name": "Abaraya",
         "area": "Namba Sennichimae, Osaka",
         "address": "2-14 Namba Sennichimae, Chuo-ku, Osaka",
@@ -55,10 +69,8 @@
         "book": "call",
         "how": "A block off the Namba tourist strip, in Sennichimae",
         "price": "≈¥1,300 (half, 10pc) – ¥4,400 (course)/person",
-        "crowd_tip": "Genuinely local clientele despite sitting a block from the Namba tourist strip. No English menu — point-and-order is normal here.",
-        "why": "Battera (pressed, vinegared mackerel sushi) — Osaka's own sushi style, easy to miss next to the takoyaki/okonomiyaki circuit.",
-        "verified_on": "2026-08-19",
-        "shelf_life": "venue"
+        "crowd_tip": "⚠ Hours/address above rest on a Tabelog search-preview snippet, not a fetched official page — confirm before relying on them. Genuinely local clientele despite sitting a block from the Namba tourist strip. No English menu — point-and-order is normal here.",
+        "why": "Battera (pressed, vinegared mackerel sushi) — Osaka's own sushi style, easy to miss next to the takoyaki/okonomiyaki circuit."
       },
       {
         "name": "Houshoan",
@@ -101,7 +113,6 @@
         "verified_on": "2026-08-19",
         "shelf_life": "venue"
       }
-    ],
-    "verified_on": "2026-08-19"
+    ]
   }
 ]

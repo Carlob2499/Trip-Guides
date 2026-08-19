@@ -23,7 +23,7 @@
       { "label": "Food & drink, per day", "basis": "day", "est": 6500, "low": 4000, "high": 10000, "per": "person", "note": "A Dotonbori crawl day or the Pontocho kaiseki night runs the high end" },
       { "label": "Local transport, per day (ICOCA pay-as-you-go)", "basis": "day", "est": 1500, "low": 800, "high": 2500, "per": "person" },
       { "label": "Sights & activities, per day", "basis": "day", "est": 1800, "low": 500, "high": 3000, "per": "person" },
-      { "label": "Nara day-trip transit (round trip)", "basis": "trip", "est": 2400, "per": "person", "note": "Kintetsu Limited Express from Osaka; cheaper via JR Nara Line rapid from Kyoto (≈¥1,440 round trip)" }
+      { "label": "Nara day-trip transit (round trip)", "basis": "trip", "est": 2400, "per": "person", "note": "Kintetsu Limited Express from Osaka; cheaper via JR Nara Line rapid from Kyoto (≈¥1,440 round trip)", "source_url": "https://www.kintetsu.co.jp/railway/Dia/pdf/price_limited_express_e.pdf", "verified_on": "2026-08-19", "shelf_life": "transit" }
     ]
   }
 ]

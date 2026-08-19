@@ -532,6 +532,96 @@
       "shortlisted": true,
       "reason": null,
       "worth": null
+    },
+    {
+      "id": "c-kiyomizu-dera-night-illumination-autumn",
+      "name": "Kiyomizu-dera Night Illumination (Autumn)",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Independently confirmed by Pass B on the temple's own site: the 2026 autumn night illumination runs Nov 21-30 -- entirely after the traveler's Nov 13-17 stay. Corroborates Pass A's c-kiyomizu-dera-autumn-night-illumination finding; also caught several aggregator/tourism-board pages still recirculating 2025's Nov 22-Dec 7 dates mislabeled as 2026.",
+      "worth": null
+    },
+    {
+      "id": "c-eikando-zenrin-ji-night-illumination",
+      "name": "Eikando (Zenrin-ji) Night Illumination",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Official 2026 night illumination (eikando.or.jp) runs Nov 20-Dec 6 -- starts 3 days after the traveler departs. The daytime autumn treasure exhibition (Nov 11-Dec 6) does overlap the stay, but without the night lighting that makes Eikando famous. Considered as an anchor-substitute candidate and rejected in favor of Toji.",
+      "worth": null
+    },
+    {
+      "id": "c-toji-autumn-illumination",
+      "name": "Toji Autumn Illumination",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-dotonbori-flagship-tourist-chains",
+      "name": "Dotonbori Flagship Tourist Chains",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Two independent resident food bloggers warn that the large-signage flagship chains fronting the main Dotonbori canal strip are priced for tourists and can mean long waits; corroborates the guide's existing Kani Doraku tourist-trap flag. Not a single venue to ship -- Kouga-ryu (below) is the shippable alternative one of the two blogs names.",
+      "worth": null
+    },
+    {
+      "id": "c-kouga-ryu--amerikamura-main-store",
+      "name": "Kouga-ryu",
+      "branch": "Amerikamura main store",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-aizuya",
+      "name": "Aizuya",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Also known as Aizusaya -- old-style budget takoyaki (author claims ~¥400/6, 'original Osaka style') named by one resident food blogger. Only one firsthand source turned up within this pass's budget and official hours/price could not be independently confirmed -- kept as a lead for a future pass, not shipped. Corroborates Pass A's separate c-aizuya--dotonbori rejection (same venue, both passes independently declined to ship it).",
+      "worth": null
+    },
+    {
+      "id": "c-nanzenji--suirokaku-aqueduct-rain-off-peak-visit",
+      "name": "Nanzenji",
+      "branch": "Suirokaku aqueduct, rain/off-peak visit",
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-nara-park-deer-feeding-main-strip-todaiji-approach",
+      "name": "Nara Park Deer-Feeding Main Strip (Todaiji Approach)",
+      "branch": null,
+      "priority": "nature",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "The main deer-feeding approach to Todaiji is the default photo-op every guide sends visitors to and draws the heaviest crowds. Two independent resident-run blogs point to Asajigahara-en / Ukimido instead for the same deer-in-nature experience with far fewer tourists.",
+      "worth": null
+    },
+    {
+      "id": "c-asajigahara-en-nara-park",
+      "name": "Asajigahara-en (Nara Park)",
+      "branch": null,
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-detour"
     }
   ],
   "evidence": [
@@ -1494,6 +1584,340 @@
         "shelfLife": "transit",
         "recheckOn": "2026-11-01"
       }
+    },
+    {
+      "id": "ev-kiyomizu-illumination-dates-2026",
+      "candidateId": "c-kiyomizu-dera-night-illumination-autumn",
+      "claim": "Kiyomizu-dera's 2026 autumn night illumination runs Nov 21-30, 2026, 17:30 open with last entry 21:00 / close 21:30, confirmed on the temple's own site -- entirely AFTER the traveler's Nov 13-17 stay.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.kiyomizudera.or.jp/en/visit/special_night_viewing/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "kiyomizudera.or.jp",
+        "independent": true,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-eikando-illumination-dates-2026",
+      "candidateId": "c-eikando-zenrin-ji-night-illumination",
+      "claim": "Eikando's official 2026 announcement sets the autumn treasure exhibition Nov 11-Dec 6 and the separate night illumination Nov 20-Dec 6 -- the night lighting starts after the traveler departs, though the daytime exhibition does overlap the stay.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.eikando.or.jp/osirase.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "eikando.or.jp",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-toji-illumination-dates-2026",
+      "candidateId": "c-toji-autumn-illumination",
+      "claim": "Toji's 2026 autumn illumination runs Oct 31-Dec 13, 2026, 18:00-21:30 (last entry 21:00), ¥1,000 adult admission, no reservation required -- confirmed directly on the temple's own site and fully covers the traveler's Nov 13-17 stay, unlike Kiyomizu-dera or Eikando.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://toji.or.jp/exhibition/2026_autumn/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "toji.or.jp",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-19"
+      }
+    },
+    {
+      "id": "ev-kiyomizu-illumination-crowd-timing-a",
+      "candidateId": "c-kiyomizu-dera-night-illumination-autumn",
+      "claim": "For anyone visiting during the temple's actual Nov 21-30 illumination window: peak crowding runs sunset to ~19:30, and entering after 20:00 gives calmer viewing (reception cutoff 21:00); the main stage and Okuno-in draw the densest crowds.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://tabino-blog.hatenablog.com/entry/kiyomizudera_kouyou_konzatu",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "hatenablog-tabino",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-kiyomizu-illumination-crowd-timing-b",
+      "candidateId": "c-kiyomizu-dera-night-illumination-autumn",
+      "claim": "Second independent account corroborating the same window: peak crowding runs sunset to ~19:30, with 20:00+ entry called 'ideal' for avoiding crowds; a quoted firsthand account describes movement-impossible crush conditions at the two main photo spots during past peak hours.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://pawasupi.com/kiyomizudera-lightup/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "pawasupi-personal-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-dotonbori-tourist-trap-a",
+      "candidateId": "c-dotonbori-flagship-tourist-chains",
+      "claim": "Firsthand food-blogger account: the flashier/larger the Dotonbori signage, the more it's aimed at tourists at a markup; names Kani Doraku-style famous chains as drawing ~2-hour waits locals avoid, and recommends Aizuya (takoyaki), Daruma (kushikatsu) and Botejyu (okonomiyaki) as tested authentic alternatives instead.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/gongon0321/n/nd99d42e2578d",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "note-gongon0321",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-dotonbori-tourist-trap-b",
+      "candidateId": "c-kouga-ryu--amerikamura-main-store",
+      "claim": "Second independent firsthand account: the author explicitly avoided the famous Dotonbori-strip takoyaki shops because of inevitable lines, choosing Kouga-ryu (Amerikamura), Tako-hachi (Umeda underground) and Creole instead so she could eat without waiting the way locals do.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/sari_skuragi/n/n75df8c28de00",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "note-sari-skuragi",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-kougaryu-hours-official",
+      "candidateId": "c-kouga-ryu--amerikamura-main-store",
+      "claim": "Kouga-ryu's Amerikamura main store (2-18-4 Nishishinsaibashi, Chuo-ku) is open 10:30-20:30 daily, extended to 10:30-21:30 on Saturdays and the day before public holidays -- confirmed on the shop's own official site.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://kougaryu.jp/shop/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kougaryu.jp",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nanzenji-hours-official",
+      "candidateId": "c-nanzenji--suirokaku-aqueduct-rain-off-peak-visit",
+      "claim": "Nanzenji's November visiting hours are 8:40-17:00 with reception closing 20 minutes before close (16:40). Main hall/garden admission ¥600. Confirmed on the temple's own site.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://nanzenji.or.jp/about_rinzaishu/visit",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "nanzenji.or.jp",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nanzenji-suirokaku-quiet-a",
+      "candidateId": "c-nanzenji--suirokaku-aqueduct-rain-off-peak-visit",
+      "claim": "Local-guide blog (self-described Higashiyama/Nanzenji-area resident site): early-morning visits to the Suirokaku aqueduct find noticeably fewer tour buses and cars than at peak hours.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://kyoto-jimoto.com/nanzenji/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kyoto-jimoto-local-guide",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-nanzenji-suirokaku-quiet-b",
+      "candidateId": "c-nanzenji--suirokaku-aqueduct-rain-off-peak-visit",
+      "claim": "Independent firsthand account of visiting Suirokaku in light rain: despite expecting heavy congestion, 'it wasn't as crowded as anticipated,' and the author found the aqueduct 'beautiful in the drizzle' -- corroborates it as a good wet-weather stop rather than a washout.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/legit_garlic4771/n/nbe245dd6d83e",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "note-legit-garlic4771",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-asajigahara-quiet-a",
+      "candidateId": "c-asajigahara-en-nara-park",
+      "claim": "Resident blog (author lived in Nara): Asajigahara-en, just north of Ukimido, has 'few tourists visible, ideal for a leisurely walk,' with deer grazing undisturbed compared to the main park areas.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://small-life.com/archives/15/03/2721.php",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "small-life-nara-resident-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-asajigahara-quiet-b",
+      "candidateId": "c-asajigahara-en-nara-park",
+      "claim": "Second independent firsthand account, same immediate area (Ukimido pond/pavilion): 'this area has almost no tourists and feels like a local gathering spot.'",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/legit_auklet5476/n/n3f66c079b770",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "note-legit-auklet5476",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-gion-private-road-photo-ban",
+      "candidateId": null,
+      "claim": "Since Oct 25, 2019, Gion's residential side-alleys off Hanami-koji (private roads, not the public Hanami-koji street itself) have been posted no-photography, with a ¥10,000 fine sought for unauthorized shooting; a 2024 report on Kosode-koji describes signage in Japanese/English/Chinese after tea-house operators complained of tourists crowding and touching geiko/maiko.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.ktv.jp/news/feature/240529-maiko/",
+        "kind": "press",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2024-05-29",
+        "family": "ktv.jp",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nara-transit-routing",
+      "candidateId": null,
+      "claim": "Both the Kintetsu Nara Line (from Osaka-Namba) and JR Yamatoji Line (from Osaka/Tennoji) reach Nara in roughly the same time; a local Nara-focused travel-info site notes fares are roughly equivalent via Osaka Station and JR runs slightly cheaper via Kyoto Station. Kintetsu-Nara station sits closer to Todaiji/Kasuga Taisha/Nara Park than JR-Nara station.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://narakanko-enjoy.com/?p=30889",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "narakanko-enjoy.com",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
     }
   ],
   "reservations": [
@@ -1579,6 +2003,13 @@
       "impact": "minor",
       "investigation": "Fetched kiyomizudera.or.jp/en/visit/, /en/location/, and /en/faq/ directly — none displayed the fee figure in the retrieved content (each referenced a separate page/table not resolved in this pass's fetches). monzenkai.com (the temple's neighborhood shopping association) and an aggregator (kyototravel.info) both independently state ¥500/¥200.",
       "resolution": "Shipped as an operator-corroborated figure (tier: corroborated) rather than a directly-confirmed official one, flagged in the sight's own note for reconfirmation."
+    },
+    {
+      "id": "d-toji-anchor-substitute",
+      "topic": "Whether Toji's autumn illumination (Pass B, T0-verified, fully covers Nov 13-17) should be woven into Day 3 (Sun Nov 15) as a substitute for the anchor event the intake assumed but that isn't running",
+      "impact": "recommendation-changing",
+      "investigation": "Pass B independently checked every plausible illumination candidate against its own official 2026 page: Kiyomizu-dera (Nov 21-30, after the trip), Eikando (night lighting from Nov 20, after the trip), and Toji (Oct 31-Dec 13, fully covers the stay). Day 3 is already the trip's most packed day -- dawn Fushimi Inari, Higashiyama, Gion, then a reserved Houshoan dinner with an unconfirmed booking window -- so adding a fourth evening stop risks the exact over-packed-day failure mode the done gate's pacing check looks for.",
+      "resolution": "Shipped Toji as its own sights entry (T0-sourced, fully verified) and flagged it in Day 3's body as an available but NOT scheduled option, with an explicit note pointing to the ledger's traveler question rather than silently cramming it into an already-packed day or silently dropping a genuinely strong find."
     }
   ],
   "depth": {
@@ -1597,8 +2028,98 @@
     "stopped": true,
     "trend": "duplicates",
     "unresolvedCouldChange": false,
-    "note": "Late-round Osaka food searches (Chukasoba Kazura, Fukutaro, additional battera/sushi spots) mostly surfaced options that were either redundant with already-shortlisted picks or too weakly sourced to ship, not new strong contenders. Kyoto/Nara sights searches converged on the same handful of marquee stops with consistent crowd-timing advice across independent blogs. Remaining unresolved items (the JR Nara Line's exact official fare page, Nara National Museum's blocked official page, a few restaurant hours) are backbone-confirmation gaps, not open questions that would change which candidates are recommended — they're flagged for Pass B/reconcile rather than blocking this pass."
+    "note": "Merged view of both passes at reconcile. Pass A: late-round Osaka food searches (Chukasoba Kazura, Fukutaro, additional battera/sushi spots) mostly surfaced options redundant with already-shortlisted picks or too weakly sourced to ship. Kyoto/Nara sights searches converged on the same marquee stops with consistent crowd-timing advice. Pass B: native-language searches surfaced one genuinely new, strong, T0-verifiable finding (Toji as an anchor-quality substitute) and several corroborating/alternative food and quiet-spot leads (Kouga-ryu, Nanzenji, Asajigahara-en); by its final round, further native-language searches were returning the same aggregator listicles and already-captured venue names. Remaining unresolved items across both passes (the JR Nara Line's exact official fare page, Nara National Museum's blocked official page, a few restaurant hours, Houshoan's exact booking window) are backbone-confirmation gaps, not open questions that would change which candidates ship — flagged as ⚠ in the guide rather than blocking this pass. The one open question that COULD change the itinerary shape (whether to build Toji into Day 3) is recorded as a traveler question rather than resolved unilaterally."
   },
-  "passB": null,
-  "reconciliation": []
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "English coverage of Kyoto/Osaka/Nara is dominated by generic top-10 tourist content and tour-operator marketing pages (confirmed directly for Fushimi Inari). Native-Japanese searches were needed to reach resident blogs on crowd timing and tourist-trap food, to catch a stale-year illumination-date trap that English aggregator content was also repeating, and to surface a manners/legal reality (the Gion photo-ban) that doesn't show up in English tourist material at all.",
+      "searchClasses": [
+        "Japanese crowd-timing queries against temple/illumination names (清水寺ライトアップ混雑, 東寺ライトアップ混雑, 南禅寺水路閣雨)",
+        "Japanese resident/local-food queries (道頓堀 たこ焼き 地元民, 大阪人 観光客だまし)",
+        "Direct fetches of each temple's own Japanese-language official page for event dates (kiyomizudera.or.jp, eikando.or.jp, toji.or.jp, nanzenji.or.jp, kougaryu.jp)",
+        "Japanese local-transit comparison queries (JR奈良線 近鉄奈良線 どっちがいい)",
+        "Japanese etiquette/manners queries (祇園 私道 撮影禁止, 関西弁 観光客)"
+      ],
+      "yield": "Caught a real dated-content trap: several aggregator and tourism-board pages were recirculating 2025 illumination dates relabeled '2026'; only each temple's own Japanese official page had the true 2026 window, which revealed the intake's assumed anchor (Kiyomizu illumination) isn't running during the trip at all, and surfaced Toji as a genuine, officially-confirmed substitute. Also surfaced two independent resident-blog corroborations each for the Dotonbori tourist-trap pattern and the Asajigahara-en quiet-deer alternative, and found the ¥10,000 Gion private-road photo-ban via a Kansai TV press report that no English tourist source mentioned."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": [
+    {
+      "findingId": "ev-kiyomizu-illumination-dates-2026",
+      "disposition": "agree",
+      "note": "Both passes independently fetched the temple's own site and landed on the same Nov 21-30, 2026 window, entirely after the trip. Already reflected in the guide's Kiyomizu-dera sight body and the 'What generic guides get wrong' divergence entry; no additional guide change needed."
+    },
+    {
+      "findingId": "ev-eikando-illumination-dates-2026",
+      "disposition": "reject",
+      "note": "Researched anchor-substitute candidate; its night illumination also starts after the trip ends (only the daytime exhibition overlaps). Not shipped -- kept as research context explaining why Toji, not Eikando, was adopted."
+    },
+    {
+      "findingId": "ev-toji-illumination-dates-2026",
+      "disposition": "adopt",
+      "note": "B-only, T0-verified (official site, fetched, appliesToYears 2026) and genuinely fills the anchor gap the intake's assumed event left behind. Added to the guide as a new sights entry (07-sights.json) and flagged as an available-but-unscheduled option in Day 3 (06-days.json), since fitting it in without cutting something else is a traveler call -- recorded as q-kansai-proof-3 in the ledger rather than silently rewriting the day."
+    },
+    {
+      "findingId": "ev-kiyomizu-illumination-crowd-timing-a",
+      "disposition": "reject",
+      "note": "Experiential crowd-timing for a window this trip doesn't fall inside. Not shipped into the current itinerary; kept as research-only in case the traveler answers q-kansai-proof-1 by shifting dates to catch the real illumination."
+    },
+    {
+      "findingId": "ev-kiyomizu-illumination-crowd-timing-b",
+      "disposition": "reject",
+      "note": "Same reasoning as ev-kiyomizu-illumination-crowd-timing-a -- corroborating experiential detail for a window outside the trip."
+    },
+    {
+      "findingId": "ev-dotonbori-tourist-trap-a",
+      "disposition": "agree",
+      "note": "Corroborates the guide's existing Kani Doraku tourist-trap flag; also independently names Kushikatsu Daruma (already shipped via Pass A) as a tested authentic alternative. No guide change needed beyond the existing flag."
+    },
+    {
+      "findingId": "ev-dotonbori-tourist-trap-b",
+      "disposition": "adopt",
+      "note": "Surfaced Kouga-ryu as a genuinely verified (official-site-fetched hours) locals' takoyaki alternative to the Dotonbori-strip queues. Added as a new shipped venue in 08-food-and-shopping.json, referenced from Day 2's crawl and the section intro."
+    },
+    {
+      "findingId": "ev-kougaryu-hours-official",
+      "disposition": "adopt",
+      "note": "Official hours backing the new Kouga-ryu venue entry."
+    },
+    {
+      "findingId": "ev-nanzenji-hours-official",
+      "disposition": "adopt",
+      "note": "Official hours backing the new Nanzenji (Suirokaku aqueduct) sights entry."
+    },
+    {
+      "findingId": "ev-nanzenji-suirokaku-quiet-a",
+      "disposition": "adopt",
+      "note": "Woven into the new Nanzenji sights entry and referenced as a wet-weather option in Day 3's plan_b."
+    },
+    {
+      "findingId": "ev-nanzenji-suirokaku-quiet-b",
+      "disposition": "adopt",
+      "note": "Same as ev-nanzenji-suirokaku-quiet-a -- the rain-specific corroboration is why Nanzenji is offered as a plan_b option, not just a fair-weather sight."
+    },
+    {
+      "findingId": "ev-asajigahara-quiet-a",
+      "disposition": "adopt",
+      "note": "Woven into the Todai-ji sight's deer note and Day 4's body, naming Asajigahara-en specifically instead of the previous vague 'along the approach path' phrasing."
+    },
+    {
+      "findingId": "ev-asajigahara-quiet-b",
+      "disposition": "adopt",
+      "note": "Second corroborating source for the same Asajigahara-en addition -- both required before naming a specific quiet-alternative location as fact rather than a single blogger's opinion."
+    },
+    {
+      "findingId": "ev-gion-private-road-photo-ban",
+      "disposition": "agree",
+      "note": "Independently corroborates Pass A's own Gion private-road-ban finding (ev-gion-private-road-ban / ev-gion-ban-corroboration), already shipped in the guide's Gion sight body and divergence entry. No additional guide change needed."
+    },
+    {
+      "findingId": "ev-nara-transit-routing",
+      "disposition": "reject",
+      "note": "Qualitative routing color; the guide's shipped Nara transit content already carries specific fare/frequency figures from official/aggregator T0 sources for both routes, which is more actionable than this reference site's general 'roughly equivalent' framing. Not shipped as a standalone claim."
+    }
+  ]
 }

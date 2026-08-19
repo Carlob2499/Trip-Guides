@@ -23,6 +23,24 @@
         "shelf_life": "venue"
       },
       {
+        "name": "Toji Autumn Illumination",
+        "kicker": "The night illumination that actually falls inside these dates",
+        "body": "<p>Toji's own site confirms its 2026 autumn illumination runs Oct 31–Dec 13, 18:00–21:00 (last entry), admission ¥1,000, no reservation needed — unlike Kiyomizu-dera (Nov 21–30) and Eikando (night lighting from Nov 20), both of which fall entirely after this trip ends. It's a five-story pagoda lit against a pond, a short walk from Kyoto Station. ⚠ Fitting an evening here means trading time against the already-packed Sun Nov 15 schedule (dawn Fushimi Inari through the reserved Houshoan dinner) — see the ledger's traveler question before booking around it.</p>",
+        "dwell_min": 60,
+        "source_url": "https://toji.or.jp/exhibition/2026_autumn/",
+        "verified_on": "2026-08-19",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Nanzenji (Suirokaku aqueduct)",
+        "kicker": "A red-brick Meiji aqueduct arching through a temple ground",
+        "body": "<p>November hours 8:40am–5:00pm (reception to 4:40pm), main hall/garden admission ¥600, per the temple's own site. Two independent firsthand accounts single out the Suirokaku aqueduct specifically as noticeably quieter early morning or in light rain than at midday — one visitor called it 'beautiful in the drizzle' rather than a washout, making it a solid wet-weather stop in the same Higashiyama corridor as Kiyomizu-dera and Gion.</p>",
+        "dwell_min": 30,
+        "source_url": "https://nanzenji.or.jp/about_rinzaishu/visit",
+        "verified_on": "2026-08-19",
+        "shelf_life": "hours"
+      },
+      {
         "name": "Arashiyama Bamboo Grove & Tenryu-ji",
         "kicker": "A green-lit path, then a UNESCO garden next door",
         "body": "<p>The grove itself is a free public path — empty before 8am, packed by 9:30. Tenryu-ji's Sogenchi garden next door gives the visit more substance than the grove alone: garden admission {{fact:tenryuji-garden-500-yen}} (+¥300 for building access), 8:30am–5:00pm (7:30am garden opening Nov 15–30).</p>",
@@ -34,7 +52,7 @@
       {
         "name": "Todai-ji",
         "kicker": "A 15-metre bronze Buddha, and the deer outside",
-        "body": "<p>The Daibutsuden (Great Buddha Hall) is open 8:00am–5:00pm in November, admission {{fact:todaiji-admission-800-yen}}. Nara Park's deer cluster densest — and pushiest — right at the Nandaimon gate; the calmer, less crowded deer are along the approach path toward Kasuga Taisha instead.</p>",
+        "body": "<p>The Daibutsuden (Great Buddha Hall) is open 8:00am–5:00pm in November, admission {{fact:todaiji-admission-800-yen}}. Nara Park's deer cluster densest — and pushiest — right at the Nandaimon gate; two independent resident-blog accounts point instead to Asajigahara-en, just north of Ukimido pond, for the same deer with far fewer tourists in the way.</p>",
         "dwell_min": 60,
         "closed_days": [],
         "source_url": "https://www.todaiji.or.jp/en/information/haikan/",
