@@ -32,17 +32,27 @@
       "text": "Pass A (canonical research) complete in 2m (attempt 2)"
     },
     {
-      "at": "2026-08-19T22:23:22.330Z",
+      "at": "2026-08-19T22:23:51.051Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-19T22:38:02.802Z",
+      "kind": "decision",
+      "text": "Pass B (independent research) complete in 14m"
+    },
+    {
+      "at": "2026-08-19T22:38:02.820Z",
       "kind": "decision",
       "text": "Candidate funnel: 53 evaluated · 32 shortlisted · 23 shipped · 24 rejected · 4 kept as detours"
     },
     {
-      "at": "2026-08-19T22:23:22.330Z",
+      "at": "2026-08-19T22:38:02.820Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-19T22:23:22.330Z",
+      "at": "2026-08-19T22:38:02.820Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether the intake's assumed anchor event (Kiyomizu-dera autumn night illumination) actually falls within the trip's Nov 13-17, 2026 dates"
     }
