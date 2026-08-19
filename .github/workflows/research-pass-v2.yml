@@ -1,0 +1,74 @@
+name: Research pass (V2)
+
+# INERT REGISTRATION STUB — this is not the V2 pipeline.
+#
+# GitHub resolves a workflow_dispatch workflow by its path on the DEFAULT branch (verified
+# empirically 2026-08-19: dispatching research-pass-v2.yml returned 404 until this file
+# existed here). This stub exists so the REAL implementation — the same path on the V2
+# feature/finalization branch — can be dispatched with `--ref <branch>`, which runs THAT
+# branch's version of the file, not this one.
+#
+# On the default branch this stub must never: run research, spend Claude, create research
+# branches, mutate guides, or publish. It declares the same inputs as the real workflow so
+# dispatch input validation stays consistent, prints where the real pipeline lives, and exits
+# green. The real workflow additionally carries its own runtime guard against default-branch
+# execution (the WAYPOINT_V2_ON_DEFAULT repository variable is the deliberate cutover switch).
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Guide slug (must already be scaffolded — V2 researches an existing scaffold)."
+        required: true
+        type: string
+      section:
+        description: "Section focus for a scoped pass. Leave blank for a full pass."
+        required: false
+        type: string
+        default: ""
+      model:
+        description: "Model for Pass A + reconcile (Pass B is always Sonnet)."
+        required: false
+        type: choice
+        options:
+          - claude-sonnet-5
+          - claude-opus-5
+        default: claude-sonnet-5
+      effort:
+        description: "Reasoning effort for every agent."
+        required: false
+        type: choice
+        options:
+          - high
+          - xhigh
+          - medium
+        default: high
+      critic_model:
+        description: "Model for the fresh-context critic."
+        required: false
+        type: choice
+        options:
+          - claude-opus-5
+          - claude-sonnet-5
+        default: claude-opus-5
+      void_retry:
+        description: "Internal — set by the bounded auto-retry. Leave false."
+        required: false
+        type: boolean
+        default: false
+
+permissions: {}
+
+jobs:
+  inert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: This ref carries the inert registration stub, not the pipeline
+        run: |
+          echo "research-pass-v2 was dispatched on '${GITHUB_REF_NAME}', which carries only the"
+          echo "inert registration stub. No research was started, no Claude was spent, no branch"
+          echo "was created, and nothing was mutated or published."
+          echo
+          echo "To run the real V2 pipeline, dispatch it on the branch that carries it, e.g.:"
+          echo "  gh workflow run research-pass-v2.yml --ref <v2-branch> -f slug=<slug>"
+          echo "done=inert (safe exit)"
