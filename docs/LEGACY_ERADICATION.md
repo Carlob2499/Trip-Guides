@@ -89,9 +89,29 @@
   `features/hub/model/checklist` (`SECTIONS`) past the hub silo's index. Fix: re-export from
   `hub/index.ts`, import through it. (The A1 class from the architecture doc.)
 
-### Remaining scans
+### scripts/ (scan complete)
 
-_(scripts reachability — in progress)_
+- **76 non-test files: all REACHABLE.** The scan's weakest-evidenced rows were re-verified by
+  hand: `gen-room-id` (scaffold + firebase room model), `check-photos` (audit chain + verify),
+  `fetch-wikivoyage`/`lookup-tz`/`lookup-place`/`search-commons` (operator/research tools named
+  by package.json and the schema's own comments), `prose-shape` (its regression test enforces
+  the debt baseline), `check-content-drift` (verify --network path). Zero orphan scripts.
+
+### Census verdict
+
+The repository is substantially cleaner than the eradication mandate anticipated — the
+aggressive cleanup arcs recorded in `docs/archive/INDEX.md` already removed the dead
+generations. The full census across CI, prompts, agent instructions, Worker, CSS, client code,
+components, lib, data, dependencies, configs, fixtures, npm scripts, and scripts/ found
+**zero DEAD code files**. What remains is small and specific:
+
+| # | Item | Class | Action |
+|---|---|---|---|
+| 1 | `.github/ISSUE_TEMPLATE/{modify,revise}-guide.yml` body text promising the deleted approval-label flow | CONFLICTING_SPEC | Rewrite the two blurbs to the real flow (label triggers; author-association gates) |
+| 2 | GitHub remote labels `modify-approved` / `revision-approved` | DEAD | `gh label delete` both |
+| 3 | `docs/reference/motion.md` rows citing deleted `overture.js` + `hub-motion.css` | CONFLICTING_SPEC | Re-point at the shipped Atlas motion homes |
+| 4 | `src/pages/new.astro` deep import past the hub silo index | CONFLICTING_SPEC (silo contract) | Re-export via `hub/index.ts`, import through it |
+| 5 | `docs/pipeline v2/FABLE_IMPLEMENTATION_PROMPT.md` (545 lines) — the executed, superseded M0–M8 build prompt | HISTORY | Archive per `docs/archive/INDEX.md` convention; update the two referring docs |
 
 ## Classification counts
 

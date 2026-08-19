@@ -15,7 +15,7 @@ import {
   CANDIDATE_STATUSES, EVIDENCE_KINDS, SOURCE_KINDS, EVIDENCE_ORIGINS, DISPOSITIONS,
   WORTH_LABELS, SOURCE_ACCESS, GROUP_REF,
   candidateSchema, evidenceSourceSchema, evidenceRecordSchema, reservationFindingSchema,
-  transportFindingSchema, saturationSchema, coverageAskSchema,
+  transportFindingSchema, disagreementSchema, saturationSchema, coverageAskSchema,
   ContractError,
 } from "./contracts.mjs";
 import { candidateId } from "./evidence.mjs";
@@ -28,29 +28,43 @@ const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
 
 export const CAPSULE_STAGES = ["passA", "passB", "reconcile", "critic"];
 
-/** Field vocabulary introspected from a zod object schema: name, required?, enum values. */
+/** Field vocabulary introspected from a zod object schema: name, required?, enum values, and a
+    JSON type hint (the canary's Pass A wrote `appliesToYears: ["2026"]` — string vs number is
+    exactly the class of drift this must expose). */
 export function fieldVocabulary(schema) {
   const shape = schema.shape || {};
   return Object.entries(shape).map(([name, field]) => {
     const required = !field.safeParse(undefined).success;
     let values = null;
+    let type = null;
     let probe = field;
-    // Unwrap defaults/nullable/optional wrappers until an enum (or not) is visible.
+    // Unwrap defaults/nullable/optional wrappers until an enum or base type is visible.
     for (let i = 0; i < 6 && probe; i++) {
       if (probe.options && Array.isArray(probe.options) && probe.options.every((o) => typeof o === "string")) {
         values = probe.options;
         break;
       }
+      const t = probe.def?.type;
+      if (["string", "number", "boolean", "array", "object", "int"].includes(t)) {
+        type = t === "int" ? "number" : t;
+        if (t === "array") {
+          const el = probe.def?.element?.def?.type;
+          if (el) type = `array of ${el === "int" ? "number" : el}${el === "object" ? "s" : "s (JSON " + (el === "int" ? "number" : el) + "s, not strings)"}`;
+          if (el === "object") type = "array of objects";
+        }
+        break;
+      }
       probe = probe.unwrap?.() ?? probe.def?.innerType ?? probe.removeDefault?.() ?? null;
     }
-    return { name, required, values };
+    return { name, required, values, type };
   });
 }
 
 function vocabLines(title, schema) {
-  const rows = fieldVocabulary(schema).map(({ name, required, values }) => {
+  const rows = fieldVocabulary(schema).map(({ name, required, values, type }) => {
     const bits = [required ? "required" : "optional"];
     if (values) bits.push(`one of: ${values.join(" | ")}`);
+    else if (type) bits.push(type);
     return `  - \`${name}\` (${bits.join("; ")})`;
   });
   return [`${title}:`, ...rows];
@@ -154,6 +168,7 @@ function commonEvidenceSections({ slug, runId }) {
     ...vocabLines("evidence source", evidenceSourceSchema),
     ...vocabLines("reservation finding", reservationFindingSchema),
     ...vocabLines("transport finding", transportFindingSchema),
+    ...vocabLines("disagreement", disagreementSchema),
     ...vocabLines("saturation record", saturationSchema),
     "",
     "### Minimal valid example (shape reference only — never copy its content)",

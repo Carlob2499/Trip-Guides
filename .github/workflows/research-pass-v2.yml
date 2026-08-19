@@ -250,6 +250,9 @@ jobs:
 
       # Validate the owed artifact, commit the work, checkpoint completion — or record the
       # failure (void → one bounded auto-retry below).
+      # set +e: a failed collection must still reach finish-stage, which records the failure
+      # (with the validator's field-level findings as durable retry feedback) and pushes it —
+      # aborting on collect left the stage "running" and the feedback unpushed (canary attempt 2).
       - name: Validate, commit, checkpoint
         id: finish
         working-directory: collect
@@ -257,11 +260,15 @@ jobs:
           npm ci
           git config user.name "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          node scripts/pipeline-v2.mjs collect-stage --slug "$SLUG" --stage passA --from "$GITHUB_WORKSPACE"
+          set +e
+          node scripts/pipeline-v2.mjs collect-stage --slug "$SLUG" --stage passA --from "$GITHUB_WORKSPACE" --branch "$BRANCH"
+          COLLECT=$?
           SCOPED=()
           if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
           node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage passA \
             --branch "$BRANCH" "${SCOPED[@]}"
+          FINISH=$?
+          if [ "$COLLECT" -ne 0 ] || [ "$FINISH" -ne 0 ]; then exit 1; fi
 
       - name: Record agent failure honestly
         if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
@@ -408,7 +415,7 @@ jobs:
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           set +e
-          node scripts/pipeline-v2.mjs collect-passb --slug "$SLUG" --from "$GITHUB_WORKSPACE"
+          node scripts/pipeline-v2.mjs collect-passb --slug "$SLUG" --from "$GITHUB_WORKSPACE" --branch "$BRANCH"
           COLLECT=$?
           node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage passB --branch "$BRANCH"
           FINISH=$?
@@ -544,23 +551,28 @@ jobs:
           fetch-depth: 0
           path: collect
 
-      - name: Offline verification
-        working-directory: collect
-        run: |
-          npm ci
-          node scripts/pipeline-v2.mjs collect-stage --slug "$SLUG" --stage reconcile --from "$GITHUB_WORKSPACE"
-          npm run verify -- --slug "$SLUG"
-
-      - name: Validate, commit, checkpoint
+      # A failed collection still reaches finish-stage so the validator's findings become
+      # durable, pushed retry feedback (the canary-attempt-2 lesson). An offline-verify failure
+      # keeps the old semantics: the stage stays running and re-runs.
+      - name: Collect, verify offline, checkpoint
         id: finish
         working-directory: collect
         run: |
+          npm ci
           git config user.name "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          set +e
+          node scripts/pipeline-v2.mjs collect-stage --slug "$SLUG" --stage reconcile --from "$GITHUB_WORKSPACE" --branch "$BRANCH"
+          COLLECT=$?
+          if [ "$COLLECT" -eq 0 ]; then
+            npm run verify -- --slug "$SLUG" || exit 1
+          fi
           SCOPED=()
           if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
           node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage reconcile \
             --branch "$BRANCH" "${SCOPED[@]}"
+          FINISH=$?
+          if [ "$COLLECT" -ne 0 ] || [ "$FINISH" -ne 0 ]; then exit 1; fi
 
       - name: Record agent failure honestly
         if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'

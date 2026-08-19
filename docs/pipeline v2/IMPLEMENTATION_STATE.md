@@ -1,6 +1,6 @@
 # Pipeline V2 — Implementation State (durable resume record)
 
-> Maintained by the implementation agent per `FABLE_IMPLEMENTATION_PROMPT.md`. A resumed session
+> Maintained by the implementation agent (build prompt archived: `docs/archive/INDEX.md → FABLE_IMPLEMENTATION_PROMPT`). A resumed session
 > reads THIS file, inspects `git log` on `codex/pipeline-v2` and the working diff, and continues
 > from "Next action" below. Never regenerate completed work.
 

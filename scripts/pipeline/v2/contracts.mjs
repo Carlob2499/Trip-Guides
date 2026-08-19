@@ -1,5 +1,5 @@
-// PIPELINE V2 — the versioned, runtime-validated contracts (M2 of docs/pipeline v2/
-// FABLE_IMPLEMENTATION_PROMPT.md; semantics locked by docs/pipeline v2/DECISIONS.md).
+// PIPELINE V2 — the versioned, runtime-validated contracts (M2 of the archived build prompt,
+// docs/archive/INDEX.md → FABLE_IMPLEMENTATION_PROMPT; semantics locked by docs/pipeline v2/DECISIONS.md).
 //
 // Everything the V2 control plane hands between stages is one of these documents, validated at
 // every read and write. The design rules, stated once:

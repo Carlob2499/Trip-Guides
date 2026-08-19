@@ -5,7 +5,7 @@ Owner: Carlo
 Window: **August 18–October 7, 2026**  
 Hard backend deadline: **September 30, 2026**
 
-Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, `FABLE_IMPLEMENTATION_PROMPT.md`, and the active branch's `IMPLEMENTATION_STATE.md`.
+Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, and the active branch's `IMPLEMENTATION_STATE.md`.
 
 This file tracks delivery. It does not redefine Pipeline V2.
 

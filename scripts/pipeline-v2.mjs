@@ -291,7 +291,9 @@ async function run(cmd, get, has) {
       try {
         problems = await validateStageOutput(slug, stage, { scoped: has("--scoped") });
       } catch (err) {
-        problems = [err.message.split("\n")[0]];
+        // A ContractError's field-level issues ARE the retry feedback — flattening them to the
+        // message's first line starved the canary's retry of exactly what it needed.
+        problems = err.issues?.length ? err.issues : [err.message.split("\n")[0]];
       }
       const changed = dirtyPaths();
       problems.push(...stageScopeProblems(slug, stage, changed));
