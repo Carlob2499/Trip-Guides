@@ -338,6 +338,64 @@ no historical guide data rewritten.
 **Non-goals honored:** no UI redesign, no GPT, no new APIs/DBs/queues, no cutover, no V1
 deletion, no live publication, no live V2 run.
 
+## Finalization session (2026-08-19, Fable) — Core Proof blocker remediation
+
+Branch `fable/pipeline-v2-finalize`, forked from `codex/pipeline-v2` @ `775b420`, merged with
+`origin/main` @ `d0118d3` (clean merge — two doc files). Baseline before any change: build 9
+pages ✓ · lint 0/0 ✓ · typecheck 0 errors + 21 pre-existing hints ✓ · tests 161 files /
+2579 ✓ + 1 todo. No failures to classify.
+
+**Blocker fixes (each with regression tests in `pipeline-v2-finalize.test.mjs`, 46 tests):**
+
+- **1A generated machine contract** — `scripts/pipeline/v2/contract-capsule.mjs` derives a
+  stage-relevant capsule AT RUN TIME from the same modules that validate (enum vocabulary,
+  canonical candidate-id rule with computed examples, freshness caps from the exported
+  `OBJECTIVE_RECHECK_MAX_DAYS` map, zod-introspected field vocabulary, dynamically derived
+  coverage ask ids + real group anchors for reconcile, minimal valid skeletons that the tests
+  parse against the live schemas). Injected as `{{contract}}` via `pipeline-v2 contract`.
+- **1B validator feedback on retry** — `scripts/pipeline/v2/feedback.mjs`
+  (`guides-intake/<slug>/feedback.v2.json`, `wp-feedback/2.0`): findings persist per
+  runId/stage/attempt, committed with run state (survive interruption/resume); ONLY the owed
+  stage's active findings feed its retry (`pipeline-v2 stage-feedback` → `{{feedback}}`),
+  wrapped as labeled VALIDATOR DATA; success retires (audit history kept). finish-stage now
+  also retains the failed attempt's IN-SCOPE output on the run branch (commit marked INVALID)
+  so a contract repair does not re-spend web research; every downstream gate still fails closed.
+- **1C V2 coverage in the real verifier** — `verify-guide.mjs` `checkCoverage` consumes
+  `coverage.v2.json` as authoritative when present (fail-closed: malformed/missing-ask/bad
+  ref/bad anchor all FAIL), V1 `coveredBy` semantics untouched otherwise.
+- **1D deterministic geocoding** — new `geocode` job between reconcile and critic:
+  `geocode-venues.mjs --write --report guides-intake/<slug>/geocode.v2.json`. PLACES_API_KEY
+  scoped to that single step (test-pinned: never in any agent step); refusal-to-guess
+  preserved; the report distinguishes attempted-but-unresolved from never-attempted (absent
+  report = never attempted; no sentinel ever enters guide content).
+- **P2 evidence trust** — `source.access` (fetched | search-preview | blocked | unknown,
+  `wp-evidence/2.1` additive). Rules: official/operator objective citations must be fetched or
+  recorded blocked; `appliesToYears` event dates must be fetched; anchor/important reservation
+  mechanics need a fetched origin or recorded block; R3+ transport names `evidenceIds` with ≥1
+  fetched. Proxy policy: `PROXY_HOSTS` (r.jina.ai, Google cache, cachedview, 12ft.io,
+  web.archive.org, translate proxy) are never the origin — rule-enforced, denied in the three
+  research agents' WP_DENY, filtered out of the critic's fetch allowlist, stated in prompts.
+- **P3 retry-aware telemetry** — per-attempt `history` on every stage (`wp-run/2.1`
+  additive): attempt/start/end/status/failureClass/duration; `stageAttemptStats` yields
+  successful/failed/cumulative seconds into telemetry (`failedDurationSec`,
+  `cumulativeDurationSec`, `wp-telemetry/2.1`); old 2.0 documents parse with empty history.
+- **P4 workflow_dispatch registration** — verified empirically: dispatch 404s until the path
+  exists on the default branch. Bootstrap PR #59 (inert stub, `permissions: {}`, spends
+  nothing, exits green) merged to main — the one authorized early merge; inert proof run
+  32259552278 (7s, success, zero side effects). The real workflow gained a first-step runtime
+  guard refusing default-branch dispatch unless the `WAYPOINT_V2_ON_DEFAULT` repository
+  variable is deliberately set (the cutover switch). NOTE: the squash-merge push produced no
+  Actions events (platform hiccup); a whitespace nudge commit to main (`14c2411`) re-triggered
+  indexing and registered the workflow.
+
+Gates after the fixes: build ✓ · lint ✓ · typecheck ✓ · full suite 162 files / 2619 ✓ + 1 todo.
+
+**Live canary (Phase 5):** slug `kansai-proof` (TEST DATA — Osaka+Kyoto Nov 13–17 2026,
+couple, food>culture>nature, KIX evening arrival, Nara day trip, rain concern, Kiyomizu
+illumination anchor conflict) scaffolded on `canary/kansai-proof` (with a copied
+`src/data/destinations/kansai-proof.json`), dispatched as run **32259673565** on that ref.
+Draft-only; not Carlo's real Japan guide; never merged to production.
+
 ## Codex final audit addendum (2026-08-17)
 
 Independent specification, code, and security reviews found and closed the post-M8 seams. Major
