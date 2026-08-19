@@ -23,6 +23,26 @@
       "createdAt": "2026-08-19T22:16:45.573Z",
       "status": "retired",
       "retiredAt": "2026-08-19T22:23:22.325Z"
+    },
+    {
+      "runId": "kansai-proof-20260819-36127b",
+      "stage": "reconcile",
+      "attempt": 1,
+      "findings": [
+        "reconcile\tRun research agent — Reconcile\t  verify and build after your output; never silence a flag you cannot source — downgrade to `⚠`",
+        "P0 research   · FAIL — 3 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ venues \"What to eat\" has verified_on 2026-08-19 but no source_url to recertify against",
+        "⚠ venues item \"Abaraya\" has verified_on 2026-08-19 but no source_url to recertify against",
+        "⚠ budget item \"Nara day-trip transit (round trip)\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "P1 candidates · FAIL — the consideration set is thin or unverifiable",
+        "✗ priority 1: \"Wanaka (Dotonbori)\" is marked shipped but appears nowhere in the guide",
+        "✗ priority 1: \"Wanaka (Kuromon Ichiba branch)\" is marked shipped but appears nowhere in the guide",
+        "✗ priority 1: \"Mizuno (Dotonbori)\" is marked shipped but appears nowhere in the guide",
+        "✗ priority 1: \"Kushikatsu Daruma (Dotonbori)\" is marked shipped but appears nowhere in the guide"
+      ],
+      "createdAt": "2026-08-19T23:38:21.221Z",
+      "status": "active",
+      "retiredAt": null
     }
   ]
 }
