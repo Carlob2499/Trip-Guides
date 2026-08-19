@@ -42,6 +42,7 @@ export function forbiddenForPassB(slug) {
     `guides-intake/${slug}/coverage.v2.json`,
     `guides-intake/${slug}/passB.v2.json`,
     `guides-intake/${slug}/feedback.v2.json`,
+    `guides-intake/${slug}/events.json`,
   ];
 }
 

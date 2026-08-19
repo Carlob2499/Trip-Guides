@@ -383,8 +383,8 @@ pages ✓ · lint 0/0 ✓ · typecheck 0 errors + 21 pre-existing hints ✓ · t
   exists on the default branch. Bootstrap PR #59 (inert stub, `permissions: {}`, spends
   nothing, exits green) merged to main — the one authorized early merge; inert proof run
   32259552278 (7s, success, zero side effects). The real workflow gained a first-step runtime
-  guard refusing default-branch dispatch unless the `WAYPOINT_V2_ON_DEFAULT` repository
-  variable is deliberately set (the cutover switch). NOTE: the squash-merge push produced no
+  guard refusing default-branch dispatch unless the `WAYPOINT_RESEARCH_ENGINE` repository
+  variable is deliberately set to `v2` (the cutover switch). NOTE: the squash-merge push produced no
   Actions events (platform hiccup); a whitespace nudge commit to main (`14c2411`) re-triggered
   indexing and registered the workflow.
 
@@ -395,6 +395,39 @@ couple, food>culture>nature, KIX evening arrival, Nara day trip, rain concern, K
 illumination anchor conflict) scaffolded on `canary/kansai-proof` (with a copied
 `src/data/destinations/kansai-proof.json`), dispatched as run **32259673565** on that ref.
 Draft-only; not Carlo's real Japan guide; never merged to production.
+
+**Canary scars fixed (each dispatch found a real boundary defect; every fix carries a
+regression test):**
+
+1. **Run 32259673565 — `gate preflight` deadlocked its own module graph** (Node exit 13):
+   pipeline.mjs's CLI used top-level await while gate.mjs statically imports pipeline.mjs back;
+   the dynamic import waited forever on the suspended evaluation. Reproduced locally, fixed by
+   running both CLIs through a non-TLA `cliMain()`; regression spawns the real CLI through the
+   real cycle. Also fixed: the `land` job ran on a failed setup (outputs of failed jobs stay
+   readable) — it now requires `needs.setup.result == 'success'`.
+2. **Run 32260514104 — every agent file-write denied.** The pinned claude-code CLI treats a
+   single-leading-slash rule path as settings-relative, and Write()/Glob()/Grep() path rules
+   are accepted but never consulted (verified against code.claude.com/docs/en/permissions).
+   `Edit(/workspace/**)` never matched `/workspace`. Fixed to `Read(//workspace/**)`,
+   `Edit(//workspace/**)` (+ absolute `//proc`/`//sys`/`//dev` denials) in all four agent
+   steps and in the critic's generated fetch policy. The agent's own honest refusal to
+   fabricate completion is itself a positive observation. Also fixed: the bounded re-dispatch
+   ran where the sandbox had deleted `.git` (gh could not resolve the repo) and omitted
+   `--ref`, which would have dispatched the default branch's inert stub.
+3. **Run 32262892232 — Pass A WROTE its artifact (permissions proven) but it failed schema
+   validation** (`appliesToYears` as strings; `disagreements[]` missing id/topic/investigation)
+   — and the step aborted before finish-stage, leaving the stage "running" and the recorded
+   feedback unpushed. Fixed: collection failures still reach finish-stage (stage failure +
+   field-level findings recorded and pushed as retry feedback); finish-stage preserves
+   ContractError issues instead of flattening to one line; the capsule now carries JSON type
+   hints ("array of numbers, not strings") and the previously-missing disagreement vocabulary;
+   interrupted attempts close honestly in the history.
+
+**Positive canary observations (attempt 2, before the write failures):** the T0-first anchor
+rule fired live — Pass A fetched kiyomizudera.or.jp directly, found the 2026 illumination runs
+Nov 21–30 (trip is Nov 13–17 — the intake's anchor assumption does not hold), rejected a stale
+2025 aggregator, recorded fetched/blocked/search-preview access states, and refused to fake
+completion when writes were denied.
 
 ## Codex final audit addendum (2026-08-17)
 

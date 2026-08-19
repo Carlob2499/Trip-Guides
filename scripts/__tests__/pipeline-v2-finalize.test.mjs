@@ -426,6 +426,86 @@ describe("1C — verify's coverage gate consumes coverage.v2.json fail-closed", 
   });
 });
 
+// ── P9: truthful Progress events ─────────────────────────────────────────────
+
+describe("P9 — the event emitter tells only what the durable artifacts prove", () => {
+  const stateFixture = () => ({
+    stageOrder: ["scaffold", "passA"],
+    attempts: { cap: 5 },
+    updatedAt: "2026-08-19T12:00:00.000Z",
+    stages: {
+      scaffold: { history: [{ attempt: 1, startedAt: "2026-08-19T10:00:00.000Z", endedAt: "2026-08-19T10:00:05.000Z", status: "complete", failureClass: null, durationSec: 5 }] },
+      passA: { history: [
+        { attempt: 1, startedAt: "2026-08-19T10:01:00.000Z", endedAt: "2026-08-19T10:30:00.000Z", status: "failed", failureClass: "agent-failure", durationSec: 1740 },
+        { attempt: 2, startedAt: "2026-08-19T10:35:00.000Z", endedAt: "2026-08-19T11:05:00.000Z", status: "complete", failureClass: null, durationSec: 1800 },
+      ] },
+    },
+    landingGate: { status: "pending", checkedAt: null, failure: null },
+    publication: { published: false, publishedAt: null, deployedLive: null, deployedAt: null },
+  });
+
+  it("stage transitions, retries and failures come from run-state history", async () => {
+    const { buildRunEvents } = await import("../pipeline/v2/events.mjs");
+    const events = buildRunEvents({ state: stateFixture() });
+    const texts = events.decisions.map((d) => d.text);
+    expect(texts.some((t) => t.includes("Pass A") && t.includes("attempt 1") && t.includes("failed"))).toBe(true);
+    expect(texts.some((t) => t.includes("Pass A") && t.includes("complete") && t.includes("attempt 2"))).toBe(true);
+  });
+
+  it("candidate funnel, dispositions and saturation come from the validated evidence artifact", async () => {
+    const { buildRunEvents } = await import("../pipeline/v2/events.mjs");
+    const evidence = {
+      candidates: [
+        { id: "c-a", status: "shipped", shortlisted: true },
+        { id: "c-b", status: "rejected", shortlisted: false },
+      ],
+      reconciliation: [
+        { findingId: "e-1", disposition: "adopt", note: "n" },
+        { findingId: "e-2", disposition: "reject", note: "n" },
+      ],
+      saturation: { stopped: true, trend: "duplicates", unresolvedCouldChange: false, note: "n" },
+      disagreements: [{ id: "d-1", topic: "bus vs train", impact: "recommendation-changing", investigation: "x", resolution: "y" }],
+    };
+    const events = buildRunEvents({ state: stateFixture(), evidence });
+    const texts = events.decisions.map((d) => d.text).join("\n");
+    expect(texts).toContain("2 evaluated");
+    expect(texts).toContain("1 adopt");
+    expect(texts).toContain("1 reject");
+    expect(texts).toContain("Adaptive search stopped");
+    expect(texts).toContain("bus vs train");
+  });
+
+  it("never fabricates: fetches empty, nuggets empty, counters null", async () => {
+    const { buildRunEvents } = await import("../pipeline/v2/events.mjs");
+    const events = buildRunEvents({ state: stateFixture() });
+    expect(events.fetches).toEqual([]);
+    expect(events.nuggets).toEqual([]);
+    expect(events.counters).toBeNull();
+  });
+
+  it("round-trips through the progress UI's own parser (old-reader compatibility)", async () => {
+    const { buildRunEvents } = await import("../pipeline/v2/events.mjs");
+    const { parseRunEvents } = await import("../../src/features/pipeline-progress/model/run-events.ts");
+    const parsed = parseRunEvents(buildRunEvents({ state: stateFixture() }));
+    expect(parsed.available).toBe(true);
+    expect(parsed.decisions.length).toBeGreaterThan(0);
+    expect(parsed.counters).toBeNull();
+    // An empty emission parses back to the honest empty state, never a fake "alive" one.
+    const empty = parseRunEvents(buildRunEvents({ state: { stageOrder: [], stages: {}, attempts: { cap: 5 } } }));
+    expect(empty.available).toBe(false);
+  });
+
+  it("geocode outcomes and the landing gate appear once they are real", async () => {
+    const { buildRunEvents } = await import("../pipeline/v2/events.mjs");
+    const state = { ...stateFixture(), landingGate: { status: "failed", checkedAt: "2026-08-19T12:30:00.000Z", failure: "network gate failed" } };
+    const events = buildRunEvents({ state, geocode: { attemptedAt: "2026-08-19T12:10:00.000Z", resolved: [{}, {}], unresolved: [{}] } });
+    const texts = events.decisions.map((d) => d.text).join("\n");
+    expect(texts).toContain("2 resolved");
+    expect(texts).toContain("1 left as honest blanks");
+    expect(texts).toContain("Landing evidence gate FAILED");
+  });
+});
+
 // ── canary scar: CLI module-graph deadlock ───────────────────────────────────
 
 describe("canary scar — pipeline.mjs gate cannot deadlock its own module graph", () => {
@@ -477,7 +557,7 @@ describe("canary scar — agent permission rules use the syntax the CLI actually
 describe("P4 — an accidental default-branch dispatch cannot start research", () => {
   it("the setup job's FIRST step refuses default-branch runs before any spend", () => {
     expect(WORKFLOW).toContain("github.ref_name == github.event.repository.default_branch");
-    expect(WORKFLOW).toContain("WAYPOINT_V2_ON_DEFAULT");
+    expect(WORKFLOW).toContain("WAYPOINT_RESEARCH_ENGINE");
     const guardAt = WORKFLOW.indexOf("Guard — research never starts from the default branch");
     const firstCheckout = WORKFLOW.indexOf("uses: actions/checkout", WORKFLOW.indexOf("jobs:"));
     expect(guardAt).toBeGreaterThan(0);

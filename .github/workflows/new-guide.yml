@@ -87,10 +87,23 @@ jobs:
       # `issue` threads the intake issue through so the research pass can surface any questions it
       # had to assume its way past back to the person who filed it. A notification channel only —
       # research never waits on an answer, and a pass dispatched without it skips that step.
+      #
+      # THE CUTOVER SWITCH (Pipeline V2 finalization). One repository variable,
+      # WAYPOINT_RESEARCH_ENGINE, selects the research engine: unset or anything but "v2" keeps
+      # V1 — the production default is never switched silently. Setting it to "v2" (a deliberate,
+      # reviewable repo-settings change reserved for after independent V2 acceptance) routes /new
+      # to the V2 pipeline, whose own default-branch guard keys on the SAME variable, and which
+      # still lands draft-only until its landing mode is deliberately changed. V1 stays intact
+      # and dispatchable either way — nothing here deletes or bypasses it.
       - name: Auto-start the research pass
         env:
           SLUG: ${{ steps.gen.outputs.slug }}
           ISSUE: ${{ github.event.issue.number }}
+          ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}
         run: |
-          gh workflow run research-pass.yml -f slug="$SLUG" \
-            -f issue="$ISSUE"
+          if [ "$ENGINE" = "v2" ]; then
+            gh workflow run research-pass-v2.yml -f slug="$SLUG"
+          else
+            gh workflow run research-pass.yml -f slug="$SLUG" \
+              -f issue="$ISSUE"
+          fi

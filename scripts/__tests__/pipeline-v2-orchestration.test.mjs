@@ -311,10 +311,15 @@ describe("research-pass-v2.yml — wiring", () => {
     expect(text).toContain("workflow_dispatch:");
     expect(text).not.toMatch(/^\s+issues:\s*$/m);
     expect(text).not.toContain("schedule:");
-    // V1 dispatch untouched: new-guide.yml still starts research-pass.yml, not V2.
+    // The cutover contract (finalization, I01): /new dispatches V2 ONLY behind the explicit
+    // WAYPOINT_RESEARCH_ENGINE=v2 repository variable; V1 is the unconditional else-default,
+    // so an unset variable can never silently route an intake to the unproven path.
     const newGuide = readFileSync(path.join(ROOT, ".github", "workflows", "new-guide.yml"), "utf8");
     expect(newGuide).toContain("gh workflow run research-pass.yml");
-    expect(newGuide).not.toContain("research-pass-v2.yml");
+    expect(newGuide).toMatch(/if \[ "\$ENGINE" = "v2" \];\s*then\s*\n\s*gh workflow run research-pass-v2\.yml/);
+    expect(newGuide).toContain("ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}");
+    // The V2 workflow's own default-branch guard keys on the SAME variable — one switch.
+    expect(text).toContain("vars.WAYPOINT_RESEARCH_ENGINE != 'v2'");
   });
 
   it("V1 research, V2 research AND change share ONE guide-<slug> concurrency group (M6 exclusion)", () => {
