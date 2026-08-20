@@ -42,7 +42,7 @@ import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
 import { emitRunEvents, readGeocodeReport } from "./pipeline/v2/events.mjs";
 import { readEvidence, requireEvidence, evidenceProblems } from "./pipeline/v2/evidence.mjs";
 import { researchRuleProblems, isProxyHost } from "./pipeline/v2/research-rules.mjs";
-import { requireCoverage, coverageProblems, loadCoverageContext } from "./pipeline/v2/coverage.mjs";
+import { requireCoverage, coverageProblems, loadCoverageContext, remapCoverageRefs } from "./pipeline/v2/coverage.mjs";
 import {
   preparePassBWorkspace, collectPassB, collectStageOutput, prepareCriticInput, restoreCriticInput, verifyPassBWorkspace,
 } from "./pipeline/v2/workspace.mjs";
@@ -108,7 +108,9 @@ export function allowedStagePaths(slug, stage) {
     passA: [guide, `${intake}/ledger.md`, `${intake}/evidence.v2.json`],
     passB: [`${intake}/passB.v2.json`],
     reconcile: [guide, `${intake}/ledger.md`, `${intake}/evidence.v2.json`, `${intake}/coverage.v2.json`],
-    critic: [guide, `${intake}/ledger.md`, `${intake}/pipeline-patterns.fragment.md`, "docs/evidence/pipeline-patterns.md"],
+    // coverage.v2.json is in the critic's scope for ONE writer: the deterministic post-compose
+    // ref remap in the trusted checkout — the critic agent itself never sees the file.
+    critic: [guide, `${intake}/ledger.md`, `${intake}/coverage.v2.json`, `${intake}/pipeline-patterns.fragment.md`, "docs/evidence/pipeline-patterns.md"],
   };
   return byStage[stage] || [];
 }
@@ -444,6 +446,14 @@ async function run(cmd, get, has) {
         }
         throw err;
       }
+    }
+
+    case "remap-coverage": {
+      // Deterministic, trusted-checkout step: follow coverage anchors to the group files
+      // composition renamed. Fails closed when an anchor no longer resolves anywhere.
+      const { changed } = await remapCoverageRefs(slug);
+      console.log(`[pipeline-v2] ${slug} — coverage refs ${changed ? "remapped to the composed group files" : "already current"}.`);
+      return 0;
     }
 
     case "verify-failed": {
