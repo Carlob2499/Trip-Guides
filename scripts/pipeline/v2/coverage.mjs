@@ -133,23 +133,39 @@ export async function remapCoverageRefs(slug, { intakeDir = INTAKE_DIR, guidesDi
   const doc = await requireCoverage(slug, { intakeDir });
   const { groups, groupAnchors } = await loadCoverageContext(slug, { intakeDir, guidesDir });
   const problems = [];
+  const dropped = [];
   let changed = false;
   for (const ask of doc.asks) {
-    ask.where = ask.where.map((ref) => {
+    const kept = [];
+    const stale = [];
+    for (const ref of ask.where) {
       const [file, anchor] = ref.split("#");
-      if (groups.includes(file) && anchor && groupAnchors.get(file)?.has(anchor)) return ref;
-      if (!anchor) return ref; // a missing anchor is the validator's finding, not a rename
+      if ((groups.includes(file) && anchor && groupAnchors.get(file)?.has(anchor)) || !anchor) {
+        kept.push(ref); // valid, or a missing-anchor shape the validator owns
+        continue;
+      }
       const suffix = file.replace(/^\d\d-/, "");
       const sameSuffix = groups.find((g) => g.replace(/^\d\d-/, "") === suffix && groupAnchors.get(g)?.has(anchor));
       const target = sameSuffix || (() => {
         const homes = groups.filter((g) => groupAnchors.get(g)?.has(anchor));
         return homes.length === 1 ? homes[0] : null;
       })();
-      if (target) { changed = true; return `${target}#${anchor}`; }
-      problems.push(`ask "${ask.id}": ${ref} — its anchor exists in ${groups.filter((g) => groupAnchors.get(g)?.has(anchor)).length || "no"} group file(s) after composition`);
-      return ref;
-    });
+      if (target) { changed = true; kept.push(`${target}#${anchor}`); continue; }
+      stale.push(ref);
+    }
+    // An anchor that exists NOWHERE any more is an identity change (the critic renamed the
+    // item), not a layout rename. Coverage stays proven while at least one valid ref remains:
+    // drop the stale corroborating ref OUT LOUD. Only losing the ask's LAST proof fails closed.
+    if (stale.length && kept.some((r) => r.includes("#"))) {
+      changed = true;
+      dropped.push(...stale.map((r) => `ask "${ask.id}": dropped stale corroborating ref ${r} (its anchor no longer exists; ${kept.length} valid ref(s) remain)`));
+    } else if (stale.length) {
+      problems.push(...stale.map((r) => `ask "${ask.id}": ${r} — its anchor exists in no group file after composition and it was the ask's only proof`));
+      kept.push(...stale);
+    }
+    ask.where = kept;
   }
+  for (const note of dropped) console.log(`[remap-coverage] ${note}`);
   if (problems.length) {
     throw new ContractError(
       `coverage refs could not be remapped after composition:\n` + problems.map((p) => `  · ${p}`).join("\n"),
@@ -157,7 +173,7 @@ export async function remapCoverageRefs(slug, { intakeDir = INTAKE_DIR, guidesDi
     );
   }
   if (changed) await writeCoverage(slug, doc, { intakeDir });
-  return { changed };
+  return { changed, dropped };
 }
 
 /** Build the real relational context used by reconcile/landing. */

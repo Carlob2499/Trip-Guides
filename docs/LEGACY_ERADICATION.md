@@ -115,11 +115,47 @@ components, lib, data, dependencies, configs, fixtures, npm scripts, and scripts
 
 ## Classification counts
 
-_(pending)_
+Across the six census domains (scripts 76 files · src client/components/lib/silos ~135 units ·
+CSS 46 files · workflows 13 + prompts 11 · deps 30 · docs 54 active files):
 
-## Deletions (path · reason · replacement · proof · tests)
+| Class | Count | Items |
+|---|---|---|
+| CURRENT | everything not listed below | the census found the active tree essentially clean |
+| TEMP_COMPAT | 5 registered items | see the register above |
+| MIGRATE | 0 | no reachable code had a tested replacement waiting |
+| DEAD | 3 | the three GitHub approval labels (deleted) |
+| HISTORY | 1 | FABLE_IMPLEMENTATION_PROMPT.md (archived) |
+| CONFLICTING_SPEC | 4 | two issue-template blurbs (fixed) · motion.md rows (fixed) · new.astro deep import (fixed) |
 
-_(pending — nothing is deleted before the canary is green)_
+## Deletions / migrations executed (path · reason · replacement · proof · tests)
+
+| Item | Class | Action | Proof |
+|---|---|---|---|
+| Labels `modify-approved` / `revision-approved` / `graduate-approved` | DEAD | `gh label delete` ×3 | zero code references (repo-wide grep); the flows that read them were deleted in earlier arcs |
+| `docs/pipeline v2/FABLE_IMPLEMENTATION_PROMPT.md` | HISTORY | archived per `docs/archive/INDEX.md` convention (`git show 9f1599b:…`) | fully executed (M0–M8 + audit recorded in IMPLEMENTATION_STATE); referring docs updated; docs-integrity suite green |
+| Issue-template blurbs | CONFLICTING_SPEC | rewritten to the real trigger/authorization flow | change.yml's actual `on:`/author-association contract |
+| `motion.md` Overture/hub-motion rows | CONFLICTING_SPEC | re-pointed at shipped Atlas homes | `overture.js`/`hub-motion.css` absent from tree; hover styles live in `atlas*.css` |
+| `new.astro` deep import | CONFLICTING_SPEC (silo contract) | re-exported `SECTIONS` through `hub/index.ts` | build green; blurb text renders in `dist/new/index.html` |
+
+## Codebase measurements — after (same method as baseline)
+
+| Metric | Before | After | Δ |
+|---|---|---|---|
+| Tracked files | 845 | 846 | +1 (net: +4 modules/tests, −1 archived doc, …) |
+| src/ LOC | 58,619 | 58,622 | +3 |
+| scripts/ LOC | 24,453 | 24,958 | +505 (feedback/capsule/events modules + canary-scar fixes + ~900 lines of new regression tests) |
+| CSS LOC | 8,030 | 8,030 | 0 |
+| Workflow YAML / count | 2,368 / 13 | 2,442 / 13 | +74 (guard, geocode job, feedback/capsule/remap wiring) |
+| docs/ LOC | 21,201 | 21,403 | +202 (this ledger + finalization record − 545-line archived prompt) |
+| prompts/ LOC | 712 | 712 | 0 (baseline was captured after the prompt edits — understates the +~40 feedback/contract lines) |
+
+**The honest reading:** raw LOC grew ~+780, all of it safety fixes, truth-telling machinery, and
+regression scars from a live canary — the class of increase the mandate explicitly accepts. The
+CONCEPTUAL ledger moved the other way: one fewer standing work order in the authority set, three
+fewer phantom controls (labels), zero competing implementations found (previous cleanup arcs had
+already removed the dead generations — the census now PROVES the tree is clean rather than
+assumes it), one silo-contract violation gone, and every remaining compatibility surface carries
+a written retirement condition.
 
 ## TEMP_COMPAT register (why · depends-on · retirement condition)
 
