@@ -789,12 +789,22 @@ jobs:
           if [ "$RC" -eq 0 ]; then node scripts/pipeline-v2.mjs compound-patterns --slug "$SLUG"; RC=$?; fi
           if [ "$RC" -eq 0 ]; then npm run extract-palette -- --slug "$SLUG"; RC=$?; fi
           if [ "$RC" -eq 0 ]; then node scripts/compose-guide.mjs --slug "$SLUG" --write; RC=$?; fi
-          if [ "$RC" -eq 0 ]; then npm run verify -- --slug "$SLUG"; RC=$?; fi
+          # Composition renumbers group files under the tab budget; coverage refs follow their
+          # anchors to the composed filenames (deterministic, fail-closed — canary scar).
+          if [ "$RC" -eq 0 ]; then node scripts/pipeline-v2.mjs remap-coverage --slug "$SLUG"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then
+            npm run verify -- --slug "$SLUG" 2>&1 | tee "$RUNNER_TEMP/verify-scorecard.txt"
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
+                --file "$RUNNER_TEMP/verify-scorecard.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
           if [ "$RC" -eq 0 ]; then
             node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage critic --branch "$BRANCH"
           else
             node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage critic --class gate-failure \
-              --detail "critic collection, process-memory, compose, or offline verification failed" --branch "$BRANCH"
+              --detail "critic collection, process-memory, compose, or coverage remap failed" --branch "$BRANCH"
             exit 1
           fi
 
