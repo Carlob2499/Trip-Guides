@@ -4,6 +4,39 @@
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
-    "steps": []
+    "steps": [
+      "<b>Barcelona airport → Andorra la Vella (arrival):</b> <a href='https://www.andorradirectbus.es/en/' target='_blank' rel='noopener noreferrer'>Direct Bus</a> from T1 (07:30–23:00) or T2 (07:45–23:15), roughly every 2 hours, ≈3h30 to the Estació Nacional d'Autobusos. {{fact:direct-bus-31-50-eur}} (confirm current fare at booking). Runs 365 days a year; 24/25/31 Dec and 1 Jan schedules may vary.",
+      "<b>Andorra la Vella → Barcelona airport (departure):</b> Same route in reverse, first departure 06:15, last 22:15. Book online and arrive 30 min early. For a same-day flight, leave enough buffer for the ≈3h30 ride plus airport time — the last bus that reliably makes an evening flight is well before the 22:15 final departure.",
+      "<b>Getting around Andorra la Vella:</b> the Barri Antic, Casa de la Vall, Sant Esteve and most hotels sit within a 10–15 minute walk of each other and of the bus station. <b>Cooperativa Interurbana Andorrana</b> city buses (L1–L6, É, LC) connect the wider Andorra la Vella–Escaldes-Engordany conurbation for a small fare if you'd rather ride than walk to Caldea (L1: Caldea ↔ La Riberola).",
+      "<b>To Llac d'Engolasters:</b> no direct bus reaches the lakeside trailhead. Either taxi to the Ctra. d'Engolasters access road (≈15 min from Andorra la Vella) and walk the short lakeside path, or start the longer signed route from the Escaldes-Engordany tourist office on foot."
+    ],
+    "source_url": "https://www.andorradirectbus.es/en/schedules",
+    "verified_on": "2026-08-20",
+    "shelf_life": "transit"
+  },
+  {
+    "type": "map",
+    "group": "Transit",
+    "title": "Orientation map — Andorra la Vella",
+    "center": { "lat": 42.5066141, "lng": 1.5205064 },
+    "span": 0.05,
+    "points": [
+      { "name": "Casa de la Vall", "lat": 42.5066141, "lng": 1.5205064, "place_id": "__VERIFICATION_REQUIRED__" },
+      { "name": "Estació Nacional d'Autobusos", "lat": 42.5043295, "lng": 1.5209673, "place_id": "__VERIFICATION_REQUIRED__" },
+      { "name": "Caldea", "lat": 42.5115189, "lng": 1.5375912, "place_id": "__VERIFICATION_REQUIRED__" }
+    ]
+  },
+  {
+    "type": "weather",
+    "group": "Transit",
+    "title": "Weather",
+    "note": "Early November in Andorra la Vella runs cold and damp — expect highs near 7°C, lows near -2°C, and a real chance of light snow at altitude. Pack layers and waterproof footwear."
+  },
+  {
+    "type": "holidays",
+    "group": "Transit",
+    "title": "Public holidays",
+    "year": 2026,
+    "note": "Checked automatically against your travel dates. A national holiday can shorten hours or close shops, museums and the Casa de la Vall entirely — cross-check against the day plan before relying on a fixed opening time."
   }
 ]

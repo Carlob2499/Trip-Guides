@@ -1,0 +1,818 @@
+{
+  "schemaVersion": "wp-evidence/2.1",
+  "slug": "andorra",
+  "runId": "andorra-20260820-8df468",
+  "candidates": [
+    {
+      "id": "c-casa-de-la-vall",
+      "name": "Casa de la Vall",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sant-esteve-church",
+      "name": "Sant Esteve Church",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-barri-antic",
+      "name": "Barri Antic",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-museu-nacional-de-l-automobil",
+      "name": "Museu Nacional de l'Automòbil",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Located in Encamp, a bus trip beyond the Andorra la Vella-based itinerary; redundant indoor pick once Caldea already covers a cold/wet-weather contingency.",
+      "worth": null
+    },
+    {
+      "id": "c-borda-estevet",
+      "name": "Borda Estevet",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-borda-d-erts--erts-la-massana",
+      "name": "Borda d'Erts",
+      "branch": "Erts, La Massana",
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "In the village of Erts (La Massana parish), too far from the Andorra la Vella base; Borda Estevet already covers the borda/mountain-grill experience within easy reach.",
+      "worth": null
+    },
+    {
+      "id": "c-mirakbe",
+      "name": "MiraKbé",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Appears on only a single aggregator roundup; no official site or independent corroboration found within this pass's research budget.",
+      "worth": null
+    },
+    {
+      "id": "c-espicula",
+      "name": "Espícula",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "No official site found; hours are aggregator-sourced only and could not be climbed to a primary source.",
+      "worth": null
+    },
+    {
+      "id": "c-mercat-de-la-vall",
+      "name": "Mercat de la Vall",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Seasonal — official page confirms first Saturday of the month, May through October only (with an August exception); out of season for a November trip.",
+      "worth": null
+    },
+    {
+      "id": "c-llac-d-engolasters",
+      "name": "Llac d'Engolasters",
+      "branch": null,
+      "priority": "nature-outdoors",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-madriu-perafita-claror-valley",
+      "name": "Madriu-Perafita-Claror Valley",
+      "branch": null,
+      "priority": "nature-outdoors",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Official guidance recommends its higher routes only end-of-June to end-of-September and flags altitudes above 1,700 m as unsafe outside that window; not appropriate for a November visit.",
+      "worth": null
+    },
+    {
+      "id": "c-roc-del-quer",
+      "name": "Roc del Quer",
+      "branch": null,
+      "priority": "nature-outdoors",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "The mirador itself is reachable exclusively by private car (CS-240 road, km 6.5) — the operator's own site confirms no bus serves the viewpoint alone; impractical for this car-free, Andorra la Vella-based trip.",
+      "worth": null
+    },
+    {
+      "id": "c-caldea",
+      "name": "Caldea",
+      "branch": null,
+      "priority": "nature-outdoors",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-entry-visa-free-90-days",
+      "candidateId": null,
+      "claim": "US passport holders may enter Andorra visa-free for stays up to 90 days; Andorra itself imposes no visa, but entry is only possible by first crossing into Spain or France (Schengen members)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Visa_policy_of_Andorra",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "wikipedia",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-entry-passport-validity",
+      "candidateId": null,
+      "claim": "Schengen entry (which governs the physical Andorra crossing via Spain/France) requires a passport valid at least 3 months beyond the planned departure date and issued within the last 10 years",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-advisory-not-fetchable",
+      "candidateId": null,
+      "claim": "US State Department travel advisory level for Andorra could not be freshly fetched this pass — travel.state.gov returns HTTP 403 to automated fetches (Cloudflare-gated, resolves only via an interactive browser tool). Secondary sources widely report Level 1 (Exercise Normal Precautions), but this is not independently confirmed against the primary source, so the guide's advisory field is left unset rather than shipped unverified.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://travel.state.gov/en/international-travel/travel-advisories/andorra.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-09-15"
+      }
+    },
+    {
+      "id": "ev-currency-euro",
+      "candidateId": null,
+      "claim": "Andorra uses the euro despite not being an EU member, via a bilateral monetary agreement that also lets it mint its own coins",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Andorra_and_the_euro",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "wikipedia",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-language-catalan",
+      "candidateId": null,
+      "claim": "Catalan is Andorra's sole official language; Spanish is the most widely spoken second language, with French and Portuguese also common",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Languages_of_Andorra",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "wikipedia",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-emergency-numbers",
+      "candidateId": null,
+      "claim": "Emergency numbers: 112 general, 110 police, 116 medical, 118 fire/mountain rescue; main hospital is Nostra Senyora de Meritxell in Escaldes-Engordany",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitandorra.com/en/public-services/in-case-of-emergency/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-ehic-not-valid",
+      "candidateId": null,
+      "claim": "The EHIC is not valid in Andorra; Andorra has reciprocal healthcare agreements only with Spain, France and Portugal, not the US — uninsured visitors are billed directly for care",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitandorra.com/en/public-services/in-case-of-emergency/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-igi-tax-rate",
+      "candidateId": null,
+      "claim": "Andorra's general IGI sales tax rate is 4.5%, with reduced rates of 0%/1%/2.5% and an increased 9.5% rate for specific categories",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.e-tramits.ad/tramits/impostos/igi",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ca",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-direct-bus-schedule-fare",
+      "candidateId": null,
+      "claim": "Direct Bus runs Barcelona airport (T1/T2) ↔ Andorra la Vella roughly every 2 hours, first departure 07:30/07:45, last 23:00/23:15 outbound and 06:15–22:15 return, ≈3.5-hour journey, fares from €31.50–35 one-way",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.andorradirectbus.es/en/route-barcelona-airport-andorra",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-direct-bus-year-round",
+      "candidateId": null,
+      "claim": "Direct Bus operates 365 days a year on this route; only 24/25/31 Dec and 1 Jan schedules may vary",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.andorradirectbus.es/en/schedules",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-casa-de-la-vall-hours",
+      "candidateId": "c-casa-de-la-vall",
+      "claim": "Nov–Apr: Casa de la Vall is open Tuesday–Saturday 10:00–14:00 and 15:00–18:00; closed Sundays and Mondays",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://museus.ad/museus/casa-de-la-vall",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ca",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-casa-de-la-vall-price",
+      "candidateId": "c-casa-de-la-vall",
+      "claim": "General admission €5, reduced €2.50 (groups 10+, seniors 65+, foreign students); guided tour +€1.50/person with advance reservation",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://museus.ad/museus/casa-de-la-vall",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ca",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-sant-esteve-history",
+      "candidateId": "c-sant-esteve-church",
+      "claim": "11th–12th century Romanesque church holding the largest Romanesque apse in Andorra, remodelled 1940 by Josep Puig i Cadafalch; free entry, not wheelchair accessible",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://museus.ad/en/monumentos/sant-esteve-d-andorra-la-vella",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-barri-antic-description",
+      "candidateId": "c-barri-antic",
+      "claim": "Barri Antic is Andorra la Vella's historic quarter, centred on Carrer Major/Carrer de la Vall/Carrer del Pui, holding Casa de la Vall and Sant Esteve church",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitandorra.com/en/culture/churches-in-andorra/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-mercat-de-la-vall-seasonal",
+      "candidateId": "c-mercat-de-la-vall",
+      "claim": "Mercat de la Vall runs first Saturday of the month, May–October 2026 (with an August extension to Sunday Aug 2); does not operate in November",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitandorra.com/en/agenda/mercat-de-la-vall/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-roc-del-quer-car-only",
+      "candidateId": "c-roc-del-quer",
+      "claim": "Visiting only the Roc del Quer mirador (without the Tibetan bridge) is exclusively by private car via the Montaup road; no bus service reaches the viewpoint alone",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ponttibetacanillo.com/en/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-madriu-altitude-safety",
+      "candidateId": "c-madriu-perafita-claror-valley",
+      "claim": "Official guidance recommends doing routes above 1,700 m only between end-of-June and end-of-September for safety",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitandorra.com/en/nature--sports/madriu-perafita-claror-valley/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-engolasters-elevation-season",
+      "candidateId": "c-llac-d-engolasters",
+      "claim": "Llac d'Engolasters sits at 1,616 m, below the 1,700 m safety line; the official trail page for the lake route itself still names June–September as the best season and May–October as possible-with-caution",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitandorra.com/en/nature--sports/hiking-route-llac-d-engolasters/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-engolasters-no-bus",
+      "candidateId": "c-llac-d-engolasters",
+      "claim": "No direct bus reaches the Engolasters lakeside trailhead; access is by car/taxi to the Ctra. d'Engolasters road or on foot from the Escaldes-Engordany tourist office",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitandorra.com/en/nature--sports/recreation-trail-engolasters-short-distance-route/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-caldea-facilities",
+      "candidateId": "c-caldea",
+      "claim": "Caldea is a large thermal spa in Escaldes-Engordany (thermal lagoons, saunas, Indo-Roman baths), a short walk/bus ride from central Andorra la Vella",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.andorra-tours.com/caldea-spa/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-11-01"
+      }
+    },
+    {
+      "id": "ev-caldea-price-blocked",
+      "candidateId": "c-caldea",
+      "claim": "Caldea's current admission price and daily hours could not be freshly fetched this pass — caldea.com returns HTTP 403 to automated fetches on every page tried (home, timetable, rates); secondary sources report ≈€37 general admission and 9:00–23:00 daily, but neither is independently confirmed against the official site, so no specific price is shipped in the guide",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.caldea.com/en/rates",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-borda-estevet-hours-address",
+      "candidateId": "c-borda-estevet",
+      "claim": "Borda Estevet, Ctra. de la Comella i de la Plana 2, Andorra la Vella; open 13:00–16:00 and 20:00–23:00; reservation via phone/WhatsApp (+376 864026); mountain/Mediterranean cuisine, capacity 250",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://bordaestevetandorra.com/reservas",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-borda-estevet-menu-price",
+      "candidateId": "c-borda-estevet",
+      "claim": "Starters €14.50–39, mains €21–29, seasonal winter/summer menus featuring snails, red tuna tartare, mountain rice, coal-grilled meats",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://bordaestevetandorra.com/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-andorran-cuisine",
+      "candidateId": "c-borda-estevet",
+      "claim": "Escudella (pork-and-vegetable stew) is traditionally a winter dish, served with sopa de galets at Christmas; trinxat de Montanya is winter cabbage, potato, garlic and cured pork, pan-fried",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitandorra.com/en/nature--sports/andorran-gastronomy/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-borda-estevet",
+      "importance": "important",
+      "bookingUrl": "https://bordaestevetandorra.com/reservas",
+      "releaseWindow": "No advance-release window found; a day-or-two-ahead call/WhatsApp is standard practice for this size of party",
+      "actionDate": null,
+      "partyRules": "No stated minimum; two-person tables are routine",
+      "deposit": "None found — phone/WhatsApp reservation, no prepayment mentioned",
+      "cancellation": "Not published; cancel by the same phone/WhatsApp channel",
+      "foreignFriction": "Reservation channel is phone or WhatsApp in Spanish/Catalan/French — no confirmed English-language online booking system",
+      "lastSeating": "Lunch service ends 16:00, dinner service ends 23:00",
+      "walkIn": "Possible outside peak times, but reservations are strongly recommended given the 250-seat capacity and high demand",
+      "leads": [],
+      "alternatives": "Phone (+376 864026) or WhatsApp via the restaurant's own site",
+      "fallback": "The Barri Antic's tapas bars and casual restaurants around Carrer Major don't require reservations"
+    },
+    {
+      "candidateId": "c-caldea",
+      "importance": "important",
+      "bookingUrl": "https://www.caldea.com/en/book-now",
+      "releaseWindow": "Unknown against the official site (blocked this pass) — operator/reseller sources describe per-session online tickets, generally bookable same-day on quiet days",
+      "actionDate": null,
+      "partyRules": "Standard general-admission ticketing; no party-size restriction found",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": null,
+      "lastSeating": null,
+      "walkIn": "Likely possible on quiet weekday sessions; not verified against the official booking system this pass",
+      "leads": [
+        {
+          "claim": "Caldea sells out on peak-season weekend afternoons/evenings and should be booked online in advance, especially for a Saturday visit",
+          "status": "unconfirmed-lead",
+          "source": {
+            "url": "https://www.andorra-tours.com/caldea-spa/caldea-spa-opening-hours/",
+            "kind": "aggregator",
+            "access": "search-preview",
+            "language": "en",
+            "publishedAt": null,
+            "family": "andorra-tours",
+            "independent": null,
+            "appliesToYears": []
+          },
+          "verifiedOn": "2026-08-20"
+        }
+      ],
+      "alternatives": "Book directly at caldea.com; Andorra la Vella hotel concierges commonly assist with same-week bookings",
+      "fallback": "If sold out or unavailable, swap for Llac d'Engolasters (weather permitting) or a slower Barri Antic afternoon"
+    }
+  ],
+  "transport": [
+    {
+      "id": "r-bcn-airport-direct-bus",
+      "route": "Barcelona–El Prat Airport (T1/T2) ↔ Andorra la Vella, Direct Bus coach",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-direct-bus-schedule-fare",
+        "ev-direct-bus-year-round"
+      ],
+      "doorToDoor": "≈3.5 hours airport to the Andorra la Vella bus station, plus a 5–10 minute walk into the Barri Antic",
+      "transferReality": "No transfer — one direct coach, no interchange required",
+      "groupLuggageMobility": "Standard coach luggage hold; unremarkable for two travelers with normal luggage",
+      "buffer": "Arrive 30 minutes before departure; build in extra slack in November for possible mountain-road weather delays",
+      "missedConnection": "Next departure is ≈2 hours later on a normal day; missing the last practical pre-flight return bus likely means an expensive, unverified-cost taxi (≈3+ hours) or a missed flight — there is no rail alternative",
+      "nextService": "Roughly every 2 hours: 07:30/07:45–23:00/23:15 outbound (T1/T2), 06:15–22:15 return",
+      "lastPracticalReturn": "For a same-day flight, work backward from departure time using the full ≈3.5-hour ride plus a real buffer — the scheduled last bus (22:15) leaves far too little margin for most flights",
+      "fallback": "Taxi is the only fallback; no train or Andorra-based airport exists"
+    }
+  ],
+  "disagreements": [
+    {
+      "id": "d-engolasters-november-suitability",
+      "topic": "Whether the Llac d'Engolasters / Engolasters-area trails are a reasonable pick for an early-November visit",
+      "impact": "recommendation-changing",
+      "investigation": "A generic aggregator/blog source suggested November is a good, quiet time to walk the Engolasters loop. Fetched three separate official visitandorra.com trail pages directly (Circuit de les Fonts, the Engolasters short-distance route, and the Llac d'Engolasters route itself); all three consistently name June–September (or May–October at best) as the recommended hiking season, and the wider Madriu-Perafita-Claror valley page explicitly flags routes above 1,700 m as unsafe outside that window.",
+      "resolution": "Trusted the official trail authority over the aggregator lead. Shipped Llac d'Engolasters (1,616 m, below the 1,700 m safety line) as the trip's nature pick since it clears the altitude threshold, but hedged the day plan with an explicit winter-conditions caveat and a Caldea plan_b on a rain/snow trigger, rather than presenting the hike as an unconditional good idea for these dates."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-borda-estevet",
+        "c-caldea"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [
+        "r-bcn-airport-direct-bus"
+      ],
+      "notApplicableReason": null
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Andorra la Vella is a small single-city, single-parish-adjacent destination. Across the three ranked priorities, 13 candidates were evaluated (4 culture/history, 5 food/dining, 4 nature/outdoors); later searches for casual restaurants, additional viewpoints, and a second bakery kept surfacing the same handful of aggregator-listed names with no new official-tier sources behind them. The two disagreements that surfaced during research (Engolasters' seasonal safety window; Caldea's exact current pricing) were either resolved against an official source or clearly bounded and flagged, not left open in a way that could still flip which candidates ship."
+  },
+  "passB": null,
+  "reconciliation": []
+}

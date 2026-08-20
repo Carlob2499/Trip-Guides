@@ -4,7 +4,26 @@
     "group": "Food & shopping",
     "title": "What to eat",
     "phase": "daily",
-    "items": [],
-    "rank": 2
+    "rank": 2,
+    "intro": "<p>Andorran cooking is Pyrenean mountain food: <b>escudella</b> (a pork-and-vegetable stew, traditionally a winter dish — exactly in season for a November trip) and <b>trinxat</b> (mashed cabbage and potato, pan-fried hard with cured pork) show up on most traditional menus once the weather turns cold. A <i>borda</i> — literally a mountain barn, now shorthand for a stone-walled grill restaurant — is the classic way to eat both. Beyond the one reservation below, the Barri Antic's cluster of casual tapas bars and old-town restaurants around Carrer Major covers the rest of the trip's meals without booking ahead.</p>",
+    "items": [
+      {
+        "name": "Borda Estevet",
+        "area": "Carretera de la Comella, just outside central Andorra la Vella",
+        "address": "Ctra. de la Comella i de la Plana, 2, AD500 Andorra la Vella",
+        "phone": "+376 864026",
+        "hours": "13:00–16:00, 20:00–23:00, daily",
+        "book": "call",
+        "how": "≈10-minute walk or short taxi from the Barri Antic",
+        "price": "€€€ — starters €14.50–39, mains €21–29",
+        "why": "A 250-seat converted stone barn built around a wood-fired grill — the classic borda experience within easy reach of the capital.",
+        "map": { "lat": 42.5032567, "lng": 1.5193481 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "source_url": "https://bordaestevetandorra.com/",
+        "verified_on": "2026-08-20"
+      }
+    ],
+    "source_url": "https://visitandorra.com/en/nature--sports/andorran-gastronomy/",
+    "verified_on": "2026-08-20"
   }
 ]

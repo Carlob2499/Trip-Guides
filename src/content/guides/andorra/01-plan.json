@@ -3,37 +3,57 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "phase": "arrival",
+    "body": "<p>Andorra has no airport and no train station — everyone arrives overland by road, almost always on the <b>Direct Bus</b> coach from Barcelona–El Prat airport (T1/T2) to the Andorra la Vella bus station. Buses run 365 days a year, about every 2 hours, first departure 07:30 (T1) / 07:45 (T2), last at 23:00/23:15, and the ride is <b>≈3.5 hours</b>.</p><p>The bus terminates at the <b>Estació Nacional d'Autobusos</b> on Avinguda de Tarragona, a 5–10 minute walk into the Barri Antic (old quarter) where most mid-range hotels sit. Book online in advance at <a href='https://www.andorradirectbus.es/en/' target='_blank' rel='noopener noreferrer'>andorradirectbus.es</a> — arrive 30 minutes before departure for the return leg to the airport.</p>",
+    "checklist": [
+      "Book the Barcelona airport ↔ Andorra la Vella Direct Bus both ways before you fly",
+      "Keep the return bus at least 4.5 hours before your flight (3.5h ride + 30 min buffer + airport time)",
+      "Pack for cold: Andorra la Vella averages 7°C/-2°C in early November, with regular light snow at altitude"
+    ],
+    "source_url": "https://www.andorradirectbus.es/en/route-barcelona-airport-andorra",
+    "verified_on": "2026-08-20",
+    "shelf_life": "transit"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "phase": "arrival",
+    "body": "<p>Andorra uses the <b>euro</b> despite not being an EU member — a special monetary agreement with the EU lets it mint its own coins. Cards and contactless are accepted almost everywhere; ATMs are common in Andorra la Vella and mostly fee-free on withdrawal (your own bank's foreign-transaction fee may still apply).</p><p>The official language is <b>Catalan</b>, but Spanish is the most widely understood second language, with French and Portuguese also common — English is patchy outside hotels and the busiest shops.</p><p>Mobile roaming is <b>not EU-regulated here</b>, so a European or US carrier plan can get expensive fast; buying a local Andorra Telecom prepaid SIM or a dedicated eSIM before or on arrival is the usual fix.</p>",
+    "source_url": "https://en.wikipedia.org/wiki/Andorra_and_the_euro",
+    "verified_on": "2026-08-20"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "phase": "before",
+    "body": "<p>US passport holders don't need an Andorran visa and can stay up to <b>90 days</b>. Because Andorra is outside the Schengen area but only reachable through Spain or France (both Schengen members), it's the <b>Schengen entry rule</b> that actually governs the trip: your passport must be valid at least <b>3 months past your planned departure</b> from the Schengen area, and issued within the last 10 years.</p><p>Carry proof of onward travel and accommodation — standard Schengen border-check documents — since the physical border crossing happens on the France/Spain side, not inside Andorra.</p>",
+    "source_url": "https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm",
+    "verified_on": "2026-08-20"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "phase": "before",
+    "body": "<p>Andorra sits outside the EU roaming umbrella, so a US or EU home plan can bill at expensive out-of-bundle rates here. An eSIM activated for arrival, or a local Andorra Telecom prepaid SIM bought in Andorra la Vella, is the standard workaround — 4G coverage is solid across the compact territory, including on the hiking routes near town.</p>",
+    "source_url": "https://en.wikipedia.org/wiki/Andorra_and_the_euro",
+    "verified_on": "2026-08-20"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
+    "phase": "before",
     "body": "",
     "checklist": [
-      "Flights",
-      "Accommodation",
-      "Airport transfer",
-      "Travel insurance",
-      "Any timed tickets"
+      "Flights into Barcelona–El Prat (BCN) — the standard gateway for the airport bus",
+      "Direct Bus tickets, both directions, at andorradirectbus.es",
+      "Accommodation in or near the Barri Antic, Andorra la Vella",
+      "Travel insurance — the EHIC does not cover Andorra, and uninsured emergency care bills the full cost",
+      "Dinner reservation at Borda Estevet for at least one night — seating is limited and demand is high",
+      "Caldea thermal spa tickets online in advance, especially for a Saturday visit"
     ]
   }
 ]

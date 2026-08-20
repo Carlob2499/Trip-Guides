@@ -3,43 +3,56 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
-    "phase": "arrival"
+    "body": "<p>Andorra's currency is the <b>euro</b>, even though it isn't an EU member — a bilateral monetary agreement lets it mint its own coins. Cards, contactless, Apple Pay and Google Pay are accepted almost everywhere; carry some cash for small old-town cafés and market stalls.</p><p>Andorra runs its own sales tax, the <b>IGI</b>, at a flat <b>{{fact:igi-tax-4-5-percent}}</b> general rate — well below Spain's 21% or France's 20% VAT, which is why electronics, cosmetics, spirits and eyewear are noticeably cheaper here. There is no special tax-free counter: the low rate applies in every shop, to residents and visitors alike.</p>",
+    "phase": "arrival",
+    "source_url": "https://www.e-tramits.ad/tramits/impostos/igi",
+    "verified_on": "2026-08-20"
   },
   {
     "type": "budget",
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "intro": "Rough per-person, per-day USD estimates for a Nov (low-season) trip — treat every figure as ≈ and confirm at booking; flight and lodging prices shift with dates and demand.",
     "currency": "$",
     "days": 5,
     "budgetTarget": "Mid-range ($75–150/day)",
     "items": [
       {
-        "label": "Lodging, per night",
+        "label": "Lodging, per night (mid-range, shared room, per person)",
         "basis": "day",
-        "est": 0
+        "est": 45,
+        "low": 35,
+        "high": 65,
+        "note": "≈ — 3-star Andorra la Vella hotels run roughly €70–120/night total in low season (May/Jun/Oct/Nov), split two ways"
       },
       {
         "label": "Food & drink, per day",
         "basis": "day",
-        "est": 0
+        "est": 45,
+        "low": 25,
+        "high": 65,
+        "note": "≈ — a borda dinner runs €35–50pp; old-town lunches and pastries are cheaper"
       },
       {
         "label": "Local transport, per day",
         "basis": "day",
-        "est": 0
+        "est": 5,
+        "note": "Andorra la Vella's old quarter and most sights are walkable; occasional local bus or taxi"
       },
       {
         "label": "Sights & activities, per day",
         "basis": "day",
-        "est": 0
+        "est": 15,
+        "note": "≈ — museum entries are €5 each; Caldea (if visited) adds significantly more — confirm current price at caldea.com"
       },
       {
         "label": "Flights — round trip",
         "basis": "trip",
-        "est": 0
+        "est": 700,
+        "low": 500,
+        "high": 1000,
+        "note": "≈ — US ↔ Barcelona (BCN), the standard gateway for the Andorra airport bus; highly date-dependent"
       }
     ]
   }

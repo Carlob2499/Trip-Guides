@@ -1,1 +1,26 @@
-{}
+{
+  "casa-de-la-vall-5-eur": {
+    "claim": "Casa de la Vall general admission",
+    "value": "€5",
+    "source_url": "https://museus.ad/museus/casa-de-la-vall",
+    "verified_on": "2026-08-20",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
+  "direct-bus-31-50-eur": {
+    "claim": "Direct Bus Barcelona airport → Andorra la Vella, one-way fare",
+    "value": "€31.50–35 one-way",
+    "source_url": "https://www.andorradirectbus.es/en/route-barcelona-airport-andorra",
+    "verified_on": "2026-08-20",
+    "shelf_life": "transit",
+    "state": "approx"
+  },
+  "igi-tax-4-5-percent": {
+    "claim": "Andorra's general IGI sales tax rate",
+    "value": "4.5%",
+    "source_url": "https://www.e-tramits.ad/tramits/impostos/igi",
+    "verified_on": "2026-08-20",
+    "shelf_life": "default",
+    "state": "clean"
+  }
+}

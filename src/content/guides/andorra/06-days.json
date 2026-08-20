@@ -6,33 +6,69 @@
     "items": [
       {
         "date": "Thu Nov 5",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Arrival — Barcelona to Andorra la Vella",
+        "pace": "Travel day: ≈3.5h Direct Bus from Barcelona airport, check-in, an easy first walk once you land",
+        "tldr": "Ride the Direct Bus in from Barcelona, then ease into the Barri Antic on foot before an early dinner.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Catch the Direct Bus from Barcelona–El Prat straight to the Estació Nacional d'Autobusos (≈3.5 hours); it's a 5–10 minute walk from there into the Barri Antic, where most mid-range hotels sit.</p><p>Once you've checked in, use the rest of the afternoon for a loose, unplanned lap of the old quarter — Carrer Major, Carrer de la Vall, Plaça del Poble — rather than anything timed. Andorra la Vella is compact enough that a first-evening wander doubles as your orientation walk for the rest of the trip.</p>",
+        "constraints": ["Casa de la Vall and most museums are closed by the time an afternoon bus arrives — save them for tomorrow"],
+        "source_url": "https://www.andorradirectbus.es/en/route-barcelona-airport-andorra",
+        "verified_on": "2026-08-20"
       },
       {
         "date": "Fri Nov 6",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Old-quarter history — Casa de la Vall & Sant Esteve",
+        "pace": "Balanced: two short indoor visits bracketing a long midday break, all within a 15-minute walking radius",
+        "tldr": "Andorra's centuries-old parliament building and the country's grandest Romanesque church, both a few doors apart in the Barri Antic.",
+        "energy": "balanced",
+        "env": "indoor",
+        "body": "<p>Start at <b>Casa de la Vall</b> (Carrer de la Vall), Andorra's former parliament building, open Tue–Sat 10:00–14:00 and 15:00–18:00 in November — book the €1.50 guided-tour supplement ahead if you want the full history, or {{fact:casa-de-la-vall-5-eur}} general admission covers a self-guided visit.</p><p>Sant Esteve church, a two-minute walk away on Plaça Bisbe Benlloch, holds the country's largest Romanesque apse and is free to enter (check posted worship hours). Between the two, work through the rest of the Barri Antic's narrow stone streets and Plaça del Poble's viewpoint.</p><p>Lunch and dinner both fall inside the old quarter's cluster of tapas bars and casual restaurants — no reservation needed for a weekday.</p>",
+        "constraints": ["Casa de la Vall closed Sundays and Mondays (Nov–Apr hours) — this is one of only three days it's open during the trip"],
+        "source_url": "https://museus.ad/museus/casa-de-la-vall",
+        "verified_on": "2026-08-20"
       },
       {
         "date": "Sat Nov 7",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Llac d'Engolasters, weather permitting — or Caldea instead",
+        "pace": "Balanced: a short lakeside walk in the morning, or a full afternoon at the thermal spa if the weather turns",
+        "tldr": "A low-altitude lake walk that stays inside Andorra's own November safety window, with the thermal spa as the honest fallback if it doesn't.",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Andorra's own hiking authority recommends its higher trails only from June to September and flags anything above 1,700 m as unsafe outside that window. <b>Llac d'Engolasters</b> sits at 1,616 m — under that line — so the short lakeside path stays a reasonable November option, though the trail authority's own guidance still names May–October as the comfortable season, so a fresh dusting of snow or ice is possible. Taxi to the Ctra. d'Engolasters access point (≈15 min from town) and walk the easy loop around the lake; cross any wet or icy sections with care.</p><p>If the forecast or trail conditions look bad that morning, swap in <b>Caldea</b>, the large thermal spa in Escaldes-Engordany (a 10-minute walk from central Andorra la Vella) — book online in advance, since it's Saturday.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Skip Engolasters and spend the day at Caldea instead — its thermal lagoons, saunas and Indo-Roman baths make a snow or rain day genuinely better than the hike would have been. Book online ahead of arrival; bring a swimsuit and water shoes (mandatory in the facility).",
+          "source_url": "https://www.andorra-tours.com/caldea-spa/",
+          "verified_on": "2026-08-20"
+        },
+        "constraints": ["No bus reaches the Engolasters trailhead — taxi or a longer walk from Escaldes-Engordany only"],
+        "source_url": "https://visitandorra.com/en/nature--sports/hiking-route-llac-d-engolasters/",
+        "verified_on": "2026-08-20"
       },
       {
         "date": "Sun Nov 8",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Slow morning, tax-free browsing, borda dinner",
+        "pace": "Slow: an open morning, casual shopping in the afternoon, one reserved dinner",
+        "tldr": "A deliberately light day built around the trip's one booked dinner — mountain cooking at Borda Estevet.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Keep the morning open — the monthly Mercat de la Vall craft-and-produce market only runs May–October, so it's not on this week, but Avinguda Meritxell's shops (electronics, cosmetics, spirits, all under Andorra's flat {{fact:igi-tax-4-5-percent}} IGI rate) are a reasonable slow-paced stand-in.</p><p>In the evening, <b>Borda Estevet</b> — a stone-walled mountain grill just outside the centre on the Carretera de la Comella — is the trip's one restaurant genuinely worth booking ahead for: trinxat, grilled meats and a wood-fired mixed grill in a 250-seat converted barn. Reserve by phone or WhatsApp (+376 864026); demand is high and seating is limited.</p>",
+        "constraints": ["Borda Estevet: reservation strongly recommended, especially for a weekend evening"],
+        "source_url": "https://bordaestevetandorra.com/",
+        "verified_on": "2026-08-20"
       },
       {
         "date": "Mon Nov 9",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Departure",
+        "pace": "Light morning, then the bus back to Barcelona airport",
+        "tldr": "A last coffee and pack-up before the Direct Bus back to Barcelona — Casa de la Vall is shut today, so don't plan around it.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Casa de la Vall and most museums are closed on Mondays (Nov–Apr hours), so use the morning for a last coffee/pastry in the Barri Antic and packing rather than a timed visit. Catch the Direct Bus back to Barcelona airport with a full ≈3.5-hour ride plus buffer built in before your flight.</p>",
+        "constraints": ["Casa de la Vall closed Mondays — do not plan a departure-day visit around it"],
+        "source_url": "https://www.andorradirectbus.es/en/schedules",
+        "verified_on": "2026-08-20"
       }
     ]
   }

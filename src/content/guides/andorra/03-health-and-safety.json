@@ -3,7 +3,9 @@
     "type": "panel",
     "group": "Health & safety",
     "title": "Health & pharmacy",
-    "body": "",
-    "phase": "daily"
+    "phase": "daily",
+    "body": "<p>General emergencies: <b>112</b>. Andorra also runs its own direct lines — police <b>110</b>, medical emergencies <b>116</b>, fire & mountain rescue <b>112</b>/<b>118</b>. The main hospital is <b>Nostra Senyora de Meritxell</b> in Escaldes-Engordany, a short taxi or L1-bus ride from Andorra la Vella.</p><p>The <b>EHIC does not cover Andorra</b> — it's neither an EU nor EEA country — and Andorra only has reciprocal healthcare agreements with Spain, France and Portugal, not the US. Uninsured visitors are billed directly for care, so travel insurance with medical coverage is worth arranging before you fly.</p><p>Pharmacies (marked with a green cross) are common through the Barri Antic and along Avinguda Meritxell, with extended hours; look for a rotating <i>farmàcia de guàrdia</i> (on-call pharmacy) notice for after-hours needs.</p>",
+    "source_url": "https://visitandorra.com/en/public-services/in-case-of-emergency/",
+    "verified_on": "2026-08-20"
   }
 ]

@@ -4,20 +4,77 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
-    "items": [],
-    "rank": 1
+    "rank": 1,
+    "items": [
+      {
+        "name": "Casa de la Vall",
+        "kicker": "Andorra's former parliament, 16th-century",
+        "body": "<p>A 16th-century stone manor that served as Andorra's seat of government (the Consell General) until 2011, now a small museum on Carrer de la Vall in the Barri Antic. {{fact:casa-de-la-vall-5-eur}} general admission, €2.50 reduced; a €1.50 guided-tour supplement is available with advance booking.</p>",
+        "map": { "lat": 42.5066141, "lng": 1.5205064 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 45,
+        "closed_days": ["sun", "mon"],
+        "source_url": "https://museus.ad/museus/casa-de-la-vall",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "name": "Sant Esteve Church",
+        "kicker": "The country's largest Romanesque apse",
+        "body": "<p>An 11th–12th century Romanesque church on Plaça Bisbe Benlloch, remodelled in 1940 by modernist architect Josep Puig i Cadafalch. Still an active parish church, with the largest Romanesque apse in Andorra and a 12th-century polychrome wooden beam inside. Free entry; not wheelchair accessible.</p>",
+        "map": { "lat": 42.5071836, "lng": 1.5216891 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 20,
+        "source_url": "https://museus.ad/en/monumentos/sant-esteve-d-andorra-la-vella",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "name": "Barri Antic",
+        "kicker": "The old quarter, on foot",
+        "body": "<p>Andorra la Vella's historic core — cobbled lanes off Carrer Major and Carrer del Pui, small squares, and the stone houses the modern capital grew up around. Small enough to walk in under an hour, but worth spreading across the trip: it holds Casa de la Vall, Sant Esteve and most of the old-town restaurants in one compact radius.</p>",
+        "dwell_min": 90,
+        "source_url": "https://visitandorra.com/en/culture/churches-in-andorra/",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "name": "Llac d'Engolasters",
+        "kicker": "A low-altitude lake walk that clears Andorra's own November safety line",
+        "body": "<p>A reservoir-lake at 1,616 m in Escaldes-Engordany parish, below the 1,700 m threshold Andorra's trail authority flags as unsafe outside June–September. The easy lakeside loop from the Ctra. d'Engolasters access road is the most realistic hiking pick for an early-November visit; the country's own hiking pages still name May–October as the comfortable season, so check for ice on shaded stretches.</p>",
+        "map": { "lat": 42.517536, "lng": 1.571087 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 90,
+        "source_url": "https://visitandorra.com/en/nature--sports/hiking-route-llac-d-engolasters/",
+        "verified_on": "2026-08-20"
+      }
+    ]
   },
   {
     "type": "divergences",
     "group": "Sights",
     "title": "What generic guides get wrong",
     "phase": "daily",
+    "rank": 1,
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "Roc del Quer's cliffside viewpoint is an easy add-on to a Canillo day trip.",
+        "correction": "The mirador itself is reachable only by car, via a single mountain road (CS-240, km 6.5) with no bus service — it only works with a rental car or taxi, which is why this car-free itinerary skips it.",
+        "category": "missing-context",
+        "source_url": "https://www.apartamentos3000.com/blog/montana/mirador-roc-del-quer/",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "claim": "Andorra's hiking trails run on a normal spring-through-autumn season.",
+        "correction": "Andorra's own trail authority recommends its higher routes only between June and September and flags anything above 1,700 m as unsafe outside that window. A November visit is realistically limited to valley-floor walks like Llac d'Engolasters (1,616 m) — and even those note winter conditions can turn the path icy.",
+        "category": "outdated",
+        "source_url": "https://visitandorra.com/en/nature--sports/hiking-trail-circuit-de-les-fonts/",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "claim": "Andorra is inside the EU/Schengen area, so a stop here counts as part of a Schengen trip.",
+        "correction": "Andorra is outside both the EU and the Schengen area. It's reachable only by first crossing into Spain or France, so the entry rules that actually govern the trip are those two countries' Schengen rules, not a separate Andorran one — and a multi-entry Schengen visa (if one is required) matters more here than almost anywhere else in Europe.",
+        "category": "misleading",
+        "source_url": "https://en.wikipedia.org/wiki/Visa_policy_of_Andorra",
+        "verified_on": "2026-08-20"
       }
-    ],
-    "rank": 1
+    ]
   }
 ]

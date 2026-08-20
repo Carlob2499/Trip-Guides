@@ -1,11 +1,22 @@
 {
-  "kicker": "Field guide",
+  "kicker": "Andorra la Vella · Nov 5–9, 2026",
   "title": "Andorra la Vella & Andorra",
-  "dek": "",
+  "dek": "A Pyrenees valley capital for two, on foot and by mountain bus — old-quarter history, borda cooking, and a low-altitude lake walk timed around the country's own November trail advice.",
   "country": "Andorra",
+  "tz": "Europe/Andorra",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Draft — Pass A researched 2026-08-20 for the Nov 5–9, 2026 trip. Confirmed against official/operator sources: entry rules (europa.eu, Wikipedia), Casa de la Vall hours (govern.ad museums), Direct Bus schedule (andorradirectbus.es), emergency numbers (visitandorra.com), IGI tax rate (e-tramits.ad). Re-check before travel: Casa de la Vall's Nov–Apr hours (seasonal switch each May), Caldea admission price (official site blocked automated fetch this pass — confirm at caldea.com), Direct Bus fares (dynamic), and the US State Department advisory level (travel.state.gov blocks automated fetch — needs a browser check).",
   "provenance": "strict",
   "roomId": "096h76diwlsrupw6",
-  "footer": ""
+  "footer": "",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free — no Andorran visa required for stays up to 90 days",
+      "passportValidity": "Valid at least 3 months beyond your planned departure from the Schengen area, and issued within the last 10 years",
+      "note": "Andorra has no airport or train of its own — every entry is overland through Spain or France, so it's those two countries' Schengen entry rules that actually apply at the border, not a separate Andorran one.",
+      "source_url": "https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm",
+      "verified_on": "2026-08-20"
+    }
+  ]
 }
