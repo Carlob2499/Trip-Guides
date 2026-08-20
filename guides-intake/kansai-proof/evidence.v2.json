@@ -1062,7 +1062,7 @@
       "kind": "objective",
       "origin": "passA",
       "source": {
-        "url": "https://www.kasugataisha.or.jp/en/about_en/basic/",
+        "url": "https://www.kasugataisha.or.jp/en/about_en/about_en/basic/",
         "kind": "official",
         "access": "fetched",
         "language": "en",
