@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "failed",
   "createdAt": "2026-08-20T13:45:44.211Z",
-  "updatedAt": "2026-08-20T15:35:11.140Z",
+  "updatedAt": "2026-08-20T17:16:27.002Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -143,7 +143,7 @@
     }
   },
   "attempts": {
-    "total": 4,
+    "total": 5,
     "cap": 5,
     "autoRetries": 0,
     "autoRetryCap": 1
