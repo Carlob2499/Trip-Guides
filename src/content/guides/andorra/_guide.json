@@ -5,7 +5,7 @@
   "country": "Andorra",
   "tz": "Europe/Andorra",
   "draft": true,
-  "verified": "⚠ Draft — Pass A researched 2026-08-20 for the Nov 5–9, 2026 trip. Confirmed against official/operator sources: entry rules (europa.eu, Wikipedia), Casa de la Vall hours (govern.ad museums), Direct Bus schedule (andorradirectbus.es), emergency numbers (visitandorra.com), IGI tax rate (e-tramits.ad). Re-check before travel: Casa de la Vall's Nov–Apr hours (seasonal switch each May), Caldea admission price (official site blocked automated fetch this pass — confirm at caldea.com), Direct Bus fares (dynamic), and the US State Department advisory level (travel.state.gov blocks automated fetch — needs a browser check).",
+  "verified": "⚠ Draft — Pass A researched 2026-08-20 for the Nov 5–9, 2026 trip, reconciled against an independent Pass B the same day. Confirmed against official/operator sources: entry rules plus the EU's Entry/Exit System rollout (europa.eu, home-affairs.ec.europa.eu, Wikipedia), Casa de la Vall hours and its reservation-only admission (govern.ad museums, casadelavall.ad), Església de Santa Coloma hours (museus.ad), MiraKbé hours/menu (mirakbe.com), Direct Bus's full daily schedule (andorradirectbus.es), emergency numbers (visitandorra.com), IGI tax rate (e-tramits.ad). Re-check before travel: Casa de la Vall's Nov–Apr hours and reservation slots (seasonal switch each May), Caldea admission price (official site blocked automated fetch this pass — confirm at caldea.com), Direct Bus fares (dynamic), and the US State Department advisory level (travel.state.gov blocks automated fetch — needs a browser check).",
   "provenance": "strict",
   "roomId": "096h76diwlsrupw6",
   "footer": "",

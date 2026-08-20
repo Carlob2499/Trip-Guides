@@ -5,10 +5,10 @@
     "title": "Key transit routes",
     "phase": "daily",
     "steps": [
-      "<b>Barcelona airport → Andorra la Vella (arrival):</b> <a href='https://www.andorradirectbus.es/en/' target='_blank' rel='noopener noreferrer'>Direct Bus</a> from T1 (07:30–23:00) or T2 (07:45–23:15), roughly every 2 hours, ≈3h30 to the Estació Nacional d'Autobusos. {{fact:direct-bus-31-50-eur}} (confirm current fare at booking). Runs 365 days a year; 24/25/31 Dec and 1 Jan schedules may vary.",
+      "<b>Barcelona airport → Andorra la Vella (arrival):</b> <a href='https://www.andorradirectbus.es/en/' target='_blank' rel='noopener noreferrer'>Direct Bus</a> runs seven scheduled departures a day per terminal (T1: 07:30, 11:00, 13:00, 15:00, 17:30, 20:00, 23:00; T2: +15 min each), ≈3h30 to the Estació Nacional d'Autobusos. {{fact:direct-bus-31-50-eur}} (confirm current fare at booking). Runs 365 days a year; 24/25/31 Dec and 1 Jan schedules may vary. Build in extra time at the airport end for EU biometric border checks (EES) on your first Schengen entry.",
       "<b>Andorra la Vella → Barcelona airport (departure):</b> Same route in reverse, first departure 06:15, last 22:15. Book online and arrive 30 min early. For a same-day flight, leave enough buffer for the ≈3h30 ride plus airport time — the last bus that reliably makes an evening flight is well before the 22:15 final departure.",
       "<b>Getting around Andorra la Vella:</b> the Barri Antic, Casa de la Vall, Sant Esteve and most hotels sit within a 10–15 minute walk of each other and of the bus station. <b>Cooperativa Interurbana Andorrana</b> city buses (L1–L6, É, LC) connect the wider Andorra la Vella–Escaldes-Engordany conurbation for a small fare if you'd rather ride than walk to Caldea (L1: Caldea ↔ La Riberola).",
-      "<b>To Llac d'Engolasters:</b> no direct bus reaches the lakeside trailhead. Either taxi to the Ctra. d'Engolasters access road (≈15 min from Andorra la Vella) and walk the short lakeside path, or start the longer signed route from the Escaldes-Engordany tourist office on foot."
+      "<b>To Llac d'Engolasters:</b> no direct bus reaches the lakeside trailhead. Either taxi to the Ctra. d'Engolasters access road (≈15 min from Andorra la Vella) and walk the short lakeside path, or start the longer signed route from the Escaldes-Engordany tourist office on foot. The official lake loop itself is an easy 1.9 km, roughly a 2-hour round trip."
     ],
     "source_url": "https://www.andorradirectbus.es/en/schedules",
     "verified_on": "2026-08-20",

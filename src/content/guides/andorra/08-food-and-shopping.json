@@ -5,8 +5,23 @@
     "title": "What to eat",
     "phase": "daily",
     "rank": 2,
-    "intro": "<p>Andorran cooking is Pyrenean mountain food: <b>escudella</b> (a pork-and-vegetable stew, traditionally a winter dish — exactly in season for a November trip) and <b>trinxat</b> (mashed cabbage and potato, pan-fried hard with cured pork) show up on most traditional menus once the weather turns cold. A <i>borda</i> — literally a mountain barn, now shorthand for a stone-walled grill restaurant — is the classic way to eat both. Beyond the one reservation below, the Barri Antic's cluster of casual tapas bars and old-town restaurants around Carrer Major covers the rest of the trip's meals without booking ahead.</p>",
+    "intro": "<p>Andorran cooking is Pyrenean mountain food: <b>escudella</b> (a pork-and-vegetable stew, traditionally a winter dish — exactly in season for a November trip) and <b>trinxat</b> (mashed cabbage and potato, pan-fried hard with cured pork) show up on most traditional menus once the weather turns cold. A <i>borda</i> — literally a mountain barn, now shorthand for a stone-walled grill restaurant — is the classic way to eat both. Beyond the two picks below, the Barri Antic's cluster of casual tapas bars and old-town restaurants around Carrer Major covers the rest of the trip's meals without booking ahead.</p>",
     "items": [
+      {
+        "name": "MiraKbé",
+        "area": "Carrer Pere d'Urg, Andorra la Vella — off the touristy Avinguda Meritxell shopping street",
+        "address": "Carrer Pere d'Urg 10, AD500 Andorra la Vella",
+        "phone": "+376 863 444",
+        "hours": "10:00–16:00 & 19:00–23:00 Mon–Sat, closed Sundays; weekday lunch set menu 13:00–15:15",
+        "closed": "Sundays",
+        "book": "call",
+        "how": "≈5-minute walk from the Barri Antic; à la carte tapas at dinner",
+        "price": "€ — lunch set menu {{fact:mirakbe-lunch-12-eur}}",
+        "crowd_tip": "Two independent accounts — a food blog and a diner review — point here instead of Andorra la Vella's touristier Avinguda Meritxell restaurants, citing better value and quality.",
+        "why": "A gastrobar two independent reviewers single out over the pricier spots on Avinguda Meritxell.",
+        "source_url": "https://www.mirakbe.com/menu_diari_andorra",
+        "verified_on": "2026-08-20"
+      },
       {
         "name": "Borda Estevet",
         "area": "Carretera de la Comella, just outside central Andorra la Vella",

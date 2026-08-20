@@ -22,5 +22,13 @@
     "verified_on": "2026-08-20",
     "shelf_life": "default",
     "state": "clean"
+  },
+  "mirakbe-lunch-12-eur": {
+    "claim": "MiraKbé weekday lunch set menu, incl. water/wine/beer",
+    "value": "€12",
+    "source_url": "https://www.mirakbe.com/menu_diari_andorra",
+    "verified_on": "2026-08-20",
+    "shelf_life": "default",
+    "state": "clean"
   }
 }

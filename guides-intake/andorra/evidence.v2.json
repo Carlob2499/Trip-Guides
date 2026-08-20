@@ -34,6 +34,16 @@
       "worth": null
     },
     {
+      "id": "c-esglesia-de-santa-coloma",
+      "name": "Església de Santa Coloma",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
       "id": "c-museu-nacional-de-l-automobil",
       "name": "Museu Nacional de l'Automòbil",
       "branch": null,
@@ -54,6 +64,16 @@
       "worth": "worth-the-effort"
     },
     {
+      "id": "c-mirakbe",
+      "name": "MiraKbé",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
       "id": "c-borda-d-erts--erts-la-massana",
       "name": "Borda d'Erts",
       "branch": "Erts, La Massana",
@@ -61,16 +81,6 @@
       "status": "rejected",
       "shortlisted": false,
       "reason": "In the village of Erts (La Massana parish), too far from the Andorra la Vella base; Borda Estevet already covers the borda/mountain-grill experience within easy reach.",
-      "worth": null
-    },
-    {
-      "id": "c-mirakbe",
-      "name": "MiraKbé",
-      "branch": null,
-      "priority": "food-dining",
-      "status": "rejected",
-      "shortlisted": false,
-      "reason": "Appears on only a single aggregator roundup; no official site or independent corroboration found within this pass's research budget.",
       "worth": null
     },
     {
@@ -89,8 +99,38 @@
       "branch": null,
       "priority": "food-dining",
       "status": "rejected",
-      "shortlisted": false,
+      "shortlisted": true,
       "reason": "Seasonal — official page confirms first Saturday of the month, May through October only (with an August exception); out of season for a November trip.",
+      "worth": null
+    },
+    {
+      "id": "c-celler-d-en-toni",
+      "name": "Celler d'en Toni",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Established since 1964 and Michelin-Guide-listed, but firsthand reviews single out the wine list and overall price-to-quality ratio as weak points. MiraKbé and Borda Estevet cover the same 'worth-seeking-out traditional Andorran food' niche at better value for this mid-range-budget pair.",
+      "worth": null
+    },
+    {
+      "id": "c-el-crosto",
+      "name": "El Crostó",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Intimate 8-table Catalan fine-dining spot, well-reviewed, but sourcing stayed aggregator-tier (no independent firsthand account found within budget) and it likely sits above the stated $75-150/day mid-range budget as an everyday pick. A possible single splurge night, not shipped as a standard pick this pass.",
+      "worth": null
+    },
+    {
+      "id": "c-bar-restaurant-la-sardana",
+      "name": "Bar-Restaurant La Sardana",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Surfaced only via a single aggregator listicle mention, with no independent second source found within budget. One uncorroborated aggregator mention doesn't clear the experiential corroboration bar, so omitted rather than shipped on thin sourcing.",
       "worth": null
     },
     {
@@ -104,13 +144,23 @@
       "worth": null
     },
     {
+      "id": "c-caldea",
+      "name": "Caldea",
+      "branch": null,
+      "priority": "nature-outdoors",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
       "id": "c-madriu-perafita-claror-valley",
       "name": "Madriu-Perafita-Claror Valley",
       "branch": null,
       "priority": "nature-outdoors",
       "status": "rejected",
-      "shortlisted": false,
-      "reason": "Official guidance recommends its higher routes only end-of-June to end-of-September and flags altitudes above 1,700 m as unsafe outside that window; not appropriate for a November visit.",
+      "shortlisted": true,
+      "reason": "Official guidance recommends its higher routes only end-of-June to end-of-September and flags altitudes above 1,700 m as unsafe outside that window; not appropriate for a November visit. Pass B independently reached the same conclusion for the same reason.",
       "worth": null
     },
     {
@@ -119,18 +169,28 @@
       "branch": null,
       "priority": "nature-outdoors",
       "status": "rejected",
-      "shortlisted": false,
+      "shortlisted": true,
       "reason": "The mirador itself is reachable exclusively by private car (CS-240 road, km 6.5) — the operator's own site confirms no bus serves the viewpoint alone; impractical for this car-free, Andorra la Vella-based trip.",
       "worth": null
     },
     {
-      "id": "c-caldea",
-      "name": "Caldea",
+      "id": "c-roc-del-quer-viewpoint",
+      "name": "Roc del Quer Viewpoint",
       "branch": null,
       "priority": "nature-outdoors",
-      "status": "shipped",
+      "status": "rejected",
       "shortlisted": true,
-      "reason": null,
+      "reason": "Same mirador as c-roc-del-quer, evaluated independently by Pass B: open daily year-round per the operator's own page, but reachable only by private car — no bus serves it, which rules it out for this car-free, Andorra la Vella-based trip regardless of hours or season.",
+      "worth": null
+    },
+    {
+      "id": "c-naturlandia",
+      "name": "Naturlandia",
+      "branch": null,
+      "priority": "nature-outdoors",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "The park's own site confirms a weekends-only autumn schedule before the winter toboggan/zipline season opens, but winter opening has historically landed around 29 Nov (last cycle) — after this trip's 5-9 Nov window — and the exact 2026 autumn-weekend calendar couldn't be pinned to a primary source. Last year's date is a lead, not a confirmed 2026 date.",
       "worth": null
     }
   ],
@@ -712,6 +772,286 @@
         "shelfLife": null,
         "recheckOn": null
       }
+    },
+    {
+      "id": "ev-casa-de-la-vall-hours-booking",
+      "candidateId": "c-casa-de-la-vall",
+      "claim": "Casa de la Vall (Andorra's historic 16th-century parliament house, Barri Antic) is open Nov–Apr 10:00–14:00 & 15:00–18:00, closed Sundays and Mondays; admission is by reservation only via +376 839760 or museusandorra@gmail.com — no walk-up visits. Standard admission €5, concessions €2.50.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.casadelavall.ad/en/visites/formulari-de-visites",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-santa-coloma-hours",
+      "candidateId": "c-esglesia-de-santa-coloma",
+      "claim": "Church of Santa Coloma (Andorra la Vella's oldest church, 8th–9th c. nave with a unique 12th-c. circular Lombard bell tower) is open Jan–May & Oct–Dec 10:00–14:00 & 15:00–18:00, closed Sun/Mon; €7 standard admission. Unlike Casa de la Vall, self-guided audioguide visits do NOT require advance reservation — only the guided-tour option does (book via +376 839760 / reservesmuseus@govern.ad).",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://museus.ad/monuments/santa-coloma",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-mirakbe-hours-menu",
+      "candidateId": "c-mirakbe",
+      "claim": "MiraKbé gastrobar (Carrer Pere d'Urg 10, Andorra la Vella) runs a weekday lunch set-menu Mon–Fri 13:00–15:15 (€12, incl. water/wine/beer) and an à la carte tapas dinner service; phone/floor service runs 10:00–16:00 & 19:00–23:00 Mon–Sat, closed Sundays.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.mirakbe.com/menu_diari_andorra",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ca",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-mirakbe-corroboration-1",
+      "candidateId": null,
+      "claim": "MiraKbé is recommended over Andorra la Vella's touristy main shopping street by an independent food blog and a separate diner account, both citing better value and quality away from the busier tourist strip.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://unexpectedcatalonia.com/restaurants-andorra/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2025-07",
+        "family": "unexpectedcatalonia-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-mirakbe-corroboration-2",
+      "candidateId": null,
+      "claim": "MiraKbé is recommended over Andorra la Vella's touristy main shopping street by an independent food blog and a separate diner account, both citing better value and quality away from the busier tourist strip.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.tripadvisor.co/LocationPhotoDirectLink-g190392-d12229953-i482456427-MiraKbe-Andorra_la_Vella_Andorra_la_Vella_Parish.html",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "es",
+        "publishedAt": null,
+        "family": "tripadvisor-review",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-borda-estevet-booking",
+      "candidateId": "c-borda-estevet",
+      "claim": "Borda Estevet (traditional Andorran mountain-grill restaurant, Andorra la Vella) takes bookings via its own online form, phone (+376 864 026), or WhatsApp; lunch service runs 13:00–16:00, dinner 20:00–23:00. No deposit, cancellation, or walk-in policy is stated on the page itself.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://bordaestevetandorra.com/reservas",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-20"
+      }
+    },
+    {
+      "id": "ev-llac-engolasters-route",
+      "candidateId": "c-llac-d-engolasters",
+      "claim": "The official Llac d'Engolasters hiking route is 1.9 km, +350/-45 m elevation, rated Easy, roughly a 2-hour round trip (1h15 out, 45 min back) — a good fit for moderate walkers on a first Pyrenees trip without a full mountain-day commitment.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://visitandorra.com/en/nature--sports/hiking-route-llac-d-engolasters/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-20"
+      }
+    },
+    {
+      "id": "ev-roc-del-quer-hours",
+      "candidateId": "c-roc-del-quer-viewpoint",
+      "claim": "The Roc del Quer viewpoint / Tibetan bridge (operated by Pont Tibetà Canillo) posts hours of 9:30–19:00 daily (Mon–Fri and Sat–Sun alike), with no seasonal closure stated on the operator's own page.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.ponttibetacanillo.com/en/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-20"
+      }
+    },
+    {
+      "id": "ev-roc-del-quer-yearround",
+      "candidateId": "c-roc-del-quer-viewpoint",
+      "claim": "Andorra's official tourism board describes Roc del Quer as remaining open year-round, Monday to Sunday, paid access, 'weather permitting' — i.e. no fixed seasonal closing date.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://visitandorra.com/en/nature--sports/roc-del-quer-viewpoint/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-20"
+      }
+    },
+    {
+      "id": "ev-language-catalan-official",
+      "candidateId": null,
+      "claim": "Catalan is Andorra's sole official language (Constitution of 1993). 2022 survey data: Catalan is the habitual language for 63.7% of the population, Spanish for 48.6%, Portuguese 6.6%, French 5.7% (respondents can name more than one) — Spanish, Portuguese and French usage stems mainly from Spanish/Portuguese immigration and from French/Spanish tourism; only Catalan is native to Andorra.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://ca.wikipedia.org/wiki/Lleng%C3%BCes_d%27Andorra",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ca",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-ees-official",
+      "candidateId": null,
+      "claim": "The EU's Entry/Exit System (EES) became fully operational on 10 April 2026 across all Schengen external border-crossing points, including land borders. It applies to non-EU short-stay visitors (e.g. US passport holders) and captures facial image, fingerprints, and travel-document data. This is a live, active change from the pre-2026 baseline a generic guide would assume for crossing into Andorra.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://home-affairs.ec.europa.eu/news/entryexit-system-ees-fully-operational-2026-04-10_en",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-04-10",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-direct-bus-schedule",
+      "candidateId": null,
+      "claim": "Direct Bus's Barcelona–El Prat Airport → Andorra la Vella coach runs 7 daily departures per terminal (T1: 07:30, 11:00, 13:00, 15:00, 17:30, 20:00, 23:00; T2: +15 min each), arriving in Andorra after approximately 3h30; passengers should arrive 30 min before departure; service runs 365 days/year.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.andorradirectbus.es/en/schedules",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
     }
   ],
   "reservations": [
@@ -719,16 +1059,16 @@
       "candidateId": "c-borda-estevet",
       "importance": "important",
       "bookingUrl": "https://bordaestevetandorra.com/reservas",
-      "releaseWindow": "No advance-release window found; a day-or-two-ahead call/WhatsApp is standard practice for this size of party",
+      "releaseWindow": "No advance-release window found; a day-or-two-ahead call/WhatsApp/online form is standard practice for this size of party",
       "actionDate": null,
       "partyRules": "No stated minimum; two-person tables are routine",
-      "deposit": "None found — phone/WhatsApp reservation, no prepayment mentioned",
+      "deposit": "None found — phone/WhatsApp/online reservation, no prepayment mentioned",
       "cancellation": "Not published; cancel by the same phone/WhatsApp channel",
-      "foreignFriction": "Reservation channel is phone or WhatsApp in Spanish/Catalan/French — no confirmed English-language online booking system",
+      "foreignFriction": "Reservation channel is phone, WhatsApp, or the site's own form, in Spanish/Catalan/French — no confirmed English-language online booking system",
       "lastSeating": "Lunch service ends 16:00, dinner service ends 23:00",
-      "walkIn": "Possible outside peak times, but reservations are strongly recommended given the 250-seat capacity and high demand",
+      "walkIn": "Possible outside peak times, but reservations are strongly recommended given the 250-seat capacity and high demand; no explicit walk-in policy stated on the restaurant's own page",
       "leads": [],
-      "alternatives": "Phone (+376 864026) or WhatsApp via the restaurant's own site",
+      "alternatives": "MiraKbé (gastrobar, off the main tourist street) as a lower-key traditional-leaning alternative if Borda Estevet is booked out; phone (+376 864026) or WhatsApp via the restaurant's own site",
       "fallback": "The Barri Antic's tapas bars and casual restaurants around Carrer Major don't require reservations"
     },
     {
@@ -762,6 +1102,38 @@
       ],
       "alternatives": "Book directly at caldea.com; Andorra la Vella hotel concierges commonly assist with same-week bookings",
       "fallback": "If sold out or unavailable, swap for Llac d'Engolasters (weather permitting) or a slower Barri Antic afternoon"
+    },
+    {
+      "candidateId": "c-casa-de-la-vall",
+      "importance": "important",
+      "bookingUrl": "https://www.casadelavall.ad/en/visites/formulari-de-visites",
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": null,
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": null,
+      "lastSeating": null,
+      "walkIn": "No walk-ins — admission is reservation-only (call +376 839760 or email museusandorra@gmail.com); book before arriving in Andorra la Vella, not on the day.",
+      "leads": [],
+      "alternatives": "Església de Santa Coloma's self-guided audioguide visit needs no advance reservation, if Casa de la Vall's slots don't line up with the trip.",
+      "fallback": null
+    },
+    {
+      "candidateId": "c-mirakbe",
+      "importance": "casual",
+      "bookingUrl": null,
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": null,
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": null,
+      "lastSeating": null,
+      "walkIn": "Small room — reservations advised for the Wed–Sat tapas dinner service (+376 863 444 / +376 636 444 / reservesmirakbe@mkbgrup.com); the weekday lunch set menu is more walk-in-friendly.",
+      "leads": [],
+      "alternatives": null,
+      "fallback": null
     }
   ],
   "transport": [
@@ -771,16 +1143,18 @@
       "risk": 3,
       "evidenceIds": [
         "ev-direct-bus-schedule-fare",
-        "ev-direct-bus-year-round"
+        "ev-direct-bus-year-round",
+        "ev-direct-bus-schedule",
+        "ev-ees-official"
       ],
       "doorToDoor": "≈3.5 hours airport to the Andorra la Vella bus station, plus a 5–10 minute walk into the Barri Antic",
-      "transferReality": "No transfer — one direct coach, no interchange required",
+      "transferReality": "No transfer — one direct coach, no interchange required. Andorra is outside the Schengen area, so this trip's Schengen entry happens at the Barcelona/Girona/Toulouse airport, not at the Andorra–Spain/France land crossing. As of 10 April 2026 the EU's Entry/Exit System (EES) is fully operational and captures a facial image + fingerprints from non-EU short-stay visitors at that airport crossing — a real change from the pre-2026 baseline a generic guide would assume.",
       "groupLuggageMobility": "Standard coach luggage hold; unremarkable for two travelers with normal luggage",
-      "buffer": "Arrive 30 minutes before departure; build in extra slack in November for possible mountain-road weather delays",
-      "missedConnection": "Next departure is ≈2 hours later on a normal day; missing the last practical pre-flight return bus likely means an expensive, unverified-cost taxi (≈3+ hours) or a missed flight — there is no rail alternative",
-      "nextService": "Roughly every 2 hours: 07:30/07:45–23:00/23:15 outbound (T1/T2), 06:15–22:15 return",
+      "buffer": "Arrive 30 minutes before departure; build in extra slack in November for possible mountain-road weather delays, and extra time at the airport end for EES biometric processing on this trip's first Schengen entry",
+      "missedConnection": "Next departure is roughly 2-3.5 hours later on a normal day (7 scheduled departures per terminal); missing the last practical pre-flight return bus likely means an expensive, unverified-cost taxi (≈3+ hours) or a missed flight — there is no rail alternative",
+      "nextService": "Seven scheduled departures a day per terminal (T1: 07:30, 11:00, 13:00, 15:00, 17:30, 20:00, 23:00; T2: +15 min each); return 06:15–22:15",
       "lastPracticalReturn": "For a same-day flight, work backward from departure time using the full ≈3.5-hour ride plus a real buffer — the scheduled last bus (22:15) leaves far too little margin for most flights",
-      "fallback": "Taxi is the only fallback; no train or Andorra-based airport exists"
+      "fallback": "Andbus (Novatel) runs a parallel Barcelona-airport shuttle; taxi is the fallback of last resort — no train or Andorra-based airport exists"
     }
   ],
   "disagreements": [
@@ -790,13 +1164,28 @@
       "impact": "recommendation-changing",
       "investigation": "A generic aggregator/blog source suggested November is a good, quiet time to walk the Engolasters loop. Fetched three separate official visitandorra.com trail pages directly (Circuit de les Fonts, the Engolasters short-distance route, and the Llac d'Engolasters route itself); all three consistently name June–September (or May–October at best) as the recommended hiking season, and the wider Madriu-Perafita-Claror valley page explicitly flags routes above 1,700 m as unsafe outside that window.",
       "resolution": "Trusted the official trail authority over the aggregator lead. Shipped Llac d'Engolasters (1,616 m, below the 1,700 m safety line) as the trip's nature pick since it clears the altitude threshold, but hedged the day plan with an explicit winter-conditions caveat and a Caldea plan_b on a rain/snow trigger, rather than presenting the hike as an unconditional good idea for these dates."
+    },
+    {
+      "id": "d-ees-tourist-exemption",
+      "topic": "Whether short-stay tourists (non-resident, non-EU passport) crossing the Andorra–Spain/France land border are covered by Andorra's EU border-management carve-out, or remain subject to full EES registration like any other Schengen external-border crossing",
+      "impact": "minor",
+      "investigation": "The EU Commission's own EES page (fetched) states the system applies broadly to non-EU short-stay visitors at all Schengen external border-crossing points, land borders included, with no Andorra-specific carve-out mentioned. Andorran press (Alto.ad — fetched; digitalandorra.com, elperiodic.ad, laciutat.cat — search-preview, Catalan-language) describes a Govern d'Andorra–EU Border Management Agreement, but its exemption from EES registration is explicitly scoped to third-country nationals holding Andorran residency permits, not short-stay tourists; the same coverage separately reports Andorra secured 'random' rather than 'systematic' vehicle checks at the land border to avoid a traffic collapse.",
+      "resolution": "Bounded rather than fully closed: since EES applies broadly to non-EU short-stay visitors at Schengen external borders and this party's FIRST such crossing is the Barcelona/Girona/Toulouse airport (not the Andorra land border), the guide treats the airport leg as the definite EES touchpoint and builds a buffer note there. The Andorra-side land-crossing nuance (resident-only carve-out vs. random-vs-systematic vehicle checks) doesn't change which candidates ship or the day plan, only a logistics buffer note, so it's recorded here rather than investigated further this pass; govern.ad's own EES guidance page should be re-checked closer to the trip (its nav-only fetch this pass returned no substantive text)."
+    },
+    {
+      "id": "d-roc-del-quer-winter-closure",
+      "topic": "Whether Roc del Quer viewpoint / Tibetan bridge might close in November for weather/safety reasons",
+      "impact": "minor",
+      "investigation": "The viewpoint's own operator page (ponttibetacanillo.com, fetched) and the official visitandorra.com page (fetched) both describe it as open on a regular daily schedule 'weather permitting' with no stated seasonal closure window. A third-party travel blog (estiber.com, fetched) instead states the site 'puede cerrarse en invierno por motivos de seguridad' (may close in winter for safety reasons), without citing a specific date range.",
+      "resolution": "Moot for this guide regardless of how it resolves: Roc del Quer stays rejected on the separate, unambiguous car-only-access constraint (no bus reaches the mirador), so the seasonal-closure question doesn't change which candidates ship. Folded into the 'what generic guides get wrong' divergence item as supporting detail (it's open, but unreachable without a car) rather than left as an open question."
     }
   ],
   "depth": {
     "reservations": {
       "requiredCandidateIds": [
         "c-borda-estevet",
-        "c-caldea"
+        "c-caldea",
+        "c-casa-de-la-vall"
       ],
       "notApplicableReason": null
     },
@@ -811,8 +1200,82 @@
     "stopped": true,
     "trend": "duplicates",
     "unresolvedCouldChange": false,
-    "note": "Andorra la Vella is a small single-city, single-parish-adjacent destination. Across the three ranked priorities, 13 candidates were evaluated (4 culture/history, 5 food/dining, 4 nature/outdoors); later searches for casual restaurants, additional viewpoints, and a second bakery kept surfacing the same handful of aggregator-listed names with no new official-tier sources behind them. The two disagreements that surfaced during research (Engolasters' seasonal safety window; Caldea's exact current pricing) were either resolved against an official source or clearly bounded and flagged, not left open in a way that could still flip which candidates ship."
+    "note": "Andorra la Vella is a small single-city, single-parish-adjacent destination. Across both independent passes and the three ranked priorities, 19 distinct candidates were evaluated (5 culture/history, 8 food/dining, 6 nature/outdoors, after deduping candidates both passes independently reached). Later searches in both passes kept surfacing the same handful of aggregator-listed names with no new official-tier sources behind them. Reconciliation resolved every conflict the two passes produced: MiraKbé flipped from Pass A's thin-sourcing rejection to shipped once Pass B climbed to its official site; Roc del Quer stayed rejected on car-only access despite Pass B shipping it under a differently-named candidate id, since neither pass found a bus route to the mirador; Caldea stayed shipped per Pass A despite Pass B's priority-fit caution, since it remains the trip's only verified wet-weather contingency for the nature/outdoors day. The two remaining open threads (the EES land-border carve-out nuance; Roc del Quer's unconfirmed winter-closure blog claim) are bounded disagreements that affect a buffer note and a rejected candidate's supporting detail respectively, not which candidates ship or the day plan's structure."
   },
-  "passB": null,
-  "reconciliation": []
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "English-language results for Andorra la Vella skew almost entirely to aggregator listicles (Tripadvisor top-10s, Wanderlog, generic 'best restaurants' roundups) that repeat the same handful of names. Catalan/Spanish queries reached Andorran-domain sources English search never surfaced: the official museums/monuments sites (museus.ad, casadelavall.ad), Andorran regional press (Alto.ad, Bondia, El Periòdic d'Andorra, La Veu Lliure, laciutat.cat) covering the 2026 EU border/EES rollout, and Catalan hiking sites (rutespirineus.cat, visitandorra.com's own routes) for trail specifics.",
+      "searchClasses": [
+        "Catalan/Spanish restaurant & food-culture queries (trinxat/escudella/cunillo, 'evitar turistes')",
+        "Catalan queries on Andorra la Vella's own official museum/monument sites for hours & booking",
+        "Catalan/Spanish local-press queries on the EU Entry/Exit System border rollout",
+        "Catalan hiking-route queries for Llac d'Engolasters and Roc del Quer seasonal access"
+      ],
+      "yield": "Surfaced MiraKbé (a gastrobar named specifically for sitting off the touristy main street) and Església de Santa Coloma (a free-audioguide church alternative to the reservation-only Casa de la Vall) — neither is a top English-search hit — plus, most valuably, the April 2026 EES land-border rollout affecting this trip's arrival logistics, which no English tourist-guide source surfaced at all."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": [
+    {
+      "findingId": "ev-casa-de-la-vall-hours-booking",
+      "disposition": "adopt",
+      "note": "New, decisive finding: admission is reservation-only via phone/email, no walk-ups — Pass A's shipped guide implied a self-guided walk-in was possible. Guide's Casa de la Vall sight card, Day 2 itinerary, Booking checklist, and a new divergence item were all updated."
+    },
+    {
+      "findingId": "ev-santa-coloma-hours",
+      "disposition": "adopt",
+      "note": "New culture/history candidate Pass A never found. Adds a genuine walk-in alternative to the now-reservation-only Casa de la Vall and rounds out priority #1 depth. Added to 07-sights.json and referenced as Casa de la Vall's fallback in reservations[]."
+    },
+    {
+      "findingId": "ev-mirakbe-hours-menu",
+      "disposition": "replace",
+      "note": "Pass A rejected MiraKbé for thin (aggregator-only) sourcing; Pass B climbed to the venue's own site (mirakbe.com) for hours/menu/pricing. Replaces Pass A's rejected verdict — candidate c-mirakbe flipped to shipped and added as a second Food & shopping venue."
+    },
+    {
+      "findingId": "ev-mirakbe-corroboration-1",
+      "disposition": "adopt",
+      "note": "Independent firsthand account corroborating MiraKbé as a non-touristy pick. Unified its claim text with ev-mirakbe-corroboration-2 (same underlying assertion, two sources) and left candidateId general rather than tied to c-mirakbe, since one of the two sources (see next row) can't be dated — this keeps the corroborated claim honest without resting a shipped-candidate crowd claim on an unconfirmed-recency source. Used for the venue's crowd_tip."
+    },
+    {
+      "findingId": "ev-mirakbe-corroboration-2",
+      "disposition": "adopt",
+      "note": "Second independent firsthand account (TripAdvisor review, search-preview access, no visible publish date). Paired with ev-mirakbe-corroboration-1 under matching claim text to satisfy the ≥2-independent-source corroboration bar; kept candidateId general rather than c-mirakbe because this source's recency can't be confirmed and an undated source shouldn't anchor a shipped candidate's experiential claim on its own."
+    },
+    {
+      "findingId": "ev-borda-estevet-booking",
+      "disposition": "agree",
+      "note": "Corroborates Pass A's Borda Estevet booking details from the same official page; folded the added no-deposit/no-stated-cancellation/online-form detail into the single merged reservations[] record for c-borda-estevet."
+    },
+    {
+      "findingId": "ev-llac-engolasters-route",
+      "disposition": "adopt",
+      "note": "Adds route distance/elevation/duration (1.9 km, +350/-45 m, ≈2h round trip) from the same official page Pass A already cited for season/altitude — folded into the Llac d'Engolasters sight card, the Day 3 body, and the Key transit routes step. Does not change the existing taxi-access guidance."
+    },
+    {
+      "findingId": "ev-roc-del-quer-hours",
+      "disposition": "conflict-resolved",
+      "note": "Pass B shipped Roc del Quer Viewpoint (candidate c-roc-del-quer-viewpoint, a different canonical id than Pass A's c-roc-del-quer for the same mirador) without addressing the car-only access Pass A already established (ev-roc-del-quer-car-only, operator source). Kept rejected under both ids — a car-free, Andorra la Vella-based trip can't reach the mirador alone — but the hours/season detail strengthened the existing 'what generic guides get wrong' divergence item, whose source_url was also corrected from a blog to the operator page it was always meant to cite."
+    },
+    {
+      "findingId": "ev-roc-del-quer-yearround",
+      "disposition": "conflict-resolved",
+      "note": "Same resolution as ev-roc-del-quer-hours: confirms the viewpoint isn't seasonally closed, but the car-only access constraint (unaffected by this finding) is why it stays out of a car-free itinerary. Folded into the divergence item's 'open, but car-only' framing."
+    },
+    {
+      "findingId": "ev-language-catalan-official",
+      "disposition": "adopt",
+      "note": "Adds 2022 survey percentages behind the Catalan/Spanish/French/Portuguese mix Pass A already described qualitatively; folded one sentence into Etiquette & language."
+    },
+    {
+      "findingId": "ev-ees-official",
+      "disposition": "adopt",
+      "note": "New, dated (10 Apr 2026) fact Pass A's entry research didn't have: the EU's Entry/Exit System is now fully operational at Schengen external borders. Added to Entry & documents, the When You Land checklist, and the airport-transfer buffer note in transport[] — material since this party's first Schengen crossing is the Barcelona/Girona/Toulouse airport before the bus to Andorra."
+    },
+    {
+      "findingId": "ev-direct-bus-schedule",
+      "disposition": "adopt",
+      "note": "Refines Pass A's 'roughly every 2 hours' outbound cadence with the operator's actual 7-departures-per-terminal timetable (same source URL Pass A used for year-round operation); folded into Key transit routes and When You Land, and consolidated into the single r-bcn-airport-direct-bus transport record alongside Pass A's own evidence for the same route."
+    }
+  ]
 }

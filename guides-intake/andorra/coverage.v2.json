@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "andorra",
+  "runId": "andorra-20260820-8df468",
+  "asks": [
+    {
+      "id": "cities",
+      "ask": "Cities: Andorra la Vella",
+      "status": "covered",
+      "where": [
+        "05-transit.json#orientation-map-andorra-la-vella",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "Trip dates: 2026-11-05 - 2026-11-09",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "06-days.json#arrival-barcelona-to-andorra-la-vella",
+        "06-days.json#departure"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Priority #1: Culture / history",
+      "status": "covered",
+      "where": [
+        "07-sights.json#casa-de-la-vall",
+        "07-sights.json#sant-esteve-church",
+        "07-sights.json#barri-antic",
+        "07-sights.json#esglesia-de-santa-coloma",
+        "06-days.json#old-quarter-history-casa-de-la-vall-sant-esteve"
+      ],
+      "evidenceIds": [
+        "ev-casa-de-la-vall-hours",
+        "ev-casa-de-la-vall-price",
+        "ev-casa-de-la-vall-hours-booking",
+        "ev-sant-esteve-history",
+        "ev-barri-antic-description",
+        "ev-santa-coloma-hours"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-2",
+      "ask": "Priority #2: Food & dining",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "08-food-and-shopping.json#borda-estevet",
+        "08-food-and-shopping.json#mirakbe",
+        "06-days.json#old-quarter-history-casa-de-la-vall-sant-esteve"
+      ],
+      "evidenceIds": [
+        "ev-borda-estevet-hours-address",
+        "ev-borda-estevet-menu-price",
+        "ev-borda-estevet-booking",
+        "ev-mirakbe-hours-menu",
+        "ev-mirakbe-corroboration-1",
+        "ev-mirakbe-corroboration-2",
+        "ev-andorran-cuisine"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-3",
+      "ask": "Priority #3: Nature / outdoors",
+      "status": "covered",
+      "where": [
+        "07-sights.json#llac-d-engolasters",
+        "06-days.json#llac-d-engolasters-weather-permitting-or-caldea-instead",
+        "05-transit.json#caldea"
+      ],
+      "evidenceIds": [
+        "ev-engolasters-elevation-season",
+        "ev-engolasters-no-bus",
+        "ev-llac-engolasters-route",
+        "ev-caldea-facilities",
+        "ev-madriu-altitude-safety",
+        "ev-roc-del-quer-car-only"
+      ],
+      "reason": null
+    },
+    {
+      "id": "pace",
+      "ask": "Pace: balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "06-days.json#slow-morning-tax-free-browsing-borda-dinner"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "travel-style",
+      "ask": "Travel style: Balanced",
+      "status": "covered",
+      "where": [
+        "07-sights.json#what-generic-guides-get-wrong",
+        "08-food-and-shopping.json#what-to-eat"
+      ],
+      "evidenceIds": [
+        "ev-mirakbe-corroboration-1",
+        "ev-mirakbe-corroboration-2"
+      ],
+      "reason": null
+    },
+    {
+      "id": "budget",
+      "ask": "Budget target: Mid-range ($75-150/day)",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "party",
+      "ask": "Party description: Two mid-20s friends, moderate walkers, first time in the Pyrenees",
+      "status": "covered",
+      "where": [
+        "07-sights.json#llac-d-engolasters",
+        "07-sights.json#what-generic-guides-get-wrong"
+      ],
+      "evidenceIds": [
+        "ev-llac-engolasters-route",
+        "ev-madriu-altitude-safety"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "Number of travelers: 2",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "passport-countries",
+      "ask": "Passport countries: United States",
+      "status": "covered",
+      "where": [
+        "01-plan.json#entry-documents"
+      ],
+      "evidenceIds": [
+        "ev-entry-visa-free-90-days",
+        "ev-entry-passport-validity",
+        "ev-ees-official"
+      ],
+      "reason": null
+    },
+    {
+      "id": "comments",
+      "ask": "Additional comments: PIPELINE V2 INTEGRATION TEST FIXTURE note, plus a Nov 5 vs Nov 6 start-date decision",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "06-days.json#arrival-barcelona-to-andorra-la-vella"
+      ],
+      "evidenceIds": [],
+      "reason": "The only material content ask in this field (the Nov 5 vs Nov 6 start date) was resolved during Pass A via a traveler question (ledger.md q-andorra-1, status answered: Nov 5 confirmed) and built into the day-by-day plan; the rest of the field is a pipeline-fixture note, not a travel request."
+    }
+  ]
+}
