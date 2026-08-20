@@ -131,6 +131,16 @@ jobs:
       group: guide-${{ needs.resolve.outputs.slug }}
       cancel-in-progress: false
     runs-on: ubuntu-latest
+    # Job-level: the workflow-level set PLUS actions:write, which the answers-to-active-research
+    # path needs to re-dispatch the research workflow (same grant, same reason as new-guide.yml's
+    # auto-start). Missing it, the answer landed on the run's ledger and then the re-dispatch
+    # died with HTTP 403 — live run 32379790925 (2026-08-20), the first real exercise of this
+    # M6 path. The resolve job keeps the narrower workflow-level set.
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: write
     env:
       GH_TOKEN: ${{ github.token }}
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
