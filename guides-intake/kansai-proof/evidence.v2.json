@@ -1918,6 +1918,32 @@
         "shelfLife": "transit",
         "recheckOn": "2026-10-15"
       }
+    },
+    {
+      "id": "ev-japan-advisory-level-corroborated",
+      "candidateId": null,
+      "claim": "Multiple independent secondary sources (news/travel-safety roundups, not travel.state.gov itself) describe the US State Dept's current Japan advisory as Level 1, 'Exercise Normal Precautions' -- consistent with Japan's long-standing stable advisory status and with the destination config's own prior (unconfirmed) note of the same level. This is corroboration, NOT verification: none of these are the official page, and the official page remains blocked (see ev-japan-travel-advisory-not-fetchable) -- reconcile is recording the typed guide-level `advisory` object on this best-available corroborated basis rather than leaving an R4 safety field structurally absent, and flags it in the guide's `verified` stamp for a real-browser re-check before travel.",
+      "kind": "objective",
+      "origin": "reconcile",
+      "source": {
+        "url": "https://www.mappr.co/us-travel-advisory-by-country/",
+        "kind": "aggregator",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "mappr.co",
+        "independent": true,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-19",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-01"
+      }
     }
   ],
   "reservations": [

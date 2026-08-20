@@ -103,6 +103,15 @@
     "risk": 2,
     "evidence": "search-preview corroboration only across multiple aggregators (osakastation.com, kyotostation.com-style fare pages) — not independently fetched from an official JR West fare page this pass; flagged for Pass B/reconcile to confirm directly against jr-odekake.net or westjr.co.jp."
   },
+  "tax-free-refund-system-nov-1-2026": {
+    "claim": "Japan's tax-free shopping system switches from an instant discount at the register to a refund claimed at departure (customs inspection confirms goods are leaving Japan)",
+    "value": "Nov 1, 2026",
+    "source_url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html",
+    "verified_on": "2026-08-19",
+    "shelf_life": "default",
+    "tier": "primary",
+    "risk": 2
+  },
   "usd-jpy-approx-158": {
     "claim": "USD to JPY spot exchange rate (mid-market — cash/card rates run a few percent worse; recheck close to departure)",
     "value": "≈¥158/US$1",

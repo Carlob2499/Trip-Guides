@@ -5,7 +5,7 @@
   "country": "Japan",
   "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft — Pass A (canonical/verified) and Pass B (local/authentic) reconciled 2026-08-19; independent critic review has not yet run. Re-check before travel: the USD/JPY rate, Houshoan's booking window, Kiyomizu-dera's exact November closing time, and the Nara day-trip's last-train times.",
+  "verified": "⚠ Draft — Pass A (canonical/verified) and Pass B (local/authentic) reconciled 2026-08-19; independent critic review has not yet run. Re-check before travel: the USD/JPY rate, Houshoan's booking window, Kiyomizu-dera's exact November closing time, the Nara day-trip's last-train times, and the US State Dept travel advisory level for Japan (recorded Level 1 from corroborated secondary sources, not a direct fetch — travel.state.gov is bot-gated against every tool this pipeline has).",
   "provenance": "strict",
   "roomId": "eoobzeguiykwitl2",
   "footer": "Location facts sourced to official venue/operator sites where reachable; see Sources & further reading.",
@@ -19,5 +19,12 @@
       "verified_on": "2026-08-19"
     }
   ],
+  "advisory": {
+    "level": 1,
+    "title": "Exercise Normal Precautions",
+    "summary": "⚠ Not directly fetched — travel.state.gov is Cloudflare-gated against every fetch tool available across this pipeline's stages (403 on every attempt). Level 1 is corroborated across multiple independent secondary sources citing the State Department's own current designation, consistent with Japan's long-standing stable advisory status, but re-confirm directly (a real browser, not an automated fetch) before travel.",
+    "source_url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
+    "verified_on": "2026-08-19"
+  },
   "tabBudget": 10
 }
