@@ -9,7 +9,7 @@
     "effort": "high",
     "criticModel": "claude-opus-5"
   },
-  "status": "stuck",
+  "status": "failed",
   "createdAt": "2026-08-19T21:44:27.008Z",
   "updatedAt": "2026-08-20T03:19:43.259Z",
   "stageOrder": [
@@ -178,7 +178,7 @@
     }
   },
   "attempts": {
-    "total": 6,
+    "total": 5,
     "cap": 5,
     "autoRetries": 0,
     "autoRetryCap": 1
