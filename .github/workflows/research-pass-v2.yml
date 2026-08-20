@@ -801,6 +801,18 @@ jobs:
               exit 1
             fi
           fi
+          # The schema gate runs HERE, not first at landing: a schema error surfacing only at
+          # land is a dead end (all stages complete, nothing to retry) — at the critic it is a
+          # normal stage failure with retained work and findings (canary scar: two facts.json
+          # evidence strings over the 240-char cap reached the landing gate).
+          if [ "$RC" -eq 0 ]; then
+            npm run build 2>&1 | tee "$RUNNER_TEMP/build-out.txt" | tail -40
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
+                --file "$RUNNER_TEMP/build-out.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
           if [ "$RC" -eq 0 ]; then
             npm run verify -- --slug "$SLUG" 2>&1 | tee "$RUNNER_TEMP/verify-scorecard.txt"
             if [ "${PIPESTATUS[0]}" -ne 0 ]; then
@@ -907,11 +919,20 @@ jobs:
             --branch "$BRANCH" --gate --land pr \
             --title "Research pass (V2): $SLUG"
 
-      - name: Record the real landing gate PASS
+      # The land step exits 0 even when the gate FAILS (draft PR is the designed fallback), so
+      # the record keys on the emitted gate verdict, never on step success — the canary's first
+      # landing recorded a pass the gate never earned by conflating the two.
+      - name: Record the real landing gate verdict
         if: success()
-        run: node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status passed --branch "$BRANCH"
+        run: |
+          if [ "${{ steps.evidence_gate.outputs.gate }}" = "passed" ]; then
+            node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status passed --branch "$BRANCH"
+          else
+            node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status failed \
+              --detail "evidence gate failed (build or configured network verify) — landed as a draft PR only" --branch "$BRANCH"
+          fi
 
-      - name: Record the real landing gate failure
+      - name: Record the landing gate failure (step crashed)
         if: failure()
         run: |
           node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status failed \
