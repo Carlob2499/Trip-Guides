@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-20T13:45:44.211Z",
-  "updatedAt": "2026-08-20T14:32:00.752Z",
+  "updatedAt": "2026-08-20T14:32:32.445Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -64,9 +64,9 @@
     },
     "passB": {
       "status": "running",
-      "startedAt": "2026-08-20T14:15:23.291Z",
+      "startedAt": "2026-08-20T14:32:32.445Z",
       "endedAt": null,
-      "attempts": 1,
+      "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
       "commit": null,
@@ -74,6 +74,14 @@
         {
           "attempt": 1,
           "startedAt": "2026-08-20T14:15:23.291Z",
+          "endedAt": "2026-08-20T14:32:32.445Z",
+          "status": "failed",
+          "failureClass": "unknown",
+          "durationSec": 1029
+        },
+        {
+          "attempt": 2,
+          "startedAt": "2026-08-20T14:32:32.445Z",
           "endedAt": null,
           "status": "running",
           "failureClass": null,
