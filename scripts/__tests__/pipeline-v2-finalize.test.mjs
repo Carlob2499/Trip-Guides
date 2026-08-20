@@ -607,6 +607,23 @@ describe("canary scar — coverage refs follow their anchors through composition
     await expect(remapCoverageRefs(SLUG, { intakeDir: dir, guidesDir: guides })).rejects.toThrow(/could not be remapped/);
   });
 
+  it("an identity change (renamed item) drops the stale corroborating ref out loud, keeps the valid proof", async () => {
+    const { remapCoverageRefs } = await import("../pipeline/v2/coverage.mjs");
+    await seed({
+      files: { "02-money.json": { money: { type: "panel", title: "Budget daily costs", items: [{ label: "Lodging, per night (mid-range)" }] } } },
+      asks: [{
+        id: "budget", ask: "budget", status: "covered",
+        where: ["02-money.json#budget-daily-costs", "02-money.json#old-renamed-row-label"],
+        evidenceIds: [], reason: null,
+      }],
+    });
+    const { changed, dropped } = await remapCoverageRefs(SLUG, { intakeDir: dir, guidesDir: guides });
+    expect(changed).toBe(true);
+    expect(dropped.length).toBe(1);
+    const doc = JSON.parse(await readFile(path.join(dir, SLUG, "coverage.v2.json"), "utf8"));
+    expect(doc.asks[0].where).toEqual(["02-money.json#budget-daily-costs"]);
+  });
+
   it("the critic job runs the remap between composition and verification", () => {
     const at = (s) => WORKFLOW.indexOf(s);
     expect(at("remap-coverage --slug")).toBeGreaterThan(at("compose-guide.mjs --slug \"$SLUG\" --write"));
