@@ -561,8 +561,9 @@ metacharacter+backslash set (`replace(/[.*+?^${}()|[\]\\]/g, "\\$&")`) at that s
 host set is unchanged. Regression test added pinning the runtime exact-match invariant against
 lookalike (`webcacheXgoogleusercontent.com`, `web-archive.org`), suffix-attack
 (`web.archive.org.evil.example`), and real-subdomain cases. Commit `57f9dcd`. Fixing the sink
-clears the source-traced findings too (no other regex path exists). **CodeQL re-scan result:
-[recorded below once the PR head scan completes].**
+clears the source-traced findings too (no other regex path exists). **CodeQL re-scan on the PR
+head: PASS — 0 open alerts** (Analyze (javascript-typescript) green; all of #69/#70/#71/#72
+resolved by the one fix).
 
 ### P12-C — live `/proc/self/environ` denial PROVEN
 
