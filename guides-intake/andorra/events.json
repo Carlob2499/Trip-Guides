@@ -62,22 +62,32 @@
       "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-20T15:18:44.673Z",
+      "at": "2026-08-20T15:31:13.365Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-20T15:35:11.140Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-20T15:35:11.140Z",
       "kind": "decision",
       "text": "Candidate funnel: 19 evaluated · 13 shortlisted · 8 shipped · 10 rejected"
     },
     {
-      "at": "2026-08-20T15:18:44.673Z",
+      "at": "2026-08-20T15:35:11.140Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 12 independent finding(s): 8 adopt · 1 replace · 1 agree · 2 conflict-resolved"
     },
     {
-      "at": "2026-08-20T15:18:44.673Z",
+      "at": "2026-08-20T15:35:11.140Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-20T15:18:44.673Z",
+      "at": "2026-08-20T15:35:11.140Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether the Llac d'Engolasters / Engolasters-area trails are a reasonable pick for an early-November visit"
     }

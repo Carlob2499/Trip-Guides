@@ -19,6 +19,25 @@
         "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run"
       ],
       "createdAt": "2026-08-20T15:18:43.086Z",
+      "status": "retired",
+      "retiredAt": "2026-08-20T15:35:09.987Z"
+    },
+    {
+      "runId": "andorra-20260820-8df468",
+      "stage": "reconcile",
+      "attempt": 2,
+      "findings": [
+        "P0 research   · FAIL — 6 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ map point \"Casa de la Vall\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Estació Nacional d'Autobusos\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Caldea\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ budget item \"Lodging, per night (mid-range, shared room, per person)\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ budget item \"Food & drink, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ [leg-duration-unverified] 1 of 4 transit-leg duration(s) carry no source — e.g. \"Day by day\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run"
+      ],
+      "createdAt": "2026-08-20T15:35:09.987Z",
       "status": "active",
       "retiredAt": null
     }
