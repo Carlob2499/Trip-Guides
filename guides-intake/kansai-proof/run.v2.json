@@ -9,9 +9,9 @@
     "effort": "high",
     "criticModel": "claude-opus-5"
   },
-  "status": "running",
+  "status": "complete",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-20T02:52:26.285Z",
+  "updatedAt": "2026-08-20T03:06:59.622Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -133,13 +133,13 @@
       "failure": null
     },
     "critic": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-20T02:52:26.285Z",
-      "endedAt": null,
+      "endedAt": "2026-08-20T03:06:59.602Z",
       "attempts": 4,
       "model": "claude-opus-5",
       "effort": "high",
-      "commit": null,
+      "commit": "b082f614b1b9d062ec7e4e9442ca5716e4f2b57e",
       "history": [
         {
           "attempt": 1,
@@ -168,10 +168,10 @@
         {
           "attempt": 4,
           "startedAt": "2026-08-20T02:52:26.285Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-20T03:06:59.602Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 873
         }
       ],
       "failure": null
@@ -184,8 +184,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "critic",
-    "action": "stage \"critic\" was running — validate its output; re-run it if incomplete"
+    "nextStage": null,
+    "action": "all stages complete — land via the workflow's evidence gate"
   },
   "failure": null,
   "publication": {
@@ -234,6 +234,17 @@
         "toolCalls": null,
         "searches": null,
         "fetches": null
+      },
+      "critic": {
+        "durationSec": 873,
+        "failedDurationSec": 3304,
+        "cumulativeDurationSec": 4177,
+        "model": "claude-opus-5",
+        "effort": "high",
+        "retries": 3,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
       }
     },
     "counts": {
@@ -243,7 +254,7 @@
       "disagreementInvestigations": 4,
       "nativeLanguageSearches": null
     },
-    "totalDurationSec": 10218,
+    "totalDurationSec": 19353,
     "tokens": null,
     "costUsd": null
   }
