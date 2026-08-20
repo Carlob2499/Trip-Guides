@@ -9,6 +9,26 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-20 — Pipeline V2 finalization: canary GREEN, census clean, cutover switch built)
+
+The Fable finalization session fixed all four Core Proof blockers (generated machine-contract
+capsule · durable per-stage retry feedback · V2 coverage consumed by the real verifier ·
+deterministic geocoding in-pipeline), added source-access classes with a proxy refusal, per-attempt
+retry telemetry, and a truthful Progress event emitter. The V2 workflow was registered via an inert
+main stub (PR #59, the one authorized early merge) and the REAL pipeline ran end-to-end on GitHub
+Actions: Pass A → Pass B → Reconcile → geocode → Critic → **draft PR #61**, landing gate PASSED
+honestly (build + networked verify, 0 dead links), guide still `draft: true`, publication false.
+Eleven dispatches; every failure deterministic, regression-tested, and resumed at the failed stage
+— including a real usage-limit interruption and two live trips of the attempt-cap breaker (stuck
+issues #60/#62, resolved by documented operator resets). The repository-wide legacy census found
+ZERO dead code files; its five findings (template blurbs, motion.md rows, a silo deep-import, an
+archived build prompt, three dead labels) are all resolved — `docs/LEGACY_ERADICATION.md` is the
+ledger. `/new` now carries the cutover switch: `WAYPOINT_RESEARCH_ENGINE=v2` routes to V2; unset
+means V1, unconditionally. An independent code review of the session's diff found one HIGH (clean
+first-try runs crashed their completion checkpoint on the absent feedback pathspec), one MEDIUM
+(comma-hostname injection into the critic's --allowedTools) and one LOW — all fixed same-session
+with pinning tests. Durable record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` (18-point proof).
+
 ## Snapshot (2026-08-17 — Pipeline V2 implementation adversarially audited and hardened)
 
 Fable's M0–M8 implementation was reviewed from fixed base `9f1599b` by independent code,
