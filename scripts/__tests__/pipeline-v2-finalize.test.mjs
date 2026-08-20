@@ -239,6 +239,21 @@ describe("P3 — per-attempt history makes retry cost visible", () => {
     expect(again.stages.passA.cumulativeDurationSec).toBe(4200);
   });
 
+  it("a landing-only re-dispatch (all research stages complete) consumes no attempt", async () => {
+    const { bumpRunAttempt, stageStart: start, stageComplete: complete } = await import("../pipeline/v2/run-state.mjs");
+    await scaffoldRun("landonly");
+    for (const stage of ["scaffold", "passA", "passB", "reconcile", "critic"]) {
+      await start("landonly", stage, { intakeDir: dir });
+      await complete("landonly", stage, { intakeDir: dir });
+    }
+    const first = await bumpRunAttempt("landonly", { intakeDir: dir });
+    expect(first.overCap).toBe(false);
+    expect(first.attempts).toBe(0); // nothing left to research — the landing gate is agent-free
+    // A run with research still owed keeps consuming attempts as before.
+    const st = await readRunStateV2("landonly", opts());
+    expect(st.attempts.total).toBe(0);
+  });
+
   it("old-reader compatibility: a wp-run/2.0 document without history parses (history defaults empty)", async () => {
     const state = await scaffoldRun("compat");
     const file = path.join(dir, "compat", "run.v2.json");
