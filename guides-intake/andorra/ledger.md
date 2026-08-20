@@ -96,7 +96,8 @@ Not run this pass — Pass A's stage contract stops after research + `evidence.v
 - **Q:** Are you starting the trip on Thursday, November 5th, or Friday, November 6th?
 - **Assumed:** Thursday, Nov 5 arrival — this is what the day-by-day plan and the closed-Monday note for Casa de la Vall are both built around.
 - **Context:** Affects the whole `Days` tab — a Nov 6 start would shift every day by one and change which day Casa de la Vall (closed Sun/Mon) is visited.
-- **Status:** open
+- **A:** We are starting Thursday, November 5th — dates confirmed.
+- **Status:** answered
 
 ## Amendments (append-only — record every research-forced re-plan)
 > When research changes the plan (an anchor moved, a neighborhood beats the intended one, a day
