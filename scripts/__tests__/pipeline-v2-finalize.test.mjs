@@ -592,6 +592,20 @@ describe("canary scar — agent permission rules use the syntax the CLI actually
     }
   });
 
+  // P12.1 containment scar: the extended live probe (probe/environ run 32348279562) observed
+  // Read, Grep AND Glob each attempt /proc and be DENIED at the tool layer under the production
+  // flag set. This pin does NOT replace that live proof — it only ensures no future edit
+  // silently drops --safe-mode (part of the exact configuration the proof was earned under)
+  // from any agent invocation.
+  it("every agent step invokes the CLI with --safe-mode (the flag set the live /proc proof ran under)", () => {
+    const agentBlocks = WORKFLOW.split(/- name: /).filter((b) => b.includes("docker run"));
+    expect(agentBlocks.length).toBe(4);
+    for (const block of agentBlocks) {
+      expect(block).toContain("--safe-mode");
+      expect(block).toContain("--no-session-persistence");
+    }
+  });
+
   it("the critic's generated fetch policy uses the same corrected syntax", async () => {
     const text = readFileSync(path.join(ROOT, "scripts", "pipeline-v2.mjs"), "utf8");
     expect(text).toContain('"Read(//workspace/**)", "Edit(//workspace/**)"');
