@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-20T13:45:44.211Z",
-  "updatedAt": "2026-08-20T14:15:23.291Z",
+  "updatedAt": "2026-08-20T14:32:00.752Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -106,7 +106,7 @@
     }
   },
   "attempts": {
-    "total": 1,
+    "total": 2,
     "cap": 5,
     "autoRetries": 0,
     "autoRetryCap": 1
