@@ -21,9 +21,9 @@
     "center": { "lat": 42.5066141, "lng": 1.5205064 },
     "span": 0.05,
     "points": [
-      { "name": "Casa de la Vall", "lat": 42.5066141, "lng": 1.5205064, "place_id": "__VERIFICATION_REQUIRED__" },
-      { "name": "Estació Nacional d'Autobusos", "lat": 42.5043295, "lng": 1.5209673, "place_id": "__VERIFICATION_REQUIRED__" },
-      { "name": "Caldea", "lat": 42.5115189, "lng": 1.5375912, "place_id": "__VERIFICATION_REQUIRED__" }
+      { "name": "Casa de la Vall", "lat": 42.5066141, "lng": 1.5205064, "place_id": "W512803160" },
+      { "name": "Estació Nacional d'Autobusos", "lat": 42.5043295, "lng": 1.5209673, "place_id": "N7264739214" },
+      { "name": "Caldea", "lat": 42.5115189, "lng": 1.5375912, "place_id": "R14119593" }
     ]
   },
   {

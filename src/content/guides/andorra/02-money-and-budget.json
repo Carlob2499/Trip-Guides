@@ -24,7 +24,7 @@
         "est": 45,
         "low": 35,
         "high": 65,
-        "note": "≈ — 3-star Andorra la Vella hotels run roughly €70–120/night total in low season (May/Jun/Oct/Nov), split two ways"
+        "note": "⚠ 3-star Andorra la Vella hotels run roughly €70–120/night total in low season (May/Jun/Oct/Nov), split two ways — a market range, not a single quoted rate; confirm at booking"
       },
       {
         "label": "Food & drink, per day",
@@ -32,7 +32,10 @@
         "est": 45,
         "low": 25,
         "high": 65,
-        "note": "≈ — a borda dinner runs €35–50pp; old-town lunches and pastries are cheaper"
+        "note": "≈ — a borda dinner runs €35–50pp; old-town lunches and pastries are cheaper",
+        "source_url": "https://bordaestevetandorra.com/",
+        "verified_on": "2026-08-20",
+        "shelf_life": "default"
       },
       {
         "label": "Local transport, per day",
@@ -44,7 +47,10 @@
         "label": "Sights & activities, per day",
         "basis": "day",
         "est": 15,
-        "note": "≈ — museum entries are €5 each; Caldea (if visited) adds significantly more — confirm current price at caldea.com"
+        "note": "≈ — museum entries are €5 each; Caldea (if visited) adds significantly more — confirm current price at caldea.com",
+        "source_url": "https://museus.ad/museus/casa-de-la-vall",
+        "verified_on": "2026-08-20",
+        "shelf_life": "default"
       },
       {
         "label": "Flights — round trip",
