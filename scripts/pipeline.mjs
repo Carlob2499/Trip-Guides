@@ -462,6 +462,10 @@ async function runSubcommand(cmd, rest, get) {
       console.log(`[land] ${result.outcome}:${result.pr}`);
       emit("outcome", result.outcome);
       emit("pr", String(result.pr));
+      // The GATE verdict as its own output: a failed gate deliberately still exits 0 here (the
+      // draft PR is the designed fallback), so a caller recording gate state must never infer it
+      // from this step's exit code — the V2 canary recorded a pass the gate never earned that way.
+      emit("gate", passed ? "passed" : "failed");
       return 0;
     }
 
