@@ -220,6 +220,29 @@ describe("research-pass-v2.yml — issue/land wiring (I01/I02)", () => {
   });
 });
 
+describe("change.yml — the answers-to-active-research leg (§9)", () => {
+  const text = readRepo(".github/workflows/change.yml");
+
+  it("the change job may re-dispatch research — actions:write present (live 403, run 32379790925)", () => {
+    // The answers path applies the answer to the active run's ledger and then re-dispatches that
+    // run's workflow. Without actions:write the dispatch dies AFTER the ledger write — the
+    // answer lands but the run never resumes. new-guide.yml carries the same grant for the same
+    // reason; the resolve job deliberately keeps the narrower workflow-level set.
+    const changeJob = text.split(/^ {2}change:$/m)[1];
+    const perms = changeJob.split("steps:")[0];
+    expect(perms).toContain("actions: write");
+    const resolveJob = text.split(/^ {2}resolve:$/m)[1].split(/^ {2}change:$/m)[0];
+    expect(resolveJob).not.toContain("actions: write");
+  });
+
+  it("both engines' re-dispatch commands live in the answers step, branch-selected", () => {
+    const step = text.split("Record answers on the active research run")[1].split("- name:")[0];
+    expect(step).toContain("research-pass-v2.yml");
+    expect(step).toContain("research-pass.yml");
+    expect(step).toContain('research-v2/*');
+  });
+});
+
 describe("pipeline.mjs land — the V2 pre-merge record is wired", () => {
   it("recordProductLanding runs before landBranch, inside the auto+passed path only", () => {
     const src = readRepo("scripts/pipeline.mjs");
