@@ -11,7 +11,7 @@
   },
   "status": "complete",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-20T03:06:59.622Z",
+  "updatedAt": "2026-08-20T03:07:26.191Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -195,8 +195,8 @@
     "deployedAt": null
   },
   "landingGate": {
-    "status": "pending",
-    "checkedAt": null,
+    "status": "passed",
+    "checkedAt": "2026-08-20T03:07:26.191Z",
     "failure": null
   },
   "telemetry": {
