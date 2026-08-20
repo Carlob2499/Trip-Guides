@@ -36,6 +36,13 @@ WP_SLUG=${slug} WP_SECTION="full pass" node scripts/pipeline.mjs prompt prompts/
 
 export function landScaffold({ slug, country, issue, siteBase, repo, cwd = ROOT }) {
   if (!isValidSlug(slug)) throw new Error(`"${slug}" isn't a valid slug`);
+  // BEFORE any side effect: the issue number is a commit-message fact, a `gh issue` argument and
+  // the filer's only reply channel. The live failure mode this guards (run 32375205019): a
+  // missing issue pushed the scaffold to main FIRST, then died at the reply — issue never
+  // closed, research never auto-started. Refusing up front keeps the failure before the push.
+  if (!/^\d+$/.test(String(issue))) {
+    throw new Error(`"${issue}" isn't an issue number — refusing before anything is committed`);
+  }
   const git = (args) => execFileSync("git", args, { cwd, stdio: "inherit" });
 
   git(["add", "src/content/guides", "guides-intake"]);
@@ -55,14 +62,23 @@ export function landScaffold({ slug, country, issue, siteBase, repo, cwd = ROOT 
   return { slug, issue };
 }
 
+/** Argument resolution, pure and testable. pipeline.mjs's `get` looks up literal argv flags —
+    `get("--issue")`, never `get("issue")`. This function once asked for the bare names (and an
+    ISSUE_NUM env nobody sets), so every value silently fell through to env fallbacks and `issue`
+    fell to "" — the exact defect live run 32375205019 hit. Flags win; the env fallback names are
+    exactly the ones new-guide.yml sets (SLUG / COUNTRY / ISSUE). */
+export function resolveScaffoldArgs(get, env = process.env) {
+  return {
+    slug: get("--slug") || env.SLUG || "",
+    country: get("--country") || env.COUNTRY || "",
+    issue: get("--issue") || env.ISSUE || "",
+    siteBase: (env.SITE_BASE_URL || "").replace(/\/$/, ""),
+    repo: env.GITHUB_REPOSITORY || "",
+  };
+}
+
 export async function runScaffold(get) {
-  const slug = get("slug") || process.env.SLUG || "";
-  landScaffold({
-    slug,
-    country: get("country") || process.env.COUNTRY || "",
-    issue: get("issue") || process.env.ISSUE_NUM || "",
-    siteBase: (process.env.SITE_BASE_URL || "").replace(/\/$/, ""),
-    repo: process.env.GITHUB_REPOSITORY || "",
-  });
-  console.log(`[scaffold] ${slug} committed to main; issue closed.`);
+  const args = resolveScaffoldArgs(get);
+  landScaffold(args);
+  console.log(`[scaffold] ${args.slug} committed to main; issue closed.`);
 }
