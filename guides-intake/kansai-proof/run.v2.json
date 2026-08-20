@@ -11,7 +11,7 @@
   },
   "status": "failed",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-20T02:05:08.390Z",
+  "updatedAt": "2026-08-20T02:07:35.083Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -158,7 +158,7 @@
     }
   },
   "attempts": {
-    "total": 2,
+    "total": 3,
     "cap": 5,
     "autoRetries": 0,
     "autoRetryCap": 1
