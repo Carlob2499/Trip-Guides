@@ -9,9 +9,9 @@
     "effort": "high",
     "criticModel": "claude-opus-5"
   },
-  "status": "failed",
+  "status": "running",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-20T02:07:35.083Z",
+  "updatedAt": "2026-08-20T02:08:42.990Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -133,10 +133,10 @@
       "failure": null
     },
     "critic": {
-      "status": "failed",
-      "startedAt": "2026-08-20T00:35:41.952Z",
-      "endedAt": "2026-08-20T00:57:32.434Z",
-      "attempts": 1,
+      "status": "running",
+      "startedAt": "2026-08-20T02:08:42.990Z",
+      "endedAt": null,
+      "attempts": 2,
       "model": "claude-opus-5",
       "effort": "high",
       "commit": null,
@@ -148,13 +148,17 @@
           "status": "failed",
           "failureClass": "gate-failure",
           "durationSec": 1310
+        },
+        {
+          "attempt": 2,
+          "startedAt": "2026-08-20T02:08:42.990Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
         }
       ],
-      "failure": {
-        "class": "gate-failure",
-        "detail": "critic collection, process-memory, compose, or offline verification failed",
-        "at": "2026-08-20T00:57:32.434Z"
-      }
+      "failure": null
     }
   },
   "attempts": {
@@ -165,13 +169,9 @@
   },
   "resume": {
     "nextStage": "critic",
-    "action": "re-run stage \"critic\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "stage \"critic\" was running — validate its output; re-run it if incomplete"
   },
-  "failure": {
-    "class": "gate-failure",
-    "detail": "critic collection, process-memory, compose, or offline verification failed",
-    "at": "2026-08-20T00:57:32.434Z"
-  },
+  "failure": null,
   "publication": {
     "published": false,
     "publishedAt": null,
