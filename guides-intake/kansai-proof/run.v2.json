@@ -9,9 +9,9 @@
     "effort": "high",
     "criticModel": "claude-opus-5"
   },
-  "status": "complete",
+  "status": "failed",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-20T03:07:26.191Z",
+  "updatedAt": "2026-08-20T03:15:12.664Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -187,7 +187,11 @@
     "nextStage": null,
     "action": "all stages complete — land via the workflow's evidence gate"
   },
-  "failure": null,
+  "failure": {
+    "class": "gate-failure",
+    "detail": "evidence gate failed (build or configured network verify) — landed as a draft PR only",
+    "at": "2026-08-20T03:15:12.664Z"
+  },
   "publication": {
     "published": false,
     "publishedAt": null,
@@ -195,9 +199,9 @@
     "deployedAt": null
   },
   "landingGate": {
-    "status": "passed",
-    "checkedAt": "2026-08-20T03:07:26.191Z",
-    "failure": null
+    "status": "failed",
+    "checkedAt": "2026-08-20T03:15:12.664Z",
+    "failure": "evidence gate failed (build or configured network verify) — landed as a draft PR only"
   },
   "telemetry": {
     "schemaVersion": "wp-telemetry/2.1",
