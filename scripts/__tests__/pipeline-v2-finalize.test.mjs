@@ -575,6 +575,23 @@ describe("canary scar — agent permission rules use the syntax the CLI actually
     expect(WORKFLOW).toContain("Read(//proc/**)");
   });
 
+  // P12-C containment scar: the live probe (probe/environ, run recorded in IMPLEMENTATION_STATE)
+  // proves the agent cannot read /proc/self/environ. This test pins the config that earns that
+  // denial so no future edit can silently drop it from ANY of the four agent steps — the deny
+  // rule is what stops the container's CLAUDE_CODE_OAUTH_TOKEN (a real env var) from being read
+  // out of /proc/self/environ.
+  it("every agent step denies Read AND Edit on //proc, //sys, //dev (all four, not just one)", () => {
+    const agentBlocks = WORKFLOW.split(/- name: /).filter((b) => b.includes("docker run"));
+    expect(agentBlocks.length).toBe(4);
+    for (const block of agentBlocks) {
+      for (const tool of ["Read", "Edit"]) {
+        for (const sys of ["//proc/**", "//sys/**", "//dev/**"]) {
+          expect(block).toContain(`${tool}(${sys})`);
+        }
+      }
+    }
+  });
+
   it("the critic's generated fetch policy uses the same corrected syntax", async () => {
     const text = readFileSync(path.join(ROOT, "scripts", "pipeline-v2.mjs"), "utf8");
     expect(text).toContain('"Read(//workspace/**)", "Edit(//workspace/**)"');
