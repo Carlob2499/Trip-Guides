@@ -48,34 +48,31 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-20 — P13.1: premature GREEN retracted, R3 fixture bus-exclusivity fixed)
+## Snapshot (2026-08-20 — Integration week I01–I06 executed; draft PR #67-adjacent integration PR up)
 
-The first P13 review returned GREEN on `88d16fe` and was **retracted the same day**: Codex's
-re-inspection caught that the P12.1 fixture rewrite had itself promoted the sourced walking
-prohibition into **bus exclusivity** ("the bus is a required segment"; missed bus ⇒ automatic
-failed same-night arrival) — while the fetched japan-guide page says Kōyasan Station "is a ten
-minute **bus or taxi** ride from Koyasan's town center" (re-verified this pass). The review had
-verified every SUPPORTS line affirmatively but never asked the source the adversarial question
-— what does the page say that CONTRADICTS the framing — the lesson is recorded in §P13.1.
-**The correction (one file, `pipeline-v2-transport-r3-proof.test.mjs`):** final leg reworded
-everywhere to "motorized (bus or taxi)"; `missedConnection` made conditional (on-foot recovery
-impossible is sourced; failure only IF the day's motorized options exhaust; taxi asserted
-neither available nor unavailable); taxi recovery added to the REQUIRED RE-CHECK list;
-`risk: 3` re-evaluated and honestly retained on the remaining fragility stack; mapping updated
-(source 2 now DOES-NOT-PROVE bus exclusivity); new scar pins the exclusivity wording out.
-Suite 12/12; validator returns `[]`; Gap-1 probe proof and all gate/invariant findings from the
-retracted review still stand. Records: IMPLEMENTATION_STATE §P13 (retraction banner) + §P13.1.
+Carlo directed "merge PR #63 and re-run the mission" — the P13 go made operationally. PR #63
+squash-merged as `be9c535`; branch `fable/pipeline-v2-integration` carries I01–I06. Delivered:
+durable `issue` + immutable `landMode` in run.v2.json (resumes inherit both; escalation/strip
+refused); deterministic `land-mode` decision + `recordProductLanding` (pre-merge record, fails
+closed on incomplete); questions job (always(), dedup); Progress reads real events with a main
+fallback for merged runs. **Two live defects found+fixed on main:** `/new` scaffold lost its
+issue (`get("issue")`/ISSUE_NUM seam — `062d3ad`) and change.yml's answers re-dispatch 403
+(missing `actions: write` — `2d39b2c`); the M6 answers path had NEVER run live before.
+**Andorra fixture (#64) proved the lifecycle live:** selector OFF→V1 / ON→V2-from-main /
+restored→V1; issue threading; interruption after passA → resume skipped it; reconcile failed
+offline verify twice and the 1B feedback retry converged (7→6→0); geocode+critic+land green;
+`landing mode pr` → real gate exit 0 → **draft PR #67, published:false, deployedLive:null,
+attempts 5/5**. Full gates green. Evidence: IMPLEMENTATION_STATE "Integration week session".
 
 ## Where we left off
 
-**P13 is pending again — Codex re-reviews the corrected head.** The verdict record, tracker
-P13 row, and this fixture are the review surface; the ask to Codex is a fresh go/no-go on the
-correction commit (diff vs `88d16fe` is the fixture fix + the retraction/correction docs).
-On a sustained GREEN plus Carlo's acceptance, integration week I01+ begins.
-
-**Until acceptance, nothing moves:** do not merge PR #63 or #61, set `WAYPOINT_RESEARCH_ENGINE`,
-publish the canary, or delete V1 / `canary/kansai-proof` / `research-v2/kansai-proof` /
-`probe/environ`. Cutover stays OFF (variable unset ⇒ /new dispatches V1). Known non-blockers
-deferred to I01/I02 by prior ruling: live Worker answer routing, `/new` V2 notification
-threading, `GOOGLE_ROUTES_KEY` unset, seven honest unresolved geocodes, Progress-UI manual
-proof. Main's stale `WAYPOINT_V2_ON_DEFAULT` stub comment stays LOW / moot-at-merge.
+**The draft integration PR (fable/pipeline-v2-integration → main) awaits independent Codex
+review — do not merge it here.** Verdict INTEGRATION_YELLOW for exactly one recorded gap: the
+live product-mode auto-merge is unprovable pre-merge (branch-ref dispatch would side-door the
+integration code into main). First post-merge action: one selector-ON `/new` canary observed
+end-to-end. Selector restored to ABSENT and verified. V1 present + dispatchable. Evidence kept
+for review: intake #64 (closed), branch `research-v2/andorra`, draft PR #67, andorra scaffold
+on main (draft-quarantined) — remove after review. Routing fixtures (san-marino,
+liechtenstein) already cleaned; stub branches deleted. Pre-existing canary artifacts (PR #61,
+`canary/kansai-proof`, `research-v2/kansai-proof`, `probe/environ`, stray `environ-probe`
+workflow id 338376924) untouched — P10–P13 evidence, their cleanup is a post-acceptance call.

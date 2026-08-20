@@ -433,7 +433,11 @@ async function runSubcommand(cmd, rest, get) {
         // Research also requires every stage cleared: a green verify on a half-researched guide
         // is a green verify on a half-researched guide.
         passed = gate.passed && (!has("--require-verified") || (state && !nextStage(state)));
-        console.log(`[land] evidence gate — ${gate.steps.map((s) => `\`${s.cmd}\` exit ${s.code}`).join(", ")}, stages ${state && !nextStage(state) ? "complete" : "incomplete"} → passed=${passed}`);
+        // The V1-spine stage status is only part of the verdict under --require-verified; printing
+        // it otherwise made a complete V2 run's log read "stages incomplete → passed=true"
+        // (state.json is V1's spine, which a V2 run never walks — observed on the andorra landing).
+        const stageNote = has("--require-verified") ? `, stages ${state && !nextStage(state) ? "complete" : "incomplete"}` : "";
+        console.log(`[land] evidence gate — ${gate.steps.map((s) => `\`${s.cmd}\` exit ${s.code}`).join(", ")}${stageNote} → passed=${passed}`);
       }
 
       const auto = (get("--land") || "auto") === "auto";

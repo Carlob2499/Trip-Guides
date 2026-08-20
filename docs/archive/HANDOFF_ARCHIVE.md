@@ -9,6 +9,24 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-20 — P13.1: premature GREEN retracted, R3 fixture bus-exclusivity fixed)
+
+The first P13 review returned GREEN on `88d16fe` and was **retracted the same day**: Codex's
+re-inspection caught that the P12.1 fixture rewrite had itself promoted the sourced walking
+prohibition into **bus exclusivity** ("the bus is a required segment"; missed bus ⇒ automatic
+failed same-night arrival) — while the fetched japan-guide page says Kōyasan Station "is a ten
+minute **bus or taxi** ride from Koyasan's town center" (re-verified this pass). The review had
+verified every SUPPORTS line affirmatively but never asked the source the adversarial question
+— what does the page say that CONTRADICTS the framing — the lesson is recorded in §P13.1.
+**The correction (one file, `pipeline-v2-transport-r3-proof.test.mjs`):** final leg reworded
+everywhere to "motorized (bus or taxi)"; `missedConnection` made conditional (on-foot recovery
+impossible is sourced; failure only IF the day's motorized options exhaust; taxi asserted
+neither available nor unavailable); taxi recovery added to the REQUIRED RE-CHECK list;
+`risk: 3` re-evaluated and honestly retained on the remaining fragility stack; mapping updated
+(source 2 now DOES-NOT-PROVE bus exclusivity); new scar pins the exclusivity wording out.
+Suite 12/12; validator returns `[]`; Gap-1 probe proof and all gate/invariant findings from the
+retracted review still stand. Records: IMPLEMENTATION_STATE §P13 (retraction banner) + §P13.1.
+
 ## Snapshot (2026-08-20 — P13 independent review: P13_GREEN on PR #63 head `88d16fe` — RETRACTED same day, see the P13.1 snapshot)
 
 The P13 go/no-go review ran fully independently — every P12.1 claim re-verified from primary
@@ -52,25 +70,4 @@ exact last-service times are explicit traveler re-checks; a new scar regex-pins 
 time and none of the three overstated phrases can return. Validator returns `[]`; all seven
 distinct negative controls preserved. Full record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` →
 "P12.1 correction pass".
-
-## Snapshot (2026-08-20 — P12 finalization: PR #63 merge-ready, CodeQL clean, /proc + R3 proven)
-
-The Fable P12 pass made PR #63 (`fable/pipeline-v2-finalize` → main) genuinely reviewable and
-boring. **Merge conflict resolved** — merged current main (`8a591e8`); the only conflict was main's
-whitespace nudge vs. the full V2 workflow, resolved `--ours`; PR #63 is now `MERGEABLE`, 0 behind,
-all four `docker run` agent steps + the default-branch dispatch guard intact, `/new` still V1 when
-the cutover var is unset. **4 CodeQL findings fixed at one root cause** — all traced to a single
-test-code regex (`pipeline-v2-finalize.test.mjs`) with incomplete dot-only escaping; `isProxyHost`
-matches by exact string comparison (never a regex) so the runtime deny set never changed; full
-metacharacter escape added + a lookalike/suffix-attack regression test; **CodeQL PR-head re-scan
-PASS, 0 open alerts**. **`/proc/self/environ` denial PROVEN live** — a push-triggered probe on the
-throwaway `probe/environ` branch, replicating the exact production agent config, showed the Read
-tool BLOCKED on the benign `/proc/version` (`CHECK1_BLOCKED` — the `Read(//proc/**)` rule is
-effective across the subtree, so environ is denied) while the model independently refused environ
-as a secret (defense in depth); sentinel never leaked. **Run `32340406684`, job `96338191848`.**
-**R3+ transport PROVEN** — a controlled KIX→Kōyasan fragile-transfer artifact (single-mode mountain
-access, overnight cable-car cutoff, missed connection = no bed), sourced from two pages fetched this
-pass, is schema-valid and accepted by the real `researchRuleProblems`; seven negative controls prove
-the acceptance is earned. Full P12 record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P12
-finalization".
-
+

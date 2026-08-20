@@ -674,3 +674,19 @@ button, which does not ship) and inferring counts from the artifacts, both of wh
 activity on the one surface whose entire job is reporting what is actually happening. The
 "Cost to research" row is omitted for the same reason — no data, so no row. Emission is a drop-in:
 `docs/reference/pipeline.md` + issue #56 carry the contract.
+
+**V2 run context is durable state, never re-threaded inputs** (integration week, 2026-08-20).
+The intake `issue` and the landing intent `landMode` (pr|auto) are recorded ONCE in
+`run.v2.json` at init and inherited by every resume, retry, and answer-redispatch; `landMode`
+is immutable for the run's life (a redispatch can neither escalate a draft run to product nor
+strip a product run to draft — ContractError), and `issue` can only heal from null, never
+rewire. Product landing (`land-mode` → auto) requires recorded intent AND every stage
+complete, and `recordProductLanding` writes the gate verdict + publication fact BEFORE the
+merge so they ride the merge commit (an auto-merged landing deletes its branch). Rejected:
+threading issue/land through every dispatch's inputs (V1's shape) — four void-retry sites plus
+the answers redispatch would each have to re-thread them, and any one omission silently
+downgrades or misroutes a run. Supersedes the "today that gateway always resolves to empty"
+clause of the Progress-honesty entry above: V2's `events.mjs` now emits real stage
+decisions/failures/landing events and Progress consumes them (proven live, andorra run
+`32396654277`); the honesty rule itself is unchanged — what the emitter cannot prove
+(fetch events, nuggets, counters, tokens/cost) still renders empty or null, never invented.

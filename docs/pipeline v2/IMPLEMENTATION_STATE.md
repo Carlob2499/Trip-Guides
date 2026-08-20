@@ -969,7 +969,61 @@ No pre-existing failures — nothing unrelated blocks I01–I06.
   and change-job's designed actions:write; publication authority remains workflow-level (land
   job), unreachable from research agents. ✓
 
-#### Live proof plan (execute in order; resume from the first unchecked item)
+#### Lifecycle completion (I02 live, controlled/draft mode) — DONE
+
+Final run `32396654277` (the fifth and last budgeted dispatch): reconcile PASSED on the
+feedback-driven retry (attempt 3 — the 1B loop converged: 7 → 6 → 0 blocking findings; the
+agent's own note confirms it worked from the injected findings), geocode resolved the three
+placeholder place_ids, critic passed, compose+build+verify green in-stage. Land job:
+`landing mode pr (intent pr; stages complete)` → REAL evidence gate `npm run build` exit 0 +
+`npm run verify --network` exit 0, `passed=true` → **draft PR #67** (never merged). Questions
+job: "none open, or all already asked" (q-andorra-1 already answered — correct dedup). Terminal
+run.v2.json: status **complete**, landingGate **passed**, publication.published **false** (the
+draft-mode guarantee held to the very end), deployedLive **null** (honest), attempts 5/5
+bounded, issue 64 + landMode pr durable throughout. Emitted events.json: 20 real decision
+events (funnel 19→13→8, adaptive-saturation stop, disagreement investigation) with fetches 0 /
+nuggets 0 / counters null — honest absence, nothing fabricated.
+
+Verify-scorecard note for the record: the in-workflow candidates gate ran ADAPTIVE (V2 posture,
+`WAYPOINT_PIPELINE_V2=1`) and PASSED on Andorra's small honest consideration set — the
+DECISIONS.md no-fixed-quotas rule observed live; the numeric floors remain only for
+V1-context verifies (deliberate TEMP_COMPAT until cutover). A local repro without the env
+shows floors — not a defect.
+
+#### I06 — V1 parity classification (recommendation; nothing executed)
+
+V2 now proves live: `/new` creation (selector), draft-safe landing through the real gate,
+interruption/resume without repeating completed work, owner communication (issue threading +
+questions + answers), Progress compatibility. Product-mode publication is deterministic-proven;
+its live exercise is post-merge (below). Classification per `docs/LEGACY_ERADICATION.md`
+(two rows updated this session): **still required** — V1 workflow+prompts as `/new`'s default
+and rollback until cutover; **shared, must remain** — pipeline.mjs spine (now the SHARED
+publication path), gate.mjs, state.json read/write, check-run-integrity, Progress V1 adapters,
+V1 coverage.json ask registry; **eligible for later retirement (Carlo/Codex authorization,
+after a green post-merge selector-ON canary)** — new-guide.yml's V1 dispatch arm →
+research-pass.yml + V1 prompts → check-passb-coverage.mjs → V1-only checkpoint surfaces;
+**post-cutover migrations** — V2-native ask registry, historical state.json display.
+
+#### CONFLICTING_SPEC flagged for Codex (pre-existing; observed, not resolved)
+
+CONTEXT.md's decision "Fixed research floors are GONE repo-wide" (2026-08-17) explicitly
+REJECTED keeping floors for V1 only — yet shipped `check-candidates.mjs` retains
+`DEFAULT_FLOORS` + `researchFloors`, active whenever `WAYPOINT_PIPELINE_V2 != 1` (i.e. every
+V1-context verify). The andorra run behaved correctly (adaptive in-workflow, candidates PASS);
+the contradiction is between the recorded decision and the V1-context code path. Predates this
+session (#63); changing V1 verify behavior is outside I01–I06 scope, so it is recorded here
+out loud rather than silently fixed or silently ignored. Codex should rule: delete the floors
+per the decision, or amend the decision to bless the env-gated TEMP_COMPAT.
+
+#### Recorded evidence gap (the single YELLOW)
+
+The live product-mode AUTO-MERGE cannot run before the integration PR merges: a branch-ref
+dispatch would side-door the whole integration branch into main via the research branch's
+merge, and main's pre-merge workflow lands draft-only by construction. Machinery is V1's
+production `--land auto` path + deterministic V2 gating (all test-pinned). First post-merge
+action: one selector-ON `/new` canary observed end-to-end.
+
+#### Live proof plan (executed — kept for the record; all items done except as noted above)
 
 - [ ] L1 selector OFF: fixture-B intake issue (Andorra, dates seeded with a mild contradiction
   so a traveler question card exists) → scaffold from main → V1 dispatched with issue, NO V2 →
