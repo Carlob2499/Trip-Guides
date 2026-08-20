@@ -194,10 +194,13 @@ function commonEvidenceSections({ slug, runId }) {
 
 async function reconcileSections({ slug, runId, intakeDir, guidesDir }) {
   const { groups, groupAnchors, expectedAskIds } = await loadCoverageContext(slug, { intakeDir, guidesDir });
+  // IDs only, deliberately: ask labels/values are intake-authored traveler text, and untrusted
+  // text rides the DATA channel (the agent reads coverage.json + intake.md in its workspace) —
+  // never a prompt string. The validator's vocabulary need is the exact id set.
   let askRows;
   try {
     const legacy = JSON.parse(await readFile(path.join(intakeDir, slug, "coverage.json"), "utf8"));
-    askRows = (legacy.asks || []).map((a) => `  - \`${a.id}\` — ${String(a.label || a.value || "").slice(0, 90)}`);
+    askRows = (legacy.asks || []).map((a) => `  - \`${a.id}\``);
   } catch {
     askRows = [...(expectedAskIds || [])].map((id) => `  - \`${id}\``);
   }
@@ -212,7 +215,8 @@ async function reconcileSections({ slug, runId, intakeDir, guidesDir }) {
     `Write \`guides-intake/${slug}/coverage.v2.json\` (schema \`${COVERAGE_SCHEMA}\`). Every material intake`,
     "ask below MUST appear exactly once, `covered` with real refs or `excluded` with an honest reason.",
     "",
-    "Material ask ids (all are required rows):",
+    "Material ask ids (all are required rows — what each id MEANS is in your workspace's",
+    `guides-intake/${slug}/coverage.json and intake.md, the data channel):`,
     ...(askRows.length ? askRows : ["  - (no legacy ask registry — enumerate every ranked priority, constraint and special requirement from intake.md; the document cannot be empty)"]),
     "",
     `Legal \`where\` refs match \`${GROUP_REF.source}\` — a real group file of THIS guide plus a #anchor that`,
