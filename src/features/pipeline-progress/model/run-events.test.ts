@@ -10,7 +10,7 @@ import { RUN_EVENTS } from "../mocks/seeds";
 
 describe("parseRunEvents", () => {
   it("reports unavailable for everything that isn't a telemetry object", () => {
-    // null is the every-day case: the gateway's read 404s because nothing emits this file yet.
+    // null is the V1 / no-run case: the gateway's read 404s (V2 emits events.json; V1 never does).
     for (const bad of [null, undefined, "", 0, [], [{ url: "x" }], "not json"]) {
       expect(parseRunEvents(bad)).toEqual(EMPTY_RUN_EVENTS);
     }

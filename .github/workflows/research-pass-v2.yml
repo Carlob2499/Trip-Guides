@@ -1,6 +1,7 @@
 name: Research pass (V2)
 
-# PIPELINE V2 — the manual, draft-only research pipeline being proven beside V1.
+# PIPELINE V2 — the stage-per-job research pipeline beside V1, selected for /new by the
+# WAYPOINT_RESEARCH_ENGINE repository variable (integration week, I01–I06).
 # (docs/pipeline v2/DECISIONS.md is the authority; docs/pipeline v2/IMPLEMENTATION_STATE.md the
 # build record.) Differences from research-pass.yml that are the POINT of this workflow:
 #
