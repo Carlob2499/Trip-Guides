@@ -727,6 +727,22 @@ variable `WAYPOINT_V2_ON_DEFAULT` in a comment; the real mechanism is the
 the real workflow (which guards on `WAYPOINT_RESEARCH_ENGINE`), so the stale comment is
 **moot-at-merge**. No direct-to-main change was made; recorded here only.
 
+### Full deterministic gates on the P12.1 head
+
+Run on `491be14` (the P12.1 test + docs commits; the only commit after it is this docs-only
+gate record). All four green:
+
+| Check | Command | Result |
+|---|---|---|
+| Build | `npm run build` | 9 pages, schema clean — exit 0 |
+| Lint | `npm run lint` | 0 errors, 0 warnings |
+| Typecheck | `npm run typecheck` | 0 errors, 0 warnings, 21 pre-existing hints |
+| Tests | `npm test` | **163 files, 2651 passed + 1 todo** |
+
+Count moved from P12's 163/2649 by exactly the two scars added this pass (overstatement-absence
+pin in the transport proof; `--safe-mode` pin on all four agent steps). Nothing weakened,
+skipped, or converted to a todo.
+
 ### Regression safety check (invariants re-confirmed on the P12.1 head)
 
 Unset `WAYPOINT_RESEARCH_ENGINE` ⇒ `/new` dispatches V1 (new-guide.yml untouched; guard pinned
