@@ -12,10 +12,10 @@
         "area": "Carrer Pere d'Urg, Andorra la Vella — off the touristy Avinguda Meritxell shopping street",
         "address": "Carrer Pere d'Urg 10, AD500 Andorra la Vella",
         "phone": "+376 863 444",
-        "hours": "10:00–16:00 & 19:00–23:00 Mon–Sat, closed Sundays; weekday lunch set menu 13:00–15:15",
-        "closed": "Sundays",
+        "hours": "Weekday lunch set menu Mon–Fri 13:00–15:15; ⚠ full opening hours aren't published — the site lists Mon–Sat 10:00–16:00 & 19:00–23:00 as when it answers calls",
+        "closed": "Sundays (unpublished — confirm when you book)",
         "book": "call",
-        "how": "≈5-minute walk from the Barri Antic; à la carte tapas at dinner",
+        "how": "≈5-minute walk from the Barri Antic; ring +376 863 444, or send a booking request at mirakbe.com/reserves. À la carte tapas at dinner",
         "price": "€ — lunch set menu {{fact:mirakbe-lunch-12-eur}}",
         "crowd_tip": "Two independent accounts — a food blog and a diner review — point here instead of Andorra la Vella's touristier Avinguda Meritxell restaurants, citing better value and quality.",
         "why": "A gastrobar two independent reviewers single out over the pricier spots on Avinguda Meritxell.",
@@ -25,7 +25,7 @@
           "lat": 42.506773900000006,
           "lng": 1.5286122
         },
-        "place_id": "ChIJd_PC0dCKpRIRgt02FAwWfFc"
+        "place_id": "__VERIFICATION_REQUIRED__"
       },
       {
         "name": "Borda Estevet",

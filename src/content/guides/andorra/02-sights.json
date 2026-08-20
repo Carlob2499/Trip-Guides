@@ -39,8 +39,8 @@
       {
         "name": "Església de Santa Coloma",
         "kicker": "Andorra la Vella's oldest church, no reservation needed",
-        "body": "<p>An 8th–9th century pre-Romanesque nave — the oldest church in the Andorra la Vella parish — with a distinctive 12th-century circular Lombard bell tower, one of the last of its kind in the Pyrenees. Open Jan–May and Oct–Dec, Tuesday–Saturday 10:00–14:00 and 15:00–18:00, closed Sunday and Monday; €7 admission.</p><p>Unlike Casa de la Vall, the self-guided audioguide visit needs no advance booking — only the guided-tour option does. A practical fallback if Casa de la Vall's reservation slots don't line up with the trip.</p>",
-        "dwell_min": 30,
+        "body": "<p>An 8th–9th century pre-Romanesque nave — the oldest church in the Andorra la Vella parish — with a distinctive 12th-century circular Lombard bell tower, one of the last of its kind in the Pyrenees. Open Jan–May and Oct–Dec, Tuesday–Saturday 10:00–14:00 and 15:00–18:00, closed Sunday and Monday; €7 admission, €3.50 reduced.</p><p>It stands on Carrer Major in the <b>Santa Coloma quarter</b>, not in the Barri Antic. The <b>Line 1</b> bus (Escaldes-Engordany ↔ Sant Julià de Lòria) runs past it; ⚠ check the current timetable at bus.ad, or take a taxi.</p><p>The self-guided audioguide visit needs no advance booking — only the guided tour does. That makes it the fallback when Casa de la Vall's reservation slots don't line up. It keeps the same Sunday and Monday closures, so on this trip it works Thursday, Friday or Saturday only.</p><p>The church interior is not adapted for reduced mobility. The adjoining Espai Columba has step-free access, a shop and toilets.</p>",
+        "dwell_min": 45,
         "closed_days": [
           "sun",
           "mon"
@@ -51,27 +51,39 @@
       {
         "name": "Barri Antic",
         "kicker": "The old quarter, on foot",
-        "body": "<p>Andorra la Vella's historic core — cobbled lanes off Carrer Major and Carrer del Pui, small squares, and the stone houses the modern capital grew up around. Small enough to walk in under an hour, but worth spreading across the trip: it holds Casa de la Vall, Sant Esteve and most of the old-town restaurants in one compact radius.</p>",
+        "body": "<p>The capital's original core dates to the 11th century, taking shape around the first granite houses and lanes cut to the slope. Cobbled streets run off Carrer Major and Carrer del Pui into a handful of small squares.</p><p>Small enough to walk in under an hour, but worth spreading across the trip: it holds Casa de la Vall, Sant Esteve and most of the old-town restaurants in one compact radius.</p>",
         "dwell_min": 90,
-        "source_url": "https://visitandorra.com/en/culture/churches-in-andorra/",
+        "source_url": "https://visitandorra.com/en/culture/must-visit-spots-in-andorra-la-vella/",
         "verified_on": "2026-08-20",
         "map": {
           "lat": 42.5068854,
           "lng": 1.5209987000000003
         },
-        "place_id": "ChIJ-XEPpQ2LpRIRJUOGAtQUFYI"
+        "place_id": "__VERIFICATION_REQUIRED__"
       },
       {
         "name": "Llac d'Engolasters",
-        "kicker": "A low-altitude lake walk that clears Andorra's own November safety line",
-        "body": "<p>A reservoir-lake at 1,616 m in Escaldes-Engordany parish, below the 1,700 m threshold Andorra's trail authority flags as unsafe outside June–September. The easy lakeside loop from the Ctra. d'Engolasters access road is the most realistic hiking pick for an early-November visit — the official route is rated Easy, about 1.9 km and a two-hour round trip with +350 m/-45 m of elevation change, a comfortable fit for moderate walkers. The country's own hiking pages still name May–October as the comfortable season, so check for ice on shaded stretches.</p>",
+        "kicker": "Andorra's easiest signed lake route — from Encamp, out and back",
+        "body": "<p>The official signed route to the lake starts in <b>Encamp</b>, in front of the Automobile Museum — not at the lake itself. It runs out and back: 1.9 km, rated Easy, +350 m on the way up and −45 m coming down, about 1 hour 15 minutes up and 45 minutes back.</p><p>The path crosses waterways and a couple of roads, joins the GR-11's red-and-white waymarks, and finishes at the 178-metre Engolasters dam and its reservoir lake.</p><p>The trail authority names June to September as this route's season, stretching to May–October when weather and terrain allow. November falls outside that window. Treat it as a conditions-dependent morning rather than a fixed plan — ice on the shaded stretches is the usual reason to call it off.</p>",
         "map": {
           "lat": 42.517536,
           "lng": 1.571087
         },
         "place_id": "__VERIFICATION_REQUIRED__",
-        "dwell_min": 90,
+        "dwell_min": 120,
         "source_url": "https://visitandorra.com/en/nature--sports/hiking-route-llac-d-engolasters/",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "name": "Museu Nacional de l'Automòbil",
+        "kicker": "At the Engolasters trailhead — the indoor half of day three",
+        "body": "<p>Andorra's national car museum stands on Avinguda de Joan Martí in Encamp, directly opposite the start of the signed Engolasters route. Open October to December, Tuesday–Saturday 10:00–14:00 and 15:00–18:00, closed Sunday and Monday. {{fact:automobile-museum-5-eur}} general admission, €2.50 reduced.</p><p>Its value on this trip is the shared bus stop: if the trail is iced over, the Encamp day still has somewhere to go. <b>Line 2</b> (Encamp) and <b>Line 4</b> (Pas de la Casa) both stop for it.</p>",
+        "dwell_min": 60,
+        "closed_days": [
+          "sun",
+          "mon"
+        ],
+        "source_url": "https://museus.ad/museus/museu-nacional-de-l-automobil",
         "verified_on": "2026-08-20"
       }
     ]
@@ -99,7 +111,7 @@
       },
       {
         "claim": "Andorra's hiking trails run on a normal spring-through-autumn season.",
-        "correction": "Andorra's own trail authority recommends its higher routes only between June and September and flags anything above 1,700 m as unsafe outside that window. A November visit is realistically limited to valley-floor walks like Llac d'Engolasters (1,616 m) — and even those note winter conditions can turn the path icy.",
+        "correction": "Andorra's own trail authority recommends routes above 1,700 m only between the end of June and the end of September, and says the season stretches to May–October only where weather and terrain allow. That upper bound is October, not November — so even an Easy valley route like Llac d'Engolasters is a check-the-conditions call on the morning, not a fixed item on the plan.",
         "category": "outdated",
         "source_url": "https://visitandorra.com/en/nature--sports/hiking-trail-circuit-de-les-fonts/",
         "verified_on": "2026-08-20"

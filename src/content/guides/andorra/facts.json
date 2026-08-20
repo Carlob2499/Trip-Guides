@@ -7,6 +7,14 @@
     "shelf_life": "venue",
     "state": "clean"
   },
+  "automobile-museum-5-eur": {
+    "claim": "Museu Nacional de l'Automòbil (Encamp) general admission",
+    "value": "€5",
+    "source_url": "https://museus.ad/museus/museu-nacional-de-l-automobil",
+    "verified_on": "2026-08-20",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
   "direct-bus-31-50-eur": {
     "claim": "Direct Bus Barcelona airport → Andorra la Vella, one-way fare",
     "value": "€31.50–35 one-way",

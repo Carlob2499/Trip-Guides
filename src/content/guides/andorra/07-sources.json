@@ -1,0 +1,11 @@
+[
+  {
+    "type": "prose",
+    "group": "Sources",
+    "title": "Sources & further reading",
+    "body": "<p>Entry rules: <a href='https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm' target='_blank' rel='noopener noreferrer'>European Commission — Your Europe</a> and <a href='https://en.wikipedia.org/wiki/Visa_policy_of_Andorra' target='_blank' rel='noopener noreferrer'>Visa policy of Andorra</a>. Border checks: <a href='https://home-affairs.ec.europa.eu/news/entryexit-system-ees-fully-operational-2026-04-10_en' target='_blank' rel='noopener noreferrer'>EU Entry/Exit System (EES)</a>. Transit: <a href='https://www.andorradirectbus.es/en/' target='_blank' rel='noopener noreferrer'>Direct Bus</a> and <a href='https://visitandorra.com/en/visitor-information/transport-and-mobility/public-transport-regular-national-routes/' target='_blank' rel='noopener noreferrer'>Visit Andorra — national bus routes</a>. Sights: <a href='https://museus.ad/' target='_blank' rel='noopener noreferrer'>museus.ad</a> (Sant Esteve, Santa Coloma, Museu Nacional de l'Automòbil) and <a href='https://www.casadelavall.ad/en/' target='_blank' rel='noopener noreferrer'>casadelavall.ad</a> (Casa de la Vall visits). Food: <a href='https://www.mirakbe.com/' target='_blank' rel='noopener noreferrer'>MiraKbé</a>. Hiking: <a href='https://visitandorra.com/en/nature--sports/' target='_blank' rel='noopener noreferrer'>Visit Andorra — Nature & sports</a>. Emergency services: <a href='https://visitandorra.com/en/public-services/in-case-of-emergency/' target='_blank' rel='noopener noreferrer'>Visit Andorra — Public services</a>. Tax: <a href='https://www.e-tramits.ad/tramits/impostos/igi' target='_blank' rel='noopener noreferrer'>Govern d'Andorra — e-Tràmits (IGI)</a>.</p><p>Two figures should be re-checked before travel: Caldea's current admission price and hours (caldea.com blocks automated fetches, so no specific figure is confirmed here) and the US State Department's current advisory level for Andorra (travel.state.gov blocks automated fetches — widely reported elsewhere as Level 1, but not independently confirmed).</p>",
+    "verified_on": "2026-08-20",
+    "shelf_life": "default",
+    "source_url": "https://visitandorra.com/en/"
+  }
+]

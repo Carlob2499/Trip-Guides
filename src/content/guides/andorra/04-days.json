@@ -1,0 +1,106 @@
+[
+  {
+    "type": "days",
+    "group": "Days",
+    "title": "Day by day",
+    "items": [
+      {
+        "date": "Thu Nov 5",
+        "title": "Arrival — Barcelona to Andorra la Vella",
+        "pace": "Travel day: ≈3.5h Direct Bus from Barcelona airport, check-in, an easy first walk once you land",
+        "tldr": "Ride the Direct Bus in from Barcelona, then ease into the Barri Antic on foot before an early dinner.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Catch the Direct Bus from Barcelona–El Prat straight to the Estació Nacional d'Autobusos (≈3.5 hours); it's a 5–10 minute walk from there into the Barri Antic, where most mid-range hotels sit.</p><p>Once you've checked in, use the rest of the afternoon for a loose, unplanned lap of the old quarter — Carrer Major, Carrer de la Vall, Plaça del Poble — rather than anything timed. Andorra la Vella is compact enough that a first-evening wander doubles as your orientation walk for the rest of the trip.</p>",
+        "constraints": [
+          "Casa de la Vall and most museums are closed by the time an afternoon bus arrives — save them for tomorrow"
+        ],
+        "source_url": "https://www.andorradirectbus.es/en/route-barcelona-airport-andorra",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "date": "Fri Nov 6",
+        "title": "Old-quarter history — Casa de la Vall & Sant Esteve",
+        "pace": "Balanced: two short indoor visits bracketing a long midday break, all within a 15-minute walking radius",
+        "tldr": "Andorra's centuries-old parliament building and the country's grandest Romanesque church, both a few doors apart in the Barri Antic.",
+        "energy": "balanced",
+        "env": "indoor",
+        "body": "<p>Start at <b>Casa de la Vall</b> (Carrer de la Vall), Andorra's former parliament building, open Tue–Sat 10:00–14:00 and 15:00–18:00 in November. Admission is reservation-only — book by phone (+376 839760) or email before you fly, since there's no walk-up entry. {{fact:casa-de-la-vall-5-eur}} general admission, or add the €1.50 guided-tour supplement.</p><p>If no slot was available, <b>Església de Santa Coloma</b> is the reservation-free substitute: an 8th–9th century church out in the Santa Coloma quarter, self-guided with an audioguide, €7. It keeps the same Tue–Sat opening, so today or tomorrow are the options.</p><p>Sant Esteve church, a two-minute walk away on Plaça Bisbe Benlloch, holds the country's largest Romanesque apse and is free to enter (check posted worship hours). Between the two, work through the rest of the Barri Antic's narrow stone streets and Plaça del Poble's viewpoint.</p><p>For lunch, <b>MiraKbé</b> (Carrer Pere d'Urg) serves a weekday set menu 13:00–15:15, a few minutes from the old quarter — ring +376 863 444 in the morning rather than turning up. Dinner falls inside the old quarter's cluster of tapas bars and casual restaurants, no reservation needed on a weekday.</p>",
+        "constraints": [
+          "Casa de la Vall closed Sundays and Mondays (Nov–Apr hours) — this is one of only three days it's open during the trip",
+          "Casa de la Vall requires advance reservation by phone or email — no walk-up admission",
+          "Santa Coloma is also closed Sundays and Mondays — as a fallback it only works Thu, Fri or Sat"
+        ],
+        "source_url": "https://museus.ad/museus/casa-de-la-vall",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "date": "Sat Nov 7",
+        "title": "Llac d'Engolasters from Encamp, weather permitting — museum or spa if not",
+        "pace": "Balanced: a bus out to Encamp and a two-hour there-and-back climb to the lake, or a full afternoon at the thermal spa if the weather turns",
+        "tldr": "The country's easiest signed lake route, walked out of Encamp — with a car museum at the trailhead and the thermal spa in town if November says no.",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>The signed route to <b>Llac d'Engolasters</b> starts in <b>Encamp</b>, in front of the Automobile Museum — not at the lake. Ride the <b>Line 2</b> bus (Andorra la Vella ↔ Encamp) out from the national bus station; ⚠ check the day's timetable at bus.ad before you set off.</p><p>From the trailhead it's 1.9 km, rated Easy but climbing +350 m: roughly 1 hour 15 minutes up to the dam and lake, 45 minutes back down. The path crosses waterways and a couple of roads, so take those with care.</p><p>Andorra's trail authority puts this route's season at June–September, and May–October at the outside. November is past that. Check the forecast and trail conditions first.</p><p>If the trail is off, you are already at the door of the <b>Museu Nacional de l'Automòbil</b> — the signed route starts opposite it, and it opens Tue–Sat 10:00–14:00 and 15:00–18:00 for {{fact:automobile-museum-5-eur}}. For a full washout, ride back and spend the afternoon at <b>Caldea</b>, the thermal centre in Escaldes-Engordany.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Skip Engolasters and spend the day at Caldea in Escaldes-Engordany: the large indoor lagoon, the outdoor and panoramic lagoons, a Nordic sauna, hammam and the Indo-Roman baths. Book on caldea.com ahead of arrival — it's a Saturday. ⚠ Confirm the day's opening hours and pass price when you book.",
+          "source_url": "https://visitandorra.com/en/nature--sports/caldea/",
+          "verified_on": "2026-08-20"
+        },
+        "constraints": [
+          "The signed route starts in Encamp, not at the lake — Line 2 bus from Andorra la Vella, timetable at bus.ad",
+          "November falls outside the June–September season the trail authority recommends for this route"
+        ],
+        "source_url": "https://visitandorra.com/en/nature--sports/hiking-route-llac-d-engolasters/",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "date": "Sun Nov 8",
+        "title": "Slow morning, tax-free browsing, borda dinner",
+        "pace": "Slow: an open morning, casual shopping in the afternoon, one reserved dinner",
+        "tldr": "A deliberately light day built around the trip's one booked dinner — mountain cooking at Borda Estevet.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Keep the morning open — the monthly Mercat de la Vall craft-and-produce market only runs May–October, so it's not on this week, but Avinguda Meritxell's shops (electronics, cosmetics, spirits, all under Andorra's flat {{fact:igi-tax-4-5-percent}} IGI rate) are a reasonable slow-paced stand-in.</p><p>In the evening, <b>Borda Estevet</b> — a stone-walled mountain grill just outside the centre on the Carretera de la Comella — is the trip's one restaurant genuinely worth booking ahead for: trinxat, grilled meats and a wood-fired mixed grill in a 250-seat converted barn. Reserve by phone or WhatsApp (+376 864026); demand is high and seating is limited.</p>",
+        "constraints": [
+          "Borda Estevet: reservation strongly recommended, especially for a weekend evening"
+        ],
+        "source_url": "https://bordaestevetandorra.com/",
+        "verified_on": "2026-08-20"
+      },
+      {
+        "date": "Mon Nov 9",
+        "title": "Departure",
+        "pace": "Light morning, then the bus back to Barcelona airport",
+        "tldr": "A last coffee and pack-up before the Direct Bus back to Barcelona — Casa de la Vall is shut today, so don't plan around it.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Casa de la Vall and most museums are closed on Mondays (Nov–Apr hours), so use the morning for a last coffee/pastry in the Barri Antic and packing rather than a timed visit. Catch the Direct Bus back to Barcelona airport with a full ≈3.5-hour ride plus buffer built in before your flight.</p>",
+        "constraints": [
+          "Casa de la Vall closed Mondays — do not plan a departure-day visit around it"
+        ],
+        "source_url": "https://www.andorradirectbus.es/en/schedules",
+        "verified_on": "2026-08-20"
+      }
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Days",
+    "title": "Health & pharmacy",
+    "phase": "daily",
+    "body": "<p>General emergencies: <b>112</b>. Andorra also runs its own direct lines — police <b>110</b>, medical emergencies <b>116</b>, fire & mountain rescue <b>112</b>/<b>118</b>. The main hospital is <b>Nostra Senyora de Meritxell</b> in Escaldes-Engordany, a short taxi or Line 1 bus ride from Andorra la Vella.</p><p>The <b>EHIC does not cover Andorra</b> — it's neither an EU nor EEA country — and Andorra only has reciprocal healthcare agreements with Spain, France and Portugal, not the US. Uninsured visitors are billed directly for care, so travel insurance with medical coverage is worth arranging before you fly.</p><p>Pharmacies (marked with a green cross) are common through the Barri Antic and along Avinguda Meritxell, with extended hours; look for a rotating <i>farmàcia de guàrdia</i> (on-call pharmacy) notice for after-hours needs.</p>",
+    "source_url": "https://visitandorra.com/en/public-services/in-case-of-emergency/",
+    "verified_on": "2026-08-20"
+  },
+  {
+    "type": "panel",
+    "group": "Days",
+    "title": "Etiquette & language",
+    "phase": "daily",
+    "body": "<p>Catalan is Andorra's sole official language — Andorra is the only country in the world where it holds that status — but the country is thoroughly multilingual: Spanish is the most widely spoken second language, with French and Portuguese also common because of immigration patterns. A 2022 survey put Catalan as the habitual language for about 64% of residents and Spanish for about 49% (respondents could name more than one) — the mix reflects immigration and cross-border tourism rather than a shift away from Catalan. Menus and signage in the capital regularly run in three or four languages, but English coverage thins out once you're off Avinguda Meritxell.</p><p>A few Catalan basics go a long way: <i>hola</i> (hello), <i>si us plau</i> (please), <i>gràcies</i> (thank you), <i>adéu</i> (goodbye). Since most residents default to Spanish or French with visitors, leading with either — plus a Catalan hola and gràcies — reads as more considered than English alone.</p><p>Andorra is a small, conservative Pyrenean country: casual dress is fine everywhere except church interiors (Sant Esteve, Casa de la Vall's chapel), where covering shoulders is appreciated.</p>",
+    "source_url": "https://en.wikipedia.org/wiki/Languages_of_Andorra",
+    "verified_on": "2026-08-20"
+  }
+]

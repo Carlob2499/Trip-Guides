@@ -8,8 +8,8 @@
       "ask": "Cities: Andorra la Vella",
       "status": "covered",
       "where": [
-        "05-transit.json#orientation-map-andorra-la-vella",
-        "06-days.json#day-by-day"
+        "03-transit.json#orientation-map-andorra-la-vella",
+        "04-days.json#day-by-day"
       ],
       "evidenceIds": [],
       "reason": null
@@ -19,9 +19,9 @@
       "ask": "Trip dates: 2026-11-05 - 2026-11-09",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day",
-        "06-days.json#arrival-barcelona-to-andorra-la-vella",
-        "06-days.json#departure"
+        "04-days.json#day-by-day",
+        "04-days.json#arrival-barcelona-to-andorra-la-vella",
+        "04-days.json#departure"
       ],
       "evidenceIds": [],
       "reason": null
@@ -31,11 +31,11 @@
       "ask": "Priority #1: Culture / history",
       "status": "covered",
       "where": [
-        "07-sights.json#casa-de-la-vall",
-        "07-sights.json#sant-esteve-church",
-        "07-sights.json#barri-antic",
-        "07-sights.json#esglesia-de-santa-coloma",
-        "06-days.json#old-quarter-history-casa-de-la-vall-sant-esteve"
+        "02-sights.json#casa-de-la-vall",
+        "02-sights.json#sant-esteve-church",
+        "02-sights.json#barri-antic",
+        "02-sights.json#esglesia-de-santa-coloma",
+        "04-days.json#old-quarter-history-casa-de-la-vall-sant-esteve"
       ],
       "evidenceIds": [
         "ev-casa-de-la-vall-hours",
@@ -52,10 +52,10 @@
       "ask": "Priority #2: Food & dining",
       "status": "covered",
       "where": [
-        "08-food-and-shopping.json#what-to-eat",
-        "08-food-and-shopping.json#borda-estevet",
-        "08-food-and-shopping.json#mirakbe",
-        "06-days.json#old-quarter-history-casa-de-la-vall-sant-esteve"
+        "05-food-and-shopping.json#what-to-eat",
+        "05-food-and-shopping.json#borda-estevet",
+        "05-food-and-shopping.json#mirakbe",
+        "04-days.json#old-quarter-history-casa-de-la-vall-sant-esteve"
       ],
       "evidenceIds": [
         "ev-borda-estevet-hours-address",
@@ -73,9 +73,8 @@
       "ask": "Priority #3: Nature / outdoors",
       "status": "covered",
       "where": [
-        "07-sights.json#llac-d-engolasters",
-        "06-days.json#llac-d-engolasters-weather-permitting-or-caldea-instead",
-        "05-transit.json#caldea"
+        "02-sights.json#llac-d-engolasters",
+        "03-transit.json#caldea"
       ],
       "evidenceIds": [
         "ev-engolasters-elevation-season",
@@ -92,8 +91,8 @@
       "ask": "Pace: balanced",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day",
-        "06-days.json#slow-morning-tax-free-browsing-borda-dinner"
+        "04-days.json#day-by-day",
+        "04-days.json#slow-morning-tax-free-browsing-borda-dinner"
       ],
       "evidenceIds": [],
       "reason": null
@@ -103,8 +102,8 @@
       "ask": "Travel style: Balanced",
       "status": "covered",
       "where": [
-        "07-sights.json#what-generic-guides-get-wrong",
-        "08-food-and-shopping.json#what-to-eat"
+        "02-sights.json#what-generic-guides-get-wrong",
+        "05-food-and-shopping.json#what-to-eat"
       ],
       "evidenceIds": [
         "ev-mirakbe-corroboration-1",
@@ -117,7 +116,7 @@
       "ask": "Budget target: Mid-range ($75-150/day)",
       "status": "covered",
       "where": [
-        "02-money-and-budget.json#budget-daily-costs"
+        "06-money-and-budget.json#budget-daily-costs"
       ],
       "evidenceIds": [],
       "reason": null
@@ -127,8 +126,8 @@
       "ask": "Party description: Two mid-20s friends, moderate walkers, first time in the Pyrenees",
       "status": "covered",
       "where": [
-        "07-sights.json#llac-d-engolasters",
-        "07-sights.json#what-generic-guides-get-wrong"
+        "02-sights.json#llac-d-engolasters",
+        "02-sights.json#what-generic-guides-get-wrong"
       ],
       "evidenceIds": [
         "ev-llac-engolasters-route",
@@ -141,7 +140,7 @@
       "ask": "Number of travelers: 2",
       "status": "covered",
       "where": [
-        "02-money-and-budget.json#budget-daily-costs"
+        "06-money-and-budget.json#budget-daily-costs"
       ],
       "evidenceIds": [],
       "reason": null
@@ -165,8 +164,8 @@
       "ask": "Additional comments: PIPELINE V2 INTEGRATION TEST FIXTURE note, plus a Nov 5 vs Nov 6 start-date decision",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day",
-        "06-days.json#arrival-barcelona-to-andorra-la-vella"
+        "04-days.json#day-by-day",
+        "04-days.json#arrival-barcelona-to-andorra-la-vella"
       ],
       "evidenceIds": [],
       "reason": "The only material content ask in this field (the Nov 5 vs Nov 6 start date) was resolved during Pass A via a traveler question (ledger.md q-andorra-1, status answered: Nov 5 confirmed) and built into the day-by-day plan; the rest of the field is a pipeline-fixture note, not a travel request."
