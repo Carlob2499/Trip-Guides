@@ -110,6 +110,20 @@
         "the 22 stale coverage refs from the previous attempt are NOT yours to fix — composition renumbers group files and the workflow now remaps coverage refs deterministically after compose"
       ],
       "createdAt": "2026-08-20T02:06:45.361Z",
+      "status": "retired",
+      "retiredAt": "2026-08-20T02:26:47.061Z"
+    },
+    {
+      "runId": "kansai-proof-20260819-36127b",
+      "stage": "critic",
+      "attempt": 2,
+      "findings": [
+        "P0 uncertainty· FAIL — 1 finding(s) (draft: these BLOCK publishing):",
+        "⚠ [forecast-unregistered] \"autumn colour\" is quoted with dates in §\"Day by day\" but no facts.json row covers it — a forecast with no `state: \"approx\"`, source or `verified_on` is a multi-year average nothing will ever expire",
+        "⚠ [leg-duration-unverified] 3 of 10 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Top sights\", \"What to eat\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run"
+      ],
+      "createdAt": "2026-08-20T02:26:47.061Z",
       "status": "active",
       "retiredAt": null
     }

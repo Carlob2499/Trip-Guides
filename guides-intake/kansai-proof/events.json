@@ -82,11 +82,6 @@
       "text": "Reconcile complete in 23m (attempt 4)"
     },
     {
-      "at": "2026-08-20T00:35:17.845Z",
-      "kind": "decision",
-      "text": "Deterministic geocode pass: 9 resolved · 7 left as honest blanks"
-    },
-    {
       "at": "2026-08-20T00:35:41.952Z",
       "kind": "check",
       "text": "Fresh-context critic started (attempt 1 of 5)"
@@ -97,27 +92,42 @@
       "text": "Fresh-context critic attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-20T00:57:32.434Z",
+      "at": "2026-08-20T02:08:11.502Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 0 resolved · 7 left as honest blanks"
+    },
+    {
+      "at": "2026-08-20T02:08:42.990Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-20T02:26:48.357Z",
+      "kind": "reject",
+      "text": "Fresh-context critic attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-20T02:26:48.357Z",
       "kind": "decision",
       "text": "Candidate funnel: 62 evaluated · 40 shortlisted · 27 shipped · 28 rejected · 4 kept as detours"
     },
     {
-      "at": "2026-08-20T00:57:32.434Z",
+      "at": "2026-08-20T02:26:48.357Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 14 independent finding(s): 2 agree · 4 reject · 8 adopt"
     },
     {
-      "at": "2026-08-20T00:57:32.434Z",
+      "at": "2026-08-20T02:26:48.357Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-20T00:57:32.434Z",
+      "at": "2026-08-20T02:26:48.357Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether the intake's assumed anchor event (Kiyomizu-dera autumn night illumination) actually falls within the trip's Nov 13-17, 2026 dates"
     },
     {
-      "at": "2026-08-20T00:57:32.434Z",
+      "at": "2026-08-20T02:26:48.357Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether Toji's autumn illumination (Pass B, T0-verified, fully covers Nov 13-17) should be woven into Day 3 (Sun Nov 15) as a substitute for the anchor event the intake assumed but that isn't running"
     }
