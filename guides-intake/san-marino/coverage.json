@@ -1,0 +1,12 @@
+{
+  "slug": "san-marino",
+  "generatedAt": "2026-08-20T14:21:33.923Z",
+  "asks": [
+    {
+      "id": "comments",
+      "label": "Additional comments",
+      "value": "PIPELINE V2 INTEGRATION TEST FIXTURE (selector routing proof only) — will be canceled and cleaned up immediately.",
+      "coveredBy": null
+    }
+  ]
+}
