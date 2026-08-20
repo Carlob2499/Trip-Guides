@@ -1,0 +1,23 @@
+[
+  {
+    "type": "sights",
+    "group": "Sights",
+    "title": "Top sights",
+    "phase": "daily",
+    "items": [],
+    "rank": 1
+  },
+  {
+    "type": "divergences",
+    "group": "Sights",
+    "title": "What generic guides get wrong",
+    "phase": "daily",
+    "items": [
+      {
+        "claim": "",
+        "correction": ""
+      }
+    ],
+    "rank": 1
+  }
+]
