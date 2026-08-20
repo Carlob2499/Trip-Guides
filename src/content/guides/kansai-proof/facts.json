@@ -35,7 +35,7 @@
     "state": "approx",
     "tier": "corroborated",
     "risk": 2,
-    "evidence": "片道 580円 往復1,160円 30分 — one-way ¥580, round-trip ¥1,160, 30 min, JR Tokaido Line Shin-Kaisoku, 0 transfers. Reconcile (2026-08-20) re-checked via WebSearch: multiple current independent Japanese sources agree on ¥580 — JR West publishes no static per-station-pair fare page to climb to."
+    "evidence": "片道 580円 30分 — one-way ¥580, 30 min, JR Shin-Kaisoku, 0 transfers. Reconcile (2026-08-20): multiple current independent Japanese sources agree on ¥580; JR West publishes no static per-pair fare page to climb to."
   },
   "kintetsu-nara-ltd-express-1200-yen": {
     "claim": "Kintetsu Nara Line Limited Express, one-way adult fare, Osaka-Namba ↔ Kintetsu-Nara (base fare + limited-express charge)",
@@ -101,7 +101,7 @@
     "state": "approx",
     "tier": "corroborated",
     "risk": 2,
-    "evidence": "Reconcile (2026-08-20) fetched ekitan.com directly (a fare-lookup database, not a review aggregator) rather than relying on the earlier search-preview-only corroboration; JR West publishes no static per-station-pair fare page to climb to for a direct official citation."
+    "evidence": "Reconcile (2026-08-20) fetched ekitan.com directly (a fare-lookup database, not a review aggregator); JR West publishes no static per-pair fare page for a direct official citation."
   },
   "tax-free-refund-system-nov-1-2026": {
     "claim": "Japan's tax-free shopping system switches from an instant discount at the register to a refund claimed at departure (customs inspection confirms goods are leaving Japan)",
