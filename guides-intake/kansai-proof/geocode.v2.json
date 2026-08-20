@@ -1,43 +1,43 @@
 {
   "slug": "kansai-proof",
-  "attemptedAt": "2026-08-20T02:08:11.502Z",
+  "attemptedAt": "2026-08-20T02:29:36.013Z",
   "applied": true,
   "pending": 7,
   "resolved": [],
   "unresolved": [
     {
       "name": "Toji Autumn Illumination",
-      "file": "07-sights.json",
+      "file": "05-sights.json",
       "why": "name mismatch — asked \"Toji Autumn Illumination\", Places returned \"To-ji Temple\""
     },
     {
       "name": "Nanzenji (Suirokaku aqueduct)",
-      "file": "07-sights.json",
+      "file": "05-sights.json",
       "why": "name mismatch — asked \"Nanzenji (Suirokaku aqueduct)\", Places returned \"Waterway Pavilion\""
     },
     {
       "name": "Kasuga Taisha",
-      "file": "07-sights.json",
+      "file": "05-sights.json",
       "why": "name mismatch — asked \"Kasuga Taisha\", Places returned \"Kasugataisha Shrine\""
     },
     {
       "name": "Kouga-ryu",
-      "file": "08-food-and-shopping.json",
+      "file": "06-food-and-shopping.json",
       "why": "name mismatch — asked \"Kouga-ryu\", Places returned \"Kogaryu Takoyaki\""
     },
     {
       "name": "Houshoan",
-      "file": "08-food-and-shopping.json",
+      "file": "06-food-and-shopping.json",
       "why": "name mismatch — asked \"Houshoan\", Places returned \"Pontocho Housyouan\""
     },
     {
       "name": "Nakamura Tokichi Honten",
-      "file": "08-food-and-shopping.json",
+      "file": "06-food-and-shopping.json",
       "why": "name mismatch — asked \"Nakamura Tokichi Honten\", Places returned \"Nakamura Tokichi Main Branch\""
     },
     {
       "name": "Kakinohazushi Tanaka",
-      "file": "08-food-and-shopping.json",
+      "file": "06-food-and-shopping.json",
       "why": "name mismatch — asked \"Kakinohazushi Tanaka\", Places returned \"Kakinoha Sushi Honpo Tanaka Nara Honten\""
     }
   ]
