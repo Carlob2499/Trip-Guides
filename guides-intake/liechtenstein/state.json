@@ -1,0 +1,14 @@
+{
+  "slug": "liechtenstein",
+  "createdAt": "2026-08-20T14:33:15.942Z",
+  "updatedAt": "2026-08-20T14:33:15.942Z",
+  "stages": {
+    "scaffold": "2026-08-20T14:33:15.942Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}
