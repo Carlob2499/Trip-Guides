@@ -53,8 +53,8 @@
       "evidenceIds": [
         "ev-mizuno-hours-price",
         "ev-daruma-dotonbori-hours-booking",
-        "ev-wanaka-address-hours",
-        "ev-abaraya-hours-closed",
+        "ev-wanaka-official-site-blocked",
+        "ev-abaraya-hours-official",
         "ev-houshoan-hours-price-booking",
         "ev-kakinohazushi-tanaka-info",
         "ev-nakamura-tokichi-founding-info",
@@ -81,9 +81,7 @@
         "ev-todaiji-hours-fee",
         "ev-kasuga-taisha-hours-fee",
         "ev-osaka-castle-hours-fee",
-        "ev-toji-illumination-dates-2026",
-        "ev-gion-private-road-ban",
-        "ev-gion-private-road-photo-ban"
+        "ev-toji-illumination-dates-2026"
       ],
       "reason": null
     },
@@ -96,7 +94,6 @@
         "06-days.json#nara-day-trip"
       ],
       "evidenceIds": [
-        "ev-bamboo-grove-crowd-timing",
         "ev-nara-deer-feeding-etiquette",
         "ev-nara-deer-rut-season-risk",
         "ev-asajigahara-quiet-a",

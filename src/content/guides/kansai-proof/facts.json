@@ -30,12 +30,12 @@
     "claim": "JR Special Rapid Service, one-way adult fare, Osaka Station ↔ Kyoto Station",
     "value": "≈¥580",
     "source_url": "https://ekitan.com/rail-company/4/fare/sf-5198/st-5006",
-    "verified_on": "2026-08-19",
+    "verified_on": "2026-08-20",
     "shelf_life": "transit",
     "state": "approx",
     "tier": "corroborated",
     "risk": 2,
-    "evidence": "片道 580円 往復1,160円 30分 — one-way ¥580, round-trip ¥1,160, 30 min, JR Tokaido Line Shin-Kaisoku, 0 transfers"
+    "evidence": "片道 580円 往復1,160円 30分 — one-way ¥580, round-trip ¥1,160, 30 min, JR Tokaido Line Shin-Kaisoku, 0 transfers. Reconcile (2026-08-20) re-checked via WebSearch: multiple current independent Japanese sources agree on ¥580 — JR West publishes no static per-station-pair fare page to climb to."
   },
   "kintetsu-nara-ltd-express-1200-yen": {
     "claim": "Kintetsu Nara Line Limited Express, one-way adult fare, Osaka-Namba ↔ Kintetsu-Nara (base fare + limited-express charge)",
@@ -96,12 +96,12 @@
     "claim": "JR Nara Line Miyakoji Rapid, one-way adult fare, Kyoto Station ↔ Nara Station",
     "value": "≈¥720",
     "source_url": "https://ekitan.com/rail-company/4/fare/sf-5198/st-5006",
-    "verified_on": "2026-08-19",
+    "verified_on": "2026-08-20",
     "shelf_life": "transit",
     "state": "approx",
-    "tier": "secondary",
+    "tier": "corroborated",
     "risk": 2,
-    "evidence": "search-preview corroboration only across multiple aggregators (osakastation.com, kyotostation.com-style fare pages) — not independently fetched from an official JR West fare page this pass; flagged for Pass B/reconcile to confirm directly against jr-odekake.net or westjr.co.jp."
+    "evidence": "Reconcile (2026-08-20) fetched ekitan.com directly (a fare-lookup database, not a review aggregator) rather than relying on the earlier search-preview-only corroboration; JR West publishes no static per-station-pair fare page to climb to for a direct official citation."
   },
   "tax-free-refund-system-nov-1-2026": {
     "claim": "Japan's tax-free shopping system switches from an instant discount at the register to a refund claimed at departure (customs inspection confirms goods are leaving Japan)",

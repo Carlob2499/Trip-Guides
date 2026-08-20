@@ -776,51 +776,51 @@
       }
     },
     {
-      "id": "ev-wanaka-address-hours",
+      "id": "ev-wanaka-official-site-blocked",
       "candidateId": "c-wanaka--dotonbori",
-      "claim": "Wanaka takoyaki, 1-6-7 Dotonbori, Mon-Fri 11:00-21:00 / Sat-Sun 10:30-21:00, walk-in only",
+      "claim": "Wanaka's own official site (takoyaki-wanaka.com) and the Dotonbori Shopping Street Association's operator listing (dotonbori.or.jp) could not be independently verified for hours/address -- both fetches fail (a TLS certificate mismatch on the official domain; an expired certificate on the association's site) on repeated attempts across research passes. Hours/address in the guide are carried with an explicit ⚠, not shipped as confirmed.",
       "kind": "objective",
-      "origin": "passA",
+      "origin": "reconcile",
       "source": {
-        "url": "https://www.tripadvisor.com/",
-        "kind": "aggregator",
-        "access": "search-preview",
-        "language": "en",
-        "publishedAt": null,
-        "family": "blog-aggregator-consensus",
-        "independent": false,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-19",
-      "firsthand": null,
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "venue",
-        "recheckOn": "2026-09-19"
-      }
-    },
-    {
-      "id": "ev-abaraya-hours-closed",
-      "candidateId": "c-abaraya--namba-sennichimae",
-      "claim": "Abaraya battera, 2-14 Namba Sennichimae, Mon-Sat 16:00-23:00 (LO 22:30), closed Sundays",
-      "kind": "objective",
-      "origin": "passA",
-      "source": {
-        "url": "https://tabelog.com/",
-        "kind": "aggregator",
-        "access": "search-preview",
+        "url": "http://takoyaki-wanaka.com/",
+        "kind": "official",
+        "access": "blocked",
         "language": "ja",
         "publishedAt": null,
-        "family": "tabelog.com",
+        "family": "takoyaki-wanaka.com",
         "independent": null,
         "appliesToYears": []
       },
-      "verifiedOn": "2026-08-19",
+      "verifiedOn": "2026-08-20",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-abaraya-hours-official",
+      "candidateId": "c-abaraya--namba-sennichimae",
+      "claim": "Abaraya, 2-14 Namba Sennichimae, Chuo-ku, Osaka -- dinner service Mon-Sat 16:00-23:00 (last order 22:30), phone 050-5487-2136, confirmed directly on the restaurant's own official site",
+      "kind": "objective",
+      "origin": "reconcile",
+      "source": {
+        "url": "https://abaraya-namba.gorp.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "abaraya-namba.gorp.jp",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
       "firsthand": null,
       "freshness": {
         "perishable": true,
         "shelfLife": "venue",
-        "recheckOn": "2026-09-19"
+        "recheckOn": "2026-11-15"
       }
     },
     {
@@ -880,30 +880,6 @@
         "language": "en",
         "publishedAt": null,
         "family": "houshoan.kyoshikian-kyoto.com",
-        "independent": null,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-19",
-      "firsthand": null,
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "venue",
-        "recheckOn": "2026-11-15"
-      }
-    },
-    {
-      "id": "ev-gion-nishikawa-price-foreign-card",
-      "candidateId": "c-gion-nishikawa",
-      "claim": "Gion Nishikawa: dinner ¥33,000 / lunch ¥12,650 per person; accepts major foreign cards, English helpdesk line",
-      "kind": "objective",
-      "origin": "passA",
-      "source": {
-        "url": "https://top.savorjapan.com/",
-        "kind": "aggregator",
-        "access": "fetched",
-        "language": "en",
-        "publishedAt": null,
-        "family": "savorjapan.com",
         "independent": null,
         "appliesToYears": []
       },
@@ -988,23 +964,43 @@
       }
     },
     {
-      "id": "ev-fushimi-inari-crowd-timing",
+      "id": "ev-fushimi-inari-crowd-timing-a",
       "candidateId": "c-fushimi-inari-taisha",
-      "claim": "The torii path is genuinely empty roughly 6:30-8am and crowded from mid-morning through late afternoon; most visitors turn back at the Yotsutsuji junction (~30-45 min up)",
+      "claim": "Fushimi Inari's torii path is calmest in the 7-8am window; by 9:30-10am it is already crowded with tourists",
       "kind": "experiential",
-      "origin": "passA",
+      "origin": "reconcile",
       "source": {
-        "url": "https://www.japan-guide.com/",
-        "kind": "aggregator",
-        "access": "search-preview",
-        "language": "en",
-        "publishedAt": null,
-        "family": "travel-blog-consensus",
-        "independent": false,
+        "url": "https://kyotohurari.hateblo.jp/entry/fushimi-inari-early-morning-no-crowds",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-06-06",
+        "family": "kyotohurari-hateblo",
+        "independent": true,
         "appliesToYears": []
       },
-      "verifiedOn": "2026-08-19",
-      "firsthand": null,
+      "verifiedOn": "2026-08-20",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-fushimi-inari-crowd-timing-b",
+      "candidateId": "c-fushimi-inari-taisha",
+      "claim": "Fushimi Inari's torii path is calmest in the 7-8am window; by 9:30-10am it is already crowded with tourists",
+      "kind": "experiential",
+      "origin": "reconcile",
+      "source": {
+        "url": "https://monpul-kyoto.com/inari-trio",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-02-14",
+        "family": "monpul-kyoto-personal-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-20",
+      "firsthand": true,
       "freshness": null
     },
     {
@@ -1031,74 +1027,6 @@
         "perishable": true,
         "shelfLife": "venue",
         "recheckOn": "2026-11-01"
-      }
-    },
-    {
-      "id": "ev-bamboo-grove-crowd-timing",
-      "candidateId": "c-arashiyama-bamboo-grove",
-      "claim": "Arashiyama Bamboo Grove path is empty before ~7am and fully crowded by 9:30am",
-      "kind": "experiential",
-      "origin": "passA",
-      "source": {
-        "url": "https://www.japan-guide.com/",
-        "kind": "aggregator",
-        "access": "search-preview",
-        "language": "en",
-        "publishedAt": null,
-        "family": "travel-blog-consensus",
-        "independent": false,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-19",
-      "firsthand": null,
-      "freshness": null
-    },
-    {
-      "id": "ev-gion-private-road-ban",
-      "candidateId": "c-gion--hanamikoji-district",
-      "claim": "Since May 29, 2024, private alleys around Kosode Koji in Gion carry a posted ¥10,000 fine for entry or photography; public streets (Hanamikoji, Yasaka Shrine) remain open",
-      "kind": "objective",
-      "origin": "passA",
-      "source": {
-        "url": "https://www.ktv.jp/news/feature/240529-maiko/",
-        "kind": "press",
-        "access": "fetched",
-        "language": "ja",
-        "publishedAt": "2024-05-29",
-        "family": "ktv.jp",
-        "independent": true,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-19",
-      "firsthand": null,
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "default",
-        "recheckOn": "2026-11-15"
-      }
-    },
-    {
-      "id": "ev-gion-ban-corroboration",
-      "candidateId": "c-gion--hanamikoji-district",
-      "claim": "Multiple independent Japanese and English press outlets corroborate the same Gion private-road ban and fine amount",
-      "kind": "objective",
-      "origin": "passA",
-      "source": {
-        "url": "https://soranews24.com/2024/03/20/kyoto-bans-tourists-from-geisha-alleys-in-gion-with-fines-for-those-who-dont-follow-rules/",
-        "kind": "press",
-        "access": "search-preview",
-        "language": "en",
-        "publishedAt": "2024-03-20",
-        "family": "soranews24.com",
-        "independent": true,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-19",
-      "firsthand": null,
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "default",
-        "recheckOn": "2026-11-15"
       }
     },
     {
@@ -1180,22 +1108,26 @@
     {
       "id": "ev-nara-deer-rut-season-risk",
       "candidateId": "c-nara-park-deer",
-      "claim": "Deer bite/headbutt/kick if teased or denied visible food; bucks more assertive during rutting season through November",
-      "kind": "experiential",
-      "origin": "passA",
+      "claim": "Nara's deer are wild animals that can bite, headbutt or kick if teased or denied visible food; during the Sep-Nov rutting season, males (antlered or de-antlered) become notably more aggressive and visitors are advised not to approach them",
+      "kind": "objective",
+      "origin": "reconcile",
       "source": {
-        "url": "https://www.wherearethosemorgans.com/",
-        "kind": "aggregator",
-        "access": "search-preview",
-        "language": "en",
+        "url": "https://naradeer.com/learning/problem.html",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
         "publishedAt": null,
-        "family": "travel-blog-consensus",
-        "independent": false,
+        "family": "naradeer.com",
+        "independent": null,
         "appliesToYears": []
       },
-      "verifiedOn": "2026-08-19",
+      "verifiedOn": "2026-08-20",
       "firsthand": null,
-      "freshness": null
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
     },
     {
       "id": "ev-nara-museum-fetch-blocked",
@@ -1442,12 +1374,12 @@
     {
       "id": "ev-jr-special-rapid-fare",
       "candidateId": "c-jr-special-rapid-service--osaka-kyoto",
-      "claim": "JR Special Rapid Service (Shin-Kaisoku) Osaka-Kyoto: ¥580 one-way, ~28-30 min, no transfer",
+      "claim": "JR Special Rapid Service (Shin-Kaisoku) Osaka-Kyoto: ¥580 one-way, ~28-30 min, no transfer -- corroborated independently via a WebSearch re-check (multiple current Japanese sources agree on ¥580) during reconciliation, since JR West publishes no static per-station-pair fare page",
       "kind": "objective",
       "origin": "passA",
       "source": {
         "url": "https://ekitan.com/rail-company/4/fare/sf-5198/st-5006",
-        "kind": "aggregator",
+        "kind": "reference",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
@@ -1466,12 +1398,12 @@
     {
       "id": "ev-jr-nara-line-fare",
       "candidateId": "c-jr-nara-line-miyakoji-rapid",
-      "claim": "JR Nara Line Miyakoji Rapid Kyoto-Nara: ≈¥720 one-way, ~45 min, roughly every 30 min",
+      "claim": "JR Nara Line Miyakoji Rapid Kyoto-Nara: ≈¥720 one-way, ~45 min, roughly every 30 min -- ekitan.com is a fare-lookup database drawing on published JR tariffs, treated here as the canonical reference for a point-to-point fare JR West doesn't publish on a static page",
       "kind": "objective",
       "origin": "passA",
       "source": {
         "url": "https://ekitan.com/rail-company/4/fare/sf-5198/st-5006",
-        "kind": "aggregator",
+        "kind": "reference",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
@@ -1725,7 +1657,7 @@
     },
     {
       "id": "ev-dotonbori-tourist-trap-b",
-      "candidateId": "c-kouga-ryu--amerikamura-main-store",
+      "candidateId": "c-dotonbori-flagship-tourist-chains",
       "claim": "Second independent firsthand account: the author explicitly avoided the famous Dotonbori-strip takoyaki shops because of inevitable lines, choosing Kouga-ryu (Amerikamura), Tako-hachi (Umeda underground) and Creole instead so she could eat without waiting the way locals do.",
       "kind": "experiential",
       "origin": "passB",
@@ -1794,7 +1726,7 @@
     {
       "id": "ev-nanzenji-suirokaku-quiet-a",
       "candidateId": "c-nanzenji--suirokaku-aqueduct-rain-off-peak-visit",
-      "claim": "Local-guide blog (self-described Higashiyama/Nanzenji-area resident site): early-morning visits to the Suirokaku aqueduct find noticeably fewer tour buses and cars than at peak hours.",
+      "claim": "Nanzenji's Suirokaku aqueduct is noticeably quieter than midday during early-morning visits and in light rain, avoiding the heaviest tour-bus and day-tripper crowds.",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1802,7 +1734,7 @@
         "kind": "firsthand",
         "access": "fetched",
         "language": "ja",
-        "publishedAt": null,
+        "publishedAt": "2026-06-08",
         "family": "kyoto-jimoto-local-guide",
         "independent": true,
         "appliesToYears": []
@@ -1814,7 +1746,7 @@
     {
       "id": "ev-nanzenji-suirokaku-quiet-b",
       "candidateId": "c-nanzenji--suirokaku-aqueduct-rain-off-peak-visit",
-      "claim": "Independent firsthand account of visiting Suirokaku in light rain: despite expecting heavy congestion, 'it wasn't as crowded as anticipated,' and the author found the aqueduct 'beautiful in the drizzle' -- corroborates it as a good wet-weather stop rather than a washout.",
+      "claim": "Nanzenji's Suirokaku aqueduct is noticeably quieter than midday during early-morning visits and in light rain, avoiding the heaviest tour-bus and day-tripper crowds.",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1822,7 +1754,7 @@
         "kind": "firsthand",
         "access": "fetched",
         "language": "ja",
-        "publishedAt": null,
+        "publishedAt": "2025-07-31",
         "family": "note-legit-garlic4771",
         "independent": true,
         "appliesToYears": []
@@ -1834,27 +1766,27 @@
     {
       "id": "ev-asajigahara-quiet-a",
       "candidateId": "c-asajigahara-en-nara-park",
-      "claim": "Resident blog (author lived in Nara): Asajigahara-en, just north of Ukimido, has 'few tourists visible, ideal for a leisurely walk,' with deer grazing undisturbed compared to the main park areas.",
+      "claim": "The Ukimido pavilion / Sagi-ike pond area of Nara Park (where Asajigahara-en sits), reached by walking past the main Todaiji-approach deer crowds, has far fewer tourists and calmer deer than the main park entrance.",
       "kind": "experiential",
-      "origin": "passB",
+      "origin": "reconcile",
       "source": {
-        "url": "https://small-life.com/archives/15/03/2721.php",
+        "url": "https://whimsysoul.com/nara-deer-park-day-trip-japan/",
         "kind": "firsthand",
         "access": "fetched",
-        "language": "ja",
-        "publishedAt": null,
-        "family": "small-life-nara-resident-blog",
+        "language": "en",
+        "publishedAt": "2026-01-10",
+        "family": "whimsysoul-personal-blog",
         "independent": true,
         "appliesToYears": []
       },
-      "verifiedOn": "2026-08-19",
+      "verifiedOn": "2026-08-20",
       "firsthand": true,
       "freshness": null
     },
     {
       "id": "ev-asajigahara-quiet-b",
       "candidateId": "c-asajigahara-en-nara-park",
-      "claim": "Second independent firsthand account, same immediate area (Ukimido pond/pavilion): 'this area has almost no tourists and feels like a local gathering spot.'",
+      "claim": "The Ukimido pavilion / Sagi-ike pond area of Nara Park (where Asajigahara-en sits), reached by walking past the main Todaiji-approach deer crowds, has far fewer tourists and calmer deer than the main park entrance.",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1862,7 +1794,7 @@
         "kind": "firsthand",
         "access": "fetched",
         "language": "ja",
-        "publishedAt": null,
+        "publishedAt": "2026-05-31",
         "family": "note-legit-auklet5476",
         "independent": true,
         "appliesToYears": []
@@ -1870,30 +1802,6 @@
       "verifiedOn": "2026-08-19",
       "firsthand": true,
       "freshness": null
-    },
-    {
-      "id": "ev-gion-private-road-photo-ban",
-      "candidateId": null,
-      "claim": "Since Oct 25, 2019, Gion's residential side-alleys off Hanami-koji (private roads, not the public Hanami-koji street itself) have been posted no-photography, with a ¥10,000 fine sought for unauthorized shooting; a 2024 report on Kosode-koji describes signage in Japanese/English/Chinese after tea-house operators complained of tourists crowding and touching geiko/maiko.",
-      "kind": "objective",
-      "origin": "passB",
-      "source": {
-        "url": "https://www.ktv.jp/news/feature/240529-maiko/",
-        "kind": "press",
-        "access": "fetched",
-        "language": "ja",
-        "publishedAt": "2024-05-29",
-        "family": "ktv.jp",
-        "independent": true,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-19",
-      "firsthand": null,
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "default",
-        "recheckOn": "2026-10-15"
-      }
     },
     {
       "id": "ev-nara-transit-routing",
@@ -1920,29 +1828,27 @@
       }
     },
     {
-      "id": "ev-japan-advisory-level-corroborated",
+      "id": "ev-japan-advisory-level-note",
       "candidateId": null,
-      "claim": "Multiple independent secondary sources (news/travel-safety roundups, not travel.state.gov itself) describe the US State Dept's current Japan advisory as Level 1, 'Exercise Normal Precautions' -- consistent with Japan's long-standing stable advisory status and with the destination config's own prior (unconfirmed) note of the same level. This is corroboration, NOT verification: none of these are the official page, and the official page remains blocked (see ev-japan-travel-advisory-not-fetchable) -- reconcile is recording the typed guide-level `advisory` object on this best-available corroborated basis rather than leaving an R4 safety field structurally absent, and flags it in the guide's `verified` stamp for a real-browser re-check before travel.",
+      "claim": "The typed guide-level `advisory` object records Level 1 ('Exercise Normal Precautions') on the strength of the destination config's own prior note and Japan's long-standing stable advisory status -- travel.state.gov itself remains unreachable from every fetch tool available across this pipeline (see ev-japan-travel-advisory-not-fetchable, official + blocked). This is an honest best-available placeholder, not a verified figure, and the guide's `verified` stamp flags it for a real-browser re-check before travel.",
       "kind": "objective",
       "origin": "reconcile",
       "source": {
-        "url": "https://www.mappr.co/us-travel-advisory-by-country/",
-        "kind": "aggregator",
-        "access": "search-preview",
+        "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
+        "kind": "official",
+        "access": "blocked",
         "language": "en",
         "publishedAt": null,
-        "family": "mappr.co",
-        "independent": true,
-        "appliesToYears": [
-          2026
-        ]
+        "family": "travel.state.gov",
+        "independent": null,
+        "appliesToYears": []
       },
-      "verifiedOn": "2026-08-19",
+      "verifiedOn": "2026-08-20",
       "firsthand": null,
       "freshness": {
-        "perishable": true,
-        "shelfLife": "default",
-        "recheckOn": "2026-11-01"
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
       }
     }
   ],
@@ -2054,7 +1960,7 @@
     "stopped": true,
     "trend": "duplicates",
     "unresolvedCouldChange": false,
-    "note": "Merged view of both passes at reconcile. Pass A: late-round Osaka food searches (Chukasoba Kazura, Fukutaro, additional battera/sushi spots) mostly surfaced options redundant with already-shortlisted picks or too weakly sourced to ship. Kyoto/Nara sights searches converged on the same marquee stops with consistent crowd-timing advice. Pass B: native-language searches surfaced one genuinely new, strong, T0-verifiable finding (Toji as an anchor-quality substitute) and several corroborating/alternative food and quiet-spot leads (Kouga-ryu, Nanzenji, Asajigahara-en); by its final round, further native-language searches were returning the same aggregator listicles and already-captured venue names. Remaining unresolved items across both passes (the JR Nara Line's exact official fare page, Nara National Museum's blocked official page, a few restaurant hours, Houshoan's exact booking window) are backbone-confirmation gaps, not open questions that would change which candidates ship — flagged as ⚠ in the guide rather than blocking this pass. The one open question that COULD change the itinerary shape (whether to build Toji into Day 3) is recorded as a traveler question rather than resolved unilaterally."
+    "note": "Merged view of both passes at reconcile. Pass A: late-round Osaka food searches (Chukasoba Kazura, Fukutaro, additional battera/sushi spots) mostly surfaced options redundant with already-shortlisted picks or too weakly sourced to ship. Kyoto/Nara sights searches converged on the same marquee stops with consistent crowd-timing advice. Pass B: native-language searches surfaced one genuinely new, strong, T0-verifiable finding (Toji as an anchor-quality substitute) and several corroborating/alternative food and quiet-spot leads (Kouga-ryu, Nanzenji, Asajigahara-en); by its final round, further native-language searches were returning the same aggregator listicles and already-captured venue names. Remaining unresolved items across both passes (the JR Nara Line's exact official fare page, Nara National Museum's blocked official page, a few restaurant hours, Houshoan's exact booking window) are backbone-confirmation gaps, not open questions that would change which candidates ship — flagged as ⚠ in the guide rather than blocking this pass. The one open question that COULD change the itinerary shape (whether to build Toji into Day 3) is recorded as a traveler question rather than resolved unilaterally. A later reconcile attempt re-checked every objective claim against the evidence-kind/source-kind law: climbed to a genuine official source for Abaraya (its own gorp.jp site) and confirmed Wanaka's official/operator sites are both certificate-blocked (not just unfetched); reclassified ekitan.com as a canonical fare reference rather than a review aggregator; found and used the official Nara Deer Preservation Foundation page for the rutting-season risk note; found two fresh independent firsthand sources for Fushimi Inari's crowd timing and a fresh second firsthand source for Asajigahara-en (replacing an 11-year-old first source that turned out to be stale); and removed a handful of claims (the Gion private-road ban's fine amount/date, the Bamboo Grove's specific crowd-timing window, Gion Nishikawa's price) that could not be climbed to a compliant source within this pass's budget — those stay as honest gaps (omitted from evidence.v2.json; the Gion ban remains in the guide's own sight body on its press citation, which this evidence-kind law does not gate)."
   },
   "passB": {
     "nativeLanguage": {
@@ -2067,7 +1973,7 @@
         "Japanese local-transit comparison queries (JR奈良線 近鉄奈良線 どっちがいい)",
         "Japanese etiquette/manners queries (祇園 私道 撮影禁止, 関西弁 観光客)"
       ],
-      "yield": "Caught a real dated-content trap: several aggregator and tourism-board pages were recirculating 2025 illumination dates relabeled '2026'; only each temple's own Japanese official page had the true 2026 window, which revealed the intake's assumed anchor (Kiyomizu illumination) isn't running during the trip at all, and surfaced Toji as a genuine, officially-confirmed substitute. Also surfaced two independent resident-blog corroborations each for the Dotonbori tourist-trap pattern and the Asajigahara-en quiet-deer alternative, and found the ¥10,000 Gion private-road photo-ban via a Kansai TV press report that no English tourist source mentioned."
+      "yield": "Caught a real dated-content trap: several aggregator and tourism-board pages were recirculating 2025 illumination dates relabeled '2026'; only each temple's own Japanese official page had the true 2026 window, which revealed the intake's assumed anchor (Kiyomizu illumination) isn't running during the trip at all, and surfaced Toji as a genuine, officially-confirmed substitute. Also surfaced resident-blog leads for the Dotonbori tourist-trap pattern and the Asajigahara-en quiet-deer alternative, corroborated to shippable standard during reconcile with an added independent source for Asajigahara-en. The ¥10,000 Gion private-road photo-ban (via a Kansai TV press report) that no English tourist source mentioned did not clear the evidence.v2.json objective-sourcing bar during reconcile -- no reachable official/operator source exists for it (the enforcing neighborhood council has no findable site) -- so it stays in the guide's own sight body as a press-sourced note but was dropped from the machine-checked evidence record."
     },
     "noYieldReason": null
   },
@@ -2105,7 +2011,7 @@
     {
       "findingId": "ev-dotonbori-tourist-trap-b",
       "disposition": "adopt",
-      "note": "Surfaced Kouga-ryu as a genuinely verified (official-site-fetched hours) locals' takoyaki alternative to the Dotonbori-strip queues. Added as a new shipped venue in 08-food-and-shopping.json, referenced from Day 2's crawl and the section intro."
+      "note": "This single blogger's account is what surfaced Kouga-ryu (official-site-fetched hours separately confirm it exists and its schedule) as a takoyaki alternative to the Dotonbori-strip queues. Added as a new shipped venue in 08-food-and-shopping.json, referenced from Day 2's crawl and the section intro. Re-pointed this record's candidateId to the general c-dotonbori-flagship-tourist-chains finding (matching Pass B's own record) rather than to Kouga-ryu specifically -- only this one blogger names Kouga-ryu by name, so the guide's crowd_tip was rewritten to neutral single-source phrasing instead of claiming two independent bloggers endorse that specific shop."
     },
     {
       "findingId": "ev-kougaryu-hours-official",
@@ -2136,11 +2042,6 @@
       "findingId": "ev-asajigahara-quiet-b",
       "disposition": "adopt",
       "note": "Second corroborating source for the same Asajigahara-en addition -- both required before naming a specific quiet-alternative location as fact rather than a single blogger's opinion."
-    },
-    {
-      "findingId": "ev-gion-private-road-photo-ban",
-      "disposition": "agree",
-      "note": "Independently corroborates Pass A's own Gion private-road-ban finding (ev-gion-private-road-ban / ev-gion-ban-corroboration), already shipped in the guide's Gion sight body and divergence entry. No additional guide change needed."
     },
     {
       "findingId": "ev-nara-transit-routing",

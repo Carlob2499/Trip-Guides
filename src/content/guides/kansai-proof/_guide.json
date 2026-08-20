@@ -5,7 +5,7 @@
   "country": "Japan",
   "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft — Pass A (canonical/verified) and Pass B (local/authentic) reconciled 2026-08-19; independent critic review has not yet run. Re-check before travel: the USD/JPY rate, Houshoan's booking window, Kiyomizu-dera's exact November closing time, the Nara day-trip's last-train times, and the US State Dept travel advisory level for Japan (recorded Level 1 from corroborated secondary sources, not a direct fetch — travel.state.gov is bot-gated against every tool this pipeline has).",
+  "verified": "⚠ Draft — Pass A (canonical/verified) and Pass B (local/authentic) reconciled 2026-08-19, re-checked for source-kind compliance 2026-08-20; independent critic review has not yet run. Re-check before travel: the USD/JPY rate, Houshoan's booking window, Kiyomizu-dera's exact November closing time, the Nara day-trip's last-train times, Wanaka's hours/address (official site certificate-blocked on repeated attempts), and the US State Dept travel advisory level for Japan (recorded Level 1 as an honest placeholder, not a direct fetch — travel.state.gov is bot-gated against every tool this pipeline has).",
   "provenance": "strict",
   "roomId": "eoobzeguiykwitl2",
   "footer": "Location facts sourced to official venue/operator sites where reachable; see Sources & further reading.",
