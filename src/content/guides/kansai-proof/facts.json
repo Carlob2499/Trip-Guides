@@ -82,6 +82,16 @@
     "tier": "primary",
     "risk": 2
   },
+  "tenryuji-autumn-early-opening-nov-14-30": {
+    "claim": "Tenryu-ji opens the Sogenchi garden at 7:30 — thirty minutes before its regular 8:30 — for the autumn colour, per the temple's dated 2026 notice",
+    "value": "Nov 14–30, 2026",
+    "source_url": "https://www.tenryuji.com/en/info/",
+    "verified_on": "2026-08-20",
+    "shelf_life": "hours",
+    "tier": "primary",
+    "risk": 2,
+    "evidence": "\"From November 14th to November 30th, 2026 … the Sogen Pond Garden opens at 7:30, thirty minutes earlier than usual … the garden's autumn colors in the early morning sunlight\""
+  },
   "jr-nara-line-kyoto-nara-720-yen": {
     "claim": "JR Nara Line Miyakoji Rapid, one-way adult fare, Kyoto Station ↔ Nara Station",
     "value": "≈¥720",

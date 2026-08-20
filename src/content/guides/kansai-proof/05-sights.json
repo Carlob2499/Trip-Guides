@@ -53,7 +53,7 @@
       {
         "name": "Arashiyama Bamboo Grove & Tenryu-ji",
         "kicker": "A green-lit path, then a UNESCO garden next door",
-        "body": "<p>The grove itself is a free public path — empty before 8am, packed by 9:30. Tenryu-ji's Sogenchi garden next door gives the visit more substance than the grove alone: garden admission {{fact:tenryuji-garden-500-yen}} (+¥300 for building access), 8:30am–5:00pm with last admission 4:50pm. The temple's own <a href='https://www.tenryuji.com/en/info/'>2026 notice</a> opens the garden half an hour early, at 7:30am, from Nov 14–30 for the autumn colour — this trip's Arashiyama morning falls inside that window.</p>",
+        "body": "<p>The grove itself is a free public path — empty before 8am, packed by 9:30. Tenryu-ji's Sogenchi garden next door gives the visit more substance than the grove alone: garden admission {{fact:tenryuji-garden-500-yen}} (+¥300 for building access), 8:30am–5:00pm with last admission 4:50pm. The temple's own <a href='https://www.tenryuji.com/en/info/'>2026 notice</a> opens the garden half an hour early, at 7:30am, from {{fact:tenryuji-autumn-early-opening-nov-14-30}} for the autumn colour — this trip's Arashiyama morning falls inside that window.</p>",
         "dwell_min": 90,
         "source_url": "https://www.tenryuji.com/en/visit/",
         "verified_on": "2026-08-20",

@@ -351,6 +351,135 @@ item's `source_url` + `verified_on`.
 
 **Deferred to human:** none.
 
+### Second critic pass — 2026-08-20 (fresh context, re-run after deterministic validation)
+
+A second fresh-context critic read the finished guide with no sight of the first pass's evidence
+artifacts. Same five scans (#6 anchor · #8 depth · #9 party fit · #12 authenticity · vibe lens),
+plus the deterministic validator's own P0. Seven findings, all implemented below; the four rubric
+scans came back clean and are rebutted-in-place at the end. **Note on file references:** the first
+pass cites group files by their pre-composition numbering (`06-days.json`, `07-sights.json`); the
+tree now numbers them `04-days.json`, `05-sights.json`, `06-food-and-shopping.json`. References
+below use the current filenames.
+
+**D1 — the Tenryu-ji autumn early-opening window is a dated, perishable fact living only in
+prose.** *(rubric #3 provenance, #11 recency; validator P0 `forecast-unregistered` ·
+`facts.json`, `04-days.json` → Tue Nov 17, `05-sights.json` → Arashiyama & Tenryu-ji.)* Both
+bodies quote a 7:30 opening across Nov 14–30 and both cite the temple's dated notice inline, so
+the provenance checks look complete — and nothing expires it. No `facts.json` row means recert
+cannot list it by id, the citation audit cannot walk it, and a 2027 notice with different dates
+would leave two bodies silently wrong. **Fixed:** `tenryuji-autumn-early-opening-nov-14-30` added
+to the registry — value `Nov 14–30, 2026`, `shelf_life: hours`, source `tenryuji.com/en/info/`
+re-fetched today with the quoted locator stored in `evidence` ("From November 14th to November
+30th, 2026 … the Sogen Pond Garden opens at 7:30, thirty minutes earlier than usual"). Both prose
+sites now reference it as `{{fact:}}`, so the window has one spelling and one expiry.
+
+**D2 — the departure day sends the travelers to Kyoto while their luggage is in Osaka, and never
+says so.** *(vibe lens — geography + common sense; rubric #4 actionable · `04-days.json` → Tue Nov
+17, `01-plan.json` → "When you land".)* The trip bases in Osaka for all four nights (booking
+checklist: "Accommodation (Osaka base…)") and gives the final morning to Arashiyama, the far
+north-west corner of Kyoto. The day then said the run back is "a local JR ride to Kyoto Station and
+then the Haruka, on top of bag collection and check-in" — a sequence that quietly requires being in
+two cities at once, on the one day where getting it wrong means missing a flight. **Fixed:** the
+card now names the two ways it actually works — check out with the bags and carry them, or route the
+return through Osaka — resting on a source the guide already cites and which was re-fetched today:
+JR West's Haruka page states "Direct service from Kansai-airport to Tennoji, Osaka, Shin-Osaka, and
+Kyoto!", so the Kyoto→KIX leg passes the base city. Day `title` and `pace` corrected with it, and
+the Plan panel now carries the calling pattern the fix leans on.
+
+**D3 — the arrival day hangs on a limited express with a last departure, and no landing time was
+ever given.** *(vibe lens — common sense; rubric #10 honest gaps · `04-days.json` → Fri Nov 13,
+`01-plan.json` → "When you land".)* The guide correctly hedges the unknown OUTBOUND flight on Tue
+Nov 17 and does not hedge the unknown INBOUND on Fri Nov 13, where the entire day is one transfer
+and the airport rail links do not run all night. **Fixed:** a ⚠ on both surfaces telling the
+travelers to check the last KIX departures for the Haruka and the Nankai line against the actual
+landing time, not the scheduled one. No departure times invented — neither operator page cited here
+carries a timetable (confirmed on the JR West page today), so the guide asks for the check instead
+of guessing the answer.
+
+**D4 — Nishiki Market is now in the base plan twice: an unswept ripple of the previous pass's own
+lunch fix.** *(vibe lens — pacing arc + geography · `04-days.json` → Sun Nov 15 and Tue Nov 17,
+plus both `plan_b` blocks.)* Writing Nishiki into Sunday's eleven-hour food gap was right; leaving
+"Nishiki Market for a final browse" standing on Tuesday was not. A five-day trip whose #1 priority
+is food ended up scheduling one arcade twice in the base plan and up to three times in rain.
+**Fixed:** Tuesday's stop demoted to conditional ("only earns a second visit if Sunday's stop got
+cut short"), the day title changed from "Arashiyama, Nishiki Market, departure prep" to "Arashiyama,
+then departure prep", and Tuesday's rain plan now says out loud that it repeats Sunday rather than
+pretending to be a fresh idea.
+
+**D5 — the trip's first food stop has no verified opening time, and the card promised breakfast.**
+*(rubric #7 four-question rule — "when does it fit"; #10 honest gaps · `04-days.json` → Sat Nov
+14.)* Kuromon Ichiba opens the first full day and the `tldr` read "Market breakfast", but nothing
+in this guide sources the market's opening time; the only timing evidence anywhere is Wanaka's
+"best before 11am", which is a crowd note, not an hour. A couple arriving at 08:00 on a food-first
+trip meets shutters. **Fixed:** `tldr` → "A market graze", and an explicit ⚠ that the opening time
+is unconfirmed and the stalls keep their own hours, so this is a mid-morning graze rather than a
+dawn breakfast. **Source lead, deliberately NOT fetched:** the market's own site, kuromon.com, is
+outside this stage's fetch allowlist — flagged rather than pretended.
+
+**D6 — Nishiki is scheduled as a meal against an association that publishes no hours and no closing
+days.** *(rubric #10 honest gaps · `04-days.json` → Sun Nov 15.)* Fetched both
+`kyoto-nishiki.or.jp/en/` and its `/manner/` page today: the association publishes exactly the
+eating etiquette the guide cites and no market-wide hours or closed days at all. **Fixed:** a ⚠
+that says so, with the actionable version — plan the arcade, treat any single stall as a
+preference. This is an honest gap in the source, not one in the research, and it now reads that way.
+
+**D7 — one line of day copy was written to the previous draft rather than to the traveler.** *(vibe
+lens — tone · `04-days.json` → Sun Nov 15.)* "Lunch is the gap this day used to have" is an edit
+note wearing itinerary clothes: the traveler has no idea what the day used to be. **Fixed:**
+rewritten to state the problem the traveler actually faces ("Lunch needs planning here: it is
+roughly eleven hours from the Fushimi Inari start to the Pontocho reservation…").
+
+#### Rebuttals — second pass
+
+- **`leg-duration-unverified` (3 of 10 legs) — judged NOT a defect, deliberately not "fixed".** The
+  three unsourced units are the section CONTAINERS ("Day by day", "Top sights", "What to eat"),
+  which match only because `extractLegDurations` stringifies a section together with its items;
+  every item that actually asserts a leg carries its own `source_url`. The only edit that clears
+  the count is hanging a `source_url` on a container no single source attests — a fabricated
+  attestation traded for a quieter number, on a check whose own header calls the count correct
+  behaviour ("a count that fires on every guide is therefore the CORRECT behaviour here … not a
+  pass/fail gate"). Left standing.
+- **`routes-not-configured` — environment, not artifact.** `GOOGLE_ROUTES_KEY` is unset by the
+  creator's default-OFF ruling; nothing inside the guide can close it.
+- **Rubric #6 (anchor), #8 (priority depth), #9 (party fit), #12 (authenticity) — clean, no
+  replacements.** The anchor substitute was re-verified today against `toji.or.jp` (Oct 31–Dec 13,
+  18:00–21:30, desk to 21:00, ¥1,000/¥500) and the disproved intake anchor still sits outside the
+  trip window. Food (#1) carries the most depth, Nature (#3) the least, matching the ranking; the
+  B-only local finds (Kouga-ryu, Nanzenji's Suirokaku, Asajigahara-en) and the Gion private-road
+  ban are not things a generic model produces.
+- **Kansai Railway Pass Lite validity, minor and left alone.** The operator page splits it — valid
+  to Oct 1, 2026 for the 2-day pass, Oct 2 for the 3-day — and the guide quotes the outer bound
+  "Apr 1–Oct 2". No November decision turns on it, so no edit; recorded rather than silently
+  dropped.
+
+#### Continuity sweep — critic execution (second pass)
+
+**Greps run** over `src/content/guides/kansai-proof/`: `Nov 14–30` · `autumn colou` · `Nishiki` ·
+`Kuromon` · `Nankai` · `Osaka base` · `Arashiyama, Nishiki` · `tenryuji-autumn-early-opening`.
+
+**Ripples found & fixed:**
+- Registering the Tenryu-ji window replaced the bare date string in BOTH bodies that carried it;
+  the grep confirms no bare `Nov 14–30` survives anywhere outside the registry row's own `value`.
+- Demoting Tuesday's Nishiki stop rippled into three more surfaces than the body: the day `title`,
+  the `pace` line, and Tuesday's `plan_b`, which still routes to Nishiki in rain and now says
+  plainly that it repeats Sunday.
+- The bags/return-route finding rippled out of the day card into `01-plan.json` → "When you land",
+  which now states the Haruka's calling pattern (the verified fact the fix rests on) and carries the
+  same last-departure ⚠ as Fri Nov 13.
+- Leading the Nara day with the Kyoto route contradicted both the trip's Osaka base and the budget
+  line, which prices the Kintetsu round trip at ¥2,400/person: the day body now leads with
+  Kintetsu-from-Osaka and keeps the JR-from-Kyoto figure as the parenthetical alternative. No fare
+  changed — only which one the traveler reads first.
+- `verified_on` restamped to 2026-08-20 **only** where the source was actually re-fetched today:
+  Fri Nov 13 and the "When you land" panel (both on the JR West Haruka page). Everything else was
+  already stamped 2026-08-20 by the first critic pass, which ran the same day — nothing was
+  re-dated to look fresher than it is.
+- Guide-level `verified` stamp: the second pass recorded, and three items added to the pre-travel
+  re-check list (last KIX departures for the Haruka/Nankai, Kuromon Ichiba's opening time, Nishiki
+  Market's hours and closing days).
+
+**Deferred to human:** none.
+
 ## Citation audit
 
 Sixteen perishable facts sampled and fetched against their own `source_url` on 2026-08-20, weighted
@@ -380,3 +509,26 @@ flagged. Not re-fetched this pass, and deliberately so: Wanaka (official site ce
 already `⚠`-flagged with an honest note), the ekitan-sourced JR fares (settled at reconcile on
 2026-08-20, one day old), the USD/JPY rate (`fx`, will be stale by November regardless), and the
 travel advisory (travel.state.gov is bot-gated against every tool in this pipeline — see Amendments).
+
+### Citation audit — second critic pass, 2026-08-20
+
+Eight facts sampled and independently re-fetched against their own `source_url`, weighted to the
+anchor substitute, the trip's one splurge, and the two facts the second pass changed or added.
+
+| Claim | Value | Source fetched | Verdict |
+|-------|-------|----------------|---------|
+| Tenryu-ji Sogenchi garden autumn early opening (newly registered) | 7:30 opening, Nov 14–30, 2026 | y — tenryuji.com/en/info/ | supports (quoted locator stored in the fact row's `evidence`) |
+| JR Haruka one-way fares + calling pattern | ¥1,800 KIX→Osaka/Shin-Osaka; ¥2,200 KIX→Kyoto | y — westjr.co.jp …/oneway/haruka/ | supports — also states "Direct service from Kansai-airport to Tennoji, Osaka, Shin-Osaka, and Kyoto!"; carries **no** timetable, which is why the new last-departure notes ask rather than assert |
+| Toji autumn illumination — dates, hours, desk close, admission (anchor substitute) | Oct 31–Dec 13; 18:00–21:30; desk to 21:00; ¥1,000 adult / ¥500 high-school | y — toji.or.jp/exhibition/2026_autumn/ | supports |
+| Houshoan — seasonal courses, hours, closed day, phone, address | ¥10,000 wagyu sukiyaki / ¥9,500 lavastone (Oct 1–Apr 30); 17:00–23:00 (LO 22:30); closed Mon; 075-255-2635 | y — houshoan.kyoshikian-kyoto.com/en/ | supports — and confirms the ¥13,000 riverside course is May 1–Sep 30 only, i.e. the first pass's correction holds |
+| Todai-ji Daibutsuden — November hours + adult admission | 8:00–17:00, ¥800 | y — todaiji.or.jp/en/information/haikan/ | supports |
+| Kiyomizu-dera — regular hours; admission fee | 6:00–18:00 (18:30 in Jul–Aug); no fee published | y — kiyomizudera.or.jp/news/open-hour.php | supports **an absence** — the page states the hours and no fee anywhere, so the guide's `⚠` on the ¥500 figure is the source's gap, not the research's |
+| Kansai Railway Pass Lite — sales/validity window + exclusions | sold Mar 25–Sep 30, 2026; valid Apr 1–Oct 2, 2026; excludes JR and the Kyoto City Subway | y — surutto.com/kansai_rwpl/en/krp.html | supports (nuance recorded in the rebuttals: validity ends Oct 1 for the 2-day pass, Oct 2 for the 3-day — the guide quotes the outer bound) |
+| Nishiki Market — eating etiquette; market-wide hours/closing days | "Please eat the food in front of or inside the shop where you bought it" | y — kyoto-nishiki.or.jp/en/manner/ **and** /en/ | supports the etiquette claim; **no hours or closing days published anywhere on the association's site → new `⚠` added to Sun Nov 15** |
+
+Sampled 8 · 8 support · 0 drifted · 0 unreachable. Two of the eight are audits of an ABSENCE
+(Kiyomizu-dera's fee, Nishiki's hours) — confirming that two of the guide's `⚠` gaps are gaps in
+the source rather than in the research, which is the only way a `⚠` earns its place. Not re-fetched
+this pass: everything the first critic pass fetched earlier the same day and did not change, plus
+the four items it listed as deliberately un-refetched (Wanaka, the ekitan fares, the USD/JPY rate,
+the travel advisory) — all four for reasons that have not changed in a day.
