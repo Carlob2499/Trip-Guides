@@ -100,6 +100,18 @@
       "createdAt": "2026-08-20T00:06:53.287Z",
       "status": "retired",
       "retiredAt": "2026-08-20T00:34:45.131Z"
+    },
+    {
+      "runId": "kansai-proof-20260819-36127b",
+      "stage": "critic",
+      "attempt": 1,
+      "findings": [
+        "budget item \"Food & drink, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on — add the verified_on (and source) or reframe the figure",
+        "the 22 stale coverage refs from the previous attempt are NOT yours to fix — composition renumbers group files and the workflow now remaps coverage refs deterministically after compose"
+      ],
+      "createdAt": "2026-08-20T02:06:45.361Z",
+      "status": "active",
+      "retiredAt": null
     }
   ]
 }
