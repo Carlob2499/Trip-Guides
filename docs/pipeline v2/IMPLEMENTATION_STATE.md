@@ -1025,31 +1025,72 @@ action: one selector-ON `/new` canary observed end-to-end.
 
 #### Live proof plan (executed — kept for the record; all items done except as noted above)
 
-- [ ] L1 selector OFF: fixture-B intake issue (Andorra, dates seeded with a mild contradiction
+- [x] L1 selector OFF: fixture-B intake issue (Andorra, dates seeded with a mild contradiction
   so a traveler question card exists) → scaffold from main → V1 dispatched with issue, NO V2 →
   cancel V1 before agent spend. Record run ids.
-- [ ] L2a: push branch; dispatch research-pass-v2 `--ref fable/pipeline-v2-integration`
+- [x] L2a: push branch; dispatch research-pass-v2 `--ref fable/pipeline-v2-integration`
   `-f slug=<B> -f issue=<B#>` (land blank ⇒ draft). Let passA COMPLETE; cancel during passB
   (the I04 interruption).
-- [ ] L3: `gh variable set WAYPOINT_RESEARCH_ENGINE v2` (prior state: ABSENT — restore to
+- [x] L3: `gh variable set WAYPOINT_RESEARCH_ENGINE v2` (prior state: ABSENT — restore to
   ABSENT). Fixture-C intake → exactly one V2 dispatch from main, zero V1 → cancel post-setup.
-- [ ] §9 answers leg (selector still ON, B active): dispatch change.yml source=answers with
+- [x] §9 answers leg (selector still ON, B active): dispatch change.yml source=answers with
   PLAN_JSON naming B's real question id → answers-route detects research-v2/<B> → ledger apply
   on the branch → V2 redispatch passes the guard → cancel that run post-setup (resume leg
   proven; no expensive rework). Worker /answer hop itself NOT re-proven live (no owner key in
   this session — recorded credential gap; auth contract unit-tested + previously live-proven).
-- [ ] Restore selector: `gh variable delete WAYPOINT_RESEARCH_ENGINE`; verify absent. Fixture-D
+- [x] Restore selector: `gh variable delete WAYPOINT_RESEARCH_ENGINE`; verify absent. Fixture-D
   intake → V1 dispatched again → cancel. (Restored-OFF proof.)
-- [ ] L2b: re-dispatch B on the integration ref (slug only — issue/land inherit) → passA NOT
+- [x] L2b: re-dispatch B on the integration ref (slug only — issue/land inherit) → passA NOT
   repeated, passB→reconcile→geocode→critic→land run to completion → evidence-gated DRAFT PR +
   landing verdict recorded + questions job comments on B's intake issue.
-- [ ] Known structural gap to record in the PR: the live product-mode AUTO-MERGE cannot be
+- [x] Known structural gap to record in the PR: the live product-mode AUTO-MERGE cannot be
   exercised before this integration PR itself merges (a branch-ref dispatch would side-door the
   integration code into main via the research branch's merge; main's workflow lands draft-only
   by construction pre-merge). Product-mode machinery is deterministic-proven; its live exercise
   is the first post-merge selector-ON /new.
-- [ ] Cleanup: cancel stray runs; delete research/<B> (V1 stub), research-v2/<C> state, C/D
+- [x] Cleanup: cancel stray runs; delete research/<B> (V1 stub), research-v2/<C> state, C/D
   scaffolds from main (one chore commit); B's intake issue + draft PR + research-v2/<B> branch
   KEPT as review evidence. Selector verified ABSENT.
 - Attempt budget for B: 3 of 5 dispatches consumed by design (init/interrupt · answer-redispatch
   cancel · completion).
+
+## Release-candidate correction pass (2026-08-20, Fable) — PR #68 defect sweep
+
+The integration pass above shipped with real product-path defects its own INTEGRATION_YELLOW
+understated. Every defect below was reproduced from the PR #68 head `3a33c47`, root-caused,
+fixed ON THE BRANCH (no direct-to-main commits this pass), and regression-tested. Baseline at
+start: main `e56b5de`, selector ABSENT, worktree clean, 2,715-test suite green.
+
+| # | Defect (root cause) | Fix | Regression protection |
+|---|---|---|---|
+| P0-1 | **Publication recorded before the merge.** `recordProductLanding()` wrote `landingGate=passed` + `published=true` + emitted "Published (merged)" BEFORE `landBranch` ran — a conflict/API failure would leave a branch asserting a publication that never happened | Two-phase transaction: phase 1 (pre-merge) records ONLY the gate verdict; phase 2 runs after gh confirms an outcome — `recordLandingOutcome` (draft/failed, never publication) or `finalizeMergedLanding` (merged: publication finalized ON MAIN, idempotent retry via `pipeline-v2 finalize-landing`). New `landing` state object (outcome/pr/mergedAt/announced/finalizedAt); schema REFUSES `published` without a confirmed merged outcome and a passed gate | Transaction matrix in `pipeline-v2-integration.test.mjs` (gate-pass-only · conflict-draft · API-failure · confirmed-merge · idempotent-retry · draft-intent-refused · unpassed-gate-refused · notice-failed-recorded); the old premature-publication test REPLACED; contracts suite's distinct-facts scar AMENDED to the honest path |
+| P0-2 | **Auto-publish authority bypass.** The `land` workflow input let ANY manual dispatch type `auto`; a feature-ref dispatch could then auto-merge its research branch (integration code and all) into main; `pipeline.mjs land` defaulted to auto; `recordProductLanding` never checked intent | `land` input REMOVED; intent DERIVED (auto ⇔ default-branch ref + selector v2), immutable, and RE-CHECKED as landing-time product authority in the land job; `pipeline.mjs land` defaults to pr (fail-safe) and refuses `--land auto` on a draft-intent run; `finalizeMergedLanding` independently requires intent+gate+completeness+PR identity | Side-door scars: no-land-input pin, derived-intent pins, authority re-check pin, CLI default-pr pin, CLI escalation-refusal pin, finalize-refusal unit tests |
+| P0-3 | **V1 rollback contamination.** Shared `land` discovered historical `run.v2.json` by file presence; Progress read V2-on-main before an active V1 branch; answers routing let a stale complete V2 branch steal an active V1 run's answers | ONE active-run definition: `land` keys V2 handling on exact branch identity (`research-v2/<slug>`); Progress fetchRun reads branches (both generations) before main history; answers-route inspects BOTH namespaces, active-beats-stale, dual-active REFUSES with a diagnostic | Rollback matrix: gateway test (active V1 branch + historical V2 on main → V1, runId null), answers-route source pins (ordering + refusal), land branch-identity pin |
+| P0/P1-4 | **Terminal-run resume.** A fresh research-v2 branch inheriting a merged run's state from main silently "resumed" the terminal run (re-landing old content) | Fresh-run semantics: the branch step emits `resumed`; init with `--branch-fresh true` archives a merged run to `previousRuns` (append-only) and mints run B fresh; non-merged inherited state REFUSES loudly | Full lifecycle test (A merges → B fresh, new identity, clean state, A inspectable); anomaly-refusal test; resume-still-works test |
+| P1-5 | **Unscoped telemetry.** events.json carried no run identity — a new run or V1 rollback could display a previous run's stream from main | Emitter stamps `runId`; parser REFUSES identity-less streams; `eventsForRun()` joins stream↔snapshot in the UI (V1 snapshots carry runId null → honest-empty); event wording reality-ordered (gate PASS is only gate PASS; "Draft PR #N" only when one exists; "Published — PR #N merged" only post-merge; failed notice surfaced) | run-events identity suite (refusal, mismatch, V1-null, pass-through), finalize-suite round-trip amended, emitter wording pins in the transaction matrix |
+| P0/P1-6 | **Safety notice dead.** The land job's permissions override dropped `issues:write` while `land-branch.sh` hid every notice failure behind a swallowed error — the vetoable auto-publish notice could never file, silently | `issues:write` restored (comment names why); the notice failure is reported in the outcome line (`merged:<n> announce=ok/failed/skipped`), parsed by `landBranch`, recorded durably (`landing.announced`), surfaced as an event — the merge itself never un-claimed | Permission scar (workflow text), shell-contract pins (announce line format, no swallowed `gh issue create`), parser contract test, announced:false unit+event test |
+| P1-7 | **Post-merge question delivery.** The questions job read its dispatch-SHA checkout; after a merged landing (branch deleted, merge newer than the dispatch SHA) it missed the merged ledger entirely; the branch could also vanish between check and fetch | The job fetches the run's CURRENT home: the branch when it survives (existence-check + fetch as one guarded step, falling through on the race), else the LATEST default branch via FETCH_HEAD | Workflow pins (BASE fetch, FETCH_HEAD checkout, race fall-through) |
+| P1-8 | **Late-answer no-op.** A complete-but-unmerged draft run counted as "active": the answer was appended and the redispatch just re-landed the unchanged product | `reopenForAnswers`: reconcile+critic re-open (history/cost preserved), landing verdicts reset, resume=reconcile — the re-run genuinely absorbs the answer; published runs refuse (change lifecycle); still-owed runs no-op. change.yml calls it between apply and redispatch | reopen unit matrix (reopens/no-ops/refuses) + change.yml wiring pin |
+| P2-9 | **Question-notification bugs.** Substring dedup (`q-1` suppressed `q-10`); a failed comment-read assumed "no comments" and would duplicate everything; copy claimed "your guide is complete" mid-run and invited "reply here" with no ingestion path | Exact `<sub>id</sub>` marker dedup; comment-read failure SKIPS posting with a `::warning::` (retry next run); copy truthful — work "carries on either way", answers routed via the progress page / ✎ button | Dedup + copy pins (orchestration suite, amended scar named as such) |
+| P2-10 | **Duplicated landing decision.** `land-mode` reimplemented `landingMode()` | The CLI now calls the tested pure function and composes landing-time authority | Wiring scar (source pin: `landingMode(state)` present, no re-derivation) |
+| P1/P2-11 | **Fixed-floor CONFLICTING_SPEC resolved.** Authority chain traced: DECISIONS.md (locked) + CONTEXT 2026-08-17 (repo-wide removal, V1-exception explicitly rejected) + census 2026-08-19 ("already gone") vs the shipped env-gated `DEFAULT_FLOORS`. No later ruling blesses retention → implemented repo-wide | Floors, `researchFloors` (checker + the dead schema field whose own test claimed deletion) removed; structural checks + saturation remain | Floorless-doctrine suite (small-set-passes, absence pin over module surface + source text); CONTEXT decision recorded |
+| P1-12 | **Checklist/auto-publish contradiction.** The scorecard said "Publishing still needs the checklist above" while doctrine (publish.mjs) says the evidence gate is the bar and the approval ceremony was removed — an unenforced requirement in prose | Human rows are now ADVISORY review prompts (no unchecked boxes, no mandatory language); verdict text names the evidence gate as the bar | Scorecard-language scars in both renderers (checkbox absence + advisory phrasing + old-claim regex bans) |
+
+**Docs corrected with the code:** the workflow header + land-step comments (two-phase truth),
+pipeline-v2.mjs header, pipeline.md V2 row, CONTEXT.md (the integration-week entry's premature-
+publication clause corrected as a recorded rejection; two new decisions added), the stale
+"NOTHING EMITS" run-events header, this file's executed-plan checkboxes.
+
+**Cleanup this pass:** andorra fixture (guide dir + intake) REMOVED on the PR branch — merging
+PR #68 removes it from main; PR #67 commented (DO NOT MERGE, evidence pointers) and CLOSED;
+selector verified ABSENT throughout (no variable touched this pass).
+
+**Final-cleanup list for the post-merge acceptance pass:** delete branch `research-v2/andorra`
+(after Codex inspects #67's diff if desired); delete `canary/kansai-proof` +
+`research-v2/kansai-proof` + `probe/environ` + draft PR #61 + the stray `environ-probe`
+workflow registration (P10–P13 evidence — only after independent review signs off); run the
+selector-ON `/new` product canary and verify the two-phase landing + safety notice live.
+
+**Remaining live-only acceptance gaps (impossible pre-merge, by design):** the real default-
+branch product auto-merge (requires this PR's code ON main + selector ON), and the Worker
+`/answer` hop (owner key not available to any session; unit + prior-live evidence stands).

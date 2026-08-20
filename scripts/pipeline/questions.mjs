@@ -42,12 +42,22 @@ export function parseQuestions(ledgerMd) {
     .filter((c) => c.id);
 }
 
-// Pure: open cards this issue has not already been told about.
+// Pure: open cards this issue has not already been told about. Dedup is by the EXACT marker the
+// comment format embeds (`<sub>id</sub>`), never substring — a bare includes() let "q-1" in an
+// old comment suppress "q-10" forever (correction pass).
+export function askedMarker(id) {
+  return `<sub>${id}</sub>`;
+}
 export function unaskedOpen(cards, alreadyAsked = "") {
-  return cards.filter((c) => c.status === "open" && !String(alreadyAsked).includes(c.id));
+  const asked = String(alreadyAsked);
+  return cards.filter((c) => c.status === "open" && !asked.includes(askedMarker(c.id)));
 }
 
-// Pure: the comment body, or "" when there is nothing to say.
+// Pure: the comment body, or "" when there is nothing to say. Copy discipline (correction pass):
+// research may still be RUNNING when this posts, so nothing here claims the guide is complete —
+// and there is no issue-comment ingestion path, so nothing invites a reply here. The traveler's
+// real controls are the progress page's answer box (linked in the scaffold reply on this same
+// issue) and the guide's ✎ Request-a-change button.
 export function formatComment(open) {
   if (!open.length) return "";
   const lines = [
@@ -55,7 +65,7 @@ export function formatComment(open) {
       ? "**One decision came up while building your guide.**"
       : `**${open.length} decisions came up while building your guide.**`,
     "",
-    "Research never waits on an answer, so each was built on the assumption below — your guide is complete either way. If an assumption is wrong, use the **✎ Request a change** button on the guide (or reply here) and it gets fixed without rebuilding anything.",
+    "Research never waits on an answer — each was built on the assumption below and the work carries on either way. To answer, use the answer box on your guide's **progress page** (linked in the reply above), or the **✎ Request a change** button on the guide once it's ready; either routes your answer into the pipeline.",
     "",
   ];
   open.forEach((o, i) => {
@@ -143,7 +153,13 @@ export async function surfaceQuestions({ slug, issue, intakeDir = INTAKE_DIR, js
   let asked = "";
   if (issue) {
     try { asked = gh(["issue", "view", String(issue), "--json", "comments", "-q", "[.comments[].body] | join(\"\\n\")"]); }
-    catch { asked = ""; }
+    catch (err) {
+      // FAIL SAFE, not blind (correction pass): if the existing comments cannot be read, "no
+      // comments" is a GUESS that duplicates every past notification. Skip this posting — the
+      // next run retries with the dedup intact — and say so where a maintainer will see it.
+      console.error(`::warning::[questions] could not read #${issue}'s comments (${err.message}) — skipping this notification rather than risking duplicates; the next run retries.`);
+      return 0;
+    }
   }
 
   const open = unaskedOpen(cards, asked);
@@ -165,8 +181,9 @@ export async function surfaceQuestions({ slug, issue, intakeDir = INTAKE_DIR, js
     gh(["issue", "comment", String(issue), "--body", body]);
     console.log(`[questions] surfaced ${open.length} on #${issue}`);
   } catch (err) {
-    // Never fails the run: a notification hiccup must not turn a good research pass red.
-    console.error(`[questions] could not comment on #${issue}: ${err.message}`);
+    // Never fails the run — but the delivery failure is OBSERVABLE (a ::warning:: annotation),
+    // never disguised as success (correction pass).
+    console.error(`::warning::[questions] could not comment on #${issue}: ${err.message} — the traveler was NOT notified; the next run retries.`);
   }
   return 0;
 }

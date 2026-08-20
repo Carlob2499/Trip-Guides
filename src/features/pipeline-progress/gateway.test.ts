@@ -232,13 +232,39 @@ const V2_RUN = {
   failure: null,
 };
 
-describe("createGithubGateway().fetchRun (M7)", () => {
+describe("createGithubGateway().fetchRun — active runs beat history, across generations (correction pass)", () => {
+  const V1_ACTIVE = { slug: "testland", createdAt: "2026-09-01T08:00:00Z", updatedAt: "2026-09-01T08:10:00Z", stages: { scaffold: "2026-09-01T08:01:00Z", passA: null, passB: null, reconcile: null, verified: null }, attempts: 1, notes: [] };
+
+  it("an ACTIVE V1 branch outranks a historical merged V2 run on main — the rollback matrix", async () => {
+    // The exact failure this pins: V2 shipped a guide (run.v2.json merged to main), the selector
+    // was rolled back to V1, and a new V1 research run started. The old order read main's V2
+    // history first and the progress page showed a finished V2 run instead of the live V1 one.
+    const { impl } = stubFetch({
+      "/research/testland/guides-intake/testland/state.json": V1_ACTIVE,
+      "/main/guides-intake/testland/run.v2.json": { ...V2_RUN, status: "complete" },
+    });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.version).toBe(1);
+    expect(run.state?.stages.scaffold).toBe("2026-09-01T08:01:00Z");
+    expect(run.runId).toBeNull(); // V1 has no run identity — telemetry stays honest-empty
+  });
+
+  it("historical V2 on main still renders as history when NO branch is active", async () => {
+    const { impl } = stubFetch({ "/main/guides-intake/testland/run.v2.json": V2_RUN });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.version).toBe(2);
+    expect(run.runId).toBe("testland-20260817-abc123");
+  });
+
   it("prefers the V2 run record and carries its REAL status through", async () => {
     const { impl, calls } = stubFetch({ "run.v2.json": V2_RUN });
     const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
     const run = await gw.fetchRun("testland");
     expect(calls[0].url).toContain("/research-v2/testland/guides-intake/testland/run.v2.json");
     expect(run.version).toBe(2);
+    expect(run.runId).toBe("testland-20260817-abc123"); // the telemetry join key
     expect(run.runStatus).toBe("running");
     expect(run.state?.stages.scaffold).toBe("2026-08-17T10:01:00Z");
     expect(run.state?.stages.passA).toBe(null); // running is not complete

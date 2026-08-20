@@ -1,25 +1,26 @@
-// Standard S2/S3 — the candidates table and its coverage floors (creator-approved 2026-08-02).
+// Standard S2/S3 — the candidates table: the consideration set on the record.
 //
 // WHY. Every other gate measures whether what shipped is TRUE; none measured whether enough
 // was CONSIDERED. Real research quality lives in the rejections — the 19 ramen shops
 // evaluated behind the 5 that shipped — and until this table, a thin pass and a deep pass
 // produced identical-looking guides. The table forces the consideration set onto the record
-// (same philosophy as the reconciliation ledger: evidence, not vibes), and the floors make
-// thinness a measurable verdict instead of a human impression.
+// (same philosophy as the reconciliation ledger: evidence, not vibes).
 //
-// WHAT IT CHECKS, per ranked-priority table in `guides-intake/<slug>/ledger.md`'s
-// `## Candidates considered` section:
-//   · rows counted: total considered, and rows whose verdict starts with "shipped"
-//   · floors: defaults below, overridable per guide via `researchFloors` in _guide.json
-//     (the tabBudget precedent — guides legitimately differ)
+// NO NUMERIC FLOORS — repo-wide, one doctrine (DECISIONS.md "Research breadth"; the 2026-08-17
+// CONTEXT decision explicitly REJECTED a V1-only exception, and the correction pass of
+// 2026-08-20 removed the env-gated remnant that had survived it). Research scales to the
+// destination: Andorra la Vella legitimately has a handful of serious culture candidates where
+// Tokyo has dozens, and a number can only punish the honest small set or invite padding toward
+// a quota. Thinness protection is the V2 saturation record (an earned stopping rule) plus the
+// STRUCTURAL checks below, which are anti-fabrication, not quotas:
+//   · rows counted and reported: total considered, and rows whose verdict starts with "shipped"
 //   · every `shipped` candidate NAME must appear somewhere in the guide's section files —
 //     a shipped row that matches nothing in the guide is either a typo or a lie, and both
 //     need a human.
 //   · D3: a table using the 3-column `| Candidate | Verdict | Shortlist |` format must mark
 //     every `shipped` row shortlisted (shipped ⊆ shortlist ⊆ considered — the funnel is
 //     broad research → shortlist → deep-verify, and "shipped" is not a side door around the
-//     shortlist stage). `researchFloors` may optionally add a `shortlist` count floor per
-//     rank; the 2-column legacy format (no third cell) isn't gated on shortlist at all.
+//     shortlist stage). The 2-column legacy format (no third cell) isn't gated on shortlist.
 //
 // POSTURE for guides that predate the standard: no `## Candidates considered` section →
 // "n/a" (the coverage.json precedent — the gate only bites guides scaffolded after it).
@@ -32,15 +33,6 @@ import { isMain } from "./audit/lib.mjs";
 import { isSectionFile } from "../src/lib/facts.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "..");
-
-/** Default floors by priority rank — shipped/considered. Deliberately modest: they are a
-    FLOOR against thinness, not a target (padding a table to hit a number is its own smell,
-    and the shipped-name cross-check makes fake rows expensive). */
-export const DEFAULT_FLOORS = {
-  1: { considered: 16, shipped: 8 },
-  2: { considered: 10, shipped: 5 },
-  3: { considered: 6, shipped: 3 },
-};
 
 /** true/false marks the shortlist cell explicitly; null means the row's table predates the
     D3 column (2-cell `| Candidate | Verdict |` format) — shortlist isn't tracked, don't gate it. */
@@ -73,25 +65,15 @@ export function parseCandidates(ledgerMd) {
   return tables;
 }
 
-/** Pure: judge parsed tables against floors + the guide's own text. */
-export function judgeCandidates(tables, { floors = {}, guideText = "", adaptive = false } = {}) {
+/** Pure: judge parsed tables — STRUCTURAL integrity only, never a quantity quota. */
+export function judgeCandidates(tables, { guideText = "" } = {}) {
   const findings = [];
   const summary = [];
   for (const t of tables) {
-    const floor = adaptive ? null : (floors[t.rank] ?? floors[String(t.rank)] ?? DEFAULT_FLOORS[t.rank]);
     const shipped = t.rows.filter((r) => /^shipped\b/i.test(r.verdict));
     const considered = t.rows.length;
     const shortlisted = t.rows.filter((r) => r.shortlisted === true).length;
-    summary.push({ rank: t.rank, priority: t.priority, considered, shipped: shipped.length, shortlisted, floor });
-    if (floor && considered < floor.considered) {
-      findings.push(`priority ${t.rank} (${t.priority}): ${considered} candidate(s) considered, floor is ${floor.considered}`);
-    }
-    if (floor && shipped.length < floor.shipped) {
-      findings.push(`priority ${t.rank} (${t.priority}): ${shipped.length} shipped, floor is ${floor.shipped}`);
-    }
-    if (floor?.shortlist != null && shortlisted < floor.shortlist) {
-      findings.push(`priority ${t.rank} (${t.priority}): ${shortlisted} shortlisted, floor is ${floor.shortlist}`);
-    }
+    summary.push({ rank: t.rank, priority: t.priority, considered, shipped: shipped.length, shortlisted });
     for (const r of shipped) {
       // The cross-check that makes a padded table expensive: a shipped name must exist in
       // the guide. Case-insensitive substring — names appear inside prose and item fields.
@@ -116,7 +98,7 @@ export function judgeCandidates(tables, { floors = {}, guideText = "", adaptive 
 }
 
 /** Full check for one slug: reads the research ledger + guide files. n/a when pre-standard. */
-export async function checkCandidates(slug, { rootDir = ROOT, researchFloors = null, adaptive = process.env.WAYPOINT_PIPELINE_V2 === "1" } = {}) {
+export async function checkCandidates(slug, { rootDir = ROOT } = {}) {
   let ledger;
   try {
     ledger = await readFile(path.join(rootDir, "guides-intake", slug, "ledger.md"), "utf8");
@@ -134,7 +116,7 @@ export async function checkCandidates(slug, { rootDir = ROOT, researchFloors = n
     }
   } catch { /* directory missing → shipped cross-check simply can't run */ }
 
-  return { ...judgeCandidates(tables, { floors: researchFloors ?? {}, guideText, adaptive }), tables: tables.length };
+  return { ...judgeCandidates(tables, { guideText }), tables: tables.length };
 }
 
 if (isMain(import.meta.url)) {
@@ -142,7 +124,7 @@ if (isMain(import.meta.url)) {
   if (!slug || slug === "--slug") { console.error("Usage: node scripts/check-candidates.mjs --slug <slug>"); process.exit(1); }
   const r = await checkCandidates(slug);
   console.log(`[candidates] ${slug}: ${r.status}${r.reason ? ` — ${r.reason}` : ""}`);
-  for (const s of r.summary ?? []) console.log(`  P${s.rank} ${s.priority}: ${s.shipped}/${s.shortlisted}/${s.considered} shipped/shortlisted/considered${s.floor ? ` (floor ${s.floor.shipped}/${s.floor.shortlist ?? "—"}/${s.floor.considered})` : " (adaptive V2)"}`);
+  for (const s of r.summary ?? []) console.log(`  P${s.rank} ${s.priority}: ${s.shipped}/${s.shortlisted}/${s.considered} shipped/shortlisted/considered`);
   for (const f of r.findings ?? []) console.log(`  ✗ ${f}`);
   process.exit(r.status === "fail" ? 1 : 0);
 }

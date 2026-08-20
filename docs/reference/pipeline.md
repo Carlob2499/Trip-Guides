@@ -262,7 +262,7 @@ to add a `run: |` block with logic in it, it belongs in `scripts/pipeline/` or `
 |---|---|---|
 | `new-guide.yml` | scaffold on the `new-guide` label, then dispatch research (engine chosen by the `WAYPOINT_RESEARCH_ENGINE` repository variable: unset/anything-else ⇒ V1, `v2` ⇒ V2 with the intake issue + product landing intent passed) | `pipeline scaffold` |
 | `research-pass.yml` | V1: the four research agents, resumable | `pipeline route/gate/land` |
-| `research-pass-v2.yml` | V2: one job per stage, mechanical Pass-B/critic isolation, durable run.v2.json. Landing follows the run's recorded intent — `pr` (default: canaries, tests, manual dispatches — always a draft PR, never publishes) or `auto` (the `/new` product dispatch — the same evidence-gated publish V1 uses, only once every stage is complete) | `pipeline-v2 …` + `pipeline land` |
+| `research-pass-v2.yml` | V2: one job per stage, mechanical Pass-B/critic isolation, durable run.v2.json. Landing authority is derived, never typed: `auto` only when dispatched on the default branch with the selector set (re-checked at landing time — a feature-ref dispatch can never auto-merge); everything else is a draft PR. Publication is a two-phase transaction: gate verdict pre-merge, publication finalized only after the CONFIRMED merge | `pipeline-v2 …` + `pipeline land` |
 | `change.yml` | every change run, all five sources; answers route to an active research run's ledger (V2 branch preferred) | `pipeline plan/gate/land/report` |
 | `recert.yml` | weekly audit + staleness detection → dispatches change runs | `scripts/recert.mjs` |
 | `feedback-export.yml` | export survey feedback → synthesis PR + inert proposal | `scripts/feedback-signals.mjs` |

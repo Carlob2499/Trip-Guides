@@ -35,7 +35,7 @@ export type {
   PageState, Tone, StatusPill, PhaseView, PhaseStatus, NoteState, NotePanelView,
 } from "./model/progress";
 export {
-  parseRunEvents, pushBounded, fetchTone, fetchHost, probeEventsThisTick,
+  parseRunEvents, pushBounded, fetchTone, fetchHost, probeEventsThisTick, eventsForRun,
   EMPTY_RUN_EVENTS, FETCH_BUFFER, DECISION_BUFFER, EVENT_PROBES, EVENT_RECHECK_EVERY,
 } from "./model/run-events";
 export type {

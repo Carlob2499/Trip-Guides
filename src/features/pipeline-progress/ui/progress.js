@@ -26,7 +26,7 @@
 import {
   deriveProgress, formatElapsed, predictSlug, normalizeSlug, createGithubGateway, createWorkerGateway,
   derivePageState, deriveStatusPill, deriveProgressLine, derivePhases, deriveNotePanel,
-  PHASE_STATUS_LABEL, STAGE_SHORT, fetchTone, fetchHost, probeEventsThisTick,
+  PHASE_STATUS_LABEL, STAGE_SHORT, fetchTone, fetchHost, probeEventsThisTick, eventsForRun,
 } from "../index";
 import {
   STATION_T, bezierPoint, bezierAngle, arcLengthFraction, bezierLength,
@@ -688,9 +688,13 @@ export function initProgress() {
     ]);
 
     if (wantEvents) {
-      if (events && events.available) eventsSeen = true;
+      // Identity join (correction pass): telemetry renders only against the run it names —
+      // never a previous run's stream still on main, never V2 history beside an active V1 run
+      // (V1 snapshots carry runId null, so they always render honest-empty telemetry).
+      var scopedEvents = events ? eventsForRun(events, run.runId) : null;
+      if (scopedEvents && scopedEvents.available) eventsSeen = true;
       else eventMisses += 1;
-      renderEvents(events);
+      renderEvents(scopedEvents);
     }
 
     const state = run.state;

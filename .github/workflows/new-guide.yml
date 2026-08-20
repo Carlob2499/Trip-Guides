@@ -93,11 +93,11 @@ jobs:
       # WAYPOINT_RESEARCH_ENGINE, selects the research engine: unset or anything but "v2" keeps
       # V1 — the production default is never switched silently. Setting it to "v2" (a deliberate,
       # reviewable repo-settings change reserved for after independent V2 acceptance) routes /new
-      # to the V2 pipeline, whose own default-branch guard keys on the SAME variable. This
-      # product dispatch passes land=auto — the accepted product mode, which still publishes
-      # only through the full evidence gate — while every manual/test V2 dispatch defaults to
-      # draft-only (land pr). V1 stays intact and dispatchable either way — nothing here deletes
-      # or bypasses it.
+      # to the V2 pipeline, whose own default-branch guard keys on the SAME variable. Landing
+      # authority is NOT passed here (correction pass): the V2 workflow derives product intent
+      # itself from the same two infrastructure facts — default-branch ref + selector "v2" — and
+      # re-checks them at landing time, so no dispatch input anywhere can request publication.
+      # V1 stays intact and dispatchable either way — nothing here deletes or bypasses it.
       - name: Auto-start the research pass
         env:
           SLUG: ${{ steps.gen.outputs.slug }}
@@ -106,7 +106,7 @@ jobs:
         run: |
           if [ "$ENGINE" = "v2" ]; then
             gh workflow run research-pass-v2.yml -f slug="$SLUG" \
-              -f issue="$ISSUE" -f land=auto
+              -f issue="$ISSUE"
           else
             gh workflow run research-pass.yml -f slug="$SLUG" \
               -f issue="$ISSUE"

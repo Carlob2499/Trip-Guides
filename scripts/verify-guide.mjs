@@ -17,7 +17,7 @@
 // What it does NOT judge (stated, never silently skipped):
 //   • Schema shape → `npm run build` is the content-collection gate. The scorecard says so; run it.
 //   • Depth / party fit / authenticity / anchor (rubric #6,#8,#9,#12) → HUMAN judgment. The
-//     scorecard lists them as a human checklist; the machine cannot pass/fail them.
+//     scorecard lists them as advisory human review prompts; the machine cannot pass/fail them.
 //
 // Verdict (exit 0/1): PASS iff every AUTO gate that BLOCKS is green. Blocking = readiness (P0
 // mechanical) and, under --network, dead links / missing photos (concrete breakage). Recency is
@@ -190,7 +190,7 @@ export function checkVoice(guide) {
   return { status: hits.length ? "fail" : "pass", hits };
 }
 
-// The rubric rows the machine can only defer to a human. Kept here as the human checklist the
+// The rubric rows the machine can only defer to a human. Kept as the ADVISORY review prompts the
 // scorecard prints — mirrors docs/standards/guide-rubric.md so the two stay legible together.
 const HUMAN_ROWS = [
   ["#6", "Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips"],
@@ -325,11 +325,12 @@ export async function verify({ slug = null, network = false } = {}) {
   }
 
   // S2/S3: candidates tables are read per-target (async), then threaded into the sync evaluator.
-  // Breadth floors are gone (V2 adaptive saturation replaced them); the structural checks remain.
+  // NO numeric floors, anywhere (DECISIONS.md "Research breadth"; the env-gated V1 remnant was
+  // removed by the 2026-08-20 correction pass) — the structural anti-fabrication checks remain.
   const { checkCandidates } = await import("./check-candidates.mjs");
   const candidatesBySlug = {};
   for (const t of targets) {
-    candidatesBySlug[t.slug] = await checkCandidates(t.slug, { researchFloors: t.guide.researchFloors ?? null });
+    candidatesBySlug[t.slug] = await checkCandidates(t.slug);
   }
 
   // S5: source-mix measurement — pure text analysis over the same raw the link sweep scans.
@@ -448,7 +449,7 @@ export function report(r) {
       const parts = (c.summary ?? []).map((s) => `P${s.rank} ${s.shipped}/${s.considered}`).join(" · ");
       L.push(`  P1 candidates · PASS — consideration set on record (${parts || "no gated priorities"})`);
     } else {
-      L.push(`  P1 candidates · FAIL — the consideration set is thin or unverifiable`);
+      L.push(`  P1 candidates · FAIL — structural integrity findings in the consideration set`);
       for (const f of c.findings ?? []) L.push(`      ✗ ${f}`);
     }
   }
@@ -574,12 +575,16 @@ export function report(r) {
 
   L.push(`  #1 schema     · not checked here — run \`npm run build\` (the content-collection gate)`);
 
-  // Human checklist
-  L.push(`  ── Human judgment (publish checklist — the machine can't score these) ──`);
-  for (const [num, desc] of HUMAN_ROWS) L.push(`  [ ] ${num.padEnd(3)} ${desc}`);
+  // Human review prompts — ADVISORY. The evidence gate (build + networked verify) is the
+  // publication bar (publish.mjs: the separate human approval ceremony was removed); these rows
+  // exist for the human READING a landed guide or a draft PR, and block nothing (correction
+  // pass: the old footer claimed publishing "still needs the human checklist", which no
+  // automation enforced — an unenforced requirement in prose is a lie in either direction).
+  L.push(`  ── Human review prompts (advisory — the evidence gate is the publication bar) ──`);
+  for (const [num, desc] of HUMAN_ROWS) L.push(`  ·  ${num.padEnd(3)} ${desc}`);
 
   L.push(r.pass
-    ? `  → verdict: PASS (blocking gates green). Publishing still needs the human checklist + \`npm run build\`.`
+    ? `  → verdict: PASS — the blocking gates are green; a run that also passes \`npm run build\` publishes through the landing gate. The prompts above are for the human reviewing it, not conditions.`
     : `  → verdict: NEEDS WORK — fix the blocking gate(s): ${r.blockers.join(", ")}. Re-research each against a primary source, then re-run.`);
   return L.join("\n");
 }
@@ -652,10 +657,10 @@ export function renderMarkdown(r) {
     for (const b of h.bareEcho) L.push(`- bare echo: "${b.stem}" covers ${b.values.length} different values (\`${b.ids.join("`, `")}\`) — which is which?`);
     L.push("", `</details>`, "");
   }
-  L.push(`### Human judgment — publish checklist (the machine can't score these)`);
-  for (const [num, desc] of HUMAN_ROWS) L.push(`- [ ] **${num}** ${desc}`);
+  L.push(`### Human review prompts — advisory (the machine can't score these; they block nothing)`);
+  for (const [num, desc] of HUMAN_ROWS) L.push(`- **${num}** ${desc}`);
   L.push("");
-  L.push(`> Verdict PASS = blocking gates green. Publishing still needs the checklist above + \`npm run build\` (schema).`);
+  L.push(`> Verdict PASS = blocking gates green — the evidence gate (\`npm run build\` + networked verify, run by the landing step) is the publication bar. These prompts are for whoever reviews the landed guide; they are not unpublished requirements.`);
   return L.join("\n");
 }
 

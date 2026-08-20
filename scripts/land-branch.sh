@@ -20,7 +20,11 @@
 # a silent self-publish becomes a self-publish someone can still catch. Absent (the modify-guide
 # scoped-edit path) it's skipped: an edit to an already-live guide isn't a new publication.
 # Prints exactly one line to stdout:
-#   merged:<pr-number>   — landed on <base>, branch deleted
+#   merged:<pr-number> announce=<ok|failed|skipped>
+#                        — landed on <base>, branch deleted. announce reports whether the
+#                          auto-published safety notice actually filed (skipped = no URL given);
+#                          a failed notice NEVER un-claims the merge, it is reported for the
+#                          caller to record durably.
 #   draft:<pr-number>    — a draft PR exists for human triage (either the caller says the work
 #                          hasn't passed yet, or the auto-merge attempt hit a conflict)
 # Exits non-zero only on a genuine unexpected failure (bad args, `gh` auth/API failure). A merge
@@ -65,21 +69,29 @@ gh pr ready "$PR_NUM" >/dev/null 2>&1 || true
 MERGE_ERR_FILE="$(mktemp)"
 if gh pr merge "$PR_NUM" --merge --delete-branch >/dev/null 2>"$MERGE_ERR_FILE"; then
   rm -f "$MERGE_ERR_FILE"
-  echo "merged:$PR_NUM"
-  # Auto-publish probation: the guide just went live with nobody approving it first. File a loud,
-  # vetoable heads-up so that safety net isn't gone entirely — never fatal, so a notification
-  # hiccup can't fail a merge that already succeeded.
+  # Auto-publish probation: the guide just merged with nobody approving it first. File a loud,
+  # vetoable heads-up so that safety net isn't gone entirely. The merge itself is already done
+  # and is NEVER un-claimed here — but a notice that failed to file is a real, reportable fact,
+  # not something to swallow: the final line carries announce=ok|failed|skipped so the caller
+  # records it durably (correction pass — the old `|| true` hid every failure).
+  ANNOUNCE="skipped"
   if [ -n "$ANNOUNCE_URL" ]; then
     NOTE_FILE="$(mktemp)"
     {
-      printf 'A research pass reached `verified` and **auto-published this guide** — it went live with no human approval step. This notice is the safety net.\n\n'
-      printf '**Live now:** %s\n\n' "$ANNOUNCE_URL"
+      printf 'A research pass passed its evidence gate and **auto-published this guide** — it merged with no human approval step. This notice is the safety net.\n\n'
+      printf '**Will be live on the next deploy:** %s\n\n' "$ANNOUNCE_URL"
       printf 'Give it a look. If something is off, hold or roll it back by re-adding `"draft": true` to the guide meta file (`_guide.json`, or `<slug>.json` for a flat guide) and pushing to `main` — it drops off the live site on the next deploy. If it looks good, just close this issue.\n\n'
       printf '_Auto-filed by land-branch.sh on merge of #%s._\n' "$PR_NUM"
     } > "$NOTE_FILE"
-    gh issue create --title "🚀 Auto-published: $TITLE" --body-file "$NOTE_FILE" --label auto-published >/dev/null 2>&1 || true
+    if gh issue create --title "🚀 Auto-published: $TITLE" --body-file "$NOTE_FILE" --label auto-published >/dev/null 2>&1; then
+      ANNOUNCE="ok"
+    else
+      ANNOUNCE="failed"
+      echo "[land-branch] MERGE #$PR_NUM SUCCEEDED but the auto-published safety notice FAILED to file — file it by hand (label: auto-published)." >&2
+    fi
     rm -f "$NOTE_FILE"
   fi
+  echo "merged:$PR_NUM announce=$ANNOUNCE"
 else
   # P4: only a genuine mergeability conflict is the documented "fall back to draft PR" path.
   # Any other failure (auth, permissions, branch protection, rate limit) is a real error that

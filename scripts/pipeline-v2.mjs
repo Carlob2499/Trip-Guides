@@ -9,10 +9,12 @@
 //     `void=true` emitted so the workflow can spend the one bounded auto-retry;
 //   · a resumed run repeats the interrupted stage (run.v2.json's resume block), never skips
 //     ahead on uncommitted work;
-//   · publication follows the run's durable landing intent (landMode, set at init): "pr" runs —
-//     canaries, tests, manual dispatches — ALWAYS land draft PRs and cannot publish; "auto" runs
-//     (the accepted /new product path) publish only through the full evidence gate via
-//     `pipeline.mjs land`, the same safe machinery V1 uses.
+//   · publication authority is INFRASTRUCTURE, never an input (correction pass): landMode is
+//     derived at init (auto ⇔ default-branch dispatch + selector "v2"), immutable, re-checked
+//     as landing-time authority — and publication itself is a TWO-PHASE transaction: the gate
+//     verdict rides the merge, publication is finalized only after gh CONFIRMS the merge
+//     (finalize-landing is the idempotent retry). "pr" runs ALWAYS land draft PRs and cannot
+//     publish, through the same `pipeline.mjs land` machinery V1 uses.
 //
 // Subcommands:
 //   init --slug <s> [--issue <n>] [--land pr|auto]   create/resume the V2 run (+ scaffold baseline)
@@ -27,7 +29,9 @@
 //   prepare-critic --slug <s>                        delete forbidden files from the working tree
 //   restore-critic --slug <s>                        restore them
 //   validate --slug <s> [--scoped]                   the full artifact validation (fail closed)
-//   land-mode --slug <s>                             emit land=auto|pr from the durable run intent
+//   land-mode --slug <s> [--product-authority true]  emit land=auto|pr (landingMode() + landing-time authority)
+//   finalize-landing --slug <s> --pr <n>             idempotent post-merge publication record (retry-safe)
+//   reopen-answers --slug <s>                        re-open reconcile+critic for a late answer
 
 import { existsSync, appendFileSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -39,7 +43,7 @@ import { ContractError } from "./pipeline/v2/contracts.mjs";
 import {
   initRunV2, readRunStateV2, nextStageV2, stageStart, stageComplete, stageFail,
   bumpRunAttempt, recordAutoRetry, recordTelemetry, markLandingGate, V2_RESEARCH_STAGES,
-  stageAttemptStats,
+  stageAttemptStats, landingMode, finalizeMergedLanding, reopenForAnswers,
 } from "./pipeline/v2/run-state.mjs";
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
@@ -266,6 +270,9 @@ async function run(cmd, get, has) {
         },
         issue: issue || null,
         landMode: landInput || null,
+        // Fresh-run semantics: the workflow's branch step says whether research-v2/<slug> was
+        // JUST created (true ⇒ any state on disk is default-branch history, not this run).
+        branchFresh: get("--branch-fresh") === "true",
       });
       if (state.stages.scaffold.status !== "complete") {
         const head = git(["rev-parse", "HEAD"]).trim();
@@ -406,16 +413,55 @@ async function run(cmd, get, has) {
     }
 
     case "land-mode": {
-      // The deterministic landing decision (I02). "auto" ONLY when the durable run records
-      // product intent (landMode "auto", set at init by the accepted /new path) AND every
-      // research stage is complete. Anything else — controlled/draft runs, incomplete runs,
-      // no run at all — lands as a draft PR. Malformed state throws (fail closed), never "pr".
+      // The deterministic landing decision, ONE implementation: landingMode() — the same pure
+      // function the unit suite exercises (correction pass: this case used to reimplement it).
+      // "auto" additionally requires LANDING-TIME PRODUCT AUTHORITY from the workflow
+      // (--product-authority true ⇔ the dispatch ref is the default branch AND the
+      // WAYPOINT_RESEARCH_ENGINE selector is "v2" at this moment) — so a feature-ref dispatch
+      // can NEVER auto-merge whatever the run records, and revoking the selector mid-run
+      // downgrades the landing to a draft PR (fail-safe). Malformed state throws, never "pr".
       const state = await readRunStateV2(slug);
-      const done = state ? !nextStageV2(state) : false;
-      const mode = state?.landMode === "auto" && done ? "auto" : "pr";
+      const authority = get("--product-authority") === "true";
+      const intent = landingMode(state);
+      const mode = authority && intent === "auto" ? "auto" : "pr";
       emit("land", mode);
       emit("issue", state?.issue || "");
-      console.log(`[pipeline-v2] ${slug} — landing mode ${mode} (intent ${state?.landMode || "(no run)"}; stages ${done ? "complete" : "incomplete"}).`);
+      console.log(`[pipeline-v2] ${slug} — landing mode ${mode} (intent ${state?.landMode || "(no run)"}; decision ${intent}; product authority ${authority ? "granted" : "absent"}).`);
+      return 0;
+    }
+
+    case "finalize-landing": {
+      // The idempotent phase-2 retry (correction pass): a merge SUCCEEDED but the post-merge
+      // finalization failed to commit. Run on a default-branch checkout; re-runs safely.
+      const pr = Number(get("--pr"));
+      const announcedFlag = get("--announced") || "";
+      const state = await finalizeMergedLanding(slug, {
+        pr,
+        announced: announcedFlag === "ok" ? true : announcedFlag === "failed" ? false : null,
+      });
+      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
+      commitAndPush(
+        [`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`],
+        `research-v2(${slug}): landing finalized — PR #${pr} merged`,
+        { branch },
+      );
+      console.log(`[pipeline-v2] ${slug} — landing finalized (PR #${pr}); publication recorded ${state.publication.publishedAt}.`);
+      return 0;
+    }
+
+    case "reopen-answers": {
+      // Late answer to a COMPLETE-but-unmerged draft run: re-open reconcile+critic so the
+      // remaining work genuinely consumes the answer (published runs are refused — those take
+      // the change lifecycle; runs with work still owed no-op).
+      const { reopened, state } = await reopenForAnswers(slug);
+      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
+      commitAndPush(
+        [`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`],
+        `research-v2(${slug}): re-opened at reconcile for a traveler answer`,
+        { branch },
+      );
+      emit("reopened", String(reopened));
+      console.log(`[pipeline-v2] ${slug} — ${reopened ? `re-opened at reconcile (run ${state.runId}) — the answer will be absorbed by the re-run` : "work still owed; the active run absorbs the answer as-is"}.`);
       return 0;
     }
 
@@ -651,7 +697,7 @@ async function cliMain() {
   const has = (flag) => argv.includes(flag);
   const cmd = argv[0];
   if (!cmd || cmd.startsWith("--")) {
-    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate|land-mode> --slug <slug> …");
+    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate|land-mode|finalize-landing|reopen-answers> --slug <slug> …");
     process.exit(1);
   }
   try {

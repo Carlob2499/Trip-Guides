@@ -130,19 +130,33 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       return (onMain as PipelineState) ?? null;
     },
     async fetchRun(slug) {
-      // V2 first: run.v2.json on the V2 research branch (each stage job commits it there). The
-      // raw text is fetched separately from its parse so "file exists but is not a run" reads
-      // as MALFORMED — the fail-closed rule — while "no file" falls through to V1 honestly.
-      const v2Text = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`))
-        ?? await getText(raw(baseBranch, `guides-intake/${slug}/run.v2.json`));
-      if (v2Text != null) {
+      // ACTIVE RUNS BEFORE HISTORY, across BOTH generations (correction pass). The old order —
+      // V2 branch, then V2-on-main, then V1 — let a historical V2 run that had merged to main
+      // hide a genuinely active V1 rollback run on research/<slug>. One contract, shared with
+      // answers routing: an existing research branch is the current run; main is history.
+      //   1. research-v2/<slug> branch  — active V2 run
+      //   2. research/<slug> branch     — active V1 run (a rollback is a real current run)
+      //   3. main run.v2.json           — merged V2 history
+      //   4. main state.json            — V1 history
+      // Raw text is fetched separately from its parse so "file exists but is not a run" reads
+      // as MALFORMED — the fail-closed rule — while "no file" falls through honestly.
+      const v2Branch = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`));
+      if (v2Branch != null) {
         let parsed: unknown;
-        try { parsed = JSON.parse(v2Text); } catch { parsed = null; }
+        try { parsed = JSON.parse(v2Branch); } catch { parsed = null; }
         return adaptV2Snapshot(parsed);
       }
-      const state = await this.fetchState(slug);
-      if (!state) return EMPTY_SNAPSHOT;
-      return { ...EMPTY_SNAPSHOT, version: 1, state };
+      const v1Branch = await getJson(raw(`research/${slug}`, `guides-intake/${slug}/state.json`));
+      if (v1Branch) return { ...EMPTY_SNAPSHOT, version: 1, state: v1Branch as PipelineState };
+      const v2Main = await getText(raw(baseBranch, `guides-intake/${slug}/run.v2.json`));
+      if (v2Main != null) {
+        let parsed: unknown;
+        try { parsed = JSON.parse(v2Main); } catch { parsed = null; }
+        return adaptV2Snapshot(parsed);
+      }
+      const v1Main = await getJson(raw(baseBranch, `guides-intake/${slug}/state.json`));
+      if (!v1Main) return EMPTY_SNAPSHOT;
+      return { ...EMPTY_SNAPSHOT, version: 1, state: v1Main as PipelineState };
     },
     async isPublished(slug) {
       // Every guide is a DIRECTORY (CLAUDE.md; gated by guide-shape-uniform.test.mjs), so the

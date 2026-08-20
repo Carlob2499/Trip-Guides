@@ -9,6 +9,22 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-20 — Integration week I01–I06 executed; draft PR #67-adjacent integration PR up)
+
+Carlo directed "merge PR #63 and re-run the mission" — the P13 go made operationally. PR #63
+squash-merged as `be9c535`; branch `fable/pipeline-v2-integration` carries I01–I06. Delivered:
+durable `issue` + immutable `landMode` in run.v2.json (resumes inherit both; escalation/strip
+refused); deterministic `land-mode` decision + `recordProductLanding` (pre-merge record, fails
+closed on incomplete); questions job (always(), dedup); Progress reads real events with a main
+fallback for merged runs. **Two live defects found+fixed on main:** `/new` scaffold lost its
+issue (`get("issue")`/ISSUE_NUM seam — `062d3ad`) and change.yml's answers re-dispatch 403
+(missing `actions: write` — `2d39b2c`); the M6 answers path had NEVER run live before.
+**Andorra fixture (#64) proved the lifecycle live:** selector OFF→V1 / ON→V2-from-main /
+restored→V1; issue threading; interruption after passA → resume skipped it; reconcile failed
+offline verify twice and the 1B feedback retry converged (7→6→0); geocode+critic+land green;
+`landing mode pr` → real gate exit 0 → **draft PR #67, published:false, deployedLive:null,
+attempts 5/5**. Full gates green. Evidence: IMPLEMENTATION_STATE "Integration week session".
+
 ## Snapshot (2026-08-20 — P13.1: premature GREEN retracted, R3 fixture bus-exclusivity fixed)
 
 The first P13 review returned GREEN on `88d16fe` and was **retracted the same day**: Codex's
@@ -48,26 +64,4 @@ review" and the tracker's P13 row. Nothing merged, published, cut over, or delet
 [Retraction note, added when archiving: the Gap-2 re-verification checked SUPPORTS lines
 affirmatively but missed that the same page documents "bus or taxi" — the fixture's
 bus-exclusivity framing was unsupported. Verdict withdrawn; see IMPLEMENTATION_STATE §P13.1.]
-
-## Snapshot (2026-08-20 — P12.1 targeted correction: the review's two HIGH proof gaps closed)
-
-The independent P11/P12 review returned **RECOMMEND_P13_YELLOW** (architecture ACCEPTED) with
-exactly two HIGH acceptance-proof gaps; this bounded pass closed both and stopped. **Gap 1 —
-`/proc` containment now proven for Grep and Glob, not just Read:** the `probe/environ` workflow
-(commit `c12d736`) reruns the agent under the UNCHANGED production config with
-`--output-format stream-json --verbose`, and a scorer requires an observed `tool_use` on `/proc`
-AND a paired tool-layer denial for EACH of Read/Grep/Glob — a model refusal scores INCONCLUSIVE,
-never PASS. **Run `32348279562`, job `96361626055`: all three tools attempted `/proc/version`
-(harmless) and were DENIED at the tool layer**; sentinel never obtained via any agent tool. New
-scar pins `--safe-mode`+`--no-session-persistence` on all four agent steps (the flag set the
-proof ran under). **Gap 2 — the R3+ transport fixture re-researched:** the overstatements the
-review flagged ("only way up", "no parallel road", "no bed on the mountain") are GONE; the
-KIX→Kōyasan scenario stays, now justified only by fetched-source claims (4 sources re-fetched
-this pass: 3 Nankai operator pages + japan-guide e4904, full source-to-claim mapping in the test
-header), with the strongest sourced fragility fact being japan-guide's twice-stated rule that
-walking from the cable-car station into town is not permitted — the final bus is mandatory. All
-exact last-service times are explicit traveler re-checks; a new scar regex-pins that no `HH:MM`
-time and none of the three overstated phrases can return. Validator returns `[]`; all seven
-distinct negative controls preserved. Full record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` →
-"P12.1 correction pass".
 

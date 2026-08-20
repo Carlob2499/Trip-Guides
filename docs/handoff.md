@@ -48,31 +48,37 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-20 — Integration week I01–I06 executed; draft PR #67-adjacent integration PR up)
+## Snapshot (2026-08-20 — Release-candidate correction pass on PR #68)
 
-Carlo directed "merge PR #63 and re-run the mission" — the P13 go made operationally. PR #63
-squash-merged as `be9c535`; branch `fable/pipeline-v2-integration` carries I01–I06. Delivered:
-durable `issue` + immutable `landMode` in run.v2.json (resumes inherit both; escalation/strip
-refused); deterministic `land-mode` decision + `recordProductLanding` (pre-merge record, fails
-closed on incomplete); questions job (always(), dedup); Progress reads real events with a main
-fallback for merged runs. **Two live defects found+fixed on main:** `/new` scaffold lost its
-issue (`get("issue")`/ISSUE_NUM seam — `062d3ad`) and change.yml's answers re-dispatch 403
-(missing `actions: write` — `2d39b2c`); the M6 answers path had NEVER run live before.
-**Andorra fixture (#64) proved the lifecycle live:** selector OFF→V1 / ON→V2-from-main /
-restored→V1; issue threading; interruption after passA → resume skipped it; reconcile failed
-offline verify twice and the 1B feedback retry converged (7→6→0); geocode+critic+land green;
-`landing mode pr` → real gate exit 0 → **draft PR #67, published:false, deployedLive:null,
-attempts 5/5**. Full gates green. Evidence: IMPLEMENTATION_STATE "Integration week session".
+The integration pass's INTEGRATION_YELLOW understated real product-path defects; the
+correction pass reproduced, fixed and scar-tested every one ON the PR branch (no
+direct-to-main commits). The big four: (1) publication was recorded BEFORE the merge — now a
+two-phase landing transaction (gate verdict pre-merge; `finalizeMergedLanding` writes
+published only after gh CONFIRMS the merge, on main, idempotently; the schema refuses
+published without a merged outcome); (2) the `land` workflow input was an auto-publish
+side-door — REMOVED, intent now derived (default-branch ref + selector) and re-checked at
+landing time, land CLI defaults to pr and refuses escalation; (3) V1 rollback could mutate or
+display historical V2 state — landing keys on exact branch identity, Progress and answers
+routing read active branches before main history, dual-active refuses; (4) a fresh branch over
+merged history silently resumed the terminal run — fresh-run semantics (new runId, prior run
+archived to previousRuns). Also: run-scoped telemetry (runId-stamped events, identity join in
+the UI), safety-notice permission + announce=ok/failed contract, post-merge questions fetch,
+late-answer reopen (reconcile+critic re-open), exact question-ID dedup + truthful copy, one
+landingMode implementation, floors removed repo-wide (CONFLICTING_SPEC resolved per the
+2026-08-17 decision), scorecard human rows now advisory. Full record: IMPLEMENTATION_STATE
+"Release-candidate correction pass".
 
 ## Where we left off
 
-**The draft integration PR (fable/pipeline-v2-integration → main) awaits independent Codex
-review — do not merge it here.** Verdict INTEGRATION_YELLOW for exactly one recorded gap: the
-live product-mode auto-merge is unprovable pre-merge (branch-ref dispatch would side-door the
-integration code into main). First post-merge action: one selector-ON `/new` canary observed
-end-to-end. Selector restored to ABSENT and verified. V1 present + dispatchable. Evidence kept
-for review: intake #64 (closed), branch `research-v2/andorra`, draft PR #67, andorra scaffold
-on main (draft-quarantined) — remove after review. Routing fixtures (san-marino,
-liechtenstein) already cleaned; stub branches deleted. Pre-existing canary artifacts (PR #61,
-`canary/kansai-proof`, `research-v2/kansai-proof`, `probe/environ`, stray `environ-probe`
-workflow id 338376924) untouched — P10–P13 evidence, their cleanup is a post-acceptance call.
+**PR #68 (fable/pipeline-v2-integration → main) is READY_FOR_CODEX_REVIEW — do not merge it
+from a session.** Verdict PREMERGE_CODE_GREEN / INTEGRATION_YELLOW: zero known code blockers;
+the only remaining gaps are live-only by construction — the default-branch product auto-merge
+(needs this code ON main + selector ON) and the Worker /answer hop (no owner key in sessions).
+First post-merge action: one selector-ON /new canary observing the two-phase landing + safety
+notice live. Selector ABSENT (verified; untouched this pass). V1 present + dispatchable, now
+with the rollback matrix tested. Cleanup: andorra fixture REMOVED on the branch (merge removes
+it from main); PR #67 closed as marked test evidence (its branch research-v2/andorra stays for
+review, then dies in post-merge cleanup); P10–P13 evidence (PR #61, canary/kansai-proof,
+research-v2/kansai-proof, probe/environ, stray environ-probe workflow id 338376924) untouched
+pending sign-off. Full suite 165 files / 2,7xx green + build/lint/typecheck — exact counts in
+PR #68's correction report.

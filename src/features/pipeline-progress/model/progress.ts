@@ -45,6 +45,10 @@ export interface PipelineState {
 export interface RunSnapshot {
   /** 0 = no run found · 1 = V1 state.json · 2 = V2 run.v2.json. */
   version: 0 | 1 | 2;
+  /** V2 only — the run's identity, the join key for run-scoped telemetry (eventsForRun). Null
+   *  for V1 and no-run snapshots: V1 emits no events, so null correctly renders honest-empty
+   *  telemetry rather than another run's stream. */
+  runId: string | null;
   state: PipelineState | null;
   /** V2 only — the run's own recorded status. Null for V1 (it never records one). */
   runStatus: "pending" | "running" | "paused" | "complete" | "failed" | "stuck" | null;
@@ -57,7 +61,7 @@ export interface RunSnapshot {
 }
 
 export const EMPTY_SNAPSHOT: RunSnapshot = {
-  version: 0, state: null, runStatus: null, failureClass: null, deployedLive: null, malformed: false,
+  version: 0, runId: null, state: null, runStatus: null, failureClass: null, deployedLive: null, malformed: false,
 };
 
 /** V2 stage keys → this page's stations. The critic IS the verify station: it runs the verify
@@ -111,6 +115,7 @@ export function adaptV2Snapshot(raw: unknown): RunSnapshot {
   const failure = r.failure as { class?: string } | null | undefined;
   return {
     version: 2,
+    runId: String(r.runId),
     state: {
       slug: String(r.slug ?? ""),
       createdAt: String(r.createdAt ?? ""),

@@ -146,14 +146,17 @@ export function commitAll(message, { cwd = ROOT } = {}) {
   return true;
 }
 
-// Hand the branch to the shared lander. It prints exactly `merged:<n>` or `draft:<n>`; anything
-// else is a bug in that script, not something to guess about.
+// Hand the branch to the shared lander. It prints exactly `merged:<n> announce=<ok|failed|skipped>`
+// or `draft:<n>`; anything else is a bug in that script, not something to guess about. `announced`
+// is null for draft outcomes (nothing to announce), true/false for merges — false means the merge
+// SUCCEEDED and the safety notice did not file, a fact the caller records rather than hides.
 export function landBranch({ branch, base = "main", title, bodyFile, passed, announceUrl = "", cwd = ROOT }) {
   const args = ["scripts/land-branch.sh", branch, base, title, bodyFile, passed ? "true" : "false"];
   if (announceUrl) args.push(announceUrl);
   const out = execFileSync("bash", args, { cwd, encoding: "utf8" });
   const line = out.trim().split("\n").filter(Boolean).pop() || "";
-  const m = line.match(/^(merged|draft):(\d+)$/);
-  if (!m) throw new Error(`land-branch.sh printed "${line}" — expected merged:<n> or draft:<n>`);
-  return { outcome: m[1], pr: Number(m[2]) };
+  const m = line.match(/^(merged|draft):(\d+)(?: announce=(ok|failed|skipped))?$/);
+  if (!m) throw new Error(`land-branch.sh printed "${line}" — expected "merged:<n> announce=<ok|failed|skipped>" or "draft:<n>"`);
+  const announced = m[1] === "merged" ? (m[3] === "ok" ? true : m[3] === "failed" ? false : null) : null;
+  return { outcome: m[1], pr: Number(m[2]), announced };
 }

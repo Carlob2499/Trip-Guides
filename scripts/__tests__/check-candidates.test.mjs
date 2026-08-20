@@ -1,13 +1,13 @@
-// Tests for the candidates-table gate (standards S2/S3). The behaviors worth pinning:
-// pre-standard guides are n/a (never retro-failed); an empty section on a post-standard
-// guide FAILS; floors come from defaults unless the guide overrides; and a "shipped" row
-// whose name appears nowhere in the guide is a finding — that cross-check is what makes
-// padding the table to hit a floor expensive.
+// Tests for the candidates-table gate (standards S2/S3), floor-free by doctrine: pre-standard
+// guides are n/a (never retro-failed); an empty section on a post-standard guide FAILS; a
+// "shipped" row whose name appears nowhere in the guide is a finding; and NO quantity ever is
+// (DECISIONS.md "Research breadth" — the 2026-08-20 correction pass removed the env-gated V1
+// floors that had outlived the 2026-08-17 repo-wide removal decision).
 
 // @protects-file Proposed venues are checked before they can enter a guide.
 
 import { describe, it, expect } from "vitest";
-import { parseCandidates, judgeCandidates, DEFAULT_FLOORS } from "../check-candidates.mjs";
+import { parseCandidates, judgeCandidates } from "../check-candidates.mjs";
 
 const table = (rank, name, rows) =>
   `### Priority ${rank}: ${name}\n\n| Candidate | Verdict |\n|-----------|---------|\n` +
@@ -46,16 +46,19 @@ describe("judgeCandidates", () => {
   const bigTable = parseCandidates(doc(table(1, "Food", rows(16, 8))));
   const guideText = rows(16, 8).filter(([, v]) => v === "shipped").map(([c]) => c).join(" ");
 
-  it("passes a table meeting the default floors, with every shipped name present in the guide", () => {
+  it("passes a big honest table, with every shipped name present in the guide", () => {
     const r = judgeCandidates(bigTable, { guideText });
     expect(r.status).toBe("pass");
     expect(r.summary[0]).toMatchObject({ considered: 16, shipped: 8 });
   });
 
-  it("fails a thin consideration set by count, naming the floor", () => {
+  it("a SMALL honest consideration set passes — no quantity is ever a finding (floorless doctrine)", () => {
+    // Andorra la Vella's 5 serious culture candidates are not a defect; a floor of 16 was.
+    // Thinness protection is the saturation record + the structural anti-fabrication checks
+    // (DECISIONS.md "Research breadth"; the 2026-08-20 correction pass removed the last floors).
     const r = judgeCandidates(parseCandidates(doc(table(1, "Food", rows(5, 5)))), { guideText: "Cand 0 Cand 1 Cand 2 Cand 3 Cand 4" });
-    expect(r.status).toBe("fail");
-    expect(r.findings.join("\n")).toMatch(/5 candidate\(s\) considered, floor is 16/);
+    expect(r.status).toBe("pass");
+    expect(r.findings.join("\n")).not.toMatch(/floor/i);
   });
 
   it("fails a shipped row that appears nowhere in the guide — the anti-padding cross-check", () => {
@@ -74,18 +77,20 @@ describe("judgeCandidates", () => {
     expect(absent.findings.join("\n")).toMatch(/"Wanaka \(Dotonbori\)" is marked shipped but appears nowhere/);
   });
 
-  it("honors per-guide researchFloors over the defaults — the tabBudget precedent", () => {
+  it("no floors exist to honor or override — small sets pass in EVERY context (amended scar)", () => {
+    // Amended from the researchFloors-override test: the override existed to soften floors,
+    // and both died together (the skill-parity suite separately pins researchFloors out of the
+    // skill). The structural checks still bite the same small table when a name is fake.
     const small = parseCandidates(doc(table(1, "Food", rows(6, 3))));
-    const text = "Cand 0 Cand 1 Cand 2";
-    expect(judgeCandidates(small, { guideText: text }).status).toBe("fail"); // default floor bites
-    expect(judgeCandidates(small, { floors: { 1: { considered: 6, shipped: 3 } }, guideText: text }).status).toBe("pass");
+    expect(judgeCandidates(small, { guideText: "Cand 0 Cand 1 Cand 2" }).status).toBe("pass");
+    expect(judgeCandidates(small, { guideText: "Cand 1 Cand 2" }).status).toBe("fail"); // Cand 0 fake
   });
 
-  it("V2 adaptive mode keeps structural checks but does not apply V1 numeric floors", () => {
+  it("tiny sets pass with structural checks intact — the old V2-adaptive posture is now the ONLY posture", () => {
     const small = parseCandidates(doc(table(1, "Food", rows(3, 2))));
-    const r = judgeCandidates(small, { adaptive: true, guideText: "Cand 0 Cand 1" });
+    const r = judgeCandidates(small, { guideText: "Cand 0 Cand 1" });
     expect(r.status).toBe("pass");
-    expect(r.summary[0].floor).toBeNull();
+    expect(r.summary[0].floor).toBeUndefined(); // the floor concept itself is gone from the summary
   });
 
   it("gates only ranks 1-3; a fourth table is bonus depth", () => {
@@ -100,12 +105,14 @@ describe("judgeCandidates", () => {
     expect(r.findings[0]).toMatch(/no priority tables/);
   });
 
-  it("default floors are the documented 16/8 · 10/5 · 6/3", () => {
-    expect(DEFAULT_FLOORS).toEqual({
-      1: { considered: 16, shipped: 8 },
-      2: { considered: 10, shipped: 5 },
-      3: { considered: 6, shipped: 3 },
-    });
+  it("the floors are GONE from the module surface — the doctrine has one home (amended scar)", async () => {
+    // Amended from the 16/8·10/5·6/3 shape pin: what is pinned now is their ABSENCE, so a
+    // future "helpful" quota cannot slip back in without tripping this.
+    const mod = await import("../check-candidates.mjs");
+    expect(mod.DEFAULT_FLOORS).toBeUndefined();
+    const { readFileSync } = await import("node:fs");
+    const src = readFileSync(new URL("../check-candidates.mjs", import.meta.url), "utf8");
+    expect(src).not.toMatch(/DEFAULT_FLOORS|researchFloors/);
   });
 });
 
@@ -149,15 +156,13 @@ describe("judgeCandidates — D3 shortlist stage (shipped ⊆ shortlist ⊆ cons
     expect(r.status).toBe("pass");
   });
 
-  it("honors an optional per-rank `shortlist` floor via researchFloors, on top of considered/shipped", () => {
+  it("shortlist counts are reported, never gated by number — the funnel RELATION is the check (amended scar)", () => {
+    // Amended from the shortlist-floor test: the optional count floor died with every floor.
+    // What survives is the relation (shipped ⊆ shortlist, above) and the honest count report.
     const t = parseCandidates(doc(table3(1, "Food", rows3(16, 8, 0))));
-    const passing = judgeCandidates(t, { guideText: names(8) });
-    expect(passing.status).toBe("pass");
-    const withFloor = judgeCandidates(t, {
-      floors: { 1: { considered: 16, shipped: 8, shortlist: 10 } },
-      guideText: names(8),
-    });
-    expect(withFloor.status).toBe("fail");
-    expect(withFloor.findings.join("\n")).toMatch(/8 shortlisted, floor is 10/);
+    const r = judgeCandidates(t, { guideText: names(8) });
+    expect(r.status).toBe("pass");
+    expect(r.summary[0]).toMatchObject({ shipped: 8, shortlisted: 8 });
+    expect(r.findings.join("\n")).not.toMatch(/floor/i);
   });
 });

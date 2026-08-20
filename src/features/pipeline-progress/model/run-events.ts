@@ -3,11 +3,11 @@
  * found worth telling the traveller. Pure parsing and formatting only — the gateway does the
  * reading, ui/ does the rendering.
  *
- * THE PIPELINE DOES NOT EMIT ANY OF THIS YET. That is the whole point of the file existing
- * ahead of the emitter: the cockpit's sourcing / judgments / "worth knowing" panels ship as
- * honest empties (`available: false`) with the copy that says so, and the day
- * scripts/pipeline.mjs starts writing `guides-intake/<slug>/events.json` in this shape, they
- * populate with no UI change. The alternative — a demo feed, or panels that "look alive" — is
+ * V2's emitter (scripts/pipeline/v2/events.mjs) writes `guides-intake/<slug>/events.json` in
+ * this shape, stamped with the RUN ID it belongs to — telemetry is a property of exactly one
+ * run, and a stream without identity (or with another run's identity) is refused as unavailable
+ * rather than rendered against the wrong run. V1 emits nothing, so V1 runs stay honest empties
+ * (`available: false`). The alternative — a demo feed, or panels that "look alive" — is
  * the page lying about a run, which docs/reference/motion.md and CLAUDE.md both forbid outright.
  *
  * Every field is optional-tolerant on read: this parses a file written by a DIFFERENT process,
@@ -46,9 +46,13 @@ export interface RunCounters {
 }
 
 export interface RunEvents {
-  /** False whenever there is no telemetry to show — no file, no emitter, or an unreadable one.
-   *  The UI must key its empty copy off THIS, never off `fetches.length === 0`, so "the run
-   *  fetched nothing yet" and "this run reports nothing at all" stay distinguishable. */
+  /** The run this stream belongs to. Parsing REFUSES a stream with no identity — stale main
+   *  files from before run-scoping, or hand-edits, read as unavailable. */
+  runId: string | null;
+  /** False whenever there is no telemetry to show — no file, no emitter, an unreadable one, or
+   *  one that names no run. The UI must key its empty copy off THIS, never off
+   *  `fetches.length === 0`, so "the run fetched nothing yet" and "this run reports nothing at
+   *  all" stay distinguishable. */
   available: boolean;
   fetches: FetchEvent[];
   decisions: DecisionEvent[];
@@ -57,6 +61,7 @@ export interface RunEvents {
 }
 
 export const EMPTY_RUN_EVENTS: RunEvents = {
+  runId: null,
   available: false,
   fetches: [],
   decisions: [],
@@ -153,7 +158,12 @@ function parseCounters(raw: unknown): RunCounters | null {
 export function parseRunEvents(raw: unknown): RunEvents {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return EMPTY_RUN_EVENTS;
   const r = raw as Record<string, unknown>;
+  // Identity is mandatory (correction pass): an event stream that names no run cannot be
+  // trusted against ANY run — pre-run-scoping files and hand-edits read as unavailable.
+  const runId = str(r.runId);
+  if (!runId) return EMPTY_RUN_EVENTS;
   const events: RunEvents = {
+    runId,
     available: true,
     fetches: parseFetches(r.fetches),
     decisions: parseDecisions(r.decisions),
@@ -165,6 +175,17 @@ export function parseRunEvents(raw: unknown): RunEvents {
   const anything =
     events.fetches.length || events.decisions.length || events.nuggets.length || events.counters;
   return anything ? events : EMPTY_RUN_EVENTS;
+}
+
+/**
+ * The identity join (correction pass): a stream is only renderable against the run it names.
+ * A mismatch — the page showing run B while main still serves run A's events, or an active V1
+ * run beside historical V2 telemetry — renders the honest empty, never the wrong run's feed.
+ */
+export function eventsForRun(events: RunEvents, runId: string | null | undefined): RunEvents {
+  if (!events.available) return events;
+  if (!runId || events.runId !== runId) return EMPTY_RUN_EVENTS;
+  return events;
 }
 
 /** The first few polls always probe for telemetry (a run may emit from its first minute). */

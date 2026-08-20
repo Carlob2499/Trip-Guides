@@ -103,15 +103,30 @@ export function buildRunEvents({ state, evidence = null, geocode = null } = {}) 
       `Deterministic geocode pass: ${geocode.resolved?.length ?? 0} resolved · ${geocode.unresolved?.length ?? 0} left as honest blanks`);
   }
 
+  // Landing events say only what has ACTUALLY happened (correction pass): the gate verdict is
+  // its own fact; a PR exists only once `landing` records one; "Published" only after a
+  // confirmed merge (the schema refuses publication.published without one).
   const gate = state?.landingGate;
-  if (gate?.status === "passed") push(gate.checkedAt, "decision", "Landing evidence gate PASSED — draft PR opened");
+  if (gate?.status === "passed") push(gate.checkedAt, "decision", "Landing evidence gate PASSED");
   if (gate?.status === "failed") push(gate.checkedAt, "reject", `Landing evidence gate FAILED — ${gate.failure || "see run log"}`);
-  if (state?.publication?.published) push(state.publication.publishedAt, "decision", "Published (merged)");
+  const landing = state?.landing;
+  if (landing?.outcome === "draft" && landing.pr) push(state?.updatedAt, "decision", `Draft PR #${landing.pr} opened for human review`);
+  if (landing?.outcome === "failed") push(state?.updatedAt, "reject", `Landing FAILED — ${landing.detail || "see run log"}; nothing merged, nothing published`);
+  if (state?.publication?.published && landing?.outcome === "merged") {
+    push(state.publication.publishedAt, "decision", `Published — PR #${landing.pr} merged`);
+    if (landing.announced === false) {
+      push(landing.finalizedAt || state.publication.publishedAt, "reject",
+        "Auto-publish safety notice FAILED to file (the merge itself succeeded) — file the rollback notice by hand");
+    }
+  }
   if (state?.publication?.deployedLive) push(state.publication.deployedAt, "decision", "Confirmed live on the deployed site");
 
   decisions.sort((a, b) => String(a.at).localeCompare(String(b.at)));
 
   return {
+    // Run identity (correction pass): telemetry belongs to exactly one run. The Progress model
+    // refuses to render an event stream against a different run's snapshot.
+    runId: state?.runId || null,
     // fetches: no trustworthy machine boundary observes the agents' web requests — honestly empty.
     fetches: [],
     decisions,
