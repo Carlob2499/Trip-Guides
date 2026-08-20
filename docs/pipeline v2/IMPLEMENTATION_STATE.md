@@ -929,6 +929,46 @@ No pre-existing failures — nothing unrelated blocks I01–I06.
   2677 passed + 1 todo · build 9 pages · lint 0/0 · typecheck 0 errors.
 - **Remaining:** the live boundary proofs below.
 
+#### Live boundary evidence (recorded as earned — fixture slugs: andorra=B #64 · san-marino=C #65 · liechtenstein=D #66)
+
+- **Two REAL defects found and repaired at the live boundary** (both invisible to the 2,677-test
+  deterministic suite — the mission's autonomous-repair contract working):
+  1. `/new` scaffold lost its issue number (run `32375205019`): `runScaffold` read `get("issue")`
+     where pipeline.mjs's `get` answers only literal flags, env fallback named `ISSUE_NUM` vs the
+     workflow's `ISSUE` — scaffold pushed to main, THEN died at the reply; issue never closed,
+     research never auto-started for EITHER engine. Fixed (`resolveScaffoldArgs`, refuse-before-
+     push guard), 6 tests, cherry-picked to main as `062d3ad`.
+  2. change.yml's answers-to-active-research re-dispatch 403'd (run `32379790925`) — token never
+     had `actions: write`; the M6 path had never run live. Answer landed on the ledger, run never
+     resumed. Fixed job-level (least privilege), pinned, on main as `2d39b2c`.
+- **L1 selector OFF (V1 routing):** #64 → scaffold `32375596604` success → reply + issue CLOSED →
+  V1 run `32375641704` dispatched with the issue, NO V2 run → canceled pre-agent-spend. ✓
+- **L2a issue/land threading live:** V2 run `32376069336` on the integration ref
+  (`-f issue=64`, land blank) → run.v2.json on research-v2/andorra records
+  `issue: "64"`, `landMode: "pr"`, runId `andorra-20260820-8df468`. passA completed (~28 min);
+  canceled mid-passB (force-cancel — the harsh no-graceful-record interruption). ✓
+- **L3 selector ON (V2-from-main routing):** variable set 14:21:00Z. #65 → scaffold success →
+  exactly ONE V2 run `32379667830` from MAIN (default-branch guard's selector escape hatch), zero
+  V1 → canceled post-setup (attempt gates exercised: research-v2/san-marino, attempt 1). Note:
+  main's init records no issue/landMode (undefined) — the integration diff's addition shown
+  differentially. ✓
+- **§9 answers leg live:** passA emitted the REAL question card `q-andorra-1` (the seeded date
+  fork). change.yml dispatch (source=answers, PLAN_JSON) → `answers-route: andorra → research
+  (research-v2/andorra)` → answer applied + pushed (`2fb6781`) → after the 403 fix, second
+  dispatch `32380556859` SUCCESS: idempotent re-apply ("some were already answered" — duplicate
+  cannot corrupt) → V2 re-dispatch `32380657184` passed the guard (selector ON), resumed the
+  correct branch, canceled post-setup. Worker /answer hop NOT re-proven live (no owner key in
+  this session — recorded credential gap; auth is unit-tested + previously live-proven). ✓
+- **Selector restored:** variable deleted (~14:33Z; window ≈12 min). #66 → scaffold success → V1
+  run `32380832093` dispatched, no new V2 → canceled. Selector verified ABSENT. ✓
+- **I04 resume live:** re-dispatch `32380888749` (slug only): passA job SKIPPED (attempts still
+  1 — completed expensive work not repeated), passB resumed on attempt 3 (history closed the
+  interrupted attempts honestly), attempts.total 3 of 5 as budgeted, issue/landMode inherited. ✓
+- **Security recheck (§17):** integration diff contains zero agent-step/credential/tool-policy
+  changes; only new permissions block is the questions job's narrow contents:read+issues:write
+  and change-job's designed actions:write; publication authority remains workflow-level (land
+  job), unreachable from research agents. ✓
+
 #### Live proof plan (execute in order; resume from the first unchecked item)
 
 - [ ] L1 selector OFF: fixture-B intake issue (Andorra, dates seeded with a mild contradiction
