@@ -11,7 +11,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 
 ## Dashboard — August 18, 2026
 
-- **Current phase:** Core implementation is locally complete on `codex/pipeline-v2`; manual draft-only canary / one-shot proof is next.
+- **Current phase (updated 2026-08-20):** P10 canary GREEN, P11 review YELLOW (architecture accepted), P12 finalization DONE (conflict resolved · CodeQL fixed · /proc/self/environ denial proven · R3+ transport proven · gates green). P13 go/no-go is the next gate — independent reviewer / Carlo decision, not self-declared.
 - **Next hard deadline:** September 6 — core research engine must be proven end-to-end in isolation.
 - **Days until September 20 feature freeze:** 33
 - **Days until September 27 code freeze:** 40
@@ -53,10 +53,10 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `
 | P07 | Preserve connected lifecycle safeguards: attempts, same-slug exclusion, answers/recert/pretrip | Core | Claude/Fable | Sep 6 | DONE | P03 | M6 recorded complete; lifecycle tests green | None | No |
 | P08 | Connect V2 state to honest Progress UI compatibility | Core | Claude/Fable | Sep 6 | DONE | P03 | M7 recorded complete | None | No |
 | P09 | Run full deterministic branch verification | Core proof | Automated CI/test | Sep 6 | DONE | P03–P08 | M8: build/lint/typecheck/test green; offline verify passes | None | No |
-| P10 | Run one-shot manual draft-only V2 canary | Core proof | Claude/Fable | Sep 6 | IN PROGRESS | P09 | Real Pass A → Pass B → Reconcile → Critic → Verify run, no production publish; proof matrix and resource report | Live/external research boundaries not yet proven | No unless a product fork appears |
-| P11 | Independently review Fable's one-shot proof and every surgical fix | Core proof | Codex | Sep 6 | NOT STARTED | P10 | Codex confirms or rejects each claimed PASS with repository evidence | Waiting for P10 | Yes only if verdict is NOT READY for architectural reason |
-| P12 | Apply only blocker/high-priority fixes from the canary | Core proof | Codex + Claude/Fable | Sep 6 | NOT STARTED | P11 | Targeted tests demonstrate each fix; no unrelated redesign | Unknown until proof | Carlo approves only if scope grows |
-| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | NOT STARTED | P10–P12 | Explicit go/no-go: READY FOR FULL INTEGRATION | Canary not complete | Yes — Carlo accepts go/no-go |
+| P10 | Run one-shot manual draft-only V2 canary | Core proof | Claude/Fable | Sep 6 | DONE | P09 | Live Pass A → Pass B → Reconcile → geocode → Critic → landing gate → draft PR #61, GREEN (18 proof points, IMPLEMENTATION_STATE) | None | No |
+| P11 | Independently review Fable's one-shot proof and every surgical fix | Core proof | Codex | Sep 6 | DONE / YELLOW | P10 | Independent review returned YELLOW (architecture accepted; bounded finalization list = P12) | None | No |
+| P12 | Apply only blocker/high-priority fixes from the canary | Core proof | Codex + Claude/Fable | Sep 6 | DONE | P11 | PR #63 merge conflict resolved (`8a591e8`); 4 CodeQL findings fixed (`57f9dcd`); live /proc/self/environ denial proven (run 32340406684); R3+ transport proven (transport-r3-proof test); gates green 163/2649 on `7809835` — all in IMPLEMENTATION_STATE "P12 finalization" | None | No |
+| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | READY FOR INDEPENDENT GO/NO-GO | P10–P12 | P12 evidence complete and recorded; awaiting independent reviewer / Carlo decision (not self-declared GREEN) | Independent decision pending | Yes — Carlo accepts go/no-go |
 | I01 | Connect `/new` dispatch to the proven V2 path behind a safe switch/cutover plan | Integration | Codex + Claude/Fable | Sep 13 | NOT STARTED | P13 | New guide can start V2 without bypassing V1 safety during transition | P13 | Yes if cutover shape changes traveler behavior |
 | I02 | Prove full `/new → intake → research → verify → compose → publish` path | Integration | Codex + Automated CI/test | Sep 13 | NOT STARTED | I01 | One isolated end-to-end guide reaches safe publish boundary with all gates intact | P13 | No |
 | I03 | Prove incomplete/failed V2 run cannot publish | Integration | Automated CI/test | Sep 13 | NOT STARTED | I01 | Controlled failure is blocked before publication | P13 | No |

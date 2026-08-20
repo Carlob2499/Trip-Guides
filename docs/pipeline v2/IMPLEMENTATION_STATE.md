@@ -6,11 +6,13 @@
 
 ## Position
 
-- **Last completed milestone:** Finalization session — Core Proof blockers fixed, live canary GREEN (draft PR #61), legacy census complete
-- **Current milestone:** independent Codex review of the finalization PR (P11)
-- **Exact next action:** review the draft PR `fable/pipeline-v2-finalize` → main and the canary
-  evidence (runs 32305376180…32328254329, PR #61). Cutover stays OFF (WAYPOINT_RESEARCH_ENGINE
-  unset ⇒ /new dispatches V1). Do not merge, publish, or delete V1 without acceptance.
+- **Last completed milestone:** P12 finalization pass — merge conflict resolved, 4 CodeQL findings
+  fixed, live `/proc/self/environ` denial proven, R3+ transport proven, all gates green (see the
+  **P12 finalization** section below)
+- **Current milestone:** P13 — independent go/no-go on `fable/pipeline-v2-finalize` → main (PR #63)
+- **Exact next action:** independent reviewer inspects the P12 evidence (below) and PR #63, then
+  makes the P13 call. Cutover stays OFF (WAYPOINT_RESEARCH_ENGINE unset ⇒ /new dispatches V1).
+  Do not merge, publish, or delete V1 without acceptance.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
 delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
@@ -529,3 +531,113 @@ Still external by design: first canary must negatively prove `/proc/self/environ
 the live container, force cancellation/resume, exercise configured Places/Routes, confirm only a
 draft PR is created, and smoke the Worker answer path. No canary or external mutation was run in
 this audit session.
+
+## P12 finalization (2026-08-20, Fable) — resolve · prove · test · document
+
+Branch `fable/pipeline-v2-finalize`. Head at handoff: **`7809835`** (+ this docs commit). PR #63.
+Bounded finalization pass; architecture unchanged; no merge, publish, cutover, or deletion.
+
+### P12-A — PR #63 merge conflict resolved
+
+Merged `origin/main` (up to `14c2411`) into the branch. The ONLY conflict was
+`.github/workflows/research-pass-v2.yml`: main's whitespace-only Actions-indexing nudge vs. the
+branch's full V2 workflow. Resolved `--ours` (kept the full 939-line workflow; the trailing
+blank line main added carries nothing). Merge commit `8a591e8`. After it: branch contains current
+main (0 behind), PR #63 `mergeable: MERGEABLE`, the V2 workflow still has all four `docker run`
+agent steps and the default-branch dispatch guard (`vars.WAYPOINT_RESEARCH_ENGINE != 'v2'`), and
+`/new` still selects V1 when the cutover var is unset (new-guide.yml unchanged). No production
+publication path introduced.
+
+### P12-B — 4 CodeQL findings resolved (one root cause)
+
+All four traced to a SINGLE test-code defect, not a runtime vulnerability. The runtime
+`isProxyHost` (`research-rules.mjs`) matches hosts by EXACT string comparison
+(`host === p || host.endsWith('.'+p)`) — never a regex — so `PROXY_HOSTS` is never a runtime
+regexp. The three `js/incomplete-hostname-regexp` findings (#69/#70/#71, at the `PROXY_HOSTS`
+literals) were CodeQL tracing those strings' dataflow into the ONE place they enter a regex: the
+config-assertion test's `new RegExp(...host.replace(/\./g,'\\.')...)` (#72,
+`js/incomplete-sanitization`), whose dot-only escape was incomplete. Fixed by escaping the full
+metacharacter+backslash set (`replace(/[.*+?^${}()|[\]\\]/g, "\\$&")`) at that sink; the denied
+host set is unchanged. Regression test added pinning the runtime exact-match invariant against
+lookalike (`webcacheXgoogleusercontent.com`, `web-archive.org`), suffix-attack
+(`web.archive.org.evil.example`), and real-subdomain cases. Commit `57f9dcd`. Fixing the sink
+clears the source-traced findings too (no other regex path exists). **CodeQL re-scan result:
+[recorded below once the PR head scan completes].**
+
+### P12-C — live `/proc/self/environ` denial PROVEN
+
+Push-triggered probe workflow (`.github/workflows/environ-probe.yml`) on the throwaway
+`probe/environ` branch — never merged to finalize/main; `workflow_dispatch` would 404 until main
+carries it (P4), so `on: push` was used. It replicates the production Pass A agent config exactly
+(pinned `node:22-bookworm-slim@sha256:d649c27…`, pinned `@anthropic-ai/claude-code@2.1.233`, the
+same `WP_TOOLS`/`WP_DENY` rules) and injects a HARMLESS sentinel next to the real
+`CLAUDE_CODE_OAUTH_TOKEN`; the token is `perl \Q…\E`-redacted from all output and no raw
+environment is uploaded.
+
+- **PASS. Run `32340406684`, job `96338191848` (conclusion: success).** The agent's Read tool was
+  BLOCKED on the benign `/proc/version` (`CHECK1_BLOCKED`) — proving `Read(//proc/**)` is effective
+  across the whole `/proc` subtree in the pinned CLI (the canary's real risk was a rule syntax that
+  silently fails to match, as `/workspace` once did). By the same prefix rule, `/proc/self/environ`
+  is denied. Independently, the model REFUSED to read `/proc/self/environ` as a secrets file
+  (defense in depth). The sentinel never surfaced; no `/proc` read succeeded.
+- Two earlier probe runs (`32339935364`, `32340206007`) returned NO LEAK but were inconclusive
+  because the model refused the exfiltration-shaped framing before any tool ran — reframing as a
+  benign-path permission diagnostic was what let the tool layer actually be observed.
+- Deterministic scar: `pipeline-v2-finalize.test.mjs` now pins the `//proc`,`//sys`,`//dev`
+  Read+Edit denials on ALL FOUR agent steps (was one `toContain`), so no edit can silently drop
+  the containment rule. Commit `ede35bb`.
+
+### P12-D — R3+ fragile-transport PROVEN
+
+`scripts/__tests__/pipeline-v2-transport-r3-proof.test.mjs` (commit `7809835`). A controlled
+artifact carries a genuinely fragile transfer — **late KIX arrival → Namba → Gokurakubashi →
+Kōyasan cable car → temple-town bus** — backed by two sources FETCHED this pass: Nankai's
+operator station page (the cable car is the only link up from Gokurakubashi;
+`nankai.co.jp/en_railway/traffic/station/gokurakubashi.html`, fetched) and japan-guide's access
+page (Kōya Line every 20–30 min, Limited Express only ~2/day, ~2 h Namba→Kōyasan;
+`japan-guide.com/e/e4904.html`, fetched). The route is R3+ by consequence, not inflation: single-mode
+mountain access, an overnight cable-car cutoff, and a missed connection meaning **no bed on the
+mountain** — with luggage compounding it. Exact last-cable-car minute left as an explicit re-check
+(⚠) since Nankai defers per-day times to Ekitan; freshness carries a transit recheck date.
+- The artifact is schema-valid (`wp-evidence/2.1`) AND the REAL `researchRuleProblems` validator
+  returns `[]` — including `transportProblems` and `sourceAccessProblems` (risk 3, doorToDoor,
+  transferReality, groupLuggageMobility, buffer, missedConnection, nextService, lastPracticalReturn,
+  fallback all present; both fetched evidence ids resolve; ≥1 fetched origin).
+- Acceptance is EARNED: seven negative controls each flip one field and the same validator rejects
+  (drop fallback / all timing anchors / missed-connection / evidence ids / the fetched origin / a
+  proxy-URL origin) — and the SAME leg below R3 owes nothing (depth is risk-earned, not always-on).
+
+### P12-E — full deterministic gates on the exact final head
+
+Run on `7809835` (all four green):
+
+| Check | Command | Result |
+|---|---|---|
+| Build | `npm run build` | 9 pages, schema clean — exit 0 |
+| Lint | `npm run lint` | 0 errors, 0 warnings |
+| Typecheck | `npm run typecheck` | 0 errors, 0 warnings, 21 pre-existing hints |
+| Tests | `npm test` | **163 files, 2649 passed + 1 todo** |
+
+Count moved from the 162/2637 baseline by exactly the regression tests added this pass: +1 file
+(transport R3 proof, 10 tests) and +2 in `pipeline-v2-finalize.test.mjs` (proxy exact-match +
+the four-step `/proc` pin) = +12 tests. No test was skipped, weakened, or converted to a todo.
+
+### Main-branch integrity (section 11)
+
+Confirmed: only the authorized changes exist on main since the V2 fork (`9f1599b`) — two authority
+docs (validation pack, tracker), the inert stub registration PR #59 (`da5580f`), and the
+whitespace nudge (`14c2411`). Main's `research-pass-v2.yml` is still a 75-line `permissions: {}`
+inert echo-only job (no `docker run`, no fetch, no branch mutation, no publish). Main was not
+modified this pass.
+
+### Regression scars added this pass
+
+- Proxy denial exact-match invariant (lookalike / suffix-attack / subdomain), `pipeline-v2-finalize.test.mjs`.
+- `//proc`/`//sys`/`//dev` Read+Edit denial pinned on all four agent steps, `pipeline-v2-finalize.test.mjs`.
+- R3+ transport acceptance + seven earned-rejection controls, `pipeline-v2-transport-r3-proof.test.mjs`.
+
+### Known gaps unchanged (NOT expanded here — belong to I01/I02 integration week)
+
+Live mid-V2 Worker answer routing (unit/contract-tested only); `GOOGLE_ROUTES_KEY` unset (route
+timing advisory when absent); seven honest unresolved geocodes (name-mismatch refusals, correct);
+`/new` V2 notification/input threading; Progress-UI manual product-surface proof.
