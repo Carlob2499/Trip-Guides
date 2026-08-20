@@ -127,34 +127,34 @@
       "text": "Fresh-context critic complete in 15m (attempt 4)"
     },
     {
-      "at": "2026-08-20T03:25:21.409Z",
+      "at": "2026-08-20T03:29:07.146Z",
       "kind": "decision",
       "text": "Candidate funnel: 62 evaluated · 40 shortlisted · 27 shipped · 28 rejected · 4 kept as detours"
     },
     {
-      "at": "2026-08-20T03:25:21.409Z",
+      "at": "2026-08-20T03:29:07.146Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 14 independent finding(s): 2 agree · 4 reject · 8 adopt"
     },
     {
-      "at": "2026-08-20T03:25:21.409Z",
+      "at": "2026-08-20T03:29:07.146Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-20T03:25:21.409Z",
+      "at": "2026-08-20T03:29:07.146Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether the intake's assumed anchor event (Kiyomizu-dera autumn night illumination) actually falls within the trip's Nov 13-17, 2026 dates"
     },
     {
-      "at": "2026-08-20T03:25:21.409Z",
+      "at": "2026-08-20T03:29:07.146Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether Toji's autumn illumination (Pass B, T0-verified, fully covers Nov 13-17) should be woven into Day 3 (Sun Nov 15) as a substitute for the anchor event the intake assumed but that isn't running"
     },
     {
-      "at": "2026-08-20T03:25:21.409Z",
-      "kind": "reject",
-      "text": "Landing evidence gate FAILED — artifact, build, or configured network evidence gate failed"
+      "at": "2026-08-20T03:29:07.146Z",
+      "kind": "decision",
+      "text": "Landing evidence gate PASSED — draft PR opened"
     }
   ],
   "nuggets": [],
