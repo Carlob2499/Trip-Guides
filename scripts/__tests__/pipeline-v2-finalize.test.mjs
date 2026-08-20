@@ -94,7 +94,8 @@ describe("1A — generated machine contract cannot drift from the validators", (
     await mkdir(path.join(dir, slug), { recursive: true });
     await writeFile(path.join(dir, slug, "coverage.json"), JSON.stringify({ slug, asks: [{ id: "priority-food", label: "Priority: food", value: "ranked #1" }] }));
     const cap = await generateContractCapsule("reconcile", { slug, runId: "r", intakeDir: dir, guidesDir: guides });
-    expect(cap).toContain("`priority-food` — Priority: food");
+    expect(cap).toContain("`priority-food`");
+    expect(cap).not.toContain("Priority: food"); // intake-authored label stays on the data channel
     expect(cap).toContain("`02-food.json`");
     expect(cap).toContain("#noodle-bar");
   });
