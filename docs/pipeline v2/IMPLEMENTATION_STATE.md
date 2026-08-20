@@ -6,10 +6,11 @@
 
 ## Position
 
-- **Last completed milestone:** Codex adversarial correction pass after M8
-- **Current milestone:** local implementation complete; Phase 1 manual canary is next
-- **Exact next action:** run the timeline's manual draft-only canary and prove the external
-  boundaries listed below. Do not merge to main, switch dispatch, publish, or delete V1.
+- **Last completed milestone:** Finalization session — Core Proof blockers fixed, live canary GREEN (draft PR #61), legacy census complete
+- **Current milestone:** independent Codex review of the finalization PR (P11)
+- **Exact next action:** review the draft PR `fable/pipeline-v2-finalize` → main and the canary
+  evidence (runs 32305376180…32328254329, PR #61). Cutover stays OFF (WAYPOINT_RESEARCH_ENGINE
+  unset ⇒ /new dispatches V1). Do not merge, publish, or delete V1 without acceptance.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
 delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
@@ -428,6 +429,85 @@ rule fired live — Pass A fetched kiyomizudera.or.jp directly, found the 2026 i
 Nov 21–30 (trip is Nov 13–17 — the intake's anchor assumption does not hold), rejected a stale
 2025 aggregator, recorded fetched/blocked/search-preview access states, and refused to fake
 completion when writes were denied.
+
+## Live canary — GREEN (2026-08-20, runs 32305376180 → 32328254329)
+
+**Canary verdict: READY_FOR_INTEGRATION.** The full V2 path ran on real GitHub Actions —
+Pass A → Pass B → Reconcile → deterministic geocode → Critic → V2 validation → build →
+networked landing gate → **draft PR #61** — ending status `complete`, landingGate
+`passed` (earned: build exit 0 + networked verify PASS, 0 dead links), publication
+honestly `false`, guide still `draft: true`. Eleven dispatches total across two run
+generations; every failure was deterministic, produced a regression test, and the run
+resumed at the failed stage without re-spending completed research.
+
+**The 18 proof points:**
+
+1. **Generated machine contract** — after the capsule carried the exact vocabulary (incl. the
+   type hints, leads sub-shape and evidence-kind law it initially lacked — each gap found by a
+   live failure and closed), Pass A's repair attempt produced a fully valid artifact in 2m19s.
+2. **Validator feedback reaches the retry** — proven repeatedly: the 2m19s Pass-A repair (vs
+   27m for the failed attempt), reconcile fixing all P0 research findings on its first
+   feedback-guided retry, the critic clearing its last finding the same way. feedback.v2.json
+   on the branch shows the full recorded→superseded→retired lifecycle.
+3. **Pass B isolation on Actions** — the passB job ran on the baseline checkout (fetch-depth 1),
+   verify-passb-workspace green; collect-passb validated and transferred passB.v2.json; 14
+   independent findings later dispositioned (2 agree · 4 reject · 8 adopt).
+4. **Critic blindness** — prepare-critic deleted the evidence/state/feedback/geocode files;
+   fetch policy generated from the guide's own cited domains only; critic ran 4 attempts blind
+   and caught real defects (double-`≈` decoration C14, voice leaks, an unregistered forecast).
+5. **Container/system-path isolation** — agents ran in the pinned node container with absolute
+   `//proc`/`//sys`/`//dev` denials (rule syntax verified against the CLI's own docs after the
+   first canary proved the old form never matched).
+6. **Repository credential isolation** — credentials removed before every agent; the agent
+   sandbox has no remotes (proven by the re-dispatch step failing for exactly that reason
+   until it was moved to the trusted checkout).
+7. **Direct-fetch evidence rule** — live: Pass A recorded fetched/blocked/search-preview access
+   states; reconcile climbed ekitan/JR sources; the rules rejected aggregator-cited objective
+   claims until real authorities were cited.
+8. **Proxy rule** — proxy domains denied in agent tool policy, filtered from the critic
+   allowlist, rejected by the evidence rules (rule-level tests; no proxy URL appears in the
+   final artifact).
+9. **V2 coverage** — `checkCoverage` consumed coverage.v2.json live ("P0 coverage · PASS — V2
+   coverage artifact"); stale refs after composition failed closed, then remapped
+   deterministically (same-suffix rename + unique-anchor + loud corroborating-ref drop).
+10. **Deterministic geocoding** — geocode job ran post-reconcile/pre-critic, PLACES key scoped
+    to the one step; report committed.
+11. **Unresolved-geocode honesty** — geocode.v2.json: 7 pending, 0 resolved, every refusal
+    carrying its reason; no sentinel, no invented coordinates.
+12. **Real network landing verification** — `land --gate` ran build + `verify --network`; it
+    caught a genuinely dead link (Kasuga Taisha's moved English page) and blocked until fixed.
+13. **Draft-only landing** — every landing produced/updated DRAFT PR #61; auto-merge never
+    fired; `_guide.json` still carries `draft: true`.
+14. **Same-slug concurrency** — all runs shared the `guide-kansai-proof` group (queued, never
+    interleaved — visible in the Actions run list).
+15. **Publication ≠ deployed-live** — run record ends `published: false, deployedLive: null`
+    (unknown stays unknown).
+16. **Worker answer routing** — not exercised live (no traveler question was answered mid-run);
+    covered by the M6 unit contract + answers-route reading research-v2/ branches. REMAINING
+    UNKNOWN for integration week.
+17. **Resume after interruption** — a REAL usage-limit interruption (run 32266140623) plus five
+    fix-forward re-dispatches each resumed at the exact failed stage; completed stages never
+    re-ran (per-stage attempts: passA×2, reconcile×4, critic×4, scaffold/passB×1).
+18. **Truthful retry telemetry** — run.v2.json carries per-attempt history with durations and
+    failure classes; usage-limit interruptions are classified from the CLI's own output;
+    events.json holds 31 deterministic decision events with fetches/nuggets honestly empty and
+    counters null.
+
+**Bounded-attempts breaker, proven live twice:** dispatches past the cap ran 29s, spent
+nothing, filed stuck issues (#60, #62). Both trips were then resolved by DOCUMENTED operator
+resets — the burnt attempts were finalization-harness defects and landing-only re-dispatches
+(now exempt from the budget), not agent flakiness.
+
+**Additional scars fixed during the canary (all regression-tested):** landing-gate recording
+keyed on the emitted gate verdict (a failed gate had been recorded as passed — the one truth
+bug found, closed same-day); schema build moved into the critic's deterministic tail (a
+facts.json 240-char violation had surfaced only at the landing dead-end); verify/remap/build
+failures at the critic and reconcile retain in-scope work + findings; check-candidates matches
+branch-qualified ledger names.
+
+**Cost note (honest):** the canary consumed roughly 2.5 agent-hours of Sonnet/Opus across 11
+dispatches, of which ~40 minutes were re-spent due to harness defects since fixed. Token
+counts were not machine-observable and are not reported.
 
 ## Codex final audit addendum (2026-08-17)
 
