@@ -729,8 +729,8 @@ the real workflow (which guards on `WAYPOINT_RESEARCH_ENGINE`), so the stale com
 
 ### Full deterministic gates on the P12.1 head
 
-Run on `491be14` (the P12.1 test + docs commits; the only commit after it is this docs-only
-gate record). All four green:
+Run on `491be14` (the P12.1 test + docs commits; every commit after it is docs-only — this gate
+record and the session-end handoff). All four green:
 
 | Check | Command | Result |
 |---|---|---|
