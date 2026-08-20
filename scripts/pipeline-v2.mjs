@@ -470,7 +470,7 @@ async function run(cmd, get, has) {
       const scorecard = readFileSync(file, "utf8");
       const findings = scorecard.split(/\r?\n/)
         .map((line) => line.trim())
-        .filter((line) => /^[⚠✗]/.test(line) || /·\s*FAIL/.test(line))
+        .filter((line) => /^[⚠✗·]/.test(line) || /·\s*FAIL/.test(line))
         .map((line) => line.slice(0, 400));
       const state = await readRunStateV2(slug);
       await recordStageFeedback(slug, {
