@@ -26,8 +26,8 @@
 // not fail it — unknown is unknown, and inventing a verdict would be the exact sin these
 // rules exist to catch.
 
-const OBJECTIVE_SOURCE_KINDS = new Set(["official", "operator", "reference"]);
-const EXPERIENTIAL_FORBIDDEN = new Set(["official", "operator"]);
+export const OBJECTIVE_SOURCE_KINDS = new Set(["official", "operator", "reference"]);
+export const EXPERIENTIAL_FORBIDDEN = new Set(["official", "operator"]);
 
 // Reader/mirror/proxy services: useful for discovery, never the origin. Kept NARROW and exact —
 // ordinary first-party sites and CDNs must not be swept up. web.archive.org is a legitimate

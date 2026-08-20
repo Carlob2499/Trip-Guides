@@ -19,7 +19,7 @@ import {
   ContractError,
 } from "./contracts.mjs";
 import { candidateId } from "./evidence.mjs";
-import { OBJECTIVE_RECHECK_MAX_DAYS, EXPERIENTIAL_STALE_MONTHS, PROXY_HOSTS } from "./research-rules.mjs";
+import { OBJECTIVE_RECHECK_MAX_DAYS, EXPERIENTIAL_STALE_MONTHS, PROXY_HOSTS, OBJECTIVE_SOURCE_KINDS, EXPERIENTIAL_FORBIDDEN } from "./research-rules.mjs";
 import { loadCoverageContext } from "./coverage.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -140,6 +140,15 @@ function commonEvidenceSections({ slug, runId }) {
     `  - evidence \`origin\`: ${EVIDENCE_ORIGINS.join(" | ")}`,
     `  - candidate \`worth\`: ${WORTH_LABELS.join(" | ")} (or null)`,
     `  - reconciliation \`disposition\`: ${DISPOSITIONS.join(" | ")}`,
+    "",
+    "### Evidence-kind ↔ source-kind law (validator-enforced)",
+    `An OBJECTIVE claim (hours, prices, rules, schedules, dates) must cite source kind ${[...OBJECTIVE_SOURCE_KINDS].join(" | ")};`,
+    "aggregator and press sources are DISCOVERY for objective facts, never their citation — climb to the",
+    "origin authority or keep the claim out of the artifact. An EXPERIENTIAL claim (crowds, atmosphere,",
+    `feel) must NOT cite ${[...EXPERIENTIAL_FORBIDDEN].join(" or ")} (that is a fabricated citation); it needs \`kind: "firsthand"\``,
+    "with `firsthand: true`, and every experiential claim on a shipped/detour candidate needs ≥2",
+    "corroborating records for the SAME claim text from independent sources (distinct `family` values,",
+    "or `independent: true`) — write the second source as its own evidence record.",
     "",
     "### Source access + proxy policy (validator-enforced)",
     "`source.access` records HOW the source was reached: `fetched` = the origin page itself was retrieved",
