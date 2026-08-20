@@ -9,6 +9,42 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-17 — Pipeline V2 implementation adversarially audited and hardened)
+
+Fable's M0–M8 implementation was reviewed from fixed base `9f1599b` by independent code,
+specification, and security lanes, then corrected to convergence. The durable technical record
+is `docs/pipeline v2/IMPLEMENTATION_STATE.md`. Delivery timeline:
+`docs/pipeline v2/IMPLEMENTATION_PLAN.md` — Claude must read and follow it for sequencing,
+kill dates, freezes, and Codex/Fable roles.
+
+V2 remains manual, draft-only, and beside V1. Agents now execute in pinned Docker/Claude CLI
+boundaries with workspace-only filesystem tools, explicit system-path denials, no host token,
+no runner command files, no git remote/history, and canonical path-scoped artifact collection.
+Pass B remains baseline-isolated; critic source fetches are restricted to pre-verified domains.
+Run scope/model settings are durable across resumes; usage/void retries are bounded; stuck state
+cannot reset itself; malformed artifacts/state fail closed; intake coverage is relational and
+includes constraints, traveler count, and departure airport; the real landing gate is durable
+and is the only event that clears the UI's Verify station.
+
+V1's numeric breadth safeguards remain intact only for V1. V2 explicitly selects adaptive mode,
+where the typed earned-saturation gate replaces quotas while structural anti-padding checks stay.
+Critic findings now produce validated, provenance-complete newest-first process-memory rows.
+Answers route atomically back to active or complete-unmerged research branches with the original
+run inputs. Public issue spend and short owner keys fail closed.
+
+## Where we left off
+
+**Branch `codex/pipeline-v2`; final audited commit is the handoff point.** Local gates are green:
+all workflow YAML parses; build, lint, typecheck and full tests pass; targeted V2/progress suites
+pass; production preview was checked desktop plus 375px dark/reduced-motion with no overflow or
+browser errors; compiled output carries `landingGate` and no synthetic live-publication copy.
+
+**Next: the Phase 1 manual canary in IMPLEMENTATION_PLAN — not cutover.** First canary must prove
+the live Docker permission denial (`Read /proc/self/environ`), cancellation/resume, configured
+Places/Routes gate, draft-PR-only landing, Worker answer routing, and branch protection. Do not
+merge V2 to main, switch `/new`, publish, delete V1, or begin the secondary UI/UX pass until its
+timeline gate explicitly allows it.
+
 ## Snapshot (2026-08-16 — PLAN_PIPELINE_SURFACES executed end to end; the bundle is retired)
 
 **Five commits on `design/pipeline-surfaces`, each through the full ship loop.** The progress

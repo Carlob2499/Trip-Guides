@@ -37,12 +37,6 @@
   §H3) — proof-of-life is an isolated test fixture, not a staged guide edit.
 - `/about/` + `/new/` not in the SW precache shell; cover overlay does not trap focus; Cloudflare dashboard Git integration still failing 0s builds.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
-- **Two GitHub issue templates still promise a dead label.** `.github/ISSUE_TEMPLATE/
-  modify-guide.yml` and `revise-guide.yml` tell the filer that nothing runs "until the owner
-  applies `modify-approved` / `revision-approved`" — those labels stopped doing anything when the
-  owner key replaced them, yet still exist on the remote (`gh label list`) because only
-  `ensure-labels.yml` was updated. Live copy instructing a real person to do a no-op; found during
-  the Commit E sweep, left alone as out of that commit's scope.
 - **ALL FOUR remote branches are now safe to delete — and none can be deleted from a container
   session.** `pipeline-changes-plan-752kra`, `a11y-landmark-fix-v2` and `recert/japan` are merged
   into main; `claude/design-fixes-continuation-wi920k` is **superseded, never to be merged** — it
@@ -54,38 +48,35 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-17 — Pipeline V2 implementation adversarially audited and hardened)
+## Snapshot (2026-08-20 — Pipeline V2 finalization: canary GREEN, census clean, cutover switch built)
 
-Fable's M0–M8 implementation was reviewed from fixed base `9f1599b` by independent code,
-specification, and security lanes, then corrected to convergence. The durable technical record
-is `docs/pipeline v2/IMPLEMENTATION_STATE.md`. Delivery timeline:
-`docs/pipeline v2/IMPLEMENTATION_PLAN.md` — Claude must read and follow it for sequencing,
-kill dates, freezes, and Codex/Fable roles.
-
-V2 remains manual, draft-only, and beside V1. Agents now execute in pinned Docker/Claude CLI
-boundaries with workspace-only filesystem tools, explicit system-path denials, no host token,
-no runner command files, no git remote/history, and canonical path-scoped artifact collection.
-Pass B remains baseline-isolated; critic source fetches are restricted to pre-verified domains.
-Run scope/model settings are durable across resumes; usage/void retries are bounded; stuck state
-cannot reset itself; malformed artifacts/state fail closed; intake coverage is relational and
-includes constraints, traveler count, and departure airport; the real landing gate is durable
-and is the only event that clears the UI's Verify station.
-
-V1's numeric breadth safeguards remain intact only for V1. V2 explicitly selects adaptive mode,
-where the typed earned-saturation gate replaces quotas while structural anti-padding checks stay.
-Critic findings now produce validated, provenance-complete newest-first process-memory rows.
-Answers route atomically back to active or complete-unmerged research branches with the original
-run inputs. Public issue spend and short owner keys fail closed.
+The Fable finalization session fixed all four Core Proof blockers (generated machine-contract
+capsule · durable per-stage retry feedback · V2 coverage consumed by the real verifier ·
+deterministic geocoding in-pipeline), added source-access classes with a proxy refusal, per-attempt
+retry telemetry, and a truthful Progress event emitter. The V2 workflow was registered via an inert
+main stub (PR #59, the one authorized early merge) and the REAL pipeline ran end-to-end on GitHub
+Actions: Pass A → Pass B → Reconcile → geocode → Critic → **draft PR #61**, landing gate PASSED
+honestly (build + networked verify, 0 dead links), guide still `draft: true`, publication false.
+Eleven dispatches; every failure deterministic, regression-tested, and resumed at the failed stage
+— including a real usage-limit interruption and two live trips of the attempt-cap breaker (stuck
+issues #60/#62, resolved by documented operator resets). The repository-wide legacy census found
+ZERO dead code files; its five findings (template blurbs, motion.md rows, a silo deep-import, an
+archived build prompt, three dead labels) are all resolved — `docs/LEGACY_ERADICATION.md` is the
+ledger. `/new` now carries the cutover switch: `WAYPOINT_RESEARCH_ENGINE=v2` routes to V2; unset
+means V1, unconditionally. An independent code review of the session's diff found one HIGH (clean
+first-try runs crashed their completion checkpoint on the absent feedback pathspec), one MEDIUM
+(comma-hostname injection into the critic's --allowedTools) and one LOW — all fixed same-session
+with pinning tests. Durable record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` (18-point proof).
 
 ## Where we left off
 
-**Branch `codex/pipeline-v2`; final audited commit is the handoff point.** Local gates are green:
-all workflow YAML parses; build, lint, typecheck and full tests pass; targeted V2/progress suites
-pass; production preview was checked desktop plus 375px dark/reduced-motion with no overflow or
-browser errors; compiled output carries `landingGate` and no synthetic live-publication copy.
+**Branch `fable/pipeline-v2-finalize`; the finalization draft PR to main is the handoff point.**
+All gates green (build · lint · typecheck · 2,637 tests). Canary evidence: runs
+32305376180→32328254329, draft PR #61 (never merge it — test data), stuck issues #60/#62 closed
+with rationale.
 
-**Next: the Phase 1 manual canary in IMPLEMENTATION_PLAN — not cutover.** First canary must prove
-the live Docker permission denial (`Read /proc/self/environ`), cancellation/resume, configured
-Places/Routes gate, draft-PR-only landing, Worker answer routing, and branch protection. Do not
-merge V2 to main, switch `/new`, publish, delete V1, or begin the secondary UI/UX pass until its
-timeline gate explicitly allows it.
+**Next: independent Codex review (tracker P11), then Carlo's go/no-go (P13).** Cutover stays OFF
+(`WAYPOINT_RESEARCH_ENGINE` unset ⇒ /new dispatches V1). Do not merge the finalization PR, set the
+cutover variable, publish the canary, or delete V1 until review acceptance. After acceptance:
+delete the canary branches (`canary/kansai-proof`, `research-v2/kansai-proof`), close PR #61
+unmerged, and remove the kansai-proof scaffold/destination copies with them.
