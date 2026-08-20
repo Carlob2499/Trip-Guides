@@ -11,7 +11,7 @@
   },
   "status": "failed",
   "createdAt": "2026-08-19T21:44:27.008Z",
-  "updatedAt": "2026-08-20T03:25:20.171Z",
+  "updatedAt": "2026-08-20T03:25:21.409Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -189,8 +189,8 @@
   },
   "failure": {
     "class": "gate-failure",
-    "detail": "evidence gate failed (build or configured network verify) — landed as a draft PR only",
-    "at": "2026-08-20T03:25:20.171Z"
+    "detail": "artifact, build, or configured network evidence gate failed",
+    "at": "2026-08-20T03:25:21.409Z"
   },
   "publication": {
     "published": false,
@@ -200,8 +200,8 @@
   },
   "landingGate": {
     "status": "failed",
-    "checkedAt": "2026-08-20T03:25:20.171Z",
-    "failure": "evidence gate failed (build or configured network verify) — landed as a draft PR only"
+    "checkedAt": "2026-08-20T03:25:21.409Z",
+    "failure": "artifact, build, or configured network evidence gate failed"
   },
   "telemetry": {
     "schemaVersion": "wp-telemetry/2.1",
