@@ -82,22 +82,37 @@
       "text": "Reconcile complete in 9m (attempt 3)"
     },
     {
-      "at": "2026-08-20T17:25:29.697Z",
+      "at": "2026-08-20T17:25:59.659Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 2 resolved · 1 left as honest blanks"
+    },
+    {
+      "at": "2026-08-20T17:26:25.052Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-20T17:44:37.051Z",
+      "kind": "decision",
+      "text": "Fresh-context critic complete in 18m"
+    },
+    {
+      "at": "2026-08-20T17:44:37.066Z",
       "kind": "decision",
       "text": "Candidate funnel: 19 evaluated · 13 shortlisted · 8 shipped · 10 rejected"
     },
     {
-      "at": "2026-08-20T17:25:29.697Z",
+      "at": "2026-08-20T17:44:37.066Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 12 independent finding(s): 8 adopt · 1 replace · 1 agree · 2 conflict-resolved"
     },
     {
-      "at": "2026-08-20T17:25:29.697Z",
+      "at": "2026-08-20T17:44:37.066Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-20T17:25:29.697Z",
+      "at": "2026-08-20T17:44:37.066Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether the Llac d'Engolasters / Engolasters-area trails are a reasonable pick for an early-November visit"
     }

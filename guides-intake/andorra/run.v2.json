@@ -11,9 +11,9 @@
   },
   "issue": "64",
   "landMode": "pr",
-  "status": "running",
+  "status": "complete",
   "createdAt": "2026-08-20T13:45:44.211Z",
-  "updatedAt": "2026-08-20T17:26:25.052Z",
+  "updatedAt": "2026-08-20T17:44:37.066Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -135,21 +135,21 @@
       "failure": null
     },
     "critic": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-20T17:26:25.052Z",
-      "endedAt": null,
+      "endedAt": "2026-08-20T17:44:37.051Z",
       "attempts": 1,
       "model": "claude-opus-5",
       "effort": "high",
-      "commit": null,
+      "commit": "e51d1c0d4cfde7d3a06901ba43f3dbdd90593ad3",
       "history": [
         {
           "attempt": 1,
           "startedAt": "2026-08-20T17:26:25.052Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-20T17:44:37.051Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 1092
         }
       ],
       "failure": null
@@ -162,8 +162,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "critic",
-    "action": "stage \"critic\" was running — validate its output; re-run it if incomplete"
+    "nextStage": null,
+    "action": "all stages complete — land via the workflow's evidence gate"
   },
   "failure": null,
   "publication": {
@@ -212,6 +212,17 @@
         "toolCalls": null,
         "searches": null,
         "fetches": null
+      },
+      "critic": {
+        "durationSec": 1092,
+        "failedDurationSec": null,
+        "cumulativeDurationSec": 1092,
+        "model": "claude-opus-5",
+        "effort": "high",
+        "retries": null,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
       }
     },
     "counts": {
@@ -221,7 +232,7 @@
       "disagreementInvestigations": 3,
       "nativeLanguageSearches": null
     },
-    "totalDurationSec": 13185,
+    "totalDurationSec": 14333,
     "tokens": null,
     "costUsd": null
   }
