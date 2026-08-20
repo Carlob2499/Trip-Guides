@@ -21,10 +21,10 @@
       {
         "name": "Kiyomizu-dera",
         "kicker": "The wooden stage over Higashiyama, daytime visit",
-        "body": "<p>Opens 6:00am; regular closing time shifts by season (≈18:00 outside special night-viewing windows) — check the posted hours on arrival. Admission {{fact:kiyomizu-dera-admission-500-yen}}. The 2026 autumn night illumination runs Nov 21–30 — after this trip's dates — so this is a daytime visit only.</p>",
+        "body": "<p>Open 6:00–18:00 (18:30 in July–August), per the temple's own <a href='https://www.kiyomizudera.or.jp/news/open-hour.php'>opening-hours notice</a> — the amulet and goshuin desks don't start until around 8:00. ⚠ Admission is widely reported as ¥500 adult / ¥200 elementary–middle school, but the temple publishes its hours online and not its fee, and the neighbourhood-association page this guide previously cited carries only night-viewing information: no primary or operator source reachable this pass states the figure. Treat it as indicative, and bring cash. The 2026 autumn night illumination runs Nov 21–30 — after this trip's dates — so this is a daytime visit only.</p>",
         "dwell_min": 75,
         "source_url": "https://www.kiyomizudera.or.jp/event/yakan.php",
-        "verified_on": "2026-08-19",
+        "verified_on": "2026-08-20",
         "shelf_life": "venue",
         "map": {
           "lat": 34.9946662,
@@ -35,10 +35,10 @@
       {
         "name": "Toji Autumn Illumination",
         "kicker": "The night illumination that actually falls inside these dates",
-        "body": "<p>Toji's own site confirms its 2026 autumn illumination runs Oct 31–Dec 13, 18:00–21:00 (last entry), admission ¥1,000, no reservation needed — unlike Kiyomizu-dera (Nov 21–30) and Eikando (night lighting from Nov 20), both of which fall entirely after this trip ends. It's a five-story pagoda lit against a pond, a short walk from Kyoto Station. ⚠ Fitting an evening here means trading time against the already-packed Sun Nov 15 schedule (dawn Fushimi Inari through the reserved Houshoan dinner) — see the ledger's traveler question before booking around it.</p>",
+        "body": "<p>Toji's own site confirms its 2026 autumn illumination runs Oct 31–Dec 13, 18:00–21:30 with the ticket desk closing at 21:00 — admission ¥1,000 adult, ¥500 high-school. Unlike Kiyomizu-dera (Nov 21–30) and Eikando (night lighting from Nov 20), it falls squarely inside this trip. It's a five-story pagoda lit against a pond, a short walk from Kyoto Station. ⚠ The page says nothing either way about advance booking, so assume you buy at the gate and check on the day. ⚠ Fitting an evening here means trading time against the already-packed Sun Nov 15 schedule (dawn Fushimi Inari through the reserved Houshoan dinner) — see the ledger's traveler question before booking around it.</p>",
         "dwell_min": 60,
         "source_url": "https://toji.or.jp/exhibition/2026_autumn/",
-        "verified_on": "2026-08-19",
+        "verified_on": "2026-08-20",
         "shelf_life": "venue"
       },
       {
@@ -53,10 +53,10 @@
       {
         "name": "Arashiyama Bamboo Grove & Tenryu-ji",
         "kicker": "A green-lit path, then a UNESCO garden next door",
-        "body": "<p>The grove itself is a free public path — empty before 8am, packed by 9:30. Tenryu-ji's Sogenchi garden next door gives the visit more substance than the grove alone: garden admission {{fact:tenryuji-garden-500-yen}} (+¥300 for building access), 8:30am–5:00pm (7:30am garden opening Nov 15–30).</p>",
+        "body": "<p>The grove itself is a free public path — empty before 8am, packed by 9:30. Tenryu-ji's Sogenchi garden next door gives the visit more substance than the grove alone: garden admission {{fact:tenryuji-garden-500-yen}} (+¥300 for building access), 8:30am–5:00pm with last admission 4:50pm. The temple's own <a href='https://www.tenryuji.com/en/info/'>2026 notice</a> opens the garden half an hour early, at 7:30am, from Nov 14–30 for the autumn colour — this trip's Arashiyama morning falls inside that window.</p>",
         "dwell_min": 90,
         "source_url": "https://www.tenryuji.com/en/visit/",
-        "verified_on": "2026-08-19",
+        "verified_on": "2026-08-20",
         "shelf_life": "venue",
         "map": {
           "lat": 35.0158379,
@@ -119,10 +119,10 @@
       },
       {
         "claim": "The Kansai Thru Pass (or its newer name, Kansai Railway Pass Lite) is a good multi-day pass for a Kansai trip.",
-        "correction": "Its 2026 sales and validity window runs Apr 1–Oct 2 only — it isn't sold or usable at all in November. It also excludes JR lines entirely (no Haruka, no JR Special Rapid, no JR Nara Line), which limits it even in-season for an itinerary built on JR routes.",
+        "correction": "The 2026 edition is sold Mar 25–Sep 30, 2026 and valid only Apr 1–Oct 2, 2026 — it isn't sold or usable at all in November. It also excludes JR lines entirely (no Haruka, no JR Special Rapid, no JR Nara Line), plus the Kyoto City subway, which limits it even in-season for an itinerary built on JR routes.",
         "category": "outdated",
         "source_url": "https://www.surutto.com/kansai_rwpl/en/krp.html",
-        "verified_on": "2026-08-19"
+        "verified_on": "2026-08-20"
       },
       {
         "claim": "Fushimi Inari's torii tunnel means hiking the full mountain loop to the summit.",

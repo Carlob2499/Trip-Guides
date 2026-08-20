@@ -19,11 +19,52 @@
     "days": 5,
     "budgetTarget": "Mid-range",
     "items": [
-      { "label": "Lodging, per night (mid-range, per person)", "basis": "day", "est": 9000, "low": 6000, "high": 14000, "per": "person" },
-      { "label": "Food & drink, per day", "basis": "day", "est": 6500, "low": 4000, "high": 10000, "per": "person", "note": "A Dotonbori crawl day or the Pontocho kaiseki night runs the high end" },
-      { "label": "Local transport, per day (ICOCA pay-as-you-go)", "basis": "day", "est": 1500, "low": 800, "high": 2500, "per": "person" },
-      { "label": "Sights & activities, per day", "basis": "day", "est": 1800, "low": 500, "high": 3000, "per": "person" },
-      { "label": "Nara day-trip transit (round trip)", "basis": "trip", "est": 2400, "per": "person", "note": "Kintetsu Limited Express from Osaka; cheaper via JR Nara Line rapid from Kyoto (≈¥1,440 round trip)", "source_url": "https://www.kintetsu.co.jp/railway/Dia/pdf/price_limited_express_e.pdf", "verified_on": "2026-08-19", "shelf_life": "transit" }
+      {
+        "label": "Lodging, per night (mid-range, per person)",
+        "basis": "day",
+        "est": 9000,
+        "low": 6000,
+        "high": 14000,
+        "per": "person"
+      },
+      {
+        "label": "Food & drink, per day",
+        "basis": "day",
+        "est": 6500,
+        "low": 4000,
+        "high": 10000,
+        "per": "person",
+        "note": "The Dotonbori crawl sits mid-band. The Pontocho kaiseki night does not fit inside this band at all — Houshoan's October–April courses are ¥9,500 or ¥10,000 per person before drinks — so budget that one dinner on its own line rather than inside the daily figure.",
+        "source_url": "https://houshoan.kyoshikian-kyoto.com/en/",
+        "verified_on": "2026-08-20",
+        "shelf_life": "venue"
+      },
+      {
+        "label": "Local transport, per day (ICOCA pay-as-you-go)",
+        "basis": "day",
+        "est": 1500,
+        "low": 800,
+        "high": 2500,
+        "per": "person"
+      },
+      {
+        "label": "Sights & activities, per day",
+        "basis": "day",
+        "est": 1800,
+        "low": 500,
+        "high": 3000,
+        "per": "person"
+      },
+      {
+        "label": "Nara day-trip transit (round trip)",
+        "basis": "trip",
+        "est": 2400,
+        "per": "person",
+        "note": "Kintetsu Limited Express from Osaka; cheaper via JR Nara Line rapid from Kyoto (≈¥1,440 round trip)",
+        "source_url": "https://www.kintetsu.co.jp/railway/Dia/pdf/price_limited_express_e.pdf",
+        "verified_on": "2026-08-19",
+        "shelf_life": "transit"
+      }
     ]
   }
 ]

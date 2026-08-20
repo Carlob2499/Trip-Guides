@@ -98,15 +98,17 @@
       {
         "name": "Houshoan",
         "area": "Pontocho, Kyoto",
+        "address": "Shiko Kaikan 1F, 227 Nabeyacho, Shijo-Agaru, Pontocho, Nakagyo-ku, Kyoto",
+        "phone": "075-255-2635",
         "hours": "17:00–23:00 (last order 22:30) — closed Mondays",
         "book": "url",
         "book_url": "https://houshoan.kyoshikian-kyoto.com/en/",
         "how": "In the Pontocho alley, walking distance from Kawaramachi or Gion-Shijo Station",
-        "price": "≈¥10,000–13,000/person (season-dependent course)",
-        "crowd_tip": "Book via the site's online form. Booking window, cancellation policy and foreign-card acceptance aren't stated on the page — a follow-up call is worth it before counting on the reservation.",
+        "price": "¥10,000 wagyu sukiyaki / ¥9,500 lavastone yakiniku, per person — the October–April menu, which is what these dates get",
+        "crowd_tip": "The ¥13,000 riverside sukiyaki course quoted on a lot of English write-ups is a May–September item: in November the courses on the site are the ¥9,500 and ¥10,000 ones. Book via the site's online form or by phone (075-255-2635). Booking window, cancellation policy and foreign-card acceptance aren't stated on the page — a follow-up call is worth it before counting on the reservation.",
         "why": "Kaiseki or wagyu-sukiyaki in a Pontocho alley — the reservation-depth pick for the trip's one dedicated splurge dinner.",
         "source_url": "https://houshoan.kyoshikian-kyoto.com/en/",
-        "verified_on": "2026-08-19",
+        "verified_on": "2026-08-20",
         "shelf_life": "venue"
       },
       {
@@ -132,7 +134,7 @@
         "how": "2 min walk from Kintetsu Nara Station",
         "price": "Mid-range, per set",
         "why": "Kakinoha-zushi (persimmon-leaf-wrapped sushi), a Nara specialty since 1903 — has an in-store tea room for eating in rather than taking away.",
-        "source_url": "https://visitnara.jp/venues/D00067/",
+        "source_url": "https://www.visitnara.jp/venues/D00067/",
         "verified_on": "2026-08-19",
         "shelf_life": "venue"
       }

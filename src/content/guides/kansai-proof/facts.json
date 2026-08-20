@@ -46,16 +46,6 @@
     "tier": "primary",
     "risk": 2
   },
-  "kiyomizu-dera-admission-500-yen": {
-    "claim": "Kiyomizu-dera regular admission, adult / elementary-middle school student",
-    "value": "¥500 / ¥200",
-    "source_url": "https://www.monzenkai.com/yakan",
-    "verified_on": "2026-08-19",
-    "shelf_life": "venue",
-    "state": "approx",
-    "tier": "corroborated",
-    "risk": 2
-  },
   "todaiji-admission-800-yen": {
     "claim": "Todai-ji Daibutsuden (Great Buddha Hall), adult admission",
     "value": "¥800",

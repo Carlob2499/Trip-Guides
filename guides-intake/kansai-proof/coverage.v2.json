@@ -8,9 +8,9 @@
       "ask": "Kiyomizu-dera autumn night illumination in Kyoto — 2026 dates not yet officially announced; may conflict with the evening schedule",
       "status": "covered",
       "where": [
-        "07-sights.json#what-generic-guides-get-wrong",
-        "07-sights.json#top-sights",
-        "06-days.json#kyoto-fushimi-inari-at-dawn-higashiyama-gion-pontocho"
+        "05-sights.json#what-generic-guides-get-wrong",
+        "05-sights.json#top-sights",
+        "04-days.json#kyoto-fushimi-inari-at-dawn-higashiyama-gion-pontocho"
       ],
       "evidenceIds": [
         "ev-kiyomizu-illumination-2026-dates",
@@ -26,8 +26,8 @@
       "ask": "Osaka, Kyoto",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day",
-        "05-transit.json#key-transit-routes"
+        "04-days.json#day-by-day",
+        "03-transit.json#key-transit-routes"
       ],
       "evidenceIds": [],
       "reason": null
@@ -37,7 +37,7 @@
       "ask": "2026-11-13 – 2026-11-17",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day"
+        "04-days.json#day-by-day"
       ],
       "evidenceIds": [],
       "reason": null
@@ -47,8 +47,8 @@
       "ask": "Food",
       "status": "covered",
       "where": [
-        "08-food-and-shopping.json#what-to-eat",
-        "06-days.json#osaka-castle-kuromon-ichiba-dotonbori-food-crawl"
+        "06-food-and-shopping.json#what-to-eat",
+        "04-days.json#osaka-castle-kuromon-ichiba-dotonbori-food-crawl"
       ],
       "evidenceIds": [
         "ev-mizuno-hours-price",
@@ -69,12 +69,12 @@
       "ask": "Culture",
       "status": "covered",
       "where": [
-        "07-sights.json#top-sights",
-        "07-sights.json#kiyomizu-dera",
-        "07-sights.json#fushimi-inari-taisha",
-        "07-sights.json#todai-ji",
-        "07-sights.json#kasuga-taisha",
-        "07-sights.json#osaka-castle"
+        "05-sights.json#top-sights",
+        "05-sights.json#kiyomizu-dera",
+        "05-sights.json#fushimi-inari-taisha",
+        "05-sights.json#todai-ji",
+        "05-sights.json#kasuga-taisha",
+        "05-sights.json#osaka-castle"
       ],
       "evidenceIds": [
         "ev-fushimi-inari-hours-fee",
@@ -90,8 +90,8 @@
       "ask": "Nature",
       "status": "covered",
       "where": [
-        "07-sights.json#arashiyama-bamboo-grove-tenryu-ji",
-        "06-days.json#nara-day-trip"
+        "05-sights.json#arashiyama-bamboo-grove-tenryu-ji",
+        "04-days.json#nara-day-trip"
       ],
       "evidenceIds": [
         "ev-nara-deer-feeding-etiquette",
@@ -109,7 +109,7 @@
       "ask": "balanced",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day"
+        "04-days.json#day-by-day"
       ],
       "evidenceIds": [],
       "reason": null
@@ -135,7 +135,7 @@
       "status": "covered",
       "where": [
         "02-money-and-budget.json#budget-daily-costs",
-        "08-food-and-shopping.json#houshoan"
+        "06-food-and-shopping.json#houshoan"
       ],
       "evidenceIds": [
         "ev-houshoan-hours-price-booking"
@@ -157,10 +157,10 @@
       "ask": "TEST CANARY (Pipeline V2 draft-only proof — not a real trip). Evening arrival at KIX on Nov 13. Wants a Nara day trip. Rain is a concern in mid-November; itinerary needs wet-weather cover.",
       "status": "covered",
       "where": [
-        "06-days.json#arrival-at-kix-transfer-to-osaka",
-        "06-days.json#nara-day-trip",
-        "06-days.json#kyoto-fushimi-inari-at-dawn-higashiyama-gion-pontocho",
-        "07-sights.json#top-sights"
+        "04-days.json#arrival-at-kix-transfer-to-osaka",
+        "04-days.json#nara-day-trip",
+        "04-days.json#kyoto-fushimi-inari-at-dawn-higashiyama-gion-pontocho",
+        "05-sights.json#top-sights"
       ],
       "evidenceIds": [
         "ev-haruka-fares",

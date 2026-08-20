@@ -20,10 +20,10 @@
     "type": "panel",
     "group": "Transit",
     "title": "IC card & rail passes",
-    "body": "<p>ICOCA (JR West's IC card) is the right call for this trip — it taps onto every train, subway and bus used across Osaka, Kyoto and Nara, on both JR and non-JR (Kintetsu, Nankai) lines. Buy one at a KIX ticket machine on arrival.</p><p>Skip the multi-day rail passes for this itinerary. The Kansai Railway Pass Lite (formerly the Kansai Thru Pass) sells and is valid only from Apr 1 to Oct 2, 2026 for its 2026 edition — it does not cover this trip's Nov 13–17 dates at all, and it excludes JR lines entirely regardless. The JR West Kansai Area Pass (from ¥2,800/day) covers JR lines including the Haruka, but not the Kintetsu Nara Line used for the day trip — priced against this trip's actual mix of ~4 medium-length rides, pay-as-you-go ICOCA plus single Haruka tickets comes out roughly even or cheaper.</p>",
+    "body": "<p>ICOCA (JR West's IC card) is the right call for this trip — it taps onto every train, subway and bus used across Osaka, Kyoto and Nara, on both JR and non-JR (Kintetsu, Nankai) lines. Buy one at a KIX ticket machine on arrival.</p><p>Skip the multi-day rail passes for this itinerary. The Kansai Railway Pass Lite (formerly the Kansai Thru Pass) is sold Mar 25–Sep 30, 2026 and valid only Apr 1–Oct 2, 2026 for its 2026 edition — it does not cover this trip's Nov 13–17 dates at all, and it excludes JR lines (and the Kyoto City subway) entirely regardless. The JR West Kansai Area Pass (from ¥2,800/day) covers JR lines including the Haruka, but not the Kintetsu Nara Line used for the day trip — priced against this trip's actual mix of ~4 medium-length rides, pay-as-you-go ICOCA plus single Haruka tickets comes out roughly even or cheaper.</p>",
     "phase": "daily",
     "source_url": "https://www.surutto.com/kansai_rwpl/en/krp.html",
-    "verified_on": "2026-08-19",
+    "verified_on": "2026-08-20",
     "shelf_life": "transit"
   },
   {
