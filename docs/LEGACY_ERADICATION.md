@@ -165,7 +165,7 @@ a written retirement condition.
 | `state.json` V1 run spine + `adaptV1RunState` | Published guides carry V1 run history; progress page reads both generations | `readAnyRunState`, progress gateway | V1 retirement + a decision on historical run-state display |
 | V1 `coverage.json` ask registry | Scaffolder writes it; V2 derives material-ask IDs from it; verifier falls back to it pre-V2 | `loadCoverageContext.expectedAskIds`, `checkCoverage` legacy path | Scaffolder emits a V2-native ask registry (post-cutover change) |
 | `.agents/` mirror of the Guide Author skill | Different agent products resolve different skill paths | V2 prompts point agents at `.agents/skills/...`; parity gated by `pipeline-v2-skill-parity.test.mjs` | A single-consumer world, or a build step that generates one from the other |
-| Inert `research-pass-v2.yml` stub on `main` | workflow_dispatch registration requires the path on the default branch (verified 2026-08-19) | canary dispatch on feature refs | The final PR merge replaces it with the real workflow |
+| ~~Inert `research-pass-v2.yml` stub on `main`~~ | ~~workflow_dispatch registration~~ | — | **RETIRED 2026-08-20:** PR #63's merge replaced the stub with the real workflow; the retirement condition was met exactly as written |
 
 ## V1 retirement map (final V1 retirement stays Carlo/Codex's decision)
 
@@ -195,7 +195,9 @@ promised them. The census found no dead V1 code files beyond these.
 **POST-CUTOVER MIGRATION** — needs a data/design decision first:
 - Scaffolder emitting a V2-native ask registry (retires legacy `coverage.json` writes)
 - Historical `state.json` display strategy once V1 rendering paths retire
-- V2 workflow gaining the `issue` notification input `/new` currently threads to V1
+- ~~V2 workflow gaining the `issue` notification input~~ **DONE (integration week, 2026-08-20):**
+  V2 records the intake issue durably in `run.v2.json` at init (inherited by every resume —
+  strictly better than V1's per-dispatch threading) and surfaces traveler questions from it
 
 ## Current authority set (post-census)
 
