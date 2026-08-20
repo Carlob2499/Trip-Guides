@@ -1,0 +1,42 @@
+{
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-20T13:45:44.228Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-20T13:45:44.232Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-20T13:46:15.062Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-20T14:14:53.514Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 29m"
+    },
+    {
+      "at": "2026-08-20T14:14:53.520Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 13 evaluated · 6 shortlisted · 6 shipped · 7 rejected"
+    },
+    {
+      "at": "2026-08-20T14:14:53.520Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+    },
+    {
+      "at": "2026-08-20T14:14:53.520Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Whether the Llac d'Engolasters / Engolasters-area trails are a reasonable pick for an early-November visit"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}
