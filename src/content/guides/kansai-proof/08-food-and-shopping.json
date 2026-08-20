@@ -19,7 +19,12 @@
         "why": "Michelin Bib Gourmand okonomiyaki with a yamaimo (mountain yam) batter — natural umami instead of the usual thick-sauce version.",
         "source_url": "https://www.mizuno-osaka.com/",
         "verified_on": "2026-08-19",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 34.668354799999996,
+          "lng": 135.5032226
+        },
+        "place_id": "ChIJp6r1whTnAGARQi9RHXsUEtA"
       },
       {
         "name": "Kushikatsu Daruma",
@@ -32,7 +37,12 @@
         "why": "The standard-bearer kushikatsu chain — the 'no double-dipping the shared sauce' rule is half the fun. The original 1929 Shinsekai flagship is further out (Naniwa-ku), walk-in only, worth it as a separate pilgrimage rather than a swap for this stop.",
         "source_url": "https://kushikatu-daruma.com/",
         "verified_on": "2026-08-19",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 34.668835099999995,
+          "lng": 135.502638
+        },
+        "place_id": "ChIJ2YfF7RTnAGARvwILJIgrP7c"
       },
       {
         "name": "Wanaka",
@@ -44,7 +54,12 @@
         "how": "In the Dotonbori arcade, a short walk from Namba Station",
         "price": "≈¥600–900/person",
         "crowd_tip": "⚠ Address/hours above are aggregator-corroborated only — the official site returned a certificate error on the attempted fetch. Confirm before relying on them. A Kuromon Ichiba branch exists too — worth a stop there instead if visiting the market anyway, best before 11am to dodge the lines that build by midday.",
-        "why": "Crispy-outside, fluffy-inside takoyaki — order 'half & half' to try two sauce styles at once."
+        "why": "Crispy-outside, fluffy-inside takoyaki — order 'half & half' to try two sauce styles at once.",
+        "map": {
+          "lat": 34.6687742,
+          "lng": 135.5027298
+        },
+        "place_id": "ChIJza-i6hHnAGAR07AQeEhDkh0"
       },
       {
         "name": "Kouga-ryu",
@@ -73,7 +88,12 @@
         "why": "Battera (pressed, vinegared mackerel sushi) — Osaka's own sushi style, easy to miss next to the takoyaki/okonomiyaki circuit.",
         "source_url": "https://abaraya-namba.gorp.jp/",
         "verified_on": "2026-08-20",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 34.6649131,
+          "lng": 135.5045491
+        },
+        "place_id": "ChIJC8FbT2rnAGARybe7iv1_LXg"
       },
       {
         "name": "Houshoan",

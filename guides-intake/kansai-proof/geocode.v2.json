@@ -1,0 +1,81 @@
+{
+  "slug": "kansai-proof",
+  "attemptedAt": "2026-08-20T00:35:17.845Z",
+  "applied": true,
+  "pending": 16,
+  "resolved": [
+    {
+      "name": "Fushimi Inari Taisha",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Kiyomizu-dera",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Arashiyama Bamboo Grove & Tenryu-ji",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Todai-ji",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Osaka Castle",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Mizuno",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Kushikatsu Daruma",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Wanaka",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Abaraya",
+      "file": "08-food-and-shopping.json"
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "Toji Autumn Illumination",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"Toji Autumn Illumination\", Places returned \"To-ji Temple\""
+    },
+    {
+      "name": "Nanzenji (Suirokaku aqueduct)",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"Nanzenji (Suirokaku aqueduct)\", Places returned \"Waterway Pavilion\""
+    },
+    {
+      "name": "Kasuga Taisha",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"Kasuga Taisha\", Places returned \"Kasugataisha Shrine\""
+    },
+    {
+      "name": "Kouga-ryu",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Kouga-ryu\", Places returned \"Kogaryu Takoyaki\""
+    },
+    {
+      "name": "Houshoan",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Houshoan\", Places returned \"Pontocho Housyouan\""
+    },
+    {
+      "name": "Nakamura Tokichi Honten",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Nakamura Tokichi Honten\", Places returned \"Nakamura Tokichi Main Branch\""
+    },
+    {
+      "name": "Kakinohazushi Tanaka",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Kakinohazushi Tanaka\", Places returned \"Kakinoha Sushi Honpo Tanaka Nara Honten\""
+    }
+  ]
+}

@@ -11,7 +11,12 @@
         "body": "<p>Free, open 24 hours. Genuinely empty 6:30–8am; the base is crowded by mid-morning and stays that way until the tour buses leave in the late afternoon. Go to the Yotsutsuji junction (~30–45 min up) — most day visitors turn back there, and the crowd thins sharply past it.</p>",
         "dwell_min": 60,
         "source_url": "https://inari.jp/en/",
-        "verified_on": "2026-08-19"
+        "verified_on": "2026-08-19",
+        "map": {
+          "lat": 34.9676945,
+          "lng": 135.7791876
+        },
+        "place_id": "ChIJIW0uPRUPAWAR6eI6dRzKGns"
       },
       {
         "name": "Kiyomizu-dera",
@@ -20,7 +25,12 @@
         "dwell_min": 75,
         "source_url": "https://www.kiyomizudera.or.jp/event/yakan.php",
         "verified_on": "2026-08-19",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 34.9946662,
+          "lng": 135.784661
+        },
+        "place_id": "ChIJB_vchdMIAWARujTEUIZlr2I"
       },
       {
         "name": "Toji Autumn Illumination",
@@ -47,7 +57,12 @@
         "dwell_min": 90,
         "source_url": "https://www.tenryuji.com/en/visit/",
         "verified_on": "2026-08-19",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.0158379,
+          "lng": 135.6737654
+        },
+        "place_id": "ChIJk54PuAGqAWARwEgz_9o-nM0"
       },
       {
         "name": "Todai-ji",
@@ -57,7 +72,12 @@
         "closed_days": [],
         "source_url": "https://www.todaiji.or.jp/en/information/haikan/",
         "verified_on": "2026-08-19",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 34.6889851,
+          "lng": 135.8398158
+        },
+        "place_id": "ChIJ3XYIepA5AWARjzzVnT-skPg"
       },
       {
         "name": "Kasuga Taisha",
@@ -75,7 +95,12 @@
         "dwell_min": 90,
         "source_url": "https://www.osakacastle.net/guide/",
         "verified_on": "2026-08-19",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 34.6872571,
+          "lng": 135.5258546
+        },
+        "place_id": "ChIJ_TooXM3gAGARQR6hXH3QAQ8"
       }
     ]
   },
