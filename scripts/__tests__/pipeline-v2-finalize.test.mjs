@@ -94,7 +94,8 @@ describe("1A — generated machine contract cannot drift from the validators", (
     await mkdir(path.join(dir, slug), { recursive: true });
     await writeFile(path.join(dir, slug, "coverage.json"), JSON.stringify({ slug, asks: [{ id: "priority-food", label: "Priority: food", value: "ranked #1" }] }));
     const cap = await generateContractCapsule("reconcile", { slug, runId: "r", intakeDir: dir, guidesDir: guides });
-    expect(cap).toContain("`priority-food` — Priority: food");
+    expect(cap).toContain("`priority-food`");
+    expect(cap).not.toContain("Priority: food"); // intake-authored label stays on the data channel
     expect(cap).toContain("`02-food.json`");
     expect(cap).toContain("#noodle-bar");
   });
@@ -643,6 +644,62 @@ describe("canary scar — coverage refs follow their anchors through composition
     const at = (s) => WORKFLOW.indexOf(s);
     expect(at("remap-coverage --slug")).toBeGreaterThan(at("compose-guide.mjs --slug \"$SLUG\" --write"));
     expect(at("remap-coverage --slug")).toBeLessThan(at("verify-failed --slug \"$SLUG\" --stage critic"));
+  });
+});
+
+// ── review scars: clean-run commits, allowlist injection, introspection drift ─
+
+describe("review scars — the independent review's three findings stay fixed", () => {
+  it("commitablePaths keeps existing + tracked-deleted paths, drops never-created ones (clean-run crash)", async () => {
+    const { execFileSync } = await import("node:child_process");
+    const { commitablePaths } = await import("../pipeline-v2.mjs");
+    const repo = path.join(dir, "repo");
+    await mkdir(repo, { recursive: true });
+    const g = (...args) => execFileSync("git", args, { cwd: repo, encoding: "utf8" });
+    g("init", "-q");
+    g("config", "user.email", "t@t"); g("config", "user.name", "t");
+    await writeFile(path.join(repo, "exists.json"), "{}");
+    await writeFile(path.join(repo, "tracked-deleted.json"), "{}");
+    g("add", "-A"); g("commit", "-qm", "seed");
+    await rm(path.join(repo, "tracked-deleted.json"));
+    const out = commitablePaths(["exists.json", "never-created.json", "tracked-deleted.json"], { cwd: repo });
+    expect(out).toEqual(["exists.json", "tracked-deleted.json"]);
+  });
+
+  it("a cited URL with a comma-laden hostname cannot mint extra --allowedTools tokens", async () => {
+    const { criticFetchTools } = await import("../pipeline-v2.mjs");
+    const slug = "injectland";
+    const guides = path.join(dir, "guides");
+    await mkdir(path.join(guides, slug), { recursive: true });
+    await mkdir(path.join(dir, slug), { recursive: true });
+    await writeFile(path.join(dir, slug, "ledger.md"), [
+      "Sources: https://legit.example.jp/page and https://evil.example,Bash,WebFetch(domain:*)/x",
+      "also http://sub.ok-domain.co.jp/fares plus https://xn--injection",
+    ].join("\n"));
+    const tools = criticFetchTools(slug, { guidesDir: guides, intakeDir: dir });
+    expect(tools).toContain("WebFetch(domain:legit.example.jp)");
+    expect(tools).toContain("WebFetch(domain:sub.ok-domain.co.jp)");
+    // The property that matters: no token beyond the fixed set + WebFetch(domain:<dns-shaped>).
+    // "evil.example" survives only as an ordinary domain grant — the comma no longer rides into
+    // the hostname, so no extra tool tokens can be minted from cited text.
+    for (const token of tools.split(",")) {
+      expect(token).toMatch(/^(Read\(\/\/workspace\/\*\*\)|Edit\(\/\/workspace\/\*\*\)|Glob|Grep|WebSearch|WebFetch\(domain:[a-z0-9-]+(\.[a-z0-9-]+)+\))$/);
+    }
+    expect(tools).not.toContain("Bash");
+    expect(tools).not.toContain("domain:*");
+    // single-label hosts (no dot) never enter the policy either
+    expect(tools).not.toContain("xn--injection");
+  });
+
+  it("zod introspection resolves real types — an internals change fails here, not silently in the capsule", async () => {
+    const { fieldVocabulary } = await import("../pipeline/v2/contract-capsule.mjs");
+    const { evidenceSourceSchema, transportFindingSchema } = await import("../pipeline/v2/contracts.mjs");
+    const source = Object.fromEntries(fieldVocabulary(evidenceSourceSchema).map((f) => [f.name, f]));
+    expect(source.appliesToYears.type).toMatch(/array of number/);
+    expect(source.access.values).toContain("fetched");
+    expect(source.url.type).toBe("string");
+    const transport = Object.fromEntries(fieldVocabulary(transportFindingSchema).map((f) => [f.name, f]));
+    expect(transport.risk.type).toBe("number");
   });
 });
 
