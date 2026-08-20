@@ -6,14 +6,13 @@
 
 ## Position
 
-- **Last completed milestone:** P13 independent review — **P13_GREEN** on head `88d16fe`
-  (see the **P13 independent go/no-go review** section at the end of this file); awaiting
-  Carlo's acceptance per the tracker P13 row
-- **Current milestone:** P13 acceptance (Carlo), then integration week I01+
-- **Exact next action:** Carlo accepts (or overrides) the P13_GREEN verdict; on acceptance,
-  I01 begins (connect `/new` dispatch to the proven V2 path behind a safe cutover plan).
-  Cutover stays OFF (WAYPOINT_RESEARCH_ENGINE unset ⇒ /new dispatches V1).
-  Do not merge, publish, or delete V1 without acceptance.
+- **Last completed milestone:** P13.1 correction — the R3+ fixture's residual bus-exclusivity
+  overstatement fixed (japan-guide documents "bus or taxi"; walking prohibition ⇒ motorized
+  transfer required, not bus required) and the premature P13_GREEN retracted (see §P13.1)
+- **Current milestone:** P13 — independent go/no-go, pending again on the corrected head
+- **Exact next action:** Codex re-reviews the corrected fixture + this record and returns the
+  P13 verdict; Carlo accepts. Cutover stays OFF (WAYPOINT_RESEARCH_ENGINE unset ⇒ /new
+  dispatches V1). Do not merge, publish, or delete V1 without acceptance.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
 delivery-cadence plan) appeared untracked while M4 was underway — authored outside this session,
@@ -754,7 +753,15 @@ bounded attempts unchanged; PR #61 open+draft+unmerged; canary branches present;
 variable read or written this pass. No test was weakened, skipped, or converted to a todo:
 the suite GREW by 2 (11 transport + 60 finalize, both green).
 
-## P13 independent go/no-go review (2026-08-20, independent reviewer) — **P13_GREEN**
+## P13 independent go/no-go review (2026-08-20, independent reviewer) — ~~P13_GREEN~~ **WITHDRAWN**
+
+> **RETRACTED same day (see §P13.1 below).** Codex's re-inspection found that the R3+ transport
+> fixture still promoted the walking prohibition into bus exclusivity — a defect this review
+> failed to catch because it verified the fixture's SUPPORTS lines against the sources but never
+> probed the sources for content contradicting the fixture's framing (japan-guide states the
+> town centre is "a ten minute bus or taxi ride" from the cable-car station). The GREEN verdict
+> was therefore premature. The section is preserved verbatim as the record of what was checked;
+> its gate/invariant/Gap-1 findings remain valid, but the verdict does not stand.
 
 Reviewed head: `88d16fe` on PR #63 (`fable/pipeline-v2-finalize` → `main`). Every claim below
 was re-verified this review, not accepted from the P12.1 record.
@@ -809,3 +816,64 @@ criterion; all are I01/I02 scope.
 
 No merge, publish, cutover, variable change, or deletion was performed. Nothing was fixed or
 touched outside this record and the tracker's P13 row.
+
+## P13.1 correction pass (2026-08-20) — residual R3 overstatement fixed; premature GREEN retracted
+
+Ordered by Codex after re-inspecting the remote post-"P13_GREEN": the P12.1 fixture rewrite had
+itself introduced a subtler version of the same defect class it was fixing — it promoted the
+sourced walking prohibition into **bus exclusivity**. The claim text called the bus "a required
+segment", and `missedConnection` treated a missed bus as an automatic failed same-night arrival.
+The fetched japan-guide page (e4904) in fact says Kōyasan Station "is a ten minute **bus or
+taxi** ride from Koyasan's town center" — verified again this pass. The sourced facts are:
+walking is prohibited, so the final leg must be **motorized**; bus and taxi are BOTH documented
+modes; late-evening availability of either is a per-day fact no cited page establishes.
+
+### What changed (one file: `scripts/__tests__/pipeline-v2-transport-r3-proof.test.mjs`)
+
+- **Evidence claim (JG_ACCESS):** "the bus is a required segment" → "a ten-minute bus or taxi
+  ride from the town centre … the final leg into town is motorized."
+- **`transferReality` / `doorToDoor` / `groupLuggageMobility`:** final leg reworded from
+  bus-only to "a final motorized leg (bus … or taxi)."
+- **`missedConnection`:** no longer asserts automatic failure. Proven vs unknown separated: on-
+  foot recovery is not an option (sourced); documented recoveries are a later bus or a taxi;
+  the cited pages establish neither remaining services nor evening taxi availability; a late
+  miss puts the same-night ascent at serious risk and requires verifying remaining bus/taxi
+  options, with the overnight re-plan the consequence **if** the day's motorized options are
+  exhausted. Unknown stays unknown in both directions — taxi is asserted neither available nor
+  unavailable.
+- **`buffer` / `nextService` / `lastPracticalReturn`:** taxi recovery added to the REQUIRED
+  TRAVELER RE-CHECK list alongside last cable car / last bus; still no `HH:MM` anywhere.
+- **`fallback`:** unchanged in substance (overnight lower down); the road-taxi-ascent-from-
+  Gokurakubashi lead is still explicitly unverified, now clearly distinguished from the
+  documented station→town-centre taxi.
+- **`risk: 3` re-evaluated, retained on the honest remainder:** evening arrival against
+  day's-end services · four segments, three transfers (Hashimoto usually added) · reserved LE
+  ~2/day · motorized-only final leg with unverified evening recovery · luggage/group compounding
+  · perishable unpublished last-service times · meaningful consequence (overnight re-plan) if
+  the remaining chain exhausts. No exaggeration needed to keep the fixture's purpose.
+- **Source-to-claim mapping updated:** source 2 now SUPPORTS "bus or taxi ~10 min" and
+  explicitly DOES-NOT-PROVE bus exclusivity, late-evening bus/taxi availability, or guaranteed
+  failure after a missed bus.
+- **New scar (the requested regression):** "a walking prohibition is never promoted into bus
+  exclusivity" — regex-pins `bus is (a) mandatory/required`, `required segment`, `only (the)
+  bus`, `only access`, `no taxi`, `taxi unavailable` out of the fixture JSON. Narrow and
+  fixture-specific by design; the validator itself is untouched.
+
+### Validation
+
+Artifact still parses (`wp-evidence/2.1`); `transportProblems`, `sourceAccessProblems`, and
+`researchRuleProblems` all return `[]`; all seven earned-rejection negative controls unchanged;
+suite now **12/12** (11 + the new scar).
+
+### Review-process lesson (recorded so it compounds)
+
+The P13 review verified every SUPPORTS line affirmatively but never asked the source the
+adversarial question — "what does this page say that CONTRADICTS the fixture's framing?" — and
+so missed the two-word phrase ("or taxi") that falsified bus exclusivity. Future fact reviews
+must interrogate sources for exclusivity/negative claims separately from affirmative claims:
+verifying that a source supports what IS said is not verifying that it permits what is IMPLIED.
+
+### Status
+
+P13 verdict returns to **pending independent go/no-go** on the corrected head. No merge,
+publish, cutover, variable change, or deletion in this pass; V1 untouched.

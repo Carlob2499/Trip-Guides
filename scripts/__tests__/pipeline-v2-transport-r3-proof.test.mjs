@@ -14,21 +14,36 @@
 // claims are gone. Every material statement below maps to a fetched source, and what the sources
 // do NOT prove is stated instead of papered over.
 //
+// P13.1 correction: the P12.1 rewrite itself still promoted the walking prohibition into bus
+// exclusivity (the claim text called the bus the one obligatory onward mode, and treated a
+// missed bus as an automatic failed same-night arrival). The fetched japan-guide page in fact
+// says Kōyasan Station "is a ten minute bus or taxi ride from Koyasan's town center" — so the
+// sourced fact is that the final leg must be MOTORIZED (walking is prohibited), with bus and
+// taxi BOTH documented modes, and the late-evening availability of either being a per-day fact
+// the cited pages do not establish. The fixture now says exactly that, and a scar below pins
+// the exclusivity wording out for good.
+//
 // The route: a late Kansai Airport (KIX) arrival trying to reach Kōyasan (Mt. Kōya) the same
-// night. Why this is R3+ — each pillar SOURCED (mapping below), none invented:
+// night. Why this is R3+ — each pillar SOURCED (mapping below), none invented. (Re-evaluated
+// at P13.1 without the bus-exclusivity premise: the rating stands on what remains.)
 //   • It is a four-segment chain with three physical transfers: KIX → Namba (Nankai airport
 //     line) → Kōya Line to Gokurakubashi (most expresses require a transfer at Hashimoto) →
-//     Kōyasan Cable Car → bus into the temple town.
-//   • The final bus is MANDATORY, not a convenience: japan-guide states (twice) that walking the
-//     street connecting the cable-car station with the town centre is not permitted. A traveller
-//     who completes the rail chain but misses the onward bus cannot self-recover on foot.
+//     Kōyasan Cable Car → a final motorized leg into the temple town.
+//   • The final leg must be motorized: japan-guide states (twice) that walking the street
+//     connecting the cable-car station with the town centre is not permitted, and documents
+//     the onward modes as a ~10-minute bus or taxi ride. A traveller cannot recover on foot;
+//     whether a bus or taxi remains at a given evening hour is a per-day fact the cited pages
+//     do not establish (required re-check).
 //   • The comfortable reserved-seat Limited Express runs only ~2/day; the every-20–30-min
 //     express is the realistic evening service and usually adds the Hashimoto transfer.
-//   • Kōyasan Station sits at 867 m; luggage crosses every transfer, a cable car, and a bus.
-//   • Consequence: if the day's last viable connection is missed, the same-night ascent fails
-//     and the group must re-plan around an overnight stay lower down. (What the sources do NOT
-//     establish — and this fixture therefore does NOT claim: that no road access exists, that a
-//     taxi is or is not available in the evening, or any exact last-departure time.)
+//   • Kōyasan Station sits at 867 m; luggage crosses every transfer, a cable car, and the
+//     final motorized leg.
+//   • Consequence: the chain is timing-sensitive end to end. A late miss leaves recovery
+//     resting on unverified remaining bus/taxi options, and if the day's motorized options are
+//     exhausted the same-night ascent fails and the group re-plans around an overnight stay
+//     lower down. (What the sources do NOT establish — and this fixture therefore does NOT
+//     claim: that the bus is the exclusive onward mode, that a taxi is or is not available at
+//     any particular hour, or any exact last-departure time.)
 //
 // SOURCE-TO-CLAIM MAPPING (all fetched 2026-08-20, this correction pass):
 //   1. https://www.nankai.co.jp/en_railway/traffic/station/gokurakubashi.html (operator, fetched)
@@ -37,10 +52,14 @@
 //      DOES NOT PROVE: exclusivity of access, timetables, last departures, road/taxi presence.
 //   2. https://www.japan-guide.com/e/e4904.html (reference, fetched)
 //      SUPPORTS: Limited Express ~2/day, 80 min Namba→Gokurakubashi; express every 20–30 min,
-//        ~100 min, most requiring a Hashimoto transfer; cable car ~5 min (¥500); bus ~10 min
-//        (¥460 to Senjuinbashi); walking the connecting street into the town centre is not
-//        permitted (stated twice on the page).
-//      DOES NOT PROVE: first/last service times, cable-car operating hours, taxi availability.
+//        ~100 min, most requiring a Hashimoto transfer; cable car ~5 min (¥500); Kōyasan
+//        Station is a ~10-minute bus or taxi ride from the town centre (bus ¥460 to
+//        Senjuinbashi); walking the connecting street into the town centre is not permitted
+//        (stated twice on the page) — so the onward leg is motorized, with bus and taxi the
+//        documented modes.
+//      DOES NOT PROVE: bus exclusivity (taxi is equally documented); first/last service times;
+//        cable-car operating hours; late-evening bus or taxi availability; that a missed bus
+//        guarantees a failed same-night arrival.
 //   3. https://www.nankai.co.jp/en_railway/traffic/kix.html (operator, fetched)
 //      SUPPORTS: Nankai links KIX and Namba — Limited Express rapi:t "34 minutes the fastest";
 //        Airport Express also runs (its duration is not stated on the page).
@@ -51,10 +70,11 @@
 //      DOES NOT PROVE: bus schedules, hours, walking rules (that is source 2).
 //
 // No exact last-departure minute is asserted anywhere in this fixture — Nankai's station pages
-// defer per-day times to its timetable search, so the last cable car / last onward bus are
-// recorded as REQUIRED TRAVELER RE-CHECKS (the ⚠ discipline) and the leg's freshness carries a
-// transit recheck date. What is asserted is the structural fragility the fetched sources support,
-// and that the validator demands — and accepts — the full door-to-door treatment for it.
+// defer per-day times to its timetable search, and no cited page speaks to late-evening bus or
+// taxi availability — so the day's last cable car, last onward bus, and realistic taxi recovery
+// are recorded as REQUIRED TRAVELER RE-CHECKS (the ⚠ discipline) and the leg's freshness carries
+// a transit recheck date. What is asserted is the structural fragility the fetched sources
+// support, and that the validator demands — and accepts — the full door-to-door treatment for it.
 
 import { describe, it, expect } from "vitest";
 import { parseOrThrow, evidenceDocSchema } from "../pipeline/v2/contracts.mjs";
@@ -94,9 +114,10 @@ const JG_ACCESS = {
   claim:
     "Namba to Gokurakubashi is ~80 min by the reserved-seat Limited Express (about two services a " +
     "day) or ~100 min by the every-20-to-30-minute express, most of which require a transfer at " +
-    "Hashimoto; the cable car up takes about five minutes (¥500) and the bus into the temple town " +
-    "about ten minutes (¥460 to Senjuinbashi). Walking the street connecting the cable-car " +
-    "station with the town centre is not permitted — the bus is a required segment.",
+    "Hashimoto; the cable car up takes about five minutes (¥500). Kōyasan Station is about a " +
+    "ten-minute bus or taxi ride from the town centre (bus ¥460 to Senjuinbashi), and walking " +
+    "the street connecting the cable-car station with the town centre is not permitted — the " +
+    "final leg into town is motorized.",
   kind: "objective",
   origin: "passA",
   source: {
@@ -171,43 +192,50 @@ const LEG = {
   doorToDoor:
     "KIX → Nankai to Namba (34 min at the fastest by rapi:t; Airport Express slower) → Kōya Line " +
     "to Gokurakubashi (~80 min Limited Express at ~2/day, or ~100 min express every 20–30 min, " +
-    "most with a Hashimoto transfer) → Kōyasan Cable Car (~5 min) → bus into the temple town " +
-    "(~10 min, ¥460 to Senjuinbashi). Segment times sum to ≈2¼–2½ h before waits and transfers.",
+    "most with a Hashimoto transfer) → Kōyasan Cable Car (~5 min) → a ~10-min motorized leg " +
+    "into the temple town (bus, ¥460 to Senjuinbashi, or taxi). Segment times sum to ≈2¼–2½ h " +
+    "before waits and transfers.",
   transferReality:
     "Three physical transfers: Namba (airport line → Kōya Line), usually Hashimoto (most " +
     "expresses require it), and Gokurakubashi (train platform → cable-car platform via the " +
-    "station's own connecting passage). The final leg is a bus, and walking from the cable-car " +
-    "station into the town centre is not permitted — the bus is a required segment, not a " +
-    "convenience.",
+    "station's own connecting passage). The final leg into the town centre must be motorized — " +
+    "walking the connecting street is not permitted — with a ~10-minute bus or taxi ride the " +
+    "documented modes.",
   groupLuggageMobility:
-    "Suitcases must cross all three transfers and board both the cable car and a local bus; the " +
-    "chain compounds for low-mobility travellers. A group with luggage should not plan this " +
-    "chain against the day's final connections.",
+    "Suitcases must cross all three transfers, board the cable car, and then a final motorized " +
+    "leg (bus or taxi); the chain compounds for low-mobility travellers. A group with luggage " +
+    "should not plan this chain against the day's final connections.",
   buffer:
     "Plan the ascent with daylight margin: sourced segment times sum to ≈2¼–2½ h before waits, " +
     "and the reserved-seat Limited Express runs only ~2/day, so an evening KIX arrival leaves " +
     "little slack. Before committing to a same-night ascent, confirm the day's last cable car " +
-    "and last onward bus on Nankai's timetable search — neither is published on the pages cited " +
-    "here (required re-check).",
+    "and last onward bus on Nankai's timetable search, and do not lean on a taxi without " +
+    "checking locally — none of those per-day facts is published on the pages cited here " +
+    "(required re-check).",
   missedConnection:
-    "If the chain breaks past the day's last viable connection, the same-night ascent fails: " +
-    "walking the final stretch into the town centre is not permitted, so a traveller cannot " +
-    "self-recover on foot past a missed bus, and the group must re-plan around an overnight " +
-    "stay lower down (any bed already booked on the mountain going unused that night).",
+    "If the planned final connection is missed, recovery on foot is not an option (walking the " +
+    "connecting street is not permitted); the documented recoveries are a later bus or a taxi, " +
+    "and the cited pages establish neither the day's remaining services nor evening taxi " +
+    "availability. A late miss therefore puts the same-night ascent at serious risk: the group " +
+    "must verify what bus/taxi options remain in the moment, and if the day's motorized " +
+    "options are exhausted, re-plan around an overnight stay lower down.",
   nextService:
-    "Not asserted from the cited pages — Nankai defers per-day times to its timetable search. " +
-    "Required traveler re-check: the day's remaining and next-morning cable car and onward bus " +
-    "times.",
+    "Not asserted from the cited pages — Nankai defers per-day times to its timetable search, " +
+    "and no cited page speaks to evening taxi availability. Required traveler re-check: the " +
+    "day's remaining and next-morning cable car and onward bus times, plus realistic taxi " +
+    "recovery if the plan would lean on it.",
   lastPracticalReturn:
-    "The last practical same-night ascent is the day's final train → cable car → bus sequence; " +
-    "its exact times vary by day and are not stated on the cited pages — confirm on Nankai's " +
-    "timetable search before travel (required re-check).",
+    "The last practical same-night ascent is the day's final train → cable car → onward bus or " +
+    "taxi sequence; its exact times vary by day and are not stated on the cited pages — " +
+    "confirm on Nankai's timetable search (and locally, for the final leg) before travel " +
+    "(required re-check).",
   fallback:
     "If the evening chain is at risk, stop for the night in Osaka or along the Kōya Line (e.g. " +
     "Hashimoto, the usual transfer point) and ascend in the morning — a fallback that fails " +
-    "independently of the same-night timetable. A road taxi up the mountain is NOT asserted as " +
-    "available: no cited source establishes evening taxi service at Gokurakubashi, so it is at " +
-    "most an unverified lead, never the plan.",
+    "independently of the same-night timetable. A road-taxi ascent of the mountain itself from " +
+    "Gokurakubashi is left as an unverified lead, never the plan: the cited pages document bus " +
+    "and taxi only between Kōyasan Station and the town centre, not a valley-to-summit road " +
+    "transfer.",
 };
 
 function baseDoc(overrides = {}) {
@@ -276,6 +304,21 @@ describe("P12-D — a genuine R3+ fragile transfer is schema-valid and the real 
     // And no exact departure minute is asserted anywhere (times like "23:14" would be invented).
     expect(text).not.toMatch(/\b([01]?\d|2[0-3]):[0-5]\d\b/);
   });
+
+  it("P13.1 — a walking prohibition is never promoted into bus exclusivity", () => {
+    // Codex's re-inspection caught the P12.1 rewrite doing exactly this: the fetched
+    // japan-guide page says the town centre is "a ten minute bus or taxi ride" from the
+    // cable-car station, so the sourced fact is a required MOTORIZED transfer, not a required
+    // bus — and unknown late-evening availability stays unknown in both directions. Pin the
+    // exclusivity wording (and its unavailability mirror-image) out of the fixture for good.
+    const text = JSON.stringify(baseDoc());
+    expect(text).not.toMatch(/bus is (a )?(mandatory|required)/i);
+    expect(text).not.toMatch(/required segment/i);
+    expect(text).not.toMatch(/only (the )?bus/i);
+    expect(text).not.toMatch(/only access/i);
+    expect(text).not.toMatch(/\bno taxi\b/i);
+    expect(text).not.toMatch(/taxi(s)?( is| are)? unavailable/i);
+  });
 });
 
 // The acceptance above is EARNED, not vacuous: degrade any pillar of the door-to-door treatment and
@@ -315,9 +358,10 @@ describe("P12-D — the validator rejects a degraded version of the same route (
 
   it("the SAME route below R3 owes nothing — depth is risk-earned, not always-on", () => {
     // Proof the rule does not simply demand detail everywhere: drop the route to R2 and the
-    // door-to-door obligations lift. The R3 rating here is earned by the sourced consequence
-    // stack (mandatory final bus, no walking recovery, overnight re-plan on a miss), not by
-    // inflating a routine leg.
+    // door-to-door obligations lift. The R3 rating here is earned by the sourced fragility
+    // stack (timing-sensitive multi-transfer chain, motorized-only final leg with unverified
+    // evening recovery, overnight re-plan if the day's options exhaust), not by inflating a
+    // routine leg.
     const doc = baseDoc({ transport: [{ ...structuredClone(LEG), risk: 2, evidenceIds: [], fallback: null }] });
     expect(transportProblems(doc)).toEqual([]);
     expect(sourceAccessProblems(doc)).toEqual([]);

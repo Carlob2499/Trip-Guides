@@ -9,6 +9,28 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-20 — P13 independent review: P13_GREEN on PR #63 head `88d16fe` — RETRACTED same day, see the P13.1 snapshot)
+
+The P13 go/no-go review ran fully independently — every P12.1 claim re-verified from primary
+evidence, none accepted on faith. **Gap 1 re-verified:** the `probe/environ` workflow at
+`c12d736` was read line-by-line and its container digest / CLI `@2.1.233` /
+`--safe-mode --no-session-persistence` / `WP_TOOLS` / `WP_DENY` confirmed byte-identical to the
+PR's Pass A agent step; the scorer's semantics (success ⇒ breach, refusal ⇒ INCONCLUSIVE, PASS
+only on attempted+denied for all three tools) confirmed in source; the raw log of run
+`32348279562` / job `96361626055` shows all three DENIED lines and no SUCCEEDED/NOT-ATTEMPTED
+line. **Gap 2 re-verified:** the transport fixture was read in full and all four cited URLs
+re-fetched this review — japan-guide e4904 and the three Nankai pages each support exactly the
+SUPPORTS lines (incl. the twice-stated walking prohibition and rapi:t "34 minutes the fastest");
+the seven negative controls trace to distinct rule paths in `research-rules.mjs`; targeted
+suite 11/11. **Gates rerun on `88d16fe`: all green** (build 9 pages · lint 0/0 · typecheck
+0 errors · **163 files, 2651 passed + 1 todo**). Invariants held: no repo variable set, PR #61
+open/draft, canary + probe branches present, `PLACES_API_KEY` confined to non-agent steps.
+Verdict recorded in `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P13 independent go/no-go
+review" and the tracker's P13 row. Nothing merged, published, cut over, or deleted.
+[Retraction note, added when archiving: the Gap-2 re-verification checked SUPPORTS lines
+affirmatively but missed that the same page documents "bus or taxi" — the fixture's
+bus-exclusivity framing was unsupported. Verdict withdrawn; see IMPLEMENTATION_STATE §P13.1.]
+
 ## Snapshot (2026-08-20 — P12.1 targeted correction: the review's two HIGH proof gaps closed)
 
 The independent P11/P12 review returned **RECOMMEND_P13_YELLOW** (architecture ACCEPTED) with
@@ -51,24 +73,4 @@ access, overnight cable-car cutoff, missed connection = no bed), sourced from tw
 pass, is schema-valid and accepted by the real `researchRuleProblems`; seven negative controls prove
 the acceptance is earned. Full P12 record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P12
 finalization".
-
-## Snapshot (2026-08-20 — Pipeline V2 finalization: canary GREEN, census clean, cutover switch built)
-
-The Fable finalization session fixed all four Core Proof blockers (generated machine-contract
-capsule · durable per-stage retry feedback · V2 coverage consumed by the real verifier ·
-deterministic geocoding in-pipeline), added source-access classes with a proxy refusal, per-attempt
-retry telemetry, and a truthful Progress event emitter. The V2 workflow was registered via an inert
-main stub (PR #59, the one authorized early merge) and the REAL pipeline ran end-to-end on GitHub
-Actions: Pass A → Pass B → Reconcile → geocode → Critic → **draft PR #61**, landing gate PASSED
-honestly (build + networked verify, 0 dead links), guide still `draft: true`, publication false.
-Eleven dispatches; every failure deterministic, regression-tested, and resumed at the failed stage
-— including a real usage-limit interruption and two live trips of the attempt-cap breaker (stuck
-issues #60/#62, resolved by documented operator resets). The repository-wide legacy census found
-ZERO dead code files; its five findings (template blurbs, motion.md rows, a silo deep-import, an
-archived build prompt, three dead labels) are all resolved — `docs/LEGACY_ERADICATION.md` is the
-ledger. `/new` now carries the cutover switch: `WAYPOINT_RESEARCH_ENGINE=v2` routes to V2; unset
-means V1, unconditionally. An independent code review of the session's diff found one HIGH (clean
-first-try runs crashed their completion checkpoint on the absent feedback pathspec), one MEDIUM
-(comma-hostname injection into the critic's --allowedTools) and one LOW — all fixed same-session
-with pinning tests. Durable record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` (18-point proof).
 

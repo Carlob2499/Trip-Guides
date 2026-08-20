@@ -48,32 +48,30 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-20 — P13 independent review: **P13_GREEN** on PR #63 head `88d16fe`)
+## Snapshot (2026-08-20 — P13.1: premature GREEN retracted, R3 fixture bus-exclusivity fixed)
 
-The P13 go/no-go review ran fully independently — every P12.1 claim re-verified from primary
-evidence, none accepted on faith. **Gap 1 re-verified:** the `probe/environ` workflow at
-`c12d736` was read line-by-line and its container digest / CLI `@2.1.233` /
-`--safe-mode --no-session-persistence` / `WP_TOOLS` / `WP_DENY` confirmed byte-identical to the
-PR's Pass A agent step; the scorer's semantics (success ⇒ breach, refusal ⇒ INCONCLUSIVE, PASS
-only on attempted+denied for all three tools) confirmed in source; the raw log of run
-`32348279562` / job `96361626055` shows all three DENIED lines and no SUCCEEDED/NOT-ATTEMPTED
-line. **Gap 2 re-verified:** the transport fixture was read in full and all four cited URLs
-re-fetched this review — japan-guide e4904 and the three Nankai pages each support exactly the
-SUPPORTS lines (incl. the twice-stated walking prohibition and rapi:t "34 minutes the fastest");
-the seven negative controls trace to distinct rule paths in `research-rules.mjs`; targeted
-suite 11/11. **Gates rerun on `88d16fe`: all green** (build 9 pages · lint 0/0 · typecheck
-0 errors · **163 files, 2651 passed + 1 todo**). Invariants held: no repo variable set, PR #61
-open/draft, canary + probe branches present, `PLACES_API_KEY` confined to non-agent steps.
-Verdict recorded in `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P13 independent go/no-go
-review" and the tracker's P13 row. Nothing merged, published, cut over, or deleted.
+The first P13 review returned GREEN on `88d16fe` and was **retracted the same day**: Codex's
+re-inspection caught that the P12.1 fixture rewrite had itself promoted the sourced walking
+prohibition into **bus exclusivity** ("the bus is a required segment"; missed bus ⇒ automatic
+failed same-night arrival) — while the fetched japan-guide page says Kōyasan Station "is a ten
+minute **bus or taxi** ride from Koyasan's town center" (re-verified this pass). The review had
+verified every SUPPORTS line affirmatively but never asked the source the adversarial question
+— what does the page say that CONTRADICTS the framing — the lesson is recorded in §P13.1.
+**The correction (one file, `pipeline-v2-transport-r3-proof.test.mjs`):** final leg reworded
+everywhere to "motorized (bus or taxi)"; `missedConnection` made conditional (on-foot recovery
+impossible is sourced; failure only IF the day's motorized options exhaust; taxi asserted
+neither available nor unavailable); taxi recovery added to the REQUIRED RE-CHECK list;
+`risk: 3` re-evaluated and honestly retained on the remaining fragility stack; mapping updated
+(source 2 now DOES-NOT-PROVE bus exclusivity); new scar pins the exclusivity wording out.
+Suite 12/12; validator returns `[]`; Gap-1 probe proof and all gate/invariant findings from the
+retracted review still stand. Records: IMPLEMENTATION_STATE §P13 (retraction banner) + §P13.1.
 
 ## Where we left off
 
-**P13_GREEN returned — the core engine is proven in isolation; the decision now sits with
-Carlo.** Per the tracker P13 row ("Yes — Carlo accepts go/no-go"), the verdict is a
-recommendation until Carlo accepts it. On acceptance, integration week I01+ begins: connect
-`/new` dispatch to the proven V2 path behind a safe cutover plan (I01), then the full
-end-to-end publish-boundary proof (I02–I05).
+**P13 is pending again — Codex re-reviews the corrected head.** The verdict record, tracker
+P13 row, and this fixture are the review surface; the ask to Codex is a fresh go/no-go on the
+correction commit (diff vs `88d16fe` is the fixture fix + the retraction/correction docs).
+On a sustained GREEN plus Carlo's acceptance, integration week I01+ begins.
 
 **Until acceptance, nothing moves:** do not merge PR #63 or #61, set `WAYPOINT_RESEARCH_ENGINE`,
 publish the canary, or delete V1 / `canary/kansai-proof` / `research-v2/kansai-proof` /
