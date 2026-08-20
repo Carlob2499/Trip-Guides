@@ -1,0 +1,39 @@
+[
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "When you land",
+    "body": ""
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Local essentials",
+    "body": ""
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Entry & documents",
+    "body": ""
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Phone & data",
+    "body": ""
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Booking checklist",
+    "body": "",
+    "checklist": [
+      "Flights",
+      "Accommodation",
+      "Airport transfer",
+      "Travel insurance",
+      "Any timed tickets"
+    ]
+  }
+]
