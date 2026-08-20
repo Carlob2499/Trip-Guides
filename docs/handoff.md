@@ -48,38 +48,41 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-20 — P12 finalization: PR #63 merge-ready, CodeQL clean, /proc + R3 proven)
+## Snapshot (2026-08-20 — P12.1 targeted correction: the review's two HIGH proof gaps closed)
 
-The Fable P12 pass made PR #63 (`fable/pipeline-v2-finalize` → main) genuinely reviewable and
-boring. **Merge conflict resolved** — merged current main (`8a591e8`); the only conflict was main's
-whitespace nudge vs. the full V2 workflow, resolved `--ours`; PR #63 is now `MERGEABLE`, 0 behind,
-all four `docker run` agent steps + the default-branch dispatch guard intact, `/new` still V1 when
-the cutover var is unset. **4 CodeQL findings fixed at one root cause** — all traced to a single
-test-code regex (`pipeline-v2-finalize.test.mjs`) with incomplete dot-only escaping; `isProxyHost`
-matches by exact string comparison (never a regex) so the runtime deny set never changed; full
-metacharacter escape added + a lookalike/suffix-attack regression test; **CodeQL PR-head re-scan
-PASS, 0 open alerts**. **`/proc/self/environ` denial PROVEN live** — a push-triggered probe on the
-throwaway `probe/environ` branch, replicating the exact production agent config, showed the Read
-tool BLOCKED on the benign `/proc/version` (`CHECK1_BLOCKED` — the `Read(//proc/**)` rule is
-effective across the subtree, so environ is denied) while the model independently refused environ
-as a secret (defense in depth); sentinel never leaked. **Run `32340406684`, job `96338191848`.**
-**R3+ transport PROVEN** — a controlled KIX→Kōyasan fragile-transfer artifact (single-mode mountain
-access, overnight cable-car cutoff, missed connection = no bed), sourced from two pages fetched this
-pass, is schema-valid and accepted by the real `researchRuleProblems`; seven negative controls prove
-the acceptance is earned. Full P12 record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P12
-finalization".
+The independent P11/P12 review returned **RECOMMEND_P13_YELLOW** (architecture ACCEPTED) with
+exactly two HIGH acceptance-proof gaps; this bounded pass closed both and stopped. **Gap 1 —
+`/proc` containment now proven for Grep and Glob, not just Read:** the `probe/environ` workflow
+(commit `c12d736`) reruns the agent under the UNCHANGED production config with
+`--output-format stream-json --verbose`, and a scorer requires an observed `tool_use` on `/proc`
+AND a paired tool-layer denial for EACH of Read/Grep/Glob — a model refusal scores INCONCLUSIVE,
+never PASS. **Run `32348279562`, job `96361626055`: all three tools attempted `/proc/version`
+(harmless) and were DENIED at the tool layer**; sentinel never obtained via any agent tool. New
+scar pins `--safe-mode`+`--no-session-persistence` on all four agent steps (the flag set the
+proof ran under). **Gap 2 — the R3+ transport fixture re-researched:** the overstatements the
+review flagged ("only way up", "no parallel road", "no bed on the mountain") are GONE; the
+KIX→Kōyasan scenario stays, now justified only by fetched-source claims (4 sources re-fetched
+this pass: 3 Nankai operator pages + japan-guide e4904, full source-to-claim mapping in the test
+header), with the strongest sourced fragility fact being japan-guide's twice-stated rule that
+walking from the cable-car station into town is not permitted — the final bus is mandatory. All
+exact last-service times are explicit traveler re-checks; a new scar regex-pins that no `HH:MM`
+time and none of the three overstated phrases can return. Validator returns `[]`; all seven
+distinct negative controls preserved. Full record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` →
+"P12.1 correction pass".
 
 ## Where we left off
 
-**Branch `fable/pipeline-v2-finalize`, head `61816fe`; PR #63 is the handoff point — MERGEABLE,
-CodeQL clean.** All four gates green on the final head (build 9 pages · lint 0/0 · typecheck 0
-errors/21 pre-existing hints · **163 files, 2649 tests + 1 todo**). Probe branch `probe/environ`
-is a throwaway proof surface (run 32340406684 PASS) — never merge it. Nothing was merged, published,
-cut over, or deleted this pass; main untouched.
+**Branch `fable/pipeline-v2-finalize`, head `68f625d`; PR #63 is the handoff point — MERGEABLE.**
+All four gates green on the P12.1 head (build 9 pages · lint 0/0 · typecheck 0 errors/21
+pre-existing hints · **163 files, 2651 tests + 1 todo** — +2 = exactly the two new scars). Probe
+branch `probe/environ` is a throwaway proof surface (runs 32340406684 + 32348279562 PASS) — never
+merge it, keep it until Codex reviews. Nothing was merged, published, cut over, or deleted; main
+untouched; no repository variable read or set.
 
-**Next: P13 — independent go/no-go (reviewer / Carlo).** Not self-declared; recommendation is
-GREEN. Cutover stays OFF (`WAYPOINT_RESEARCH_ENGINE` unset ⇒ /new dispatches V1). Do not merge
-PR #63, set the cutover variable, publish the canary, or delete V1 until acceptance. PR #61 and the
-canary branches (`canary/kansai-proof`, `research-v2/kansai-proof`) remain quarantined until then.
+**Next: P13 — independent go/no-go by Codex on PR #63 head `68f625d`.** Not self-declared. Cutover
+stays OFF (`WAYPOINT_RESEARCH_ENGINE` unset ⇒ /new dispatches V1). Do not merge PR #63, set the
+cutover variable, publish the canary, or delete V1 until acceptance. PR #61 and the canary branches
+(`canary/kansai-proof`, `research-v2/kansai-proof`) remain quarantined. Main's inert stub still
+names `WAYPOINT_V2_ON_DEFAULT` in a comment — LOW drift, moot-at-merge (PR #63 replaces the file).
 Remaining known gaps (I01/I02 integration week): live Worker answer routing, `/new` V2
 notification threading, `GOOGLE_ROUTES_KEY` unset, Progress-UI manual proof.
