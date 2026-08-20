@@ -72,27 +72,37 @@
       "text": "Reconcile attempt 3 failed (agent-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-20T00:06:53.278Z",
+      "at": "2026-08-20T00:11:26.752Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 4 of 5)"
+    },
+    {
+      "at": "2026-08-20T00:34:45.122Z",
+      "kind": "decision",
+      "text": "Reconcile complete in 23m (attempt 4)"
+    },
+    {
+      "at": "2026-08-20T00:34:45.136Z",
       "kind": "decision",
       "text": "Candidate funnel: 62 evaluated · 40 shortlisted · 27 shipped · 28 rejected · 4 kept as detours"
     },
     {
-      "at": "2026-08-20T00:06:53.278Z",
+      "at": "2026-08-20T00:34:45.136Z",
       "kind": "decision",
-      "text": "Reconcile dispositioned 15 independent finding(s): 3 agree · 4 reject · 8 adopt"
+      "text": "Reconcile dispositioned 14 independent finding(s): 2 agree · 4 reject · 8 adopt"
     },
     {
-      "at": "2026-08-20T00:06:53.278Z",
+      "at": "2026-08-20T00:34:45.136Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-20T00:06:53.278Z",
+      "at": "2026-08-20T00:34:45.136Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether the intake's assumed anchor event (Kiyomizu-dera autumn night illumination) actually falls within the trip's Nov 13-17, 2026 dates"
     },
     {
-      "at": "2026-08-20T00:06:53.278Z",
+      "at": "2026-08-20T00:34:45.136Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether Toji's autumn illumination (Pass B, T0-verified, fully covers Nov 13-17) should be woven into Day 3 (Sun Nov 15) as a substitute for the anchor event the intake assumed but that isn't running"
     }

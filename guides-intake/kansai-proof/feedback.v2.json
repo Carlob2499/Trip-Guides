@@ -98,8 +98,8 @@
         "event-date claim \"Multiple independent secondary sources (news/travel-safety r\" (ev-japan-advisory-level-corroborated) records appliesToYears without access \"fetched\" — an announced date must come from an announcement that was actually read"
       ],
       "createdAt": "2026-08-20T00:06:53.287Z",
-      "status": "active",
-      "retiredAt": null
+      "status": "retired",
+      "retiredAt": "2026-08-20T00:34:45.131Z"
     }
   ]
 }
