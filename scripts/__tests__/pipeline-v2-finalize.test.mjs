@@ -307,6 +307,17 @@ describe("P2 — fetched vs discovered vs blocked; a mirror is never the origin"
     expect(isProxyHost("https://official.example/x")).toBe(false);
   });
 
+  it("proxy denial is exact-host + subdomain — lookalike and suffix-attack hosts stay out (P12 CodeQL scar)", () => {
+    // The deny set must be matched literally: a '.'-as-wildcard reading anywhere in the chain
+    // would either widen the denial to innocent hosts or let a crafted host impersonate one.
+    expect(isProxyHost("https://webcacheXgoogleusercontent.com/x")).toBe(false); // lookalike char
+    expect(isProxyHost("https://web-archive.org/x")).toBe(false); // lookalike host
+    expect(isProxyHost("https://web.archive.org.evil.example/x")).toBe(false); // suffix attack
+    expect(isProxyHost("https://notr.jina.ai/x")).toBe(false); // endsWith needs the dot boundary
+    expect(isProxyHost("https://sub.web.archive.org/x")).toBe(true); // real subdomain stays denied
+    expect(isProxyHost("not a url")).toBe(false); // malformed input fails closed to "not proxy" (rules still demand an http(s) origin)
+  });
+
   it("anchor/important reservation mechanics need a fetched origin or a recorded block", () => {
     const doc = base({
       candidates: [{ id: "c-x", name: "X", branch: null, priority: null, status: "shipped", shortlisted: true, reason: null, worth: null }],
@@ -328,10 +339,13 @@ describe("P2 — fetched vs discovered vs blocked; a mirror is never the origin"
   });
 
   it("the workflow denies the proxy domains to every research agent (config assertion)", () => {
+    // Complete regex escape (metacharacters AND backslashes) — a partial escape would let the
+    // '.' wildcard count a near-miss host (webcacheXgoogleusercontent.com) as the denial.
+    const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     for (const host of PROXY_HOSTS) {
       // three research agents (passA, passB, reconcile) carry the denial; the critic is
       // allowlist-only and its allowlist filters proxies at the source.
-      expect((WORKFLOW.match(new RegExp(`WebFetch\\(domain:${host.replace(/\./g, "\\.")}\\)`, "g")) || []).length).toBe(3);
+      expect((WORKFLOW.match(new RegExp(`WebFetch\\(domain:${escapeRegExp(host)}\\)`, "g")) || []).length).toBe(3);
     }
   });
 });
