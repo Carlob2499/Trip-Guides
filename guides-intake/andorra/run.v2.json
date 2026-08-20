@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-20T13:45:44.211Z",
-  "updatedAt": "2026-08-20T14:34:53.277Z",
+  "updatedAt": "2026-08-20T14:54:00.674Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -63,13 +63,13 @@
       "failure": null
     },
     "passB": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-20T14:34:53.277Z",
-      "endedAt": null,
+      "endedAt": "2026-08-20T14:54:00.657Z",
       "attempts": 3,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "5d5c1c694d961e41932f3713e516071ddb77debc",
       "history": [
         {
           "attempt": 1,
@@ -90,10 +90,10 @@
         {
           "attempt": 3,
           "startedAt": "2026-08-20T14:34:53.277Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-20T14:54:00.657Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 1147
         }
       ],
       "failure": null
@@ -128,8 +128,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passB",
-    "action": "stage \"passB\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "reconcile",
+    "action": "run stage \"reconcile\""
   },
   "failure": null,
   "publication": {
@@ -156,6 +156,17 @@
         "toolCalls": null,
         "searches": null,
         "fetches": null
+      },
+      "passB": {
+        "durationSec": 1147,
+        "failedDurationSec": 1170,
+        "cumulativeDurationSec": 2317,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": 2,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
       }
     },
     "counts": {
@@ -165,7 +176,7 @@
       "disagreementInvestigations": 1,
       "nativeLanguageSearches": null
     },
-    "totalDurationSec": 1749,
+    "totalDurationSec": 4096,
     "tokens": null,
     "costUsd": null
   }

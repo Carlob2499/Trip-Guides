@@ -22,17 +22,47 @@
       "text": "Pass A (canonical research) complete in 29m"
     },
     {
-      "at": "2026-08-20T14:14:53.520Z",
+      "at": "2026-08-20T14:15:23.291Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-20T14:32:32.445Z",
+      "kind": "reject",
+      "text": "Pass B (independent research) attempt 1 failed (unknown) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-20T14:32:32.445Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-20T14:34:53.277Z",
+      "kind": "reject",
+      "text": "Pass B (independent research) attempt 2 failed (unknown) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-20T14:34:53.277Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 3 of 5)"
+    },
+    {
+      "at": "2026-08-20T14:54:00.657Z",
+      "kind": "decision",
+      "text": "Pass B (independent research) complete in 19m (attempt 3)"
+    },
+    {
+      "at": "2026-08-20T14:54:00.674Z",
       "kind": "decision",
       "text": "Candidate funnel: 13 evaluated · 6 shortlisted · 6 shipped · 7 rejected"
     },
     {
-      "at": "2026-08-20T14:14:53.520Z",
+      "at": "2026-08-20T14:54:00.674Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-20T14:14:53.520Z",
+      "at": "2026-08-20T14:54:00.674Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether the Llac d'Engolasters / Engolasters-area trails are a reasonable pick for an early-November visit"
     }
