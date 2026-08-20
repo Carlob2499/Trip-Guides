@@ -26,7 +26,7 @@
 import {
   deriveProgress, formatElapsed, predictSlug, normalizeSlug, createGithubGateway, createWorkerGateway,
   derivePageState, deriveStatusPill, deriveProgressLine, derivePhases, deriveNotePanel,
-  PHASE_STATUS_LABEL, STAGE_SHORT, fetchTone, fetchHost,
+  PHASE_STATUS_LABEL, STAGE_SHORT, fetchTone, fetchHost, probeEventsThisTick,
 } from "../index";
 import {
   STATION_T, bezierPoint, bezierAngle, arcLengthFraction, bezierLength,
@@ -43,10 +43,6 @@ const TICK_MS = 1000;
 // Give a guessed slug a real chance to resolve before offering the manual-correction input —
 // scaffolding (new-guide.yml's own commit) can take upward of 30-60s after the issue is filed.
 const GUESS_GRACE_MS = 90000;
-// Nothing emits guides-intake/<slug>/events.json yet, so the read 404s every time. Ask a few
-// times in case a run turns telemetry on mid-flight, then stop spending a request per tick on a
-// file that isn't coming. The panels are already showing the truthful "not reported yet" copy.
-const EVENT_PROBES = 3;
 
 export function initProgress() {
   const root = document.getElementById("pgRoot");
@@ -102,11 +98,12 @@ export function initProgress() {
     keyStatus: byId("pgKeyStatus"),
   };
 
-  const gateway = createGithubGateway({ owner: OWNER, repo: NAME });
   const cfgEl = byId("pgConfig");
   const cfg = cfgEl ? JSON.parse(cfgEl.textContent || "{}") : {};
   const base = cfg.base || "/";
   const repo = cfg.repo || OWNER + "/" + NAME;
+  // siteBase enables the deployed-live probe (the site's own search index) — same-origin.
+  const gateway = createGithubGateway({ owner: OWNER, repo: NAME, siteBase: base });
 
   const params = new URLSearchParams(location.search);
   // Same shape scaffold-guide.mjs's slugify() emits and scripts/lib/slug.mjs validates. The
@@ -123,13 +120,17 @@ export function initProgress() {
   let tickTimer = null;
   let pollTimer = null;
   let stopped = false;
-  let eventProbesLeft = EVENT_PROBES;
+  let pollIndex = 0;
+  let eventMisses = 0;
+  let eventsSeen = false;
+  let runMalformed = false;
 
   /** The last derived view, kept so a frame write or a re-measure has something to draw. */
   let view = deriveProgress(null, { now: new Date(), published: false });
   let page = "empty";
   let noteState = "monitoring";
   let openQuestions = [];
+  let blockingForks = 0;
 
   // Owner state. `owner` is a UI gate only — the Worker re-checks the key on every request, so a
   // visitor who flips this in a console gets 401s, not access.
@@ -367,7 +368,7 @@ export function initProgress() {
 
   function renderNotePanel() {
     if (!els.note) return;
-    var panel = deriveNotePanel(page, noteState);
+    var panel = deriveNotePanel(page, noteState, { openQuestions: openQuestions.length });
     els.note.setAttribute("data-tone", panel.tone);
     if (els.noteHead) els.noteHead.textContent = panel.heading;
     if (els.notePlaceholder) {
@@ -634,7 +635,11 @@ export function initProgress() {
   /* ── Render ───────────────────────────────────────────────────────────────────────────── */
 
   function render() {
-    page = derivePageState({ view: view, hasRun: hasRun, openQuestions: openQuestions.length });
+    page = derivePageState({
+      view: view, hasRun: hasRun,
+      blockingForks: blockingForks, openQuestions: openQuestions.length,
+      malformed: runMalformed,
+    });
     if (page !== "awaiting" && noteState === "awaiting") noteState = "monitoring";
     if (page === "awaiting" && noteState === "monitoring") noteState = "awaiting";
 
@@ -670,22 +675,28 @@ export function initProgress() {
 
   async function poll() {
     if (stopped) return;
-    const wantEvents = eventProbesLeft > 0;
-    const [state, published, questions, events] = await Promise.all([
-      gateway.fetchState(slug),
+    pollIndex += 1;
+    // Late telemetry keeps being looked for while a run is active (probeEventsThisTick) —
+    // every tick at first, then every few, never again once the run is done.
+    const active = page === "running" || page === "awaiting" || page === "empty";
+    const wantEvents = probeEventsThisTick({ pollIndex: pollIndex, misses: eventMisses, active: active, seen: eventsSeen });
+    const [run, published, questions, events] = await Promise.all([
+      gateway.fetchRun(slug),
       gateway.isPublished(slug),
       gateway.fetchQuestions(slug),
       wantEvents ? gateway.fetchRunEvents(slug) : Promise.resolve(null),
     ]);
 
     if (wantEvents) {
-      if (events && events.available) eventProbesLeft = EVENT_PROBES;
-      else eventProbesLeft -= 1;
+      if (events && events.available) eventsSeen = true;
+      else eventMisses += 1;
       renderEvents(events);
     }
 
-    if (state) {
-      if (!lastState) startedAt = new Date(state.createdAt).getTime();
+    const state = run.state;
+    runMalformed = run.malformed;
+    if (state || run.malformed) {
+      if (state && !lastState) startedAt = new Date(state.createdAt).getTime();
       lastState = state;
       hasRun = true;
       if (els.correction) els.correction.hidden = true;
@@ -695,11 +706,25 @@ export function initProgress() {
       // polling a dead guess forever.
       if (els.correction) els.correction.hidden = false;
     }
-    openQuestions = questions.filter(function (q) { return q.status === "open"; });
+    var open = questions.filter(function (q) { return q.status === "open"; });
+    openQuestions = open;
+    // Only a blocking fork pauses the page — research proceeds past ordinary questions on its
+    // recorded assumption, and claiming otherwise was this page lying about the run.
+    blockingForks = open.filter(function (q) { return q.blocking; }).length;
+
+    // The deploy truth: the V2 record's own fact when it has one, else the site's own search
+    // index — probed only once the guide reads published, because before the merge there is
+    // nothing whose deployment could be confirmed.
+    var deployedLive = run.deployedLive;
+    if (deployedLive == null && published) deployedLive = await gateway.isLive(slug);
+
     // Render even when state is still null — deriveProgress(null, …) is a valid "nothing
     // cleared yet" view, so the map shows what's COMING immediately, not a blank panel while
     // waiting for the very first successful fetch.
-    view = deriveProgress(state, { now: new Date(), published: published });
+    view = deriveProgress(state, {
+      now: new Date(), published: published,
+      runStatus: run.runStatus, deployedLive: deployedLive,
+    });
     render();
   }
 
@@ -749,7 +774,11 @@ export function initProgress() {
       hasRun = false;
       priorPage = null;
       announceReady = false;
-      eventProbesLeft = EVENT_PROBES;
+      pollIndex = 0;
+      eventMisses = 0;
+      eventsSeen = false;
+      runMalformed = false;
+      blockingForks = 0;
       startedAt = Date.now();
       history.replaceState(null, "", location.pathname + "?slug=" + encodeURIComponent(slug));
       start();

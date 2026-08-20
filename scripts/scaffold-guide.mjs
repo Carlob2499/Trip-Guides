@@ -320,11 +320,11 @@ export function buildLedgerMd(answers = {}) {
 > Standard S2/S3 (2026-08-02): real research quality is how many options you REJECTED and
 > why — a thin pass and a deep pass are indistinguishable if only survivors are recorded.
 > One table per ranked priority, one row per candidate EVALUATED (not just shipped).
-> Verdict is \`shipped\` or \`rejected: <one-line reason>\`. The floors (verify's
-> \`candidates\` row; defaults top 8/16, second 5/10, third 3/6 shipped/considered,
-> overridable via \`researchFloors\` in \`_guide.json\`) gate on these counts, and every
-> \`shipped\` name must actually appear in the guide. An honest \`rejected: couldn't
-> verify\` row is a good row — it proves the option was seen.
+> Verdict is \`shipped\` or \`rejected: <one-line reason>\`. Breadth is ADAPTIVE — no fixed
+> quota: stop when new searches mostly duplicate/weaken the set AND unresolved evidence is
+> unlikely to change the recommendation, and record that stop. Verify's \`candidates\` row
+> still fails an empty table and cross-checks every \`shipped\` name against the guide. An
+> honest \`rejected: couldn't verify\` row is a good row — it proves the option was seen.
 
 ### Priority 1: (name it)
 
@@ -380,8 +380,11 @@ export function buildCoverageMatrix(answers, slug) {
   add("travel-style", "Travel style", answers.travelStyle);
   add("budget", "Budget target", answers.budget);
   add("party", "Party description", answers.party);
+  add("travelers", "Number of travelers", answers.travelers);
+  add("constraints", "Binding mobility / dietary / sensory constraints", answers.constraints);
   add("passport-countries", "Passport countries", answers.passportCountries);
-  add("comments", "Comments / constraints", answers.comments);
+  add("departure-airport", "Departure airport", answers.departureAirport);
+  add("comments", "Additional comments", answers.comments);
   return { slug, generatedAt: new Date().toISOString(), asks };
 }
 

@@ -88,8 +88,8 @@ function json(data, status, headers) {
 //
 // OWNER_KEY is the opposite case and is logged for the opposite reason: unset means the owner
 // endpoints are DISABLED, so the creator's site silently falls back to the GitHub path and
-// nothing explains why. A key that is set but short is logged too — it still works, and the
-// owner is the only one who can lengthen it.
+// nothing explains why. A key that is set but short is logged and fails closed until the owner
+// rotates it.
 function warnUnprotected(env) {
   const off = [];
   if (!env.RATE) off.push("RATE KV unbound (per-IP limit never counts; intake files WITHOUT the auto-run label)");

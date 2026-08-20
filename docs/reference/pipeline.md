@@ -248,8 +248,10 @@ them. Untrusted text never enters a prompt — it rides the DATA channel as a na
   the stuck issue. A change run has no auto-retry — it enforces directly.
 - **Burst detection** — several stages recorded in one commit is a run that is not resumable, and it
   goes red.
-- **Concurrency groups** — `research-<slug>` and `guide-<slug>` queue rather than interleave; the
-  scaffold job serializes globally because the slug isn't known until the body is parsed.
+- **Concurrency groups** — research (V1 and V2) and change all share ONE `guide-<slug>` group, so
+  any two runs on the same guide queue rather than interleave (research and change share an
+  exclusion boundary — they can never land concurrently); the scaffold job serializes globally
+  because the slug isn't known until the body is parsed.
 
 ## The workflow set
 

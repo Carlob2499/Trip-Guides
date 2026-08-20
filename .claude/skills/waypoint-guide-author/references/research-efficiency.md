@@ -60,13 +60,19 @@ unconfirmed one. Past budget, the stopping conditions apply (`verification-rules
   Pass A: ≥3 searches for the phrases/language card and ≥2 for the footage scout. Pass B: ≥2
   searches for resident phrases/slang. Duties starve when the main sights spend the whole budget
   first; the run report states how many searches each duty actually used.
-- **Discovery gets its own floor now — the per-entity budget above is a VERIFICATION cap, not a
-  breadth cap (S2/S3, 2026-08-02).** The registry and `lookup-venue.mjs` made verification much
-  cheaper per entity; spend the freed budget on breadth, and the candidates floors (16/10/6
-  considered per ranked priority) are the minimum that spend must produce. Sweeping a "best
-  <priority> in <city>" landscape to FILL the candidates table is discovery, not per-entity
-  verification — do it before climbing to T0 on the survivors, and record every rejection with
-  its one-line reason as you go.
+- **Discovery is ADAPTIVE, not quota-driven — the per-entity budget above is a VERIFICATION
+  cap, not a breadth cap (V2, DECISIONS.md "Research breadth" — this supersedes the S2/S3 fixed
+  floors of 16/10/6 per ranked priority).** Research scales to the destination: a small town may
+  hold three serious options, Tokyo may demand dozens. Stop discovering when BOTH hold: (1) new
+  searches mostly produce duplicates or clearly weaker options, and (2) unresolved evidence is
+  unlikely to change the final recommendation. **Record that stop** — the trend the last
+  searches showed and the unresolved-evidence answer — in the run's saturation record (V2:
+  `evidence.v2.json`'s `saturation`; the ledger's candidates tables remain the human trail).
+  A stop is EARNED, never assumed: while searches still surface novel serious options, or an
+  unresolved disagreement could flip a recommendation, keep going. Sweeping a "best <priority>
+  in <city>" landscape to FILL the candidates table is discovery, not per-entity verification —
+  do it before climbing to T0 on the survivors, and record every rejection with its one-line
+  reason as you go.
 - **Search precisely.** `site:` queries on the official domain; the venue's native-language name
   (the local-language official page is often the true T0 — fetch it and translate, don't keep
   searching English).

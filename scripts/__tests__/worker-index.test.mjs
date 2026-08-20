@@ -266,7 +266,7 @@ describe("GET /health", () => {
     expect(json).toMatchObject({ rateLimit: "OFF", ownerEndpoints: "OFF", repo: "owner/repo" });
   });
 
-  it("reports WEAK for a key under the server-side minimum — still functional", async () => {
+  it("reports WEAK for a key under the server-side minimum — routes fail closed", async () => {
     const short = "k".repeat(OWNER_KEY_MIN_LEN - 1);
     const json = await (await health(baseEnv({ OWNER_KEY: short }))).json();
     expect(json.ownerEndpoints).toBe("WEAK");
@@ -277,7 +277,7 @@ describe("GET /health", () => {
       post("/change", { slug: "korea", change: "Admission is 3,000 won now." }, { [OWNER_KEY_HEADER]: short }),
       baseEnv({ OWNER_KEY: short }),
     );
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(503);
   });
 
   it("reports configured for a key at or over the minimum", async () => {

@@ -24,3 +24,15 @@ creates a second copy that drifts. Point at the file; don't paraphrase it.
 Untrusted text (an issue body, a traveler's words) never enters a prompt. It rides the DATA
 channel as a file the prompt names — `change.txt`, `feedback-export.working.json` — and the
 prompt says so.
+
+## V1 vs V2 research prompts
+
+The four `research-*-v2.md` prompts are Pipeline V2's stage contracts, composed only by
+`research-pass-v2.yml` (manual, draft-only while V2 is proven). The unsuffixed
+`research-*.md` four remain V1's contracts, composed by `research-pass.yml` — the workflow
+`/new` still dispatches. The V2 contracts differ on purpose: agents never run git or
+checkpoint (the workflow validates, commits and checkpoints every stage), Pass B runs in a
+mechanically clean baseline workspace, the critic's forbidden inputs are absent rather than
+merely banned, and the machine artifacts are `evidence.v2.json` / `passB.v2.json` /
+`coverage.v2.json` instead of ledger prose + `passB.json`. Do not "sync" one set to the other;
+when V1 is retired its four prompts are deleted whole.

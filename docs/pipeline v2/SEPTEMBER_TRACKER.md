@@ -5,13 +5,13 @@ Owner: Carlo
 Window: **August 18–October 7, 2026**  
 Hard backend deadline: **September 30, 2026**
 
-Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, `FABLE_IMPLEMENTATION_PROMPT.md`, and the active branch's `IMPLEMENTATION_STATE.md`.
+Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, and the active branch's `IMPLEMENTATION_STATE.md`.
 
 This file tracks delivery. It does not redefine Pipeline V2.
 
 ## Dashboard — August 18, 2026
 
-- **Current phase:** Core implementation is locally complete on `codex/pipeline-v2`; manual draft-only canary / one-shot proof is next.
+- **Current phase (updated 2026-08-20):** P10 canary GREEN, P11 review YELLOW (architecture accepted), P12 finalization DONE, P12.1 targeted correction DONE. The first P13 review returned GREEN prematurely and was **retracted same day** — Codex's re-inspection caught a residual bus-exclusivity overstatement in the R3 fixture (japan-guide documents "bus **or taxi**"; walking prohibition proves motorized-transfer-required, not bus-required). **P13.1 correction applied** (fixture reworded to source-faithful claims, missed-connection made conditional, risk 3 re-earned honestly, exclusivity scar added; suite 12/12). P13 go/no-go is pending again on the corrected head.
 - **Next hard deadline:** September 6 — core research engine must be proven end-to-end in isolation.
 - **Days until September 20 feature freeze:** 33
 - **Days until September 27 code freeze:** 40
@@ -53,10 +53,10 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `
 | P07 | Preserve connected lifecycle safeguards: attempts, same-slug exclusion, answers/recert/pretrip | Core | Claude/Fable | Sep 6 | DONE | P03 | M6 recorded complete; lifecycle tests green | None | No |
 | P08 | Connect V2 state to honest Progress UI compatibility | Core | Claude/Fable | Sep 6 | DONE | P03 | M7 recorded complete | None | No |
 | P09 | Run full deterministic branch verification | Core proof | Automated CI/test | Sep 6 | DONE | P03–P08 | M8: build/lint/typecheck/test green; offline verify passes | None | No |
-| P10 | Run one-shot manual draft-only V2 canary | Core proof | Claude/Fable | Sep 6 | IN PROGRESS | P09 | Real Pass A → Pass B → Reconcile → Critic → Verify run, no production publish; proof matrix and resource report | Live/external research boundaries not yet proven | No unless a product fork appears |
-| P11 | Independently review Fable's one-shot proof and every surgical fix | Core proof | Codex | Sep 6 | NOT STARTED | P10 | Codex confirms or rejects each claimed PASS with repository evidence | Waiting for P10 | Yes only if verdict is NOT READY for architectural reason |
-| P12 | Apply only blocker/high-priority fixes from the canary | Core proof | Codex + Claude/Fable | Sep 6 | NOT STARTED | P11 | Targeted tests demonstrate each fix; no unrelated redesign | Unknown until proof | Carlo approves only if scope grows |
-| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | NOT STARTED | P10–P12 | Explicit go/no-go: READY FOR FULL INTEGRATION | Canary not complete | Yes — Carlo accepts go/no-go |
+| P10 | Run one-shot manual draft-only V2 canary | Core proof | Claude/Fable | Sep 6 | DONE | P09 | Live Pass A → Pass B → Reconcile → geocode → Critic → landing gate → draft PR #61, GREEN (18 proof points, IMPLEMENTATION_STATE) | None | No |
+| P11 | Independently review Fable's one-shot proof and every surgical fix | Core proof | Codex | Sep 6 | DONE / YELLOW | P10 | Independent review returned YELLOW (architecture accepted; bounded finalization list = P12) | None | No |
+| P12 | Apply only blocker/high-priority fixes from the canary | Core proof | Codex + Claude/Fable | Sep 6 | DONE (+P12.1) | P11 | PR #63 merge conflict resolved (`8a591e8`); 4 CodeQL findings fixed (`57f9dcd`); live /proc/self/environ denial proven (run 32340406684); R3+ transport proven (transport-r3-proof test); gates green 163/2649 on `7809835`. P12.1 correction: Grep+Glob /proc denial proven at the tool layer (run 32348279562, job 96361626055); R3+ fixture re-researched, overstatements removed, source-to-claim mapping recorded — IMPLEMENTATION_STATE "P12.1 correction pass" | None | No |
+| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | PENDING — first GREEN (2026-08-20, `88d16fe`) retracted same day (missed bus-exclusivity overstatement); P13.1 fixture correction applied, re-review awaited | P10–P12 | Gap-1 probe proof and gate/invariant findings stand; R3 fixture now source-faithful ("bus or taxi", conditional missed-connection, exclusivity scar); records in IMPLEMENTATION_STATE.md §P13 (retraction) + §P13.1 | Independent decision pending (again) | Yes — Carlo accepts go/no-go |
 | I01 | Connect `/new` dispatch to the proven V2 path behind a safe switch/cutover plan | Integration | Codex + Claude/Fable | Sep 13 | NOT STARTED | P13 | New guide can start V2 without bypassing V1 safety during transition | P13 | Yes if cutover shape changes traveler behavior |
 | I02 | Prove full `/new → intake → research → verify → compose → publish` path | Integration | Codex + Automated CI/test | Sep 13 | NOT STARTED | I01 | One isolated end-to-end guide reaches safe publish boundary with all gates intact | P13 | No |
 | I03 | Prove incomplete/failed V2 run cannot publish | Integration | Automated CI/test | Sep 13 | NOT STARTED | I01 | Controlled failure is blocked before publication | P13 | No |

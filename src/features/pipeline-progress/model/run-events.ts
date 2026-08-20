@@ -167,6 +167,29 @@ export function parseRunEvents(raw: unknown): RunEvents {
   return anything ? events : EMPTY_RUN_EVENTS;
 }
 
+/** The first few polls always probe for telemetry (a run may emit from its first minute). */
+export const EVENT_PROBES = 3;
+/** After those miss, keep looking every Nth poll WHILE THE RUN IS ACTIVE — telemetry that
+ *  starts late (an emitter turned on mid-run, a V2 stage that begins reporting) must still
+ *  surface without the page spending a request on every 15s tick forever. */
+export const EVENT_RECHECK_EVERY = 4;
+
+/**
+ * Pure probe policy (M7): should THIS poll tick spend a request on events.json?
+ *  · once telemetry has been seen, always — it is live data now;
+ *  · while the run is active: every tick for the first EVENT_PROBES misses, then every
+ *    EVENT_RECHECK_EVERY-th tick (late telemetry keeps being looked for);
+ *  · once the run is done (or no run exists), never — nothing new can appear.
+ */
+export function probeEventsThisTick(
+  { pollIndex, misses, active, seen }: { pollIndex: number; misses: number; active: boolean; seen: boolean },
+): boolean {
+  if (seen) return true;
+  if (!active) return false;
+  if (misses < EVENT_PROBES) return true;
+  return pollIndex % EVENT_RECHECK_EVERY === 0;
+}
+
 /** Which token paints a status code in the sourcing list. */
 export type FetchTone = "green" | "muted" | "warn" | "crit";
 

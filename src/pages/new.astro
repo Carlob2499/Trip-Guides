@@ -1,7 +1,7 @@
 ---
 import PwaHead from "../components/PwaHead.astro";
 import { generateContourLayer } from "../lib/contours";
-import { SECTIONS } from "../features/hub/model/checklist";
+import { SECTIONS } from "../features/hub/index";
 // Build-time only (Astro frontmatter runs in Node): the intake single source of truth supplies
 // the priority dropdowns' exact option strings and the derived fields' labels, so the no-JS
 // fallback cannot drift from the schema. Nothing here reaches the client bundle.

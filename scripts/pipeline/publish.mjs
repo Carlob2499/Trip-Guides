@@ -68,6 +68,41 @@ function defaultRun(cmd) {
   catch (err) { return typeof err?.status === "number" ? err.status : 1; }
 }
 
+// The LANDING evidence gate — the same two steps evidenceGate() defines (build, then the
+// networked verify), run with output captured so the verify scorecard can become the PR body.
+// This exists because `pipeline land --gate` used to run ONLY the networked verify and then tell
+// publishGuide the gate had passed — a landing could publish a guide whose build was broken.
+// One contract, two consumers: evidenceGate() for the manual publish override (stdio inherited),
+// landingGate() for the landing step (output captured). Both run build first and short-circuit.
+export function landingGate(slug, { exec = defaultExecCapture } = {}) {
+  if (!isValidSlug(slug)) throw new Error(`"${slug}" isn't a valid slug`);
+  const steps = [];
+  const build = exec("npm run build");
+  steps.push({ cmd: "npm run build", code: build.code });
+  if (build.code !== 0) {
+    const tail = String(build.out || "").split("\n").slice(-40).join("\n");
+    return {
+      passed: false,
+      steps,
+      scorecard: `## Evidence gate — build FAILED (exit ${build.code})\n\nThe networked verify was not run: the build is the schema gate, and a guide that cannot build cannot publish.\n\n\`\`\`\n${tail}\n\`\`\`\n`,
+    };
+  }
+  const cmd = `npm run verify -- --slug ${slug} --markdown --network`;
+  const verify = exec(cmd);
+  steps.push({ cmd, code: verify.code });
+  return { passed: verify.code === 0, steps, scorecard: String(verify.out || "") };
+}
+
+function defaultExecCapture(cmd) {
+  try { return { code: 0, out: execSync(cmd, { cwd: ROOT, encoding: "utf8" }) }; }
+  catch (err) {
+    return {
+      code: typeof err?.status === "number" ? err.status : 1,
+      out: `${err?.stdout || ""}${err?.stderr || ""}`,
+    };
+  }
+}
+
 // Publish: gate (unless the caller already ran it this run) then flip.
 export async function publishGuide(slug, { gatePassed = null, guidesDir = GUIDES_DIR, run = defaultRun } = {}) {
   if (gatePassed === null) {

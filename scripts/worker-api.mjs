@@ -74,6 +74,7 @@ export function keyMatches(expected, provided) {
  */
 export function ownerGate(configuredKey, providedKey) {
   if (!configuredKey) return err(503, "owner endpoints are not configured");
+  if (configuredKey.length < OWNER_KEY_MIN_LEN) return err(503, "owner endpoints are misconfigured: OWNER_KEY is too short");
   if (!keyMatches(configuredKey, providedKey)) return err(401, "unauthorized");
   return { ok: true };
 }
@@ -109,9 +110,8 @@ export const OWNER_KEY_MIN_LEN = 32;
 
 /** What /health reports about the owner endpoints:
  *    "OFF"         unset ⇒ all three 503 (fail closed).
- *    "WEAK"        configured, but short enough to be worth guessing. STILL FUNCTIONAL on
- *                  purpose — refusing to serve would lock the owner out of their own site over
- *                  a key that works, which is a worse outcome than saying so out loud.
+ *    "WEAK"        configured, but short enough to be worth guessing. Owner routes fail closed
+ *                  with 503 until it is replaced; health keeps the diagnosis explicit.
  *    "configured"  at or over the minimum.
  */
 export function ownerKeyHealth(configuredKey) {

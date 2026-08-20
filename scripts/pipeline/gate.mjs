@@ -63,16 +63,27 @@ export function attemptsOf(state, lifecycle) {
   return state?.attempts || 0;
 }
 
-export async function bumpChangeAttempt(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+// Attempt counters are scoped to a RUN, not the guide's lifetime (M6, Pipeline V2). The run
+// key is the change branch's suffix (issue number, or the dispatch run id): retries of the
+// SAME work share a key and count toward the cap, while a NEW request starts at attempt 1 —
+// three successful change runs must never consume a guide's allowance for the fourth.
+export async function bumpChangeAttempt(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR, runKey = null } = {}) {
   const state = (await readState(slug, { intakeDir })) || { slug, createdAt: now, updatedAt: now, stages: {}, attempts: 0, notes: [] };
-  state.change = { ...(state.change || {}), attempts: (state.change?.attempts || 0) + 1, updatedAt: now };
+  const prev = state.change || {};
+  const sameRun = runKey == null || prev.runKey === runKey;
+  state.change = {
+    ...prev,
+    attempts: sameRun ? (prev.attempts || 0) + 1 : 1,
+    runKey: runKey ?? prev.runKey ?? null,
+    updatedAt: now,
+  };
   state.updatedAt = now;
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(statePath(slug, intakeDir), JSON.stringify(state, null, 2) + "\n");
   return state;
 }
 
-async function gateBudget({ slug, lifecycle = "research", branch, cap = CAPS[lifecycle] || 5 }) {
+async function gateBudget({ slug, lifecycle = "research", branch, cap = CAPS[lifecycle] || 5, runKey = null }) {
   const before = await readState(slug);
   if (lifecycle === "research" && before && !nextStage(before)) {
     console.log(`[budget] ${slug} already reached verified — nothing to do.`);
@@ -80,7 +91,7 @@ async function gateBudget({ slug, lifecycle = "research", branch, cap = CAPS[lif
     return 0;
   }
 
-  const state = lifecycle === "change" ? await bumpChangeAttempt(slug) : await bumpAttempt(slug);
+  const state = lifecycle === "change" ? await bumpChangeAttempt(slug, { runKey }) : await bumpAttempt(slug);
   const attempts = attemptsOf(state, lifecycle);
   emitOutput("attempts", String(attempts));
   emitOutput("next", nextStage(state) || "");
@@ -188,11 +199,12 @@ function captureNode(args) {
   catch (err) { return { code: typeof err?.status === "number" ? err.status : 1, out: `${err?.stdout || ""}${err?.stderr || ""}` }; }
 }
 
-// Quantitative floors bite only on a FULL pass — a section-scoped re-run legitimately produces
-// few B finds, and gating it would punish precision.
+// The substance check bites only on a FULL pass — a section-scoped re-run legitimately
+// produces few B finds, and gating it would punish precision. (Quantitative floors are gone —
+// V2's adaptive saturation record replaced them; what a full pass still owes is EXISTING.)
 function gateCoverage({ slug, floors }) {
   const args = [path.join(ROOT, "scripts", "check-passb-coverage.mjs"), "--slug", slug];
-  if (floors) args.push("--floors");
+  if (floors) args.push("--full-pass");
   return runNode(args);
 }
 
@@ -227,9 +239,17 @@ function gateIntegrity({ slug, preHead, preStages, enforce }) {
 // any agent budget is spent: a human may have hand-elaborated the intake since, and a date range
 // narrowed in prose but never reflected in the flat bullet is exactly how a contradiction gets in.
 // Idempotent, and never fails the run — a finding becomes a traveler question, not a red build.
+// Pure: the file the preflight's --write actually mutates, so the commit below and the writer
+// (applyContradictions → guides-intake/<slug>/ledger.md) cannot disagree again. It used to
+// commit intake.md — the one file the check NEVER writes (intake is frozen intent; findings are
+// recorded beside it) — so every preflight finding was silently left uncommitted.
+export function preflightCommitPath(slug) {
+  return `guides-intake/${slug}/ledger.md`;
+}
+
 function gatePreflight({ slug, branch }) {
   runNode([path.join(ROOT, "scripts", "audit", "check-intake-contradictions.mjs"), "--slug", slug, "--write"]);
-  const rel = `guides-intake/${slug}/intake.md`;
+  const rel = preflightCommitPath(slug);
   if (branch && git(["status", "--porcelain", "--", rel]).trim()) {
     git(["add", rel]);
     git(["commit", "-m", `chore(intake): stamp contradiction findings for ${slug}`]);
@@ -241,15 +261,24 @@ function gatePreflight({ slug, branch }) {
 // The verdict, run AFTER remediation so a void run still gets its retry dispatched and its stuck
 // issue filed before the workflow goes red — but it does go red: a run that produced nothing, or
 // that faked its staging, is a failed run no matter what merged.
-function gateEnforce({ isVoid, violations, kinds }) {
+function gateEnforce({ isVoid, violations, kinds, compose }) {
+  let failed = false;
   if (String(isVoid) === "true") {
     console.error("::error::Void run — the agent produced no durable output. Remediation dispatched above.");
-    return 1;
+    failed = true;
   }
   if (violations && String(violations) !== "0") {
     console.error(`::error::Checkpoint discipline violated — ${violations} finding(s), kinds: ${kinds || "?"}. The stages this run cleared are not resumable.`);
-    return 1;
+    failed = true;
   }
+  // The compose check now runs BEFORE landing (continue-on-error, so a failure downgrades the
+  // landing to a draft PR instead of skipping it) — this is where that deferred failure turns
+  // the run red, after remediation and the draft-PR landing have both had their chance.
+  if (compose === "failure") {
+    console.error("::error::Compose check failed — the run landed as a draft at most; the composition error needs a human.");
+    failed = true;
+  }
+  if (failed) return 1;
   console.log("[run-integrity] clean.");
   return 0;
 }

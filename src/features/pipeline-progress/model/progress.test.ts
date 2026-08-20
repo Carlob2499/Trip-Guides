@@ -174,15 +174,26 @@ const doneView = () => deriveProgress(VERIFIED, { now: new Date("2026-07-19T11:3
 describe("derivePageState", () => {
   it("is empty until a real state has actually been read", () => {
     // deriveProgress(null, …) is a valid view, so the view alone can't tell these apart.
-    expect(derivePageState({ view: emptyView(), hasRun: false, openQuestions: 0 })).toBe("empty");
-    expect(derivePageState({ view: emptyView(), hasRun: true, openQuestions: 0 })).toBe("running");
+    expect(derivePageState({ view: emptyView(), hasRun: false, blockingForks: 0, openQuestions: 0 })).toBe("empty");
+    expect(derivePageState({ view: emptyView(), hasRun: true, blockingForks: 0, openQuestions: 0 })).toBe("running");
   });
 
-  it("ranks done over everything, and an open question over the stall it caused", () => {
-    expect(derivePageState({ view: doneView(), hasRun: true, openQuestions: 3 })).toBe("done");
-    expect(derivePageState({ view: stalledView(), hasRun: true, openQuestions: 1 })).toBe("awaiting");
-    expect(derivePageState({ view: stalledView(), hasRun: true, openQuestions: 0 })).toBe("stalled");
-    expect(derivePageState({ view: midView(), hasRun: true, openQuestions: 0 })).toBe("running");
+  it("ranks done over everything, and a BLOCKING fork over the stall it caused", () => {
+    expect(derivePageState({ view: doneView(), hasRun: true, blockingForks: 3, openQuestions: 3 })).toBe("done");
+    expect(derivePageState({ view: stalledView(), hasRun: true, blockingForks: 1, openQuestions: 1 })).toBe("awaiting");
+    expect(derivePageState({ view: stalledView(), hasRun: true, blockingForks: 0, openQuestions: 0 })).toBe("stalled");
+    expect(derivePageState({ view: midView(), hasRun: true, blockingForks: 0, openQuestions: 0 })).toBe("running");
+  });
+
+  it("CHANGE (M7): a non-blocking open question never pauses the page — research proceeds on its assumption", () => {
+    // The old contract put ANY open question in "awaiting" ("Waiting on you", "Paused at
+    // stage…") — a false claim: V1 research never blocks on a question. Only a fork does.
+    expect(derivePageState({ view: midView(), hasRun: true, blockingForks: 0, openQuestions: 2 })).toBe("running");
+    expect(derivePageState({ view: midView(), hasRun: true, blockingForks: 1, openQuestions: 2 })).toBe("awaiting");
+  });
+
+  it("a MALFORMED run state surfaces as stalled — never as 'no run'", () => {
+    expect(derivePageState({ view: emptyView(), hasRun: true, blockingForks: 0, openQuestions: 0, malformed: true })).toBe("stalled");
   });
 });
 
@@ -219,10 +230,15 @@ describe("deriveProgressLine", () => {
     });
   });
 
-  it("reports real clocks for the stalled and finished cases", () => {
+  it("reports real clocks for the stalled and finished cases — and never calls a merge 'live'", () => {
     expect(deriveProgressLine("stalled", stalledView()))
       .toBe("No checkpoint for 38m 00s — stage 3 of 6 never finished.");
-    expect(deriveProgressLine("done", doneView())).toBe("All 6 stages cleared in 1h 30m.");
+    // deployedLive unknown/false → the merge is stated as a merge, with the deploy unconfirmed.
+    expect(deriveProgressLine("done", doneView()))
+      .toBe("All 6 stages cleared in 1h 30m. Merged — the site deploy that carries it hasn't been confirmed yet.");
+    // Only a CONFIRMED deploy earns the word "live".
+    const live = deriveProgress(VERIFIED, { now: new Date("2026-07-19T11:30:00Z"), published: true, deployedLive: true });
+    expect(deriveProgressLine("done", live)).toBe("All 6 stages cleared in 1h 30m. Live on the site.");
   });
 
   it("degrades to a stageless sentence rather than reading past the end of the list", () => {
@@ -289,5 +305,109 @@ describe("deriveNotePanel", () => {
     expect(deriveNotePanel("stalled", "monitoring").tone).toBe("warn");
     expect(deriveNotePanel("running", "monitoring").tone).toBe("muted");
     expect(deriveNotePanel("done", "monitoring").tone).toBe("green");
+  });
+});
+
+/* ── M7: the V2 adapter and the truths V1 could not tell ──────────────────────────────────── */
+
+import { adaptV2Snapshot } from "./progress";
+
+const v2Run = (over: Record<string, unknown> = {}) => ({
+  schemaVersion: "wp-run/2.0",
+  slug: "testland",
+  runId: "testland-20260817-abcdef",
+  lifecycle: "research",
+  status: "running",
+  createdAt: "2026-08-17T10:00:00Z",
+  updatedAt: "2026-08-17T10:05:00Z",
+  stages: {
+    scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" },
+    passA: { status: "running", startedAt: "2026-08-17T10:02:00Z" },
+    passB: { status: "queued" }, reconcile: { status: "queued" }, critic: { status: "queued" },
+  },
+  attempts: { total: 1, cap: 5 },
+  publication: { published: false, deployedLive: null },
+  landingGate: { status: "pending", checkedAt: null, failure: null },
+  failure: null,
+  ...over,
+});
+
+describe("adaptV2Snapshot (M7)", () => {
+  it("maps V2 stages onto the stations (critic → the verify station) and keeps the real status", () => {
+    const snap = adaptV2Snapshot(v2Run({
+      status: "complete",
+      stages: {
+        scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" }, passA: { status: "complete", endedAt: "2026-08-17T10:02:00Z" },
+        passB: { status: "complete", endedAt: "2026-08-17T10:03:00Z" }, reconcile: { status: "complete", endedAt: "2026-08-17T10:04:00Z" },
+        critic: { status: "complete", endedAt: "2026-08-17T10:05:00Z" },
+      },
+      landingGate: { status: "passed", checkedAt: "2026-08-17T10:06:00Z", failure: null },
+    }));
+    expect(snap.version).toBe(2);
+    expect(snap.malformed).toBe(false);
+    expect(snap.state?.stages).toEqual({ scaffold: "2026-08-17T10:01:00Z", passA: "2026-08-17T10:02:00Z", passB: "2026-08-17T10:03:00Z", reconcile: "2026-08-17T10:04:00Z", verified: "2026-08-17T10:05:00Z" });
+    expect(snap.runStatus).toBe("complete");
+  });
+
+  it("a failed run carries its failure class; deployed-live carries only when recorded", () => {
+    const snap = adaptV2Snapshot(v2Run({ status: "failed", failure: { class: "void-run", detail: "x" } }));
+    expect(snap.runStatus).toBe("failed");
+    expect(snap.failureClass).toBe("void-run");
+    expect(snap.deployedLive).toBe(null);
+    const live = adaptV2Snapshot(v2Run({ publication: { published: true, deployedLive: true } }));
+    expect(live.deployedLive).toBe(true);
+  });
+
+  it("fails CLOSED on a document that is not a compatible V2 run", () => {
+    expect(adaptV2Snapshot(null).malformed).toBe(true);
+    expect(adaptV2Snapshot({ schemaVersion: "wp-run/3.0" }).malformed).toBe(true);
+    expect(adaptV2Snapshot("garbage").malformed).toBe(true);
+  });
+});
+
+describe("deriveProgress with a V2 run status (M7) — no more 20-minute guess", () => {
+  it("a LONG HEALTHY STAGE stays running: the recorded status wins over the stale clock", () => {
+    // 3 hours since the last checkpoint — V1's clock would scream "Stalled"; the V2 run says
+    // running, and the run's own word is the truth.
+    const snap = adaptV2Snapshot(v2Run());
+    const v = deriveProgress(snap.state, {
+      now: new Date("2026-08-17T13:05:00Z"), published: false, runStatus: snap.runStatus,
+    });
+    expect(v.isStuck).toBe(false);
+    expect(v.runFailed).toBe(false);
+  });
+
+  it("a RECORDED failure is stuck immediately — no clock needed, and the pill says Failed", () => {
+    const snap = adaptV2Snapshot(v2Run({ status: "failed", failure: { class: "agent-failure", detail: "x" } }));
+    const v = deriveProgress(snap.state, {
+      now: new Date("2026-08-17T10:06:00Z"), published: false, runStatus: snap.runStatus,
+    });
+    expect(v.isStuck).toBe(true);
+    expect(v.runFailed).toBe(true);
+    expect(deriveStatusPill("stalled", v)).toEqual({ text: "Failed", tone: "warn" });
+    expect(deriveProgressLine("stalled", v)).toMatch(/recorded a failure/);
+  });
+
+  it("V1 (no run status) keeps its labeled clock heuristic — nothing better exists there", () => {
+    const staleNow = new Date(new Date(MID_RESEARCH.updatedAt).getTime() + STUCK_THRESHOLD_MS + 1000);
+    const v = deriveProgress(MID_RESEARCH, { now: staleNow, published: false });
+    expect(v.isStuck).toBe(true);
+    expect(v.runFailed).toBe(false);
+    expect(deriveStatusPill("stalled", v).text).toBe("Stalled");
+  });
+});
+
+describe("deriveNotePanel with open non-blocking questions (M7)", () => {
+  it("offers the REAL answer control while research continues — the endpoint exists now", () => {
+    const panel = deriveNotePanel("running", "monitoring", { openQuestions: 2 });
+    expect(panel.acceptsInput).toBe(true);
+    expect(panel.placeholder).toBe(null);
+    expect(panel.heading).toMatch(/research continues/);
+  });
+
+  it("stays the admitted gap with no questions open", () => {
+    const panel = deriveNotePanel("running", "monitoring", { openQuestions: 0 });
+    expect(panel.acceptsInput).toBe(false);
+    expect(panel.placeholder).not.toBe(null);
   });
 });

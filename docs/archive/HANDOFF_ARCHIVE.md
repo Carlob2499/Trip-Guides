@@ -9,63 +9,68 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
-## Snapshot (2026-08-15 — guide-deepening list, items 1/3/4/5 closed)
+## Snapshot (2026-08-20 — P13 independent review: P13_GREEN on PR #63 head `88d16fe` — RETRACTED same day, see the P13.1 snapshot)
 
-**Korea geocode backfill.** `PLACES_API_KEY` lives in `.env` but nothing sources it into the
-process env — `set -a; source .env; set +a` before invoking `geocode-venues.mjs`. 1 of 25
-unresolved venues (LoL Park) matched confidently and was written; the other 24 stay blank on
-purpose — name mismatches Places itself disagrees with, or category entries ("Konbini") that
-aren't a single place. Refuse-rather-than-guess working as designed.
+The P13 go/no-go review ran fully independently — every P12.1 claim re-verified from primary
+evidence, none accepted on faith. **Gap 1 re-verified:** the `probe/environ` workflow at
+`c12d736` was read line-by-line and its container digest / CLI `@2.1.233` /
+`--safe-mode --no-session-persistence` / `WP_TOOLS` / `WP_DENY` confirmed byte-identical to the
+PR's Pass A agent step; the scorer's semantics (success ⇒ breach, refusal ⇒ INCONCLUSIVE, PASS
+only on attempted+denied for all three tools) confirmed in source; the raw log of run
+`32348279562` / job `96361626055` shows all three DENIED lines and no SUCCEEDED/NOT-ATTEMPTED
+line. **Gap 2 re-verified:** the transport fixture was read in full and all four cited URLs
+re-fetched this review — japan-guide e4904 and the three Nankai pages each support exactly the
+SUPPORTS lines (incl. the twice-stated walking prohibition and rapi:t "34 minutes the fastest");
+the seven negative controls trace to distinct rule paths in `research-rules.mjs`; targeted
+suite 11/11. **Gates rerun on `88d16fe`: all green** (build 9 pages · lint 0/0 · typecheck
+0 errors · **163 files, 2651 passed + 1 todo**). Invariants held: no repo variable set, PR #61
+open/draft, canary + probe branches present, `PLACES_API_KEY` confined to non-agent steps.
+Verdict recorded in `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P13 independent go/no-go
+review" and the tracker's P13 row. Nothing merged, published, cut over, or deleted.
+[Retraction note, added when archiving: the Gap-2 re-verification checked SUPPORTS lines
+affirmatively but missed that the same page documents "bus or taxi" — the fixture's
+bus-exclusivity framing was unsupported. Verdict withdrawn; see IMPLEMENTATION_STATE §P13.1.]
 
-**Bare-echo / undated-budget items were already clean.** Korea/denmark's facts hygiene
-(bare-echo, malformed, misattribution) and untokenized-money checks both ran clean — an earlier
-2026-08-15 session had already closed them. Japan's findings (3 malformed + 1 misattribution + 3
-bare-echo stems) left with the guide — it was deleted later the same day for a fresh redo (see
-Decisions). The defects survive as frozen fixture evidence, which is where they always belonged.
+## Snapshot (2026-08-20 — P12.1 targeted correction: the review's two HIGH proof gaps closed)
 
-**E1 tiering backfill done; `backfill-tier.mjs` deleted.** Re-run on korea/denmark: 0 rows left
-to assign — everything's already `tier: primary` or correctly left blank as a research call the
-script was never built to make.
+The independent P11/P12 review returned **RECOMMEND_P13_YELLOW** (architecture ACCEPTED) with
+exactly two HIGH acceptance-proof gaps; this bounded pass closed both and stopped. **Gap 1 —
+`/proc` containment now proven for Grep and Glob, not just Read:** the `probe/environ` workflow
+(commit `c12d736`) reruns the agent under the UNCHANGED production config with
+`--output-format stream-json --verbose`, and a scorer requires an observed `tool_use` on `/proc`
+AND a paired tool-layer denial for EACH of Read/Grep/Glob — a model refusal scores INCONCLUSIVE,
+never PASS. **Run `32348279562`, job `96361626055`: all three tools attempted `/proc/version`
+(harmless) and were DENIED at the tool layer**; sentinel never obtained via any agent tool. New
+scar pins `--safe-mode`+`--no-session-persistence` on all four agent steps (the flag set the
+proof ran under). **Gap 2 — the R3+ transport fixture re-researched:** the overstatements the
+review flagged ("only way up", "no parallel road", "no bed on the mountain") are GONE; the
+KIX→Kōyasan scenario stays, now justified only by fetched-source claims (4 sources re-fetched
+this pass: 3 Nankai operator pages + japan-guide e4904, full source-to-claim mapping in the test
+header), with the strongest sourced fragility fact being japan-guide's twice-stated rule that
+walking from the cable-car station into town is not permitted — the final bus is mandatory. All
+exact last-service times are explicit traveler re-checks; a new scar regex-pins that no `HH:MM`
+time and none of the three overstated phrases can return. Validator returns `[]`; all seven
+distinct negative controls preserved. Full record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` →
+"P12.1 correction pass".
 
-## Snapshot (2026-08-14 — the codebase-audit cleanup: audited, then cut, all gates green)
+## Snapshot (2026-08-20 — P12 finalization: PR #63 merge-ready, CodeQL clean, /proc + R3 proven)
 
-**Six-lens adversarial audit → three executed passes** (branch `claude/codebase-audit-cleanup-cahyfq`,
-report artifact shared with the creator). Verdict: near-zero dead code, but process weight, helper
-duplication, and four shipped defects. **Defects fixed:** tools-reminders.js was never imported
-(Tools ticks didn't persist — now wired); double `.sheet-grip` drag-handle removed; grid.js's two
-literal NUL bytes (grep saw the file as binary) escaped; the guide footer's telemetry disclosure
-outlived the feature (caught by the dist grep, removed).
+The Fable P12 pass made PR #63 (`fable/pipeline-v2-finalize` → main) genuinely reviewable and
+boring. **Merge conflict resolved** — merged current main (`8a591e8`); the only conflict was main's
+whitespace nudge vs. the full V2 workflow, resolved `--ours`; PR #63 is now `MERGEABLE`, 0 behind,
+all four `docker run` agent steps + the default-branch dispatch guard intact, `/new` still V1 when
+the cutover var is unset. **4 CodeQL findings fixed at one root cause** — all traced to a single
+test-code regex (`pipeline-v2-finalize.test.mjs`) with incomplete dot-only escaping; `isProxyHost`
+matches by exact string comparison (never a regex) so the runtime deny set never changed; full
+metacharacter escape added + a lookalike/suffix-attack regression test; **CodeQL PR-head re-scan
+PASS, 0 open alerts**. **`/proc/self/environ` denial PROVEN live** — a push-triggered probe on the
+throwaway `probe/environ` branch, replicating the exact production agent config, showed the Read
+tool BLOCKED on the benign `/proc/version` (`CHECK1_BLOCKED` — the `Read(//proc/**)` rule is
+effective across the subtree, so environ is denied) while the model independently refused environ
+as a secret (defense in depth); sentinel never leaked. **Run `32340406684`, job `96338191848`.**
+**R3+ transport PROVEN** — a controlled KIX→Kōyasan fragile-transfer artifact (single-mode mountain
+access, overnight cable-car cutoff, missed connection = no bed), sourced from two pages fetched this
+pass, is schema-valid and accepted by the real `researchRuleProblems`; seven negative controls prove
+the acceptance is earned. Full P12 record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P12
+finalization".
 
-**Cuts, all creator-approved:** panel/progress-preview design-study trees; 5 unreferenced archive
-docs; the test-index meta-gate (test + generator + 248KB catalog); the ENTIRE telemetry chain
-(silo, bumpCounter, RTDB rules node, weekly workflow — whose docs/telemetry commit path was broken
-and never fired); the 24 local-only Playwright specs (a11y.spec.ts remains the CI gate);
-model-smoke.yml; CHANGELOG (frozen, moved to docs/archive/). Workflow diet: content-audit merged
-into recert.yml as its Monday report job; mutation + skill-retro de-cronned to dispatch-only.
-17 workflows remain, 4 crons.
-
-**Structure:** silo contract's 3 violations sealed (hub index.ts; atlas exports initAtlasWorld —
-atlas-map.js got an SSR-safe HTMLElement base for the barrel; route-optimizer math →
-`src/lib/route-optimize.ts`); guide.css split under its ~800 rule (botbar/sheet → mobile-nav.css,
-map/budget blocks rehomed); index.astro's inline hub script → `src/scripts/atlas-hub.js`;
-`check-drift.mjs`→`check-content-drift.mjs` and trip-tools `reminders.ts`→`booking-reminders.ts`
-(name collisions); single-letter-variable rename sweep over the 6 worst files (274→185 repo-wide).
-Dedup: esc/reducedMotion → scripts/util.js; scripts gained lib/cli.mjs + lib/geo.mjs; og/recap
-share pages/og/_card.ts. d3 → 3 submodules (~200KB less shipped); geo-tz → devDependencies.
-
-## Snapshot (2026-08-14 — dark-mode focus-ring contrast fixed)
-
-**Fixed, not deferred.** The prior entry's "`--accent-ink` would break light (≈2.70:1)" was wrong
-— `accentTokens()` derives it to clear ≥4.5:1 on every light AND dark surface by construction, so
-no fork existed. 53 `:focus`/`:focus-visible` rules painting identity `--accent` (19 `src/styles/`
-files, 6 feature silos, `progress-preview`) now paint `--accent-ink` instead, same fix already
-applied to accent link text. Verified in preview: Korea's dark ring 2.48:1 → 5.23:1, light
-unchanged; `.pin-flash`/`[data-selected]` left alone. Ship loop green: build/lint/typecheck,
-vitest 2009/2009, `a11y.spec.ts` 69/69, drift unchanged.
-
-> **Rolled off since**, in order, each one commit further back than the last: the
-> "both design-reconciliation forks are closed" snapshot (2026-08-15 — the rate-fallback
-> currency-converter fix and the dark-mode focus-ring fix), and "case 11's live half is built"
-> (2026-08-16 — live Routes verification, the blocker that wasn't, and the `us` registry
-> close-out). Both are shipped work with nothing open against them;
-> `git log -- docs/archive/HANDOFF_ARCHIVE.md` walks back to either verbatim.

@@ -28,8 +28,9 @@ const STORAGE_KEY = "wp-owner-key";
 /** A key short enough to be a typo is more likely a mis-paste than a secret. Rejecting it at the
     input is a better error than a silent 401 from the Worker on every later action. This is a
     PASTE guard, not the security boundary: the Worker's own OWNER_KEY_MIN_LEN (32, in
-    scripts/worker-api.mjs) is the authority and reports a shorter key as WEAK on /health. */
-export const OWNER_KEY_MIN = 16;
+    scripts/worker-api.mjs) is the authority and rejects a shorter configured key while reporting
+    WEAK on /health. */
+export const OWNER_KEY_MIN = 32;
 
 /** How long a pasted key stays usable in this browser. Long enough not to be a chore, short
     enough that a forgotten key on a shared machine stops working on its own. */

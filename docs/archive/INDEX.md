@@ -12,6 +12,15 @@ to look for here. Two files in this folder are **not** indexed, because they sti
 
 ---
 
+### FABLE_IMPLEMENTATION_PROMPT.md — the Pipeline V2 build prompt (M0–M8)
+
+Codex-authored execution prompt that drove the V2 core build on `codex/pipeline-v2`
+(2026-08-17, M0–M8 + the Codex adversarial correction pass). Fully executed; its milestone
+record lives on in `docs/pipeline v2/IMPLEMENTATION_STATE.md`, and the 2026-08-19 finalization
+session ran under a successor prompt held outside the repo. Archived 2026-08-19 because a
+completed build prompt in the active authority set reads as a standing work order.
+`git show 9f1599b:"docs/pipeline v2/FABLE_IMPLEMENTATION_PROMPT.md"`
+
 ### PLAN_EVIDENCE_FIRST.md — evidence first, guide second
 
 Written 2026-08-12 against the creator's master-orchestrator mandate, executed 2026-08-13, retired

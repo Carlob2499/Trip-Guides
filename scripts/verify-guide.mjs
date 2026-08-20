@@ -30,7 +30,7 @@
 //         npm run verify -- --slug korea --network   adds link/photo checks (slow, network)
 //         npm run verify -- --slug korea --json      machine JSON (for the PR-comment step)
 
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readGuides, flatten, isMain } from "./audit/lib.mjs";
@@ -40,6 +40,8 @@ import { checkFactsHygiene } from "./audit/check-facts-hygiene.mjs";
 import { evaluateRiskGates } from "./audit/check-risk-gates.mjs";
 import { evaluateUncertainty } from "./audit/check-uncertainty.mjs";
 import { checkRoutes } from "./audit/check-routes.mjs";
+import { COVERAGE_SCHEMA, coverageDocSchema, parseOrThrow, assertVersionCompatible } from "./pipeline/v2/contracts.mjs";
+import { coverageProblems, collectAnchors } from "./pipeline/v2/coverage.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -99,7 +101,54 @@ export function evaluateReadiness(guide, slug) {
 
 // P3/R15: coverage gate — every intake ask must map to guide content or a logged skip/amendment.
 // Pre-P3 guides without coverage.json pass trivially (the gate only bites guides scaffolded after P3).
+//
+// V2 (Core Proof blocker 1C): when guides-intake/<slug>/coverage.v2.json exists it is the
+// AUTHORITATIVE coverage record — V2 reconcile deliberately does not maintain duplicate V1
+// coverage state, so this consumer reads the V2 artifact rather than demanding the legacy path.
+// Fail closed: a malformed required V2 artifact, a missing material ask, or an invalid
+// ref/anchor is a coverage FAIL, never "no coverage". V1 guides keep the legacy behavior.
+export function checkCoverageV2(slug) {
+  const p = path.join(ROOT, "guides-intake", slug, "coverage.v2.json");
+  if (!existsSync(p)) return null;
+  const fail = (problems) => ({ status: "fail", version: 2, problems, uncovered: [] });
+  let raw;
+  try { raw = JSON.parse(readFileSync(p, "utf8")); }
+  catch (err) { return fail([`coverage.v2.json is not valid JSON (${err.message}) — a malformed required artifact blocks, it does not read as "covered"`]); }
+  let doc;
+  try {
+    assertVersionCompatible(raw.schemaVersion, COVERAGE_SCHEMA, { file: p });
+    doc = parseOrThrow(coverageDocSchema, raw, { file: p, what: "V2 coverage artifact" });
+  } catch (err) { return fail(err.issues?.length ? err.issues : [err.message.split("\n")[0]]); }
+  if (doc.slug !== slug) return fail([`coverage.v2.json belongs to "${doc.slug}", not "${slug}"`]);
+
+  // The real relational context, built synchronously (loadCoverageContext's contract).
+  const guideDir = path.join(ROOT, "src", "content", "guides", slug);
+  const groups = existsSync(guideDir)
+    ? readdirSync(guideDir).filter((name) => /^\d\d-[a-z0-9-]+\.json$/.test(name)).sort()
+    : [];
+  const groupAnchors = new Map();
+  for (const name of groups) {
+    try { groupAnchors.set(name, collectAnchors(JSON.parse(readFileSync(path.join(guideDir, name), "utf8")))); }
+    catch { groupAnchors.set(name, new Set()); }
+  }
+  let expectedAskIds = null;
+  try {
+    const legacy = JSON.parse(readFileSync(path.join(ROOT, "guides-intake", slug, "coverage.json"), "utf8"));
+    expectedAskIds = new Set((legacy.asks || []).map((a) => a.id).filter(Boolean));
+  } catch { /* no legacy ask registry — the V2 document still cannot be empty */ }
+  let evidenceIds = null;
+  const evidenceFile = path.join(ROOT, "guides-intake", slug, "evidence.v2.json");
+  if (existsSync(evidenceFile)) {
+    try { evidenceIds = new Set((JSON.parse(readFileSync(evidenceFile, "utf8")).evidence || []).map((e) => e.id)); }
+    catch { return fail(["evidence.v2.json is not valid JSON — coverage citations cannot be checked against a malformed evidence artifact"]); }
+  }
+  const problems = coverageProblems(doc, { groups, groupAnchors, expectedAskIds, evidenceIds });
+  return problems.length ? fail(problems) : { status: "pass", version: 2, problems: [], uncovered: [] };
+}
+
 export function checkCoverage(slug) {
+  const v2 = checkCoverageV2(slug);
+  if (v2) return v2;
   const p = path.join(ROOT, "guides-intake", slug, "coverage.json");
   if (!existsSync(p)) return { status: "n/a", uncovered: [] };
   let cov;
@@ -188,7 +237,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // venue that no longer exists is concrete breakage, same class as a dead link.
   const venueStatus = net?.venuesBySlug?.[slug] ?? { status: "skipped" };
 
-  // S2/S3: the candidates table + coverage floors. Async (file reads), so verify() computes
+  // S2/S3: the candidates table (structural checks; breadth is adaptive since V2). Async, so verify() computes
   // it and passes the result in — the same shape as the staleness scan.
   const candidatesRow = candidates ?? { status: "n/a", reason: "not computed" };
 
@@ -276,6 +325,7 @@ export async function verify({ slug = null, network = false } = {}) {
   }
 
   // S2/S3: candidates tables are read per-target (async), then threaded into the sync evaluator.
+  // Breadth floors are gone (V2 adaptive saturation replaced them); the structural checks remain.
   const { checkCandidates } = await import("./check-candidates.mjs");
   const candidatesBySlug = {};
   for (const t of targets) {
@@ -389,7 +439,7 @@ export function report(r) {
     for (const f of v.flagged) L.push(`      ⚠ ${f.name} (${f.section}) — ${f.why}`);
   }
 
-  // S2/S3: candidates table + floors. Optional-chained for pre-standard result objects.
+  // S2/S3: candidates table (structural, floor-free since V2). Optional-chained for pre-standard result objects.
   if (r.candidates?.status === "n/a") {
     L.push(`  P1 candidates · n/a — ${r.candidates.reason}`);
   } else if (r.candidates && r.candidates.status !== "skipped") {
@@ -427,7 +477,10 @@ export function report(r) {
   if (r.coverage.status === "n/a") {
     L.push(`  P0 coverage   · n/a — pre-P3 guide (no coverage.json)`);
   } else if (r.coverage.status === "pass") {
-    L.push(`  P0 coverage   · PASS — every intake ask addressed`);
+    L.push(`  P0 coverage   · PASS — every intake ask addressed${r.coverage.version === 2 ? " (V2 coverage artifact)" : ""}`);
+  } else if (r.coverage.version === 2) {
+    L.push(`  P0 coverage   · FAIL — V2 coverage artifact does not hold up (${r.coverage.problems.length} problem(s)):`);
+    for (const p of r.coverage.problems) L.push(`      ⚠ ${p}`);
   } else {
     L.push(`  P0 coverage   · FAIL — ${r.coverage.uncovered.length} intake ask(s) not addressed:`);
     for (const a of r.coverage.uncovered) L.push(`      ⚠ ${a.id}: "${a.label}" = "${a.value}" — set coveredBy in coverage.json or log a skip`);
@@ -581,7 +634,11 @@ export function renderMarkdown(r) {
     for (const p of r.content.missingPhotos) L.push(`- missing photo: ${p.file}`);
     L.push("", `</details>`, "");
   }
-  if (r.coverage.status === "fail") {
+  if (r.coverage.status === "fail" && r.coverage.version === 2) {
+    L.push(`<details><summary>⚠ V2 coverage artifact failed (${r.coverage.problems.length} problem(s))</summary>`, "");
+    for (const p of r.coverage.problems) L.push(`- ${p}`);
+    L.push("", `</details>`, "");
+  } else if (r.coverage.status === "fail") {
     L.push(`<details><summary>⚠ ${r.coverage.uncovered.length} uncovered intake ask(s)</summary>`, "");
     for (const a of r.coverage.uncovered) L.push(`- **${a.label}**: "${a.value}" — set \`coveredBy\` in \`coverage.json\` or log a skip/amendment`);
     L.push("", `</details>`, "");

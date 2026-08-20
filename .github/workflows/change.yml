@@ -154,10 +154,48 @@ jobs:
           git config user.name  "waypoint-change[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # Separate branch namespace from research/<slug>, so the two lifecycles never collide on a
-      # guide being worked on at the same time.
+      # M6 answers routing: while research is ACTIVE on this guide, a dispatched answer belongs
+      # to that run's ledger on the research branch — a change run would fork from main and edit
+      # the scaffold while the real work sits unmerged. Published guides keep the change path.
+      - name: Route answers (active research vs change)
+        id: answers_route
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          SOURCE: ${{ needs.resolve.outputs.source }}
+          PLAN_JSON: ${{ inputs.plan_json }}
+        run: |
+          if [ "$SOURCE" = "answers" ]; then
+            node scripts/pipeline.mjs answers-route --slug "$SLUG"
+          else
+            echo "target=change" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Record answers on the active research run
+        if: steps.answers_route.outputs.target == 'research'
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          PLAN_JSON: ${{ inputs.plan_json }}
+          RBRANCH: ${{ steps.answers_route.outputs.research_branch }}
+        run: |
+          git fetch origin "$RBRANCH"
+          git checkout "$RBRANCH"
+          node scripts/pipeline.mjs answers-apply --slug "$SLUG" --branch "$RBRANCH"
+          if [[ "$RBRANCH" == research-v2/* ]]; then
+            SECTION=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.section')
+            MODEL=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.model')
+            EFFORT=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.effort')
+            CRITIC=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.criticModel')
+            gh workflow run research-pass-v2.yml -f slug="$SLUG" -f section="$SECTION" \
+              -f model="$MODEL" -f effort="$EFFORT" -f critic_model="$CRITIC"
+          else
+            gh workflow run research-pass.yml -f slug="$SLUG"
+          fi
+
+      # Separate branch namespace from research/<slug>; the guide-<slug> concurrency group is
+      # what stops the two lifecycles landing concurrently on one guide.
       - name: Start or resume the change branch
         id: branch
+        if: steps.answers_route.outputs.target != 'research'
         env:
           SLUG: ${{ needs.resolve.outputs.slug }}
           SUFFIX: ${{ needs.resolve.outputs.issue || github.run_id }}
@@ -165,14 +203,19 @@ jobs:
           node scripts/pipeline.mjs branch --slug "$SLUG" \
             --prefix change --suffix "$SUFFIX"
 
+      # Attempts are scoped to the RUN (the branch suffix): retries of the same issue count up
+      # toward the cap; a new request starts at 1 — successful change runs never consume a
+      # guide's lifetime allowance (M6).
       - name: Attempt budget
         id: budget
+        if: steps.answers_route.outputs.target != 'research'
         env:
           SLUG: ${{ needs.resolve.outputs.slug }}
           BRANCH: ${{ steps.branch.outputs.name }}
+          RUN_KEY: ${{ needs.resolve.outputs.issue || github.run_id }}
         run: |
           node scripts/pipeline.mjs gate budget --slug "$SLUG" \
-            --lifecycle change --branch "$BRANCH"
+            --lifecycle change --branch "$BRANCH" --run-key "$RUN_KEY"
 
       # Builds and validates the plan. The requester's own words are written to change.txt here —
       # they are DATA the agent reads, never text interpolated into a prompt.
@@ -281,6 +324,21 @@ jobs:
           node scripts/pipeline.mjs gate artifacts --slug "$SLUG" \
             --stage change --file /tmp/change-summary.md
 
+      # A change run has no stages to batch, so this is purely the void check: an agent chain that
+      # burned the session and left nothing durable. No auto-retry here — a change run re-runs from
+      # scratch, and the attempt cap is what stops it repeating forever — so it enforces directly,
+      # and it runs BEFORE landing so a void run can never open or merge anything. always() so the
+      # audit still reports when the agent chain itself failed.
+      - name: Run-integrity gate
+        if: always() && steps.budget.outputs.should_run == 'true' && steps.forks.outputs.blocked == 'false'
+        env:
+          SLUG: ${{ needs.resolve.outputs.slug }}
+          PRE_HEAD: ${{ steps.pre.outputs.head }}
+          PRE_STAGES: ${{ steps.pre.outputs.stages }}
+        run: |
+          node scripts/pipeline.mjs gate integrity --slug "$SLUG" --enforce \
+            --pre-head "$PRE_HEAD" --pre-stages "$PRE_STAGES"
+
       # The PR title is assembled in bash from variables rather than by expression concatenation,
       # for the same reason as everything above: it is a shell argument, not a template.
       - name: Land the branch
@@ -314,16 +372,3 @@ jobs:
           node scripts/pipeline.mjs report --issue "$ISSUE" \
             --outcome "$OUTCOME" --pr "$PR" \
             --summary /tmp/change-summary.md
-
-      # A change run has no stages to batch, so this is purely the void check: an agent chain that
-      # burned the session and left nothing durable. No auto-retry here — a change run re-runs from
-      # scratch, and the attempt cap is what stops it repeating forever — so it enforces directly.
-      - name: Run-integrity gate
-        if: always() && steps.budget.outputs.should_run == 'true' && steps.forks.outputs.blocked == 'false'
-        env:
-          SLUG: ${{ needs.resolve.outputs.slug }}
-          PRE_HEAD: ${{ steps.pre.outputs.head }}
-          PRE_STAGES: ${{ steps.pre.outputs.stages }}
-        run: |
-          node scripts/pipeline.mjs gate integrity --slug "$SLUG" --enforce \
-            --pre-head "$PRE_HEAD" --pre-stages "$PRE_STAGES"

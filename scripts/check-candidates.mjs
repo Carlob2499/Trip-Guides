@@ -74,29 +74,34 @@ export function parseCandidates(ledgerMd) {
 }
 
 /** Pure: judge parsed tables against floors + the guide's own text. */
-export function judgeCandidates(tables, { floors = {}, guideText = "" } = {}) {
+export function judgeCandidates(tables, { floors = {}, guideText = "", adaptive = false } = {}) {
   const findings = [];
   const summary = [];
   for (const t of tables) {
-    const floor = floors[t.rank] ?? floors[String(t.rank)] ?? DEFAULT_FLOORS[t.rank];
-    if (!floor) continue; // ranks beyond 3 are bonus depth, never gated
+    const floor = adaptive ? null : (floors[t.rank] ?? floors[String(t.rank)] ?? DEFAULT_FLOORS[t.rank]);
     const shipped = t.rows.filter((r) => /^shipped\b/i.test(r.verdict));
     const considered = t.rows.length;
     const shortlisted = t.rows.filter((r) => r.shortlisted === true).length;
     summary.push({ rank: t.rank, priority: t.priority, considered, shipped: shipped.length, shortlisted, floor });
-    if (considered < floor.considered) {
+    if (floor && considered < floor.considered) {
       findings.push(`priority ${t.rank} (${t.priority}): ${considered} candidate(s) considered, floor is ${floor.considered}`);
     }
-    if (shipped.length < floor.shipped) {
+    if (floor && shipped.length < floor.shipped) {
       findings.push(`priority ${t.rank} (${t.priority}): ${shipped.length} shipped, floor is ${floor.shipped}`);
     }
-    if (floor.shortlist != null && shortlisted < floor.shortlist) {
+    if (floor?.shortlist != null && shortlisted < floor.shortlist) {
       findings.push(`priority ${t.rank} (${t.priority}): ${shortlisted} shortlisted, floor is ${floor.shortlist}`);
     }
     for (const r of shipped) {
       // The cross-check that makes a padded table expensive: a shipped name must exist in
       // the guide. Case-insensitive substring — names appear inside prose and item fields.
-      if (guideText && !guideText.toLowerCase().includes(r.name.toLowerCase())) {
+      // A ledger row may qualify the name with a branch/location parenthetical the guide
+      // legitimately omits — "Wanaka (Dotonbori)" ships as "Wanaka" — so the base name (the
+      // part before a trailing parenthetical) also satisfies the check. First seen live on
+      // the V2 canary, where all 14 "missing" shipped candidates were qualifier mismatches.
+      const base = r.name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+      const present = (name) => name && guideText.toLowerCase().includes(name.toLowerCase());
+      if (guideText && !present(r.name) && !present(base)) {
         findings.push(`priority ${t.rank}: "${r.name}" is marked shipped but appears nowhere in the guide`);
       }
       // shipped ⊆ shortlist (D3): a table using the 3-column format must mark every shipped
@@ -111,7 +116,7 @@ export function judgeCandidates(tables, { floors = {}, guideText = "" } = {}) {
 }
 
 /** Full check for one slug: reads the research ledger + guide files. n/a when pre-standard. */
-export async function checkCandidates(slug, { rootDir = ROOT, researchFloors = null } = {}) {
+export async function checkCandidates(slug, { rootDir = ROOT, researchFloors = null, adaptive = process.env.WAYPOINT_PIPELINE_V2 === "1" } = {}) {
   let ledger;
   try {
     ledger = await readFile(path.join(rootDir, "guides-intake", slug, "ledger.md"), "utf8");
@@ -129,7 +134,7 @@ export async function checkCandidates(slug, { rootDir = ROOT, researchFloors = n
     }
   } catch { /* directory missing → shipped cross-check simply can't run */ }
 
-  return { ...judgeCandidates(tables, { floors: researchFloors ?? {}, guideText }), tables: tables.length };
+  return { ...judgeCandidates(tables, { floors: researchFloors ?? {}, guideText, adaptive }), tables: tables.length };
 }
 
 if (isMain(import.meta.url)) {
@@ -137,7 +142,7 @@ if (isMain(import.meta.url)) {
   if (!slug || slug === "--slug") { console.error("Usage: node scripts/check-candidates.mjs --slug <slug>"); process.exit(1); }
   const r = await checkCandidates(slug);
   console.log(`[candidates] ${slug}: ${r.status}${r.reason ? ` — ${r.reason}` : ""}`);
-  for (const s of r.summary ?? []) console.log(`  P${s.rank} ${s.priority}: ${s.shipped}/${s.shortlisted}/${s.considered} shipped/shortlisted/considered (floor ${s.floor.shipped}/${s.floor.shortlist ?? "—"}/${s.floor.considered})`);
+  for (const s of r.summary ?? []) console.log(`  P${s.rank} ${s.priority}: ${s.shipped}/${s.shortlisted}/${s.considered} shipped/shortlisted/considered${s.floor ? ` (floor ${s.floor.shipped}/${s.floor.shortlist ?? "—"}/${s.floor.considered})` : " (adaptive V2)"}`);
   for (const f of r.findings ?? []) console.log(`  ✗ ${f}`);
   process.exit(r.status === "fail" ? 1 : 0);
 }

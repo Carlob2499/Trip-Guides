@@ -14,7 +14,7 @@ import {
   deriveGuideRecord, relevanceOrder, quickCardKicker, firstDayDateOf, lastDayDateOf,
   deriveBuildingGuides,
 } from "../features/atlas/index";
-import type { RunStateLike } from "../features/atlas/index";
+import type { RunStateLike, RunStateV2Like } from "../features/atlas/index";
 import { sheetOrder, ordinalFor } from "../lib/sheet-order";
 import { tripRangeLabel } from "../lib/trip-dates";
 // A 56px plate does not need a 258 KB original — Commons serves a 14.5 KB thumbnail for
@@ -71,10 +71,10 @@ const curated = allGuides.filter((g) => !g.data.draft);
    not this source file, so `../../guides-intake/…` resolved to dist/guides-intake/… and every
    read ENOENT'd into the catch below. It failed the honest way (no rows, no error) which is
    exactly why it needed a fixture build to catch rather than a reading. */
-async function readRunState(slug: string): Promise<unknown> {
+async function readRunFile(slug: string, name: string): Promise<unknown> {
   try {
     // `g.id` is a directory name this repo's own content loader enumerated, not user input.
-    const file = path.join(process.cwd(), "guides-intake", slug, "state.json");
+    const file = path.join(process.cwd(), "guides-intake", slug, name);
     return JSON.parse(await readFile(file, "utf8"));
   } catch {
     // Missing, unreadable or malformed. deriveBuildingGuides reads null as "no run this page
@@ -89,7 +89,10 @@ const building = deriveBuildingGuides(
       title: g.data.title,
       country: g.data.country,
       draft: true,
-      state: (await readRunState(g.id)) as RunStateLike | null,
+      state: (await readRunFile(g.id, "state.json")) as RunStateLike | null,
+      // The V2 run record (Pipeline V2, M7): when a landed V2 run exists it is the newer word
+      // on whether research finished — building.ts prefers it over the V1 spine.
+      runV2: (await readRunFile(g.id, "run.v2.json")) as RunStateV2Like | null,
     })),
   ),
 );

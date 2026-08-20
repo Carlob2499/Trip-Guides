@@ -37,12 +37,6 @@
   §H3) — proof-of-life is an isolated test fixture, not a staged guide edit.
 - `/about/` + `/new/` not in the SW precache shell; cover overlay does not trap focus; Cloudflare dashboard Git integration still failing 0s builds.
 - No guide uses a direct royalty-free `sights[].img.src` yet — capability live, unexercised.
-- **Two GitHub issue templates still promise a dead label.** `.github/ISSUE_TEMPLATE/
-  modify-guide.yml` and `revise-guide.yml` tell the filer that nothing runs "until the owner
-  applies `modify-approved` / `revision-approved`" — those labels stopped doing anything when the
-  owner key replaced them, yet still exist on the remote (`gh label list`) because only
-  `ensure-labels.yml` was updated. Live copy instructing a real person to do a no-op; found during
-  the Commit E sweep, left alone as out of that commit's scope.
 - **ALL FOUR remote branches are now safe to delete — and none can be deleted from a container
   session.** `pipeline-changes-plan-752kra`, `a11y-landmark-fix-v2` and `recert/japan` are merged
   into main; `claude/design-fixes-continuation-wi920k` is **superseded, never to be merged** — it
@@ -54,43 +48,34 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-16 — PLAN_PIPELINE_SURFACES executed end to end; the bundle is retired)
+## Snapshot (2026-08-20 — P13.1: premature GREEN retracted, R3 fixture bus-exclusivity fixed)
 
-**Five commits on `design/pipeline-surfaces`, each through the full ship loop.** The progress
-cockpit with its frame-by-frame route map (`0d6aae0`), the intake preflight checklist (`f9b333a`),
-the change-request requester view (`544cc95`), the owner triage queue at `/progress/triage/`
-(`63a63ff`), and this retirement. The plan's one deferred fork closed on the way (`e119f2a` — the
-hub now stamps a guide that is BUILDING, deliberately not the `ongoing` "trip happening now"
-class).
-
-**Three things the design asked for were NOT built, on purpose, and each is recorded as a
-Decision in CONTEXT.md.** Triage's Quick fix / Full re-check go through the owner-keyed Worker
-rather than the deleted `*-approved` labels; the feedback-proposals panel moved off `/progress/`
-into triage; and the live-event panels (sources · decisions · nuggets · counters) ship with the
-full layout and honestly empty boxes, because nothing in the pipeline emits per-event data yet.
-Emission is issue **#56** — the gateway, types, mocks and tests are already there for it to drop
-into. The bundle's "Watch a demo run" button was never built for the same reason.
-
-**Retirement, per the bundle's own instructions.** `design_handoff_pipeline_and_intake/` (39
-files) and `PLAN_PIPELINE_SURFACES.md` are DELETED, not moved — an inline-styled prototype drifts
-from the implementation within a release. What survives: one section in
-`docs/reference/pipeline.md` (note-panel colours · the stalled-run rule · the route map's
-frame-by-frame requirement), eight rows in `docs/reference/motion.md`'s inventory, and a closure
-entry in `docs/archive/INDEX.md` carrying the `git show` paths to both. Four code comments that
-cited the plan by filename now cite the archive heading instead.
+The first P13 review returned GREEN on `88d16fe` and was **retracted the same day**: Codex's
+re-inspection caught that the P12.1 fixture rewrite had itself promoted the sourced walking
+prohibition into **bus exclusivity** ("the bus is a required segment"; missed bus ⇒ automatic
+failed same-night arrival) — while the fetched japan-guide page says Kōyasan Station "is a ten
+minute **bus or taxi** ride from Koyasan's town center" (re-verified this pass). The review had
+verified every SUPPORTS line affirmatively but never asked the source the adversarial question
+— what does the page say that CONTRADICTS the framing — the lesson is recorded in §P13.1.
+**The correction (one file, `pipeline-v2-transport-r3-proof.test.mjs`):** final leg reworded
+everywhere to "motorized (bus or taxi)"; `missedConnection` made conditional (on-foot recovery
+impossible is sourced; failure only IF the day's motorized options exhaust; taxi asserted
+neither available nor unavailable); taxi recovery added to the REQUIRED RE-CHECK list;
+`risk: 3` re-evaluated and honestly retained on the remaining fragility stack; mapping updated
+(source 2 now DOES-NOT-PROVE bus exclusivity); new scar pins the exclusivity wording out.
+Suite 12/12; validator returns `[]`; Gap-1 probe proof and all gate/invariant findings from the
+retracted review still stand. Records: IMPLEMENTATION_STATE §P13 (retraction banner) + §P13.1.
 
 ## Where we left off
 
-**This commit is LOCAL and unpushed — deliberately.** The creator verifies it, pushes, and opens
-the single PR for the whole branch (title: `feat: pipeline surfaces — progress cockpit, intake
-checklist, change + triage`). Everything before it is already pushed.
+**P13 is pending again — Codex re-reviews the corrected head.** The verdict record, tracker
+P13 row, and this fixture are the review surface; the ask to Codex is a fresh go/no-go on the
+correction commit (diff vs `88d16fe` is the fixture fix + the retraction/correction docs).
+On a sustained GREEN plus Carlo's acceptance, integration week I01+ begins.
 
-**All gates green, and lint is now genuinely clean.** Build 9 pages · lint 0 (the 176 errors this
-file used to carry were all in the deleted bundle's `support.js`, so they left with it) ·
-typecheck 0 errors / 19 hints · 2400 tests + 1 todo across 155 files · coverage gate passes ·
-`/progress/`, `/progress/triage/`, `/change/` and `/new/` re-checked in `astro preview` after the
-deletion · dist grep clean of every prototype string.
-
-**Next after the PR merges:** nothing is queued. Issue #56 (pipeline run events) is the natural
-follow-on and is fully specced; the two stale issue templates in Open items are a smaller,
-unrelated fix.
+**Until acceptance, nothing moves:** do not merge PR #63 or #61, set `WAYPOINT_RESEARCH_ENGINE`,
+publish the canary, or delete V1 / `canary/kansai-proof` / `research-v2/kansai-proof` /
+`probe/environ`. Cutover stays OFF (variable unset ⇒ /new dispatches V1). Known non-blockers
+deferred to I01/I02 by prior ruling: live Worker answer routing, `/new` V2 notification
+threading, `GOOGLE_ROUTES_KEY` unset, seven honest unresolved geocodes, Progress-UI manual
+proof. Main's stale `WAYPOINT_V2_ON_DEFAULT` stub comment stays LOW / moot-at-merge.

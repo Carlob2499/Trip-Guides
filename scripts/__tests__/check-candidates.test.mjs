@@ -64,11 +64,28 @@ describe("judgeCandidates", () => {
     expect(r.findings.join("\n")).toMatch(/"Cand 0" is marked shipped but appears nowhere/);
   });
 
+  it("a branch-qualified ledger name matches its base name in the guide (V2 canary scar)", () => {
+    // "Wanaka (Dotonbori)" in the ledger ships as plain "Wanaka" in the guide — the qualifier
+    // must not read as a phantom recommendation; a genuinely absent name must still fail.
+    const table1 = table(1, "Food", [["Wanaka (Dotonbori)", "shipped"], ...rows(16, 8).slice(1)]);
+    const present = judgeCandidates(parseCandidates(doc(table1)), { guideText: `Wanaka ${guideText}` });
+    expect(present.findings.join("\n")).not.toMatch(/Wanaka/);
+    const absent = judgeCandidates(parseCandidates(doc(table1)), { guideText });
+    expect(absent.findings.join("\n")).toMatch(/"Wanaka \(Dotonbori\)" is marked shipped but appears nowhere/);
+  });
+
   it("honors per-guide researchFloors over the defaults — the tabBudget precedent", () => {
     const small = parseCandidates(doc(table(1, "Food", rows(6, 3))));
     const text = "Cand 0 Cand 1 Cand 2";
     expect(judgeCandidates(small, { guideText: text }).status).toBe("fail"); // default floor bites
     expect(judgeCandidates(small, { floors: { 1: { considered: 6, shipped: 3 } }, guideText: text }).status).toBe("pass");
+  });
+
+  it("V2 adaptive mode keeps structural checks but does not apply V1 numeric floors", () => {
+    const small = parseCandidates(doc(table(1, "Food", rows(3, 2))));
+    const r = judgeCandidates(small, { adaptive: true, guideText: "Cand 0 Cand 1" });
+    expect(r.status).toBe("pass");
+    expect(r.summary[0].floor).toBeNull();
   });
 
   it("gates only ranks 1-3; a fourth table is bonus depth", () => {

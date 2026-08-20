@@ -19,7 +19,7 @@ function stubFetch(routes: Record<string, unknown>, status = 200) {
     return {
       ok: key !== undefined && status < 400,
       status: key === undefined ? 404 : status,
-      text: async () => JSON.stringify(body),
+      text: async () => typeof body === "string" ? body : JSON.stringify(body),
       json: async () => body,
     } as unknown as Response;
   });
@@ -173,24 +173,119 @@ describe("createGithubGateway().fetchRunEvents", () => {
     const out = await gw.fetchRunEvents("testland");
 
     expect(calls).toHaveLength(1);
-    expect(calls[0].url).toContain("/research/testland/guides-intake/testland/events.json");
+    expect(calls[0].url).toContain("/research-v2/testland/guides-intake/testland/events.json");
     expect(out.available).toBe(true);
     expect(out.counters).toEqual({ pages: 148, facts: 62, kept: 51, dropped: 11 });
   });
 
   it("returns an honestly-empty result on the 404 that is today's every-single-case", async () => {
-    // Nothing in the pipeline writes events.json yet. One request, no fallback to `main`:
-    // telemetry is a property of a run, and a run lives on its branch.
+    // Nothing in the pipeline writes events.json yet. BOTH generations' branches are tried
+    // (research-v2/, then research/) and nothing falls back to `main`: telemetry is a
+    // property of a run, and a run lives on its branch.
     const { impl, calls } = stubFetch({});
     const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
 
     await expect(gw.fetchRunEvents("testland")).resolves.toEqual(EMPTY_RUN_EVENTS);
-    expect(calls).toHaveLength(1);
+    expect(calls).toHaveLength(2);
+    expect(calls[0].url).toContain("/research-v2/testland/");
+    expect(calls[1].url).toContain("/research/testland/");
   });
 
   it("returns an honestly-empty result rather than throwing on a file it cannot read", async () => {
     const { impl } = stubFetch({ "events.json": "{ truncated" });
     const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
     await expect(gw.fetchRunEvents("testland")).resolves.toEqual(EMPTY_RUN_EVENTS);
+  });
+});
+
+/* ── M7: the generation-aware run read + the deploy truth ─────────────────────────────────── */
+
+const V2_RUN = {
+  schemaVersion: "wp-run/2.0",
+  slug: "testland",
+  runId: "testland-20260817-abc123",
+  lifecycle: "research",
+  status: "running",
+  createdAt: "2026-08-17T10:00:00Z",
+  updatedAt: "2026-08-17T10:30:00Z",
+  stageOrder: ["scaffold", "passA", "passB", "reconcile", "critic"],
+  stages: {
+    scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" },
+    passA: { status: "running", startedAt: "2026-08-17T10:02:00Z" },
+    passB: { status: "queued" }, reconcile: { status: "queued" }, critic: { status: "queued" },
+  },
+  attempts: { total: 2, cap: 5 },
+  publication: { published: false, deployedLive: null },
+  landingGate: { status: "pending", checkedAt: null, failure: null },
+  failure: null,
+};
+
+describe("createGithubGateway().fetchRun (M7)", () => {
+  it("prefers the V2 run record and carries its REAL status through", async () => {
+    const { impl, calls } = stubFetch({ "run.v2.json": V2_RUN });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(calls[0].url).toContain("/research-v2/testland/guides-intake/testland/run.v2.json");
+    expect(run.version).toBe(2);
+    expect(run.runStatus).toBe("running");
+    expect(run.state?.stages.scaffold).toBe("2026-08-17T10:01:00Z");
+    expect(run.state?.stages.passA).toBe(null); // running is not complete
+    expect(run.state?.attempts).toBe(2);
+    expect(run.malformed).toBe(false);
+  });
+
+  it("falls back to the V1 state when no V2 record exists", async () => {
+    const { impl } = stubFetch({ "state.json": { slug: "testland", createdAt: "x", updatedAt: "y", stages: { scaffold: "z" }, attempts: 1, notes: [] } });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.version).toBe(1);
+    expect(run.runStatus).toBe(null); // V1 records no run status — honestly null
+    expect(run.state?.stages.scaffold).toBe("z");
+  });
+
+  it("a V2 file that EXISTS but is unreadable comes back malformed — never 'no run'", async () => {
+    const { impl } = stubFetch({ "run.v2.json": { schemaVersion: "definitely-not-a-run" } });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.version).toBe(2);
+    expect(run.malformed).toBe(true);
+    expect(run.state).toBe(null);
+  });
+
+  it("no state anywhere is version 0", async () => {
+    const { impl } = stubFetch({});
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.version).toBe(0);
+    expect(run.state).toBe(null);
+  });
+});
+
+describe("createGithubGateway().fetchQuestions", () => {
+  it("prefers the active V2 ledger so a stale V1 branch cannot hide questions", async () => {
+    const ledger = "## Questions for the traveler\n\n### Q1\n- **Q:** Early dinner?\n- **Assumed:** yes\n- **Context:** day 2\n- **Status:** open\n";
+    const { impl, calls } = stubFetch({ "ledger.md": ledger });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const questions = await gw.fetchQuestions("testland");
+    expect(calls[0].url).toContain("/research-v2/testland/");
+    expect(questions).toHaveLength(1);
+  });
+});
+
+describe("createGithubGateway().isLive (M7) — merged is not live", () => {
+  it("true only when the DEPLOYED search index carries the slug", async () => {
+    const { impl, calls } = stubFetch({ "search-index.json": [{ slug: "testland" }, { slug: "korea" }] });
+    const gw = createGithubGateway({ owner: "o", repo: "r", siteBase: "/Trip-Guides/", fetchImpl: impl });
+    await expect(gw.isLive("testland")).resolves.toBe(true);
+    await expect(gw.isLive("nowhere")).resolves.toBe(false);
+    expect(calls[0].url).toContain("/Trip-Guides/data/search-index.json");
+  });
+
+  it("unknown stays unknown: no siteBase configured, or the index unreachable, resolves null", async () => {
+    const { impl } = stubFetch({});
+    const noBase = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    await expect(noBase.isLive("testland")).resolves.toBe(null);
+    const unreachable = createGithubGateway({ owner: "o", repo: "r", siteBase: "/Trip-Guides/", fetchImpl: impl });
+    await expect(unreachable.isLive("testland")).resolves.toBe(null);
   });
 });

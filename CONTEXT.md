@@ -172,6 +172,32 @@ _Avoid_: intake proxy (it stopped being intake-only when the owner endpoints lan
 Each entry states what was decided, and the alternative that was rejected — the rejection is
 the load-bearing half. Contradicting one of these is allowed; doing it silently is not.
 
+**Pipeline V2 lives BESIDE V1 with its own prompt set** (implementation ruling, 2026-08-17,
+`codex/pipeline-v2`; authority `docs/pipeline v2/DECISIONS.md`). The four `research-*-v2.md`
+prompts are V2's stage contracts, composed only by the manual, draft-only
+`research-pass-v2.yml`; the unsuffixed four stay V1's, still dispatched by `/new`. Rejected:
+updating the four existing prompts in place to the V2 artifacts — that would have silently
+converted every `/new` dispatch into an unproven V1-orchestration/V2-contract hybrid while
+"V2 stays manual/draft-only" was the rule. When V1 retires, its prompts are deleted whole,
+never merged.
+
+**Fixed research floors are GONE repo-wide, replaced by the earned saturation stop**
+(2026-08-17, from DECISIONS.md "Research breadth"). `DEFAULT_FLOORS` 16/8·10/5·6/3, the
+`researchFloors` schema field, and Pass B's ≥8/≥3/≥2 quotas are deleted; the replacement
+protections are the V2 saturation record (a stop must record duplicates/weaker trend AND that
+unresolved evidence can't change the recommendation) plus every structural anti-padding check
+(shipped ⊆ shortlist, shipped-name cross-check, empty-table failure, non-empty full Pass B).
+Rejected: keeping the floors for V1 only — one doctrine with two numbers is how the skill and
+the gates drift.
+
+**Attempt counters are run-scoped, and research+change share one `guide-<slug>` concurrency
+group** (2026-08-17). A change run's budget keys on its branch suffix (issue/run-id): retries
+of the same work still cap at 3, but successful runs never consume a guide's lifetime
+allowance (the 4th request used to trip the breaker). Rejected: resetting the counter on
+successful landing — a reset commit after a merge would push to a deleted branch. The old
+separate `research-<slug>` group let a research and a change run interleave on one guide;
+they now queue.
+
 **Evidence-gate detection is DECOUPLED from `risk`/`evidence`/`tier`** (creator ruling,
 2026-08-13). PLAN_EVIDENCE_FIRST specified E1, E2 and E3 as risk-keyed: R2+ must be a fact row,
 R3/R4 need `tier: primary` plus an `evidence` snippet, R4 must be surfaced. An audit found ZERO
