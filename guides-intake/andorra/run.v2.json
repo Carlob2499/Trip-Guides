@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-20T13:45:44.211Z",
-  "updatedAt": "2026-08-20T17:25:29.697Z",
+  "updatedAt": "2026-08-20T17:26:25.052Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -135,14 +135,23 @@
       "failure": null
     },
     "critic": {
-      "status": "queued",
-      "startedAt": null,
+      "status": "running",
+      "startedAt": "2026-08-20T17:26:25.052Z",
       "endedAt": null,
-      "attempts": 0,
-      "model": null,
-      "effort": null,
+      "attempts": 1,
+      "model": "claude-opus-5",
+      "effort": "high",
       "commit": null,
-      "history": [],
+      "history": [
+        {
+          "attempt": 1,
+          "startedAt": "2026-08-20T17:26:25.052Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
+        }
+      ],
       "failure": null
     }
   },
@@ -154,7 +163,7 @@
   },
   "resume": {
     "nextStage": "critic",
-    "action": "run stage \"critic\""
+    "action": "stage \"critic\" was running — validate its output; re-run it if incomplete"
   },
   "failure": null,
   "publication": {
