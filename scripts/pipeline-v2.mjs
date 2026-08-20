@@ -65,15 +65,20 @@ function emitMultiline(key, value) {
   appendFileSync(process.env.GITHUB_OUTPUT, `${key}<<${marker}\n${value}\n${marker}\n`);
 }
 
-function criticFetchTools(slug) {
+export function criticFetchTools(slug, { guidesDir = GUIDES_DIR, intakeDir = INTAKE_DIR } = {}) {
   const domains = new Set();
-  const roots = [path.join(GUIDES_DIR, slug), path.join(INTAKE_DIR, slug, "ledger.md")];
+  const roots = [path.join(guidesDir, slug), path.join(intakeDir, slug, "ledger.md")];
   const visit = (target) => {
     if (!existsSync(target)) return;
     if (statSync(target).isDirectory()) return readdirSync(target).forEach((name) => visit(path.join(target, name)));
-    for (const match of readFileSync(target, "utf8").matchAll(/https?:\/\/[^\s"'<>)}\]]+/g)) {
+    for (const match of readFileSync(target, "utf8").matchAll(/https?:\/\/[^\s"'<>)}\],]+/g)) {
       try {
         const host = new URL(match[0]).hostname.toLowerCase();
+        // The host lands VERBATIM inside a comma-joined --allowedTools string, and these URLs
+        // came from web research (untrusted). Node's URL parser keeps commas in a hostname, so
+        // "https://evil.example,bash" would mint extra grant tokens (review finding, MEDIUM).
+        // Only a strict DNS-shaped host may enter the policy; anything else is dropped.
+        if (!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(host)) continue;
         // Proxy/mirror hosts never enter the critic's fetch policy — a mirror is not the origin.
         if (!/(^|\.)github\.com$|(^|\.)githubusercontent\.com$/.test(host) && !isProxyHost(match[0])) domains.add(host);
       } catch { /* malformed source is caught by the evidence gate */ }
@@ -91,12 +96,26 @@ function git(args, { cwd = ROOT } = {}) {
   return execFileSync("git", args, { cwd, encoding: "utf8" });
 }
 
+/** The subset of paths `git add` can take without aborting: present on disk, or tracked (a
+    tracked-but-deleted path must still stage its deletion). A pathspec matching NOTHING kills
+    the whole add with exit 128 — feedback.v2.json only exists after a failure, so a clean
+    first-try run used to crash its own completion checkpoint here (review finding, HIGH). */
+export function commitablePaths(paths, { cwd = ROOT } = {}) {
+  return paths.filter((rel) => {
+    if (existsSync(path.join(cwd, rel))) return true;
+    try { git(["ls-files", "--error-unmatch", "--", rel], { cwd }); return true; }
+    catch { return false; }
+  });
+}
+
 function commitAndPush(paths, message, { branch = null, cwd = ROOT } = {}) {
-  const dirty = git(["status", "--porcelain", "--", ...paths], { cwd }).trim();
+  const targets = commitablePaths(paths, { cwd });
+  if (!targets.length) return null;
+  const dirty = git(["status", "--porcelain", "--", ...targets], { cwd }).trim();
   if (!dirty) return null;
-  git(["add", "--", ...paths], { cwd });
+  git(["add", "--", ...targets], { cwd });
   // --only prevents an unrelated pre-staged path from hitchhiking into a control-plane commit.
-  git(["commit", "--only", "-m", message, "--", ...paths], { cwd });
+  git(["commit", "--only", "-m", message, "--", ...targets], { cwd });
   if (branch) git(["push", "origin", `HEAD:${branch}`], { cwd });
   return git(["rev-parse", "HEAD"], { cwd }).trim();
 }
@@ -317,7 +336,7 @@ async function run(cmd, get, has) {
           const allowed = allowedStagePaths(slug, stage);
           const inScope = changed.filter((file) => allowed.some((root) => file === root || file.startsWith(root + "/")));
           if (inScope.length) {
-            git(["add", "-A", "--", ...allowed]);
+            git(["add", "-A", "--", ...commitablePaths(allowed)]);
             try { git(["commit", "--only", "-m", `research-v2(${slug}): ${stage} attempt output (INVALID — retained for repair)`, "--", ...allowed]); }
             catch { /* nothing staged in scope */ }
             if (branch) git(["push", "origin", `HEAD:${branch}`]);
@@ -333,7 +352,7 @@ async function run(cmd, get, has) {
       // Commit the stage's work (the WORKFLOW commits, never the agent), then checkpoint.
       let workCommit = null;
       if (dirty) {
-        const paths = allowedStagePaths(slug, stage);
+        const paths = commitablePaths(allowedStagePaths(slug, stage));
         git(["add", "-A", "--", ...paths]);
         git(["commit", "--only", "-m", `research-v2(${slug}): ${stage}`, "--", ...paths]);
         if (branch) git(["push", "origin", `HEAD:${branch}`]);
@@ -480,7 +499,7 @@ async function run(cmd, get, has) {
       const changed = dirtyPaths();
       const allowed = allowedStagePaths(slug, stage);
       if (changed.some((f) => allowed.some((root) => f === root || f.startsWith(root + "/")))) {
-        git(["add", "-A", "--", ...allowed]);
+        git(["add", "-A", "--", ...commitablePaths(allowed)]);
         try { git(["commit", "--only", "-m", `research-v2(${slug}): ${stage} attempt output (verify FAILED — retained for repair)`, "--", ...allowed]); }
         catch { /* nothing staged in scope */ }
         if (branch) git(["push", "origin", `HEAD:${branch}`]);
