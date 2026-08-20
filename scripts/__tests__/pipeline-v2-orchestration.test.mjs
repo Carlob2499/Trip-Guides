@@ -8,7 +8,8 @@
 //   · a stage that produced nothing durable is a recorded VOID failure, not a green step;
 //   · routing resumes at the interrupted stage; attempts and auto-retries stay bounded;
 //   · the workflow YAML wires all of it (baseline checkout for Pass B, fetch-depth 1 for the
-//     critic, draft-only landing, the same concurrency group as V1 research).
+//     critic, durable-intent landing — draft unless the run earned product mode — and the same
+//     concurrency group as V1 research).
 
 // @protects-file Pass B cannot see Pass A; the critic cannot see the process; a void stage cannot land.
 
@@ -385,12 +386,21 @@ describe("research-pass-v2.yml — wiring", () => {
     }
   });
 
-  it("lands as a DRAFT PR always — V2 does not publish while being proven", () => {
-    const job = text.split(/^ {2}land:/m)[1];
-    expect(job).toContain("--land pr");
-    expect(job).toContain("--gate"); // the real evidence gate still runs; only the merge is withheld
-    expect(job).not.toContain("--announce"); // nothing to announce: nothing publishes
+  it("lands by the run's DURABLE intent — deterministic land-mode, never a hardcoded merge (I02)", () => {
+    const job = text.split(/^ {2}land:/m)[1].split(/^ {2}[a-zA-Z]+:$/m)[0];
+    // The mode is computed by tested code from run.v2.json (product intent + every stage
+    // complete), never taken from this dispatch's inputs and never hardcoded to auto.
+    expect(job).toContain("pipeline-v2.mjs land-mode");
+    expect(job).toContain('--land "$LAND"');
+    expect(job).not.toContain("--land auto"); // auto exists only as land-mode's earned verdict
+    expect(job).toContain("--gate"); // the real evidence gate still decides
+    expect(job).toContain("--announce"); // a product merge files the vetoable auto-published notice
     expect(job).toContain("pipeline-v2.mjs validate"); // fail-closed artifact validation gates landing
+    // land-mode runs BEFORE the land step so the decision exists when landing needs it.
+    expect(job.indexOf("land-mode")).toBeLessThan(job.indexOf('--land "$LAND"'));
+    // A merged product landing already carries its record in the merge commit — the post-record
+    // is skipped so it cannot resurrect the deleted branch.
+    expect(job).toContain("outputs.outcome != 'merged'");
   });
 
   it("the bounded retry is void-gated and re-dispatches with void_retry=true", () => {

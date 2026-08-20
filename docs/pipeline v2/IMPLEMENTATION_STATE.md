@@ -877,3 +877,30 @@ verifying that a source supports what IS said is not verifying that it permits w
 
 P13 verdict returns to **pending independent go/no-go** on the corrected head. No merge,
 publish, cutover, variable change, or deletion in this pass; V1 untouched.
+
+## Integration week session (2026-08-20, Fable) — I01–I06
+
+**Authorization:** Carlo explicitly directed "merge PR #63 and then re-run the mission prompt"
+(2026-08-20). PR #63 was marked ready and squash-merged as `be9c535` on that instruction —
+operationally the P13 go decision, made by the owner. The integration mission's own hard
+precondition (accepted V2 on main) holds.
+
+**Session start record (mission §2):**
+- Starting main SHA: `be9c535` (squash merge of PR #63, mergedAt 2026-08-20T13:07:11Z).
+- Integration branch: `fable/pipeline-v2-integration` from `be9c535`.
+- Worktree: clean at branch creation.
+- `WAYPOINT_RESEARCH_ENGINE`: **NOT SET** (repo variable list empty) — V1 default active.
+- V1 workflows present: `research-pass.yml`, `new-guide.yml`, `change.yml` all on main.
+- Open canary artifacts (pre-session, for the cleanup census): PR #61 (draft), branches
+  `canary/kansai-proof`, `research-v2/kansai-proof`, `probe/environ`; a stray registered
+  workflow `environ-probe` (id 338376924) with no file on main.
+- Environment precheck (§2A): Node v24.16.0 (≥22 ✓); `npm ci` exit 0; gh auth scopes
+  `repo`+`workflow` (push, dispatch, PR create all available); secrets present unexposed.
+
+**Pre-edit baseline (§7), run on `be9c535`:** `npm test` 163 files, 2652 passed + 1 todo;
+build 9 pages exit 0; lint 0/0; typecheck 0 errors 0 warnings 21 pre-existing hints.
+No pre-existing failures — nothing unrelated blocks I01–I06.
+
+### Milestone log (appended as each milestone earns completion)
+
+_(in progress — see below as sections are added)_

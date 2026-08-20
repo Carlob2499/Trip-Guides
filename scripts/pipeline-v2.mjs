@@ -9,10 +9,13 @@
 //     `void=true` emitted so the workflow can spend the one bounded auto-retry;
 //   · a resumed run repeats the interrupted stage (run.v2.json's resume block), never skips
 //     ahead on uncommitted work;
-//   · publication stays OFF in this workflow — V2 lands draft PRs while it is being proven.
+//   · publication follows the run's durable landing intent (landMode, set at init): "pr" runs —
+//     canaries, tests, manual dispatches — ALWAYS land draft PRs and cannot publish; "auto" runs
+//     (the accepted /new product path) publish only through the full evidence gate via
+//     `pipeline.mjs land`, the same safe machinery V1 uses.
 //
 // Subcommands:
-//   init --slug <s>                                  create/resume the V2 run (+ scaffold baseline)
+//   init --slug <s> [--issue <n>] [--land pr|auto]   create/resume the V2 run (+ scaffold baseline)
 //   route --slug <s> [--json]                        emit next=<stage>, done, baseline, run_id
 //   budget --slug <s> [--branch <b>]                 bump the bounded attempt counter
 //   begin-stage --slug <s> --stage <st> [--model m] [--effort e] [--branch <b>]
@@ -24,6 +27,7 @@
 //   prepare-critic --slug <s>                        delete forbidden files from the working tree
 //   restore-critic --slug <s>                        restore them
 //   validate --slug <s> [--scoped]                   the full artifact validation (fail closed)
+//   land-mode --slug <s>                             emit land=auto|pr from the durable run intent
 
 import { existsSync, appendFileSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -249,12 +253,20 @@ async function run(cmd, get, has) {
         for (const p of scaffoldProblems) console.error(`  · ${p}`);
         return 1;
       }
-      let state = await initRunV2(slug, { inputs: {
-        section: get("--section") || "",
-        model: get("--model") || "claude-sonnet-5",
-        effort: get("--effort") || "high",
-        criticModel: get("--critic-model") || "claude-opus-5",
-      } });
+      const issue = get("--issue") || "";
+      if (issue && !/^\d+$/.test(issue)) { console.error(`[pipeline-v2] "${issue}" isn't an issue number.`); return 1; }
+      const landInput = get("--land") || "";
+      if (landInput && !["pr", "auto"].includes(landInput)) { console.error(`[pipeline-v2] --land must be pr or auto, not "${landInput}".`); return 1; }
+      let state = await initRunV2(slug, {
+        inputs: {
+          section: get("--section") || "",
+          model: get("--model") || "claude-sonnet-5",
+          effort: get("--effort") || "high",
+          criticModel: get("--critic-model") || "claude-opus-5",
+        },
+        issue: issue || null,
+        landMode: landInput || null,
+      });
       if (state.stages.scaffold.status !== "complete") {
         const head = git(["rev-parse", "HEAD"]).trim();
         await stageStart(slug, "scaffold");
@@ -390,6 +402,20 @@ async function run(cmd, get, has) {
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
       commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED`, { branch });
       console.error(`[pipeline-v2] ${slug} — stage "${stage}" recorded as failed (${get("--class") || "unknown"}); branch stays manually resumable.`);
+      return 0;
+    }
+
+    case "land-mode": {
+      // The deterministic landing decision (I02). "auto" ONLY when the durable run records
+      // product intent (landMode "auto", set at init by the accepted /new path) AND every
+      // research stage is complete. Anything else — controlled/draft runs, incomplete runs,
+      // no run at all — lands as a draft PR. Malformed state throws (fail closed), never "pr".
+      const state = await readRunStateV2(slug);
+      const done = state ? !nextStageV2(state) : false;
+      const mode = state?.landMode === "auto" && done ? "auto" : "pr";
+      emit("land", mode);
+      emit("issue", state?.issue || "");
+      console.log(`[pipeline-v2] ${slug} — landing mode ${mode} (intent ${state?.landMode || "(no run)"}; stages ${done ? "complete" : "incomplete"}).`);
       return 0;
     }
 
@@ -625,7 +651,7 @@ async function cliMain() {
   const has = (flag) => argv.includes(flag);
   const cmd = argv[0];
   if (!cmd || cmd.startsWith("--")) {
-    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate> --slug <slug> …");
+    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate|land-mode> --slug <slug> …");
     process.exit(1);
   }
   try {

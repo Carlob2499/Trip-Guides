@@ -180,6 +180,14 @@ export const runStateSchema = z.looseObject({
     effort: z.string().min(1),
     criticModel: z.string().min(1),
   }),
+  // Product-communication continuity (I01): the intake issue this run reports back to. Recorded
+  // once at init from /new's dispatch and carried durably, so a resume/redispatch (which has no
+  // issue input) still surfaces traveler questions on the right thread. Null = manual run.
+  issue: z.string().regex(/^\d+$/, "expected a GitHub issue number").nullable().default(null),
+  // Landing intent (I02), immutable per run: "pr" is the controlled/draft mode (canaries, tests —
+  // can never publish); "auto" is the accepted product mode, which still publishes only through
+  // the full evidence gate. Recorded at init; a redispatch inherits it from here.
+  landMode: z.enum(["pr", "auto"]).default("pr"),
   status: z.enum(["pending", "running", "paused", "complete", "failed", "stuck"]),
   createdAt: iso,
   updatedAt: iso,

@@ -167,6 +167,8 @@ export async function initRunV2(slug, {
   intakeDir = INTAKE_DIR,
   force = false,
   inputs = { section: "", model: "claude-sonnet-5", effort: "high", criticModel: "claude-opus-5" },
+  issue = null,
+  landMode = null,
 } = {}) {
   const existing = await readRunStateV2(slug, { intakeDir });
   if (existing && !force) {
@@ -179,6 +181,22 @@ export async function initRunV2(slug, {
         `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel recorded in run.v2.json`,
       );
     }
+    // Run context is durable and immutable: a redispatch that omits issue/landMode inherits the
+    // recorded values (that is the point — retries and answer-redispatches carry nothing), and a
+    // redispatch naming DIFFERENT values is cross-wiring, refused. The one write allowed is
+    // healing a null issue with a real one (a manual first dispatch later adopted by /new).
+    if (issue && existing.issue && issue !== existing.issue) {
+      throw new ContractError(`run ${existing.runId} reports to issue #${existing.issue} — refusing to rewire it to #${issue}`);
+    }
+    if (landMode && landMode !== (existing.landMode || "pr")) {
+      throw new ContractError(
+        `run ${existing.runId} landing mode is "${existing.landMode || "pr"}" and immutable — a draft/test run never silently becomes a publishing one (or vice versa). Land by hand via \`pipeline.mjs publish\` if that is the deliberate intent.`,
+      );
+    }
+    if (issue && !existing.issue) {
+      existing.issue = issue;
+      return save(touch(existing, now), intakeDir);
+    }
     return existing;
   }
   const state = {
@@ -187,6 +205,8 @@ export async function initRunV2(slug, {
     runId: newRunId(slug, { now: new Date(now) }),
     lifecycle,
     inputs,
+    issue: issue || null,
+    landMode: landMode || "pr",
     status: "pending",
     createdAt: now,
     updatedAt: now,
@@ -324,6 +344,27 @@ export async function markPublished(slug, { now = new Date().toISOString(), inta
   state.publication.published = true;
   state.publication.publishedAt = now;
   return save(touch(state, now), intakeDir);
+}
+
+/** The deterministic landing decision (I02): "auto" ONLY when the run records product intent
+    (landMode "auto", set at init by the accepted /new dispatch) AND every stage is complete.
+    Everything else — controlled/draft runs, incomplete runs, no run at all — is "pr". */
+export function landingMode(state) {
+  return state?.landMode === "auto" && !nextStageV2(state) ? "auto" : "pr";
+}
+
+/** The product-landing record (I02): landing gate PASS + published, written BEFORE the merge so
+    both facts ride the merge commit — an auto-merged landing deletes its branch, so a record made
+    after it has nowhere durable to live. Fail-closed by construction: markLandingGate(passed)
+    sets run status "complete", and the schema refuses "complete" unless EVERY stage is complete —
+    an incomplete run throws here, before any draft flag is touched. Returns null when the slug
+    has no V2 run (a V1 landing), the final state otherwise. deployedLive stays null: merged is
+    not live, and this function must never claim otherwise. */
+export async function recordProductLanding(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+  const state = await readRunStateV2(slug, { intakeDir }); // throws on malformed — refuse, don't guess
+  if (!state) return null;
+  await markLandingGate(slug, { passed: true, now, intakeDir });
+  return markPublished(slug, { now, intakeDir });
 }
 
 export async function markDeployedLive(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {

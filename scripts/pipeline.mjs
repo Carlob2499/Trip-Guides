@@ -441,6 +441,22 @@ async function runSubcommand(cmd, rest, get) {
       // Auto-publish is the rule: a run that passed its evidence gate takes the draft flag off
       // here, in the same step that lands it. `--land pr` runs that nobody asked for stay drafts.
       if (passed && auto) {
+        // V2 runs (I02): the landing verdict + publication fact must ride INTO the merge — an
+        // auto-merged landing deletes its branch, so a record made after it has nowhere to live.
+        // recordProductLanding fails closed: an incomplete or malformed V2 run throws HERE,
+        // before any draft flag is touched, and nothing lands. V1 slugs (no run.v2.json) skip.
+        const { recordProductLanding, readRunStateV2 } = await import("./pipeline/v2/run-state.mjs");
+        const v2Landed = !!(await recordProductLanding(slug));
+        if (v2Landed) {
+          const { emitRunEvents, readGeocodeReport } = await import("./pipeline/v2/events.mjs");
+          const { readEvidence } = await import("./pipeline/v2/evidence.mjs");
+          await emitRunEvents(slug, {
+            state: await readRunStateV2(slug),
+            evidence: await readEvidence(slug).catch(() => null),
+            geocode: await readGeocodeReport(slug),
+          });
+          console.log(`[land] ${slug} — V2 product landing recorded (gate PASS + published) ahead of the merge.`);
+        }
         const published = await publishGuide(slug, { gatePassed: true });
         if (published.ok) {
           console.log(`[land] ${slug} published — draft flag removed from ${published.metaPath}`);
@@ -448,6 +464,10 @@ async function runSubcommand(cmd, rest, get) {
         } else if (published.error !== PUBLISH_ERRORS.NOT_DRAFT) {
           console.error(`[land] could not publish ${slug}: ${published.error}`);
           return 1;
+        } else if (v2Landed) {
+          // Already-published guide (a V2 re-research): the landing record still has to ride the
+          // merge — commitAll no-ops when the tree is clean, so this is safe either way.
+          commitAll(`chore(${slug}): record V2 product landing — verify PASS`);
         }
       }
 
