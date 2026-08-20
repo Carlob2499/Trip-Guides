@@ -178,17 +178,29 @@ describe("createGithubGateway().fetchRunEvents", () => {
     expect(out.counters).toEqual({ pages: 148, facts: 62, kept: 51, dropped: 11 });
   });
 
-  it("returns an honestly-empty result on the 404 that is today's every-single-case", async () => {
-    // Nothing in the pipeline writes events.json yet. BOTH generations' branches are tried
-    // (research-v2/, then research/) and nothing falls back to `main`: telemetry is a
-    // property of a run, and a run lives on its branch.
+  it("returns an honestly-empty result when nothing has emitted — V1 runs, or no run at all", async () => {
+    // The V2 emitter (scripts/pipeline/v2/events.mjs) writes events.json on the run's branch and
+    // a merged product landing carries it into main, so the read order is research-v2 → main →
+    // research. V1 emits nothing, so a V1 run resolving empty here is the honest answer.
     const { impl, calls } = stubFetch({});
     const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
 
     await expect(gw.fetchRunEvents("testland")).resolves.toEqual(EMPTY_RUN_EVENTS);
-    expect(calls).toHaveLength(2);
+    expect(calls).toHaveLength(3);
     expect(calls[0].url).toContain("/research-v2/testland/");
-    expect(calls[1].url).toContain("/research/testland/");
+    expect(calls[1].url).toContain("/main/guides-intake/testland/");
+    expect(calls[2].url).toContain("/research/testland/");
+  });
+
+  it("a MERGED product run's events stay readable from main after its branch is deleted (I02/I05)", async () => {
+    const { impl, calls } = stubFetch({ "/main/guides-intake/testland/events.json": RUN_EVENTS });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+
+    const out = await gw.fetchRunEvents("testland");
+
+    expect(out.available).toBe(true);
+    expect(calls[0].url).toContain("/research-v2/testland/"); // the active branch is still preferred
+    expect(calls[1].url).toContain("/main/guides-intake/testland/");
   });
 
   it("returns an honestly-empty result rather than throwing on a file it cannot read", async () => {

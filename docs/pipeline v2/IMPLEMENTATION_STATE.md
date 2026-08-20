@@ -903,4 +903,59 @@ No pre-existing failures — nothing unrelated blocks I01–I06.
 
 ### Milestone log (appended as each milestone earns completion)
 
-_(in progress — see below as sections are added)_
+#### I01+I02 deterministic half — DONE (commit `b5b1eed`)
+
+- **Problem (I01):** V1's `/new` dispatch threads the intake `issue`; V2's dispatch did not, and
+  the V2 workflow had no `issue` input and no questions-surfacing step — product communication
+  continuity was severed on the V2 path.
+- **Problem (I02):** V2's land job hardcoded `--land pr`, and `--require-verified` checks the V1
+  spine (`state.json`) a V2 run never completes — no safe product path to publication existed.
+- **Fix:** run.v2.json gains durable, schema-validated `issue` (nullable) + `landMode`
+  (pr|auto, immutable per run) recorded at init; resumes/retries inherit both (retry dispatches
+  deliberately pass neither — test-pinned). `land-mode` subcommand + pure `landingMode()` compute
+  the deterministic landing decision (auto ⇔ product intent AND every stage complete).
+  `recordProductLanding()` writes gate PASS + published into run.v2.json BEFORE the merge (an
+  auto-merged landing deletes its branch), failing closed on incomplete runs via the schema's
+  own complete-requires-all-stages rule — wired inside `pipeline.mjs land` on the passed&&auto
+  path only. new-guide.yml's V2 dispatch passes `-f issue` + `-f land=auto`; the V2 land job
+  computes the mode, passes `--announce`, and skips the post-record on a merged outcome; a
+  `questions` job (always(), continue-on-error) surfaces traveler assumptions from the run's own
+  recorded issue. Progress gateway (I05 half): stale "NOTHING EMITS THIS YET" claim corrected;
+  fetchRunEvents falls back to `main` so a merged product run's event log stays readable.
+- **Tests:** `pipeline-v2-integration.test.mjs` (24 new; schema round-trip/back-compat, inherit/
+  heal/refuse semantics, landingMode matrix, recordProductLanding fail-closed, workflow-text
+  pins); orchestration draft-only pin intentionally CHANGED to the durable-intent contract;
+  gateway tests updated (+ merged-run fallback). Full gates on the head: 164 files,
+  2677 passed + 1 todo · build 9 pages · lint 0/0 · typecheck 0 errors.
+- **Remaining:** the live boundary proofs below.
+
+#### Live proof plan (execute in order; resume from the first unchecked item)
+
+- [ ] L1 selector OFF: fixture-B intake issue (Andorra, dates seeded with a mild contradiction
+  so a traveler question card exists) → scaffold from main → V1 dispatched with issue, NO V2 →
+  cancel V1 before agent spend. Record run ids.
+- [ ] L2a: push branch; dispatch research-pass-v2 `--ref fable/pipeline-v2-integration`
+  `-f slug=<B> -f issue=<B#>` (land blank ⇒ draft). Let passA COMPLETE; cancel during passB
+  (the I04 interruption).
+- [ ] L3: `gh variable set WAYPOINT_RESEARCH_ENGINE v2` (prior state: ABSENT — restore to
+  ABSENT). Fixture-C intake → exactly one V2 dispatch from main, zero V1 → cancel post-setup.
+- [ ] §9 answers leg (selector still ON, B active): dispatch change.yml source=answers with
+  PLAN_JSON naming B's real question id → answers-route detects research-v2/<B> → ledger apply
+  on the branch → V2 redispatch passes the guard → cancel that run post-setup (resume leg
+  proven; no expensive rework). Worker /answer hop itself NOT re-proven live (no owner key in
+  this session — recorded credential gap; auth contract unit-tested + previously live-proven).
+- [ ] Restore selector: `gh variable delete WAYPOINT_RESEARCH_ENGINE`; verify absent. Fixture-D
+  intake → V1 dispatched again → cancel. (Restored-OFF proof.)
+- [ ] L2b: re-dispatch B on the integration ref (slug only — issue/land inherit) → passA NOT
+  repeated, passB→reconcile→geocode→critic→land run to completion → evidence-gated DRAFT PR +
+  landing verdict recorded + questions job comments on B's intake issue.
+- [ ] Known structural gap to record in the PR: the live product-mode AUTO-MERGE cannot be
+  exercised before this integration PR itself merges (a branch-ref dispatch would side-door the
+  integration code into main via the research branch's merge; main's workflow lands draft-only
+  by construction pre-merge). Product-mode machinery is deterministic-proven; its live exercise
+  is the first post-merge selector-ON /new.
+- [ ] Cleanup: cancel stray runs; delete research/<B> (V1 stub), research-v2/<C> state, C/D
+  scaffolds from main (one chore commit); B's intake issue + draft PR + research-v2/<B> branch
+  KEPT as review evidence. Selector verified ABSENT.
+- Attempt budget for B: 3 of 5 dispatches consumed by design (init/interrupt · answer-redispatch
+  cancel · completion).

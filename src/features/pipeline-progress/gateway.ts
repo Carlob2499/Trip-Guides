@@ -54,10 +54,12 @@ export interface ProgressGateway {
   /**
    * Live telemetry for the run — what it fetched, decided and learned (model/run-events.ts).
    *
-   * NOTHING EMITS THIS YET, so today it always resolves to EMPTY_RUN_EVENTS and the cockpit's
-   * sourcing / judgments / "worth knowing" panels render their honest-empty copy. The method
-   * exists now, in the shape the emitter will write, so that turning telemetry on is a pipeline
-   * change and not a UI one — and so nobody is tempted to fake a feed in the meantime.
+   * V2 EMITS THIS FOR REAL: scripts/pipeline/v2/events.mjs rebuilds events.json from the durable
+   * run artifacts at every stage finish/fail and at landing, so a V2 run's stage decisions,
+   * failures, geocode outcomes and landing verdict are actual emitted data. What the emitter
+   * cannot prove stays honestly absent — fetch-level events, nuggets and unmeasured counters
+   * render their honest-empty copy, never a fabricated feed. V1 emits nothing, so V1 runs still
+   * resolve EMPTY_RUN_EVENTS.
    */
   fetchRunEvents(slug: string): Promise<RunEvents>;
 }
@@ -183,12 +185,15 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       return Array.isArray(issues) ? toProposals(issues, slug) : [];
     },
     async fetchRunEvents(slug) {
-      // Research-branch only: telemetry is a property of a RUN, and the branch is where a run
-      // lives (`main` never carries it). Both generations' branches are tried — a V2 run's
-      // events would live on research-v2/<slug>. A 404 becomes EMPTY_RUN_EVENTS via
-      // parseRunEvents(null); the UI keeps LOOKING while the run is active (probeEventsThisTick
-      // in model/run-events.ts), just less often, so telemetry that starts late still surfaces.
-      const v2 = await getJson(raw(`research-v2/${slug}`, `guides-intake/${slug}/events.json`));
+      // The branch is where an ACTIVE run lives, so it is read first — but a merged V2 product
+      // landing deletes its branch and carries events.json into `main` (the same fallback
+      // fetchRun already makes for run.v2.json), so the finished run's event log stays
+      // readable after the merge. V1 branches are tried last; V1 emits nothing today, so that
+      // read resolving empty is honest. A 404 becomes EMPTY_RUN_EVENTS via parseRunEvents(null);
+      // the UI keeps LOOKING while the run is active (probeEventsThisTick in
+      // model/run-events.ts), just less often, so telemetry that starts late still surfaces.
+      const v2 = await getJson(raw(`research-v2/${slug}`, `guides-intake/${slug}/events.json`))
+        ?? await getJson(raw(baseBranch, `guides-intake/${slug}/events.json`));
       if (v2) return parseRunEvents(v2);
       return parseRunEvents(await getJson(raw(`research/${slug}`, `guides-intake/${slug}/events.json`)));
     },
