@@ -9,6 +9,28 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
+## Snapshot (2026-08-20 — P12.1 targeted correction: the review's two HIGH proof gaps closed)
+
+The independent P11/P12 review returned **RECOMMEND_P13_YELLOW** (architecture ACCEPTED) with
+exactly two HIGH acceptance-proof gaps; this bounded pass closed both and stopped. **Gap 1 —
+`/proc` containment now proven for Grep and Glob, not just Read:** the `probe/environ` workflow
+(commit `c12d736`) reruns the agent under the UNCHANGED production config with
+`--output-format stream-json --verbose`, and a scorer requires an observed `tool_use` on `/proc`
+AND a paired tool-layer denial for EACH of Read/Grep/Glob — a model refusal scores INCONCLUSIVE,
+never PASS. **Run `32348279562`, job `96361626055`: all three tools attempted `/proc/version`
+(harmless) and were DENIED at the tool layer**; sentinel never obtained via any agent tool. New
+scar pins `--safe-mode`+`--no-session-persistence` on all four agent steps (the flag set the
+proof ran under). **Gap 2 — the R3+ transport fixture re-researched:** the overstatements the
+review flagged ("only way up", "no parallel road", "no bed on the mountain") are GONE; the
+KIX→Kōyasan scenario stays, now justified only by fetched-source claims (4 sources re-fetched
+this pass: 3 Nankai operator pages + japan-guide e4904, full source-to-claim mapping in the test
+header), with the strongest sourced fragility fact being japan-guide's twice-stated rule that
+walking from the cable-car station into town is not permitted — the final bus is mandatory. All
+exact last-service times are explicit traveler re-checks; a new scar regex-pins that no `HH:MM`
+time and none of the three overstated phrases can return. Validator returns `[]`; all seven
+distinct negative controls preserved. Full record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` →
+"P12.1 correction pass".
+
 ## Snapshot (2026-08-20 — P12 finalization: PR #63 merge-ready, CodeQL clean, /proc + R3 proven)
 
 The Fable P12 pass made PR #63 (`fable/pipeline-v2-finalize` → main) genuinely reviewable and
@@ -49,40 +71,4 @@ means V1, unconditionally. An independent code review of the session's diff foun
 first-try runs crashed their completion checkpoint on the absent feedback pathspec), one MEDIUM
 (comma-hostname injection into the critic's --allowedTools) and one LOW — all fixed same-session
 with pinning tests. Durable record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` (18-point proof).
-
-## Snapshot (2026-08-17 — Pipeline V2 implementation adversarially audited and hardened)
-
-Fable's M0–M8 implementation was reviewed from fixed base `9f1599b` by independent code,
-specification, and security lanes, then corrected to convergence. The durable technical record
-is `docs/pipeline v2/IMPLEMENTATION_STATE.md`. Delivery timeline:
-`docs/pipeline v2/IMPLEMENTATION_PLAN.md` — Claude must read and follow it for sequencing,
-kill dates, freezes, and Codex/Fable roles.
-
-V2 remains manual, draft-only, and beside V1. Agents now execute in pinned Docker/Claude CLI
-boundaries with workspace-only filesystem tools, explicit system-path denials, no host token,
-no runner command files, no git remote/history, and canonical path-scoped artifact collection.
-Pass B remains baseline-isolated; critic source fetches are restricted to pre-verified domains.
-Run scope/model settings are durable across resumes; usage/void retries are bounded; stuck state
-cannot reset itself; malformed artifacts/state fail closed; intake coverage is relational and
-includes constraints, traveler count, and departure airport; the real landing gate is durable
-and is the only event that clears the UI's Verify station.
-
-V1's numeric breadth safeguards remain intact only for V1. V2 explicitly selects adaptive mode,
-where the typed earned-saturation gate replaces quotas while structural anti-padding checks stay.
-Critic findings now produce validated, provenance-complete newest-first process-memory rows.
-Answers route atomically back to active or complete-unmerged research branches with the original
-run inputs. Public issue spend and short owner keys fail closed.
-
-## Where we left off
-
-**Branch `codex/pipeline-v2`; final audited commit is the handoff point.** Local gates are green:
-all workflow YAML parses; build, lint, typecheck and full tests pass; targeted V2/progress suites
-pass; production preview was checked desktop plus 375px dark/reduced-motion with no overflow or
-browser errors; compiled output carries `landingGate` and no synthetic live-publication copy.
-
-**Next: the Phase 1 manual canary in IMPLEMENTATION_PLAN — not cutover.** First canary must prove
-the live Docker permission denial (`Read /proc/self/environ`), cancellation/resume, configured
-Places/Routes gate, draft-PR-only landing, Worker answer routing, and branch protection. Do not
-merge V2 to main, switch `/new`, publish, delete V1, or begin the secondary UI/UX pass until its
-timeline gate explicitly allows it.
 

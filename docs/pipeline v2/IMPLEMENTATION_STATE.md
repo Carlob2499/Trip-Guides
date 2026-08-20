@@ -6,13 +6,13 @@
 
 ## Position
 
-- **Last completed milestone:** P12.1 targeted correction pass — the two HIGH acceptance-proof
-  gaps from the RECOMMEND_P13_YELLOW review closed: `/proc` containment proven for Grep+Glob
-  (not just Read) at the tool layer, and the R3+ transport fixture re-researched so every
-  claimed consequence maps to a fetched source (see the **P12.1 correction pass** section below)
-- **Current milestone:** P13 — independent go/no-go on `fable/pipeline-v2-finalize` → main (PR #63)
-- **Exact next action:** Codex inspects the P12 + P12.1 evidence and PR #63's new head, then
-  makes the P13 call. Cutover stays OFF (WAYPOINT_RESEARCH_ENGINE unset ⇒ /new dispatches V1).
+- **Last completed milestone:** P13 independent review — **P13_GREEN** on head `88d16fe`
+  (see the **P13 independent go/no-go review** section at the end of this file); awaiting
+  Carlo's acceptance per the tracker P13 row
+- **Current milestone:** P13 acceptance (Carlo), then integration week I01+
+- **Exact next action:** Carlo accepts (or overrides) the P13_GREEN verdict; on acceptance,
+  I01 begins (connect `/new` dispatch to the proven V2 path behind a safe cutover plan).
+  Cutover stays OFF (WAYPOINT_RESEARCH_ENGINE unset ⇒ /new dispatches V1).
   Do not merge, publish, or delete V1 without acceptance.
 
 **Mid-session external event (08:09):** `docs/pipeline v2/IMPLEMENTATION_PLAN.md` (Carlo's
@@ -753,3 +753,59 @@ agent `docker run` block (test-pinned); credential/remote removal before agents 
 bounded attempts unchanged; PR #61 open+draft+unmerged; canary branches present; no repository
 variable read or written this pass. No test was weakened, skipped, or converted to a todo:
 the suite GREW by 2 (11 transport + 60 finalize, both green).
+
+## P13 independent go/no-go review (2026-08-20, independent reviewer) — **P13_GREEN**
+
+Reviewed head: `88d16fe` on PR #63 (`fable/pipeline-v2-finalize` → `main`). Every claim below
+was re-verified this review, not accepted from the P12.1 record.
+
+### Verdict
+
+**P13_GREEN — the core engine is proven in isolation; integration week (I01+) may begin**,
+subject to Carlo's acceptance (tracker P13 row). Judged against Validation Pack §E: all
+release-blocking contracts are proven; the two HIGH proof gaps that conditioned the prior
+RECOMMEND_P13_YELLOW are closed with live, independently-inspected evidence; no open item
+allows fabricated facts, unsafe publication, lost state, fake progress, or unreliable
+trip-critical transport behavior.
+
+### Evidence inspected (independently, this review)
+
+- **Commit chain:** `git log 491be14..88d16fe --stat` — three docs-only commits;
+  `git diff 0005d92 88d16fe --stat -- scripts/ .github/` empty, so `0005d92` is the only
+  code/test change since the prior reviewed head `346de65`.
+- **Gap 1 (`/proc` containment for Grep/Glob):** probe workflow read at
+  `probe/environ` @ `c12d736` — container digest, CLI `@2.1.233`,
+  `--safe-mode --no-session-persistence`, `WP_TOOLS`, `WP_DENY` byte-identical to the PR's
+  Pass A agent step (probe adds only `stream-json --verbose` observability + the sentinel).
+  Scorer semantics confirmed in source: tool success ⇒ exit 1, refusal/no-result ⇒ exit 2,
+  PASS only on attempted+denied for ALL of Read/Grep/Glob. Run `32348279562`, job
+  `96361626055`, attempt 1, conclusion success: all three DENIED lines observed in the raw
+  job log; no SUCCEEDED/NOT ATTEMPTED line; sentinel leak check passed.
+- **Gap 2 (R3+ fixture):** test file read line-by-line at `88d16fe`; all four cited URLs
+  re-fetched this review and each SUPPORTS line confirmed (japan-guide: LE ~2/day 80 min,
+  express 20–30 min ~100 min with Hashimoto transfer, cable ~5 min ¥500, bus ~10 min ¥460 to
+  Senjuinbashi, walking prohibition stated twice; Nankai: rapi:t "34 minutes the fastest",
+  Gokurakubashi on-premises transfer passage, Kōyasan Station 867 m + station-front buses).
+  None of the three overstatements present; HH:MM scar confirmed; the seven negative controls
+  traced to distinct rule paths in `research-rules.mjs` (`transportProblems` /
+  `sourceAccessProblems`, plus the `risk < 3` skip). Targeted suite 11/11.
+- **Gates rerun on `88d16fe`:** build 9 pages exit 0 · lint 0/0 · typecheck 0 errors,
+  0 warnings, 21 pre-existing hints · tests **163 files, 2651 passed + 1 todo** (delta vs P12
+  exactly the two new scars).
+- **Invariants:** `gh variable list` empty (unset ⇒ `/new` dispatches V1); PR #63 and #61 both
+  OPEN/draft/unmerged; `canary/kansai-proof`, `research-v2/kansai-proof`, `probe/environ` all
+  present; `PLACES_API_KEY` confined to the geocode step + landing-gate job (test-pinned, both
+  non-agent); `--safe-mode`+`--no-session-persistence` pinned on all four agent steps; main's
+  stale `WAYPOINT_V2_ON_DEFAULT` stub comment confirmed LOW and moot-at-merge.
+
+### Non-blockers carried into integration week (unchanged, by prior ruling)
+
+Live mid-V2 Worker answer routing (unit/contract-tested only) · `/new` V2 notification/input
+threading · `GOOGLE_ROUTES_KEY` unset (advisory when absent) · seven honest unresolved
+geocodes (correct refusals) · Progress-UI manual product-surface proof. None meets a §E RED
+criterion; all are I01/I02 scope.
+
+### Review conduct
+
+No merge, publish, cutover, variable change, or deletion was performed. Nothing was fixed or
+touched outside this record and the tracker's P13 row.

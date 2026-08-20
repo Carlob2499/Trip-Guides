@@ -48,41 +48,36 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-20 — P12.1 targeted correction: the review's two HIGH proof gaps closed)
+## Snapshot (2026-08-20 — P13 independent review: **P13_GREEN** on PR #63 head `88d16fe`)
 
-The independent P11/P12 review returned **RECOMMEND_P13_YELLOW** (architecture ACCEPTED) with
-exactly two HIGH acceptance-proof gaps; this bounded pass closed both and stopped. **Gap 1 —
-`/proc` containment now proven for Grep and Glob, not just Read:** the `probe/environ` workflow
-(commit `c12d736`) reruns the agent under the UNCHANGED production config with
-`--output-format stream-json --verbose`, and a scorer requires an observed `tool_use` on `/proc`
-AND a paired tool-layer denial for EACH of Read/Grep/Glob — a model refusal scores INCONCLUSIVE,
-never PASS. **Run `32348279562`, job `96361626055`: all three tools attempted `/proc/version`
-(harmless) and were DENIED at the tool layer**; sentinel never obtained via any agent tool. New
-scar pins `--safe-mode`+`--no-session-persistence` on all four agent steps (the flag set the
-proof ran under). **Gap 2 — the R3+ transport fixture re-researched:** the overstatements the
-review flagged ("only way up", "no parallel road", "no bed on the mountain") are GONE; the
-KIX→Kōyasan scenario stays, now justified only by fetched-source claims (4 sources re-fetched
-this pass: 3 Nankai operator pages + japan-guide e4904, full source-to-claim mapping in the test
-header), with the strongest sourced fragility fact being japan-guide's twice-stated rule that
-walking from the cable-car station into town is not permitted — the final bus is mandatory. All
-exact last-service times are explicit traveler re-checks; a new scar regex-pins that no `HH:MM`
-time and none of the three overstated phrases can return. Validator returns `[]`; all seven
-distinct negative controls preserved. Full record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` →
-"P12.1 correction pass".
+The P13 go/no-go review ran fully independently — every P12.1 claim re-verified from primary
+evidence, none accepted on faith. **Gap 1 re-verified:** the `probe/environ` workflow at
+`c12d736` was read line-by-line and its container digest / CLI `@2.1.233` /
+`--safe-mode --no-session-persistence` / `WP_TOOLS` / `WP_DENY` confirmed byte-identical to the
+PR's Pass A agent step; the scorer's semantics (success ⇒ breach, refusal ⇒ INCONCLUSIVE, PASS
+only on attempted+denied for all three tools) confirmed in source; the raw log of run
+`32348279562` / job `96361626055` shows all three DENIED lines and no SUCCEEDED/NOT-ATTEMPTED
+line. **Gap 2 re-verified:** the transport fixture was read in full and all four cited URLs
+re-fetched this review — japan-guide e4904 and the three Nankai pages each support exactly the
+SUPPORTS lines (incl. the twice-stated walking prohibition and rapi:t "34 minutes the fastest");
+the seven negative controls trace to distinct rule paths in `research-rules.mjs`; targeted
+suite 11/11. **Gates rerun on `88d16fe`: all green** (build 9 pages · lint 0/0 · typecheck
+0 errors · **163 files, 2651 passed + 1 todo**). Invariants held: no repo variable set, PR #61
+open/draft, canary + probe branches present, `PLACES_API_KEY` confined to non-agent steps.
+Verdict recorded in `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P13 independent go/no-go
+review" and the tracker's P13 row. Nothing merged, published, cut over, or deleted.
 
 ## Where we left off
 
-**Branch `fable/pipeline-v2-finalize`, head `68f625d`; PR #63 is the handoff point — MERGEABLE.**
-All four gates green on the P12.1 head (build 9 pages · lint 0/0 · typecheck 0 errors/21
-pre-existing hints · **163 files, 2651 tests + 1 todo** — +2 = exactly the two new scars). Probe
-branch `probe/environ` is a throwaway proof surface (runs 32340406684 + 32348279562 PASS) — never
-merge it, keep it until Codex reviews. Nothing was merged, published, cut over, or deleted; main
-untouched; no repository variable read or set.
+**P13_GREEN returned — the core engine is proven in isolation; the decision now sits with
+Carlo.** Per the tracker P13 row ("Yes — Carlo accepts go/no-go"), the verdict is a
+recommendation until Carlo accepts it. On acceptance, integration week I01+ begins: connect
+`/new` dispatch to the proven V2 path behind a safe cutover plan (I01), then the full
+end-to-end publish-boundary proof (I02–I05).
 
-**Next: P13 — independent go/no-go by Codex on PR #63 head `68f625d`.** Not self-declared. Cutover
-stays OFF (`WAYPOINT_RESEARCH_ENGINE` unset ⇒ /new dispatches V1). Do not merge PR #63, set the
-cutover variable, publish the canary, or delete V1 until acceptance. PR #61 and the canary branches
-(`canary/kansai-proof`, `research-v2/kansai-proof`) remain quarantined. Main's inert stub still
-names `WAYPOINT_V2_ON_DEFAULT` in a comment — LOW drift, moot-at-merge (PR #63 replaces the file).
-Remaining known gaps (I01/I02 integration week): live Worker answer routing, `/new` V2
-notification threading, `GOOGLE_ROUTES_KEY` unset, Progress-UI manual proof.
+**Until acceptance, nothing moves:** do not merge PR #63 or #61, set `WAYPOINT_RESEARCH_ENGINE`,
+publish the canary, or delete V1 / `canary/kansai-proof` / `research-v2/kansai-proof` /
+`probe/environ`. Cutover stays OFF (variable unset ⇒ /new dispatches V1). Known non-blockers
+deferred to I01/I02 by prior ruling: live Worker answer routing, `/new` V2 notification
+threading, `GOOGLE_ROUTES_KEY` unset, seven honest unresolved geocodes, Progress-UI manual
+proof. Main's stale `WAYPOINT_V2_ON_DEFAULT` stub comment stays LOW / moot-at-merge.
