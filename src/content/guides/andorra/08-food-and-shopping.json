@@ -20,7 +20,12 @@
         "crowd_tip": "Two independent accounts — a food blog and a diner review — point here instead of Andorra la Vella's touristier Avinguda Meritxell restaurants, citing better value and quality.",
         "why": "A gastrobar two independent reviewers single out over the pricier spots on Avinguda Meritxell.",
         "source_url": "https://www.mirakbe.com/menu_diari_andorra",
-        "verified_on": "2026-08-20"
+        "verified_on": "2026-08-20",
+        "map": {
+          "lat": 42.506773900000006,
+          "lng": 1.5286122
+        },
+        "place_id": "ChIJd_PC0dCKpRIRgt02FAwWfFc"
       },
       {
         "name": "Borda Estevet",
@@ -32,7 +37,10 @@
         "how": "≈10-minute walk or short taxi from the Barri Antic",
         "price": "€€€ — starters €14.50–39, mains €21–29",
         "why": "A 250-seat converted stone barn built around a wood-fired grill — the classic borda experience within easy reach of the capital.",
-        "map": { "lat": 42.5032567, "lng": 1.5193481 },
+        "map": {
+          "lat": 42.5032567,
+          "lng": 1.5193481
+        },
         "place_id": "N8967965640",
         "source_url": "https://bordaestevetandorra.com/",
         "verified_on": "2026-08-20"

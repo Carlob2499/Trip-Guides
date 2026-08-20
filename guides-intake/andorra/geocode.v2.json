@@ -1,0 +1,23 @@
+{
+  "slug": "andorra",
+  "attemptedAt": "2026-08-20T17:25:59.659Z",
+  "applied": true,
+  "pending": 3,
+  "resolved": [
+    {
+      "name": "Barri Antic",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "MiraKbé",
+      "file": "08-food-and-shopping.json"
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "Església de Santa Coloma",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"Església de Santa Coloma\", Places returned \"Church of Santa Coloma d'Andorra\""
+    }
+  ]
+}

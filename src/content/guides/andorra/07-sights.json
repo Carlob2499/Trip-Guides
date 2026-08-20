@@ -10,10 +10,16 @@
         "name": "Casa de la Vall",
         "kicker": "Andorra's former parliament, 16th-century",
         "body": "<p>A 16th-century stone manor that served as Andorra's seat of government (the Consell General) until 2011, now a small museum on Carrer de la Vall in the Barri Antic. {{fact:casa-de-la-vall-5-eur}} general admission, €2.50 reduced; a €1.50 guided-tour supplement is available with advance booking.</p><p>Visits are reservation-only — there's no walk-up admission. Book by phone (+376 839760) or email (museusandorra@gmail.com) before you travel; same-day slots aren't guaranteed. The <a href='https://www.casadelavall.ad/en/visites/formulari-de-visites' target='_blank' rel='noopener noreferrer'>visits page</a> has the request form.</p>",
-        "map": { "lat": 42.5066141, "lng": 1.5205064 },
+        "map": {
+          "lat": 42.5066141,
+          "lng": 1.5205064
+        },
         "place_id": "W512803160",
         "dwell_min": 45,
-        "closed_days": ["sun", "mon"],
+        "closed_days": [
+          "sun",
+          "mon"
+        ],
         "source_url": "https://museus.ad/museus/casa-de-la-vall",
         "verified_on": "2026-08-20"
       },
@@ -21,7 +27,10 @@
         "name": "Sant Esteve Church",
         "kicker": "The country's largest Romanesque apse",
         "body": "<p>An 11th–12th century Romanesque church on Plaça Bisbe Benlloch, remodelled in 1940 by modernist architect Josep Puig i Cadafalch. Still an active parish church, with the largest Romanesque apse in Andorra and a 12th-century polychrome wooden beam inside. Free entry; not wheelchair accessible.</p>",
-        "map": { "lat": 42.5071836, "lng": 1.5216891 },
+        "map": {
+          "lat": 42.5071836,
+          "lng": 1.5216891
+        },
         "place_id": "W191582655",
         "dwell_min": 20,
         "source_url": "https://museus.ad/en/monumentos/sant-esteve-d-andorra-la-vella",
@@ -32,7 +41,10 @@
         "kicker": "Andorra la Vella's oldest church, no reservation needed",
         "body": "<p>An 8th–9th century pre-Romanesque nave — the oldest church in the Andorra la Vella parish — with a distinctive 12th-century circular Lombard bell tower, one of the last of its kind in the Pyrenees. Open Jan–May and Oct–Dec, Tuesday–Saturday 10:00–14:00 and 15:00–18:00, closed Sunday and Monday; €7 admission.</p><p>Unlike Casa de la Vall, the self-guided audioguide visit needs no advance booking — only the guided-tour option does. A practical fallback if Casa de la Vall's reservation slots don't line up with the trip.</p>",
         "dwell_min": 30,
-        "closed_days": ["sun", "mon"],
+        "closed_days": [
+          "sun",
+          "mon"
+        ],
         "source_url": "https://museus.ad/monuments/santa-coloma",
         "verified_on": "2026-08-20"
       },
@@ -42,13 +54,21 @@
         "body": "<p>Andorra la Vella's historic core — cobbled lanes off Carrer Major and Carrer del Pui, small squares, and the stone houses the modern capital grew up around. Small enough to walk in under an hour, but worth spreading across the trip: it holds Casa de la Vall, Sant Esteve and most of the old-town restaurants in one compact radius.</p>",
         "dwell_min": 90,
         "source_url": "https://visitandorra.com/en/culture/churches-in-andorra/",
-        "verified_on": "2026-08-20"
+        "verified_on": "2026-08-20",
+        "map": {
+          "lat": 42.5068854,
+          "lng": 1.5209987000000003
+        },
+        "place_id": "ChIJ-XEPpQ2LpRIRJUOGAtQUFYI"
       },
       {
         "name": "Llac d'Engolasters",
         "kicker": "A low-altitude lake walk that clears Andorra's own November safety line",
         "body": "<p>A reservoir-lake at 1,616 m in Escaldes-Engordany parish, below the 1,700 m threshold Andorra's trail authority flags as unsafe outside June–September. The easy lakeside loop from the Ctra. d'Engolasters access road is the most realistic hiking pick for an early-November visit — the official route is rated Easy, about 1.9 km and a two-hour round trip with +350 m/-45 m of elevation change, a comfortable fit for moderate walkers. The country's own hiking pages still name May–October as the comfortable season, so check for ice on shaded stretches.</p>",
-        "map": { "lat": 42.517536, "lng": 1.571087 },
+        "map": {
+          "lat": 42.517536,
+          "lng": 1.571087
+        },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 90,
         "source_url": "https://visitandorra.com/en/nature--sports/hiking-route-llac-d-engolasters/",
