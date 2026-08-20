@@ -124,6 +124,42 @@ export function collectAnchors(value, out = new Set()) {
   return out;
 }
 
+/** Deterministic ref remap after composition (canary scar): `compose-guide --write` merges and
+    RENUMBERS group files under the tab budget, stranding coverage refs written before it ran.
+    Anchors are the identity; filenames are layout — a ref whose file is gone follows its anchor
+    to the file that now holds it. Same-suffix renames win first (06-days → 04-days); otherwise
+    the anchor must live in exactly ONE group file. Anything unresolvable fails closed. */
+export async function remapCoverageRefs(slug, { intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides") } = {}) {
+  const doc = await requireCoverage(slug, { intakeDir });
+  const { groups, groupAnchors } = await loadCoverageContext(slug, { intakeDir, guidesDir });
+  const problems = [];
+  let changed = false;
+  for (const ask of doc.asks) {
+    ask.where = ask.where.map((ref) => {
+      const [file, anchor] = ref.split("#");
+      if (groups.includes(file) && anchor && groupAnchors.get(file)?.has(anchor)) return ref;
+      if (!anchor) return ref; // a missing anchor is the validator's finding, not a rename
+      const suffix = file.replace(/^\d\d-/, "");
+      const sameSuffix = groups.find((g) => g.replace(/^\d\d-/, "") === suffix && groupAnchors.get(g)?.has(anchor));
+      const target = sameSuffix || (() => {
+        const homes = groups.filter((g) => groupAnchors.get(g)?.has(anchor));
+        return homes.length === 1 ? homes[0] : null;
+      })();
+      if (target) { changed = true; return `${target}#${anchor}`; }
+      problems.push(`ask "${ask.id}": ${ref} — its anchor exists in ${groups.filter((g) => groupAnchors.get(g)?.has(anchor)).length || "no"} group file(s) after composition`);
+      return ref;
+    });
+  }
+  if (problems.length) {
+    throw new ContractError(
+      `coverage refs could not be remapped after composition:\n` + problems.map((p) => `  · ${p}`).join("\n"),
+      { file: coveragePath(slug, intakeDir) },
+    );
+  }
+  if (changed) await writeCoverage(slug, doc, { intakeDir });
+  return { changed };
+}
+
 /** Build the real relational context used by reconcile/landing. */
 export async function loadCoverageContext(slug, { intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides") } = {}) {
   const guideDir = path.join(guidesDir, slug);

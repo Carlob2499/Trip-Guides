@@ -552,6 +552,68 @@ describe("canary scar — agent permission rules use the syntax the CLI actually
   });
 });
 
+// ── canary scar: composition strands coverage refs ───────────────────────────
+
+describe("canary scar — coverage refs follow their anchors through composition renames", () => {
+  const SLUG = "remapland";
+  let guides;
+
+  async function seed({ asks, files }) {
+    guides = path.join(dir, "guides");
+    await mkdir(path.join(guides, SLUG), { recursive: true });
+    for (const [name, content] of Object.entries(files)) {
+      await writeFile(path.join(guides, SLUG, name), JSON.stringify(content));
+    }
+    await mkdir(path.join(dir, SLUG), { recursive: true });
+    await writeFile(path.join(dir, SLUG, "coverage.v2.json"), JSON.stringify({
+      schemaVersion: COVERAGE_SCHEMA, slug: SLUG, runId: "r-1", asks,
+    }));
+  }
+
+  it("a same-suffix rename (06-days → 04-days) is followed; an untouched ref is left alone", async () => {
+    const { remapCoverageRefs } = await import("../pipeline/v2/coverage.mjs");
+    await seed({
+      files: {
+        "01-plan.json": { plan: { type: "prose", title: "Arrival day" } },
+        "04-days.json": { days: { type: "days", title: "Day by day" } },
+      },
+      asks: [
+        { id: "dates", ask: "dates", status: "covered", where: ["06-days.json#day-by-day"], evidenceIds: [], reason: null },
+        { id: "plan", ask: "plan", status: "covered", where: ["01-plan.json#arrival-day"], evidenceIds: [], reason: null },
+      ],
+    });
+    const { changed } = await remapCoverageRefs(SLUG, { intakeDir: dir, guidesDir: guides });
+    expect(changed).toBe(true);
+    const doc = JSON.parse(await readFile(path.join(dir, SLUG, "coverage.v2.json"), "utf8"));
+    expect(doc.asks[0].where).toEqual(["04-days.json#day-by-day"]);
+    expect(doc.asks[1].where).toEqual(["01-plan.json#arrival-day"]);
+  });
+
+  it("an anchor found in exactly one other group follows it; an unresolvable anchor fails closed", async () => {
+    const { remapCoverageRefs } = await import("../pipeline/v2/coverage.mjs");
+    await seed({
+      files: { "02-food.json": { food: { type: "venues", title: "Food", items: [{ name: "Noodle Bar" }] } } },
+      asks: [{ id: "p1", ask: "food", status: "covered", where: ["08-food-and-shopping.json#noodle-bar"], evidenceIds: [], reason: null }],
+    });
+    const { changed } = await remapCoverageRefs(SLUG, { intakeDir: dir, guidesDir: guides });
+    expect(changed).toBe(true);
+    const doc = JSON.parse(await readFile(path.join(dir, SLUG, "coverage.v2.json"), "utf8"));
+    expect(doc.asks[0].where).toEqual(["02-food.json#noodle-bar"]);
+
+    await seed({
+      files: { "02-food.json": { food: { type: "venues", title: "Food" } } },
+      asks: [{ id: "p1", ask: "food", status: "covered", where: ["08-nothing.json#vanished-anchor"], evidenceIds: [], reason: null }],
+    });
+    await expect(remapCoverageRefs(SLUG, { intakeDir: dir, guidesDir: guides })).rejects.toThrow(/could not be remapped/);
+  });
+
+  it("the critic job runs the remap between composition and verification", () => {
+    const at = (s) => WORKFLOW.indexOf(s);
+    expect(at("remap-coverage --slug")).toBeGreaterThan(at("compose-guide.mjs --slug \"$SLUG\" --write"));
+    expect(at("remap-coverage --slug")).toBeLessThan(at("verify-failed --slug \"$SLUG\" --stage critic"));
+  });
+});
+
 // ── P4: dispatch guard ───────────────────────────────────────────────────────
 
 describe("P4 — an accidental default-branch dispatch cannot start research", () => {
