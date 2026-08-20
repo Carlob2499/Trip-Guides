@@ -38,8 +38,8 @@
         "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run"
       ],
       "createdAt": "2026-08-20T15:35:09.987Z",
-      "status": "active",
-      "retiredAt": null
+      "status": "retired",
+      "retiredAt": "2026-08-20T17:25:29.694Z"
     }
   ]
 }
