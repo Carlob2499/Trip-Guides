@@ -293,6 +293,12 @@ export async function bumpRunAttempt(slug, { now = new Date().toISOString(), int
   if (state.status === "stuck") {
     return { state, overCap: true, attempts: state.attempts.total, cap: state.attempts.cap };
   }
+  // The attempt budget bounds AGENT research spend. A dispatch with every research stage
+  // already complete only re-runs the deterministic landing gate — free of agent cost, so it
+  // consumes no attempt (canary scar: two landing-only re-dispatches tripped the cap).
+  if (!nextStageV2(state)) {
+    return { state, overCap: false, attempts: state.attempts.total, cap: state.attempts.cap };
+  }
   state.attempts.total += 1;
   const overCap = state.attempts.total > state.attempts.cap;
   if (overCap) state.status = "stuck";
