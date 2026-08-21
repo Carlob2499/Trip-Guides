@@ -1064,10 +1064,10 @@
       "kind": "objective",
       "origin": "passA",
       "source": {
-        "url": "https://www.officeholidays.com/countries/luxembourg/2026",
-        "kind": "reference",
-        "access": "search-preview",
-        "language": "en",
+        "url": "https://itm.public.lu/fr/conditions-travail/conges/jours-feries.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "fr",
         "publishedAt": null,
         "family": null,
         "independent": null,
@@ -1318,12 +1318,12 @@
       "kind": "experiential",
       "origin": "passB",
       "source": {
-        "url": "https://www.tripadvisor.com/Restaurant_Review-g190356-d33274127-Reviews-Kaito-Luxembourg_City.html",
+        "url": "https://wanderlog.com/place/details/11865585/kaito",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "en",
-        "publishedAt": null,
-        "family": "tripadvisor-review-kaito",
+        "publishedAt": "2025-12-29",
+        "family": "wanderlog-tripadvisor-mirror-kaito",
         "independent": true,
         "appliesToYears": []
       },
@@ -1560,7 +1560,7 @@
     {
       "findingId": "ev-kaito-crowd-tripadvisor",
       "disposition": "adopt",
-      "note": "Second corroborating source for the same Kaito crowd claim (search-preview access, not fetched) — clears the >=2-independent bar though on a weaker access tier than ideal; flagged here rather than silently treated as equal to a fetched source."
+      "note": "Second corroborating source for the same Kaito crowd claim. Direct TripAdvisor fetch returned HTTP 403 (blocked); the same underlying reviewer's account was reached and read via Wanderlog's mirror of that TripAdvisor review (dated 2025-12-29), giving a fetched, dated citation instead of an undated search-preview snippet. Independent of ev-kaito-crowd-redisdead (different author, different platform) — clears the >=2-independent-firsthand bar."
     },
     {
       "findingId": "ev-language-reality",
