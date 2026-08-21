@@ -1,0 +1,14 @@
+{
+  "slug": "luxembourg",
+  "createdAt": "2026-08-21T07:19:08.845Z",
+  "updatedAt": "2026-08-21T07:19:08.845Z",
+  "stages": {
+    "scaffold": "2026-08-21T07:19:08.845Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}

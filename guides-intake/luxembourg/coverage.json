@@ -1,0 +1,78 @@
+{
+  "slug": "luxembourg",
+  "generatedAt": "2026-08-21T07:19:08.845Z",
+  "asks": [
+    {
+      "id": "cities",
+      "label": "Cities",
+      "value": "Luxembourg City",
+      "coveredBy": null
+    },
+    {
+      "id": "dates",
+      "label": "Trip dates",
+      "value": "2026-10-16 – 2026-10-19",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-1",
+      "label": "Priority #1",
+      "value": "Culture / history",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-2",
+      "label": "Priority #2",
+      "value": "Food & dining",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-3",
+      "label": "Priority #3",
+      "value": "Nature / outdoors",
+      "coveredBy": null
+    },
+    {
+      "id": "pace",
+      "label": "Pace",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "travel-style",
+      "label": "Travel style",
+      "value": "Balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "budget",
+      "label": "Budget target",
+      "value": "Mid-range ($75–150/day)",
+      "coveredBy": null
+    },
+    {
+      "id": "party",
+      "label": "Party description",
+      "value": "Two friends in their 30s, first visit. Comfortable walkers, fine with stairs and hills, planning to get around on foot and by public transport.",
+      "coveredBy": null
+    },
+    {
+      "id": "travelers",
+      "label": "Number of travelers",
+      "value": "2",
+      "coveredBy": null
+    },
+    {
+      "id": "passport-countries",
+      "label": "Passport countries",
+      "value": "United States",
+      "coveredBy": null
+    },
+    {
+      "id": "comments",
+      "label": "Additional comments",
+      "value": "A short city break — three nights, one hotel, no moving around. Most interested in the old\nfortifications and the museums in the upper town, and in walking down into the valley below it\nrather than only seeing the city from above. Want to eat well without booking anything formal.\nNo car planned. If there is one worthwhile half-day trip out of the city we would consider it,\nbut we are not trying to see the whole country.",
+      "coveredBy": null
+    }
+  ]
+}

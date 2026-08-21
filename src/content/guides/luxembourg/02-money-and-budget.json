@@ -1,0 +1,46 @@
+[
+  {
+    "type": "panel",
+    "group": "Money & budget",
+    "title": "Money & currency",
+    "body": "",
+    "phase": "arrival"
+  },
+  {
+    "type": "budget",
+    "group": "Money & budget",
+    "title": "Budget & daily costs",
+    "phase": "before",
+    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "currency": "$",
+    "days": 4,
+    "budgetTarget": "Mid-range ($75–150/day)",
+    "items": [
+      {
+        "label": "Lodging, per night",
+        "basis": "day",
+        "est": 0
+      },
+      {
+        "label": "Food & drink, per day",
+        "basis": "day",
+        "est": 0
+      },
+      {
+        "label": "Local transport, per day",
+        "basis": "day",
+        "est": 0
+      },
+      {
+        "label": "Sights & activities, per day",
+        "basis": "day",
+        "est": 0
+      },
+      {
+        "label": "Flights — round trip",
+        "basis": "trip",
+        "est": 0
+      }
+    ]
+  }
+]
