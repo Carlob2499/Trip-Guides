@@ -26,9 +26,17 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
 const OUT_DIR = path.join(ROOT, "src", "data", "palettes");
 
-// Mirrors content.config.ts — the gate the extracted primary must pass.
-const LIGHT_BG = "#e9ebe3";
-const DARK_BG = "#14181c";
+// Mirrors content.config.ts — the gate the extracted primary must pass. A DUPLICATED constant
+// whose comment claims a mirror is only as good as the last time someone checked, and this pair
+// had silently drifted a whole design pass: the grounds sat at #e9ebe3 / #14181c while the
+// schema (and base.css) had moved to R5's #e3e7dc / #0f1317. The light drift was the dangerous
+// direction — a LIGHTER ground inflates contrast for a dark accent, so this extractor could
+// bless a primary the schema then rejected at build time, which is a gate failure the guide
+// author cannot see coming. Re-synced 2026-08-21 (canary luxembourg-20260821-99c13e's schema
+// rejection is what sent anyone looking). Grep both files together if either ground moves;
+// scripts/__tests__/extract-palette.test.mjs fails if they diverge again.
+const LIGHT_BG = "#e3e7dc";
+const DARK_BG = "#0f1317";
 const MIN_ACCENT_CONTRAST = 3.0;
 
 // ── colour math ──────────────────────────────────────────────────────────────

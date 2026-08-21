@@ -49,7 +49,7 @@ import {
   stageAttemptStats, landingMode, deriveLandIntent, reopenForAnswers,
 } from "./pipeline/v2/run-state.mjs";
 import { finalizeLandingRecovery } from "./pipeline/v2/landing-truth.mjs";
-import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock } from "./pipeline/v2/feedback.mjs";
+import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock, extractGateFindings } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
 import { emitRunEvents, readGeocodeReport } from "./pipeline/v2/events.mjs";
 import { readEvidence, requireEvidence, evidenceProblems } from "./pipeline/v2/evidence.mjs";
@@ -167,6 +167,26 @@ export function stageScopeProblems(slug, stage, paths) {
   const allowed = allowedStagePaths(slug, stage);
   return paths.filter((file) => !allowed.some((root) => file === root || file.startsWith(root + "/")))
     .map((file) => `stage ${stage} touched forbidden path ${file}`);
+}
+
+/** A failed offline gate, recorded as BOTH durable stage feedback and an honest failed stage,
+    from ONE findings array. Single-sourcing that array is the whole point: the live canary
+    (luxembourg-20260821-99c13e) logged "0 finding(s) recorded for the retry" and wrote
+    `0 finding(s)` into the failure detail while feedback.v2.json carried one, because the
+    console and the detail read the PRE-fallback count while the record got the fallback. Two
+    counters for one fact is one counter too many. Exported (with an injectable intakeDir) so a
+    test can drive the exact sequence verify-failed drives, against a temporary run directory. */
+export async function recordGateFailure(slug, stage, gateOutput, { intakeDir = INTAKE_DIR } = {}) {
+  const retryFindings = extractGateFindings(gateOutput);
+  const state = await readRunStateV2(slug, { intakeDir });
+  await recordStageFeedback(slug, {
+    runId: state.runId, stage, attempt: state.stages?.[stage]?.attempts || 0,
+    findings: retryFindings, intakeDir,
+  });
+  await stageFail(slug, stage, {
+    failureClass: "gate-failure", detail: `offline verify failed: ${retryFindings.length} finding(s)`, intakeDir,
+  });
+  return retryFindings;
 }
 
 export function validateSectionInput(value) {
@@ -584,26 +604,21 @@ async function run(cmd, get, has) {
     }
 
     case "verify-failed": {
-      // The offline verify blocked this stage's output. Keep everything the retry needs:
-      // the scorecard's findings as durable stage feedback, the in-scope work retained on the
-      // branch for repair (fail-closed gates still guard it downstream), and an honest failed
-      // stage record. Without this, a verify failure discarded the stage's work and told the
-      // retry nothing (observed live: 19 minutes of reconcile re-spent for want of a scorecard).
+      // An offline gate blocked this stage's output. Keep everything the retry needs: the gate's
+      // findings as durable stage feedback, the in-scope work retained on the branch for repair
+      // (fail-closed gates still guard it downstream), and an honest failed stage record.
+      // Without this, a verify failure discarded the stage's work and told the retry nothing
+      // (observed live: 19 minutes of reconcile re-spent for want of a scorecard).
+      //
+      // --file is ANY gate's captured output, not just `npm run verify`'s scorecard: the schema
+      // gate and the coverage remap route here too, and extractGateFindings is what makes their
+      // output actionable rather than a placeholder (see feedback.mjs's canary scar).
       const stage = get("--stage");
       const file = get("--file");
       if (!V2_RESEARCH_STAGES.includes(stage) || !file || !existsSync(file)) {
-        console.error("[pipeline-v2] verify-failed needs --stage <stage> --file <scorecard>"); return 1;
+        console.error("[pipeline-v2] verify-failed needs --stage <stage> --file <gate output>"); return 1;
       }
-      const scorecard = readFileSync(file, "utf8");
-      const findings = scorecard.split(/\r?\n/)
-        .map((line) => line.trim())
-        .filter((line) => /^[⚠✗·]/.test(line) || /·\s*FAIL/.test(line))
-        .map((line) => line.slice(0, 400));
-      const state = await readRunStateV2(slug);
-      await recordStageFeedback(slug, {
-        runId: state.runId, stage, attempt: state.stages?.[stage]?.attempts || 0,
-        findings: findings.length ? findings : ["offline verify failed — see the run log scorecard"],
-      });
+      const gateOutput = readFileSync(file, "utf8");
       const changed = dirtyPaths();
       const allowed = allowedStagePaths(slug, stage);
       if (changed.some((f) => allowed.some((root) => f === root || f.startsWith(root + "/")))) {
@@ -612,10 +627,10 @@ async function run(cmd, get, has) {
         catch { /* nothing staged in scope */ }
         if (branch) git(["push", "origin", `HEAD:${branch}`]);
       }
-      await stageFail(slug, stage, { failureClass: "gate-failure", detail: `offline verify failed: ${findings.length} finding(s)` });
+      const retryFindings = await recordGateFailure(slug, stage, gateOutput);
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
       commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (offline verify)`, { branch });
-      console.error(`[pipeline-v2] ${slug} — ${stage} failed offline verify; ${findings.length} finding(s) recorded for the retry; work retained.`);
+      console.error(`[pipeline-v2] ${slug} — ${stage} failed offline verify; ${retryFindings.length} finding(s) recorded for the retry; work retained.`);
       return 0;
     }
 

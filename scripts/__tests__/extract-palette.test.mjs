@@ -6,8 +6,37 @@
 // @protects-file Colours pulled from a cover image are real colours from that image.
 
 import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { dominantVibrant, rgbToHsl, gate } from "../extract-palette.mjs";
+
+const ROOT = fileURLToPath(new URL("../..", import.meta.url));
+const readSource = (rel) => readFileSync(path.join(ROOT, rel), "utf8");
+
+/** Pull a `const NAME = "value";` out of a source file. The two contrast policies live in
+    separate files by necessity (a plain-node script cannot import TS), so the only way to
+    check the mirror is to read both declarations. */
+function constantIn(source, name) {
+  const match = new RegExp(`const ${name}\\s*=\\s*["']?([^"';]+)["']?;`).exec(source);
+  if (!match) throw new Error(`${name} not declared in the source under test`);
+  return match[1].trim();
+}
+
+/** WCAG relative-luminance contrast, implemented HERE rather than imported from the module under
+    test — the point is to verify the extractor's claim independently, not to re-run its own math
+    and agree with itself. */
+function contrastRatio(a, b) {
+  const toRgb = (h) => { const n = parseInt(h.replace("#", ""), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+  const lum = (r, g, b) => {
+    const f = (c) => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  };
+  const la = lum(...toRgb(a)), lb = lum(...toRgb(b));
+  const [hi, lo] = la > lb ? [la, lb] : [lb, la];
+  return (hi + 0.05) / (lo + 0.05);
+}
 
 async function solidColorPixels(r, g, b, w = 8, h = 8) {
   const { data } = await sharp({ create: { width: w, height: h, channels: 3, background: { r, g, b } } })
@@ -93,5 +122,48 @@ describe("gate — lightness sweep against the contrast floor", () => {
     expect(picked).not.toBeNull();
     // Re-derive via hslToHex at the same h/s to sanity-check gate returned a real hex.
     expect(typeof picked).toBe("string");
+  });
+});
+
+// ── contrast-ground drift ────────────────────────────────────────────────────
+// extract-palette.mjs duplicates content.config.ts's page grounds because a plain-node script
+// cannot import TS, and the comment above the duplicate claimed a mirror that had stopped
+// holding: the extractor still measured #e9ebe3 / #14181c a whole design pass after R5 moved
+// the product to #e3e7dc / #0f1317. The light drift was the UNSAFE direction — a lighter ground
+// inflates contrast for a dark accent, so the extractor could bless a primary the schema then
+// rejected at build time. A comment cannot hold a mirror; this can.
+describe("contrast grounds — the extractor measures what the product actually paints", () => {
+  const extractor = readSource("scripts/extract-palette.mjs");
+  const schema = readSource("src/content.config.ts");
+
+  it("names the current page grounds, not a retired palette", () => {
+    expect(constantIn(schema, "LIGHT_BG")).toBe("#e3e7dc");
+    expect(constantIn(schema, "DARK_BG")).toBe("#0f1317");
+  });
+
+  it("keeps the extractor's grounds and floor identical to the schema's (the drift regression)", () => {
+    for (const name of ["LIGHT_BG", "DARK_BG", "MIN_ACCENT_CONTRAST"]) {
+      expect(constantIn(extractor, name)).toBe(constantIn(schema, name));
+    }
+  });
+
+  it("still finds a passing primary for every hue, and every one clears ≥3:1 on BOTH grounds", () => {
+    const light = constantIn(schema, "LIGHT_BG"), dark = constantIn(schema, "DARK_BG");
+    const floor = Number(constantIn(schema, "MIN_ACCENT_CONTRAST"));
+    for (let bucket = 0; bucket < 24; bucket++) {
+      for (const s of [0.35, 0.6, 0.85]) {
+        const primary = gate(bucket / 24, s, 0.5);
+        // A correction that made the gate unsatisfiable would be a worse bug than the drift.
+        expect(primary, `hue bucket ${bucket} at s=${s} found no passing lightness`).not.toBeNull();
+        expect(contrastRatio(primary, light)).toBeGreaterThanOrEqual(floor);
+        expect(contrastRatio(primary, dark)).toBeGreaterThanOrEqual(floor);
+      }
+    }
+  });
+
+  it("rejects the canary's #9c2f2a on the dark ground, at the ratio the schema gate reported", () => {
+    // The live verdict was 2.53:1 against #0f1317 — the ground the drifted extractor never used.
+    expect(contrastRatio("#9c2f2a", "#0f1317")).toBeCloseTo(2.53, 2);
+    expect(contrastRatio("#9c2f2a", "#0f1317")).toBeLessThan(3.0);
   });
 });
