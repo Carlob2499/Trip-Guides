@@ -25,8 +25,11 @@
         "tldr": "Saturday market, the old town's cathedral and palace, then MNHA and Fort Thüngen's Musée Dräi Eechelen.",
         "energy": "balanced",
         "env": "mixed",
-        "body": "<p>Start at the Place Guillaume II market (Wed & Sat only, 07:30–13:30) for coffee and a look at the produce stalls, then work through the old town on foot: Notre-Dame Cathedral, the Grand Ducal Palace (exterior — the interior only opens in summer), and the Fëschmaart square, home to the MNHA.</p><p>In the afternoon, cross toward Kirchberg for Fort Thüngen and the Musée Dräi Eechelen — buy the €12 combined ticket with MNHA if visiting both the same day. Bock Casemates is a short walk back from there, and makes a good end to the fortifications thread before dinner — Manzoku Ramen Bar, a genuinely walk-in-only spot with no reservation system at all, is open this Saturday evening if a change from Luxembourgish food appeals.</p>",
+        "body": "<p>Start at the Place Guillaume II market (Wed & Sat only, 07:30–14:00) for coffee and a look at the produce stalls, then work through the old town on foot: Notre-Dame Cathedral, the Grand Ducal Palace (exterior — the interior only opens in summer), and the Fëschmaart square, home to the MNHA.</p><p>In the afternoon, cross toward Kirchberg for Fort Thüngen and the Musée Dräi Eechelen — buy the €12 combined ticket with MNHA if visiting both the same day. Bock Casemates is a short walk back from there, and makes a good end to the fortifications thread before dinner — Manzoku Ramen Bar, a genuinely walk-in-only spot with no reservation system at all, is open this Saturday evening if a change from Luxembourgish food appeals.</p>",
         "constraints": ["Market runs Wed & Sat only — this is the one day it lines up with the trip"],
+        "source_url": "https://www.vdl.lu/en/visiting/leisure-and-recreation/luxembourg-city-markets/markets-luxembourg-city",
+        "verified_on": "2026-08-21",
+        "shelf_life": "hours",
         "waypoints": [
           { "name": "Place Guillaume II market", "lat": 49.6106173, "lng": 6.1308884, "time": "09:00" },
           { "name": "Notre-Dame Cathedral", "lat": 49.6098109, "lng": 6.1315567, "time": "10:00" },

@@ -55,7 +55,10 @@
         "low": 5,
         "high": 25,
         "per": "person",
-        "note": "Bock Casemates €11, MNHA €7, Musée Dräi Eechelen €7 (or €12 combined), Villa Vauban €5 — the plan visits one or two of these most days."
+        "note": "Bock Casemates {{fact:bock-casemates-11-eur}}, MNHA {{fact:mnha-7-eur}}, Musée Dräi Eechelen {{fact:m3e-7-eur}} (or {{fact:m3e-mnha-combined-12-eur}} combined), Villa Vauban {{fact:villa-vauban-5-eur}} — the plan visits one or two of these most days.",
+        "source_url": "https://www.nationalmusee.lu/en/visit/practical-infos/opening-times-and-admission",
+        "verified_on": "2026-08-21",
+        "shelf_life": "hours"
       },
       {
         "label": "Vianden half-day (castle + transit)",

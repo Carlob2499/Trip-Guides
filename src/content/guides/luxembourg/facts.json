@@ -40,7 +40,7 @@
     "tier": "primary"
   },
   "vianden-castle-13-eur": {
-    "claim": "Vianden Castle — adult admission (incl. €1 municipal tourist tax)",
+    "claim": "Vianden Castle → adult admission (incl. €1 municipal tourist tax)",
     "value": "€13",
     "source_url": "https://castle-vianden.lu/gb/besuch/",
     "verified_on": "2026-08-21",
@@ -48,7 +48,7 @@
     "tier": "primary"
   },
   "vianden-castle-student-7-eur": {
-    "claim": "Vianden Castle — student (13+) admission",
+    "claim": "Vianden Castle → student (13+) admission",
     "value": "€7",
     "source_url": "https://castle-vianden.lu/gb/besuch/",
     "verified_on": "2026-08-21",

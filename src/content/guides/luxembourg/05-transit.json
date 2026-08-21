@@ -22,11 +22,11 @@
     "center": { "lat": 49.6110, "lng": 6.1340 },
     "span": 0.06,
     "points": [
-      { "name": "Bock Casemates", "lat": 49.6116635, "lng": 6.1366893, "place_id": "__VERIFICATION_REQUIRED__" },
-      { "name": "Musée National d'Histoire et d'Art", "lat": 49.6115014, "lng": 6.1338568, "place_id": "__VERIFICATION_REQUIRED__" },
-      { "name": "Musée Dräi Eechelen / Fort Thüngen", "lat": 49.6163950, "lng": 6.1392966, "place_id": "__VERIFICATION_REQUIRED__" },
-      { "name": "Grund", "lat": 49.6102782, "lng": 6.1359038, "place_id": "__VERIFICATION_REQUIRED__" },
-      { "name": "Pfaffenthal panoramic lift", "lat": 49.6155370, "lng": 6.1305598, "place_id": "__VERIFICATION_REQUIRED__" }
+      { "name": "Bock Casemates", "lat": 49.6116635, "lng": 6.1366893, "place_id": "N8080240552" },
+      { "name": "Musée National d'Histoire et d'Art", "lat": 49.6115014, "lng": 6.1338568, "place_id": "W48994767" },
+      { "name": "Musée Dräi Eechelen / Fort Thüngen", "lat": 49.6163950, "lng": 6.1392966, "place_id": "W26424184" },
+      { "name": "Grund", "lat": 49.6102782, "lng": 6.1359038, "place_id": "R533322" },
+      { "name": "Pfaffenthal panoramic lift", "lat": 49.6155370, "lng": 6.1305598, "place_id": "N4315424507" }
     ]
   },
   {

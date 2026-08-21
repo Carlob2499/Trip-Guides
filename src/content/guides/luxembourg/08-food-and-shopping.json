@@ -10,13 +10,13 @@
       {
         "name": "Marché Place Guillaume II",
         "area": "Ville Haute (old town)",
-        "hours": "Wed & Sat 07:30–13:30",
+        "hours": "Wed & Sat 07:30–14:00",
         "book": "walk-in",
         "how": "In the main square, a 5-minute walk from the Palace and Cathedral.",
         "price": "€3–10 per item",
         "why": "Regional produce, cheese, roast chicken and a food-stall cluster — the easiest, most casual lunch in the old town, and it lands on this trip's Saturday.",
         "map": { "lat": 49.6106173, "lng": 6.1308884 },
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "W24387570",
         "source_url": "https://www.vdl.lu/en/visiting/leisure-and-recreation/luxembourg-city-markets/markets-luxembourg-city",
         "verified_on": "2026-08-21",
         "shelf_life": "hours"
@@ -34,7 +34,7 @@
         "crowd_tip": "Lunch generally seats walk-ins; dinner fills up, especially Fri–Sat — call ahead or use the online booking form if arriving after 19:00.",
         "why": "200 years in the same Clausen building, serving Judd mat Gaardebounen — smoked pork collar and broad beans, Luxembourg's national dish.",
         "map": { "lat": 49.6134735, "lng": 6.1431420 },
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "W55354720",
         "source_url": "https://www.mouselscantine.lu/",
         "verified_on": "2026-08-21",
         "shelf_life": "hours"
