@@ -58,8 +58,13 @@ describe("routeAnswers — active research owns its answers (M6)", () => {
     expect(d.branch).toBe("research/korea");
   });
 
-  it("a published guide keeps the change-run behavior, active-looking state or not", () => {
-    expect(routeAnswers({ hasAnswers: true, researchActive: true, researchBranch: "research/korea", published: true }).target).toBe("change");
+  it("an ACTIVE research run owns the answer even when the slug is already published — Run A live on main never steals Run B's answer (Codex blocker 1)", () => {
+    const d = routeAnswers({ hasAnswers: true, researchActive: true, researchBranch: "research/korea", published: true });
+    expect(d.target).toBe("research");
+    expect(d.branch).toBe("research/korea");
+  });
+
+  it("a published guide with NO active research keeps the change-run behavior", () => {
     expect(routeAnswers({ hasAnswers: true, researchActive: false, researchBranch: null, published: true }).target).toBe("change");
   });
 

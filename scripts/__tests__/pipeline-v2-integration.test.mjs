@@ -291,22 +291,28 @@ describe("pipeline.mjs land — authority at the CLI seam", () => {
     expect(landCase).toContain("--land auto refused");
   });
 
-  it("phase order: gate record before landBranch; finalize/record only AFTER the outcome exists", () => {
-    const gateRecord = landCase.indexOf("markLandingGate");
-    const landBranchAt = landCase.indexOf("landBranch({");
-    const finalize = landCase.indexOf("finalizeMergedLanding");
-    const outcomeRecord = landCase.indexOf("recordLandingOutcome");
+  it("phase order: gate record before the land seam; finalize/record only AFTER the outcome exists", () => {
+    // The transaction body moved to landing.mjs's executeLanding (Codex blocker 3); the phase
+    // order lives there now, and the CLI delegates rather than re-implementing.
+    const landing = readRepo("scripts/pipeline/landing.mjs");
+    const gateRecord = landing.indexOf("markLandingGate");
+    const landAt = landing.indexOf("result = land({");
+    const finalize = landing.indexOf("finalizeMergedLanding");
+    const outcomeRecord = landing.indexOf("recordLandingOutcome");
     expect(gateRecord).toBeGreaterThan(0);
-    expect(landBranchAt).toBeGreaterThan(gateRecord);
-    expect(finalize).toBeGreaterThan(landBranchAt);
+    expect(landAt).toBeGreaterThan(gateRecord);
+    expect(finalize).toBeGreaterThan(landAt);
     expect(outcomeRecord).toBeGreaterThan(0);
-    // The retired premature-publication call is gone by name.
+    // The retired premature-publication call is gone by name — from both layers.
+    expect(landing).not.toContain("recordProductLanding");
     expect(landCase).not.toContain("recordProductLanding");
+    expect(landCase).toContain("executeLanding(slug");
   });
 
   it("a post-merge finalization failure is loud and names the idempotent retry command", () => {
-    expect(landCase).toContain("MERGE SUCCEEDED");
-    expect(landCase).toContain("finalize-landing --slug");
+    const landing = readRepo("scripts/pipeline/landing.mjs");
+    expect(landing).toContain("MERGE SUCCEEDED");
+    expect(landing).toContain("finalize-landing --slug");
   });
 });
 
@@ -362,24 +368,35 @@ describe("fresh-run semantics — history never becomes a new run's identity", (
 });
 
 describe("answers routing — one definition of active, across generations", () => {
-  it("routeAnswers still sends active research to its run and published guides to change", () => {
+  it("routeAnswers sends active research to its run BEFORE consulting publication (Codex blocker 1)", () => {
     expect(routeAnswers({ hasAnswers: true, researchActive: true, researchBranch: "research-v2/x", published: false }).target).toBe("research");
-    expect(routeAnswers({ hasAnswers: true, researchActive: true, researchBranch: "research-v2/x", published: true }).target).toBe("change");
+    // A published Run A on main never steals an answer from Run B's live research branch.
+    expect(routeAnswers({ hasAnswers: true, researchActive: true, researchBranch: "research-v2/x", published: true }).target).toBe("research");
+    // Only when no run owns the answer does publication route it to the change lifecycle.
+    expect(routeAnswers({ hasAnswers: true, researchActive: false, researchBranch: null, published: true }).target).toBe("change");
   });
 
-  it("the answers-route matrix lives in THE shared resolver (hardening pass) — no private precedence rule", () => {
+  it("the answers-route matrix lives in THE shared resolver — no private precedence rule, and branch inspection is UNCONDITIONAL", () => {
     // The matrix itself — stale complete V2 never outranks active V1, dual-active refuses — is
-    // behaviorally proven in run-generation.test.mjs against resolveActiveGeneration; this pin
-    // holds answers-route to consuming that one resolver instead of re-deriving activity.
+    // behaviorally proven in run-generation.test.mjs against resolveActiveGeneration; the REAL
+    // seam (real origin, real branches, published main) is proven in
+    // pipeline-v2-release-blockers.test.mjs. This pin holds the resolution to questions.mjs's
+    // resolveAnswerRouting, consuming that one resolver, with active ownership resolved BEFORE
+    // historical publication — never gated on `if (!published)` again.
+    const q = readRepo("scripts/pipeline/questions.mjs");
+    const fn = q.split("export async function resolveAnswerRouting")[1];
+    expect(fn).toContain("const v2 = inspect(");
+    expect(fn).toContain("const v1 = inspect(");
+    expect(fn).toContain("resolveActiveGeneration({");
+    expect(fn).toContain('"v2-complete-draft"');
+    // publication is computed AFTER ownership resolution, and no publication guard wraps the
+    // branch inspection.
+    expect(fn.indexOf("resolveActiveGeneration({")).toBeLessThan(fn.indexOf("let published"));
+    expect(fn).not.toContain("if (!published)");
     const src = readRepo("scripts/pipeline.mjs");
     const routeCase = src.split('case "answers-route"')[1].split('case "answers-apply"')[0];
-    expect(routeCase).toContain("const v2 = inspect(");
-    expect(routeCase).toContain("const v1 = inspect(");
-    expect(routeCase).toContain('import("../src/lib/run-generation.mjs")');
-    expect(routeCase).toContain("resolveActiveGeneration({");
+    expect(routeCase).toContain("resolveAnswerRouting(slug");
     expect(routeCase).toContain("refusing to guess which run owns the answer");
-    // Complete-but-unmerged draft runs still own their answers (the reopen makes it true).
-    expect(routeCase).toContain('"v2-complete-draft"');
   });
 });
 

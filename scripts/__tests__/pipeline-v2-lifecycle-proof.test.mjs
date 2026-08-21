@@ -54,11 +54,12 @@ beforeEach(async () => {
 });
 afterEach(async () => { await rm(dir, { recursive: true, force: true }); });
 
-const mergedPr = (pr) => (args) => {
+const mergedPr = (pr, mergeOid) => (args) => {
   if (args[0] === "pr" && args[1] === "view") {
     return JSON.stringify({
       state: "MERGED", mergedAt: "2026-08-20T15:00:00Z", baseRefName: "main",
-      headRefName: `research-v2/${SLUG}`, url: `https://github.com/x/y/pull/${pr}`,
+      headRefName: `research-v2/${SLUG}`, mergeCommit: { oid: mergeOid },
+      url: `https://github.com/x/y/pull/${pr}`,
     });
   }
   throw new Error(`unexpected gh call: ${args.join(" ")}`);
@@ -118,7 +119,10 @@ describe("R13 — the deterministic lifecycle, end to end", () => {
     g("checkout", "-q", "main");
     g("merge", "-q", "--no-ff", "-m", "merge run A", `research-v2/${SLUG}`);
     g("branch", "-qD", `research-v2/${SLUG}`); // land-branch.sh deletes the branch on merge
-    const verified = verifyMergedPr({ slug: SLUG, pr: 200, gh: mergedPr(200) });
+    // Verification now proves the RUN identity too (Codex blocker 2): the merge commit's own
+    // run.v2.json must carry the runId being finalized.
+    const mergeOidA = g("rev-parse", "main").trim();
+    const verified = verifyMergedPr({ slug: SLUG, pr: 200, expectedRunId: runA.runId, gh: mergedPr(200, mergeOidA), git: (args) => g(...args) });
     const finalA = await finalizeMergedLanding(SLUG, { pr: 200, mergedAt: verified.mergedAt, announced: true, intakeDir });
     expect(finalA.publication.published).toBe(true);
     expect(finalA.landing.mergedAt).toBe("2026-08-20T15:00:00Z");

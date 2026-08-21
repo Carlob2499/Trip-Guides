@@ -67,6 +67,37 @@ export async function restoreDraft(slug, { guidesDir = GUIDES_DIR } = {}) {
   return { ok: true, changed: true, slug, metaPath: located.metaPath };
 }
 
+// REMOTE QUARANTINE (Codex blocker 3, 2026-08-20): auto-landing removes the draft flag and
+// pushes it BEFORE the merge attempt, so EVERY landing that ends without a confirmed merge must
+// put draft:true back ON ORIGIN — a local restore that never reaches the remote leaves a
+// publishable branch behind while the log claims "safely draft". This is the one durable
+// re-quarantine: restore the flag, commit it, and ALWAYS push (the retry case is exactly "the
+// restore commit exists locally but its push never landed"). A push failure THROWS — quarantine
+// that is not on origin is not quarantine, and the caller must treat it as a blocking failure.
+// Where a PR exists for the branch, it is returned to draft best-effort (`gh pr ready --undo`);
+// the guide-content flag is the hard invariant, the PR state the visible secondary.
+export async function quarantineRemoteBranch(slug, {
+  branch, reason = "failed landing", guidesDir = GUIDES_DIR, cwd = ROOT, git, gh,
+} = {}) {
+  if (!branch) throw new Error("quarantineRemoteBranch requires the research branch to re-quarantine");
+  const runGit = git || ((args) => execFileSync("git", args, { cwd, encoding: "utf8" }));
+  const restored = await restoreDraft(slug, { guidesDir });
+  if (!restored.ok) {
+    throw new Error(`could not restore the draft flag for ${slug} (${restored.error}) — the remote branch cannot be proven quarantined`);
+  }
+  if (restored.changed) {
+    runGit(["add", "--", restored.metaPath]);
+    runGit(["commit", "--only", "-m", `chore(${slug}): restore draft after ${reason} — nothing published`, "--", restored.metaPath]);
+  }
+  runGit(["push", "origin", `HEAD:${branch}`]);
+  let prUndrafted = null;
+  if (gh) {
+    try { gh(["pr", "ready", branch, "--undo"]); prUndrafted = true; }
+    catch { prUndrafted = false; /* best-effort — no PR, or gh itself is what failed */ }
+  }
+  return { restored: restored.changed, pushed: true, prUndrafted };
+}
+
 // THE evidence gate — build + networked verify. One implementation, used by the automated landing
 // path and by the manual `pipeline publish` override alike, so "published" means the same thing
 // whoever triggered it. Returns { passed, steps: [{ cmd, code }] }.

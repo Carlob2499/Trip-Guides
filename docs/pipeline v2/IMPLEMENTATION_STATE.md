@@ -1153,3 +1153,54 @@ PR #68's body and the suites named):
 typecheck 0 errors · lint 0 errors · build clean · axe a11y 55/55 · dist grepped for the
 retired Progress wording. **Not executable locally:** the live product auto-merge and Worker
 /answer hop (live-only by design, unchanged); PR CI runs on push.
+
+## Codex re-review corrections (2026-08-20, after `de69123` — three release blockers + one recovery-truth defect)
+
+Codex independently re-reviewed the R1–R13 head and confirmed four remaining defects. All four
+are fixed on the branch, each with the mandated real-seam behavioral tests (new suite:
+`pipeline-v2-release-blockers.test.mjs` — real git repos, real bare origins, gh mocked only at
+the process seam).
+
+- **Blocker 1 — answers routing: active ownership BEFORE historical publication.** The real
+  `answers-route` computed slug publication from main first and inspected research branches
+  only inside `if (!published)` — so published Run A + active Run B skipped active-generation
+  resolution entirely and sent Run B's answer to the change lifecycle. The whole resolution now
+  lives in `resolveAnswerRouting` (questions.mjs, injectable git/guidesDir): both branch
+  namespaces are inspected UNCONDITIONALLY, the shared resolver decides ownership, dual-active
+  refuses, and only an ownerless answer routes by publication. `routeAnswers`'s precedence
+  flipped to match; the tests asserting published-beats-active are corrected. Proven at the
+  real seam: published main + active B → B; + complete-unmerged B → B; + active V1 → V1;
+  + nothing → change; dual-active → refusal.
+- **Blocker 2 — finalization proves the RUN, not the branch name.** `research-v2/<slug>` is
+  reused across generations, so `verifyMergedPr`'s base+head identity let an operator finalize
+  Run B against Run A's old merged PR. It now also requires GitHub to name the merge commit and
+  reads `guides-intake/<slug>/run.v2.json` out of that commit's own tree — the run state rode
+  the branch into the merge (phase 1), so the merge commit carries exactly the run it landed;
+  any runId other than `expectedRunId` (mandatory, both callers supply it) refuses. Proven from
+  the REAL merged-but-unfinalized state (landing.pr never pre-seeded): Run A's PR refused,
+  unrelated same-base PR refused, Run B's PR succeeds with GitHub's mergedAt persisted to
+  origin.
+- **Blocker 3 — every non-merged auto landing re-quarantines ORIGIN.** The conflict fallback
+  logged a failed draft-restore push and continued (reporting a safe draft outcome), and the
+  hard-failure path never restored draft at all. The landing transaction moved to
+  `scripts/pipeline/landing.mjs` (`executeLanding`, injectable seams) with
+  `quarantineRemoteBranch` (publish.mjs): restore → commit → ALWAYS push → best-effort PR
+  undraft; a push failure on the conflict path records landing FAILED and exits 1 (BLOCKED,
+  never "safely draft"), and the hard-failure path quarantines before rethrowing. Proven with
+  real remotes: CASE A (conflict → origin branch draft:true, draft outcome), CASE B (conflict +
+  dead remote → BLOCKED/failed/exit 1, no safe-restore claim), CASE C (hard failure → draft
+  restored AND pushed before exit, landing failed, gate PASS), plus the lost-push retry.
+- **Recovery truth — announcement fails closed.** A crash between the merge and main leaves
+  durable `announced:null`; a recovery omitting `--announced` silently finalized unknown.
+  `finalizeLandingRecovery` now refuses when neither the durable state nor the flag carries the
+  fact; `--announced` accepts `ok|failed|skipped` (skipped = no announce URL — the one honest
+  null), and the land path's printed retry command always carries one of the three. Proven from
+  the real merged-but-unfinalized state, not a pre-seeded one.
+- **FINAL lifecycle proof.** One deterministic 12-step test: Run A publishes → Run B same slug
+  → REAL answers routing picks B despite A live → gate PASS → hard failure + remote quarantine
+  → retry → real merge (performed by a gh-side clone) + finalization crash → recovery refuses
+  A's old PR → refuses missing announce fact → recovers with B's PR → B published, durably on
+  origin.
+
+**Validation this pass:** full gates re-run (build · lint · typecheck · full vitest suite incl.
+the new 18-test blocker suite); results recorded in the PR's acceptance matrix.

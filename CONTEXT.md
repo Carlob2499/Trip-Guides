@@ -728,3 +728,26 @@ behavior was proven" are forced to be the same statement. Rejected: prose summar
 was fixed" without per-requirement proof lines — that shape is how the correction pass's
 "zero known code blockers" claim shipped over twelve live defects; the matrix exists so a
 claim of readiness decomposes into rows a reviewer can falsify one at a time.
+
+**A landing is proven by its RUN, and a non-merged auto landing is quarantined ON ORIGIN**
+(Codex re-review corrections, 2026-08-20, PR #68). Four amendments to the two-phase
+transaction above. (1) Merge confirmation includes RUN IDENTITY: `verifyMergedPr` reads
+`run.v2.json` out of the merge commit's own tree and refuses any runId other than the one
+being finalized — `research-v2/<slug>` is REUSED across generations, so base+head alone would
+let Run A's old merged PR finalize Run B; `expectedRunId` is mandatory, no caller may skip
+the proof. (2) Every non-merged AUTO landing must leave `origin/<branch>` carrying
+`draft:true` again (the flip was pushed pre-merge); the restore is committed AND pushed
+(`quarantineRemoteBranch`), and a restore that cannot reach origin is a BLOCKED landing —
+recorded failed, exit 1, never reported as a safe draft fallback. The whole transaction lives
+in `scripts/pipeline/landing.mjs` (`executeLanding`, injectable seams) so the invariant is
+behaviorally tested against real git remotes. (3) Recovery announcement truth FAILS CLOSED:
+`finalize-landing` without `--announced` refuses when the durable state carries no announce
+fact (`ok|failed|skipped`; skipped = no announce URL was configured) — a crash between the
+merge and main must not silently turn a known real-world outcome into null; the land path's
+printed retry command now always carries the flag. (4) Answers routing resolves ACTIVE
+research ownership BEFORE historical slug publication (`resolveAnswerRouting`,
+questions.mjs): a published Run A on main never steals Run B's answer into the change
+lifecycle; only when no run owns the answer does publication route it to a change run.
+Rejected: branch-name identity as landing proof (aliases generations); logging a failed
+draft-restore and continuing (claims a safety the remote cannot show); routing by
+publication-first (the exact Run-A-steals-Run-B mis-route).

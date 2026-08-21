@@ -33,7 +33,7 @@
 //   validate --slug <s> [--scoped]                   the full artifact validation (fail closed)
 //   land-intent --slug <s> --event-name <e> --on-default <b> --engine <v>  derive init-time intent (trusted /new only mints auto)
 //   land-mode --slug <s> [--product-authority true]  emit land=auto|pr (landingMode() + landing-time authority)
-//   finalize-landing --slug <s> --pr <n> [--announced ok|failed] [--base <b>]  GitHub-verified, remotely-persisted post-merge retry
+//   finalize-landing --slug <s> --pr <n> [--announced ok|failed|skipped] [--base <b>]  GitHub-verified (incl. runId proof), remotely-persisted post-merge retry; announcement truth fails closed
 //   reopen-answers --slug <s>                        re-open reconcile+critic for a late answer
 
 import { existsSync, appendFileSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -454,12 +454,14 @@ async function run(cmd, get, has) {
       // local success is not durable success. The printed retry command is complete as printed.
       const pr = Number(get("--pr"));
       const announcedFlag = get("--announced") || "";
-      if (announcedFlag && !["ok", "failed"].includes(announcedFlag)) {
-        console.error(`[pipeline-v2] --announced must be ok or failed, not "${announcedFlag}".`); return 1;
+      if (announcedFlag && !["ok", "failed", "skipped"].includes(announcedFlag)) {
+        console.error(`[pipeline-v2] --announced must be ok, failed or skipped, not "${announcedFlag}".`); return 1;
       }
+      // Omitted --announced passes null through — the recovery FAILS CLOSED on it unless the
+      // durable state already records the fact; "skipped" is the explicit no-announce-URL case.
       const { state, base, mergedAt } = await finalizeLandingRecovery(slug, {
         pr,
-        announced: announcedFlag === "ok" ? true : announcedFlag === "failed" ? false : null,
+        announced: announcedFlag === "ok" ? true : announcedFlag === "failed" ? false : announcedFlag === "skipped" ? "skipped" : null,
         base: get("--base") || null,
       });
       console.log(`[pipeline-v2] ${slug} — landing finalized (PR #${pr}, merged ${mergedAt}); publication recorded ${state.publication.publishedAt}; pushed to origin/${base}.`);

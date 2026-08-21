@@ -10,6 +10,28 @@
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
 
+## Snapshot (2026-08-20 — FINAL integration-hardening pass on PR #68, R1–R13)
+
+The deterministic pre-Codex hardening pass closed thirteen requirements on the PR branch, each
+behaviorally tested. Authority: only the trusted /new flow mints auto intent — new-guide.yml
+now CALLS research-pass-v2.yml (workflow_call; the called run carries the caller's "issues"
+event), and `deriveLandIntent` refuses `workflow_dispatch` outright, so a manual dispatch on
+main with the selector live is still a pr run. Recovery: `finalize-landing` now PROVES the
+merge against GitHub (state/base/head/mergedAt via `landing-truth.mjs`), records GitHub's own
+mergedAt, refuses open/unmerged/unrelated/mismatched PRs, and must push to the remote default
+branch or fail (`finalizeLandingRecovery`, tested against a real bare origin). Fresh runs:
+`resetFreshRunWorkspace` strips the prior run's mutable artifacts from a fresh branch and the
+recorded baseline, proven with the REAL Pass-B verifier. One active-generation resolver
+(`src/lib/run-generation.mjs`) now serves answers routing AND the Progress gateway (run state,
+questions, events) — stale V2 never outranks active V1, dual-active is an explicit conflict.
+Progress keys "Published" on the RUN's own publication (Run B never inherits Run A's), and
+renders landing failed/draft truthfully (gate PASS survives; "Landing failed"/"Awaiting
+review"). Late answers extend the exhausted cap by a bounded reopen grant. The land crash
+handler no longer rewrites a passed gate or resurrects merged branches; the conflict fallback
+restores `draft:true`; announced survives retries; HANDOFF_ARCHIVE re-normalized to LF. New
+suites: pipeline-v2-hardening, run-generation, pipeline-v2-lifecycle-proof (the full A→B
+deterministic lifecycle). Record: IMPLEMENTATION_STATE "Final integration-hardening pass".
+
 ## Snapshot (2026-08-20 — Release-candidate correction pass on PR #68)
 
 The integration pass's INTEGRATION_YELLOW understated real product-path defects; the
@@ -46,20 +68,3 @@ offline verify twice and the 1B feedback retry converged (7→6→0); geocode+cr
 `landing mode pr` → real gate exit 0 → **draft PR #67, published:false, deployedLive:null,
 attempts 5/5**. Full gates green. Evidence: IMPLEMENTATION_STATE "Integration week session".
 
-## Snapshot (2026-08-20 — P13.1: premature GREEN retracted, R3 fixture bus-exclusivity fixed)
-
-The first P13 review returned GREEN on `88d16fe` and was **retracted the same day**: Codex's
-re-inspection caught that the P12.1 fixture rewrite had itself promoted the sourced walking
-prohibition into **bus exclusivity** ("the bus is a required segment"; missed bus ⇒ automatic
-failed same-night arrival) — while the fetched japan-guide page says Kōyasan Station "is a ten
-minute **bus or taxi** ride from Koyasan's town center" (re-verified this pass). The review had
-verified every SUPPORTS line affirmatively but never asked the source the adversarial question
-— what does the page say that CONTRADICTS the framing — the lesson is recorded in §P13.1.
-**The correction (one file, `pipeline-v2-transport-r3-proof.test.mjs`):** final leg reworded
-everywhere to "motorized (bus or taxi)"; `missedConnection` made conditional (on-foot recovery
-impossible is sourced; failure only IF the day's motorized options exhaust; taxi asserted
-neither available nor unavailable); taxi recovery added to the REQUIRED RE-CHECK list;
-`risk: 3` re-evaluated and honestly retained on the remaining fragility stack; mapping updated
-(source 2 now DOES-NOT-PROVE bus exclusivity); new scar pins the exclusivity wording out.
-Suite 12/12; validator returns `[]`; Gap-1 probe proof and all gate/invariant findings from the
-retracted review still stand. Records: IMPLEMENTATION_STATE §P13 (retraction banner) + §P13.1.

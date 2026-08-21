@@ -48,37 +48,34 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-20 — FINAL integration-hardening pass on PR #68, R1–R13)
+## Snapshot (2026-08-20 — Codex re-review corrections on PR #68: 3 blockers + recovery truth)
 
-The deterministic pre-Codex hardening pass closed thirteen requirements on the PR branch, each
-behaviorally tested. Authority: only the trusted /new flow mints auto intent — new-guide.yml
-now CALLS research-pass-v2.yml (workflow_call; the called run carries the caller's "issues"
-event), and `deriveLandIntent` refuses `workflow_dispatch` outright, so a manual dispatch on
-main with the selector live is still a pr run. Recovery: `finalize-landing` now PROVES the
-merge against GitHub (state/base/head/mergedAt via `landing-truth.mjs`), records GitHub's own
-mergedAt, refuses open/unmerged/unrelated/mismatched PRs, and must push to the remote default
-branch or fail (`finalizeLandingRecovery`, tested against a real bare origin). Fresh runs:
-`resetFreshRunWorkspace` strips the prior run's mutable artifacts from a fresh branch and the
-recorded baseline, proven with the REAL Pass-B verifier. One active-generation resolver
-(`src/lib/run-generation.mjs`) now serves answers routing AND the Progress gateway (run state,
-questions, events) — stale V2 never outranks active V1, dual-active is an explicit conflict.
-Progress keys "Published" on the RUN's own publication (Run B never inherits Run A's), and
-renders landing failed/draft truthfully (gate PASS survives; "Landing failed"/"Awaiting
-review"). Late answers extend the exhausted cap by a bounded reopen grant. The land crash
-handler no longer rewrites a passed gate or resurrects merged branches; the conflict fallback
-restores `draft:true`; announced survives retries; HANDOFF_ARCHIVE re-normalized to LF. New
-suites: pipeline-v2-hardening, run-generation, pipeline-v2-lifecycle-proof (the full A→B
-deterministic lifecycle). Record: IMPLEMENTATION_STATE "Final integration-hardening pass".
+Codex's independent re-review of the R1–R13 head confirmed four remaining defects; all four are
+fixed on the branch with real-seam behavioral proofs (new suite
+`pipeline-v2-release-blockers.test.mjs`: real git repos + bare origins, gh mocked only at the
+process seam). (1) Answers routing resolves ACTIVE research ownership BEFORE historical slug
+publication — `resolveAnswerRouting` (questions.mjs, injectable) inspects both branch
+namespaces unconditionally, so a published Run A never steals active Run B's answer;
+`routeAnswers` precedence flipped to match. (2) `verifyMergedPr` now proves the RUN, not the
+branch name: GitHub must name the merge commit, and its tree's own `run.v2.json` must carry the
+`expectedRunId` (mandatory) — Run A's old merged PR can no longer finalize Run B on the reused
+branch. (3) The landing transaction moved to `scripts/pipeline/landing.mjs` (`executeLanding`)
+with `quarantineRemoteBranch`: EVERY non-merged auto landing restores `draft:true` and pushes
+it to origin (conflict fallback AND hard failure); an unpushable restore is a BLOCKED landing —
+failed, exit 1, never "safely draft". (4) `finalize-landing` announcement truth fails closed:
+no durable fact + no `--announced ok|failed|skipped` = refusal; the printed retry command
+always carries the flag. A 12-step FINAL test walks publish-A → research-B → real routing →
+quarantine → merge → refuse-A's-PR → recover-with-B's-PR → B published. Records:
+IMPLEMENTATION_STATE "Codex re-review corrections" + a new CONTEXT decision.
 
 ## Where we left off
 
-**PR #68 (fable/pipeline-v2-integration → main) is READY_FOR_CODEX_REVIEW — do not merge it
-from a session, do not set the selector, do not run the live canary.** All thirteen hardening
-requirements fixed and behaviorally proven; full suite 168 files / 2,776 tests green + build + lint
-+ typecheck + axe a11y (55/55). The only remaining proofs are live-only by construction: the
-default-branch product auto-merge via a real /new (needs this code ON main + selector ON,
-observing the workflow_call provenance end-to-end), and the Worker /answer hop (no owner key
-in sessions). First post-merge action: one selector-ON /new canary observing the two-phase
-landing + safety notice + trusted-invocation authority live. Selector ABSENT (untouched this
-pass). V1 present + dispatchable. Cleanup queue unchanged: PR #67 closed as evidence;
-andorra removed on the branch; P10–P13 evidence untouched pending sign-off.
+**PR #68 (fable/pipeline-v2-integration → main) is back to READY_FOR_CODEX_REVIEW — do not
+merge it from a session, do not set the selector, do not run the live canary.** The four
+Codex defects (answers-route precedence, run-identity finalization proof, remote quarantine
+invariant, announcement fail-closed) are fixed and behaviorally proven; the PR body's
+acceptance matrix has one row per defect with the exact proving tests. Full gates re-run green
+on the final tree. Live-only proofs unchanged (product auto-merge via real /new; Worker
+/answer hop). Selector ABSENT (untouched this pass). V1 present + dispatchable. Cleanup queue
+unchanged: PR #67 closed as evidence; andorra removed on the branch; P10–P13 evidence
+untouched pending sign-off.

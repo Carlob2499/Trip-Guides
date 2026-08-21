@@ -87,14 +87,25 @@ function ghMock({ pr = null, prError = null, defaultBranch = null } = {}) {
   };
 }
 
+const MERGE_OID = "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678";
+const RID = `${SLUG}-20260820-abc123`;
+
 const MERGED_PR = (over = {}) => ({
   state: "MERGED",
   mergedAt: "2026-08-20T12:34:56Z",
   baseRefName: "main",
   headRefName: `research-v2/${SLUG}`,
+  mergeCommit: { oid: MERGE_OID },
   url: `https://github.com/Carlob2499/Trip-Guides/pull/91`,
   ...over,
 });
+
+/** A git mock serving the merge commit's own run state — the run-identity proof's source. */
+const gitServing = (runId, oid = MERGE_OID) => (args) => {
+  if (args[0] === "show" && args[1] === `${oid}:guides-intake/${SLUG}/run.v2.json`) return JSON.stringify({ runId });
+  if (args[0] === "fetch") return "";
+  throw new Error(`unexpected git call: ${args.join(" ")}`);
+};
 
 // ── R1: only the trusted /new product flow may auto-land ─────────────────────
 
@@ -147,47 +158,69 @@ describe("R1 — landing intent: manual dispatch can never mint auto, whatever r
 
 // ── R2: recovery finalization proves the merge against GitHub ────────────────
 
-describe("R2 — verifyMergedPr refuses everything but the real merged landing", () => {
+describe("R2 — verifyMergedPr refuses everything but the real merged landing OF THIS RUN", () => {
   it("a nonexistent/unreadable PR is refused", () => {
-    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ prError: "GraphQL: Could not resolve to a PullRequest" }) }))
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ prError: "GraphQL: Could not resolve to a PullRequest" }) }))
       .toThrow(/could not be read from GitHub/);
   });
 
+  it("a MISSING expectedRunId is refused — no caller may skip the run-identity proof", () => {
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR() }), git: gitServing(RID) }))
+      .toThrow(/requires the runId/);
+  });
+
   it("an OPEN PR is refused — nothing merged yet", () => {
-    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR({ state: "OPEN", mergedAt: null }) }) }))
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR({ state: "OPEN", mergedAt: null }) }) }))
       .toThrow(/is OPEN on GitHub/);
   });
 
   it("a CLOSED-but-unmerged PR is refused", () => {
-    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR({ state: "CLOSED", mergedAt: null }) }) }))
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR({ state: "CLOSED", mergedAt: null }) }) }))
       .toThrow(/is CLOSED on GitHub/);
   });
 
   it("a merged PR with the WRONG base branch is refused", () => {
-    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR({ baseRefName: "gh-pages" }) }) }))
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR({ baseRefName: "gh-pages" }) }) }))
       .toThrow(/merged into "gh-pages"/);
   });
 
   it("an UNRELATED merged PR (wrong head — another slug, or not a research branch) is refused", () => {
-    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR({ headRefName: "research-v2/otherland" }) }) }))
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR({ headRefName: "research-v2/otherland" }) }) }))
       .toThrow(/not "research-v2\/hardland"/);
-    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR({ headRefName: "fix/typo" }) }) }))
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR({ headRefName: "fix/typo" }) }) }))
       .toThrow(ContractError);
   });
 
   it("MERGED without a mergedAt is refused — the timestamp is never invented", () => {
-    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR({ mergedAt: null }) }) }))
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR({ mergedAt: null }) }) }))
       .toThrow(/refusing to invent/);
   });
 
-  it("the correct merged PR succeeds and returns GITHUB's mergedAt", () => {
-    const out = verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR() }) });
+  it("MERGED with no merge commit named is refused — the landing cannot be tied to a run", () => {
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR({ mergeCommit: null }) }) }))
+      .toThrow(/names no merge commit/);
+  });
+
+  it("a merged PR whose merge commit carries ANOTHER run's runId is refused — reused branch names cannot alias generations (Codex blocker 2)", () => {
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR() }), git: gitServing(`${SLUG}-20260810-old000`) }))
+      .toThrow(/merged run "hardland-20260810-old000", not the run being finalized/);
+  });
+
+  it("a merge commit with NO readable run state for the slug is refused, fail closed", () => {
+    const deadGit = (args) => { if (args[0] === "fetch") return ""; throw new Error("path does not exist"); };
+    expect(() => verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR() }), git: deadGit }))
+      .toThrow(/no readable guides-intake/);
+  });
+
+  it("the correct merged PR — right head, base, AND runId — succeeds and returns GITHUB's mergedAt", () => {
+    const out = verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: RID, gh: ghMock({ pr: MERGED_PR() }), git: gitServing(RID) });
     expect(out.mergedAt).toBe("2026-08-20T12:34:56Z");
+    expect(out.mergeCommit).toBe(MERGE_OID);
   });
 
   it("finalizeMergedLanding persists GitHub's mergedAt, not the retry clock", async () => {
-    await gatePassedProductRun(dir);
-    const verified = verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR() }) });
+    const run = await gatePassedProductRun(dir);
+    const verified = verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: run.runId, gh: ghMock({ pr: MERGED_PR() }), git: gitServing(run.runId) });
     const state = await finalizeMergedLanding(SLUG, { pr: 91, mergedAt: verified.mergedAt, intakeDir: dir });
     expect(state.landing.mergedAt).toBe("2026-08-20T12:34:56Z");
     expect(state.publication.publishedAt).toBe("2026-08-20T12:34:56Z");
@@ -210,7 +243,7 @@ describe("R2 — verifyMergedPr refuses everything but the real merged landing",
 // ── R3: recovery persists to the REMOTE default branch ───────────────────────
 
 describe("R3 — finalizeLandingRecovery is durable or it is failed (real git, real bare origin)", () => {
-  let repo, origin, g, intakeDir;
+  let repo, origin, g, intakeDir, mergeOid;
 
   beforeEach(async () => {
     repo = path.join(dir, "repo");
@@ -220,24 +253,34 @@ describe("R3 — finalizeLandingRecovery is durable or it is failed (real git, r
     execFileSync("git", ["init", "-q", "--bare", "-b", "main", origin]);
     g = makeRepo(repo);
     intakeDir = path.join(repo, "guides-intake");
-    // The post-merge default-branch state: run complete, gate passed, landing NOT yet finalized.
-    await gatePassedProductRun(intakeDir);
     await writeFile(path.join(repo, "README.md"), "seed\n");
     g("add", "-A");
-    g("commit", "-qm", "main after the merge (finalization still owed)");
+    g("commit", "-qm", "seed main");
+    // The run rode its branch and was merged FOR REAL — the merge commit carries the run state,
+    // which is the identity the recovery's runId proof reads. Finalization is still owed.
+    g("checkout", "-qb", `research-v2/${SLUG}`);
+    await gatePassedProductRun(intakeDir);
+    g("add", "-A");
+    g("commit", "-qm", "run complete on the branch, gate passed");
+    g("checkout", "-q", "main");
+    g("merge", "-q", "--no-ff", "-m", `merge ${SLUG} run`, `research-v2/${SLUG}`);
+    mergeOid = g("rev-parse", "HEAD").trim();
+    g("branch", "-qD", `research-v2/${SLUG}`);
     g("remote", "add", "origin", origin);
     g("push", "-q", "origin", "main");
   });
 
   const gitAt = (cwd) => (args) => execFileSync("git", args, { cwd, encoding: "utf8" });
+  const prFixture = (over = {}) => MERGED_PR({ mergeCommit: { oid: mergeOid }, ...over });
 
-  it("a successful recovery verifies, finalizes with GitHub's mergedAt, commits AND pushes to origin's default branch", async () => {
+  it("a successful recovery verifies (incl. run identity), finalizes with GitHub's mergedAt, commits AND pushes to origin's default branch", async () => {
     const { state, base, mergedAt } = await finalizeLandingRecovery(SLUG, {
-      pr: 91, base: "main", cwd: repo, intakeDir, gh: ghMock({ pr: MERGED_PR() }), git: gitAt(repo),
+      pr: 91, base: "main", cwd: repo, intakeDir, announced: "skipped", gh: ghMock({ pr: prFixture() }), git: gitAt(repo),
     });
     expect(base).toBe("main");
     expect(mergedAt).toBe("2026-08-20T12:34:56Z");
     expect(state.publication.published).toBe(true);
+    expect(state.landing.announced).toBe(null); // explicit "skipped" — the honest recorded value
     // DURABLE: the finalized record is on the REMOTE default branch, not just the local checkout.
     const remote = execFileSync("git", ["--git-dir", origin, "show", `main:guides-intake/${SLUG}/run.v2.json`], { encoding: "utf8" });
     const doc = JSON.parse(remote);
@@ -248,20 +291,20 @@ describe("R3 — finalizeLandingRecovery is durable or it is failed (real git, r
   it("a PUSH FAILURE is a FAILED recovery — local success is not durable success", async () => {
     g("remote", "set-url", "origin", path.join(dir, "no-such-remote.git"));
     await expect(finalizeLandingRecovery(SLUG, {
-      pr: 91, base: "main", cwd: repo, intakeDir, gh: ghMock({ pr: MERGED_PR() }), git: gitAt(repo),
+      pr: 91, base: "main", cwd: repo, intakeDir, announced: "skipped", gh: ghMock({ pr: prFixture() }), git: gitAt(repo),
     })).rejects.toThrow();
   });
 
   it("refuses to run anywhere but the default-branch checkout", async () => {
     g("checkout", "-q", "-b", "somewhere-else");
     await expect(finalizeLandingRecovery(SLUG, {
-      pr: 91, base: "main", cwd: repo, intakeDir, gh: ghMock({ pr: MERGED_PR() }), git: gitAt(repo),
+      pr: 91, base: "main", cwd: repo, intakeDir, announced: "skipped", gh: ghMock({ pr: prFixture() }), git: gitAt(repo),
     })).rejects.toThrow(/must run on a "main" checkout/);
   });
 
   it("a GitHub refusal aborts BEFORE any publication fact is written", async () => {
     await expect(finalizeLandingRecovery(SLUG, {
-      pr: 91, base: "main", cwd: repo, intakeDir, gh: ghMock({ pr: MERGED_PR({ state: "OPEN", mergedAt: null }) }), git: gitAt(repo),
+      pr: 91, base: "main", cwd: repo, intakeDir, announced: "skipped", gh: ghMock({ pr: prFixture({ state: "OPEN", mergedAt: null }) }), git: gitAt(repo),
     })).rejects.toThrow(/is OPEN/);
     expect((await readRunStateV2(SLUG, { intakeDir })).publication.published).toBe(false);
   });
@@ -453,19 +496,20 @@ describe("R8 — a landing failure never rewrites a passed research gate", () =>
   });
 
   it("CASE B: merge succeeded, finalization failed → the retry finalizes without rewriting anything", async () => {
-    await gatePassedProductRun(dir);
+    const run = await gatePassedProductRun(dir);
     // The durable state after a merged-but-unfinalized landing is exactly the gate-passed state
-    // (phase 2 never committed). The retry — with GitHub verification — completes it.
-    const verified = verifyMergedPr({ slug: SLUG, pr: 91, gh: ghMock({ pr: MERGED_PR() }) });
+    // (phase 2 never committed). The retry — with GitHub verification incl. run identity —
+    // completes it.
+    const verified = verifyMergedPr({ slug: SLUG, pr: 91, expectedRunId: run.runId, gh: ghMock({ pr: MERGED_PR() }), git: gitServing(run.runId) });
     const state = await finalizeMergedLanding(SLUG, { pr: 91, mergedAt: verified.mergedAt, intakeDir: dir });
     expect(state.landingGate.status).toBe("passed");
     expect(state.landing.outcome).toBe("merged");
     expect(state.publication.published).toBe(true);
   });
 
-  it("wiring: the land CLI emits the gate verdict on the HARD-failure path too, so the crash handler can see it", () => {
-    const landCase = readRepo("scripts/pipeline.mjs").split('case "land"')[1].split('case "resolve-change"')[0];
-    const catchBlock = landCase.split("} catch (err) {")[1].split("throw err;")[0];
+  it("wiring: the landing transaction emits the gate verdict on the HARD-failure path too, so the crash handler can see it", () => {
+    const landing = readRepo("scripts/pipeline/landing.mjs");
+    const catchBlock = landing.split("} catch (err) {")[1].split("throw err;")[0];
     expect(catchBlock).toContain('emit("gate", passed ? "passed" : "failed")');
     expect(catchBlock).toContain('emit("outcome", "failed")');
   });
@@ -513,11 +557,14 @@ describe("R9 — the conflict fallback re-quarantines the guide", () => {
     expect(state.landingGate.status).toBe("passed");
   });
 
-  it("wiring: the land CLI restores the draft flag exactly on the passed+auto draft outcome", () => {
-    const landCase = readRepo("scripts/pipeline.mjs").split('case "land"')[1].split('case "resolve-change"')[0];
-    expect(landCase).toContain('result.outcome === "draft" && passed && auto');
-    expect(landCase).toContain("restoreDraft(slug)");
-    expect(landCase).toContain("restore draft after merge-conflict fallback");
+  it("wiring: the landing transaction quarantines the remote branch exactly on the passed+auto draft outcome", () => {
+    // The behavioral proof (real git remote, push-failure blocking) lives in
+    // pipeline-v2-release-blockers.test.mjs; this pins the wiring in landing.mjs.
+    const landing = readRepo("scripts/pipeline/landing.mjs");
+    expect(landing).toContain('result.outcome === "draft" && passed && auto');
+    expect(landing).toContain('quarantine("merge-conflict fallback")');
+    // A quarantine that cannot be persisted is a BLOCKED landing, never a safe draft claim.
+    expect(landing).toContain("BLOCKED");
   });
 });
 
@@ -551,10 +598,11 @@ describe("R10 — announced is never downgraded by a retry", () => {
     expect(state.landing.announced).toBe(true);
   });
 
-  it("wiring: the printed retry command carries the announce fact for BOTH outcomes, so it is complete as printed", () => {
-    const landCase = readRepo("scripts/pipeline.mjs").split('case "land"')[1].split('case "resolve-change"')[0];
-    expect(landCase).toContain('result.announced === true ? " --announced ok"');
-    expect(landCase).toContain('result.announced === false ? " --announced failed"');
-    expect(landCase).toMatch(/finalize-landing --slug \$\{slug\} --pr \$\{result\.pr\}\$\{annFlag\}/);
+  it("wiring: the printed retry command carries the announce fact for EVERY merged outcome, so it is complete as printed", () => {
+    const landing = readRepo("scripts/pipeline/landing.mjs");
+    expect(landing).toContain('result.announced === true ? " --announced ok"');
+    expect(landing).toContain('result.announced === false ? " --announced failed"');
+    expect(landing).toContain('" --announced skipped"'); // no announce URL — explicit, never omitted
+    expect(landing).toMatch(/finalize-landing --slug \$\{slug\} --pr \$\{result\.pr\}\$\{annFlag\}/);
   });
 });

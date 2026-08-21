@@ -86,13 +86,19 @@ describe("resolveActiveGeneration — the required matrix", () => {
 
 describe("one resolver everywhere (wiring)", () => {
   it("answers routing consumes THE shared resolver, not a private precedence rule", () => {
+    // The resolution body moved to questions.mjs's resolveAnswerRouting (Codex blocker 1) so
+    // the real seam is behaviorally testable; the pin follows it there, and pins the CLI to
+    // delegating rather than re-deriving.
+    const q = readFileSync(path.join(ROOT, "scripts", "pipeline", "questions.mjs"), "utf8");
+    expect(q).toContain('import("../../src/lib/run-generation.mjs")');
+    expect(q).toContain("resolveActiveGeneration({");
     const src = readFileSync(path.join(ROOT, "scripts", "pipeline.mjs"), "utf8");
     const routeCase = src.split('case "answers-route"')[1].split('case "answers-apply"')[0];
-    expect(routeCase).toContain('import("../src/lib/run-generation.mjs")');
-    expect(routeCase).toContain("resolveActiveGeneration({");
+    expect(routeCase).toContain("resolveAnswerRouting(slug");
     expect(routeCase).toContain("refusing to guess which run owns the answer");
     // The old inline predicates are gone — no subsystem-local activity definition survives.
     expect(routeCase).not.toContain("v2Incomplete");
+    expect(routeCase).not.toContain("resolveActiveGeneration");
   });
 
   it("the Progress gateway consumes the same resolver for run state, questions AND events", () => {

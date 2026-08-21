@@ -164,9 +164,11 @@ jobs:
           git config user.name  "waypoint-change[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # M6 answers routing: while research is ACTIVE on this guide, a dispatched answer belongs
-      # to that run's ledger on the research branch — a change run would fork from main and edit
-      # the scaffold while the real work sits unmerged. Published guides keep the change path.
+      # M6 answers routing: an ACTIVE research run (either generation) owns a dispatched answer
+      # — resolved BEFORE any historical publication check, so a published prior run on main
+      # never steals an answer from a live re-research branch (Codex blocker 1). A change run
+      # would fork from main and edit the scaffold while the real work sits unmerged. Only when
+      # NO run owns the answer does a published guide take the change path.
       - name: Route answers (active research vs change)
         id: answers_route
         env:
