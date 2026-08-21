@@ -8,8 +8,8 @@
       "ask": "Luxembourg City",
       "status": "covered",
       "where": [
-        "05-transit.json#orientation-map-luxembourg-city",
-        "06-days.json#day-by-day"
+        "03-transit.json#orientation-map-luxembourg-city",
+        "04-days.json#day-by-day"
       ],
       "evidenceIds": [],
       "reason": null
@@ -19,7 +19,7 @@
       "ask": "2026-10-16 – 2026-10-19",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day"
+        "04-days.json#day-by-day"
       ],
       "evidenceIds": [
         "ev-holidays-2026-no-october-overlap",
@@ -32,9 +32,9 @@
       "ask": "Culture / history",
       "status": "covered",
       "where": [
-        "07-sights.json#top-sights",
-        "06-days.json#day-by-day",
-        "07-sights.json#vianden-castle"
+        "02-sights.json#top-sights",
+        "04-days.json#day-by-day",
+        "02-sights.json#vianden-castle"
       ],
       "evidenceIds": [
         "ev-bock-casemates-hours-price",
@@ -51,7 +51,7 @@
       "ask": "Food & dining",
       "status": "covered",
       "where": [
-        "08-food-and-shopping.json#what-to-eat"
+        "05-food-and-shopping.json#what-to-eat"
       ],
       "evidenceIds": [
         "ev-marche-days-hours",
@@ -68,9 +68,9 @@
       "ask": "Nature / outdoors",
       "status": "covered",
       "where": [
-        "07-sights.json#grund-the-alzette-valley",
-        "05-transit.json#pfaffenthal-panoramic-lift",
-        "07-sights.json#vianden-castle"
+        "02-sights.json#grund-the-alzette-valley",
+        "03-transit.json#pfaffenthal-panoramic-lift",
+        "02-sights.json#vianden-castle"
       ],
       "evidenceIds": [
         "ev-grund-description",
@@ -87,7 +87,7 @@
       "ask": "balanced",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day"
+        "04-days.json#day-by-day"
       ],
       "evidenceIds": [],
       "reason": null
@@ -97,8 +97,8 @@
       "ask": "Balanced",
       "status": "covered",
       "where": [
-        "07-sights.json#top-sights",
-        "07-sights.json#vianden-castle"
+        "02-sights.json#top-sights",
+        "02-sights.json#vianden-castle"
       ],
       "evidenceIds": [
         "ev-mullerthal-crowd-mllebougeotte",
@@ -112,7 +112,7 @@
       "ask": "Mid-range ($75–150/day)",
       "status": "covered",
       "where": [
-        "02-money-and-budget.json#budget-daily-costs"
+        "06-money-and-budget.json#budget-daily-costs"
       ],
       "evidenceIds": [],
       "reason": null
@@ -123,8 +123,8 @@
       "status": "covered",
       "where": [
         "01-plan.json#booking-checklist",
-        "05-transit.json#key-transit-routes",
-        "06-days.json#day-by-day"
+        "03-transit.json#key-transit-routes",
+        "04-days.json#day-by-day"
       ],
       "evidenceIds": [
         "ev-transit-free-nationwide"
@@ -136,7 +136,7 @@
       "ask": "2",
       "status": "covered",
       "where": [
-        "02-money-and-budget.json#budget-daily-costs"
+        "06-money-and-budget.json#budget-daily-costs"
       ],
       "evidenceIds": [],
       "reason": null
@@ -158,10 +158,10 @@
       "ask": "A short city break — three nights, one hotel, no moving around. Most interested in the old fortifications and the museums in the upper town, and in walking down into the valley below it rather than only seeing the city from above. Want to eat well without booking anything formal. No car planned. If there is one worthwhile half-day trip out of the city we would consider it, but we are not trying to see the whole country.",
       "status": "covered",
       "where": [
-        "07-sights.json#top-sights",
-        "07-sights.json#grund-the-alzette-valley",
-        "08-food-and-shopping.json#what-to-eat",
-        "07-sights.json#vianden-castle"
+        "02-sights.json#top-sights",
+        "02-sights.json#grund-the-alzette-valley",
+        "05-food-and-shopping.json#what-to-eat",
+        "02-sights.json#vianden-castle"
       ],
       "evidenceIds": [
         "ev-vianden-route-line-181",

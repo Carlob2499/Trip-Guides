@@ -10,8 +10,14 @@
         "name": "Bock Casemates",
         "kicker": "The fortress that gave the country its name",
         "body": "<p>A 17th-century network of tunnels carved into the Bock promontory, part of a UNESCO World Heritage-listed fortress that made Luxembourg one of Europe's most fortified cities before its 1867 dismantling.</p><p>Open daily 09:45–19:00 (last admission), closed Dec 25 & Jan 1. Adult admission {{fact:bock-casemates-11-eur}}. Allow about an hour; bring a layer, the tunnels stay cool year-round.</p>",
-        "img": { "file": "Casemates Luxembourg 963.jpg", "alt": "Stone archways inside the Bock Casemates tunnel network" },
-        "map": { "lat": 49.6116635, "lng": 6.1366893 },
+        "img": {
+          "file": "Casemates Luxembourg 963.jpg",
+          "alt": "Stone archways inside the Bock Casemates tunnel network"
+        },
+        "map": {
+          "lat": 49.6116635,
+          "lng": 6.1366893
+        },
         "place_id": "N8080240552",
         "dwell_min": 60,
         "source_url": "https://www.luxembourg-city.com/en/tours-activities/underground/bock-casemates",
@@ -22,8 +28,14 @@
         "name": "Chemin de la Corniche",
         "kicker": "\"The most beautiful balcony in Europe\"",
         "body": "<p>A free pedestrian promenade along the 17th-century ramparts, running from the Bock promontory to the Holy Ghost Citadel with views over the Alzette valley, the Grund, and the Rham Plateau.</p><p>It's the spine of the self-guided Wenzel Circular Walk, which strings together roughly 1,000 years of the city's fortification history down into the Grund and back up. No hours or ticket — open air, any time of day.</p>",
-        "img": { "file": "Below Chemin de la Corniche Luxembourg City Luxembourg.jpg", "alt": "View along the Chemin de la Corniche promenade over the Alzette valley" },
-        "map": { "lat": 49.6107684, "lng": 6.1347358 },
+        "img": {
+          "file": "Below Chemin de la Corniche Luxembourg City Luxembourg.jpg",
+          "alt": "View along the Chemin de la Corniche promenade over the Alzette valley"
+        },
+        "map": {
+          "lat": 49.6107684,
+          "lng": 6.1347358
+        },
         "place_id": "W82537050",
         "dwell_min": 40,
         "source_url": "https://www.luxembourg-city.com/en/place/fortification/chemin-de-la-corniche",
@@ -34,11 +46,19 @@
         "name": "Musée National d'Histoire et d'Art (MNHA)",
         "kicker": "Luxembourg's archaeology, history and art collection at the Fëschmaart",
         "body": "<p>The national museum sits on the Marché-aux-Poissons, the historic square that was the city's original marketplace, and covers everything from Roman-era archaeology to modern Luxembourgish art across 6,000m².</p><p>Open Tue–Wed & Fri–Sun 10:00–18:00, Thu 10:00–20:00, closed Mondays. Individual admission {{fact:mnha-7-eur}}; free for under-26s, the last hour before closing, and Thursday 17:30–20:00.</p>",
-        "img": { "file": "Marché-aux-Poissons Luxemb City.jpg", "alt": "The Marché-aux-Poissons square in Luxembourg City's old town" },
-        "map": { "lat": 49.6115014, "lng": 6.1338568 },
+        "img": {
+          "file": "Marché-aux-Poissons Luxemb City.jpg",
+          "alt": "The Marché-aux-Poissons square in Luxembourg City's old town"
+        },
+        "map": {
+          "lat": 49.6115014,
+          "lng": 6.1338568
+        },
         "place_id": "W48994767",
         "dwell_min": 90,
-        "closed_days": ["mon"],
+        "closed_days": [
+          "mon"
+        ],
         "source_url": "https://www.nationalmusee.lu/en/visit/practical-infos/opening-times-and-admission",
         "verified_on": "2026-08-21",
         "shelf_life": "hours"
@@ -47,11 +67,19 @@
         "name": "Musée Dräi Eechelen",
         "kicker": "Fort Thüngen's three towers, on the fortress's own history",
         "body": "<p>Built into the restored Fort Thüngen bastion on the Kirchberg plateau, this museum tells the story of the fortress itself — a natural pairing with the Bock Casemates and Corniche walk on the other side of the valley.</p><p>Open Tue–Sun 10:00–18:00 (Wed to 20:00), closed Mondays. Individual admission {{fact:m3e-7-eur}}, or {{fact:m3e-mnha-combined-12-eur}} combined with the MNHA on the same day.</p>",
-        "img": { "file": "Fort thüngen Dräi Eechelen 01.jpg", "alt": "Fort Thüngen's restored towers, home to the Musée Dräi Eechelen" },
-        "map": { "lat": 49.6163950, "lng": 6.1392966 },
+        "img": {
+          "file": "Fort thüngen Dräi Eechelen 01.jpg",
+          "alt": "Fort Thüngen's restored towers, home to the Musée Dräi Eechelen"
+        },
+        "map": {
+          "lat": 49.616395,
+          "lng": 6.1392966
+        },
         "place_id": "W26424184",
         "dwell_min": 60,
-        "closed_days": ["mon"],
+        "closed_days": [
+          "mon"
+        ],
         "source_url": "https://m3e.public.lu/en/infos-pratiques.html",
         "verified_on": "2026-08-21",
         "shelf_life": "hours"
@@ -60,11 +88,19 @@
         "name": "Villa Vauban",
         "kicker": "The city's art museum, in a 19th-century villa",
         "body": "<p>A compact fine-art collection (Dutch and Flemish masters, 19th-century French painting) inside a villa built over an old fortress bastion, next to the municipal park. Its Monday opening is useful — most of the city's other museums close that day.</p><p>Open Mon, Wed, Thu, Sat & Sun 10:00–18:00, Fri 10:00–21:00, closed Tuesdays. Adult admission {{fact:villa-vauban-5-eur}}; free every Friday 18:00–21:00.</p>",
-        "img": { "file": "Villa Vauban Luxembourg 01.jpg", "alt": "The 19th-century villa housing Luxembourg City's art museum" },
-        "map": { "lat": 49.6131205, "lng": 6.1224211 },
+        "img": {
+          "file": "Villa Vauban Luxembourg 01.jpg",
+          "alt": "The 19th-century villa housing Luxembourg City's art museum"
+        },
+        "map": {
+          "lat": 49.6131205,
+          "lng": 6.1224211
+        },
         "place_id": "W53087984",
         "dwell_min": 60,
-        "closed_days": ["tue"],
+        "closed_days": [
+          "tue"
+        ],
         "source_url": "https://villavauban.lu/en/the-museum/general-informations/",
         "verified_on": "2026-08-21",
         "shelf_life": "hours"
@@ -73,8 +109,14 @@
         "name": "Notre-Dame Cathedral",
         "kicker": "Free, and open most of the day",
         "body": "<p>Luxembourg's late-Gothic cathedral, resting place of the Grand Ducal family, sits a short walk from the Palace and the Fëschmaart. Admission is free.</p><p>Open daily 08:00–18:00 (to 19:00 on Sundays), except during services — a 15–20 minute stop that fits naturally between the Palace and the museums.</p>",
-        "img": { "file": "Luxembourg Cathédrale Notre-Dame ancien portail - Octave 2016.jpg", "alt": "A carved portal of Notre-Dame Cathedral, Luxembourg City" },
-        "map": { "lat": 49.6098109, "lng": 6.1315567 },
+        "img": {
+          "file": "Luxembourg Cathédrale Notre-Dame ancien portail - Octave 2016.jpg",
+          "alt": "A carved portal of Notre-Dame Cathedral, Luxembourg City"
+        },
+        "map": {
+          "lat": 49.6098109,
+          "lng": 6.1315567
+        },
         "place_id": "N13917701491",
         "dwell_min": 20,
         "source_url": "https://www.visitluxembourg.com/place/cathedrale-notre-dame",
@@ -85,8 +127,14 @@
         "name": "Grand Ducal Palace",
         "kicker": "Exterior only, outside high summer",
         "body": "<p>The 16th-century seat of the Grand Ducal family sits in the middle of the old town — worth a walk-by for the guards and the Renaissance façade even when it isn't open inside.</p><p>Guided interior tours only run mid-July through August (2026: 18 Jul–30 Aug), and the ceremonial changing of the guard happens on a handful of named summer dates — neither falls inside an October visit. Free to view from outside, any time.</p>",
-        "img": { "file": "Luxembourg Grand Ducal Palace 01.jpg", "alt": "The Renaissance façade of the Grand Ducal Palace, Luxembourg City" },
-        "map": { "lat": 49.6109410, "lng": 6.1328693 },
+        "img": {
+          "file": "Luxembourg Grand Ducal Palace 01.jpg",
+          "alt": "The Renaissance façade of the Grand Ducal Palace, Luxembourg City"
+        },
+        "map": {
+          "lat": 49.610941,
+          "lng": 6.1328693
+        },
         "place_id": "W9653074",
         "dwell_min": 15,
         "source_url": "https://www.luxembourg-city.com/en/place/iconic-buildings/grand-ducal-palace",
@@ -97,8 +145,14 @@
         "name": "Grund & the Alzette valley",
         "kicker": "The valley floor the upper town looks down on",
         "body": "<p>A former tanners' and millers' quarter along the Alzette River, reached on foot down the Corniche/Wenzel path or in seconds via the free Pfaffenthal panoramic lift. Cobbled lanes, riverside houses, and Neumünster Abbey's cloister garden (free, open daily 10:00–18:00) make it the natural low point of a fortifications walk.</p><p>No admission; a loop through Grund, along the river, and back up the lift or the Corniche takes about an hour at an easy pace.</p>",
-        "img": { "file": "Luxembourg City - Grund from Corniche.jpg", "alt": "The Grund district and the Alzette River, seen from the Corniche above" },
-        "map": { "lat": 49.6102782, "lng": 6.1359038 },
+        "img": {
+          "file": "Luxembourg City - Grund from Corniche.jpg",
+          "alt": "The Grund district and the Alzette River, seen from the Corniche above"
+        },
+        "map": {
+          "lat": 49.6102782,
+          "lng": 6.1359038
+        },
         "place_id": "R533322",
         "dwell_min": 60,
         "source_url": "https://www.neimenster.lu/en/in-the-heart-of-the-city/",
@@ -109,8 +163,14 @@
         "name": "Vianden Castle",
         "kicker": "A half-day out — the country's grandest medieval castle",
         "body": "<p>A restored 11th–14th-century castle stacked over the Our river valley, roughly an hour from Luxembourg City by free train + connecting bus. It's the strongest fortifications-themed day trip the country offers, and the one this guide builds in.</p><p>October hours: daily 10:00–17:00, last entry 16:30. Adult admission {{fact:vianden-castle-13-eur}} (incl. municipal tourist tax), students (13+) {{fact:vianden-castle-student-7-eur}}. Closed Nov 2, Dec 25, Jan 1.</p><p>If a hiking-focused half day appeals more than another castle, the Mullerthal Trail's Echternach loop is a strong alternative — a direct, no-transfer free bus (line 201) with none of Vianden's connection to plan around, and locals report the Schiessentumpel waterfall is markedly quieter right at opening before the day's tour groups arrive.</p>",
-        "img": { "file": "20200829 Vianden castle 04.jpg", "alt": "Vianden Castle's towers above the Our river valley" },
-        "map": { "lat": 49.9348804, "lng": 6.2028042 },
+        "img": {
+          "file": "20200829 Vianden castle 04.jpg",
+          "alt": "Vianden Castle's towers above the Our river valley"
+        },
+        "map": {
+          "lat": 49.9348804,
+          "lng": 6.2028042
+        },
         "place_id": "W191609796",
         "dwell_min": 120,
         "source_url": "https://castle-vianden.lu/gb/besuch/",

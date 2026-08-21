@@ -5,7 +5,7 @@
     "title": "What to eat",
     "phase": "daily",
     "rank": 2,
-    "intro": "All but one of these are walk-in with no advance booking, ever. Mousel's Cantine gets busy at dinner, so a same-day call helps if arriving in the evening — Kaito Ramen and Manzoku Ramen Bar below are genuine no-reservation fallbacks if that doesn't pan out.",
+    "intro": "All but one of these are walk-in with no advance booking, ever. Mousel's Cantine gets busy at dinner, so a same-day call helps if arriving in the evening — Kaito Ramen and Manzoku Ramen Bar below are genuine no-reservation fallbacks if that doesn't pan out. Sunday is the thin day: the market runs Wed & Sat only, Oberweis closes Sundays, Manzoku opens Wed–Sat, and Mousel's Cantine serves only 12:00–16:00 — Kaito is the one pick here open through Sunday evening.",
     "items": [
       {
         "name": "Marché Place Guillaume II",
@@ -67,9 +67,10 @@
       {
         "name": "Kaito Ramen",
         "area": "Place de Paris, near the central train station",
+        "address": "29, rue du Fort Elisabeth, L-1463 Luxembourg",
         "hours": "Daily 11:30–21:30",
         "book": "walk-in",
-        "how": "Walk-in / first-come-first-served every day of this trip's stay; only groups of 8+ can book ahead.",
+        "how": "Just off Place de Paris, a few minutes' walk from Luxembourg central station — first-come, first-served, with online booking only for groups of 8+.",
         "crowd_tip": "Gets genuinely busy at midday — arriving by or around noon, or going for dinner instead, is the practical way to skip the wait.",
         "why": "Open every day of the Oct 16–19 stay with zero reservation system for parties this size — the most reliable no-booking dinner or lunch fallback on this list.",
         "place_id": "__VERIFICATION_REQUIRED__",
@@ -83,10 +84,12 @@
       },
       {
         "name": "Manzoku Ramen Bar",
-        "area": "⚠ Exact street address not independently confirmed this pass — check manzoku.lu before going",
+        "area": "Avenue du Dix Septembre, outside the old town",
+        "address": "153, Avenue du Dix Septembre, L-2551 Luxembourg",
         "hours": "Wed–Sat only (Wed–Thu 11:30–14:00; Fri 11:30–14:00 & 18:00–21:00; Sat 18:00–22:00), closed Sun–Tue",
         "book": "walk-in",
-        "how": "No reservation system exists at all — once full, seating runs off a virtual waitlist app.",
+        "how": "The ramen bar is at no. 153, across the avenue from the Manzoku shop at no. 162 — outside the old town, so allow a free bus ride each way.",
+        "crowd_tip": "No reservation system exists at all — once the room is full, seating runs off a virtual waitlist app.",
         "why": "Genuinely walk-in-only by design, matching a no-formal-booking preference exactly — but only Friday and Saturday of this Fri–Mon stay fall inside its open days.",
         "place_id": "__VERIFICATION_REQUIRED__",
         "source_url": "https://www.manzoku.lu/",

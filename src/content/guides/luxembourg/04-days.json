@@ -1,0 +1,182 @@
+[
+  {
+    "type": "days",
+    "group": "Days",
+    "title": "Day by day",
+    "items": [
+      {
+        "date": "Fri Oct 16",
+        "title": "Arrival & the Corniche at dusk",
+        "pace": "Light — land, check in, one easy walk before dinner.",
+        "tldr": "Land, settle in, and take the free Corniche walk to the Bock at golden hour before dinner in Clausen.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Bus 16 or 29 from the airport into the centre is free and runs every 10–15 minutes — no need to plan around a taxi unless there's a lot of luggage.</p><p>Once settled, walk the Chemin de la Corniche toward the Bock promontory for the golden-hour view over the Alzette valley — free, no timing pressure, and a good way to get oriented before the fuller days ahead.</p><p>Dinner at Mousel's Cantine sits right at the bottom of the Bock, a short walk down. Friday dinner service fills up: call +352 27 67 23 42 or use its online form if you'll get there after 19:00, as this plan does.</p>",
+        "waypoints": [
+          {
+            "name": "Findel Airport",
+            "lat": 49.6272512,
+            "lng": 6.2041896,
+            "note": "Bus 16/29, free"
+          },
+          {
+            "name": "Chemin de la Corniche",
+            "lat": 49.6107684,
+            "lng": 6.1347358,
+            "time": "≈18:00"
+          },
+          {
+            "name": "Mousel's Cantine",
+            "lat": 49.6134735,
+            "lng": 6.143142,
+            "time": "≈19:30"
+          }
+        ]
+      },
+      {
+        "date": "Sat Oct 17",
+        "title": "Upper town — market, museums, fortifications",
+        "pace": "Balanced — market and old town in the morning, the two museums split across midday and afternoon.",
+        "tldr": "Saturday market, the old town's cathedral and palace, then MNHA and Fort Thüngen's Musée Dräi Eechelen.",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Start at the Place Guillaume II market (Wed & Sat only, 07:30–14:00) for coffee and a look at the produce stalls, then work through the old town on foot: Notre-Dame Cathedral, the Grand Ducal Palace (exterior — the interior only opens in summer), and the Fëschmaart square, home to the MNHA.</p><p>The market's food-stall village runs 10:30–14:00 and the MNHA is five minutes' walk from the square — loop back for lunch before the stalls pack up.</p><p>In the afternoon, cross toward Kirchberg for Fort Thüngen and the Musée Dräi Eechelen — buy the €12 combined ticket with MNHA if visiting both the same day.</p><p>Bock Casemates is about 20 minutes on foot back toward the old town, and makes a good end to the fortifications thread; last admission is 19:00, later than any of the day's museums. For dinner, Manzoku Ramen Bar is open this Saturday evening if a change from Luxembourgish food appeals.</p>",
+        "constraints": [
+          "Market runs Wed & Sat only — this is the one day it lines up with the trip"
+        ],
+        "source_url": "https://www.vdl.lu/en/visiting/leisure-and-recreation/luxembourg-city-markets/markets-luxembourg-city",
+        "verified_on": "2026-08-21",
+        "shelf_life": "hours",
+        "waypoints": [
+          {
+            "name": "Place Guillaume II market",
+            "lat": 49.6106173,
+            "lng": 6.1308884,
+            "time": "09:00"
+          },
+          {
+            "name": "Notre-Dame Cathedral",
+            "lat": 49.6098109,
+            "lng": 6.1315567,
+            "time": "10:00"
+          },
+          {
+            "name": "Grand Ducal Palace (exterior)",
+            "lat": 49.610941,
+            "lng": 6.1328693,
+            "time": "10:30"
+          },
+          {
+            "name": "Musée National d'Histoire et d'Art",
+            "lat": 49.6115014,
+            "lng": 6.1338568,
+            "time": "11:00"
+          },
+          {
+            "name": "Musée Dräi Eechelen / Fort Thüngen",
+            "lat": 49.616395,
+            "lng": 6.1392966,
+            "time": "14:30"
+          },
+          {
+            "name": "Bock Casemates",
+            "lat": 49.6116635,
+            "lng": 6.1366893,
+            "time": "16:30"
+          }
+        ]
+      },
+      {
+        "date": "Sun Oct 18",
+        "title": "Vianden Castle, then down into the Grund",
+        "pace": "One committed morning out of the city, one relaxed afternoon back in it.",
+        "tldr": "A free train + bus out to Vianden Castle in the morning, then the Pfaffenthal lift down into the Grund for the afternoon.",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Take a CFL train to Ettelbrück, then RGTR bus 181 on to Vianden — both free, together under an hour each way. ⚠ Confirm the current bus 181 departure time on the mobiliteit.lu app that morning; the Ettelbrück hub was reorganized in May 2026. The castle is open 10:00–17:00 in October (last entry 16:30); budget about two hours there plus travel, aiming to be back in the city by early-to-mid afternoon.</p><p>Back in Luxembourg City, take the free Pfaffenthal panoramic lift down from Pescatore park into the Grund, and walk the valley floor along the Alzette — Neumünster Abbey's cloister garden is a natural stop — before riding the lift back up or finishing the loop on the Corniche.</p><p>Sunday thins the food options out: the market doesn't run, Oberweis and Manzoku are closed, and Mousel's Cantine serves only 12:00–16:00. Kaito Ramen by the central station runs until 21:30 every day, and is the dependable Sunday dinner.</p>",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Neumünster Abbey's cultural centre (28 Rue Münster, in the Grund) has covered cloister and courtyard space and is open daily 10:00–18:00, free to enter — a dry fallback for the valley-walk half of the day if the weather turns. The Vianden Castle interior itself is indoors and unaffected by rain.",
+          "source_url": "https://www.neimenster.lu/en/in-the-heart-of-the-city/",
+          "verified_on": "2026-08-21"
+        },
+        "waypoints": [
+          {
+            "name": "Luxembourg → Ettelbrück (train)",
+            "time": "≈09:00"
+          },
+          {
+            "name": "Vianden Castle",
+            "lat": 49.9348804,
+            "lng": 6.2028042,
+            "time": "≈10:15"
+          },
+          {
+            "name": "Pfaffenthal panoramic lift",
+            "lat": 49.615537,
+            "lng": 6.1305598,
+            "time": "≈15:30"
+          },
+          {
+            "name": "Grund / Neumünster Abbey",
+            "lat": 49.6102782,
+            "lng": 6.1359038,
+            "time": "≈16:00"
+          }
+        ]
+      },
+      {
+        "date": "Mon Oct 19",
+        "title": "Villa Vauban & the Pétrusse valley, then departure",
+        "pace": "Light morning built around what's actually open, then the airport.",
+        "tldr": "A last museum that's actually open on a Monday, a walk in the Pétrusse valley, then a free bus back to the airport.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>MNHA and the Musée Dräi Eechelen are closed on Mondays, so this morning is Villa Vauban (open Mondays 10:00–18:00) instead, followed by a walk through the Pétrusse valley park just below the old town — shaded paths and old rampart views, no ticket needed.</p><p>Bus 16 or 29 back to Findel Airport is free and runs every 10–15 minutes; build in extra time if checking a bag or returning a rental.</p>",
+        "constraints": [
+          "MNHA and Musée Dräi Eechelen closed today — Villa Vauban stays open Mondays"
+        ],
+        "waypoints": [
+          {
+            "name": "Villa Vauban",
+            "lat": 49.6131205,
+            "lng": 6.1224211,
+            "time": "10:00"
+          },
+          {
+            "name": "Pétrusse valley",
+            "lat": 49.6056229,
+            "lng": 6.1340965,
+            "time": "11:30"
+          },
+          {
+            "name": "Findel Airport",
+            "lat": 49.6272512,
+            "lng": 6.2041896,
+            "time": "bus 16/29, free"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Days",
+    "title": "Health & pharmacy",
+    "body": "<p>112 is the emergency number for police, fire and ambulance, valid everywhere in Luxembourg.</p><p>Outside normal hours, a rotating <b>pharmacie de garde</b> (duty pharmacy) keeps at least one pharmacy open nationwide from 8am to 8am the next day. Current duty pharmacies are listed at <a href='https://www.pharmacie.lu/'>pharmacie.lu</a> and posted in every pharmacy's window; at night, ring the bell and present your needs through the hatch.</p><p>US travel insurance is worth arranging before you go — Luxembourg has no reciprocal healthcare agreement with the US, and Schengen entry technically expects proof of coverage.</p>",
+    "phase": "daily",
+    "source_url": "https://www.pharmacie.lu/",
+    "verified_on": "2026-08-21",
+    "shelf_life": "default"
+  },
+  {
+    "type": "panel",
+    "group": "Days",
+    "title": "Etiquette & language",
+    "body": "<p>Three official languages share the country: Luxembourgish is the everyday spoken language, French dominates shops, menus and signage, and German shows up in print media. Around 80% of the population also speaks English, but opening with \"Bonjour\" rather than English is the local norm and is well received.</p><p>A brief handshake is the standard greeting, including in casual encounters with shopkeepers and waitstaff — cheek-kissing is reserved for people who already know each other. Luxembourgers tend toward reserved, polite phrasing over overt friendliness; it isn't coldness, just the register.</p><p>Punctuality is taken seriously for any timed booking or tour.</p>",
+    "phase": "daily",
+    "source_url": "https://www.expatica.com/lu/living/integration/culture-and-social-etiquette-in-luxembourg-106555/",
+    "verified_on": "2026-08-21",
+    "shelf_life": "default"
+  }
+]
