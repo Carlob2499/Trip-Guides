@@ -1,0 +1,452 @@
+{
+  "schemaVersion": "wp-evidence/2.1",
+  "slug": "luxembourg",
+  "runId": "luxembourg-20260821-99c13e",
+  "candidates": [
+    {
+      "id": "c-wenzel-circular-walk",
+      "name": "Wenzel Circular Walk",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-bock-casemates",
+      "name": "Bock Casemates",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "Anchor sight within the Wenzel Circuit. Pass B resolved conflicting secondary hours/price figures (10:00-17:00/18:00, EUR4-8 on aggregators) against the operator's own current page (see disagreement d-casemates-hours-price-conflict), but could not corroborate a specific off-peak crowd-timing claim to the >=2-independent-firsthand bar within budget -- every 'go early to avoid crowds' source found was SEO/aggregator-tier, not a dated firsthand account. No timing claim is shipped from this pass; the resolved hours/price stand as objective evidence only.",
+      "worth": null
+    },
+    {
+      "id": "c-pfaffenthal-panoramic-elevator",
+      "name": "Pfaffenthal Panoramic Elevator",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-mullerthal-trail--echternach-loop",
+      "name": "Mullerthal Trail",
+      "branch": "Echternach loop",
+      "priority": "nature-outdoors",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "The half-day-out option that best serves the party's underused nature/outdoors priority without duplicating the culture/history depth already built from the city's own fortifications and museums.",
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-vianden-castle",
+      "name": "Vianden Castle",
+      "branch": null,
+      "priority": "nature-outdoors",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "The default half-day-trip pick, but reached only via a train-then-bus transfer (Ettelbruck, then bus 570), versus a single direct free bus to Echternach. It is also another castle/history stop layered on top of an already history-heavy city plan, rather than serving the party's third, currently thin priority (nature/outdoors). Not pursued further as the recommended half-day trip.",
+      "worth": null
+    },
+    {
+      "id": "c-um-dierfgen",
+      "name": "Um Dierfgen",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "The guidebook-default address for Luxembourgish specialties in the capital. Multiple independent review sources (resto.lu, TripAdvisor listing text seen via search) consistently describe it as full and effectively needing a reservation at lunch and dinner -- the opposite of the party's stated 'eat well without booking anything formal.' Could not fetch the operator's own site to confirm or refute directly (umdierfgen.lu returned 403 on both a direct attempt and a mirror retry), so no reservation-policy evidence record is shipped for it -- but the weight of consistent secondary reports is enough to route the recommendation elsewhere.",
+      "worth": null
+    },
+    {
+      "id": "c-manzoku-ramen-bar",
+      "name": "Manzoku Ramen Bar",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Genuinely walk-in-only by design (no reservation system exists at all, virtual queue instead), matching the party's preference exactly. Important caveat: only open Wed-Sat, closed Sun-Tue -- for an Oct 16-19 (Fri-Mon) visit that leaves only Friday and Saturday inside opening hours.",
+      "worth": null
+    },
+    {
+      "id": "c-kaito-ramen",
+      "name": "Kaito Ramen",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Walk-in/first-come-first-served daily, open every day of the Oct 16-19 stay (11:30-21:30), which Manzoku is not. Corroborated as genuinely busy at midday, so best used as a lunch-just-before-noon or dinner pick rather than a peak-lunch drop-in.",
+      "worth": null
+    },
+    {
+      "id": "c-konrad-cafe-bar",
+      "name": "Konrad Cafe & Bar",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Repeatedly mentioned as a casual, walk-in-friendly local favourite (well-known carrot cake). Only one directly-fetched firsthand source found within budget (planethibbel.com); a second independent firsthand source was not secured (a second candidate article truncated on fetch). Held as a lead, not shipped as a corroborated experiential pick.",
+      "worth": null
+    },
+    {
+      "id": "c-beim-siggy",
+      "name": "Beim Siggy",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Clausen brasserie repeatedly recommended for Luxembourgish food with a valley view over the Grund. Could not corroborate firsthand within the two-attempt fetch budget: the one personal-blog write-up found no longer resolves (DNS failure), and TripAdvisor returned 403 on every attempt this pass (restaurant review page, forum thread, and a mirror retry). Omitted rather than shipped unverified.",
+      "worth": null
+    },
+    {
+      "id": "c-chiggeri",
+      "name": "Chiggeri",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Well-regarded but consistently positioned and reviewed as upscale fine dining with an extensive wine list -- the wrong register for 'eat well without booking anything formal.' Not pursued further.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-wenzel-circuit-route",
+      "candidateId": "c-wenzel-circular-walk",
+      "claim": "The Wenzel Circular Walk is a free, self-guided ~2.5km/3-hour signposted route (named for Duke Wenceslas II) that links the Bock rock/casemates, the medieval Wenzel-era fortifications, the Chemin de la Corniche and the upper and lower town -- a single route through the exact combination of fortifications and valley-adjacent walking this party asked for.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.visitluxembourg.com/fr/tour/circuit-pedestre-wenzel",
+        "kind": "official",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-casemates-hours-price",
+      "candidateId": "c-bock-casemates",
+      "claim": "Bock Casemates: open daily (year-round except Dec 25 and Jan 1), entry every 15 minutes from 09:45 to 19:00 (last admission), maximum 45 minutes per visit; adult admission EUR11.00 (2026).",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.luxembourg-city.com/en/tours-activities/underground/bock-casemates",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-pfaffenthal-elevator",
+      "candidateId": "c-pfaffenthal-panoramic-elevator",
+      "claim": "The Pfaffenthal Panoramic Elevator is free, rises 71m connecting Pescatore Park in the upper town to the Pfaffenthal district at the bottom of the Alzette valley, and runs daily 05:45-01:00 (closed for maintenance the first Monday of each month, 09:00 to 05:45 the next day) -- a practical way to walk down into the valley and ride back up rather than reclimbing.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.visitluxembourg.com/fr/attraction/ascenseur-panoramique-du-pfaffenthal",
+        "kind": "official",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-free-public-transport",
+      "candidateId": null,
+      "claim": "Public transport (bus, tram, and 2nd-class train) has been free throughout the entire territory of Luxembourg since 1 March 2020, for residents and visitors alike; only 1st-class rail travel requires a paid ticket.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.mobiliteit.lu/en/tickets-page/fares/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-bus201-route",
+      "candidateId": "c-mullerthal-trail--echternach-loop",
+      "claim": "RGTR bus line 201 runs Luxembourg City (Limpertsberg) - Echternach directly, no transfer, free like all Luxembourg public transport.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.mobiliteit.lu/en/line/bus-201-rgtr-2/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-mullerthal-crowd-mllebougeotte",
+      "candidateId": "c-mullerthal-trail--echternach-loop",
+      "claim": "Schiessentumpel is the busiest point on the Mullerthal Trail loop near Echternach; walking it right at opening, before the day's tour/hiking groups arrive, changes the experience -- noticeably quieter and near-empty at the falls.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.mllebougeotte.fr/post/petite-suisse-luxembourgeoise-mullerthal-trail",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": "2026-06-19",
+        "family": "mllebougeotte",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-mullerthal-crowd-emeraudetrip",
+      "candidateId": "c-mullerthal-trail--echternach-loop",
+      "claim": "Schiessentumpel is the busiest point on the Mullerthal Trail loop near Echternach; walking it right at opening, before the day's tour/hiking groups arrive, changes the experience -- noticeably quieter and near-empty at the falls.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://emeraudetrip.com/randonnee-sur-le-mullerthal-trail/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": null,
+        "family": "emeraudetrip",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-manzoku-policy",
+      "candidateId": "c-manzoku-ramen-bar",
+      "claim": "Manzoku Ramen Bar takes no reservations at all (virtual waitlist queue via an app once full); open only Wednesday-Saturday (Wed-Thu 11:30-14:00, Fri 11:30-14:00 and 18:00-21:00, Sat 18:00-22:00), closed Sunday-Tuesday.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.manzoku.lu/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-kaito-policy",
+      "candidateId": "c-kaito-ramen",
+      "claim": "Kaito (Place de Paris location) is walk-in / first-come-first-served daily 11:30-21:30; only groups of 8 or more can book a table in advance.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.kaito.lu/about-us",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-kaito-crowd-redisdead",
+      "candidateId": "c-kaito-ramen",
+      "claim": "Kaito's Place de Paris location gets genuinely busy at midday; since it's walk-in only (no reservations except groups of 8+), arriving by or around noon on a weekday is the practical way to get a table without a long wait.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://weblog.redisdead.net/main/post/2025/05/06/Mes-bonnes-adresses-a-Luxembourg",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": "2025-05-06",
+        "family": "redisdead",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-kaito-crowd-tripadvisor",
+      "candidateId": "c-kaito-ramen",
+      "claim": "Kaito's Place de Paris location gets genuinely busy at midday; since it's walk-in only (no reservations except groups of 8+), arriving by or around noon on a weekday is the practical way to get a table without a long wait.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.tripadvisor.com/Restaurant_Review-g190356-d33274127-Reviews-Kaito-Luxembourg_City.html",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "tripadvisor-review-kaito",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-language-reality",
+      "candidateId": null,
+      "claim": "Luxembourg has three official languages (Luxembourgish, French, German). French is the most consistently useful single language for visitors in shops, cafes and restaurants, especially in the capital; roughly 80% of the population also speaks English as a practical backup. Locals themselves switch between all three day to day: Luxembourgish for broadcast media and everyday talk, German for print, French for business and formal matters.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.lingoda.com/blog/en/languages-in-luxembourg/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    }
+  ],
+  "reservations": [],
+  "transport": [
+    {
+      "id": "t-luxembourg-echternach-bus201",
+      "route": "Luxembourg City (Limpertsberg) to Echternach via RGTR bus line 201",
+      "risk": 1,
+      "evidenceIds": [
+        "ev-bus201-route",
+        "ev-free-public-transport"
+      ],
+      "doorToDoor": "Direct bus, no transfer, free of charge; runs roughly every 30 minutes per aggregator schedules (not independently fetched from the official timetable PDF this pass).",
+      "transferReality": "None -- single direct service.",
+      "groupLuggageMobility": "Not relevant for a 2-person half-day trip with no luggage.",
+      "buffer": null,
+      "missedConnection": "Low consequence given ~30-minute frequency.",
+      "nextService": "Every ~30 minutes through the day (per mobiliteit.lu line page and third-party timetable aggregators).",
+      "lastPracticalReturn": null,
+      "fallback": "Lines 211/212 also connect Luxembourg City to Echternach via a longer routing through intermediate villages, per the Mullerthal Trail's own mobility page (not independently fetched by Pass B)."
+    }
+  ],
+  "disagreements": [
+    {
+      "id": "d-casemates-hours-price-conflict",
+      "topic": "Bock Casemates opening hours and adult admission price",
+      "impact": "minor",
+      "investigation": "Initial aggregator/search results gave 10:00-17:00 (18:00 in summer), open March 1-November 2 only, adult price cited as either EUR8 or EUR4. Fetching the operator's own current page (luxembourg-city.com) directly showed a different picture: open year-round except Dec 25/Jan 1, timed entries every 15 minutes from 09:45-19:00, adult EUR11.00 (2026).",
+      "resolution": "Treated the fetched operator page as the current T0 source over the older/lower secondary figures; see ev-casemates-hours-price. Does not change any recommendation, only the specific hours/price to publish."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [],
+      "notApplicableReason": "None of Pass B's shipped/detour candidates require booking -- Manzoku and Kaito are walk-in only by design, and the Wenzel walk, Pfaffenthal elevator and Mullerthal/Echternach trip need no reservation, matching the party's explicit no-formal-booking preference."
+    },
+    "transport": {
+      "requiredRouteIds": [],
+      "notApplicableReason": "The only inter-city route Pass B evaluated (Luxembourg City-Echternach) is a direct, ~30-minute-frequency, free public bus with no transfer -- rated risk 1, well under the R3+ threshold that would require full transport-depth research."
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "The claims that cleared the >=2-independent-firsthand bar (Mullerthal/Schiessentumpel crowd timing, Kaito midday crowd) did so within the first couple of targeted searches. Later rounds chasing the remaining open items -- Casemates off-peak timing, a second Konrad source, Beim Siggy corroboration, Um Dierfgen's own site -- kept returning the same SEO/aggregator content or hit blocked origins (TripAdvisor 403 on every attempt this pass; two personal-blog domains unreachable; r.jina.ai mirror not permitted in this environment; yt-dlp not installed, so no video transcripts were attempted). None of those unresolved items are likely to flip a recommendation -- they were left as honest omissions/rejections (see candidates) rather than pursued past the point of duplicate results."
+  },
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "Luxembourg's genuine resident-angle content (personal travel blogs, culinary press, forum-style reviews) runs mostly in French and German rather than English tourist coverage; Luxembourgish itself is rarely used for this kind of written web content, so 'native-first' here meant leaning on French/German queries rather than literal Luxembourgish translations, plus a French/German-domain filter over the usual English top-10.",
+      "searchClasses": [
+        "French crowd/timing queries for the Casemates, Corniche and Grund",
+        "German 'Geheimtipp' (insider-tip) queries for resident food recommendations",
+        "French forum/blog queries comparing half-day trips without a car (Vianden vs Mullerthal/Echternach)",
+        "French queries for firsthand Mullerthal/Schiessentumpel hiking accounts",
+        "French queries for walk-in, no-reservation dining in Luxembourg City"
+      ],
+      "yield": "Surfaced the official Wenzel Circular Walk as a self-guided way to combine the fortifications, upper town and valley walk the party specifically asked for; two independent French personal-blog accounts corroborating that Schiessentumpel (Mullerthal) is markedly quieter right at opening; a German blog's honest food-scene overview that led to Oekosoph/Wanderscheid as further leads (not independently corroborated within budget, not shipped); and a French personal blog (redisdead) naming specific walk-in ramen spots (Kaito, Manzoku) with practical arrival-timing advice that English-language 'best restaurants Luxembourg' searches did not surface at all."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": []
+}
