@@ -674,3 +674,80 @@ button, which does not ship) and inferring counts from the artifacts, both of wh
 activity on the one surface whose entire job is reporting what is actually happening. The
 "Cost to research" row is omitted for the same reason — no data, so no row. Emission is a drop-in:
 `docs/reference/pipeline.md` + issue #56 carry the contract.
+
+**V2 run context is durable state, never re-threaded inputs** (integration week, 2026-08-20;
+publication clause CORRECTED by the release-candidate pass the same week). The intake `issue`
+is recorded ONCE in `run.v2.json` at init, inherited by every resume/retry/answer-redispatch,
+heals only from null, never rewires. Rejected: threading context through every dispatch's
+inputs (V1's shape) — four void-retry sites plus the answers redispatch would each re-thread
+it, and any one omission misroutes a run. Supersedes the "today that gateway always resolves
+to empty" clause of the Progress-honesty entry above: V2's `events.mjs` emits real, RUN-SCOPED
+stage/landing events (runId-stamped; Progress refuses a stream naming another run) and the
+honesty rule is unchanged — what the emitter cannot prove still renders empty or null.
+
+**Landing authority is infrastructure; publication is a two-phase transaction** (release-
+candidate correction pass, 2026-08-20; derivation hardened same day). `landMode` is DERIVED at
+init by `deriveLandIntent()` — auto ⇔ TRUSTED PROVENANCE (the run was invoked through
+new-guide.yml's workflow_call, so its event is the caller's "issues", never
+"workflow_dispatch") AND the default branch AND `WAYPOINT_RESEARCH_ENGINE=v2` — recorded once,
+immutable (resume requests are ignored, not honored), and re-checked as landing-time
+authority. The hardening amendment closed the ref+selector-only gap: a maintainer's manual
+dispatch on main with the selector live now still creates a draft-only run — only the /new
+product flow can mint auto, and no workflow input, manual dispatch, or feature-ref run can
+reach auto publication. Publication
+itself: the gate verdict is a pre-merge fact and rides the branch; `publication.published` is
+written ONLY by `finalizeMergedLanding` after gh confirms the merge, on the default branch,
+idempotently retryable — and the schema refuses `published` without a confirmed merged
+landing outcome. Rejected: the integration week's first design (`recordProductLanding`),
+which wrote published BEFORE `landBranch` ran so the fact could "ride the merge commit" —
+state claiming an event before reality is exactly what the honest-progress doctrine forbids,
+and a merge conflict would have left a branch asserting a publication that never happened.
+Also rejected: a `land` workflow input ("set only by /new" was prose, not enforcement — any
+manual dispatch could type it).
+
+**Numeric research floors are dead EVERYWHERE, including V1 context** (release-candidate
+correction pass, 2026-08-20, closing the recorded CONFLICTING_SPEC). The 2026-08-17 decision
+above said floors were gone repo-wide and explicitly rejected a V1-only exception — yet
+`check-candidates.mjs` shipped an env-gated remnant (`DEFAULT_FLOORS` active whenever
+`WAYPOINT_PIPELINE_V2 != 1`) that failed honest small consideration sets (Andorra: "5
+considered, floor is 16") in every V1-context verify. The remnant, the `researchFloors`
+schema field, and their tests are now removed; the structural anti-fabrication checks
+(shipped-name cross-check, shipped ⊆ shortlist, empty-table failure) and the saturation
+record remain the thinness protection. Rejected: re-recording the conflict for a third time —
+three authorities already agreed, so the code moved.
+
+**Every integration/hardening pass ends with a per-requirement acceptance matrix** (creator
+ruling, 2026-08-20, on the PR #68 final hardening pass). The closing report — and the PR body
+it updates — carries one table row PER requirement: verdict (PASS or BLOCKED, nothing
+softer), files changed, a one-line implementation summary, the EXACT test(s) proving the
+behavior, the test result, and remaining uncertainty (an honest "none" is a claim, not a
+default). Two hard rules ride with it: a requirement is never marked PASS on inspection alone
+where a behavioral test was required, and a required behavioral test that is absent or
+failing makes the row BLOCKED — the matrix is where "tests passed" and "the requested
+behavior was proven" are forced to be the same statement. Rejected: prose summaries of "what
+was fixed" without per-requirement proof lines — that shape is how the correction pass's
+"zero known code blockers" claim shipped over twelve live defects; the matrix exists so a
+claim of readiness decomposes into rows a reviewer can falsify one at a time.
+
+**A landing is proven by its RUN, and a non-merged auto landing is quarantined ON ORIGIN**
+(Codex re-review corrections, 2026-08-20, PR #68). Four amendments to the two-phase
+transaction above. (1) Merge confirmation includes RUN IDENTITY: `verifyMergedPr` reads
+`run.v2.json` out of the merge commit's own tree and refuses any runId other than the one
+being finalized — `research-v2/<slug>` is REUSED across generations, so base+head alone would
+let Run A's old merged PR finalize Run B; `expectedRunId` is mandatory, no caller may skip
+the proof. (2) Every non-merged AUTO landing must leave `origin/<branch>` carrying
+`draft:true` again (the flip was pushed pre-merge); the restore is committed AND pushed
+(`quarantineRemoteBranch`), and a restore that cannot reach origin is a BLOCKED landing —
+recorded failed, exit 1, never reported as a safe draft fallback. The whole transaction lives
+in `scripts/pipeline/landing.mjs` (`executeLanding`, injectable seams) so the invariant is
+behaviorally tested against real git remotes. (3) Recovery announcement truth FAILS CLOSED:
+`finalize-landing` without `--announced` refuses when the durable state carries no announce
+fact (`ok|failed|skipped`; skipped = no announce URL was configured) — a crash between the
+merge and main must not silently turn a known real-world outcome into null; the land path's
+printed retry command now always carries the flag. (4) Answers routing resolves ACTIVE
+research ownership BEFORE historical slug publication (`resolveAnswerRouting`,
+questions.mjs): a published Run A on main never steals Run B's answer into the change
+lifecycle; only when no run owns the answer does publication route it to a change run.
+Rejected: branch-name identity as landing proof (aliases generations); logging a failed
+draft-restore and continuing (claims a safety the remote cannot show); routing by
+publication-first (the exact Run-A-steals-Run-B mis-route).

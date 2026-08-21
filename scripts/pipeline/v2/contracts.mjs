@@ -180,6 +180,14 @@ export const runStateSchema = z.looseObject({
     effort: z.string().min(1),
     criticModel: z.string().min(1),
   }),
+  // Product-communication continuity (I01): the intake issue this run reports back to. Recorded
+  // once at init from /new's dispatch and carried durably, so a resume/redispatch (which has no
+  // issue input) still surfaces traveler questions on the right thread. Null = manual run.
+  issue: z.string().regex(/^\d+$/, "expected a GitHub issue number").nullable().default(null),
+  // Landing intent (I02), immutable per run: "pr" is the controlled/draft mode (canaries, tests —
+  // can never publish); "auto" is the accepted product mode, which still publishes only through
+  // the full evidence gate. Recorded at init; a redispatch inherits it from here.
+  landMode: z.enum(["pr", "auto"]).default("pr"),
   status: z.enum(["pending", "running", "paused", "complete", "failed", "stuck"]),
   createdAt: iso,
   updatedAt: iso,
@@ -205,6 +213,34 @@ export const runStateSchema = z.looseObject({
     deployedLive: z.boolean().nullable().default(null),
     deployedAt: iso.nullable().default(null),
   }),
+  // THE LANDING TRANSACTION (correction pass, 2026-08-20): gate PASS and merge success are
+  // SEPARATE facts. `landingGate` says what the evidence gate found; `landing` says what GitHub
+  // actually did with the branch. `pending` until an outcome exists; "merged" is written only
+  // AFTER gh confirms the merge — the schema below refuses `published: true` on anything else.
+  // `announced` records whether the auto-publish safety notice was actually filed (null =
+  // not applicable/not attempted; false = merge succeeded but the notice API call failed — a
+  // durable fact someone must act on, never a reason to pretend the merge failed).
+  landing: z.object({
+    outcome: z.enum(["pending", "merged", "draft", "failed"]).default("pending"),
+    pr: z.number().int().min(1).nullable().default(null),
+    mergedAt: iso.nullable().default(null),
+    announced: z.boolean().nullable().default(null),
+    finalizedAt: iso.nullable().default(null),
+    detail: z.string().nullable().default(null),
+  }).superRefine((l, ctx) => {
+    if (l.outcome === "merged" && (!l.pr || !l.mergedAt)) ctx.addIssue({ code: "custom", message: "a merged landing requires pr and mergedAt" });
+    if (l.outcome === "pending" && (l.pr || l.mergedAt || l.finalizedAt)) ctx.addIssue({ code: "custom", message: "a pending landing cannot carry outcome fields" });
+    if (l.outcome === "draft" && !l.pr) ctx.addIssue({ code: "custom", message: "a draft landing names its PR" });
+  }).default({ outcome: "pending", pr: null, mergedAt: null, announced: null, finalizedAt: null, detail: null }),
+  // Prior runs of this slug (fresh-run semantics): compact, append-only history — a re-research
+  // never silently destroys the record of what shipped before it.
+  previousRuns: z.array(z.looseObject({
+    runId: z.string().min(1),
+    status: z.string().min(1),
+    endedAt: iso.nullable().default(null),
+    publishedAt: iso.nullable().default(null),
+    mergedPr: z.number().int().min(1).nullable().default(null),
+  })).default([]),
   landingGate: z.object({
     status: z.enum(["pending", "passed", "failed"]),
     checkedAt: iso.nullable().default(null),
@@ -222,6 +258,19 @@ export const runStateSchema = z.looseObject({
   if (state.status === "failed" && !state.failure) ctx.addIssue({ code: "custom", message: "failed run requires failure detail" });
   if (state.publication.published !== Boolean(state.publication.publishedAt)) ctx.addIssue({ code: "custom", message: "published and publishedAt must agree" });
   if (state.publication.deployedLive === true && !state.publication.deployedAt) ctx.addIssue({ code: "custom", message: "deployedLive requires deployedAt" });
+  // NO STATE GETS AHEAD OF REALITY (correction pass): "published" is a claim about a CONFIRMED
+  // GitHub merge — it is schema-invalid without one, and schema-invalid on a failed gate. These
+  // are the invariants the retired recordProductLanding() violated by writing published before
+  // landBranch ran.
+  if (state.publication.published && state.landing?.outcome !== "merged") {
+    ctx.addIssue({ code: "custom", message: "published requires a CONFIRMED merged landing outcome — a gate pass is not a merge" });
+  }
+  if (state.publication.published && state.landingGate?.status !== "passed") {
+    ctx.addIssue({ code: "custom", message: "published requires a passed landing gate" });
+  }
+  if (state.landing?.outcome === "merged" && state.landingGate?.status !== "passed") {
+    ctx.addIssue({ code: "custom", message: "a merged landing without a passed gate is not a state this pipeline can produce" });
+  }
 });
 
 // ── research evidence + candidates ───────────────────────────────────────────

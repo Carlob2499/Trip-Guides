@@ -17,18 +17,23 @@ permissions:
   issues: write
   actions: write
 
-# A single GLOBAL group, not per-issue: the country isn't known until issue-to-scaffold.mjs parses
-# the body INSIDE the job, so two different issues for the same country can't be told apart by a
-# pre-job key — and when they ran concurrently both computed the same uniqueSlug from independent
-# checkouts and the second `git pull --rebase` hit an add/add conflict. Scaffolds are fast and
-# infrequent; serializing them trades a little parallelism for correctness. Queue, never cancel —
-# a scaffold commit is not idempotent to interrupt.
-concurrency:
-  group: new-guide-scaffold
-  cancel-in-progress: false
+# The scaffold serialization group lives on the scaffold JOB, not the workflow (hardening
+# pass): the run now contains the full called V2 research pipeline, and a workflow-level group
+# would hold the new-guide slot for the research's whole multi-hour duration — every later
+# scaffold queued behind someone else's research. The job-level group keeps the original
+# guarantee (scaffold commits to main never interleave) at the original cost.
 
 jobs:
   scaffold:
+    # A single GLOBAL group, not per-issue: the country isn't known until issue-to-scaffold.mjs
+    # parses the body INSIDE the job, so two different issues for the same country can't be told
+    # apart by a pre-job key — and when they ran concurrently both computed the same uniqueSlug
+    # from independent checkouts and the second `git pull --rebase` hit an add/add conflict.
+    # Scaffolds are fast and infrequent; serializing them trades a little parallelism for
+    # correctness. Queue, never cancel — a scaffold commit is not idempotent to interrupt.
+    concurrency:
+      group: new-guide-scaffold
+      cancel-in-progress: false
     # The public issue form auto-labels submissions. Only the owner/collaborators may turn that
     # label into a write-token scaffold + Claude spend; outsider issues remain readable for a
     # maintainer to dispatch deliberately.
@@ -36,6 +41,8 @@ jobs:
       github.event.label.name == 'new-guide' &&
       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
     runs-on: ubuntu-latest
+    outputs:
+      slug: ${{ steps.gen.outputs.slug }}
     env:
       GH_TOKEN: ${{ github.token }}
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
@@ -86,24 +93,53 @@ jobs:
 
       # `issue` threads the intake issue through so the research pass can surface any questions it
       # had to assume its way past back to the person who filed it. A notification channel only —
-      # research never waits on an answer, and a pass dispatched without it skips that step.
+      # research never waits on an answer. V1 carries it per dispatch; V2 records it durably in
+      # run.v2.json at init, so V2 resumes/retries never need it re-threaded.
       #
       # THE CUTOVER SWITCH (Pipeline V2 finalization). One repository variable,
       # WAYPOINT_RESEARCH_ENGINE, selects the research engine: unset or anything but "v2" keeps
       # V1 — the production default is never switched silently. Setting it to "v2" (a deliberate,
       # reviewable repo-settings change reserved for after independent V2 acceptance) routes /new
-      # to the V2 pipeline, whose own default-branch guard keys on the SAME variable, and which
-      # still lands draft-only until its landing mode is deliberately changed. V1 stays intact
-      # and dispatchable either way — nothing here deletes or bypasses it.
-      - name: Auto-start the research pass
+      # to the V2 pipeline through the research-v2 JOB below — a workflow_call, the TRUSTED
+      # product invocation (hardening pass): the called run executes under this workflow's own
+      # "issues" event, which is what lets V2's init mint product (auto) landing intent. A
+      # manual dispatch of research-pass-v2 is a workflow_dispatch and can only ever
+      # create a draft-only (pr) run, whatever ref or selector it runs under. Landing authority
+      # is still never a typed input anywhere. V1 stays intact and dispatchable either way —
+      # nothing here deletes or bypasses it.
+      - name: Auto-start the research pass (V1 engine)
         env:
           SLUG: ${{ steps.gen.outputs.slug }}
           ISSUE: ${{ github.event.issue.number }}
           ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}
         run: |
           if [ "$ENGINE" = "v2" ]; then
-            gh workflow run research-pass-v2.yml -f slug="$SLUG"
+            echo "V2 engine selected — the research-v2 job takes over via workflow_call (the trusted product invocation)."
           else
             gh workflow run research-pass.yml -f slug="$SLUG" \
               -f issue="$ISSUE"
           fi
+
+  # The trusted V2 product invocation (hardening pass). workflow_call — not `gh workflow run` —
+  # so the V2 pipeline can distinguish this product entry point structurally: the called run's
+  # github.event_name is "issues" (this workflow's own trigger), which ordinary
+  # workflow_dispatch cannot impersonate, and only workflows committed to the default branch
+  # run on the default-branch ref at all. The job-level concurrency mirrors the V2 workflow's
+  # own guide-<slug> group (a reusable workflow's workflow-level concurrency is not applied on
+  # call), so V1/V2 research and change runs on one slug still queue instead of interleaving.
+  research-v2:
+    needs: scaffold
+    if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: write
+    concurrency:
+      group: guide-${{ needs.scaffold.outputs.slug }}
+      cancel-in-progress: false
+    uses: ./.github/workflows/research-pass-v2.yml
+    with:
+      slug: ${{ needs.scaffold.outputs.slug }}
+      issue: ${{ format('{0}', github.event.issue.number) }}
+    secrets: inherit

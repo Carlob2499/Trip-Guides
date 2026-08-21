@@ -33,6 +33,11 @@ export const V2_RESEARCH_STAGES = ["scaffold", "passA", "passB", "reconcile", "c
 // pins the research attempt cap at five for initial V2 compatibility), one automatic redispatch.
 export const V2_ATTEMPT_CAP = 5;
 export const V2_AUTO_RETRY_CAP = 1;
+// A human answer re-opening a completed run grants this many further dispatches for the
+// reopened tail (reconcile → critic → landing). The AUTONOMOUS cap stays what it was — the
+// grant exists only on the human-triggered reopen path, so a run still cannot loop on its own;
+// a late answer arriving at the cap must not be dead on arrival (hardening pass, 2026-08-20).
+export const V2_REOPEN_ATTEMPT_GRANT = 2;
 
 export function runStatePath(slug, intakeDir = INTAKE_DIR) {
   if (!isValidSlug(slug)) throw new ContractError(`invalid run-state slug "${slug}"`);
@@ -157,36 +162,16 @@ export function stageAttemptStats(st) {
   };
 }
 
-/** Create a fresh V2 run. Refuses to clobber an existing one unless force. */
-export async function initRunV2(slug, {
-  lifecycle = "research",
-  stages = V2_RESEARCH_STAGES,
-  cap = V2_ATTEMPT_CAP,
-  autoRetryCap = V2_AUTO_RETRY_CAP,
-  now = new Date().toISOString(),
-  intakeDir = INTAKE_DIR,
-  force = false,
-  inputs = { section: "", model: "claude-sonnet-5", effort: "high", criticModel: "claude-opus-5" },
-} = {}) {
-  const existing = await readRunStateV2(slug, { intakeDir });
-  if (existing && !force) {
-    // Complete and stuck records are deliberately durable too. A redispatch may re-run landing
-    // or surface the stuck state, but it must not silently mint a new run whose "baseline"
-    // already contains the prior run's evidence. Starting over requires an explicit --force
-    // decision and a deliberately fresh branch.
-    if (JSON.stringify(existing.inputs) !== JSON.stringify(inputs)) {
-      throw new ContractError(
-        `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel recorded in run.v2.json`,
-      );
-    }
-    return existing;
-  }
-  const state = {
+/** The canonical fresh-run shape (one writer — init and fresh-run archival both use it). */
+function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }) {
+  return {
     schemaVersion: RUN_SCHEMA,
     slug,
     runId: newRunId(slug, { now: new Date(now) }),
     lifecycle,
     inputs,
+    issue: issue || null,
+    landMode: landMode || "pr",
     status: "pending",
     createdAt: now,
     updatedAt: now,
@@ -198,10 +183,84 @@ export async function initRunV2(slug, {
     resume: { nextStage: stages[0], action: `run stage "${stages[0]}"` },
     failure: null,
     publication: { published: false, publishedAt: null, deployedLive: null, deployedAt: null },
+    landing: { outcome: "pending", pr: null, mergedAt: null, announced: null, finalizedAt: null, detail: null },
+    previousRuns: [],
     landingGate: { status: "pending", checkedAt: null, failure: null },
     telemetry: null,
   };
-  return save(state, intakeDir);
+}
+
+/** Create a fresh V2 run. Refuses to clobber an existing one unless force. `branchFresh` is the
+    fresh-run signal from the workflow's branch step: the research-v2 branch did NOT exist and
+    was just created from the default branch, so any state found on disk is inherited history. */
+export async function initRunV2(slug, {
+  lifecycle = "research",
+  stages = V2_RESEARCH_STAGES,
+  cap = V2_ATTEMPT_CAP,
+  autoRetryCap = V2_AUTO_RETRY_CAP,
+  now = new Date().toISOString(),
+  intakeDir = INTAKE_DIR,
+  force = false,
+  inputs = { section: "", model: "claude-sonnet-5", effort: "high", criticModel: "claude-opus-5" },
+  issue = null,
+  landMode = null,
+  branchFresh = false,
+} = {}) {
+  const existing = await readRunStateV2(slug, { intakeDir });
+  if (existing && !force && branchFresh) {
+    // FRESH-RUN SEMANTICS (correction pass): the research-v2 branch was JUST created from the
+    // default branch, so `existing` is HISTORY that rode a prior merge — it is not this
+    // dispatch's run, and silently "resuming" a terminal run would land the old content again.
+    // A merged, published prior run starts a NEW run with the old one archived (append-only,
+    // never destroyed). Anything else reaching a fresh branch is an anomaly: refuse loudly.
+    if (existing.publication?.published && existing.landing?.outcome === "merged") {
+      const archived = [...(existing.previousRuns || []), {
+        runId: existing.runId,
+        status: existing.status,
+        endedAt: existing.updatedAt || null,
+        publishedAt: existing.publication.publishedAt || null,
+        mergedPr: existing.landing?.pr ?? null,
+      }];
+      const state = freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode });
+      state.previousRuns = archived;
+      return save(state, intakeDir);
+    }
+    throw new ContractError(
+      `a fresh research-v2 branch inherited run ${existing.runId} (status "${existing.status}", ` +
+        `landing "${existing.landing?.outcome || "pending"}") from the default branch — that is neither an ` +
+        `active run to resume nor merged history to archive. Investigate how it reached the default branch ` +
+        `before dispatching again.`,
+    );
+  }
+  if (existing && !force) {
+    // Complete and stuck records are deliberately durable too. A redispatch may re-run landing
+    // or surface the stuck state, but it must not silently mint a new run whose "baseline"
+    // already contains the prior run's evidence.
+    if (JSON.stringify(existing.inputs) !== JSON.stringify(inputs)) {
+      throw new ContractError(
+        `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel recorded in run.v2.json`,
+      );
+    }
+    // Run context is durable and immutable. issue: a redispatch that omits it inherits; naming a
+    // DIFFERENT one is cross-wiring, refused; healing a null with a real one is the one write.
+    if (issue && existing.issue && issue !== existing.issue) {
+      throw new ContractError(`run ${existing.runId} reports to issue #${existing.issue} — refusing to rewire it to #${issue}`);
+    }
+    // landMode: recorded at creation and IMMUTABLE — a resume request can neither escalate a
+    // draft run to product nor strip a product run to draft. The request is simply not consulted
+    // on resume (logged when it differs, so drift is visible); landing-time authority is
+    // separately enforced by the landing decision (product authority) and by the landing
+    // transaction itself, so even a recorded "auto" cannot merge without both.
+    if (landMode && landMode !== (existing.landMode || "pr")) {
+      console.error(`[run-state] resume requested landMode "${landMode}" but run ${existing.runId} records "${existing.landMode || "pr"}" — recorded intent is immutable; request ignored.`);
+    }
+    if (issue && !existing.issue) {
+      existing.issue = issue;
+      return save(touch(existing, now), intakeDir);
+    }
+    return existing;
+  }
+  return save(freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }), intakeDir);
 }
 
 function requireRun(state, slug) {
@@ -324,6 +383,111 @@ export async function markPublished(slug, { now = new Date().toISOString(), inta
   state.publication.published = true;
   state.publication.publishedAt = now;
   return save(touch(state, now), intakeDir);
+}
+
+/** The deterministic landing decision (I02): "auto" ONLY when the run records product intent
+    (landMode "auto", set at init by the accepted /new dispatch) AND every stage is complete.
+    Everything else — controlled/draft runs, incomplete runs, no run at all — is "pr". */
+export function landingMode(state) {
+  return state?.landMode === "auto" && !nextStageV2(state) ? "auto" : "pr";
+}
+
+/** LANDING INTENT AT INIT (hardening pass, 2026-08-20): only the trusted /new product flow may
+    mint an auto-authorized run. new-guide.yml invokes research-pass-v2.yml through workflow_call,
+    so the trusted invocation runs under the CALLER's event ("issues") — while every manual /
+    developer invocation is a `workflow_dispatch`. Being on the default branch with the selector
+    set is necessary but NOT sufficient: a maintainer typing `gh workflow run` on main with the
+    selector live still gets a draft-PR run. Missing/blank provenance fails safe to "pr". */
+export function deriveLandIntent({ eventName = "", onDefault = false, engine = "" } = {}) {
+  const trustedProvenance = Boolean(eventName) && eventName !== "workflow_dispatch";
+  return trustedProvenance && onDefault === true && engine === "v2" ? "auto" : "pr";
+}
+
+// ── the landing transaction (correction pass, 2026-08-20) ────────────────────
+// Gate PASS and merge success are SEPARATE facts, recorded in two phases. Phase 1 (pre-merge,
+// rides the branch): markLandingGate — the gate verdict is a real pre-merge fact. Phase 2 (only
+// after gh CONFIRMS an outcome): recordLandingOutcome for draft/failed, finalizeMergedLanding
+// for merged. publication.published is written by finalizeMergedLanding ALONE, and the schema
+// refuses it without a confirmed merged outcome — no state or event can get ahead of reality.
+// The retired recordProductLanding() wrote published before landBranch ran; its replacement
+// tests pin that this can never come back.
+
+/** Phase-2 record for a NON-merged outcome: the draft-PR fallback (gate fail, or gate pass with
+    a merge conflict) and the hard-failure case. Never touches publication. */
+export async function recordLandingOutcome(slug, { outcome, pr = null, detail = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+  if (!["draft", "failed"].includes(outcome)) {
+    throw new ContractError(`recordLandingOutcome records draft or failed — a merge is finalizeMergedLanding's job, and "${outcome}" is not an outcome`);
+  }
+  const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
+  state.landing = { ...state.landing, outcome, pr: pr ?? state.landing?.pr ?? null, detail: detail ?? null };
+  return save(touch(state, now), intakeDir);
+}
+
+/** Phase-2 finalization for a CONFIRMED merge. Fail-closed on every authority fact it can check
+    itself: durable product intent (landMode "auto"), a passed gate, every stage complete (the
+    schema's complete-run rule), and a real PR number from the confirmed merge. Idempotent — a
+    post-merge finalization that failed to commit can be retried without rewriting history.
+    `announced` records whether the auto-publish safety notice was filed (false = the merge
+    succeeded and the notice did NOT — a durable follow-up fact, never a rollback reason). */
+export async function finalizeMergedLanding(slug, { pr, mergedAt = new Date().toISOString(), announced = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+  const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
+  if (!Number.isInteger(pr) || pr < 1) throw new ContractError("finalizeMergedLanding requires the merged PR number — a merge without identity is not confirmed");
+  if (state.landMode !== "auto") {
+    throw new ContractError(`run ${state.runId} has landing intent "${state.landMode}" — a draft/test run cannot be finalized as a product merge, whoever asks`);
+  }
+  if (state.landingGate?.status !== "passed") {
+    throw new ContractError(`run ${state.runId} landing gate is "${state.landingGate?.status}" — a merge cannot be finalized past an unpassed gate`);
+  }
+  // Run/landing identity must agree: a retry naming a DIFFERENT PR than the one this run's
+  // landing recorded is finalizing someone else's merge — refused, never reconciled by guessing.
+  if (state.landing?.pr && state.landing.pr !== pr) {
+    throw new ContractError(`run ${state.runId} landing records PR #${state.landing.pr} — refusing to finalize it against PR #${pr}`);
+  }
+  if (state.landing?.outcome === "merged" && state.publication?.published) return state; // idempotent retry
+  // Announcement truth survives recovery: a retry that omits --announced must not downgrade a
+  // recorded announced=true/false to unknown. Only an explicit value overwrites.
+  const announcedFact = announced ?? state.landing?.announced ?? null;
+  state.landing = { outcome: "merged", pr, mergedAt, announced: announcedFact, finalizedAt: now, detail: null };
+  state.publication.published = true;
+  state.publication.publishedAt = state.publication.publishedAt || mergedAt;
+  // deployedLive stays exactly as it was (normally null): merged is NOT live.
+  return save(touch(state, now), intakeDir);
+}
+
+/** Late answers to a COMPLETE-but-unmerged draft run (correction pass): re-open the deterministic
+    resume point so the remaining work genuinely consumes the answer — reconcile re-reads the
+    answered ledger cards, the critic re-judges, landing re-runs. Refuses on published/merged
+    runs (those take the change lifecycle) and no-ops on runs with work still owed. History is
+    preserved: stage attempt records stay; only status/resume/landing verdicts re-open. */
+export async function reopenForAnswers(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+  const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
+  if (state.publication?.published || state.landing?.outcome === "merged") {
+    throw new ContractError(`run ${state.runId} is published — a late answer takes the change lifecycle, not a research re-open`);
+  }
+  if (nextStageV2(state)) return { state, reopened: false }; // work still owed — the run absorbs it as-is
+  for (const stage of ["reconcile", "critic"]) {
+    const st = state.stages[stage];
+    st.status = "queued";
+    st.startedAt = null;
+    st.endedAt = null;
+    st.failure = null;
+    // history and attempts stay — the re-open is visible cost, not erased cost.
+  }
+  state.status = "running";
+  state.failure = null;
+  state.landingGate = { status: "pending", checkedAt: null, failure: null };
+  state.landing = { outcome: "pending", pr: null, mergedAt: null, announced: null, finalizedAt: null, detail: null };
+  // USER-TRIGGERED REOPEN vs AUTONOMOUS BUDGET (hardening pass): a run that completed AT the
+  // attempt cap would otherwise re-open straight into "stuck" — the next dispatch's budget bump
+  // exceeds the exhausted cap before any answer-absorbing work runs. A human answer is not an
+  // autonomous retry: extend the cap just enough for the reopened tail. Bounded per reopen, and
+  // reopens only ever happen on a real human answer — automatic retries stay capped as before.
+  if (state.attempts.total + V2_REOPEN_ATTEMPT_GRANT > state.attempts.cap) {
+    state.attempts.cap = state.attempts.total + V2_REOPEN_ATTEMPT_GRANT;
+  }
+  recomputeResume(state);
+  await save(touch(state, now), intakeDir);
+  return { state, reopened: true };
 }
 
 export async function markDeployedLive(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {

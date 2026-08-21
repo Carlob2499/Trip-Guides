@@ -9,68 +9,62 @@
 > (the ~80-line budget its own header sets is gated by
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
-## Snapshot (2026-08-20 — P13 independent review: P13_GREEN on PR #63 head `88d16fe` — RETRACTED same day, see the P13.1 snapshot)
 
-The P13 go/no-go review ran fully independently — every P12.1 claim re-verified from primary
-evidence, none accepted on faith. **Gap 1 re-verified:** the `probe/environ` workflow at
-`c12d736` was read line-by-line and its container digest / CLI `@2.1.233` /
-`--safe-mode --no-session-persistence` / `WP_TOOLS` / `WP_DENY` confirmed byte-identical to the
-PR's Pass A agent step; the scorer's semantics (success ⇒ breach, refusal ⇒ INCONCLUSIVE, PASS
-only on attempted+denied for all three tools) confirmed in source; the raw log of run
-`32348279562` / job `96361626055` shows all three DENIED lines and no SUCCEEDED/NOT-ATTEMPTED
-line. **Gap 2 re-verified:** the transport fixture was read in full and all four cited URLs
-re-fetched this review — japan-guide e4904 and the three Nankai pages each support exactly the
-SUPPORTS lines (incl. the twice-stated walking prohibition and rapi:t "34 minutes the fastest");
-the seven negative controls trace to distinct rule paths in `research-rules.mjs`; targeted
-suite 11/11. **Gates rerun on `88d16fe`: all green** (build 9 pages · lint 0/0 · typecheck
-0 errors · **163 files, 2651 passed + 1 todo**). Invariants held: no repo variable set, PR #61
-open/draft, canary + probe branches present, `PLACES_API_KEY` confined to non-agent steps.
-Verdict recorded in `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P13 independent go/no-go
-review" and the tracker's P13 row. Nothing merged, published, cut over, or deleted.
-[Retraction note, added when archiving: the Gap-2 re-verification checked SUPPORTS lines
-affirmatively but missed that the same page documents "bus or taxi" — the fixture's
-bus-exclusivity framing was unsupported. Verdict withdrawn; see IMPLEMENTATION_STATE §P13.1.]
+## Snapshot (2026-08-20 — FINAL integration-hardening pass on PR #68, R1–R13)
 
-## Snapshot (2026-08-20 — P12.1 targeted correction: the review's two HIGH proof gaps closed)
+The deterministic pre-Codex hardening pass closed thirteen requirements on the PR branch, each
+behaviorally tested. Authority: only the trusted /new flow mints auto intent — new-guide.yml
+now CALLS research-pass-v2.yml (workflow_call; the called run carries the caller's "issues"
+event), and `deriveLandIntent` refuses `workflow_dispatch` outright, so a manual dispatch on
+main with the selector live is still a pr run. Recovery: `finalize-landing` now PROVES the
+merge against GitHub (state/base/head/mergedAt via `landing-truth.mjs`), records GitHub's own
+mergedAt, refuses open/unmerged/unrelated/mismatched PRs, and must push to the remote default
+branch or fail (`finalizeLandingRecovery`, tested against a real bare origin). Fresh runs:
+`resetFreshRunWorkspace` strips the prior run's mutable artifacts from a fresh branch and the
+recorded baseline, proven with the REAL Pass-B verifier. One active-generation resolver
+(`src/lib/run-generation.mjs`) now serves answers routing AND the Progress gateway (run state,
+questions, events) — stale V2 never outranks active V1, dual-active is an explicit conflict.
+Progress keys "Published" on the RUN's own publication (Run B never inherits Run A's), and
+renders landing failed/draft truthfully (gate PASS survives; "Landing failed"/"Awaiting
+review"). Late answers extend the exhausted cap by a bounded reopen grant. The land crash
+handler no longer rewrites a passed gate or resurrects merged branches; the conflict fallback
+restores `draft:true`; announced survives retries; HANDOFF_ARCHIVE re-normalized to LF. New
+suites: pipeline-v2-hardening, run-generation, pipeline-v2-lifecycle-proof (the full A→B
+deterministic lifecycle). Record: IMPLEMENTATION_STATE "Final integration-hardening pass".
 
-The independent P11/P12 review returned **RECOMMEND_P13_YELLOW** (architecture ACCEPTED) with
-exactly two HIGH acceptance-proof gaps; this bounded pass closed both and stopped. **Gap 1 —
-`/proc` containment now proven for Grep and Glob, not just Read:** the `probe/environ` workflow
-(commit `c12d736`) reruns the agent under the UNCHANGED production config with
-`--output-format stream-json --verbose`, and a scorer requires an observed `tool_use` on `/proc`
-AND a paired tool-layer denial for EACH of Read/Grep/Glob — a model refusal scores INCONCLUSIVE,
-never PASS. **Run `32348279562`, job `96361626055`: all three tools attempted `/proc/version`
-(harmless) and were DENIED at the tool layer**; sentinel never obtained via any agent tool. New
-scar pins `--safe-mode`+`--no-session-persistence` on all four agent steps (the flag set the
-proof ran under). **Gap 2 — the R3+ transport fixture re-researched:** the overstatements the
-review flagged ("only way up", "no parallel road", "no bed on the mountain") are GONE; the
-KIX→Kōyasan scenario stays, now justified only by fetched-source claims (4 sources re-fetched
-this pass: 3 Nankai operator pages + japan-guide e4904, full source-to-claim mapping in the test
-header), with the strongest sourced fragility fact being japan-guide's twice-stated rule that
-walking from the cable-car station into town is not permitted — the final bus is mandatory. All
-exact last-service times are explicit traveler re-checks; a new scar regex-pins that no `HH:MM`
-time and none of the three overstated phrases can return. Validator returns `[]`; all seven
-distinct negative controls preserved. Full record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` →
-"P12.1 correction pass".
+## Snapshot (2026-08-20 — Release-candidate correction pass on PR #68)
 
-## Snapshot (2026-08-20 — P12 finalization: PR #63 merge-ready, CodeQL clean, /proc + R3 proven)
+The integration pass's INTEGRATION_YELLOW understated real product-path defects; the
+correction pass reproduced, fixed and scar-tested every one ON the PR branch (no
+direct-to-main commits). The big four: (1) publication was recorded BEFORE the merge — now a
+two-phase landing transaction (gate verdict pre-merge; `finalizeMergedLanding` writes
+published only after gh CONFIRMS the merge, on main, idempotently; the schema refuses
+published without a merged outcome); (2) the `land` workflow input was an auto-publish
+side-door — REMOVED, intent now derived (default-branch ref + selector) and re-checked at
+landing time, land CLI defaults to pr and refuses escalation; (3) V1 rollback could mutate or
+display historical V2 state — landing keys on exact branch identity, Progress and answers
+routing read active branches before main history, dual-active refuses; (4) a fresh branch over
+merged history silently resumed the terminal run — fresh-run semantics (new runId, prior run
+archived to previousRuns). Also: run-scoped telemetry (runId-stamped events, identity join in
+the UI), safety-notice permission + announce=ok/failed contract, post-merge questions fetch,
+late-answer reopen (reconcile+critic re-open), exact question-ID dedup + truthful copy, one
+landingMode implementation, floors removed repo-wide (CONFLICTING_SPEC resolved per the
+2026-08-17 decision), scorecard human rows now advisory. Full record: IMPLEMENTATION_STATE
+"Release-candidate correction pass".
 
-The Fable P12 pass made PR #63 (`fable/pipeline-v2-finalize` → main) genuinely reviewable and
-boring. **Merge conflict resolved** — merged current main (`8a591e8`); the only conflict was main's
-whitespace nudge vs. the full V2 workflow, resolved `--ours`; PR #63 is now `MERGEABLE`, 0 behind,
-all four `docker run` agent steps + the default-branch dispatch guard intact, `/new` still V1 when
-the cutover var is unset. **4 CodeQL findings fixed at one root cause** — all traced to a single
-test-code regex (`pipeline-v2-finalize.test.mjs`) with incomplete dot-only escaping; `isProxyHost`
-matches by exact string comparison (never a regex) so the runtime deny set never changed; full
-metacharacter escape added + a lookalike/suffix-attack regression test; **CodeQL PR-head re-scan
-PASS, 0 open alerts**. **`/proc/self/environ` denial PROVEN live** — a push-triggered probe on the
-throwaway `probe/environ` branch, replicating the exact production agent config, showed the Read
-tool BLOCKED on the benign `/proc/version` (`CHECK1_BLOCKED` — the `Read(//proc/**)` rule is
-effective across the subtree, so environ is denied) while the model independently refused environ
-as a secret (defense in depth); sentinel never leaked. **Run `32340406684`, job `96338191848`.**
-**R3+ transport PROVEN** — a controlled KIX→Kōyasan fragile-transfer artifact (single-mode mountain
-access, overnight cable-car cutoff, missed connection = no bed), sourced from two pages fetched this
-pass, is schema-valid and accepted by the real `researchRuleProblems`; seven negative controls prove
-the acceptance is earned. Full P12 record: `docs/pipeline v2/IMPLEMENTATION_STATE.md` → "P12
-finalization".
+## Snapshot (2026-08-20 — Integration week I01–I06 executed; draft PR #67-adjacent integration PR up)
+
+Carlo directed "merge PR #63 and re-run the mission" — the P13 go made operationally. PR #63
+squash-merged as `be9c535`; branch `fable/pipeline-v2-integration` carries I01–I06. Delivered:
+durable `issue` + immutable `landMode` in run.v2.json (resumes inherit both; escalation/strip
+refused); deterministic `land-mode` decision + `recordProductLanding` (pre-merge record, fails
+closed on incomplete); questions job (always(), dedup); Progress reads real events with a main
+fallback for merged runs. **Two live defects found+fixed on main:** `/new` scaffold lost its
+issue (`get("issue")`/ISSUE_NUM seam — `062d3ad`) and change.yml's answers re-dispatch 403
+(missing `actions: write` — `2d39b2c`); the M6 answers path had NEVER run live before.
+**Andorra fixture (#64) proved the lifecycle live:** selector OFF→V1 / ON→V2-from-main /
+restored→V1; issue threading; interruption after passA → resume skipped it; reconcile failed
+offline verify twice and the 1B feedback retry converged (7→6→0); geocode+critic+land green;
+`landing mode pr` → real gate exit 0 → **draft PR #67, published:false, deployedLive:null,
+attempts 5/5**. Full gates green. Evidence: IMPLEMENTATION_STATE "Integration week session".
 

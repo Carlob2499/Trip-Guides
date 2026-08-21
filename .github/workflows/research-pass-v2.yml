@@ -1,6 +1,7 @@
 name: Research pass (V2)
 
-# PIPELINE V2 — the manual, draft-only research pipeline being proven beside V1.
+# PIPELINE V2 — the stage-per-job research pipeline beside V1, selected for /new by the
+# WAYPOINT_RESEARCH_ENGINE repository variable (integration week, I01–I06).
 # (docs/pipeline v2/DECISIONS.md is the authority; docs/pipeline v2/IMPLEMENTATION_STATE.md the
 # build record.) Differences from research-pass.yml that are the POINT of this workflow:
 #
@@ -18,13 +19,57 @@ name: Research pass (V2)
 #   · MECHANICAL CRITIC BLINDNESS. The critic input excludes evidence/run state and its fetch
 #     permissions name only pre-verified source domains. Every agent runs in a pinned container
 #     that mounts only /workspace; a fresh host checkout collects only stage-owned artifacts.
-#   · NO PUBLICATION. Landing always opens a DRAFT PR (--land pr) with the real evidence-gate
-#     scorecard as its body. V2 does not remove `draft`, does not auto-merge, and V1 dispatch
-#     (new-guide.yml → research-pass.yml) is untouched.
+#   · PUBLICATION AUTHORITY IS INFRASTRUCTURE, NEVER AN INPUT (correction + hardening passes).
+#     landMode is DERIVED at init from THREE facts — trusted provenance (the run was invoked
+#     through new-guide.yml's workflow_call, so github.event_name is the caller's "issues",
+#     never "workflow_dispatch"), the default-branch ref, AND the WAYPOINT_RESEARCH_ENGINE
+#     selector being "v2" — recorded once, immutable, and re-checked as landing-time authority
+#     by the land job. A MANUAL workflow_dispatch therefore ALWAYS creates a landMode=pr run,
+#     even on the default branch with the selector live: only the trusted /new product flow can
+#     mint auto authority, and no input anyone can type changes that. "pr" runs (canaries,
+#     tests, every manual and feature-ref dispatch) ALWAYS land a draft PR with the real
+#     evidence-gate scorecard as body and can never publish. "auto" runs publish through the
+#     SAME evidence-gated `pipeline.mjs land` machinery V1 uses, as a TWO-PHASE transaction:
+#     gate verdict rides the merge; the publication fact is finalized only after gh CONFIRMS the
+#     merge (schema-refused earlier). V1 dispatch (new-guide.yml → research-pass.yml) is
+#     untouched either way.
 #
 # Resumable: run.v2.json records per-stage status and the resume point; each stage job is
 # skipped when routing says it is already complete, so a re-dispatch continues, never restarts.
 on:
+  # THE TRUSTED PRODUCT ENTRY POINT (hardening pass): new-guide.yml calls this workflow via
+  # workflow_call, which ordinary workflow_dispatch cannot impersonate — a called run executes
+  # under the CALLER's event ("issues"), and only workflows already committed to the default
+  # branch can call it from that ref. Init derives landMode from exactly that provenance.
+  workflow_call:
+    inputs:
+      slug:
+        required: true
+        type: string
+      section:
+        required: false
+        type: string
+        default: ""
+      model:
+        required: false
+        type: string
+        default: claude-sonnet-5
+      effort:
+        required: false
+        type: string
+        default: high
+      critic_model:
+        required: false
+        type: string
+        default: claude-opus-5
+      issue:
+        required: false
+        type: string
+        default: ""
+      void_retry:
+        required: false
+        type: boolean
+        default: false
   workflow_dispatch:
     inputs:
       slug:
@@ -61,6 +106,16 @@ on:
           - claude-opus-5
           - claude-sonnet-5
         default: claude-opus-5
+      issue:
+        description: "Intake issue number for traveler-question continuity (set automatically by new-guide.yml). Blank on a resume: the run's durable record already carries it."
+        required: false
+        type: string
+        default: ""
+      # There is deliberately NO `land` input (correction pass): landing authority is never a
+      # dispatch input anyone can type. Product intent is DERIVED inside setup from two
+      # infrastructure facts — the dispatch ref is the default branch AND the
+      # WAYPOINT_RESEARCH_ENGINE selector is "v2" — and re-checked at landing time, so a manual
+      # or feature-ref dispatch structurally cannot request auto publication.
       void_retry:
         description: "Internal — set by the bounded auto-retry. Leave false."
         required: false
@@ -127,13 +182,33 @@ jobs:
         id: branch
         run: node scripts/pipeline.mjs branch --slug "$SLUG" --prefix research-v2
 
+      # issue is recorded durably at init (blank = inherit on a resume) so retries and
+      # answer-redispatches never re-thread it. Landing intent is DERIVED, never typed, by the
+      # tested deriveLandIntent(): auto ONLY for the trusted product invocation — the event is
+      # NOT workflow_dispatch (new-guide.yml's workflow_call runs under its own "issues" event;
+      # every manual/developer dispatch IS workflow_dispatch) AND the ref is the default branch
+      # AND the selector is "v2". A maintainer typing `gh workflow run` on main with the
+      # selector live still creates a draft-only (pr) run. --branch-fresh tells init whether the
+      # research branch was just created (any state found then is default-branch HISTORY: a
+      # merged prior run starts a NEW run with the old one archived and its mutable artifacts
+      # removed from the fresh branch; anything else fresh is refused).
       - name: Init or resume the V2 run
         env:
           BRANCH: ${{ steps.branch.outputs.name }}
+          BRANCH_RESUMED: ${{ steps.branch.outputs.resumed }}
+          ISSUE: ${{ inputs.issue }}
+          ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}
+          ON_DEFAULT: ${{ github.ref_name == github.event.repository.default_branch }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
+          LAND=$(node scripts/pipeline-v2.mjs land-intent --slug "$SLUG" \
+            --event-name "$EVENT_NAME" --on-default "$ON_DEFAULT" --engine "$ENGINE")
+          FRESH=false
+          if [ "$BRANCH_RESUMED" = "false" ]; then FRESH=true; fi
           node scripts/pipeline-v2.mjs init --slug "$SLUG" --section "$SECTION" --branch "$BRANCH" \
             --model "${{ inputs.model || 'claude-sonnet-5' }}" --effort "${{ inputs.effort || 'high' }}" \
-            --critic-model "${{ inputs.critic_model || 'claude-opus-5' }}"
+            --critic-model "${{ inputs.critic_model || 'claude-opus-5' }}" \
+            --issue "$ISSUE" --land "$LAND" --branch-fresh "$FRESH"
 
       - name: Attempt budget (bounded)
         id: budget
@@ -876,9 +951,15 @@ jobs:
       always() && needs.setup.result == 'success' && needs.setup.outputs.should_run == 'true' &&
       (needs.critic.result == 'success' || (needs.critic.result == 'skipped' && needs.setup.outputs.next == ''))
     runs-on: ubuntu-latest
+    # issues:write exists for exactly one reason (correction pass): a product merge files the
+    # vetoable "🚀 Auto-published" safety notice, and this job override used to drop the
+    # permission the workflow level would have granted — every notice died silently behind
+    # land-branch.sh's old `|| true`. The notice failure is now also recorded durably
+    # (landing.announced=false) instead of swallowed.
     permissions:
       contents: write
       pull-requests: write
+      issues: write
     env:
       GH_TOKEN: ${{ github.token }}
       SLUG: ${{ inputs.slug }}
@@ -910,20 +991,47 @@ jobs:
           if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
           node scripts/pipeline-v2.mjs validate --slug "$SLUG" "${SCOPED[@]}"
 
+      # The deterministic landing decision: auto ONLY when the run's durable record says product
+      # intent AND every stage is complete AND landing-time PRODUCT AUTHORITY holds — this run is
+      # on the default branch with the selector still "v2" RIGHT NOW. A feature-ref dispatch can
+      # therefore never auto-merge its research branch into main (the previously possible
+      # side-door), and revoking the selector mid-run downgrades the landing to a draft PR.
+      - name: Determine the landing mode
+        id: mode
+        env:
+          ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}
+          ON_DEFAULT: ${{ github.ref_name == github.event.repository.default_branch }}
+        run: |
+          AUTHORITY=false
+          if [ "$ON_DEFAULT" = "true" ] && [ "$ENGINE" = "v2" ]; then AUTHORITY=true; fi
+          node scripts/pipeline-v2.mjs land-mode --slug "$SLUG" --product-authority "$AUTHORITY"
+
       # The REAL evidence gate (build + networked verify) runs inside `land --gate`; the
-      # scorecard becomes the PR body. --land pr: a V2 run NEVER auto-merges or publishes.
-      - name: Land as a draft PR
+      # scorecard becomes the PR body. Mode pr (controlled/draft runs): never merges, never
+      # publishes. Mode auto (product runs): the same evidence-gated publication path V1 uses,
+      # as a TWO-PHASE transaction — the gate verdict rides the branch into the merge, and the
+      # publication fact is finalized on the default branch only AFTER gh confirms the merge
+      # (schema-refused any earlier). The --announce URL files the vetoable auto-published
+      # notice on a real merge; a notice failure is recorded durably, never swallowed.
+      - name: Land the branch
         id: evidence_gate
+        env:
+          LAND: ${{ steps.mode.outputs.land }}
         run: |
           node scripts/pipeline.mjs land --slug "$SLUG" \
-            --branch "$BRANCH" --gate --land pr \
-            --title "Research pass (V2): $SLUG"
+            --branch "$BRANCH" --gate --land "$LAND" \
+            --title "Research pass (V2): $SLUG" \
+            --announce "${SITE_BASE_URL}/guides/${SLUG}/"
 
       # The land step exits 0 even when the gate FAILS (draft PR is the designed fallback), so
       # the record keys on the emitted gate verdict, never on step success — the canary's first
-      # landing recorded a pass the gate never earned by conflating the two.
+      # landing recorded a pass the gate never earned by conflating the two. A MERGED product
+      # landing is skipped here: its gate verdict rode the merge commit (phase 1) and its
+      # publication record was finalized on the default branch after the confirmed merge
+      # (phase 2, inside `land`); its branch is gone — pushing a post-record would only
+      # resurrect a zombie branch.
       - name: Record the real landing gate verdict
-        if: success()
+        if: success() && steps.evidence_gate.outputs.outcome != 'merged'
         run: |
           if [ "${{ steps.evidence_gate.outputs.gate }}" = "passed" ]; then
             node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status passed --branch "$BRANCH"
@@ -932,8 +1040,77 @@ jobs:
               --detail "evidence gate failed (build or configured network verify) — landed as a draft PR only" --branch "$BRANCH"
           fi
 
+      # RESEARCH-GATE TRUTH AND LANDING TRUTH ARE SEPARATE (hardening pass). This crash handler
+      # used to rewrite a legitimate gate PASS into gate FAIL whenever a LATER GitHub operation
+      # (merge auth/API error, post-merge finalization) crashed the land step — and, worse, its
+      # push recreated the just-deleted research branch on the merged-but-finalization-failed
+      # path. It now keys on the emitted gate verdict (the land CLI emits it on every path,
+      # including hard landing failures): a passed gate is never rewritten — the landing failure
+      # is already recorded durably as landing.outcome=failed by the CLI — and a MERGED outcome
+      # records nothing here at all (the branch is gone; finalize-landing is the retry).
       - name: Record the landing gate failure (step crashed)
-        if: failure()
+        if: failure() && steps.evidence_gate.outputs.gate != 'passed'
         run: |
           node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status failed \
             --detail "artifact, build, or configured network evidence gate failed" --branch "$BRANCH" || true
+
+      - name: Preserve the passed gate verdict after a landing-side crash
+        if: failure() && steps.evidence_gate.outputs.gate == 'passed' && steps.evidence_gate.outputs.outcome != 'merged'
+        run: |
+          # The gate PASSED and the failure was landing-side (recorded by the CLI as
+          # landing.outcome=failed). Make sure the durable gate verdict says PASS — on pr-mode
+          # landings phase 1 never wrote it — without ever touching a merged run's gone branch.
+          node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status passed --branch "$BRANCH" || true
+
+  # ── questions: surface, never gate (I01 — V1's product-communication contract) ──────────────
+  # The traveler sees what was assumed on their behalf. always(): a run cut off mid-stage still
+  # asks what it managed to. The issue number comes from the run's DURABLE record (set at init by
+  # /new's dispatch), never from this dispatch's inputs — so a resume/retry, which carries no
+  # issue input, still reports to the right thread. Deduped by question id inside `questions`.
+  questions:
+    needs: [setup, land]
+    if: always() && needs.setup.result == 'success' && needs.setup.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # The run's ledger lives on the research branch while it exists. A merged product landing
+      # DELETES that branch and the merge lands after this workflow's dispatch SHA — so the
+      # default checkout above can predate the merge (correction pass: it used to be read as-is
+      # and could miss the merged ledger entirely). Explicitly fetch whichever home is current:
+      # the branch when it survives, the LATEST default branch otherwise. The branch can also
+      # vanish between the existence check and the fetch (the merge races this job) — that
+      # falls through to the default-branch fetch rather than failing.
+      - name: Check out the run's current home (branch, or post-merge default branch)
+        env:
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1 \
+             && git fetch origin "$BRANCH" 2>/dev/null; then
+            git checkout -B "$BRANCH" FETCH_HEAD
+          else
+            git fetch origin "$BASE"
+            git checkout -B "$BASE" FETCH_HEAD
+          fi
+      # Non-gating for research quality, but delivery failure is OBSERVABLE: the surfacer prints
+      # a ::warning:: annotation when it cannot post, instead of pretending delivery succeeded.
+      - name: Surface traveler questions on the intake issue
+        continue-on-error: true
+        run: |
+          ISSUE=$(node -e 'try { console.log(require(`./guides-intake/${process.env.SLUG}/run.v2.json`).issue || "") } catch { console.log("") }')
+          if [ -n "$ISSUE" ]; then
+            node scripts/pipeline.mjs questions --slug "$SLUG" --issue "$ISSUE"
+          else
+            echo "no intake issue recorded on this run — nothing to surface (manual dispatch)."
+          fi

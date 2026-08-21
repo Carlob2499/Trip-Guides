@@ -26,7 +26,7 @@
 import {
   deriveProgress, formatElapsed, predictSlug, normalizeSlug, createGithubGateway, createWorkerGateway,
   derivePageState, deriveStatusPill, deriveProgressLine, derivePhases, deriveNotePanel,
-  PHASE_STATUS_LABEL, STAGE_SHORT, fetchTone, fetchHost, probeEventsThisTick,
+  PHASE_STATUS_LABEL, STAGE_SHORT, fetchTone, fetchHost, probeEventsThisTick, eventsForRun,
 } from "../index";
 import {
   STATION_T, bezierPoint, bezierAngle, arcLengthFraction, bezierLength,
@@ -124,6 +124,7 @@ export function initProgress() {
   let eventMisses = 0;
   let eventsSeen = false;
   let runMalformed = false;
+  let runConflict = false;
 
   /** The last derived view, kept so a frame write or a re-measure has something to draw. */
   let view = deriveProgress(null, { now: new Date(), published: false });
@@ -635,10 +636,12 @@ export function initProgress() {
   /* ── Render ───────────────────────────────────────────────────────────────────────────── */
 
   function render() {
+    // A dual-active conflict rides the malformed path into "stalled" — both are "a human must
+    // untangle the state" — and gets its own explicit diagnostic line below.
     page = derivePageState({
       view: view, hasRun: hasRun,
       blockingForks: blockingForks, openQuestions: openQuestions.length,
-      malformed: runMalformed,
+      malformed: runMalformed || runConflict,
     });
     if (page !== "awaiting" && noteState === "awaiting") noteState = "monitoring";
     if (page === "awaiting" && noteState === "monitoring") noteState = "awaiting";
@@ -649,7 +652,11 @@ export function initProgress() {
       els.pill.textContent = pill.text;
       els.pill.setAttribute("data-tone", pill.tone);
     }
-    if (els.line) els.line.textContent = deriveProgressLine(page, view);
+    if (els.line) {
+      els.line.textContent = runConflict
+        ? "Two research runs (V1 and V2) are simultaneously active for this guide — a maintainer must resolve the duplicate before progress can be reported."
+        : deriveProgressLine(page, view);
+    }
 
     renderSteps();
     renderStations();
@@ -680,22 +687,34 @@ export function initProgress() {
     // every tick at first, then every few, never again once the run is done.
     const active = page === "running" || page === "awaiting" || page === "empty";
     const wantEvents = probeEventsThisTick({ pollIndex: pollIndex, misses: eventMisses, active: active, seen: eventsSeen });
-    const [run, published, questions, events] = await Promise.all([
+    const [run, publishedOnMain, questions, events] = await Promise.all([
       gateway.fetchRun(slug),
       gateway.isPublished(slug),
       gateway.fetchQuestions(slug),
       wantEvents ? gateway.fetchRunEvents(slug) : Promise.resolve(null),
     ]);
+    // PUBLICATION BELONGS TO THE RUN (hardening pass): for a V2 run the "Published" fact is the
+    // RUN's own recorded publication — a re-research (Run B) of a guide that is already live
+    // must not inherit Run A's publication just because main's meta file has no draft flag.
+    // Only V1 and no-run snapshots fall back to the main-branch probe.
+    var published = run.version === 2 && !run.malformed && run.published != null
+      ? run.published
+      : publishedOnMain;
 
     if (wantEvents) {
-      if (events && events.available) eventsSeen = true;
+      // Identity join (correction pass): telemetry renders only against the run it names —
+      // never a previous run's stream still on main, never V2 history beside an active V1 run
+      // (V1 snapshots carry runId null, so they always render honest-empty telemetry).
+      var scopedEvents = events ? eventsForRun(events, run.runId) : null;
+      if (scopedEvents && scopedEvents.available) eventsSeen = true;
       else eventMisses += 1;
-      renderEvents(events);
+      renderEvents(scopedEvents);
     }
 
     const state = run.state;
     runMalformed = run.malformed;
-    if (state || run.malformed) {
+    runConflict = !!run.conflict;
+    if (state || run.malformed || run.conflict) {
       if (state && !lastState) startedAt = new Date(state.createdAt).getTime();
       lastState = state;
       hasRun = true;
@@ -723,7 +742,7 @@ export function initProgress() {
     // waiting for the very first successful fetch.
     view = deriveProgress(state, {
       now: new Date(), published: published,
-      runStatus: run.runStatus, deployedLive: deployedLive,
+      runStatus: run.runStatus, landingOutcome: run.landingOutcome, deployedLive: deployedLive,
     });
     render();
   }
@@ -778,6 +797,7 @@ export function initProgress() {
       eventMisses = 0;
       eventsSeen = false;
       runMalformed = false;
+      runConflict = false;
       blockingForks = 0;
       startedAt = Date.now();
       history.replaceState(null, "", location.pathname + "?slug=" + encodeURIComponent(slug));

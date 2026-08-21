@@ -460,6 +460,7 @@ describe("1C — verify's coverage gate consumes coverage.v2.json fail-closed", 
 
 describe("P9 — the event emitter tells only what the durable artifacts prove", () => {
   const stateFixture = () => ({
+    runId: "korea-20260819-aaaaaa", // identity is mandatory on emission — run-scoped telemetry
     stageOrder: ["scaffold", "passA"],
     attempts: { cap: 5 },
     updatedAt: "2026-08-19T12:00:00.000Z",
@@ -518,11 +519,15 @@ describe("P9 — the event emitter tells only what the durable artifacts prove",
     const { parseRunEvents } = await import("../../src/features/pipeline-progress/model/run-events.ts");
     const parsed = parseRunEvents(buildRunEvents({ state: stateFixture() }));
     expect(parsed.available).toBe(true);
+    expect(parsed.runId).toBe("korea-20260819-aaaaaa"); // the identity survives the round trip
     expect(parsed.decisions.length).toBeGreaterThan(0);
     expect(parsed.counters).toBeNull();
-    // An empty emission parses back to the honest empty state, never a fake "alive" one.
-    const empty = parseRunEvents(buildRunEvents({ state: { stageOrder: [], stages: {}, attempts: { cap: 5 } } }));
+    // An empty emission parses back to the honest empty state, never a fake "alive" one —
+    // and an emission with no run identity is refused outright (run-scoped telemetry).
+    const empty = parseRunEvents(buildRunEvents({ state: { runId: "korea-20260819-aaaaaa", stageOrder: [], stages: {}, attempts: { cap: 5 } } }));
     expect(empty.available).toBe(false);
+    const identityless = parseRunEvents(buildRunEvents({ state: stateFixture() && { ...stateFixture(), runId: undefined } }));
+    expect(identityless.available).toBe(false);
   });
 
   it("geocode outcomes and the landing gate appear once they are real", async () => {

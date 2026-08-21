@@ -119,9 +119,19 @@ describe("run state — valid lifecycle", () => {
     expect((await recordAutoRetry("korea", opts())).allowed).toBe(false);
   });
 
-  it("published and deployed-live are DISTINCT facts", async () => {
-    await initRunV2("korea", opts());
-    let state = await markPublished("korea", opts());
+  it("published and deployed-live are DISTINCT facts — reached only through the landing transaction (amended scar)", async () => {
+    // Amended (correction pass): markPublished on a bare run is now SCHEMA-INVALID — published
+    // requires a confirmed merged landing. The distinct-facts pin survives on the honest path:
+    // complete every stage, pass the gate, confirm the merge, then observe deploy separately.
+    await initRunV2("korea", { ...opts(), landMode: "auto" });
+    await expect(markPublished("korea", opts())).rejects.toThrow(/CONFIRMED merged landing/);
+    const { stageStart, stageComplete, markLandingGate, finalizeMergedLanding, V2_RESEARCH_STAGES } = await import("../pipeline/v2/run-state.mjs");
+    for (const stage of V2_RESEARCH_STAGES) {
+      await stageStart("korea", stage, opts());
+      await stageComplete("korea", stage, opts());
+    }
+    await markLandingGate("korea", { passed: true, ...opts() });
+    let state = await finalizeMergedLanding("korea", { pr: 42, ...opts() });
     expect(state.publication.published).toBe(true);
     expect(state.publication.deployedLive).toBe(null); // still unknown — a merge is not "live"
     state = await markDeployedLive("korea", opts());

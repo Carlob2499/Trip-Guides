@@ -213,6 +213,10 @@ async function runSubcommand(cmd, rest, get) {
       const name = `${get("--prefix") || "research"}/${slug}${suffix}`;
       const { resumed } = startOrResumeBranch(name);
       emit("name", name);
+      // Fresh-run signal (correction pass): a branch that did NOT exist means any run state in
+      // the checkout is default-branch history, not an active run — init keys fresh-run
+      // semantics on this rather than guessing from the state file itself.
+      emit("resumed", String(resumed));
       console.log(`[branch] ${resumed ? "resumed" : "started"} ${name}`);
       return 0;
     }
@@ -270,15 +274,14 @@ async function runSubcommand(cmd, rest, get) {
       return surfaceQuestions({ slug, issue: get("--issue"), json: has("--json") });
     }
 
-    // M6: where does a traveler answer belong? While research is ACTIVE it belongs to that
-    // run's ledger on the research branch; only a published/complete guide gets a change run.
-    // Reads the committed state on the CURRENT checkout (main) — an active research run's
-    // stages are incomplete there by construction.
+    // M6: where does a traveler answer belong? An ACTIVE research run (either generation) owns
+    // it — resolved BEFORE any historical publication check, so a published Run A on main never
+    // steals an answer from Run B's live research branch (Codex blocker 1). Only when no run
+    // owns the answer does a published/complete guide get a change run. The whole resolution
+    // lives in resolveAnswerRouting (questions.mjs) so the real seam is behaviorally testable.
     case "answers-route": {
       if (!needSlug()) return 1;
-      const { routeAnswers } = await import("./pipeline/questions.mjs");
-      const { execFileSync } = await import("node:child_process");
-      const { existsSync: exists, readFileSync } = await import("node:fs");
+      const { resolveAnswerRouting } = await import("./pipeline/questions.mjs");
 
       let hasAnswers;
       try {
@@ -286,41 +289,12 @@ async function runSubcommand(cmd, rest, get) {
         hasAnswers = !!parseAnswersJson(process.env.PLAN_JSON)?.length;
       } catch { hasAnswers = false; }
 
-      const metaPath = path.join(ROOT, "src", "content", "guides", slug, "_guide.json");
-      let published;
-      try { published = exists(metaPath) && !JSON.parse(readFileSync(metaPath, "utf8")).draft; } catch { published = false; }
-
-      let researchBranch = null;
-      let researchActive = false;
-      if (!published) {
-        // The active truth lives on the research branch, not main. Prefer V2 only when its own
-        // committed run record says it still has a resume stage; a stale branch is not active.
-        for (const [b, stateFile] of [
-          [`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`],
-          [`research/${slug}`, `guides-intake/${slug}/state.json`],
-        ]) {
-          let existsOnOrigin = false;
-          try {
-            execFileSync("git", ["ls-remote", "--exit-code", "--heads", "origin", b], { cwd: ROOT, stdio: "pipe" });
-            existsOnOrigin = true;
-          } catch { /* branch absent — try the next namespace */ }
-          if (!existsOnOrigin) continue;
-          try {
-            execFileSync("git", ["fetch", "--depth=1", "origin", b], { cwd: ROOT, stdio: "pipe" });
-            const raw = execFileSync("git", ["show", `FETCH_HEAD:${stateFile}`], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-            const remoteState = JSON.parse(raw);
-            const active = b.startsWith("research-v2/")
-              ? ["pending", "running", "paused", "failed", "complete"].includes(remoteState.status)
-              : ["passA", "passB", "reconcile", "verified"].some((stage) => !remoteState.stages?.[stage]);
-            if (active) { researchBranch = b; researchActive = true; break; }
-          } catch (err) {
-            console.error(`[answers-route] ${b} exists but its committed state is unreadable: ${err.message}`);
-            return 1;
-          }
-        }
+      const d = await resolveAnswerRouting(slug, { hasAnswers });
+      if (d.error) { console.error(`[answers-route] ${d.error}`); return 1; }
+      if (d.conflict) {
+        console.error(`[answers-route] BOTH research-v2/${slug} (status ${d.v2Status}) and research/${slug} are active — refusing to guess which run owns the answer. Resolve the duplicate run first.`);
+        return 1;
       }
-
-      const d = routeAnswers({ hasAnswers, researchActive, researchBranch, published });
       emit("target", d.target);
       emit("research_branch", d.branch || "");
       console.log(`[answers-route] ${slug} → ${d.target}${d.branch ? ` (${d.branch})` : ""} — ${d.reason}`);
@@ -415,7 +389,7 @@ async function runSubcommand(cmd, rest, get) {
 
     case "land": {
       if (!needSlug()) return 1;
-      const { publishGuide, commitAll, landBranch, landingGate, PUBLISH_ERRORS } = await import("./pipeline/publish.mjs");
+      const { landingGate } = await import("./pipeline/publish.mjs");
       const { writeFileSync, readFileSync, existsSync: exists } = await import("node:fs");
       const bodyFile = get("--body-file") || "/tmp/scorecard.md";
       let passed = get("--passed") === "true";
@@ -433,40 +407,59 @@ async function runSubcommand(cmd, rest, get) {
         // Research also requires every stage cleared: a green verify on a half-researched guide
         // is a green verify on a half-researched guide.
         passed = gate.passed && (!has("--require-verified") || (state && !nextStage(state)));
-        console.log(`[land] evidence gate — ${gate.steps.map((s) => `\`${s.cmd}\` exit ${s.code}`).join(", ")}, stages ${state && !nextStage(state) ? "complete" : "incomplete"} → passed=${passed}`);
+        // The V1-spine stage status is only part of the verdict under --require-verified; printing
+        // it otherwise made a complete V2 run's log read "stages incomplete → passed=true"
+        // (state.json is V1's spine, which a V2 run never walks — observed on the andorra landing).
+        const stageNote = has("--require-verified") ? `, stages ${state && !nextStage(state) ? "complete" : "incomplete"}` : "";
+        console.log(`[land] evidence gate — ${gate.steps.map((s) => `\`${s.cmd}\` exit ${s.code}`).join(", ")}${stageNote} → passed=${passed}`);
       }
 
-      const auto = (get("--land") || "auto") === "auto";
+      // FAIL-SAFE DEFAULT (correction pass): omitted landing authority resolves to a draft PR,
+      // never auto publication. Every production caller passes --land explicitly; a bare manual
+      // `pipeline land` can no longer publish by omission.
+      const auto = (get("--land") || "pr") === "auto";
+      const branch = get("--branch");
+      const base = get("--base") || "main";
 
-      // Auto-publish is the rule: a run that passed its evidence gate takes the draft flag off
-      // here, in the same step that lands it. `--land pr` runs that nobody asked for stay drafts.
-      if (passed && auto) {
-        const published = await publishGuide(slug, { gatePassed: true });
-        if (published.ok) {
-          console.log(`[land] ${slug} published — draft flag removed from ${published.metaPath}`);
-          commitAll(`feat(${slug}): publish — verify PASS`);
-        } else if (published.error !== PUBLISH_ERRORS.NOT_DRAFT) {
-          console.error(`[land] could not publish ${slug}: ${published.error}`);
+      // V2 landing is detected by BRANCH IDENTITY, never by file presence: a V1 landing whose
+      // checkout carries a historical run.v2.json (a V1 rollback after a product merge) must not
+      // read, mutate, or emit V2 state — that file is another generation's history. Exact match:
+      // research-v2/<this slug> is the one branch whose landing owns this slug's V2 run.
+      const isV2Landing = branch === `research-v2/${slug}`;
+      let v2state = null;
+      if (isV2Landing) {
+        const { readRunStateV2 } = await import("./pipeline/v2/run-state.mjs");
+        v2state = await readRunStateV2(slug); // fail-closed: malformed throws, absent is null
+        if (!v2state) {
+          console.error(`[land] ${branch} carries no run.v2.json — a V2 landing without its own run state is refused.`);
+          return 1;
+        }
+        // AUTHORITY, enforced at the CLI seam too: a draft/test run (landMode "pr") cannot be
+        // escalated by invoking the shared land CLI with --land auto — whoever asks.
+        if (auto && v2state.landMode !== "auto") {
+          console.error(`[land] run ${v2state.runId} has landing intent "${v2state.landMode}" — --land auto refused; the landing CLI cannot escalate a draft run to product.`);
           return 1;
         }
       }
 
-      const result = landBranch({
-        branch: get("--branch"),
-        base: get("--base") || "main",
+      // The whole transaction — phase-1 flip, land-branch.sh, phase-2 record, and the remote
+      // quarantine on every non-merged auto outcome (Codex blocker 3) — lives in executeLanding
+      // (scripts/pipeline/landing.mjs), where its invariants are behaviorally tested against
+      // real git remotes. A HARD landing failure still throws out of here (quarantined and
+      // recorded first inside executeLanding) so the CLI exit stays loud.
+      const { executeLanding } = await import("./pipeline/landing.mjs");
+      const landed = await executeLanding(slug, {
+        branch,
+        base,
+        passed,
+        auto,
         title: get("--title"),
         bodyFile,
-        passed: passed && auto,
         announceUrl: get("--announce") || "",
+        v2state,
+        emit,
       });
-      console.log(`[land] ${result.outcome}:${result.pr}`);
-      emit("outcome", result.outcome);
-      emit("pr", String(result.pr));
-      // The GATE verdict as its own output: a failed gate deliberately still exits 0 here (the
-      // draft PR is the designed fallback), so a caller recording gate state must never infer it
-      // from this step's exit code — the V2 canary recorded a pass the gate never earned that way.
-      emit("gate", passed ? "passed" : "failed");
-      return 0;
+      return landed.code;
     }
 
     // The concurrency key has to be known before the job that would compute it starts, so this

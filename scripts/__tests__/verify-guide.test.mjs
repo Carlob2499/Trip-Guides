@@ -211,13 +211,21 @@ describe("renderMarkdown", () => {
     noVerifiedDate: false,
   };
 
-  it("renders a passing scorecard with the marker, table, and checklist", () => {
+  it("renders a passing scorecard with the marker, table, and ADVISORY review prompts (#12 scar)", () => {
     const md = renderMarkdown(base);
     expect(md).toMatch(/^<!-- waypoint-scorecard:korea -->/);
     expect(md).toContain("Verdict: ✅ PASS");
     expect(md).toContain("| Gate | Tier | Result |");
     expect(md).toContain("Research —");
-    expect(md).toContain("- [ ] **#9**"); // a human-checklist row
+    // The human rows are ADVISORY review prompts — the evidence gate is the publication bar
+    // (publish.mjs doctrine; the separate human approval ceremony was removed). The old footer
+    // claimed publishing "still needs the checklist", an unenforced requirement no automation
+    // honored: unchecked boxes under mandatory-sounding prose may not return.
+    expect(md).toContain("- **#9**"); // a prompt row — not a checkbox
+    expect(md).not.toContain("- [ ]");
+    expect(md).toContain("the evidence gate");
+    expect(md).not.toMatch(/still needs the checklist|Publishing still needs/i);
+    expect(md).toContain("not unpublished requirements");
   });
 
   it("renders NEEDS WORK with a collapsible blocking-findings list", () => {
@@ -264,13 +272,16 @@ describe("report (plain-text CLI renderer)", () => {
     noVerifiedDate: false,
   };
 
-  it("renders a PASS header and the human checklist", () => {
+  it("renders a PASS header and ADVISORY review prompts, never a publish checklist (#12 scar)", () => {
     const out = report(base);
     expect(out).toContain("korea — PASS ✓");
     expect(out).toContain("draft: no");
     expect(out).toContain("P0 research   · PASS");
     expect(out).toContain("verdict: PASS");
-    expect(out).toContain("[ ] #9  Party fit");
+    expect(out).toContain("#9"); // the prompt stays visible…
+    expect(out).not.toContain("[ ] #9"); // …but never as an unchecked publish requirement
+    expect(out).toContain("advisory — the evidence gate is the publication bar");
+    expect(out).not.toMatch(/Publishing still needs/i);
   });
 
   it("renders NEEDS WORK with each blocking finding listed", () => {

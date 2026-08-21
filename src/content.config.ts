@@ -725,16 +725,10 @@ const guides = defineCollection({
     // superRefine below holds every named group to the Panel contract: it must exist,
     // and every section in it must be a Panel-hostable carded type with a title.
     panelGroups: z.array(z.string()).optional(),
-    researchFloors: z.record(
-      z.string().regex(/^[1-3]$/),
-      z.object({
-        considered: z.number().int().positive(),
-        shipped: z.number().int().positive(),
-        shortlist: z.number().int().positive().optional(),
-      }),
-    ).optional(),
-    // V1 keeps per-guide breadth overrides while it remains live beside V2. V2 uses the
-    // adaptive saturation record instead; removing this field before cutover breaks V1.
+    // researchFloors is GONE (fixed candidate quotas died with DECISIONS.md "Research breadth";
+    // the correction pass of 2026-08-20 removed the last env-gated consumer, so the field had
+    // no reader left). No shipped guide ever declared it; a guide still carrying it holds an
+    // unknown key the schema strips.
     // R5 — per-group voice descriptors (design decision №4: "labels literal, always;
     // warmth demoted to the descriptors"). Keyed by EXACT group name (superRefine below
     // rejects keys no section uses, so a group rename can't silently orphan its line).

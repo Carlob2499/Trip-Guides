@@ -8,13 +8,14 @@
 //   · a stage that produced nothing durable is a recorded VOID failure, not a green step;
 //   · routing resumes at the interrupted stage; attempts and auto-retries stay bounded;
 //   · the workflow YAML wires all of it (baseline checkout for Pass B, fetch-depth 1 for the
-//     critic, draft-only landing, the same concurrency group as V1 research).
+//     critic, durable-intent landing — draft unless the run earned product mode — and the same
+//     concurrency group as V1 research).
 
 // @protects-file Pass B cannot see Pass A; the critic cannot see the process; a void stage cannot land.
 
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, readFile, rm } from "node:fs/promises";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -307,17 +308,26 @@ describe("routing + bounded attempts survive a resume (state on disk)", () => {
 describe("research-pass-v2.yml — wiring", () => {
   const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
 
-  it("is manual-only (workflow_dispatch), and nothing auto-dispatches it", () => {
+  it("is dispatchable + callable ONLY — and only new-guide.yml calls it (the trusted product entry)", () => {
     expect(text).toContain("workflow_dispatch:");
+    expect(text).toContain("workflow_call:");
     expect(text).not.toMatch(/^\s+issues:\s*$/m);
     expect(text).not.toContain("schedule:");
-    // The cutover contract (finalization, I01): /new dispatches V2 ONLY behind the explicit
-    // WAYPOINT_RESEARCH_ENGINE=v2 repository variable; V1 is the unconditional else-default,
-    // so an unset variable can never silently route an intake to the unproven path.
+    // The cutover contract (finalization, I01 + hardening): /new routes to V2 ONLY behind the
+    // explicit WAYPOINT_RESEARCH_ENGINE=v2 repository variable, via the workflow_call job; V1
+    // is the unconditional else-default, so an unset variable can never silently route an
+    // intake to the unproven path.
     const newGuide = readFileSync(path.join(ROOT, ".github", "workflows", "new-guide.yml"), "utf8");
     expect(newGuide).toContain("gh workflow run research-pass.yml");
-    expect(newGuide).toMatch(/if \[ "\$ENGINE" = "v2" \];\s*then\s*\n\s*gh workflow run research-pass-v2\.yml/);
+    expect(newGuide).toContain("uses: ./.github/workflows/research-pass-v2.yml");
+    expect(newGuide).toContain("if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'");
     expect(newGuide).toContain("ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}");
+    // …and new-guide.yml is the ONLY caller in the repo (the trust boundary is structural).
+    const workflowsDir = path.join(ROOT, ".github", "workflows");
+    const callers = readdirSync(workflowsDir)
+      .filter((f) => f.endsWith(".yml") && f !== "new-guide.yml")
+      .filter((f) => readFileSync(path.join(workflowsDir, f), "utf8").includes("uses: ./.github/workflows/research-pass-v2.yml"));
+    expect(callers).toEqual([]);
     // The V2 workflow's own default-branch guard keys on the SAME variable — one switch.
     expect(text).toContain("vars.WAYPOINT_RESEARCH_ENGINE != 'v2'");
   });
@@ -385,12 +395,21 @@ describe("research-pass-v2.yml — wiring", () => {
     }
   });
 
-  it("lands as a DRAFT PR always — V2 does not publish while being proven", () => {
-    const job = text.split(/^ {2}land:/m)[1];
-    expect(job).toContain("--land pr");
-    expect(job).toContain("--gate"); // the real evidence gate still runs; only the merge is withheld
-    expect(job).not.toContain("--announce"); // nothing to announce: nothing publishes
+  it("lands by the run's DURABLE intent — deterministic land-mode, never a hardcoded merge (I02)", () => {
+    const job = text.split(/^ {2}land:/m)[1].split(/^ {2}[a-zA-Z]+:$/m)[0];
+    // The mode is computed by tested code from run.v2.json (product intent + every stage
+    // complete), never taken from this dispatch's inputs and never hardcoded to auto.
+    expect(job).toContain("pipeline-v2.mjs land-mode");
+    expect(job).toContain('--land "$LAND"');
+    expect(job).not.toContain("--land auto"); // auto exists only as land-mode's earned verdict
+    expect(job).toContain("--gate"); // the real evidence gate still decides
+    expect(job).toContain("--announce"); // a product merge files the vetoable auto-published notice
     expect(job).toContain("pipeline-v2.mjs validate"); // fail-closed artifact validation gates landing
+    // land-mode runs BEFORE the land step so the decision exists when landing needs it.
+    expect(job.indexOf("land-mode")).toBeLessThan(job.indexOf('--land "$LAND"'));
+    // A merged product landing already carries its record in the merge commit — the post-record
+    // is skipped so it cannot resurrect the deleted branch.
+    expect(job).toContain("outputs.outcome != 'merged'");
   });
 
   it("the bounded retry is void-gated and re-dispatches with void_retry=true", () => {

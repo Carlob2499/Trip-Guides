@@ -172,10 +172,15 @@ describe("traveler questions — surface, never gate", () => {
     expect(unaskedOpen(parseQuestions(ledger), "…<sub>Q1</sub>…")).toEqual([]);
   });
 
-  it("the comment states the assumption and says the guide is complete either way", () => {
+  it("the comment states the assumption and stays truthful about a possibly-active run (amended scar)", () => {
+    // Amended (correction pass): the old copy said "your guide is complete either way" — posted
+    // while research may still be RUNNING, and it invited "reply here" though no issue-comment
+    // ingestion path exists. The surfaced-not-blocking contract stays; the claims are now true.
     const body = formatComment(unaskedOpen(parseQuestions(ledger)));
     expect(body).toContain("Built on: single tickets");
-    expect(body).toContain("complete either way"); // it surfaces, it does not block
+    expect(body).toContain("carries on either way"); // it surfaces, it does not block
+    expect(body).not.toMatch(/guide is complete|reply here/i); // no false completeness, no dead reply channel
+    expect(body).toContain("progress page"); // points at the REAL answer route
     expect(body).toContain("<sub>Q1</sub>"); // the dedup key travels in the comment
   });
 

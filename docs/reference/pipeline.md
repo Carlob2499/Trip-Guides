@@ -260,9 +260,10 @@ to add a `run: |` block with logic in it, it belongs in `scripts/pipeline/` or `
 
 | Workflow | Does | Logic lives in |
 |---|---|---|
-| `new-guide.yml` | scaffold on the `new-guide` label, then dispatch research | `pipeline scaffold` |
-| `research-pass.yml` | the four research agents, resumable | `pipeline route/gate/land` |
-| `change.yml` | every change run, all five sources | `pipeline plan/gate/land/report` |
+| `new-guide.yml` | scaffold on the `new-guide` label, then start research (engine chosen by the `WAYPOINT_RESEARCH_ENGINE` repository variable: unset/anything-else ⇒ V1 via `gh workflow run`, `v2` ⇒ the V2 pipeline via **workflow_call** — the trusted product invocation whose caller-event provenance is what lets V2 mint auto landing intent; the intake issue threads through) | `pipeline scaffold` |
+| `research-pass.yml` | V1: the four research agents, resumable | `pipeline route/gate/land` |
+| `research-pass-v2.yml` | V2: one job per stage, mechanical Pass-B/critic isolation, durable run.v2.json. Landing authority is derived, never typed: `auto` only for the trusted /new workflow_call (caller-event provenance — a manual workflow_dispatch is always a draft run, even on main with the selector set) on the default branch with the selector live, re-checked at landing time; everything else is a draft PR. Publication is a two-phase transaction: gate verdict pre-merge, publication finalized only after the merge is CONFIRMED against GitHub — including that the merge commit's own run.v2.json carries the runId being finalized (branch names are reused across generations; a PR proves the run, not just the slug). Every non-merged auto landing re-quarantines the remote branch (draft:true pushed back), and a quarantine that cannot reach origin is a BLOCKED landing, never a safe draft claim | `pipeline-v2 …` + `pipeline land` |
+| `change.yml` | every change run, all five sources; answers route to the run that owns the slug — an active research run's ledger (V2 branch preferred) BEFORE any historical publication check, so a live prior run never steals an active run's answer; only with no owning run does a published guide get a change run | `pipeline plan/gate/land/report` |
 | `recert.yml` | weekly audit + staleness detection → dispatches change runs | `scripts/recert.mjs` |
 | `feedback-export.yml` | export survey feedback → synthesis PR + inert proposal | `scripts/feedback-signals.mjs` |
 | `pretrip-check.yml` | T-7 departure window: stale facts on a trip about to happen | `scripts/pretrip-check.ts` |

@@ -48,34 +48,34 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-20 — P13.1: premature GREEN retracted, R3 fixture bus-exclusivity fixed)
+## Snapshot (2026-08-20 — Codex re-review corrections on PR #68: 3 blockers + recovery truth)
 
-The first P13 review returned GREEN on `88d16fe` and was **retracted the same day**: Codex's
-re-inspection caught that the P12.1 fixture rewrite had itself promoted the sourced walking
-prohibition into **bus exclusivity** ("the bus is a required segment"; missed bus ⇒ automatic
-failed same-night arrival) — while the fetched japan-guide page says Kōyasan Station "is a ten
-minute **bus or taxi** ride from Koyasan's town center" (re-verified this pass). The review had
-verified every SUPPORTS line affirmatively but never asked the source the adversarial question
-— what does the page say that CONTRADICTS the framing — the lesson is recorded in §P13.1.
-**The correction (one file, `pipeline-v2-transport-r3-proof.test.mjs`):** final leg reworded
-everywhere to "motorized (bus or taxi)"; `missedConnection` made conditional (on-foot recovery
-impossible is sourced; failure only IF the day's motorized options exhaust; taxi asserted
-neither available nor unavailable); taxi recovery added to the REQUIRED RE-CHECK list;
-`risk: 3` re-evaluated and honestly retained on the remaining fragility stack; mapping updated
-(source 2 now DOES-NOT-PROVE bus exclusivity); new scar pins the exclusivity wording out.
-Suite 12/12; validator returns `[]`; Gap-1 probe proof and all gate/invariant findings from the
-retracted review still stand. Records: IMPLEMENTATION_STATE §P13 (retraction banner) + §P13.1.
+Codex's independent re-review of the R1–R13 head confirmed four remaining defects; all four are
+fixed on the branch with real-seam behavioral proofs (new suite
+`pipeline-v2-release-blockers.test.mjs`: real git repos + bare origins, gh mocked only at the
+process seam). (1) Answers routing resolves ACTIVE research ownership BEFORE historical slug
+publication — `resolveAnswerRouting` (questions.mjs, injectable) inspects both branch
+namespaces unconditionally, so a published Run A never steals active Run B's answer;
+`routeAnswers` precedence flipped to match. (2) `verifyMergedPr` now proves the RUN, not the
+branch name: GitHub must name the merge commit, and its tree's own `run.v2.json` must carry the
+`expectedRunId` (mandatory) — Run A's old merged PR can no longer finalize Run B on the reused
+branch. (3) The landing transaction moved to `scripts/pipeline/landing.mjs` (`executeLanding`)
+with `quarantineRemoteBranch`: EVERY non-merged auto landing restores `draft:true` and pushes
+it to origin (conflict fallback AND hard failure); an unpushable restore is a BLOCKED landing —
+failed, exit 1, never "safely draft". (4) `finalize-landing` announcement truth fails closed:
+no durable fact + no `--announced ok|failed|skipped` = refusal; the printed retry command
+always carries the flag. A 12-step FINAL test walks publish-A → research-B → real routing →
+quarantine → merge → refuse-A's-PR → recover-with-B's-PR → B published. Records:
+IMPLEMENTATION_STATE "Codex re-review corrections" + a new CONTEXT decision.
 
 ## Where we left off
 
-**P13 is pending again — Codex re-reviews the corrected head.** The verdict record, tracker
-P13 row, and this fixture are the review surface; the ask to Codex is a fresh go/no-go on the
-correction commit (diff vs `88d16fe` is the fixture fix + the retraction/correction docs).
-On a sustained GREEN plus Carlo's acceptance, integration week I01+ begins.
-
-**Until acceptance, nothing moves:** do not merge PR #63 or #61, set `WAYPOINT_RESEARCH_ENGINE`,
-publish the canary, or delete V1 / `canary/kansai-proof` / `research-v2/kansai-proof` /
-`probe/environ`. Cutover stays OFF (variable unset ⇒ /new dispatches V1). Known non-blockers
-deferred to I01/I02 by prior ruling: live Worker answer routing, `/new` V2 notification
-threading, `GOOGLE_ROUTES_KEY` unset, seven honest unresolved geocodes, Progress-UI manual
-proof. Main's stale `WAYPOINT_V2_ON_DEFAULT` stub comment stays LOW / moot-at-merge.
+**PR #68 (fable/pipeline-v2-integration → main) is back to READY_FOR_CODEX_REVIEW — do not
+merge it from a session, do not set the selector, do not run the live canary.** The four
+Codex defects (answers-route precedence, run-identity finalization proof, remote quarantine
+invariant, announcement fail-closed) are fixed and behaviorally proven; the PR body's
+acceptance matrix has one row per defect with the exact proving tests. Full gates re-run green
+on the final tree. Live-only proofs unchanged (product auto-merge via real /new; Worker
+/answer hop). Selector ABSENT (untouched this pass). V1 present + dispatchable. Cleanup queue
+unchanged: PR #67 closed as evidence; andorra removed on the branch; P10–P13 evidence
+untouched pending sign-off.

@@ -49,6 +49,61 @@ export async function flipDraft(slug, { guidesDir = GUIDES_DIR } = {}) {
   return { ok: true, slug, country: guide.country || "", metaPath: located.metaPath };
 }
 
+// The INVERSE flip (hardening pass, 2026-08-20): re-quarantine a guide as a draft. Exists for
+// exactly one caller — the merge-conflict fallback in `pipeline land`. Auto-landing removes the
+// draft flag BEFORE the merge attempt (the flip must ride the merge); when that merge then hits
+// a conflict and falls back to a draft PR, the branch would otherwise carry publishable,
+// undrafted guide content that a human resolving the conflict could merge — silently bypassing
+// the publication contract. Restoring draft:true keeps every NON-merged outcome unpublished.
+// Idempotent: already-draft returns { ok: false, error: NOT_DRAFT }-inverse ({ changed: false }).
+export async function restoreDraft(slug, { guidesDir = GUIDES_DIR } = {}) {
+  const located = resolveGuidePath(slug, guidesDir);
+  if (!located) return { ok: false, error: PUBLISH_ERRORS.NOT_FOUND, slug };
+  const guide = JSON.parse(await readFile(located.metaPath, "utf8"));
+  if (guide.draft === true) return { ok: true, changed: false, slug, metaPath: located.metaPath };
+  const next = { draft: true, ...guide };
+  next.draft = true; // draft leads the meta file, matching the scaffolder's shape
+  await writeFile(located.metaPath, JSON.stringify(next, null, 2) + "\n");
+  return { ok: true, changed: true, slug, metaPath: located.metaPath };
+}
+
+// REMOTE QUARANTINE (Codex blocker 3, 2026-08-20): auto-landing removes the draft flag and
+// pushes it BEFORE the merge attempt, so EVERY landing that ends without a confirmed merge must
+// put draft:true back ON ORIGIN — a local restore that never reaches the remote leaves a
+// publishable branch behind while the log claims "safely draft". This is the one durable
+// re-quarantine: restore the flag, commit it, and ALWAYS push (the retry case is exactly "the
+// restore commit exists locally but its push never landed"). A push failure THROWS — quarantine
+// that is not on origin is not quarantine, and the caller must treat it as a blocking failure.
+// The PR (where one exists) is returned to draft best-effort (`gh pr ready --undo`) — ALWAYS
+// attempted, against the real gh CLI when no runner is injected, because the production path
+// (pipeline.mjs → executeLanding) supplies none; an injected-runner-only attempt was a dead path
+// in the product. The guide-content flag is the hard invariant, the PR state the visible
+// secondary: a failed undraft warns loudly (the guide is safe, the PR may still look Ready)
+// instead of failing the quarantine.
+export async function quarantineRemoteBranch(slug, {
+  branch, reason = "failed landing", guidesDir = GUIDES_DIR, cwd = ROOT, git, gh, warn = console.warn,
+} = {}) {
+  if (!branch) throw new Error("quarantineRemoteBranch requires the research branch to re-quarantine");
+  const runGit = git || ((args) => execFileSync("git", args, { cwd, encoding: "utf8" }));
+  const runGh = gh || ((args) => execFileSync("gh", args, { cwd, encoding: "utf8" }));
+  const restored = await restoreDraft(slug, { guidesDir });
+  if (!restored.ok) {
+    throw new Error(`could not restore the draft flag for ${slug} (${restored.error}) — the remote branch cannot be proven quarantined`);
+  }
+  if (restored.changed) {
+    runGit(["add", "--", restored.metaPath]);
+    runGit(["commit", "--only", "-m", `chore(${slug}): restore draft after ${reason} — nothing published`, "--", restored.metaPath]);
+  }
+  runGit(["push", "origin", `HEAD:${branch}`]);
+  let prUndrafted;
+  try { runGh(["pr", "ready", branch, "--undo"]); prUndrafted = true; }
+  catch (err) {
+    prUndrafted = false;
+    warn(`[quarantine] ${slug} — the remote guide content is safely draft:true on origin/${branch}, but the PR could not be returned to draft (${err?.message || err}); it may still appear Ready on GitHub. Undraft it by hand: gh pr ready ${branch} --undo`);
+  }
+  return { restored: restored.changed, pushed: true, prUndrafted };
+}
+
 // THE evidence gate — build + networked verify. One implementation, used by the automated landing
 // path and by the manual `pipeline publish` override alike, so "published" means the same thing
 // whoever triggered it. Returns { passed, steps: [{ cmd, code }] }.
@@ -146,14 +201,17 @@ export function commitAll(message, { cwd = ROOT } = {}) {
   return true;
 }
 
-// Hand the branch to the shared lander. It prints exactly `merged:<n>` or `draft:<n>`; anything
-// else is a bug in that script, not something to guess about.
+// Hand the branch to the shared lander. It prints exactly `merged:<n> announce=<ok|failed|skipped>`
+// or `draft:<n>`; anything else is a bug in that script, not something to guess about. `announced`
+// is null for draft outcomes (nothing to announce), true/false for merges — false means the merge
+// SUCCEEDED and the safety notice did not file, a fact the caller records rather than hides.
 export function landBranch({ branch, base = "main", title, bodyFile, passed, announceUrl = "", cwd = ROOT }) {
   const args = ["scripts/land-branch.sh", branch, base, title, bodyFile, passed ? "true" : "false"];
   if (announceUrl) args.push(announceUrl);
   const out = execFileSync("bash", args, { cwd, encoding: "utf8" });
   const line = out.trim().split("\n").filter(Boolean).pop() || "";
-  const m = line.match(/^(merged|draft):(\d+)$/);
-  if (!m) throw new Error(`land-branch.sh printed "${line}" — expected merged:<n> or draft:<n>`);
-  return { outcome: m[1], pr: Number(m[2]) };
+  const m = line.match(/^(merged|draft):(\d+)(?: announce=(ok|failed|skipped))?$/);
+  if (!m) throw new Error(`land-branch.sh printed "${line}" — expected "merged:<n> announce=<ok|failed|skipped>" or "draft:<n>"`);
+  const announced = m[1] === "merged" ? (m[3] === "ok" ? true : m[3] === "failed" ? false : null) : null;
+  return { outcome: m[1], pr: Number(m[2]), announced };
 }

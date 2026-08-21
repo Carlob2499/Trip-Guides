@@ -41,23 +41,43 @@ export interface PipelineState {
    deployed-live as DISTINCT facts. This adapts that richer record into the view this page
    already paints — plus the facts V1 never had, which is what makes the page stop guessing. */
 
+/** The four landing outcomes a V2 run records (contracts.mjs `landing.outcome`). */
+export type LandingOutcome = "pending" | "merged" | "draft" | "failed";
+
 /** What one poll learned about the run, whichever pipeline generation produced it. */
 export interface RunSnapshot {
   /** 0 = no run found · 1 = V1 state.json · 2 = V2 run.v2.json. */
   version: 0 | 1 | 2;
+  /** V2 only — the run's identity, the join key for run-scoped telemetry (eventsForRun). Null
+   *  for V1 and no-run snapshots: V1 emits no events, so null correctly renders honest-empty
+   *  telemetry rather than another run's stream. */
+  runId: string | null;
   state: PipelineState | null;
   /** V2 only — the run's own recorded status. Null for V1 (it never records one). */
   runStatus: "pending" | "running" | "paused" | "complete" | "failed" | "stuck" | null;
   /** V2 only — the recorded failure classification, when the run failed. */
   failureClass: string | null;
+  /** V2 only — THIS RUN's own publication fact (run.v2.json `publication.published`), which is
+   *  what the page must key "Published" on: a re-research (Run B) of an already-live guide must
+   *  never inherit Run A's publication just because the slug exists on main. Null for V1/no-run
+   *  snapshots — those fall back to the main-branch draft-flag probe. */
+  published: boolean | null;
+  /** V2 only — the run's recorded landing outcome. "failed" = research may have PASSED its gate
+   *  while the merge/publish step failed; the page must say exactly that, never "researching"
+   *  or "complete". Null for V1 (it records no landing). */
+  landingOutcome: LandingOutcome | null;
   /** V2 only — the run's own deployed-live fact (null = not yet known, which is honest). */
   deployedLive: boolean | null;
   /** True when a V2 file EXISTS but cannot be read as a run — never silently "no run". */
   malformed: boolean;
+  /** True when BOTH generations are genuinely active for this slug — an invalid state that gets
+   *  an explicit diagnostic, never an arbitrary precedence pick (run-generation.mjs). */
+  conflict: boolean;
 }
 
 export const EMPTY_SNAPSHOT: RunSnapshot = {
-  version: 0, state: null, runStatus: null, failureClass: null, deployedLive: null, malformed: false,
+  version: 0, runId: null, state: null, runStatus: null, failureClass: null,
+  published: null, landingOutcome: null, deployedLive: null, malformed: false, conflict: false,
 };
 
 /** V2 stage keys → this page's stations. The critic IS the verify station: it runs the verify
@@ -106,11 +126,19 @@ export function adaptV2Snapshot(raw: unknown): RunSnapshot {
     return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
   }
   if (landingGate?.status === "passed") stages.verified = String(r.updatedAt);
-  const publication = (r.publication ?? {}) as { deployedLive?: boolean | null };
+  const publication = (r.publication ?? {}) as { published?: boolean; deployedLive?: boolean | null };
   const status = landingGate.status === "failed" ? "failed" : String(r.status);
   const failure = r.failure as { class?: string } | null | undefined;
+  // The landing record is newer than the earliest V2 documents — optional-tolerant like every
+  // other read here, defaulting to "pending" exactly as the server schema does. The server
+  // schema is what refuses published:true without a merged outcome; this adapter just carries
+  // the recorded facts through so the page can say them.
+  const landingDoc = r.landing as { outcome?: unknown } | null | undefined;
+  const outcomes: LandingOutcome[] = ["pending", "merged", "draft", "failed"];
+  const landingOutcome = outcomes.find((o) => o === String(landingDoc?.outcome)) ?? "pending";
   return {
     version: 2,
+    runId: String(r.runId),
     state: {
       slug: String(r.slug ?? ""),
       createdAt: String(r.createdAt ?? ""),
@@ -121,8 +149,11 @@ export function adaptV2Snapshot(raw: unknown): RunSnapshot {
     },
     runStatus: validStatuses.find((s) => s === status) ?? null,
     failureClass: landingGate.status === "failed" ? "gate-failure" : (failure?.class ?? null),
+    published: publication.published === true,
+    landingOutcome,
     deployedLive: typeof publication.deployedLive === "boolean" ? publication.deployedLive : null,
     malformed: false,
+    conflict: false,
   };
 }
 
@@ -150,6 +181,9 @@ export interface ProgressView {
   isStuck: boolean;
   /** True only when the run RECORDED a failure (V2). V1 has no failure record — false there. */
   runFailed: boolean;
+  /** The run's recorded landing outcome (V2). "failed" means research may have PASSED while
+   *  publishing did not — the page states that split, never one rewritten as the other. */
+  landingOutcome: LandingOutcome | null;
   /** The Pages deploy actually carrying the published guide: true / false / null = unknown.
    *  Distinct from the `published` stage (the merge) on purpose — a merge is not "live". */
   deployedLive: boolean | null;
@@ -178,16 +212,18 @@ export function deriveProgress(
     published: boolean;
     /** V2's recorded run status; null/absent for V1 runs (they record none). */
     runStatus?: RunSnapshot["runStatus"];
+    /** V2's recorded landing outcome; null/absent for V1 runs. */
+    landingOutcome?: LandingOutcome | null;
     /** The deploy truth, when a caller has one (V2 record, or the site's own index probe). */
     deployedLive?: boolean | null;
   },
 ): ProgressView {
-  const { now, published, runStatus = null, deployedLive = null } = opts;
+  const { now, published, runStatus = null, landingOutcome = null, deployedLive = null } = opts;
 
   if (!state) {
     return {
       stages: emptyStages(), currentIndex: 0, percent: 0, elapsedMs: 0, sinceUpdateMs: 0,
-      attempts: 0, isDone: false, isStuck: false, runFailed: false, deployedLive: null,
+      attempts: 0, isDone: false, isStuck: false, runFailed: false, landingOutcome: null, deployedLive: null,
     };
   }
 
@@ -213,7 +249,7 @@ export function deriveProgress(
 
   return {
     stages, currentIndex, percent, elapsedMs, sinceUpdateMs,
-    attempts: state.attempts || 0, isDone, isStuck, runFailed, deployedLive,
+    attempts: state.attempts || 0, isDone, isStuck, runFailed, landingOutcome, deployedLive,
   };
 }
 
@@ -294,7 +330,9 @@ const STAGE_ACTIVITY: Record<Stage, string> = {
   passB: "gathering local, on-the-ground knowledge",
   reconcile: "resolving where the two passes disagree",
   verified: "re-checking every perishable fact",
-  published: "confirming the merged guide's site deploy",
+  // "landing", not "confirming the deploy": while this station is CURRENT nothing has merged
+  // yet, and the old wording claimed a merge that hadn't happened (hardening pass).
+  published: "landing and publishing the finished guide",
 };
 
 /** The five shapes the whole page takes. Everything else on it is derived from this one word. */
@@ -328,6 +366,11 @@ export function derivePageState({ view, hasRun, blockingForks, malformed = false
   if (!hasRun) return "empty";
   if (view.isDone) return "done";
   if (blockingForks > 0) return "awaiting";
+  // A recorded terminal landing outcome that ISN'T a merge stops the run as surely as a stall:
+  // "failed" = research done, publishing failed (a maintainer retries the landing); "draft" =
+  // parked as a draft PR for human review. Both would otherwise render as "running… landing",
+  // which is the page claiming activity nothing is performing (hardening pass).
+  if (view.landingOutcome === "failed" || view.landingOutcome === "draft") return "stalled";
   if (view.isStuck) return "stalled";
   return "running";
 }
@@ -345,8 +388,13 @@ export function deriveStatusPill(page: PageState, view: ProgressView): StatusPil
     case "awaiting":
       return { text: "Waiting on you", tone: "warn" };
     case "stalled":
-      // A recorded failure (V2) is a stronger, truer claim than the V1 clock's "stalled".
-      return { text: view.runFailed ? "Failed" : "Stalled", tone: "warn" };
+      // Order of truth: a recorded RESEARCH failure first (the run itself broke), then the
+      // landing split — research passed but publishing failed, or parked for human review —
+      // then the V1 clock's guess. Each is a different claim and gets its own words.
+      if (view.runFailed) return { text: "Failed", tone: "warn" };
+      if (view.landingOutcome === "failed") return { text: "Landing failed", tone: "warn" };
+      if (view.landingOutcome === "draft") return { text: "Awaiting review", tone: "warn" };
+      return { text: "Stalled", tone: "warn" };
     case "running": {
       const stage = view.stages[view.currentIndex];
       return { text: stage ? "Researching · " + STAGE_SHORT[stage.key] : "Researching", tone: "accent" };
@@ -381,9 +429,18 @@ export function deriveProgressLine(page: PageState, view: ProgressView): string 
         ? `Paused at stage ${view.currentIndex + 1} of ${total} — the run needs an answer before it goes on.`
         : "Paused — the run needs an answer before it goes on.";
     case "stalled":
-      return view.runFailed
-        ? `The run recorded a failure at stage ${view.currentIndex + 1} of ${total} — it will not continue without a human.`
-        : `No checkpoint for ${formatElapsed(view.sinceUpdateMs)} — stage ${view.currentIndex + 1} of ${total} never finished.`;
+      if (view.runFailed) {
+        return `The run recorded a failure at stage ${view.currentIndex + 1} of ${total} — it will not continue without a human.`;
+      }
+      // The landing split, stated as the split it is: gate truth and landing truth are separate
+      // facts, and a landing failure must never read as a research failure (or as healthy).
+      if (view.landingOutcome === "failed") {
+        return "Research finished and passed its checks, but publishing the guide failed — nothing was published. A maintainer can retry the landing.";
+      }
+      if (view.landingOutcome === "draft") {
+        return "Research is complete and waiting as a draft pull request for human review. Nothing publishes until it lands.";
+      }
+      return `No checkpoint for ${formatElapsed(view.sinceUpdateMs)} — stage ${view.currentIndex + 1} of ${total} never finished.`;
     case "running":
       return stage
         ? `Stage ${view.currentIndex + 1} of ${total} — ${STAGE_ACTIVITY[stage.key]}.`

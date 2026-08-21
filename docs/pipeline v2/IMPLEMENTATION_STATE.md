@@ -877,3 +877,330 @@ verifying that a source supports what IS said is not verifying that it permits w
 
 P13 verdict returns to **pending independent go/no-go** on the corrected head. No merge,
 publish, cutover, variable change, or deletion in this pass; V1 untouched.
+
+## Integration week session (2026-08-20, Fable) — I01–I06
+
+**Authorization:** Carlo explicitly directed "merge PR #63 and then re-run the mission prompt"
+(2026-08-20). PR #63 was marked ready and squash-merged as `be9c535` on that instruction —
+operationally the P13 go decision, made by the owner. The integration mission's own hard
+precondition (accepted V2 on main) holds.
+
+**Session start record (mission §2):**
+- Starting main SHA: `be9c535` (squash merge of PR #63, mergedAt 2026-08-20T13:07:11Z).
+- Integration branch: `fable/pipeline-v2-integration` from `be9c535`.
+- Worktree: clean at branch creation.
+- `WAYPOINT_RESEARCH_ENGINE`: **NOT SET** (repo variable list empty) — V1 default active.
+- V1 workflows present: `research-pass.yml`, `new-guide.yml`, `change.yml` all on main.
+- Open canary artifacts (pre-session, for the cleanup census): PR #61 (draft), branches
+  `canary/kansai-proof`, `research-v2/kansai-proof`, `probe/environ`; a stray registered
+  workflow `environ-probe` (id 338376924) with no file on main.
+- Environment precheck (§2A): Node v24.16.0 (≥22 ✓); `npm ci` exit 0; gh auth scopes
+  `repo`+`workflow` (push, dispatch, PR create all available); secrets present unexposed.
+
+**Pre-edit baseline (§7), run on `be9c535`:** `npm test` 163 files, 2652 passed + 1 todo;
+build 9 pages exit 0; lint 0/0; typecheck 0 errors 0 warnings 21 pre-existing hints.
+No pre-existing failures — nothing unrelated blocks I01–I06.
+
+### Milestone log (appended as each milestone earns completion)
+
+#### I01+I02 deterministic half — DONE (commit `b5b1eed`)
+
+- **Problem (I01):** V1's `/new` dispatch threads the intake `issue`; V2's dispatch did not, and
+  the V2 workflow had no `issue` input and no questions-surfacing step — product communication
+  continuity was severed on the V2 path.
+- **Problem (I02):** V2's land job hardcoded `--land pr`, and `--require-verified` checks the V1
+  spine (`state.json`) a V2 run never completes — no safe product path to publication existed.
+- **Fix:** run.v2.json gains durable, schema-validated `issue` (nullable) + `landMode`
+  (pr|auto, immutable per run) recorded at init; resumes/retries inherit both (retry dispatches
+  deliberately pass neither — test-pinned). `land-mode` subcommand + pure `landingMode()` compute
+  the deterministic landing decision (auto ⇔ product intent AND every stage complete).
+  `recordProductLanding()` writes gate PASS + published into run.v2.json BEFORE the merge (an
+  auto-merged landing deletes its branch), failing closed on incomplete runs via the schema's
+  own complete-requires-all-stages rule — wired inside `pipeline.mjs land` on the passed&&auto
+  path only. new-guide.yml's V2 dispatch passes `-f issue` + `-f land=auto`; the V2 land job
+  computes the mode, passes `--announce`, and skips the post-record on a merged outcome; a
+  `questions` job (always(), continue-on-error) surfaces traveler assumptions from the run's own
+  recorded issue. Progress gateway (I05 half): stale "NOTHING EMITS THIS YET" claim corrected;
+  fetchRunEvents falls back to `main` so a merged product run's event log stays readable.
+- **Tests:** `pipeline-v2-integration.test.mjs` (24 new; schema round-trip/back-compat, inherit/
+  heal/refuse semantics, landingMode matrix, recordProductLanding fail-closed, workflow-text
+  pins); orchestration draft-only pin intentionally CHANGED to the durable-intent contract;
+  gateway tests updated (+ merged-run fallback). Full gates on the head: 164 files,
+  2677 passed + 1 todo · build 9 pages · lint 0/0 · typecheck 0 errors.
+- **Remaining:** the live boundary proofs below.
+
+#### Live boundary evidence (recorded as earned — fixture slugs: andorra=B #64 · san-marino=C #65 · liechtenstein=D #66)
+
+- **Two REAL defects found and repaired at the live boundary** (both invisible to the 2,677-test
+  deterministic suite — the mission's autonomous-repair contract working):
+  1. `/new` scaffold lost its issue number (run `32375205019`): `runScaffold` read `get("issue")`
+     where pipeline.mjs's `get` answers only literal flags, env fallback named `ISSUE_NUM` vs the
+     workflow's `ISSUE` — scaffold pushed to main, THEN died at the reply; issue never closed,
+     research never auto-started for EITHER engine. Fixed (`resolveScaffoldArgs`, refuse-before-
+     push guard), 6 tests, cherry-picked to main as `062d3ad`.
+  2. change.yml's answers-to-active-research re-dispatch 403'd (run `32379790925`) — token never
+     had `actions: write`; the M6 path had never run live. Answer landed on the ledger, run never
+     resumed. Fixed job-level (least privilege), pinned, on main as `2d39b2c`.
+- **L1 selector OFF (V1 routing):** #64 → scaffold `32375596604` success → reply + issue CLOSED →
+  V1 run `32375641704` dispatched with the issue, NO V2 run → canceled pre-agent-spend. ✓
+- **L2a issue/land threading live:** V2 run `32376069336` on the integration ref
+  (`-f issue=64`, land blank) → run.v2.json on research-v2/andorra records
+  `issue: "64"`, `landMode: "pr"`, runId `andorra-20260820-8df468`. passA completed (~28 min);
+  canceled mid-passB (force-cancel — the harsh no-graceful-record interruption). ✓
+- **L3 selector ON (V2-from-main routing):** variable set 14:21:00Z. #65 → scaffold success →
+  exactly ONE V2 run `32379667830` from MAIN (default-branch guard's selector escape hatch), zero
+  V1 → canceled post-setup (attempt gates exercised: research-v2/san-marino, attempt 1). Note:
+  main's init records no issue/landMode (undefined) — the integration diff's addition shown
+  differentially. ✓
+- **§9 answers leg live:** passA emitted the REAL question card `q-andorra-1` (the seeded date
+  fork). change.yml dispatch (source=answers, PLAN_JSON) → `answers-route: andorra → research
+  (research-v2/andorra)` → answer applied + pushed (`2fb6781`) → after the 403 fix, second
+  dispatch `32380556859` SUCCESS: idempotent re-apply ("some were already answered" — duplicate
+  cannot corrupt) → V2 re-dispatch `32380657184` passed the guard (selector ON), resumed the
+  correct branch, canceled post-setup. Worker /answer hop NOT re-proven live (no owner key in
+  this session — recorded credential gap; auth is unit-tested + previously live-proven). ✓
+- **Selector restored:** variable deleted (~14:33Z; window ≈12 min). #66 → scaffold success → V1
+  run `32380832093` dispatched, no new V2 → canceled. Selector verified ABSENT. ✓
+- **I04 resume live:** re-dispatch `32380888749` (slug only): passA job SKIPPED (attempts still
+  1 — completed expensive work not repeated), passB resumed on attempt 3 (history closed the
+  interrupted attempts honestly), attempts.total 3 of 5 as budgeted, issue/landMode inherited. ✓
+- **Security recheck (§17):** integration diff contains zero agent-step/credential/tool-policy
+  changes; only new permissions block is the questions job's narrow contents:read+issues:write
+  and change-job's designed actions:write; publication authority remains workflow-level (land
+  job), unreachable from research agents. ✓
+
+#### Lifecycle completion (I02 live, controlled/draft mode) — DONE
+
+Final run `32396654277` (the fifth and last budgeted dispatch): reconcile PASSED on the
+feedback-driven retry (attempt 3 — the 1B loop converged: 7 → 6 → 0 blocking findings; the
+agent's own note confirms it worked from the injected findings), geocode resolved the three
+placeholder place_ids, critic passed, compose+build+verify green in-stage. Land job:
+`landing mode pr (intent pr; stages complete)` → REAL evidence gate `npm run build` exit 0 +
+`npm run verify --network` exit 0, `passed=true` → **draft PR #67** (never merged). Questions
+job: "none open, or all already asked" (q-andorra-1 already answered — correct dedup). Terminal
+run.v2.json: status **complete**, landingGate **passed**, publication.published **false** (the
+draft-mode guarantee held to the very end), deployedLive **null** (honest), attempts 5/5
+bounded, issue 64 + landMode pr durable throughout. Emitted events.json: 20 real decision
+events (funnel 19→13→8, adaptive-saturation stop, disagreement investigation) with fetches 0 /
+nuggets 0 / counters null — honest absence, nothing fabricated.
+
+Verify-scorecard note for the record: the in-workflow candidates gate ran ADAPTIVE (V2 posture,
+`WAYPOINT_PIPELINE_V2=1`) and PASSED on Andorra's small honest consideration set — the
+DECISIONS.md no-fixed-quotas rule observed live; the numeric floors remain only for
+V1-context verifies (deliberate TEMP_COMPAT until cutover). A local repro without the env
+shows floors — not a defect.
+
+#### I06 — V1 parity classification (recommendation; nothing executed)
+
+V2 now proves live: `/new` creation (selector), draft-safe landing through the real gate,
+interruption/resume without repeating completed work, owner communication (issue threading +
+questions + answers), Progress compatibility. Product-mode publication is deterministic-proven;
+its live exercise is post-merge (below). Classification per `docs/LEGACY_ERADICATION.md`
+(two rows updated this session): **still required** — V1 workflow+prompts as `/new`'s default
+and rollback until cutover; **shared, must remain** — pipeline.mjs spine (now the SHARED
+publication path), gate.mjs, state.json read/write, check-run-integrity, Progress V1 adapters,
+V1 coverage.json ask registry; **eligible for later retirement (Carlo/Codex authorization,
+after a green post-merge selector-ON canary)** — new-guide.yml's V1 dispatch arm →
+research-pass.yml + V1 prompts → check-passb-coverage.mjs → V1-only checkpoint surfaces;
+**post-cutover migrations** — V2-native ask registry, historical state.json display.
+
+#### CONFLICTING_SPEC flagged for Codex (pre-existing; observed, not resolved)
+
+CONTEXT.md's decision "Fixed research floors are GONE repo-wide" (2026-08-17) explicitly
+REJECTED keeping floors for V1 only — yet shipped `check-candidates.mjs` retains
+`DEFAULT_FLOORS` + `researchFloors`, active whenever `WAYPOINT_PIPELINE_V2 != 1` (i.e. every
+V1-context verify). The andorra run behaved correctly (adaptive in-workflow, candidates PASS);
+the contradiction is between the recorded decision and the V1-context code path. Predates this
+session (#63); changing V1 verify behavior is outside I01–I06 scope, so it is recorded here
+out loud rather than silently fixed or silently ignored. Codex should rule: delete the floors
+per the decision, or amend the decision to bless the env-gated TEMP_COMPAT.
+
+#### Recorded evidence gap (the single YELLOW)
+
+The live product-mode AUTO-MERGE cannot run before the integration PR merges: a branch-ref
+dispatch would side-door the whole integration branch into main via the research branch's
+merge, and main's pre-merge workflow lands draft-only by construction. Machinery is V1's
+production `--land auto` path + deterministic V2 gating (all test-pinned). First post-merge
+action: one selector-ON `/new` canary observed end-to-end.
+
+#### Live proof plan (executed — kept for the record; all items done except as noted above)
+
+- [x] L1 selector OFF: fixture-B intake issue (Andorra, dates seeded with a mild contradiction
+  so a traveler question card exists) → scaffold from main → V1 dispatched with issue, NO V2 →
+  cancel V1 before agent spend. Record run ids.
+- [x] L2a: push branch; dispatch research-pass-v2 `--ref fable/pipeline-v2-integration`
+  `-f slug=<B> -f issue=<B#>` (land blank ⇒ draft). Let passA COMPLETE; cancel during passB
+  (the I04 interruption).
+- [x] L3: `gh variable set WAYPOINT_RESEARCH_ENGINE v2` (prior state: ABSENT — restore to
+  ABSENT). Fixture-C intake → exactly one V2 dispatch from main, zero V1 → cancel post-setup.
+- [x] §9 answers leg (selector still ON, B active): dispatch change.yml source=answers with
+  PLAN_JSON naming B's real question id → answers-route detects research-v2/<B> → ledger apply
+  on the branch → V2 redispatch passes the guard → cancel that run post-setup (resume leg
+  proven; no expensive rework). Worker /answer hop itself NOT re-proven live (no owner key in
+  this session — recorded credential gap; auth contract unit-tested + previously live-proven).
+- [x] Restore selector: `gh variable delete WAYPOINT_RESEARCH_ENGINE`; verify absent. Fixture-D
+  intake → V1 dispatched again → cancel. (Restored-OFF proof.)
+- [x] L2b: re-dispatch B on the integration ref (slug only — issue/land inherit) → passA NOT
+  repeated, passB→reconcile→geocode→critic→land run to completion → evidence-gated DRAFT PR +
+  landing verdict recorded + questions job comments on B's intake issue.
+- [x] Known structural gap to record in the PR: the live product-mode AUTO-MERGE cannot be
+  exercised before this integration PR itself merges (a branch-ref dispatch would side-door the
+  integration code into main via the research branch's merge; main's workflow lands draft-only
+  by construction pre-merge). Product-mode machinery is deterministic-proven; its live exercise
+  is the first post-merge selector-ON /new.
+- [x] Cleanup: cancel stray runs; delete research/<B> (V1 stub), research-v2/<C> state, C/D
+  scaffolds from main (one chore commit); B's intake issue + draft PR + research-v2/<B> branch
+  KEPT as review evidence. Selector verified ABSENT.
+- Attempt budget for B: 3 of 5 dispatches consumed by design (init/interrupt · answer-redispatch
+  cancel · completion).
+
+## Release-candidate correction pass (2026-08-20, Fable) — PR #68 defect sweep
+
+The integration pass above shipped with real product-path defects its own INTEGRATION_YELLOW
+understated. Every defect below was reproduced from the PR #68 head `3a33c47`, root-caused,
+fixed ON THE BRANCH (no direct-to-main commits this pass), and regression-tested. Baseline at
+start: main `e56b5de`, selector ABSENT, worktree clean, 2,715-test suite green.
+
+| # | Defect (root cause) | Fix | Regression protection |
+|---|---|---|---|
+| P0-1 | **Publication recorded before the merge.** `recordProductLanding()` wrote `landingGate=passed` + `published=true` + emitted "Published (merged)" BEFORE `landBranch` ran — a conflict/API failure would leave a branch asserting a publication that never happened | Two-phase transaction: phase 1 (pre-merge) records ONLY the gate verdict; phase 2 runs after gh confirms an outcome — `recordLandingOutcome` (draft/failed, never publication) or `finalizeMergedLanding` (merged: publication finalized ON MAIN, idempotent retry via `pipeline-v2 finalize-landing`). New `landing` state object (outcome/pr/mergedAt/announced/finalizedAt); schema REFUSES `published` without a confirmed merged outcome and a passed gate | Transaction matrix in `pipeline-v2-integration.test.mjs` (gate-pass-only · conflict-draft · API-failure · confirmed-merge · idempotent-retry · draft-intent-refused · unpassed-gate-refused · notice-failed-recorded); the old premature-publication test REPLACED; contracts suite's distinct-facts scar AMENDED to the honest path |
+| P0-2 | **Auto-publish authority bypass.** The `land` workflow input let ANY manual dispatch type `auto`; a feature-ref dispatch could then auto-merge its research branch (integration code and all) into main; `pipeline.mjs land` defaulted to auto; `recordProductLanding` never checked intent | `land` input REMOVED; intent DERIVED (auto ⇔ default-branch ref + selector v2), immutable, and RE-CHECKED as landing-time product authority in the land job; `pipeline.mjs land` defaults to pr (fail-safe) and refuses `--land auto` on a draft-intent run; `finalizeMergedLanding` independently requires intent+gate+completeness+PR identity | Side-door scars: no-land-input pin, derived-intent pins, authority re-check pin, CLI default-pr pin, CLI escalation-refusal pin, finalize-refusal unit tests |
+| P0-3 | **V1 rollback contamination.** Shared `land` discovered historical `run.v2.json` by file presence; Progress read V2-on-main before an active V1 branch; answers routing let a stale complete V2 branch steal an active V1 run's answers | ONE active-run definition: `land` keys V2 handling on exact branch identity (`research-v2/<slug>`); Progress fetchRun reads branches (both generations) before main history; answers-route inspects BOTH namespaces, active-beats-stale, dual-active REFUSES with a diagnostic | Rollback matrix: gateway test (active V1 branch + historical V2 on main → V1, runId null), answers-route source pins (ordering + refusal), land branch-identity pin |
+| P0/P1-4 | **Terminal-run resume.** A fresh research-v2 branch inheriting a merged run's state from main silently "resumed" the terminal run (re-landing old content) | Fresh-run semantics: the branch step emits `resumed`; init with `--branch-fresh true` archives a merged run to `previousRuns` (append-only) and mints run B fresh; non-merged inherited state REFUSES loudly | Full lifecycle test (A merges → B fresh, new identity, clean state, A inspectable); anomaly-refusal test; resume-still-works test |
+| P1-5 | **Unscoped telemetry.** events.json carried no run identity — a new run or V1 rollback could display a previous run's stream from main | Emitter stamps `runId`; parser REFUSES identity-less streams; `eventsForRun()` joins stream↔snapshot in the UI (V1 snapshots carry runId null → honest-empty); event wording reality-ordered (gate PASS is only gate PASS; "Draft PR #N" only when one exists; "Published — PR #N merged" only post-merge; failed notice surfaced) | run-events identity suite (refusal, mismatch, V1-null, pass-through), finalize-suite round-trip amended, emitter wording pins in the transaction matrix |
+| P0/P1-6 | **Safety notice dead.** The land job's permissions override dropped `issues:write` while `land-branch.sh` hid every notice failure behind a swallowed error — the vetoable auto-publish notice could never file, silently | `issues:write` restored (comment names why); the notice failure is reported in the outcome line (`merged:<n> announce=ok/failed/skipped`), parsed by `landBranch`, recorded durably (`landing.announced`), surfaced as an event — the merge itself never un-claimed | Permission scar (workflow text), shell-contract pins (announce line format, no swallowed `gh issue create`), parser contract test, announced:false unit+event test |
+| P1-7 | **Post-merge question delivery.** The questions job read its dispatch-SHA checkout; after a merged landing (branch deleted, merge newer than the dispatch SHA) it missed the merged ledger entirely; the branch could also vanish between check and fetch | The job fetches the run's CURRENT home: the branch when it survives (existence-check + fetch as one guarded step, falling through on the race), else the LATEST default branch via FETCH_HEAD | Workflow pins (BASE fetch, FETCH_HEAD checkout, race fall-through) |
+| P1-8 | **Late-answer no-op.** A complete-but-unmerged draft run counted as "active": the answer was appended and the redispatch just re-landed the unchanged product | `reopenForAnswers`: reconcile+critic re-open (history/cost preserved), landing verdicts reset, resume=reconcile — the re-run genuinely absorbs the answer; published runs refuse (change lifecycle); still-owed runs no-op. change.yml calls it between apply and redispatch | reopen unit matrix (reopens/no-ops/refuses) + change.yml wiring pin |
+| P2-9 | **Question-notification bugs.** Substring dedup (`q-1` suppressed `q-10`); a failed comment-read assumed "no comments" and would duplicate everything; copy claimed "your guide is complete" mid-run and invited "reply here" with no ingestion path | Exact `<sub>id</sub>` marker dedup; comment-read failure SKIPS posting with a `::warning::` (retry next run); copy truthful — work "carries on either way", answers routed via the progress page / ✎ button | Dedup + copy pins (orchestration suite, amended scar named as such) |
+| P2-10 | **Duplicated landing decision.** `land-mode` reimplemented `landingMode()` | The CLI now calls the tested pure function and composes landing-time authority | Wiring scar (source pin: `landingMode(state)` present, no re-derivation) |
+| P1/P2-11 | **Fixed-floor CONFLICTING_SPEC resolved.** Authority chain traced: DECISIONS.md (locked) + CONTEXT 2026-08-17 (repo-wide removal, V1-exception explicitly rejected) + census 2026-08-19 ("already gone") vs the shipped env-gated `DEFAULT_FLOORS`. No later ruling blesses retention → implemented repo-wide | Floors, `researchFloors` (checker + the dead schema field whose own test claimed deletion) removed; structural checks + saturation remain | Floorless-doctrine suite (small-set-passes, absence pin over module surface + source text); CONTEXT decision recorded |
+| P1-12 | **Checklist/auto-publish contradiction.** The scorecard said "Publishing still needs the checklist above" while doctrine (publish.mjs) says the evidence gate is the bar and the approval ceremony was removed — an unenforced requirement in prose | Human rows are now ADVISORY review prompts (no unchecked boxes, no mandatory language); verdict text names the evidence gate as the bar | Scorecard-language scars in both renderers (checkbox absence + advisory phrasing + old-claim regex bans) |
+
+**Docs corrected with the code:** the workflow header + land-step comments (two-phase truth),
+pipeline-v2.mjs header, pipeline.md V2 row, CONTEXT.md (the integration-week entry's premature-
+publication clause corrected as a recorded rejection; two new decisions added), the stale
+"NOTHING EMITS" run-events header, this file's executed-plan checkboxes.
+
+**Cleanup this pass:** andorra fixture (guide dir + intake) REMOVED on the PR branch — merging
+PR #68 removes it from main; PR #67 commented (DO NOT MERGE, evidence pointers) and CLOSED;
+selector verified ABSENT throughout (no variable touched this pass).
+
+**Final-cleanup list for the post-merge acceptance pass:** delete branch `research-v2/andorra`
+(after Codex inspects #67's diff if desired); delete `canary/kansai-proof` +
+`research-v2/kansai-proof` + `probe/environ` + draft PR #61 + the stray `environ-probe`
+workflow registration (P10–P13 evidence — only after independent review signs off); run the
+selector-ON `/new` product canary and verify the two-phase landing + safety notice live.
+
+**Remaining live-only acceptance gaps (impossible pre-merge, by design):** the real default-
+branch product auto-merge (requires this PR's code ON main + selector ON), and the Worker
+`/answer` hop (owner key not available to any session; unit + prior-live evidence stands).
+
+## Final integration-hardening pass (2026-08-20, Fable) — R1–R13 on PR #68
+
+The pre-Codex deterministic hardening sweep. Every requirement was first re-confirmed against
+the current head, then fixed with a behavioral test at a real seam. Summary (full detail in
+PR #68's body and the suites named):
+
+- **R1 — trusted-invocation authority.** new-guide.yml now invokes research-pass-v2.yml via
+  `workflow_call` (the trusted product entry: the called run executes under the caller's
+  "issues" event); `deriveLandIntent()` (run-state.mjs) mints "auto" ONLY for non-dispatch
+  provenance + default-branch ref + selector "v2". A manual `workflow_dispatch` on main with
+  the selector live now creates a **pr** run. New CLI `land-intent`; the old two-fact shell
+  derivation is gone. Scaffold serialization moved to job-level concurrency so the called
+  research run cannot hold the new-guide slot for hours.
+- **R2/R3/R10 — verified, durable, truth-preserving recovery.** New
+  `scripts/pipeline/v2/landing-truth.mjs`: `verifyMergedPr` (gh-backed: MERGED state, real
+  mergedAt, base + `research-v2/<slug>` head; refuses open/closed-unmerged/unrelated/wrong-
+  base/wrong-head), `resolveDefaultBranch`, `finalizeLandingRecovery` (validates the checkout,
+  verifies, finalizes with GITHUB's mergedAt, commits AND pushes to the remote default branch —
+  push failure = failed recovery). `finalizeMergedLanding` refuses a PR mismatching the
+  recorded landing and preserves a recorded `announced` when the retry omits it; the printed
+  retry command now always carries `--announced`. The land CLI's merged path also verifies
+  before finalizing.
+- **R4 — fresh-run workspace reset.** `resetFreshRunWorkspace` (workspace.mjs) removes the
+  prior run's mutable artifacts (evidence/coverage/passB/feedback/events/geocode + tracked
+  run.v2.json) from a fresh branch and its recorded baseline; CLI `init --branch-fresh` runs it
+  before capturing the scaffold baseline. Proven end-to-end with the REAL Pass-B verifier in a
+  real git repo (pipeline-v2-hardening + lifecycle-proof suites) — previously a re-research's
+  baseline structurally could not pass `verify-passb-workspace`.
+- **R5 — one active-generation resolver.** `src/lib/run-generation.mjs` (plain .mjs, consumed
+  by Node and Vite): active V2 > active V1 > complete-draft V2 > V2 history > none; dual-active
+  = explicit conflict. answers-route AND the Progress gateway (fetchRun/fetchQuestions/
+  fetchRunEvents) consume it; the gateway resolves once per poll batch.
+- **R6/R11 — run-scoped publication + truthful landing rendering.** RunSnapshot now carries
+  the RUN's own `published` + `landingOutcome`; the page keys "Published" on those (Run B never
+  inherits Run A's live guide), landing failed renders "Landing failed" with gate PASS intact,
+  draft renders "Awaiting review", dual-active renders an explicit diagnostic; polling no
+  longer stops on an inherited publication.
+- **R7 — late answers past the cap.** `reopenForAnswers` grants a bounded
+  `V2_REOPEN_ATTEMPT_GRANT` (2) above the exhausted cap — human-gated only; the autonomous cap
+  itself is unchanged.
+- **R8 — gate truth ≠ landing truth.** The land CLI emits the gate verdict on the hard-failure
+  path; the workflow's crash handler no longer rewrites a passed gate into gate FAIL and never
+  pushes to a merged run's deleted branch (the zombie-branch resurrect); a passed gate on a
+  pr-mode landing crash is preserved explicitly.
+- **R9 — conflict fallback unpublished.** `restoreDraft` (publish.mjs) re-quarantines the
+  guide on the passed+auto draft (conflict) outcome, committed to the fallback branch — a
+  human merging the conflict PR merges a DRAFT.
+- **R12 — HANDOFF_ARCHIVE.md** re-normalized to pure LF + single trailing newline; the PR diff
+  is now the genuine snapshot rotation only.
+- **R13 — deterministic lifecycle proof.** `pipeline-v2-lifecycle-proof.test.mjs` walks
+  /new→A(auto)→passes→gate→verified merge→finalized publication→Progress-done→fresh B→
+  unpublished B→B owns questions/events/answers→clean B Pass-B workspace, against the real
+  modules with mocked GitHub only.
+
+**Validation:** full vitest suite 168 files / 2,776 tests green (incl. the three new suites) ·
+typecheck 0 errors · lint 0 errors · build clean · axe a11y 55/55 · dist grepped for the
+retired Progress wording. **Not executable locally:** the live product auto-merge and Worker
+/answer hop (live-only by design, unchanged); PR CI runs on push.
+
+## Codex re-review corrections (2026-08-20, after `de69123` — three release blockers + one recovery-truth defect)
+
+Codex independently re-reviewed the R1–R13 head and confirmed four remaining defects. All four
+are fixed on the branch, each with the mandated real-seam behavioral tests (new suite:
+`pipeline-v2-release-blockers.test.mjs` — real git repos, real bare origins, gh mocked only at
+the process seam).
+
+- **Blocker 1 — answers routing: active ownership BEFORE historical publication.** The real
+  `answers-route` computed slug publication from main first and inspected research branches
+  only inside `if (!published)` — so published Run A + active Run B skipped active-generation
+  resolution entirely and sent Run B's answer to the change lifecycle. The whole resolution now
+  lives in `resolveAnswerRouting` (questions.mjs, injectable git/guidesDir): both branch
+  namespaces are inspected UNCONDITIONALLY, the shared resolver decides ownership, dual-active
+  refuses, and only an ownerless answer routes by publication. `routeAnswers`'s precedence
+  flipped to match; the tests asserting published-beats-active are corrected. Proven at the
+  real seam: published main + active B → B; + complete-unmerged B → B; + active V1 → V1;
+  + nothing → change; dual-active → refusal.
+- **Blocker 2 — finalization proves the RUN, not the branch name.** `research-v2/<slug>` is
+  reused across generations, so `verifyMergedPr`'s base+head identity let an operator finalize
+  Run B against Run A's old merged PR. It now also requires GitHub to name the merge commit and
+  reads `guides-intake/<slug>/run.v2.json` out of that commit's own tree — the run state rode
+  the branch into the merge (phase 1), so the merge commit carries exactly the run it landed;
+  any runId other than `expectedRunId` (mandatory, both callers supply it) refuses. Proven from
+  the REAL merged-but-unfinalized state (landing.pr never pre-seeded): Run A's PR refused,
+  unrelated same-base PR refused, Run B's PR succeeds with GitHub's mergedAt persisted to
+  origin.
+- **Blocker 3 — every non-merged auto landing re-quarantines ORIGIN.** The conflict fallback
+  logged a failed draft-restore push and continued (reporting a safe draft outcome), and the
+  hard-failure path never restored draft at all. The landing transaction moved to
+  `scripts/pipeline/landing.mjs` (`executeLanding`, injectable seams) with
+  `quarantineRemoteBranch` (publish.mjs): restore → commit → ALWAYS push → best-effort PR
+  undraft; a push failure on the conflict path records landing FAILED and exits 1 (BLOCKED,
+  never "safely draft"), and the hard-failure path quarantines before rethrowing. Proven with
+  real remotes: CASE A (conflict → origin branch draft:true, draft outcome), CASE B (conflict +
+  dead remote → BLOCKED/failed/exit 1, no safe-restore claim), CASE C (hard failure → draft
+  restored AND pushed before exit, landing failed, gate PASS), plus the lost-push retry.
+- **Recovery truth — announcement fails closed.** A crash between the merge and main leaves
+  durable `announced:null`; a recovery omitting `--announced` silently finalized unknown.
+  `finalizeLandingRecovery` now refuses when neither the durable state nor the flag carries the
+  fact; `--announced` accepts `ok|failed|skipped` (skipped = no announce URL — the one honest
+  null), and the land path's printed retry command always carries one of the three. Proven from
+  the real merged-but-unfinalized state, not a pre-seeded one.
+- **FINAL lifecycle proof.** One deterministic 12-step test: Run A publishes → Run B same slug
+  → REAL answers routing picks B despite A live → gate PASS → hard failure + remote quarantine
+  → retry → real merge (performed by a gh-side clone) + finalization crash → recovery refuses
+  A's old PR → refuses missing announce fact → recovers with B's PR → B published, durably on
+  origin.
+
+**Validation this pass:** full gates re-run (build · lint · typecheck · full vitest suite incl.
+the new 18-test blocker suite); results recorded in the PR's acceptance matrix.

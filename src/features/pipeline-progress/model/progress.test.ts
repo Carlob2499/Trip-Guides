@@ -411,3 +411,111 @@ describe("deriveNotePanel with open non-blocking questions (M7)", () => {
     expect(panel.placeholder).not.toBe(null);
   });
 });
+
+/* ── Hardening pass (2026-08-20): publication belongs to the run; landing truth is its own fact ── */
+
+describe("adaptV2Snapshot — run-scoped publication + landing outcome (R6/R11)", () => {
+  it("exposes the RUN's own publication and landing facts", () => {
+    const snap = adaptV2Snapshot(v2Run());
+    expect(snap.published).toBe(false);
+    expect(snap.landingOutcome).toBe("pending"); // absent landing block = pending, the schema default
+    const merged = adaptV2Snapshot(v2Run({
+      publication: { published: true, deployedLive: null },
+      landing: { outcome: "merged", pr: 80, mergedAt: "2026-08-19T09:00:00Z" },
+    }));
+    expect(merged.published).toBe(true);
+    expect(merged.landingOutcome).toBe("merged");
+  });
+
+  it("gate PASS before the merge stays UNPUBLISHED — the exact Run-B-at-gate state", () => {
+    const snap = adaptV2Snapshot(v2Run({
+      status: "complete",
+      stages: {
+        scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" }, passA: { status: "complete", endedAt: "2026-08-17T10:02:00Z" },
+        passB: { status: "complete", endedAt: "2026-08-17T10:03:00Z" }, reconcile: { status: "complete", endedAt: "2026-08-17T10:04:00Z" },
+        critic: { status: "complete", endedAt: "2026-08-17T10:05:00Z" },
+      },
+      landingGate: { status: "passed", checkedAt: "2026-08-17T10:06:00Z", failure: null },
+    }));
+    expect(snap.published).toBe(false);
+    expect(snap.landingOutcome).toBe("pending");
+    // Run-scoped published (NOT main's draft-flag probe) keeps the page honest: not done.
+    const v = deriveProgress(snap.state, {
+      now: new Date("2026-08-17T10:07:00Z"), published: snap.published as boolean,
+      runStatus: snap.runStatus, landingOutcome: snap.landingOutcome,
+    });
+    expect(v.isDone).toBe(false);
+    expect(derivePageState({ view: v, hasRun: true, blockingForks: 0, openQuestions: 0 })).toBe("running");
+  });
+});
+
+describe("landing failure and draft parking render truthfully (R11)", () => {
+  const landedView = (outcome: "failed" | "draft") => {
+    const snap = adaptV2Snapshot(v2Run({
+      status: "complete",
+      stages: {
+        scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" }, passA: { status: "complete", endedAt: "2026-08-17T10:02:00Z" },
+        passB: { status: "complete", endedAt: "2026-08-17T10:03:00Z" }, reconcile: { status: "complete", endedAt: "2026-08-17T10:04:00Z" },
+        critic: { status: "complete", endedAt: "2026-08-17T10:05:00Z" },
+      },
+      landingGate: { status: "passed", checkedAt: "2026-08-17T10:06:00Z", failure: null },
+      landing: outcome === "failed"
+        ? { outcome: "failed", detail: "gh pr merge: HTTP 401" }
+        : { outcome: "draft", pr: 92 },
+    }));
+    return { snap, view: deriveProgress(snap.state, {
+      now: new Date("2026-08-17T10:07:00Z"), published: snap.published as boolean,
+      runStatus: snap.runStatus, landingOutcome: snap.landingOutcome,
+    }) };
+  };
+
+  it("landing FAILED: gate PASS stays visible, publication false, page stalled with its own words", () => {
+    const { view } = landedView("failed");
+    // The verify station (the gate verdict) remains DONE — a landing failure never rewrites it.
+    expect(view.stages.find((s) => s.key === "verified")?.done).toBe(true);
+    expect(view.isDone).toBe(false); // never looks healthy/complete
+    const page = derivePageState({ view, hasRun: true, blockingForks: 0, openQuestions: 0 });
+    expect(page).toBe("stalled");
+    expect(deriveStatusPill(page, view)).toEqual({ text: "Landing failed", tone: "warn" });
+    expect(deriveProgressLine(page, view)).toMatch(/passed its checks.*publishing the guide failed/);
+    expect(deriveProgressLine(page, view)).toMatch(/retry the landing/); // actionable
+  });
+
+  it("landing DRAFT (conflict fallback or pr-intent run): parked for review, unpublished, not 'running'", () => {
+    const { view } = landedView("draft");
+    const page = derivePageState({ view, hasRun: true, blockingForks: 0, openQuestions: 0 });
+    expect(page).toBe("stalled");
+    expect(deriveStatusPill(page, view)).toEqual({ text: "Awaiting review", tone: "warn" });
+    expect(deriveProgressLine(page, view)).toMatch(/draft pull request for human review/);
+    expect(deriveProgressLine(page, view)).toMatch(/Nothing publishes until it lands/);
+  });
+
+  it("a RESEARCH failure still outranks landing words — the run itself broke", () => {
+    const snap = adaptV2Snapshot(v2Run({ status: "failed", failure: { class: "agent-failure", detail: "x" } }));
+    const v = deriveProgress(snap.state, {
+      now: new Date("2026-08-17T10:06:00Z"), published: false,
+      runStatus: snap.runStatus, landingOutcome: snap.landingOutcome,
+    });
+    expect(deriveStatusPill("stalled", v).text).toBe("Failed");
+  });
+
+  it("merged + published still ranks done above everything (order preserved)", () => {
+    const snap = adaptV2Snapshot(v2Run({
+      status: "complete",
+      stages: {
+        scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" }, passA: { status: "complete", endedAt: "2026-08-17T10:02:00Z" },
+        passB: { status: "complete", endedAt: "2026-08-17T10:03:00Z" }, reconcile: { status: "complete", endedAt: "2026-08-17T10:04:00Z" },
+        critic: { status: "complete", endedAt: "2026-08-17T10:05:00Z" },
+      },
+      landingGate: { status: "passed", checkedAt: "2026-08-17T10:06:00Z", failure: null },
+      landing: { outcome: "merged", pr: 80, mergedAt: "2026-08-19T09:00:00Z" },
+      publication: { published: true, deployedLive: null },
+    }));
+    const v = deriveProgress(snap.state, {
+      now: new Date("2026-08-19T10:00:00Z"), published: snap.published as boolean,
+      runStatus: snap.runStatus, landingOutcome: snap.landingOutcome,
+    });
+    expect(v.isDone).toBe(true);
+    expect(derivePageState({ view: v, hasRun: true, blockingForks: 0, openQuestions: 0 })).toBe("done");
+  });
+});

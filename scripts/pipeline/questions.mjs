@@ -42,12 +42,22 @@ export function parseQuestions(ledgerMd) {
     .filter((c) => c.id);
 }
 
-// Pure: open cards this issue has not already been told about.
+// Pure: open cards this issue has not already been told about. Dedup is by the EXACT marker the
+// comment format embeds (`<sub>id</sub>`), never substring — a bare includes() let "q-1" in an
+// old comment suppress "q-10" forever (correction pass).
+export function askedMarker(id) {
+  return `<sub>${id}</sub>`;
+}
 export function unaskedOpen(cards, alreadyAsked = "") {
-  return cards.filter((c) => c.status === "open" && !String(alreadyAsked).includes(c.id));
+  const asked = String(alreadyAsked);
+  return cards.filter((c) => c.status === "open" && !asked.includes(askedMarker(c.id)));
 }
 
-// Pure: the comment body, or "" when there is nothing to say.
+// Pure: the comment body, or "" when there is nothing to say. Copy discipline (correction pass):
+// research may still be RUNNING when this posts, so nothing here claims the guide is complete —
+// and there is no issue-comment ingestion path, so nothing invites a reply here. The traveler's
+// real controls are the progress page's answer box (linked in the scaffold reply on this same
+// issue) and the guide's ✎ Request-a-change button.
 export function formatComment(open) {
   if (!open.length) return "";
   const lines = [
@@ -55,7 +65,7 @@ export function formatComment(open) {
       ? "**One decision came up while building your guide.**"
       : `**${open.length} decisions came up while building your guide.**`,
     "",
-    "Research never waits on an answer, so each was built on the assumption below — your guide is complete either way. If an assumption is wrong, use the **✎ Request a change** button on the guide (or reply here) and it gets fixed without rebuilding anything.",
+    "Research never waits on an answer — each was built on the assumption below and the work carries on either way. To answer, use the answer box on your guide's **progress page** (linked in the reply above), or the **✎ Request a change** button on the guide once it's ready; either routes your answer into the pipeline.",
     "",
   ];
   open.forEach((o, i) => {
@@ -69,16 +79,19 @@ export function formatComment(open) {
 
 // ── answers, back into the run that asked (M6, Pipeline V2) ──────────────────
 
-/** Pure routing decision for a traveler answer: while research is ACTIVE (stages incomplete,
-    guide still a draft, a research branch exists) the answer belongs to that run's ledger —
-    a change run would fork from main and edit the scaffold while the real work sits on the
-    research branch. Published/complete guides keep the change-run behavior unchanged. */
+/** Pure routing decision for a traveler answer. PRECEDENCE (Codex blocker 1, 2026-08-20):
+    an ACTIVE research run with a branch on origin owns the answer BEFORE any historical
+    publication fact is consulted — Run A being live on main must never steal Run B's answer
+    into the change lifecycle while Run B is mid-research (or parked complete-but-unmerged) on
+    its branch. Only when NO research run owns the answer does publication route it to a
+    change run. A change run would fork from main and edit the scaffold while the real work
+    sits on the research branch, which is exactly the mis-route this ordering forbids. */
 export function routeAnswers({ hasAnswers, researchActive, researchBranch, published }) {
   if (!hasAnswers) return { target: "change", branch: null, reason: "no dispatched answers — ledger-driven change run" };
-  if (published) return { target: "change", branch: null, reason: "guide is published — a change run absorbs the answers" };
   if (researchActive && researchBranch) {
-    return { target: "research", branch: researchBranch, reason: "research is active — the answers go to that run's ledger, and the run absorbs them" };
+    return { target: "research", branch: researchBranch, reason: "an active research run owns the slug — the answers go to that run's ledger (a published prior run is history, not the owner)" };
   }
+  if (published) return { target: "change", branch: null, reason: "guide is published and no active research run owns the answer — a change run absorbs it" };
   return {
     target: "change",
     branch: null,
@@ -86,6 +99,72 @@ export function routeAnswers({ hasAnswers, researchActive, researchBranch, publi
       ? "research looks active but no research branch exists on origin — change run (it queues behind research in the guide-<slug> group)"
       : "no active research — a change run absorbs the answers",
   };
+}
+
+/** The REAL answers-route resolution, IO included (extracted from the CLI so the seam is
+    behaviorally testable against a real origin — Codex blocker 1). ACTIVE RESEARCH OWNERSHIP
+    IS RESOLVED BEFORE HISTORICAL SLUG PUBLICATION: both research namespaces are inspected on
+    origin unconditionally, the shared active-generation resolver decides ownership, and only
+    when it finds no answer-owning run does main's publication state send the answer to the
+    change lifecycle. Dual-active refuses explicitly; unreadable committed state refuses rather
+    than guesses. Returns { target, branch, reason } or { error } / { conflict: true }. */
+export async function resolveAnswerRouting(slug, {
+  hasAnswers,
+  cwd = ROOT,
+  guidesDir = path.join(ROOT, "src", "content", "guides"),
+  git = null,
+} = {}) {
+  const { execFileSync } = await import("node:child_process");
+  const runGit = git || ((args, opts = {}) => execFileSync("git", args, { cwd, encoding: "utf8", ...opts }));
+  const { resolveActiveGeneration } = await import("../../src/lib/run-generation.mjs");
+
+  // The active truth lives on the research branches, not main. Both namespaces are inspected
+  // BEFORE any publication check, and the decision itself is THE shared active-generation
+  // resolver (src/lib/run-generation.mjs) — the same semantic Progress, questions and events
+  // read through, so no subsystem can invent its own precedence rule. Matrix: active V2 wins;
+  // an active V1 rollback outranks a stale complete-draft V2; both genuinely active REFUSES;
+  // a merged V2 remnant is history and owns nothing.
+  const inspect = (b, stateFile) => {
+    try {
+      runGit(["ls-remote", "--exit-code", "--heads", "origin", b], { stdio: "pipe" });
+    } catch { return { exists: false }; }
+    try {
+      runGit(["fetch", "--depth=1", "origin", b], { stdio: "pipe" });
+      const raw = runGit(["show", `FETCH_HEAD:${stateFile}`], { stdio: ["ignore", "pipe", "pipe"] });
+      return { exists: true, state: JSON.parse(raw) };
+    } catch (err) {
+      return { exists: true, error: err.message };
+    }
+  };
+  const v2 = inspect(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`);
+  const v1 = inspect(`research/${slug}`, `guides-intake/${slug}/state.json`);
+  for (const [b, r] of [[`research-v2/${slug}`, v2], [`research/${slug}`, v1]]) {
+    if (r.error) return { error: `${b} exists but its committed state is unreadable: ${r.error}` };
+  }
+  const resolved = resolveActiveGeneration({
+    v2Exists: v2.exists, v2State: v2.state ?? null,
+    v1Exists: v1.exists, v1State: v1.state ?? null,
+  });
+  if (resolved.conflict) {
+    // Two generations both mid-research on one slug is not a routing preference — it is a
+    // state error a human untangles. Refusing beats guessing (matrix rule 5).
+    return { conflict: true, v2Status: v2.state?.status };
+  }
+  let researchBranch = null;
+  let researchActive = false;
+  if (resolved.decision === "v2-active" || resolved.decision === "v2-complete-draft") {
+    researchBranch = `research-v2/${slug}`; researchActive = true;
+  } else if (resolved.decision === "v1-active") {
+    researchBranch = `research/${slug}`; researchActive = true;
+  }
+
+  // Historical publication is consulted ONLY after active ownership resolved to nothing —
+  // a published Run A on main never outranks Run B's live research branch.
+  let published;
+  const metaPath = path.join(guidesDir, slug, "_guide.json");
+  try { published = existsSync(metaPath) && !JSON.parse(await readFile(metaPath, "utf8")).draft; } catch { published = false; }
+
+  return routeAnswers({ hasAnswers, researchActive, researchBranch, published });
 }
 
 /** Pure: mark ledger question cards answered. For each {id, answer}: find the `### <id>` card,
@@ -143,7 +222,13 @@ export async function surfaceQuestions({ slug, issue, intakeDir = INTAKE_DIR, js
   let asked = "";
   if (issue) {
     try { asked = gh(["issue", "view", String(issue), "--json", "comments", "-q", "[.comments[].body] | join(\"\\n\")"]); }
-    catch { asked = ""; }
+    catch (err) {
+      // FAIL SAFE, not blind (correction pass): if the existing comments cannot be read, "no
+      // comments" is a GUESS that duplicates every past notification. Skip this posting — the
+      // next run retries with the dedup intact — and say so where a maintainer will see it.
+      console.error(`::warning::[questions] could not read #${issue}'s comments (${err.message}) — skipping this notification rather than risking duplicates; the next run retries.`);
+      return 0;
+    }
   }
 
   const open = unaskedOpen(cards, asked);
@@ -165,8 +250,9 @@ export async function surfaceQuestions({ slug, issue, intakeDir = INTAKE_DIR, js
     gh(["issue", "comment", String(issue), "--body", body]);
     console.log(`[questions] surfaced ${open.length} on #${issue}`);
   } catch (err) {
-    // Never fails the run: a notification hiccup must not turn a good research pass red.
-    console.error(`[questions] could not comment on #${issue}: ${err.message}`);
+    // Never fails the run — but the delivery failure is OBSERVABLE (a ::warning:: annotation),
+    // never disguised as success (correction pass).
+    console.error(`::warning::[questions] could not comment on #${issue}: ${err.message} — the traveler was NOT notified; the next run retries.`);
   }
   return 0;
 }

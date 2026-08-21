@@ -54,11 +54,13 @@ export const STALLED: PipelineState = {
   notes: [],
 };
 
-/* Live run telemetry in the shape guides-intake/<slug>/events.json WILL have. Nothing writes
-   that file yet (see model/run-events.ts) — this seed exists so the parser and the panels are
-   tested against a real shape rather than against an empty object, NOT so the UI can show it.
-   The page never renders a seed: an invented feed over a real run is the page lying. */
+/* Live run telemetry in the shape the V2 emitter (scripts/pipeline/v2/events.mjs) writes to
+   guides-intake/<slug>/events.json — runId-stamped, because telemetry belongs to exactly one
+   run. This seed exists so the parser and the panels are tested against a real shape rather
+   than against an empty object, NOT so the UI can show it. The page never renders a seed: an
+   invented feed over a real run is the page lying. */
 export const RUN_EVENTS: RunEvents = {
+  runId: "testland-20260719-abc123",
   available: true,
   fetches: [
     { at: "2026-07-19T10:21:03.000Z", url: "https://www.visitdenmark.com/denmark/plan-your-trip", status: 200 },
