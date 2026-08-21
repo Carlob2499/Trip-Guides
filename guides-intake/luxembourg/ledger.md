@@ -28,7 +28,13 @@
 
 | Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
 |------|--------------------|--------------------------|--------------------|---------------------------------|
-|      |                    |                          |                    |                                 |
+| Bock Casemates hours/price | €11, 09:45–19:00 daily (fetched luxembourg-city.com) | Independently fetched the same page, same figures; investigated an off-peak crowd claim but found no dated firsthand source | AGREE — shipped as-is | Two independent fetches of the same T0 source is strong corroboration; Bock's own crowd timing stays unclaimed rather than sourced to SEO content |
+| Pfaffenthal Panoramic Elevator | Free, daily 05:45–01:00 (fetched vdl.lu + luxembourg-city.com) | Same facts, independently fetched from visitluxembourg.com | AGREE — shipped as-is | Cross-domain corroboration of the same official fact |
+| Free nationwide public transport | Free since 1 Mar 2020 (fetched mobiliteit.lu) | Identical claim, same source URL | AGREE — shipped as-is | — |
+| Chemin de la Corniche / Wenzel Circular Walk | Described the Corniche as "the spine of the Wenzel Circular Walk," not separately sourced | Found and fetched the walk's own official page (visitluxembourg.com) | AGREE (B-only citation) — no guide text change, evidence.v2.json now carries the direct T0 source | B closed a citation gap rather than surfacing new content |
+| Vianden Castle vs. Mullerthal/Echternach as the one half-day trip | Shipped Vianden Castle (fortifications, priority #1), full T0 hours/price + R3 transport depth + reservation check, corrected the stale "bus 570" claim to line 181 | Independently proposed Echternach/Mullerthal instead (direct low-risk bus, corroborated quiet-at-opening waterfall) — partly reasoning from the same stale "bus 570" figure A had already disproven | CONFLICT, resolved → Vianden Castle kept as the built trip; Mullerthal/Echternach retained as a flagged alternative (status: detour) on the Vianden sights card | Recommendation-changing disagreement — see `dis-vianden-vs-mullerthal-halfday` in evidence.v2.json and traveler question q-luxembourg-1 |
+| Walk-in dining matching "no formal booking" | Shipped Mousel's Cantine (dinner needs a call), Oberweis, the market; rejected Um Plateau/Brasserie Guillaume for booking friction | Independently found and T0-verified two genuinely walk-in-only spots — Kaito Ramen (daily) and Manzoku Ramen Bar (Wed–Sat), each corroborated on crowd timing by ≥2 independent firsthand sources; rejected Um Dierfgen/Beim Siggy/Chiggeri for the same reasons A would have | B-only, ADOPT — both added to `08-food-and-shopping.json`; Manzoku's exact address flagged ⚠ (not in B's evidence) | B's native French-language sweep surfaced these; English-only search in Pass A did not |
+| Languages spoken / practical visitor language | ~80% English backup (search-preview Wikipedia) | Same facts with a fetched, more detailed source (lingoda.com) naming French as the most practically useful single language | AGREE — no guide text change; stronger citation available for a future edit | — |
 
 ## Discovery leads (Pass B — native-first)
 > OPTIONAL accelerant, filled by an interactive deep-research sweep BEFORE the pipeline runs
@@ -63,6 +69,7 @@
 | Villa Vauban | shipped | y |
 | Notre-Dame Cathedral | shipped | y |
 | Grand Ducal Palace (exterior — interior tours are summer-only) | shipped | y |
+| Wenzel Circular Walk (Pass B — official self-guided route, already reflected in the Corniche card) | shipped | y |
 | Vianden Castle (half-day trip) | shipped | y |
 
 ### Priority 2: Food & dining
@@ -75,6 +82,12 @@
 | Am Tiirmschen | rejected: permanently closed (end of Nov 2023, per its own manager's account to local press) | y |
 | Um Plateau | rejected: its own listing pushes online table reservations, against the traveler's stated no-booking preference | y |
 | Brasserie Guillaume | rejected: couldn't confirm walk-in policy against an official source within budget | y |
+| Kaito Ramen (Pass B) | shipped | y |
+| Manzoku Ramen Bar (Pass B) | shipped | y |
+| Konrad Cafe & Bar (Pass B) | rejected: only one directly-fetched firsthand source secured within budget, short of the ≥2-independent corroboration bar for a "locals go here" claim | y |
+| Beim Siggy (Pass B) | rejected: couldn't corroborate firsthand within the two-attempt fetch budget (dead blog, TripAdvisor 403 on every attempt) | n |
+| Chiggeri (Pass B) | rejected: consistently upscale fine dining — wrong register for "no formal booking" | n |
+| Um Dierfgen (Pass B) | rejected: consistent secondary reports describe it as effectively needing a reservation at lunch and dinner; operator site itself returned 403 | n |
 
 ### Priority 3: Nature / outdoors
 
@@ -86,6 +99,7 @@
 | Pétrusse Valley | shipped | y |
 | Vianden Chairlift | rejected: couldn't confirm current price against a fetched official source — conflicting search figures (€6.50 / €9 / €16-per-couple) | n |
 | Echternach & Müllerthal (alternative half-day/day trip) | rejected: a real option, but the traveler wants at most one worthwhile trip out, and Vianden Castle scores higher on the trip's top-ranked culture/history priority | y |
+| Mullerthal Trail — Echternach loop (Pass B, independently researched) | conflict-resolved: direct low-risk bus (line 201) and corroborated quiet-at-opening Schiessentumpel waterfall — a genuinely strong alternative to Vianden for the trip's thinnest priority, but Vianden was kept as the built trip (priority #1 alignment + complete depth research); retained as a flagged alternative, not shipped as the day plan | y |
 | Schengen (Moselle tripoint) | rejected: more a photo-op than a culture/history or nature-depth stop, further out with a weaker transit connection than Vianden | n |
 
 ## Questions for the traveler (research emits; traveler answers on the progress page)
@@ -93,8 +107,8 @@
 > builds on until the traveler answers. See src/features/intake-questions/ for the model.
 
 ### q-luxembourg-1
-- **Q:** We found one strong half-day trip out of the city — Vianden Castle, about an hour away by free train + bus. Want it built into the plan, or would you rather stay in Luxembourg City the whole time?
-- **Assumed:** Building it in, on Sunday (day 3) morning, with the valley walk filling the same afternoon.
+- **Q:** We built in one half-day trip out of the city — Vianden Castle (about an hour away by free train + bus), since fortifications/history is your #1 priority. Our second research pass also turned up a genuinely good alternative for a more outdoors/hiking-focused half day: the Mullerthal Trail's Echternach loop, a direct free bus with no transfer, and reportedly much quieter right at opening. Happy to swap if hiking through a beech-wood gorge and waterfall appeals more than another castle — otherwise we'll leave it as Vianden.
+- **Assumed:** Building in Vianden Castle on Sunday (day 3) morning, with the valley walk filling the same afternoon; Mullerthal/Echternach noted as the alternative if you'd rather swap.
 - **Context:** Day 3 (Sun Oct 18) and the Sights tab's Vianden Castle card.
 - **Status:** open
 
@@ -112,3 +126,5 @@
 - **2026-08-21 — `src/data/countries.mjs` has no "Luxembourg" entry (code-layer gap, out of this pass's scope).** This guide's `country: "Luxembourg"` won't resolve an accent colour, currency, timezone fallback, or public-holiday ISO code from the shared country table — every other guide in the repo (Denmark, South Korea, Japan, Germany, Portugal, and 20+ European countries) has a row; Luxembourg does not. `_guide.json` works around the accent (explicit `theme` override) and timezone (explicit `tz: "Europe/Luxembourg"`) at the content layer, but currency-conversion and the `holidays` section still depend on the missing table row, and `src/data/countries.mjs`'s own `EU112_COUNTRIES` set (which backstops the emergency-SOS sheet) also omits Luxembourg — an EU member with the same 112 number as every neighbor it does list. Both are one-line additions to a code file, which sits outside this run's `src/content/guides/luxembourg/` + `guides-intake/luxembourg/` scope. **This needs a code-layer fix before the guide can fully render currency/holidays/emergency-SOS — flagging for the reconcile/critic stage or a follow-up change run, not silently working around it in content.**
 - **2026-08-21 — Budget denominated in € (local currency), not $ (the intake form's shorthand).** The intake's "$75–150/day" is the scaffolder's generic mid-range label, not a stated currency preference; every other shipped guide (Denmark, Korea) prices its budget section in the destination's own currency. Luxembourg uses the euro, so the budget section and `facts.json` price registry are in €, with `budgetTarget` keeping the original "$75–150/day" label as context only.
 - **2026-08-21 — Grand Ducal Palace kept in Sights despite being exterior-only for this trip.** The intake ranks culture/history first and specifically names "the museums in the upper town" — the Palace sits in the same cluster and is worth a walk-by even without an interior tour in October. Its card and a `divergences` entry both say so explicitly, so it doesn't read as a bait-and-switch.
+- **2026-08-21 (reconcile) — Two Pass-B-only walk-in restaurants added: Kaito Ramen and Manzoku Ramen Bar.** Both are T0-verified (operator's own site fetched) as genuinely walk-in-only with zero reservation systems, and both were independently corroborated on crowd timing by ≥2 firsthand sources — a stronger match to the traveler's stated "eat well without booking anything formal" preference than anything Pass A shipped. Added to `08-food-and-shopping.json`; Manzoku's exact street address could not be independently confirmed this pass and ships with an explicit ⚠ rather than a guessed address.
+- **2026-08-21 (reconcile) — Vianden Castle kept as the trip's one half-day-out over Pass B's independently researched Mullerthal Trail/Echternach alternative.** Pass B proposed swapping to Echternach (direct low-risk bus, corroborated-quiet Schiessentumpel waterfall) to serve the trip's thinner nature/outdoors priority, reasoning partly from the same stale "bus 570" Ettelbrück connection Pass A had already disproven. Vianden was kept given its #1-priority alignment (fortifications) and already-complete transport/reservation depth research; Mullerthal/Echternach is retained as a flagged alternative on the Vianden sights card and the traveler is asked to confirm or swap (see `q-luxembourg-1`). Full investigation recorded as `dis-vianden-vs-mullerthal-halfday` in `evidence.v2.json`.

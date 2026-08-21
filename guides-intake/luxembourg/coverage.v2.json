@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "luxembourg",
+  "runId": "luxembourg-20260821-99c13e",
+  "asks": [
+    {
+      "id": "cities",
+      "ask": "Luxembourg City",
+      "status": "covered",
+      "where": [
+        "05-transit.json#orientation-map-luxembourg-city",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "2026-10-16 – 2026-10-19",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-holidays-2026-no-october-overlap",
+        "ev-october-weather"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Culture / history",
+      "status": "covered",
+      "where": [
+        "07-sights.json#top-sights",
+        "06-days.json#day-by-day",
+        "07-sights.json#vianden-castle"
+      ],
+      "evidenceIds": [
+        "ev-bock-casemates-hours-price",
+        "ev-mnha-hours-price",
+        "ev-m3e-hours-price",
+        "ev-villa-vauban-hours-price",
+        "ev-vianden-castle-hours-price",
+        "ev-wenzel-circuit-route"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-2",
+      "ask": "Food & dining",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat"
+      ],
+      "evidenceIds": [
+        "ev-marche-days-hours",
+        "ev-mousels-cantine-hours-price",
+        "ev-oberweis-history",
+        "ev-manzoku-policy",
+        "ev-kaito-policy",
+        "ev-kaito-crowd-redisdead"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-3",
+      "ask": "Nature / outdoors",
+      "status": "covered",
+      "where": [
+        "07-sights.json#grund-the-alzette-valley",
+        "05-transit.json#pfaffenthal-panoramic-lift",
+        "07-sights.json#vianden-castle"
+      ],
+      "evidenceIds": [
+        "ev-grund-description",
+        "ev-pfaffenthal-lift-hours",
+        "ev-petrusse-valley-description",
+        "ev-bus201-route",
+        "ev-mullerthal-crowd-mllebougeotte",
+        "ev-mullerthal-crowd-emeraudetrip"
+      ],
+      "reason": null
+    },
+    {
+      "id": "pace",
+      "ask": "balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "travel-style",
+      "ask": "Balanced",
+      "status": "covered",
+      "where": [
+        "07-sights.json#top-sights",
+        "07-sights.json#vianden-castle"
+      ],
+      "evidenceIds": [
+        "ev-mullerthal-crowd-mllebougeotte",
+        "ev-mullerthal-crowd-emeraudetrip",
+        "ev-kaito-crowd-redisdead"
+      ],
+      "reason": null
+    },
+    {
+      "id": "budget",
+      "ask": "Mid-range ($75–150/day)",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "party",
+      "ask": "Two friends in their 30s, first visit. Comfortable walkers, fine with stairs and hills, planning to get around on foot and by public transport.",
+      "status": "covered",
+      "where": [
+        "01-plan.json#booking-checklist",
+        "05-transit.json#key-transit-routes",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-transit-free-nationwide"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "2",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "passport-countries",
+      "ask": "United States",
+      "status": "covered",
+      "where": [
+        "01-plan.json#entry-documents"
+      ],
+      "evidenceIds": [
+        "ev-entry-us-visa-free"
+      ],
+      "reason": null
+    },
+    {
+      "id": "comments",
+      "ask": "A short city break — three nights, one hotel, no moving around. Most interested in the old fortifications and the museums in the upper town, and in walking down into the valley below it rather than only seeing the city from above. Want to eat well without booking anything formal. No car planned. If there is one worthwhile half-day trip out of the city we would consider it, but we are not trying to see the whole country.",
+      "status": "covered",
+      "where": [
+        "07-sights.json#top-sights",
+        "07-sights.json#grund-the-alzette-valley",
+        "08-food-and-shopping.json#what-to-eat",
+        "07-sights.json#vianden-castle"
+      ],
+      "evidenceIds": [
+        "ev-vianden-route-line-181",
+        "ev-manzoku-policy",
+        "ev-kaito-policy"
+      ],
+      "reason": null
+    }
+  ]
+}

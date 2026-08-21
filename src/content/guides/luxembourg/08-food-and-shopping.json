@@ -5,7 +5,7 @@
     "title": "What to eat",
     "phase": "daily",
     "rank": 2,
-    "intro": "All three of these are walk-in — no advance booking needed for lunch. Mousel's Cantine gets busy at dinner, so a same-day call helps if arriving in the evening.",
+    "intro": "All but one of these are walk-in with no advance booking, ever. Mousel's Cantine gets busy at dinner, so a same-day call helps if arriving in the evening — Kaito Ramen and Manzoku Ramen Bar below are genuine no-reservation fallbacks if that doesn't pan out.",
     "items": [
       {
         "name": "Marché Place Guillaume II",
@@ -51,6 +51,31 @@
         "why": "Family-run since 1964 and supplier to the Grand Ducal court since 1999 — a coffee-and-pastry break between old-town sights, not a full meal.",
         "place_id": "__VERIFICATION_REQUIRED__",
         "source_url": "https://www.oberweis.lu/en_US/la-maison",
+        "verified_on": "2026-08-21",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Kaito Ramen",
+        "area": "Place de Paris, near the central train station",
+        "hours": "Daily 11:30–21:30",
+        "book": "walk-in",
+        "how": "Walk-in / first-come-first-served every day of this trip's stay; only groups of 8+ can book ahead.",
+        "crowd_tip": "Gets genuinely busy at midday — arriving by or around noon, or going for dinner instead, is the practical way to skip the wait.",
+        "why": "Open every day of the Oct 16–19 stay with zero reservation system for parties this size — the most reliable no-booking dinner or lunch fallback on this list.",
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "source_url": "https://www.kaito.lu/about-us",
+        "verified_on": "2026-08-21",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Manzoku Ramen Bar",
+        "area": "⚠ Exact street address not independently confirmed this pass — check manzoku.lu before going",
+        "hours": "Wed–Sat only (Wed–Thu 11:30–14:00; Fri 11:30–14:00 & 18:00–21:00; Sat 18:00–22:00), closed Sun–Tue",
+        "book": "walk-in",
+        "how": "No reservation system exists at all — once full, seating runs off a virtual waitlist app.",
+        "why": "Genuinely walk-in-only by design, matching a no-formal-booking preference exactly — but only Friday and Saturday of this Fri–Mon stay fall inside its open days.",
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "source_url": "https://www.manzoku.lu/",
         "verified_on": "2026-08-21",
         "shelf_life": "hours"
       }
