@@ -168,6 +168,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
+
+      # The trusted product entry (new-guide.yml's workflow_call) runs a REUSED workflow at the
+      # CALLER's triggering SHA — the issue-label event's SHA, which predates the scaffold job's
+      # own commit to the default branch (both jobs are steps of the SAME workflow run). The
+      # checkout above therefore lands on pre-scaffold main, and this run's slug is invisible to
+      # V2 init even though the scaffold already exists on the real remote default branch
+      # (first production canary, malta/#69, run 32454262582 — recorded live evidence). A
+      # workflow_dispatch's checked-out ref is the developer's own choice and must never be
+      # silently replaced, so this refresh runs ONLY for the non-dispatch (trusted) path — before
+      # setup-node/npm ci, so nothing installs or runs against the stale pre-scaffold tree.
+      - name: Refresh the trusted product checkout to the post-scaffold default branch
+        if: github.event_name != 'workflow_dispatch'
+        env:
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          git fetch --no-tags origin "$BASE"
+          git checkout -B "$BASE" FETCH_HEAD
+
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
