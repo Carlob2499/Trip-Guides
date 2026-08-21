@@ -49,6 +49,24 @@ export async function flipDraft(slug, { guidesDir = GUIDES_DIR } = {}) {
   return { ok: true, slug, country: guide.country || "", metaPath: located.metaPath };
 }
 
+// The INVERSE flip (hardening pass, 2026-08-20): re-quarantine a guide as a draft. Exists for
+// exactly one caller — the merge-conflict fallback in `pipeline land`. Auto-landing removes the
+// draft flag BEFORE the merge attempt (the flip must ride the merge); when that merge then hits
+// a conflict and falls back to a draft PR, the branch would otherwise carry publishable,
+// undrafted guide content that a human resolving the conflict could merge — silently bypassing
+// the publication contract. Restoring draft:true keeps every NON-merged outcome unpublished.
+// Idempotent: already-draft returns { ok: false, error: NOT_DRAFT }-inverse ({ changed: false }).
+export async function restoreDraft(slug, { guidesDir = GUIDES_DIR } = {}) {
+  const located = resolveGuidePath(slug, guidesDir);
+  if (!located) return { ok: false, error: PUBLISH_ERRORS.NOT_FOUND, slug };
+  const guide = JSON.parse(await readFile(located.metaPath, "utf8"));
+  if (guide.draft === true) return { ok: true, changed: false, slug, metaPath: located.metaPath };
+  const next = { draft: true, ...guide };
+  next.draft = true; // draft leads the meta file, matching the scaffolder's shape
+  await writeFile(located.metaPath, JSON.stringify(next, null, 2) + "\n");
+  return { ok: true, changed: true, slug, metaPath: located.metaPath };
+}
+
 // THE evidence gate — build + networked verify. One implementation, used by the automated landing
 // path and by the manual `pipeline publish` override alike, so "published" means the same thing
 // whoever triggered it. Returns { passed, steps: [{ cmd, code }] }.

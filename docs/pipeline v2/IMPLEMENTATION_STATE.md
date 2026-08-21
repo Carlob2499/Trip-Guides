@@ -1094,3 +1094,62 @@ selector-ON `/new` product canary and verify the two-phase landing + safety noti
 **Remaining live-only acceptance gaps (impossible pre-merge, by design):** the real default-
 branch product auto-merge (requires this PR's code ON main + selector ON), and the Worker
 `/answer` hop (owner key not available to any session; unit + prior-live evidence stands).
+
+## Final integration-hardening pass (2026-08-20, Fable) — R1–R13 on PR #68
+
+The pre-Codex deterministic hardening sweep. Every requirement was first re-confirmed against
+the current head, then fixed with a behavioral test at a real seam. Summary (full detail in
+PR #68's body and the suites named):
+
+- **R1 — trusted-invocation authority.** new-guide.yml now invokes research-pass-v2.yml via
+  `workflow_call` (the trusted product entry: the called run executes under the caller's
+  "issues" event); `deriveLandIntent()` (run-state.mjs) mints "auto" ONLY for non-dispatch
+  provenance + default-branch ref + selector "v2". A manual `workflow_dispatch` on main with
+  the selector live now creates a **pr** run. New CLI `land-intent`; the old two-fact shell
+  derivation is gone. Scaffold serialization moved to job-level concurrency so the called
+  research run cannot hold the new-guide slot for hours.
+- **R2/R3/R10 — verified, durable, truth-preserving recovery.** New
+  `scripts/pipeline/v2/landing-truth.mjs`: `verifyMergedPr` (gh-backed: MERGED state, real
+  mergedAt, base + `research-v2/<slug>` head; refuses open/closed-unmerged/unrelated/wrong-
+  base/wrong-head), `resolveDefaultBranch`, `finalizeLandingRecovery` (validates the checkout,
+  verifies, finalizes with GITHUB's mergedAt, commits AND pushes to the remote default branch —
+  push failure = failed recovery). `finalizeMergedLanding` refuses a PR mismatching the
+  recorded landing and preserves a recorded `announced` when the retry omits it; the printed
+  retry command now always carries `--announced`. The land CLI's merged path also verifies
+  before finalizing.
+- **R4 — fresh-run workspace reset.** `resetFreshRunWorkspace` (workspace.mjs) removes the
+  prior run's mutable artifacts (evidence/coverage/passB/feedback/events/geocode + tracked
+  run.v2.json) from a fresh branch and its recorded baseline; CLI `init --branch-fresh` runs it
+  before capturing the scaffold baseline. Proven end-to-end with the REAL Pass-B verifier in a
+  real git repo (pipeline-v2-hardening + lifecycle-proof suites) — previously a re-research's
+  baseline structurally could not pass `verify-passb-workspace`.
+- **R5 — one active-generation resolver.** `src/lib/run-generation.mjs` (plain .mjs, consumed
+  by Node and Vite): active V2 > active V1 > complete-draft V2 > V2 history > none; dual-active
+  = explicit conflict. answers-route AND the Progress gateway (fetchRun/fetchQuestions/
+  fetchRunEvents) consume it; the gateway resolves once per poll batch.
+- **R6/R11 — run-scoped publication + truthful landing rendering.** RunSnapshot now carries
+  the RUN's own `published` + `landingOutcome`; the page keys "Published" on those (Run B never
+  inherits Run A's live guide), landing failed renders "Landing failed" with gate PASS intact,
+  draft renders "Awaiting review", dual-active renders an explicit diagnostic; polling no
+  longer stops on an inherited publication.
+- **R7 — late answers past the cap.** `reopenForAnswers` grants a bounded
+  `V2_REOPEN_ATTEMPT_GRANT` (2) above the exhausted cap — human-gated only; the autonomous cap
+  itself is unchanged.
+- **R8 — gate truth ≠ landing truth.** The land CLI emits the gate verdict on the hard-failure
+  path; the workflow's crash handler no longer rewrites a passed gate into gate FAIL and never
+  pushes to a merged run's deleted branch (the zombie-branch resurrect); a passed gate on a
+  pr-mode landing crash is preserved explicitly.
+- **R9 — conflict fallback unpublished.** `restoreDraft` (publish.mjs) re-quarantines the
+  guide on the passed+auto draft (conflict) outcome, committed to the fallback branch — a
+  human merging the conflict PR merges a DRAFT.
+- **R12 — HANDOFF_ARCHIVE.md** re-normalized to pure LF + single trailing newline; the PR diff
+  is now the genuine snapshot rotation only.
+- **R13 — deterministic lifecycle proof.** `pipeline-v2-lifecycle-proof.test.mjs` walks
+  /new→A(auto)→passes→gate→verified merge→finalized publication→Progress-done→fresh B→
+  unpublished B→B owns questions/events/answers→clean B Pass-B workspace, against the real
+  modules with mocked GitHub only.
+
+**Validation:** full vitest suite 168 files / 2,776 tests green (incl. the three new suites) ·
+typecheck 0 errors · lint 0 errors · build clean · axe a11y 55/55 · dist grepped for the
+retired Progress wording. **Not executable locally:** the live product auto-merge and Worker
+/answer hop (live-only by design, unchanged); PR CI runs on push.

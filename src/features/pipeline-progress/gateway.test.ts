@@ -166,14 +166,18 @@ describe("createWorkerGateway", () => {
 });
 
 describe("createGithubGateway().fetchRunEvents", () => {
-  it("reads the run's own branch and shapes what it finds", async () => {
+  it("reads the run's own branch and shapes what it finds (after the generation resolution reads)", async () => {
     const { impl, calls } = stubFetch({ "events.json": RUN_EVENTS });
     const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
 
     const out = await gw.fetchRunEvents("testland");
 
-    expect(calls).toHaveLength(1);
-    expect(calls[0].url).toContain("/research-v2/testland/guides-intake/testland/events.json");
+    // Two resolution reads (run.v2.json + state.json) precede the events read — the shared
+    // active-generation resolver decides WHICH branch's events are the run's own.
+    expect(calls).toHaveLength(3);
+    expect(calls[0].url).toContain("/research-v2/testland/guides-intake/testland/run.v2.json");
+    expect(calls[1].url).toContain("/research/testland/guides-intake/testland/state.json");
+    expect(calls[2].url).toContain("/research-v2/testland/guides-intake/testland/events.json");
     expect(out.available).toBe(true);
     expect(out.counters).toEqual({ pages: 148, facts: 62, kept: 51, dropped: 11 });
   });
@@ -186,10 +190,11 @@ describe("createGithubGateway().fetchRunEvents", () => {
     const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
 
     await expect(gw.fetchRunEvents("testland")).resolves.toEqual(EMPTY_RUN_EVENTS);
-    expect(calls).toHaveLength(3);
-    expect(calls[0].url).toContain("/research-v2/testland/");
-    expect(calls[1].url).toContain("/main/guides-intake/testland/");
-    expect(calls[2].url).toContain("/research/testland/");
+    const eventReads = calls.filter((c) => c.url.includes("events.json"));
+    expect(eventReads).toHaveLength(3);
+    expect(eventReads[0].url).toContain("/research-v2/testland/");
+    expect(eventReads[1].url).toContain("/main/guides-intake/testland/");
+    expect(eventReads[2].url).toContain("/research/testland/");
   });
 
   it("a MERGED product run's events stay readable from main after its branch is deleted (I02/I05)", async () => {
@@ -199,8 +204,22 @@ describe("createGithubGateway().fetchRunEvents", () => {
     const out = await gw.fetchRunEvents("testland");
 
     expect(out.available).toBe(true);
-    expect(calls[0].url).toContain("/research-v2/testland/"); // the active branch is still preferred
-    expect(calls[1].url).toContain("/main/guides-intake/testland/");
+    const eventReads = calls.filter((c) => c.url.includes("events.json"));
+    expect(eventReads[0].url).toContain("/research-v2/testland/"); // the branch is still preferred
+    expect(eventReads[1].url).toContain("/main/guides-intake/testland/");
+  });
+
+  it("an ACTIVE V1 run's events come from the V1 branch alone — V2 history on main never renders beside it", async () => {
+    const { impl, calls } = stubFetch({
+      "/research/testland/guides-intake/testland/state.json": { slug: "testland", stages: { scaffold: "x", passA: null } },
+      "/main/guides-intake/testland/events.json": RUN_EVENTS,
+    });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    // V1 emits nothing, so the honest answer is empty — never main's V2 stream.
+    await expect(gw.fetchRunEvents("testland")).resolves.toEqual(EMPTY_RUN_EVENTS);
+    const eventReads = calls.filter((c) => c.url.includes("events.json"));
+    expect(eventReads).toHaveLength(1);
+    expect(eventReads[0].url).toContain("/research/testland/");
   });
 
   it("returns an honestly-empty result rather than throwing on a file it cannot read", async () => {
@@ -288,6 +307,42 @@ describe("createGithubGateway().fetchRun — active runs beat history, across ge
     expect(run.version).toBe(2);
     expect(run.malformed).toBe(true);
     expect(run.state).toBe(null);
+  });
+
+  it("a stale COMPLETE-but-unmerged V2 branch never outranks an ACTIVE V1 branch (resolver CASE A)", async () => {
+    const { impl } = stubFetch({
+      "/research-v2/testland/guides-intake/testland/run.v2.json": { ...V2_RUN, status: "complete" },
+      "/research/testland/guides-intake/testland/state.json": V1_ACTIVE,
+    });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.version).toBe(1);
+    expect(run.conflict).toBe(false);
+  });
+
+  it("BOTH generations genuinely active is an explicit CONFLICT snapshot — no precedence pick (resolver CASE C)", async () => {
+    const { impl } = stubFetch({
+      "/research-v2/testland/guides-intake/testland/run.v2.json": V2_RUN, // status running
+      "/research/testland/guides-intake/testland/state.json": V1_ACTIVE,
+    });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.conflict).toBe(true);
+    expect(run.state).toBe(null); // the page reports the diagnostic, not either run's progress
+  });
+
+  it("the snapshot carries the RUN's OWN publication + landing facts — Run B never inherits Run A's (R6)", async () => {
+    const { impl } = stubFetch({ "run.v2.json": { ...V2_RUN, status: "complete",
+      stages: { scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" }, passA: { status: "complete", endedAt: "2026-08-17T10:02:00Z" }, passB: { status: "complete", endedAt: "2026-08-17T10:03:00Z" }, reconcile: { status: "complete", endedAt: "2026-08-17T10:04:00Z" }, critic: { status: "complete", endedAt: "2026-08-17T10:05:00Z" } },
+      landingGate: { status: "passed", checkedAt: "2026-08-17T10:06:00Z", failure: null },
+      landing: { outcome: "pending" },
+    } });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    // Gate PASS before the merge: still unpublished, landing still pending — the exact facts
+    // the UI needs so an active re-research never reads as published/complete.
+    expect(run.published).toBe(false);
+    expect(run.landingOutcome).toBe("pending");
   });
 
   it("no state anywhere is version 0", async () => {

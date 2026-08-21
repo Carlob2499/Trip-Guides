@@ -15,7 +15,7 @@
 
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, readFile, rm } from "node:fs/promises";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -308,17 +308,26 @@ describe("routing + bounded attempts survive a resume (state on disk)", () => {
 describe("research-pass-v2.yml — wiring", () => {
   const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
 
-  it("is manual-only (workflow_dispatch), and nothing auto-dispatches it", () => {
+  it("is dispatchable + callable ONLY — and only new-guide.yml calls it (the trusted product entry)", () => {
     expect(text).toContain("workflow_dispatch:");
+    expect(text).toContain("workflow_call:");
     expect(text).not.toMatch(/^\s+issues:\s*$/m);
     expect(text).not.toContain("schedule:");
-    // The cutover contract (finalization, I01): /new dispatches V2 ONLY behind the explicit
-    // WAYPOINT_RESEARCH_ENGINE=v2 repository variable; V1 is the unconditional else-default,
-    // so an unset variable can never silently route an intake to the unproven path.
+    // The cutover contract (finalization, I01 + hardening): /new routes to V2 ONLY behind the
+    // explicit WAYPOINT_RESEARCH_ENGINE=v2 repository variable, via the workflow_call job; V1
+    // is the unconditional else-default, so an unset variable can never silently route an
+    // intake to the unproven path.
     const newGuide = readFileSync(path.join(ROOT, ".github", "workflows", "new-guide.yml"), "utf8");
     expect(newGuide).toContain("gh workflow run research-pass.yml");
-    expect(newGuide).toMatch(/if \[ "\$ENGINE" = "v2" \];\s*then\s*\n\s*gh workflow run research-pass-v2\.yml/);
+    expect(newGuide).toContain("uses: ./.github/workflows/research-pass-v2.yml");
+    expect(newGuide).toContain("if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'");
     expect(newGuide).toContain("ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}");
+    // …and new-guide.yml is the ONLY caller in the repo (the trust boundary is structural).
+    const workflowsDir = path.join(ROOT, ".github", "workflows");
+    const callers = readdirSync(workflowsDir)
+      .filter((f) => f.endsWith(".yml") && f !== "new-guide.yml")
+      .filter((f) => readFileSync(path.join(workflowsDir, f), "utf8").includes("uses: ./.github/workflows/research-pass-v2.yml"));
+    expect(callers).toEqual([]);
     // The V2 workflow's own default-branch guard keys on the SAME variable — one switch.
     expect(text).toContain("vars.WAYPOINT_RESEARCH_ENGINE != 'v2'");
   });

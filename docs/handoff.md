@@ -48,37 +48,37 @@
   `merge_pull_request` takes no delete-branch flag. One pass at
   github.com/Carlob2499/Trip-Guides/branches clears all four.
 
-## Snapshot (2026-08-20 — Release-candidate correction pass on PR #68)
+## Snapshot (2026-08-20 — FINAL integration-hardening pass on PR #68, R1–R13)
 
-The integration pass's INTEGRATION_YELLOW understated real product-path defects; the
-correction pass reproduced, fixed and scar-tested every one ON the PR branch (no
-direct-to-main commits). The big four: (1) publication was recorded BEFORE the merge — now a
-two-phase landing transaction (gate verdict pre-merge; `finalizeMergedLanding` writes
-published only after gh CONFIRMS the merge, on main, idempotently; the schema refuses
-published without a merged outcome); (2) the `land` workflow input was an auto-publish
-side-door — REMOVED, intent now derived (default-branch ref + selector) and re-checked at
-landing time, land CLI defaults to pr and refuses escalation; (3) V1 rollback could mutate or
-display historical V2 state — landing keys on exact branch identity, Progress and answers
-routing read active branches before main history, dual-active refuses; (4) a fresh branch over
-merged history silently resumed the terminal run — fresh-run semantics (new runId, prior run
-archived to previousRuns). Also: run-scoped telemetry (runId-stamped events, identity join in
-the UI), safety-notice permission + announce=ok/failed contract, post-merge questions fetch,
-late-answer reopen (reconcile+critic re-open), exact question-ID dedup + truthful copy, one
-landingMode implementation, floors removed repo-wide (CONFLICTING_SPEC resolved per the
-2026-08-17 decision), scorecard human rows now advisory. Full record: IMPLEMENTATION_STATE
-"Release-candidate correction pass".
+The deterministic pre-Codex hardening pass closed thirteen requirements on the PR branch, each
+behaviorally tested. Authority: only the trusted /new flow mints auto intent — new-guide.yml
+now CALLS research-pass-v2.yml (workflow_call; the called run carries the caller's "issues"
+event), and `deriveLandIntent` refuses `workflow_dispatch` outright, so a manual dispatch on
+main with the selector live is still a pr run. Recovery: `finalize-landing` now PROVES the
+merge against GitHub (state/base/head/mergedAt via `landing-truth.mjs`), records GitHub's own
+mergedAt, refuses open/unmerged/unrelated/mismatched PRs, and must push to the remote default
+branch or fail (`finalizeLandingRecovery`, tested against a real bare origin). Fresh runs:
+`resetFreshRunWorkspace` strips the prior run's mutable artifacts from a fresh branch and the
+recorded baseline, proven with the REAL Pass-B verifier. One active-generation resolver
+(`src/lib/run-generation.mjs`) now serves answers routing AND the Progress gateway (run state,
+questions, events) — stale V2 never outranks active V1, dual-active is an explicit conflict.
+Progress keys "Published" on the RUN's own publication (Run B never inherits Run A's), and
+renders landing failed/draft truthfully (gate PASS survives; "Landing failed"/"Awaiting
+review"). Late answers extend the exhausted cap by a bounded reopen grant. The land crash
+handler no longer rewrites a passed gate or resurrects merged branches; the conflict fallback
+restores `draft:true`; announced survives retries; HANDOFF_ARCHIVE re-normalized to LF. New
+suites: pipeline-v2-hardening, run-generation, pipeline-v2-lifecycle-proof (the full A→B
+deterministic lifecycle). Record: IMPLEMENTATION_STATE "Final integration-hardening pass".
 
 ## Where we left off
 
 **PR #68 (fable/pipeline-v2-integration → main) is READY_FOR_CODEX_REVIEW — do not merge it
-from a session.** Verdict PREMERGE_CODE_GREEN / INTEGRATION_YELLOW: zero known code blockers;
-the only remaining gaps are live-only by construction — the default-branch product auto-merge
-(needs this code ON main + selector ON) and the Worker /answer hop (no owner key in sessions).
-First post-merge action: one selector-ON /new canary observing the two-phase landing + safety
-notice live. Selector ABSENT (verified; untouched this pass). V1 present + dispatchable, now
-with the rollback matrix tested. Cleanup: andorra fixture REMOVED on the branch (merge removes
-it from main); PR #67 closed as marked test evidence (its branch research-v2/andorra stays for
-review, then dies in post-merge cleanup); P10–P13 evidence (PR #61, canary/kansai-proof,
-research-v2/kansai-proof, probe/environ, stray environ-probe workflow id 338376924) untouched
-pending sign-off. Full suite 165 files / 2,7xx green + build/lint/typecheck — exact counts in
-PR #68's correction report.
+from a session, do not set the selector, do not run the live canary.** All thirteen hardening
+requirements fixed and behaviorally proven; full suite 168 files / 2,776 tests green + build + lint
++ typecheck + axe a11y (55/55). The only remaining proofs are live-only by construction: the
+default-branch product auto-merge via a real /new (needs this code ON main + selector ON,
+observing the workflow_call provenance end-to-end), and the Worker /answer hop (no owner key
+in sessions). First post-merge action: one selector-ON /new canary observing the two-phase
+landing + safety notice + trusted-invocation authority live. Selector ABSENT (untouched this
+pass). V1 present + dispatchable. Cleanup queue unchanged: PR #67 closed as evidence;
+andorra removed on the branch; P10–P13 evidence untouched pending sign-off.

@@ -33,6 +33,11 @@ export const V2_RESEARCH_STAGES = ["scaffold", "passA", "passB", "reconcile", "c
 // pins the research attempt cap at five for initial V2 compatibility), one automatic redispatch.
 export const V2_ATTEMPT_CAP = 5;
 export const V2_AUTO_RETRY_CAP = 1;
+// A human answer re-opening a completed run grants this many further dispatches for the
+// reopened tail (reconcile → critic → landing). The AUTONOMOUS cap stays what it was — the
+// grant exists only on the human-triggered reopen path, so a run still cannot loop on its own;
+// a late answer arriving at the cap must not be dead on arrival (hardening pass, 2026-08-20).
+export const V2_REOPEN_ATTEMPT_GRANT = 2;
 
 export function runStatePath(slug, intakeDir = INTAKE_DIR) {
   if (!isValidSlug(slug)) throw new ContractError(`invalid run-state slug "${slug}"`);
@@ -387,6 +392,17 @@ export function landingMode(state) {
   return state?.landMode === "auto" && !nextStageV2(state) ? "auto" : "pr";
 }
 
+/** LANDING INTENT AT INIT (hardening pass, 2026-08-20): only the trusted /new product flow may
+    mint an auto-authorized run. new-guide.yml invokes research-pass-v2.yml through workflow_call,
+    so the trusted invocation runs under the CALLER's event ("issues") — while every manual /
+    developer invocation is a `workflow_dispatch`. Being on the default branch with the selector
+    set is necessary but NOT sufficient: a maintainer typing `gh workflow run` on main with the
+    selector live still gets a draft-PR run. Missing/blank provenance fails safe to "pr". */
+export function deriveLandIntent({ eventName = "", onDefault = false, engine = "" } = {}) {
+  const trustedProvenance = Boolean(eventName) && eventName !== "workflow_dispatch";
+  return trustedProvenance && onDefault === true && engine === "v2" ? "auto" : "pr";
+}
+
 // ── the landing transaction (correction pass, 2026-08-20) ────────────────────
 // Gate PASS and merge success are SEPARATE facts, recorded in two phases. Phase 1 (pre-merge,
 // rides the branch): markLandingGate — the gate verdict is a real pre-merge fact. Phase 2 (only
@@ -422,8 +438,16 @@ export async function finalizeMergedLanding(slug, { pr, mergedAt = new Date().to
   if (state.landingGate?.status !== "passed") {
     throw new ContractError(`run ${state.runId} landing gate is "${state.landingGate?.status}" — a merge cannot be finalized past an unpassed gate`);
   }
+  // Run/landing identity must agree: a retry naming a DIFFERENT PR than the one this run's
+  // landing recorded is finalizing someone else's merge — refused, never reconciled by guessing.
+  if (state.landing?.pr && state.landing.pr !== pr) {
+    throw new ContractError(`run ${state.runId} landing records PR #${state.landing.pr} — refusing to finalize it against PR #${pr}`);
+  }
   if (state.landing?.outcome === "merged" && state.publication?.published) return state; // idempotent retry
-  state.landing = { outcome: "merged", pr, mergedAt, announced, finalizedAt: now, detail: null };
+  // Announcement truth survives recovery: a retry that omits --announced must not downgrade a
+  // recorded announced=true/false to unknown. Only an explicit value overwrites.
+  const announcedFact = announced ?? state.landing?.announced ?? null;
+  state.landing = { outcome: "merged", pr, mergedAt, announced: announcedFact, finalizedAt: now, detail: null };
   state.publication.published = true;
   state.publication.publishedAt = state.publication.publishedAt || mergedAt;
   // deployedLive stays exactly as it was (normally null): merged is NOT live.
@@ -453,6 +477,14 @@ export async function reopenForAnswers(slug, { now = new Date().toISOString(), i
   state.failure = null;
   state.landingGate = { status: "pending", checkedAt: null, failure: null };
   state.landing = { outcome: "pending", pr: null, mergedAt: null, announced: null, finalizedAt: null, detail: null };
+  // USER-TRIGGERED REOPEN vs AUTONOMOUS BUDGET (hardening pass): a run that completed AT the
+  // attempt cap would otherwise re-open straight into "stuck" — the next dispatch's budget bump
+  // exceeds the exhausted cap before any answer-absorbing work runs. A human answer is not an
+  // autonomous retry: extend the cap just enough for the reopened tail. Bounded per reopen, and
+  // reopens only ever happen on a real human answer — automatic retries stay capped as before.
+  if (state.attempts.total + V2_REOPEN_ATTEMPT_GRANT > state.attempts.cap) {
+    state.attempts.cap = state.attempts.total + V2_REOPEN_ATTEMPT_GRANT;
+  }
   recomputeResume(state);
   await save(touch(state, now), intakeDir);
   return { state, reopened: true };

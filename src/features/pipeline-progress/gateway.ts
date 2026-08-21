@@ -23,6 +23,10 @@ import type { RunEvents } from "./model/run-events";
 import { parseQuestionsFromIntake } from "../intake-questions/index";
 import type { IntakeQuestion } from "../intake-questions/index";
 import { postToWorker, failureMessage } from "../../lib/worker-client.js";
+// THE shared active-generation resolver (hardening pass) — the same semantic answers routing
+// uses server-side, so Progress, questions, events and answers can never disagree about which
+// generation owns the slug. Plain .mjs, consumed by Node and Vite alike (allowJs).
+import { resolveActiveGeneration } from "../../lib/run-generation.mjs";
 
 export interface ProgressGateway {
   /** The most-current pipeline state for `slug`, or null if none exists (yet, or never will —
@@ -118,6 +122,48 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
   const raw = (branch: string, filePath: string) =>
     `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}?t=${Date.now()}`;
 
+  /** ONE active-generation resolution per poll batch (hardening pass): fetchRun, fetchQuestions
+   *  and fetchRunEvents all key off the same decision, taken from the same pair of branch
+   *  reads, so no two panels of one poll can disagree about which generation owns the slug.
+   *  The memo's TTL is well under the 15s poll interval — each poll re-resolves. */
+  interface GenerationRead {
+    v2Text: string | null;
+    v2State: unknown | null;
+    v2Malformed: boolean;
+    v1State: unknown | null;
+    decision: string;
+    conflict: boolean;
+  }
+  const GEN_TTL_MS = 5000;
+  let genMemo: { slug: string; at: number; read: Promise<GenerationRead> } | null = null;
+
+  async function readGeneration(slug: string): Promise<GenerationRead> {
+    const [v2Text, v1State] = await Promise.all([
+      getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`)),
+      getJson(raw(`research/${slug}`, `guides-intake/${slug}/state.json`)),
+    ]);
+    let v2State: unknown | null = null;
+    let v2Malformed = false;
+    if (v2Text != null) {
+      try { v2State = JSON.parse(v2Text); } catch { v2Malformed = true; }
+    }
+    const resolved = resolveActiveGeneration({
+      v2Exists: v2Text != null && !v2Malformed,
+      v2State,
+      v1Exists: v1State != null,
+      v1State,
+    }) as { decision: string; conflict: boolean };
+    return { v2Text, v2State, v2Malformed, v1State, decision: resolved.decision, conflict: resolved.conflict };
+  }
+
+  function generation(slug: string): Promise<GenerationRead> {
+    const now = Date.now();
+    if (!genMemo || genMemo.slug !== slug || now - genMemo.at > GEN_TTL_MS) {
+      genMemo = { slug, at: now, read: readGeneration(slug) };
+    }
+    return genMemo.read;
+  }
+
   return {
     async fetchState(slug) {
       // The research branch gets a state-file commit after EVERY stage (the granular, live
@@ -130,24 +176,22 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       return (onMain as PipelineState) ?? null;
     },
     async fetchRun(slug) {
-      // ACTIVE RUNS BEFORE HISTORY, across BOTH generations (correction pass). The old order —
-      // V2 branch, then V2-on-main, then V1 — let a historical V2 run that had merged to main
-      // hide a genuinely active V1 rollback run on research/<slug>. One contract, shared with
-      // answers routing: an existing research branch is the current run; main is history.
-      //   1. research-v2/<slug> branch  — active V2 run
-      //   2. research/<slug> branch     — active V1 run (a rollback is a real current run)
-      //   3. main run.v2.json           — merged V2 history
-      //   4. main state.json            — V1 history
-      // Raw text is fetched separately from its parse so "file exists but is not a run" reads
-      // as MALFORMED — the fail-closed rule — while "no file" falls through honestly.
-      const v2Branch = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`));
-      if (v2Branch != null) {
-        let parsed: unknown;
-        try { parsed = JSON.parse(v2Branch); } catch { parsed = null; }
-        return adaptV2Snapshot(parsed);
+      // THE shared resolver decides (hardening pass) — the same matrix answers routing applies:
+      //   · active V2 branch                        → the V2 run
+      //   · active V1 branch                        → the V1 run (a rollback is a real current
+      //     run, and it outranks a stale complete-but-unmerged V2 draft)
+      //   · complete-draft / merged-remnant V2      → the V2 record (current draft, or history)
+      //   · BOTH genuinely active                   → conflict: an explicit diagnostic snapshot,
+      //     never an arbitrary precedence pick
+      //   · nothing on either branch                → main history (V2 record, then V1)
+      // A V2 branch file that EXISTS but cannot be parsed reads as MALFORMED — never "no run".
+      const g = await generation(slug);
+      if (g.v2Malformed) return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
+      if (g.conflict) return { ...EMPTY_SNAPSHOT, conflict: true };
+      if (g.decision === "v2-active" || g.decision === "v2-complete-draft" || g.decision === "v2-history") {
+        return adaptV2Snapshot(g.v2State);
       }
-      const v1Branch = await getJson(raw(`research/${slug}`, `guides-intake/${slug}/state.json`));
-      if (v1Branch) return { ...EMPTY_SNAPSHOT, version: 1, state: v1Branch as PipelineState };
+      if (g.decision === "v1-active") return { ...EMPTY_SNAPSHOT, version: 1, state: g.v1State as PipelineState };
       const v2Main = await getText(raw(baseBranch, `guides-intake/${slug}/run.v2.json`));
       if (v2Main != null) {
         let parsed: unknown;
@@ -180,10 +224,22 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
     },
     async fetchQuestions(slug) {
       // Questions and forks are research state, so they live in the ledger — intake.md is
-      // frozen intent. Prefer the V2 branch; a stale V1 branch must not hide the active run's
-      // questions.
-      const v2 = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/ledger.md`));
-      const md = v2 ?? await getText(raw(`research/${slug}`, `guides-intake/${slug}/ledger.md`));
+      // frozen intent. WHICH ledger is the shared resolver's decision (hardening pass): the
+      // owning generation's branch — never "V2 branch first because it exists", which let a
+      // stale V2 branch hide an active V1 run's questions. A conflict surfaces no questions
+      // (the page is showing the conflict diagnostic, and answers routing refuses anyway).
+      const g = await generation(slug);
+      if (g.conflict) return [];
+      let md: string | null;
+      if (g.decision === "v2-active" || g.decision === "v2-complete-draft") {
+        md = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/ledger.md`));
+      } else if (g.decision === "v1-active") {
+        md = await getText(raw(`research/${slug}`, `guides-intake/${slug}/ledger.md`));
+      } else {
+        // No active run — legacy fallback order (branches are typically gone; both reads 404).
+        const v2 = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/ledger.md`));
+        md = v2 ?? await getText(raw(`research/${slug}`, `guides-intake/${slug}/ledger.md`));
+      }
       if (md == null) return [];
       return parseQuestionsFromIntake(md);
     },
@@ -199,13 +255,19 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       return Array.isArray(issues) ? toProposals(issues, slug) : [];
     },
     async fetchRunEvents(slug) {
-      // The branch is where an ACTIVE run lives, so it is read first — but a merged V2 product
-      // landing deletes its branch and carries events.json into `main` (the same fallback
-      // fetchRun already makes for run.v2.json), so the finished run's event log stays
-      // readable after the merge. V1 branches are tried last; V1 emits nothing today, so that
-      // read resolving empty is honest. A 404 becomes EMPTY_RUN_EVENTS via parseRunEvents(null);
-      // the UI keeps LOOKING while the run is active (probeEventsThisTick in
-      // model/run-events.ts), just less often, so telemetry that starts late still surfaces.
+      // The owning generation's branch is read first (the shared resolver decides which one) —
+      // and a merged V2 product landing deletes its branch and carries events.json into `main`
+      // (the same fallback fetchRun makes for run.v2.json), so a finished run's event log stays
+      // readable after the merge. V1 emits nothing today, so its read resolving empty is
+      // honest. A 404 becomes EMPTY_RUN_EVENTS via parseRunEvents(null); the UI keeps LOOKING
+      // while the run is active (probeEventsThisTick), just less often, so telemetry that
+      // starts late still surfaces. The runId join in the UI (eventsForRun) is what guarantees
+      // a stream renders only against the run it names, whatever this read returned.
+      const g = await generation(slug);
+      if (g.conflict) return parseRunEvents(null);
+      if (g.decision === "v1-active") {
+        return parseRunEvents(await getJson(raw(`research/${slug}`, `guides-intake/${slug}/events.json`)));
+      }
       const v2 = await getJson(raw(`research-v2/${slug}`, `guides-intake/${slug}/events.json`))
         ?? await getJson(raw(baseBranch, `guides-intake/${slug}/events.json`));
       if (v2) return parseRunEvents(v2);

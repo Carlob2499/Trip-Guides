@@ -367,25 +367,19 @@ describe("answers routing — one definition of active, across generations", () 
     expect(routeAnswers({ hasAnswers: true, researchActive: true, researchBranch: "research-v2/x", published: true }).target).toBe("change");
   });
 
-  it("the answers-route matrix: stale complete V2 never outranks active V1; duplicates refuse (source pins)", () => {
+  it("the answers-route matrix lives in THE shared resolver (hardening pass) — no private precedence rule", () => {
+    // The matrix itself — stale complete V2 never outranks active V1, dual-active refuses — is
+    // behaviorally proven in run-generation.test.mjs against resolveActiveGeneration; this pin
+    // holds answers-route to consuming that one resolver instead of re-deriving activity.
     const src = readRepo("scripts/pipeline.mjs");
     const routeCase = src.split('case "answers-route"')[1].split('case "answers-apply"')[0];
-    // Both namespaces inspected BEFORE deciding — the first-match-wins loop is gone.
     expect(routeCase).toContain("const v2 = inspect(");
     expect(routeCase).toContain("const v1 = inspect(");
-    // Matrix rule 5: two active generations refuse rather than guess.
+    expect(routeCase).toContain('import("../src/lib/run-generation.mjs")');
+    expect(routeCase).toContain("resolveActiveGeneration({");
     expect(routeCase).toContain("refusing to guess which run owns the answer");
-    // Matrix rule 4: active V1 beats a stale complete V2 — the decision chain's order is
-    // explicit: incomplete V2 → active V1 → complete-draft V2, nothing else wins by accident.
-    const incompleteAt = routeCase.indexOf("if (v2Incomplete) {");
-    const v1At = routeCase.indexOf("else if (v1Active)");
-    const draftAt = routeCase.indexOf("else if (v2CompleteDraft)");
-    expect(incompleteAt).toBeGreaterThan(0);
-    expect(v1At).toBeGreaterThan(incompleteAt);
-    expect(draftAt).toBeGreaterThan(v1At);
     // Complete-but-unmerged draft runs still own their answers (the reopen makes it true).
-    expect(routeCase).toContain("v2CompleteDraft");
-    expect(routeCase).toContain('landing?.outcome !== "merged"');
+    expect(routeCase).toContain('"v2-complete-draft"');
   });
 });
 
@@ -435,15 +429,27 @@ describe("reopenForAnswers — a late answer genuinely re-enters the work", () =
 
 describe("new-guide.yml — the /new dispatch", () => {
   const text = readRepo(".github/workflows/new-guide.yml");
-  const dispatch = text.split("Auto-start the research pass")[1];
 
-  it("the V2 product dispatch threads the intake issue — and NO landing input exists to pass", () => {
-    const v2 = dispatch.split('if [ "$ENGINE" = "v2" ]')[1].split("else")[0];
-    expect(v2).toContain('-f issue="$ISSUE"');
-    expect(v2).not.toContain("-f land"); // authority is derived, never typed (side-door scar)
+  it("the V2 product invocation is a workflow_call threading the intake issue — and NO landing input exists to pass", () => {
+    // The trusted entry point (hardening pass): a reusable-workflow call, which runs the V2
+    // pipeline under THIS workflow's "issues" event — the provenance deriveLandIntent trusts —
+    // and which `gh workflow run` (workflow_dispatch) structurally cannot impersonate.
+    const job = text.split(/^ {2}research-v2:$/m)[1];
+    expect(job).toContain("uses: ./.github/workflows/research-pass-v2.yml");
+    expect(job).toContain("slug: ${{ needs.scaffold.outputs.slug }}");
+    expect(job).toContain("issue: ${{ format('{0}', github.event.issue.number) }}");
+    expect(job).toContain("secrets: inherit");
+    expect(job).not.toMatch(/^\s+land:/m); // authority is derived, never typed (side-door scar)
+    expect(job).toContain("if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'");
+    // Per-slug exclusion survives the call: a reusable workflow's own workflow-level
+    // concurrency is not applied, so the caller job carries the guide-<slug> group.
+    expect(job).toContain("group: guide-${{ needs.scaffold.outputs.slug }}");
+    // No `gh workflow run research-pass-v2` remains anywhere in /new — the call is the only V2 path.
+    expect(text).not.toContain("gh workflow run research-pass-v2.yml");
   });
 
-  it("the V1 dispatch still threads the issue — V1 behavior preserved", () => {
+  it("the V1 dispatch still threads the issue — V1 behavior preserved as the unconditional default", () => {
+    const dispatch = text.split("Auto-start the research pass")[1].split("- name:")[0];
     const v1 = dispatch.split("else")[1];
     expect(v1).toContain("research-pass.yml");
     expect(v1).toContain('-f issue="$ISSUE"');
@@ -459,11 +465,16 @@ describe("research-pass-v2.yml — landing authority is infrastructure, never in
     expect(inputs).toMatch(/^ {6}issue:$/m); // issue continuity input remains
   });
 
-  it("init DERIVES intent from default-branch ref + selector, and passes the fresh-branch signal", () => {
+  it("init DERIVES intent through land-intent (provenance + ref + selector), and passes the fresh-branch signal", () => {
     const init = text.split("Init or resume the V2 run")[1].split("- name:")[0];
     expect(init).toContain("ON_DEFAULT: ${{ github.ref_name == github.event.repository.default_branch }}");
     expect(init).toContain("ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}");
-    expect(init).toMatch(/if \[ "\$ON_DEFAULT" = "true" \] && \[ "\$ENGINE" = "v2" \]; then LAND=auto; fi/);
+    // Hardening pass: the derivation is the tested deriveLandIntent() behind the land-intent
+    // subcommand, keyed on github.event_name — a manual workflow_dispatch can never mint auto,
+    // whatever ref/selector it runs under (the old two-fact shell derivation is gone).
+    expect(init).toContain("EVENT_NAME: ${{ github.event_name }}");
+    expect(init).toMatch(/LAND=\$\(node scripts\/pipeline-v2\.mjs land-intent/);
+    expect(init).not.toMatch(/LAND=auto/);
     expect(init).toContain('--branch-fresh "$FRESH"');
     expect(init).toContain('BRANCH_RESUMED: ${{ steps.branch.outputs.resumed }}');
   });

@@ -19,20 +19,57 @@ name: Research pass (V2)
 #   · MECHANICAL CRITIC BLINDNESS. The critic input excludes evidence/run state and its fetch
 #     permissions name only pre-verified source domains. Every agent runs in a pinned container
 #     that mounts only /workspace; a fresh host checkout collects only stage-owned artifacts.
-#   · PUBLICATION AUTHORITY IS INFRASTRUCTURE, NEVER AN INPUT (correction pass). landMode is
-#     DERIVED at init — "auto" only when the dispatch ran on the default branch with the
-#     WAYPOINT_RESEARCH_ENGINE selector set to "v2" — recorded once, immutable, and re-checked
-#     as landing-time authority by the land job, so a manual or feature-ref dispatch
-#     structurally cannot reach auto publication. "pr" runs (canaries, tests, every feature-ref
-#     dispatch) ALWAYS land a draft PR with the real evidence-gate scorecard as body and can
-#     never publish. "auto" runs publish through the SAME evidence-gated `pipeline.mjs land`
-#     machinery V1 uses, as a TWO-PHASE transaction: gate verdict rides the merge; the
-#     publication fact is finalized only after gh CONFIRMS the merge (schema-refused earlier).
-#     V1 dispatch (new-guide.yml → research-pass.yml) is untouched either way.
+#   · PUBLICATION AUTHORITY IS INFRASTRUCTURE, NEVER AN INPUT (correction + hardening passes).
+#     landMode is DERIVED at init from THREE facts — trusted provenance (the run was invoked
+#     through new-guide.yml's workflow_call, so github.event_name is the caller's "issues",
+#     never "workflow_dispatch"), the default-branch ref, AND the WAYPOINT_RESEARCH_ENGINE
+#     selector being "v2" — recorded once, immutable, and re-checked as landing-time authority
+#     by the land job. A MANUAL workflow_dispatch therefore ALWAYS creates a landMode=pr run,
+#     even on the default branch with the selector live: only the trusted /new product flow can
+#     mint auto authority, and no input anyone can type changes that. "pr" runs (canaries,
+#     tests, every manual and feature-ref dispatch) ALWAYS land a draft PR with the real
+#     evidence-gate scorecard as body and can never publish. "auto" runs publish through the
+#     SAME evidence-gated `pipeline.mjs land` machinery V1 uses, as a TWO-PHASE transaction:
+#     gate verdict rides the merge; the publication fact is finalized only after gh CONFIRMS the
+#     merge (schema-refused earlier). V1 dispatch (new-guide.yml → research-pass.yml) is
+#     untouched either way.
 #
 # Resumable: run.v2.json records per-stage status and the resume point; each stage job is
 # skipped when routing says it is already complete, so a re-dispatch continues, never restarts.
 on:
+  # THE TRUSTED PRODUCT ENTRY POINT (hardening pass): new-guide.yml calls this workflow via
+  # workflow_call, which ordinary workflow_dispatch cannot impersonate — a called run executes
+  # under the CALLER's event ("issues"), and only workflows already committed to the default
+  # branch can call it from that ref. Init derives landMode from exactly that provenance.
+  workflow_call:
+    inputs:
+      slug:
+        required: true
+        type: string
+      section:
+        required: false
+        type: string
+        default: ""
+      model:
+        required: false
+        type: string
+        default: claude-sonnet-5
+      effort:
+        required: false
+        type: string
+        default: high
+      critic_model:
+        required: false
+        type: string
+        default: claude-opus-5
+      issue:
+        required: false
+        type: string
+        default: ""
+      void_retry:
+        required: false
+        type: boolean
+        default: false
   workflow_dispatch:
     inputs:
       slug:
@@ -146,11 +183,15 @@ jobs:
         run: node scripts/pipeline.mjs branch --slug "$SLUG" --prefix research-v2
 
       # issue is recorded durably at init (blank = inherit on a resume) so retries and
-      # answer-redispatches never re-thread it. Landing intent is DERIVED, never typed: auto only
-      # when this dispatch runs on the default branch with the selector set — the same two facts
-      # the land job re-checks at landing time. --branch-fresh tells init whether the research
-      # branch was just created (any state found then is default-branch HISTORY: a merged prior
-      # run starts a NEW run with the old one archived; anything else fresh is refused).
+      # answer-redispatches never re-thread it. Landing intent is DERIVED, never typed, by the
+      # tested deriveLandIntent(): auto ONLY for the trusted product invocation — the event is
+      # NOT workflow_dispatch (new-guide.yml's workflow_call runs under its own "issues" event;
+      # every manual/developer dispatch IS workflow_dispatch) AND the ref is the default branch
+      # AND the selector is "v2". A maintainer typing `gh workflow run` on main with the
+      # selector live still creates a draft-only (pr) run. --branch-fresh tells init whether the
+      # research branch was just created (any state found then is default-branch HISTORY: a
+      # merged prior run starts a NEW run with the old one archived and its mutable artifacts
+      # removed from the fresh branch; anything else fresh is refused).
       - name: Init or resume the V2 run
         env:
           BRANCH: ${{ steps.branch.outputs.name }}
@@ -158,9 +199,10 @@ jobs:
           ISSUE: ${{ inputs.issue }}
           ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}
           ON_DEFAULT: ${{ github.ref_name == github.event.repository.default_branch }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          LAND=pr
-          if [ "$ON_DEFAULT" = "true" ] && [ "$ENGINE" = "v2" ]; then LAND=auto; fi
+          LAND=$(node scripts/pipeline-v2.mjs land-intent --slug "$SLUG" \
+            --event-name "$EVENT_NAME" --on-default "$ON_DEFAULT" --engine "$ENGINE")
           FRESH=false
           if [ "$BRANCH_RESUMED" = "false" ]; then FRESH=true; fi
           node scripts/pipeline-v2.mjs init --slug "$SLUG" --section "$SECTION" --branch "$BRANCH" \
@@ -998,11 +1040,27 @@ jobs:
               --detail "evidence gate failed (build or configured network verify) — landed as a draft PR only" --branch "$BRANCH"
           fi
 
+      # RESEARCH-GATE TRUTH AND LANDING TRUTH ARE SEPARATE (hardening pass). This crash handler
+      # used to rewrite a legitimate gate PASS into gate FAIL whenever a LATER GitHub operation
+      # (merge auth/API error, post-merge finalization) crashed the land step — and, worse, its
+      # push recreated the just-deleted research branch on the merged-but-finalization-failed
+      # path. It now keys on the emitted gate verdict (the land CLI emits it on every path,
+      # including hard landing failures): a passed gate is never rewritten — the landing failure
+      # is already recorded durably as landing.outcome=failed by the CLI — and a MERGED outcome
+      # records nothing here at all (the branch is gone; finalize-landing is the retry).
       - name: Record the landing gate failure (step crashed)
-        if: failure()
+        if: failure() && steps.evidence_gate.outputs.gate != 'passed'
         run: |
           node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status failed \
             --detail "artifact, build, or configured network evidence gate failed" --branch "$BRANCH" || true
+
+      - name: Preserve the passed gate verdict after a landing-side crash
+        if: failure() && steps.evidence_gate.outputs.gate == 'passed' && steps.evidence_gate.outputs.outcome != 'merged'
+        run: |
+          # The gate PASSED and the failure was landing-side (recorded by the CLI as
+          # landing.outcome=failed). Make sure the durable gate verdict says PASS — on pr-mode
+          # landings phase 1 never wrote it — without ever touching a merged run's gone branch.
+          node scripts/pipeline-v2.mjs landing-gate --slug "$SLUG" --status passed --branch "$BRANCH" || true
 
   # ── questions: surface, never gate (I01 — V1's product-communication contract) ──────────────
   # The traveler sees what was assumed on their behalf. always(): a run cut off mid-stage still

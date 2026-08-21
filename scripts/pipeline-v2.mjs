@@ -29,8 +29,9 @@
 //   prepare-critic --slug <s>                        delete forbidden files from the working tree
 //   restore-critic --slug <s>                        restore them
 //   validate --slug <s> [--scoped]                   the full artifact validation (fail closed)
+//   land-intent --slug <s> --event-name <e> --on-default <b> --engine <v>  derive init-time intent (trusted /new only mints auto)
 //   land-mode --slug <s> [--product-authority true]  emit land=auto|pr (landingMode() + landing-time authority)
-//   finalize-landing --slug <s> --pr <n>             idempotent post-merge publication record (retry-safe)
+//   finalize-landing --slug <s> --pr <n> [--announced ok|failed] [--base <b>]  GitHub-verified, remotely-persisted post-merge retry
 //   reopen-answers --slug <s>                        re-open reconcile+critic for a late answer
 
 import { existsSync, appendFileSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -43,8 +44,9 @@ import { ContractError } from "./pipeline/v2/contracts.mjs";
 import {
   initRunV2, readRunStateV2, nextStageV2, stageStart, stageComplete, stageFail,
   bumpRunAttempt, recordAutoRetry, recordTelemetry, markLandingGate, V2_RESEARCH_STAGES,
-  stageAttemptStats, landingMode, finalizeMergedLanding, reopenForAnswers,
+  stageAttemptStats, landingMode, deriveLandIntent, reopenForAnswers,
 } from "./pipeline/v2/run-state.mjs";
+import { finalizeLandingRecovery } from "./pipeline/v2/landing-truth.mjs";
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
 import { emitRunEvents, readGeocodeReport } from "./pipeline/v2/events.mjs";
@@ -53,6 +55,7 @@ import { researchRuleProblems, isProxyHost } from "./pipeline/v2/research-rules.
 import { requireCoverage, coverageProblems, loadCoverageContext, remapCoverageRefs } from "./pipeline/v2/coverage.mjs";
 import {
   preparePassBWorkspace, collectPassB, collectStageOutput, prepareCriticInput, restoreCriticInput, verifyPassBWorkspace,
+  resetFreshRunWorkspace,
 } from "./pipeline/v2/workspace.mjs";
 import { emptyTelemetry, stageFacts, countsFromEvidence, mergeTelemetry } from "./pipeline/v2/telemetry.mjs";
 
@@ -261,6 +264,7 @@ async function run(cmd, get, has) {
       if (issue && !/^\d+$/.test(issue)) { console.error(`[pipeline-v2] "${issue}" isn't an issue number.`); return 1; }
       const landInput = get("--land") || "";
       if (landInput && !["pr", "auto"].includes(landInput)) { console.error(`[pipeline-v2] --land must be pr or auto, not "${landInput}".`); return 1; }
+      const branchFresh = get("--branch-fresh") === "true";
       let state = await initRunV2(slug, {
         inputs: {
           section: get("--section") || "",
@@ -272,8 +276,17 @@ async function run(cmd, get, has) {
         landMode: landInput || null,
         // Fresh-run semantics: the workflow's branch step says whether research-v2/<slug> was
         // JUST created (true ⇒ any state on disk is default-branch history, not this run).
-        branchFresh: get("--branch-fresh") === "true",
+        branchFresh,
       });
+      if (branchFresh) {
+        // A fresh branch cut over merged history still CONTAINS the prior run's mutable
+        // artifacts (evidence/coverage/passB/feedback/events/geocode + its run.v2.json in the
+        // tree). Remove them from the run branch BEFORE the scaffold baseline is captured, so
+        // Pass B's clean-workspace contract holds and Pass A never reads a previous run's
+        // evidence as its own. No-op on a first-ever run. (Hardening pass, 2026-08-20.)
+        const { baseline, reset } = resetFreshRunWorkspace(slug);
+        if (reset) console.log(`[pipeline-v2] ${slug} — fresh-run reset: prior run artifacts removed; clean baseline ${baseline.slice(0, 7)}.`);
+      }
       if (state.stages.scaffold.status !== "complete") {
         const head = git(["rev-parse", "HEAD"]).trim();
         await stageStart(slug, "scaffold");
@@ -431,21 +444,40 @@ async function run(cmd, get, has) {
     }
 
     case "finalize-landing": {
-      // The idempotent phase-2 retry (correction pass): a merge SUCCEEDED but the post-merge
-      // finalization failed to commit. Run on a default-branch checkout; re-runs safely.
+      // The idempotent phase-2 retry, hardened (2026-08-20): before ANY publication fact is
+      // written it (1) resolves and validates the repository default branch, (2) proves the
+      // merge against GitHub itself — PR exists, is MERGED, base and head match this run's
+      // landing — and records GitHub's own mergedAt, never the retry clock, then (3) commits
+      // AND pushes the record to the remote default branch. A push failure fails the command:
+      // local success is not durable success. The printed retry command is complete as printed.
       const pr = Number(get("--pr"));
       const announcedFlag = get("--announced") || "";
-      const state = await finalizeMergedLanding(slug, {
+      if (announcedFlag && !["ok", "failed"].includes(announcedFlag)) {
+        console.error(`[pipeline-v2] --announced must be ok or failed, not "${announcedFlag}".`); return 1;
+      }
+      const { state, base, mergedAt } = await finalizeLandingRecovery(slug, {
         pr,
         announced: announcedFlag === "ok" ? true : announcedFlag === "failed" ? false : null,
+        base: get("--base") || null,
       });
-      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
-      commitAndPush(
-        [`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`],
-        `research-v2(${slug}): landing finalized — PR #${pr} merged`,
-        { branch },
-      );
-      console.log(`[pipeline-v2] ${slug} — landing finalized (PR #${pr}); publication recorded ${state.publication.publishedAt}.`);
+      console.log(`[pipeline-v2] ${slug} — landing finalized (PR #${pr}, merged ${mergedAt}); publication recorded ${state.publication.publishedAt}; pushed to origin/${base}.`);
+      return 0;
+    }
+
+    case "land-intent": {
+      // Landing INTENT at init (requirement: only the trusted /new product flow may auto-land).
+      // Pure derivation, one implementation (deriveLandIntent) shared with the unit suite:
+      // provenance (the trusted workflow_call from new-guide.yml runs under the caller's event,
+      // never "workflow_dispatch") AND the default-branch ref AND the live selector. The mode
+      // is printed alone on stdout so the workflow can capture it with $(…).
+      const intent = deriveLandIntent({
+        eventName: get("--event-name") || "",
+        onDefault: get("--on-default") === "true",
+        engine: get("--engine") || "",
+      });
+      emit("land", intent);
+      console.error(`[pipeline-v2] ${slug} — landing intent ${intent} (event ${get("--event-name") || "(none)"}; default-branch ${get("--on-default") || "false"}; selector ${get("--engine") || "(unset)"}).`);
+      console.log(intent);
       return 0;
     }
 
@@ -697,7 +729,7 @@ async function cliMain() {
   const has = (flag) => argv.includes(flag);
   const cmd = argv[0];
   if (!cmd || cmd.startsWith("--")) {
-    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate|land-mode|finalize-landing|reopen-answers> --slug <slug> …");
+    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate|land-intent|land-mode|finalize-landing|reopen-answers> --slug <slug> …");
     process.exit(1);
   }
   try {

@@ -297,10 +297,13 @@ async function runSubcommand(cmd, rest, get) {
       let researchBranch = null;
       let researchActive = false;
       if (!published) {
-        // The active truth lives on the research branches, not main — and "active" has ONE
-        // definition across generations (correction pass): a run with work still owed. Both
-        // namespaces are inspected BEFORE deciding, because the old first-match-wins loop let a
-        // stale complete V2 branch steal answers from a genuinely active V1 rollback run.
+        // The active truth lives on the research branches, not main. Both namespaces are
+        // inspected BEFORE deciding, and the decision itself is THE shared active-generation
+        // resolver (src/lib/run-generation.mjs) — the same semantic Progress, questions and
+        // events read through, so no subsystem can invent its own precedence rule. Matrix:
+        // active V2 wins; an active V1 rollback outranks a stale complete-draft V2; both
+        // genuinely active REFUSES; a merged V2 remnant is history and owns nothing.
+        const { resolveActiveGeneration } = await import("../src/lib/run-generation.mjs");
         const inspect = (b, stateFile) => {
           try {
             execFileSync("git", ["ls-remote", "--exit-code", "--heads", "origin", b], { cwd: ROOT, stdio: "pipe" });
@@ -318,22 +321,21 @@ async function runSubcommand(cmd, rest, get) {
         for (const [b, r] of [[`research-v2/${slug}`, v2], [`research/${slug}`, v1]]) {
           if (r.error) { console.error(`[answers-route] ${b} exists but its committed state is unreadable: ${r.error}`); return 1; }
         }
-        const v2Incomplete = v2.exists && v2.state && ["pending", "running", "paused", "failed", "stuck"].includes(v2.state.status);
-        // A COMPLETE-but-unmerged draft run still owns its answers — the answers step re-opens
-        // reconcile so the run genuinely absorbs them — but only when no other generation is
-        // actively researching this slug.
-        const v2CompleteDraft = v2.exists && v2.state && v2.state.status === "complete" &&
-          v2.state.landing?.outcome !== "merged" && !v2.state.publication?.published;
-        const v1Active = v1.exists && v1.state && ["passA", "passB", "reconcile", "verified"].some((stage) => !v1.state.stages?.[stage]);
-        if (v2Incomplete && v1Active) {
+        const resolved = resolveActiveGeneration({
+          v2Exists: v2.exists, v2State: v2.state ?? null,
+          v1Exists: v1.exists, v1State: v1.state ?? null,
+        });
+        if (resolved.conflict) {
           // Two generations both mid-research on one slug is not a routing preference — it is a
           // state error a human untangles. Refusing beats guessing (matrix rule 5).
-          console.error(`[answers-route] BOTH research-v2/${slug} (status ${v2.state.status}) and research/${slug} are active — refusing to guess which run owns the answer. Resolve the duplicate run first.`);
+          console.error(`[answers-route] BOTH research-v2/${slug} (status ${v2.state?.status}) and research/${slug} are active — refusing to guess which run owns the answer. Resolve the duplicate run first.`);
           return 1;
         }
-        if (v2Incomplete) { researchBranch = `research-v2/${slug}`; researchActive = true; }
-        else if (v1Active) { researchBranch = `research/${slug}`; researchActive = true; } // active beats a stale complete V2 (matrix rule 4)
-        else if (v2CompleteDraft) { researchBranch = `research-v2/${slug}`; researchActive = true; }
+        if (resolved.decision === "v2-active" || resolved.decision === "v2-complete-draft") {
+          researchBranch = `research-v2/${slug}`; researchActive = true;
+        } else if (resolved.decision === "v1-active") {
+          researchBranch = `research/${slug}`; researchActive = true;
+        }
       }
 
       const d = routeAnswers({ hasAnswers, researchActive, researchBranch, published });
@@ -431,7 +433,7 @@ async function runSubcommand(cmd, rest, get) {
 
     case "land": {
       if (!needSlug()) return 1;
-      const { publishGuide, commitAll, landBranch, landingGate, PUBLISH_ERRORS } = await import("./pipeline/publish.mjs");
+      const { publishGuide, restoreDraft, commitAll, landBranch, landingGate, PUBLISH_ERRORS } = await import("./pipeline/publish.mjs");
       const { writeFileSync, readFileSync, existsSync: exists } = await import("node:fs");
       const bodyFile = get("--body-file") || "/tmp/scorecard.md";
       let passed = get("--passed") === "true";
@@ -543,7 +545,12 @@ async function runSubcommand(cmd, rest, get) {
       } catch (err) {
         // A HARD landing failure (auth, rate limit, API error — land-branch.sh already refuses
         // to disguise these as draft fallback). Nothing merged, nothing published; record the
-        // honest failed outcome on the still-existing branch, then surface the error.
+        // honest failed outcome on the still-existing branch, then surface the error. The GATE
+        // verdict is emitted even on this path (hardening pass): research truth and landing
+        // truth are separate facts, and the workflow's crash handler keys on the gate output to
+        // avoid rewriting a legitimate PASS into a gate failure because GitHub misbehaved.
+        emit("gate", passed ? "passed" : "failed");
+        emit("outcome", "failed");
         if (isV2Landing) {
           const { recordLandingOutcome } = await import("./pipeline/v2/run-state.mjs");
           await recordLandingOutcome(slug, { outcome: "failed", detail: String(err?.message || err).slice(0, 300) });
@@ -554,24 +561,48 @@ async function runSubcommand(cmd, rest, get) {
       }
       console.log(`[land] ${result.outcome}:${result.pr}`);
 
+      // MERGE-CONFLICT FALLBACK STAYS UNPUBLISHED (hardening pass, 2026-08-20). Auto-landing
+      // removed the draft flag BEFORE the merge attempt (the flip must ride the merge); a
+      // conflict fell back to a draft PR whose branch still carried the UNDRAFTED guide — a
+      // human resolving the conflict and merging would have published around the whole V2
+      // finalization contract. Restore draft:true on the branch so every non-merged outcome is
+      // safely unpublished; a later legitimate landing re-runs the gate and re-flips it.
+      if (result.outcome === "draft" && passed && auto) {
+        const restored = await restoreDraft(slug);
+        if (restored.ok && restored.changed) {
+          gitHere(["add", "--", restored.metaPath]);
+          try {
+            gitHere(["commit", "--only", "-m", `chore(${slug}): restore draft after merge-conflict fallback — nothing published`, "--", restored.metaPath]);
+            gitHere(["push", "origin", `HEAD:${branch}`]);
+            console.log(`[land] ${slug} — draft flag RESTORED after the merge conflict; the fallback PR carries no publishable flip.`);
+          } catch (err) {
+            console.error(`[land] could not commit/push the draft restore: ${err?.message || err}`);
+          }
+        }
+      }
+
       if (isV2Landing) {
         const { recordLandingOutcome, finalizeMergedLanding } = await import("./pipeline/v2/run-state.mjs");
         if (result.outcome === "merged") {
-          // PHASE 2: GitHub confirmed the merge; the research branch is deleted. Finalize the
-          // publication fact ON THE DEFAULT BRANCH — the run state's only home now. A failure
-          // here is loud and retryable (the merge is real; history is never rewritten):
-          // `node scripts/pipeline-v2.mjs finalize-landing --slug <s> --pr <n>` on a fresh
-          // default-branch checkout completes it idempotently.
+          // PHASE 2: land-branch.sh reported the merge; the research branch is deleted.
+          // Finalize the publication fact ON THE DEFAULT BRANCH — the run state's only home now
+          // — after independently re-verifying the merge against GitHub (base, head, MERGED
+          // state) and taking GitHub's own mergedAt, never this process's clock. A failure here
+          // is loud and retryable (the merge is real; history is never rewritten): the printed
+          // finalize-landing command is complete and runnable exactly as printed.
+          const annFlag = result.announced === true ? " --announced ok" : result.announced === false ? " --announced failed" : "";
           try {
             gitHere(["fetch", "origin", base]);
             gitHere(["checkout", "-B", base, `origin/${base}`]);
-            await finalizeMergedLanding(slug, { pr: result.pr, announced: result.announced ?? null });
+            const { verifyMergedPr } = await import("./pipeline/v2/landing-truth.mjs");
+            const verified = verifyMergedPr({ slug, pr: result.pr, base });
+            await finalizeMergedLanding(slug, { pr: result.pr, mergedAt: verified.mergedAt, announced: result.announced ?? null });
             await emitV2Events(slug);
             commitV2Record(`research-v2(${slug}): landing finalized — PR #${result.pr} merged`, base);
-            console.log(`[land] ${slug} — merge confirmed (PR #${result.pr}); publication finalized on ${base}.`);
+            console.log(`[land] ${slug} — merge confirmed (PR #${result.pr}, merged ${verified.mergedAt}); publication finalized on ${base}.`);
           } catch (err) {
             console.error(`[land] MERGE SUCCEEDED (PR #${result.pr}) but post-merge finalization failed: ${err?.message || err}`);
-            console.error(`[land] retry on a ${base} checkout: node scripts/pipeline-v2.mjs finalize-landing --slug ${slug} --pr ${result.pr}${result.announced === false ? " --announced failed" : ""}`);
+            console.error(`[land] retry on a ${base} checkout: node scripts/pipeline-v2.mjs finalize-landing --slug ${slug} --pr ${result.pr}${annFlag}`);
             emit("outcome", result.outcome);
             emit("pr", String(result.pr));
             emit("gate", passed ? "passed" : "failed");
