@@ -482,6 +482,44 @@ describe("research-pass-v2.yml — landing authority is infrastructure, never in
     expect(inputs).toMatch(/^ {6}issue:$/m); // issue continuity input remains
   });
 
+  it("the trusted product checkout is refreshed to the post-scaffold default branch, BEFORE npm ci and branch creation, and NEVER on workflow_dispatch (live scar: malta/#69, run 32454262582)", () => {
+    // The setup job's first checkout has no `ref` — it runs at the CALLING workflow's
+    // triggering SHA (workflow_call semantics), which predates new-guide.yml's own scaffold
+    // commit to the default branch. The first live product canary proved this: `/new` minted
+    // landMode=auto correctly, then init refused because the pre-scaffold tree carried neither
+    // guides-intake/malta/intake.md nor src/content/guides/malta/_guide.json. GitHub Actions'
+    // reusable-workflow checkout snapshot cannot be reproduced by a Node unit test — this pins
+    // our own workflow-file CONTRACT: the refresh step exists, is guarded off the manual
+    // (workflow_dispatch) path so a developer's chosen ref is never silently replaced, and
+    // fetches/checks out the default branch strictly BEFORE dependency install and BEFORE the
+    // research branch is created from it.
+    const setup = text.split(/^ {2}setup:$/m)[1].split(/^ {2}passA:$/m)[0];
+    const checkout = setup.indexOf("uses: actions/checkout@");
+    const refresh = setup.indexOf("Refresh the trusted product checkout to the post-scaffold default branch");
+    const guard = setup.indexOf('if: github.event_name != \'workflow_dispatch\'', refresh);
+    const fetchBase = setup.indexOf('git fetch --no-tags origin "$BASE"');
+    const checkoutBase = setup.indexOf('git checkout -B "$BASE" FETCH_HEAD');
+    const setupNode = setup.indexOf("uses: actions/setup-node@");
+    const npmCi = setup.indexOf("run: npm ci");
+    const branchStep = setup.indexOf('pipeline.mjs branch --slug "$SLUG" --prefix research-v2');
+
+    expect(checkout).toBeGreaterThanOrEqual(0);
+    expect(refresh).toBeGreaterThan(checkout);
+    expect(guard).toBeGreaterThan(refresh);
+    expect(guard).toBeLessThan(fetchBase);
+    expect(fetchBase).toBeGreaterThan(refresh);
+    expect(checkoutBase).toBeGreaterThan(fetchBase);
+    expect(setupNode).toBeGreaterThan(checkoutBase);
+    expect(npmCi).toBeGreaterThan(setupNode);
+    expect(branchStep).toBeGreaterThan(npmCi);
+
+    const refreshStep = setup.slice(refresh - 40, fetchBase + 200);
+    expect(refreshStep).toContain("BASE: ${{ github.event.repository.default_branch }}");
+    // No typed input can enable this on the untrusted (manual) path — it keys ONLY on the
+    // real GitHub event name, the same provenance fact deriveLandIntent trusts.
+    expect(refreshStep).not.toMatch(/inputs\./);
+  });
+
   it("init DERIVES intent through land-intent (provenance + ref + selector), and passes the fresh-branch signal", () => {
     const init = text.split("Init or resume the V2 run")[1].split("- name:")[0];
     expect(init).toContain("ON_DEFAULT: ${{ github.ref_name == github.event.repository.default_branch }}");
