@@ -1,0 +1,43 @@
+{
+  "runId": "luxembourg-20260821-99c13e",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-21T07:19:38.996Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-21T07:19:39.008Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-21T07:20:08.952Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-21T07:51:35.792Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 31m"
+    },
+    {
+      "at": "2026-08-21T07:51:35.804Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 21 evaluated · 19 shortlisted · 15 shipped · 6 rejected"
+    },
+    {
+      "at": "2026-08-21T07:51:35.804Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+    },
+    {
+      "at": "2026-08-21T07:51:35.804Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Which bus line connects Ettelbrück to Vianden — older aggregator sources cite \"bus 570,\" the official transit authority lists line 181."
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}
