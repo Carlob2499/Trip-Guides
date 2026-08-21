@@ -11,9 +11,9 @@
   },
   "issue": "71",
   "landMode": "auto",
-  "status": "running",
+  "status": "failed",
   "createdAt": "2026-08-21T07:19:38.929Z",
-  "updatedAt": "2026-08-21T09:07:09.989Z",
+  "updatedAt": "2026-08-21T09:19:38.656Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -119,9 +119,9 @@
       "failure": null
     },
     "critic": {
-      "status": "running",
+      "status": "failed",
       "startedAt": "2026-08-21T09:07:09.989Z",
-      "endedAt": null,
+      "endedAt": "2026-08-21T09:19:38.656Z",
       "attempts": 1,
       "model": "claude-opus-5",
       "effort": "high",
@@ -130,13 +130,17 @@
         {
           "attempt": 1,
           "startedAt": "2026-08-21T09:07:09.989Z",
-          "endedAt": null,
-          "status": "running",
-          "failureClass": null,
-          "durationSec": null
+          "endedAt": "2026-08-21T09:19:38.656Z",
+          "status": "failed",
+          "failureClass": "gate-failure",
+          "durationSec": 749
         }
       ],
-      "failure": null
+      "failure": {
+        "class": "gate-failure",
+        "detail": "offline verify failed: 0 finding(s)",
+        "at": "2026-08-21T09:19:38.656Z"
+      }
     }
   },
   "attempts": {
@@ -147,9 +151,13 @@
   },
   "resume": {
     "nextStage": "critic",
-    "action": "stage \"critic\" was running — validate its output; re-run it if incomplete"
+    "action": "re-run stage \"critic\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
   },
-  "failure": null,
+  "failure": {
+    "class": "gate-failure",
+    "detail": "offline verify failed: 0 finding(s)",
+    "at": "2026-08-21T09:19:38.656Z"
+  },
   "publication": {
     "published": false,
     "publishedAt": null,

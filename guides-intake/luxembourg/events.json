@@ -63,27 +63,42 @@
       "text": "Reconcile complete in 6m (attempt 3)"
     },
     {
-      "at": "2026-08-21T09:06:18.183Z",
+      "at": "2026-08-21T09:06:43.648Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 2 resolved · 1 left as honest blanks"
+    },
+    {
+      "at": "2026-08-21T09:07:09.989Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-21T09:19:38.656Z",
+      "kind": "reject",
+      "text": "Fresh-context critic attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-21T09:19:38.656Z",
       "kind": "decision",
       "text": "Candidate funnel: 29 evaluated · 23 shortlisted · 18 shipped · 9 rejected · 1 kept as detours"
     },
     {
-      "at": "2026-08-21T09:06:18.183Z",
+      "at": "2026-08-21T09:19:38.656Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 12 independent finding(s): 8 adopt · 4 agree"
     },
     {
-      "at": "2026-08-21T09:06:18.183Z",
+      "at": "2026-08-21T09:19:38.656Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-21T09:06:18.183Z",
+      "at": "2026-08-21T09:19:38.656Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Which bus line connects Ettelbrück to Vianden — older aggregator sources cite \"bus 570,\" the official transit authority lists line 181."
     },
     {
-      "at": "2026-08-21T09:06:18.183Z",
+      "at": "2026-08-21T09:19:38.656Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Which single half-day trip out of the city to build into the plan — Vianden Castle (fortifications/history) or the Mullerthal Trail/Echternach loop (nature/hiking) — since the traveler asked for at most one."
     }
