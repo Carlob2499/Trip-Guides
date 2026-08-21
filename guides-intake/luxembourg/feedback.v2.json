@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "wp-feedback/2.0",
+  "slug": "luxembourg",
+  "entries": [
+    {
+      "runId": "luxembourg-20260821-99c13e",
+      "stage": "reconcile",
+      "attempt": 1,
+      "findings": [
+        "P0 research   · FAIL — 7 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ map point \"Bock Casemates\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Musée National d'Histoire et d'Art\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Musée Dräi Eechelen / Fort Thüngen\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Grund\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Pfaffenthal panoramic lift\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Upper town — market, museums, fortifications\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "P1 candidates · FAIL — structural integrity findings in the consideration set",
+        "✗ priority 1: \"Chemin de la Corniche / Wenzel Circular Walk\" is marked shipped but appears nowhere in the guide",
+        "✗ priority 3: \"Pfaffenthal Panoramic Elevator\" is marked shipped but appears nowhere in the guide",
+        "✗ priority 3: \"Grund & the Alzette valley walk\" is marked shipped but appears nowhere in the guide",
+        "⚠ [leg-gap-unjudgeable] 2 of 11 scheduled day leg(s) have no clock time on both ends, so no travel window exists to test — add `time` to those waypoints to make them checkable",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "⚠ bare echo: \"Vianden Castle\" covers 2 different values — which is which?",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-21T08:22:38.939Z",
+      "status": "active",
+      "retiredAt": null
+    }
+  ]
+}
