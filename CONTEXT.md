@@ -686,10 +686,15 @@ stage/landing events (runId-stamped; Progress refuses a stream naming another ru
 honesty rule is unchanged — what the emitter cannot prove still renders empty or null.
 
 **Landing authority is infrastructure; publication is a two-phase transaction** (release-
-candidate correction pass, 2026-08-20). `landMode` is DERIVED at init — auto ⇔ the dispatch
-ran on the default branch with `WAYPOINT_RESEARCH_ENGINE=v2` — recorded once, immutable
-(resume requests are ignored, not honored), and re-checked as landing-time authority, so no
-workflow input, manual dispatch, or feature-ref run can reach auto publication. Publication
+candidate correction pass, 2026-08-20; derivation hardened same day). `landMode` is DERIVED at
+init by `deriveLandIntent()` — auto ⇔ TRUSTED PROVENANCE (the run was invoked through
+new-guide.yml's workflow_call, so its event is the caller's "issues", never
+"workflow_dispatch") AND the default branch AND `WAYPOINT_RESEARCH_ENGINE=v2` — recorded once,
+immutable (resume requests are ignored, not honored), and re-checked as landing-time
+authority. The hardening amendment closed the ref+selector-only gap: a maintainer's manual
+dispatch on main with the selector live now still creates a draft-only run — only the /new
+product flow can mint auto, and no workflow input, manual dispatch, or feature-ref run can
+reach auto publication. Publication
 itself: the gate verdict is a pre-merge fact and rides the branch; `publication.published` is
 written ONLY by `finalizeMergedLanding` after gh confirms the merge, on the default branch,
 idempotently retryable — and the schema refuses `published` without a confirmed merged

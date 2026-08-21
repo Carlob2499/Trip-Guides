@@ -9,9 +9,11 @@
 //     `void=true` emitted so the workflow can spend the one bounded auto-retry;
 //   · a resumed run repeats the interrupted stage (run.v2.json's resume block), never skips
 //     ahead on uncommitted work;
-//   · publication authority is INFRASTRUCTURE, never an input (correction pass): landMode is
-//     derived at init (auto ⇔ default-branch dispatch + selector "v2"), immutable, re-checked
-//     as landing-time authority — and publication itself is a TWO-PHASE transaction: the gate
+//   · publication authority is INFRASTRUCTURE, never an input (correction + hardening passes):
+//     landMode is derived at init by deriveLandIntent (auto ⇔ trusted non-dispatch provenance
+//     from new-guide.yml's workflow_call + default-branch ref + selector "v2" — a manual
+//     workflow_dispatch is always "pr"), immutable, re-checked as landing-time authority — and
+//     publication itself is a TWO-PHASE transaction: the gate
 //     verdict rides the merge, publication is finalized only after gh CONFIRMS the merge
 //     (finalize-landing is the idempotent retry). "pr" runs ALWAYS land draft PRs and cannot
 //     publish, through the same `pipeline.mjs land` machinery V1 uses.
