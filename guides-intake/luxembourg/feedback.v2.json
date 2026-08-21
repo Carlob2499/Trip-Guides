@@ -28,6 +28,18 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-21T08:22:38.939Z",
+      "status": "retired",
+      "retiredAt": "2026-08-21T08:56:29.294Z"
+    },
+    {
+      "runId": "luxembourg-20260821-99c13e",
+      "stage": "reconcile",
+      "attempt": 2,
+      "findings": [
+        "experiential claim \"Kaito's Place de Paris location gets genuinely busy at midda\" (ev-kaito-crowd-tripadvisor) has no source date — recency is unproven for a shipped recommendation",
+        "event-date claim \"Luxembourg observes 11 nationwide public holidays in 2026 (N\" (ev-holidays-2026-no-october-overlap) records appliesToYears without access \"fetched\" — an announced date must come from an announcement that was actually read"
+      ],
+      "createdAt": "2026-08-21T08:56:29.294Z",
       "status": "active",
       "retiredAt": null
     }
