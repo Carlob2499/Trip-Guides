@@ -715,3 +715,16 @@ schema field, and their tests are now removed; the structural anti-fabrication c
 (shipped-name cross-check, shipped ⊆ shortlist, empty-table failure) and the saturation
 record remain the thinness protection. Rejected: re-recording the conflict for a third time —
 three authorities already agreed, so the code moved.
+
+**Every integration/hardening pass ends with a per-requirement acceptance matrix** (creator
+ruling, 2026-08-20, on the PR #68 final hardening pass). The closing report — and the PR body
+it updates — carries one table row PER requirement: verdict (PASS or BLOCKED, nothing
+softer), files changed, a one-line implementation summary, the EXACT test(s) proving the
+behavior, the test result, and remaining uncertainty (an honest "none" is a claim, not a
+default). Two hard rules ride with it: a requirement is never marked PASS on inspection alone
+where a behavioral test was required, and a required behavioral test that is absent or
+failing makes the row BLOCKED — the matrix is where "tests passed" and "the requested
+behavior was proven" are forced to be the same statement. Rejected: prose summaries of "what
+was fixed" without per-requirement proof lines — that shape is how the correction pass's
+"zero known code blockers" claim shipped over twelve live defects; the matrix exists so a
+claim of readiness decomposes into rows a reviewer can falsify one at a time.
