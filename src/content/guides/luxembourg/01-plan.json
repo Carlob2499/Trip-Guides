@@ -3,37 +3,51 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "body": "<p>Findel Airport (LUX) sits about 6km northeast of the city. Bus lines 16 and 29 run every 10–15 minutes to the city centre and central station, and — like every bus, tram and 2nd-class train in the country — they're free.</p><p>A taxi from the terminal takes roughly 15–20 minutes into town; the pickup zone has shifted to Kiss & Fly Parking C during ongoing tram construction. There's no need to buy a ticket or download a transit app before a bus ride — just board.</p>",
+    "phase": "arrival",
+    "source_url": "https://www.lux-airport.lu/parking-transport/bus/",
+    "verified_on": "2026-08-21",
+    "shelf_life": "transit"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "body": "<p>Currency is the euro. Cards are accepted almost everywhere, including small cafés and market stalls; carrying some cash still helps for the weekend market and smaller Grund bars.</p><p>Tipping is not obligatory — Luxembourg carries no legal service charge, and rounding up the bill (or adding 5–10% for real standout service) is the norm rather than a fixed percentage.</p>",
+    "phase": "arrival",
+    "source_url": "https://luxtoday.lu/en/knowledge/how-much-to-tip-in-luxembourg",
+    "verified_on": "2026-08-21",
+    "shelf_life": "default"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "body": "<p>A US passport travels visa-free into Luxembourg for stays up to 90 days in any 180-day period, under the Schengen short-stay rule — no separate Luxembourg visa needed for this trip.</p><p>Keep the passport valid at least 3 months past the return date. ETIAS pre-authorization for visa-exempt travelers is expected to start applying from late 2026; it doesn't affect this trip's October dates but is worth a check if travel plans shift later.</p>",
+    "phase": "before",
+    "source_url": "https://guichet.public.lu/en/citoyens/immigration/moins-3-mois/ressortissant-tiers/entree-visa.html",
+    "verified_on": "2026-08-21",
+    "shelf_life": "default"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "body": "<p>Luxembourg sits inside the EU's \"roam like at home\" zone, so an EU SIM or eSIM covers it at domestic rates alongside a Belgium/France/Germany trip — not useful coming straight from a US plan, though. Check your US carrier's international day-pass rate, or buy a prepaid eSIM (Airalo, Holafly, or POST Luxembourg at the airport) before landing.</p>",
+    "phase": "before"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
-    "body": "",
+    "body": "<p>Nothing on this itinerary needs advance booking — Bock Casemates, the museums, and Vianden Castle all sell walk-up tickets, and the food picks below are chosen for walk-in viability. The one exception is Mousel's Cantine's dinner service, which fills up; a same-day call or its online form is worth using if arriving after 19:00.</p>",
+    "phase": "before",
     "checklist": [
       "Flights",
       "Accommodation",
       "Airport transfer",
       "Travel insurance",
-      "Any timed tickets"
+      "Mousel's Cantine dinner — call ahead or book online if arriving after 19:00"
     ]
   }
 ]

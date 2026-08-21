@@ -1,1 +1,67 @@
-{}
+{
+  "bock-casemates-11-eur": {
+    "claim": "Bock Casemates — adult admission",
+    "value": "€11",
+    "source_url": "https://www.luxembourg-city.com/en/tours-activities/underground/bock-casemates",
+    "verified_on": "2026-08-21",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "mnha-7-eur": {
+    "claim": "Nationalmusée um Fëschmaart (MNHA) — individual admission",
+    "value": "€7",
+    "source_url": "https://www.nationalmusee.lu/en/visit/practical-infos/opening-times-and-admission",
+    "verified_on": "2026-08-21",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "m3e-7-eur": {
+    "claim": "Musée Dräi Eechelen — individual admission",
+    "value": "€7",
+    "source_url": "https://m3e.public.lu/en/infos-pratiques.html",
+    "verified_on": "2026-08-21",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "m3e-mnha-combined-12-eur": {
+    "claim": "Combined same-day ticket — Musée Dräi Eechelen + Nationalmusée",
+    "value": "€12",
+    "source_url": "https://m3e.public.lu/en/infos-pratiques.html",
+    "verified_on": "2026-08-21",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "villa-vauban-5-eur": {
+    "claim": "Villa Vauban — adult admission",
+    "value": "€5",
+    "source_url": "https://villavauban.lu/en/the-museum/general-informations/",
+    "verified_on": "2026-08-21",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "vianden-castle-13-eur": {
+    "claim": "Vianden Castle — adult admission (incl. €1 municipal tourist tax)",
+    "value": "€13",
+    "source_url": "https://castle-vianden.lu/gb/besuch/",
+    "verified_on": "2026-08-21",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "vianden-castle-student-7-eur": {
+    "claim": "Vianden Castle — student (13+) admission",
+    "value": "€7",
+    "source_url": "https://castle-vianden.lu/gb/besuch/",
+    "verified_on": "2026-08-21",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "hotel-140-eur": {
+    "claim": "Mid-range hotel — Luxembourg City, per room per night",
+    "value": "€140",
+    "source_url": "https://www.budgetyourtrip.com/hotels/luxembourg-LU",
+    "verified_on": "2026-08-21",
+    "shelf_life": "venue",
+    "state": "approx",
+    "tier": "secondary"
+  }
+}

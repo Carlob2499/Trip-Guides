@@ -1,11 +1,71 @@
 {
-  "kicker": "Field guide",
+  "kicker": "Luxembourg City · Oct 16–19, 2026",
   "title": "Luxembourg City & Luxembourg",
-  "dek": "",
+  "dek": "Three nights in the fortress city — ramparts and casemates in the upper town, a walk down into the Alzette valley, and one castle beyond the border of the trip's own ambition.",
   "country": "Luxembourg",
+  "tz": "Europe/Luxembourg",
+  "theme": {
+    "primary": "#9c2f2a",
+    "secondary": "#2d3f6e",
+    "accent": "#c9a227"
+  },
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Draft — Pass A (canonical/verified) complete 2026-08-21, Pass B (local/authentic) and reconciliation still to come. Confirmed against primary/official sources: UNESCO-fortifications backbone (Bock Casemates, Chemin de la Corniche/Wenzel Walk), upper-town museums (MNHA, Musée Dräi Eechelen, Villa Vauban), the Pfaffenthal panoramic lift, nationwide free public transport since 1 Mar 2020, the Findel Airport bus link, Vianden Castle + its Ettelbrück/bus-181 connection, entry rules for a US passport, and the shipped food picks. Re-check before travel: the RGTR bus 181 timetable (the Ettelbrück hub reorganized 10 May 2026 — confirm current departure times the morning of), Mousel's Cantine's reservation policy for dinner, and every museum's Monday closure against the actual day plan. Not yet checked: the current US State Department travel advisory level (source is bot-gated against automated fetch) and native-language corroboration (Pass B).",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, stays up to 90 days within any 180-day period across the whole Schengen area.",
+      "passportValidity": "Valid at least 3 months beyond your Schengen departure date.",
+      "note": "A Schengen visa-free stay does not permit paid work. ETIAS pre-travel authorization is expected to start applying to visa-exempt visitors from late 2026 — confirm before booking if this trip slips past that date.",
+      "source_url": "https://guichet.public.lu/en/citoyens/immigration/moins-3-mois/ressortissant-tiers/entree-visa.html",
+      "verified_on": "2026-08-21"
+    }
+  ],
+  "phrases": {
+    "lang": "fr-LU",
+    "items": [
+      {
+        "situation": "Do you speak English?",
+        "native": "Parlez-vous anglais ?",
+        "note": "~80% of Luxembourg speaks English, but starting in French is the local norm",
+        "source_url": "https://frenchassistant.com/french-travel-phrases/",
+        "verified_on": "2026-08-21"
+      },
+      {
+        "situation": "Where is the bathroom, please?",
+        "native": "Où sont les toilettes, s'il vous plaît ?",
+        "source_url": "https://blog.gymglish.com/2022/11/28/common-vital-french-phrases-for-your-survival",
+        "verified_on": "2026-08-21"
+      },
+      {
+        "situation": "How much does this cost?",
+        "native": "Combien ça coûte ?",
+        "note": "point at the item + show this screen",
+        "source_url": "https://lingopie.com/blog/basic-french-travel-phrases-for-beginners/",
+        "verified_on": "2026-08-21"
+      },
+      {
+        "situation": "Excuse me, I'm lost — can you help me?",
+        "native": "Excusez-moi, je suis perdu(e). Pouvez-vous m'aider ?",
+        "source_url": "https://everydayparisian.com/10-key-french-phrases-to-know-for-traveling-to-france/",
+        "verified_on": "2026-08-21"
+      },
+      {
+        "situation": "I have a food allergy",
+        "native": "Je suis allergique à ...",
+        "note": "point + show this screen ordering food",
+        "source_url": "https://speechling.com/how-to/how-to-say-im-allergic-in-french-1457",
+        "verified_on": "2026-08-21"
+      },
+      {
+        "situation": "The bill, please",
+        "native": "L'addition, s'il vous plaît",
+        "source_url": "https://frenchassistant.com/french-travel-phrases/",
+        "verified_on": "2026-08-21"
+      }
+    ]
+  },
   "provenance": "strict",
   "roomId": "8rn5yyk08njus8ik",
-  "footer": ""
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license."
 }

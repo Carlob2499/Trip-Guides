@@ -3,7 +3,7 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
+    "body": "<p>Luxembourg uses the euro (€). ATMs are widely available in the city centre, and contactless card payment is the norm — the market stalls and smaller Grund bars are the main places cash still helps.</p><p>Luxembourg is one of Europe's more expensive capitals: a financial-hub economy pushes hotel and restaurant prices above nearby Belgium or France.</p>",
     "phase": "arrival"
   },
   {
@@ -11,35 +11,69 @@
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
-    "currency": "$",
+    "intro": "Per-person estimates for a mid-range trip. Public transport is free nationwide, so the biggest daily swing is food. Sights are cheap individually (€5–13 each) — the itinerary below visits at most one or two paid sights a day.",
+    "currency": "€",
     "days": 4,
     "budgetTarget": "Mid-range ($75–150/day)",
+    "party": 2,
     "items": [
       {
-        "label": "Lodging, per night",
+        "label": "Lodging, per night (per room)",
         "basis": "day",
-        "est": 0
+        "est": 140,
+        "low": 100,
+        "high": 200,
+        "per": "group",
+        "note": "≈€140/night is a typical mid-range Luxembourg City rate; confirm against your actual booking.",
+        "source_url": "https://www.budgetyourtrip.com/hotels/luxembourg-LU",
+        "verified_on": "2026-08-21",
+        "shelf_life": "venue"
       },
       {
         "label": "Food & drink, per day",
         "basis": "day",
-        "est": 0
+        "est": 55,
+        "low": 35,
+        "high": 80,
+        "per": "person",
+        "note": "Market lunch + casual dinner; a sit-down Luxembourgish dinner runs toward the high end."
       },
       {
         "label": "Local transport, per day",
         "basis": "day",
-        "est": 0
+        "est": 0,
+        "per": "person",
+        "note": "Buses, trams and 2nd-class trains are free nationwide (since 1 Mar 2020).",
+        "source_url": "https://www.mobiliteit.lu/en/tickets-page/fares/",
+        "verified_on": "2026-08-21",
+        "shelf_life": "transit"
       },
       {
         "label": "Sights & activities, per day",
         "basis": "day",
-        "est": 0
+        "est": 15,
+        "low": 5,
+        "high": 25,
+        "per": "person",
+        "note": "Bock Casemates €11, MNHA €7, Musée Dräi Eechelen €7 (or €12 combined), Villa Vauban €5 — the plan visits one or two of these most days."
+      },
+      {
+        "label": "Vianden half-day (castle + transit)",
+        "basis": "trip",
+        "est": 13,
+        "low": 7,
+        "high": 13,
+        "per": "person",
+        "note": "Castle admission only — the train/bus connection is free nationwide transit.",
+        "source_url": "https://castle-vianden.lu/gb/besuch/",
+        "verified_on": "2026-08-21",
+        "shelf_life": "venue"
       },
       {
         "label": "Flights — round trip",
         "basis": "trip",
-        "est": 0
+        "est": 0,
+        "note": "Not estimated — depends on departure city, which isn't yet confirmed."
       }
     ]
   }

@@ -1,0 +1,1113 @@
+{
+  "schemaVersion": "wp-evidence/2.1",
+  "slug": "luxembourg",
+  "runId": "luxembourg-20260821-99c13e",
+  "candidates": [
+    {
+      "id": "c-bock-casemates",
+      "name": "Bock Casemates",
+      "branch": null,
+      "priority": "Culture / history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-chemin-de-la-corniche",
+      "name": "Chemin de la Corniche",
+      "branch": null,
+      "priority": "Culture / history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-musee-national-d-histoire-et-d-art",
+      "name": "Musée National d'Histoire et d'Art",
+      "branch": null,
+      "priority": "Culture / history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-musee-drai-eechelen",
+      "name": "Musée Dräi Eechelen",
+      "branch": null,
+      "priority": "Culture / history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-villa-vauban",
+      "name": "Villa Vauban",
+      "branch": null,
+      "priority": "Culture / history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-notre-dame-cathedral",
+      "name": "Notre-Dame Cathedral",
+      "branch": null,
+      "priority": "Culture / history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-grand-ducal-palace",
+      "name": "Grand Ducal Palace",
+      "branch": null,
+      "priority": "Culture / history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-pfaffenthal-panoramic-elevator",
+      "name": "Pfaffenthal Panoramic Elevator",
+      "branch": null,
+      "priority": "Nature / outdoors",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-grund",
+      "name": "Grund",
+      "branch": null,
+      "priority": "Nature / outdoors",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-neumunster-abbey",
+      "name": "Neumünster Abbey",
+      "branch": null,
+      "priority": "Nature / outdoors",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-petrusse-valley",
+      "name": "Pétrusse Valley",
+      "branch": null,
+      "priority": "Nature / outdoors",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-vianden-castle",
+      "name": "Vianden Castle",
+      "branch": null,
+      "priority": "Culture / history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-vianden-chairlift",
+      "name": "Vianden Chairlift",
+      "branch": null,
+      "priority": "Nature / outdoors",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Couldn't confirm current price against a fetched official source within budget — search-only figures conflicted (€6.50 one-way vs €9 vs €16/couple). Left out of the shipped day plan rather than ship an unconfirmed figure.",
+      "worth": null
+    },
+    {
+      "id": "c-echternach-mullerthal",
+      "name": "Echternach & Müllerthal",
+      "branch": null,
+      "priority": "Nature / outdoors",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "A real alternative half-day/day trip (hiking region + Roman abbey town), but the traveler wants at most one worthwhile trip out and Vianden Castle scores higher on the trip's top-ranked culture/history priority — this is a hiking-first destination, less fortifications-specific.",
+      "worth": null
+    },
+    {
+      "id": "c-schengen",
+      "name": "Schengen",
+      "branch": null,
+      "priority": "Nature / outdoors",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "The Moselle tripoint viewpoint is more a symbolic photo stop than a culture/history or nature depth destination, and is further from the city than Vianden with a weaker transit connection.",
+      "worth": null
+    },
+    {
+      "id": "c-marche-place-guillaume-ii",
+      "name": "Marché Place Guillaume II",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-mousel-s-cantine",
+      "name": "Mousel's Cantine",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-oberweis--grand-rue",
+      "name": "Oberweis",
+      "branch": "Grand-Rue",
+      "priority": "Food & dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-am-tiirmschen",
+      "name": "Am Tiirmschen",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Permanently closed — the restaurant stopped serving customers end of October 2023 and officially closed end of November 2023 per the operator's own account to local press. A frequent generic-guide recommendation that no longer exists.",
+      "worth": null
+    },
+    {
+      "id": "c-um-plateau",
+      "name": "Um Plateau",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Reservation-recommended/table-booking oriented per its own listings, which runs against the traveler's stated preference to eat well without booking anything formal.",
+      "worth": null
+    },
+    {
+      "id": "c-brasserie-guillaume",
+      "name": "Brasserie Guillaume",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Long all-day hours suggested walk-in viability, but the operator's own page carried no hours or booking-policy detail and a second official confirmation couldn't be reached within budget — omitted rather than ship an unconfirmed walk-in claim.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-entry-us-visa-free",
+      "candidateId": null,
+      "claim": "A US passport holder may enter Luxembourg visa-free for stays up to 90 days within any 180-day period (Schengen short-stay rule); ETIAS pre-authorization for visa-exempt travelers is expected to apply from late 2026.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://guichet.public.lu/en/citoyens/immigration/moins-3-mois/ressortissant-tiers/entree-visa.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-transit-free-nationwide",
+      "candidateId": null,
+      "claim": "Public transport (bus, tram, 2nd-class rail) has been free nationwide since 1 March 2020; 1st-class rail and cross-border tickets remain paid, and free fare ends at the border.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mobiliteit.lu/en/tickets-page/fares/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-airport-bus-free",
+      "candidateId": null,
+      "claim": "Bus lines 16 and 29 connect Findel Airport to the city centre/central station every 10–15 minutes, free of charge within Luxembourg; the tram also serves the airport.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.lux-airport.lu/parking-transport/bus/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-airport-taxi-pickup",
+      "candidateId": null,
+      "claim": "Airport taxi pickup has moved to Kiss & Fly Parking C during ongoing tram construction.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.lux-airport.lu/parking-transport/taxi/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-bock-casemates-hours-price",
+      "candidateId": "c-bock-casemates",
+      "claim": "Bock Casemates open daily, every 15 min from 09:45 to 19:00 (last admission), closed Dec 25 & Jan 1; adult admission €11.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.luxembourg-city.com/en/tours-activities/underground/bock-casemates",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-bock-casemates-unesco",
+      "candidateId": "c-chemin-de-la-corniche",
+      "claim": "Luxembourg City's Old Quarters and Fortifications were inscribed on the UNESCO World Heritage List on 17 December 1994, recognizing the fortress complex spanning the 16th–19th centuries before its 1867 partial demolition.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.vdl.lu/en/visiting/art-and-culture/architecture-et-patrimoine/unesco",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-corniche-description",
+      "candidateId": "c-chemin-de-la-corniche",
+      "claim": "The Chemin de la Corniche, called \"the most beautiful balcony of Europe\" by writer Batty Weber, runs along the 17th-century ramparts from the Bock promontory to the Holy Ghost Citadel; it is free, open-air, and forms the spine of the Wenzel Circular Walk.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.luxembourg-city.com/en/place/fortification/chemin-de-la-corniche",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-mnha-hours-price",
+      "candidateId": "c-musee-national-d-histoire-et-d-art",
+      "claim": "Nationalmusée um Fëschmaart (MNHA) open Tue–Wed & Fri–Sun 10:00–18:00, Thu 10:00–20:00, closed Mondays; individual admission €7, combined ticket with Musée Dräi Eechelen €12, free for under-26s and the last hour before closing.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nationalmusee.lu/en/visit/practical-infos/opening-times-and-admission",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-m3e-hours-price",
+      "candidateId": "c-musee-drai-eechelen",
+      "claim": "Musée Dräi Eechelen open Tue–Sun 10:00–18:00 (Wed to 20:00), closed Mondays; individual admission €7, combined same-day ticket with MNHA €12, group rate (6+) €5.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://m3e.public.lu/en/infos-pratiques.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-villa-vauban-hours-price",
+      "candidateId": "c-villa-vauban",
+      "claim": "Villa Vauban open Mon, Wed, Thu, Sat & Sun 10:00–18:00, Fri 10:00–21:00, closed Tuesdays and Nov 1/Dec 25/Jan 1; adult admission €5, free every Friday 18:00–21:00.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://villavauban.lu/en/the-museum/general-informations/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-notre-dame-hours",
+      "candidateId": "c-notre-dame-cathedral",
+      "claim": "Notre-Dame Cathedral is free to enter, open daily 08:00–18:00 (to 19:00 Sundays), except during services.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.visitluxembourg.com/place/cathedrale-notre-dame",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-palace-summer-tours",
+      "candidateId": "c-grand-ducal-palace",
+      "claim": "Grand Ducal Palace interior guided tours (75 min, sold by the Luxembourg City Tourist Office) run 18 July–30 August 2026 only; the changing of the guard in 2026 falls on 22 June, 18 July, and 5 September, all at 16:00 — none inside an October visit window.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.luxembourg-city.com/en/place/iconic-buildings/grand-ducal-palace",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-pfaffenthal-lift-hours",
+      "candidateId": "c-pfaffenthal-panoramic-elevator",
+      "claim": "The Pfaffenthal panoramic elevator runs daily 05:45–01:00, free of charge, connecting Pescatore park (upper town) to Pfaffenthal (Alzette valley floor); closed for maintenance the first Monday of each month from 09:00 to 05:45 the next day.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.vdl.lu/en/getting-around/bike-or-foot/elevators",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-pfaffenthal-lift-free",
+      "candidateId": "c-pfaffenthal-panoramic-elevator",
+      "claim": "The Pfaffenthal panoramic elevator is completely free to use.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.luxembourg-city.com/en/place/monument/panoramic-elevator-of-the-pfaffenthal",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-grund-description",
+      "candidateId": "c-grund",
+      "claim": "The Grund is a former tanners'/millers' quarter set deep in the Alzette valley, part of the 1994 UNESCO fortifications listing, with cobbled lanes (some dating to the 10th century) along the riverfront.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.vdl.lu/en/visiting/art-and-culture/architecture-et-patrimoine/unesco",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-neumunster-hours",
+      "candidateId": "c-neumunster-abbey",
+      "claim": "Neumünster Abbey (neimënster) cultural centre in the Grund is open daily 10:00–18:00; its cloister and courtyard are free to visit, with a paid guided-tour option and the Wenzel route running through it.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.neimenster.lu/en/in-the-heart-of-the-city/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-petrusse-valley-description",
+      "candidateId": "c-petrusse-valley",
+      "claim": "The Pétrusse Valley is a free public park along the old fortress moat below the old town, with walking/jogging trails and a fitness park at Rue d'Anvers, reached from the city centre via stone staircases.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.luxembourg-city.com/en/place/parc/the-petrusse-valley",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-vianden-castle-hours-price",
+      "candidateId": "c-vianden-castle",
+      "claim": "Vianden Castle, October hours: daily 10:00–17:00, last entry 16:30 (seasonal ranges apply other months); adult admission €13 (incl. €1 municipal tourist tax), student (13+) €7, child (6–12) €4; closed Jan 1, Nov 2, Dec 25.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://castle-vianden.lu/gb/besuch/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-vianden-route-line-181",
+      "candidateId": "c-vianden-castle",
+      "claim": "The current public-transport connection to Vianden is CFL train to Ettelbrück + RGTR bus line 181 (Ettelbrück – Vianden – Obereisenbach); the Ettelbrück mobility hub was reorganized starting 10 May 2026, with several lines' stops relocated, and the current line 181 timetable is valid as of that date — which covers this trip's October 2026 dates.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mobiliteit.lu/wp-content/uploads/horaires-new/rgtr//181.pdf?v=20250618",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-05-10",
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-vianden-ettelbruck-reorg",
+      "candidateId": "c-vianden-castle",
+      "claim": "From 10 May 2026 the Ettelbrück mobility hub's bus station was completely reorganized with new bus stops brought into service, as part of ongoing hub construction — the official notice does not itself name which lines are affected, but the line 181 timetable (see ev-vianden-route-line-181) is separately stamped valid from the same date.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mobiliteit.lu/en/timetable-changes-on-certain-rgtr-bus-lines-starting-on-10-may-2026/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-marche-days-hours",
+      "candidateId": "c-marche-place-guillaume-ii",
+      "claim": "The Place Guillaume II market runs Wednesdays and Saturdays, 07:30–14:00 (city page states 07:30–14:00; a food-stall cluster within it ran 10:30–14:00 through Oct 2024 per the same page), with regional produce, cheese, roast chicken and artisanal goods.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.vdl.lu/en/visiting/leisure-and-recreation/luxembourg-city-markets/markets-luxembourg-city",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-mousels-cantine-hours-price",
+      "candidateId": "c-mousel-s-cantine",
+      "claim": "Mousel's Cantine (46 Montée de Clausen), open Mon–Sat 11:45–14:00 & 18:00–22:00, Sun 12:00–16:00; appetizers €9–28, mains €24–69, desserts €9–11; the site offers online booking and encourages reservations, walk-in availability not explicitly stated.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mouselscantine.lu/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-mousels-cantine-dish",
+      "candidateId": "c-mousel-s-cantine",
+      "claim": "Mousel's Cantine has operated in the same Clausen building for 200 years, serving traditional Luxembourgish dishes including Judd mat Gaardebounen (smoked pork collar with broad beans), the country's national dish.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mouselscantine.lu/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-judd-mat-gaardebounen",
+      "candidateId": null,
+      "claim": "Judd mat Gaardebounen (smoked/cured pork collar with broad beans, boiled potatoes) is considered Luxembourg's national dish, associated with the village of Gostingen.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Judd_mat_Gaardebounen",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-oberweis-history",
+      "candidateId": "c-oberweis--grand-rue",
+      "claim": "Oberweis has operated since 1964, moved to the Grand-Rue flagship location in 1970 with a first-floor tearoom, and has been supplier to the Grand Ducal court since 1999.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.oberweis.lu/en_US/la-maison",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-um-plateau-reservations",
+      "candidateId": "c-um-plateau",
+      "claim": "Um Plateau's own listing prompts \"Réserver une table\" (reserve a table) as its primary call to action, linking to its own booking system — indicating a reservation-oriented service model, though the page doesn't explicitly state whether reservations are required or merely recommended.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.visitluxembourg.com/fr/gastronomie/restaurant-um-plateau",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-pharmacy-duty-system",
+      "candidateId": null,
+      "claim": "112 is the nationwide emergency number. A rotating duty pharmacy (pharmacie de garde) keeps at least one pharmacy open 24 hours (8am–8am), listed at pharmacie.lu and posted in every pharmacy window.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.pharmacie.lu/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "fr",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-tipping-not-mandatory",
+      "candidateId": null,
+      "claim": "Luxembourg has no legally mandated restaurant service charge; tipping is optional, and rounding up or adding 5–10% for standout service is the common practice.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://luxtoday.lu/en/knowledge/how-much-to-tip-in-luxembourg",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-19"
+      }
+    },
+    {
+      "id": "ev-languages-spoken",
+      "candidateId": null,
+      "claim": "Luxembourg has three official languages (Luxembourgish, French, German); French is dominant in shops/signage, and roughly 80% of the population also speaks English.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Languages_of_Luxembourg",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-greeting-etiquette",
+      "candidateId": null,
+      "claim": "A brief handshake is the standard Luxembourg greeting even in casual encounters; cheek-kissing is reserved for people who already know each other and never happens between two men; social register is reserved/formal until a relationship is established.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.expatica.com/lu/living/integration/culture-and-social-etiquette-in-luxembourg-106555/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-october-weather",
+      "candidateId": null,
+      "claim": "Luxembourg in October averages 13°C/6°C day/night, with roughly 70–87mm of rain spread across 11–15 days of the month — moderate, not a distinct monsoon-style rainy season, but frequent enough to warrant an indoor fallback for outdoor days.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://weather-and-climate.com/averages-Luxembourg-October",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-holidays-2026-no-october-overlap",
+      "candidateId": null,
+      "claim": "Luxembourg observes 11 nationwide public holidays in 2026 (New Year's, Easter Monday, Labour Day, Europe Day, Ascension, Whit Monday, National Day, Assumption, All Saints', Christmas, Boxing Day) — none fall inside this trip's Oct 16–19 window; the closest is All Saints' Day (Nov 1).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.officeholidays.com/countries/luxembourg/2026",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-21",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-19"
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-mousel-s-cantine",
+      "importance": "important",
+      "bookingUrl": "https://www.mouselscantine.lu/",
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": null,
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "Phone booking (+352 27 67 23 42) or the site's own form; no evidence of a foreign-card or foreign-phone barrier.",
+      "lastSeating": "≈21:00 (kitchen closes 22:00)",
+      "walkIn": "Lunch generally seats walk-ins per the operator's own site; dinner is not confirmed walk-in-friendly and the site itself encourages booking — this directly bears on the traveler's stated preference to avoid formal booking, so it's flagged rather than assumed.",
+      "leads": [
+        {
+          "claim": "Weekend dinner (Fri–Sat) is the highest-risk seating for a walk-in to fail.",
+          "status": "unconfirmed-lead",
+          "source": null,
+          "verifiedOn": null
+        }
+      ],
+      "alternatives": "The Wed/Sat Place Guillaume II market and Oberweis both need no booking at any time and can absorb a dinner that doesn't work out at Mousel's.",
+      "fallback": "Arrive for lunch instead (11:45 seating), which the operator's own page treats as normal walk-in service."
+    },
+    {
+      "candidateId": "c-vianden-castle",
+      "importance": "important",
+      "bookingUrl": null,
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": null,
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": null,
+      "lastSeating": null,
+      "walkIn": "Walk-up ticketing at the castle gate; the official site describes no online-booking requirement for individual visitors (only group tours contact the administration by email).",
+      "leads": [],
+      "alternatives": null,
+      "fallback": "If the bus 181 connection runs late or is missed, the next departure per the reorganized Ettelbrück hub schedule should still allow a same-day visit given the castle's 10:00–17:00 October hours — confirm via the mobiliteit.lu app rather than assuming a fixed interval."
+    }
+  ],
+  "transport": [
+    {
+      "id": "route-luxembourg-vianden",
+      "route": "Luxembourg City → Ettelbrück (CFL train) → Vianden (RGTR bus 181)",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-vianden-route-line-181",
+        "ev-vianden-ettelbruck-reorg"
+      ],
+      "doorToDoor": "≈50–70 min each way (train to Ettelbrück + bus 181 connection), both legs free nationwide transit.",
+      "transferReality": "Cross-platform-adjacent at Ettelbrück per aggregator descriptions, but the whole hub was physically reorganized 10 May 2026 (new platforms, some stops relocated) — the pre-reorg mental model of the transfer no longer applies.",
+      "groupLuggageMobility": "Not a factor for this day trip — no luggage carried, two able walkers.",
+      "buffer": "Build 15–20 min slack at Ettelbrück given the hub reorganization; don't plan a tight back-to-back connection on the outbound leg.",
+      "missedConnection": "RGTR routes in this corridor have historically run roughly half-hourly to hourly; a missed connection costs time, not the day, given the castle's wide October opening window (10:00–17:00).",
+      "nextService": "Not independently confirmed post-reorganization — check the mobiliteit.lu app or call the Mobilitéitszentral (+352 2465 2465) the morning of.",
+      "lastPracticalReturn": "Plan to leave Vianden by mid-to-late afternoon; the castle's last entry is 16:30 in October and free nationwide transit stays available through the evening on the same route.",
+      "fallback": "A taxi from Vianden back to Ettelbrück or direct to Luxembourg City is a fallback if the bus connection fails outright — not priced or booked in advance for this trip."
+    }
+  ],
+  "disagreements": [
+    {
+      "id": "dis-mnha-pricing",
+      "topic": "Whether MNHA (Nationalmusée um Fëschmaart) permanent-exhibition admission is free or a paid €7.",
+      "impact": "minor",
+      "investigation": "An initial search-engine summary claimed permanent exhibitions are free; fetching the museum's own official practical-info page directly showed a standard €7 individual ticket (free only for under-26s, the last hour before close, and Thursday 17:30–20:00).",
+      "resolution": "Resolved in favor of the fetched official source (nationalmusee.lu): €7 individual, with the specific free windows/categories listed above. The guide ships the official figure."
+    },
+    {
+      "id": "dis-vianden-bus-line",
+      "topic": "Which bus line connects Ettelbrück to Vianden — older aggregator sources cite \"bus 570,\" the official transit authority lists line 181.",
+      "impact": "recommendation-changing",
+      "investigation": "Multiple travel-forum/aggregator sources named bus 570. Searching the official mobiliteit.lu line directory found no line 570 serving this corridor, but found line 181 (Ettelbrück–Vianden–Obereisenbach) with an official PDF timetable stamped valid from 10 May 2026, alongside an official notice that the Ettelbrück hub was reorganized on that date.",
+      "resolution": "Resolved in favor of the official, current source: line 181, not 570 — the aggregator figure appears to be stale pre-reorganization information. The guide and a 'What generic guides get wrong' entry both carry the corrected line number, with a flag to reconfirm the live departure time given how recently the hub changed."
+    },
+    {
+      "id": "dis-tipping-service-charge",
+      "topic": "Whether Luxembourg restaurants add a legally mandated 15% service charge (as in France/Belgium) or tipping is fully optional.",
+      "impact": "minor",
+      "investigation": "One aggregator-style search result claimed a 15% service charge is added and included. A directly fetched Luxembourg-focused publication (luxtoday.lu) states explicitly that, unlike France and Belgium, Luxembourg does not require a service charge by law, and tipping (5–10%, or rounding up) is optional custom.",
+      "resolution": "Resolved in favor of the fetched, Luxembourg-specific source. The guide states tipping as optional/customary, not a mandated charge."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-mousel-s-cantine",
+        "c-vianden-castle"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [
+        "route-luxembourg-vianden"
+      ],
+      "notApplicableReason": null
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "By the end of this pass, further searches on the upper-town fortifications/museums cluster, the Grund/valley walk, and Luxembourg City dining were returning the same handful of names (the same museums, the same market, the same short list of traditional restaurants) rather than new serious options. The one unresolved item — Vianden chairlift pricing — is a minor add-on to an already-shipped half-day trip, not something that would change which candidates ship; it's flagged rather than blocking the stop. The Grand Ducal Palace advisory-page block (Cloudflare, needs a browser tool) and native French/Luxembourgish corroboration are left to Pass B / a browser-enabled session, not further English-language search."
+  },
+  "passB": null,
+  "reconciliation": []
+}

@@ -3,7 +3,10 @@
     "type": "panel",
     "group": "Health & safety",
     "title": "Health & pharmacy",
-    "body": "",
-    "phase": "daily"
+    "body": "<p>112 is the emergency number for police, fire and ambulance, valid everywhere in Luxembourg.</p><p>Outside normal hours, a rotating <b>pharmacie de garde</b> (duty pharmacy) keeps at least one pharmacy open nationwide from 8am to 8am the next day. Current duty pharmacies are listed at <a href='https://www.pharmacie.lu/'>pharmacie.lu</a> and posted in every pharmacy's window; at night, ring the bell and present your needs through the hatch.</p><p>US travel insurance is worth arranging before you go — Luxembourg has no reciprocal healthcare agreement with the US, and Schengen entry technically expects proof of coverage.</p>",
+    "phase": "daily",
+    "source_url": "https://www.pharmacie.lu/",
+    "verified_on": "2026-08-21",
+    "shelf_life": "default"
   }
 ]
