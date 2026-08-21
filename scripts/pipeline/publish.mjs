@@ -74,13 +74,18 @@ export async function restoreDraft(slug, { guidesDir = GUIDES_DIR } = {}) {
 // re-quarantine: restore the flag, commit it, and ALWAYS push (the retry case is exactly "the
 // restore commit exists locally but its push never landed"). A push failure THROWS — quarantine
 // that is not on origin is not quarantine, and the caller must treat it as a blocking failure.
-// Where a PR exists for the branch, it is returned to draft best-effort (`gh pr ready --undo`);
-// the guide-content flag is the hard invariant, the PR state the visible secondary.
+// The PR (where one exists) is returned to draft best-effort (`gh pr ready --undo`) — ALWAYS
+// attempted, against the real gh CLI when no runner is injected, because the production path
+// (pipeline.mjs → executeLanding) supplies none; an injected-runner-only attempt was a dead path
+// in the product. The guide-content flag is the hard invariant, the PR state the visible
+// secondary: a failed undraft warns loudly (the guide is safe, the PR may still look Ready)
+// instead of failing the quarantine.
 export async function quarantineRemoteBranch(slug, {
-  branch, reason = "failed landing", guidesDir = GUIDES_DIR, cwd = ROOT, git, gh,
+  branch, reason = "failed landing", guidesDir = GUIDES_DIR, cwd = ROOT, git, gh, warn = console.warn,
 } = {}) {
   if (!branch) throw new Error("quarantineRemoteBranch requires the research branch to re-quarantine");
   const runGit = git || ((args) => execFileSync("git", args, { cwd, encoding: "utf8" }));
+  const runGh = gh || ((args) => execFileSync("gh", args, { cwd, encoding: "utf8" }));
   const restored = await restoreDraft(slug, { guidesDir });
   if (!restored.ok) {
     throw new Error(`could not restore the draft flag for ${slug} (${restored.error}) — the remote branch cannot be proven quarantined`);
@@ -90,10 +95,11 @@ export async function quarantineRemoteBranch(slug, {
     runGit(["commit", "--only", "-m", `chore(${slug}): restore draft after ${reason} — nothing published`, "--", restored.metaPath]);
   }
   runGit(["push", "origin", `HEAD:${branch}`]);
-  let prUndrafted = null;
-  if (gh) {
-    try { gh(["pr", "ready", branch, "--undo"]); prUndrafted = true; }
-    catch { prUndrafted = false; /* best-effort — no PR, or gh itself is what failed */ }
+  let prUndrafted;
+  try { runGh(["pr", "ready", branch, "--undo"]); prUndrafted = true; }
+  catch (err) {
+    prUndrafted = false;
+    warn(`[quarantine] ${slug} — the remote guide content is safely draft:true on origin/${branch}, but the PR could not be returned to draft (${err?.message || err}); it may still appear Ready on GitHub. Undraft it by hand: gh pr ready ${branch} --undo`);
   }
   return { restored: restored.changed, pushed: true, prUndrafted };
 }

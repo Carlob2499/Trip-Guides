@@ -76,7 +76,10 @@ export async function executeLanding(slug, {
     try { runGit(["commit", "--only", "-m", message, "--", ...paths]); } catch { return; /* clean */ }
     if (toBranch) runGit(["push", "origin", `HEAD:${toBranch}`]);
   };
-  const quarantine = (reason) => quarantineRemoteBranch(slug, { branch, reason, cwd, git: runGit, gh, ...guideOpts });
+  // `gh` passes through undefined on the production path — quarantineRemoteBranch's own real-gh
+  // default owns the PR undraft there; `warn: error` keeps its "PR may still look Ready" caution
+  // on this transaction's loud channel.
+  const quarantine = (reason) => quarantineRemoteBranch(slug, { branch, reason, cwd, git: runGit, gh, warn: error, ...guideOpts });
 
   // Auto-publish is the rule: a run that passed its evidence gate takes the draft flag off
   // here, in the same step that lands it. `--land pr` runs that nobody asked for stay drafts.

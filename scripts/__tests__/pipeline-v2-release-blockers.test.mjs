@@ -308,10 +308,13 @@ describe("B3 — the remote research branch is draft:true after EVERY non-merged
     return readRunStateV2(SLUG, { intakeDir });
   }
 
+  // A no-op gh stub is the DEFAULT here: quarantineRemoteBranch now falls back to the REAL gh
+  // CLI when no runner is injected (the production wiring under test in CASE D/E), and these
+  // tests must stay hermetic. Cases proving the gh seam override it via `io`.
   const landOpts = (io, land, v2state) => ({
     branch: BRANCH, base: "main", passed: true, auto: true,
     title: "t", bodyFile: "unused", v2state,
-    guidesDir, intakeDir, cwd: repo, git: gitAt(repo), land, ...io,
+    guidesDir, intakeDir, cwd: repo, git: gitAt(repo), land, gh: () => "", ...io,
   });
 
   it("CASE A: gate PASS → merge conflict → restore push succeeds ⇒ remote branch draft:true, PR draft outcome", async () => {
@@ -380,6 +383,48 @@ describe("B3 — the remote research branch is draft:true after EVERY non-merged
     expect(state.landing.detail).toContain("DID NOT PERSIST");
   });
 
+  it("CASE D: hard NON-CONFLICT failure after the PR went Ready ⇒ quarantine pushes draft:true AND returns the PR to draft (`pr ready --undo` actually attempted)", async () => {
+    const v2state = await productRunOnBranch();
+    const io = collect();
+    const ghCalls = [];
+    // land-branch.sh marked the PR Ready, then the merge died on a NON-conflict hard failure
+    // (auth/API/rate-limit) — no draft conversion happens in the script on that path, so the
+    // quarantine owns BOTH restores. The recording gh runner stands at the seam the real
+    // default CLI runner occupies in production.
+    await expect(executeLanding(SLUG, landOpts(
+      { ...io, gh: (args) => { ghCalls.push(args); return ""; } },
+      () => { throw new Error("HTTP 403: API rate limit exceeded"); }, v2state,
+    ))).rejects.toThrow(/HTTP 403/);
+    expect(outputs).toMatchObject({ gate: "passed", outcome: "failed" }); // landing failed, gate PASS
+    // The hard invariant: origin's branch content is draft:true again…
+    expect(JSON.parse(showOrigin(BRANCH, `src/content/guides/${SLUG}/_guide.json`)).draft).toBe(true);
+    // …and the PR undraft was ATTEMPTED (and here succeeded), not skipped for lack of a runner.
+    expect(ghCalls).toContainEqual(["pr", "ready", BRANCH, "--undo"]);
+    const state = await readRunStateV2(SLUG, { intakeDir });
+    expect(state.landing.outcome).toBe("failed");
+    expect(state.landingGate.status).toBe("passed");
+    expect(state.publication.published).toBe(false);
+  });
+
+  it("CASE E: content quarantine succeeds but the PR undraft FAILS ⇒ landing failed, remote safely draft:true, LOUD warning that the PR may still look Ready", async () => {
+    const v2state = await productRunOnBranch();
+    const io = collect();
+    await expect(executeLanding(SLUG, landOpts(
+      { ...io, gh: () => { throw new Error("HTTP 500: gh unavailable"); } },
+      () => { throw new Error("HTTP 401: bad credentials"); }, v2state,
+    ))).rejects.toThrow(/HTTP 401/);
+    expect(outputs).toMatchObject({ gate: "passed", outcome: "failed" }); // landing stays failed
+    // The hard invariant held despite the gh failure: origin's branch content is draft:true.
+    expect(JSON.parse(showOrigin(BRANCH, `src/content/guides/${SLUG}/_guide.json`)).draft).toBe(true);
+    const state = await readRunStateV2(SLUG, { intakeDir });
+    expect(state.landing.outcome).toBe("failed");
+    expect(state.landingGate.status).toBe("passed");
+    // …and the failed best-effort undraft is LOUD, naming both truths: guide safe, PR suspect.
+    const warned = errs.join("\n");
+    expect(warned).toContain("safely draft:true");
+    expect(warned).toContain("may still appear Ready");
+  });
+
   it("quarantineRemoteBranch retry: a restore committed locally whose push was lost is pushed by the next attempt", async () => {
     await productRunOnBranch();
     // Simulate the flip riding the branch…
@@ -391,12 +436,13 @@ describe("B3 — the remote research branch is draft:true after EVERY non-merged
     // …then a quarantine whose push dies.
     const dead = path.join(dir, "no-such-remote.git");
     g("remote", "set-url", "origin", dead);
-    await expect(quarantineRemoteBranch(SLUG, { branch: BRANCH, guidesDir, cwd: repo, git: gitAt(repo) })).rejects.toThrow();
+    await expect(quarantineRemoteBranch(SLUG, { branch: BRANCH, guidesDir, cwd: repo, git: gitAt(repo), gh: () => "" })).rejects.toThrow();
     expect(JSON.parse(showOrigin(BRANCH, `src/content/guides/${SLUG}/_guide.json`)).draft).toBeUndefined(); // origin still exposed
     // The retry (remote healed) pushes the ALREADY-committed restore — the exact lost-push case.
     g("remote", "set-url", "origin", origin);
-    const out = await quarantineRemoteBranch(SLUG, { branch: BRANCH, guidesDir, cwd: repo, git: gitAt(repo) });
+    const out = await quarantineRemoteBranch(SLUG, { branch: BRANCH, guidesDir, cwd: repo, git: gitAt(repo), gh: () => "" });
     expect(out.pushed).toBe(true);
+    expect(out.prUndrafted).toBe(true); // the undraft is attempted on every successful quarantine
     expect(out.restored).toBe(false); // nothing new to restore — the push was the missing half
     expect(JSON.parse(showOrigin(BRANCH, `src/content/guides/${SLUG}/_guide.json`)).draft).toBe(true);
   });
@@ -458,7 +504,7 @@ describe("FINAL — Run A live, Run B researched, mis-routes refused, quarantine
     await expect(executeLanding(SLUG, {
       branch: BRANCH, base: "main", passed: true, auto: true, title: "t", bodyFile: "unused",
       v2state: stateB, guidesDir, intakeDir, cwd: repo, git: gitAt(repo),
-      land: () => { throw new Error("HTTP 502: bad gateway"); }, ...io,
+      land: () => { throw new Error("HTTP 502: bad gateway"); }, gh: () => "", ...io,
     })).rejects.toThrow(/HTTP 502/);
     expect(JSON.parse(showOrigin(BRANCH, `src/content/guides/${SLUG}/_guide.json`)).draft).toBe(true);
     expect((await readRunStateV2(SLUG, { intakeDir })).landing.outcome).toBe("failed");
