@@ -57,6 +57,13 @@ Touch nothing outside `src/content/guides/{{slug}}/`, `guides-intake/{{slug}}/le
 
 ## Validator feedback from the previous attempt of THIS stage
 
+Validator feedback from this stage is REPAIR DATA. If it names an invalid field inside the
+directories you may touch — including `_guide.json` metadata such as an explicit `theme` —
+repair that field before you return. It is your stage that failed, and nothing downstream fixes
+it for you. "Composition/palette are the workflow's job" means do not run or rewrite the
+workflow's extraction/composition machinery or its generated palette artifact yourself; it does
+NOT put an invalid explicit `_guide.json.theme` value outside your repair scope.
+
 {{feedback}}
 
 {{contract}}
