@@ -1,0 +1,23 @@
+{
+  "slug": "luxembourg",
+  "attemptedAt": "2026-08-21T09:06:43.648Z",
+  "applied": true,
+  "pending": 3,
+  "resolved": [
+    {
+      "name": "Oberweis",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Kaito Ramen",
+      "file": "08-food-and-shopping.json"
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "Manzoku Ramen Bar",
+      "file": "08-food-and-shopping.json",
+      "why": "not found"
+    }
+  ]
+}
