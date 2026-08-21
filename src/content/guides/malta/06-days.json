@@ -1,0 +1,45 @@
+[
+  {
+    "type": "days",
+    "group": "Days",
+    "title": "Day by day",
+    "items": [
+      {
+        "date": "Fri Nov 6",
+        "title": "",
+        "pace": "",
+        "body": ""
+      },
+      {
+        "date": "Sat Nov 7",
+        "title": "",
+        "pace": "",
+        "body": ""
+      },
+      {
+        "date": "Sun Nov 8",
+        "title": "",
+        "pace": "",
+        "body": ""
+      },
+      {
+        "date": "Mon Nov 9",
+        "title": "",
+        "pace": "",
+        "body": ""
+      },
+      {
+        "date": "Tue Nov 10",
+        "title": "",
+        "pace": "",
+        "body": ""
+      },
+      {
+        "date": "Wed Nov 11",
+        "title": "",
+        "pace": "",
+        "body": ""
+      }
+    ]
+  }
+]

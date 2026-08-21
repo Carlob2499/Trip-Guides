@@ -1,0 +1,14 @@
+{
+  "slug": "malta",
+  "createdAt": "2026-08-21T06:24:44.483Z",
+  "updatedAt": "2026-08-21T06:24:44.483Z",
+  "stages": {
+    "scaffold": "2026-08-21T06:24:44.483Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}
