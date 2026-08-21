@@ -11,9 +11,10 @@
 // Precedence at render (src/lib/palettes.ts): explicit guide `theme` → extracted palette →
 // country accent. A guide with no usable photo simply gets no file → country accent, unchanged.
 //
-// Contrast + colour math is duplicated locally rather than imported from src/lib/contrast.ts —
-// plain-node scripts can't import TS (the documented scripts/audit pattern; check-staleness does
-// the same with SHELF_LIFE_DAYS). Keep in sync with content.config.ts if the floor/grounds change.
+// Contrast MATH is duplicated locally rather than imported from src/lib/contrast.ts — plain-node
+// scripts can't import TS (the documented scripts/audit pattern; check-staleness does the same
+// with SHELF_LIFE_DAYS). The POLICY (grounds + floor) is not duplicated: it lives in
+// src/lib/contrast-policy.mjs, a plain .mjs both this file and content.config.ts import.
 
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import path from "node:path";
@@ -21,23 +22,15 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { isMain } from "./audit/lib.mjs";
 import { isSectionFile } from "../src/lib/facts.mjs";
+// Single source of truth for the accent contrast policy — see that file's header. Was a
+// hand-maintained duplicate of content.config.ts's grounds that silently drifted a whole design
+// pass (canary luxembourg-20260821-99c13e's schema rejection is what sent anyone looking); now
+// both files import the same constants instead of two people keeping two copies in sync.
+import { LIGHT_BG, DARK_BG, MIN_ACCENT_CONTRAST } from "../src/lib/contrast-policy.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
 const OUT_DIR = path.join(ROOT, "src", "data", "palettes");
-
-// Mirrors content.config.ts — the gate the extracted primary must pass. A DUPLICATED constant
-// whose comment claims a mirror is only as good as the last time someone checked, and this pair
-// had silently drifted a whole design pass: the grounds sat at #e9ebe3 / #14181c while the
-// schema (and base.css) had moved to R5's #e3e7dc / #0f1317. The light drift was the dangerous
-// direction — a LIGHTER ground inflates contrast for a dark accent, so this extractor could
-// bless a primary the schema then rejected at build time, which is a gate failure the guide
-// author cannot see coming. Re-synced 2026-08-21 (canary luxembourg-20260821-99c13e's schema
-// rejection is what sent anyone looking). Grep both files together if either ground moves;
-// scripts/__tests__/extract-palette.test.mjs fails if they diverge again.
-const LIGHT_BG = "#e3e7dc";
-const DARK_BG = "#0f1317";
-const MIN_ACCENT_CONTRAST = 3.0;
 
 // ── colour math ──────────────────────────────────────────────────────────────
 const hex = (n) => Math.round(n).toString(16).padStart(2, "0");
@@ -51,7 +44,9 @@ function luminance(r, g, b) {
   const f = (c) => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
   return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
 }
-function contrast(hexA, hexB) {
+// Exported so scripts/validate-palettes.mjs re-checks committed palettes with the SAME math
+// this extractor gates new ones with, rather than a third hand-copy of the WCAG formula.
+export function contrast(hexA, hexB) {
   const la = luminance(...hexToRgb(hexA)), lb = luminance(...hexToRgb(hexB));
   const [hi, lo] = la > lb ? [la, lb] : [lb, la];
   return (hi + 0.05) / (lo + 0.05);

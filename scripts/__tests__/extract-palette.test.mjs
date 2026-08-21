@@ -11,18 +11,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { dominantVibrant, rgbToHsl, gate } from "../extract-palette.mjs";
+import { LIGHT_BG, DARK_BG, MIN_ACCENT_CONTRAST } from "../../src/lib/contrast-policy.mjs";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const readSource = (rel) => readFileSync(path.join(ROOT, rel), "utf8");
-
-/** Pull a `const NAME = "value";` out of a source file. The two contrast policies live in
-    separate files by necessity (a plain-node script cannot import TS), so the only way to
-    check the mirror is to read both declarations. */
-function constantIn(source, name) {
-  const match = new RegExp(`const ${name}\\s*=\\s*["']?([^"';]+)["']?;`).exec(source);
-  if (!match) throw new Error(`${name} not declared in the source under test`);
-  return match[1].trim();
-}
 
 /** WCAG relative-luminance contrast, implemented HERE rather than imported from the module under
     test — the point is to verify the extractor's claim independently, not to re-run its own math
@@ -126,44 +118,54 @@ describe("gate — lightness sweep against the contrast floor", () => {
 });
 
 // ── contrast-ground drift ────────────────────────────────────────────────────
-// extract-palette.mjs duplicates content.config.ts's page grounds because a plain-node script
-// cannot import TS, and the comment above the duplicate claimed a mirror that had stopped
-// holding: the extractor still measured #e9ebe3 / #14181c a whole design pass after R5 moved
-// the product to #e3e7dc / #0f1317. The light drift was the UNSAFE direction — a lighter ground
-// inflates contrast for a dark accent, so the extractor could bless a primary the schema then
-// rejected at build time. A comment cannot hold a mirror; this can.
+// extract-palette.mjs used to duplicate content.config.ts's page grounds as a hand-copied
+// constant, and the comment above the duplicate claimed a mirror that had stopped holding: the
+// extractor still measured #e9ebe3 / #14181c a whole design pass after R5 moved the product to
+// #e3e7dc / #0f1317. The light drift was the UNSAFE direction — a lighter ground inflates
+// contrast for a dark accent, so the extractor could bless a primary the schema then rejected at
+// build time. The duplicate is gone now (both files import src/lib/contrast-policy.mjs), which
+// makes that specific drift structurally impossible — this still pins the shared values AND
+// proves neither file quietly re-introduced a local copy of its own.
 describe("contrast grounds — the extractor measures what the product actually paints", () => {
   const extractor = readSource("scripts/extract-palette.mjs");
   const schema = readSource("src/content.config.ts");
 
-  it("names the current page grounds, not a retired palette", () => {
-    expect(constantIn(schema, "LIGHT_BG")).toBe("#e3e7dc");
-    expect(constantIn(schema, "DARK_BG")).toBe("#0f1317");
+  it("the shared policy module names the current page grounds, not a retired palette", () => {
+    expect(LIGHT_BG).toBe("#e3e7dc");
+    expect(DARK_BG).toBe("#0f1317");
+    expect(MIN_ACCENT_CONTRAST).toBe(3.0);
   });
 
-  it("keeps the extractor's grounds and floor identical to the schema's (the drift regression)", () => {
+  it("both the extractor and the schema import the policy — neither re-declares its own copy", () => {
     for (const name of ["LIGHT_BG", "DARK_BG", "MIN_ACCENT_CONTRAST"]) {
-      expect(constantIn(extractor, name)).toBe(constantIn(schema, name));
+      expect(extractor, `extract-palette.mjs should import ${name}, not declare it`).toMatch(
+        new RegExp(`import\\s*\\{[^}]*\\b${name}\\b[^}]*\\}\\s*from\\s*["']\\.\\./src/lib/contrast-policy\\.mjs["']`)
+      );
+      expect(schema, `content.config.ts should import ${name}, not declare it`).toMatch(
+        new RegExp(`import\\s*\\{[^}]*\\b${name}\\b[^}]*\\}\\s*from\\s*["']\\./lib/contrast-policy\\.mjs["']`)
+      );
+      // A stray re-declaration (`const LIGHT_BG = ...`) would give the file its own value again,
+      // silently defeating the import above — assert there isn't one.
+      expect(extractor).not.toMatch(new RegExp(`const\\s+${name}\\s*=`));
+      expect(schema).not.toMatch(new RegExp(`const\\s+${name}\\s*=`));
     }
   });
 
-  it("still finds a passing primary for every hue, and every one clears ≥3:1 on BOTH grounds", () => {
-    const light = constantIn(schema, "LIGHT_BG"), dark = constantIn(schema, "DARK_BG");
-    const floor = Number(constantIn(schema, "MIN_ACCENT_CONTRAST"));
+  it("still finds a passing primary for every hue, and every one clears the floor on BOTH grounds", () => {
     for (let bucket = 0; bucket < 24; bucket++) {
       for (const s of [0.35, 0.6, 0.85]) {
         const primary = gate(bucket / 24, s, 0.5);
         // A correction that made the gate unsatisfiable would be a worse bug than the drift.
         expect(primary, `hue bucket ${bucket} at s=${s} found no passing lightness`).not.toBeNull();
-        expect(contrastRatio(primary, light)).toBeGreaterThanOrEqual(floor);
-        expect(contrastRatio(primary, dark)).toBeGreaterThanOrEqual(floor);
+        expect(contrastRatio(primary, LIGHT_BG)).toBeGreaterThanOrEqual(MIN_ACCENT_CONTRAST);
+        expect(contrastRatio(primary, DARK_BG)).toBeGreaterThanOrEqual(MIN_ACCENT_CONTRAST);
       }
     }
   });
 
   it("rejects the canary's #9c2f2a on the dark ground, at the ratio the schema gate reported", () => {
     // The live verdict was 2.53:1 against #0f1317 — the ground the drifted extractor never used.
-    expect(contrastRatio("#9c2f2a", "#0f1317")).toBeCloseTo(2.53, 2);
-    expect(contrastRatio("#9c2f2a", "#0f1317")).toBeLessThan(3.0);
+    expect(contrastRatio("#9c2f2a", DARK_BG)).toBeCloseTo(2.53, 2);
+    expect(contrastRatio("#9c2f2a", DARK_BG)).toBeLessThan(MIN_ACCENT_CONTRAST);
   });
 });
