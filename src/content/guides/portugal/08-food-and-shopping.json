@@ -16,6 +16,7 @@
     "title": "Lisbon — what to eat",
     "phase": "daily",
     "rank": 1,
+    "intro": "Skip sit-down meals directly on Rua Augusta or around Praça do Comércio/Rossio — Portuguese travel press repeatedly flags that strip for inflated prices, weak quality and street touts; a block or two off the main drag does better.",
     "items": [
       {
         "name": "Pastéis de Belém",
@@ -45,6 +46,7 @@
         "area": "Cais do Sodré, in the historic Mercado da Ribeira building",
         "hours": "Sun–Wed 10:00–24:00, Thu–Sat 10:00–02:00",
         "book": "walk-in",
+        "crowd_tip": "Go before noon for the least crowded stalls — by early afternoon most tables and lines run long. A convenient, genuinely touristy food hall, not where Lisboetas eat day to day.",
         "why": "26 stalls and 8 bars under one roof — the operator's own site calls it 'one of Portugal's most popular tourist attractions,' so go in with that expectation rather than looking for a hidden gem.",
         "verified_on": "2026-08-22",
         "shelf_life": "hours",

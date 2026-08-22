@@ -82,7 +82,7 @@
       {
         "name": "Pena Palace",
         "kicker": "A candy-colored Romanticist palace on a mountaintop",
-        "body": "<p>Sintra's marquee sight — a riot of turrets and tile in yellow, red and lavender, wrapped in a sprawling forested park. The palace interior needs a pre-booked timed slot; the park alone (€12) is a worthwhile lower-key option. Open every day of the year except Dec 24/25/31 and Jan 1 — it does NOT close Tuesdays, despite what many sites claim.</p>",
+        "body": "<p>Sintra's marquee sight — a riot of turrets and tile in yellow, red and lavender, wrapped in a sprawling forested park. The palace interior needs a pre-booked timed slot; the park alone (€12) is a worthwhile lower-key option. Open every day of the year except Dec 24/25/31 and Jan 1 — it does NOT close Tuesdays, despite what many sites claim.</p><p>Crowds build steadily through mid-morning and stay heaviest from about 10:30 to 15:00, as day-trip trains, tour buses and cruise excursions converge; the first entry slots after opening are calmest, and things thin out again after 16:00.</p>",
         "dwell_min": 150,
         "source_url": "https://www.parquesdesintra.pt/en/plan-your-visit/opening-times-and-prices/",
         "verified_on": "2026-08-22",
@@ -108,7 +108,7 @@
       {
         "name": "Monserrate Palace and gardens",
         "kicker": "The quiet, garden-forward alternative to Pena's crowds",
-        "body": "<p>A Moorish-revival palace wrapped in one of Portugal's finest botanical gardens — noticeably calmer than Pena Palace and worth the detour on a nature-leaning day. Roof restoration is underway through early 2027; the palace stays open but the hop-on-hop-off shuttle is currently suspended.</p>",
+        "body": "<p>A Moorish-revival palace wrapped in one of Portugal's finest botanical gardens — noticeably calmer than Pena Palace and worth the detour on a nature-leaning day. Roof restoration is underway through early 2027; the palace stays open but the hop-on-hop-off shuttle is currently suspended.</p><p>It draws far fewer visitors than Pena Palace or Quinta da Regaleira — even in peak season it's realistic to have palace rooms and much of the garden largely to yourself, in sharp contrast to a crowded morning at those two.</p>",
         "source_url": "https://www.parquesdesintra.pt/en/parks-monuments/park-and-palace-of-monserrate/",
         "verified_on": "2026-08-22",
         "shelf_life": "hours"
@@ -165,7 +165,7 @@
       {
         "name": "Ribeira",
         "kicker": "Porto's UNESCO riverside old town",
-        "body": "<p>Layers of pastel-colored houses stacked above the Douro, the postcard image of Porto. Best seen from both banks — walk it from Porto's side, then again from Vila Nova de Gaia across the bridge for the classic wide shot.</p>",
+        "body": "<p>Layers of pastel-colored houses stacked above the Douro, the postcard image of Porto. Best seen from both banks — walk it from Porto's side, then again from Vila Nova de Gaia across the bridge for the classic wide shot.</p><p>Restaurants directly on the promenade are a well-documented tourist-trap cluster — laminated menus, touts, inflated prices; walk a street or two back, toward Clérigos, the Cathedral, or Bonfim, for genuinely local kitchens.</p>",
         "source_url": "https://visitporto.travel/en-GB",
         "verified_on": "2026-08-22",
         "shelf_life": "default"
@@ -198,6 +198,7 @@
         "claim": "Catch the Scotturb 403 bus from Sintra to Cabo da Roca.",
         "correction": "Carris Metropolitana took over Sintra-area bus routes in Jan 2023; the current route to Cabo da Roca is Carris Metropolitana line 1253, not Scotturb 403.",
         "category": "outdated",
+        "source_url": "https://carrismetropolitana.pt/lines/1253",
         "verified_on": "2026-08-22"
       },
       {

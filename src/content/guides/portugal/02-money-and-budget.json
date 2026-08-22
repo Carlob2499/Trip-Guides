@@ -21,9 +21,9 @@
     "budgetTarget": "Mid-range ($75–150/day)",
     "items": [
       { "label": "Lodging, per night (mid-range)", "basis": "day", "est": 90, "note": "Lisbon and Porto mid-range hotel/apartment rates run comparably; treat as a planning range, not a quote." },
-      { "label": "Food & drink, per day", "basis": "day", "est": 45, "note": "A francesinha or sit-down lunch runs €10-20; a pastel de nata is ≈€1.50. Reservations-level dinners push this higher." },
+      { "label": "Food & drink, per day", "basis": "day", "est": 45, "note": "A francesinha or sit-down lunch runs €10-20; a pastel de nata is ≈€1.50. Reservations-level dinners push this higher.", "verified_on": "2026-08-22", "shelf_life": "hours", "source_url": "https://pasteisdebelem.pt/en/contact/" },
       { "label": "Local transport, per day", "basis": "day", "est": 8, "note": "Metro/tram zapping fares in Lisbon and Porto; day passes cost more but pay off on sightseeing-heavy days." },
-      { "label": "Sights & activities, per day", "basis": "day", "est": 20, "note": "Belém Tower €15, Jerónimos €18, São Jorge Castle €17, Pena Palace €20, Regaleira €20, Lello ≈€10-16 (unconfirmed tiers), Clérigos €10 — spread across the trip, not all in one day." },
+      { "label": "Sights & activities, per day", "basis": "day", "est": 20, "note": "Belém Tower €15, Jerónimos €18, São Jorge Castle €17, Pena Palace €20, Regaleira €20, Lello ≈€10-16 (unconfirmed tiers), Clérigos €10 — spread across the trip, not all in one day.", "verified_on": "2026-08-22", "shelf_life": "hours", "source_url": "https://www.museusemonumentos.pt/en/museus-e-monumentos/torre-de-belem" },
       { "label": "Flights — round trip, into Lisbon / home from Porto", "basis": "trip", "est": 700, "note": "TAP Air Portugal flies EWR direct to both LIS and OPO — an open-jaw ticket avoids backtracking. ⚠ airfare is dynamic; this is a planning range, not a quote." },
       {
         "label": "Lisbon–Porto Alfa Pendular train, one-way",

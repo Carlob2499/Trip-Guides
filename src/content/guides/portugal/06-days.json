@@ -22,7 +22,10 @@
         "constraints": ["Jerónimos and Belém Tower closed Mondays — must be today, not a swap day"],
         "energy": "packed",
         "env": "outdoor",
-        "checklist": ["Confirm your Belém Tower and Jerónimos timed-entry tickets the night before"]
+        "checklist": ["Confirm your Belém Tower and Jerónimos timed-entry tickets the night before"],
+        "source_url": "https://www.museusemonumentos.pt/en/museus-e-monumentos/torre-de-belem",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
       },
       {
         "date": "Mon Apr 12",
@@ -31,18 +34,24 @@
         "pace": "Morning castle visit before the heat/crowds build, afternoon free to wander Alfama, evening fado dinner.",
         "body": "<p>São Jorge Castle is one of the only major Lisbon sights open every day (09:00–21:00 in April, €17, no advance ticket needed) — useful, since Belém's sights are shut today. Below it, Alfama's medieval lanes survived the 1755 earthquake essentially intact; there's no fixed route, just wander downhill toward the river.</p><p>Ride Tram 28 for at least one leg — the classic yellow tram climbing Alfama's hills — and keep bags zipped in the crush near the doors, standard advice for any packed tourist tram.</p>",
         "energy": "balanced",
-        "env": "outdoor"
+        "env": "outdoor",
+        "source_url": "https://castelodesaojorge.pt/en/information/useful-information/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
       },
       {
         "date": "Tue Apr 13",
         "title": "Sintra day trip",
         "tldr": "Pena Palace and Quinta da Regaleira in one day — both open Tuesdays, despite what some guides say.",
-        "pace": "Early train from Rossio, Pena Palace first (mandatory timed slot), Regaleira after, Moorish Castle if there's time and energy.",
-        "body": "<p>Train from Rossio to Sintra (≈40 min), then the 24h Scotturb bus pass (€10.96) for bus 434 up to Pena Palace and the Moorish Castle. Pena's palace interior needs a pre-booked timed slot (€20 palace+park; €12 park-only skips the wait); Quinta da Regaleira (€20, its mystical initiation well is the highlight) is a walk or short bus ride from the historic center.</p><p>Despite what many sites claim, Pena Palace does NOT close on Tuesdays — Parques de Sintra properties are open year-round except Dec 24/25/31 and Jan 1. If energy holds, the Moorish Castle's ramparts are a worthwhile add before heading back.</p>",
+        "pace": "Early train from Rossio (before ≈09:00 beats the day-tripper wave), Pena Palace first (mandatory timed slot), Regaleira after, Moorish Castle if there's time and energy.",
+        "body": "<p>Train from Rossio to Sintra (≈40 min), then the 24h Scotturb bus pass (€10.96) for bus 434 up to Pena Palace and the Moorish Castle. Pena's palace interior needs a pre-booked timed slot (€20 palace+park; €12 park-only skips the wait); Quinta da Regaleira (€20, its mystical initiation well is the highlight) is a walk or short bus ride from the historic center.</p><p>Leaving Rossio before about 09:00, rather than mid-morning, reaches Pena well ahead of the day-tripper wave — crowds build steadily through mid-morning and stay heavy until about 16:00, so an early start (and letting one packed bus 434 pass rather than boarding standing-room-only) pays off.</p><p>Despite what many sites claim, Pena Palace does NOT close on Tuesdays — Parques de Sintra properties are open year-round except Dec 24/25/31 and Jan 1. If energy holds, the Moorish Castle's ramparts are a worthwhile add before heading back.</p>",
         "constraints": ["Pena Palace interior requires a pre-booked timed-entry slot"],
         "energy": "packed",
         "env": "outdoor",
-        "checklist": ["Book the Pena Palace timed-entry slot in advance", "Load the 24h Scotturb bus pass at Sintra station"]
+        "checklist": ["Book the Pena Palace timed-entry slot in advance", "Load the 24h Scotturb bus pass at Sintra station"],
+        "source_url": "https://www.parquesdesintra.pt/en/plan-your-visit/opening-times-and-prices/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
       },
       {
         "date": "Wed Apr 14",
@@ -58,9 +67,12 @@
         "title": "Travel to Porto",
         "tldr": "≈2h45m by Alfa Pendular train, then settle into Porto with a Ribeira riverside walk.",
         "pace": "Train mid-morning, arrive early afternoon, easy orientation walk, early dinner.",
-        "body": "<p>The Alfa Pendular from Oriente or Santa Apolónia to Porto Campanhã takes roughly 2h45m — book ahead at cp.pt (the site's exact fare isn't independently confirmable against a live fetch, budget ≈€25–35pp for 2nd class).</p><p>Once in Porto, walk down to São Bento station first — even if you're not catching a train, its main hall's 22,000-tile azulejo mural is free to see and worth the detour — then continue to the Ribeira riverside for your first look at the Dom Luís I Bridge and Vila Nova de Gaia across the water.</p>",
+        "body": "<p>The Alfa Pendular from Oriente or Santa Apolónia to Porto Campanhã takes roughly 2h45m — book ahead at cp.pt (the site's exact fare isn't independently confirmable against a live fetch, budget ≈€25–35pp for 2nd class).</p><p>CP sells discounted, non-refundable 'Promo' fares (bookable 5–60 days ahead) alongside refundable 'Normal' fares in 1st/2nd class; seats are assigned by carriage and number (bring ID), and luggage rides with you in a small overhead rack plus a shared rack near each carriage entrance — no separate baggage car.</p><p>Once in Porto, walk down to São Bento station first — even if you're not catching a train, its main hall's 22,000-tile azulejo mural is free to see and worth the detour — then continue to the Ribeira riverside for your first look at the Dom Luís I Bridge and Vila Nova de Gaia across the water. Restaurants directly on the Ribeira promenade run a well-known tourist-trap gauntlet — save the sit-down meal for a street or two back.</p>",
         "energy": "balanced",
-        "env": "mixed"
+        "env": "mixed",
+        "source_url": "https://www.cp.pt/passageiros/pt/como-viajar/alfa-pendular",
+        "verified_on": "2026-08-22",
+        "shelf_life": "transit"
       },
       {
         "date": "Fri Apr 16",
@@ -71,7 +83,10 @@
         "constraints": ["Mercado do Bolhão closed Sundays — today, not later in the week"],
         "energy": "packed",
         "env": "mixed",
-        "checklist": ["Book the Livraria Lello ticket a few days ahead"]
+        "checklist": ["Book the Livraria Lello ticket a few days ahead"],
+        "source_url": "https://mercadobolhao.pt/en/faqs/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
       },
       {
         "date": "Sat Apr 17",
@@ -80,7 +95,10 @@
         "pace": "Walk the upper deck of Dom Luís I Bridge over, cellar tour late morning, riverfront lunch, afternoon free.",
         "body": "<p>Walk the upper deck of the Dom Luís I Bridge (free, pedestrian, Porto Metro Line D also crosses it) into Vila Nova de Gaia, where the port houses line the riverbank. Sandeman's Porto Visit (€23, 50 min, 3 wines) or Taylor's self-guided audio tour are both confirmed and straightforward to book; treat Graham's and Cálem as options to check on the ground — their official sites didn't yield current pricing on a live fetch.</p><p>Spend the afternoon along the Gaia riverfront — the classic postcard view of Ribeira is from this side, especially as the light goes gold.</p>",
         "energy": "balanced",
-        "env": "outdoor"
+        "env": "outdoor",
+        "source_url": "https://www.sandeman.com/port-wine/visit/cellars-porto/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
       },
       {
         "date": "Sun Apr 18",

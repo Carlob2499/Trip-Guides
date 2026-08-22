@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "portugal",
+  "runId": "portugal-20260822-7c041e",
+  "asks": [
+    {
+      "id": "cities",
+      "ask": "Cities: Lisbon, Porto, Sintra",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "06-days.json#travel-to-porto",
+        "07-sights.json#lisbon",
+        "07-sights.json#sintra"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "Trip dates: 2027-04-10 – 2027-04-19",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Priority #1: Food & dining",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#portuguese-dining-in-short",
+        "08-food-and-shopping.json#lisbon-what-to-eat",
+        "08-food-and-shopping.json#porto-what-to-eat",
+        "08-food-and-shopping.json#vila-nova-de-gaia-port-wine-cellars"
+      ],
+      "evidenceIds": [
+        "ev-pasteis-de-belem-hours-price",
+        "ev-manteigaria-locations",
+        "ev-cafe-santiago-hours",
+        "ev-mercado-do-bolhao-hours",
+        "ev-porto-ribeira-tourist-trap-1"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-2",
+      "ask": "Priority #2: Culture / history",
+      "status": "covered",
+      "where": [
+        "07-sights.json#belem-tower",
+        "07-sights.json#jeronimos-monastery",
+        "07-sights.json#sao-jorge-castle",
+        "07-sights.json#pena-palace",
+        "07-sights.json#quinta-da-regaleira",
+        "06-days.json#sintra-day-trip"
+      ],
+      "evidenceIds": [
+        "ev-belem-tower-hours-price",
+        "ev-jeronimos-monastery-hours-price",
+        "ev-pena-palace-hours-price-timed-entry"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-3",
+      "ask": "Priority #3: Nature / outdoors",
+      "status": "covered",
+      "where": [
+        "07-sights.json#monserrate-palace-and-gardens"
+      ],
+      "evidenceIds": [
+        "ev-monserrate-hours-price-renovation",
+        "ev-monserrate-crowd-1",
+        "ev-monserrate-crowd-2"
+      ],
+      "reason": null
+    },
+    {
+      "id": "pace",
+      "ask": "Pace: balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "travel-style",
+      "ask": "Travel style: Balanced",
+      "status": "covered",
+      "where": [
+        "07-sights.json#pena-palace",
+        "07-sights.json#monserrate-palace-and-gardens",
+        "08-food-and-shopping.json#lisbon-what-to-eat"
+      ],
+      "evidenceIds": [
+        "ev-pena-crowd-timing-1",
+        "ev-monserrate-crowd-1"
+      ],
+      "reason": null
+    },
+    {
+      "id": "budget",
+      "ask": "Budget target: Mid-range ($75–150/day)",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "party",
+      "ask": "Party description: two travellers in their 30s, happy walking a full day and taking trains between cities",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "05-transit.json#key-transit-routes"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "Number of travelers: 2",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "passport-countries",
+      "ask": "Passport countries: United States",
+      "status": "covered",
+      "where": [
+        "01-plan.json#entry-documents"
+      ],
+      "evidenceIds": [
+        "ev-entry-us-90-180"
+      ],
+      "reason": null
+    },
+    {
+      "id": "departure-airport",
+      "ask": "Departure airport: EWR",
+      "status": "covered",
+      "where": [
+        "01-plan.json#booking-checklist"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "comments",
+      "ask": "First time in Portugal. Lisbon and Porto by train, with Sintra as a day trip. Interested in where people actually eat rather than the tourist strips.",
+      "status": "covered",
+      "where": [
+        "05-transit.json#key-transit-routes",
+        "08-food-and-shopping.json#porto-what-to-eat",
+        "07-sights.json#ribeira"
+      ],
+      "evidenceIds": [
+        "ev-porto-ribeira-tourist-trap-1",
+        "ev-porto-ribeira-tourist-trap-2"
+      ],
+      "reason": null
+    }
+  ]
+}
