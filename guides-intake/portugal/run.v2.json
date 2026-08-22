@@ -13,7 +13,7 @@
   "landMode": "auto",
   "status": "running",
   "createdAt": "2026-08-22T01:24:31.449Z",
-  "updatedAt": "2026-08-22T01:50:01.904Z",
+  "updatedAt": "2026-08-22T02:05:17.080Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -63,21 +63,21 @@
       "failure": null
     },
     "passB": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-22T01:50:01.904Z",
-      "endedAt": null,
+      "endedAt": "2026-08-22T02:05:17.066Z",
       "attempts": 1,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "41a32e9c88a81a0a3f1773f9459fc70b015a70dc",
       "history": [
         {
           "attempt": 1,
           "startedAt": "2026-08-22T01:50:01.904Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-22T02:05:17.066Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 915
         }
       ],
       "failure": null
@@ -112,8 +112,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passB",
-    "action": "stage \"passB\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "reconcile",
+    "action": "run stage \"reconcile\""
   },
   "failure": null,
   "publication": {
@@ -149,6 +149,17 @@
         "toolCalls": null,
         "searches": null,
         "fetches": null
+      },
+      "passB": {
+        "durationSec": 915,
+        "failedDurationSec": null,
+        "cumulativeDurationSec": 915,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": null,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
       }
     },
     "counts": {
@@ -158,7 +169,7 @@
       "disagreementInvestigations": 5,
       "nativeLanguageSearches": null
     },
-    "totalDurationSec": 1501,
+    "totalDurationSec": 2446,
     "tokens": null,
     "costUsd": null
   }
