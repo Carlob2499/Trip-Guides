@@ -219,6 +219,27 @@ export async function escalationReport(slug, { stage = null, intakeDir = INTAKE_
   return { ...notice, decision, issue: state?.issue || null };
 }
 
+/** What a RETURNED model process's rejected output is, durably. finish-stage's classification
+    lives here — one exported implementation, driven by tests against a temporary run directory,
+    because "an invalid artifact is not a failed agent" is the whole point of the fix and prose
+    cannot hold it. `changed` is the stage's dirty paths; `problems` the validators' findings. */
+export async function recordStageOutputFailure(slug, stage, { problems, changed, intakeDir = INTAKE_DIR } = {}) {
+  // CLASSIFICATION BOUNDARY (reliability pass, 2026-08-22): this is a verdict on output from a
+  // process that RETURNED, so it may never say "agent-failure" — that class asserts a failed
+  // Claude process, which only the workflow observes (recovery.mjs). Invalid-but-dirty output,
+  // scope-invalid output and a failed contract are all deterministic GATE verdicts; nothing
+  // produced at all is a void run.
+  const isVoid = (changed || []).length === 0;
+  const failureClass = isVoid ? "void-run" : "gate-failure";
+  const failed = await stageFail(slug, stage, { failureClass, detail: problems.join(" · "), intakeDir });
+  // 1B: persist the exact machine findings so THIS stage's retry receives them instead of
+  // re-spending research to rediscover a contract defect.
+  await recordStageFeedback(slug, {
+    runId: failed.runId, stage, attempt: failed.stages[stage]?.attempts || 0, findings: problems, intakeDir,
+  });
+  return { failureClass, isVoid, state: failed };
+}
+
 export function validateSectionInput(value) {
   const section = String(value || "");
   if (section.length > 200) return "section focus exceeds 200 characters";
@@ -405,19 +426,7 @@ async function run(cmd, get, has) {
       problems.push(...stageScopeProblems(slug, stage, changed));
       const dirty = changed.length > 0;
       if (problems.length) {
-        const isVoid = !dirty; // nothing produced at all — the classic void run
-        // CLASSIFICATION BOUNDARY (reliability pass, 2026-08-22): finish-stage is judging the
-        // output of a model process that RETURNED. It therefore may never say "agent-failure" —
-        // that class asserts a failed Claude process, which only the workflow observes (see
-        // recovery.mjs). Invalid-but-dirty output, scope-invalid output and a failed contract
-        // are all deterministic GATE verdicts; nothing produced at all is a void run.
-        const failed = await stageFail(slug, stage, {
-          failureClass: isVoid ? "void-run" : "gate-failure",
-          detail: problems.join(" · "),
-        });
-        // 1B: persist the exact machine findings so THIS stage's retry receives them instead of
-        // re-spending research to rediscover a contract defect.
-        await recordStageFeedback(slug, { runId: failed.runId, stage, attempt: failed.stages[stage]?.attempts || 0, findings: problems });
+        const { isVoid, failureClass } = await recordStageOutputFailure(slug, stage, { problems, changed });
         // Retain the attempt's IN-SCOPE output on the run branch so a retry can repair the
         // artifact in place. Scope violations are NOT committed; every downstream gate
         // (finish-stage, validate, landing) still fails closed on this content.
@@ -434,7 +443,7 @@ async function run(cmd, get, has) {
         await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
         commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (${isVoid ? "void" : "invalid output"})`, { branch });
         emit("void", String(isVoid));
-        emit("failure_class", isVoid ? "void-run" : "gate-failure");
+        emit("failure_class", failureClass);
         console.error(`[pipeline-v2] ${slug} — stage "${stage}" output does not hold up:`);
         for (const p of problems) console.error(`  · ${p}`);
         return 1;
