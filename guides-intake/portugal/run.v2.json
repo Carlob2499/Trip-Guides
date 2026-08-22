@@ -13,7 +13,7 @@
   "landMode": "auto",
   "status": "running",
   "createdAt": "2026-08-22T01:24:31.449Z",
-  "updatedAt": "2026-08-22T01:24:59.670Z",
+  "updatedAt": "2026-08-22T01:49:32.196Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -43,21 +43,21 @@
       "failure": null
     },
     "passA": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-22T01:24:59.670Z",
-      "endedAt": null,
+      "endedAt": "2026-08-22T01:49:32.184Z",
       "attempts": 1,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "19c27bd48774a9f0f0d675da95747fa0f55a046a",
       "history": [
         {
           "attempt": 1,
           "startedAt": "2026-08-22T01:24:59.670Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-22T01:49:32.184Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 1473
         }
       ],
       "failure": null
@@ -103,8 +103,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passA",
-    "action": "stage \"passA\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "passB",
+    "action": "run stage \"passB\""
   },
   "failure": null,
   "publication": {
@@ -127,5 +127,30 @@
     "checkedAt": null,
     "failure": null
   },
-  "telemetry": null
+  "telemetry": {
+    "schemaVersion": "wp-telemetry/2.1",
+    "stages": {
+      "passA": {
+        "durationSec": 1473,
+        "failedDurationSec": null,
+        "cumulativeDurationSec": 1473,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": null,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
+      }
+    },
+    "counts": {
+      "candidatesConsidered": 34,
+      "candidatesDeepVerified": 32,
+      "factsVerified": 50,
+      "disagreementInvestigations": 5,
+      "nativeLanguageSearches": null
+    },
+    "totalDurationSec": 1501,
+    "tokens": null,
+    "costUsd": null
+  }
 }

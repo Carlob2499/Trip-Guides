@@ -1,0 +1,48 @@
+{
+  "runId": "portugal-20260822-7c041e",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-22T01:24:31.489Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-22T01:24:31.491Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-22T01:24:59.670Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-22T01:49:32.184Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 25m"
+    },
+    {
+      "at": "2026-08-22T01:49:32.196Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 34 evaluated · 32 shortlisted · 26 shipped · 4 rejected"
+    },
+    {
+      "at": "2026-08-22T01:49:32.196Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+    },
+    {
+      "at": "2026-08-22T01:49:32.196Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Whether Pena Palace closes on Tuesdays (plus Easter/May 1/Jun 13), as widely repeated by third-party aggregator sites, versus the official Parques de Sintra position that its properties are open every day except Dec 24/25/31 and Jan 1."
+    },
+    {
+      "at": "2026-08-22T01:49:32.196Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Multiple third-party booking sites (Viator, Busbud, TripAdvisor) still list the Aerobus airport shuttle as bookable, while the official Lisbon Airport transport page omits it entirely and aerobus.pt 404s."
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}
