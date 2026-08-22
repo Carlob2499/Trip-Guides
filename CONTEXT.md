@@ -751,3 +751,27 @@ lifecycle; only when no run owns the answer does publication route it to a chang
 Rejected: branch-name identity as landing proof (aliases generations); logging a failed
 draft-restore and continuing (claims a safety the remote cannot show); routing by
 publication-first (the exact Run-A-steals-Run-B mis-route).
+
+**A failure class names the PLANE that failed, and durable state alone decides a retry**
+(reliability ruling, 2026-08-22, `fix/v2-reliability-hardening`; live evidence: Portugal run
+`portugal-20260822-7c041e`, issue #74). Three planes, never inferred from one another:
+*interactive* Claude (local bridge, embedded browser), *headless* Claude Code in GitHub Actions,
+and the *deterministic* workflow/control plane. Consequences, all now mechanical: (1) A headless
+agent step reports the CLAUDE PROCESS's status, never a pipe's — every invocation runs through
+`scripts/run-logged-command.sh`, because `docker run … | tee` reported tee's zero and recorded a
+session-limited reconcile GREEN. (2) A failed agent process's workspace is PARTIAL ATTEMPT
+EVIDENCE: it never enters the collect/verify path, so a partial run cannot be reclassified as a
+content-gate failure. (3) `finish-stage` judges output from a process that RETURNED, so it may say
+`void-run` (nothing produced) or `gate-failure` (invalid or scope-invalid output) and NEVER
+`agent-failure` — that class asserts a failed model process, which only the workflow observes.
+`usage-limit` requires the CLI's own printed diagnostic AND a nonzero process; a control-plane
+failure nobody attributed is `unknown`, not `gate-failure`. (4) Automatic repair is decided by
+`run.v2.json` — an auto-retryable class (`gate-failure`/`void-run` only), actionable validator
+findings for the same runId/stage, and room in both the attempt cap (5) and the auto-retry cap (1)
+— and a repair re-dispatch resumes the SAME runId, branch, intake and landMode with completed
+stages skipped. (5) A run that will not repair itself escalates VISIBLY: an Actions error plus one
+marker-deduped issue comment. Rejected: an ephemeral step output (`void == 'true'`) as retry
+truth — it was scoped to the one failure class that almost never occurs, so ordinary repairable
+gate failures never self-dispatched at all, and a per-dispatch boolean cannot bound a loop ACROSS
+dispatches; also rejected: widening the caps to compensate (the defect was routing, not budget),
+and letting a repeated terminal failure re-comment on the intake issue.
