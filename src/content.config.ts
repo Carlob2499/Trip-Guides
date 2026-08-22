@@ -7,24 +7,10 @@ import { contrastRatio } from "./lib/contrast";
 import { isSectionFile, interpolateFacts, FACT_VALUE_FORBIDDEN_RE } from "./lib/facts.mjs";
 import { findUnsafeHtml } from "./lib/prose-html";
 import { PANEL_HOSTABLE_TYPES } from "./lib/section-types";
-
-// Light page background (base.css `--bg`). A guide `theme.primary` becomes the
-// site `--accent`, painted as link/tab/label text on this surface — so it must
-// stay legible against it. Keep in sync with base.css if that token changes.
-// R5 (2026-08-11): lifted #dfe3d9 -> #e3e7dc with the Day palette. A lighter ground RAISES
-// contrast for every dark accent, so no guide's theme.primary newly fails — but a gate
-// measuring a background the product no longer paints measures nothing, which is the only
-// reason this literal is touched at all. No schema field changed.
-const LIGHT_BG = "#e3e7dc";
-// Dark page background (base.css dark-mode `--bg`). The accent is NOT re-mapped in
-// dark mode, so a theme.primary must stay legible on BOTH grounds — a light-only
-// gate shipped a 2.33:1 dark-mode bug in WayPoint-V2; gate both, always.
-const DARK_BG = "#0f1317";
-// 3.0:1 is WCAG's minimum for large-text / UI-component contrast, and is the
-// empirically-calibrated floor of the project's own country accent palette
-// (the tightest, #a6721b, sits at ~3.20:1 on the R2 ground). Below this, accent UI turns
-// illegible on the cream background — fail the build loudly rather than ship it.
-const MIN_ACCENT_CONTRAST = 3.0;
+// Single source of truth for the accent contrast policy (grounds + floor), shared with
+// scripts/extract-palette.mjs and scripts/validate-palettes.mjs so the schema gate, the
+// generator, and the repo-wide validator can't independently drift — see that file's header.
+import { LIGHT_BG, DARK_BG, MIN_ACCENT_CONTRAST } from "./lib/contrast-policy.mjs";
 
 // ADDITIVE provenance for perishable facts (prices, hours, transit, availability).
 // Optional everywhere — every pre-existing guide builds unchanged. When present:
