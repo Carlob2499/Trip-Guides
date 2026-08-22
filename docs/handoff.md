@@ -5,7 +5,7 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE
-Pipeline V2's reliability repair is MERGED (PR #75 → main `253607a`) and green, but has NEVER executed in a live Actions job. Canary #4 is that proof and has not started.
+Pipeline V2's reliability repair is MERGED (PR #75 → main `253607a`) and CI-green, but the repaired V2 research/recovery RUNTIME has not yet been exercised by a live Pipeline V2 research canary. Canary #4 is that proof and has not started.
 Standing hazard: Claude's embedded browser can crash on login/CAPTCHA/Cloudflare verification — never attempt one; interactive Remote Control can lose the local bridge (`computer_unreachable`).
 Canaries: Malta RED; Luxembourg RED; Portugal CANARY_RED (#74, run portugal-20260822-7c041e) — preserve all three as evidence. DO NOT resume Portugal; Canary #4 is a FRESH slug.
 Merged repair: agent exit integrity (no `| tee` masking); partial output cannot enter the success path; failure classes name a plane (`finish-stage` never says `agent-failure`); retry eligibility reads durable run.v2.json; a stopped run escalates visibly. Caps unchanged (5 attempts, 1 auto-retry).
@@ -22,7 +22,9 @@ The V2 reliability repair is **merged and closed out**. PR #75 (12 commits, 15 f
 4 cancellation-reachable escalations, 0 paths from `finish-stage` to `agent-failure` — with the
 full gate green on the merged tree (2904 tests, build, lint, typecheck).
 
-**Nothing about it has run in GitHub Actions.** Every claim is unit-level or a wiring pin.
+**What is NOT proven:** the repaired research/recovery runtime has never been exercised by a live
+Pipeline V2 research canary. PR CI ran in Actions and is green — but CI runs the test suite, not
+the research workflow. Every claim about the recovery path is unit-level or a wiring pin.
 
 Recommended next step: **start Canary #4 on a fresh slug** (never by resuming Portugal) and treat
 it as the boundary check the unit suite structurally cannot perform.

@@ -343,7 +343,9 @@ runner produces the build+verify scorecard as the PR body.
 ### Reliability repair — MERGED 2026-08-22, UNPROVEN in production (PR #75 → main `253607a`)
 
 The Portugal scar's repair is on main and green (2904 tests, build, lint, typecheck on the
-merged tree), but **no part of it has executed in a live Actions job**. Canary #4 is that proof.
+merged tree), but **the repaired research/recovery runtime has not been exercised by a live
+Pipeline V2 research canary**. PR CI ran in Actions and passed; it runs the test suite, not
+`research-pass-v2.yml`. Canary #4 is that proof.
 Four seams to watch in its logs — each is a place this code meets a system it does not control,
 which is exactly what the unit suite cannot speak to:
 
