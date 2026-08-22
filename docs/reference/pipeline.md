@@ -20,7 +20,7 @@ and never work orders. Read alongside `docs/standards/guide-rubric.md` (the bar)
 |  | **Research** | **Change** |
 |---|---|---|
 | Builds | a guide that does not exist yet | a guide that already exists |
-| Workflow | `research-pass.yml` | `change.yml` |
+| Workflow | `research-pass.yml` (V1, default) · `research-pass-v2.yml` (V2, selector-gated — see below) | `change.yml` |
 | Agents | 4 (Pass A · Pass B · reconcile · critic) | 2 (change · critic) |
 | Stages | `scaffold → passA → passB → reconcile → verified` | none — one run, start to finish |
 | Resumable | **yes**, per stage, from a committed checkpoint | **no** — a dead run re-runs from scratch |
@@ -35,6 +35,38 @@ state machine to resume it would cost more than re-running it, and a stale persi
 whole class of bug that now cannot exist.
 
 ## The research lifecycle — build a guide, publish it if the evidence holds
+
+> **Two GENERATION implementations, one lifecycle (cutover, 2026-08-22).** There are still
+> exactly **two product lifecycles** — Research and Change. Research currently has two
+> implementations while V2 is proven:
+>
+> | | **V1 — `research-pass.yml`** | **V2 — `research-pass-v2.yml`** |
+> |---|---|---|
+> | Role | **default and rollback path** (TEMP_COMPAT) | integrated candidate, not yet accepted live |
+> | Selected by | everything, while the selector is off | trusted `/new` (`new-guide.yml` `workflow_call`) only when `WAYPOINT_RESEARCH_ENGINE` = `v2` |
+> | Manual dispatch | — | always `landMode=pr`; it structurally cannot publish |
+> | Stage/state ownership | agents checkpoint and commit | **workflow-owned** in `run.v2.json`; agents never checkpoint or commit |
+> | Pass B / critic isolation | by prompt and invocation | **mechanical** — separate worktree at the recorded baseline, fail-closed leak check; the critic's forbidden inputs are deleted from the tree |
+>
+> The V1 description in the rest of this section remains accurate **for V1** and is retained as
+> the rollback path, not as the singular current architecture. V2's own state machine, failure
+> semantics and two-phase publication are below and in `docs/pipeline v2/IMPLEMENTATION_STATE.md`.
+>
+> **V2 failure and retry semantics (PR #75).** The planes are never inferred from one another:
+> a failed agent PROCESS stays a process failure (`usage-limit` · `agent-failure` · `cancelled` ·
+> `unknown`), and an artifact verdict from a process that RETURNED is `void-run` or
+> `gate-failure` — never `agent-failure`. Partial output from a failed process never enters the
+> success/validation path. Only an actionable `gate-failure` or `void-run` — one carrying
+> validator findings for the same runId/stage, with budget left — earns **one** bounded
+> automatic repair, which preserves the exact runId, branch, intake, immutable `landMode`,
+> completed stages and attempt history. Every other class **stops visibly**: an Actions error
+> plus one marker-deduped issue comment naming the stage, class, why no retry happened and the
+> safe recovery. Caps are unchanged (5 attempts, 1 auto-retry).
+>
+> **Publication is the two-phase transaction described later in this document** — the gate verdict
+> rides the merge, and publication is finalized only after the merge is confirmed.
+
+*The V1 research lifecycle, which remains the default while the selector is off:*
 
 ```
   intake (site wizard → Worker → issue)          ← the only human step

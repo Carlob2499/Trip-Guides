@@ -708,6 +708,46 @@ describe("B3 — a cancelled run stops VISIBLY and never auto-repairs", () => {
   });
 });
 
+// ── the retry-authority invariant, re-checked independently ──────────────────
+// Codex's non-blocking note on PR #75: the YAML suppresses the visible stop whenever
+// `allowed=true`, so it trusts retryEligibility() completely. A regression that let a
+// never-retryable class through would strand a run silently — the exact failure this pass
+// exists to remove. `auto-retry` therefore re-checks the invariant against the DURABLE record
+// before emitting a yes, as a separate predicate rather than a shared branch.
+
+describe("retry authority — a `yes` must always be able to name an auto-retryable recorded class", () => {
+  it("the guard is a second, independent read of the durable record", () => {
+    const source = readRepo("scripts/pipeline-v2.mjs");
+    const block = source.split("DEFENCE IN DEPTH")[1].split("case \"record-agent-failure\"")[0];
+    expect(block).toContain("AUTO_RETRYABLE_CLASSES.includes(recorded)");
+    expect(block).toContain("state?.stages?.[decision.stage]?.failure?.class");
+    expect(block).toContain("allowed: false");
+  });
+
+  it("every class the state machine may approve satisfies the invariant", async () => {
+    // The two agree today — this pins that they must, for the whole vocabulary.
+    for (const cls of FAILURE_CLASSES) {
+      await rm(path.join(intakeDir, SLUG), { recursive: true, force: true });
+      await mkdir(path.join(intakeDir, SLUG), { recursive: true });
+      await runAt("reconcile");
+      const failed = await failWith("reconcile", cls, { findings: ["a finding"] });
+      const decision = await decide(failed, "reconcile");
+      const recorded = failed.stages.reconcile.failure.class;
+      if (decision.allowed) expect(AUTO_RETRYABLE_CLASSES).toContain(recorded);
+      else expect(decision.reason).toBeTruthy();
+    }
+  });
+
+  it("the invariant would catch a disagreement, and its refusal is honest about being a bug", () => {
+    // Simulating the regression Codex described: eligibility says yes for a cancelled stage.
+    const recorded = "cancelled";
+    const wouldRefuse = !AUTO_RETRYABLE_CLASSES.includes(recorded);
+    expect(wouldRefuse).toBe(true);
+    const source = readRepo("scripts/pipeline-v2.mjs");
+    expect(source).toContain("that disagreement is itself the bug");
+  });
+});
+
 // ── P · Q · authority and publication never move on a failure path ───────────
 
 describe("P/Q — no failure or retry state can move landing authority or publication", () => {

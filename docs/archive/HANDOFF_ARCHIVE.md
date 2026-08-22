@@ -10,6 +10,36 @@
 > `scripts/__tests__/docs-integrity.test.mjs`). The session-end ritual still appends here.
 
 
+## Snapshot (2026-08-22 — V2 reliability repair: PR #75 built, reviewed three times, merged)
+
+Portugal (Canary #3, #74, run `portugal-20260822-7c041e`) died three ways at once and the
+workflow reported none of them: the headless reconcile printed `You've hit your session limit`
+and exited nonzero while `docker run … | tee` reported tee's zero, so the step went GREEN; the
+partial workspace was then verified into a misleading content-gate story; and nothing retried,
+because the retry gate read one ephemeral step output (`void == 'true'`) that a deterministic
+gate failure never sets. Codex had already pushed exit-integrity + bounded-warm-start work to
+`fix/v2-reliability-hardening`; this session verified it (9/9 green, nothing rewritten) and
+finished the runtime/orchestration half.
+
+Landed on main as `253607a` (PR #75, 12 commits, 15 files): all four agent invocations run
+through `scripts/run-logged-command.sh`; collect/verify is gated on the agent having returned
+cleanly; failure classes now name a PLANE (`finish-stage` can say `void-run`/`gate-failure` and
+never `agent-failure`; the process plane is classified once in `scripts/pipeline/v2/
+recovery.mjs` from the step conclusion plus the CLI's own diagnostic); retry eligibility is read
+from `run.v2.json` (auto-retryable class + actionable findings for the same runId/stage + both
+budgets); a run that will not repair itself escalates visibly. **Caps untouched (5 attempts, 1
+auto-retry) — the defect was routing, not budget.**
+
+Three Codex review rounds, all closed: **B1** the four stage jobs' own `permissions:` blocks
+omitted `issues`, which GitHub resolves to `none`, so the escalation's `gh issue comment` would
+have 403'd in exactly the path it exists to make visible; **B2** an *eligible* repair whose
+`gh workflow run` failed left `allowed=true`, skipping the stop while the reservation was
+already spent; **B3** `failure()` and `cancelled()` are disjoint, so a cancelled run recorded
+`cancelled` and then skipped both the retry decision and the escalation. Method scar worth
+keeping: the first B1 regression **passed with its own fix deleted** — it was substring-matching
+the explanatory comment, which contained `issues: write`. Every workflow guard since is verified
+by reverting its fix and watching it go red.
+
 ## Snapshot (2026-08-20 — FINAL integration-hardening pass on PR #68, R1–R13)
 
 The deterministic pre-Codex hardening pass closed thirteen requirements on the PR branch, each
@@ -51,20 +81,3 @@ late-answer reopen (reconcile+critic re-open), exact question-ID dedup + truthfu
 landingMode implementation, floors removed repo-wide (CONFLICTING_SPEC resolved per the
 2026-08-17 decision), scorecard human rows now advisory. Full record: IMPLEMENTATION_STATE
 "Release-candidate correction pass".
-
-## Snapshot (2026-08-20 — Integration week I01–I06 executed; draft PR #67-adjacent integration PR up)
-
-Carlo directed "merge PR #63 and re-run the mission" — the P13 go made operationally. PR #63
-squash-merged as `be9c535`; branch `fable/pipeline-v2-integration` carries I01–I06. Delivered:
-durable `issue` + immutable `landMode` in run.v2.json (resumes inherit both; escalation/strip
-refused); deterministic `land-mode` decision + `recordProductLanding` (pre-merge record, fails
-closed on incomplete); questions job (always(), dedup); Progress reads real events with a main
-fallback for merged runs. **Two live defects found+fixed on main:** `/new` scaffold lost its
-issue (`get("issue")`/ISSUE_NUM seam — `062d3ad`) and change.yml's answers re-dispatch 403
-(missing `actions: write` — `2d39b2c`); the M6 answers path had NEVER run live before.
-**Andorra fixture (#64) proved the lifecycle live:** selector OFF→V1 / ON→V2-from-main /
-restored→V1; issue threading; interruption after passA → resume skipped it; reconcile failed
-offline verify twice and the 1B feedback retry converged (7→6→0); geocode+critic+land green;
-`landing mode pr` → real gate exit 0 → **draft PR #67, published:false, deployedLive:null,
-attempts 5/5**. Full gates green. Evidence: IMPLEMENTATION_STATE "Integration week session".
-

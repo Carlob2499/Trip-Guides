@@ -1,5 +1,37 @@
 # Codex Handoff — Pipeline V2
 
+> # ⚠ HISTORICAL AUDIT RECORD — NOT AN ACTIVE WORK ORDER
+>
+> **Status: RESOLVED (2026-08-22).** Everything below this block is the ORIGINAL audit brief and
+> its open questions, kept for its dependency notes and its record of what was asked. **Do not
+> execute any instruction in it.** Read every "What you need to answer", "Known places where the
+> new decisions may conflict", "What to inspect", "Tests", "Final output" section as a question
+> that was ALREADY ANSWERED, never as a task list.
+>
+> **The decision it asks for has been made:** V2 was **built beside V1**, not as a cleanup of the
+> existing pipeline. That work is complete and merged.
+>
+> **Three claims below are now FALSE — do not act on them:**
+> 1. *"Can the pipeline be cleaned up, or is a V2 replacement better?"* — resolved: build beside
+>    V1. V2 exists, is integrated, and is selector-gated.
+> 2. *Numeric Pass-B candidate/venue quotas are current.* — they were REMOVED (P06) and replaced
+>    by adaptive saturation protections. Re-introducing a numeric floor would be a regression.
+> 3. *Telemetry reportedly does not emit.* — V2 telemetry emits and Progress reads it through the
+>    V2 gateway/adapter (I05), with honest-empty preserved where data is genuinely absent.
+>
+> **Current authority for execution state — read these instead:**
+> - `docs/pipeline v2/SEPTEMBER_TRACKER.md` — delivery state and what is proven vs pending.
+> - `docs/pipeline v2/IMPLEMENTATION_STATE.md` — the detailed build/canary record.
+> - `docs/reference/pipeline.md` — the pipeline POLICY authority.
+>
+> **Current boundary:** a fresh **Canary #4** after closeout PR #76, exercising the repaired
+> runtime from PR #75. V1 remains the rollback/default path and the `WAYPOINT_RESEARCH_ENGINE`
+> selector remains off until that acceptance is earned.
+
+---
+
+*Original brief follows, verbatim, as historical record.*
+
 Read this file after `docs/pipeline v2/DECISIONS.md`.
 
 The repo-wide audit requested below is complete. This file now records the verified dependency contract; do not repeat the audit.
