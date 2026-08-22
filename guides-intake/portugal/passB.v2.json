@@ -1,0 +1,570 @@
+{
+  "schemaVersion": "wp-evidence/2.1",
+  "slug": "portugal",
+  "runId": "portugal-20260822-7c041e",
+  "candidates": [
+    {
+      "id": "c-time-out-market-lisboa",
+      "name": "Time Out Market Lisboa",
+      "branch": null,
+      "priority": null,
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Consistently reported as packed with no free seating by early-mid afternoon; a curated tourist food hall, not where Lisboetas eat day to day — fine as a fast, early (pre-noon) lunch stop, not the 'where people actually eat' pick this trip wants.",
+      "worth": null
+    },
+    {
+      "id": "c-cervejaria-ramiro",
+      "name": "Cervejaria Ramiro",
+      "branch": null,
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Genuinely excellent per Portuguese food press, but it's the default canonical pick every guide already leads with (Pass A territory); Pass B's job is the alternative, so effort was redirected to neighborhood tascas per the traveler's explicit ask to eat where locals eat.",
+      "worth": null
+    },
+    {
+      "id": "c-rua-augusta-restaurant-strip",
+      "name": "Rua Augusta Restaurant Strip",
+      "branch": null,
+      "priority": null,
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Portuguese travel press repeatedly flags the Praça do Comércio / Restauradores / Figueira / Rossio / Rua Augusta cluster for above-average prices, below-average quality, and street touts handing out menus — a textbook tourist-trap signal; steer the whole cluster out of the guide.",
+      "worth": null
+    },
+    {
+      "id": "c-taberna-os-papagaios--arroios",
+      "name": "Taberna Os Papagaios",
+      "branch": "Arroios",
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Portuguese press (Visão, May 2025) profiles it as part of a new wave of neighborhood tascas in Arroios (no wifi, no reservations, community-focused). Promising, but press coverage isn't a firsthand account, so it isn't independently corroborated — kept as a lead for reconcile rather than shipped.",
+      "worth": null
+    },
+    {
+      "id": "c-a-adega-do-domingos",
+      "name": "A Adega do Domingos",
+      "branch": null,
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Search-preview-only lead (the native source, Lisboa Secreta, blocked on direct fetch) describing it as an unpretentious, tradition-holding tasca on Rua de Arroios near Anjos. Not independently verified — flagged as a lead only.",
+      "worth": null
+    },
+    {
+      "id": "c-manteigaria--chiado",
+      "name": "Manteigaria",
+      "branch": "Chiado",
+      "priority": null,
+      "status": "shortlisted",
+      "shortlisted": false,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-pasteis-de-belem",
+      "name": "Pastéis de Belém",
+      "branch": null,
+      "priority": null,
+      "status": "shortlisted",
+      "shortlisted": false,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-bufete-fase",
+      "name": "Bufete Fase",
+      "branch": null,
+      "priority": null,
+      "status": "shortlisted",
+      "shortlisted": false,
+      "reason": null,
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-cafe-santiago",
+      "name": "Café Santiago",
+      "branch": null,
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "The benchmark francesinha and genuinely good, but queues run through lunch and dinner and it draws mostly first-timers; kept as a comparison point rather than the pick, since Bufete Fase gives a distinct version of the same dish with a neighborhood crowd and no line.",
+      "worth": null
+    },
+    {
+      "id": "c-porto-ribeira-waterfront-restaurants",
+      "name": "Porto Ribeira Waterfront Restaurants",
+      "branch": null,
+      "priority": null,
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Two independent Porto-based food writers (goaskalocal.com, portoalities.com) both single out the Cais da Ribeira promenade as the city's clearest tourist-trap cluster — laminated photo menus, touts, inflated prices, thinner francesinha sauce; steer at least two streets back.",
+      "worth": null
+    },
+    {
+      "id": "c-casa-expresso--clerigos-porto",
+      "name": "Casa Expresso",
+      "branch": "Clérigos, Porto",
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Single local-guide source (goaskalocal.com) describing traditional dishes 'other restaurants have forgotten'; promising but only one firsthand account — kept as a lead rather than shortlisted.",
+      "worth": null
+    },
+    {
+      "id": "c-papagaio--clerigos-porto",
+      "name": "Papagaio",
+      "branch": "Clérigos, Porto",
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Same single-source lead (goaskalocal.com) — 'half-hidden, almost all-Portuguese clientele'. Not independently corroborated.",
+      "worth": null
+    },
+    {
+      "id": "c-pena-palace",
+      "name": "Pena Palace",
+      "branch": null,
+      "priority": null,
+      "status": "shipped",
+      "shortlisted": false,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-quinta-da-regaleira",
+      "name": "Quinta da Regaleira",
+      "branch": null,
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "The default marquee garden and worth including, but multiple sources agree it's as crowded as Pena by mid-morning. Pass B's contribution is routing part of the Sintra day to the calmer Monserrate instead of stacking a second crowded stop — not replacing Regaleira outright; left for reconcile to weigh against Pass A's own coverage.",
+      "worth": null
+    },
+    {
+      "id": "c-monserrate-palace",
+      "name": "Monserrate Palace",
+      "branch": null,
+      "priority": null,
+      "status": "shipped",
+      "shortlisted": false,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-convento-dos-capuchos",
+      "name": "Convento dos Capuchos",
+      "branch": null,
+      "priority": null,
+      "status": "shortlisted",
+      "shortlisted": false,
+      "reason": null,
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-livraria-lello",
+      "name": "Livraria Lello",
+      "branch": null,
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Ticket price (~€15.95, redeemable against a book) only reached via search-preview, not a fetched official page (tickets.livrarialello.pt returned no readable content on fetch) — flagged for Pass A to confirm against the operator page directly rather than shipped unverified here.",
+      "worth": null
+    },
+    {
+      "id": "c-castelo-de-sao-jorge",
+      "name": "Castelo de São Jorge",
+      "branch": null,
+      "priority": null,
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "'Go at opening or after 18:00' crowd advice is widely repeated, but every source found reads as generic, near-identically-phrased listicle content rather than a distinct firsthand account — not corroborated to the bar for a shipped crowd note. Objective hours/price left to Pass A.",
+      "worth": null
+    },
+    {
+      "id": "c-cabo-da-roca",
+      "name": "Cabo da Roca",
+      "branch": null,
+      "priority": null,
+      "status": "shortlisted",
+      "shortlisted": false,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-parque-da-cidade-e-foz-do-douro",
+      "name": "Parque da Cidade e Foz do Douro",
+      "branch": null,
+      "priority": null,
+      "status": "shortlisted",
+      "shortlisted": false,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-douro-valley-day-trip",
+      "name": "Douro Valley Day Trip",
+      "branch": null,
+      "priority": null,
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Not among the trip's stated cities (Lisbon, Porto, Sintra only); a proper Douro Valley visit needs the better part of a day plus 2+ hours' transit each way, which the itinerary as scoped doesn't budget. Flagged as a future-trip lead, not this one.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-pena-crowd-timing-1",
+      "candidateId": "c-pena-palace",
+      "claim": "Pena Palace is calmest in the first entry slots after opening; crowds build steadily through mid-morning and stay heavy into mid-afternoon (roughly 10:30-15:00) as day-trip trains, tour buses, and cruise excursions converge, then thin out again after about 16:00.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://ourlittlelifestyle.com/pena-palace-tickets-tips/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-07-21",
+        "family": "ourlittlelifestyle",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-pena-crowd-timing-2",
+      "candidateId": "c-pena-palace",
+      "claim": "Pena Palace is calmest in the first entry slots after opening; crowds build steadily through mid-morning and stay heavy into mid-afternoon (roughly 10:30-15:00) as day-trip trains, tour buses, and cruise excursions converge, then thin out again after about 16:00.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.awaygowe.com/pena-palace-sintra-portugal/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2025-11-10",
+        "family": "awaygowe",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-pena-official-pricing",
+      "candidateId": "c-pena-palace",
+      "claim": "Adult (18-64) tickets at Park and National Palace of Pena: Park-only €12; combined Park + Palace ('Essential visit') €20. Park opens 09:00-19:00 (last admission 18:00); Palace interior 09:30-18:30 (last admission ~17:30-18:00). Palace interior entry uses a timed booking slot.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.parquesdesintra.pt/en/plan-your-visit/opening-times-and-prices/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-monserrate-crowd-1",
+      "candidateId": "c-monserrate-palace",
+      "claim": "Monserrate draws far fewer visitors than Pena Palace or Quinta da Regaleira — it sits off the Sintra bus-434 tourist loop, so even during peak season it's realistic to walk the palace rooms with only a handful of other visitors, versus needing to wait for a parking space at Pena.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://handluggageonly.co.uk/amazing-monserrate-palace-often-missed-beauty-sintra-portugal/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-05-28",
+        "family": "handluggageonly",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-monserrate-crowd-2",
+      "candidateId": "c-monserrate-palace",
+      "claim": "Monserrate draws far fewer visitors than Pena Palace or Quinta da Regaleira — after a crowded morning at Regaleira, Monserrate offers a markedly slower, quieter afternoon with room to actually linger in the gardens.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://travelportugal.blog/park-and-palace-of-monserrate/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2024-09-17",
+        "family": "travelportugalblog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-monserrate-official-pricing",
+      "candidateId": "c-monserrate-palace",
+      "claim": "Combined Park + Palace of Monserrate adult ticket (18-64): €12. Park 09:00-19:00 (last admission 18:00); Palace 09:30-18:00 (last admission 17:00-17:30).",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.parquesdesintra.pt/en/plan-your-visit/opening-times-and-prices/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-capuchos-official-pricing",
+      "candidateId": "c-convento-dos-capuchos",
+      "claim": "Convent of the Capuchos adult ticket (18-64): €11. Open 09:00-17:30, last admission 17:00.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.parquesdesintra.pt/en/plan-your-visit/opening-times-and-prices/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-sintra-train-crowd-timing-1",
+      "candidateId": null,
+      "claim": "Leaving Lisbon (Rossio station) on a train before about 09:00 puts you at Sintra's main sights well ahead of the day-tripper wave; the circular tourist bus (434) gets crowded enough by mid-morning that it's worth letting one pass to get a seat rather than boarding standing-room-only.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.alongdustyroads.com/posts/how-to-get-from-lisbon-to-sintra-train",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "alongdustyroads",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-sintra-train-crowd-timing-2",
+      "candidateId": null,
+      "claim": "Arriving in Sintra before 09:00 rather than 11:00 means sharing the castle/palace grounds with roughly a thousand fewer people, since summer crowds are worst from about 10:00 to 16:00.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://chasingwhereabouts.com/blog/day-trip-to-sintra-from-lisbon",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "chasingwhereabouts",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-cp-alfa-pendular-booking",
+      "candidateId": null,
+      "claim": "CP's Alfa Pendular Lisbon-Porto service sells 'Promo' fares (bookable 5-60 days ahead, discounted, non-refundable) alongside refundable 'Normal' fares in 1st/2nd class; seats are assigned by carriage/number (ID required at boarding), and luggage rides with you — a small overhead rack per seat plus a shared rack near each carriage entrance, no separate baggage car.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.cp.pt/passageiros/pt/como-viajar/alfa-pendular",
+        "kind": "official",
+        "access": "fetched",
+        "language": "pt",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-porto-ribeira-tourist-trap-1",
+      "candidateId": "c-porto-ribeira-waterfront-restaurants",
+      "claim": "Restaurants directly on the Cais da Ribeira promenade are consistently identified by Porto-based food writers as the city's clearest tourist-trap cluster — laminated photo menus, street touts, and inflated prices are the norm; walking two streets back (toward Clérigos, the Cathedral, or Bonfim) reaches genuinely local kitchens at lower prices.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://goaskalocal.com/blog/porto-restaurants-and-bars",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "goaskalocal",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-porto-ribeira-tourist-trap-2",
+      "candidateId": "c-porto-ribeira-waterfront-restaurants",
+      "claim": "Ribeira is 'a tourist area par excellence, so it has plenty of tourist traps' — most restaurants there are 'all icing, no cake, and expensive too'; the genuinely good venues (traditional Portuguese, seafood, fine dining) sit just off the promenade, not on it.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://portoalities.com/en/best-restaurants-in-ribeira/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-04-03",
+        "family": "portoalities",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-bufete-fase-local-character",
+      "candidateId": "c-bufete-fase",
+      "claim": "Bufete Fase is a small, cash-only lunch counter off the tourist path — a distinct broth-based francesinha sauce (lighter on tomato, built on a secret meat broth) served to a crowd of regulars and office workers rather than tour groups, in contrast to Café Santiago's queues down the street.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://doeatbetterexperience.com/blog/francesinha-in-porto/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "doeatbetterexperience",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-belem-dine-in-bypass",
+      "candidateId": "c-pasteis-de-belem",
+      "claim": "The line visible outside Pastéis de Belém is almost always the takeaway queue; walking in through the main entrance and asking staff for a table reaches a 1,000+ seat dine-in room with a wait usually under 10 minutes, even at peak times — a way to skip the queue most visitors assume is unavoidable.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://santosdelisboa.pt/en/pasteis-de-belem/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-02-28",
+        "family": "santosdelisboa",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-manteigaria-belem-comparison",
+      "candidateId": "c-manteigaria--chiado",
+      "claim": "Manteigaria (Chiado) and Pastéis de Belém are close enough in quality that queue length, tourist density, and travel time matter more than the taste difference; Manteigaria has no real line and sits centrally, while Belém is worth the trip mainly if already visiting the monastery.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.etfoodvoyage.com/pastel-de-nata-manteigaria-pasteis-de-belem/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "etfoodvoyage",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    }
+  ],
+  "reservations": [],
+  "transport": [],
+  "disagreements": [],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [],
+      "notApplicableReason": "Pass B's finds are neighborhood tascas, counter-service pastelarias, and walk-in-friendly spots (Bufete Fase, Manteigaria, the Belém dine-in room) specifically because they don't gate on reservations; no Pass B candidate rose to anchor/serious-finalist status requiring booking-window research — that belongs to Pass A's canonical picks."
+    },
+    "transport": {
+      "requiredRouteIds": [],
+      "notApplicableReason": "Both routes researched (Rossio-Sintra suburban rail, Lisbon-Porto Alfa Pendular) are high-frequency scheduled services with no single point of failure; crowd timing is worth noting but neither carries R3+ missed-connection or stranding risk in this pass."
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "~35 native-first and English searches/fetches across Lisbon/Porto neighborhood dining, Sintra palace crowd timing, transit reality, and resident phrases. The last several rounds returned the same aggregator listicles and SEO-templated comparisons, or hit blocked sources (reddit.com, tripadvisor.com, fodors.com, lisboasecreta.co, evasoes.pt, tickets.livrarialello.pt) rather than novel firsthand leads — a clear duplicate/blocked plateau. Remaining open threads (Livraria Lello's exact ticket price, deeper corroboration on Café Santiago's queue length) are minor and non-recommendation-changing; flagged for Pass A/reconcile rather than chased further."
+  },
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "No src/data/destinations/portugal.json exists yet for this guide, so language was inferred from the destination (Portuguese) rather than read from a t0Domains list. English-only queries for Lisbon/Porto dining return the same tourist top-10 and SEO listicles every time; Portuguese-language queries (onde comer, tascas, evitar turistas, bairro Anjos/Arroios, gírias portuguesas) and Spanish-language queries for Sintra (the next-best-indexed Romance-language traveler community after Portuguese) surfaced neighborhood-specific finds and local press coverage that pure English search missed entirely.",
+      "searchClasses": [
+        "Portuguese-language restaurant/neighborhood queries (onde comer em Lisboa/Porto, tascas, bairros Anjos/Arroios/Bonfim)",
+        "Portuguese-language crowd/experience queries (Time Out Market, Castelo de São Jorge, Cabo da Roca, Livraria Lello)",
+        "Portuguese-language food-comparison queries (Manteigaria vs Pastéis de Belém, francesinha)",
+        "Portuguese-language slang/phrase queries (expressões e gírias portuguesas)",
+        "Spanish-language Sintra palace-comparison queries (Monserrate vs Pena vs Regaleira)"
+      ],
+      "yield": "Surfaced Lisbon's Arroios/Anjos neighborhood-tasca wave (Visão press coverage, a search-preview-only Lisboa Secreta lead), the Ribeira/Rua Augusta tourist-trap warning repeated across Portuguese travel press and two independent Porto food bloggers, and the Café Santiago vs Bufete Fase local/tourist split. Native-language reddit/forum threads (r/portugal, r/Lisbon) could not be fetched directly — WebFetch blocks reddit.com outright — so those stayed leads-only via search snippets rather than fetched, citable sources; several other native/local pages (lisboasecreta.co, evasoes.pt, tripadvisor.com, fodors.com) returned 403s and were marked blocked rather than promoted to citations. yt-dlp was not available in this environment, so the usual YouTube-transcript social/video aide was skipped per the tool-missing doctrine — no video/social leads were pursued this pass."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": []
+}
