@@ -43,34 +43,39 @@
       "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-22T02:18:20.636Z",
-      "kind": "decision",
-      "text": "Candidate funnel: 48 evaluated · 34 shortlisted · 27 shipped · 7 rejected"
+      "at": "2026-08-22T08:06:01.941Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 2 of 5)"
     },
     {
-      "at": "2026-08-22T02:18:20.636Z",
-      "kind": "decision",
-      "text": "Reconcile dispositioned 15 independent finding(s): 9 adopt · 3 agree · 1 detour · 2 reject"
+      "at": "2026-08-22T08:34:14.310Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 2 failed (agent-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-22T02:18:20.636Z",
+      "at": "2026-08-22T08:34:14.310Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 46 evaluated · 34 shortlisted · 26 shipped · 8 rejected"
+    },
+    {
+      "at": "2026-08-22T08:34:14.310Z",
+      "kind": "decision",
+      "text": "Reconcile dispositioned 15 independent finding(s): 9 adopt · 3 agree · 3 reject"
+    },
+    {
+      "at": "2026-08-22T08:34:14.310Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-22T02:18:20.636Z",
+      "at": "2026-08-22T08:34:14.310Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether Pena Palace closes on Tuesdays (plus Easter/May 1/Jun 13), as widely repeated by third-party aggregator sites, versus the official Parques de Sintra position that its properties are open every day except Dec 24/25/31 and Jan 1."
     },
     {
-      "at": "2026-08-22T02:18:20.636Z",
+      "at": "2026-08-22T08:34:14.310Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Multiple third-party booking sites (Viator, Busbud, TripAdvisor) still list the Aerobus airport shuttle as bookable, while the official Lisbon Airport transport page omits it entirely and aerobus.pt 404s."
-    },
-    {
-      "at": "2026-08-22T02:18:20.636Z",
-      "kind": "check",
-      "text": "Decision-changing disagreement investigated: Whether to warn travelers away from dining directly on Porto's Cais da Ribeira waterfront promenade."
     }
   ],
   "nuggets": [],

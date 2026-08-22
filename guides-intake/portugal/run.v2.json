@@ -11,9 +11,9 @@
   },
   "issue": "74",
   "landMode": "auto",
-  "status": "running",
+  "status": "failed",
   "createdAt": "2026-08-22T01:24:31.449Z",
-  "updatedAt": "2026-08-22T08:06:01.941Z",
+  "updatedAt": "2026-08-22T08:34:14.310Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -83,9 +83,9 @@
       "failure": null
     },
     "reconcile": {
-      "status": "running",
+      "status": "failed",
       "startedAt": "2026-08-22T08:06:01.941Z",
-      "endedAt": null,
+      "endedAt": "2026-08-22T08:34:14.310Z",
       "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
@@ -102,13 +102,17 @@
         {
           "attempt": 2,
           "startedAt": "2026-08-22T08:06:01.941Z",
-          "endedAt": null,
-          "status": "running",
-          "failureClass": null,
-          "durationSec": null
+          "endedAt": "2026-08-22T08:34:14.310Z",
+          "status": "failed",
+          "failureClass": "agent-failure",
+          "durationSec": 1692
         }
       ],
-      "failure": null
+      "failure": {
+        "class": "agent-failure",
+        "detail": "\"Sintra monuments (Pena, Moorish Castle, Monserrate, Capuchos) have twi\" (ev-sintra-wildfire-closure-pattern) names 2027 but its source was published in 2026 — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2027] · \"Porto.CARD has been temporarily unavailable for purchase since early J\" (ev-porto-card-suspended) names 2027 without a dated publication — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2027] · event-date claim \"ETIAS (the EU's pre-travel authorisation for visa-exempt vis\" (ev-entry-etias-not-yet-required) records appliesToYears without access \"fetched\" — an announced date must come from an announcement that was actually read",
+        "at": "2026-08-22T08:34:14.310Z"
+      }
     },
     "critic": {
       "status": "queued",
@@ -130,9 +134,13 @@
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
+    "action": "re-run stage \"reconcile\" (failed: agent-failure) — a resumed run repeats the interrupted stage, never skips ahead"
   },
-  "failure": null,
+  "failure": {
+    "class": "agent-failure",
+    "detail": "\"Sintra monuments (Pena, Moorish Castle, Monserrate, Capuchos) have twi\" (ev-sintra-wildfire-closure-pattern) names 2027 but its source was published in 2026 — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2027] · \"Porto.CARD has been temporarily unavailable for purchase since early J\" (ev-porto-card-suspended) names 2027 without a dated publication — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2027] · event-date claim \"ETIAS (the EU's pre-travel authorisation for visa-exempt vis\" (ev-entry-etias-not-yet-required) records appliesToYears without access \"fetched\" — an announced date must come from an announcement that was actually read",
+    "at": "2026-08-22T08:34:14.310Z"
+  },
   "publication": {
     "published": false,
     "publishedAt": null,
