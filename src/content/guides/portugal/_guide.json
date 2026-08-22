@@ -1,11 +1,42 @@
 {
-  "kicker": "Field guide",
-  "title": "Lisbon, Porto, Sintra & Portugal",
-  "dek": "",
+  "kicker": "Lisbon · Sintra · Porto — Apr 10–19, 2027",
+  "title": "Portugal",
+  "dek": "Ten days by train between Lisbon and Porto, with a Sintra day trip between palaces and gardens — built around where people actually eat, not the tourist strips.",
   "country": "Portugal",
+  "tz": "Europe/Lisbon",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Pass A (canonical & verified) — Checked 2026-08-22 against primary/official sources (Parques de Sintra, museusemonumentos.pt, Câmara/diocese sites, CP, Carris, Metro Lisboa, Turismo de Lisboa/Porto, europa.eu, gov.pt) for entry rules, hours, prices, and transit. Not yet reconciled against a local/authentic second pass. Re-check before travel: ETIAS's launch status (unconfirmed as of Aug 2026, watch travel-europe.europa.eu/etias_en), Lisbon–Porto and Lisbon–Sintra exact train fares (cp.pt blocks automated verification — confirm at booking), Livraria Lello's exact ticket tiers, Porto.CARD's on-sale status (suspended since Jul 2026), and the current US State Department travel advisory level for Portugal (its page blocks automated fetch — check travel.state.gov directly).",
   "provenance": "strict",
   "roomId": "3j0io75vqvreps1n",
-  "footer": ""
+  "footer": "",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, up to 90 days in any 180-day period across the whole Schengen area (Portugal included).",
+      "passportValidity": "Valid at least 3 months beyond your Schengen departure date, and issued within the last 10 years.",
+      "note": "ETIAS (a pre-travel authorisation for visa-exempt visitors) is not required yet. The EU quietly dropped its Q4 2026 target in Jul 2026; 2027 is the most-likely next launch window but no date is confirmed — re-check travel-europe.europa.eu/etias_en before you fly.",
+      "source_url": "https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm",
+      "verified_on": "2026-08-22"
+    }
+  ],
+  "phrases": {
+    "lang": "pt-PT",
+    "items": [
+      { "situation": "Hello", "native": "Olá", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "Please", "native": "Por favor", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "Thank you", "native": "Obrigado (said by a man) / Obrigada (said by a woman)", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "Where is...?", "native": "Onde fica...?", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "Where is the bathroom?", "native": "Onde fica a casa de banho?", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "I would like...", "native": "Queria...", "note": "the standard, polite way to order in a restaurant", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "Which dishes do you recommend?", "native": "Que pratos recomenda?", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "I am vegetarian / vegan", "native": "Sou vegetariano/a — pratos vegetarianos / pratos veganos", "note": "point + show this screen ordering food", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "Gluten-free / lactose intolerant", "native": "Isento de glúten / Intolerante à lactose", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "How much does this cost?", "native": "Quanto custa?", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "The bill, please", "native": "A conta, por favor", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "Can you help me?", "native": "Pode ajudar-me?", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "I need help", "native": "Preciso de ajuda", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" },
+      { "situation": "Police / firefighters / hospital", "native": "a polícia / os bombeiros / o hospital", "source_url": "https://www.practiceportuguese.com/learning-notes/phrases-for-your-first-trip-to-portugal/", "verified_on": "2026-08-22" }
+    ]
+  },
+  "tabBudget": 10
 }

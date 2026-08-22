@@ -2,22 +2,211 @@
   {
     "type": "sights",
     "group": "Sights",
-    "title": "Top sights",
+    "title": "Lisbon",
     "phase": "daily",
-    "items": [],
-    "rank": 2
+    "rank": 2,
+    "items": [
+      {
+        "name": "Belém Tower",
+        "kicker": "Reopened 2026 with a new visitor cap",
+        "body": "<p>The 16th-century fortress guarding the Tagus estuary — Manueline stonework, a small but genuinely worth-it interior. Reopened May 2026 after a year of restoration with a new phased-entry system capping visits around 900/day, so book a timed slot well ahead rather than assuming a walk-up.</p>",
+        "closed_days": ["mon"],
+        "source_url": "https://www.museusemonumentos.pt/en/museus-e-monumentos/torre-de-belem",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Jerónimos Monastery",
+        "kicker": "Vasco da Gama's tomb, under soaring Manueline vaults",
+        "body": "<p>Portugal's grandest monastery, funded by the spice trade Vasco da Gama's voyages opened up. The cloister (€18) is the highlight — the church itself is free and keeps separate, shorter hours. Current admission runs notably higher than the €10–12 many older guides still quote.</p>",
+        "closed_days": ["mon"],
+        "source_url": "https://www.museusemonumentos.pt/en/museus-e-monumentos/mosteiro-dos-jeronimos-e-capela-de-sao-jeronimo",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "São Jorge Castle",
+        "kicker": "Lisbon's best rooftop view, open every day",
+        "body": "<p>The hilltop castle above Alfama — ramparts, peacocks, and a panoramic view over the city and river. One of the few major Lisbon sights open every single day (only 5 closed dates a year), which makes it a natural pick for a day when Belém's sights are shut.</p>",
+        "source_url": "https://castelodesaojorge.pt/en/information/useful-information/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Alfama",
+        "kicker": "Lisbon's oldest neighborhood, spared by the 1755 earthquake",
+        "body": "<p>A tangle of medieval lanes between the castle and the river — no fixed route rewards it best. Fado, the city's melancholic folk music, has its roots here; several small clubs host live sets in the evening.</p>"
+      },
+      {
+        "name": "Tram 28",
+        "kicker": "The classic yellow tram, still a real transit line",
+        "body": "<p>The vintage tram climbing Alfama and Graça's steepest hills — a working transit route, not a tourist attraction dressed up as one, though it draws crowds accordingly. Ride at least one full leg; keep bags zipped near the doors.</p>",
+        "source_url": "https://www.carris.pt/compre/viagens-ocasionais/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "transit"
+      },
+      {
+        "name": "Praça do Comércio",
+        "kicker": "One of Europe's grandest riverside squares",
+        "body": "<p>Built on the ruins of the royal palace the 1755 earthquake destroyed — the Arco da Rua Augusta frames the view down from Baixa, and the Cais das Colunas steps lead right to the water.</p>",
+        "source_url": "https://www.visitlisboa.com/en/places/praca-do-comercio-terreiro-do-paco",
+        "verified_on": "2026-08-22",
+        "shelf_life": "default"
+      },
+      {
+        "name": "MAAT",
+        "kicker": "A riverside museum of art, architecture and technology",
+        "body": "<p>A sinuous, low-slung riverside building whose curved roof doubles as a public walkway. Worth an hour if there's energy left after Belém's bigger sights.</p>",
+        "closed_days": ["tue"],
+        "source_url": "https://www.maat.pt/en/tickets",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "LX Factory",
+        "kicker": "A 19th-century industrial complex turned creative quarter",
+        "body": "<p>Former textile mill under the 25 de Abril bridge, now shops, studios, restaurants and street art. No fixed complex hours — it functions as an always-open outdoor space, though individual shops keep their own schedules.</p>",
+        "source_url": "https://lxfactory.com/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "venue"
+      }
+    ]
+  },
+  {
+    "type": "sights",
+    "group": "Sights",
+    "title": "Sintra",
+    "phase": "daily",
+    "rank": 2,
+    "items": [
+      {
+        "name": "Pena Palace",
+        "kicker": "A candy-colored Romanticist palace on a mountaintop",
+        "body": "<p>Sintra's marquee sight — a riot of turrets and tile in yellow, red and lavender, wrapped in a sprawling forested park. The palace interior needs a pre-booked timed slot; the park alone (€12) is a worthwhile lower-key option. Open every day of the year except Dec 24/25/31 and Jan 1 — it does NOT close Tuesdays, despite what many sites claim.</p>",
+        "dwell_min": 150,
+        "source_url": "https://www.parquesdesintra.pt/en/plan-your-visit/opening-times-and-prices/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Quinta da Regaleira",
+        "kicker": "A Gothic-Romantic estate with a symbolic initiation well",
+        "body": "<p>A wealthy eccentric's early-1900s fantasy garden — grottoes, a chapel, and the famous spiral Initiatic Well descending into the earth. Privately run, not a Parques de Sintra property, so book separately at regaleira.pt.</p>",
+        "dwell_min": 120,
+        "source_url": "https://www.regaleira.pt/en/visitas",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Moorish Castle",
+        "kicker": "10th-century ramparts with sweeping coastal views",
+        "body": "<p>A ruined hilltop fortification with some of the best views in Sintra on a clear day — worth the extra bus 434 stop if Pena Palace and Regaleira haven't filled the day.</p>",
+        "source_url": "https://www.parquesdesintra.pt/en/parks-monuments/the-moorish-castle/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Monserrate Palace and gardens",
+        "kicker": "The quiet, garden-forward alternative to Pena's crowds",
+        "body": "<p>A Moorish-revival palace wrapped in one of Portugal's finest botanical gardens — noticeably calmer than Pena Palace and worth the detour on a nature-leaning day. Roof restoration is underway through early 2027; the palace stays open but the hop-on-hop-off shuttle is currently suspended.</p>",
+        "source_url": "https://www.parquesdesintra.pt/en/parks-monuments/park-and-palace-of-monserrate/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      }
+    ]
+  },
+  {
+    "type": "sights",
+    "group": "Sights",
+    "title": "Porto",
+    "phase": "daily",
+    "rank": 2,
+    "items": [
+      {
+        "name": "Livraria Lello",
+        "kicker": "The neo-Gothic bookshop everyone photographs",
+        "body": "<p>A swirling red staircase and stained-glass ceiling inside a working bookshop — now ticketed to manage crowds, and known to sell out by midday. The ticket fee is redeemable against a book purchase on the entry-level tier.</p>",
+        "source_url": "https://www.livrarialello.pt/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Torre dos Clérigos",
+        "kicker": "Porto's best rooftop panorama",
+        "body": "<p>A 240-step climb up a baroque bell tower to the best view over Porto's tiled rooftops and the Douro. Open daily, extended hours during Easter/summer.</p>",
+        "source_url": "https://www.torredosclerigos.pt/en/ticket-office/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Sé do Porto",
+        "kicker": "Porto's fortress-like cathedral above Ribeira",
+        "body": "<p>Part Romanesque fortress, part Baroque cathedral, with a cloister of azulejo tilework worth the modest admission. The terrace outside has one of the best free views over the old town.</p>",
+        "source_url": "https://www.diocese-porto.pt/pt/catedral-do-porto/",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Dom Luís I Bridge",
+        "kicker": "A two-level iron bridge, free to walk both decks",
+        "body": "<p>Gustave Eiffel's workshop's double-deck bridge across the Douro — walk the upper deck (shared with Metro Line D) for the view, or the lower deck for a level closer to the river. No ticket, no fixed hours.</p>",
+        "source_url": "https://visitporto.travel/en-GB",
+        "verified_on": "2026-08-22",
+        "shelf_life": "default"
+      },
+      {
+        "name": "São Bento train station",
+        "kicker": "20,000+ azulejo tiles inside a working station",
+        "body": "<p>A functioning CP station whose main hall is lined with tile panels depicting Portuguese history and transport scenes — free, and worth a stop even without a train to catch. Named 7th most beautiful railway station in Europe in 2024.</p>",
+        "source_url": "https://www.ippatrimonio.pt/pt-pt/estacoes/estacao-de-porto-sao-bento",
+        "verified_on": "2026-08-22",
+        "shelf_life": "default"
+      },
+      {
+        "name": "Ribeira",
+        "kicker": "Porto's UNESCO riverside old town",
+        "body": "<p>Layers of pastel-colored houses stacked above the Douro, the postcard image of Porto. Best seen from both banks — walk it from Porto's side, then again from Vila Nova de Gaia across the bridge for the classic wide shot.</p>",
+        "source_url": "https://visitporto.travel/en-GB",
+        "verified_on": "2026-08-22",
+        "shelf_life": "default"
+      }
+    ]
   },
   {
     "type": "divergences",
     "group": "Sights",
     "title": "What generic guides get wrong",
     "phase": "daily",
+    "rank": 2,
+    "intro": "<p>A few claims that circulate widely online but don't hold up against the venues' own current, official information.</p>",
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "Pena Palace is closed on Tuesdays (plus Easter, May 1 and Jun 13).",
+        "correction": "Parques de Sintra's own FAQ says its properties — Pena Palace included — are open every day of the year except Dec 24, 25, 31 and Jan 1, plus rare extraordinary closures for fire risk or extreme weather. The 'Tuesday closure' is aggregator misinformation.",
+        "category": "outdated",
+        "source_url": "https://www.parquesdesintra.pt/en/plan-your-visit/faqs/",
+        "verified_on": "2026-08-22"
+      },
+      {
+        "claim": "Take the Aerobus from Lisbon Airport into the city.",
+        "correction": "Aerobus was permanently discontinued in 2022, though several booking sites still list it. The Lisbon Airport's own transport page lists Metro, Carris buses, FlixBus and taxi — use the Metro red line instead.",
+        "category": "outdated",
+        "source_url": "https://www.lisbonairport.pt/en/lis/access-parking/getting-to-and-from-the-airport/public-transportation",
+        "verified_on": "2026-08-22"
+      },
+      {
+        "claim": "Catch the Scotturb 403 bus from Sintra to Cabo da Roca.",
+        "correction": "Carris Metropolitana took over Sintra-area bus routes in Jan 2023; the current route to Cabo da Roca is Carris Metropolitana line 1253, not Scotturb 403.",
+        "category": "outdated",
+        "verified_on": "2026-08-22"
+      },
+      {
+        "claim": "Jerónimos Monastery costs around €10–12.",
+        "correction": "The current official admission is €18 — a meaningful jump from the figure many older guides still quote.",
+        "category": "outdated",
+        "source_url": "https://www.museusemonumentos.pt/en/museus-e-monumentos/mosteiro-dos-jeronimos-e-capela-de-sao-jeronimo",
+        "verified_on": "2026-08-22"
       }
-    ],
-    "rank": 2
+    ]
   }
 ]

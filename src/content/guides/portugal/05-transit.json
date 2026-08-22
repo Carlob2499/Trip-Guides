@@ -4,7 +4,16 @@
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
-    "steps": []
+    "steps": [
+      "<b>Airport → Lisbon center:</b> Metro red line, Aeroporto → Saldanha (≈20 min). Buy a Navegante card (€0.50) + fare (€1.92 single, or €1.72 with prepaid zapping credit) at the station machine.",
+      "<b>Around Lisbon:</b> Metro for cross-city hops; Carris trams/buses for the hills (Tram 28 single fare €3.30 cash onboard, or €1.72 with Navegante zapping — a 24h Carris+Metro pass is €7.25 and breaks even after ≈3 tram rides).",
+      "<b>Lisbon → Sintra (day trip):</b> CP Sintra line from Rossio station, ≈40 min (exact current fare not independently confirmable — cp.pt blocks automated verification, budget a few euros each way). At Sintra station, buy the 24h Scotturb bus pass (€10.96, confirmed) covering bus <b>434</b> to Pena Palace/Moorish Castle and bus <b>435</b> to Monserrate.",
+      "<b>Lisbon → Porto:</b> CP Alfa Pendular from Oriente or Santa Apolónia station, ≈2h45m (exact fare not independently confirmable — cp.pt is a JS-heavy site that blocks automated fetch; aggregator estimates run ≈€25–34 2nd class, book at cp.pt to confirm and reserve a seat).",
+      "<b>Around Porto:</b> the historic center (Ribeira, Clérigos, São Bento) is walkable; Porto Metro Line D crosses the upper deck of the Dom Luís I Bridge to Vila Nova de Gaia for the port wine cellars."
+    ],
+    "source_url": "https://www.metrolisboa.pt/en/",
+    "verified_on": "2026-08-22",
+    "shelf_life": "transit"
   },
   {
     "type": "map",

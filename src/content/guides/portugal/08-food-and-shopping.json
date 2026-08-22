@@ -1,10 +1,123 @@
 [
   {
+    "type": "prose",
+    "group": "Food & shopping",
+    "title": "Portuguese dining, in short",
+    "body": "<p>Lunch is the main meal, roughly noon–14:30; dinner runs later than a typical US schedule, 19:30–22:30. Tipping ~5–10% is customary in restaurants, never mandatory.</p><p>The bread, olives or cheese set on your table without being asked — the <i>couvert</i> — is a real charge if eaten, but Portuguese law says you're never obliged to pay for anything you didn't order: send it back and it's free.</p>",
+    "phase": "daily",
+    "rank": 1,
+    "source_url": "https://www.visitportugal.com/en/node/195722",
+    "verified_on": "2026-08-22",
+    "shelf_life": "default"
+  },
+  {
     "type": "venues",
     "group": "Food & shopping",
-    "title": "What to eat",
+    "title": "Lisbon — what to eat",
     "phase": "daily",
-    "items": [],
-    "rank": 1
+    "rank": 1,
+    "items": [
+      {
+        "name": "Pastéis de Belém",
+        "area": "Belém",
+        "hours": "Daily 08:00–21:00 (22:00 Jul–Sep)",
+        "price": "≈€1.50–1.60 per tart",
+        "book": "walk-in",
+        "how": "Part of the Belém sightseeing walk, between Jerónimos and the Tower.",
+        "crowd_tip": "The outside queue is for takeaway only — walk past it to the café entrance and you'll usually have a table in under 10 minutes, even at peak times. Quietest before 09:00 on weekdays or after 18:00 any day.",
+        "why": "The original custard tart, baked to a secret 1837 recipe, in a 1,000+ seat historic café most visitors never realize exists past the queue.",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours",
+        "source_url": "https://pasteisdebelem.pt/en/contact/"
+      },
+      {
+        "name": "Manteigaria",
+        "area": "Multiple — Chiado, Time Out Market, Belém, Rossio (also 4 Porto locations)",
+        "price": "⚠ ≈€1.20–1.30 per tart — aggregator-sourced, not shown on the official site",
+        "book": "walk-in",
+        "why": "A genuine multi-location alternative to Pastéis de Belém, watch them pipe and bake through an open kitchen window.",
+        "verified_on": "2026-08-22",
+        "shelf_life": "venue",
+        "source_url": "https://www.manteigaria.com/"
+      },
+      {
+        "name": "Time Out Market Lisboa",
+        "area": "Cais do Sodré, in the historic Mercado da Ribeira building",
+        "hours": "Sun–Wed 10:00–24:00, Thu–Sat 10:00–02:00",
+        "book": "walk-in",
+        "why": "26 stalls and 8 bars under one roof — the operator's own site calls it 'one of Portugal's most popular tourist attractions,' so go in with that expectation rather than looking for a hidden gem.",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours",
+        "source_url": "https://www.timeout.com/time-out-market-lisboa"
+      },
+      {
+        "name": "A Ginjinha do Rossio",
+        "area": "Rossio, Largo de São Domingos 8",
+        "price": "⚠ ≈€1.50 per shot — no official site exists for this stall; price is aggregator-sourced only, confirm on arrival",
+        "book": "walk-in",
+        "why": "A standing-room-only cherry liqueur stall since 1840 — cheap, fast, and a genuine Lisbon tradition."
+      }
+    ]
+  },
+  {
+    "type": "venues",
+    "group": "Food & shopping",
+    "title": "Porto — what to eat",
+    "phase": "daily",
+    "rank": 1,
+    "items": [
+      {
+        "name": "Mercado do Bolhão",
+        "area": "Central Porto",
+        "hours": "Market stalls Mon–Fri 08:00–20:00, Sat 08:00–18:00; in-market restaurants Mon–Sat 08:00–24:00; closed Sun/holidays",
+        "book": "walk-in",
+        "why": "Porto's historic market, reopened after a multi-year renovation — a market breakfast here beats a hotel one.",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours",
+        "source_url": "https://mercadobolhao.pt/en/faqs/"
+      },
+      {
+        "name": "Café Santiago",
+        "area": "Central Porto",
+        "hours": "Mon–Sat 12:00–22:45, closed Sunday",
+        "price": "≈€8.50–10 (unconfirmed — not shown on the official page)",
+        "book": "walk-in",
+        "why": "Serving francesinha — Porto's belt-testing sandwich under melted cheese and beer sauce — since 1959, self-billed among the '50 best sandwiches in the world.'",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours",
+        "source_url": "https://cafesantiago.pt/en/"
+      }
+    ]
+  },
+  {
+    "type": "venues",
+    "group": "Food & shopping",
+    "title": "Vila Nova de Gaia — port wine cellars",
+    "phase": "daily",
+    "rank": 1,
+    "items": [
+      {
+        "name": "Sandeman",
+        "area": "Vila Nova de Gaia",
+        "price": "€23 (50 min, 3 wines) up to €53 (1h30, 4 wines)",
+        "book": "url",
+        "book_url": "https://www.sandeman.com/port-wine/visit/cellars-porto/",
+        "why": "The most straightforward cellar tour to book, with a range of tasting depths.",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours",
+        "source_url": "https://www.sandeman.com/port-wine/visit/cellars-porto/"
+      },
+      {
+        "name": "Taylor's",
+        "area": "Vila Nova de Gaia",
+        "hours": "Cellar 10:00–18:15 daily; Tasting Room 10:00–19:30 daily",
+        "book": "url",
+        "book_url": "https://www.taylor.pt/en/visit-taylors/",
+        "why": "A self-guided audio tour in 13 languages, including 3 wines — good if a fixed tour time doesn't fit the day.",
+        "verified_on": "2026-08-22",
+        "shelf_life": "hours",
+        "source_url": "https://www.taylor.pt/en/visit-taylors/"
+      }
+    ]
   }
 ]

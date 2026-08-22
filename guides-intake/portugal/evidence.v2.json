@@ -1,0 +1,1726 @@
+{
+  "schemaVersion": "wp-evidence/2.1",
+  "slug": "portugal",
+  "runId": "portugal-20260822-7c041e",
+  "candidates": [
+    {
+      "id": "c-pasteis-de-belem",
+      "name": "Pastéis de Belém",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-manteigaria",
+      "name": "Manteigaria",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-time-out-market-lisboa",
+      "name": "Time Out Market Lisboa",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-a-ginjinha-do-rossio",
+      "name": "A Ginjinha do Rossio",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-mercado-do-bolhao",
+      "name": "Mercado do Bolhão",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-cafe-santiago",
+      "name": "Café Santiago",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-brasao--aliados-porto",
+      "name": "Brasão",
+      "branch": "Aliados, Porto",
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "hours/price only confirmed via aggregator snippets in Pass A — no direct fetch of an official page succeeded; not shipped until re-confirmed",
+      "worth": null
+    },
+    {
+      "id": "c-cufra--porto",
+      "name": "Cufra",
+      "branch": "Porto",
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "same gap as Brasão — official domain identified (cufra.pt) but not fetched; hours/price are aggregator-only",
+      "worth": null
+    },
+    {
+      "id": "c-belem-tower",
+      "name": "Belém Tower",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-jeronimos-monastery",
+      "name": "Jerónimos Monastery",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sao-jorge-castle",
+      "name": "São Jorge Castle",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-tram-28",
+      "name": "Tram 28",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-praca-do-comercio",
+      "name": "Praça do Comércio",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-maat",
+      "name": "MAAT",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-alfama",
+      "name": "Alfama",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-lx-factory",
+      "name": "LX Factory",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-pena-palace",
+      "name": "Pena Palace",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-quinta-da-regaleira",
+      "name": "Quinta da Regaleira",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-moorish-castle",
+      "name": "Moorish Castle",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-national-palace-of-sintra",
+      "name": "National Palace of Sintra",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "lower priority than Pena Palace + Regaleira within one balanced day; a return trip would be needed to add it without cutting something else",
+      "worth": null
+    },
+    {
+      "id": "c-cabo-da-roca",
+      "name": "Cabo da Roca",
+      "branch": null,
+      "priority": "nature",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "the Sintra day is already anchored by Pena Palace + Regaleira (+ optional Moorish Castle); reaching continental Europe's westernmost point and back needs a second Sintra day this 10-day itinerary doesn't budget for",
+      "worth": null
+    },
+    {
+      "id": "c-monserrate-palace-and-gardens",
+      "name": "Monserrate Palace and gardens",
+      "branch": null,
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-livraria-lello",
+      "name": "Livraria Lello",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-torre-dos-clerigos",
+      "name": "Torre dos Clérigos",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-se-do-porto",
+      "name": "Sé do Porto",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-dom-luis-i-bridge",
+      "name": "Dom Luís I Bridge",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sao-bento-train-station",
+      "name": "São Bento train station",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-ribeira--porto",
+      "name": "Ribeira",
+      "branch": "Porto",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sandeman--vila-nova-de-gaia",
+      "name": "Sandeman",
+      "branch": "Vila Nova de Gaia",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-taylor-s--vila-nova-de-gaia",
+      "name": "Taylor's",
+      "branch": "Vila Nova de Gaia",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-graham-s--vila-nova-de-gaia",
+      "name": "Graham's",
+      "branch": "Vila Nova de Gaia",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "official site (grahams-port.com) returned HTTP 403 on every attempted URL path — could not confirm current tour price/hours from a primary source in Pass A",
+      "worth": null
+    },
+    {
+      "id": "c-calem--vila-nova-de-gaia",
+      "name": "Cálem",
+      "branch": "Vila Nova de Gaia",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "official fetch (calem.pt, tour.calem.pt) returned only contact details — no hours or price content retrievable",
+      "worth": null
+    },
+    {
+      "id": "c-porto-card",
+      "name": "Porto Card",
+      "branch": null,
+      "priority": "culture",
+      "status": "considered",
+      "shortlisted": true,
+      "reason": "confirmed via official source to be pulled from sale since early Jul 2026 for a 'product restructuring process' with no announced relaunch date — cannot recommend purchasing until status changes; recheck close to the Apr 2027 trip",
+      "worth": null
+    },
+    {
+      "id": "c-lisboa-card",
+      "name": "Lisboa Card",
+      "branch": null,
+      "priority": "culture",
+      "status": "considered",
+      "shortlisted": true,
+      "reason": "official pricing confirmed (€31/€51/€62 for 24h/48h/72h); only pays off on a day with 3+ paid entries — this itinerary spreads sights across many days, so per-entry tickets are cheaper overall. Kept as an option for the single densest sightseeing day, not shipped as a blanket recommendation",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-entry-us-90-180",
+      "candidateId": null,
+      "claim": "US citizens (and other visa-exempt nationals) may stay in the Schengen area, which includes Portugal, up to 90 days in any 180-day period without a visa; passport must be valid at least 3 months beyond the intended departure date and have been issued within the last 10 years.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-entry-etias-not-yet-required",
+      "candidateId": null,
+      "claim": "ETIAS (the EU's pre-travel authorisation for visa-exempt visitors) is not yet operational or required as of Aug 2026. The EU quietly removed its previously-stated Q4 2026 launch target from the official ETIAS site in Jul 2026; 2027 is the most-likely next launch window per immigration-law commentary, but no confirmed date has been announced — genuinely unresolved as of this research.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.fragomen.com/insights/european-union-european-travel-information-and-authorisation-system-etias-launch-delayed.html",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": "2026-07",
+        "family": "immigration-law-commentary",
+        "independent": true,
+        "appliesToYears": [
+          2027
+        ]
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-currency-payment-tipping",
+      "candidateId": null,
+      "claim": "Portugal uses the euro; ATMs and major cards (Visa, Amex, Mastercard/Maestro, JCB, Diners) are widely accepted; tipping ~5–10% in restaurants/taxis is customary but not mandatory.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.visitportugal.com/en/node/195717",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-couvert-law",
+      "candidateId": null,
+      "claim": "Portuguese consumer law (Lei n.º 24/96, Art. 9 §4) says a consumer is not obliged to pay for any good or service — including the bread/olives 'couvert' automatically brought to the table — that was not previously and expressly ordered; a diner may decline it at no charge. Restaurants must display the couvert price and can face ASAE fines for charging it without disclosure.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=726&tabela=leis",
+        "kind": "official",
+        "access": "fetched",
+        "language": "pt",
+        "publishedAt": "1996-07-31",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-emergency-112",
+      "candidateId": null,
+      "claim": "Portugal's national emergency number is 112 (police/fire/ambulance, free, 24/7); SNS 24 health line is 808 24 24 24.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.gov.pt/guias/contactos-de-emergencia-em-portugal",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-roaming-non-eu",
+      "candidateId": null,
+      "claim": "The EU's 'Roam Like at Home' rules only cover EU/EEA (plus Moldova/Ukraine) residents on an EU-based plan — a US traveler's home phone plan is NOT covered by these rules and roaming can be expensive without a specific international plan, local SIM, or eSIM.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://europa.eu/youreurope/citizens/consumers/internet-telecoms/mobile-roaming-costs/index_en.htm",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-lisbon-airport-transit",
+      "candidateId": null,
+      "claim": "Lisbon Airport (LIS) to city center: Metro red line (Aeroporto–Saldanha), roughly 20 min; Metro single fare €1.92 by contactless bank card or €1.72 on a prepaid Navegante 'zapping' card; taxi/rideshare roughly €10–15 including luggage fee.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.lisbonairport.pt/en/lis/access-parking/getting-to-and-from-the-airport/public-transportation",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-metro-lisboa-fares",
+      "candidateId": null,
+      "claim": "Metro Lisboa single fare €1.92 (card) / €1.72 (Navegante zapping); operates 06:30–01:00 daily; a Navegante card costs €0.50 once.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.metrolisboa.pt/en/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-aerobus-discontinued",
+      "candidateId": null,
+      "claim": "The Aerobus airport shuttle service was permanently discontinued in 2022 and no longer operates, despite still appearing as bookable on several third-party booking sites. The official Lisbon Airport transport page lists Metro/Carris buses/Flixbus/taxi and makes no mention of Aerobus; aerobus.pt itself 404s.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://aerobus.pt/en",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-lisbon-porto-train-fare-unconfirmed",
+      "candidateId": null,
+      "claim": "Lisbon–Porto Alfa Pendular fare and exact journey time could NOT be confirmed against the operator's own site: cp.pt is a JS-rendered SPA that returns only page headers with no fare content to automated fetch (attempted on 4 different cp.pt URLs including a PDF tariff sheet). Aggregator estimates (unconfirmed) put standard 2nd class around €25–34, 1st class around €48, journey ≈2h45m, with promotional fares from ≈€9.50–7.50 on advance/promo purchase.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.cp.pt/passageiros/en/consult-timetables/prices/national/alfa-pendular",
+        "kind": "operator",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-lisbon-sintra-train-unconfirmed",
+      "candidateId": null,
+      "claim": "CP's Sintra line (Rossio ↔ Sintra) runs roughly every 15–20 min at peak, journey ≈40 min, integrated into the Navegante fare system — but exact current fare/frequency could not be confirmed against cp.pt directly (same JS-rendering block as the Alfa Pendular page).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.cp.pt/passageiros/en/consult-timetables/stations/geral/lisboa-rossio",
+        "kind": "operator",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-sintra-bus-434-operator",
+      "candidateId": null,
+      "claim": "Scotturb is the official transport operator for the Sintra palace shuttle buses (434 'Circuito da Pena', 435 to Monserrate); its own homepage confirms this role, but the route-specific fare/frequency subpages 404'd on every attempt — treat any specific fare figure as unconfirmed pending a direct re-check.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.scotturb.com",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-sintra-transport-pass",
+      "candidateId": null,
+      "claim": "A 24-hour transport pass covering Scotturb bus lines 434 and 435 costs €10.96, sold directly on Parques de Sintra's own ticketing platform — transport only, monument tickets sold separately.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://bilheteira.parquesdesintra.pt/info/mobilidade-em-sintra/1243/en",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-cabo-da-roca-bus-renumbered",
+      "candidateId": "c-cabo-da-roca",
+      "claim": "The bus route to Cabo da Roca commonly cited in older guides as 'Scotturb 403' was discontinued/renumbered when Carris Metropolitana took over the route in Jan 2023 — the current route is Carris Metropolitana line 1253. Any source still citing 'Scotturb 403' is stale.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://carrismetropolitana.pt/lines/1253",
+        "kind": "operator",
+        "access": "blocked",
+        "language": "pt",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-holidays-labor-code-list",
+      "candidateId": null,
+      "claim": "Portugal's mandatory national public holidays (Código do Trabalho Art. 234): Jan 1, Good Friday, Easter Sunday, Apr 25, May 1, Corpus Christi, Jun 10, Aug 15, Oct 5, Nov 1, Dec 1, Dec 8, Dec 25. For 2027, Good Friday falls Mar 26 and Easter Sunday Mar 28 — both before the Apr 10–19, 2027 trip window; Freedom Day (Apr 25) falls 6 days after the trip ends. No national holiday falls inside the trip window. Lisbon's Santo António (Jun 13) and Porto's São João (Jun 24) municipal holidays also fall well outside the window.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://informador.pt/legislacao/lexit/codigos/direito-laboral/codigo-do-trabalho/artigo-234-o-feriados-obrigatorios/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "pt",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2027
+        ]
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-pasteis-de-belem-hours-price",
+      "candidateId": "c-pasteis-de-belem",
+      "claim": "Open daily 08:00–21:00 (extended to 22:00 Jul 1–Sep 30; shortened to 19:00 on Dec 24/25/31/Jan 1); walk-in only, no reservation system; ≈€1.50–1.60 per tart, ≈€9 for a box of 6.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://pasteisdebelem.pt/en/contact/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-pasteis-de-belem-queue-1",
+      "candidateId": "c-pasteis-de-belem",
+      "claim": "The queue outside is almost always for takeaway only; walking past it to the café entrance gets a table in under 10 minutes even at peak times, since the confeitaria seats 1,000+ across several rooms most visitors don't realize exist. Quietest before 09:00 on weekdays or after 18:00 any day; peak congestion is 10:00–17:00, especially weekends Apr–Oct.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://santosdelisboa.pt/en/pasteis-de-belem/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026",
+        "family": "santosdelisboa",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-pasteis-de-belem-queue-2",
+      "candidateId": "c-pasteis-de-belem",
+      "claim": "Consistently heavy foot traffic and real queues are normal here — 'if there is no line at the door, it is possible that something out of the blue has happened' — but the crowds reflect a genuinely good, consistently praised product, not just tourist momentum.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://timeout.com/lisbon/restaurants/pasteis-de-belem",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2021-09-17",
+        "family": "timeout",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-manteigaria-locations",
+      "candidateId": "c-manteigaria",
+      "claim": "Manteigaria has 13 Lisbon locations (incl. Chiado, Time Out Market, Belém, Rossio) and 4 Porto locations (Bolhão, Clérigos, Santa Catarina, Largo São Domingos) — a genuine multi-city alternative to Pastéis de Belém, though itself now a large chain (also in Paris, Madrid, Hong Kong). Price ≈€1.20–1.30/tart (aggregator-sourced, not confirmed on the official site).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.manteigaria.com/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-time-out-market-hours-and-self-description",
+      "candidateId": "c-time-out-market-lisboa",
+      "claim": "Time Out Market Lisboa: Sun–Wed 10:00–24:00, Thu–Sat 10:00–02:00, in the historic Mercado da Ribeira building, 26 stalls + 8 bars. The operator's own page describes it as 'one of Portugal's most popular tourist attractions,' welcoming thousands of visitors daily.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.timeout.com/time-out-market-lisboa",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-ginjinha-rossio",
+      "candidateId": "c-a-ginjinha-do-rossio",
+      "claim": "A Ginjinha do Rossio (Largo de São Domingos 8, founded 1840) has no official website; hours (~09:00–22:00 daily) and price (~€1.50–1.55/shot) are aggregator-sourced only — expected for a venue this small, but the exact figures need a ground-level or very recent dated re-check before print.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tripadvisor.com",
+        "kind": "aggregator",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "tripadvisor-and-lisbon-blogs",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-mercado-do-bolhao-hours",
+      "candidateId": "c-mercado-do-bolhao",
+      "claim": "Market stalls Mon–Fri 08:00–20:00, Sat 08:00–18:00, closed Sun/holidays; in-market restaurants Mon–Sat 08:00–24:00, closed Sun/holidays. Reopened after a multi-year renovation (aggregator-sourced reopening date of 2026-09-15 — not independently confirmed via an official/press fetch); page shows normal operations with no closure notices.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://mercadobolhao.pt/en/faqs/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-cafe-santiago-hours",
+      "candidateId": "c-cafe-santiago",
+      "claim": "Café Santiago (francesinha, since 1959): Mon–Sat 12:00–22:45, closed Sunday. Price not listed on the official page (aggregator estimate ≈€8.50–10, unconfirmed).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://cafesantiago.pt/en/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-portuguese-meal-times",
+      "candidateId": null,
+      "claim": "Typical Portuguese meal windows: breakfast 07:30–10:00, lunch (main meal) 12:00–14:30, afternoon snack ~17:00, dinner 19:30–22:30 — noticeably later than typical US dinner hours.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.visitportugal.com/en/node/195722",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": "default",
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-belem-tower-hours-price",
+      "candidateId": "c-belem-tower",
+      "claim": "Tue–Sun 09:30–17:30, closed Mondays (and Jan 1, Easter Sunday, May 1, Jun 13, Dec 25); adult admission €15.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.museusemonumentos.pt/en/museus-e-monumentos/torre-de-belem",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-belem-tower-capacity-cap",
+      "candidateId": "c-belem-tower",
+      "claim": "Belém Tower reopened 27 May 2026 after ~1 year of conservation work (~€1.05M, PRR-funded) with a new phased-entry system capping visits at ~60 entrants per 30-minute slot / 900/day — down sharply from its pre-closure pace of 400,000+ visitors/year. Advance timed booking is now much more important than older guides suggest. The official government PRR page describing this was blocked (TLS certificate error); corroborated instead via Portuguese press.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.rtp.pt/noticias/cultura/a-torre-de-belem-como-nunca-a-viu-reabre-apos-obras-de-um-milhao-de-euros_n1743350",
+        "kind": "press",
+        "access": "fetched",
+        "language": "pt",
+        "publishedAt": "2026-05",
+        "family": "rtp-noticias",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-jeronimos-monastery-hours-price",
+      "candidateId": "c-jeronimos-monastery",
+      "claim": "Cloister Tue–Sun 09:30–17:30 (last entry 17:00); Church Tue–Sat 10:30–17:00, Sun/holidays 14:00–17:00; closed Mondays (and Jan 1, Easter Sunday, May 1, Jun 13, Dec 25). Adult admission €18 — notably higher than the €10–12 figure many older guides still repeat; no Belém Tower combo ticket found on the current official page.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.museusemonumentos.pt/en/museus-e-monumentos/mosteiro-dos-jeronimos-e-capela-de-sao-jeronimo",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-sao-jorge-castle-hours-price",
+      "candidateId": "c-sao-jorge-castle",
+      "claim": "Summer (Mar 1–Oct 31) daily 09:00–21:00 (last admission 20:30); winter daily 09:00–18:00 (last admission 17:30); closed only 5 days/year (Jan 1, May 1, Dec 24/25/31). Adult admission €17; advance ticket not mandatory.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://castelodesaojorge.pt/en/information/useful-information/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-tram-28-fares",
+      "candidateId": "c-tram-28",
+      "claim": "Onboard cash single tram fare €3.30; Navegante zapping pay-per-use €1.72/journey (min top-up €3); 24h Carris+Metro pass €7.25. A 24h pass breaks even after ~3 tram rides.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.carris.pt/compre/viagens-ocasionais/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "pt",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-praca-do-comercio-orientation",
+      "candidateId": "c-praca-do-comercio",
+      "claim": "Praça do Comércio (locally 'Terreiro do Paço') is one of the largest squares in Europe, on the site of the former royal palace destroyed in the 1755 earthquake; features Pátio da Galé, Cais das Colunas, Arco da Rua Augusta, and an equestrian statue of King José I.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.visitlisboa.com/en/places/praca-do-comercio-terreiro-do-paco",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": "default",
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-maat-hours-price",
+      "candidateId": "c-maat",
+      "claim": "Wed–Mon 10:00–19:00, closed Tuesdays (and Jan 1, May 1, Dec 25). Portugal-resident €12 / non-resident €16 (single ticket covers MAAT Central + Gallery); students under 30 get 25% off, seniors 65+ get 15% off.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.maat.pt/en/tickets",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-lx-factory-what-it-is",
+      "candidateId": "c-lx-factory",
+      "claim": "LX Factory is a former 1846 textile/printing complex in Alcântara under the 25 de Abril bridge, repurposed since 2008 into shops/studios/restaurants/street art; no confirmed official general opening hours exist (the official site returned unreadable content) — individual shops/restaurants keep their own hours, so it functions as an always-browsable outdoor complex rather than a ticketed venue with fixed hours.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://lxfactory.com/",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-pena-palace-hours-price-timed-entry",
+      "candidateId": "c-pena-palace",
+      "claim": "Park 09:00–19:00 (last entry 18:00); Palace 09:30–18:30 (last ticket 17:30, last admission 18:00). Park-only adult €12; Palace+Park ('Essential Visit') adult €20. Palace interior requires a mandatory pre-booked timed-entry slot, no delay tolerance.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.parquesdesintra.pt/en/plan-your-visit/opening-times-and-prices/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-pena-palace-not-closed-tuesdays",
+      "candidateId": "c-pena-palace",
+      "claim": "Parques de Sintra properties (Pena Palace included) are open every day of the year except Dec 24, 25, 31 and Jan 1, plus rare extraordinary closures (fire risk, extreme weather, state events) — the widely-repeated third-party claim that Pena Palace 'closes Tuesdays' plus Easter/May 1/Jun 13 is NOT supported by the official site and is aggregator misinformation.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.parquesdesintra.pt/en/plan-your-visit/faqs/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-quinta-da-regaleira-hours-price",
+      "candidateId": "c-quinta-da-regaleira",
+      "claim": "Jan–Mar & Oct–Dec 10:00–18:30, Apr–Sep 09:00–19:30 (last entrance 17:30 year-round). Adult admission €20, prices explicitly valid from Jan 2026 — treat any pre-2026 published price as outdated. Closed Jan 1, Dec 24/25/31.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.regaleira.pt/en/visitas",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-01",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-moorish-castle-hours-price",
+      "candidateId": "c-moorish-castle",
+      "claim": "09:30–18:00, last ticket/admission 17:30; ticket office closed 12:00–13:00 (vending machines available). Adult admission €12.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.parquesdesintra.pt/en/parks-monuments/the-moorish-castle/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-monserrate-hours-price-renovation",
+      "candidateId": "c-monserrate-palace-and-gardens",
+      "claim": "Park 09:00–19:00 (last admission 18:00); Palace 09:30–18:00 (last admission 17:30). Adult admission €12. Roof/scaffolding restoration is underway 'until the first quarter of 2027' — the palace stays open throughout but the hop-on-hop-off electric shuttle is currently suspended; since the trip is Apr 2027 (Q2), scaffolding is officially slated to be gone by then, but restoration timelines commonly slip.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.parquesdesintra.pt/en/parks-monuments/park-and-palace-of-monserrate/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2027
+        ]
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-sintra-wildfire-closure-pattern",
+      "candidateId": null,
+      "claim": "Sintra monuments (Pena, Moorish Castle, Monserrate, Capuchos) have twice been closed for several days on short notice in summer (Aug 2025, Jul 2026) due to extreme heat/wildfire risk alerts. This is a Jun–Sep risk pattern, not something that has historically hit April — the Apr 10–19, 2027 window is lower-risk but not zero-risk. Check parquesdesintra.pt/en/notices/ before departure.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.parquesdesintra.pt/en/notices/260703-monuments-closed/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-07-02",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-livraria-lello-hours",
+      "candidateId": "c-livraria-lello",
+      "claim": "Open daily 09:00–19:30.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.livrarialello.pt/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-livraria-lello-price-unconfirmed",
+      "candidateId": "c-livraria-lello",
+      "claim": "Ticket tiers repeated consistently across multiple booking/aggregator sites: Silver €10 (redeemable against a book purchase), Gold €15.95 (incl. a Livraria Lello Editions book), Platinum ≈€50 (rare/first-editions room access) — but the official booking domain (tickets.livrarialello.pt) is a JS-rendered SPA that would not yield pricing content to automated fetch across two attempts. Treat these figures as consistent-but-unconfirmed; Lello is known to adjust ticket tiers periodically.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://tickets.livrarialello.pt/en",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-torre-dos-clerigos-hours-price",
+      "candidateId": "c-torre-dos-clerigos",
+      "claim": "Daily 09:00–19:00 (extended to 23:00 during Easter/Summer/Christmas); last entry 30 min before closing. Day ticket adult €10, students €7 (ID required); combo tower+Stock Exchange Palace+MMIPO €25.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.torredosclerigos.pt/en/ticket-office/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-se-do-porto-hours",
+      "candidateId": "c-se-do-porto",
+      "claim": "Summer 09:00–18:30, winter 09:00–17:30, closed Christmas and Easter; Sunday/weekday Mass at 11:00. Cloister/museum admission ≈€4 (aggregator-sourced only — the diocese's own fetched page didn't show a price).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.diocese-porto.pt/pt/catedral-do-porto/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "pt",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-dom-luis-i-bridge-durable",
+      "candidateId": "c-dom-luis-i-bridge",
+      "claim": "Two-level iron bridge across the Douro; upper deck carries pedestrians + Porto Metro Line D, lower deck carries pedestrians + vehicles. Free to walk on both decks, no ticket, open-air public infrastructure with no fixed hours.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitporto.travel/en-GB",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": "default",
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-sao-bento-durable",
+      "candidateId": "c-sao-bento-train-station",
+      "claim": "Functioning CP passenger station whose main hall is decorated with ~22,000 azulejo tiles depicting Portuguese history; free to view as a public station concourse. Named 7th most beautiful railway station in Europe by European Best Destinations, Jan 2024.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ippatrimonio.pt/pt-pt/estacoes/estacao-de-porto-sao-bento",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2024-01",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": "default",
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-ribeira-official-source-identity",
+      "candidateId": "c-ribeira--porto",
+      "claim": "Ribeira is Porto's UNESCO World Heritage riverside historic district. The correct official municipal tourism citation is visitporto.travel (confirmed via its own footer to be run by Porto City Council / Câmara Municipal do Porto) — NOT porto.travel, a well-produced but privately-run ('Guiajando') lookalike site that ranks prominently in search and is sometimes mistaken for the official source.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitporto.travel/en-GB",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": "default",
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-sandeman-tours-price",
+      "candidateId": "c-sandeman--vila-nova-de-gaia",
+      "claim": "Porto Sandeman Visit €23 (50 min, 3 wines); Sandeman 1790 Visit €35 (1h30, 5 wines); Wine & Chocolate Experience €32 (1h, 3 wines + chocolate); Old Tawnies Visit €53 (1h30, 4 wines).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.sandeman.com/port-wine/visit/cellars-porto/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-taylors-hours",
+      "candidateId": "c-taylor-s--vila-nova-de-gaia",
+      "claim": "Cellar hours 10:00–18:15 daily (holiday exceptions); Tasting Room 10:00–19:30 daily. Audio-guided self-tour in 13 languages includes 3 wines; base tour price not shown on the fetched page.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.taylor.pt/en/visit-taylors/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-porto-card-suspended",
+      "candidateId": "c-porto-card",
+      "claim": "Porto.CARD has been temporarily unavailable for purchase since early Jul 2026 due to a stated 'product restructuring process,' with no announced relaunch date as of Aug 2026. Last confirmed 2026 pricing: 24h €7.50, 48h €12, 72h €16, 96h €18; does NOT include public transport. This must be re-checked close to the Apr 2027 trip.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://booking.visitportoandnorth.travel/en/portocard/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-18"
+      }
+    },
+    {
+      "id": "ev-lisboa-card-prices",
+      "candidateId": "c-lisboa-card",
+      "claim": "Lisboa Card (valid pricing 1 Apr 2026–31 Mar 2027): 24h adult €31, 48h €51, 72h €62 (online promo shown as €58.90 for 72h). Covers free Metro/Carris/CP(Sintra & Cascais lines)/Fertagus travel and free entry to ~50–52 museums/monuments incl. Jerónimos, Belém Tower, São Jorge Castle. A lookalike reseller domain (lisboacard.org, via ticketbar.eu) brands itself 'The Official Lisbon Pass' but is a third-party reseller, not the issuer — the genuine issuer is shop.visitlisboa.com (Turismo de Lisboa).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://shop.visitlisboa.com/products/lisboa-card",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2027
+        ]
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-20"
+      }
+    },
+    {
+      "id": "ev-tram-28-pickpocket-warning-unconfirmed",
+      "candidateId": "c-tram-28",
+      "claim": "A commonly repeated claim (US State Dept–sourced per aggregator mentions) says Tram 28 is notorious for pickpocketing, advising against standing near doors — but direct fetches of both travel.state.gov (403) and osac.gov (405) failed, so this could not be corroborated against a primary government source in this pass. Treat as an unverified-but-widely-repeated caution, not a confirmed official warning.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://osac.gov/Content/Report/b79d575e-bc92-42e1-a701-23c0900f1613",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-22",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-20"
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-pena-palace",
+      "importance": "important",
+      "bookingUrl": "https://bilheteira.parquesdesintra.pt",
+      "releaseWindow": "rolling online sale, no fixed release date — book as soon as the exact day is fixed",
+      "actionDate": "as soon as the Sintra day's date is fixed, given mandatory timed entry",
+      "partyRules": "none noted for a party of 2",
+      "deposit": "full price paid at booking",
+      "cancellation": "not confirmed in this pass — check the official ticket portal's own terms before booking",
+      "foreignFriction": "none noted — standard online card checkout",
+      "lastSeating": "last palace admission 18:00 (last ticket 17:30); park last entry 18:00",
+      "walkIn": "a ticket office exists, but the palace interior visit itself requires a pre-booked timed slot — walk-up access to the interior is not guaranteed",
+      "leads": [],
+      "alternatives": "park-only ticket (€12) doesn't require a timed slot, only the palace interior does",
+      "fallback": "if no interior slot is available, the park/gardens and exterior are still fully visitable on a park-only ticket"
+    },
+    {
+      "candidateId": "c-belem-tower",
+      "importance": "important",
+      "bookingUrl": "https://www.museusemonumentos.pt/en/museus-e-monumentos/torre-de-belem",
+      "releaseWindow": "not confirmed in this pass — the official government PRR page describing the new capacity system was blocked (TLS error); book online as early as convenient given the new low daily cap",
+      "actionDate": "as early as convenient once dates are fixed, given the ~900/day cap introduced after the May 2026 reopening",
+      "partyRules": "none noted for a party of 2",
+      "deposit": "not confirmed",
+      "cancellation": "not confirmed",
+      "foreignFriction": "none noted",
+      "lastSeating": "last admission 17:30 (site closes 17:30, closed Mondays)",
+      "walkIn": "walk-up entry is no longer assured post-reopening given the new capped, slotted system — this is a change from the pre-2026 status quo",
+      "leads": [
+        {
+          "claim": "New entry system caps visits at ~60 people per 30-minute slot / 900/day",
+          "status": "unconfirmed-lead",
+          "source": {
+            "url": "https://recuperarportugal.gov.pt/2026/05/26/torre-de-belem-reabre-apos-intervencao-financiada-pelo-prr/",
+            "kind": "official",
+            "access": "blocked",
+            "language": "pt",
+            "publishedAt": null,
+            "family": null,
+            "independent": null,
+            "appliesToYears": []
+          },
+          "verifiedOn": "2026-08-22"
+        }
+      ],
+      "alternatives": "none — this is the only site with the tower's interior",
+      "fallback": "the exterior/riverfront view and surrounding Belém waterfront remain worthwhile even without an interior slot"
+    },
+    {
+      "candidateId": "c-livraria-lello",
+      "importance": "important",
+      "bookingUrl": "https://tickets.livrarialello.pt/en",
+      "releaseWindow": "not confirmed — rolling online sale per aggregator sources",
+      "actionDate": "book online a few days ahead — widely reported to sell out same-day, especially midday",
+      "partyRules": "none noted for a party of 2",
+      "deposit": "full ticket price paid at booking, redeemable against a book purchase in-store (Silver tier)",
+      "cancellation": "not confirmed in this pass",
+      "foreignFriction": "none noted",
+      "lastSeating": "last entry not confirmed — site shows 09:00–19:30 daily",
+      "walkIn": "a same-day walk-up queue exists but is reported to run out of slots by midday on busy days (aggregator-sourced, not officially confirmed)",
+      "leads": [
+        {
+          "claim": "Ticket tiers: Silver €10 / Gold €15.95 / Platinum ≈€50",
+          "status": "unconfirmed-lead",
+          "source": {
+            "url": "https://tickets.livrarialello.pt/en",
+            "kind": "official",
+            "access": "blocked",
+            "language": "en",
+            "publishedAt": null,
+            "family": null,
+            "independent": null,
+            "appliesToYears": []
+          },
+          "verifiedOn": "2026-08-22"
+        }
+      ],
+      "alternatives": "none — Lello is the specific destination",
+      "fallback": "if sold out, several other Porto bookshops and the Almeida Garrett Municipal Library are nearby alternatives, though none match Lello's draw"
+    }
+  ],
+  "transport": [
+    {
+      "id": "t-lisbon-porto-alfa-pendular",
+      "route": "Lisbon (Oriente/Santa Apolónia) → Porto (Campanhã), CP Alfa Pendular",
+      "risk": 2,
+      "evidenceIds": [
+        "ev-lisbon-porto-train-fare-unconfirmed"
+      ],
+      "doorToDoor": "not fully mapped in this pass — depends on Lisbon lodging location relative to Oriente/Santa Apolónia",
+      "transferReality": "not applicable — direct intercity train, no transfer",
+      "groupLuggageMobility": "standard intercity train with luggage racks; fine for a party of 2 with normal luggage",
+      "buffer": "multiple daily departures reduce the cost of missing one",
+      "missedConnection": "no hard connection to miss — simply catch a later departure",
+      "nextService": "not confirmed — cp.pt's JS-rendered site blocked automated fetch of the timetable",
+      "lastPracticalReturn": "not applicable, one-way relocation",
+      "fallback": "FlixBus intercity coach is a documented lower-cost/slower alternative if the train is disrupted (seen in Lisbon airport's own transport page listing FlixBus as an intercity option)"
+    },
+    {
+      "id": "t-lisbon-sintra-plus-bus-434",
+      "route": "Lisbon (Rossio) → Sintra (CP Sintra line) → Pena Palace/Moorish Castle (Scotturb bus 434)",
+      "risk": 2,
+      "evidenceIds": [
+        "ev-lisbon-sintra-train-unconfirmed",
+        "ev-sintra-bus-434-operator",
+        "ev-sintra-transport-pass"
+      ],
+      "doorToDoor": "not fully mapped — depends on Lisbon lodging location relative to Rossio station",
+      "transferReality": "one transfer, train to bus, both well-signed at Sintra station; buses run frequently enough (aggregator-cited every 10–15 min, unconfirmed exact frequency) that a missed one is a short wait, not a lost hour",
+      "groupLuggageMobility": "not relevant — day trip, no luggage",
+      "buffer": "Sintra train runs frequently on weekdays per aggregator sources; the 24h Scotturb 434/435 pass (€10.96, officially confirmed) removes the need to time individual bus departures",
+      "missedConnection": "low consequence — both train and bus run frequently enough that a miss costs minutes, not the day",
+      "nextService": "not confirmed exactly — cp.pt and scotturb.com route subpages both blocked automated fetch",
+      "lastPracticalReturn": "not confirmed in this pass — check the last Sintra→Rossio train time before finalizing the day's return",
+      "fallback": "taxi/Uber from Sintra back to Lisbon if the last train is missed — Sintra is a well-trafficked tourist town with readily available taxis"
+    }
+  ],
+  "disagreements": [
+    {
+      "id": "d-pena-palace-closure-days",
+      "topic": "Whether Pena Palace closes on Tuesdays (plus Easter/May 1/Jun 13), as widely repeated by third-party aggregator sites, versus the official Parques de Sintra position that its properties are open every day except Dec 24/25/31 and Jan 1.",
+      "impact": "recommendation-changing",
+      "investigation": "Fetched the official Parques de Sintra FAQ page directly, which states explicitly that properties are open year-round except the four named December/January dates, plus rare extraordinary closures (fire risk, weather, state events).",
+      "resolution": "The official FAQ wins — Pena Palace does NOT close on Tuesdays. The 'closed Tuesdays' claim is aggregator misinformation and must not be repeated in the guide or used to schedule the Sintra day."
+    },
+    {
+      "id": "d-aerobus-still-operating",
+      "topic": "Multiple third-party booking sites (Viator, Busbud, TripAdvisor) still list the Aerobus airport shuttle as bookable, while the official Lisbon Airport transport page omits it entirely and aerobus.pt 404s.",
+      "impact": "recommendation-changing",
+      "investigation": "Fetched the official Lisbon Airport transport page directly (lists Metro, Carris buses, FlixBus, taxi — no Aerobus); attempted aerobus.pt directly (404); cross-checked via a TripAdvisor forum thread discussing the 2022 cancellation.",
+      "resolution": "Aerobus is discontinued (since 2022). The guide recommends the Metro red line or taxi/rideshare instead, and should not repeat Aerobus fare figures still circulating on booking sites."
+    },
+    {
+      "id": "d-cabo-da-roca-bus-number",
+      "topic": "Most guides (and much aggregator content) still cite 'Scotturb 403' as the bus to Cabo da Roca; Carris Metropolitana took over Sintra-area routes in Jan 2023.",
+      "impact": "minor",
+      "investigation": "Searched for the current operator/route number; found Carris Metropolitana line 1253 described as the current Sintra↔Cabo da Roca circuit, though the operator's own route page is JS-rendered and could not be fetched for schedule detail.",
+      "resolution": "If a future pass adds Cabo da Roca to the itinerary, cite Carris Metropolitana 1253, not Scotturb 403. Not itinerary-critical this pass since Cabo da Roca was rejected as a candidate for time-budget reasons."
+    },
+    {
+      "id": "d-jeronimos-price",
+      "topic": "The official Jerónimos Monastery page shows €18 adult admission; many older/generic travel guides still quote €10–12.",
+      "impact": "minor",
+      "investigation": "Fetched the official museusemonumentos.pt ticket page directly (twice, to confirm) — €18 is the current, clearly stated figure.",
+      "resolution": "Ship €18 as the current price; note it's higher than what older guides say so the traveler isn't surprised."
+    },
+    {
+      "id": "d-etias-launch-timing",
+      "topic": "Whether ETIAS will be required by the Apr 10–19, 2027 trip. The EU's own site removed its Q4-2026 target in Jul 2026; press/immigration-law commentary now says 2027 is 'most likely' but unconfirmed.",
+      "impact": "minor",
+      "investigation": "Fetched the official europa.eu entry-rules page (silent on ETIAS); could not get readable content from the official ETIAS SPA site directly; cross-checked via an immigration-law firm's public commentary (Fragomen) and general press.",
+      "resolution": "Not itinerary-changing — ETIAS is very unlikely to be enforced by this trip given no confirmed 2027 date exists yet, but the guide should carry an explicit re-check reminder in the pre-departure checklist rather than assert either way as settled."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-pena-palace",
+        "c-belem-tower",
+        "c-livraria-lello"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [],
+      "notApplicableReason": "no route in this itinerary reaches risk R3+ — Lisbon-Porto Alfa Pendular and the Sintra CP line + Scotturb 434/435 buses all run multiple times daily with taxi/Uber as an easy, well-documented fallback if one departure is missed; nothing here is a single-point-of-failure connection"
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Five entity-batched research sweeps (entry/money/transit backbone, Lisbon sights, Sintra day trip, Porto sights, food across both cities) covered the full Lisbon-Porto-Sintra backbone against all three ranked priorities (food, culture/history, nature/outdoors). Late-stage searches (Brasão/Cufra francesinha alternates, Cabo da Roca bus routing, Porto Card/Lisboa Card status) returned the same handful of names repeatedly or confirmed already-known gaps (JS-rendered cp.pt, Graham's 403, ETIAS's unconfirmed date) rather than surfacing new serious candidates. Remaining unknowns (exact CP fares, Lello's exact ticket tiers, ETIAS's eventual launch date, the Portugal travel advisory level itself — travel.state.gov is Cloudflare-gated against WebFetch and needs a browser tool this session doesn't have) are pre-trip recheck items and a networked-pass follow-up, not undiscovered candidates that would change which venues/sights ship."
+  },
+  "passB": null,
+  "reconciliation": []
+}

@@ -6,63 +6,99 @@
     "items": [
       {
         "date": "Sat Apr 10",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Arrive Lisbon",
+        "tldr": "Land, get settled, ease into the city with an Alfama wander and an early dinner.",
+        "pace": "Land, Metro into the center, check in, no fixed plans after that.",
+        "body": "<p>Clear the airport, take the Metro red line to Saldanha (≈20 min) and find your Lisbon base. Keep the rest of the day open — an Alfama wander and an early dinner beat a packed first-day itinerary after a transatlantic flight.</p>",
+        "energy": "slow",
+        "env": "mixed"
       },
       {
         "date": "Sun Apr 11",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Belém — monastery, tower, custard tarts",
+        "tldr": "Jerónimos Monastery, Belém Tower and Pastéis de Belém — all closed Mondays, so today's the day.",
+        "pace": "Morning at Jerónimos, midday at Belém Tower, afternoon pastries and MAAT along the riverfront.",
+        "body": "<p>Jerónimos Monastery (Tue–Sun, cloister 09:30–17:30, €18) and Belém Tower (Tue–Sun 09:30–17:30, €15) both close Mondays — this is the day for them, and both now need timed tickets booked ahead. Between them, walk the riverfront to Pastéis de Belém for the original custard tart; go before 09:00 or after 18:00 to skip the crowd, and know the outside queue is takeaway-only — the café itself seats 1,000+ and usually turns a table in under 10 minutes.</p><p>Round out the afternoon at MAAT (Wed–Mon 10:00–19:00, €16) if there's energy left.</p>",
+        "constraints": ["Jerónimos and Belém Tower closed Mondays — must be today, not a swap day"],
+        "energy": "packed",
+        "env": "outdoor",
+        "checklist": ["Confirm your Belém Tower and Jerónimos timed-entry tickets the night before"]
       },
       {
         "date": "Mon Apr 12",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Alfama & São Jorge Castle",
+        "tldr": "The one Lisbon sight that stays open Mondays — climb to São Jorge Castle and get lost in Alfama's lanes.",
+        "pace": "Morning castle visit before the heat/crowds build, afternoon free to wander Alfama, evening fado dinner.",
+        "body": "<p>São Jorge Castle is one of the only major Lisbon sights open every day (09:00–21:00 in April, €17, no advance ticket needed) — useful, since Belém's sights are shut today. Below it, Alfama's medieval lanes survived the 1755 earthquake essentially intact; there's no fixed route, just wander downhill toward the river.</p><p>Ride Tram 28 for at least one leg — the classic yellow tram climbing Alfama's hills — and keep bags zipped in the crush near the doors, standard advice for any packed tourist tram.</p>",
+        "energy": "balanced",
+        "env": "outdoor"
       },
       {
         "date": "Tue Apr 13",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Sintra day trip",
+        "tldr": "Pena Palace and Quinta da Regaleira in one day — both open Tuesdays, despite what some guides say.",
+        "pace": "Early train from Rossio, Pena Palace first (mandatory timed slot), Regaleira after, Moorish Castle if there's time and energy.",
+        "body": "<p>Train from Rossio to Sintra (≈40 min), then the 24h Scotturb bus pass (€10.96) for bus 434 up to Pena Palace and the Moorish Castle. Pena's palace interior needs a pre-booked timed slot (€20 palace+park; €12 park-only skips the wait); Quinta da Regaleira (€20, its mystical initiation well is the highlight) is a walk or short bus ride from the historic center.</p><p>Despite what many sites claim, Pena Palace does NOT close on Tuesdays — Parques de Sintra properties are open year-round except Dec 24/25/31 and Jan 1. If energy holds, the Moorish Castle's ramparts are a worthwhile add before heading back.</p>",
+        "constraints": ["Pena Palace interior requires a pre-booked timed-entry slot"],
+        "energy": "packed",
+        "env": "outdoor",
+        "checklist": ["Book the Pena Palace timed-entry slot in advance", "Load the 24h Scotturb bus pass at Sintra station"]
       },
       {
         "date": "Wed Apr 14",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Baixa & Chiado — a lighter day",
+        "tldr": "Recovery day after Sintra: Praça do Comércio, Time Out Market, LX Factory, whatever pace feels right.",
+        "pace": "Deliberately loose — pick two or three of these, not all of them.",
+        "body": "<p>After Sintra's full day, ease off: Praça do Comércio for the riverside square, Time Out Market for a browse-and-graze lunch (it's genuinely tourist-heavy by its own operator's admission, but convenient), and LX Factory's shops and street art in the afternoon — it has no fixed hours since it's really an open-air complex of independently-run spaces.</p><p>Cap the day with a ginjinha (cherry liqueur) at the standing-room-only A Ginjinha do Rossio — cash, a euro fifty, and a Lisbon tradition since 1840.</p>",
+        "energy": "slow",
+        "env": "mixed"
       },
       {
         "date": "Thu Apr 15",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Travel to Porto",
+        "tldr": "≈2h45m by Alfa Pendular train, then settle into Porto with a Ribeira riverside walk.",
+        "pace": "Train mid-morning, arrive early afternoon, easy orientation walk, early dinner.",
+        "body": "<p>The Alfa Pendular from Oriente or Santa Apolónia to Porto Campanhã takes roughly 2h45m — book ahead at cp.pt (the site's exact fare isn't independently confirmable against a live fetch, budget ≈€25–35pp for 2nd class).</p><p>Once in Porto, walk down to São Bento station first — even if you're not catching a train, its main hall's 22,000-tile azulejo mural is free to see and worth the detour — then continue to the Ribeira riverside for your first look at the Dom Luís I Bridge and Vila Nova de Gaia across the water.</p>",
+        "energy": "balanced",
+        "env": "mixed"
       },
       {
         "date": "Fri Apr 16",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Bolhão market, Lello, Clérigos",
+        "tldr": "Market breakfast, then two of Porto's most iconic (and most ticketed) sights.",
+        "pace": "Morning market, late-morning Lello before the queue builds, early afternoon Clérigos Tower.",
+        "body": "<p>Start at Mercado do Bolhão (Mon–Fri 08:00–20:00) for a market breakfast — it's closed Sundays, so this is the day. From there it's a short walk to Livraria Lello, the famously ornate bookshop that now requires a timed ticket (book ahead, it's known to sell out by midday); go as early as your slot allows.</p><p>Torre dos Clérigos (daily 09:00–19:00, €10) is a few minutes further — climb it for the best rooftop view over Porto's tiled skyline.</p>",
+        "constraints": ["Mercado do Bolhão closed Sundays — today, not later in the week"],
+        "energy": "packed",
+        "env": "mixed",
+        "checklist": ["Book the Livraria Lello ticket a few days ahead"]
       },
       {
         "date": "Sat Apr 17",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Vila Nova de Gaia — port wine",
+        "tldr": "Cross the bridge for a port wine cellar tour, then a slow riverside afternoon.",
+        "pace": "Walk the upper deck of Dom Luís I Bridge over, cellar tour late morning, riverfront lunch, afternoon free.",
+        "body": "<p>Walk the upper deck of the Dom Luís I Bridge (free, pedestrian, Porto Metro Line D also crosses it) into Vila Nova de Gaia, where the port houses line the riverbank. Sandeman's Porto Visit (€23, 50 min, 3 wines) or Taylor's self-guided audio tour are both confirmed and straightforward to book; treat Graham's and Cálem as options to check on the ground — their official sites didn't yield current pricing on a live fetch.</p><p>Spend the afternoon along the Gaia riverfront — the classic postcard view of Ribeira is from this side, especially as the light goes gold.</p>",
+        "energy": "balanced",
+        "env": "outdoor"
       },
       {
         "date": "Sun Apr 18",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Sé do Porto & free time",
+        "tldr": "The cathedral, then a genuinely open afternoon — Porto's last full day.",
+        "pace": "Late morning at the cathedral, afternoon and evening unscheduled.",
+        "body": "<p>Sé do Porto (09:00–18:30 in April) sits above Ribeira with a cloister worth the modest admission. After that, the day is deliberately open — revisit whichever neighborhood earned a second look, do a last pass through Ribeira, or simply rest before the flight home.</p>",
+        "energy": "slow",
+        "env": "mixed"
       },
       {
         "date": "Mon Apr 19",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Departure",
+        "tldr": "Fly home from Porto (OPO) — TAP flies direct to Newark, no need to backtrack to Lisbon.",
+        "pace": "Pack, head to Francisco Sá Carneiro Airport (OPO), fly home.",
+        "body": "<p>TAP Air Portugal flies direct from Porto (OPO) to Newark, so there's no need to return to Lisbon before flying home. Confirm your airport transfer time the night before.</p>",
+        "energy": "slow",
+        "env": "indoor"
       }
     ]
   }

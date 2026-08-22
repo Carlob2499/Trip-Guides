@@ -3,37 +3,60 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "body": "<p>Lisbon Humberto Delgado Airport (LIS) sits inside the city — no long transfer. Take the Metro red line (Aeroporto–Saldanha, ≈20 min) into the center; buy a Navegante card (€0.50) plus fare at the station machine before boarding. A taxi or rideshare runs ≈€10–15 including the airport luggage fee.</p><p>The Aerobus airport shuttle some older guides mention was discontinued in 2022 — don't look for it.</p>",
+    "checklist": [
+      "Buy a Navegante card (€0.50) at an airport Metro machine, then load a single fare (€1.92) or top up for zapping (€1.72/ride)",
+      "Confirm your first night's lodging address before you land — Lisbon's Alfama/Baixa streets are narrow and easy to mistype into a taxi app"
+    ],
+    "source_url": "https://www.lisbonairport.pt/en/lis/access-parking/getting-to-and-from-the-airport/public-transportation",
+    "verified_on": "2026-08-22",
+    "shelf_life": "transit"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "body": "<p>Emergency number: <b>112</b> (police/fire/ambulance, free, 24/7). Tap water is safe throughout Portugal. Tipping ~5–10% in restaurants is customary but not required — nobody will chase you down for skipping it.</p><p>The bread, olives or cheese a waiter sets down without being asked (<i>couvert</i>) is a real, legal charge if you eat it — but Portuguese consumer law says you're never obliged to pay for anything you didn't order, and you can hand it back at no charge. Restaurants must display the couvert price; ask if it isn't shown.</p>",
+    "source_url": "https://pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=726&tabela=leis",
+    "verified_on": "2026-08-22",
+    "shelf_life": "default"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "body": "<p>US passports enter Portugal visa-free for up to 90 days in any 180-day Schengen window. Keep your passport valid at least 3 months past your Apr 19 departure. No ETIAS authorisation is required yet — the EU pushed its target launch past Q4 2026 with no new date confirmed, so this is worth a last look before you fly (see the masthead re-check list).</p>",
+    "checklist": [
+      "Passport valid at least 3 months beyond Apr 19, 2027",
+      "Re-check ETIAS status closer to departure — travel-europe.europa.eu/etias_en"
+    ],
+    "source_url": "https://europa.eu/youreurope/citizens/travel/entry-exit/non-eu-nationals/index_en.htm",
+    "verified_on": "2026-08-22",
+    "shelf_life": "default"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "body": "<p>The EU's 'Roam Like at Home' rules cover EU/EEA residents only — a US phone plan is NOT included, so check your carrier's own international pass before you fly (AT&T/Verizon-style day-passes run roughly $10–12/day; some T-Mobile plans include basic reduced-speed data). A local prepaid SIM or eSIM from MEO or Vodafone Portugal, available at airport kiosks, is usually cheaper for a 9-day trip if your carrier doesn't already cover Europe.</p>",
+    "source_url": "https://europa.eu/youreurope/citizens/consumers/internet-telecoms/mobile-roaming-costs/index_en.htm",
+    "verified_on": "2026-08-22",
+    "shelf_life": "default"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
-    "body": "",
+    "body": "<p>Start at the top — these set your dates and are the ones most likely to sell out.</p>",
     "checklist": [
-      "Flights",
-      "Accommodation",
-      "Airport transfer",
+      "Flights, round trip — TAP Air Portugal flies EWR direct to both Lisbon (LIS) and Porto (OPO), so an open-jaw (into LIS, home from OPO) skips backtracking",
+      "Accommodation — Lisbon (5 nights) and Porto (4 nights)",
+      "Pena Palace timed-entry ticket (mandatory for the interior) — book once the Sintra day (Apr 13) is fixed: bilheteira.parquesdesintra.pt",
+      "Belém Tower ticket — book ahead; the tower reopened May 2026 with a new ~900-visitor/day cap after a year of restoration",
+      "Livraria Lello ticket — books up, especially midday: tickets.livrarialello.pt",
+      "Lisbon–Porto Alfa Pendular train (Apr 15) — book at cp.pt; exact fare isn't independently confirmable against a live fetch, budget ≈€25–35pp 2nd class",
       "Travel insurance",
-      "Any timed tickets"
+      "Confirm your phone plan's Europe roaming or order a local eSIM"
     ]
   },
   {
@@ -44,6 +67,7 @@
   {
     "type": "holidays",
     "group": "Plan",
-    "title": "Public holidays & closures"
+    "title": "Public holidays & closures",
+    "note": "No Portuguese national holiday falls inside Apr 10–19, 2027 — Good Friday (Mar 26) and Easter Sunday (Mar 28) land before you arrive, and Freedom Day (Apr 25) falls 6 days after you leave. Lisbon's Santo António (Jun 13) and Porto's São João (Jun 24) are also well outside your dates."
   }
 ]

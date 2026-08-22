@@ -3,7 +3,21 @@
     "type": "panel",
     "group": "Health & safety",
     "title": "Health & pharmacy",
-    "body": "",
-    "phase": "daily"
+    "body": "<p>Emergency number <b>112</b> (free, 24/7) covers police, fire and ambulance. Tap water is safe to drink throughout Portugal. Pharmacies (<i>farmácia</i>) are marked with a green cross; most keep normal shop hours, with a rotating late-night pharmacy roster posted in every pharmacy window.</p><p>US travelers have no reciprocal public healthcare in Portugal — bring travel insurance that covers overseas medical care.</p>",
+    "checklist": [
+      "Save 112 in your phone before you land",
+      "Pack medicines in original packaging with a copy of any prescriptions",
+      "Confirm travel insurance covers overseas medical care"
+    ],
+    "phase": "daily",
+    "source_url": "https://www.gov.pt/guias/contactos-de-emergencia-em-portugal",
+    "verified_on": "2026-08-22",
+    "shelf_life": "default"
+  },
+  {
+    "type": "prose",
+    "group": "Health & safety",
+    "title": "Tram 28 and crowded spots — the standard caution",
+    "body": "<p>Tram 28 and other packed tourist routes draw the pickpocket attention any crowded transit line does — keep bags zipped and in front of you, especially standing near the doors. A specific 'Tram 28 is notorious' claim circulates widely online, but the primary US government source for it (travel.state.gov) isn't independently confirmable against a live fetch — treat it as standard big-city caution rather than a confirmed official warning.</p>"
   }
 ]
