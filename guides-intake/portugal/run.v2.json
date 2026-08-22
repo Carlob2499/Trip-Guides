@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "wp-run/2.1",
+  "slug": "portugal",
+  "runId": "portugal-20260822-7c041e",
+  "lifecycle": "research",
+  "inputs": {
+    "section": "",
+    "model": "claude-sonnet-5",
+    "effort": "high",
+    "criticModel": "claude-opus-5"
+  },
+  "issue": "74",
+  "landMode": "auto",
+  "status": "running",
+  "createdAt": "2026-08-22T01:24:31.449Z",
+  "updatedAt": "2026-08-22T01:24:31.491Z",
+  "stageOrder": [
+    "scaffold",
+    "passA",
+    "passB",
+    "reconcile",
+    "critic"
+  ],
+  "stages": {
+    "scaffold": {
+      "status": "complete",
+      "startedAt": "2026-08-22T01:24:31.489Z",
+      "endedAt": "2026-08-22T01:24:31.491Z",
+      "attempts": 1,
+      "model": null,
+      "effort": null,
+      "commit": "b7fe0a4e52df4c1ca6e8b5c82e47a1f43c555ba3",
+      "history": [
+        {
+          "attempt": 1,
+          "startedAt": "2026-08-22T01:24:31.489Z",
+          "endedAt": "2026-08-22T01:24:31.491Z",
+          "status": "complete",
+          "failureClass": null,
+          "durationSec": 0
+        }
+      ],
+      "failure": null
+    },
+    "passA": {
+      "status": "queued",
+      "startedAt": null,
+      "endedAt": null,
+      "attempts": 0,
+      "model": null,
+      "effort": null,
+      "commit": null,
+      "history": [],
+      "failure": null
+    },
+    "passB": {
+      "status": "queued",
+      "startedAt": null,
+      "endedAt": null,
+      "attempts": 0,
+      "model": null,
+      "effort": null,
+      "commit": null,
+      "history": [],
+      "failure": null
+    },
+    "reconcile": {
+      "status": "queued",
+      "startedAt": null,
+      "endedAt": null,
+      "attempts": 0,
+      "model": null,
+      "effort": null,
+      "commit": null,
+      "history": [],
+      "failure": null
+    },
+    "critic": {
+      "status": "queued",
+      "startedAt": null,
+      "endedAt": null,
+      "attempts": 0,
+      "model": null,
+      "effort": null,
+      "commit": null,
+      "history": [],
+      "failure": null
+    }
+  },
+  "attempts": {
+    "total": 0,
+    "cap": 5,
+    "autoRetries": 0,
+    "autoRetryCap": 1
+  },
+  "resume": {
+    "nextStage": "passA",
+    "action": "run stage \"passA\""
+  },
+  "failure": null,
+  "publication": {
+    "published": false,
+    "publishedAt": null,
+    "deployedLive": null,
+    "deployedAt": null
+  },
+  "landing": {
+    "outcome": "pending",
+    "pr": null,
+    "mergedAt": null,
+    "announced": null,
+    "finalizedAt": null,
+    "detail": null
+  },
+  "previousRuns": [],
+  "landingGate": {
+    "status": "pending",
+    "checkedAt": null,
+    "failure": null
+  },
+  "telemetry": null
+}
