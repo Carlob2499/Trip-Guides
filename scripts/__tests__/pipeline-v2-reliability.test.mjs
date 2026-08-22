@@ -555,8 +555,9 @@ describe("B2 — an eligible repair whose re-dispatch FAILS is still a visible s
     expect(condition("true", "failure")).toBe(true);   // 5 · dispatch failed    → escalate
 
     for (const step of WORKFLOW.split("- name: Escalate — this run stopped and needs a human").slice(1)) {
+      // The B2 branch survives B3's widening of the outer status guard (see the B3 block).
       expect(step.split("- name:")[0])
-        .toContain("if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')");
+        .toContain("(steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')");
     }
   });
 
@@ -616,6 +617,94 @@ describe("B2 — an eligible repair whose re-dispatch FAILS is still a visible s
     expect(state.landing.outcome).toBe("pending");
     // The run is still resumable at exactly the failed stage.
     expect(nextStageV2(state)).toBe("reconcile");
+  });
+});
+
+// ── B3 · cancellation must reach the visible stop, not fall through it ───────
+// Codex re-review on PR #75. GitHub Actions' status functions are DISJOINT: on a cancelled run
+// `failure()` is false. `Record agent failure honestly` already used `(failure() || cancelled())`
+// and so durably recorded `cancelled` — but the retry decision and the escalation were gated on
+// `failure()` alone, so the contract's own matrix row (cancelled → stop + escalate) had no
+// escalation behind it. Another silent strand, in a class the matrix claimed was covered.
+
+describe("B3 — a cancelled run stops VISIBLY and never auto-repairs", () => {
+  // The three step conditions, modelled exactly as the YAML writes them. Each is pinned against
+  // the workflow text below, so this table cannot drift away from what actually ships.
+  const retryRuns = (failed, cancelledRun) => failed || cancelledRun;
+  const redispatchRuns = (failed, cancelledRun, allowed) => failed && allowed === "true";
+  const escalateRuns = (failed, cancelledRun, allowed, redispatch) =>
+    (failed || cancelledRun) && (allowed !== "true" || redispatch === "failure");
+
+  it("the workflow's real conditions are the ones this table models", () => {
+    const retries = WORKFLOW.split("- name: Bounded automatic repair retry").slice(1);
+    const redispatches = WORKFLOW.split("- name: Re-dispatch the repair attempt once").slice(1);
+    const escalations = WORKFLOW.split("- name: Escalate — this run stopped and needs a human").slice(1);
+    expect([retries.length, redispatches.length, escalations.length]).toEqual([4, 4, 4]);
+    for (const step of retries) expect(step.split("- name:")[0]).toContain("if: failure() || cancelled()");
+    for (const step of escalations) {
+      expect(step.split("- name:")[0])
+        .toContain("if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')");
+    }
+    // (3) The DISPATCH condition stays narrow — a cancelled run must never launch a repair.
+    for (const step of redispatches) {
+      const block = step.split("- name:")[0];
+      expect(block).toContain("if: failure() && steps.retry.outputs.allowed == 'true'");
+      expect(block).not.toContain("cancelled()");
+    }
+  });
+
+  it("cancelled → the decision is reached, refused, and the escalation runs; no dispatch", () => {
+    // A cancelled run: failure()=false, cancelled()=true. `allowed` is 'false' because the state
+    // machine refuses the class (proven behaviorally below).
+    expect(retryRuns(false, true)).toBe(true);          // the decision is REACHED …
+    expect(redispatchRuns(false, true, "false")).toBe(false); // … no automatic repair launches …
+    expect(escalateRuns(false, true, "false", "skipped")).toBe(true); // … and the stop is visible.
+    // What this replaces: the pre-B3 gates keyed on failure() alone, which is FALSE here — both
+    // the decision and the escalation were skipped, stranding the run with no notice.
+    const preB3RetryRuns = (failed) => failed;
+    const preB3EscalateRuns = (failed, allowed) => failed && allowed !== "true";
+    expect(preB3RetryRuns(false)).toBe(false);
+    expect(preB3EscalateRuns(false, "false")).toBe(false);
+  });
+
+  it("cancellation still can't dispatch even if `allowed` were somehow true (defence in depth)", () => {
+    expect(redispatchRuns(false, true, "true")).toBe(false);
+    expect(escalateRuns(false, true, "true", "skipped")).toBe(false);
+  });
+
+  it("the ordinary failure paths are unchanged by B3", () => {
+    expect(escalateRuns(true, false, "false", "skipped")).toBe(true);  // refused      → escalate
+    expect(escalateRuns(true, false, "true", "success")).toBe(false);  // launched     → silent
+    expect(escalateRuns(true, false, "true", "failure")).toBe(true);   // B2 dispatch  → escalate
+    expect(redispatchRuns(true, false, "true")).toBe(true);
+  });
+
+  it("end to end: a cancelled agent records `cancelled`, is refused, and yields a stop notice", async () => {
+    await runAt("reconcile", { issue: "74" });
+    // The workflow's record step classifies the cancelled process…
+    const verdict = classifyAgentFailure({ agentConclusion: "cancelled", agentOutput: "" });
+    expect(verdict.class).toBe("cancelled");
+    await stageFail(SLUG, "reconcile", { failureClass: verdict.class, detail: verdict.detail, intakeDir });
+    const state = await readRunStateV2(SLUG, { intakeDir });
+    expect(state.stages.reconcile.failure.class).toBe("cancelled");
+
+    // …the state machine refuses it (no budget spent)…
+    const decision = await decide(state, "reconcile");
+    expect(decision.allowed).toBe(false);
+    expect(decision.reason).toContain("never auto-retryable");
+    expect((await readRunStateV2(SLUG, { intakeDir })).attempts.autoRetries).toBe(0);
+
+    // …and the escalation has a real notice to file.
+    const report = await escalationReport(SLUG, { stage: "reconcile", intakeDir });
+    expect(report.issue).toBe("74");
+    expect(report.body).toContain("cancelled");
+    expect(report.actionsError).toMatch(/STOPPED/);
+    expect(report.decision.recovery).toBeTruthy();
+    // The run is untouched and resumable at the cancelled stage.
+    const after = await readRunStateV2(SLUG, { intakeDir });
+    expect(nextStageV2(after)).toBe("reconcile");
+    expect(after.publication.published).toBe(false);
+    expect(after.landMode).toBe("pr");
   });
 });
 

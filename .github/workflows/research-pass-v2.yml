@@ -408,7 +408,11 @@ jobs:
       # still accepted as a workflow input for compatibility, but it is no longer consulted —
       # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
       - name: Bounded automatic repair retry (durable run state decides)
-        if: failure()
+        # failure() and cancelled() are DISJOINT status functions: on a cancelled run failure()
+        # is false, so gating on it alone skipped both this decision and the escalation below —
+        # leaving `cancelled` recorded but silent, against the contract (Codex review B3). The
+        # state machine still REFUSES cancelled; asking it is what produces the visible stop.
+        if: failure() || cancelled()
         id: retry
         working-directory: collect
         run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --stage passA --branch "$BRANCH"
@@ -438,7 +442,7 @@ jobs:
       # reservation is already durably consumed and no repair run exists, so skipping the notice
       # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
       - name: Escalate — this run stopped and needs a human
-        if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
+        if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
@@ -598,7 +602,11 @@ jobs:
       # still accepted as a workflow input for compatibility, but it is no longer consulted —
       # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
       - name: Bounded automatic repair retry (durable run state decides)
-        if: failure()
+        # failure() and cancelled() are DISJOINT status functions: on a cancelled run failure()
+        # is false, so gating on it alone skipped both this decision and the escalation below —
+        # leaving `cancelled` recorded but silent, against the contract (Codex review B3). The
+        # state machine still REFUSES cancelled; asking it is what produces the visible stop.
+        if: failure() || cancelled()
         id: retry
         working-directory: collect
         run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --stage passB --branch "$BRANCH"
@@ -628,7 +636,7 @@ jobs:
       # reservation is already durably consumed and no repair run exists, so skipping the notice
       # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
       - name: Escalate — this run stopped and needs a human
-        if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
+        if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
@@ -796,7 +804,11 @@ jobs:
       # still accepted as a workflow input for compatibility, but it is no longer consulted —
       # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
       - name: Bounded automatic repair retry (durable run state decides)
-        if: failure()
+        # failure() and cancelled() are DISJOINT status functions: on a cancelled run failure()
+        # is false, so gating on it alone skipped both this decision and the escalation below —
+        # leaving `cancelled` recorded but silent, against the contract (Codex review B3). The
+        # state machine still REFUSES cancelled; asking it is what produces the visible stop.
+        if: failure() || cancelled()
         id: retry
         working-directory: collect
         run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --stage reconcile --branch "$BRANCH"
@@ -826,7 +838,7 @@ jobs:
       # reservation is already durably consumed and no repair run exists, so skipping the notice
       # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
       - name: Escalate — this run stopped and needs a human
-        if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
+        if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
@@ -1075,7 +1087,11 @@ jobs:
       # still accepted as a workflow input for compatibility, but it is no longer consulted —
       # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
       - name: Bounded automatic repair retry (durable run state decides)
-        if: failure()
+        # failure() and cancelled() are DISJOINT status functions: on a cancelled run failure()
+        # is false, so gating on it alone skipped both this decision and the escalation below —
+        # leaving `cancelled` recorded but silent, against the contract (Codex review B3). The
+        # state machine still REFUSES cancelled; asking it is what produces the visible stop.
+        if: failure() || cancelled()
         id: retry
         working-directory: collect
         run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --stage critic --branch "$BRANCH"
@@ -1105,7 +1121,7 @@ jobs:
       # reservation is already durably consumed and no repair run exists, so skipping the notice
       # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
       - name: Escalate — this run stopped and needs a human
-        if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
+        if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
