@@ -266,6 +266,12 @@ jobs:
     permissions:
       contents: write
       actions: write
+      # issues: write is REQUIRED by the stop/escalation step, and a job-level permissions
+      # block sets every omitted scope to `none` — the workflow-level grant does not survive
+      # the override. Without it `gh issue comment` 403s in exactly the failure path the
+      # escalation exists to make visible (Codex review B1). Least privilege: the token is
+      # still never passed into the agent container.
+      issues: write
     env:
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
@@ -409,6 +415,8 @@ jobs:
 
       - name: Re-dispatch the repair attempt once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        id: redispatch
+        continue-on-error: true
         # working-directory: the workspace root's .git was replaced by the agent sandbox (no
         # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
         # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
@@ -426,12 +434,17 @@ jobs:
       # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
       # Actions error and, when the run knows its intake issue, one deduped issue comment naming
       # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      # A repair that was ELIGIBLE but whose re-dispatch failed is also a stop: the auto-retry
+      # reservation is already durably consumed and no repair run exists, so skipping the notice
+      # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
       - name: Escalate — this run stopped and needs a human
-        if: failure() && steps.retry.outputs.allowed != 'true'
+        if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
-        run: node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage passA
+        run: |
+          node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage passA \
+            --dispatch-failed "${{ steps.redispatch.outcome == 'failure' }}"
 
   # ── Pass B — mechanically isolated ─────────────────────────────────────────
   passB:
@@ -444,6 +457,12 @@ jobs:
     permissions:
       contents: write
       actions: write
+      # issues: write is REQUIRED by the stop/escalation step, and a job-level permissions
+      # block sets every omitted scope to `none` — the workflow-level grant does not survive
+      # the override. Without it `gh issue comment` 403s in exactly the failure path the
+      # escalation exists to make visible (Codex review B1). Least privilege: the token is
+      # still never passed into the agent container.
+      issues: write
     env:
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
@@ -586,6 +605,8 @@ jobs:
 
       - name: Re-dispatch the repair attempt once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        id: redispatch
+        continue-on-error: true
         # working-directory: the workspace root's .git was replaced by the agent sandbox (no
         # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
         # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
@@ -603,12 +624,17 @@ jobs:
       # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
       # Actions error and, when the run knows its intake issue, one deduped issue comment naming
       # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      # A repair that was ELIGIBLE but whose re-dispatch failed is also a stop: the auto-retry
+      # reservation is already durably consumed and no repair run exists, so skipping the notice
+      # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
       - name: Escalate — this run stopped and needs a human
-        if: failure() && steps.retry.outputs.allowed != 'true'
+        if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
-        run: node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage passB
+        run: |
+          node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage passB \
+            --dispatch-failed "${{ steps.redispatch.outcome == 'failure' }}"
 
   # ── Reconcile ──────────────────────────────────────────────────────────────
   reconcile:
@@ -620,6 +646,12 @@ jobs:
     permissions:
       contents: write
       actions: write
+      # issues: write is REQUIRED by the stop/escalation step, and a job-level permissions
+      # block sets every omitted scope to `none` — the workflow-level grant does not survive
+      # the override. Without it `gh issue comment` 403s in exactly the failure path the
+      # escalation exists to make visible (Codex review B1). Least privilege: the token is
+      # still never passed into the agent container.
+      issues: write
     env:
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
@@ -771,6 +803,8 @@ jobs:
 
       - name: Re-dispatch the repair attempt once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        id: redispatch
+        continue-on-error: true
         # working-directory: the workspace root's .git was replaced by the agent sandbox (no
         # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
         # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
@@ -788,12 +822,17 @@ jobs:
       # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
       # Actions error and, when the run knows its intake issue, one deduped issue comment naming
       # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      # A repair that was ELIGIBLE but whose re-dispatch failed is also a stop: the auto-retry
+      # reservation is already durably consumed and no repair run exists, so skipping the notice
+      # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
       - name: Escalate — this run stopped and needs a human
-        if: failure() && steps.retry.outputs.allowed != 'true'
+        if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
-        run: node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage reconcile
+        run: |
+          node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage reconcile \
+            --dispatch-failed "${{ steps.redispatch.outcome == 'failure' }}"
 
   # ── Deterministic geocoding (blocker 1D) — after Reconcile, before the Critic ──
   # No agent runs in this job; PLACES_API_KEY is scoped to the single lookup step and research
@@ -856,6 +895,12 @@ jobs:
     permissions:
       contents: write
       actions: write
+      # issues: write is REQUIRED by the stop/escalation step, and a job-level permissions
+      # block sets every omitted scope to `none` — the workflow-level grant does not survive
+      # the override. Without it `gh issue comment` 403s in exactly the failure path the
+      # escalation exists to make visible (Codex review B1). Least privilege: the token is
+      # still never passed into the agent container.
+      issues: write
     env:
       SLUG: ${{ inputs.slug }}
       BRANCH: ${{ needs.setup.outputs.branch }}
@@ -1037,6 +1082,8 @@ jobs:
 
       - name: Re-dispatch the repair attempt once
         if: failure() && steps.retry.outputs.allowed == 'true'
+        id: redispatch
+        continue-on-error: true
         # working-directory: the workspace root's .git was replaced by the agent sandbox (no
         # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
         # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
@@ -1054,12 +1101,17 @@ jobs:
       # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
       # Actions error and, when the run knows its intake issue, one deduped issue comment naming
       # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      # A repair that was ELIGIBLE but whose re-dispatch failed is also a stop: the auto-retry
+      # reservation is already durably consumed and no repair run exists, so skipping the notice
+      # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
       - name: Escalate — this run stopped and needs a human
-        if: failure() && steps.retry.outputs.allowed != 'true'
+        if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
-        run: node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage critic
+        run: |
+          node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage critic \
+            --dispatch-failed "${{ steps.redispatch.outcome == 'failure' }}"
 
   # ── Land — always a draft PR while V2 is being proven ──────────────────────
   land:

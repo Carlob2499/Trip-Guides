@@ -160,9 +160,31 @@ export function retryEligibility(state, { stage = null, findings = [] } = {}) {
 // question comment is not that signal; neither is a green-looking workflow page.
 
 /** Identity of one terminal observation. Repeated observations of the SAME failure (same run,
-    stage, class and attempt) reuse this marker, so the escalation never spams the issue. */
-export function stopNoticeMarker({ runId, stage, failureClass, attempt }) {
-  return `<!-- waypoint-v2-stop:${runId}:${stage}:${failureClass || "unknown"}:${attempt ?? 0} -->`;
+    stage, class, attempt and KIND of stop) reuse this marker, so the escalation never spams the
+    issue — while a refusal and a failed re-dispatch on the same failure stay distinct notices,
+    because they are different events needing different recovery. */
+export function stopNoticeMarker({ runId, stage, failureClass, attempt, kind = "refused" }) {
+  return `<!-- waypoint-v2-stop:${kind}:${runId}:${stage}:${failureClass || "unknown"}:${attempt ?? 0} -->`;
+}
+
+/** THE REPAIR WAS ELIGIBLE AND THE RE-DISPATCH ITSELF FAILED (Codex review B2). The auto-retry
+    reservation is already durably consumed and no repair run exists — so this is a stop, and its
+    notice must say exactly that. Re-deriving eligibility here would read the now-spent budget and
+    report "automatic repair budget exhausted", which reads as though a repair actually launched;
+    that is the misreport this function exists to prevent. */
+export function dispatchFailedDecision(eligible) {
+  return {
+    allowed: false,
+    kind: "dispatch-failed",
+    stage: eligible.stage,
+    failureClass: eligible.failureClass,
+    findingCount: eligible.findingCount,
+    reason: "the automatic repair was ELIGIBLE, but the workflow re-dispatch itself failed — " +
+      "no repair run was created, and the run's single auto-retry reservation is already spent",
+    recovery: "re-dispatch research-pass-v2.yml by hand with the SAME slug — the run resumes at " +
+      "the failed stage with its recorded findings, and no completed research is repeated. The " +
+      "automatic repair budget is spent, so a further failure will stop here again.",
+  };
 }
 
 /** True when this exact terminal failure was already reported into the issue thread. */
@@ -178,7 +200,7 @@ export function renderStopNotice({ slug, state, decision, runUrl = null }) {
   const failureClass = decision.failureClass || "unknown";
   const runId = state?.runId || "(no run state)";
   const attempt = state?.stages?.[stage]?.attempts ?? 0;
-  const marker = stopNoticeMarker({ runId, stage, failureClass, attempt });
+  const marker = stopNoticeMarker({ runId, stage, failureClass, attempt, kind: decision.kind || "refused" });
   const detail = state?.stages?.[stage]?.failure?.detail || state?.failure?.detail || null;
 
   const body = [

@@ -28,7 +28,7 @@
 //   record-agent-failure --slug <s> --stage <st> --agent-conclusion <c> [--agent-log <f>] [--branch <b>]
 //                                                    classify + record the AGENT PROCESS's failure
 //   auto-retry --slug <s> [--stage <st>]             emit allowed=true|false (durable state decides)
-//   escalate --slug <s> [--stage <st>]               the visible stop surface (Actions error + one issue comment)
+//   escalate --slug <s> [--stage <st>] [--dispatch-failed true]  the visible stop surface (Actions error + one issue comment)
 //   prepare-passb --slug <s> --dest <dir>            worktree at baseline + fail-closed leak check
 //   collect-passb --slug <s> --from <dir>            validate + transfer Pass B's artifact
 //   prepare-critic --slug <s>                        delete forbidden files from the working tree
@@ -53,7 +53,7 @@ import {
 } from "./pipeline/v2/run-state.mjs";
 import { finalizeLandingRecovery } from "./pipeline/v2/landing-truth.mjs";
 import {
-  classifyAgentFailure, retryEligibility, renderStopNotice, alreadyNotified,
+  classifyAgentFailure, retryEligibility, renderStopNotice, alreadyNotified, dispatchFailedDecision,
 } from "./pipeline/v2/recovery.mjs";
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock, extractGateFindings } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
@@ -199,7 +199,7 @@ export async function recordGateFailure(slug, stage, gateOutput, { intakeDir = I
     Exported (with an injectable intakeDir) so the visible-recovery-surface contract is tested
     against a temporary run directory instead of a live issue thread. A run state that cannot be
     read is itself reportable — the Actions annotation must survive a corrupt record. */
-export async function escalationReport(slug, { stage = null, intakeDir = INTAKE_DIR, runUrl = null } = {}) {
+export async function escalationReport(slug, { stage = null, intakeDir = INTAKE_DIR, runUrl = null, dispatchFailed = false } = {}) {
   let state = null;
   let findings = [];
   let readError = null;
@@ -210,11 +210,17 @@ export async function escalationReport(slug, { stage = null, intakeDir = INTAKE_
   } catch (err) {
     readError = err.message.split("\n")[0];
   }
-  const decision = readError
-    ? { allowed: false, stage, failureClass: "unknown", findingCount: 0,
-        reason: `durable run state could not be read: ${readError}`,
-        recovery: `restore guides-intake/${slug}/run.v2.json from git before re-dispatching` }
-    : retryEligibility(state, { stage: stage || state?.resume?.nextStage || null, findings });
+  let decision;
+  if (readError) {
+    decision = { allowed: false, stage, failureClass: "unknown", findingCount: 0,
+      reason: `durable run state could not be read: ${readError}`,
+      recovery: `restore guides-intake/${slug}/run.v2.json from git before re-dispatching` };
+  } else {
+    const eligibility = retryEligibility(state, { stage: stage || state?.resume?.nextStage || null, findings });
+    // A failed re-dispatch is NOT a refusal: re-deriving eligibility now would read the already
+    // consumed reservation and report exhausted budget as if a repair had launched.
+    decision = dispatchFailed ? dispatchFailedDecision(eligibility) : eligibility;
+  }
   const notice = renderStopNotice({ slug, state, decision, runUrl });
   return { ...notice, decision, issue: state?.issue || null };
 }
@@ -650,7 +656,10 @@ async function run(cmd, get, has) {
       // A run that stops without repairing itself must be VISIBLE. The Actions annotation is
       // unconditional (it is the recovery surface when no issue exists); the issue comment is
       // posted once per terminal observation, deduped by the notice's own marker.
-      const report = await escalationReport(slug, { stage: get("--stage") || null });
+      const report = await escalationReport(slug, {
+        stage: get("--stage") || null,
+        dispatchFailed: get("--dispatch-failed") === "true",
+      });
       console.log(`::error::${report.actionsError}`);
       if (!report.issue) {
         console.error(`[pipeline-v2] ${slug} — no intake issue recorded; the Actions error above is the recovery surface.`);

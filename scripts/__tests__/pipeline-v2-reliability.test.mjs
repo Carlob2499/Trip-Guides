@@ -458,10 +458,164 @@ describe("O — a run that stops creates a visible recovery surface", () => {
     expect(escalations).toHaveLength(4);
     for (const step of escalations) {
       const block = step.split("- name:")[0];
-      expect(block).toContain("if: failure() && steps.retry.outputs.allowed != 'true'");
+      // Both stop shapes reach it: a refused repair, and an eligible repair whose re-dispatch
+      // failed (B2 — the reservation is spent and no repair run exists).
+      expect(block).toContain("steps.retry.outputs.allowed != 'true'");
       expect(block).toContain("escalate --slug");
     }
     expect(readRepo("scripts/pipeline-v2.mjs")).toContain("::error::");
+  });
+});
+
+// ── B1 · B2 · the live boundaries the escalation actually crosses ────────────
+// Codex review on PR #75. Both are the Boundary Checks class: code meeting a system it does
+// not control (GitHub's permission model; the Actions dispatch API), where every unit test
+// upstream was green and would have stayed green.
+
+describe("B1 — every job that can escalate is actually permitted to comment", () => {
+  // COMMENTS ARE STRIPPED FIRST, deliberately: the prose explaining why the grant is needed
+  // contains the very string being asserted, so a comment-blind substring check passes even
+  // with the real grant deleted. (Caught by forcing the failure path on this guard itself.)
+  const CODE = WORKFLOW.split("\n").filter((line) => !/^\s*#/.test(line)).join("\n");
+  const jobs = CODE.split(/\n {2}(?=[a-zA-Z_][a-zA-Z0-9_-]*:\n)/);
+
+  /** The scopes a job's own permissions block actually grants. */
+  const grants = (job) => {
+    const block = job.split(/^ {4}permissions:$/m)[1] || "";
+    return block.split("\n").slice(1)
+      .filter((line) => /^ {6}\S/.test(line))
+      .map((line) => line.trim());
+  };
+
+  it("a job-level permissions block sets omitted scopes to none, so each stage job grants issues: write", () => {
+    const escalating = jobs.filter((job) => job.includes("escalate --slug"));
+    expect(escalating.length).toBe(4); // passA, passB, reconcile, critic
+    for (const job of escalating) {
+      const scopes = grants(job);
+      expect(scopes).toContain("issues: write");   // the escalation surface
+      expect(scopes).toContain("contents: write");
+      expect(scopes).toContain("actions: write");  // the re-dispatch still needs it
+      expect(scopes).not.toContain("pull-requests: write"); // least privilege: not this job's job
+    }
+  });
+
+  it("the issue permission is NEVER exposed to the Claude container", () => {
+    for (const step of WORKFLOW.split("- name: Run research agent —").slice(1)) {
+      const block = step.split("- name:")[0];
+      for (const secret of ["GH_TOKEN", "GITHUB_TOKEN", "github.token"]) {
+        expect(block).not.toContain(secret);
+      }
+      // Only the OAuth token is forwarded into the container's environment.
+      const forwarded = [...block.matchAll(/-e ([A-Z_]+)/g)].map((m) => m[1]);
+      expect(forwarded).toContain("CLAUDE_CODE_OAUTH_TOKEN");
+      expect(forwarded.filter((v) => /TOKEN/.test(v))).toEqual(["CLAUDE_CODE_OAUTH_TOKEN"]);
+    }
+  });
+
+  it("inside the stage jobs, only the two steps that shell out to gh hold GH_TOKEN", () => {
+    // Scoped to the jobs this change touches; `setup`'s long-standing job-level grant (it files
+    // the stuck issue) is not in scope here.
+    for (const job of jobs.filter((j) => j.includes("escalate --slug"))) {
+      const holders = job.split("- name:").filter((s) => s.includes("GH_TOKEN: ${{ github.token }}"));
+      expect(holders).toHaveLength(2);
+      for (const step of holders) expect(step).toMatch(/gh workflow run|pipeline-v2\.mjs escalate/);
+      // The grant is per-step, never hoisted to the job where the agent step would inherit it.
+      expect(job.split(/^ {4}steps:$/m)[0]).not.toContain("GH_TOKEN");
+    }
+  });
+});
+
+describe("B2 — an eligible repair whose re-dispatch FAILS is still a visible stop", () => {
+  it("the workflow routes a failed re-dispatch into the escalation step", () => {
+    const redispatches = WORKFLOW.split("- name: Re-dispatch the repair attempt once").slice(1);
+    expect(redispatches).toHaveLength(4);
+    for (const step of redispatches) {
+      const block = step.split("- name:")[0];
+      expect(block).toContain("id: redispatch");
+      // Without this the job's failure would short-circuit the escalation step entirely.
+      expect(block).toContain("continue-on-error: true");
+    }
+    const escalations = WORKFLOW.split("- name: Escalate — this run stopped and needs a human").slice(1);
+    expect(escalations).toHaveLength(4);
+    for (const step of escalations) {
+      const block = step.split("- name:")[0];
+      expect(block).toContain("steps.redispatch.outcome == 'failure'");
+      expect(block).toContain(`--dispatch-failed "${"${{"} steps.redispatch.outcome == 'failure' }}"`);
+    }
+  });
+
+  it("escalates on refusal OR failed dispatch, and stays silent when the repair really launched", () => {
+    // The step's own condition, evaluated as the truth table it encodes. Case 4 in the review:
+    // an eligible repair that DID dispatch must not file a stop notice.
+    const condition = (allowed, redispatchOutcome) =>
+      allowed !== "true" || redispatchOutcome === "failure";
+    expect(condition("false", "skipped")).toBe(true);  // 3 · refused            → escalate
+    expect(condition("", "skipped")).toBe(true);       //     retry step crashed → escalate
+    expect(condition("true", "success")).toBe(false);  // 4 · repair launched    → silent
+    expect(condition("true", "failure")).toBe(true);   // 5 · dispatch failed    → escalate
+
+    for (const step of WORKFLOW.split("- name: Escalate — this run stopped and needs a human").slice(1)) {
+      expect(step.split("- name:")[0])
+        .toContain("if: failure() && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')");
+    }
+  });
+
+  it("introduces no new automatic retry loop — one dispatch per stage, and escalation never dispatches", () => {
+    expect(WORKFLOW.match(/gh workflow run research-pass-v2\.yml/g)).toHaveLength(4); // one per stage
+    for (const step of WORKFLOW.split("- name: Escalate — this run stopped and needs a human").slice(1)) {
+      const block = step.split("- name:")[0];
+      expect(block).not.toContain("gh workflow run");
+      expect(block).not.toContain("auto-retry");
+    }
+    // The reservation is spent once and never rolled back — no rollback path exists to race.
+    expect(readRepo("scripts/pipeline-v2.mjs")).not.toMatch(/autoRetries\s*-[-=]/);
+  });
+
+  it("reports the dispatch failure truthfully — never as exhausted budget, never as a launched repair", async () => {
+    await runAt("reconcile", { issue: "74" });
+    await failWith("reconcile", "gate-failure", { findings: ["coverage refs unresolved"] });
+    // Eligibility said yes and the reservation was consumed…
+    expect((await decide(await readRunStateV2(SLUG, { intakeDir }), "reconcile")).allowed).toBe(true);
+    await recordAutoRetry(SLUG, { intakeDir });
+    // …then `gh workflow run` failed. Re-deriving eligibility now would read the SPENT budget.
+    const spent = await readRunStateV2(SLUG, { intakeDir });
+    expect(retryEligibility(spent, { stage: "reconcile", findings: ["x"] }).reason).toMatch(/budget exhausted/);
+
+    const report = await escalationReport(SLUG, { stage: "reconcile", intakeDir, dispatchFailed: true });
+    expect(report.decision.allowed).toBe(false);
+    expect(report.decision.reason).toMatch(/re-dispatch itself failed/);
+    expect(report.decision.reason).toMatch(/no repair run was created/);
+    expect(report.decision.reason).not.toMatch(/budget exhausted/);
+    expect(report.body).toContain("reconcile");
+    expect(report.body).toContain("gate-failure");
+    expect(report.decision.recovery).toMatch(/SAME slug/);
+    expect(report.actionsError).toMatch(/STOPPED/);
+  });
+
+  it("the dispatch-failure notice is a DIFFERENT observation from a plain refusal", async () => {
+    await runAt("reconcile", { issue: "74" });
+    await failWith("reconcile", "gate-failure", { findings: ["fix"] });
+    const refused = await escalationReport(SLUG, { stage: "reconcile", intakeDir });
+    const failedDispatch = await escalationReport(SLUG, { stage: "reconcile", intakeDir, dispatchFailed: true });
+    expect(failedDispatch.marker).not.toBe(refused.marker);
+    expect(alreadyNotified([refused.body], failedDispatch.marker)).toBe(false);
+    // …but each still dedupes against itself on a repeated observation.
+    const again = await escalationReport(SLUG, { stage: "reconcile", intakeDir, dispatchFailed: true });
+    expect(alreadyNotified([failedDispatch.body], again.marker)).toBe(true);
+  });
+
+  it("a failed re-dispatch moves neither publication nor landing authority", async () => {
+    await runAt("reconcile", { landMode: "pr" });
+    await failWith("reconcile", "gate-failure", { findings: ["fix"] });
+    await recordAutoRetry(SLUG, { intakeDir });
+    await escalationReport(SLUG, { stage: "reconcile", intakeDir, dispatchFailed: true });
+    const state = await readRunStateV2(SLUG, { intakeDir });
+    expect(state.publication.published).toBe(false);
+    expect(state.publication.publishedAt).toBeNull();
+    expect(state.landMode).toBe("pr");
+    expect(state.landing.outcome).toBe("pending");
+    // The run is still resumable at exactly the failed stage.
+    expect(nextStageV2(state)).toBe("reconcile");
   });
 });
 
