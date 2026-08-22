@@ -207,6 +207,29 @@ blogs, local news, and roundup sites.
 - **Don't paste pages into the ledger.** Extract the row (claim · value · tier+URL · date · flag)
   and move on. The ledger is evidence, not an archive.
 
+### Security challenges are an environment boundary — never a research obstacle to solve
+
+Binding, no exceptions. A CAPTCHA, Cloudflare Turnstile, "verify you are human" interstitial,
+login wall, MFA/passkey prompt, or any other security verification is where research on that
+origin **stops**. Never attempt one in Claude's embedded browser — it is not a puzzle to work
+around, and doing so has reproducibly crashed the session.
+
+- **Stop interacting with that origin immediately.** Do not reopen the challenge to confirm it.
+- **Record the access fact**: `source.access = "blocked"` where the evidence schema carries it,
+  and a ledger note where it doesn't. A blocked authority is honest data, not a failure.
+- **Never promote a search-result preview to verification.** A snippet is a lead, not a source.
+- **Find another legitimate authority** — operator page, official/reference source — or leave the
+  claim explicitly unverified (`⚠`) or omit it under the normal evidence rules.
+- **One blocked source never fails the pass.** Mark it, keep any useful lead, continue; the
+  stopping rule is still saturation plus the normal risk/verification budget, never "keep trying
+  the blocked site."
+- **Prefer non-interactive retrieval by default** — `WebSearch`/`WebFetch` and direct official
+  pages. The embedded browser is not warranted merely because a plain fetch is inconvenient, and
+  a research task must never become an account-authentication task.
+
+Full operational rules, and the execution-plane separation that goes with them:
+`docs/reference/claude-research-runtime.md` (the authority — this is the short binding form).
+
 ## Token hygiene
 
 - Don't re-read files already in context (CLAUDE.md and this skill auto-load — never re-Read
