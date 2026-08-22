@@ -7,11 +7,20 @@ name: Research pass (V2)
 #
 #   · ONE JOB PER STAGE. The workflow — never the agent — validates each stage's owed artifact,
 #     commits it, and checkpoints run.v2.json (begin-stage before the agent, finish-stage after).
-#     A stage that produced nothing durable is a recorded VOID failure with one bounded
-#     auto-retry; any other agent failure is recorded honestly as `agent-failure` and the branch
-#     stays manually resumable. A usage-limit interruption is classified from the CLI's own
-#     printed "hit your session limit" line in the captured agent output — machine output, not
-#     a guess (first seen live on canary run 32266140623).
+#   · FAILURE CLASSES NAME A PLANE (reliability pass, 2026-08-22 — the Portugal scar). Every
+#     agent invocation runs through scripts/run-logged-command.sh, so a nonzero Claude process is
+#     a nonzero STEP while the combined stdout/stderr still lands in agent-output.log; a `| tee`
+#     wrapper used to report tee's success instead, and a session-limited reconcile was recorded
+#     GREEN. A failed agent process therefore never reaches the normal collect/verify path — its
+#     workspace is partial attempt evidence, and `record-agent-failure` classifies it from the
+#     step conclusion plus the CLI's own printed diagnostic (usage-limit / cancelled /
+#     agent-failure / unknown). finish-stage judges only output from a process that RETURNED, so
+#     it can say void-run or gate-failure and never `agent-failure`.
+#   · AUTOMATIC REPAIR IS DECIDED BY DURABLE STATE, not by a step output. run.v2.json's recorded
+#     failure class, the active validator findings for the runId/stage, and the attempt +
+#     auto-retry budgets decide; a repair re-dispatch reuses the SAME slug, so the same runId,
+#     branch, intake and landMode are resumed and completed stages are skipped. A run that will
+#     not repair itself escalates visibly (Actions error + one deduped issue comment).
 #   · MECHANICAL PASS-B ISOLATION. The passB job checks out the run's recorded BASELINE commit
 #     (fetch-depth 1): Pass A's outputs are absent from its world, not merely forbidden. The
 #     collect step then checks out the run branch separately, validates passB.v2.json
@@ -327,11 +336,16 @@ jobs:
           WP_EFFORT: ${{ inputs.effort || 'high' }}
           WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+        # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
+        # so a Claude process that printed "You've hit your session limit" and exited nonzero was
+        # recorded as a SUCCESSFUL step and the partial workspace went on to be verified. The
+        # wrapper keeps the identical combined-output log while propagating the PRODUCER's status.
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
-            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"' 2>&1 | tee "$RUNNER_TEMP/agent-output.log"
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
 
       - name: Checkout a fresh control-plane copy after Pass A
         if: always()
@@ -348,6 +362,9 @@ jobs:
       # (with the validator's field-level findings as durable retry feedback) and pushes it —
       # aborting on collect left the stage "running" and the feedback unpushed (canary attempt 2).
       - name: Validate, commit, checkpoint
+        # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT: an agent process that did not return cleanly
+        # leaves attempt evidence, never a stage to validate. Explicit, not ambient.
+        if: success() && steps.agent.outcome == 'success'
         id: finish
         working-directory: collect
         run: |
@@ -368,29 +385,35 @@ jobs:
         if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
         working-directory: collect
         run: |
+          npm ci
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          CLASS=gate-failure
-          DETAIL="control-plane step failed; branch resumes this stage"
-          if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
-          if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
-          if grep -q "hit your session limit" "$RUNNER_TEMP/agent-output.log" 2>/dev/null; then CLASS=usage-limit; DETAIL="Claude session limit reached mid-stage; re-dispatch after the window resets"; fi
-          node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage passA \
-            --class "$CLASS" --detail "$DETAIL" \
+          node scripts/pipeline-v2.mjs record-agent-failure --slug "$SLUG" --stage passA \
+            --agent-conclusion "${{ steps.agent.conclusion }}" \
+            --agent-log "$RUNNER_TEMP/agent-output.log" \
             --branch "$BRANCH"
 
-      - name: Bounded auto-retry after a void stage
-        if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+      # BOUNDED AUTOMATIC REPAIR (reliability pass, 2026-08-22). This gate used to read one
+      # ephemeral step output — `void == 'true'` — so the commonest repairable failure there is,
+      # an ordinary deterministic gate failure, never reached the retry command at all. The
+      # DURABLE run state now decides: the recorded failure class must be auto-retryable
+      # (gate-failure/void-run only), actionable validator findings must exist for this
+      # runId/stage, and the attempt + auto-retry budgets must both have room. `void_retry` is
+      # still accepted as a workflow input for compatibility, but it is no longer consulted —
+      # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
+      - name: Bounded automatic repair retry (durable run state decides)
+        if: failure()
         id: retry
         working-directory: collect
-        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
+        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --stage passA --branch "$BRANCH"
 
-      - name: Re-dispatch once
+      - name: Re-dispatch the repair attempt once
         if: failure() && steps.retry.outputs.allowed == 'true'
         # working-directory: the workspace root's .git was replaced by the agent sandbox (no
         # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
         # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
-        # on canary run 32260514104.
+        # on canary run 32260514104. The re-dispatch carries the SAME slug, so setup resumes the
+        # SAME runId, branch, intake and landMode, and every completed stage is skipped.
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
@@ -399,6 +422,16 @@ jobs:
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
+
+      # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
+      # Actions error and, when the run knows its intake issue, one deduped issue comment naming
+      # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      - name: Escalate — this run stopped and needs a human
+        if: failure() && steps.retry.outputs.allowed != 'true'
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage passA
 
   # ── Pass B — mechanically isolated ─────────────────────────────────────────
   passB:
@@ -487,11 +520,16 @@ jobs:
           WP_EFFORT: ${{ inputs.effort || 'high' }}
           WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:github.com),WebFetch(domain:api.github.com),WebFetch(domain:raw.githubusercontent.com),WebFetch(domain:githubusercontent.com),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+        # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
+        # so a Claude process that printed "You've hit your session limit" and exited nonzero was
+        # recorded as a SUCCESSFUL step and the partial workspace went on to be verified. The
+        # wrapper keeps the identical combined-output log while propagating the PRODUCER's status.
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
-            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"' 2>&1 | tee "$RUNNER_TEMP/agent-output.log"
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
 
       # The workflow — not Pass B — validates and transfers the artifact, then commits. The
       # control-plane checkout happens AFTER the agent (always(), so failure recording has a
@@ -505,6 +543,8 @@ jobs:
           path: collect
 
       - name: Transfer the Pass B artifact
+        # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT (see Pass A).
+        if: success() && steps.agent.outcome == 'success'
         id: transfer
         working-directory: collect
         run: |
@@ -525,27 +565,32 @@ jobs:
           npm ci
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          CLASS=gate-failure
-          DETAIL="control-plane step failed; branch resumes this stage"
-          if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
-          if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
-          if grep -q "hit your session limit" "$RUNNER_TEMP/agent-output.log" 2>/dev/null; then CLASS=usage-limit; DETAIL="Claude session limit reached mid-stage; re-dispatch after the window resets"; fi
-          node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage passB \
-            --class "$CLASS" --detail "$DETAIL" \
+          node scripts/pipeline-v2.mjs record-agent-failure --slug "$SLUG" --stage passB \
+            --agent-conclusion "${{ steps.agent.conclusion }}" \
+            --agent-log "$RUNNER_TEMP/agent-output.log" \
             --branch "$BRANCH"
 
-      - name: Bounded auto-retry after a void stage
-        if: failure() && steps.transfer.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+      # BOUNDED AUTOMATIC REPAIR (reliability pass, 2026-08-22). This gate used to read one
+      # ephemeral step output — `void == 'true'` — so the commonest repairable failure there is,
+      # an ordinary deterministic gate failure, never reached the retry command at all. The
+      # DURABLE run state now decides: the recorded failure class must be auto-retryable
+      # (gate-failure/void-run only), actionable validator findings must exist for this
+      # runId/stage, and the attempt + auto-retry budgets must both have room. `void_retry` is
+      # still accepted as a workflow input for compatibility, but it is no longer consulted —
+      # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
+      - name: Bounded automatic repair retry (durable run state decides)
+        if: failure()
         id: retry
         working-directory: collect
-        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
+        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --stage passB --branch "$BRANCH"
 
-      - name: Re-dispatch once
+      - name: Re-dispatch the repair attempt once
         if: failure() && steps.retry.outputs.allowed == 'true'
         # working-directory: the workspace root's .git was replaced by the agent sandbox (no
         # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
         # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
-        # on canary run 32260514104.
+        # on canary run 32260514104. The re-dispatch carries the SAME slug, so setup resumes the
+        # SAME runId, branch, intake and landMode, and every completed stage is skipped.
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
@@ -554,6 +599,16 @@ jobs:
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
+
+      # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
+      # Actions error and, when the run knows its intake issue, one deduped issue comment naming
+      # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      - name: Escalate — this run stopped and needs a human
+        if: failure() && steps.retry.outputs.allowed != 'true'
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage passB
 
   # ── Reconcile ──────────────────────────────────────────────────────────────
   reconcile:
@@ -634,11 +689,16 @@ jobs:
           WP_EFFORT: ${{ inputs.effort || 'high' }}
           WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+        # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
+        # so a Claude process that printed "You've hit your session limit" and exited nonzero was
+        # recorded as a SUCCESSFUL step and the partial workspace went on to be verified. The
+        # wrapper keeps the identical combined-output log while propagating the PRODUCER's status.
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
-            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"' 2>&1 | tee "$RUNNER_TEMP/agent-output.log"
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
 
       - name: Checkout a fresh control-plane copy after reconcile
         if: always()
@@ -653,6 +713,10 @@ jobs:
       # durable, pushed retry feedback (the canary-attempt-2 lesson). An offline-verify failure
       # keeps the old semantics: the stage stays running and re-runs.
       - name: Collect, verify offline, checkpoint
+        # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT: this is the exact step Portugal's masked
+        # session-limit failure reached, where it manufactured a content-gate story about a
+        # reconcile the model never finished.
+        if: success() && steps.agent.outcome == 'success'
         id: finish
         working-directory: collect
         run: |
@@ -683,29 +747,35 @@ jobs:
         if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
         working-directory: collect
         run: |
+          npm ci
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          CLASS=gate-failure
-          DETAIL="control-plane step failed; branch resumes this stage"
-          if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
-          if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
-          if grep -q "hit your session limit" "$RUNNER_TEMP/agent-output.log" 2>/dev/null; then CLASS=usage-limit; DETAIL="Claude session limit reached mid-stage; re-dispatch after the window resets"; fi
-          node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage reconcile \
-            --class "$CLASS" --detail "$DETAIL" \
+          node scripts/pipeline-v2.mjs record-agent-failure --slug "$SLUG" --stage reconcile \
+            --agent-conclusion "${{ steps.agent.conclusion }}" \
+            --agent-log "$RUNNER_TEMP/agent-output.log" \
             --branch "$BRANCH"
 
-      - name: Bounded auto-retry after a void stage
-        if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+      # BOUNDED AUTOMATIC REPAIR (reliability pass, 2026-08-22). This gate used to read one
+      # ephemeral step output — `void == 'true'` — so the commonest repairable failure there is,
+      # an ordinary deterministic gate failure, never reached the retry command at all. The
+      # DURABLE run state now decides: the recorded failure class must be auto-retryable
+      # (gate-failure/void-run only), actionable validator findings must exist for this
+      # runId/stage, and the attempt + auto-retry budgets must both have room. `void_retry` is
+      # still accepted as a workflow input for compatibility, but it is no longer consulted —
+      # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
+      - name: Bounded automatic repair retry (durable run state decides)
+        if: failure()
         id: retry
         working-directory: collect
-        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
+        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --stage reconcile --branch "$BRANCH"
 
-      - name: Re-dispatch once
+      - name: Re-dispatch the repair attempt once
         if: failure() && steps.retry.outputs.allowed == 'true'
         # working-directory: the workspace root's .git was replaced by the agent sandbox (no
         # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
         # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
-        # on canary run 32260514104.
+        # on canary run 32260514104. The re-dispatch carries the SAME slug, so setup resumes the
+        # SAME runId, branch, intake and landMode, and every completed stage is skipped.
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
@@ -714,6 +784,16 @@ jobs:
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
+
+      # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
+      # Actions error and, when the run knows its intake issue, one deduped issue comment naming
+      # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      - name: Escalate — this run stopped and needs a human
+        if: failure() && steps.retry.outputs.allowed != 'true'
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage reconcile
 
   # ── Deterministic geocoding (blocker 1D) — after Reconcile, before the Critic ──
   # No agent runs in this job; PLACES_API_KEY is scoped to the single lookup step and research
@@ -852,11 +932,16 @@ jobs:
           WP_EFFORT: ${{ inputs.effort || 'high' }}
           WP_TOOLS: ${{ steps.fetch_policy.outputs.tools }}
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**)
+        # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
+        # so a Claude process that printed "You've hit your session limit" and exited nonzero was
+        # recorded as a SUCCESSFUL step and the partial workspace went on to be verified. The
+        # wrapper keeps the identical combined-output log while propagating the PRODUCER's status.
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
-            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"' 2>&1 | tee "$RUNNER_TEMP/agent-output.log"
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
 
       - name: Checkout a fresh control-plane copy after the critic
         if: always()
@@ -868,6 +953,8 @@ jobs:
 
       # Deterministic tail the V1 critic used to run itself: palette + composition are code.
       - name: Collect allowed output, compose, validate, commit, checkpoint
+        # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT (see Pass A).
+        if: success() && steps.agent.outcome == 'success'
         id: finish
         working-directory: collect
         run: |
@@ -929,27 +1016,32 @@ jobs:
           npm ci
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          CLASS=gate-failure
-          DETAIL="control-plane step failed; branch resumes this stage"
-          if [ "${{ steps.agent.conclusion }}" = "failure" ]; then CLASS=agent-failure; DETAIL="agent failed; branch resumes this stage"; fi
-          if [ "${{ steps.agent.conclusion }}" = "cancelled" ]; then CLASS=cancelled; DETAIL="agent was cancelled; branch resumes this stage"; fi
-          if grep -q "hit your session limit" "$RUNNER_TEMP/agent-output.log" 2>/dev/null; then CLASS=usage-limit; DETAIL="Claude session limit reached mid-stage; re-dispatch after the window resets"; fi
-          node scripts/pipeline-v2.mjs fail-stage --slug "$SLUG" --stage critic \
-            --class "$CLASS" --detail "$DETAIL" \
+          node scripts/pipeline-v2.mjs record-agent-failure --slug "$SLUG" --stage critic \
+            --agent-conclusion "${{ steps.agent.conclusion }}" \
+            --agent-log "$RUNNER_TEMP/agent-output.log" \
             --branch "$BRANCH"
 
-      - name: Bounded auto-retry after a void stage
-        if: failure() && steps.finish.outputs.void == 'true' && format('{0}', inputs.void_retry) != 'true'
+      # BOUNDED AUTOMATIC REPAIR (reliability pass, 2026-08-22). This gate used to read one
+      # ephemeral step output — `void == 'true'` — so the commonest repairable failure there is,
+      # an ordinary deterministic gate failure, never reached the retry command at all. The
+      # DURABLE run state now decides: the recorded failure class must be auto-retryable
+      # (gate-failure/void-run only), actionable validator findings must exist for this
+      # runId/stage, and the attempt + auto-retry budgets must both have room. `void_retry` is
+      # still accepted as a workflow input for compatibility, but it is no longer consulted —
+      # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
+      - name: Bounded automatic repair retry (durable run state decides)
+        if: failure()
         id: retry
         working-directory: collect
-        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --branch "$BRANCH"
+        run: node scripts/pipeline-v2.mjs auto-retry --slug "$SLUG" --stage critic --branch "$BRANCH"
 
-      - name: Re-dispatch once
+      - name: Re-dispatch the repair attempt once
         if: failure() && steps.retry.outputs.allowed == 'true'
         # working-directory: the workspace root's .git was replaced by the agent sandbox (no
         # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
         # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
-        # on canary run 32260514104.
+        # on canary run 32260514104. The re-dispatch carries the SAME slug, so setup resumes the
+        # SAME runId, branch, intake and landMode, and every completed stage is skipped.
         working-directory: collect
         env:
           GH_TOKEN: ${{ github.token }}
@@ -958,6 +1050,16 @@ jobs:
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
             -f void_retry=true
+
+      # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
+      # Actions error and, when the run knows its intake issue, one deduped issue comment naming
+      # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      - name: Escalate — this run stopped and needs a human
+        if: failure() && steps.retry.outputs.allowed != 'true'
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/pipeline-v2.mjs escalate --slug "$SLUG" --stage critic
 
   # ── Land — always a draft PR while V2 is being proven ──────────────────────
   land:

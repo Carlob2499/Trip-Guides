@@ -25,7 +25,10 @@
 //   begin-stage --slug <s> --stage <st> [--model m] [--effort e] [--branch <b>]
 //   finish-stage --slug <s> --stage <st> [--branch <b>] [--scoped]
 //   fail-stage --slug <s> --stage <st> --class <c> [--detail <d>] [--branch <b>]
-//   auto-retry --slug <s>                            emit allowed=true|false (bounded, once)
+//   record-agent-failure --slug <s> --stage <st> --agent-conclusion <c> [--agent-log <f>] [--branch <b>]
+//                                                    classify + record the AGENT PROCESS's failure
+//   auto-retry --slug <s> [--stage <st>]             emit allowed=true|false (durable state decides)
+//   escalate --slug <s> [--stage <st>]               the visible stop surface (Actions error + one issue comment)
 //   prepare-passb --slug <s> --dest <dir>            worktree at baseline + fail-closed leak check
 //   collect-passb --slug <s> --from <dir>            validate + transfer Pass B's artifact
 //   prepare-critic --slug <s>                        delete forbidden files from the working tree
@@ -49,6 +52,9 @@ import {
   stageAttemptStats, landingMode, deriveLandIntent, reopenForAnswers,
 } from "./pipeline/v2/run-state.mjs";
 import { finalizeLandingRecovery } from "./pipeline/v2/landing-truth.mjs";
+import {
+  classifyAgentFailure, retryEligibility, renderStopNotice, alreadyNotified,
+} from "./pipeline/v2/recovery.mjs";
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock, extractGateFindings } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
 import { emitRunEvents, readGeocodeReport } from "./pipeline/v2/events.mjs";
@@ -187,6 +193,30 @@ export async function recordGateFailure(slug, stage, gateOutput, { intakeDir = I
     failureClass: "gate-failure", detail: `offline verify failed: ${retryFindings.length} finding(s)`, intakeDir,
   });
   return retryFindings;
+}
+
+/** The terminal-stop report: why this run is not repairing itself and what a human should do.
+    Exported (with an injectable intakeDir) so the visible-recovery-surface contract is tested
+    against a temporary run directory instead of a live issue thread. A run state that cannot be
+    read is itself reportable — the Actions annotation must survive a corrupt record. */
+export async function escalationReport(slug, { stage = null, intakeDir = INTAKE_DIR, runUrl = null } = {}) {
+  let state = null;
+  let findings = [];
+  let readError = null;
+  try {
+    state = await readRunStateV2(slug, { intakeDir });
+    const failedStage = stage || state?.resume?.nextStage || null;
+    if (state && failedStage) findings = await activeFeedback(slug, { runId: state.runId, stage: failedStage, intakeDir });
+  } catch (err) {
+    readError = err.message.split("\n")[0];
+  }
+  const decision = readError
+    ? { allowed: false, stage, failureClass: "unknown", findingCount: 0,
+        reason: `durable run state could not be read: ${readError}`,
+        recovery: `restore guides-intake/${slug}/run.v2.json from git before re-dispatching` }
+    : retryEligibility(state, { stage: stage || state?.resume?.nextStage || null, findings });
+  const notice = renderStopNotice({ slug, state, decision, runUrl });
+  return { ...notice, decision, issue: state?.issue || null };
 }
 
 export function validateSectionInput(value) {
@@ -376,8 +406,13 @@ async function run(cmd, get, has) {
       const dirty = changed.length > 0;
       if (problems.length) {
         const isVoid = !dirty; // nothing produced at all — the classic void run
+        // CLASSIFICATION BOUNDARY (reliability pass, 2026-08-22): finish-stage is judging the
+        // output of a model process that RETURNED. It therefore may never say "agent-failure" —
+        // that class asserts a failed Claude process, which only the workflow observes (see
+        // recovery.mjs). Invalid-but-dirty output, scope-invalid output and a failed contract
+        // are all deterministic GATE verdicts; nothing produced at all is a void run.
         const failed = await stageFail(slug, stage, {
-          failureClass: isVoid ? "void-run" : "agent-failure",
+          failureClass: isVoid ? "void-run" : "gate-failure",
           detail: problems.join(" · "),
         });
         // 1B: persist the exact machine findings so THIS stage's retry receives them instead of
@@ -399,6 +434,7 @@ async function run(cmd, get, has) {
         await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
         commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (${isVoid ? "void" : "invalid output"})`, { branch });
         emit("void", String(isVoid));
+        emit("failure_class", isVoid ? "void-run" : "gate-failure");
         console.error(`[pipeline-v2] ${slug} — stage "${stage}" output does not hold up:`);
         for (const p of problems) console.error(`  · ${p}`);
         return 1;
@@ -530,10 +566,101 @@ async function run(cmd, get, has) {
     }
 
     case "auto-retry": {
+      // THE STATE MACHINE decides, not the YAML (reliability pass, 2026-08-22). The old wiring
+      // asked one ephemeral step output — `void == 'true'` — so an ordinary deterministic gate
+      // failure, the commonest repairable failure there is, never reached this command at all.
+      // Eligibility is now read from the DURABLE record: the recorded failure class, the active
+      // validator findings for THIS runId/stage, and the run's own attempt/auto-retry budgets.
+      // Budget is spent only when the answer is yes — a refusal must not consume the one retry
+      // a later, genuinely repairable failure is owed.
+      let decision;
+      let state;
+      try {
+        state = await readRunStateV2(slug);
+        const failedStage = get("--stage") || state?.resume?.nextStage || null;
+        const findings = state && failedStage
+          ? await activeFeedback(slug, { runId: state.runId, stage: failedStage })
+          : [];
+        decision = retryEligibility(state, { stage: failedStage, findings });
+      } catch (err) {
+        // Corrupt/unreadable durable state is never a licence to retry — it fails closed, loudly.
+        emit("allowed", "false");
+        emit("reason", "run state unreadable");
+        console.error(`[pipeline-v2] ${slug} — automatic repair retry REFUSED: ${err.message.split("\n")[0]}`);
+        return 1;
+      }
+      emit("stage", decision.stage || "");
+      emit("failure_class", decision.failureClass || "");
+      emit("findings", String(decision.findingCount));
+      emit("reason", decision.reason.replace(/\s+/g, " "));
+      if (!decision.allowed) {
+        emit("allowed", "false");
+        console.error(`[pipeline-v2] ${slug} — automatic repair retry REFUSED: ${decision.reason}`);
+        console.error(`[pipeline-v2] ${slug} — safe recovery: ${decision.recovery}`);
+        return 0; // the workflow escalates on allowed != 'true'; refusing is not a crash
+      }
       const { allowed, autoRetries, cap } = await recordAutoRetry(slug);
       commitAndPush([`guides-intake/${slug}/run.v2.json`], `chore(pipeline-v2): ${slug} auto-retry ${autoRetries}`, { branch });
       emit("allowed", String(allowed));
-      console.log(`[pipeline-v2] ${slug} — auto-retry ${autoRetries} of ${cap}: ${allowed ? "allowed" : "REFUSED (bounded)"}`);
+      emit("run_id", state.runId);
+      console.log(`[pipeline-v2] ${slug} — automatic repair retry ${autoRetries} of ${cap}: ${allowed ? "ALLOWED" : "REFUSED (bounded)"} (${decision.reason})`);
+      return 0;
+    }
+
+    case "record-agent-failure": {
+      // The AGENT PROCESS's own failure, classified from what the workflow actually observed:
+      // the step conclusion plus the CLI's captured combined output. One implementation, shared
+      // by every stage job — the four inline bash copies this replaced could (and did) drift.
+      const stage = get("--stage");
+      if (!V2_RESEARCH_STAGES.includes(stage)) {
+        console.error(`[pipeline-v2] record-agent-failure needs --stage <${V2_RESEARCH_STAGES.join("|")}>`); return 1;
+      }
+      const logFile = get("--agent-log");
+      const agentOutput = logFile && existsSync(logFile) ? readFileSync(logFile, "utf8") : "";
+      const { class: failureClass, detail } = classifyAgentFailure({
+        agentConclusion: get("--agent-conclusion") || "",
+        agentOutput,
+      });
+      // stageFail is a no-op on an ALREADY-failed stage, deliberately: when finish-stage has
+      // already recorded a deterministic gate-failure, this step must not overwrite that verdict
+      // with a coarser process-plane guess. Report the class that actually stands.
+      const after = await stageFail(slug, stage, { failureClass, detail });
+      const recorded = after.stages?.[stage]?.failure?.class || failureClass;
+      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (${recorded})`, { branch });
+      emit("failure_class", recorded);
+      console.error(
+        recorded === failureClass
+          ? `[pipeline-v2] ${slug} — stage "${stage}" recorded as failed (${recorded}: ${detail}); branch stays resumable.`
+          : `[pipeline-v2] ${slug} — stage "${stage}" already carries the more specific class "${recorded}"; the process-plane observation (${failureClass}) does not overwrite it.`,
+      );
+      return 0;
+    }
+
+    case "escalate": {
+      // A run that stops without repairing itself must be VISIBLE. The Actions annotation is
+      // unconditional (it is the recovery surface when no issue exists); the issue comment is
+      // posted once per terminal observation, deduped by the notice's own marker.
+      const report = await escalationReport(slug, { stage: get("--stage") || null });
+      console.log(`::error::${report.actionsError}`);
+      if (!report.issue) {
+        console.error(`[pipeline-v2] ${slug} — no intake issue recorded; the Actions error above is the recovery surface.`);
+        return 0;
+      }
+      const gh = (args) => execFileSync("gh", args, { cwd: ROOT, encoding: "utf8" });
+      let existing;
+      try {
+        existing = JSON.parse(gh(["issue", "view", String(report.issue), "--json", "comments"])).comments.map((c) => c.body);
+      } catch (err) {
+        console.error(`[pipeline-v2] could not read issue #${report.issue}'s comments (${err.message.split("\n")[0]}) — refusing to risk a duplicate.`);
+        return 0;
+      }
+      if (alreadyNotified(existing, report.marker)) {
+        console.log(`[pipeline-v2] ${slug} — this terminal failure is already reported on issue #${report.issue}; not posting again.`);
+        return 0;
+      }
+      gh(["issue", "comment", String(report.issue), "--body", report.body]);
+      console.log(`[pipeline-v2] ${slug} — stop notice filed on issue #${report.issue}.`);
       return 0;
     }
 
@@ -748,7 +875,7 @@ async function cliMain() {
   const has = (flag) => argv.includes(flag);
   const cmd = argv[0];
   if (!cmd || cmd.startsWith("--")) {
-    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|auto-retry|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate|land-intent|land-mode|finalize-landing|reopen-answers> --slug <slug> …");
+    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|record-agent-failure|auto-retry|escalate|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate|land-intent|land-mode|finalize-landing|reopen-answers> --slug <slug> …");
     process.exit(1);
   }
   try {
