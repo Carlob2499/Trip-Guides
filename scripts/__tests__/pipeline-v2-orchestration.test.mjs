@@ -412,9 +412,14 @@ describe("research-pass-v2.yml — wiring", () => {
     expect(job).toContain("outputs.outcome != 'merged'");
   });
 
-  it("the bounded retry is void-gated and re-dispatches with void_retry=true", () => {
-    expect(text).toContain("void_retry=true");
-    expect(text.match(/outputs\.void == 'true'/g)?.length).toBeGreaterThanOrEqual(3);
-    expect(text).toContain("auto-retry");
+  // SUPERSEDED by the reliability pass (2026-08-22). The retry used to be gated on the `void`
+  // STEP OUTPUT, which meant an ordinary deterministic gate failure — the commonest repairable
+  // failure there is — never reached the retry command at all (Portugal, run
+  // portugal-20260822-7c041e). Eligibility is now read from the durable run state; the full
+  // contract lives in pipeline-v2-reliability.test.mjs.
+  it("the bounded retry asks the durable state machine and re-dispatches the same slug", () => {
+    expect(text).toContain("void_retry=true"); // the re-dispatch input survives for compatibility
+    expect(text).not.toContain("outputs.void == 'true'"); // …but no longer decides anything
+    expect(text.match(/auto-retry --slug "\$SLUG" --stage/g)?.length).toBe(4);
   });
 });

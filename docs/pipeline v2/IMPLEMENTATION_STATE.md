@@ -144,7 +144,7 @@ New: `scripts/pipeline/v2/{contracts,run-state,evidence,coverage,telemetry}.mjs`
 ## M4 — done (orchestration + mechanical isolation)
 
 New: `scripts/pipeline/v2/workspace.mjs`, `scripts/pipeline-v2.mjs` (CLI: init · route · budget
-· begin-stage · finish-stage · fail-stage · auto-retry · prepare-passb ·
+· begin-stage · finish-stage · fail-stage · record-agent-failure · auto-retry · escalate · prepare-passb ·
 verify-passb-workspace · collect-passb · prepare-critic · restore-critic · validate),
 `prompts/research-{passA,passB,reconcile,critic}-v2.md`, `.github/workflows/
 research-pass-v2.yml`, `scripts/__tests__/pipeline-v2-orchestration.test.mjs` (24 tests),
@@ -158,10 +158,30 @@ prompts/README.md V1-vs-V2 section.
   finish-stage VALIDATES the stage's owed artifact (`validateStageOutput`: scaffold files,
   passA-origin evidence, passB artifact, dispositions+coverage at reconcile, critic ledger
   artifacts), commits the work (the workflow commits, never the agent), checkpoints completion,
-  and records stage telemetry (duration/model/effort + evidence-derived counts). A stage with
-  problems and no diff = VOID (`void=true` output, failure class void-run) → ONE bounded
-  auto-retry re-dispatch; any other agent failure = honest `agent-failure`, branch manually
-  resumable (usage-limit never guessed from logs).
+  and records stage telemetry (duration/model/effort + evidence-derived counts).
+- **Failure classes name a PLANE** (reliability pass, 2026-08-22 — the Portugal scar, run
+  `portugal-20260822-7c041e`). Every agent invocation runs through
+  `scripts/run-logged-command.sh`, so a nonzero Claude process is a nonzero STEP while
+  `agent-output.log` still holds the complete combined stdout/stderr; the previous `| tee`
+  wrapper reported tee's status and recorded a session-limited reconcile GREEN. A failed agent
+  process therefore never reaches the normal collect/verify path (its workspace is partial
+  attempt evidence), and `record-agent-failure` classifies it from the step conclusion plus the
+  CLI's own printed diagnostic — `usage-limit` (diagnostic AND nonzero process, never one alone)
+  / `cancelled` / `agent-failure` / `unknown`. `finish-stage` judges only output from a process
+  that RETURNED, so it says `void-run` (nothing produced) or `gate-failure` (invalid or
+  scope-invalid output) and can never say `agent-failure`. An already-recorded gate verdict is
+  never overwritten by the coarser process-plane observation.
+- **Automatic repair is decided by DURABLE state** (same pass). The gate used to read one
+  ephemeral step output (`void == 'true'`), so ordinary deterministic gate failures — the
+  commonest repairable failure — never reached the retry command at all. `run.v2.json` now
+  decides: an auto-retryable class (`gate-failure`/`void-run` only), actionable validator
+  findings for the same runId/stage, and room in BOTH the attempt cap (5) and the auto-retry cap
+  (1) — caps unchanged. Budget is spent only on a yes. A repair re-dispatch carries the same
+  slug, so the same runId, branch, intake and landMode resume and completed stages are skipped.
+  `void_retry` survives as a workflow input for in-flight compatibility and decides nothing.
+- **A run that stops is VISIBLE** (same pass): `pipeline-v2.mjs escalate` emits an Actions error
+  and, when the run records an intake issue, files ONE marker-deduped comment naming the stage,
+  class, finding count, why no retry happened and the exact safe recovery action.
 - **Pass-B isolation:** the passB job's agent world is a checkout of the run's recorded
   BASELINE commit at fetch-depth 1 (Pass-A outputs absent from tree AND history); the
   control-plane checkout used for begin-stage is `rm -rf`'d before the agent; collection is a
@@ -315,8 +335,9 @@ Prerequisites: the slug must already be scaffolded on main (file a /new intake o
 `GOOGLE_ROUTES_KEY` (optional). The run lands a DRAFT PR only. Boundary checks to run on the
 first canary (Boundary Checks doctrine): (1) confirm the passB job's baseline checkout really
 lacks Pass-A files on the runner (the verify-passb-workspace step prints it); (2) force one
-failure path — cancel an agent step and confirm fail-stage records `agent-failure` and the
-branch resumes at the same stage on re-dispatch; (3) confirm `pipeline land --gate` on the
+failure path — cancel an agent step and confirm `record-agent-failure` records `cancelled` (and
+a session-limited step records `usage-limit`) and the branch resumes at the same stage on
+re-dispatch; (3) confirm `pipeline land --gate` on the
 runner produces the build+verify scorecard as the PR body.
 
 **Unverified external boundaries (none exercised from this session — no Actions run, no gh
