@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "wp-feedback/2.0",
+  "slug": "portugal",
+  "entries": [
+    {
+      "runId": "portugal-20260822-7c041e",
+      "stage": "reconcile",
+      "attempt": 1,
+      "findings": [
+        "P0 research   · FAIL — 9 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ divergences item \"?\" has verified_on 2026-08-22 but no source_url to recertify against",
+        "⚠ budget item \"Food & drink, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Belém — monastery, tower, custard tarts\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Alfama & São Jorge Castle\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Sintra day trip\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Travel to Porto\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Bolhão market, Lello, Clérigos\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Vila Nova de Gaia — port wine\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "P0 coverage   · FAIL — 13 intake ask(s) not addressed:",
+        "⚠ cities: \"Cities\" = \"Lisbon, Porto, Sintra\" — set coveredBy in coverage.json or log a skip",
+        "⚠ dates: \"Trip dates\" = \"2027-04-10 – 2027-04-19\" — set coveredBy in coverage.json or log a skip",
+        "⚠ priority-1: \"Priority #1\" = \"Food & dining\" — set coveredBy in coverage.json or log a skip",
+        "⚠ priority-2: \"Priority #2\" = \"Culture / history\" — set coveredBy in coverage.json or log a skip",
+        "⚠ priority-3: \"Priority #3\" = \"Nature / outdoors\" — set coveredBy in coverage.json or log a skip",
+        "⚠ pace: \"Pace\" = \"balanced\" — set coveredBy in coverage.json or log a skip",
+        "⚠ travel-style: \"Travel style\" = \"Balanced\" — set coveredBy in coverage.json or log a skip",
+        "⚠ budget: \"Budget target\" = \"Mid-range ($75–150/day)\" — set coveredBy in coverage.json or log a skip",
+        "⚠ party: \"Party description\" = \"two travellers in their 30s, happy walking a full day and taking trains between cities\" — set coveredBy in coverage.json or log a skip",
+        "⚠ travelers: \"Number of travelers\" = \"2\" — set coveredBy in coverage.json or log a skip",
+        "⚠ passport-countries: \"Passport countries\" = \"United States\" — set coveredBy in coverage.json or log a skip",
+        "⚠ departure-airport: \"Departure airport\" = \"EWR\" — set coveredBy in coverage.json or log a skip",
+        "⚠ comments: \"Additional comments\" = \"First time in Portugal. Lisbon and Porto by train, with Sintra as a day trip. Interested in where people actually eat rather than the tourist strips.\" — set coveredBy in coverage.json or log a skip",
+        "⚠ [leg-duration-unverified] 4 of 6 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Arrive Lisbon\", \"Sintra day trip\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-22T02:18:20.635Z",
+      "status": "active",
+      "retiredAt": null
+    }
+  ]
+}
