@@ -50,9 +50,12 @@
         "energy": "balanced",
         "env": "mixed",
         "body": "<p>Walk Ciudad Vieja starting at Plaza Independencia. Tour Palacio Salvo (≈45 min) for its Art Deco lobby, tango museum, and rooftop viewpoint over the city. ⚠ Red Ticket publishes the tour as a fresh listing each month, so the February 2027 dates and times only go up close to the trip — check the Palacio Salvo producer page a few weeks out and book the slot then.</p><p>Have lunch at Mercado del Puerto — the 1868 iron-frame market hall itself is worth seeing, and El Palenque is the best-known parrilla under its roof. In the afternoon, visit the Museo del Carnaval (Wed–Sun 11:00–17:00, {{fact:museo-carnaval-200-uyu}}) on the Rambla near the port — the closest thing to an official primer on the world's longest Carnival, useful groundwork before the holiday days ahead.</p>",
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://www.gub.uy/ministerio-educacion-cultura/comunicacion/noticias/horario-museos-direccion-nacional-cultura-semana-carnaval",
         "constraints": [
           "Palacio Salvo tickets are Red Ticket only — buy ahead, not at the door",
-          "Museo del Carnaval is closed Mondays and Tuesdays"
+          "Museo del Carnaval normally runs Wed–Sun 11:00–17:00; Carnival-week exceptions can occur, so recheck before the trip"
         ]
       },
       {
