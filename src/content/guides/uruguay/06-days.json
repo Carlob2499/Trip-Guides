@@ -21,7 +21,7 @@
         "tldr": "A full day in Uruguay's UNESCO river town — cobblestones, the lighthouse, sunset over the Río de la Plata.",
         "energy": "balanced",
         "env": "outdoor",
-        "body": "<p>Take an early COT bus from Tres Cruces (≈2h20m) to Colonia del Sacramento's Barrio Histórico, a compact 17th–19th-century quarter that earned UNESCO World Heritage status in 1995 for its fused Portuguese-Spanish street plan.</p><p>Climb the Faro de Colonia (the 1857 lighthouse built over the ruined San Francisco convent) for a rooftop view over the old town and the river toward Argentina — it's open Saturdays 10:00–12:00 and 15:00–17:00, {{fact:faro-colonia-35-uyu}}, closed-toe shoes required. Wander the Calle de los Suspiros and the old port gate, then catch an evening bus back to Montevideo.</p>",
+        "body": "<p>Take an early COT bus from Tres Cruces (≈2h20m) to Colonia del Sacramento's Barrio Histórico, a compact 17th–19th-century quarter that earned UNESCO World Heritage status in 1995 for its fused Portuguese-Spanish street plan.</p><p>Climb the Faro de Colonia (the 1857 lighthouse built over the ruined San Francisco convent) for a rooftop view over the old town and the river toward Argentina — it's open Saturdays 10:00–12:00 and 15:00–17:00, {{fact:faro-colonia-35-uyu}}, closed-toe shoes required. Wander the Calle de los Suspiros and the old port gate, then catch an evening bus back to Montevideo.</p><p>Buenos Aires day-tripper ferries land and depart roughly 10:00–15:00, so the early start and evening return also dodge the old town's busiest window.</p>",
         "constraints": ["Faro de Colonia is open Thu–Sun only — this day (and Sun Feb 7) is the window for it"],
         "waypoints": [
           { "name": "Colonia del Sacramento — Barrio Histórico", "lat": -34.4626, "lng": -57.8398, "note": "UNESCO old town core" }
@@ -44,7 +44,7 @@
         "tldr": "A wine-country morning at Bodega Bouza, then a slow afternoon while Montevideo runs its Carnival-holiday hours.",
         "energy": "slow",
         "env": "mixed",
-        "body": "<p>Feb 8 is one of Uruguay's two Carnival public holidays (the dates are fixed relative to Easter, not separately announced each year) — expect government offices and some museums to close or run short hours, even though it's a normal working day by law for private business.</p><p>Spend the morning at Bodega Bouza in Melilla (≈15 min by taxi from downtown), a boutique winery known for Tannat, with a guided walk through the vineyard and a tasting or lunch. ⚠ Confirm Bouza's Monday hours directly before you go — sourcing for this pass could only confirm the winery's daily 11:00–18:00 opening in general, not a guaranteed Monday tour slot.</p>",
+        "body": "<p>Feb 8 is one of Uruguay's two Carnival public holidays (the dates are fixed relative to Easter, not separately announced each year) — expect government offices and some museums to close or run short hours, even though it's a normal working day by law for private business.</p><p>Spend the morning at Bodega Bouza in Melilla (≈15 min by taxi from downtown), a boutique winery known for Tannat, with a guided walk through the vineyard and a tasting or lunch. ⚠ Confirm Bouza's Monday hours directly before you go — only the winery's daily 11:00–18:00 opening is confirmed, not a guaranteed Monday tour slot.</p>",
         "constraints": ["Carnival public holiday — confirm any museum's hours before counting on it today"]
       },
       {
@@ -86,11 +86,11 @@
       {
         "date": "Fri Feb 12",
         "title": "Beach day, with an optional detour",
-        "pace": "Slow beach day — or an early start for Cabo Polonio",
-        "tldr": "A deliberately unstructured beach day, with Cabo Polonio's wild sea lion coast as a big-commitment alternative.",
+        "pace": "Slow beach day — José Ignacio or Laguna Garzón as a lighter detour, or an early start for Cabo Polonio",
+        "tldr": "A deliberately open beach day — José Ignacio and Laguna Garzón as closer detours, Cabo Polonio's wild sea lion coast as the big-commitment option.",
         "energy": "slow",
         "env": "outdoor",
-        "body": "<p>Keep this day open — a beach afternoon at Playa Mansa or a slower José Ignacio-area stretch, with no fixed plan.</p><p>For a more ambitious nature day, Cabo Polonio (a dune-and-lighthouse settlement with its own wild sea lion colony) is reachable from this coast, but it's a real undertaking: roughly 1.5 hours by road plus a 4x4 transfer across the dunes each way, effectively consuming the whole day. Worth the detour for a nature-first traveler; not a fit if the priority is rest before departure.</p>",
+        "body": "<p>Keep this day open — a beach afternoon at Playa Mansa, or a drive out to José Ignacio, a quieter beach town about 30–40 minutes away that stays noticeably calmer than central Punta del Este even in February, good for a long lunch.</p><p>Laguna Garzón, a protected lagoon past José Ignacio, runs kayak, SUP, and birdwatching outings with a local operator — book by WhatsApp in advance, since capacity is limited and there's no fixed daily schedule.</p><p>For a more ambitious nature day, Cabo Polonio (a dune-and-lighthouse settlement with its own wild sea lion colony) is reachable as a full-day round trip — roughly 1.5 hours by road plus a 4x4 transfer across the dunes each way. Worth the detour for a nature-first traveler; not a fit if the priority is rest before departure.</p>",
         "constraints": []
       },
       {

@@ -5,7 +5,7 @@
   "country": "Uruguay",
   "tz": "America/Montevideo",
   "draft": true,
-  "verified": "⚠ Draft — Pass A checked 2026-08-23 for the Feb 5–13, 2027 trip. Confirmed against primary sources: entry rules for a US passport, the Carnival public holiday dates (Easter-relative, computed), intercity bus fares/schedules, and sight hours & admission prices. Re-check before travel: the USD/UYU exchange rate (moves week to week), the exact 2027 Desfile de Llamadas parade dates (Montevideo's official event page had not posted them as of this check — see the Plan tab), and the US State Department advisory level (its page blocks automated fetches in this pass; needs a manual check before publish).",
+  "verified": "⚠ Draft — checked 2026-08-23 for the Feb 5–13, 2027 trip, across an independent verification pass and a local/authenticity pass reconciled the same day. Confirmed against primary sources: entry rules for a US passport, the Carnival public holiday dates (Easter-relative, computed), intercity bus fares/schedules, sight hours & admission prices, and Lo de Silverio's posted hours. Re-check before travel: the USD/UYU exchange rate (moves week to week), the exact 2027 Desfile de Llamadas parade dates (Montevideo's official event page had not posted them as of this check — see the Plan tab), the US State Department advisory level (its page blocks automated fetches; needs a manual check before publish), and Lo de Silverio's tasting/menu pricing (not listed online).",
   "provenance": "strict",
   "roomId": "g93twdwy2d1hh4qi",
   "footer": "",

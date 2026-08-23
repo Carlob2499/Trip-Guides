@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "uruguay",
+  "runId": "uruguay-20260823-9789de",
+  "asks": [
+    {
+      "id": "cities",
+      "ask": "Montevideo, Colonia del Sacramento, Punta del Este",
+      "status": "covered",
+      "where": [
+        "05-transit.json#orientation-map-uruguay-s-south-coast",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "2027-02-05 – 2027-02-13",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "01-plan.json#public-holidays"
+      ],
+      "evidenceIds": [
+        "ev-carnival-holiday-2027"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Food & dining",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "07-sights.json#mercado-del-puerto"
+      ],
+      "evidenceIds": [
+        "ev-el-palenque-hours",
+        "ev-el-palenque-address",
+        "ev-bouza-address",
+        "ev-losilverio-hours"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-2",
+      "ask": "Culture / history",
+      "status": "covered",
+      "where": [
+        "07-sights.json#palacio-salvo",
+        "07-sights.json#mercado-del-puerto",
+        "07-sights.json#museo-del-carnaval",
+        "07-sights.json#colonia-del-sacramento-barrio-historico-faro"
+      ],
+      "evidenceIds": [
+        "ev-palacio-salvo-redticket-active",
+        "ev-museo-carnaval",
+        "ev-mercado-del-puerto",
+        "ev-faro-colonia",
+        "ev-colonia-offpeak-1",
+        "ev-colonia-offpeak-2"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-3",
+      "ask": "Nature / outdoors",
+      "status": "covered",
+      "where": [
+        "06-days.json#punta-del-este-isla-de-lobos",
+        "06-days.json#beach-day-with-an-optional-detour"
+      ],
+      "evidenceIds": [
+        "ev-isla-lobos",
+        "ev-cabo-polonio-colony",
+        "ev-lagunagarzon-activities"
+      ],
+      "reason": null
+    },
+    {
+      "id": "pace",
+      "ask": "balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "budget",
+      "ask": "Mid-range ($75-150/day)",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs",
+        "02-money-and-budget.json#money-currency"
+      ],
+      "evidenceIds": [
+        "ev-fx-usd-uyu"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "2",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "passport-countries",
+      "ask": "United States",
+      "status": "covered",
+      "where": [
+        "01-plan.json#entry-documents"
+      ],
+      "evidenceIds": [
+        "ev-entry-visa-us"
+      ],
+      "reason": null
+    },
+    {
+      "id": "departure-airport",
+      "ask": "JFK",
+      "status": "covered",
+      "where": [
+        "01-plan.json#when-you-land",
+        "02-money-and-budget.json#flights-round-trip-jfk-connecting"
+      ],
+      "evidenceIds": [
+        "ev-no-nonstop-jfk-mvd"
+      ],
+      "reason": null
+    },
+    {
+      "id": "comments",
+      "ask": "Canary #4 (Pipeline V2 acceptance test) — first time in Uruguay, interested in asado/parrilla culture, Colonia's old town, and the Punta del Este beach scene.",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "07-sights.json#colonia-del-sacramento-barrio-historico-faro",
+        "06-days.json#punta-del-este-isla-de-lobos"
+      ],
+      "evidenceIds": [
+        "ev-el-palenque-hours",
+        "ev-faro-colonia",
+        "ev-isla-lobos"
+      ],
+      "reason": null
+    }
+  ]
+}

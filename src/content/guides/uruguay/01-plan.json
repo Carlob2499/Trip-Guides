@@ -27,7 +27,7 @@
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": "<p>A US passport holder needs no visa for a tourist visit of up to 90 days — see the Entry card below. Immigration can ask for proof of onward travel and sufficient funds, though this is rarely enforced in practice for US arrivals.</p><p>⚠ The US State Department's current advisory level for Uruguay could not be automatically verified in this research pass (the page blocks plain automated fetches) — confirm the level at travel.state.gov before you go. A search lead (via the US Embassy Montevideo's own site) points to a Level 2 (Exercise Increased Caution) renewal around July 2026, but this is a lead, not a fetched primary verification.</p>"
+    "body": "<p>A US passport holder needs no visa for a tourist visit of up to 90 days — see the Entry card below. Immigration can ask for proof of onward travel and sufficient funds, though this is rarely enforced in practice for US arrivals.</p><p>⚠ The US State Department's current advisory level for Uruguay is unconfirmed — its page blocks automated fetches, so check the level at travel.state.gov before you go. A search lead (via the US Embassy Montevideo's own site) points to a Level 2 (Exercise Increased Caution) renewal around July 2026, but that is a lead, not a fetched primary verification.</p>"
   },
   {
     "type": "panel",

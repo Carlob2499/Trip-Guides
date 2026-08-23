@@ -43,10 +43,22 @@ note under Amendments).
 
 | Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
 |------|--------------------|--------------------------|--------------------|---------------------------------|
-|      |                    |                          |                    |                                 |
+| Mercado del Puerto | Shipped as the marquee Sights/Food pick | Considered — presumed Pass A's anchor, routed around it for a food find instead | AGREE — kept as shipped | Corroborated, not displaced. Added a quiet-window note in the Colonia entry pattern below, not here (Mercado del Puerto's own hours weren't in dispute). |
+| Isla de Lobos | Shipped, T0-verified boat excursion | Rejected from Pass B's own list — recognized as Pass A's mainstream pick, not a novel local find | AGREE — kept as shipped | Both passes converge; Pass B's anti-default filter correctly routed effort elsewhere instead of re-verifying it. |
+| Cabo Polonio | Shipped as an opt-in "worth-the-detour" (full-day round trip, cites a commercial day-trip tour product) | Rejected — reasoned it "requires an overnight detour," no citation given | CONFLICT-RESOLVED — kept Pass A's framing (opt-in full-day detour) | See `d-cabo-polonio-feasibility` in `evidence.v2.json`. Pass A's cited day-trip tour product outweighs Pass B's uncited assumption; practical guide outcome is the same either way (optional, not fixed). |
+| Colonia off-peak visit window | Not researched | New — 2 independent Brazilian-Portuguese firsthand blogs corroborate the same 10:00–15:00 Buenos Aires ferry crowd window | B-only, ADOPTED | Clears the 2-source experiential bar. Woven into the Colonia sight entry (`07-sights.json`) and the Sat Feb 6 day plan (`06-days.json`). |
+| José Ignacio | Glancingly mentioned as a beach-day option (no research) | New — 2 independent Spanish-language firsthand sources corroborate a quieter, calmer beach scene than central Punta del Este | B-only, ADOPTED (worth-the-detour) | Clears the 2-source bar. Enriched the existing Fri Feb 12 mention with the corroborated color. |
+| Laguna Garzón | Not researched | New — T0-verified (operator's own site) protected-lagoon kayak/SUP/birdwatching operator near José Ignacio | B-only, ADOPTED (worth-the-detour) | Objective facts only (booking channel, no fixed price/schedule). Addresses the thin #3 priority (nature/outdoors) with a lighter-commitment detour than Cabo Polonio. Woven into Fri Feb 12. |
+| Mercado Agrícola de Montevideo (MAM) | Not researched | New — T0-verified hours/address; "calmer, less touristy" framing has 1 current (2026) + 1 stale (2021, past 24mo) source | B-only, NOT SHIPPED | Objective facts recorded as evidence but not written into guide text — the distinguishing experiential claim doesn't clear the 2-source current-corroboration bar, and Lo de Silverio already fills the "novel local food pick" role this trip. Kept as a lead for a future pass. |
+| Lo de Silverio | Not researched | New — T0-verified (official site) neighborhood parrilla in Villa Dolores, away from the port tourist core | B-only, ADOPTED | Already-verified-on-arrival per Pass B's contract — carried across as-is. Shipped as a new venue card in `08-food-and-shopping.json`. |
+| La Pedrera | Not researched | New — single-sourced (Ohlalá!, Feb 2025) beach-town lead | B-only, NOT SHIPPED | Single source, no second corroboration found within budget. Recorded as a future-trip lead, not woven into guide text. |
+| Colonia ferry departure timing (08:30 crowding) | Not researched | New — single-sourced (dicasdouruguai.com.br) granular ferry-crowding detail | B-only, NOT SHIPPED | Single source. Concurs with Pass B's own shortlisted-not-shipped call; recorded as a lead only. |
+| Uruguayan slang / voseo vocabulary | Not researched (guide covered voseo grammar only) | New — durable, reference-sourced everyday slang (botija, championes, bondi, tá, dale, che) | B-only, ADOPTED | Durable fact, no freshness risk. Shipped as a short addition to Etiquette & language, with an inline citation. |
+| Don Beto / La Otra Parrilla / Pellicer Parrilla Gourmet / Asados Iruña | Not researched | Rejected — each surfaced via a single aggregator/listicle only, no independently fetched firsthand account within budget | AGREE — kept rejected | Recorded in `evidence.v2.json` candidates as rejected leads, not silently dropped. |
 
-(Empty — reconciliation happens once Pass B has run independently. This table is Reconcile's stage,
-not Pass A's.)
+Full per-record dispositions (12 passB-origin evidence records, each with a typed `disposition` +
+`note`) live in `evidence.v2.json`'s `reconciliation[]` array — this table is the human-readable
+summary of that machine record, not a substitute for it.
 
 ## Discovery leads (Pass B — native-first)
 > OPTIONAL accelerant, filled by an interactive deep-research sweep BEFORE the pipeline runs
@@ -72,6 +84,12 @@ not Pass A's.)
 | El Palenque (Punta del Este branch) | shipped | y |
 | Estancia del Puerto (Mercado del Puerto) | rejected: surfaced in the same discovery sweep as El Palenque but not independently deep-verified — El Palenque's Bloomberg top-30 ranking made it the stronger, faster-to-verify pick; adaptive stopping favored depth over a redundant second stall in the same hall | n |
 | Bodega Bouza (Melilla winery) | shipped | y |
+| Lo de Silverio (Villa Dolores, Pass B) | shipped | y |
+| Mercado Agrícola de Montevideo (Pass B) | shortlisted: T0-verified hours/address, but the "calmer/less touristy" claim has only 1 current corroborating source (a 2nd dates to 2021, past the freshness window) — not shipped | y |
+| Don Beto (Pass B) | rejected: single-aggregator listicle only, no independently fetched firsthand account | n |
+| La Otra Parrilla (Pass B) | rejected: repeats across aggregator lists, no independently fetched firsthand review | n |
+| Pellicer Parrilla Gourmet, Mercado Agrícola (Pass B) | rejected: not listed on the market's own official site — current existence unconfirmed | n |
+| Asados Iruña (Pass B) | rejected: distinctive lead (Fri–Sun only, reservation-required) surfaced only via aggregated search, no original source fetched | n |
 
 ### Priority 2: Culture / history
 
@@ -85,18 +103,24 @@ not Pass A's.)
 | Casapueblo (Punta Ballena) | shipped | y |
 | La Mano de Punta del Este | shipped | y |
 | Desfile de Llamadas / Carnival season framing | shipped (as seasonal context — see Amendments on why exact 2027 dates are not asserted) | y |
+| Colonia del Sacramento off-peak visit window (Pass B) | shipped: 2 independent firsthand sources corroborate the Buenos Aires ferry crowd window (≈10:00–15:00) | y |
+| Colonia ferry departure timing — 08:30 crowding (Pass B) | shortlisted: single-sourced granular detail, not woven into guide text | y |
 
 ### Priority 3: Nature / outdoors
 
 | Candidate | Verdict | Shortlist |
 |-----------|---------|-----------|
 | Isla de Lobos boat excursion | shipped | y |
-| Cabo Polonio (wild sea lion colony + dune settlement) | detour (worth-the-detour): the strongest single nature find, but a full-day round trip from Punta del Este (road + 4x4 dune transfer) — presented as an opt-in alternative on the one open day rather than fixed into the itinerary | y |
+| Cabo Polonio (wild sea lion colony + dune settlement) | detour (worth-the-detour): the strongest single nature find, but a full-day round trip from Punta del Este (road + 4x4 dune transfer) — presented as an opt-in alternative on the one open day rather than fixed into the itinerary. Pass B's candidate table called it out of scope without citing a source; see `d-cabo-polonio-feasibility` | y |
 | La Rambla (Montevideo waterfront) | shipped | y |
+| José Ignacio (Pass B) | detour (worth-the-detour): 2 independent sources corroborate a quieter beach scene than central Punta del Este | y |
+| Laguna Garzón (Pass B) | detour (worth-the-detour): T0-verified kayak/SUP/birdwatching operator near José Ignacio — a lighter-commitment nature detour than Cabo Polonio | y |
+| La Pedrera (Pass B) | considered: single-sourced beach-town lead, not independently corroborated | n |
 
-**Saturation:** stopped — later searches across all three priorities mostly re-surfaced the same
-handful of names across different aggregators (duplicates trend). The one unresolved item (Llamadas'
-exact 2027 dates) doesn't change any recommendation — see `evidence.v2.json`'s `saturation` record.
+**Saturation:** stopped — both passes independently reached the same stopping point (later searches
+across all priorities mostly re-surfaced the same handful of names across different aggregators —
+duplicates trend). The one unresolved item (Llamadas' exact 2027 dates) doesn't change any
+recommendation — see `evidence.v2.json`'s merged `saturation` record.
 
 ## Questions for the traveler (research emits; traveler answers on the progress page)
 
@@ -160,3 +184,19 @@ exact 2027 dates) doesn't change any recommendation — see `evidence.v2.json`'s
   found (≈UYU 2,800/person, Wed–Mon tour slots) came from a tour-booking aggregator, which the
   evidence-kind law (aggregator ≠ citation for an objective fact) correctly blocks from being shipped
   as a clean fact. The venue card carries this as an explicit ⚠ rather than a confirmed price.
+- **2026-08-23 — Reconcile: Pass B merged in.** Folded Pass B's 12 evidence records and 14
+  candidates into `evidence.v2.json` (3 candidate ids collided with Pass A's own — Mercado del
+  Puerto, Isla de Lobos, Cabo Polonio — and were merged into single entries rather than duplicated).
+  Shipped 4 new B-only finds on their merits (Lo de Silverio, the Colonia off-peak visit window,
+  José Ignacio, Laguna Garzón — see the reconciliation table above and `evidence.v2.json`'s
+  `reconciliation[]` for the full per-record disposition trail). Declined to ship Mercado Agrícola de
+  Montevideo's distinguishing "less touristy" claim (1 current + 1 stale corroborating source, short
+  of the 2-source bar) and two single-sourced leads (La Pedrera, the 08:30-ferry-crowding detail) —
+  all three stay recorded as leads, not silently dropped. Resolved one genuine cross-pass
+  disagreement (Cabo Polonio's day-trip-vs-overnight feasibility, `d-cabo-polonio-feasibility`) in
+  Pass A's favor, since it cited an actual commercial day-trip tour product against Pass B's uncited
+  assumption — the practical guide outcome (an opt-in detour, not a fixed stop) is unchanged either
+  way. Also fixed three pre-existing voice-gate violations from Pass A (process language — "this
+  research pass" / "this pass" — that had leaked into three `body` fields) while touching those
+  sections for reconciliation. No new traveler-facing fork surfaced during reconciliation; the two
+  open questions from Pass A stand unchanged.

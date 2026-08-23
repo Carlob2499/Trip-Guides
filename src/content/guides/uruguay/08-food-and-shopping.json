@@ -50,6 +50,21 @@
         "verified_on": "2026-08-23",
         "shelf_life": "venue",
         "source_url": "https://bodegabouza.com/"
+      },
+      {
+        "name": "Lo de Silverio",
+        "area": "Villa Dolores, away from the port tourist core",
+        "address": "Alejo Rossell y Rius 1655 esq. 4 de Julio, Montevideo",
+        "phone": "+598 2628 4771",
+        "hours": "Tue–Sat 12:00–16:00 & 20:00–00:00, Sun 12:00–16:00",
+        "closed": "Mondays",
+        "book": "call",
+        "how": "Taxi or rideshare from downtown — a residential neighborhood, not a walk from Ciudad Vieja",
+        "price": "⚠ ask when booking — not listed online",
+        "why": "A neighborhood parrilla off the tourist circuit, in residential Villa Dolores — book ahead for dinner, capacity is limited.",
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://www.lodesilverio.com/"
       }
     ]
   }
