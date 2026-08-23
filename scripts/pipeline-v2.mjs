@@ -54,6 +54,7 @@ import {
 import { finalizeLandingRecovery } from "./pipeline/v2/landing-truth.mjs";
 import {
   classifyAgentFailure, retryEligibility, renderStopNotice, alreadyNotified, dispatchFailedDecision,
+  AUTO_RETRYABLE_CLASSES,
 } from "./pipeline/v2/recovery.mjs";
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock, extractGateFindings } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
@@ -608,6 +609,26 @@ async function run(cmd, get, has) {
       emit("failure_class", decision.failureClass || "");
       emit("findings", String(decision.findingCount));
       emit("reason", decision.reason.replace(/\s+/g, " "));
+      // DEFENCE IN DEPTH (Codex review note on PR #75). The workflow suppresses the visible stop
+      // whenever this command says `allowed=true`, so a future regression that let a
+      // never-retryable class through retryEligibility() would strand the run silently — the
+      // exact failure mode this whole pass exists to remove. Re-check the invariant here against
+      // the DURABLE record, independently of how eligibility reached its verdict: one predicate,
+      // no shared branching. A yes that cannot name an auto-retryable recorded class is refused.
+      if (decision.allowed) {
+        const recorded = state?.stages?.[decision.stage]?.failure?.class || null;
+        if (!AUTO_RETRYABLE_CLASSES.includes(recorded)) {
+          decision = {
+            ...decision,
+            allowed: false,
+            reason: `refused by the retry-authority invariant: stage "${decision.stage}" records class ` +
+              `"${recorded}", which is not auto-retryable (eligibility said otherwise — that disagreement is itself the bug)`,
+            recovery: "report this: the retry decision and the durable record disagree. Re-dispatch " +
+              "research-pass-v2.yml by hand with the same slug once the cause is understood.",
+          };
+          emit("reason", decision.reason.replace(/\s+/g, " "));
+        }
+      }
       if (!decision.allowed) {
         emit("allowed", "false");
         console.error(`[pipeline-v2] ${slug} — automatic repair retry REFUSED: ${decision.reason}`);

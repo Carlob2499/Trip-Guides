@@ -340,6 +340,37 @@ a session-limited step records `usage-limit`) and the branch resumes at the same
 re-dispatch; (3) confirm `pipeline land --gate` on the
 runner produces the build+verify scorecard as the PR body.
 
+### Reliability repair — MERGED 2026-08-22, UNPROVEN in production (PR #75 → main `253607a`)
+
+The Portugal scar's repair is on main and green (2904 tests, build, lint, typecheck on the
+merged tree), but **the repaired research/recovery runtime has not been exercised by a live
+Pipeline V2 research canary**. PR CI ran in Actions and passed; it runs the test suite, not
+`research-pass-v2.yml`. Canary #4 is that proof.
+Four seams to watch in its logs — each is a place this code meets a system it does not control,
+which is exactly what the unit suite cannot speak to:
+
+1. **The exit wrapper resolves on the runner.** Agent steps call
+   `bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh"`. Pass B's world is the recorded
+   BASELINE commit, so a run whose baseline predates `253607a` will not have that file. A fresh
+   canary is safe; a RESUMED older run is the case to watch.
+2. **The escalation can actually comment.** B1 added `issues: write` to the four stage jobs
+   (a job-level `permissions:` block resolves every omitted scope to `none`, which is why the
+   grant was missing). The grant is the fix; one real `gh issue comment` from a stage job is the
+   proof, and nothing has produced one.
+3. **The cancellation chain completes in time.** B3 makes the retry decision and the escalation
+   REACHABLE on cancellation, but that chain needs `npm ci` plus three node invocations inside
+   GitHub's cancellation grace window. Reachability is proven; *finishing* is not. If a cancelled
+   canary files no notice, this is the first suspect — and the fix is to make the escalate step
+   cheaper, not to widen the step conditions again.
+4. **`gh` is authenticated where escalate runs** (in `collect/`, with `GH_TOKEN: github.token`).
+   The Actions error is printed BEFORE any `gh` call, so a gh failure still leaves a visible
+   signal; confirm that ordering held rather than assuming it.
+
+Deliberately non-auto-retryable, so a canary hitting one should show a VISIBLE STOP and no
+repair dispatch: `usage-limit` · `agent-failure` · `cancelled` · `unknown` · missing findings ·
+corrupt run state · either budget exhausted. Caps are unchanged (5 attempts, 1 auto-retry) — the
+defect was retry ROUTING, not budget.
+
 **Unverified external boundaries (none exercised from this session — no Actions run, no gh
 write, no Worker call was made):**
 - All GitHub Actions YAML paths: job chaining/`needs` conditions in research-pass-v2.yml, the

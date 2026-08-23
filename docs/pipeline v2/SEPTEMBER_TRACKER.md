@@ -9,32 +9,40 @@ Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, and the active branch's `IMPLE
 
 This file tracks delivery. It does not redefine Pipeline V2.
 
-## Dashboard — August 18, 2026
+## Dashboard — August 22, 2026
 
-- **Current phase (updated 2026-08-20):** P10 canary GREEN, P11 review YELLOW (architecture accepted), P12 finalization DONE, P12.1 targeted correction DONE. The first P13 review returned GREEN prematurely and was **retracted same day** — Codex's re-inspection caught a residual bus-exclusivity overstatement in the R3 fixture (japan-guide documents "bus **or taxi**"; walking prohibition proves motorized-transfer-required, not bus-required). **P13.1 correction applied** (fixture reworded to source-faithful claims, missed-connection made conditional, risk 3 re-earned honestly, exclusivity scar added; suite 12/12). P13 go/no-go is pending again on the corrected head.
-- **Next hard deadline:** September 6 — core research engine must be proven end-to-end in isolation.
-- **Days until September 20 feature freeze:** 33
-- **Days until September 27 code freeze:** 40
-- **Days until September 30 backend complete:** 43
-- **Current blocker:** No release blocker is recorded; the major unproven boundary is the real manual draft canary through Pass A → Pass B → Reconcile → Critic → Verify.
-- **Highest-risk unfinished item:** proving the research behavior against live sources without weakening the deterministic protections already implemented.
-- **Carlo's next action:** receive the one-shot Fable proof, hand its evidence to Codex for independent review, and approve only the minimum fixes needed before integration.
+- **Current phase (updated 2026-08-22):** post-integration **reliability acceptance**. P13 core
+  proof is DONE. Integration I01–I06 executed (PR #68 + #70/#72/#73 hardening). Three live
+  canaries ran and all three ended RED — Malta (#1), Luxembourg (#2), Portugal (#3, issue #74,
+  run `portugal-20260822-7c041e`). Portugal exposed a reliability defect class rather than a
+  research defect: a failed agent process was reported as a successful step. That repair is
+  merged (**PR #75 → main `253607a`**) and its closeout is **PR #76** (this PR).
+- **Current blocker:** **closeout PR #76 + live reliability acceptance.** The repaired V2
+  research/recovery runtime has not yet been exercised by a live Pipeline V2 research canary.
+- **Next hard deadline:** September 6 — core research engine proven end-to-end in isolation.
+- **Days until September 20 feature freeze:** 29
+- **Days until September 27 code freeze:** 36
+- **Days until September 30 backend complete:** 39
+- **Highest-risk unfinished item:** the four live-only seams of the #75 repair (exit-wrapper
+  resolution on the runner, a real escalation issue comment, the cancellation chain completing
+  inside GitHub's grace window, and `gh` auth where escalate runs). None can be proven by the
+  unit suite.
+- **Carlo's next action:** merge #76 after Codex re-review, then run **preflight + a FRESH
+  Canary #4** (never by resuming Portugal), then hand its evidence to Codex for independent
+  review.
 
 ### Current evidence already recorded
 
-The active implementation branch reports:
+- M0–M8 complete; P13 core proof DONE.
+- Integration I01–I06 executed; reliability hardening #75 merged.
+- Build, lint, typecheck green; full suite green (this PR's exact numbers are recorded in its
+  Validation section, rerun on the final head).
+- V1 dispatch intact; `WAYPOINT_RESEARCH_ENGINE` selector **off**, so `/new` uses V1 today.
+- Manual `workflow_dispatch` is always `landMode=pr` — a canary structurally cannot publish.
+- V2 production publication is **not yet accepted live**.
 
-- M0–M8 complete.
-- Build green.
-- Lint green.
-- Typecheck green.
-- Full test suite green at 2,566 passing tests plus 1 todo.
-- V2 remains manual/draft-only.
-- V1 dispatch is still intact.
-- `/new` has not been switched to V2.
-- Production publication is not yet enabled for V2.
-
-Do not mark the core pipeline proven until the manual canary and Codex review are complete.
+**Do not mark the V2 product path accepted until a fresh canary and independent review are
+complete.** Three RED canaries and a merged repair are not an acceptance.
 
 ---
 
@@ -56,13 +64,16 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `
 | P10 | Run one-shot manual draft-only V2 canary | Core proof | Claude/Fable | Sep 6 | DONE | P09 | Live Pass A → Pass B → Reconcile → geocode → Critic → landing gate → draft PR #61, GREEN (18 proof points, IMPLEMENTATION_STATE) | None | No |
 | P11 | Independently review Fable's one-shot proof and every surgical fix | Core proof | Codex | Sep 6 | DONE / YELLOW | P10 | Independent review returned YELLOW (architecture accepted; bounded finalization list = P12) | None | No |
 | P12 | Apply only blocker/high-priority fixes from the canary | Core proof | Codex + Claude/Fable | Sep 6 | DONE (+P12.1) | P11 | PR #63 merge conflict resolved (`8a591e8`); 4 CodeQL findings fixed (`57f9dcd`); live /proc/self/environ denial proven (run 32340406684); R3+ transport proven (transport-r3-proof test); gates green 163/2649 on `7809835`. P12.1 correction: Grep+Glob /proc denial proven at the tool layer (run 32348279562, job 96361626055); R3+ fixture re-researched, overstatements removed, source-to-claim mapping recorded — IMPLEMENTATION_STATE "P12.1 correction pass" | None | No |
-| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | PENDING — first GREEN (2026-08-20, `88d16fe`) retracted same day (missed bus-exclusivity overstatement); P13.1 fixture correction applied, re-review awaited | P10–P12 | Gap-1 probe proof and gate/invariant findings stand; R3 fixture now source-faithful ("bus or taxi", conditional missed-connection, exclusivity scar); records in IMPLEMENTATION_STATE.md §P13 (retraction) + §P13.1 | Independent decision pending (again) | Yes — Carlo accepts go/no-go |
-| I01 | Connect `/new` dispatch to the proven V2 path behind a safe switch/cutover plan | Integration | Codex + Claude/Fable | Sep 13 | NOT STARTED | P13 | New guide can start V2 without bypassing V1 safety during transition | P13 | Yes if cutover shape changes traveler behavior |
-| I02 | Prove full `/new → intake → research → verify → compose → publish` path | Integration | Codex + Automated CI/test | Sep 13 | NOT STARTED | I01 | One isolated end-to-end guide reaches safe publish boundary with all gates intact | P13 | No |
-| I03 | Prove incomplete/failed V2 run cannot publish | Integration | Automated CI/test | Sep 13 | NOT STARTED | I01 | Controlled failure is blocked before publication | P13 | No |
-| I04 | Prove resume from interruption without repeating completed expensive work | Integration | Automated CI/test + targeted live run | Sep 13 | NOT STARTED | P13 | Durable checkpoint and resume evidence; no completed stage rerun unless required | P13 | No |
-| I05 | Reconcile V2 telemetry with Progress cockpit / issue #56 instead of building a second system | Integration | Codex | Sep 13 | NOT STARTED | P13 | Progress surface displays only real emitted state/events; honest empty remains when unavailable | P13 | Yes only if #56 contract conflicts with V2 |
-| I06 | Keep V1 available until V2 proves publication and resume parity | Integration | Codex | Sep 13 | NOT STARTED | I02–I04 | V1 not deleted or silently bypassed before parity evidence exists | None | Carlo approves final V1 retirement |
+| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | DONE | P10–P12 | P13.1 fixture correction accepted on the corrected head (source-faithful "bus or taxi", conditional missed-connection, exclusivity scar); records in IMPLEMENTATION_STATE §P13/§P13.1 | None | No |
+| I01 | Connect `/new` dispatch to the proven V2 path behind a safe switch/cutover plan | Integration | Codex + Claude/Fable | Sep 13 | DONE | P13 | `new-guide.yml` has the trusted V2 `workflow_call` path, selector-gated on `WAYPOINT_RESEARCH_ENGINE`; V1 remains default while the selector is off (PR #68 + #70 hardening) | None | No |
+| I02 | Prove full `/new → intake → research → verify → compose → publish` path | Integration | Codex + Automated CI/test | Sep 13 | IN PROGRESS — LIVE ACCEPTANCE PENDING | I01 | Deterministic + integration wiring exists and is tested, but NO canary has produced an accepted green product landing: Malta, Luxembourg and Portugal all ended RED. Acceptance requires a fresh Canary #4 after #76 | Live acceptance not earned | No |
+| I03 | Prove incomplete/failed V2 run cannot publish | Integration | Automated CI/test | Sep 13 | DONE | I01 | Live failure evidence: Malta, Luxembourg and Portugal all failed and NONE published, plus the deterministic suite (publication stays false across every failure/retry state; manual dispatch cannot mint landing authority) | None | No |
+| I04 | Prove resume from interruption without repeating completed expensive work | Integration | Automated CI/test + targeted live run | Sep 13 | DONE (manual resume) — autonomous repair LIVE-UNPROVEN | P13 | Andorra proved manual resume live (interrupt after passA → resume skipped it). The AUTONOMOUS bounded repair from #75 is a Canary #4 acceptance seam and does not retract this proof | None | No |
+| I05 | Reconcile V2 telemetry with Progress cockpit / issue #56 instead of building a second system | Integration | Codex | Sep 13 | DONE | P13 | Progress reads real emitted events through the V2 gateway/adapter with a main fallback for merged runs; honest-empty preserved. Code + integration tests | None | No |
+| I06 | Keep V1 available until V2 proves publication and resume parity | Integration | Codex | Sep 13 | SATISFIED TO DATE — HOLD UNTIL CUTOVER | I02–I04 | V1 intact and never bypassed; selector expected to stay off until acceptance. Cannot close until V2 earns publication parity | None | Carlo approves final V1 retirement |
+| R01 | Repair the V2 runtime reliability defect class Portugal exposed | Reliability | Codex + Claude | Aug 22 | DONE | I01–I05 | PR #75 merged as main `253607a`: agent exit integrity (no `\| tee` masking), partial output cannot enter the success path, failure classes name a plane, retry authority is durable, a stopped run escalates visibly. Caps unchanged (5 attempts, 1 auto-retry) | None | No |
+| R02 | Close out the post-merge documentation/authority truth | Reliability | Claude | Aug 22 | IN PROGRESS | R01 | PR #76 (this PR): handoff ritual, retry-authority invariant, tracker/handoff/policy/prompt-doc congruence, stale-comment fix | Awaiting Codex re-review | No |
+| R03 | **Live reliability acceptance — fresh Canary #4** | Reliability | Carlo + Codex | Sep 6 | NOT STARTED | R02 | A FRESH slug (never a Portugal resume) exercises the repaired runtime end to end. Four live-only seams: exit-wrapper resolution on the runner; one real escalation issue comment; the cancellation chain completing inside GitHub's grace window; `gh` auth where escalate runs | #76 not merged | Yes — Carlo starts the canary |
 | V01 | Mega-city food / reservation research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Adaptive saturation, food fit, reservation depth, independent evidence proven | Integration not done | No |
 | V02 | Native-language + thin-English research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Native research produces meaningful new evidence or is correctly skipped | Integration not done | No |
 | V03 | Fragile transport / physical-transfer trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | Door-to-door plausibility, buffer, missed-connection consequence and fallback shown where risk earns depth | Integration not done | No |

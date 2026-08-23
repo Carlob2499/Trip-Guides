@@ -18,9 +18,16 @@ describe("bounded session warm start", () => {
     const output = extractWarmStart(handoff);
     expect(output.length).toBeGreaterThan(0);
     expect(Buffer.byteLength(output, "utf8")).toBeLessThanOrEqual(WARM_START_MAX_BYTES);
-    expect(output).toContain("Pipeline V2 is reliability-blocked");
-    expect(output).toContain("DO NOT RESUME");
-    expect(output).toContain("do not start Canary #4 yet");
+    // The capsule must always carry the CURRENT safety state. These assert the standing
+    // invariants rather than one moment's wording — the original three pinned the pre-merge
+    // phrasing ("reliability-blocked", "do not start Canary #4 yet"), which went stale the hour
+    // PR #75 merged and would have forced a false line back into the capsule to stay green.
+    expect(output).toMatch(/Canary #4/);                 // where the risk currently sits
+    expect(output).toMatch(/DO NOT resume Portugal/i);   // the evidence run stays untouched
+    expect(output).toMatch(/V1 intact|keep V1/i);        // the rollback path
+    expect(output).toMatch(/selector/i);                 // the V2 cutover switch's state
+    // A capsule that has stopped naming the live risk is worse than none.
+    expect(output).toMatch(/NEVER executed in a live Actions job|proven|has not started/i);
   });
 
   it("never auto-injects CONTEXT.md", () => {

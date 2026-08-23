@@ -365,8 +365,15 @@ export async function bumpRunAttempt(slug, { now = new Date().toISOString(), int
   return { state, overCap, attempts: state.attempts.total, cap: state.attempts.cap };
 }
 
-/** One automatic redispatch for a recognized usage/capacity interruption or a proven void run.
-    Bounded: past the cap the caller must NOT redispatch. */
+/** Reserve the run's ONE bounded automatic repair for a policy-approved REPAIRABLE failure.
+    Bounded: past the cap the caller must NOT redispatch.
+
+    This function only spends the budget — it does not decide who may. Eligibility lives in
+    `recovery.mjs` (`retryEligibility`) and today permits ONLY `gate-failure` and `void-run`,
+    and only with actionable validator feedback for the same runId/stage. In particular
+    `usage-limit` is deliberately NEVER auto-retryable (PR #75): an interrupted process proves
+    nothing about the artifact, and re-dispatching into a closed usage window burns the repair a
+    later real failure is owed. It stops visibly instead. */
 export async function recordAutoRetry(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
   state.attempts.autoRetries += 1;
