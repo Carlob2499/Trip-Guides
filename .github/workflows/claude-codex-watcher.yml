@@ -119,7 +119,12 @@ jobs:
 
       - name: Not eligible — clean no-op
         if: steps.check.outputs.eligible != 'true'
-        run: echo "[codex-watcher] PR #$PR — not eligible: ${{ steps.check.outputs.reason }}"
+        # A block scalar, not a one-line `run: echo "... #$PR ..."` — YAML treats a bare
+        # ` #` in an UNQUOTED plain scalar as a comment start and truncates the value right
+        # there (observed live: the step failed with "unexpected EOF looking for matching
+        # quote" because everything from ` #$PR` onward was silently dropped by the parser).
+        run: |
+          echo "[codex-watcher] PR #$PR — not eligible: ${{ steps.check.outputs.reason }}"
 
       # ── everything below runs ONLY when eligible ──────────────────────────────────────
       - name: Checkout the PR branch (scoped credential for fetch only)
