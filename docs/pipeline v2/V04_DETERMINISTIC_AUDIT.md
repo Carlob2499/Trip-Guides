@@ -1,6 +1,6 @@
 # V04 deterministic audit — conflicting evidence / future-event safety
 
-Status: **PARTIAL PASS / DETERMINISTIC GAP IDENTIFIED**  
+Status: **DETERMINISTIC HARDENING IMPLEMENTED — EXACT-HEAD CI PENDING**  
 Date: 2026-08-23
 
 This audit applies the cheapest-proof-first rule from `PIPELINE_VALIDATION_PACK.md` and the pre-registered V04 card in `VALIDATION_RUNBOOK.md`. It does not dispatch research and does not change publication/cutover state.
@@ -9,7 +9,7 @@ This audit applies the cheapest-proof-first rule from `PIPELINE_VALIDATION_PACK.
 
 The recurring-event fabrication risk is already mechanically enforced by `scripts/pipeline/v2/research-rules.mjs::yearSafetyProblems()` and covered by `scripts/__tests__/pipeline-v2-research-rules.test.mjs`.
 
-The current deterministic contract proves:
+The deterministic contract proves:
 
 - an objective claim naming a future year fails when the cited source predates that season and does not explicitly declare `appliesToYears` for it;
 - an undated source cannot confirm a future season merely because an event recurs;
@@ -19,37 +19,26 @@ The current deterministic contract proves:
 
 This directly protects the V04 immediate-fail case: last year's recurring-event date cannot silently become this year's confirmed date.
 
-## Conflicting-evidence half — deterministic gap
+## Conflicting-evidence half — hardening implemented
 
-The building blocks exist:
+The gap recorded by PR #83 was real: `disagreementProblems()` previously checked only that a recommendation-changing disagreement had prose in `resolution`, while the schema could not prove which evidence records actually conflicted.
 
-- objective facts and experiential claims have different allowed source roles;
-- shipped experiential claims require two independent firsthand source families;
-- recommendation-changing disagreements cannot finish with a blank `resolution`.
+The deterministic contract is now strengthened as follows:
 
-But `disagreementProblems()` currently checks only:
+1. `wp-evidence` is additively bumped to **2.2**.
+2. `disagreements[].evidenceIds` names the concrete evidence records whose claims disagree.
+3. Historical 2.0/2.1-shaped artifacts remain parseable because the new field defaults to `[]`; accepted historical evidence is not rewritten to manufacture modern proof.
+4. A **recommendation-changing** disagreement must cite at least two **distinct** evidence ids.
+5. Every cited id must resolve to a real record in the same evidence document.
+6. A prose-only investigation/resolution therefore cannot manufacture conflict proof.
+7. Existing source-role, freshness, corroboration, and access rules remain the authority for the linked evidence itself; the disagreement rule does not fork those policies.
+8. Both agent skill homes now tell researchers to record this linkage, preserving instruction parity.
 
-> recommendation-changing disagreement + blank resolution → fail
-
-The disagreement schema contains `id`, `topic`, `impact`, `investigation`, and `resolution`, but no evidence-record linkage. Therefore a syntactically valid disagreement can say it was investigated/resolved without machine-verifiable proof of **which** evidence records disagreed.
-
-That is weaker than the V04 pre-registered contract, which requires the official fact and practical/experiential evidence to remain distinct, independently sourced lanes whose conflict survives into reconciliation.
-
-## Required hardening before V04 can earn a deterministic PASS
-
-Add evidence linkage to recommendation-changing disagreements and enforce it without breaking historical evidence:
-
-1. extend the disagreement contract with typed evidence identifiers (backward-compatible at parse time);
-2. require a recommendation-changing disagreement to cite enough existing evidence records to substantiate the conflict;
-3. reject unknown evidence ids;
-4. prove the linked records are not merely duplicate copies of one source family when independence matters;
-5. keep source-role enforcement delegated to the existing objective/experiential rules rather than duplicating those rules;
-6. add regression fixtures showing that a prose-only `resolution` cannot manufacture a disagreement proof;
-7. migrate current accepted evidence records only where necessary and preserve historical RED canary evidence as history rather than rewriting it into a fake PASS.
+Focused regression coverage in `scripts/__tests__/pipeline-v2-disagreement-evidence.test.mjs` proves the schema bump, historical compatibility, typed ids, duplicate/unknown-id rejection, prose-only failure, and the valid linked case.
 
 ## V04 verdict
 
 - **Future-event safety:** PASS deterministically.
-- **Conflicting-evidence accountability:** YELLOW; schema/rule linkage gap identified.
-- **Full V04:** not yet PASS.
-- **Expensive research run needed now:** no. Fix the deterministic evidence-link gap first, then use targeted/live evidence only if it can prove something the strengthened fixture cannot.
+- **Conflicting-evidence accountability:** implementation complete; exact-head CI is the remaining acceptance gate for this change.
+- **Expensive research run needed to prove this specific schema/rule property:** no. A live V04 exercise is only useful later if it tests behavior not already proven by these deterministic fixtures.
+- **Production/cutover effect:** none. `WAYPOINT_RESEARCH_ENGINE` remains off/unset; no guide is published by this hardening.
