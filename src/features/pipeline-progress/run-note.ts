@@ -1,4 +1,4 @@
-import type { ProgressGateway } from "./gateway";
+import type { RunSnapshot } from "./model/progress";
 import { postToWorker, failureMessage } from "../../lib/worker-client.js";
 
 export type RunNoteTarget = { slug: string; runId: string; issue: number };
@@ -7,6 +7,10 @@ export type RunNoteResolution =
   | { ok: false; reason: "not-v2" | "conflict" | "malformed" | "missing" | "stale" | "network" };
 
 type FetchLike = typeof fetch;
+type RunIdentitySnapshot = Pick<RunSnapshot, "version" | "runId" | "malformed" | "conflict">;
+type RunIdentityGateway = { fetchRun(slug: string): Promise<RunIdentitySnapshot> };
+type WorkerResult = Awaited<ReturnType<typeof postToWorker>>;
+type RawRunRecord = Record<string, unknown>;
 
 type WorkerOptions = {
   ownerKey?: string;
@@ -20,13 +24,19 @@ function decodeBase64Utf8(content: unknown): string {
   return new TextDecoder().decode(bytes);
 }
 
+function asRecord(value: unknown): RawRunRecord | null {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+    ? value as RawRunRecord
+    : null;
+}
+
 async function fetchV2Record(
   owner: string,
   repo: string,
   slug: string,
   ref: string,
   fetchImpl: FetchLike,
-): Promise<{ kind: "missing" } | { kind: "network" } | { kind: "record"; raw: any }> {
+): Promise<{ kind: "missing" } | { kind: "network" } | { kind: "record"; raw: RawRunRecord }> {
   const path = `guides-intake/${slug}/run.v2.json`;
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${encodeURIComponent(ref)}`;
   let res: Response;
@@ -39,9 +49,10 @@ async function fetchV2Record(
   if (!res.ok) return { kind: "network" };
 
   try {
-    const envelope = await res.json();
-    const raw = JSON.parse(decodeBase64Utf8(envelope?.content));
-    return { kind: "record", raw };
+    const envelope: unknown = await res.json();
+    const content = asRecord(envelope)?.content;
+    const raw = asRecord(JSON.parse(decodeBase64Utf8(content)) as unknown);
+    return raw ? { kind: "record", raw } : { kind: "network" };
   } catch {
     return { kind: "network" };
   }
@@ -56,7 +67,7 @@ async function fetchV2Record(
  */
 export async function resolveRunNoteTarget(opts: {
   slug: string;
-  gateway: ProgressGateway;
+  gateway: RunIdentityGateway;
   owner: string;
   repo: string;
   baseBranch?: string;
@@ -73,9 +84,9 @@ export async function resolveRunNoteTarget(opts: {
     if (found.kind === "missing") continue;
     if (found.kind === "network") return { ok: false, reason: "network" };
     const raw = found.raw;
-    const issue = Number(raw?.issue);
-    const matches = /^wp-run\/2\./.test(String(raw?.schemaVersion ?? "")) &&
-      raw?.slug === slug && raw?.runId === snapshot.runId && Number.isInteger(issue) && issue > 0;
+    const issue = Number(raw.issue);
+    const matches = /^wp-run\/2\./.test(String(raw.schemaVersion ?? "")) &&
+      raw.slug === slug && raw.runId === snapshot.runId && Number.isInteger(issue) && issue > 0;
     if (!matches) return { ok: false, reason: "stale" };
     return { ok: true, target: { slug, runId: snapshot.runId, issue } };
   }
@@ -90,9 +101,9 @@ export function createRunNoteWorkerGateway(opts: WorkerOptions = {}) {
   };
 }
 
-export function runNoteFailureMessage(result: { ok: boolean; status?: number | null }) {
+export function runNoteFailureMessage(result: WorkerResult) {
   if (!result.ok && result.status === 409) {
     return "This run changed while you were typing. Refresh and try again.";
   }
-  return failureMessage(result as any);
+  return failureMessage(result);
 }
