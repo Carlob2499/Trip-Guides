@@ -67,11 +67,12 @@ claim otherwise. Full record: `CONTEXT.md`'s Decisions entry.
 
 **Next:** Claude's half of the reciprocal Claude↔Codex PR review loop
 (`automation/claude-codex-review-loop`, `scripts/codex-watcher.mjs`,
-`.github/workflows/claude-codex-watcher.yml`) — PR #78. Codex's real external watcher DID review
-it and wrote a real BLOCKING work order (`codex-78-ad60316-security-1`, security architecture);
-Claude fixed it, incl. an owner-authorized narrow `pull_request_target` exception (see
-CONTEXT.md's Decisions entry, security model revision 2) and pushed a new head. Loop mechanism
-is proven live; not yet proven: a round that reaches a clean (non-blocking) Codex pass.
+`claude-codex-{signal,watcher}.yml`) — PR #78. Codex's real external watcher reviewed it twice:
+work order 1 (security architecture) fixed as revision 2 (`pull_request_target`), then a live
+correction superseded that — Claude missed it before pushing (see CONTEXT.md's Decisions entry
+for the full miss) — and revision 3 (two-workflow privilege separation, no `pull_request_target`
+at all) is now pushed. Loop mechanism proven to react twice; not yet proven: a round that reaches
+a clean (non-blocking) Codex pass.
 
 ## Canary evidence to preserve
 

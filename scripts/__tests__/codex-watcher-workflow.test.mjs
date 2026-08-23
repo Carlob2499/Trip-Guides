@@ -18,6 +18,9 @@ import { fileURLToPath } from "node:url";
 const WORKFLOW = fileURLToPath(new URL("../../.github/workflows/claude-codex-watcher.yml", import.meta.url));
 const yml = readFileSync(WORKFLOW, "utf8");
 
+const SIGNAL_WORKFLOW = fileURLToPath(new URL("../../.github/workflows/claude-codex-signal.yml", import.meta.url));
+const signalYml = readFileSync(SIGNAL_WORKFLOW, "utf8");
+
 // Real YAML block-scalar semantics (not step-name-delimited chunking, which over-captures
 // across job/step boundaries the moment a step has no `name:` in between): a `run: |` block's
 // body is every subsequent line more indented than the `run:` line itself, until the first
@@ -42,6 +45,31 @@ function blockScalarBodies(text) {
   return blocks;
 }
 
+// Indentation-scoped, like blockScalarBodies above: a `permissions:` line's own block is every
+// subsequent line more indented than it, stopping at the first line at-or-below that indentation
+// (or EOF). A plain "key: value" regex without an indentation bound over-captures into whatever
+// follows (job names, `runs-on:`, a nested `permissions:` block) the moment there's more than
+// one `permissions:` block in the file — caught live when it broke on claude-codex-signal.yml's
+// two-block (workflow-level + job-level) shape.
+function permissionsBlocks(text) {
+  const lines = text.split("\n");
+  const blocks = [];
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^(\s*)permissions:\s*$/);
+    if (!m) continue;
+    const indent = m[1].length;
+    const body = [];
+    for (let j = i + 1; j < lines.length; j++) {
+      const line = lines[j];
+      if (line.trim() === "") { body.push(line); continue; }
+      if (line.match(/^(\s*)/)[1].length <= indent) break;
+      body.push(line);
+    }
+    blocks.push(body.join("\n"));
+  }
+  return blocks;
+}
+
 // Slices out one named step's YAML (from its `- name: <label>` line up to, but not including,
 // the next `- name:` at the SAME step-list indentation, or EOF). Indentation-aware so it can't
 // over-capture into a sibling job the way naive text-splitting can.
@@ -58,20 +86,59 @@ function stepBlock(label) {
   return lines.slice(startIdx, endIdx).join("\n");
 }
 
-describe("claude-codex-watcher.yml — trigger safety", () => {
-  it("uses pull_request_target (owner-authorized narrow exception, PR #78) — never plain pull_request for the PR-body-edit trigger", () => {
+describe("claude-codex-watcher.yml — trigger safety (two-workflow privilege separation, revision 3)", () => {
+  it("the privileged worker never triggers directly on pull_request or pull_request_target — only workflow_run, schedule, and workflow_dispatch", () => {
     const onBlock = yml.slice(yml.indexOf("\non:"), yml.indexOf("\npermissions:"));
-    expect(onBlock).toMatch(/^\s*pull_request_target:/m);
     expect(onBlock).not.toMatch(/^\s*pull_request:/m);
+    expect(onBlock).not.toMatch(/^\s*pull_request_target:/m);
+    expect(onBlock).toMatch(/^\s*workflow_run:/m);
   });
 
-  it("triggers on pull_request_target edited (Codex's PR-body edit) and a schedule fallback", () => {
-    expect(yml).toMatch(/on:\s*\n(?:.*\n)*?\s*pull_request_target:\s*\n\s*types:\s*\[edited\]/);
+  it("triggers on workflow_run completion of the signal workflow, by exact name, and a schedule fallback", () => {
+    expect(yml).toMatch(/on:\s*\n(?:.*\n)*?\s*workflow_run:\s*\n\s*workflows:\s*\["Claude ↔ Codex review signal"\]\s*\n\s*types:\s*\[completed\]/);
     expect(yml).toMatch(/schedule:\s*\n(?:\s*#.*\n)*\s*-\s*cron:/);
+  });
+
+  it("only proceeds on a workflow_run event when the signal run actually succeeded", () => {
+    const list = stepBlock("List the PR(s) this firing should check");
+    expect(list).toMatch(/RUN_CONCLUSION.*!=\s*"success"/s);
+  });
+
+  it("the PR number from a workflow_run event is read from GitHub's own workflow_run.pull_requests (never trusted as sole ground truth — the eligibility check re-verifies independently below)", () => {
+    const list = stepBlock("List the PR(s) this firing should check");
+    expect(list).toMatch(/RUN_PR_NUMBER/);
+    expect(list).toMatch(/workflow_run\.pull_requests\[0\]\.number/);
   });
 
   it("case 16 — the scheduled fallback computes its candidate list the same way the event trigger's eligibility check does (list-candidates, not a separate weaker path)", () => {
     expect(yml).toMatch(/codex-watcher\.mjs list-candidates/);
+  });
+});
+
+describe("claude-codex-signal.yml — the unprivileged half is genuinely unprivileged", () => {
+  it("triggers on pull_request: edited and nothing else", () => {
+    const onBlock = signalYml.slice(signalYml.indexOf("\non:"), signalYml.indexOf("\npermissions:"));
+    expect(onBlock).toMatch(/^\s*pull_request:\s*\n\s*types:\s*\[edited\]\s*$/m);
+    expect(onBlock).not.toMatch(/workflow_run|schedule|workflow_dispatch/);
+  });
+
+  it("declares read-only permissions and no job in it requests anything more", () => {
+    const perms = permissionsBlocks(signalYml);
+    expect(perms.length).toBeGreaterThan(0);
+    for (const block of perms) {
+      expect(block.trim()).toBe("contents: read");
+    }
+  });
+
+  it("no secret and no GitHub write-token env var appears anywhere in the file — it has nothing to leak because it never receives anything", () => {
+    expect(signalYml).not.toMatch(/secrets\./);
+    expect(signalYml).not.toMatch(/GH_TOKEN|PUSH_TOKEN|CLAUDE_CODE_OAUTH_TOKEN/);
+  });
+
+  it("the two workflows are actually linked by name — the signal workflow's own `name:` matches the worker's workflow_run.workflows filter exactly", () => {
+    const signalName = signalYml.match(/^name:\s*(.+)$/m)?.[1].trim();
+    expect(signalName).toBeTruthy();
+    expect(yml).toContain(`workflows: ["${signalName}"]`);
   });
 });
 
@@ -91,7 +158,7 @@ describe("claude-codex-watcher.yml — case 9: per-PR concurrency", () => {
 });
 
 describe("claude-codex-watcher.yml — the control plane is pinned to the default branch, never the PR", () => {
-  it("the trusted checkout (repo root) carries no explicit PR ref — under pull_request_target that means it is always the base/default branch", () => {
+  it("the trusted checkout (repo root) carries no explicit PR ref — for workflow_run/schedule/workflow_dispatch that means it is always the default branch (none of these triggers has a PR-ref concept at all)", () => {
     const trustedCheckout = stepBlock("Checkout the TRUSTED control plane (default branch only)");
     expect(trustedCheckout).not.toMatch(/ref:/);
   });
@@ -257,11 +324,23 @@ describe("claude-codex-watcher.yml — script-injection hygiene (CodeQL, PR #78 
     const offenders = blockScalarBodies(withOffender).filter((b) => b.text.includes("${{ steps.check.outputs.reason }}"));
     expect(offenders.length).toBeGreaterThan(0);
   });
+
+  it("the signal workflow is clean too — no run: step interpolates ${{ }} directly (its one event value, PR number, flows through env: PR)", () => {
+    const offenders = [];
+    for (const block of blockScalarBodies(signalYml)) {
+      if (block.text.includes("${{")) offenders.push(`line ${block.startLine} (block)`);
+    }
+    for (const line of signalYml.split("\n")) {
+      const inlineMatch = line.match(/^\s*run:\s*(.+)$/);
+      if (inlineMatch && inlineMatch[1].includes("${{")) offenders.push(`inline: ${line.trim()}`);
+    }
+    expect(offenders).toEqual([]);
+  });
 });
 
-describe("claude-codex-watcher.yml — permissions stay inside the watcher's authority", () => {
-  it("no job requests actions:write, admin, or any scope beyond contents/pull-requests", () => {
-    const perms = [...yml.matchAll(/permissions:\s*\n((?:\s+\S+:\s*\S+\n?)+)/g)].map((m) => m[1]);
+describe("claude-codex-watcher.yml + claude-codex-signal.yml — permissions stay inside the watcher's authority", () => {
+  it("no job in either file requests actions:write, admin, or any scope beyond contents/pull-requests", () => {
+    const perms = [...permissionsBlocks(yml), ...permissionsBlocks(signalYml)];
     expect(perms.length).toBeGreaterThan(0);
     for (const block of perms) {
       expect(block).not.toMatch(/actions:\s*write/);
