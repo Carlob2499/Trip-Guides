@@ -280,9 +280,28 @@ export function passBSubstanceProblems(doc) {
 }
 
 export function disagreementProblems(doc) {
-  return (doc.disagreements || [])
-    .filter((d) => d.impact === "recommendation-changing" && !d.resolution?.trim())
-    .map((d) => `recommendation-changing disagreement "${d.topic}" (${d.id}) has no resolution`);
+  const problems = [];
+  const byId = new Map((doc.evidence || []).map((e) => [e.id, e]));
+  for (const d of doc.disagreements || []) {
+    if (d.impact !== "recommendation-changing") continue;
+    if (!d.resolution?.trim()) {
+      problems.push(`recommendation-changing disagreement "${d.topic}" (${d.id}) has no resolution`);
+    }
+    const ids = [...new Set(d.evidenceIds || [])];
+    if (ids.length < 2) {
+      problems.push(
+        `recommendation-changing disagreement "${d.topic}" (${d.id}) must cite at least two distinct evidence records — ` +
+          `prose alone cannot prove a conflict`,
+      );
+      continue;
+    }
+    for (const id of ids) {
+      if (!byId.has(id)) {
+        problems.push(`recommendation-changing disagreement "${d.topic}" (${d.id}) cites unknown evidence id "${id}"`);
+      }
+    }
+  }
+  return problems;
 }
 
 /** Rule: a search-result preview is discovery, not a read of the page (Core Proof finding).

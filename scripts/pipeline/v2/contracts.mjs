@@ -22,7 +22,7 @@ import { z } from "zod";
 // ── versioning ───────────────────────────────────────────────────────────────
 
 export const RUN_SCHEMA = "wp-run/2.1"; // 2.1: per-attempt stage history (additive)
-export const EVIDENCE_SCHEMA = "wp-evidence/2.1"; // 2.1: source access classes (additive)
+export const EVIDENCE_SCHEMA = "wp-evidence/2.2"; // 2.2: recommendation-changing disagreements link evidence records (additive)
 export const COVERAGE_SCHEMA = "wp-coverage/2.0";
 export const TELEMETRY_SCHEMA = "wp-telemetry/2.1"; // 2.1: cumulative/failed attempt durations (additive)
 export const FEEDBACK_SCHEMA = "wp-feedback/2.0";
@@ -378,6 +378,10 @@ export const disagreementSchema = z.object({
   id: z.string().min(1),
   topic: z.string().min(1),
   impact: z.enum(["recommendation-changing", "minor"]),
+  // 2.2 (additive): exact evidence records whose claims disagree. Default [] keeps historical
+  // 2.0/2.1 documents readable; the research rule makes linkage mandatory only when impact
+  // is recommendation-changing.
+  evidenceIds: z.array(z.string().min(1)).default([]),
   investigation: z.string().min(1),
   resolution: z.string().nullable().default(null),
 });
