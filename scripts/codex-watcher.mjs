@@ -139,10 +139,35 @@ const FORBIDDEN_PATTERNS = [
   { re: /\bcutover\b/i, name: "cutover-decision" },
 ];
 
+// A negation ("do not merge", "never publish", "won't touch secrets") directly governing a
+// forbidden verb means the work order is PROHIBITING that action, not requesting it — Codex's
+// own work orders routinely include "do not merge" as a standing disclaimer, so a bare
+// substring/word match here would refuse every legitimate work order it ever writes. Only the
+// text immediately before the match is checked (not the whole clause), so an EARLIER negated
+// aside can't accidentally shield a LATER real imperative in the same sentence.
+const NEGATION_RE = /\b(?:do\s+not|does\s+not|did\s+not|don't|doesn't|didn't|never|without|avoid|no)\b/i;
+const NEGATION_LOOKBACK_CHARS = 30;
+// A hyphenated qualifier ("pre-merge review", "post-merge cleanup") uses the forbidden word as
+// an adjective describing a state, not as an imperative asking for the action — must end
+// exactly where the match begins, not just appear somewhere nearby.
+const QUALIFIER_PREFIX_RE = /(?:pre|post)-$/i;
+
 export function exceedsAuthority(workOrderText) {
   const t = String(workOrderText || "");
-  const hit = FORBIDDEN_PATTERNS.find((p) => p.re.test(t));
-  return { exceeds: Boolean(hit), name: hit ? hit.name : null };
+  // Split on sentence-ish boundaries first — a clause is the right scope for "is this specific
+  // mention negated," rather than the whole (possibly multi-sentence) work order text.
+  const clauses = t.split(/(?<=[.\n;])/);
+  for (const clause of clauses) {
+    for (const p of FORBIDDEN_PATTERNS) {
+      const m = p.re.exec(clause);
+      if (!m) continue;
+      const near = clause.slice(Math.max(0, m.index - NEGATION_LOOKBACK_CHARS), m.index);
+      if (NEGATION_RE.test(near)) continue;
+      if (QUALIFIER_PREFIX_RE.test(near)) continue;
+      return { exceeds: true, name: p.name };
+    }
+  }
+  return { exceeds: false, name: null };
 }
 
 /**

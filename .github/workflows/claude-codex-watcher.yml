@@ -10,23 +10,44 @@ name: Claude ↔ Codex review watcher
 # for the full contract; scripts/codex-watcher.mjs carries every behavioral rule as pure,
 # independently tested functions — this file is intentionally thin.
 #
-# SECURITY MODEL — the same shape research-pass-v2.yml already proved live: a trusted
-# control-plane job validates the PR/head/work-order identity BEFORE any agent runs; the
-# agent's isolated workspace never receives a GitHub write credential (only
-# CLAUDE_CODE_OAUTH_TOKEN); the control plane re-checks out a CLEAN copy afterward, applies
-# only the agent's resulting file tree, runs the repo's own gates, and is the only actor that
-# ever commits, pushes, or edits the PR body — and only to the one validated same-repo branch.
-# A fork PR (isCrossRepository) is refused before anything else runs. `pull_request` (never
-# `pull_request_target`) is used deliberately, so a fork's copy of this workflow never runs
-# with this repo's secrets in the first place — the explicit fork check is defense in depth,
-# not the only line.
+# TRUST MODEL (owner-authorized architecture ruling, PR #78, 2026-08-23 — a NARROW exception
+# to this repo's standing "never pull_request_target" rule, for THIS watcher only, not a
+# general permission): Codex's own review (codex-78-ad60316-security-1) found that plain
+# `pull_request` lets a same-repo PR edit THIS WORKFLOW FILE and scripts/codex-watcher.mjs
+# themselves, and have that edited version be what decides its own eligibility/authority next
+# time — the control plane was not actually pinned to a trusted copy. `pull_request_target`
+# fixes that: the workflow definition GitHub runs is always the DEFAULT BRANCH's copy,
+# regardless of what the PR under review changed. The danger `pull_request_target` normally
+# carries — a fork PR's untrusted code running with this repo's secrets — is closed here by
+# never checking out or executing PR-controlled code while any GitHub write credential or
+# secret is present, on top of the pre-existing explicit fork rejection:
+#   1. Every step that decides eligibility/authority/idempotency, or that composes the agent's
+#      prompt, runs against the checkout at repo root — which under `pull_request_target`
+#      defaults to the BASE ref, never the PR head. No step gives that checkout an explicit
+#      PR `ref:`.
+#   2. PR content is checked out into its OWN path (`pr-workspace/`), pinned to the EXACT sha
+#      Codex reviewed. Fork PRs are refused by `isEligible` (isCrossRepository) before this or
+#      any later step ever runs.
+#   3. `npm ci`, the agent, and every gate (lint/typecheck/test/build) run inside
+#      `pr-workspace/` with NO GH/PUSH token in that step's `env:` — PR-controlled
+#      package.json scripts, tests, and build tooling never see a credential.
+#   4. Claude's OAuth token reaches ONLY the isolated agent container — never a GitHub
+#      credential, same as before.
+#   5. Only AFTER validation passes does a brand-new, untouched control-plane checkout
+#      (`push-workspace/`, also pinned to the pre-fix sha) receive the validated file tree via
+#      `rsync` (copying files, never merging git history or running code) — so nothing
+#      PR-controlled ever plants a `.git` hook/config that a later credentialed step could run.
+#      Only deterministic `git add/commit/push` happens there, and only that one step ever
+#      holds a push-capable token.
 on:
-  pull_request:
+  pull_request_target:
     types: [edited]
   schedule:
     # Modest fallback only — the primary trigger is the `edited` event above, which fires the
     # moment Codex's bot edits a PR body. Off-the-hour, matching this repo's other schedule
-    # crons (recert.yml, pretrip-check.yml, feedback-export.yml).
+    # crons (recert.yml, pretrip-check.yml, feedback-export.yml). schedule/workflow_dispatch
+    # runs are ALWAYS the default branch's own copy of this file regardless of trigger type,
+    # so they need no special handling for the trust model above.
     - cron: "17 */6 * * *"
   workflow_dispatch:
     inputs:
@@ -48,9 +69,9 @@ jobs:
       pull-requests: read
     outputs:
       prs: ${{ steps.list.outputs.prs }}
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
+      # No explicit `ref:` — under pull_request_target this checks out the DEFAULT branch,
+      # never the PR head, so the candidate-listing logic below is always the trusted copy.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
@@ -62,11 +83,12 @@ jobs:
       - name: List the PR(s) this firing should check
         id: list
         env:
+          GH_TOKEN: ${{ github.token }}
           EVENT_NAME: ${{ github.event_name }}
           EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
           DISPATCH_PR: ${{ inputs.pr }}
         run: |
-          if [ "$EVENT_NAME" = "pull_request" ]; then
+          if [ "$EVENT_NAME" = "pull_request_target" ]; then
             echo "prs=[$EVENT_PR_NUMBER]" >> "$GITHUB_OUTPUT"
           elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             # DISPATCH_PR is free-text input from whoever ran this manually — validate it's a
@@ -106,10 +128,14 @@ jobs:
       contents: write
       pull-requests: write
     env:
-      GH_TOKEN: ${{ github.token }}
       PR: ${{ matrix.pr }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      # TRUSTED CONTROL PLANE — no explicit `ref:`, so under pull_request_target this is
+      # always the default branch, regardless of what PR #<matrix.pr> itself changed. Every
+      # decision-making step below (eligibility, prompt composition, section building, the PR
+      # body write) runs from THIS checkout, at repo root — never from PR-controlled content.
+      - name: Checkout the TRUSTED control plane (default branch only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
@@ -122,9 +148,13 @@ jobs:
       # isCrossRepository is gh's own fork check — a fork PR is refused here, structurally,
       # before anything else in this job runs. Every one of the work order's 8 eligibility
       # conditions is decided by ONE function (scripts/codex-watcher.mjs's isEligible) so
-      # there is a single source of truth, independently unit-tested.
+      # there is a single source of truth, independently unit-tested. This step's token is
+      # read-only in effect (a `gh pr view` call) and is the ONLY credential present anywhere
+      # near PR content until the final push step, far below.
       - name: Check eligibility against LIVE PR state
         id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: node scripts/codex-watcher.mjs check --pr "$PR"
 
       - name: Not eligible — clean no-op
@@ -139,34 +169,34 @@ jobs:
           echo "[codex-watcher] PR #$PR — not eligible: $REASON"
 
       # ── everything below runs ONLY when eligible ──────────────────────────────────────
-      - name: Checkout the PR branch (scoped credential for fetch only)
+      # PR-CONTROLLED CONTENT, pinned to the EXACT commit Codex reviewed (never the floating
+      # branch head, which could have moved between the check above and this checkout) — and
+      # in its OWN path, never overwriting the trusted root checkout. No credential is passed
+      # to this step; `actions/checkout` handles its own transient auth internally and
+      # `persist-credentials: false` means nothing is left behind for a later step to find.
+      - name: Checkout the PR's exact reviewed content (untrusted, credential-free)
         if: steps.check.outputs.eligible == 'true'
-        env:
-          PUSH_TOKEN: ${{ github.token }}
-          HEAD_REF: ${{ steps.check.outputs.head_ref }}
-        run: |
-          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
-          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
-          git fetch origin "$HEAD_REF"
-          git checkout -B "$HEAD_REF" FETCH_HEAD
-
-      - name: Remove repository credentials before the agent runs
-        if: steps.check.outputs.eligible == 'true'
-        run: |
-          git config --local --unset-all http.https://github.com/.extraheader || true
-          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ steps.check.outputs.head }}
+          path: pr-workspace
+          persist-credentials: false
 
       # The work order rides the DATA channel as a named file (this repo's own prompt-safety
       # rule, scripts/pipeline/prompt.mjs's header comment) — Codex's text is never
-      # concatenated into the prompt template itself, only referenced by path.
+      # concatenated into the prompt template itself, only referenced by path. Written into
+      # pr-workspace (where the agent's mount is rooted) so the agent can read it; excluded
+      # from collection below so it can never reach a real commit.
       - name: Write the work order as a file the agent reads (never inlined into the prompt)
         if: steps.check.outputs.eligible == 'true'
         run: |
           node -e '
             const r = JSON.parse(require("child_process").execSync(`node scripts/codex-watcher.mjs check --pr ${process.env.PR}`, {encoding:"utf8"}));
-            require("fs").writeFileSync(".codex-work-order.md", (r.workOrderText || "") + "\n");
+            require("fs").writeFileSync("pr-workspace/.codex-work-order.md", (r.workOrderText || "") + "\n");
           '
 
+      # TRUSTED: composed from the control-plane's own (default-branch) prompts/codex-work-order.md
+      # — a PR cannot rewrite the instructions its own fix agent is given.
       - name: Compose the agent prompt
         if: steps.check.outputs.eligible == 'true'
         id: prompt
@@ -175,8 +205,9 @@ jobs:
           WP_WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
         run: node scripts/pipeline.mjs prompt prompts/codex-work-order.md > /dev/null
 
-      - name: Replace repository history with an unprivileged local workspace
+      - name: Replace the PR workspace's history with an unprivileged local sandbox
         if: steps.check.outputs.eligible == 'true'
+        working-directory: pr-workspace
         run: |
           rm -rf .git
           git init
@@ -187,7 +218,8 @@ jobs:
 
       # EXIT INTEGRITY (same wrapper research-pass-v2.yml's agent steps use): a Claude process
       # that exits nonzero must be recorded as a failed step, never masked by a `| tee` that
-      # only reports ITS OWN exit code.
+      # only reports ITS OWN exit code. No GitHub credential of any kind reaches this
+      # container — only CLAUDE_CODE_OAUTH_TOKEN.
       - name: Run the fix agent (isolated — no GitHub credential reaches this container)
         if: steps.check.outputs.eligible == 'true'
         id: agent
@@ -200,50 +232,70 @@ jobs:
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**)
         run: |
           bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
-            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE/pr-workspace",dst=/workspace \
             --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
             sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
 
-      # The control plane never trusts the agent's own (sandboxed, historyless) .git — it
-      # checks out a SECOND, clean copy of the real PR branch and mirrors the agent's
-      # resulting tree onto it, so only intended file content ever reaches a real commit.
-      - name: Checkout a fresh control-plane copy after the agent
+      # VALIDATE IN A CREDENTIAL-FREE WORKSPACE (Codex P0 finding #2): PR-controlled
+      # package.json scripts, test code, and build tooling run here, and this step's `env:`
+      # holds NO GitHub token of any kind — nothing they execute can read one, whether or not
+      # they'd ever try to. A gate failure fails this step (bash's default -e) and nothing
+      # downstream — commit, push, PR-body write — ever runs.
+      - name: Validate the agent's result (credential-free — no GH/PUSH token present)
         if: steps.check.outputs.eligible == 'true' && steps.agent.outcome == 'success'
-        id: collect
+        id: validate
+        working-directory: pr-workspace
+        run: |
+          npm ci
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+
+      # A FRESH, UNTOUCHED control-plane checkout, created only AFTER validation passed and
+      # pinned to the same pre-fix commit — no PR-controlled script has ever run against this
+      # directory's `.git`, so nothing could have planted a hook/config here that a later
+      # credentialed step might trigger. No credential is passed to this checkout either.
+      - name: Checkout a fresh control-plane copy for the push (post-validation only)
+        if: steps.check.outputs.eligible == 'true' && steps.validate.outcome == 'success'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          ref: ${{ steps.check.outputs.head_ref }}
-          fetch-depth: 0
-          path: collect
+          ref: ${{ steps.check.outputs.head }}
+          path: push-workspace
           persist-credentials: false
 
-      # PARTIAL OR UNVALIDATED OUTPUT IS NEVER PUSHED: the repo's own gates run on the
-      # collected result BEFORE any commit exists, so a gate failure leaves nothing to push —
-      # the job fails loudly instead, visible in the PR's checks, and Claude's section is never
-      # touched (so a stale, already-broken "ready for review" claim can never linger).
-      - name: Apply the agent's result, run the repo's gates, commit, push
-        if: steps.check.outputs.eligible == 'true' && steps.agent.outcome == 'success'
+      # Copies FILES only — never merges pr-workspace's (sandboxed, historyless) git objects
+      # or config into push-workspace's real `.git`. `.codex-work-order.md` is explicitly
+      # excluded (Codex P1 finding) so the scratch work-order file can never reach a commit,
+      # regardless of what .gitignore says.
+      - name: Copy the validated file tree onto the fresh checkout
+        if: steps.check.outputs.eligible == 'true' && steps.validate.outcome == 'success'
+        run: |
+          rsync -a --delete \
+            --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='.astro' \
+            --exclude='coverage' --exclude='.codex-work-order.md' \
+            pr-workspace/ push-workspace/
+
+      # PARTIAL OR UNVALIDATED OUTPUT IS NEVER PUSHED, and no PR-controlled code ever runs
+      # again once this step's credential is introduced — this step is pure git plumbing
+      # (diff/add/commit/push), never npm/build/test. This is the ONLY step in the whole job
+      # that holds a push-capable credential, and it holds it for git operations only.
+      - name: Commit and push (the only step with a write-capable credential)
+        if: steps.check.outputs.eligible == 'true' && steps.validate.outcome == 'success'
         id: finish
-        working-directory: collect
+        working-directory: push-workspace
         env:
           PUSH_TOKEN: ${{ github.token }}
           WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
           HEAD_REF: ${{ steps.check.outputs.head_ref }}
         run: |
-          rsync -a --delete --exclude='.git' --exclude='node_modules' --exclude='dist' \
-            "$GITHUB_WORKSPACE/" ./
-          npm ci
           if git diff --quiet; then
             echo "[codex-watcher] agent made no file changes — nothing to push." >&2
             exit 1
           fi
           DIFFSTAT=$(git diff --shortstat | sed 's/^ *//')
           echo "diffstat=$DIFFSTAT" >> "$GITHUB_OUTPUT"
-          npm run lint
-          npm run typecheck
-          npm test
-          npm run build
           git config user.name "waypoint-codex-watcher[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
@@ -256,7 +308,8 @@ jobs:
 
       # Every field here is CONTROL-PLANE composed, deterministic text — never the agent's own
       # free-form output pasted verbatim — so nothing the agent wrote can forge a marker or
-      # otherwise corrupt the bounded-section protocol on the next parse.
+      # otherwise corrupt the bounded-section protocol on the next parse. Runs from repo ROOT
+      # (the trusted default-branch checkout), using its own copy of codex-watcher.mjs.
       #
       # SCRIPT-INJECTION HYGIENE (CodeQL, PR #78 live finding): every ${{ steps.*.outputs.* }}
       # a script needs is assigned through `env:` and read back as a shell variable — NEVER
@@ -266,17 +319,17 @@ jobs:
       # expression engine, is what does the (safe, literal) variable expansion.
       - name: Mark the new HEAD ready for Codex
         if: steps.finish.outcome == 'success'
-        working-directory: collect
         env:
+          GH_TOKEN: ${{ github.token }}
           WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
           NEW_HEAD: ${{ steps.finish.outputs.new_head }}
           DIFFSTAT: ${{ steps.finish.outputs.diffstat }}
         run: |
-          node ../scripts/codex-watcher.mjs build-section \
+          node scripts/codex-watcher.mjs build-section \
             --head "$NEW_HEAD" \
             --work-order "$WORK_ORDER_ID" \
             --summary "Addressed Codex work order $WORK_ORDER_ID. $DIFFSTAT" \
-            --validation "lint, typecheck, test, and build all passed on the new head before it was pushed." \
+            --validation "lint, typecheck, test, and build all passed in a credential-free workspace before a fresh control-plane checkout pushed the validated tree." \
             --uncertainty "None beyond what Codex's next independent review of this head surfaces." \
             > /tmp/claude-section.txt
-          node ../scripts/codex-watcher.mjs update-pr --pr "$PR" --section-file /tmp/claude-section.txt
+          node scripts/codex-watcher.mjs update-pr --pr "$PR" --section-file /tmp/claude-section.txt

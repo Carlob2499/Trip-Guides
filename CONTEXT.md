@@ -809,15 +809,30 @@ the single source of truth for all 8 conditions (open, same-repo, EXACT head mat
 `CODEX_REVIEWED_HEAD`, action required, a work-order id present, that id never already recorded
 in `CLAUDE_PROCESSED_WORK_ORDER`, and the work order's own text scanned against a forbidden-verb
 list — merge, publish, enable the selector, weaken validation, and the rest of the same
-authority boundary this file already draws around every automated pipeline). Security model is
-the one `research-pass-v2.yml` already proved live: `pull_request: types: [edited]` (never
-`pull_request_target`), a fork PR refused before anything else runs, the agent's isolated
-workspace never holding a GitHub write credential, a fresh control-plane checkout collecting
-only the agent's resulting file tree, the repo's own gates run before any commit exists, and
-every PR-body field the workflow writes back is control-plane-composed text — never the agent's
-own free-form output pasted verbatim, so nothing it wrote can forge a marker. A
+authority boundary this file already draws around every automated pipeline).
+
+**Security model, revision 2 (owner-authorized, PR #78, work order `codex-78-ad60316-security-1`,
+2026-08-23):** Codex's own first real review found the original design's `pull_request: edited`
+trigger left the control plane itself (this workflow file and `scripts/codex-watcher.mjs`)
+PR-editable — a same-repo PR (including one Claude's own agent pushes to) could rewrite the
+eligibility gate and have that rewritten version be what decides its own trustworthiness next
+time. **The repo's standing "never `pull_request_target`" rule is reversed for this one watcher,
+narrowly, by explicit owner ruling** (not a general permission — see the workflow file's own
+top-of-file comment for the full 9-condition authorization): the trigger is
+`pull_request_target: types: [edited]`, so the workflow definition GitHub runs is always the
+DEFAULT BRANCH's copy regardless of what the PR under review changed. The fork-secret-theft risk
+`pull_request_target` normally carries is closed structurally: PR content is checked out into its
+own path pinned to the exact reviewed sha, fork PRs are refused before that checkout or any later
+step runs, `npm ci`/the agent/every gate (lint, typecheck, test, build) run with NO GitHub
+write credential of any kind present in that step's environment, and only AFTER validation
+passes does a brand-new control-plane checkout (never touched by PR-controlled code) receive the
+validated file tree via `rsync` — never a git merge of untrusted history — for a
+git-plumbing-only commit/push. `.codex-work-order.md` (the agent's scratch work-order file) is
+excluded from that copy and gitignored, so it can never reach a real commit. A
 `codex-watcher-pr-<number>` concurrency group (same shape as `guide-<slug>`) makes "no two
 watcher jobs for one PR" and "the scheduled fallback can't race the event trigger" both
-mechanical. Not yet proven: a REAL round trip against Codex's actual external watcher — the
-dedicated PR is opened and marked ready, but the loop isn't called complete until Codex reviews
-a real head, writes a real work order, and this watcher consumes it for real.
+mechanical. Not yet proven: a REAL round trip against Codex's actual external watcher on a
+head that Codex accepts without a further blocking finding — Codex's first real review (above)
+DID execute the loop's mechanism (a real work order was written, consumed, and fixed) but was
+itself a BLOCKING verdict, so the loop is proven to react correctly, not yet proven to reach a
+clean pass.

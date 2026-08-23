@@ -67,8 +67,11 @@ claim otherwise. Full record: `CONTEXT.md`'s Decisions entry.
 
 **Next:** Claude's half of the reciprocal Claude↔Codex PR review loop
 (`automation/claude-codex-review-loop`, `scripts/codex-watcher.mjs`,
-`.github/workflows/claude-codex-watcher.yml`) — built, tested, PR opened. Not yet proven: a
-real round trip against Codex's own external watcher.
+`.github/workflows/claude-codex-watcher.yml`) — PR #78. Codex's real external watcher DID review
+it and wrote a real BLOCKING work order (`codex-78-ad60316-security-1`, security architecture);
+Claude fixed it, incl. an owner-authorized narrow `pull_request_target` exception (see
+CONTEXT.md's Decisions entry, security model revision 2) and pushed a new head. Loop mechanism
+is proven live; not yet proven: a round that reaches a clean (non-blocking) Codex pass.
 
 ## Canary evidence to preserve
 

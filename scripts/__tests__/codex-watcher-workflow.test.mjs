@@ -4,9 +4,12 @@
    pattern for testing workflow YAML (scripts/__tests__/lint-ci-scope.test.mjs: targeted
    text/regex extraction of the one field being guarded, never a full YAML parse). */
 
-// @protects-file The watcher workflow never uses pull_request_target, never runs on a fork
-// PR, never lets a GitHub write credential reach the agent container, and can never run two
-// jobs for the same PR concurrently regardless of what triggered them.
+// @protects-file The watcher's control-plane decisions (eligibility, prompt, PR-body writes)
+// always execute default-branch-pinned code; no GitHub write credential is ever present while
+// PR-controlled code (npm ci/lint/typecheck/test/build/the agent) runs; commit/push happens
+// only from a fresh, post-validation checkout that PR-controlled code never touched; fork PRs
+// are refused before any of that; and the watcher can never run two jobs for the same PR
+// concurrently regardless of what triggered them.
 
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
@@ -15,15 +18,55 @@ import { fileURLToPath } from "node:url";
 const WORKFLOW = fileURLToPath(new URL("../../.github/workflows/claude-codex-watcher.yml", import.meta.url));
 const yml = readFileSync(WORKFLOW, "utf8");
 
+// Real YAML block-scalar semantics (not step-name-delimited chunking, which over-captures
+// across job/step boundaries the moment a step has no `name:` in between): a `run: |` block's
+// body is every subsequent line more indented than the `run:` line itself, until the first
+// line at or below that indentation (or EOF). Shared by every test below that needs to look at
+// what a step's shell script actually contains.
+function blockScalarBodies(text) {
+  const lines = text.split("\n");
+  const blocks = [];
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^(\s*)run:\s*\|\s*$/);
+    if (!m) continue;
+    const indent = m[1].length;
+    const body = [];
+    for (let j = i + 1; j < lines.length; j++) {
+      const line = lines[j];
+      if (line.trim() === "") { body.push(line); continue; }
+      if (line.match(/^(\s*)/)[1].length <= indent) break;
+      body.push(line);
+    }
+    blocks.push({ startLine: i + 1, indent, text: body.join("\n") });
+  }
+  return blocks;
+}
+
+// Slices out one named step's YAML (from its `- name: <label>` line up to, but not including,
+// the next `- name:` at the SAME step-list indentation, or EOF). Indentation-aware so it can't
+// over-capture into a sibling job the way naive text-splitting can.
+function stepBlock(label) {
+  const lines = yml.split("\n");
+  const startIdx = lines.findIndex((l) => l.includes(`name: ${label}`));
+  expect(startIdx, `step "${label}" must exist`).toBeGreaterThanOrEqual(0);
+  const indent = lines[startIdx].match(/^(\s*)-\s*name:/)?.[1].length;
+  expect(indent, `step "${label}" must be a "- name:" list item`).not.toBeUndefined();
+  let endIdx = lines.length;
+  for (let j = startIdx + 1; j < lines.length; j++) {
+    if (lines[j].match(new RegExp(`^\\s{${indent}}-\\s*name:`))) { endIdx = j; break; }
+  }
+  return lines.slice(startIdx, endIdx).join("\n");
+}
+
 describe("claude-codex-watcher.yml — trigger safety", () => {
-  it("never uses pull_request_target as an actual trigger (the classic fork-PR-with-secrets vulnerability) — the term may still appear in an explanatory comment", () => {
+  it("uses pull_request_target (owner-authorized narrow exception, PR #78) — never plain pull_request for the PR-body-edit trigger", () => {
     const onBlock = yml.slice(yml.indexOf("\non:"), yml.indexOf("\npermissions:"));
-    expect(onBlock).not.toMatch(/^\s*pull_request_target:/m);
+    expect(onBlock).toMatch(/^\s*pull_request_target:/m);
+    expect(onBlock).not.toMatch(/^\s*pull_request:/m);
   });
 
-  it("triggers on pull_request edited (Codex's PR-body edit) and a schedule fallback", () => {
-    expect(yml).toMatch(/on:\s*\n(?:.*\n)*?\s*pull_request:\s*\n\s*types:\s*\[edited\]/);
-    // Comment lines may sit between `schedule:` and its `- cron:` entry.
+  it("triggers on pull_request_target edited (Codex's PR-body edit) and a schedule fallback", () => {
+    expect(yml).toMatch(/on:\s*\n(?:.*\n)*?\s*pull_request_target:\s*\n\s*types:\s*\[edited\]/);
     expect(yml).toMatch(/schedule:\s*\n(?:\s*#.*\n)*\s*-\s*cron:/);
   });
 
@@ -41,21 +84,42 @@ describe("claude-codex-watcher.yml — case 9: per-PR concurrency", () => {
   });
 
   it("the SAME group name is used regardless of trigger — an event-triggered run and a scheduled-fallback run for the same PR queue behind each other rather than racing", () => {
-    // Only one concurrency block should exist in the whole file, and it must be keyed purely
-    // by matrix.pr — nothing here branches on github.event_name, so trigger source cannot
-    // change which lock a run takes.
     const blocks = [...yml.matchAll(/concurrency:\s*\n\s*group:\s*([^\n]+)/g)];
     expect(blocks.length).toBe(1);
     expect(blocks[0][1]).not.toMatch(/event_name/);
   });
 });
 
-describe("claude-codex-watcher.yml — case 4: fork PRs are refused before the agent can run", () => {
-  it("the eligibility check (which rejects isCrossRepository PRs) runs before the agent step, and the agent step is gated on it", () => {
+describe("claude-codex-watcher.yml — the control plane is pinned to the default branch, never the PR", () => {
+  it("the trusted checkout (repo root) carries no explicit PR ref — under pull_request_target that means it is always the base/default branch", () => {
+    const trustedCheckout = stepBlock("Checkout the TRUSTED control plane (default branch only)");
+    expect(trustedCheckout).not.toMatch(/ref:/);
+  });
+
+  it("eligibility (fork/head/work-order/authority) is decided from the trusted checkout, before any PR content is checked out", () => {
     const checkIdx = yml.indexOf("Check eligibility against LIVE PR state");
-    const agentIdx = yml.indexOf("Run the fix agent");
+    const prCheckoutIdx = yml.indexOf("Checkout the PR's exact reviewed content");
     expect(checkIdx).toBeGreaterThan(0);
-    expect(agentIdx).toBeGreaterThan(checkIdx);
+    expect(prCheckoutIdx).toBeGreaterThan(checkIdx);
+  });
+
+  it("PR content is checked out pinned to the exact SHA the eligibility check validated — never a floating branch ref that could move after the check", () => {
+    const prCheckout = stepBlock("Checkout the PR's exact reviewed content (untrusted, credential-free)");
+    expect(prCheckout).toMatch(/ref:\s*\$\{\{\s*steps\.check\.outputs\.head\s*\}\}/);
+    expect(prCheckout).toMatch(/path:\s*pr-workspace/);
+  });
+
+  it("the agent's prompt is composed from the trusted (default-branch) prompts/codex-work-order.md, not from PR content", () => {
+    const promptStep = stepBlock("Compose the agent prompt");
+    expect(promptStep).not.toMatch(/working-directory:\s*pr-workspace/);
+    expect(promptStep).toMatch(/prompts\/codex-work-order\.md/);
+  });
+
+  it("the PR-body write (build-section / update-pr) runs the control plane's OWN copy of codex-watcher.mjs, from repo root", () => {
+    const handoff = stepBlock("Mark the new HEAD ready for Codex");
+    expect(handoff).not.toMatch(/working-directory:/);
+    expect(handoff).toMatch(/node scripts\/codex-watcher\.mjs build-section/);
+    expect(handoff).toMatch(/node scripts\/codex-watcher\.mjs update-pr/);
   });
 
   it("every step after the eligibility check is gated — directly on eligibility, or transitively on a prior step's success (which itself required eligibility)", () => {
@@ -65,7 +129,7 @@ describe("claude-codex-watcher.yml — case 4: fork PRs are refused before the a
       .slice(2) // skip the check step itself + its own "not eligible" report step
       .map((b) => `- name:${b}`);
     expect(stepBlocks.length).toBeGreaterThan(5); // sanity: didn't accidentally match nothing
-    const gated = /steps\.check\.outputs\.eligible == 'true'|steps\.agent\.outcome == 'success'|steps\.finish\.outcome == 'success'/;
+    const gated = /steps\.check\.outputs\.eligible == 'true'|steps\.agent\.outcome == 'success'|steps\.validate\.outcome == 'success'|steps\.finish\.outcome == 'success'/;
     for (const block of stepBlocks) {
       expect(block, block.split("\n")[0]).toMatch(/if:/);
       expect(block, block.split("\n")[0]).toMatch(gated);
@@ -73,58 +137,94 @@ describe("claude-codex-watcher.yml — case 4: fork PRs are refused before the a
   });
 });
 
-describe("claude-codex-watcher.yml — case 14: no GitHub write credential reaches the agent container", () => {
-  it("the docker run invocation for the agent step never passes a GH/PUSH token env var name through -e", () => {
-    const agentBlock = yml.slice(yml.indexOf("Run the fix agent"), yml.indexOf("Checkout a fresh control-plane copy after the agent"));
-    expect(agentBlock).toMatch(/CLAUDE_CODE_OAUTH_TOKEN/); // the only credential that DOES reach it
+describe("claude-codex-watcher.yml — case 4: fork PRs are refused before any secret-bearing or write-capable step", () => {
+  it("fork PRs never reach PR checkout, npm ci, the agent, or any credentialed step — isEligible's isCrossRepository check runs first and gates everything after it", () => {
+    // Already covered generically by the gating test above; this asserts the SPECIFIC ordering
+    // fork-safety depends on: nothing that could touch PR content or a token runs before
+    // `check`. Sliced from `jobs:` onward so the file's own top-of-file trust-model comment
+    // (which necessarily NAMES pr-workspace/docker while explaining the design) isn't mistaken
+    // for an actual step running before eligibility is decided.
+    const beforeCheck = yml.slice(yml.indexOf("\njobs:"), yml.indexOf("id: check"));
+    expect(beforeCheck).not.toMatch(/pr-workspace/);
+    expect(beforeCheck).not.toMatch(/docker run/);
+  });
+});
+
+describe("claude-codex-watcher.yml — case 2 (Codex P0 finding #2): no GitHub write credential is present while PR-controlled code executes", () => {
+  it("no job declares a job-wide GH_TOKEN or PUSH_TOKEN — every token is scoped to the one step that needs it", () => {
+    const watchJob = yml.slice(yml.indexOf("\n  watch:"));
+    const jobHeader = watchJob.slice(0, watchJob.indexOf("\n    steps:"));
+    expect(jobHeader).not.toMatch(/GH_TOKEN|PUSH_TOKEN/);
+  });
+
+  it("checking out PR content, npm ci in pr-workspace, and the agent run all carry no GH/PUSH token in their own env:", () => {
+    for (const label of [
+      "Checkout the PR's exact reviewed content (untrusted, credential-free)",
+      "Write the work order as a file the agent reads (never inlined into the prompt)",
+      "Replace the PR workspace's history with an unprivileged local sandbox",
+      "Run the fix agent (isolated — no GitHub credential reaches this container)",
+    ]) {
+      const block = stepBlock(label);
+      expect(block, label).not.toMatch(/GH_TOKEN|PUSH_TOKEN/);
+    }
+  });
+
+  it("the fix agent's docker invocation never passes a GH/PUSH token env var name through -e, and only CLAUDE_CODE_OAUTH_TOKEN reaches it", () => {
+    const agentBlock = stepBlock("Run the fix agent (isolated — no GitHub credential reaches this container)");
+    expect(agentBlock).toMatch(/CLAUDE_CODE_OAUTH_TOKEN/);
     expect(agentBlock).not.toMatch(/-e\s+(GH_TOKEN|GITHUB_TOKEN|PUSH_TOKEN|PAT)\b/);
     expect(agentBlock).not.toMatch(/secrets\.GITHUB_TOKEN/);
   });
 
-  it("repository credentials are explicitly stripped from the checkout before the agent step runs", () => {
-    const beforeAgent = yml.slice(0, yml.indexOf("Run the fix agent"));
-    expect(beforeAgent).toMatch(/Remove repository credentials before the agent runs/);
-    expect(beforeAgent).toMatch(/--unset-all http\.https:\/\/github\.com\/\.extraheader/);
-  });
-
-  it("the agent's workspace history is replaced with an unprivileged, remote-less sandbox before it runs", () => {
-    const beforeAgent = yml.slice(0, yml.indexOf("Run the fix agent"));
-    expect(beforeAgent).toMatch(/rm -rf \.git/);
-    expect(beforeAgent).toMatch(/git init/);
+  it("case 2 (Codex P0 finding #2) — the validate step (npm ci/lint/typecheck/test/build) carries NO GH/PUSH token in its own env:, even though it executes PR-controlled code", () => {
+    const validate = stepBlock("Validate the agent's result (credential-free — no GH/PUSH token present)");
+    expect(validate).not.toMatch(/GH_TOKEN|PUSH_TOKEN/);
+    for (const gate of ["npm ci", "npm run lint", "npm run typecheck", "npm test", "npm run build"]) {
+      expect(validate, gate).toContain(gate);
+    }
   });
 });
 
-describe("claude-codex-watcher.yml — the control plane, not the agent, validates and pushes", () => {
-  it("the repo's gates (lint, typecheck, test, build) run on the collected result before any commit", () => {
-    const finishBlock = yml.slice(yml.indexOf("Apply the agent's result"), yml.indexOf("Mark the new HEAD ready for Codex"));
-    const gateIdx = {
-      lint: finishBlock.indexOf("npm run lint"),
-      typecheck: finishBlock.indexOf("npm run typecheck"),
-      test: finishBlock.indexOf("npm test"),
-      build: finishBlock.indexOf("npm run build"),
-      commit: finishBlock.indexOf("git commit"),
-      push: finishBlock.indexOf("git push"),
-    };
-    for (const [gate, idx] of Object.entries(gateIdx)) expect(idx, gate).toBeGreaterThan(-1);
-    expect(gateIdx.lint).toBeLessThan(gateIdx.commit);
-    expect(gateIdx.typecheck).toBeLessThan(gateIdx.commit);
-    expect(gateIdx.test).toBeLessThan(gateIdx.commit);
-    expect(gateIdx.build).toBeLessThan(gateIdx.commit);
-    expect(gateIdx.commit).toBeLessThan(gateIdx.push);
+describe("claude-codex-watcher.yml — case: validation is split from commit/push (Codex P0 finding #2)", () => {
+  it("commit/push is a SEPARATE step from validation, running only after validation succeeded, and is pure git plumbing — no npm/lint/test/build command reappears once the push credential is present", () => {
+    const finish = stepBlock("Commit and push (the only step with a write-capable credential)");
+    expect(finish).toMatch(/if:.*steps\.validate\.outcome == 'success'/);
+    expect(finish).toMatch(/PUSH_TOKEN/);
+    for (const forbidden of ["npm ci", "npm run lint", "npm run typecheck", "npm test", "npm run build"]) {
+      expect(finish, `finish step must not run "${forbidden}"`).not.toContain(forbidden);
+    }
+    expect(finish).toMatch(/git add -A/);
+    expect(finish).toMatch(/git commit/);
+    expect(finish).toMatch(/git push/);
   });
 
-  it("bash's default -e (errexit) means a failing gate stops the step before any commit runs — no separate guard needed", () => {
-    // GitHub Actions' default bash shell for `run:` is `bash --noprofile --norc -eo pipefail`.
-    // This test exists so that if this workflow's steps ever gain an explicit `shell:`
-    // override, a reviewer is forced to re-examine whether fail-closed still holds.
-    expect(yml).not.toMatch(/shell:\s*bash\s+-c\b/); // no override that would drop -e
+  it("the push happens from a FRESH checkout created only after validation succeeded — not from the workspace the agent/gates ran in", () => {
+    const freshCheckout = stepBlock("Checkout a fresh control-plane copy for the push (post-validation only)");
+    expect(freshCheckout).toMatch(/if:.*steps\.validate\.outcome == 'success'/);
+    expect(freshCheckout).toMatch(/path:\s*push-workspace/);
+    expect(freshCheckout).toMatch(/ref:\s*\$\{\{\s*steps\.check\.outputs\.head\s*\}\}/);
+
+    const finish = stepBlock("Commit and push (the only step with a write-capable credential)");
+    expect(finish).toMatch(/working-directory:\s*push-workspace/);
   });
 
-  it("Claude's PR-section write happens ONLY after the push succeeds, using control-plane-composed text, not the agent's own output file", () => {
-    const handoff = yml.slice(yml.indexOf("Mark the new HEAD ready for Codex"));
-    expect(handoff).toMatch(/if:\s*steps\.finish\.outcome == 'success'/);
-    expect(handoff).toMatch(/build-section/);
-    expect(handoff).not.toMatch(/summary-file|agent-output\.log/);
+  it("only FILES are copied onto the fresh checkout (rsync), never pr-workspace's own .git — so nothing PR-controlled could have planted a hook/config there", () => {
+    const copyStep = stepBlock("Copy the validated file tree onto the fresh checkout");
+    expect(copyStep).toMatch(/rsync/);
+    expect(copyStep).toMatch(/--exclude='\.git'/);
+    expect(copyStep).not.toMatch(/git merge|git pull|cp -r.*\.git\b/);
+  });
+});
+
+describe("claude-codex-watcher.yml — case: temporary work-order data is excluded from every commit (Codex P1 finding)", () => {
+  it(".codex-work-order.md is explicitly excluded from the rsync that populates the pushed workspace", () => {
+    const copyStep = stepBlock("Copy the validated file tree onto the fresh checkout");
+    expect(copyStep).toMatch(/--exclude='\.codex-work-order\.md'/);
+  });
+
+  it(".gitignore also lists .codex-work-order.md as defense in depth", () => {
+    const gitignore = readFileSync(fileURLToPath(new URL("../../.gitignore", import.meta.url)), "utf8");
+    expect(gitignore).toMatch(/^\.codex-work-order\.md$/m);
   });
 });
 
@@ -137,28 +237,13 @@ describe("claude-codex-watcher.yml — script-injection hygiene (CodeQL, PR #78 
   // SHELL does that substitution, safely, not the expression engine. This test fails the
   // moment any `run:` step regresses to interpolating `${{ }}` directly again.
   it("no `run:` step body ever contains a raw ${{ }} expression — every value flows through env: instead", () => {
-    // Real YAML block-scalar semantics, not step-name-delimited chunking (which over-captures
-    // across job/step boundaries the moment a step has no `name:` in between): a `run: |`
-    // block's body is every subsequent line more indented than the `run:` line itself, until
-    // the first line at or below that indentation (or EOF).
-    const lines = yml.split("\n");
     const offenders = [];
-    for (let i = 0; i < lines.length; i++) {
-      const blockMatch = lines[i].match(/^(\s*)run:\s*\|\s*$/);
-      if (blockMatch) {
-        const indent = blockMatch[1].length;
-        const body = [];
-        for (let j = i + 1; j < lines.length; j++) {
-          const line = lines[j];
-          if (line.trim() === "") { body.push(line); continue; }
-          if (line.match(/^(\s*)/)[1].length <= indent) break;
-          body.push(line);
-        }
-        if (body.join("\n").includes("${{")) offenders.push(`line ${i + 1} (block)`);
-        continue;
-      }
-      const inlineMatch = lines[i].match(/^\s*run:\s*(.+)$/);
-      if (inlineMatch && inlineMatch[1].includes("${{")) offenders.push(`line ${i + 1} (inline)`);
+    for (const block of blockScalarBodies(yml)) {
+      if (block.text.includes("${{")) offenders.push(`line ${block.startLine} (block)`);
+    }
+    for (const line of yml.split("\n")) {
+      const inlineMatch = line.match(/^\s*run:\s*(.+)$/);
+      if (inlineMatch && inlineMatch[1].includes("${{")) offenders.push(`inline: ${line.trim()}`);
     }
     expect(offenders, "these run: steps interpolate ${{ }} directly into shell script text").toEqual([]);
   });
@@ -169,20 +254,8 @@ describe("claude-codex-watcher.yml — script-injection hygiene (CodeQL, PR #78 
       'echo "[codex-watcher] PR #$PR — not eligible: ${{ steps.check.outputs.reason }}"',
     );
     expect(withOffender).not.toBe(yml); // the replace actually matched something
-    const lines = withOffender.split("\n");
-    const found = lines.some((l, i) => {
-      const m = l.match(/^(\s*)run:\s*\|\s*$/);
-      if (!m) return false;
-      const indent = m[1].length;
-      const body = [];
-      for (let j = i + 1; j < lines.length; j++) {
-        if (lines[j].trim() === "") continue;
-        if (lines[j].match(/^(\s*)/)[1].length <= indent) break;
-        body.push(lines[j]);
-      }
-      return body.join("\n").includes("${{ steps.check.outputs.reason }}");
-    });
-    expect(found).toBe(true);
+    const offenders = blockScalarBodies(withOffender).filter((b) => b.text.includes("${{ steps.check.outputs.reason }}"));
+    expect(offenders.length).toBeGreaterThan(0);
   });
 });
 

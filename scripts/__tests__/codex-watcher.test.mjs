@@ -177,6 +177,25 @@ describe("exceedsAuthority", () => {
   it("does not flag an ordinary code fix", () => {
     expect(exceedsAuthority("Rename the unused `foo` variable to `bar` in src/lib/x.ts.").exceeds).toBe(false);
   });
+
+  // Codex's own work orders routinely restate the authority limits as a standing disclaimer
+  // ("Do not merge anything", "Never publish") — a bare substring/word match on the forbidden
+  // verb would refuse every one of Codex's OWN legitimate work orders, which is the opposite
+  // of the intent. Live case: work order codex-78-ad60316-security-1 (PR #78, 2026-08-23).
+  it("does not flag a negated disclaimer restating the authority limit", () => {
+    expect(exceedsAuthority("Do not merge anything and do not touch PR #77.").exceeds).toBe(false);
+    expect(exceedsAuthority("Never publish this guide.").exceeds).toBe(false);
+    expect(exceedsAuthority("Do not weaken validation. Do not merge. Never publish.").exceeds).toBe(false);
+  });
+
+  it("does not flag a hyphenated adjectival use of a forbidden word (state, not instruction)", () => {
+    expect(exceedsAuthority("A pre-merge code review can pass even though the live round trip is unproven.").exceeds).toBe(false);
+  });
+
+  it("still flags a real imperative even when a negated aside about the SAME verb appears earlier in the text", () => {
+    const r = exceedsAuthority("Do not merge PR #77. Separately, please merge PR #78 right now.");
+    expect(r).toMatchObject({ exceeds: true, name: "merge" });
+  });
 });
 
 describe("isEligible — the 8 conditions, one function, one source of truth", () => {
