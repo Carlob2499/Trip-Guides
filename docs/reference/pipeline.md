@@ -42,7 +42,7 @@ whole class of bug that now cannot exist.
 >
 > | | **V1 — `research-pass.yml`** | **V2 — `research-pass-v2.yml`** |
 > |---|---|---|
-> | Role | **default and rollback path** (TEMP_COMPAT) | integrated candidate, not yet accepted live |
+> | Role | **default and rollback path** (TEMP_COMPAT) | **draft product path accepted; production cutover pending** |
 > | Selected by | everything, while the selector is off | trusted `/new` (`new-guide.yml` `workflow_call`) only when `WAYPOINT_RESEARCH_ENGINE` = `v2` |
 > | Manual dispatch | — | always `landMode=pr`; it structurally cannot publish |
 > | Stage/state ownership | agents checkpoint and commit | **workflow-owned** in `run.v2.json`; agents never checkpoint or commit |
@@ -299,9 +299,12 @@ to add a `run: |` block with logic in it, it belongs in `scripts/pipeline/` or `
 | `recert.yml` | weekly audit + staleness detection → dispatches change runs | `scripts/recert.mjs` |
 | `feedback-export.yml` | export survey feedback → synthesis PR + inert proposal | `scripts/feedback-signals.mjs` |
 | `pretrip-check.yml` | T-7 departure window: stale facts on a trip about to happen | `scripts/pretrip-check.ts` |
-| `claude-codex-signal.yml` | UNPRIVILEGED half of the Claude↔Codex loop: `pull_request: edited` only, read-only, no secrets, no write token — exists solely so `claude-codex-watcher.yml`'s `workflow_run` trigger fires; computes/decides nothing | — |
-| `claude-codex-watcher.yml` | PRIVILEGED half: reacts to a PR's bounded `codex-review-next` section (Codex's own external, independent watcher) saying `CLAUDE_ACTION_REQUIRED: yes` at the PR's current head, fixes exactly what the work order describes, and hands the new head back via Claude's own bounded `claude-ready-for-codex` section — never merges, publishes, or expands scope beyond the work order. Triggered by `workflow_run` (from the signal workflow above) + schedule + `workflow_dispatch` — never `pull_request`/`pull_request_target` directly, so its own definition is unconditionally default-branch-pinned | `scripts/codex-watcher.mjs` |
 | `deploy` · `deploy-worker` · `test` · `a11y` · `ensure-labels` · `mutation` (manual) | the substrate | — |
+
+The reciprocal Claude↔Codex reviewer introduced during integration PRs #78/#79 is intentionally
+**not** part of this workflow set. Cleanup PR #80 retired it as temporary integration scaffolding;
+`npm run check:invariants` requires those privileged watcher files to remain absent unless a future
+explicit architecture decision reintroduces them.
 
 ## Model economy — the backbone runs on a Claude subscription
 
