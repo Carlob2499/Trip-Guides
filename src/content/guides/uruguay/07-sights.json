@@ -29,10 +29,18 @@
         "kicker": "The story behind the world's longest Carnival",
         "body": "<p>A small, well-organized museum on La Rambla near the port, tracing the history of Montevideo's Carnival — the candombe drum tradition, the Desfile de Llamadas parade, and the murga theatrical groups that compete every summer. A useful primer before the Carnival-holiday days on this trip.</p>",
         "dwell_min": 60,
-        "closed_days": ["mon", "tue"],
+        "closed_days": [
+          "mon",
+          "tue"
+        ],
         "verified_on": "2026-08-23",
         "shelf_life": "hours",
-        "source_url": "http://www.museos.gub.uy/index.php/noticias/item/2542-horario-de-los-museos-de-la-direccion-nacional-de-cultura-en-semana-de-carnaval"
+        "source_url": "http://www.museos.gub.uy/index.php/noticias/item/2542-horario-de-los-museos-de-la-direccion-nacional-de-cultura-en-semana-de-carnaval",
+        "map": {
+          "lat": -34.905501799999996,
+          "lng": -56.212235799999995
+        },
+        "place_id": "ChIJu2aB9oR_n5URpcC05F0pBmk"
       },
       {
         "name": "Colonia del Sacramento — Barrio Histórico & Faro",
@@ -50,7 +58,12 @@
         "dwell_min": 90,
         "verified_on": "2026-08-23",
         "shelf_life": "hours",
-        "source_url": "https://casapueblo.com.uy/"
+        "source_url": "https://casapueblo.com.uy/",
+        "map": {
+          "lat": -34.908868999999996,
+          "lng": -55.044906
+        },
+        "place_id": "ChIJU5klwWARdZURDUiW1xMsc5M"
       },
       {
         "name": "La Mano de Punta del Este",

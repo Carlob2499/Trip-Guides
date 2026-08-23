@@ -1,0 +1,54 @@
+{
+  "slug": "uruguay",
+  "attemptedAt": "2026-08-23T07:35:18.353Z",
+  "applied": true,
+  "pending": 10,
+  "resolved": [
+    {
+      "name": "Museo del Carnaval",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Casapueblo — Punta Ballena",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "El Palenque",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "El Palenque (Punta del Este branch)",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Bodega Bouza",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Lo de Silverio",
+      "file": "08-food-and-shopping.json"
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "Palacio Salvo",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"Palacio Salvo\", Places returned \"Salvo Palace\""
+    },
+    {
+      "name": "Mercado del Puerto",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"Mercado del Puerto\", Places returned \"Port Market\""
+    },
+    {
+      "name": "Colonia del Sacramento — Barrio Histórico & Faro",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"Colonia del Sacramento — Barrio Histórico & Faro\", Places returned \"Colonia del Sacramento Lighthouse\""
+    },
+    {
+      "name": "La Mano de Punta del Este",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"La Mano de Punta del Este\", Places returned \"The Fingers of Punta del Este\""
+    }
+  ]
+}
