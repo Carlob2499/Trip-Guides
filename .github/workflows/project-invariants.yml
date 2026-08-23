@@ -23,8 +23,9 @@ on:
       - public/sw.js
       - docs/design-handoff/**
       - src/content/guides/uruguay/_guide.json
-      # Retired integration scaffolding stays in the trigger list deliberately: re-adding
-      # any of it must run the invariant that requires it to remain absent.
+      # The reciprocal Claude↔Codex reviewer is a protected autonomy/control-plane integration.
+      # Any change to its revision-4 trust-boundary files must run the invariant that requires
+      # the mechanism and its job-level privilege separation to remain present.
       - .github/workflows/claude-codex-watcher.yml
       - .github/workflows/claude-codex-signal.yml
       - scripts/codex-watcher.mjs
