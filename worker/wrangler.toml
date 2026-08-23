@@ -1,8 +1,8 @@
 # Cloudflare Worker config for the site's backend (W5 intake proxy, widened in batch 3 to the
-# change/answer/approve endpoints). Deployed by .github/workflows/deploy-worker.yml
-# (cloudflare/wrangler-action), never by hand.
+# change/answer/approve endpoints and now the V2 run-note endpoint). Deployed by
+# .github/workflows/deploy-worker.yml (cloudflare/wrangler-action), never by hand.
 name = "waypoint-intake"
-main = "index.mjs"
+main = "note-entry.mjs"
 compatibility_date = "2024-11-01"
 
 # Non-secret config. The two secrets (GH_TOKEN, OWNER_KEY) are set separately with
