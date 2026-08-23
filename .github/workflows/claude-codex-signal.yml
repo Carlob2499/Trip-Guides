@@ -27,6 +27,12 @@ jobs:
       # in this job for a PR to compromise. The privileged worker (claude-codex-watcher.yml)
       # re-fetches the PR from trusted code and does not read this step's output.
       - name: Acknowledge the PR body edit (no privileged action taken here)
+        # A block scalar, not a one-line `run: echo "... #$PR ..."` — YAML treats a bare
+        # ` #` in an UNQUOTED plain scalar as a comment start and truncates the value right
+        # there (the exact bug already caught once in claude-codex-watcher.yml's "not
+        # eligible" step, and repeated here live — this run failed with "unexpected EOF
+        # looking for matching quote" for the identical reason).
         env:
           PR: ${{ github.event.pull_request.number }}
-        run: echo "[codex-signal] PR #$PR body edited — the privileged worker will independently re-validate and decide."
+        run: |
+          echo "[codex-signal] PR #$PR body edited — the privileged worker will independently re-validate and decide."
