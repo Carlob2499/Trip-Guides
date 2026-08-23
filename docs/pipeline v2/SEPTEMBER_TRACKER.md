@@ -11,14 +11,14 @@ This file tracks delivery. It does not redefine Pipeline V2.
 
 ## Dashboard — August 23, 2026
 
-- **Current phase:** post-Canary #4 **validation preparation**; repository cleanup/autonomy hardening is merged.
+- **Current phase:** post-Canary #4 **validation execution preparation complete**; repository cleanup/autonomy hardening is merged.
 - **Core engine:** P01–P13 DONE.
 - **Integration:** I01–I05 have deterministic/live evidence; I06 deliberately stays open until final V1 retirement/cutover approval.
 - **Reliability acceptance:** PR #75 repair (`253607a`) is merged; PR #76 closeout is merged; fresh Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains draft-only and unpublished.
 - **Canary #4 truth:** it proved the fresh-run wrapper and ordinary bounded recovery path. It did **not** exercise a real escalation issue comment/`gh` path because no intake issue existed, and it did **not** exercise the cancellation grace-window chain because no cancellation occurred. Those two failure-only seams remain targeted proofs.
 - **Production cutover:** NOT DONE. `WAYPOINT_RESEARCH_ENGINE` remains unset/off, V1 remains the production default/rollback path, and a manual V2 canary cannot mint production publication authority.
 - **Cleanup closeout:** PR #80 merged as `ca9d1b8e76d72ea95620e1c006417418855c88d0` after exact-head Project invariants, Tests/coverage, Accessibility, and Vercel passed. The revision-4 Claude↔Codex reviewer trust boundary remains active and protected.
-- **Next validation work:** prepare and execute V01–V05 distinct research-risk trials, measure only telemetry that truly exists (V06), then assess observed resource waste (V07). Do not spend full Claude runs debugging deterministic CI/state/schema failures.
+- **Next validation work:** execute the pre-registered V01–V05 risk trials in `VALIDATION_RUNBOOK.md`, using two combined draft research runs plus deterministic/targeted V04 where sufficient; measure only telemetry that truly exists (V06), then assess observed resource waste (V07).
 - **Days until September 20 feature freeze:** 28
 - **Days until September 27 code freeze:** 35
 - **Days until September 30 backend complete:** 38
@@ -32,6 +32,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - Uruguay Canary #4: Pass A/B first try; Reconcile attempt 4 after three real gate failures with findings converging 5→2→0 blocking; bounded auto-retry consumed once then correctly refused; Critic first try; landing gate passed; `publication: false`; `landMode: pr`.
 - Progress consumes real V2 durable run events; unavailable fetch-level/nugget/unmeasured counters remain honestly absent.
 - The reciprocal Claude↔Codex reviewer from PRs #78/#79 remains active with the revision-4 separation restored by #79: unprivileged signal, read-only validation of PR-controlled content, and a separate write-capable publish job that never executes PR content.
+- V01–V05 now have pre-registered trial cards, evidence packets, immediate-fail conditions, and a resource-efficient execution grouping in `docs/pipeline v2/VALIDATION_RUNBOOK.md`.
 
 **Do not equate “green draft canary” with “production cutover complete.”** The former is accepted evidence; the latter remains a deliberate product/operations decision with its own proof.
 
@@ -66,11 +67,11 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `
 | R02 | Close out the post-merge documentation/authority truth | Reliability | Claude | Aug 22 | DONE | R01 | PR #76 merged; retry/authority/handoff congruence tests landed | None | No |
 | R03 | **Live reliability acceptance — fresh Canary #4** | Reliability | Carlo + Codex | Sep 6 | DONE / YELLOW | R02 | Uruguay fresh canary GREEN. Fresh-run wrapper/recovery proved; two failure-only seams remain: real issue escalation/`gh` path and cancellation grace-window completion | Two targeted failure-only proofs remain | No full-canary rerun required |
 | C01 | Repository-wide cleanup/autonomy pass (PR #80) | Cleanup | Codex + Automated CI/test | Sep 6 | DONE | R03 | PR #80 merged at `ca9d1b8e`; invariants, truthful authority surfaces, repo ownership map, canonical checks, Progress run-note completion, offline/security cleanup, and repeated review/debug passes; final exact-head invariants/tests/a11y/Vercel green | None | No |
-| V01 | Mega-city food / reservation research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Adaptive saturation, food fit, reservation depth, independent evidence | Fixture/success criteria must be prepared before expensive run | No |
-| V02 | Native-language + thin-English research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Native research adds meaningful evidence or is correctly skipped | Fixture/success criteria pending | No |
-| V03 | Fragile transport / physical-transfer trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Door-to-door plausibility, buffers, missed-connection consequence/fallback where risk earns depth | Fixture/success criteria pending | No |
-| V04 | Conflicting-evidence / future-event trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Disagreement investigated; future date not fabricated; recheck behavior recorded | Fixture/success criteria pending | No |
-| V05 | Large-group / mobility trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Group size/mobility materially changes transport/reservation/walking recommendations where appropriate | Fixture/success criteria pending | No |
+| V01 | Mega-city food / reservation research trial | Validation | Claude/Fable + Codex | Sep 20 | READY FOR REVIEW | I02 | Pre-registered V01 trial card + evidence packet + fail conditions in `VALIDATION_RUNBOOK.md`; execute as Combined Research Run A | Awaiting model-backed execution only | No |
+| V02 | Native-language + thin-English research trial | Validation | Claude/Fable + Codex | Sep 20 | READY FOR REVIEW | I02 | Pre-registered V02 trial card + native-audit evidence requirements in `VALIDATION_RUNBOOK.md`; group with Run B | Awaiting model-backed execution only | No |
+| V03 | Fragile transport / physical-transfer trial | Validation | Claude/Fable + Codex | Sep 20 | READY FOR REVIEW | I02 | Pre-registered V03 transport-risk evidence and immediate-fail conditions in `VALIDATION_RUNBOOK.md`; group with Run B | Awaiting model-backed execution only | No |
+| V04 | Conflicting-evidence / future-event trial | Validation | Claude/Fable + Codex | Sep 20 | READY FOR REVIEW | I02 | Deterministic future-event + disagreement cards and evidence requirements in `VALIDATION_RUNBOOK.md`; targeted/live only if fixtures leave a gap | Execute cheapest sufficient proof first | No |
+| V05 | Large-group / mobility trial | Validation | Claude/Fable + Codex | Sep 20 | READY FOR REVIEW | I02 | Pre-registered V05 intake-to-decision requirements in `VALIDATION_RUNBOOK.md`; group with Run B | Awaiting model-backed execution only | No |
 | V06 | Measure model/tool/token/time telemetry where truly available | Validation | Codex + Automated CI/test | Sep 20 | NOT STARTED | I02 | Real per-stage metrics only; unavailable values explicitly unavailable | Some metrics may not exist | No |
 | V07 | Compare research quality against resource use and identify observed waste | Validation | Codex | Sep 20 | NOT STARTED | V01–V06 | Evidence-backed duplicated reads/searches/retries or explicit no-meaningful-waste result | Requires validation evidence | No |
 | F01 | **FEATURE FREEZE** — no ordinary new backend features | Freeze | Carlo | Sep 20 | NOT STARTED | V01–V07 | Tracker status explicitly DONE; unfinished ideas deferred | Validation incomplete | Yes — Carlo alone can waive |
