@@ -43,44 +43,15 @@ function requirePath(rel, label = rel, type = "file") {
   return true;
 }
 
+function requireAbsent(rel, label = rel) {
+  if (fs.existsSync(file(rel))) fail(`${label}: retired integration scaffolding must stay absent (${rel})`);
+  else pass(label);
+}
+
 function requireText(rel, needle, label) {
   if (!requirePath(rel, `${label} source`)) return;
   if (!read(rel).includes(needle)) fail(`${label}: expected contract text not found`);
   else pass(label);
-}
-
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function jobBlock(yaml, name) {
-  const start = new RegExp(`^  ${escapeRegExp(name)}:\\s*$`, "m").exec(yaml);
-  if (!start) return null;
-  const bodyStart = start.index + start[0].length;
-  const remainder = yaml.slice(bodyStart);
-  const nextJob = /^  [A-Za-z0-9_-]+:\s*$/m.exec(remainder);
-  return remainder.slice(0, nextJob ? nextJob.index : undefined);
-}
-
-function requireJobPermissions(yaml, jobName, expected, forbidden = []) {
-  const block = jobBlock(yaml, jobName);
-  if (!block) {
-    fail(`Claude↔Codex watcher: missing ${jobName} job`);
-    return;
-  }
-
-  for (const [scope, level] of Object.entries(expected)) {
-    const line = new RegExp(`^    ${escapeRegExp(scope)}: ${escapeRegExp(level)}\\s*$`, "m");
-    if (!line.test(block)) fail(`Claude↔Codex watcher: ${jobName} must set ${scope}: ${level}`);
-  }
-
-  for (const needle of forbidden) {
-    if (block.includes(needle)) fail(`Claude↔Codex watcher: ${jobName} contains forbidden privilege ${needle}`);
-  }
-
-  if (!failures.some((item) => item.includes(`Claude↔Codex watcher: ${jobName}`))) {
-    pass(`Claude↔Codex ${jobName} permission boundary`);
-  }
 }
 
 // Runtime agent instructions must stay behaviorally in sync. Their short preambles are
@@ -103,27 +74,18 @@ requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
 requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
 requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
 
-// The reciprocal review worker must keep a real job-level privilege boundary. Inspect each
-// top-level job separately so a later publish permission cannot accidentally satisfy validate.
-const watcher = read(".github/workflows/claude-codex-watcher.yml");
-requireJobPermissions(
-  watcher,
-  "validate",
-  { contents: "read", "pull-requests": "read" },
-  ["contents: write", "pull-requests: write", "issues: write", "actions: write"],
-);
-requireJobPermissions(watcher, "publish", { contents: "write", "pull-requests": "write" });
-const publishBlock = jobBlock(watcher, "publish");
-const publishNeedsValidate = /^    needs:\s*(?:validate|\[[^\]]*\bvalidate\b[^\]]*\])\s*$/m;
-if (publishBlock && !publishNeedsValidate.test(publishBlock)) fail("Claude↔Codex watcher: publish must depend on validate");
-else if (publishBlock) pass("Claude↔Codex publish depends on validate");
-
-// Artifact transport must not be allowed to choose the privileged push target. The publish job
-// has to re-fetch live PR state from trusted control-plane code before it can push anything.
-if (publishBlock && !/node scripts\/codex-watcher\.mjs check --pr "\$PR"/.test(publishBlock)) {
-  fail("Claude↔Codex watcher: publish must independently re-check live PR state");
-} else if (publishBlock) {
-  pass("Claude↔Codex publish re-checks live PR state");
+// The reciprocal Claude↔Codex watcher was temporary integration scaffolding for PRs #78/#79.
+// It is not one of Waypoint's product lifecycles. Reintroducing it would restore a large,
+// secret-bearing automation surface that the cleanup deliberately retired.
+for (const retired of [
+  ".github/workflows/claude-codex-watcher.yml",
+  ".github/workflows/claude-codex-signal.yml",
+  "scripts/codex-watcher.mjs",
+  "scripts/__tests__/codex-watcher.test.mjs",
+  "scripts/__tests__/codex-watcher-workflow.test.mjs",
+  "prompts/codex-work-order.md",
+]) {
+  requireAbsent(retired, `Retired reciprocal-review scaffold: ${retired}`);
 }
 
 // Protected traveler-facing architecture.
