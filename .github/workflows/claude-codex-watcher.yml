@@ -10,38 +10,39 @@ name: Claude ↔ Codex review watcher
 # for the full contract; scripts/codex-watcher.mjs carries every behavioral rule as pure,
 # independently tested functions — this file is intentionally thin.
 #
-# TRUST MODEL, revision 3 (Codex architecture correction, PR #78, 2026-08-23 — this
-# SUPERSEDES an earlier `pull_request_target`-as-primary-trigger revision that was pushed
-# without noticing the correction had already landed on the PR; see CONTEXT.md's Decisions
-# entry for the full history, including that miss). Two-workflow privilege separation:
+# TRUST MODEL, revision 4 (CodeQL finding on revision 3, PR #78, 2026-08-23 — see CONTEXT.md's
+# Decisions entry for the full revision history). Revision 3 dropped `pull_request_target` for
+# `workflow_run`, per Codex's correction — necessary, but not sufficient on its own: CodeQL's
+# "Checkout of untrusted code in a privileged context" query correctly kept firing, because
+# `workflow_run` is EXACTLY as dangerous as `pull_request_target` if the job that checks out
+# and executes PR-controlled code (npm ci, the agent) is the SAME job that holds
+# `contents: write` — the ambient GITHUB_TOKEN is write-capable for that whole job regardless
+# of which individual step's `env:` happens to reference it; scoping env vars per-step (what
+# revision 3 did) is a real mitigation but not one CodeQL's static model — or the underlying
+# threat model — credits, because nothing stops a compromised dependency from reading the
+# runner's ambient token directly. The fix has to be a real GitHub Actions JOB boundary:
 #   - `claude-codex-signal.yml` — UNPRIVILEGED. Triggers on `pull_request: edited`
 #     (Codex's PR-body edit). No secrets, no write token, does nothing but exist and
 #     complete. Nothing it computes is trusted by THIS workflow.
-#   - THIS workflow — the PRIVILEGED WORKER. Triggers on `workflow_run` (fires when the
-#     signal workflow completes) + a schedule fallback + workflow_dispatch. A
-#     `workflow_run`-triggered workflow's OWN definition is unconditionally read from the
-#     DEFAULT BRANCH — there is no PR-ref concept for this trigger at all, so unlike
-#     `pull_request_target` there is no `ref:`-omission convention to get right; it simply
-#     cannot be anything else. Every decision this job makes independently re-fetches and
-#     re-validates PR state via trusted code (`scripts/codex-watcher.mjs`, also sourced from
-#     the default branch) — it never trusts the signal run's own output, and
-#     `github.event.workflow_run.pull_requests` (only populated for a same-repo, non-fork PR)
-#     is treated as a hint to re-verify, never as ground truth on its own.
-# The rest of the isolation this revision inherited from revision 2 is unchanged:
-#   1. PR content is checked out into its OWN path (`pr-workspace/`), pinned to the EXACT sha
-#      Codex reviewed. Fork PRs are refused by `isEligible` (isCrossRepository) before this or
-#      any later step ever runs.
-#   2. `npm ci`, the agent, and every gate (lint/typecheck/test/build) run inside
-#      `pr-workspace/` with NO GH/PUSH token in that step's `env:` — PR-controlled
-#      package.json scripts, tests, and build tooling never see a credential.
-#   3. Claude's OAuth token reaches ONLY the isolated agent container — never a GitHub
-#      credential.
-#   4. Only AFTER validation passes does a brand-new, untouched control-plane checkout
-#      (`push-workspace/`, also pinned to the pre-fix sha) receive the validated file tree via
-#      `rsync` (copying files, never merging git history or running code) — so nothing
-#      PR-controlled ever plants a `.git` hook/config that a later credentialed step could run.
-#      Only deterministic `git add/commit/push` happens there, and only that one step ever
-#      holds a push-capable token.
+#   - THIS workflow's `validate` job — triggers on `workflow_run` (fires when the signal
+#     workflow completes) + a schedule fallback + workflow_dispatch, all of which are
+#     unconditionally default-branch-pinned (no PR-ref concept at all). Permissions are
+#     `contents: read, pull-requests: read` — genuinely read-only at the JOB level, so the
+#     ambient token cannot push even if something in the checked-out PR content tried. This
+#     is the ONLY job that ever checks out PR content (pinned to the exact sha Codex
+#     reviewed, into its own `pr-workspace/` path, fork PRs refused by `isEligible` before
+#     anything else runs), runs `npm ci` against it, or runs the isolated fix agent (whose
+#     container gets ONLY `CLAUDE_CODE_OAUTH_TOKEN`, never a GitHub credential). On success it
+#     strips scratch state (`.git`, `.codex-work-order.md`) and uploads the validated tree —
+#     files only, as a build artifact — for the next job to pick up. It never has a
+#     write-capable credential to leak in the first place.
+#   - THIS workflow's `publish` job — `contents: write, pull-requests: write`. It NEVER checks
+#     out or executes PR content: it downloads the artifact `validate` produced (or finds none,
+#     if `validate` wasn't eligible or failed, and cleanly does nothing), checks out a FRESH
+#     control-plane copy pinned to the pre-fix sha, copies the artifact's files onto it via
+#     `rsync` (never merging git history), and does only deterministic `git add/commit/push` —
+#     the only job, and the only step within it, that ever holds a push-capable credential, and
+#     it never runs a single line of PR-controlled code.
 on:
   workflow_run:
     workflows: ["Claude ↔ Codex review signal"]
@@ -126,26 +127,28 @@ jobs:
             echo "prs=$CANDIDATES" >> "$GITHUB_OUTPUT"
           fi
 
-  # ── per-PR: validate identity, then — only if eligible — fix + hand back to Codex ───────
-  watch:
+  # ── validate: per-PR, READ-ONLY. The only job that ever checks out PR content or runs the
+  # agent — CodeQL's "privileged context" concern (job holds a write-capable token while
+  # checking out/executing PR-controlled code) cannot apply here because this job's own
+  # `permissions:` cap the ambient token to read-only, full stop. ──────────────────────────
+  validate:
     needs: discover
     if: needs.discover.outputs.prs != '[]' && needs.discover.outputs.prs != ''
     strategy:
       fail-fast: false
       matrix:
         pr: ${{ fromJson(needs.discover.outputs.prs) }}
-    # ONE job per PR NUMBER, ever in flight — this is what makes "no two Claude watcher jobs
-    # for the same PR run concurrently" mechanical rather than assumed, and what makes the
-    # scheduled fallback and the event trigger structurally unable to race each other on the
-    # same PR (same group name, same queue, either way). Matches the guide-<slug> convention
-    # research-pass-v2.yml and change.yml already use for the identical reason.
+    # ONE job per PR NUMBER, ever in flight, shared with `publish` below (same group name) —
+    # this is what makes "no two Claude watcher jobs for the same PR run concurrently"
+    # mechanical rather than assumed, across BOTH stages and regardless of what triggered them.
+    # Matches the guide-<slug> convention research-pass-v2.yml and change.yml already use.
     concurrency:
       group: codex-watcher-pr-${{ matrix.pr }}
       cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
+      pull-requests: read
     env:
       PR: ${{ matrix.pr }}
     steps:
@@ -257,14 +260,13 @@ jobs:
             node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
             sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
 
-      # VALIDATE IN A CREDENTIAL-FREE WORKSPACE (Codex P0 finding #2): PR-controlled
-      # package.json scripts, test code, and build tooling run here, and this step's `env:`
-      # holds NO GitHub token of any kind — nothing they execute can read one, whether or not
-      # they'd ever try to. A gate failure fails this step (bash's default -e) and nothing
-      # downstream — commit, push, PR-body write — ever runs.
-      - name: Validate the agent's result (credential-free — no GH/PUSH token present)
+      # CREDENTIAL-FREE by construction (this job's own permissions, not step discipline):
+      # PR-controlled package.json scripts, test code, and build tooling run here. A gate
+      # failure fails this step (bash's default -e) and nothing downstream — the artifact
+      # upload below, and everything in `publish` — ever runs.
+      - name: Run the repo's gates against the agent's result
         if: steps.check.outputs.eligible == 'true' && steps.agent.outcome == 'success'
-        id: validate
+        id: gates
         working-directory: pr-workspace
         run: |
           npm ci
@@ -273,42 +275,142 @@ jobs:
           npm test
           npm run build
 
-      # A FRESH, UNTOUCHED control-plane checkout, created only AFTER validation passed and
-      # pinned to the same pre-fix commit — no PR-controlled script has ever run against this
-      # directory's `.git`, so nothing could have planted a hook/config here that a later
-      # credentialed step might trigger. No credential is passed to this checkout either.
-      - name: Checkout a fresh control-plane copy for the push (post-validation only)
-        if: steps.check.outputs.eligible == 'true' && steps.validate.outcome == 'success'
+      # Strip every trace of PR-controlled git history and scratch state before the artifact
+      # ever leaves this job: `.git` here is the historyless agent sandbox from the step
+      # above (never the real thing — `publish` gets a REAL history from its own fresh
+      # checkout), and `.codex-work-order.md` must never reach a commit (Codex P1 finding) —
+      # excluded here as the primary defense, with the `publish` job's own rsync exclude and
+      # `.gitignore` as further-defense-in-depth layers, not the only line. The metadata file
+      # carries only already-validated, already-typed identifiers (a commit sha, a branch
+      # name, a work-order id) — never anything PR-authored/free-form.
+      - name: Strip scratch state and write metadata for the publish job
+        if: steps.check.outputs.eligible == 'true' && steps.gates.outcome == 'success'
+        env:
+          META_HEAD: ${{ steps.check.outputs.head }}
+          META_HEAD_REF: ${{ steps.check.outputs.head_ref }}
+          META_WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
+        run: |
+          rm -rf pr-workspace/.git
+          rm -f pr-workspace/.codex-work-order.md
+          node -e '
+            const fs = require("fs");
+            fs.writeFileSync("pr-workspace/.codex-meta.json", JSON.stringify({
+              head: process.env.META_HEAD,
+              headRef: process.env.META_HEAD_REF,
+              workOrderId: process.env.META_WORK_ORDER_ID,
+            }));
+          '
+
+      # The ONLY thing that crosses the job boundary — files, never a credential, never git
+      # history. `publish` (a separate job, separate runner, no filesystem in common) picks
+      # this up by name. `if-no-files-found: error` means a broken exclude/path here fails
+      # loudly instead of silently uploading nothing.
+      - name: Upload the validated file tree for the publish job
+        if: steps.check.outputs.eligible == 'true' && steps.gates.outcome == 'success'
+        uses: actions/upload-artifact@v7 # matches this repo's existing convention (mutation.yml) — not SHA-pinned like checkout/setup-node above because no verified SHA for this action was available in this session; worth tightening later.
+        with:
+          name: validated-pr-${{ matrix.pr }}
+          path: pr-workspace
+          retention-days: 1
+          if-no-files-found: error
+
+  # ── publish: per-PR, the ONLY job with a write-capable credential. It never checks out or
+  # executes PR content — only files an already-gated `validate` run produced. ──────────────
+  publish:
+    needs: [discover, validate]
+    if: needs.discover.outputs.prs != '[]' && needs.discover.outputs.prs != ''
+    strategy:
+      fail-fast: false
+      matrix:
+        pr: ${{ fromJson(needs.discover.outputs.prs) }}
+    # SAME group name as `validate` — a scheduled-fallback run's publish stage and an
+    # event-triggered run's publish stage for the same PR queue behind each other exactly
+    # like their validate stages do; this is one shared lock across both stages of a run.
+    concurrency:
+      group: codex-watcher-pr-${{ matrix.pr }}
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      PR: ${{ matrix.pr }}
+    steps:
+      # TRUSTED CONTROL PLANE, default-branch-pinned — needed for scripts/codex-watcher.mjs's
+      # build-section/update-pr, which this job runs at the end. Never touches PR content.
+      - name: Checkout the TRUSTED control plane (default branch only)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          ref: ${{ steps.check.outputs.head }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # No artifact means `validate` was ineligible, found no changes, or failed a gate —
+      # any of those is a clean no-op here, never an error. continue-on-error is scoped to
+      # exactly this one step; every step after it is explicitly gated on its outcome.
+      - name: Download the validated file tree (if validate produced one)
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v7 # see the upload step's note on why this isn't SHA-pinned
+        with:
+          name: validated-pr-${{ matrix.pr }}
+          path: validated
+
+      - name: Nothing to publish — clean no-op
+        if: steps.download.outcome != 'success'
+        run: echo "[codex-watcher] PR #$PR — no validated artifact (not eligible, no changes, or a gate failed upstream)."
+
+      - name: Read the validated tree's metadata
+        if: steps.download.outcome == 'success'
+        id: meta
+        run: |
+          node -e '
+            const fs = require("fs");
+            const m = JSON.parse(fs.readFileSync("validated/.codex-meta.json", "utf8"));
+            const out = fs.createWriteStream(process.env.GITHUB_OUTPUT, { flags: "a" });
+            out.write(`head=${m.head}\n`);
+            out.write(`head_ref=${m.headRef}\n`);
+            out.write(`work_order_id=${m.workOrderId}\n`);
+          '
+
+      # A FRESH, UNTOUCHED control-plane checkout, pinned to the pre-fix commit `validate`
+      # reviewed — no PR-controlled script has EVER run against this directory's `.git` (this
+      # job never checked out PR content at all), so nothing could have planted a hook/config
+      # here that the credentialed step below might trigger.
+      - name: Checkout a fresh control-plane copy for the push
+        if: steps.download.outcome == 'success'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ steps.meta.outputs.head }}
           path: push-workspace
           persist-credentials: false
 
-      # Copies FILES only — never merges pr-workspace's (sandboxed, historyless) git objects
-      # or config into push-workspace's real `.git`. `.codex-work-order.md` is explicitly
-      # excluded (Codex P1 finding) so the scratch work-order file can never reach a commit,
-      # regardless of what .gitignore says.
+      # Copies FILES only — the artifact already has no `.git` and no `.codex-work-order.md`
+      # (stripped in `validate`), and the excludes here are further defense in depth, not the
+      # only line, matching this file's existing layered-exclusion pattern.
       - name: Copy the validated file tree onto the fresh checkout
-        if: steps.check.outputs.eligible == 'true' && steps.validate.outcome == 'success'
+        if: steps.download.outcome == 'success'
         run: |
           rsync -a --delete \
             --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='.astro' \
-            --exclude='coverage' --exclude='.codex-work-order.md' \
-            pr-workspace/ push-workspace/
+            --exclude='coverage' --exclude='.codex-work-order.md' --exclude='.codex-meta.json' \
+            validated/ push-workspace/
 
-      # PARTIAL OR UNVALIDATED OUTPUT IS NEVER PUSHED, and no PR-controlled code ever runs
-      # again once this step's credential is introduced — this step is pure git plumbing
-      # (diff/add/commit/push), never npm/build/test. This is the ONLY step in the whole job
-      # that holds a push-capable credential, and it holds it for git operations only.
+      # PARTIAL OR UNVALIDATED OUTPUT IS NEVER PUSHED (nothing reaches this job unless
+      # `validate`'s gates already passed), and this step is pure git plumbing — no npm/
+      # build/test ever runs in this job at all. This is the ONLY step in the ONLY job that
+      # holds a push-capable credential.
       - name: Commit and push (the only step with a write-capable credential)
-        if: steps.check.outputs.eligible == 'true' && steps.validate.outcome == 'success'
+        if: steps.download.outcome == 'success'
         id: finish
         working-directory: push-workspace
         env:
           PUSH_TOKEN: ${{ github.token }}
-          WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
-          HEAD_REF: ${{ steps.check.outputs.head_ref }}
+          WORK_ORDER_ID: ${{ steps.meta.outputs.work_order_id }}
+          HEAD_REF: ${{ steps.meta.outputs.head_ref }}
         run: |
           if git diff --quiet; then
             echo "[codex-watcher] agent made no file changes — nothing to push." >&2
@@ -341,7 +443,7 @@ jobs:
         if: steps.finish.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
-          WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
+          WORK_ORDER_ID: ${{ steps.meta.outputs.work_order_id }}
           NEW_HEAD: ${{ steps.finish.outputs.new_head }}
           DIFFSTAT: ${{ steps.finish.outputs.diffstat }}
         run: |
@@ -349,7 +451,7 @@ jobs:
             --head "$NEW_HEAD" \
             --work-order "$WORK_ORDER_ID" \
             --summary "Addressed Codex work order $WORK_ORDER_ID. $DIFFSTAT" \
-            --validation "lint, typecheck, test, and build all passed in a credential-free workspace before a fresh control-plane checkout pushed the validated tree." \
+            --validation "lint, typecheck, test, and build all passed in a read-only (no write-token) job before a separate, write-capable job that never checked out PR content pushed the validated tree." \
             --uncertainty "None beyond what Codex's next independent review of this head surfaces." \
             > /tmp/claude-section.txt
           node scripts/codex-watcher.mjs update-pr --pr "$PR" --section-file /tmp/claude-section.txt
