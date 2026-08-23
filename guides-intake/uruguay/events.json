@@ -73,22 +73,37 @@
       "text": "Reconcile complete in 14m (attempt 4)"
     },
     {
-      "at": "2026-08-23T07:34:52.568Z",
+      "at": "2026-08-23T07:35:18.353Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 6 resolved · 4 left as honest blanks"
+    },
+    {
+      "at": "2026-08-23T07:35:47.137Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T08:02:06.703Z",
+      "kind": "decision",
+      "text": "Fresh-context critic complete in 26m"
+    },
+    {
+      "at": "2026-08-23T08:02:06.720Z",
       "kind": "decision",
       "text": "Candidate funnel: 26 evaluated · 20 shortlisted · 14 shipped · 6 rejected · 3 kept as detours"
     },
     {
-      "at": "2026-08-23T07:34:52.568Z",
+      "at": "2026-08-23T08:02:06.720Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 11 independent finding(s): 7 adopt · 4 agree"
     },
     {
-      "at": "2026-08-23T07:34:52.568Z",
+      "at": "2026-08-23T08:02:06.720Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-23T07:34:52.568Z",
+      "at": "2026-08-23T08:02:06.720Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Palacio Salvo guided-tour day/time grid and booking channel"
     }
