@@ -1,111 +1,95 @@
 # HANDOFF — current operational state
 
-> This file is the human-readable handoff. Only the bounded block between the warm-start
-> markers is auto-injected by `scripts/handoff-head.mjs`; deeper history is read on demand.
+> Human-readable warm start for the next engineering session. Deep history lives in `CONTEXT.md` and the Pipeline V2 implementation records; this file stays deliberately current and compact.
 
 <!-- WARM_START_BEGIN -->
-WAYPOINT / Trip-Guides — CURRENT STATE
-Pipeline V2's reliability repair is MERGED (PR #75 → main `253607a`) and CI-green, but the repaired V2 research/recovery RUNTIME has not yet been exercised by a live Pipeline V2 research canary. Canary #4 is that proof and has not started.
-Standing hazard: Claude's embedded browser can crash on login/CAPTCHA/Cloudflare verification — never attempt one; interactive Remote Control can lose the local bridge (`computer_unreachable`).
-Canaries: Malta RED; Luxembourg RED; Portugal CANARY_RED (#74, run portugal-20260822-7c041e) — preserve all three as evidence. DO NOT resume Portugal; Canary #4 is a FRESH slug.
-Merged repair: agent exit integrity (no `| tee` masking); partial output cannot enter the success path; failure classes name a plane (`finish-stage` never says `agent-failure`); retry eligibility reads durable run.v2.json; a stopped run escalates visibly. Caps unchanged (5 attempts, 1 auto-retry).
-Safety: keep V1 intact; V2 selector still OFF (`WAYPOINT_RESEARCH_ENGINE` unset) — Canary #4 runs as a manual dispatch, which is always landMode=pr; do not delete evidence branches.
-Next: start Canary #4 on a fresh slug and watch the four boundaries listed under "Before Canary #4" below.
-Deep context: `CONTEXT.md`, `docs/reference/pipeline.md`, `docs/pipeline v2/IMPLEMENTATION_STATE.md`.
+WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-23)
+Pipeline V2 reliability repair is MERGED and Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains `draft: true`, `publication: false`, `landMode: pr`; it is evidence, not production content.
+Canary #4 proved the fresh-run exit wrapper and normal recovery path, including real gate failures and bounded retry authority. Two live failure-only seams remain unproven by that run: a real escalation issue comment / `gh` path (no intake issue existed) and the cancellation grace-window chain (no cancellation occurred). Do not claim those as proven.
+V1 remains intact and is still the default/rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. Manual V2 dispatches remain structurally draft-only; production cutover is a separate decision.
+The reciprocal Claude↔Codex watcher now uses a job-level trust boundary: read-only validation and write-capable publication are separate jobs. Treat that boundary as security-critical.
+Current engineering surface: draft cleanup PR #80 (`cleanup/grand-pass-2026-08-23`) is reconciling repo truth, CI/invariants, ownership docs, performance/offline/security seams, and repeated review/debug passes. Do not merge it merely because an early CI run is green.
+Next product work after cleanup: prepare/execute the distinct V01–V05 validation risk classes, prove the two remaining live failure-only reliability seams when a safe targeted exercise can do so, then proceed toward cutover only on evidence.
+Deep context: `CONTEXT.md`, `docs/reference/pipeline.md`, `docs/pipeline v2/IMPLEMENTATION_STATE.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
 <!-- WARM_START_END -->
 
-## Where we left off
+## Accepted evidence to preserve
 
-The V2 reliability repair is **merged and closed out**. PR #75 (12 commits, 15 files) landed on
-`main` as `253607a` after three Codex review rounds; the merged head was re-verified in place —
-0 `tee`-wrapped invocations, 4 exit-integrity wrappers, `issues: write` on all four stage jobs,
-4 cancellation-reachable escalations, 0 paths from `finish-stage` to `agent-failure` — with the
-full gate green on the merged tree (2904 tests, build, lint, typecheck).
+### Canary history
 
-**What is NOT proven:** the repaired research/recovery runtime has never been exercised by a live
-Pipeline V2 research canary. PR CI ran in Actions and is green — but CI runs the test suite, not
-the research workflow. Every claim about the recovery path is unit-level or a wiring pin.
+- **Malta — RED.** Historical Canary #1; preserve as failure evidence.
+- **Luxembourg — RED.** Historical Canary #2; preserve as failure/convergence evidence.
+- **Portugal — RED.** Canary #3, issue #74, run `portugal-20260822-7c041e`; exposed the reliability defect class fixed by PR #75. Never convert it into the accepted green run.
+- **Uruguay — GREEN draft product path.** Canary #4, run `uruguay-20260823-9789de`, branch `research-v2/uruguay`, draft guide. Pass A/B first try; Reconcile attempt 4 after three real gate failures with findings converging 5→2→0 blocking; bounded auto-retry consumed once then correctly refused; Critic first try at Opus/high; landing gate passed. It did not publish.
 
-Recommended next step: **start Canary #4 on a fresh slug** (never by resuming Portugal) and treat
-it as the boundary check the unit suite structurally cannot perform.
+Do not delete canary/research evidence branches merely to make the repository look cleaner.
 
-## Before Canary #4 — what to actually watch
+## Reliability boundary truth
 
-The repair touches four seams where this code meets a system it does not control. Unit tests say
-nothing about any of them, so watch these in the run's logs rather than assuming green means proven:
+PR #75 fixed the runtime class Portugal exposed:
 
-1. **The exit wrapper resolves.** Each agent step runs
-   `bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh"`. Pass B's world is the recorded
-   BASELINE commit — if a run's baseline predates `253607a`, that file is not in its tree.
-   Canary #4's baseline is cut fresh from current main, so it will be there; a *resumed older
-   run* is the case to watch.
-2. **The escalation can actually comment.** B1's fix is the grant; the proof is one real
-   `gh issue comment` from a stage job. Nothing has exercised it.
-3. **The cancellation path completes in time.** B3 makes the retry decision and escalation
-   reachable on cancellation, but that chain needs `npm ci` plus three node invocations inside
-   GitHub's cancellation grace window. Reachable is proven; *finishing* is not. If a cancelled
-   canary files no notice, this is the first suspect — and the fix is to make the escalate step
-   cheaper, not to widen the conditions again.
-4. **`gh` is authenticated where escalate runs.** It executes in `collect/` with
-   `GH_TOKEN: github.token`. The Actions error prints *before* any `gh` call, so a gh failure
-   still leaves a visible signal — confirm that ordering held.
+- agent exit status cannot be masked by `| tee`;
+- partial output cannot enter the success path;
+- failure classes name the correct execution plane;
+- retry eligibility reads durable V2 state;
+- stopped runs have an escalation path;
+- caps remain bounded (5 attempts, 1 auto-retry).
 
-Deliberately NOT auto-retryable, so expect a visible stop rather than a repair:
-`usage-limit` · `agent-failure` · `cancelled` · `unknown` · missing findings · corrupt state ·
-either budget exhausted.
+Canary #4 proved the fresh-run wrapper/recovery product path. It did **not** exercise two failure-only seams:
 
-## Canary #4 result — product path GREEN
+1. a real escalation comment through `gh issue comment` with an intake issue present;
+2. cancellation completing retry-decision + escalation inside GitHub's cancellation grace window.
 
-`uruguay`, runId `uruguay-20260823-9789de`, branch `research-v2/uruguay`, draft PR #77 (never
-merged, never production content). Every stage complete: Pass A/B first try, Reconcile on
-attempt 4 (3 real `gate-failure`s, findings converging 5→2→0 blocking, auto-retry consumed once
-then correctly refused twice — attempts 3-4 were deliberate manual dispatches), Critic first
-try at `claude-opus-5`/`high`. Research never exceeded `claude-sonnet-5`/`high`. Landing gate
-passed, `publication: false`, `landMode: pr`. Two of the four seams above remain UNPROVEN by
-this run: #2 (no intake issue existed to comment on) and #3 (no cancellation occurred) — do not
-claim otherwise. Full record: `CONTEXT.md`'s Decisions entry.
+Those remain targeted reliability proofs, not reasons to repeat a full research canary.
 
-**Next:** Claude's half of the reciprocal Claude↔Codex PR review loop
-(`automation/claude-codex-review-loop`, `scripts/codex-watcher.mjs`,
-`claude-codex-{signal,watcher}.yml`) — PR #78. Codex's real external watcher reviewed it twice:
-work order 1 (security architecture) fixed as revision 2 (`pull_request_target`), then a live
-correction superseded that — Claude missed it before pushing (see CONTEXT.md's Decisions entry
-for the full miss) — and revision 3 (two-workflow privilege separation, no `pull_request_target`
-at all) is now pushed. Loop mechanism proven to react twice; not yet proven: a round that reaches
-a clean (non-blocking) Codex pass.
+## Research-engine cutover truth
 
-## Canary evidence to preserve
+- V1 workflow/orchestrator stay present and usable.
+- `/new` selects V2 only when `vars.WAYPOINT_RESEARCH_ENGINE == 'v2'`.
+- With the selector unset, V1 remains the production default.
+- Manual V2 `workflow_dispatch` is always `landMode=pr`; it cannot mint production publication authority.
+- A green draft canary proves the research/product path, not a production cutover by itself.
 
-- **Malta** — Canary #1, stale reusable-workflow checkout defect. Historical RED evidence.
-- **Luxembourg** — Canary #2, gate-feedback/palette defects and manual convergence history.
-  Historical RED evidence.
-- **Portugal** — Canary #3, issue #74, run `portugal-20260822-7c041e`, branch
-  `research-v2/portugal`. Preserve exactly as failure evidence; do not convert it into the green
-  acceptance run.
+## Claude ↔ Codex review automation
+
+The reviewer loop is control-plane code. Current required architecture:
+
+- `.github/workflows/claude-codex-signal.yml` is an unprivileged signal/doorbell;
+- `.github/workflows/claude-codex-watcher.yml` separates read-only validation from write-capable publication at the **job** boundary;
+- `scripts/codex-watcher.mjs` owns work-order parsing, eligibility, bounded handoff, and idempotency;
+- `prompts/codex-work-order.md` is trusted control-plane input;
+- PR-controlled validation code must never share the same credentialed execution domain as publication.
+
+Historical note: PR #78's prose/history and the revision that actually reached the branch diverged; PR #79 restored the intended job-level boundary. Future reviews must inspect shipped code, not infer architecture from an old PR description.
+
+## Current cleanup / autonomy pass
+
+Draft PR #80 is the single cleanup surface. Its rules:
+
+- `main` stays untouched until review is complete;
+- structural cleanup requires evidence of duplicate ownership, not similar names;
+- `trip-split`, `trip-tools`, and `trip-kit` are distinct systems and are not consolidation targets by name alone;
+- project invariants protect V1/V2 coexistence, reviewer trust boundaries, Trip Split, itinerary/maps/SOS/offline, Atlas design authority, agent-instruction parity, and Canary #4's draft state;
+- CI retains stricter coverage while local canonical checks provide one obvious verification path;
+- the final branch must survive behavioral, architecture/security, and fresh-eyes consistency review loops.
+
+Plain-English status: `docs/cleanup/GRAND_CLEANUP_STATUS.md`.
+Repository ownership map: `docs/reference/repo-map.md`.
 
 ## Standing operating rules
 
-- V1 remains the rollback/default path; the V2 selector stays OFF until a canary is accepted.
-- A manual `workflow_dispatch` is ALWAYS `landMode=pr` — a canary structurally cannot publish.
-- Do not delete canary or research evidence branches.
-- Every claim about a crash must name its execution plane: interactive bridge/browser, headless
-  GitHub Actions research agent, or the deterministic control plane. They are never inferred
-  from one another (`docs/reference/claude-research-runtime.md`).
-- Interactive research must never attempt CAPTCHA, Turnstile, MFA, login, or security
-  verification in Claude's embedded browser. Mark the origin blocked and use another source.
-
-## A method note worth keeping
-
-PR #75's first B1 regression **passed with its own fix deleted** — it was substring-matching the
-comment explaining why the grant was needed, which itself contained `issues: write`. Every
-workflow guard added since is verified by reverting its fix and confirming the test goes red. A
-guard that has never failed is an assumption, not a test.
+- Do not use repeated full Claude research runs to debug deterministic state/schema/CI problems.
+- Never infer one execution plane's failure from another (interactive browser/bridge, GitHub Actions research agent, deterministic control plane).
+- Interactive research must never attempt CAPTCHA, Turnstile, MFA, login, or security verification; mark the source blocked and use another source.
+- A missing metric is an honest blank. Never estimate tool/token/fetch telemetry as fact merely to fill a dashboard.
+- Historical pipeline critic findings belong in process evidence, never traveler learnings.
+- Every safety guard should have a test capable of going red when the protected behavior is removed; a guard that has never failed is still an assumption.
 
 ## Where to read more
 
-- `CONTEXT.md` — durable project decisions/history, on demand only.
+- `CONTEXT.md` — durable decisions/history, read on demand.
 - `docs/reference/pipeline.md` — product pipeline architecture.
-- `docs/reference/claude-research-runtime.md` — execution planes + the security-challenge rule.
-- `docs/pipeline v2/IMPLEMENTATION_STATE.md` — detailed V2 build/canary record.
-- `.claude/skills/waypoint-guide-author/references/research-efficiency.md` — interactive research
-  and source-access rules.
+- `docs/reference/claude-research-runtime.md` — execution planes and source-access safety.
+- `docs/pipeline v2/IMPLEMENTATION_STATE.md` — detailed V2 build/canary evidence.
+- `docs/pipeline v2/SEPTEMBER_TRACKER.md` — delivery state and deadlines.
+- `.claude/skills/waypoint-guide-author/references/research-efficiency.md` — research/source-access rules.
