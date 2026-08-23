@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "complete",
   "createdAt": "2026-08-23T03:28:30.724Z",
-  "updatedAt": "2026-08-23T08:02:06.720Z",
+  "updatedAt": "2026-08-23T08:03:57.507Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -165,8 +165,8 @@
     "deployedAt": null
   },
   "landing": {
-    "outcome": "pending",
-    "pr": null,
+    "outcome": "draft",
+    "pr": 77,
     "mergedAt": null,
     "announced": null,
     "finalizedAt": null,
