@@ -1,0 +1,821 @@
+{
+  "schemaVersion": "wp-evidence/2.1",
+  "slug": "uruguay",
+  "runId": "uruguay-20260823-9789de",
+  "candidates": [
+    {
+      "id": "c-el-palenque--mercado-del-puerto-montevideo",
+      "name": "El Palenque",
+      "branch": "Mercado del Puerto, Montevideo",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-el-palenque--punta-del-este",
+      "name": "El Palenque",
+      "branch": "Punta del Este",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-estancia-del-puerto",
+      "name": "Estancia del Puerto",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Surfaced in the same Mercado del Puerto discovery sweep as El Palenque, but not independently deep-verified this pass — El Palenque's Bloomberg top-30 parrilla ranking and multiply-corroborated hours made it the stronger, faster-to-verify anchor; adaptive stopping favored depth on one pick over breadth on two redundant ones in the same hall.",
+      "worth": null
+    },
+    {
+      "id": "c-bodega-bouza",
+      "name": "Bodega Bouza",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-palacio-salvo",
+      "name": "Palacio Salvo",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-teatro-solis",
+      "name": "Teatro Solís",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Fully verified (guided-tour times, price UYU 40/60, Wednesday-free) but cut from the Day 3 plan for pacing — that day already carries Palacio Salvo, Mercado del Puerto, and the Museo del Carnaval, and a fourth stop over-packs a 'balanced'-pace day. A genuine candidate for a slower version of this itinerary.",
+      "worth": null
+    },
+    {
+      "id": "c-mercado-del-puerto",
+      "name": "Mercado del Puerto",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-museo-del-carnaval",
+      "name": "Museo del Carnaval",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-colonia-del-sacramento--barrio-historico-faro",
+      "name": "Colonia del Sacramento",
+      "branch": "Barrio Histórico & Faro",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-casapueblo--punta-ballena",
+      "name": "Casapueblo",
+      "branch": "Punta Ballena",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-la-mano-de-punta-del-este",
+      "name": "La Mano de Punta del Este",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-isla-de-lobos",
+      "name": "Isla de Lobos",
+      "branch": null,
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-cabo-polonio",
+      "name": "Cabo Polonio",
+      "branch": null,
+      "priority": "nature",
+      "status": "detour",
+      "shortlisted": true,
+      "reason": "A genuinely wild, un-electrified sea-lion coast and dune settlement — the strongest single nature find for this trip — but reaching it costs a full day round trip from Punta del Este (road plus a 4x4 dune transfer each way). Presented as an opt-in detour on the one open day rather than fixed into a 9-day, 3-city itinerary that already has fixed logistics on both sides.",
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-la-rambla--montevideo",
+      "name": "La Rambla",
+      "branch": "Montevideo",
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-desfile-de-llamadas",
+      "name": "Desfile de Llamadas",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-carnival-holiday-2027",
+      "candidateId": "c-desfile-de-llamadas",
+      "claim": "Uruguay's Carnival public holidays (Lunes y Martes de Carnaval) fall Feb 8–9, 2027 — computed Easter-relative (48/47 days before Easter Sunday, which is Mar 28, 2027), not separately announced each year",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://feriados.io/feriados/uy/2027",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "es",
+        "publishedAt": null,
+        "family": "holiday-calendar-aggregators",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-llamadas-2026-dates",
+      "candidateId": "c-desfile-de-llamadas",
+      "claim": "The Desfile de Llamadas parade's most recent officially-confirmed dates are Friday Feb 6 and Saturday Feb 7, 2026 (Isla de Flores, Montevideo); the 2027 dates had not been posted on the event's official page as of this check",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://eventos.montevideo.gub.uy/evento/desfiles-de-carnaval/desfile-de-llamadas",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": "2026-01",
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-01"
+      }
+    },
+    {
+      "id": "ev-entry-visa-us",
+      "candidateId": null,
+      "claim": "US citizens traveling on a regular (non-diplomatic) passport do not need a visa for tourism and are granted 90 days on arrival",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://embassyofuruguay.us/miami/index.php/es/visa-de-turismo/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-cdc-health",
+      "candidateId": null,
+      "claim": "CDC recommends hepatitis A and B (plus routine vaccines) for most travelers to Uruguay; yellow fever is not recommended",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://wwwnc.cdc.gov/travel/destinations/traveler/none/uruguay",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-advisory-blocked",
+      "candidateId": null,
+      "claim": "travel.state.gov is Cloudflare-gated against automated fetch (403) in this environment; a search synthesis (via the US Embassy Montevideo's own renewal notice) suggests Level 2 as of a July 2026 renewal, but this is a lead, not a fetched primary verification",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages/Uruguay.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-09-22"
+      }
+    },
+    {
+      "id": "ev-cot-colonia-fare",
+      "candidateId": null,
+      "claim": "COT bus Montevideo (Tres Cruces) → Colonia del Sacramento: UYU 579 one-way, ≈2h20m, frequent departures from 05:00",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.cot.com.uy/horarios-tarifas.php",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-cot-punta-fare",
+      "candidateId": null,
+      "claim": "COT bus Montevideo (Tres Cruces) → Punta del Este: UYU 466 one-way, ≈2h, frequent departures from 04:45",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.cot.com.uy/horarios-tarifas.php",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-airport-transfer",
+      "candidateId": null,
+      "claim": "Carrasco Airport → downtown Montevideo: official taxi desk exists with a fare calculator (fixed-fare structure), or public buses to Tres Cruces/downtown — exact bus line numbers and precise minutes are a cross-checked lead, not independently fetched",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.taxisaeropuerto.com/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-no-nonstop-jfk-mvd",
+      "candidateId": null,
+      "claim": "No nonstop flight exists between JFK and Montevideo (MVD) as of this check; every routing connects (commonly via São Paulo, Panama City, or Bogotá)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.flightconnections.com/flights-from-jfk-to-mvd",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "flight-route-databases",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-faro-colonia",
+      "candidateId": "c-colonia-del-sacramento--barrio-historico-faro",
+      "claim": "Faro de Colonia (lighthouse) is open Thursday–Sunday 10:00–12:00 and 15:00–17:00, UYU 35 entrance, minimum age 8, closed-toe shoes required",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://visitacolonia.com/listings/visitas-al-faro-de-colonia/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-casapueblo",
+      "candidateId": "c-casapueblo--punta-ballena",
+      "claim": "Casapueblo is open daily from 10:00; admission UYU 600 (adult), UYU 500 (65+), free under 12",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://casapueblo.com.uy/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-museo-carnaval",
+      "candidateId": "c-museo-del-carnaval",
+      "claim": "Museo del Carnaval is open Wednesday–Sunday 11:00–17:00 (closed Mon/Tue), UYU 200 admission, free under 12; keeps regular hours during Carnival week itself",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "http://www.museos.gub.uy/index.php/noticias/item/2542-horario-de-los-museos-de-la-direccion-nacional-de-cultura-en-semana-de-carnaval",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-isla-lobos",
+      "candidateId": "c-isla-de-lobos",
+      "claim": "Isla de Lobos boat excursion departs daily at 12:00, ≈2h round trip, US$70 adult / US$50 child under 10; no landing permitted on the island itself",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.isladelobos.com.uy/en/home-english/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-palacio-salvo-redticket-active",
+      "candidateId": "c-palacio-salvo",
+      "claim": "Palacio Salvo guided tours are booked exclusively through Red Ticket (redtickets.uy) — confirmed by a live listed event (Aug 24, 2026, 10:30, Spanish, with further times shown) — no door sales exist",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://redtickets.uy/evento/Visitas-guiadas-al-Palacio-Salvo/19397/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-palacio-salvo-stale-page",
+      "candidateId": "c-palacio-salvo",
+      "claim": "Montevideo Municipio B's own page still lists a different, likely-outdated tour arrangement (Tue/Thu/Sat 15:00/16:00/17:00, UYU 200, phone/Facebook booking) that conflicts with Red Ticket's current listings",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://municipiob.montevideo.gub.uy/node/4421",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-mercado-del-puerto",
+      "candidateId": "c-mercado-del-puerto",
+      "claim": "Mercado del Puerto was inaugurated Oct 10, 1868; the building keeps Mon–Sat 9:00–17:00, Sun 10:00–17:00 hours (exterior bars later), with Sunday the busiest day and 11:30–15:00 the market's own recommended window",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mercadodelpuerto.com.uy/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-el-palenque-hours",
+      "candidateId": "c-el-palenque--mercado-del-puerto-montevideo",
+      "claim": "El Palenque (Mercado del Puerto) hours: Tue–Fri 12:00–23:00, Sat–Sun 12:00–17:00, closed Mondays",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.alacarta.com.uy/el-palenque/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-el-palenque-address",
+      "candidateId": "c-el-palenque--mercado-del-puerto-montevideo",
+      "claim": "El Palenque addresses: Pérez Castellano 1579 (Montevideo, Mercado del Puerto); Parada 7, Av. Roosevelt (Punta del Este)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.elpalenque.com.uy/parrilla-montevideo-uruguay.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-bouza-address",
+      "candidateId": "c-bodega-bouza",
+      "claim": "Bodega Bouza is located at Cno. de la Redención 7658 bis, Melilla (greater Montevideo), phone +598 2323 4030",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://bodegabouza.com/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-antel-chip",
+      "candidateId": null,
+      "claim": "Antel's official prepaid \"Chip Prepago\" SIM costs $65 UYU, requiring a minimum top-up of $220 to activate service",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://tienda.antel.com.uy/producto/357/chip-prepago",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-fx-usd-uyu",
+      "candidateId": null,
+      "claim": "Mid-market exchange rate: 1 USD ≈ 40.1496 UYU",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=UYU",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "fx",
+        "recheckOn": "2026-08-30"
+      }
+    },
+    {
+      "id": "ev-tipping-norm",
+      "candidateId": null,
+      "claim": "Restaurant tipping (propina) of ≈10% is customary but not legally required; the \"cubierto\" cover charge is a separate house fee (bread/setting), not a tip",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.guruguay.com/tipping-in-uruguay/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-cabo-polonio-colony",
+      "candidateId": "c-cabo-polonio",
+      "claim": "Cabo Polonio's sea lion reserve (two coexisting species, males to 340 kg) sits on rocks near the Cabo Polonio Lighthouse, inside Parque Nacional Cabo Polonio, with breeding-season colonies described as extremely loud in summer",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://turismorocha.gub.uy/atractivos/naturaleza/reserva-de-lobos-marinos",
+        "kind": "official",
+        "access": "fetched",
+        "language": "es",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-21"
+      }
+    },
+    {
+      "id": "ev-cabo-polonio-access",
+      "candidateId": "c-cabo-polonio",
+      "claim": "No regular paved-road vehicle access reaches Cabo Polonio's settlement itself — the last stretch is by 4x4 across dunes — a durable, long-standing access arrangement rather than a recently-changed one, effectively consuming a full day round trip from Punta del Este",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.civitatis.com/en/punta-del-este/cabo-polonio-day-trip/",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "day-trip-tour-descriptions",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-carnival-length",
+      "candidateId": "c-desfile-de-llamadas",
+      "claim": "Uruguay's Carnival is widely described as the longest in the world, running roughly 40 days from mid/late January",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://uruguaycarnival.com/",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-tourist-police-helpline",
+      "candidateId": null,
+      "claim": "Uruguay's Ministry of Tourism runs a free non-emergency tourist helpline (0800-8748, business hours); seasonal tourist police patrol Ciudad Vieja (Montevideo) and Colonia's historic quarter in summer",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://thingstodoinuruguay.com/safety/",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-23",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-21"
+      }
+    }
+  ],
+  "reservations": [],
+  "transport": [],
+  "disagreements": [
+    {
+      "id": "d-palacio-salvo-schedule",
+      "topic": "Palacio Salvo guided-tour day/time grid and booking channel",
+      "impact": "recommendation-changing",
+      "investigation": "Montevideo's own Municipio B page (fetched) states Tue/Thu/Sat 15:00–17:00 tours booked by phone/Facebook at UYU 200. Multiple independent tour aggregators (GetYourGuide, descubrimontevideo.uy, Trip.com) converge on a different, more granular grid — Mon–Fri 10:30/12:00/14:00/16:30 (ES) plus English times, Sat 10:00/10:30/12:00, Sun 12:00/14:00 — booked exclusively through Red Ticket, no door sales. Fetching Red Ticket's own event listing directly confirmed an active, currently-selling event (Aug 24, 2026, 10:30, Spanish, with more times available), which corroborates the Red-Ticket-based system as the CURRENT one and the Municipio B page as stale content still live on a government domain.",
+      "resolution": "Shipped the Red-Ticket/aggregator-converged schedule as the operative one, but softened the guide's specific day-time claims to a range with an explicit ⚠ inviting confirmation at booking, since no single fetch produced the complete official grid — only the booking CHANNEL (Red Ticket, no door sales) is fetched-solid."
+    },
+    {
+      "id": "d-entry-days-wording",
+      "topic": "'90 days' vs '90 business days' for the US tourist stay allowance",
+      "impact": "minor",
+      "investigation": "The Uruguay embassy's own tourism-visa page uses '90 días hábiles' (business days); several tourism aggregators simplify this to a flat 90 calendar days. For a 9-day trip the distinction is immaterial either way.",
+      "resolution": "Guide states '90 days' without over-specifying business vs. calendar, since it doesn't change this trip's planning and over-precision here risks asserting a distinction the sources themselves don't agree on."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [],
+      "notApplicableReason": "No shipped candidate this pass is a scarce-release booking (no ticketed anchor with a release window, no reservation-only restaurant) — El Palenque and the sights are walk-in or simple same-week online tickets; Bodega Bouza and Isla de Lobos are advance-bookable but not scarcity-constrained."
+    },
+    "transport": {
+      "requiredRouteIds": [],
+      "notApplicableReason": "The only intercity legs are the Montevideo–Colonia and Montevideo–Punta del Este COT bus routes, both high-frequency (departures roughly hourly), well under R3 risk — a missed departure has a same-day next-bus fallback, not a stranding consequence. No route in this itinerary reaches R3+."
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Later searches on Montevideo parrillas, Punta del Este beach sights, and Colonia old-town attractions mostly re-surfaced the same handful of names (El Palenque, Mercado del Puerto stalls, Casapueblo, La Mano) across different aggregators, with no new serious contender emerging. The one open item — the Desfile de Llamadas' exact 2027 dates — is unresolved but does not change any recommendation: the Carnival-season framing, the two legal holiday days, and the museum/venue picks all hold regardless of which exact nights the parade itself lands on."
+  },
+  "passB": null,
+  "reconciliation": []
+}

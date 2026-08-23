@@ -3,25 +3,40 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "body": "<p>Carrasco International Airport (MVD) sits about 20 km east of downtown Montevideo. The official airport taxi desk (Taxis Aeropuerto Carrasco) runs a fixed-fare structure with its own calculator, and the trip takes roughly 25–30 minutes outside rush hour. ⚠ Public buses also run from the terminal to Tres Cruces and downtown for far less (≈45–60 minutes with luggage) — several lines are reported to cover the route, but confirm the current number at the terminal rather than relying on a specific line number here.</p><p>There is no direct flight from New York; every routing from JFK connects (commonly through São Paulo, Panama City, or Bogotá), so budget the full connection time on arrival day rather than a tight single hop.</p>",
+    "checklist": [
+      "Buy an Antel prepaid SIM chip at the airport arrivals area, or activate an eSIM before you fly",
+      "Have small USD or freshly-withdrawn UYU for the airport taxi if skipping the bus",
+      "Confirm your connecting-flight buffer at booking — no JFK–MVD route is nonstop"
+    ],
+    "verified_on": "2026-08-23",
+    "shelf_life": "transit",
+    "source_url": "https://www.taxisaeropuerto.com/"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "body": "<p>Currency is the Uruguayan peso (UYU, \"$\" locally — watch for confusion with USD prices quoted the same way in tourist areas). Spanish is the national language, spoken in the fast, Italian-inflected Rioplatense accent shared with Buenos Aires (\"vos\" instead of \"tú\", \"sh\" for \"ll/y\"). Electrical outlets are mostly Type L (Italian 3-pin) and Type C, at 220V — a US traveler needs a plug adapter and, for 120V-only devices, a voltage converter.</p><p>Uruguay abolished daylight saving time in 2015, so it stays on UTC-3 year-round — no seasonal clock change to plan around.</p>",
+    "checklist": [
+      "Pack a Type L/C plug adapter — US flat-pin plugs do not fit",
+      "Check any 120V-only device for a 220V-compatible charger/converter"
+    ]
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "body": "<p>A US passport holder needs no visa for a tourist visit of up to 90 days — see the Entry card below. Immigration can ask for proof of onward travel and sufficient funds, though this is rarely enforced in practice for US arrivals.</p><p>⚠ The US State Department's current advisory level for Uruguay could not be automatically verified in this research pass (the page blocks plain automated fetches) — confirm the level at travel.state.gov before you go. A search lead (via the US Embassy Montevideo's own site) points to a Level 2 (Exercise Increased Caution) renewal around July 2026, but this is a lead, not a fetched primary verification.</p>"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "body": "<p>Antel is the state carrier and the broadest network. A prepaid \"Chip Prepago\" SIM costs {{fact:antel-chip-65-uyu}} (plus a minimum top-up to activate service) from Antel's own stores; airport kiosks in the international arrivals area sell tourist-ready SIMs from Antel and Movistar, passport in hand for registration. Antel does not currently issue eSIMs to tourists arriving without a local contract — a third-party travel eSIM is the alternative if you want to skip the physical-SIM counter.</p>",
+    "verified_on": "2026-08-23",
+    "shelf_life": "hours",
+    "source_url": "https://tienda.antel.com.uy/producto/357/chip-prepago"
   },
   {
     "type": "panel",
@@ -29,11 +44,23 @@
     "title": "Booking checklist",
     "body": "",
     "checklist": [
-      "Flights",
-      "Accommodation",
-      "Airport transfer",
+      "Flights (no nonstop JFK–MVD — check your connection buffer)",
+      "Accommodation — confirm AC is real and working, not just listed",
+      "Airport transfer or Antel/eSIM data plan sorted before landing",
       "Travel insurance",
-      "Any timed tickets"
+      "Isla de Lobos boat excursion, if the weather looks settled (isladelobos.com.uy)"
     ]
+  },
+  {
+    "type": "weather",
+    "group": "Plan",
+    "title": "Weather for your dates"
+  },
+  {
+    "type": "holidays",
+    "group": "Plan",
+    "title": "Public holidays",
+    "year": 2027,
+    "note": "Checked automatically against your travel dates (source: Nager.Date, refreshed each deploy). Carnival Monday and Tuesday (Feb 8–9, 2027) fall inside this trip — they're normal business days by law (employers choose whether to grant them), but many offices, and some museums, run reduced hours or close. The Desfile de Llamadas parade itself is a separate, locally-scheduled event — see the Days tab."
   }
 ]

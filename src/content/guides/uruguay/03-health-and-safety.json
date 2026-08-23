@@ -3,7 +3,20 @@
     "type": "panel",
     "group": "Health & safety",
     "title": "Health & pharmacy",
-    "body": "",
-    "phase": "daily"
+    "phase": "daily",
+    "body": "<p>No vaccines are required for entry. The CDC recommends being current on routine shots (MMR, Tdap, flu) plus hepatitis A and B for most travelers; yellow fever is not recommended for Uruguay itself. Tap water is generally safe to drink in Montevideo and the other cities on this trip.</p><p>Pharmacies (\"farmacias\") are common and well-stocked in all three towns; look for a green cross sign. Farmashop and San Roque are the widest chains.</p>",
+    "verified_on": "2026-08-23",
+    "shelf_life": "default",
+    "source_url": "https://wwwnc.cdc.gov/travel/destinations/traveler/none/uruguay"
+  },
+  {
+    "type": "panel",
+    "group": "Health & safety",
+    "title": "Emergency numbers",
+    "phase": "daily",
+    "body": "<p>Dial <b>911</b> nationwide for police, or the direct lines: police 911, medical/ambulance 105, fire 104. Uruguay's Ministry of Tourism runs a free non-emergency tourist helpline at 0800-8748 (business hours) for scams, lost documents, and general hassles. Seasonal tourist police patrol Ciudad Vieja in Montevideo and Colonia's historic quarter during summer, with some English.</p><p>⚠ The US State Department's advisory could not be independently fetched this pass (see the Plan tab) — check it directly before travel. As general practice in crowded tourist spots (Mercado del Puerto, Carnival crowds, the Rambla at night), keep phones and bags zipped and front-facing; petty theft is the more common tourist-facing risk than violent crime, but confirm current specifics against the advisory itself.</p>",
+    "verified_on": "2026-08-23",
+    "shelf_life": "default",
+    "source_url": "https://thingstodoinuruguay.com/safety/"
   }
 ]

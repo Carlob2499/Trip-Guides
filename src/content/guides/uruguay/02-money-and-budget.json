@@ -3,43 +3,85 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
-    "phase": "arrival"
+    "body": "<p>The Uruguayan peso (UYU) floats freely; {{fact:fx-usd-uyu-40}} to 1 USD as of this check, but this moves week to week — reconfirm close to departure. US dollars are widely accepted for larger purchases (hotels, tours, some restaurants) in tourist areas, but small vendors, buses, and markets expect pesos.</p><p>Cards are widely accepted in Montevideo and Punta del Este; carry cash for Colonia's smaller shops, bus fares, and the Faro de Colonia's entrance fee. ATMs (\"cajeros\" — Redbanc, Banred networks) are common in all three towns.</p>",
+    "verified_on": "2026-08-23",
+    "shelf_life": "fx",
+    "source_url": "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=UYU"
   },
   {
     "type": "budget",
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "intro": "Per-person, mid-range estimates for 8 nights (Feb 5–13, 2027) — cross-checked against current hotel and tour pricing, not a single source. Treat lodging and flights as ⚠ especially soft: both move with season and booking date.",
     "currency": "$",
-    "days": 9,
+    "days": 8,
     "budgetTarget": "Mid-range ($75-150/day)",
     "items": [
       {
-        "label": "Lodging, per night",
+        "label": "Lodging, per night (mid-range hotel, 2 sharing)",
         "basis": "day",
-        "est": 0
+        "est": 90,
+        "low": 60,
+        "high": 140,
+        "per": "person",
+        "note": "≈ Montevideo runs cheaper than Punta del Este in February (its high season) — expect the top of this range on the coast."
       },
       {
         "label": "Food & drink, per day",
         "basis": "day",
-        "est": 0
+        "est": 45,
+        "low": 30,
+        "high": 65,
+        "per": "person",
+        "note": "≈ A parrilla lunch or dinner at a sit-down spot like El Palenque runs well above a chivito-and-empanada day."
       },
       {
         "label": "Local transport, per day",
         "basis": "day",
-        "est": 0
+        "est": 12,
+        "low": 6,
+        "high": 20,
+        "per": "person",
+        "note": "City buses/taxis; excludes the intercity COT fares to Colonia/Punta del Este, itemized below."
       },
       {
         "label": "Sights & activities, per day",
         "basis": "day",
-        "est": 0
+        "est": 18,
+        "low": 5,
+        "high": 40,
+        "per": "person",
+        "note": "≈ Museum/lighthouse entries are cheap (UYU 35–600); the Isla de Lobos boat trip (US$70) is the one big-ticket day."
       },
       {
-        "label": "Flights — round trip",
+        "label": "COT bus — Montevideo ↔ Colonia del Sacramento (round trip)",
         "basis": "trip",
-        "est": 0
+        "est": 29,
+        "per": "person",
+        "note": "≈ round trip at {{fact:cot-colonia-579-uyu}}, converted at the rate above.",
+        "verified_on": "2026-08-23",
+        "shelf_life": "transit",
+        "source_url": "https://www.cot.com.uy/horarios-tarifas.php"
+      },
+      {
+        "label": "COT bus — Montevideo ↔ Punta del Este (one-way)",
+        "basis": "trip",
+        "est": 12,
+        "per": "person",
+        "note": "≈ {{fact:cot-punta-466-uyu}}, converted at the rate above.",
+        "verified_on": "2026-08-23",
+        "shelf_life": "transit",
+        "source_url": "https://www.cot.com.uy/horarios-tarifas.php"
+      },
+      {
+        "label": "Flights — round trip (JFK, connecting)",
+        "basis": "trip",
+        "est": 850,
+        "low": 650,
+        "high": 1100,
+        "per": "person",
+        "note": "⚠ No nonstop JFK–MVD route exists; fares swing hard by connection and booking date — treat this as a rough planning figure, not a quote."
       }
     ]
   }

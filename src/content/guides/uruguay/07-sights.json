@@ -4,8 +4,61 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
-    "items": [],
-    "rank": 2
+    "rank": 2,
+    "items": [
+      {
+        "name": "Palacio Salvo",
+        "kicker": "Art Deco tower over Plaza Independencia",
+        "body": "<p>Completed in 1928 and briefly the tallest building in South America, this Art Deco landmark anchors Plaza Independencia. The only way inside is a guided tour (≈45 min) that reaches the 11th-floor terrace and rooftop viewpoint, plus a small tango museum honoring \"La Cumparsita\" composer Gerardo Matos Rodríguez, who lived here. ⚠ Sources disagree on the exact day-by-day time grid — booking is confirmed current and Red-Ticket-only; confirm the slot at booking.</p>",
+        "dwell_min": 60,
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://redtickets.uy/evento/Visitas-guiadas-al-Palacio-Salvo/19397/"
+      },
+      {
+        "name": "Mercado del Puerto",
+        "kicker": "1868 iron-frame market hall turned parrilla hall",
+        "body": "<p>A cast-iron Victorian market building inaugurated October 10, 1868, now packed wall-to-wall with parrilla counters grilling in the open, tourists and locals shoulder to shoulder at lunch. The building itself keeps Mon–Sat 9:00–17:00, Sun 10:00–17:00 hours, with exterior bars running later — Sunday is the busiest day, and 11:30–15:00 is the market's own recommended window for atmosphere and live music.</p><p>El Palenque, the market's best-known parrilla, is closed Mondays specifically — other stalls keep their own hours.</p>",
+        "dwell_min": 90,
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://www.mercadodelpuerto.com.uy/"
+      },
+      {
+        "name": "Museo del Carnaval",
+        "kicker": "The story behind the world's longest Carnival",
+        "body": "<p>A small, well-organized museum on the Rambla near the port, tracing the history of Montevideo's Carnival — the candombe drum tradition, the Llamadas parade, and the murga theatrical groups that compete every summer. A useful primer before the Carnival-holiday days on this trip.</p>",
+        "dwell_min": 60,
+        "closed_days": ["mon", "tue"],
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "http://www.museos.gub.uy/index.php/noticias/item/2542-horario-de-los-museos-de-la-direccion-nacional-de-cultura-en-semana-de-carnaval"
+      },
+      {
+        "name": "Colonia del Sacramento — Barrio Histórico & Faro",
+        "kicker": "UNESCO-listed 17th-century old town",
+        "body": "<p>Twelve compact blocks of Portuguese and Spanish colonial streets, cobbled in uneven river stone, declared a UNESCO World Heritage Site in 1995. Climb the 1857 lighthouse (built over the ruins of a burned convent) for the view over the old town and the Río de la Plata toward Argentina.</p><p>The old town itself is open every day; the lighthouse climb specifically is Thursday–Sunday only.</p>",
+        "dwell_min": 240,
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://visitacolonia.com/listings/visitas-al-faro-de-colonia/"
+      },
+      {
+        "name": "Casapueblo — Punta Ballena",
+        "kicker": "Carlos Páez Vilaró's cliffside whitewashed compound",
+        "body": "<p>Artist Carlos Páez Vilaró built this rambling, whitewashed, Gaudí-esque compound into the cliffs at Punta Ballena over four decades, living and working here until his death in 2014. Part gallery, part hotel, part sunset viewpoint — it's one of the few reliably-crowded sunset spots on this coast, for good reason.</p>",
+        "dwell_min": 90,
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://casapueblo.com.uy/"
+      },
+      {
+        "name": "La Mano de Punta del Este",
+        "kicker": "The half-buried hand on Playa Brava",
+        "body": "<p>Chilean sculptor Mario Irarrázabal's 1982 concrete hand, fingers reaching out of the sand on Playa Brava — Punta del Este's single most photographed spot and free to visit any time. Early morning avoids the tour-bus crowds.</p>",
+        "dwell_min": 20
+      }
+    ]
   },
   {
     "type": "divergences",
@@ -14,10 +67,24 @@
     "phase": "daily",
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "Skip Uruguay's Carnival — Rio's is the famous one.",
+        "correction": "Uruguay's is a different tradition, not a lesser version of Rio's: it runs longer than any other Carnival in the world (roughly 40 days, starting in January), and it's built on candombe drumming and the Llamadas parade — a distinct Afro-Uruguayan heritage, not a samba spectacle.",
+        "category": "misleading"
+      },
+      {
+        "claim": "Colonia del Sacramento is a Buenos Aires day trip, so see it from Argentina.",
+        "correction": "It's just as reachable — and simpler — from Montevideo: a direct COT bus (≈2h20m, no international ferry crossing) runs from Tres Cruces terminal several times a day.",
+        "category": "missing-context",
+        "verified_on": "2026-08-23",
+        "source_url": "https://www.cot.com.uy/horarios-tarifas.php"
+      },
+      {
+        "claim": "Walk up to Palacio Salvo and buy a ticket at the door.",
+        "correction": "There is no door sale — tours are booked exclusively through Red Ticket, and showing up without a ticket means no entry.",
+        "category": "outdated",
+        "verified_on": "2026-08-23",
+        "source_url": "https://redtickets.uy/evento/Visitas-guiadas-al-Palacio-Salvo/19397/"
       }
-    ],
-    "rank": 2
+    ]
   }
 ]
