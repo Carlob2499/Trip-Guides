@@ -14,7 +14,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - **Current phase:** post-Canary #4 **validation preparation + repository cleanup/autonomy hardening**.
 - **Core engine:** P01–P13 DONE.
 - **Integration:** I01–I05 have deterministic/live evidence; I06 deliberately stays open until final V1 retirement/cutover approval.
-- **Reliability:** PR #75 repair is merged; PR #76 closeout is merged; fresh Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains draft-only and unpublished.
+- **Reliability acceptance:** PR #75 repair (`253607a`) is merged; PR #76 closeout is merged; fresh Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains draft-only and unpublished.
 - **Canary #4 truth:** it proved the fresh-run wrapper and ordinary bounded recovery path. It did **not** exercise a real escalation issue comment/`gh` path because no intake issue existed, and it did **not** exercise the cancellation grace-window chain because no cancellation occurred. Those two failure-only seams remain targeted proofs.
 - **Production cutover:** NOT DONE. `WAYPOINT_RESEARCH_ENGINE` remains unset/off, V1 remains the production default/rollback path, and a manual V2 canary cannot mint production publication authority.
 - **Current engineering surface:** draft PR #80 (`cleanup/grand-pass-2026-08-23`) is reconciling stale authority docs/issues, adding executable project invariants, simplifying verification, auditing ownership/duplication/performance/offline/security, and running repeated review/debug loops.
@@ -31,7 +31,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - Malta, Luxembourg, and Portugal remain preserved RED canary evidence.
 - Uruguay Canary #4: Pass A/B first try; Reconcile attempt 4 after three real gate failures with findings converging 5→2→0 blocking; bounded auto-retry consumed once then correctly refused; Critic first try; landing gate passed; `publication: false`; `landMode: pr`.
 - Progress consumes real V2 durable run events; unavailable fetch-level/nugget/unmeasured counters remain honestly absent.
-- Claude↔Codex review automation uses a job-level read-only-validation / write-capable-publication trust boundary. Treat shipped code as authority, not old PR prose.
+- The temporary Claude↔Codex reciprocal reviewer from PRs #78/#79 is RETIRED in cleanup PR #80. It was integration scaffolding, not a Waypoint product lifecycle, and its absence is now an executable project invariant.
 
 **Do not equate “green draft canary” with “production cutover complete.”** The former is accepted evidence; the latter remains a deliberate product/operations decision with its own proof.
 
