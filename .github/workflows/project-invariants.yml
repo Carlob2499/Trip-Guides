@@ -1,0 +1,46 @@
+name: Project invariants
+
+# Lightweight guard for architecture/authority files that the full Tests workflow may
+# intentionally skip when a PR changes only Markdown. This uses only Node built-ins, so it
+# needs no npm install and stays cheap enough to run whenever a protected contract moves.
+on:
+  pull_request:
+    paths:
+      - AGENTS.md
+      - CLAUDE.md
+      - package.json
+      - scripts/check-project-invariants.mjs
+      - .github/workflows/project-invariants.yml
+      - .github/workflows/new-guide.yml
+      - .github/workflows/claude-codex-watcher.yml
+      - .github/workflows/research-pass.yml
+      - .github/workflows/research-pass-v2.yml
+      - scripts/pipeline.mjs
+      - scripts/pipeline-v2.mjs
+      - src/features/trip-split/**
+      - src/features/itinerary/**
+      - src/features/maps/**
+      - src/features/sos/**
+      - public/sw.js
+      - docs/design-handoff/**
+      - src/content/guides/uruguay/_guide.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: invariants-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  invariants:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: node scripts/check-project-invariants.mjs
