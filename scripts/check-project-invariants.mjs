@@ -43,11 +43,6 @@ function requirePath(rel, label = rel, type = "file") {
   return true;
 }
 
-function requireAbsent(rel, label = rel) {
-  if (fs.existsSync(file(rel))) fail(`${label}: retired integration scaffolding must stay absent (${rel})`);
-  else pass(label);
-}
-
 function requireText(rel, needle, label) {
   if (!requirePath(rel, `${label} source`)) return;
   if (!read(rel).includes(needle)) fail(`${label}: expected contract text not found`);
@@ -86,10 +81,11 @@ requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
 requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
 requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
 
-// The reciprocal Claude↔Codex watcher was temporary integration scaffolding for PRs #78/#79.
-// It is not one of Waypoint's product lifecycles. Reintroducing it would restore a large,
-// secret-bearing automation surface that the cleanup deliberately retired.
-for (const retired of [
+// The reciprocal Claude↔Codex loop is a durable autonomy/control-plane surface. Cleanup may
+// simplify around it, but must not silently remove the mechanism that consumes bounded Codex
+// work orders and hands exact new heads back for independent review. Its own focused tests pin
+// the revision-4 trust boundary (unprivileged signal, read-only validate job, separate writer).
+for (const required of [
   ".github/workflows/claude-codex-watcher.yml",
   ".github/workflows/claude-codex-signal.yml",
   "scripts/codex-watcher.mjs",
@@ -97,8 +93,28 @@ for (const retired of [
   "scripts/__tests__/codex-watcher-workflow.test.mjs",
   "prompts/codex-work-order.md",
 ]) {
-  requireAbsent(retired, `Retired reciprocal-review scaffold: ${retired}`);
+  requirePath(required, `Reciprocal-review control plane: ${required}`);
 }
+requireText(
+  ".github/workflows/claude-codex-signal.yml",
+  "pull_request:\n    types: [edited]",
+  "Reciprocal-review signal remains pull_request:edited",
+);
+requireText(
+  ".github/workflows/claude-codex-watcher.yml",
+  "workflow_run:",
+  "Reciprocal-review worker remains default-branch workflow_run driven",
+);
+requireText(
+  ".github/workflows/claude-codex-watcher.yml",
+  "validate:",
+  "Reciprocal-review read-only validate job remains present",
+);
+requireText(
+  ".github/workflows/claude-codex-watcher.yml",
+  "publish:",
+  "Reciprocal-review separate publish job remains present",
+);
 
 // Protected traveler-facing architecture.
 requirePath("src/features/trip-split/index.ts", "Trip Split feature");
