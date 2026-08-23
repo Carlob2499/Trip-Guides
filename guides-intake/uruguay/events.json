@@ -23,17 +23,27 @@
       "text": "Pass A (canonical research) complete in 34m"
     },
     {
-      "at": "2026-08-23T04:03:12.278Z",
+      "at": "2026-08-23T04:03:39.314Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T04:15:51.352Z",
+      "kind": "decision",
+      "text": "Pass B (independent research) complete in 12m"
+    },
+    {
+      "at": "2026-08-23T04:15:51.363Z",
       "kind": "decision",
       "text": "Candidate funnel: 15 evaluated · 14 shortlisted · 12 shipped · 2 rejected · 1 kept as detours"
     },
     {
-      "at": "2026-08-23T04:03:12.278Z",
+      "at": "2026-08-23T04:15:51.363Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-23T04:03:12.278Z",
+      "at": "2026-08-23T04:15:51.363Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Palacio Salvo guided-tour day/time grid and booking channel"
     }
