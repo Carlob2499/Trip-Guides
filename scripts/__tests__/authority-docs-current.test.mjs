@@ -1,12 +1,7 @@
 // AUTHORITY DOCS — the surfaces a future session TRUSTS must not silently regress to a
-// pre-integration status. Codex's release-readiness audit (PR #76, R1–R7) found the tracker two
-// days and several phases stale, an obsolete audit brief still readable as an active work order,
-// the pipeline POLICY doc describing a V1-only research lifecycle, and a code comment claiming a
-// retry policy that PR #75 deliberately reversed. Every one of those passed the whole suite.
-//
-// These pins are deliberately COARSE — status vocabulary and the few claims that were actually
-// wrong — not prose assertions. A doc must stay editable; it must not be able to quietly say
-// "NOT STARTED" about work that shipped, or assert a policy the code contradicts.
+// pre-integration status. These tests pin current architectural truth, not one day's wording.
+// A status test must evolve when evidence evolves; forcing a living tracker back to yesterday's
+// state merely to keep CI green would make the test the source of misinformation.
 
 // @protects-file The docs a future session treats as current cannot revert to a pre-integration or contradicted claim.
 
@@ -32,13 +27,17 @@ function trackerStatus(id) {
 }
 
 describe("R1 — the tracker states the CURRENT phase, and no shipped work reads as NOT STARTED", () => {
-  it("the dashboard names reliability acceptance and Canary #4, not the retired P13 blocker", () => {
+  it("the dashboard records accepted draft reliability evidence without claiming production cutover", () => {
     const dash = TRACKER.split("# Master tracker")[0];
     expect(dash).toMatch(/Canary #4/);
     expect(dash).toMatch(/reliability acceptance/i);
-    expect(dash).toMatch(/#76/);                       // the current blocker
-    expect(dash).not.toMatch(/Carlo's next action:.*Fable proof/i); // the retired next action
-    expect(dash).not.toMatch(/2,566/);                 // the stale test count
+    expect(dash).toMatch(/#75/);
+    expect(dash).toMatch(/#76/);
+    expect(dash).toMatch(/253607a/);
+    expect(dash).toMatch(/draft product path GREEN/i);
+    expect(dash).toMatch(/production cutover.*NOT DONE/i);
+    expect(dash).not.toMatch(/Carlo's next action:.*Fable proof/i);
+    expect(dash).not.toMatch(/2,566/);
   });
 
   it("integration work that shipped is no longer NOT STARTED", () => {
@@ -47,18 +46,18 @@ describe("R1 — the tracker states the CURRENT phase, and no shipped work reads
     }
   });
 
-  it("but live acceptance is NOT claimed — I02 and the canary stay open, I06 stays held", () => {
-    // The failure mode in the other direction: marking the product path done because the code
-    // exists. Three RED canaries and a merged repair are not an acceptance.
-    expect(trackerStatus("I02")).toMatch(/IN PROGRESS|PENDING/i);
+  it("records draft product-path acceptance while keeping production cutover open", () => {
+    expect(trackerStatus("I02")).toMatch(/DONE \/ YELLOW|DRAFT PRODUCT PATH GREEN/i);
     expect(trackerStatus("I02")).not.toMatch(/^DONE$/);
-    expect(trackerStatus("I06")).toMatch(/HOLD|SATISFIED TO DATE/i);
-    expect(trackerStatus("R03")).toMatch(/NOT STARTED/); // fresh Canary #4
+    expect(trackerStatus("I06")).toMatch(/HOLD|IN PROGRESS/i);
+    expect(trackerStatus("R03")).toMatch(/DONE \/ YELLOW/i);
+    expect(TRACKER).toMatch(/production cutover.*pending|production cutover.*not done/i);
   });
 
-  it("the reliability pass is recorded as the current work", () => {
-    expect(trackerStatus("R01")).toMatch(/DONE/);        // #75 merged
-    expect(TRACKER).toMatch(/253607a/);                  // the merged head
+  it("the temporary reciprocal reviewer is retired rather than advertised as current architecture", () => {
+    const dash = TRACKER.split("# Master tracker")[0];
+    expect(dash).toMatch(/reciprocal reviewer.*RETIRED/i);
+    expect(dash).not.toMatch(/review automation uses a job-level read-only-validation/i);
   });
 });
 
@@ -68,15 +67,14 @@ describe("R2 — the original audit brief cannot be mistaken for an active work 
     expect(head).toMatch(/HISTORICAL|NOT AN ACTIVE WORK ORDER/i);
     expect(head).toMatch(/RESOLVED/i);
     expect(head).toMatch(/built beside V1|build beside V1/i);
-    // It must point at what IS current.
     expect(head).toMatch(/SEPTEMBER_TRACKER\.md/);
     expect(head).toMatch(/IMPLEMENTATION_STATE\.md/);
   });
 
-  it("names the three claims that are now false, so they cannot be acted on", () => {
+  it("names the obsolete quota/telemetry assumptions so they cannot be acted on", () => {
     const head = CODEX_HANDOFF.slice(0, CODEX_HANDOFF.indexOf("## What you need to answer"));
-    expect(head).toMatch(/quota/i);      // numeric Pass-B quotas were removed (P06)
-    expect(head).toMatch(/telemetry/i);  // telemetry does emit (I05)
+    expect(head).toMatch(/quota/i);
+    expect(head).toMatch(/telemetry/i);
   });
 });
 
@@ -88,7 +86,7 @@ describe("R3 — the pipeline POLICY doc knows both research implementations", (
     expect(PIPELINE).toMatch(/landMode=pr/);
   });
 
-  it("still asserts exactly TWO product lifecycles — the implementations are not a third", () => {
+  it("still asserts exactly TWO product lifecycles — implementations and retired tooling are not a third", () => {
     expect(PIPELINE).toMatch(/Two lifecycles, and nothing else/);
     expect(PIPELINE).toMatch(/two \*\*product\*\* lifecycles|exactly \*\*two\*\* product lifecycles|two PRODUCT lifecycles|exactly \*\*two\*\* product/i);
   });
@@ -112,7 +110,6 @@ describe("R5 — no doc or comment claims a retry policy the code refuses", () =
   });
 
   it("and the executable policy agrees — the comment is not the authority", () => {
-    // Read the real exported value, not the source text: the comment must answer to the code.
     expect([...AUTO_RETRYABLE_CLASSES].sort()).toEqual(["gate-failure", "void-run"]);
     expect(AUTO_RETRYABLE_CLASSES).not.toContain("usage-limit");
     expect(AUTO_RETRYABLE_CLASSES).not.toContain("cancelled");
@@ -120,16 +117,25 @@ describe("R5 — no doc or comment claims a retry policy the code refuses", () =
   });
 });
 
-describe("R6 — the handoff's unproven-runtime claim is literally true", () => {
+describe("R6 — the handoff states exactly what the accepted canary did and did not prove", () => {
   const HANDOFF = read("docs/handoff.md");
 
-  it("does not claim the repair never ran in Actions — PR CI did", () => {
+  it("records the accepted Uruguay draft canary rather than pretending the repair never ran", () => {
+    expect(HANDOFF).toMatch(/Uruguay/i);
+    expect(HANDOFF).toMatch(/Canary #4/);
+    expect(HANDOFF).toMatch(/GREEN/i);
     expect(HANDOFF).not.toMatch(/NEVER executed in a live Actions job/i);
     expect(HANDOFF).not.toMatch(/Nothing about it has run in GitHub Actions/i);
   });
 
-  it("makes the narrower, true claim: no live V2 research canary has exercised it", () => {
-    expect(HANDOFF).toMatch(/research canary/i);
-    expect(HANDOFF).toMatch(/Canary #4/);
+  it("keeps the two unproven failure-only seams explicit", () => {
+    expect(HANDOFF).toMatch(/escalation/i);
+    expect(HANDOFF).toMatch(/cancellation/i);
+    expect(HANDOFF).toMatch(/unproven|did not exercise/i);
+  });
+
+  it("states the reciprocal reviewer is retired, not a current lifecycle", () => {
+    expect(HANDOFF).toMatch(/reciprocal Claude↔Codex reviewer automation.*RETIRED/i);
+    expect(HANDOFF).toMatch(/not a Waypoint product lifecycle/i);
   });
 });
