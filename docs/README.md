@@ -1,20 +1,46 @@
-# docs/ — sorted by how long a document lives
+# Waypoint documentation
 
-Filenames are lowercase kebab-case. The folder tells you what you're allowed to do with the
-file before you open it, which is the question that actually matters when you land here cold.
+This directory contains only documentation that helps Waypoint operate, recover, or improve now. Completed plans, superseded handoffs, cleanup ledgers, and review transcripts belong in Git history rather than competing with current instructions.
 
-| Folder | What's in it | Can I edit it? |
+## Start here
+
+For a fresh engineering session, read in this order:
+
+1. `../README.md` — what Waypoint is and where things live.
+2. `../PRODUCT.md` — product doctrine and non-negotiables.
+3. `handoff.md` — current operational state and the next engineering surface.
+4. `reference/repo-map.md` — code ownership and subsystem boundaries.
+5. The relevant document under `reference/` for the subsystem being changed.
+
+If the work touches Pipeline V2, also read:
+
+- `pipeline v2/DECISIONS.md` — locked product/architecture decisions.
+- `pipeline v2/IMPLEMENTATION_STATE.md` — current durable implementation/proof state.
+- `pipeline v2/PIPELINE_VALIDATION_PACK.md` — validation scenarios that still need evidence.
+- `pipeline v2/SEPTEMBER_TRACKER.md` — delivery/cutover status and deadlines.
+
+## What each documentation area owns
+
+| Path | Owns | Rule |
 | --- | --- | --- |
-| `handoff.md` *(no folder)* | Where the last session stopped. Auto-loads at session start beside `CONTEXT.md`. | **Rewritten every session** — that's the ritual. ≤120 lines, gated. |
-| `reference/` | How the system works **today**: architecture, the two pipeline lifecycles (research and change), motion doctrine, the visual-redesign spec, issue-tracker conventions. | Yes — and you must, when behaviour changes. A stale reference doc is worse than none. |
-| `standards/` | The bar work is held to: the guide rubric, the new-guide intake template. | Rarely, and deliberately. Changing a standard changes every future guide. |
-| `evidence/` | What we learned, accumulated over time: traveller patterns, pipeline patterns, the competitive landscape. | Append, don't rewrite. These are records, and the two `*-patterns` files must never mix — one asserts lived experience, the other is process evidence from before anyone travelled. |
-| `generated/` | Written by scripts: `where-the-tests-are-blind.md`, the mutation run's roll-up. | **No.** Hand-edits are overwritten on the next run, and CI fails if these go stale. |
-| `archive/` | `INDEX.md` — one entry per finished plan or superseded snapshot, saying how it ended and printing the `git show` line for its body. Bodies live in git; the only files still kept whole are `HANDOFF_ARCHIVE.md` and `visual-redesign-history.md`. | No. History, kept honest — it may cite paths that no longer resolve, which is why the integrity gate skips it. |
-| `design-handoff/` | Design-tool exports: the Atlas system (`DESIGN.md` — R4 with the R5 guide-UI revision folded in, the single written design authority), machine-checkable gates in `enforcement/`, prototype bundles. | Only `DESIGN.md` and this bundle's own README. The rest is vendored output. |
+| `handoff.md` | Current operational state and next work | Keep compact and current. No session diary. |
+| `reference/` | How Waypoint works today | Update when behavior or architecture changes. |
+| `standards/` | Durable quality bars and templates | Change deliberately because future work inherits them. |
+| `evidence/` | Durable product/research evidence | Preserve facts and provenance; do not mix traveler evidence with pipeline-process evidence. |
+| `generated/` | Script-generated reports | Do not hand-edit. Regenerate with the owning script. |
+| `design-handoff/` | Future Atlas design authority and machine-checkable design gates | Preserve until the redesign is implemented and formally retired. |
+| `pipeline v2/` | Locked V2 decisions, current implementation/proof state, validation pack, and delivery tracker | Do not add another parallel status document. |
+| `mockups/` | Supporting implementation fixtures/prototypes that are still referenced by active design work | Not architectural authority unless another current doc explicitly says so. |
 
-**Naming rules.** Lowercase kebab-case, no underscores, no `SCREAMING_CASE` — that convention
-belongs to the repo root (`README`, `CLAUDE`, `SECURITY`), where tooling looks for
-those exact names. No live document takes an exception any more — the last one,
-`PLAN_EVIDENCE_FIRST.md`, retired on 2026-08-15. `SCREAMING_CASE` survives only as the
-heading of an `archive/INDEX.md` entry, which is the name ~35 code comments cite it by.
+## Documentation rules
+
+- **Current truth wins.** If a document describes behavior that no longer exists, update or remove it.
+- **Do not create a new status file when an existing authority owns that information.** Update the owner instead.
+- **Do not keep completed plans in the live tree for nostalgia.** Git history already preserves them.
+- **Do not make tests depend on historical prose.** Tests should protect current behavior and current authority.
+- **Do not duplicate architecture across multiple docs.** Link to the owner.
+- **Unknown stays unknown.** Never fill an evidence/status gap merely to make a dashboard look complete.
+
+## Naming
+
+Use lowercase kebab-case for ordinary files under `docs/`. Root convention files such as `README.md`, `PRODUCT.md`, `AGENTS.md`, `CLAUDE.md`, and `SECURITY.md` keep their conventional names because tooling and humans expect them there.
