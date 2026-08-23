@@ -1,0 +1,43 @@
+{
+  "runId": "uruguay-20260823-9789de",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-23T03:28:30.782Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T03:28:30.785Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-23T03:29:03.185Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T04:03:12.273Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 34m"
+    },
+    {
+      "at": "2026-08-23T04:03:12.278Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 15 evaluated · 14 shortlisted · 12 shipped · 2 rejected · 1 kept as detours"
+    },
+    {
+      "at": "2026-08-23T04:03:12.278Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+    },
+    {
+      "at": "2026-08-23T04:03:12.278Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Palacio Salvo guided-tour day/time grid and booking channel"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}
