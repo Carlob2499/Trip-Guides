@@ -8,7 +8,15 @@ on:
     paths:
       - AGENTS.md
       - CLAUDE.md
+      - README.md
+      - PRODUCT.md
       - package.json
+      - docs/README.md
+      - docs/handoff.md
+      - docs/reference/**
+      - docs/pipeline v2/DECISIONS.md
+      - docs/pipeline v2/IMPLEMENTATION_STATE.md
+      - docs/pipeline v2/SEPTEMBER_TRACKER.md
       - scripts/check-project-invariants.mjs
       - .github/workflows/project-invariants.yml
       - .github/workflows/new-guide.yml
@@ -23,9 +31,9 @@ on:
       - public/sw.js
       - docs/design-handoff/**
       - src/content/guides/uruguay/_guide.json
-      # The reciprocal Claude↔Codex reviewer is a protected autonomy/control-plane integration.
-      # Any change to its revision-4 trust-boundary files must run the invariant that requires
-      # the mechanism and its job-level privilege separation to remain present.
+      # Retired reciprocal-review paths remain in the trigger list intentionally. Re-adding any
+      # one of them must run the invariant that requires the temporary integration stack to stay
+      # absent unless a future architecture decision deliberately restores it.
       - .github/workflows/claude-codex-watcher.yml
       - .github/workflows/claude-codex-signal.yml
       - scripts/codex-watcher.mjs
