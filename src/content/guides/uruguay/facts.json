@@ -55,7 +55,7 @@
   "museo-carnaval-200-uyu": {
     "claim": "Museo del Carnaval admission",
     "value": "UYU 200",
-    "source_url": "http://www.museos.gub.uy/index.php/noticias/item/2542-horario-de-los-museos-de-la-direccion-nacional-de-cultura-en-semana-de-carnaval",
+    "source_url": "https://www.gub.uy/ministerio-educacion-cultura/comunicacion/noticias/horario-museos-direccion-nacional-cultura-semana-carnaval",
     "verified_on": "2026-08-23",
     "shelf_life": "venue",
     "state": "clean"
