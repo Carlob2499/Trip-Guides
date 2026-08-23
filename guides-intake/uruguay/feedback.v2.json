@@ -25,6 +25,28 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-23T04:30:35.830Z",
+      "status": "retired",
+      "retiredAt": "2026-08-23T04:41:46.119Z"
+    },
+    {
+      "runId": "uruguay-20260823-9789de",
+      "stage": "reconcile",
+      "attempt": 2,
+      "findings": [
+        "P0 research   · FAIL — 5 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ map point \"Montevideo (Ciudad Vieja)\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Colonia del Sacramento (Barrio Histórico)\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Punta del Este\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Punta del Este & Isla de Lobos\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ [leg-duration-unverified] 5 of 8 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Ciudad Vieja & Carnival's home museum\", \"Bodega Bouza & the Carnival holiday\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-23T04:41:46.119Z",
       "status": "active",
       "retiredAt": null
     }
