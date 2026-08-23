@@ -1,0 +1,14 @@
+{
+  "slug": "uruguay",
+  "createdAt": "2026-08-23T03:25:20.845Z",
+  "updatedAt": "2026-08-23T03:25:20.845Z",
+  "stages": {
+    "scaffold": "2026-08-23T03:25:20.845Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}
