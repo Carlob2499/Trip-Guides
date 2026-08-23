@@ -245,21 +245,18 @@ export function depthScopeProblems(doc) {
   const problems = [];
   const depth = doc.depth;
   if (!depth) return ["research depth assessment is missing — reservation/transport obligations were never enumerated"];
-  const candidateIds = new Set((doc.candidates || []).map((c) => c.id));
+  const candidateIds = new Set((doc.candidates || []).map((c) => [c.id, c.id])).keys();
+  const candidateSet = new Set(candidateIds);
   const reservationIds = new Set((doc.reservations || []).map((r) => r.candidateId));
-  const requiredReservations = depth.reservations?.requiredCandidateIds || [];
-  if (!requiredReservations.length && !depth.reservations?.notApplicableReason?.trim()) {
-    problems.push("reservation depth lists no required candidates and no not-applicable reason");
-  }
+  const requiredReservations = doc.depth.reservations?.requiredCandidateIds || [];
+  if (!requiredReservations.length && !doc.depth.reservations?.notApplicableReason?.trim()) problems.push("reservation depth lists no required candidates and no not-applicable reason");
   for (const id of requiredReservations) {
-    if (!candidateIds.has(id)) problems.push(`reservation depth requires unknown candidate "${id}"`);
+    if (!candidateSet.has(id)) problems.push(`reservation depth requires unknown candidate "${id}"`);
     if (!reservationIds.has(id)) problems.push(`reservation depth requires "${id}" but no reservation record exists`);
   }
   const routeIds = new Set((doc.transport || []).map((t) => t.id));
-  const requiredRoutes = depth.transport?.requiredRouteIds || [];
-  if (!requiredRoutes.length && !depth.transport?.notApplicableReason?.trim()) {
-    problems.push("transport depth lists no required routes and no not-applicable reason");
-  }
+  const requiredRoutes = doc.depth.transport?.requiredRouteIds || [];
+  if (!requiredRoutes.length && !doc.depth.transport?.notApplicableReason?.trim()) problems.push("transport depth lists no required routes and no not-applicable reason");
   for (const id of requiredRoutes) if (!routeIds.has(id)) problems.push(`transport depth requires route "${id}" but no transport record exists`);
   return problems;
 }
@@ -269,20 +266,26 @@ export function passBSubstanceProblems(doc) {
   const problems = [];
   if (!audit) problems.push("Pass B native-language audit is missing");
   else if (!audit.why?.trim()) problems.push("Pass B native-language audit does not explain why local-language research was or was not used");
-  else if (audit.used && (!audit.searchClasses.length || !audit.yield?.trim())) {
-    problems.push("Pass B says native-language research was used but records no search classes or useful yield");
-  }
+  else if (audit.used && (!audit.searchClasses.length || !audit.yield?.trim())) problems.push("Pass B says native-language research was used but records no search classes or useful yield");
   const passBRecords = (doc.evidence || []).filter((e) => e.origin === "passB");
-  if (!passBRecords.length && !doc.passB?.noYieldReason?.trim()) {
-    problems.push("Pass B produced no evidence and no typed noYieldReason — a missing resident angle cannot pass as an empty array");
-  }
+  if (!passBRecords.length && !doc.passB?.noYieldReason?.trim()) problems.push("Pass B produced no evidence and no typed noYieldReason — a missing resident angle cannot pass as an empty array");
   return problems;
 }
 
 export function disagreementProblems(doc) {
-  return (doc.disagreements || [])
-    .filter((d) => d.impact === "recommendation-changing" && !d.resolution?.trim())
-    .map((d) => `recommendation-changing disagreement "${d.topic}" (${d.id}) has no resolution`);
+  const problems = [];
+  const byId = new Map((doc.evidence || []).map((e) => [e.id, e]));
+  for (const d of doc.disagreements || []) {
+    if (d.impact !== "recommendation-changing") continue;
+    if (!d.resolution?.trim()) problems.push(`recommendation-changing disagreement "${d.topic}" (${d.id}) has no resolution`);
+    const ids = [...new Set(d.evidenceIds || [])];
+    if (ids.length < 2) {
+      problems.push(`recommendation-changing disagreement "${d.topic}" (${d.id}) must cite at least two distinct evidence records — prose alone cannot prove a conflict`);
+      continue;
+    }
+    for (const id of ids) if (!byId.has(id)) problems.push(`recommendation-changing disagreement "${d.topic}" (${d.id}) cites unknown evidence id "${id}"`);
+  }
+  return problems;
 }
 
 /** Rule: a search-result preview is discovery, not a read of the page (Core Proof finding).
@@ -292,62 +295,27 @@ export function sourceAccessProblems(doc) {
   const problems = [];
   const evidence = doc.evidence || [];
   const byId = new Map(evidence.map((e) => [e.id, e]));
-
   for (const e of evidence) {
     const access = e.source?.access || "unknown";
-    if (e.source?.url && isProxyHost(e.source.url)) {
-      problems.push(
-        `evidence "${e.id}" cites a reader/mirror/proxy URL (${new URL(e.source.url).hostname}) as its source — ` +
-          `a mirror cannot count as the origin; cite the true origin (fetched) or record it blocked`,
-      );
-    }
-    if (e.kind === "objective" && ["official", "operator"].includes(e.source?.kind) && !["fetched", "blocked"].includes(access)) {
-      problems.push(
-        `objective claim "${e.claim.slice(0, 60)}" (${e.id}) cites an ${e.source.kind} source with access "${access}" — ` +
-          `a search preview referencing the official page is not a read of it; fetch the origin or record the block`,
-      );
-    }
-    if (e.kind === "objective" && (e.source?.appliesToYears || []).length && access !== "fetched") {
-      problems.push(
-        `event-date claim "${e.claim.slice(0, 60)}" (${e.id}) records appliesToYears without access "fetched" — ` +
-          `an announced date must come from an announcement that was actually read`,
-      );
-    }
+    if (e.source?.url && isProxyHost(e.source.url)) problems.push(`evidence "${e.id}" cites a reader/mirror/proxy URL (${new URL(e.source.url).hostname}) as its source — a mirror cannot count as the origin; cite the true origin (fetched) or record it blocked`);
+    if (e.kind === "objective" && ["official", "operator"].includes(e.source?.kind) && !["fetched", "blocked"].includes(access)) problems.push(`objective claim "${e.claim.slice(0, 60)}" (${e.id}) cites an ${e.source.kind} source with access "${access}" — a search preview referencing the official page is not a read of it; fetch the origin or record the block`);
+    if (e.kind === "objective" && (e.source?.appliesToYears || []).length && access !== "fetched") problems.push(`event-date claim "${e.claim.slice(0, 60)}" (${e.id}) records appliesToYears without access "fetched" — an announced date must come from an announcement that was actually read`);
   }
-
-  // Important/anchor reservation mechanics rest on at least one genuinely fetched objective
-  // record for that candidate — or an honestly recorded block.
   for (const r of doc.reservations || []) {
     if (!["anchor", "important"].includes(r.importance)) continue;
     const records = evidence.filter((e) => e.candidateId === r.candidateId && e.kind === "objective");
-    if (!records.length) continue; // reservationProblems already polices missing answers
-    const ok = records.some((e) => e.source?.access === "fetched")
-      || records.some((e) => e.source?.access === "blocked");
-    if (!ok) {
-      problems.push(
-        `${r.importance} reservation for ${r.candidateId} rests only on search-preview/unknown-access sources — ` +
-          `booking mechanics need a fetched origin or a recorded block`,
-      );
-    }
+    if (!records.length) continue;
+    const ok = records.some((e) => e.source?.access === "fetched") || records.some((e) => e.source?.access === "blocked");
+    if (!ok) problems.push(`${r.importance} reservation for ${r.candidateId} rests only on search-preview/unknown-access sources — booking mechanics need a fetched origin or a recorded block`);
   }
-
-  // High-risk transport facts name their evidence and at least one record was genuinely read.
   for (const t of doc.transport || []) {
     if (t.risk < 3) continue;
     const ids = t.evidenceIds || [];
-    if (!ids.length) {
-      problems.push(`high-risk route "${t.route}" (${t.id}, R${t.risk}) names no evidence records — R3+ transport facts must cite the evidence they rest on`);
-      continue;
-    }
+    if (!ids.length) { problems.push(`high-risk route "${t.route}" (${t.id}, R${t.risk}) names no evidence records — R3+ transport facts must cite the evidence they rest on`); continue; }
     const missing = ids.filter((id) => !byId.has(id));
     for (const id of missing) problems.push(`high-risk route "${t.route}" (${t.id}) cites unknown evidence id "${id}"`);
     const resolved = ids.filter((id) => byId.has(id)).map((id) => byId.get(id));
-    if (resolved.length && !resolved.some((e) => e.source?.access === "fetched")) {
-      problems.push(
-        `high-risk route "${t.route}" (${t.id}, R${t.risk}) has no evidence with a fetched origin — ` +
-          `a trip-critical connection cannot rest on search previews alone`,
-      );
-    }
+    if (resolved.length && !resolved.some((e) => e.source?.access === "fetched")) problems.push(`high-risk route "${t.route}" (${t.id}, R${t.risk}) has no evidence with a fetched origin — a trip-critical connection cannot rest on search previews alone`);
   }
   return problems;
 }
@@ -356,7 +324,7 @@ export function sourceAccessProblems(doc) {
 export function transportProblems(doc) {
   const problems = [];
   for (const t of doc.transport || []) {
-    if (t.risk < 3) continue; // forgiving transport stays simple — by design
+    if (t.risk < 3) continue;
     const missing = [];
     if (!t.doorToDoor) missing.push("door-to-door route");
     if (!t.transferReality) missing.push("physical transfer reality");
@@ -364,12 +332,7 @@ export function transportProblems(doc) {
     if (!t.fallback) missing.push("fallback");
     if (!t.missedConnection) missing.push("missed-connection consequence");
     if (!(t.buffer || t.nextService || t.lastPracticalReturn)) missing.push("buffer / next service / last practical return");
-    if (missing.length) {
-      problems.push(
-        `high-risk route "${t.route}" (${t.id}, R${t.risk}) is missing: ${missing.join(", ")} — ` +
-          `a timetable connection is not automatically a good connection`,
-      );
-    }
+    if (missing.length) problems.push(`high-risk route "${t.route}" (${t.id}, R${t.risk}) is missing: ${missing.join(", ")} — a timetable connection is not automatically a good connection`);
   }
   return problems;
 }
@@ -377,16 +340,8 @@ export function transportProblems(doc) {
 /** All research-rule problems in one list — layered on top of evidenceProblems() by the gate. */
 export function researchRuleProblems(doc) {
   return [
-    ...evidenceKindProblems(doc),
-    ...corroborationProblems(doc),
-    ...yearSafetyProblems(doc),
-    ...freshnessProblems(doc),
-    ...objectiveFreshnessProblems(doc),
-    ...reservationProblems(doc),
-    ...sourceAccessProblems(doc),
-    ...transportProblems(doc),
-    ...depthScopeProblems(doc),
-    ...passBSubstanceProblems(doc),
-    ...disagreementProblems(doc),
+    ...evidenceKindProblems(doc), ...corroborationProblems(doc), ...yearSafetyProblems(doc), ...freshnessProblems(doc),
+    ...objectiveFreshnessProblems(doc), ...reservationProblems(doc), ...sourceAccessProblems(doc), ...transportProblems(doc),
+    ...depthScopeProblems(doc), ...passBSubstanceProblems(doc), ...disagreementProblems(doc),
   ];
 }
