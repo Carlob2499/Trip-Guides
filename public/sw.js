@@ -1,11 +1,11 @@
-﻿/*
+/*
   Offline service worker for Trip Guides.
 
   What it does:
   - Pre-caches the home page and each guide so they open without a connection
     once you've loaded the site at least once online.
   - Pages (HTML) are network-first: you get fresh content when online, and the
-    saved copy when you're offline.
+    saved copy when you're offline or the connection is too slow to be useful.
   - Everything else (CSS, JS, fonts, photos) is cache-first: fast, and available
     offline after it's been seen once.
 
@@ -20,6 +20,7 @@
 */
 const CACHE = "tripguides-dev";
 const BASE = "/Trip-Guides";
+const HTML_NETWORK_TIMEOUT_MS = 3500;
 /* CORE:BEGIN — the precache list. Rewritten in dist/ at build time by
    scripts/gen-sw-precache.mjs from the guides that actually built (so a new
    guide is precached automatically, and a removed one stops 404-ing the
@@ -34,6 +35,16 @@ const CORE = [
   BASE + "/icons/favicon.svg",
 ];
 /* CORE:END */
+
+async function fetchHtmlWithTimeout(request) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), HTML_NETWORK_TIMEOUT_MS);
+  try {
+    return await fetch(request, { signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -61,11 +72,13 @@ self.addEventListener("fetch", (event) => {
     (req.headers.get("accept") || "").includes("text/html");
 
   if (isHTML) {
-    // network-first, fall back to the cached page, then the home page.
-    // Only cache a *successful* response — never a 404/redirect/opaque error,
-    // or a device that loaded mid-deploy would serve that broken page forever.
+    // Network-first, but not network-forever. A half-dead mobile connection is functionally
+    // offline to a traveler; after a short bound, abort the request and use the already-cached
+    // page. Then fall back to the cached home page if this exact navigation was never seen.
+    // Only cache a *successful* response — never a 404/redirect/opaque error, or a device that
+    // loaded mid-deploy would serve that broken page forever.
     event.respondWith(
-      fetch(req)
+      fetchHtmlWithTimeout(req)
         .then((res) => {
           if (res.ok) {
             const copy = res.clone();
