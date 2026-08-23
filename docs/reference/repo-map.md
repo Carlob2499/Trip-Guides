@@ -1,124 +1,147 @@
 # Waypoint repository map
 
-This is the short orientation layer for humans and coding agents. It explains which directories own which responsibilities so cleanup work does not create a second source of truth by accident.
+This is the short ownership map for humans and coding agents. It exists to answer one question quickly: **where does a change belong, and what must it not accidentally replace?**
 
-## Product shape
+## System shape
 
-Waypoint is a static Astro travel-guide product with a research pipeline behind it. The website is generated from structured guide content, but the pipeline is the real backend: it researches, verifies, composes, tracks state, and only then allows a guide to land.
+Waypoint is a static Astro travel product with a research/verification backend and a small Worker for owner-only live actions.
 
 ```text
 /new
   ↓
-intake + frozen traveler requirements
+traveler intake
   ↓
 research engine (V1 default / V2 behind selector)
   ↓
-durable run state + evidence + coverage + events
+durable state + evidence + coverage + events
   ↓
-verification + composition + landing gate
+compose + verification + landing gate
   ↓
-draft PR or production publication authority
+draft review or authorized publication
   ↓
 Astro build → GitHub Pages
 ```
 
+The product has exactly two lifecycles:
+
+- **Research** creates or re-researches a guide.
+- **Change** modifies an existing guide without pretending every edit is a new research run.
+
 ## Top-level ownership
 
 | Area | Owns | Do not confuse with |
-|---|---|---|
-| `src/content/guides/` | Published/draft guide content consumed by Astro | Pipeline state or agent scratch output |
-| `guides-intake/` | Durable per-run intake/state/evidence artifacts | Final site content |
-| `src/features/` | Product feature silos with explicit public surfaces | Shared generic libraries in `src/lib/` |
-| `src/lib/` | Shared deterministic helpers and cross-feature primitives | Feature-owned UI/state |
-| `src/pages/` | Astro routes/screens | Feature business logic |
+| --- | --- | --- |
+| `src/content/guides/` | Draft/published guide content rendered by Astro | Research run state |
+| `guides-intake/` | Intake, run state, evidence, coverage, questions, and research artifacts | Traveler-facing final content |
+| `src/features/` | Feature-owned product logic/UI with explicit public surfaces | Generic shared helpers |
+| `src/lib/` | Shared deterministic helpers and cross-feature primitives | Feature-owned state/UI |
+| `src/pages/` | Astro routes/screens and page composition | Feature business logic |
 | `src/components/` | Shared rendered components | Feature model ownership |
-| `src/scripts/` | Browser-side bootstraps/glue | Pipeline/build tooling in root `scripts/` |
-| `scripts/` | Build, verification, research, pipeline, audit, and repo automation | Browser runtime |
-| `worker/` | Cloud worker endpoints used by live/owner controls | Static Pages runtime |
-| `.github/workflows/` | CI, deploy, guide creation, research, review automation | Product business logic |
-| `docs/reference/` | Current operational/reference truth | Archived plans/history |
-| `docs/archive/` | Historical decisions/plans retained for archaeology | Current instructions |
-| `docs/design-handoff/` | Authority for the future Atlas redesign | Current backend-cleanup scope |
+| `src/scripts/` | Browser bootstraps and page glue | Pipeline/build automation |
+| `scripts/` | Build, audit, verification, research, pipeline, and repo tooling | Browser runtime |
+| `worker/` | Owner/live endpoints that need a backend | Static Pages runtime |
+| `.github/workflows/` | CI, deploy, guide creation, research, change, recertification, and scheduled checks | Product business logic |
+| `docs/reference/` | Current technical/operational truth | Completed plans or review history |
+| `docs/design-handoff/` | Future Atlas design authority and enforcement | Current backend behavior |
+
+## Product center
+
+The intended field-use hierarchy is:
+
+**Today · Itinerary · Map · Split · Guide**
+
+The day-by-day itinerary is the organizing surface. New capabilities should attach to the trip/day context rather than becoming unrelated top-level systems unless there is a strong product reason.
+
+Traveler-critical surfaces include:
+
+- Today/day-to-day itinerary and plan/actual behavior
+- maps, route/navigation links, and transit context
+- reservation/access information
+- Trip Split
+- reminders/checklists and saved trip information
+- SOS/emergency information
+- useful exports such as GPX/ICS where applicable
+- PWA/offline/poor-network behavior
+- accessible, touch-friendly, sunlight-readable mobile behavior
 
 ## Feature silos that sound similar but are not duplicates
 
 ### `src/features/trip-split/`
 
-Owns the actual group-money system: deterministic split math, settlement, normalization, summary model, and the calculator UI. It is one shared ledger per guide.
+Owns the actual shared-money system: deterministic split math, normalization, settlements, summary model, and calculator UI. One authoritative ledger per guide.
 
 ### `src/features/trip-tools/`
 
-Owns the standalone cross-trip Tools screen. It derives a view over several existing systems (Trip Split, jetlag, closures, reminders, route ordering) rather than reimplementing them.
+Owns the cross-trip Tools screen. It derives views/actions from existing systems such as Trip Split, closures, reminders, jet lag, and routing. It must not clone their underlying state machines.
 
 ### `src/features/trip-kit/`
 
-Owns focused on-the-ground utilities such as arrival planning, book-by timing, phrase/speak behavior, entry selection, and packing. It is not the same thing as the cross-trip Tools screen.
+Owns focused on-the-ground utilities such as arrival planning, booking timing, phrase/speak behavior, entry selection, and packing.
 
-Treating these three folders as interchangeable because their names all contain “trip” would be a cleanup bug, not simplification.
+These folders share vocabulary, not ownership. Similar names are not evidence that they should be merged.
 
 ## Research pipeline generations
 
 Two implementations intentionally coexist during cutover:
 
-- **V1:** `.github/workflows/research-pass.yml` + `scripts/pipeline.mjs` and associated V1 paths. It remains the default/rollback path while `WAYPOINT_RESEARCH_ENGINE` is not set to `v2`.
-- **V2:** `.github/workflows/research-pass-v2.yml` + `scripts/pipeline-v2.mjs` + `scripts/pipeline/v2/`. It owns durable staged state, evidence, coverage, telemetry/events, bounded retries, recovery, and landing authority.
+### V1
 
-Do not delete V1 merely because V2 exists. Retirement is a product cutover decision, not a cleanup inference.
+- `.github/workflows/research-pass.yml`
+- `scripts/pipeline.mjs`
+- associated V1 prompts/state paths
 
-## Claude ↔ Codex review automation
+V1 remains the default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is not set to `v2`.
 
-The reciprocal-review system is a control plane, not product code.
+### V2
 
-- `.github/workflows/claude-codex-signal.yml` is an unprivileged doorbell.
-- `.github/workflows/claude-codex-watcher.yml` separates **read-only validation** from **write-capable publication** at the job boundary.
-- `scripts/codex-watcher.mjs` is the behavioral source of truth for work-order parsing/eligibility/idempotency.
-- `prompts/codex-work-order.md` is the trusted prompt template.
+- `.github/workflows/research-pass-v2.yml`
+- `scripts/pipeline-v2.mjs`
+- `scripts/pipeline/v2/`
 
-The job-level permission boundary is security-critical and was restored by PR #79 after PR #78's history/body diverged from what actually reached `main`.
+V2 owns staged durable run state, mechanical Pass A/Pass B isolation, evidence/coverage contracts, events, bounded retry/recovery, and V2 landing authority.
 
-## Traveler-critical surfaces
+V1 retirement is a cutover decision, not a cleanup inference.
 
-Cleanup must preserve these even when they look like UI glue:
+## Pipeline V2 authority
 
-- day-to-day itinerary and plan/actual behavior
-- maps and transit deep links
-- arrival/autopilot tools
-- entry/phrase/packing utilities
-- Trip Split
-- reminders/checklists
-- SOS/emergency information
-- exports (for example GPX/ICS where applicable)
-- PWA/offline service worker and honest network fallbacks
-- accessibility/touch/sunlight behavior
+If changing V2, read these before editing:
+
+1. `docs/pipeline v2/DECISIONS.md` — locked decisions.
+2. `docs/pipeline v2/IMPLEMENTATION_STATE.md` — current implementation/proof state.
+3. `docs/pipeline v2/PIPELINE_VALIDATION_PACK.md` — remaining validation risk classes.
+4. `docs/pipeline v2/SEPTEMBER_TRACKER.md` — delivery/cutover status.
+5. `docs/reference/pipeline.md` — durable pipeline policy.
+
+Do not create another parallel V2 status/plan document.
 
 ## Performance-sensitive dependencies
 
-These packages are valuable but relatively heavy, so new imports should stay gated/lazy when possible:
+Heavy browser dependencies are intentional and should stay lazy/gated where possible:
 
-- Firebase
-- `pdfjs-dist`
-- D3 modules / TopoJSON
-- GSAP
-- Sharp is build-time tooling, not a browser dependency
+- Firebase — live sync only
+- `pdfjs-dist` — PDF ingestion only
+- D3 modules / TopoJSON — Atlas/map visualization only
+- GSAP — decorative motion only and skipped under reduced motion
+- QRCode — share rendering only
+- Sharp — build-time tooling, not a browser dependency
 
-Use `scripts/check-perf-budget.mjs` after a production build to catch accidental bundle growth.
+Use `npm run check:perf` after a production build when changing browser bundles.
 
 ## Verification hierarchy
 
-For ordinary engineering changes, the canonical local commands are:
+- `npm run check:fast` — invariants + lint + typecheck + unit tests.
+- `npm run check` — invariants + lint + typecheck + coverage + production build.
+- `npm run check:offline` — service-worker/offline contract.
+- `npm run ship:check` — `check` + offline contract + performance budget.
 
-- `npm run check:fast` — invariants + lint + typecheck + tests
-- `npm run check` — invariants + production build + lint + typecheck + tests
-- `npm run ship:check` — `check` plus the performance budget
+CI remains authoritative for merge/deploy status and includes accessibility checks.
 
-CI still keeps its stricter coverage gate; these commands do not replace coverage in `.github/workflows/test.yml` or deployment verification on `main`.
-
-## Rule for consolidation
+## Consolidation rule
 
 Only consolidate two implementations when all three are true:
 
-1. they own the same product decision or state;
-2. consumers can be migrated to one public surface without semantic loss;
+1. they own the same product decision or durable state;
+2. consumers can migrate to one public surface without semantic loss;
 3. tests prove the survivor covers both behaviors.
 
-Shared words, similar filenames, or adjacent UI are not sufficient evidence.
+Shared words, similar filenames, adjacent UI, or aesthetic preference are not sufficient evidence.
