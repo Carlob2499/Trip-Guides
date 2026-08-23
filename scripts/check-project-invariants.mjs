@@ -114,8 +114,17 @@ requireJobPermissions(
 );
 requireJobPermissions(watcher, "publish", { contents: "write", "pull-requests": "write" });
 const publishBlock = jobBlock(watcher, "publish");
-if (publishBlock && !/^    needs: validate\s*$/m.test(publishBlock)) fail("Claude↔Codex watcher: publish must depend on validate");
+const publishNeedsValidate = /^    needs:\s*(?:validate|\[[^\]]*\bvalidate\b[^\]]*\])\s*$/m;
+if (publishBlock && !publishNeedsValidate.test(publishBlock)) fail("Claude↔Codex watcher: publish must depend on validate");
 else if (publishBlock) pass("Claude↔Codex publish depends on validate");
+
+// Artifact transport must not be allowed to choose the privileged push target. The publish job
+// has to re-fetch live PR state from trusted control-plane code before it can push anything.
+if (publishBlock && !/node scripts\/codex-watcher\.mjs check --pr "\$PR"/.test(publishBlock)) {
+  fail("Claude↔Codex watcher: publish must independently re-check live PR state");
+} else if (publishBlock) {
+  pass("Claude↔Codex publish re-checks live PR state");
+}
 
 // Protected traveler-facing architecture.
 requirePath("src/features/trip-split/index.ts", "Trip Split feature");
