@@ -6,10 +6,10 @@
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-23)
 Pipeline V2 reliability repair is merged and Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains `draft: true`, `publication: false`, `landMode: pr`; it is evidence, not production content.
 V1 remains the production default/rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. Manual V2 dispatches remain draft-only; production cutover is a separate evidence-based decision.
-Canary #4 proved the normal fresh-run/recovery path, including real gate failures and bounded retry authority. Two failure-only seams were not exercised and must not be described as proven: a real escalation issue comment / `gh` path, and the cancellation grace-window chain.
+Canary #4 proved the normal fresh-run/recovery path, including real gate failures and bounded retry authority. Two failure-only seams remain unproven because Uruguay did not exercise them: a real escalation issue comment / `gh` path, and the cancellation grace-window chain.
 The Progress surface now has durable V2 run events and an owner-note path keyed to exact V2 run identity; facts that the backend cannot prove remain honestly blank.
 Next engineering work: execute the remaining V01–V05 validation risk classes, obtain targeted live proof for the two failure-only reliability seams when it can be done safely, and approach V2 cutover only after those acceptance conditions are satisfied.
-Read next: `README.md`, `PRODUCT.md`, `docs/reference/repo-map.md`, `docs/reference/pipeline.md`, `docs/pipeline v2/DECISIONS.md`, `docs/pipeline v2/IMPLEMENTATION_STATE.md`, `docs/pipeline v2/PIPELINE_VALIDATION_PACK.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
+Read next: `README.md`, `PRODUCT.md`, `CONTEXT.md`, `docs/reference/repo-map.md`, `docs/reference/pipeline.md`, `docs/pipeline v2/DECISIONS.md`, `docs/pipeline v2/IMPLEMENTATION_STATE.md`, `docs/pipeline v2/PIPELINE_VALIDATION_PACK.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
 <!-- WARM_START_END -->
 
 ## Accepted live evidence
@@ -73,6 +73,7 @@ These are targeted reliability proofs. They are not a reason to repeat an expens
 
 - `README.md` — repository orientation and reading order.
 - `PRODUCT.md` — product identity and non-negotiables.
+- `CONTEXT.md` — durable historical decisions; read on demand, not injected wholesale into warm starts.
 - `docs/reference/repo-map.md` — ownership/boundaries.
 - `docs/reference/pipeline.md` — durable pipeline policy.
 - `docs/pipeline v2/DECISIONS.md` — locked V2 decisions.
