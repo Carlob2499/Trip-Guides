@@ -7,7 +7,7 @@ WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-23)
 Pipeline V2 reliability repair is MERGED and Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains `draft: true`, `publication: false`, `landMode: pr`; it is evidence, not production content.
 Canary #4 proved the fresh-run exit wrapper and normal recovery path, including real gate failures and bounded retry authority. Two live failure-only seams remain unproven by that run: a real escalation issue comment / `gh` path (no intake issue existed) and the cancellation grace-window chain (no cancellation occurred). Do not claim those as proven.
 V1 remains intact and is still the default/rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. Manual V2 dispatches remain structurally draft-only; production cutover is a separate decision.
-The reciprocal Claude↔Codex watcher now uses a job-level trust boundary: read-only validation and write-capable publication are separate jobs. Treat that boundary as security-critical.
+The temporary reciprocal Claude↔Codex reviewer automation from PRs #78/#79 has been RETIRED during cleanup. It was integration scaffolding, not a Waypoint product lifecycle; do not reintroduce it without a new explicit architecture decision.
 Current engineering surface: draft cleanup PR #80 (`cleanup/grand-pass-2026-08-23`) is reconciling repo truth, CI/invariants, ownership docs, performance/offline/security seams, and repeated review/debug passes. Do not merge it merely because an early CI run is green.
 Next product work after cleanup: prepare/execute the distinct V01–V05 validation risk classes, prove the two remaining live failure-only reliability seams when a safe targeted exercise can do so, then proceed toward cutover only on evidence.
 Deep context: `CONTEXT.md`, `docs/reference/pipeline.md`, `docs/pipeline v2/IMPLEMENTATION_STATE.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
@@ -50,17 +50,20 @@ Those remain targeted reliability proofs, not reasons to repeat a full research 
 - Manual V2 `workflow_dispatch` is always `landMode=pr`; it cannot mint production publication authority.
 - A green draft canary proves the research/product path, not a production cutover by itself.
 
-## Claude ↔ Codex review automation
+## Retired integration scaffolding
 
-The reviewer loop is control-plane code. Current required architecture:
+PRs #78/#79 introduced a reciprocal Claude↔Codex PR reviewer to shuttle bounded work orders during the integration repair. The cleanup determined that this automation was **not** part of either durable Waypoint lifecycle (Research or Change) and carried a disproportionate secret/write-capable security surface.
 
-- `.github/workflows/claude-codex-signal.yml` is an unprivileged signal/doorbell;
-- `.github/workflows/claude-codex-watcher.yml` separates read-only validation from write-capable publication at the **job** boundary;
-- `scripts/codex-watcher.mjs` owns work-order parsing, eligibility, bounded handoff, and idempotency;
-- `prompts/codex-work-order.md` is trusted control-plane input;
-- PR-controlled validation code must never share the same credentialed execution domain as publication.
+The following are intentionally retired and protected by `npm run check:invariants` so they cannot quietly return:
 
-Historical note: PR #78's prose/history and the revision that actually reached the branch diverged; PR #79 restored the intended job-level boundary. Future reviews must inspect shipped code, not infer architecture from an old PR description.
+- `.github/workflows/claude-codex-signal.yml`;
+- `.github/workflows/claude-codex-watcher.yml`;
+- `scripts/codex-watcher.mjs`;
+- `scripts/__tests__/codex-watcher.test.mjs`;
+- `scripts/__tests__/codex-watcher-workflow.test.mjs`;
+- `prompts/codex-work-order.md`.
+
+Historical PR descriptions and `CONTEXT.md` may describe how the watcher evolved; that is history, not current architecture.
 
 ## Current cleanup / autonomy pass
 
@@ -69,7 +72,7 @@ Draft PR #80 is the single cleanup surface. Its rules:
 - `main` stays untouched until review is complete;
 - structural cleanup requires evidence of duplicate ownership, not similar names;
 - `trip-split`, `trip-tools`, and `trip-kit` are distinct systems and are not consolidation targets by name alone;
-- project invariants protect V1/V2 coexistence, reviewer trust boundaries, Trip Split, itinerary/maps/SOS/offline, Atlas design authority, agent-instruction parity, and Canary #4's draft state;
+- project invariants protect V1/V2 coexistence, retired reviewer scaffolding, Trip Split, itinerary/maps/SOS/offline, Atlas design authority, agent-instruction parity, and Canary #4's draft state;
 - CI retains stricter coverage while local canonical checks provide one obvious verification path;
 - the final branch must survive behavioral, architecture/security, and fresh-eyes consistency review loops.
 
