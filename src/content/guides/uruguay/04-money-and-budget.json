@@ -13,19 +13,19 @@
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Per-person, mid-range estimates for 8 nights (Feb 5–13, 2027) — cross-checked against current hotel and tour pricing, not a single source. Treat lodging and flights as ⚠ especially soft: both move with season and booking date.",
+    "intro": "Per-person, mid-range estimates for the trip's 9 days and 8 nights (Feb 5–13, 2027) — cross-checked against current hotel and tour pricing, not a single source. Treat lodging and flights as ⚠ especially soft: both move with season and booking date.",
     "currency": "$",
-    "days": 8,
+    "days": 9,
     "budgetTarget": "Mid-range ($75-150/day)",
     "items": [
       {
-        "label": "Lodging, per night (mid-range hotel, 2 sharing)",
-        "basis": "day",
-        "est": 90,
-        "low": 60,
-        "high": 140,
+        "label": "Lodging — 8 nights (mid-range hotel, 2 sharing)",
+        "basis": "trip",
+        "est": 720,
+        "low": 480,
+        "high": 1120,
         "per": "person",
-        "note": "≈ Montevideo runs cheaper than Punta del Este in February (its high season) — expect the top of this range on the coast."
+        "note": "≈ A mid-range nightly rate for two sharing, taken across the trip's eight nights. Montevideo runs cheaper than Punta del Este in February (its high season) — expect the top of this range on the coast."
       },
       {
         "label": "Food & drink, per day",

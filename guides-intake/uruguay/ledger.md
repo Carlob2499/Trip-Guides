@@ -291,3 +291,178 @@ recommendation — see `evidence.v2.json`'s merged `saturation` record.
   citation, or recommendation changed — this is a provenance-completeness fix only. Everything
   else in `evidence.v2.json`/`coverage.v2.json` was left untouched: re-reading found no defect to
   fix, and editing an already-correct machine artifact risks introducing a new one.
+- **2026-08-23 — Critic: Fri Feb 12 carries no `plan_b`, by decision.** The day is deliberately
+  open and low-commitment (`energy: slow`, a beach afternoon with two optional detours), so a wet
+  day collapses it into a rest day rather than breaking a booked plan. The region's one indoor
+  refuge, Casapueblo, is already spent on Thu Feb 11, and no second alternate could be verified
+  from a source this stage may fetch. Recording the explicit **"no good alternate"** note the
+  inclement-cover rule asks for instead of inventing one. Sat Feb 6 — the day that genuinely owed
+  one — got a researched `plan_b` this pass (see Critic findings #4).
+
+## Critic findings
+
+Five scans run against the finished guide (rubric #6 anchor · #8 priority depth · #9 party fit ·
+#12 authenticity, plus the vibe lens). Eight findings, all implemented below; two items deferred
+to a networked pass are listed at the end.
+
+1. **Thursday sent the traveler across the peninsula three times** — `06-days.json`, Thu Feb 11
+   ("Casapueblo & La Barra"). *Vibe lens: geography.* La Barra sits ≈8 km **east** of Punta del
+   Este and Punta Ballena/Casapueblo ≈15 km **west** — distances the guide states itself in
+   `05-transit.json`, and which the two sights' own coordinates confirm (Casapueblo lng −55.045,
+   Punta del Este −54.934, La Barra east of both). The body nonetheless read "On the way, stop in
+   La Barra", and the `pace` line ordered it Punta Ballena → La Barra → Casapueblo: ≈46 km of
+   doubling back, and the reverse of the order the body gave. **Fixed:** retitled "La Barra &
+   Casapueblo" and reordered east→west — La Barra in the morning, Casapueblo from late afternoon
+   into its sunset close — with `pace`, `tldr` and body rewritten to agree. Casapueblo's "open
+   daily from 10:00, closes at sunset" re-fetched from casapueblo.com.uy this pass. **Ripple:**
+   Wed Feb 10's `plan_b` said to "push La Barra to the afternoon"; rewritten to take Casapueblo
+   early and leave Thursday to La Barra.
+2. **El Palenque's hours were aggregator-sourced but shipped clean, and two day plans rested on
+   them** — `08-food-and-shopping.json` ("El Palenque"), `06-days.json` Fri Feb 5 + Sun Feb 7,
+   `07-sights.json` ("Mercado del Puerto"). *Rubric #3 provenance, #7 four-question rule;
+   verification-rules §5 — "Hours — primary source only… never publish an unconfirmed hour as
+   fact."* Fetched the restaurant's own page (elpalenque.com.uy): it publishes address and phone
+   and **no hours at all**. The shipped grid (Tue–Fri 12:00–23:00, Sat–Sun 12:00–17:00) comes from
+   alacarta.com.uy, a restaurant directory — the same source class this ledger's own Bodega Bouza
+   amendment correctly refused for an objective fact. **Fixed:** hours downgraded to `⚠`, naming
+   the directory as a report; `source_url` re-pointed to the venue's own page, which supports the
+   address and phone it is now cited for. The Punta del Este branch, which carried no `hours`
+   field at all (an open #7 gap), was given the same honest `⚠` line.
+3. **The arrival-evening dinner contradicted the guide's own market hours** — `06-days.json` Fri
+   Feb 5 against `07-sights.json` ("Mercado del Puerto"). *Vibe lens: meals & energy / common
+   sense.* The sights card states the hall keeps Mon–Sat 9:00–17:00; the arrival day sent a pair
+   off a connecting flight there for "an early dinner… if the flight lands with enough daylight
+   left". February sunset in Montevideo is ≈20:00, so "enough daylight" points three hours past
+   the hall's own posted close — on the guide's own two facts. **Fixed:** the arrival evening is
+   now a Rambla walk and a meal near the hotel, with Mercado del Puerto named as a lunch
+   destination held for Sunday, leaning on the guide's already-shipped fact that Uruguayan dinner
+   service barely starts before 21:00. The hall's hours could **not** be re-verified —
+   mercadodelpuerto.com.uy refused the connection — so they are flagged in the citation audit
+   rather than re-asserted.
+4. **The Saturday day trip is anchored on a venue that can close on the day, and had no
+   alternate** — `06-days.json` Sat Feb 6. *Vibe lens: inclement cover; rubric #10 honest gaps.*
+   The day is `env: outdoor` and a 4h40m round-trip bus commitment, and its named anchor is the
+   Faro de Colonia — whose listing on visitacolonia.com (the source the guide already cites for
+   the fee) states the hours run **subject to Navy personnel being available**, and that ID is
+   required. The guide dropped both conditions, and the day carried neither a `plan_b` nor a "no
+   good alternate" note. **Fixed:** the caveat (and the ID requirement) restored to the day body,
+   its `constraints`, and the sight card; a researched `plan_b` added — Colonia's indoor museums,
+   **eight on one UYU 150 ticket**, with Espacio del Telégrafo open Saturdays 11:30–16:30
+   (fetched: visitacolonia.com/listings/museo-espacio-del-telegrafo/), registered as
+   `colonia-museos-150-uyu` in `facts.json` and referenced by token, not typed as a bare figure.
+   The constraint also claimed Sun Feb 7 was a second window for the climb — Sun Feb 7 is a
+   Montevideo day; corrected.
+5. **The Palacio Salvo citation pointed at a month-specific listing that no longer resolves** —
+   `07-sights.json` ("Palacio Salvo" and its `divergences` row), `06-days.json` Sun Feb 7,
+   `09-sources.json`. *Rubric #3 / #11.* `redtickets.uy/evento/Visitas-guiadas-al-Palacio-Salvo/19397/`
+   renders no event; the producer page `redtickets.uy/productor/PalacioSalvo` shows the tour
+   published **one month at a time** ("Visitas guiadas al Palacio Salvo - AGOSTO", 1 of 1).
+   That is also the real explanation for the guide's "sources disagree on the exact time grid" —
+   each month's listing carries its own. **Fixed:** all three references re-cited to the producer
+   page; the unsupported "Sunday slots run late morning and midafternoon" claim **removed** rather
+   than swapped for another unfetched grid; the day and sight cards now tell the traveler the
+   February 2027 listing only appears close to the trip, which is when to book.
+6. **The budget multiplied per-day costs by 8 across a 9-day itinerary** — `02-money-and-budget.json`.
+   *Rubric #5 itinerary integrity — the same seam class as the japan-2 pipeline-patterns row.*
+   `BudgetBlock.astro` computes `est × days` for every `basis: "day"` line and
+   `estTotal / party / days` for the per-day headline that the intake's "$75–150/day" target is
+   judged against. `days: 8` was right for 8 nights of lodging and wrong for everything else:
+   food, local transport and sights were each short a day (≈$75 pp), while the daily headline was
+   inflated ≈12%. **Fixed:** `days: 9`, matching the nine day cards; lodging converted to a
+   `basis: "trip"` line explicitly labelled 8 nights (8 × $90 = $720, range $480–$1,120); the
+   intro now reads "9 days and 8 nights". No estimate changed value.
+7. **Laguna Garzón's only citation is unreachable** — `06-days.json` Fri Feb 12, `09-sources.json`.
+   *Rubric #10; verification-rules §4.* Three fetches of lagunagarzon.uy returned nothing. The day
+   asserted, as fact, that the operator runs kayak/SUP/birdwatching outings and that booking is by
+   WhatsApp — objective claims resting on a source that no longer answers. **Fixed** per
+   ship/flag/omit: downgraded to `⚠` (the lagoon and operator stay, the booking channel is no
+   longer asserted), and the dead link removed from the Sources tab with an honest line in its
+   place. Not omitted outright, because the candidate is a recorded worth-the-detour find.
+8. **The dek claimed the trip was "timed to" Carnival, and the intake never says so** —
+   `_guide.json`. *Rubric #6 anchor / #10 honest gaps.* The intake's anchor-event field is blank
+   and the dates are the scaffolder's assumption — this ledger's own first amendment says exactly
+   that. **Fixed:** "timed to land in the middle of the country's Carnival season" → "dates that
+   fall in the middle of the country's Carnival season". The Carnival treatment itself survives
+   the scan intact: the Easter-relative public holidays ship as computed fact, the unannounced
+   2027 Llamadas dates are withheld, and the two are never conflated.
+
+Also fixed while in the file, one line rather than a numbered finding: the Colonia sight card
+narrated its own sourcing to the reader ("Two independent firsthand accounts corroborate the same
+pattern…"). Provenance belongs in `verified_on`/`source_url`, not in traveler prose — sentence
+trimmed, the off-peak window itself kept verbatim.
+
+**Scanned and left alone.** Priority depth (#8) reads correctly weighted — food carries four
+verified venue cards and the parrilla framing, culture carries five sights plus the Carnival
+thread, nature stays deliberately lighter with three detour-labelled options. Party fit (#9) is
+honestly blocked rather than faked: intake names no party, no traveler-patterns party matches a
+group of two, and q-uruguay-2 asks instead of inventing. The pacing arc holds — a slow arrival day
+after a connecting flight, the two Carnival holidays spent on a winery and a travel day rather
+than on museums that may shut, and no three-museum run anywhere.
+
+**Deferred — needs a pass with script or wider network access:**
+- `05-transit.json`'s three named map points carry no `place_id` (honestly recorded in the
+  amendments above), while six `place_id` values ship on `07-sights.json` and
+  `08-food-and-shopping.json` items. One environment note cannot explain both states. No
+  fabrication is demonstrable — the coordinates carry floating-point artifacts consistent with a
+  real API response rather than recalled numbers — and this stage can neither run
+  `lookup-place.mjs`/`lookup-venue.mjs` (every `node scripts/…` call returns "this command
+  requires approval") nor fetch google.com. Left untouched deliberately; a networked pass should
+  re-derive all nine and record which tool produced them.
+- `01-plan.json` ("When you land") hedges the Carrasco airport bus with "several lines are
+  reported to cover the route… confirm the current number at the terminal". That is a `⚠`
+  standing in for a lookup rather than for an unsourceable fact — CUTCSA and COT both publish
+  their airport lines. **Source lead:** cutcsa.com.uy's own line pages. Not fetched: it is a
+  domain no earlier pass verified, and this stage's fetching is restricted to domains already on
+  the record. Flagged rather than papered over.
+
+## Citation audit
+
+Thirteen perishable facts sampled — every registry row plus the plan-critical hours and booking
+claims, weighted to prices, hours and the Carnival-adjacent anchors.
+
+| Claim | Value | Source fetched | Verdict |
+|-------|-------|----------------|---------|
+| COT fare, Montevideo → Colonia del Sacramento | UYU 579 one-way | y — cot.com.uy | supports (departures from 05:00 confirmed too) |
+| COT fare, Montevideo → Punta del Este | UYU 466 one-way | y — cot.com.uy | supports (departures from 04:45 confirmed too) |
+| Isla de Lobos boat excursion | US$70 adult / US$50 under 10, daily 12:00, ≈2h | y — isladelobos.com.uy | supports |
+| Casapueblo admission | UYU 600 adult / 500 senior / free under 12 | y — casapueblo.com.uy | supports; also confirms daily from 10:00 **and closing at sunset** — the closing detail was added to Thu Feb 11 |
+| Faro de Colonia fee + hours | UYU 35; Thu–Sun 10:00–12:00 & 15:00–17:00 | y — visitacolonia.com | drifted → fixed: figure and grid support, but the source conditions the hours on Navy staff availability and requires ID, and the guide carried neither (finding #4) |
+| Museo del Carnaval admission + hours | UYU 200; Wed–Sun 11:00–17:00 | y — museos.gub.uy | supports (the page is a Carnival-week notice; it states the regular Wed–Sun grid) |
+| Antel Chip Prepago | $65 | y — tienda.antel.com.uy | supports |
+| Lo de Silverio hours | Tue–Sat 12:00–16:00 & 20:00–00:00, Sun 12:00–16:00 | y — lodesilverio.com | supports; no pricing published, matching the guide's `⚠` |
+| El Palenque hours | Tue–Fri 12:00–23:00, Sat–Sun 12:00–17:00 | y — elpalenque.com.uy | drifted → fixed: the venue's own site publishes **no** hours; the grid is a directory's. Downgraded to `⚠`, citation re-pointed (finding #2) |
+| Palacio Salvo tour — booking channel + slot grid | Red Ticket only, ≈45 min | y — redtickets.uy | drifted → fixed: the cited event page no longer resolves; re-cited to the producer page, unsupported slot grid removed (finding #5) |
+| Colonia combined museum ticket (NEW this pass) | UYU 150, covers 8 museums; Espacio del Telégrafo Mon/Tue/Thu/Fri/Sat 11:30–16:30 | y — visitacolonia.com | supports — sourced before shipping, backs the Sat Feb 6 `plan_b` |
+| Mercado del Puerto hall hours | Mon–Sat 9:00–17:00, Sun 10:00–17:00 | n — mercadodelpuerto.com.uy refused the connection | unreachable → flagged; not re-asserted, and finding #3 stops the arrival day depending on the optimistic reading |
+| Laguna Garzón activities + booking channel | kayak/SUP/birdwatching, book by WhatsApp | n — lagunagarzon.uy did not respond (3 attempts) | unreachable → flagged; claim downgraded to `⚠`, dead link pulled from Sources (finding #7) |
+
+#### Continuity sweep — critic execution
+
+**Greps run** (all scoped to `src/content/guides/uruguay/`):
+- `19397|alacarta|La Barra|Casapueblo|El Palenque|Laguna Garz|Faro|8 nights|Red Ticket` — the
+  full touchpoint set for findings #1, #2, #5, #6, #7.
+- `19397|lagunagarzon` re-run after editing — 0 stale citations remain in the guide.
+- `\{\{fact:[a-z0-9-]+\}\}` — all 13 token uses resolve against `facts.json`, and all 9
+  non-reserved rows are referenced at least once (the new `colonia-museos-150-uyu` twice).
+
+**Ripples found and fixed:**
+- Wed Feb 10's `plan_b` instructed "push La Barra to the afternoon", which the Thursday reorder
+  invalidated → rewritten to take Casapueblo early and leave Thursday to La Barra.
+- The stale Red Ticket event URL survived in two places beyond the sight card — the `divergences`
+  row and the Sources tab → both re-pointed to the producer page.
+- Sun Feb 7's day body asserted El Palenque's Sunday window as fact → now names it as the hall's
+  best-known parrilla without quoting an unverified hour.
+- `07-sights.json`'s Mercado del Puerto card is the other half of finding #3 → now states plainly
+  that the hall is a lunch stop and that the later per-stall hours are directory listings.
+- The guide-level `verified` stamp is the reader's re-check list, and this pass added three
+  re-check items → El Palenque's hours, the February 2027 Palacio Salvo listing, and the Laguna
+  Garzón operator appended to it in `_guide.json`.
+- `05-transit.json` already treats Casapueblo (≈15 km) and La Barra (≈8 km) as separate hops, so
+  the Thursday reorder needed no change there — checked, not assumed.
+- Every shipped `## Candidates considered` name was re-checked against the edited prose after the
+  rewrites; all still occur verbatim, including "Colonia del Sacramento off-peak visit window",
+  "Desfile de Llamadas" and "La Rambla".
+
+**Deferred to human:** the two items listed at the end of Critic findings — the `place_id`
+provenance asymmetry across `05-transit.json` vs the sights/venues items, and the Carrasco airport
+bus line number. Nothing else deferred.

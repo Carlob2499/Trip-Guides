@@ -44,6 +44,14 @@
     "shelf_life": "venue",
     "state": "clean"
   },
+  "colonia-museos-150-uyu": {
+    "claim": "Colonia del Sacramento combined museum ticket (covers 8 museums)",
+    "value": "UYU 150",
+    "source_url": "https://visitacolonia.com/listings/museo-espacio-del-telegrafo/",
+    "verified_on": "2026-08-23",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
   "museo-carnaval-200-uyu": {
     "claim": "Museo del Carnaval admission",
     "value": "UYU 200",

@@ -32,8 +32,8 @@
       "ask": "Food & dining",
       "status": "covered",
       "where": [
-        "08-food-and-shopping.json#what-to-eat",
-        "07-sights.json#mercado-del-puerto"
+        "02-food-and-shopping.json#what-to-eat",
+        "03-sights.json#mercado-del-puerto"
       ],
       "evidenceIds": [
         "ev-el-palenque-hours",
@@ -48,10 +48,10 @@
       "ask": "Culture / history",
       "status": "covered",
       "where": [
-        "07-sights.json#palacio-salvo",
-        "07-sights.json#mercado-del-puerto",
-        "07-sights.json#museo-del-carnaval",
-        "07-sights.json#colonia-del-sacramento-barrio-historico-faro"
+        "03-sights.json#palacio-salvo",
+        "03-sights.json#mercado-del-puerto",
+        "03-sights.json#museo-del-carnaval",
+        "03-sights.json#colonia-del-sacramento-barrio-historico-faro"
       ],
       "evidenceIds": [
         "ev-palacio-salvo-redticket-active",
@@ -93,8 +93,8 @@
       "ask": "Mid-range ($75-150/day)",
       "status": "covered",
       "where": [
-        "02-money-and-budget.json#budget-daily-costs",
-        "02-money-and-budget.json#money-currency"
+        "04-money-and-budget.json#budget-daily-costs",
+        "04-money-and-budget.json#money-currency"
       ],
       "evidenceIds": [
         "ev-fx-usd-uyu"
@@ -106,7 +106,7 @@
       "ask": "2",
       "status": "covered",
       "where": [
-        "02-money-and-budget.json#budget-daily-costs"
+        "04-money-and-budget.json#budget-daily-costs"
       ],
       "evidenceIds": [],
       "reason": null
@@ -129,7 +129,7 @@
       "status": "covered",
       "where": [
         "01-plan.json#when-you-land",
-        "02-money-and-budget.json#flights-round-trip-jfk-connecting"
+        "04-money-and-budget.json#flights-round-trip-jfk-connecting"
       ],
       "evidenceIds": [
         "ev-no-nonstop-jfk-mvd"
@@ -141,8 +141,8 @@
       "ask": "Canary #4 (Pipeline V2 acceptance test) — first time in Uruguay, interested in asado/parrilla culture, Colonia's old town, and the Punta del Este beach scene.",
       "status": "covered",
       "where": [
-        "08-food-and-shopping.json#what-to-eat",
-        "07-sights.json#colonia-del-sacramento-barrio-historico-faro",
+        "02-food-and-shopping.json#what-to-eat",
+        "03-sights.json#colonia-del-sacramento-barrio-historico-faro",
         "06-days.json#punta-del-este-isla-de-lobos"
       ],
       "evidenceIds": [

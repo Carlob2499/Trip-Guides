@@ -19,12 +19,27 @@
     "type": "map",
     "group": "Transit",
     "title": "Orientation map — Uruguay's south coast",
-    "center": { "lat": -34.775, "lng": -56.32 },
+    "center": {
+      "lat": -34.775,
+      "lng": -56.32
+    },
     "span": 3.4,
     "points": [
-      { "name": "Montevideo (Ciudad Vieja)", "lat": -34.9058, "lng": -56.2011 },
-      { "name": "Colonia del Sacramento (Barrio Histórico)", "lat": -34.4626, "lng": -57.8398 },
-      { "name": "Punta del Este", "lat": -34.9475, "lng": -54.9338 }
+      {
+        "name": "Montevideo (Ciudad Vieja)",
+        "lat": -34.9058,
+        "lng": -56.2011
+      },
+      {
+        "name": "Colonia del Sacramento (Barrio Histórico)",
+        "lat": -34.4626,
+        "lng": -57.8398
+      },
+      {
+        "name": "Punta del Este",
+        "lat": -34.9475,
+        "lng": -54.9338
+      }
     ]
   }
 ]

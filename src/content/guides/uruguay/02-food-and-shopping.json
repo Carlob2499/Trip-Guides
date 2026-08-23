@@ -12,7 +12,7 @@
         "area": "Mercado del Puerto, Ciudad Vieja",
         "address": "Pérez Castellano 1579, Montevideo",
         "phone": "+598 2917 0190",
-        "hours": "Tue–Fri 12:00–23:00, Sat–Sun 12:00–17:00",
+        "hours": "⚠ Reported Tue–Fri 12:00–23:00, Sat–Sun 12:00–17:00 by a Montevideo restaurant directory — the restaurant's own site posts no hours, so call before you count on an evening sitting",
         "closed": "Mondays",
         "book": "call",
         "how": "Inside Mercado del Puerto, a 5–10 min walk from Plaza Independencia",
@@ -21,7 +21,7 @@
         "why": "Ranked among Bloomberg's top parrillas in the world; the everyday standard-bearer for Uruguayan grilled beef.",
         "verified_on": "2026-08-23",
         "shelf_life": "hours",
-        "source_url": "https://www.alacarta.com.uy/el-palenque/",
+        "source_url": "https://www.elpalenque.com.uy/parrilla-montevideo-uruguay.html",
         "map": {
           "lat": -34.9056438,
           "lng": -56.211484199999994
@@ -33,6 +33,7 @@
         "area": "Parada 7, Av. Roosevelt",
         "address": "Parada 7, Av. Roosevelt, Punta del Este",
         "phone": "+598 4249 4257",
+        "hours": "⚠ Not posted on the restaurant's own site — call the branch to confirm the day and sitting",
         "book": "call",
         "how": "On the main beach avenue, best reached by taxi from central Punta del Este",
         "price": "≈$$$ (parrilla, per person)",
