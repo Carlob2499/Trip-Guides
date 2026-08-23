@@ -536,18 +536,20 @@
     {
       "id": "ev-museo-carnaval",
       "candidateId": "c-museo-del-carnaval",
-      "claim": "Museo del Carnaval is open Wednesday–Sunday 11:00–17:00 (closed Mon/Tue), UYU 200 admission, free under 12; keeps regular hours during Carnival week itself",
+      "claim": "Museo del Carnaval is open Wednesday–Sunday 11:00–17:00 (normally closed Mon/Tue), UYU 200 admission, free under 12; Carnival-week special openings can occur",
       "kind": "objective",
       "origin": "passA",
       "source": {
-        "url": "http://www.museos.gub.uy/index.php/noticias/item/2542-horario-de-los-museos-de-la-direccion-nacional-de-cultura-en-semana-de-carnaval",
+        "url": "https://www.gub.uy/ministerio-educacion-cultura/comunicacion/noticias/horario-museos-direccion-nacional-cultura-semana-carnaval",
         "kind": "official",
         "access": "fetched",
         "language": "es",
-        "publishedAt": null,
+        "publishedAt": "2026-02-12",
         "family": null,
         "independent": null,
-        "appliesToYears": []
+        "appliesToYears": [
+          2026
+        ]
       },
       "verifiedOn": "2026-08-23",
       "firsthand": null,
