@@ -6,6 +6,7 @@
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-23)
 Pipeline V2 reliability repair is merged and Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains `draft: true`, `publication: false`, `landMode: pr`; it is evidence, not production content.
 V1 remains the production default/rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. Manual V2 dispatches remain draft-only; production cutover is a separate evidence-based decision.
+The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 job-level trust boundary; cleanup must not retire or weaken it.
 Canary #4 proved the normal fresh-run/recovery path, including real gate failures and bounded retry authority. Two failure-only seams remain unproven because Uruguay did not exercise them: a real escalation issue comment / `gh` path, and the cancellation grace-window chain.
 The Progress surface now has durable V2 run events and an owner-note path keyed to exact V2 run identity; facts that the backend cannot prove remain honestly blank.
 Next engineering work: execute the remaining V01–V05 validation risk classes, obtain targeted live proof for the two failure-only reliability seams when it can be done safely, and approach V2 cutover only after those acceptance conditions are satisfied.
