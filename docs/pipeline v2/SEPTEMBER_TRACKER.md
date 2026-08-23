@@ -5,94 +5,86 @@ Owner: Carlo
 Window: **August 18–October 7, 2026**  
 Hard backend deadline: **September 30, 2026**
 
-Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, and the active branch's `IMPLEMENTATION_STATE.md`.
+Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, `docs/handoff.md`, and the active branch's `IMPLEMENTATION_STATE.md`.
 
 This file tracks delivery. It does not redefine Pipeline V2.
 
-## Dashboard — August 22, 2026
+## Dashboard — August 23, 2026
 
-- **Current phase (updated 2026-08-22):** post-integration **reliability acceptance**. P13 core
-  proof is DONE. Integration I01–I06 executed (PR #68 + #70/#72/#73 hardening). Three live
-  canaries ran and all three ended RED — Malta (#1), Luxembourg (#2), Portugal (#3, issue #74,
-  run `portugal-20260822-7c041e`). Portugal exposed a reliability defect class rather than a
-  research defect: a failed agent process was reported as a successful step. That repair is
-  merged (**PR #75 → main `253607a`**) and its closeout is **PR #76** (this PR).
-- **Current blocker:** **closeout PR #76 + live reliability acceptance.** The repaired V2
-  research/recovery runtime has not yet been exercised by a live Pipeline V2 research canary.
-- **Next hard deadline:** September 6 — core research engine proven end-to-end in isolation.
-- **Days until September 20 feature freeze:** 29
-- **Days until September 27 code freeze:** 36
-- **Days until September 30 backend complete:** 39
-- **Highest-risk unfinished item:** the four live-only seams of the #75 repair (exit-wrapper
-  resolution on the runner, a real escalation issue comment, the cancellation chain completing
-  inside GitHub's grace window, and `gh` auth where escalate runs). None can be proven by the
-  unit suite.
-- **Carlo's next action:** merge #76 after Codex re-review, then run **preflight + a FRESH
-  Canary #4** (never by resuming Portugal), then hand its evidence to Codex for independent
-  review.
+- **Current phase:** post-Canary #4 **validation preparation + repository cleanup/autonomy hardening**.
+- **Core engine:** P01–P13 DONE.
+- **Integration:** I01–I05 have deterministic/live evidence; I06 deliberately stays open until final V1 retirement/cutover approval.
+- **Reliability:** PR #75 repair is merged; PR #76 closeout is merged; fresh Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains draft-only and unpublished.
+- **Canary #4 truth:** it proved the fresh-run wrapper and ordinary bounded recovery path. It did **not** exercise a real escalation issue comment/`gh` path because no intake issue existed, and it did **not** exercise the cancellation grace-window chain because no cancellation occurred. Those two failure-only seams remain targeted proofs.
+- **Production cutover:** NOT DONE. `WAYPOINT_RESEARCH_ENGINE` remains unset/off, V1 remains the production default/rollback path, and a manual V2 canary cannot mint production publication authority.
+- **Current engineering surface:** draft PR #80 (`cleanup/grand-pass-2026-08-23`) is reconciling stale authority docs/issues, adding executable project invariants, simplifying verification, auditing ownership/duplication/performance/offline/security, and running repeated review/debug loops.
+- **Next validation work:** prepare and execute V01–V05 distinct research-risk trials, measure only telemetry that truly exists (V06), then assess observed resource waste (V07). Do not spend full Claude runs debugging deterministic CI/state/schema failures.
+- **Days until September 20 feature freeze:** 28
+- **Days until September 27 code freeze:** 35
+- **Days until September 30 backend complete:** 38
+- **Highest-risk unfinished items:** validation breadth across distinct risk classes; the two remaining live failure-only reliability seams; production cutover/publication parity; final mobile/offline/security stabilization.
 
 ### Current evidence already recorded
 
 - M0–M8 complete; P13 core proof DONE.
-- Integration I01–I06 executed; reliability hardening #75 merged.
-- Build, lint, typecheck green; full suite green (this PR's exact numbers are recorded in its
-  Validation section, rerun on the final head).
-- V1 dispatch intact; `WAYPOINT_RESEARCH_ENGINE` selector **off**, so `/new` uses V1 today.
-- Manual `workflow_dispatch` is always `landMode=pr` — a canary structurally cannot publish.
-- V2 production publication is **not yet accepted live**.
+- Integration wiring is in place; V1 remains intact behind the selector architecture.
+- Malta, Luxembourg, and Portugal remain preserved RED canary evidence.
+- Uruguay Canary #4: Pass A/B first try; Reconcile attempt 4 after three real gate failures with findings converging 5→2→0 blocking; bounded auto-retry consumed once then correctly refused; Critic first try; landing gate passed; `publication: false`; `landMode: pr`.
+- Progress consumes real V2 durable run events; unavailable fetch-level/nugget/unmeasured counters remain honestly absent.
+- Claude↔Codex review automation uses a job-level read-only-validation / write-capable-publication trust boundary. Treat shipped code as authority, not old PR prose.
 
-**Do not mark the V2 product path accepted until a fresh canary and independent review are
-complete.** Three RED canaries and a merged repair are not an acceptance.
+**Do not equate “green draft canary” with “production cutover complete.”** The former is accepted evidence; the latter remains a deliberate product/operations decision with its own proof.
 
 ---
 
 # Master tracker
 
-Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `DONE` · `DEFERRED`
+Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `DONE` · `DEFERRED` · `DONE / YELLOW`
 
 | ID | Work item | Phase | Owner | Deadline | Status | Dependency | Evidence required | Blocker | Decision needed |
 |---|---|---|---|---|---|---|---|---|---|
-| P01 | Preserve locked creator decisions and V2 authority docs | Foundation | Carlo / Codex | Aug 18 | DONE | None | `DECISIONS.md`, `CODEX_HANDOFF.md`, Fable execution prompt present | None | No |
-| P02 | Complete repo dependency audit and choose V2 build-beside-V1 | Foundation | Codex | Aug 18 | DONE | P01 | Codex handoff states audit complete; execution prompt specifies build beside V1 | None | No |
-| P03 | Implement V2 contracts, state, evidence, coverage, telemetry | Core | Claude/Fable | Sep 6 | DONE | P02 | M2 recorded complete with contract tests | None | No |
-| P04 | Implement V2 doctrine and Guide Author changes | Core | Claude/Fable | Sep 6 | DONE | P03 | M3 recorded complete; parity tests green | None | No |
-| P05 | Implement manual V2 orchestration and Pass B / Critic isolation | Core | Claude/Fable | Sep 6 | DONE | P03 | M4 recorded complete; orchestration tests green | None | No |
-| P06 | Replace fixed candidate/Pass-B quotas with adaptive saturation protections | Core | Claude/Fable | Sep 6 | DONE | P04 | M5 recorded complete; old floors removed from gates and replacement tests added | None | No |
-| P07 | Preserve connected lifecycle safeguards: attempts, same-slug exclusion, answers/recert/pretrip | Core | Claude/Fable | Sep 6 | DONE | P03 | M6 recorded complete; lifecycle tests green | None | No |
-| P08 | Connect V2 state to honest Progress UI compatibility | Core | Claude/Fable | Sep 6 | DONE | P03 | M7 recorded complete | None | No |
-| P09 | Run full deterministic branch verification | Core proof | Automated CI/test | Sep 6 | DONE | P03–P08 | M8: build/lint/typecheck/test green; offline verify passes | None | No |
-| P10 | Run one-shot manual draft-only V2 canary | Core proof | Claude/Fable | Sep 6 | DONE | P09 | Live Pass A → Pass B → Reconcile → geocode → Critic → landing gate → draft PR #61, GREEN (18 proof points, IMPLEMENTATION_STATE) | None | No |
-| P11 | Independently review Fable's one-shot proof and every surgical fix | Core proof | Codex | Sep 6 | DONE / YELLOW | P10 | Independent review returned YELLOW (architecture accepted; bounded finalization list = P12) | None | No |
-| P12 | Apply only blocker/high-priority fixes from the canary | Core proof | Codex + Claude/Fable | Sep 6 | DONE (+P12.1) | P11 | PR #63 merge conflict resolved (`8a591e8`); 4 CodeQL findings fixed (`57f9dcd`); live /proc/self/environ denial proven (run 32340406684); R3+ transport proven (transport-r3-proof test); gates green 163/2649 on `7809835`. P12.1 correction: Grep+Glob /proc denial proven at the tool layer (run 32348279562, job 96361626055); R3+ fixture re-researched, overstatements removed, source-to-claim mapping recorded — IMPLEMENTATION_STATE "P12.1 correction pass" | None | No |
-| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | DONE | P10–P12 | P13.1 fixture correction accepted on the corrected head (source-faithful "bus or taxi", conditional missed-connection, exclusivity scar); records in IMPLEMENTATION_STATE §P13/§P13.1 | None | No |
-| I01 | Connect `/new` dispatch to the proven V2 path behind a safe switch/cutover plan | Integration | Codex + Claude/Fable | Sep 13 | DONE | P13 | `new-guide.yml` has the trusted V2 `workflow_call` path, selector-gated on `WAYPOINT_RESEARCH_ENGINE`; V1 remains default while the selector is off (PR #68 + #70 hardening) | None | No |
-| I02 | Prove full `/new → intake → research → verify → compose → publish` path | Integration | Codex + Automated CI/test | Sep 13 | IN PROGRESS — LIVE ACCEPTANCE PENDING | I01 | Deterministic + integration wiring exists and is tested, but NO canary has produced an accepted green product landing: Malta, Luxembourg and Portugal all ended RED. Acceptance requires a fresh Canary #4 after #76 | Live acceptance not earned | No |
-| I03 | Prove incomplete/failed V2 run cannot publish | Integration | Automated CI/test | Sep 13 | DONE | I01 | Live failure evidence: Malta, Luxembourg and Portugal all failed and NONE published, plus the deterministic suite (publication stays false across every failure/retry state; manual dispatch cannot mint landing authority) | None | No |
-| I04 | Prove resume from interruption without repeating completed expensive work | Integration | Automated CI/test + targeted live run | Sep 13 | DONE (manual resume) — autonomous repair LIVE-UNPROVEN | P13 | Andorra proved manual resume live (interrupt after passA → resume skipped it). The AUTONOMOUS bounded repair from #75 is a Canary #4 acceptance seam and does not retract this proof | None | No |
-| I05 | Reconcile V2 telemetry with Progress cockpit / issue #56 instead of building a second system | Integration | Codex | Sep 13 | DONE | P13 | Progress reads real emitted events through the V2 gateway/adapter with a main fallback for merged runs; honest-empty preserved. Code + integration tests | None | No |
-| I06 | Keep V1 available until V2 proves publication and resume parity | Integration | Codex | Sep 13 | SATISFIED TO DATE — HOLD UNTIL CUTOVER | I02–I04 | V1 intact and never bypassed; selector expected to stay off until acceptance. Cannot close until V2 earns publication parity | None | Carlo approves final V1 retirement |
-| R01 | Repair the V2 runtime reliability defect class Portugal exposed | Reliability | Codex + Claude | Aug 22 | DONE | I01–I05 | PR #75 merged as main `253607a`: agent exit integrity (no `\| tee` masking), partial output cannot enter the success path, failure classes name a plane, retry authority is durable, a stopped run escalates visibly. Caps unchanged (5 attempts, 1 auto-retry) | None | No |
-| R02 | Close out the post-merge documentation/authority truth | Reliability | Claude | Aug 22 | IN PROGRESS | R01 | PR #76 (this PR): handoff ritual, retry-authority invariant, tracker/handoff/policy/prompt-doc congruence, stale-comment fix | Awaiting Codex re-review | No |
-| R03 | **Live reliability acceptance — fresh Canary #4** | Reliability | Carlo + Codex | Sep 6 | NOT STARTED | R02 | A FRESH slug (never a Portugal resume) exercises the repaired runtime end to end. Four live-only seams: exit-wrapper resolution on the runner; one real escalation issue comment; the cancellation chain completing inside GitHub's grace window; `gh` auth where escalate runs | #76 not merged | Yes — Carlo starts the canary |
-| V01 | Mega-city food / reservation research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Adaptive saturation, food fit, reservation depth, independent evidence proven | Integration not done | No |
-| V02 | Native-language + thin-English research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Native research produces meaningful new evidence or is correctly skipped | Integration not done | No |
-| V03 | Fragile transport / physical-transfer trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | Door-to-door plausibility, buffer, missed-connection consequence and fallback shown where risk earns depth | Integration not done | No |
-| V04 | Conflicting-evidence / future-event trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | Disagreement investigated; future date not fabricated; recheck behavior recorded | Integration not done | No |
-| V05 | Large-group / mobility trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | Group size changes transport/reservation/walking recommendations appropriately | Integration not done | No |
-| V06 | Measure model/tool/token/time telemetry where truly available | Validation | Codex + Automated CI/test | Sep 20 | NOT STARTED | Real per-stage metrics; unavailable metrics marked unavailable, never estimated as fact | Integration not done | No |
-| V07 | Compare research quality against resource use and identify observed waste | Validation | Codex | Sep 20 | NOT STARTED | Evidence-backed list of duplicated reads/searches/retries or no meaningful waste found | V01–V06 | No |
-| F01 | **FEATURE FREEZE** — no ordinary new backend features | Freeze | Carlo | Sep 20 | NOT STARTED | V01–V07 | Explicit tracker status set to DONE; unfinished ideas moved to deferred | Validation incomplete | Yes — Carlo alone can waive |
+| P01 | Preserve locked creator decisions and V2 authority docs | Foundation | Carlo / Codex | Aug 18 | DONE | None | `DECISIONS.md`, `CODEX_HANDOFF.md`, execution prompt present | None | No |
+| P02 | Complete repo dependency audit and choose V2 build-beside-V1 | Foundation | Codex | Aug 18 | DONE | P01 | Audit complete; V2 intentionally built beside V1 | None | No |
+| P03 | Implement V2 contracts, state, evidence, coverage, telemetry | Core | Claude/Fable | Sep 6 | DONE | P02 | M2 contract/state tests | None | No |
+| P04 | Implement V2 doctrine and Guide Author changes | Core | Claude/Fable | Sep 6 | DONE | P03 | M3 parity tests | None | No |
+| P05 | Implement manual V2 orchestration and Pass B / Critic isolation | Core | Claude/Fable | Sep 6 | DONE | P03 | M4 orchestration tests | None | No |
+| P06 | Replace fixed candidate/Pass-B quotas with adaptive saturation protections | Core | Claude/Fable | Sep 6 | DONE | P04 | M5 adaptive protections; old floors removed | None | No |
+| P07 | Preserve connected lifecycle safeguards: attempts, same-slug exclusion, answers/recert/pretrip | Core | Claude/Fable | Sep 6 | DONE | P03 | M6 lifecycle tests | None | No |
+| P08 | Connect V2 state to honest Progress UI compatibility | Core | Claude/Fable | Sep 6 | DONE | P03 | M7 Progress adapter/gateway evidence | None | No |
+| P09 | Run full deterministic branch verification | Core proof | Automated CI/test | Sep 6 | DONE | P03–P08 | M8 build/lint/typecheck/test/offline verify | None | No |
+| P10 | Run one-shot manual draft-only V2 canary | Core proof | Claude/Fable | Sep 6 | DONE | P09 | Initial GREEN draft proof recorded in IMPLEMENTATION_STATE | None | No |
+| P11 | Independently review Fable's one-shot proof and every surgical fix | Core proof | Codex | Sep 6 | DONE / YELLOW | P10 | Architecture accepted; bounded correction list produced | None | No |
+| P12 | Apply only blocker/high-priority fixes from the canary | Core proof | Codex + Claude/Fable | Sep 6 | DONE (+P12.1) | P11 | Merge conflict + CodeQL + tool-layer /proc + R3+ fixture corrections accepted | None | No |
+| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | DONE | P10–P12 | Corrected proof accepted; source-faithful transport scar preserved | None | No |
+| I01 | Connect `/new` dispatch to the proven V2 path behind a safe switch/cutover plan | Integration | Codex + Claude/Fable | Sep 13 | DONE | P13 | `new-guide.yml` selector-gated V2 `workflow_call`; V1 remains default while selector is off | None | No |
+| I02 | Prove full `/new → intake → research → verify → compose → landing` product path | Integration | Codex + Automated CI/test | Sep 13 | DONE / YELLOW — DRAFT PRODUCT PATH GREEN; PRODUCTION CUTOVER PENDING | I01 | Uruguay Canary #4 completed every research/verification/composition/landing stage and passed landing gate in `landMode=pr`; production auto-publication remains intentionally unproven while selector is off | Production cutover/publication parity not yet exercised | Carlo approves cutover later |
+| I03 | Prove incomplete/failed V2 run cannot publish | Integration | Automated CI/test | Sep 13 | DONE | I01 | Malta/Luxembourg/Portugal failed without publication + deterministic publication-state tests | None | No |
+| I04 | Prove resume/recovery without repeating completed expensive work | Integration | Automated CI/test + targeted live run | Sep 13 | DONE / YELLOW | P13 | Andorra proved manual resume; Uruguay exercised real bounded gate-failure retry authority. Cancellation recovery timing remains tracked under R03 | Cancellation seam unproven | No |
+| I05 | Reconcile V2 telemetry with Progress cockpit / issue #56 instead of building a second system | Integration | Codex | Sep 13 | DONE | P13 | Progress reads durable emitted V2 events with generation/main fallback; honest-empty preserved | None | No |
+| I06 | Keep V1 available until V2 proves publication and resume parity | Integration | Codex | Sep 13 | IN PROGRESS — HOLD UNTIL CUTOVER | I02–I04 | V1 remains intact/default; no silent retirement | Final production cutover not approved | Carlo approves final V1 retirement |
+| R01 | Repair the V2 runtime reliability defect class Portugal exposed | Reliability | Codex + Claude | Aug 22 | DONE | I01–I05 | PR #75: exit integrity, partial-output rejection, plane-correct failures, durable retry authority, visible escalation path | None | No |
+| R02 | Close out the post-merge documentation/authority truth | Reliability | Claude | Aug 22 | DONE | R01 | PR #76 merged; retry/authority/handoff congruence tests landed | None | No |
+| R03 | **Live reliability acceptance — fresh Canary #4** | Reliability | Carlo + Codex | Sep 6 | DONE / YELLOW | R02 | Uruguay fresh canary GREEN. Fresh-run wrapper/recovery proved; two failure-only seams remain: real issue escalation/`gh` path and cancellation grace-window completion | Two targeted failure-only proofs remain | No full-canary rerun required |
+| C01 | Repository-wide cleanup/autonomy pass (PR #80) | Cleanup | Codex + Automated CI/test | Sep 6 | IN PROGRESS | R03 | Invariants, truthful authority docs/issues, repo ownership map, canonical checks, performance/offline/security audit, repeated debug loops | Exact final-head review/CI pending | No |
+| V01 | Mega-city food / reservation research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Adaptive saturation, food fit, reservation depth, independent evidence | Fixture/success criteria must be prepared before expensive run | No |
+| V02 | Native-language + thin-English research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Native research adds meaningful evidence or is correctly skipped | Fixture/success criteria pending | No |
+| V03 | Fragile transport / physical-transfer trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Door-to-door plausibility, buffers, missed-connection consequence/fallback where risk earns depth | Fixture/success criteria pending | No |
+| V04 | Conflicting-evidence / future-event trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Disagreement investigated; future date not fabricated; recheck behavior recorded | Fixture/success criteria pending | No |
+| V05 | Large-group / mobility trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Group size/mobility materially changes transport/reservation/walking recommendations where appropriate | Fixture/success criteria pending | No |
+| V06 | Measure model/tool/token/time telemetry where truly available | Validation | Codex + Automated CI/test | Sep 20 | NOT STARTED | I02 | Real per-stage metrics only; unavailable values explicitly unavailable | Some metrics may not exist | No |
+| V07 | Compare research quality against resource use and identify observed waste | Validation | Codex | Sep 20 | NOT STARTED | V01–V06 | Evidence-backed duplicated reads/searches/retries or explicit no-meaningful-waste result | Requires validation evidence | No |
+| F01 | **FEATURE FREEZE** — no ordinary new backend features | Freeze | Carlo | Sep 20 | NOT STARTED | V01–V07 | Tracker status explicitly DONE; unfinished ideas deferred | Validation incomplete | Yes — Carlo alone can waive |
 | S01 | Adversarial invalid-state testing | Stabilization | Automated CI/test | Sep 27 | NOT STARTED | F01 | Unsupported facts, malformed artifacts, stale high-risk facts, corrupt state, unsafe publish fail correctly | Feature freeze not reached | No |
-| S02 | Mobile traveler-path check | Stabilization | Carlo + Codex | Sep 27 | NOT STARTED | F01 | `/new`, `/progress`, finished guide critical path usable on phone; no blocking overflow/control issue | Feature freeze not reached | No |
-| S03 | Offline / poor-network traveler-path check | Stabilization | Carlo + Codex | Sep 27 | NOT STARTED | F01 | Core trip information remains usable; network-dependent gaps fail honestly | Feature freeze not reached | No |
-| S04 | Accessibility regression pass | Stabilization | Automated CI/test + manual check | Sep 27 | NOT STARTED | F01 | Existing a11y gate green; critical new controls keyboard/touch accessible | Feature freeze not reached | No |
+| S02 | Mobile traveler-path check | Stabilization | Carlo + Codex | Sep 27 | NOT STARTED | F01 | `/new`, `/progress`, finished-guide critical path usable on phone | Feature freeze not reached | No |
+| S03 | Offline / poor-network traveler-path check | Stabilization | Carlo + Codex | Sep 27 | NOT STARTED | F01 | Core trip info usable; network-dependent gaps fail honestly | Feature freeze not reached | No |
+| S04 | Accessibility regression pass | Stabilization | Automated CI/test + manual check | Sep 27 | NOT STARTED | F01 | Existing a11y gate green; critical controls keyboard/touch accessible | Feature freeze not reached | No |
 | S05 | Bad-network / bot-blocked source behavior | Stabilization | Codex | Sep 27 | NOT STARTED | F01 | Blocked sources do not become fabricated failures or false confirmations | Feature freeze not reached | No |
 | S06 | Run final regression suite including historical Japan scars | Stabilization | Automated CI/test | Sep 27 | NOT STARTED | F01 | Preserved regression tests green; intentional contract changes documented | Feature freeze not reached | No |
-| F02 | **BACKEND CODE FREEZE** except release blockers | Freeze | Carlo | Sep 27 | NOT STARTED | S01–S06 | No unresolved release blocker; branch policy/work discipline follows freeze | Stabilization incomplete | Yes — Carlo alone can waive |
-| F03 | Release-blocker-only window | Freeze | Codex + Claude/Fable | Sep 28–30 | NOT STARTED | F02 | Only defects threatening correctness, creation, verification, publication, offline use, data integrity, security or major usability are changed | F02 | Carlo approves each scope exception |
-| F04 | **BACKEND COMPLETE** | Freeze | Carlo / Codex | Sep 30 | NOT STARTED | F03 | Full integration green; validation rubric green/yellow with no blocker; production path documented | Prior milestones | Yes — final backend acceptance |
+| F02 | **BACKEND CODE FREEZE** except release blockers | Freeze | Carlo | Sep 27 | NOT STARTED | S01–S06 | No unresolved release blocker; freeze discipline active | Stabilization incomplete | Yes — Carlo alone can waive |
+| F03 | Release-blocker-only window | Freeze | Codex + Claude/Fable | Sep 28–30 | NOT STARTED | F02 | Only correctness/creation/verification/publication/offline/data-integrity/security/major-usability blockers change | F02 | Carlo approves each scope exception |
+| F04 | **BACKEND COMPLETE** | Freeze | Carlo / Codex | Sep 30 | NOT STARTED | F03 | Integration/cutover green; validation rubric green/yellow with no blocker; production path documented | Prior milestones | Yes — final backend acceptance |
 | U01 | UI hierarchy and visual polish | UI finalization | Carlo + design/coding agent | Oct 1–7 | NOT STARTED | F04 | Critical traveler tasks clear on mobile/desktop; no backend contract redesign | Backend not frozen | No |
-| U02 | Progress UI clarity and backend/UI congruency | UI finalization | Carlo + Codex | Oct 1–7 | NOT STARTED | F04 | Every displayed status/event is backed by real backend data or honestly empty | Backend not frozen | No |
+| U02 | Progress UI clarity and backend/UI congruency | UI finalization | Carlo + Codex | Oct 1–7 | NOT STARTED | F04 | Every displayed status/event backed by real backend data or honestly empty | Backend not frozen | No |
 | U03 | Final accessibility and interaction polish | UI finalization | Automated CI/test + Carlo | Oct 1–7 | NOT STARTED | F04 | A11y gate green + manual critical-flow check | Backend not frozen | No |
 | U04 | Shift project from engineering to trip use | Handoff | Carlo | Oct 7 | NOT STARTED | U01–U03 | Remaining work is content/reverification/real bugs, not architecture projects | UI finalization incomplete | No |
 
@@ -100,7 +92,7 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `
 
 # Weekly operating cadence
 
-Carlo's Claude Max 5x window resets **Wednesday at 3:00 AM**.
+Claude Max 5x window resets **Wednesday at 3:00 AM**.
 
 Use the allowance deliberately:
 
