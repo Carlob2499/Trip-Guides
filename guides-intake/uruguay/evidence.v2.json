@@ -272,14 +272,16 @@
       "kind": "objective",
       "origin": "passA",
       "source": {
-        "url": "https://feriados.io/feriados/uy/2027",
+        "url": "https://todo.com.uy/agenda/calendarios/calendario2027.html",
         "kind": "reference",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "es",
         "publishedAt": null,
         "family": "holiday-calendar-aggregators",
         "independent": null,
-        "appliesToYears": []
+        "appliesToYears": [
+          2027
+        ]
       },
       "verifiedOn": "2026-08-23",
       "firsthand": null,
@@ -292,7 +294,7 @@
     {
       "id": "ev-llamadas-2026-dates",
       "candidateId": "c-desfile-de-llamadas",
-      "claim": "The Desfile de Llamadas parade's most recent officially-confirmed dates are Friday Feb 6 and Saturday Feb 7, 2026 (Isla de Flores, Montevideo); the 2027 dates had not been posted on the event's official page as of this check",
+      "claim": "The Desfile de Llamadas parade's most recent officially-confirmed dates are Friday Feb 6 and Saturday Feb 7, 2026 (Isla de Flores, Montevideo); the following year's dates had not been posted on the event's official page as of this check",
       "kind": "objective",
       "origin": "passA",
       "source": {
@@ -894,7 +896,7 @@
     {
       "id": "ev-colonia-offpeak-1",
       "candidateId": "c-colonia-del-sacramento-barrio-historico--off-peak-visit-window",
-      "claim": "Buenos Aires day-tripper ferries land and depart Colonia between roughly 10:00 and 15:00; arriving before 10:00 or staying past 16:00 shows a visibly quieter, more photogenic old town once the day-trip crowd has left.",
+      "claim": "Colonia del Sacramento's Barrio Histórico is calmer and more atmospheric once the Buenos Aires day-tripper ferry crowd (roughly 10:00-15:00) has left — arriving early or lingering into late afternoon/evening shows the old town at its quietest, once the same-day 'bate-volta' visitors are gone.",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -914,7 +916,7 @@
     {
       "id": "ev-colonia-offpeak-2",
       "candidateId": "c-colonia-del-sacramento-barrio-historico--off-peak-visit-window",
-      "claim": "Colonia's historic quarter gets 'MUITO mais mágica' (much more magical) in the late afternoon and evening, once the same-day ferry tourists ('bate-volta') have already left; the author frames overnighting there as the way to see the town at its best.",
+      "claim": "Colonia del Sacramento's Barrio Histórico is calmer and more atmospheric once the Buenos Aires day-tripper ferry crowd (roughly 10:00-15:00) has left — arriving early or lingering into late afternoon/evening shows the old town at its quietest, once the same-day 'bate-volta' visitors are gone.",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -996,26 +998,6 @@
       "freshness": null
     },
     {
-      "id": "ev-mam-local-2021-stale",
-      "candidateId": "c-mercado-agricola-de-montevideo",
-      "claim": "MAM is 'another good option in the city and is less touristic' than Mercado del Puerto, and 'a more complete market' with broader food/shop offerings. Published Sept 2021 — outside the 24-month experiential-freshness window, recorded as a re-verify lead rather than current corroboration.",
-      "kind": "experiential",
-      "origin": "passB",
-      "source": {
-        "url": "https://guiadonomadedigital.com/mercado-agricola-de-montevideu/",
-        "kind": "firsthand",
-        "access": "fetched",
-        "language": "pt",
-        "publishedAt": "2021-09-17",
-        "family": "guiadonomadedigital",
-        "independent": true,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-23",
-      "firsthand": true,
-      "freshness": null
-    },
-    {
       "id": "ev-losilverio-hours",
       "candidateId": "c-lo-de-silverio",
       "claim": "Lo de Silverio (Alejo Rossell y Rius 1655 esquina 4 de Julio, Villa Dolores) is open Tuesday-Saturday 12:00-16:00 and 20:00-00:00, Sunday 12:00-16:00.",
@@ -1042,7 +1024,7 @@
     {
       "id": "ev-jose-ignacio-1",
       "candidateId": "c-jose-ignacio",
-      "claim": "José Ignacio stays 'discreto, lindo y curado' in February — busy but noticeably less intense than January's peak; recommended for long lunches and a quieter register than central Punta, best visited as a day trip while staying in Punta (Mansa or the Península) for practicality.",
+      "claim": "José Ignacio is a noticeably calmer, more serene beach town than central Punta del Este's crowd- and nightlife-driven scene, even during the February high season — better suited to travelers wanting quiet, privacy, and long lunches over the multitudes.",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1062,7 +1044,7 @@
     {
       "id": "ev-jose-ignacio-2",
       "candidateId": "c-jose-ignacio",
-      "claim": "'Las playas de José Ignacio son menos concurridas, ofreciendo un entorno más sereno' compared to Punta del Este's nightlife-driven, crowd-seeking scene — José Ignacio draws travelers wanting privacy and calm rather than the multitudes.",
+      "claim": "José Ignacio is a noticeably calmer, more serene beach town than central Punta del Este's crowd- and nightlife-driven scene, even during the February high season — better suited to travelers wanting quiet, privacy, and long lunches over the multitudes.",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1262,11 +1244,6 @@
       "findingId": "ev-mam-local-2026",
       "disposition": "agree",
       "note": "Single fresh (2026) firsthand source for the 'calmer, less touristy' framing. Concurs with Pass B's own call to keep the candidate shortlisted rather than shipped — needs a second CURRENT corroborating source, not a stale one."
-    },
-    {
-      "findingId": "ev-mam-local-2021-stale",
-      "disposition": "agree",
-      "note": "Published 2021-09, past the 24-month experiential-freshness window. Concurs with Pass B's own treatment as a re-verify lead rather than current evidence; does not count toward the 2-source corroboration bar."
     },
     {
       "findingId": "ev-losilverio-hours",

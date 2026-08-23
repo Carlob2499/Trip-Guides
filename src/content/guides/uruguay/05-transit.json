@@ -22,9 +22,9 @@
     "center": { "lat": -34.775, "lng": -56.32 },
     "span": 3.4,
     "points": [
-      { "name": "Montevideo (Ciudad Vieja)", "lat": -34.9058, "lng": -56.2011, "place_id": "__VERIFICATION_REQUIRED__" },
-      { "name": "Colonia del Sacramento (Barrio Histórico)", "lat": -34.4626, "lng": -57.8398, "place_id": "__VERIFICATION_REQUIRED__" },
-      { "name": "Punta del Este", "lat": -34.9475, "lng": -54.9338, "place_id": "__VERIFICATION_REQUIRED__" }
+      { "name": "Montevideo (Ciudad Vieja)", "lat": -34.9058, "lng": -56.2011 },
+      { "name": "Colonia del Sacramento (Barrio Histórico)", "lat": -34.4626, "lng": -57.8398 },
+      { "name": "Punta del Este", "lat": -34.9475, "lng": -54.9338 }
     ]
   }
 ]

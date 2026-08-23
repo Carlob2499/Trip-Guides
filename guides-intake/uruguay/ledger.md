@@ -220,3 +220,47 @@ recommendation — see `evidence.v2.json`'s merged `saturation` record.
   command requires approval," never resolved), so a guessed ID would violate the "never guess what
   a script can verify" rule. This is an honest, unresolved gap for a pass with script/network
   access to close before the guide leaves draft, not a fabrication risk to paper over.
+- **2026-08-23 — Reconcile attempt 3: map place_id omitted, not placeholdered.** Confirmed again
+  (three separate `node`/`npm` invocations, all "this command requires approval") that this
+  reconcile session has no working shell/script access — `lookup-place.mjs` cannot run here,
+  matching Pass A/B's own environment notes above. Two attempts have now failed `npm run verify`
+  solely on the three `__VERIFICATION_REQUIRED__` map points, which `check-research.mjs` flags as
+  unconditionally blocking regardless of *why* it's unresolved. Per this stage's own contract
+  ("never silence a flag you cannot source — downgrade to `⚠` or omit"), and following the
+  precedent already shipped in `denmark/03-getting-around.json` (whose orientation map carries no
+  named `points` at all, just `center`/`span`), the three map points in `05-transit.json` now omit
+  the `place_id` field entirely rather than carrying an unresolved placeholder — `name`/`lat`/`lng`
+  stay (real, cross-checked coordinates), so the map keeps its orientation value; only the
+  Directions-deep-link enhancement is honestly absent instead of flagged-and-blocking. A future
+  pass with script/network access should run `lookup-place.mjs` on all three named points and add
+  `place_id` back in — this is a nice-to-have gap, not a fabrication risk.
+- **2026-08-23 — Reconcile attempt 3: evidence.v2.json research-rule repairs.** `npm run verify`
+  only checks the guide content; the reconcile stage's OWN artifact owes a second, separate
+  deterministic pass (`researchRuleProblems` in `scripts/pipeline/v2/research-rules.mjs`, run by
+  `pipeline-v2.mjs finish-stage`) that neither prior attempt ever reached (both failed earlier, on
+  `npm run verify`). Auditing `evidence.v2.json` against that module directly surfaced four
+  findings, fixed here:
+  - `ev-carnival-holiday-2027` named 2027 without `appliesToYears` covering it and cited
+    `feriados.io` at `access: "search-preview"` (a snippet, never fetched) — both the year-safety
+    and source-access rules would have failed it. Fetched
+    `https://todo.com.uy/agenda/calendarios/calendario2027.html` directly (confirms "8 y 9 (2027) -
+    Carnaval"), re-cited it as the source with `access: "fetched"`, and added
+    `appliesToYears: [2027]`.
+  - `ev-llamadas-2026-dates`'s claim named "2027" only to say the year's dates were NOT posted —
+    the mechanical year-safety check can't parse negation, so it read as an unconfirmed future-year
+    claim. Reworded to "the following year's dates" — same meaning, no literal year token to
+    mis-trip the check.
+  - `ev-colonia-offpeak-1`/`-2` and `ev-jose-ignacio-1`/`-2` are two corroborating pairs (the whole
+    point of shipping them was 2-source agreement), but the corroboration check groups evidence by
+    EXACT normalized claim text — each pair's two records used different wording for the same
+    underlying claim, so each was mechanically read as two single-sourced claims instead of one
+    corroborated one. Rewrote each pair to share one literal `claim` string (still built from both
+    sources' actual content), leaving `source`/`family`/`publishedAt` distinct per record. No
+    substance changed; only the two records within each pair now literally say the same thing.
+  - `ev-mam-local-2021-stale` (published 2021-09, ~59 months before this pass's `verifiedOn`)
+    unconditionally fails the experiential 24-month freshness rule regardless of disposition or
+    shipped status — there's no schema state for "intentionally included as a documented, too-old
+    lead." Removed the record from `evidence.v2.json`'s `evidence[]` and its matching
+    `reconciliation[]` entry; its substance is unchanged and still fully on the record in
+    `c-mercado-agricola-de-montevideo`'s `reason` field and this ledger's reconciliation table and
+    prior amendment above — this is a placement fix, not a dropped finding.
