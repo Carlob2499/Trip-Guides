@@ -26,9 +26,10 @@ jobs:
           cache: npm
       - run: npm ci
       # THE main-push gate since 2026-08-14: test.yml is PR-only now, so this job carries
-      # the full set alone — lint, then coverage (a strict superset of `npm test`: every
-      # test runs AND the pure-logic coverage floors in vitest.config.ts are enforced),
-      # then typecheck. A direct push that bypasses PR review still meets every gate here.
+      # the full set alone — protected project invariants, lint, coverage (a strict superset of
+      # `npm test`: every test runs AND the pure-logic coverage floors in vitest.config.ts are
+      # enforced), then typecheck. A direct push that bypasses PR review still meets every gate.
+      - run: npm run check:invariants
       - run: npm run lint
       - run: npm run coverage
       - run: npm run typecheck
