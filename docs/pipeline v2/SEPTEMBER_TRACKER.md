@@ -11,13 +11,13 @@ This file tracks delivery. It does not redefine Pipeline V2.
 
 ## Dashboard — August 23, 2026
 
-- **Current phase:** post-Canary #4 **validation preparation + repository cleanup/autonomy hardening**.
+- **Current phase:** post-Canary #4 **validation preparation**; repository cleanup/autonomy hardening is merged.
 - **Core engine:** P01–P13 DONE.
 - **Integration:** I01–I05 have deterministic/live evidence; I06 deliberately stays open until final V1 retirement/cutover approval.
 - **Reliability acceptance:** PR #75 repair (`253607a`) is merged; PR #76 closeout is merged; fresh Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains draft-only and unpublished.
 - **Canary #4 truth:** it proved the fresh-run wrapper and ordinary bounded recovery path. It did **not** exercise a real escalation issue comment/`gh` path because no intake issue existed, and it did **not** exercise the cancellation grace-window chain because no cancellation occurred. Those two failure-only seams remain targeted proofs.
 - **Production cutover:** NOT DONE. `WAYPOINT_RESEARCH_ENGINE` remains unset/off, V1 remains the production default/rollback path, and a manual V2 canary cannot mint production publication authority.
-- **Current engineering surface:** draft PR #80 (`cleanup/grand-pass-2026-08-23`) is reconciling stale authority docs/issues, adding executable project invariants, simplifying verification, auditing ownership/duplication/performance/offline/security, and running repeated review/debug loops.
+- **Cleanup closeout:** PR #80 merged as `ca9d1b8e76d72ea95620e1c006417418855c88d0` after exact-head Project invariants, Tests/coverage, Accessibility, and Vercel passed. The revision-4 Claude↔Codex reviewer trust boundary remains active and protected.
 - **Next validation work:** prepare and execute V01–V05 distinct research-risk trials, measure only telemetry that truly exists (V06), then assess observed resource waste (V07). Do not spend full Claude runs debugging deterministic CI/state/schema failures.
 - **Days until September 20 feature freeze:** 28
 - **Days until September 27 code freeze:** 35
@@ -31,7 +31,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - Malta, Luxembourg, and Portugal remain preserved RED canary evidence.
 - Uruguay Canary #4: Pass A/B first try; Reconcile attempt 4 after three real gate failures with findings converging 5→2→0 blocking; bounded auto-retry consumed once then correctly refused; Critic first try; landing gate passed; `publication: false`; `landMode: pr`.
 - Progress consumes real V2 durable run events; unavailable fetch-level/nugget/unmeasured counters remain honestly absent.
-- The temporary Claude↔Codex reciprocal reviewer from PRs #78/#79 is RETIRED in cleanup PR #80. It was integration scaffolding, not a Waypoint product lifecycle, and its absence is now an executable project invariant.
+- The reciprocal Claude↔Codex reviewer from PRs #78/#79 remains active with the revision-4 separation restored by #79: unprivileged signal, read-only validation of PR-controlled content, and a separate write-capable publish job that never executes PR content.
 
 **Do not equate “green draft canary” with “production cutover complete.”** The former is accepted evidence; the latter remains a deliberate product/operations decision with its own proof.
 
@@ -65,7 +65,7 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `
 | R01 | Repair the V2 runtime reliability defect class Portugal exposed | Reliability | Codex + Claude | Aug 22 | DONE | I01–I05 | PR #75: exit integrity, partial-output rejection, plane-correct failures, durable retry authority, visible escalation path | None | No |
 | R02 | Close out the post-merge documentation/authority truth | Reliability | Claude | Aug 22 | DONE | R01 | PR #76 merged; retry/authority/handoff congruence tests landed | None | No |
 | R03 | **Live reliability acceptance — fresh Canary #4** | Reliability | Carlo + Codex | Sep 6 | DONE / YELLOW | R02 | Uruguay fresh canary GREEN. Fresh-run wrapper/recovery proved; two failure-only seams remain: real issue escalation/`gh` path and cancellation grace-window completion | Two targeted failure-only proofs remain | No full-canary rerun required |
-| C01 | Repository-wide cleanup/autonomy pass (PR #80) | Cleanup | Codex + Automated CI/test | Sep 6 | IN PROGRESS | R03 | Invariants, truthful authority docs/issues, repo ownership map, canonical checks, performance/offline/security audit, repeated debug loops | Exact final-head review/CI pending | No |
+| C01 | Repository-wide cleanup/autonomy pass (PR #80) | Cleanup | Codex + Automated CI/test | Sep 6 | DONE | R03 | PR #80 merged at `ca9d1b8e`; invariants, truthful authority surfaces, repo ownership map, canonical checks, Progress run-note completion, offline/security cleanup, and repeated review/debug passes; final exact-head invariants/tests/a11y/Vercel green | None | No |
 | V01 | Mega-city food / reservation research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Adaptive saturation, food fit, reservation depth, independent evidence | Fixture/success criteria must be prepared before expensive run | No |
 | V02 | Native-language + thin-English research trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Native research adds meaningful evidence or is correctly skipped | Fixture/success criteria pending | No |
 | V03 | Fragile transport / physical-transfer trial | Validation | Claude/Fable + Codex | Sep 20 | NOT STARTED | I02 | Door-to-door plausibility, buffers, missed-connection consequence/fallback where risk earns depth | Fixture/success criteria pending | No |
