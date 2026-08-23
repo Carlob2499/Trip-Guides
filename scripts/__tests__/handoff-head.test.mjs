@@ -18,16 +18,18 @@ describe("bounded session warm start", () => {
     const output = extractWarmStart(handoff);
     expect(output.length).toBeGreaterThan(0);
     expect(Buffer.byteLength(output, "utf8")).toBeLessThanOrEqual(WARM_START_MAX_BYTES);
-    // The capsule must always carry the CURRENT safety state. These assert the standing
-    // invariants rather than one moment's wording — the original three pinned the pre-merge
-    // phrasing ("reliability-blocked", "do not start Canary #4 yet"), which went stale the hour
-    // PR #75 merged and would have forced a false line back into the capsule to stay green.
-    expect(output).toMatch(/Canary #4/);                 // where the risk currently sits
-    expect(output).toMatch(/DO NOT resume Portugal/i);   // the evidence run stays untouched
-    expect(output).toMatch(/V1 intact|keep V1/i);        // the rollback path
-    expect(output).toMatch(/selector/i);                 // the V2 cutover switch's state
-    // A capsule that has stopped naming the live risk is worse than none.
-    expect(output).toMatch(/NEVER executed in a live Actions job|proven|has not started/i);
+
+    // Guard durable CURRENT state, not one canary's temporary wording.
+    expect(output).toMatch(/Canary #4/);
+    expect(output).toMatch(/Uruguay/i);
+    expect(output).toMatch(/draft.*true|draft-only/i);
+    expect(output).toMatch(/V1.*default|V1.*rollback/i);
+    expect(output).toMatch(/WAYPOINT_RESEARCH_ENGINE|selector/i);
+    expect(output).toMatch(/escalation/i);
+    expect(output).toMatch(/cancellation/i);
+    expect(output).toMatch(/unproven|did not exercise/i);
+    expect(output).toMatch(/reciprocal Claude↔Codex reviewer automation.*remains active/i);
+    expect(output).toMatch(/revision-4.*trust boundary/i);
   });
 
   it("never auto-injects CONTEXT.md", () => {
