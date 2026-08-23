@@ -102,7 +102,7 @@ summary of that machine record, not a substitute for it.
 | Colonia del Sacramento — Barrio Histórico & Faro | shipped | y |
 | Casapueblo (Punta Ballena) | shipped | y |
 | La Mano de Punta del Este | shipped | y |
-| Desfile de Llamadas / Carnival season framing | shipped (as seasonal context — see Amendments on why exact 2027 dates are not asserted) | y |
+| Desfile de Llamadas | shipped (as seasonal Carnival context — see Amendments on why exact 2027 dates are not asserted) | y |
 | Colonia del Sacramento off-peak visit window (Pass B) | shipped: 2 independent firsthand sources corroborate the Buenos Aires ferry crowd window (≈10:00–15:00) | y |
 | Colonia ferry departure timing — 08:30 crowding (Pass B) | shortlisted: single-sourced granular detail, not woven into guide text | y |
 
@@ -200,3 +200,23 @@ recommendation — see `evidence.v2.json`'s merged `saturation` record.
   research pass" / "this pass" — that had leaked into three `body` fields) while touching those
   sections for reconciliation. No new traveler-facing fork surfaced during reconciliation; the two
   open questions from Pass A stand unchanged.
+- **2026-08-23 — Reconcile retry: candidates/guide-text repair.** The prior reconcile attempt
+  shipped three candidates (Desfile de Llamadas, the Colonia off-peak visit window, La Rambla)
+  whose ledger row names didn't literally occur anywhere in the guide text — a qualifier/phrasing
+  mismatch, not a fabricated or dropped finding (`check-candidates.mjs`'s cross-check is a
+  case-insensitive substring match against the shipped row's own name). Fixed by weaving the
+  actual terms into the prose they already described: `07-sights.json`'s Museo del Carnaval entry
+  now names "the Desfile de Llamadas parade" (previously just "the Llamadas parade") and "La
+  Rambla" (previously "the Rambla"); the Colonia entry now names the "Colonia del Sacramento
+  off-peak visit window" explicitly alongside the existing 10:00-15:00 ferry-crowd description.
+  Trimmed the ledger's "Desfile de Llamadas / Carnival season framing" row name to just "Desfile
+  de Llamadas" (the qualifier moved into the Verdict cell, where it already lived in substance).
+  Also replaced the literal "(US$70)" in the "Sights & activities, per day" budget item's note
+  with `{{fact:isla-lobos-70-usd}}` — an undated hard-coded figure outside the facts registry,
+  caught by the D2 provenance check now that this guide is `provenance: "strict"`. No content
+  claim changed; only phrasing/citation form. The three map-point `place_id`s remain the literal
+  `__VERIFICATION_REQUIRED__` placeholder — `lookup-place.mjs` requires network/shell access this
+  stage does not have (confirmed again this attempt: every `node`/`npm` invocation returns "this
+  command requires approval," never resolved), so a guessed ID would violate the "never guess what
+  a script can verify" rule. This is an honest, unresolved gap for a pass with script/network
+  access to close before the guide leaves draft, not a fabrication risk to paper over.
