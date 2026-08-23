@@ -54,8 +54,9 @@ function requireText(rel, needle, label) {
   else pass(label);
 }
 
-// Runtime agent instructions must stay behaviorally in sync. Their short preambles are
-// intentionally tool-specific; everything after the first horizontal rule is shared policy.
+// Runtime agent instructions must stay behaviorally in sync. The preamble and a tiny set of
+// runtime-specific names are intentionally different; normalize ONLY those explicit aliases.
+// Any other difference remains a policy drift and fails CI.
 const agents = read("AGENTS.md");
 const claude = read("CLAUDE.md");
 const sharedBody = (text) => {
@@ -63,8 +64,19 @@ const sharedBody = (text) => {
   const at = text.indexOf(marker);
   return at === -1 ? text : text.slice(at + marker.length);
 };
-if (sharedBody(agents) !== sharedBody(claude)) fail("Agent policy parity: AGENTS.md and CLAUDE.md shared bodies differ");
-else pass("Agent policy parity");
+const normalizeAgentSpecificNames = (text) => text
+  .replaceAll("Codex Remote", "<AGENT_REMOTE>")
+  .replaceAll("Claude Code Remote", "<AGENT_REMOTE>")
+  .replaceAll("AGENTS.md", "<AGENT_MANUAL>")
+  .replaceAll("CLAUDE.md", "<AGENT_MANUAL>");
+
+const normalizedAgents = normalizeAgentSpecificNames(sharedBody(agents));
+const normalizedClaude = normalizeAgentSpecificNames(sharedBody(claude));
+if (normalizedAgents !== normalizedClaude) {
+  fail("Agent policy parity: AGENTS.md and CLAUDE.md differ beyond the explicit runtime-specific allowlist");
+} else {
+  pass("Agent policy parity");
+}
 
 // Pipeline V1 and V2 coexist until an explicitly approved cutover.
 requirePath(".github/workflows/research-pass.yml", "Pipeline V1 workflow");
