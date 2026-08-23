@@ -61,11 +61,21 @@ jobs:
       - run: npm ci
       - name: List the PR(s) this firing should check
         id: list
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+          DISPATCH_PR: ${{ inputs.pr }}
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "prs=[${{ github.event.pull_request.number }}]" >> "$GITHUB_OUTPUT"
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "prs=[${{ inputs.pr }}]" >> "$GITHUB_OUTPUT"
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            echo "prs=[$EVENT_PR_NUMBER]" >> "$GITHUB_OUTPUT"
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            # DISPATCH_PR is free-text input from whoever ran this manually — validate it's a
+            # bare integer before it goes anywhere near a shell/JSON string.
+            if ! [[ "$DISPATCH_PR" =~ ^[0-9]+$ ]]; then
+              echo "[codex-watcher] --pr must be a plain PR number, got: $DISPATCH_PR" >&2
+              exit 1
+            fi
+            echo "prs=[$DISPATCH_PR]" >> "$GITHUB_OUTPUT"
           else
             # Scheduled fallback: the SAME eligibility function used everywhere else decides
             # which open, same-repo PRs actually have unprocessed, current-head work orders —
@@ -123,19 +133,22 @@ jobs:
         # ` #` in an UNQUOTED plain scalar as a comment start and truncates the value right
         # there (observed live: the step failed with "unexpected EOF looking for matching
         # quote" because everything from ` #$PR` onward was silently dropped by the parser).
+        env:
+          REASON: ${{ steps.check.outputs.reason }}
         run: |
-          echo "[codex-watcher] PR #$PR — not eligible: ${{ steps.check.outputs.reason }}"
+          echo "[codex-watcher] PR #$PR — not eligible: $REASON"
 
       # ── everything below runs ONLY when eligible ──────────────────────────────────────
       - name: Checkout the PR branch (scoped credential for fetch only)
         if: steps.check.outputs.eligible == 'true'
         env:
           PUSH_TOKEN: ${{ github.token }}
+          HEAD_REF: ${{ steps.check.outputs.head_ref }}
         run: |
           AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
-          git fetch origin "${{ steps.check.outputs.head_ref }}"
-          git checkout -B "${{ steps.check.outputs.head_ref }}" FETCH_HEAD
+          git fetch origin "$HEAD_REF"
+          git checkout -B "$HEAD_REF" FETCH_HEAD
 
       - name: Remove repository credentials before the agent runs
         if: steps.check.outputs.eligible == 'true'
@@ -216,6 +229,7 @@ jobs:
         env:
           PUSH_TOKEN: ${{ github.token }}
           WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
+          HEAD_REF: ${{ steps.check.outputs.head_ref }}
         run: |
           rsync -a --delete --exclude='.git' --exclude='node_modules' --exclude='dist' \
             "$GITHUB_WORKSPACE/" ./
@@ -236,23 +250,32 @@ jobs:
           git commit -m "fix(codex-watcher): address work order $WORK_ORDER_ID"
           AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
-          git push origin "HEAD:${{ steps.check.outputs.head_ref }}"
+          git push origin "HEAD:$HEAD_REF"
           git config --local --unset-all http.https://github.com/.extraheader || true
           echo "new_head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       # Every field here is CONTROL-PLANE composed, deterministic text — never the agent's own
       # free-form output pasted verbatim — so nothing the agent wrote can forge a marker or
       # otherwise corrupt the bounded-section protocol on the next parse.
+      #
+      # SCRIPT-INJECTION HYGIENE (CodeQL, PR #78 live finding): every ${{ steps.*.outputs.* }}
+      # a script needs is assigned through `env:` and read back as a shell variable — NEVER
+      # interpolated directly into `run:` text. GitHub substitutes `${{ }}` into the script
+      # BEFORE the shell parses it, so a value containing shell metacharacters would otherwise
+      # execute as code, not data — `env:` assignment is immune because the shell, not the
+      # expression engine, is what does the (safe, literal) variable expansion.
       - name: Mark the new HEAD ready for Codex
         if: steps.finish.outcome == 'success'
         working-directory: collect
         env:
           WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
+          NEW_HEAD: ${{ steps.finish.outputs.new_head }}
+          DIFFSTAT: ${{ steps.finish.outputs.diffstat }}
         run: |
           node ../scripts/codex-watcher.mjs build-section \
-            --head "${{ steps.finish.outputs.new_head }}" \
+            --head "$NEW_HEAD" \
             --work-order "$WORK_ORDER_ID" \
-            --summary "Addressed Codex work order $WORK_ORDER_ID. ${{ steps.finish.outputs.diffstat }}" \
+            --summary "Addressed Codex work order $WORK_ORDER_ID. $DIFFSTAT" \
             --validation "lint, typecheck, test, and build all passed on the new head before it was pushed." \
             --uncertainty "None beyond what Codex's next independent review of this head surfaces." \
             > /tmp/claude-section.txt

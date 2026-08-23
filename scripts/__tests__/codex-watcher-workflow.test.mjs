@@ -128,6 +128,64 @@ describe("claude-codex-watcher.yml — the control plane, not the agent, validat
   });
 });
 
+describe("claude-codex-watcher.yml — script-injection hygiene (CodeQL, PR #78 live finding)", () => {
+  // GitHub substitutes `${{ }}` into a `run:` script's TEXT before the shell ever sees it —
+  // so any step-output/event/input value interpolated directly into script text is a
+  // script-injection vector (a value containing shell metacharacters executes as code, not
+  // data). The fix, applied everywhere in this file, is to assign the value through `env:`
+  // and reference it as an ordinary shell variable — `env:` assignment is immune, because the
+  // SHELL does that substitution, safely, not the expression engine. This test fails the
+  // moment any `run:` step regresses to interpolating `${{ }}` directly again.
+  it("no `run:` step body ever contains a raw ${{ }} expression — every value flows through env: instead", () => {
+    // Real YAML block-scalar semantics, not step-name-delimited chunking (which over-captures
+    // across job/step boundaries the moment a step has no `name:` in between): a `run: |`
+    // block's body is every subsequent line more indented than the `run:` line itself, until
+    // the first line at or below that indentation (or EOF).
+    const lines = yml.split("\n");
+    const offenders = [];
+    for (let i = 0; i < lines.length; i++) {
+      const blockMatch = lines[i].match(/^(\s*)run:\s*\|\s*$/);
+      if (blockMatch) {
+        const indent = blockMatch[1].length;
+        const body = [];
+        for (let j = i + 1; j < lines.length; j++) {
+          const line = lines[j];
+          if (line.trim() === "") { body.push(line); continue; }
+          if (line.match(/^(\s*)/)[1].length <= indent) break;
+          body.push(line);
+        }
+        if (body.join("\n").includes("${{")) offenders.push(`line ${i + 1} (block)`);
+        continue;
+      }
+      const inlineMatch = lines[i].match(/^\s*run:\s*(.+)$/);
+      if (inlineMatch && inlineMatch[1].includes("${{")) offenders.push(`line ${i + 1} (inline)`);
+    }
+    expect(offenders, "these run: steps interpolate ${{ }} directly into shell script text").toEqual([]);
+  });
+
+  it("sanity: the detector itself catches a real offender (proves it isn't vacuously passing)", () => {
+    const withOffender = yml.replace(
+      'echo "[codex-watcher] PR #$PR — not eligible: $REASON"',
+      'echo "[codex-watcher] PR #$PR — not eligible: ${{ steps.check.outputs.reason }}"',
+    );
+    expect(withOffender).not.toBe(yml); // the replace actually matched something
+    const lines = withOffender.split("\n");
+    const found = lines.some((l, i) => {
+      const m = l.match(/^(\s*)run:\s*\|\s*$/);
+      if (!m) return false;
+      const indent = m[1].length;
+      const body = [];
+      for (let j = i + 1; j < lines.length; j++) {
+        if (lines[j].trim() === "") continue;
+        if (lines[j].match(/^(\s*)/)[1].length <= indent) break;
+        body.push(lines[j]);
+      }
+      return body.join("\n").includes("${{ steps.check.outputs.reason }}");
+    });
+    expect(found).toBe(true);
+  });
+});
+
 describe("claude-codex-watcher.yml — permissions stay inside the watcher's authority", () => {
   it("no job requests actions:write, admin, or any scope beyond contents/pull-requests", () => {
     const perms = [...yml.matchAll(/permissions:\s*\n((?:\s+\S+:\s*\S+\n?)+)/g)].map((m) => m[1]);
