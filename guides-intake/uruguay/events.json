@@ -33,17 +33,32 @@
       "text": "Pass B (independent research) complete in 12m"
     },
     {
-      "at": "2026-08-23T04:15:51.363Z",
-      "kind": "decision",
-      "text": "Candidate funnel: 15 evaluated · 14 shortlisted · 12 shipped · 2 rejected · 1 kept as detours"
+      "at": "2026-08-23T04:16:21.815Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 1 of 5)"
     },
     {
-      "at": "2026-08-23T04:15:51.363Z",
+      "at": "2026-08-23T04:30:35.832Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-23T04:30:35.832Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 26 evaluated · 20 shortlisted · 14 shipped · 6 rejected · 3 kept as detours"
+    },
+    {
+      "at": "2026-08-23T04:30:35.832Z",
+      "kind": "decision",
+      "text": "Reconcile dispositioned 12 independent finding(s): 7 adopt · 5 agree"
+    },
+    {
+      "at": "2026-08-23T04:30:35.832Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-23T04:15:51.363Z",
+      "at": "2026-08-23T04:30:35.832Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Palacio Salvo guided-tour day/time grid and booking channel"
     }
