@@ -299,6 +299,7 @@ to add a `run: |` block with logic in it, it belongs in `scripts/pipeline/` or `
 | `recert.yml` | weekly audit + staleness detection → dispatches change runs | `scripts/recert.mjs` |
 | `feedback-export.yml` | export survey feedback → synthesis PR + inert proposal | `scripts/feedback-signals.mjs` |
 | `pretrip-check.yml` | T-7 departure window: stale facts on a trip about to happen | `scripts/pretrip-check.ts` |
+| `claude-codex-watcher.yml` | Claude's half of the reciprocal Claude↔Codex PR review loop: reacts to a PR's bounded `codex-review-next` section (Codex's own external, independent watcher) saying `CLAUDE_ACTION_REQUIRED: yes` at the PR's current head, fixes exactly what the work order describes, and hands the new head back via Claude's own bounded `claude-ready-for-codex` section — never merges, publishes, or expands scope beyond the work order | `scripts/codex-watcher.mjs` |
 | `deploy` · `deploy-worker` · `test` · `a11y` · `ensure-labels` · `mutation` (manual) | the substrate | — |
 
 ## Model economy — the backbone runs on a Claude subscription

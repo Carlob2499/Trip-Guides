@@ -775,3 +775,49 @@ truth — it was scoped to the one failure class that almost never occurs, so or
 gate failures never self-dispatched at all, and a per-dispatch boolean cannot bound a loop ACROSS
 dispatches; also rejected: widening the caps to compensate (the defect was routing, not budget),
 and letting a repeated terminal failure re-comment on the intake issue.
+
+**Canary #4 (uruguay) is PRODUCT-PATH GREEN — the reliability repair's live proof, not a repeat
+of the Malta/Luxembourg/Portugal RED evidence** (2026-08-23, runId `uruguay-20260823-9789de`,
+branch `research-v2/uruguay`, draft PR #77 — never merged, never turned into production
+content). Every stage reached `complete`: Pass A and Pass B on the first attempt
+(`claude-sonnet-5`/`high`); Reconcile on the FOURTH attempt, `claude-sonnet-5`/`high`
+throughout — three real `gate-failure`s (never misclassified as `agent-failure`), findings
+converging attempt over attempt (5 blocking → 2 blocking → 0), the durable auto-retry budget
+correctly consumed on attempt 1→2 and correctly refused on attempts 3 and 4 (both dispatched
+deliberately, by explicit instruction, after checking the same 6 conditions the reliability
+ruling above already requires: actionable class, ordinary content defect, converging or
+purely-repairable, no pipeline/control-plane change implicated, publication still false,
+still resumable); Critic completed on the first attempt at `claude-opus-5`/`high`, never
+Sonnet. `landingGate.status: "passed"`, `publication.published: false`, `landMode: "pr"` the
+whole way — this is what the repair's four watched seams (`docs/handoff.md`'s "Before Canary
+#4") look like exercised for real, not simulated. Two of those seams remain explicitly
+UNPROVEN by this canary and must not be claimed otherwise: a real issue-escalation comment +
+`gh` auth (this run never had an intake issue to comment on) and the cancellation-grace-window
+path (no cancellation occurred). Rejected: calling the canary green off the Actions run's own
+badge alone — the acceptance record distinguishes workflow success, stage-contract success,
+evidence-gate success, and live-reliability acceptance as four separate claims, and only the
+first three are fully earned here.
+
+**The reciprocal Claude ↔ Codex PR review loop is Claude's next integration step after Canary
+#4**, built as a dedicated `automation/claude-codex-review-loop` PR — never folded into
+Pipeline V2. Two bounded HTML-comment sections make one PR body a shared, append-only state
+machine: `<!-- claude-ready-for-codex:start/end -->` (Claude's, exact HEAD + the one work-order
+ID it last processed) and `<!-- codex-review-next:start/end -->` (Codex's own external
+watcher's — verdict, findings, `CLAUDE_ACTION_REQUIRED`, the next work order); each side
+replaces only its own section, never the other's. `scripts/codex-watcher.mjs`'s `isEligible` is
+the single source of truth for all 8 conditions (open, same-repo, EXACT head match against
+`CODEX_REVIEWED_HEAD`, action required, a work-order id present, that id never already recorded
+in `CLAUDE_PROCESSED_WORK_ORDER`, and the work order's own text scanned against a forbidden-verb
+list — merge, publish, enable the selector, weaken validation, and the rest of the same
+authority boundary this file already draws around every automated pipeline). Security model is
+the one `research-pass-v2.yml` already proved live: `pull_request: types: [edited]` (never
+`pull_request_target`), a fork PR refused before anything else runs, the agent's isolated
+workspace never holding a GitHub write credential, a fresh control-plane checkout collecting
+only the agent's resulting file tree, the repo's own gates run before any commit exists, and
+every PR-body field the workflow writes back is control-plane-composed text — never the agent's
+own free-form output pasted verbatim, so nothing it wrote can forge a marker. A
+`codex-watcher-pr-<number>` concurrency group (same shape as `guide-<slug>`) makes "no two
+watcher jobs for one PR" and "the scheduled fallback can't race the event trigger" both
+mechanical. Not yet proven: a REAL round trip against Codex's actual external watcher — the
+dedicated PR is opened and marked ready, but the loop isn't called complete until Codex reviews
+a real head, writes a real work order, and this watcher consumes it for real.

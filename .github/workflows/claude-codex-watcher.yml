@@ -1,0 +1,254 @@
+name: Claude ↔ Codex review watcher
+
+# THE CLAUDE HALF of the reciprocal Claude<->Codex PR review loop (Waypoint work order,
+# 2026-08-23). Codex runs its OWN independent, external watcher against this repo's PRs —
+# nothing in this file configures, triggers, or is called by Codex's side. What this workflow
+# does is react to Codex's side of the protocol: when a PR's bounded `codex-review-next`
+# section says CLAUDE_ACTION_REQUIRED: yes at the PR's CURRENT head, fix exactly what the work
+# order describes, push to the SAME PR branch, and mark the new head ready for Codex's next
+# pass. See docs/reference/pipeline.md's "workflow set" table and CONTEXT.md's Decisions entry
+# for the full contract; scripts/codex-watcher.mjs carries every behavioral rule as pure,
+# independently tested functions — this file is intentionally thin.
+#
+# SECURITY MODEL — the same shape research-pass-v2.yml already proved live: a trusted
+# control-plane job validates the PR/head/work-order identity BEFORE any agent runs; the
+# agent's isolated workspace never receives a GitHub write credential (only
+# CLAUDE_CODE_OAUTH_TOKEN); the control plane re-checks out a CLEAN copy afterward, applies
+# only the agent's resulting file tree, runs the repo's own gates, and is the only actor that
+# ever commits, pushes, or edits the PR body — and only to the one validated same-repo branch.
+# A fork PR (isCrossRepository) is refused before anything else runs. `pull_request` (never
+# `pull_request_target`) is used deliberately, so a fork's copy of this workflow never runs
+# with this repo's secrets in the first place — the explicit fork check is defense in depth,
+# not the only line.
+on:
+  pull_request:
+    types: [edited]
+  schedule:
+    # Modest fallback only — the primary trigger is the `edited` event above, which fires the
+    # moment Codex's bot edits a PR body. Off-the-hour, matching this repo's other schedule
+    # crons (recert.yml, pretrip-check.yml, feedback-export.yml).
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: "PR number to check (manual/test invocation)."
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  # ── discover: which PR number(s) does THIS firing need to check? ────────────────────────
+  discover:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      prs: ${{ steps.list.outputs.prs }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: List the PR(s) this firing should check
+        id: list
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "prs=[${{ github.event.pull_request.number }}]" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "prs=[${{ inputs.pr }}]" >> "$GITHUB_OUTPUT"
+          else
+            # Scheduled fallback: the SAME eligibility function used everywhere else decides
+            # which open, same-repo PRs actually have unprocessed, current-head work orders —
+            # so this can never re-execute one the event trigger already handled, and never
+            # touches a fork PR or a stale-head work order.
+            CANDIDATES=$(node scripts/codex-watcher.mjs list-candidates)
+            echo "prs=$CANDIDATES" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ── per-PR: validate identity, then — only if eligible — fix + hand back to Codex ───────
+  watch:
+    needs: discover
+    if: needs.discover.outputs.prs != '[]' && needs.discover.outputs.prs != ''
+    strategy:
+      fail-fast: false
+      matrix:
+        pr: ${{ fromJson(needs.discover.outputs.prs) }}
+    # ONE job per PR NUMBER, ever in flight — this is what makes "no two Claude watcher jobs
+    # for the same PR run concurrently" mechanical rather than assumed, and what makes the
+    # scheduled fallback and the event trigger structurally unable to race each other on the
+    # same PR (same group name, same queue, either way). Matches the guide-<slug> convention
+    # research-pass-v2.yml and change.yml already use for the identical reason.
+    concurrency:
+      group: codex-watcher-pr-${{ matrix.pr }}
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ matrix.pr }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Ground truth, never the (possibly-stale-by-now) event payload: re-fetch the PR live.
+      # isCrossRepository is gh's own fork check — a fork PR is refused here, structurally,
+      # before anything else in this job runs. Every one of the work order's 8 eligibility
+      # conditions is decided by ONE function (scripts/codex-watcher.mjs's isEligible) so
+      # there is a single source of truth, independently unit-tested.
+      - name: Check eligibility against LIVE PR state
+        id: check
+        run: node scripts/codex-watcher.mjs check --pr "$PR"
+
+      - name: Not eligible — clean no-op
+        if: steps.check.outputs.eligible != 'true'
+        run: echo "[codex-watcher] PR #$PR — not eligible: ${{ steps.check.outputs.reason }}"
+
+      # ── everything below runs ONLY when eligible ──────────────────────────────────────
+      - name: Checkout the PR branch (scoped credential for fetch only)
+        if: steps.check.outputs.eligible == 'true'
+        env:
+          PUSH_TOKEN: ${{ github.token }}
+        run: |
+          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
+          git fetch origin "${{ steps.check.outputs.head_ref }}"
+          git checkout -B "${{ steps.check.outputs.head_ref }}" FETCH_HEAD
+
+      - name: Remove repository credentials before the agent runs
+        if: steps.check.outputs.eligible == 'true'
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
+
+      # The work order rides the DATA channel as a named file (this repo's own prompt-safety
+      # rule, scripts/pipeline/prompt.mjs's header comment) — Codex's text is never
+      # concatenated into the prompt template itself, only referenced by path.
+      - name: Write the work order as a file the agent reads (never inlined into the prompt)
+        if: steps.check.outputs.eligible == 'true'
+        run: |
+          node -e '
+            const r = JSON.parse(require("child_process").execSync(`node scripts/codex-watcher.mjs check --pr ${process.env.PR}`, {encoding:"utf8"}));
+            require("fs").writeFileSync(".codex-work-order.md", (r.workOrderText || "") + "\n");
+          '
+
+      - name: Compose the agent prompt
+        if: steps.check.outputs.eligible == 'true'
+        id: prompt
+        env:
+          WP_PR: ${{ matrix.pr }}
+          WP_WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
+        run: node scripts/pipeline.mjs prompt prompts/codex-work-order.md > /dev/null
+
+      - name: Replace repository history with an unprivileged local workspace
+        if: steps.check.outputs.eligible == 'true'
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
+
+      # EXIT INTEGRITY (same wrapper research-pass-v2.yml's agent steps use): a Claude process
+      # that exits nonzero must be recorded as a failed step, never masked by a `| tee` that
+      # only reports ITS OWN exit code.
+      - name: Run the fix agent (isolated — no GitHub credential reaches this container)
+        if: steps.check.outputs.eligible == 'true'
+        id: agent
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: claude-sonnet-5
+          WP_EFFORT: high
+          WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**)
+        run: |
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+
+      # The control plane never trusts the agent's own (sandboxed, historyless) .git — it
+      # checks out a SECOND, clean copy of the real PR branch and mirrors the agent's
+      # resulting tree onto it, so only intended file content ever reaches a real commit.
+      - name: Checkout a fresh control-plane copy after the agent
+        if: steps.check.outputs.eligible == 'true' && steps.agent.outcome == 'success'
+        id: collect
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ steps.check.outputs.head_ref }}
+          fetch-depth: 0
+          path: collect
+          persist-credentials: false
+
+      # PARTIAL OR UNVALIDATED OUTPUT IS NEVER PUSHED: the repo's own gates run on the
+      # collected result BEFORE any commit exists, so a gate failure leaves nothing to push —
+      # the job fails loudly instead, visible in the PR's checks, and Claude's section is never
+      # touched (so a stale, already-broken "ready for review" claim can never linger).
+      - name: Apply the agent's result, run the repo's gates, commit, push
+        if: steps.check.outputs.eligible == 'true' && steps.agent.outcome == 'success'
+        id: finish
+        working-directory: collect
+        env:
+          PUSH_TOKEN: ${{ github.token }}
+          WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
+        run: |
+          rsync -a --delete --exclude='.git' --exclude='node_modules' --exclude='dist' \
+            "$GITHUB_WORKSPACE/" ./
+          npm ci
+          if git diff --quiet; then
+            echo "[codex-watcher] agent made no file changes — nothing to push." >&2
+            exit 1
+          fi
+          DIFFSTAT=$(git diff --shortstat | sed 's/^ *//')
+          echo "diffstat=$DIFFSTAT" >> "$GITHUB_OUTPUT"
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+          git config user.name "waypoint-codex-watcher[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(codex-watcher): address work order $WORK_ORDER_ID"
+          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
+          git push origin "HEAD:${{ steps.check.outputs.head_ref }}"
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          echo "new_head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      # Every field here is CONTROL-PLANE composed, deterministic text — never the agent's own
+      # free-form output pasted verbatim — so nothing the agent wrote can forge a marker or
+      # otherwise corrupt the bounded-section protocol on the next parse.
+      - name: Mark the new HEAD ready for Codex
+        if: steps.finish.outcome == 'success'
+        working-directory: collect
+        env:
+          WORK_ORDER_ID: ${{ steps.check.outputs.work_order_id }}
+        run: |
+          node ../scripts/codex-watcher.mjs build-section \
+            --head "${{ steps.finish.outputs.new_head }}" \
+            --work-order "$WORK_ORDER_ID" \
+            --summary "Addressed Codex work order $WORK_ORDER_ID. ${{ steps.finish.outputs.diffstat }}" \
+            --validation "lint, typecheck, test, and build all passed on the new head before it was pushed." \
+            --uncertainty "None beyond what Codex's next independent review of this head surfaces." \
+            > /tmp/claude-section.txt
+          node ../scripts/codex-watcher.mjs update-pr --pr "$PR" --section-file /tmp/claude-section.txt
