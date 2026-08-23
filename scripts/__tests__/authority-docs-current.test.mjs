@@ -105,8 +105,9 @@ describe("the handoff states exactly what the accepted canary did and did not pr
     expect(HANDOFF).toMatch(/unproven|did not exercise/i);
   });
 
-  it("does not advertise temporary cleanup/reviewer machinery as current architecture", () => {
+  it("keeps temporary cleanup status out while recording the durable reciprocal reviewer boundary", () => {
     expect(HANDOFF).not.toMatch(/draft cleanup PR|cleanup\/grand-pass/i);
-    expect(HANDOFF).not.toMatch(/reciprocal Claude↔Codex|codex-watcher/i);
+    expect(HANDOFF).toMatch(/reciprocal Claude↔Codex reviewer automation.*remains active/i);
+    expect(HANDOFF).toMatch(/revision-4.*trust boundary/i);
   });
 });
