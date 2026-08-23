@@ -43,6 +43,11 @@ function requirePath(rel, label = rel, type = "file") {
   return true;
 }
 
+function forbidPath(rel, label = rel) {
+  if (fs.existsSync(file(rel))) fail(`${label}: retired path must stay absent (${rel})`);
+  else pass(label);
+}
+
 function requireText(rel, needle, label) {
   if (!requirePath(rel, `${label} source`)) return;
   if (!read(rel).includes(needle)) fail(`${label}: expected contract text not found`);
@@ -51,7 +56,6 @@ function requireText(rel, needle, label) {
 
 // Runtime agent instructions must stay behaviorally in sync. The preamble and a tiny set of
 // runtime-specific names are intentionally different; normalize ONLY those explicit aliases.
-// Any other difference remains a policy drift and fails CI.
 const agents = read("AGENTS.md");
 const claude = read("CLAUDE.md");
 const sharedBody = (text) => {
@@ -73,6 +77,22 @@ if (normalizedAgents !== normalizedClaude) {
   pass("Agent policy parity");
 }
 
+// Permanent orientation/authority surfaces must exist. Historical plans and cleanup ledgers are
+// intentionally not authorities; current behavior should be discoverable from this compact set.
+for (const rel of [
+  "README.md",
+  "PRODUCT.md",
+  "docs/README.md",
+  "docs/handoff.md",
+  "docs/reference/repo-map.md",
+  "docs/reference/pipeline.md",
+  "docs/pipeline v2/DECISIONS.md",
+  "docs/pipeline v2/IMPLEMENTATION_STATE.md",
+  "docs/pipeline v2/SEPTEMBER_TRACKER.md",
+]) {
+  requirePath(rel, `Current authority: ${rel}`);
+}
+
 // Pipeline V1 and V2 coexist until an explicitly approved cutover.
 requirePath(".github/workflows/research-pass.yml", "Pipeline V1 workflow");
 requirePath(".github/workflows/research-pass-v2.yml", "Pipeline V2 workflow");
@@ -81,11 +101,10 @@ requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
 requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
 requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
 
-// The reciprocal Claude↔Codex loop is a durable autonomy/control-plane surface. Cleanup may
-// simplify around it, but must not silently remove the mechanism that consumes bounded Codex
-// work orders and hands exact new heads back for independent review. Its own focused tests pin
-// the revision-4 trust boundary (unprivileged signal, read-only validate job, separate writer).
-for (const required of [
+// The reciprocal Claude↔Codex reviewer was temporary integration scaffolding. It is deliberately
+// retired: reintroducing it would restore a privileged automation surface outside Waypoint's two
+// product lifecycles and requires a new architecture decision.
+for (const retired of [
   ".github/workflows/claude-codex-watcher.yml",
   ".github/workflows/claude-codex-signal.yml",
   "scripts/codex-watcher.mjs",
@@ -93,28 +112,8 @@ for (const required of [
   "scripts/__tests__/codex-watcher-workflow.test.mjs",
   "prompts/codex-work-order.md",
 ]) {
-  requirePath(required, `Reciprocal-review control plane: ${required}`);
+  forbidPath(retired, `Retired reciprocal reviewer: ${retired}`);
 }
-requireText(
-  ".github/workflows/claude-codex-signal.yml",
-  "pull_request:\n    types: [edited]",
-  "Reciprocal-review signal remains pull_request:edited",
-);
-requireText(
-  ".github/workflows/claude-codex-watcher.yml",
-  "workflow_run:",
-  "Reciprocal-review worker remains default-branch workflow_run driven",
-);
-requireText(
-  ".github/workflows/claude-codex-watcher.yml",
-  "validate:",
-  "Reciprocal-review read-only validate job remains present",
-);
-requireText(
-  ".github/workflows/claude-codex-watcher.yml",
-  "publish:",
-  "Reciprocal-review separate publish job remains present",
-);
 
 // Protected traveler-facing architecture.
 requirePath("src/features/trip-split/index.ts", "Trip Split feature");
@@ -129,7 +128,7 @@ requirePath("public/sw.js", "Offline service worker");
 requireText("AGENTS.md", "Sights and Food are REPOSITORIES", "Sights/Food breadth doctrine");
 requireText("AGENTS.md", "pipeline critic findings", "Traveler/process learnings separation");
 
-// Future Atlas redesign authority is intentionally preserved during backend cleanup.
+// Future Atlas redesign authority is intentionally preserved until that redesign is implemented.
 requirePath("docs/design-handoff/DESIGN.md", "Atlas written design authority");
 requirePath("docs/design-handoff/enforcement/ACCEPTANCE.md", "Atlas acceptance contract");
 requirePath("docs/design-handoff/enforcement/check-drift.mjs", "Atlas drift checker");
@@ -149,7 +148,7 @@ if (requirePath(uruguayMetaPath, "Uruguay Canary #4 guide")) {
 if (failures.length) {
   console.error("\nWaypoint invariant check FAILED:\n");
   for (const failure of failures) console.error(`  ✗ ${failure}`);
-  console.error(`\n${failures.length} invariant(s) failed; cleanup must not ship.\n`);
+  console.error(`\n${failures.length} invariant(s) failed; this change must not ship.\n`);
   process.exit(1);
 }
 
