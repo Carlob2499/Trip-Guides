@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "complete",
   "createdAt": "2026-08-23T03:28:30.724Z",
-  "updatedAt": "2026-08-23T08:03:57.507Z",
+  "updatedAt": "2026-08-23T08:03:58.834Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -174,8 +174,8 @@
   },
   "previousRuns": [],
   "landingGate": {
-    "status": "pending",
-    "checkedAt": null,
+    "status": "passed",
+    "checkedAt": "2026-08-23T08:03:58.834Z",
     "failure": null
   },
   "telemetry": {
