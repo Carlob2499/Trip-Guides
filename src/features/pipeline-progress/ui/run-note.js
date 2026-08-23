@@ -42,8 +42,10 @@ export function initRunNote() {
   panel.dataset.runNoteInit = "1";
 
   const cfgEl = document.getElementById("pgConfig");
-  let cfg = {};
-  try { cfg = cfgEl ? JSON.parse(cfgEl.textContent || "{}") : {}; } catch { cfg = {}; }
+  const cfg = (() => {
+    try { return cfgEl ? JSON.parse(cfgEl.textContent || "{}") : {}; }
+    catch { return {}; }
+  })();
   const repoFull = String(cfg.repo || `${OWNER}/${NAME}`);
   const [ownerName = OWNER, repoName = NAME] = repoFull.split("/");
   const base = cfg.base || "/";
