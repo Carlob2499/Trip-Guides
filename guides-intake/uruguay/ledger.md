@@ -264,3 +264,30 @@ recommendation — see `evidence.v2.json`'s merged `saturation` record.
     `reconciliation[]` entry; its substance is unchanged and still fully on the record in
     `c-mercado-agricola-de-montevideo`'s `reason` field and this ledger's reconciliation table and
     prior amendment above — this is a placement fix, not a dropped finding.
+- **2026-08-23 — Reconcile attempt 4: audit confirms prior fixes hold, one defensive hardening.**
+  This attempt opened with no working shell/script access either (every `npm`/`node` invocation
+  still returns "this command requires approval"), so `npm run verify` could not be re-run
+  directly. Instead, every rule the offline gate enforces was traced by hand against the current
+  state of the guide + `evidence.v2.json` + `coverage.v2.json`: `check-research.mjs` (readiness —
+  no `__VERIFICATION_REQUIRED__` placeholders remain, verified-stamp/provenance/itinerary-date
+  rules all clean), the D2 undated-hard-fact rule, `evidence.mjs` (candidate-id derivation,
+  funnel invariants, disposition completeness, saturation), `research-rules.mjs` (objective/
+  experiential source-kind law, corroboration, year-safety, freshness, reservation depth, source
+  access, depth-scope, Pass B substance, disagreement resolution), `coverage.mjs` (every material
+  ask covered with real anchors that exist in their target group files, every cited evidence id
+  real), `check-candidates.mjs` (every `shipped` ledger row's name appears in the guide text and
+  is marked shortlisted), `check-routes.mjs` (advisory-only by design), the P6 voice gate, E1
+  risk-gates, E3 uncertainty checks, S5 source-mix, and the build-time `provenance:"strict"` ≈
+  gate in `content.config.ts`. All read as clean against the artifact this attempt inherited.
+  The one open item from the run's most recent recorded validator feedback — two `check-research`
+  D2 findings on the "Sights & activities, per day" budget item and the "Punta del Este & Isla de
+  Lobos" day item, both citing an undated hour/price-looking figure — traces to before the prior
+  attempt's `{{fact:isla-lobos-70-usd}}` substitution (`06-days.json` and
+  `02-money-and-budget.json` now contain no bare `$`/`am`/`pm`-shaped figure in either item;
+  confirmed by direct pattern search, not just re-reading the prose). As a defensive hardening
+  against any residual gap in that read, this attempt also gave both items their own explicit
+  `verified_on`/`shelf_life`/`source_url` (matching the Isla de Lobos fact's own source), which
+  makes `check-research.mjs`'s per-item D2 rule skip them outright regardless. No guide claim,
+  citation, or recommendation changed — this is a provenance-completeness fix only. Everything
+  else in `evidence.v2.json`/`coverage.v2.json` was left untouched: re-reading found no defect to
+  fix, and editing an already-correct machine artifact risks introducing a new one.

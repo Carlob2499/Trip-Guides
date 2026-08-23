@@ -52,7 +52,10 @@
         "low": 5,
         "high": 40,
         "per": "person",
-        "note": "≈ Museum/lighthouse entries are cheap (UYU 35–600); the Isla de Lobos boat trip ({{fact:isla-lobos-70-usd}}) is the one big-ticket day."
+        "note": "≈ Museum/lighthouse entries are cheap (UYU 35–600); the Isla de Lobos boat trip ({{fact:isla-lobos-70-usd}}) is the one big-ticket day.",
+        "verified_on": "2026-08-23",
+        "shelf_life": "venue",
+        "source_url": "https://www.isladelobos.com.uy/en/home-english/"
       },
       {
         "label": "COT bus — Montevideo ↔ Colonia del Sacramento (round trip)",
