@@ -1,0 +1,32 @@
+name: Claude ↔ Codex review signal
+
+# THE UNPRIVILEGED HALF of the two-workflow privilege separation for Claude's reciprocal
+# Claude<->Codex PR review loop (Codex architecture correction, PR #78, 2026-08-23 —
+# superseding the prior single-workflow `pull_request_target` design). This workflow does
+# NOTHING privileged and MUST NEVER be given one: no repository secrets, no write-capable
+# token, read-only permissions, and it makes no eligibility/authority decision of any kind.
+# Its only job is to exist and complete, so that claude-codex-watcher.yml's `workflow_run`
+# trigger fires — the trusted worker then independently re-fetches and re-validates
+# everything about the PR from ITS OWN (always default-branch-pinned) code. Nothing this
+# workflow computes, outputs, or claims is trusted by the worker; it is a doorbell, not an
+# authority.
+on:
+  pull_request:
+    types: [edited]
+
+permissions:
+  contents: read
+
+jobs:
+  signal:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # No checkout, no secrets, nothing PR-controlled ever executes here — there is nothing
+      # in this job for a PR to compromise. The privileged worker (claude-codex-watcher.yml)
+      # re-fetches the PR from trusted code and does not read this step's output.
+      - name: Acknowledge the PR body edit (no privileged action taken here)
+        env:
+          PR: ${{ github.event.pull_request.number }}
+        run: echo "[codex-signal] PR #$PR body edited — the privileged worker will independently re-validate and decide."

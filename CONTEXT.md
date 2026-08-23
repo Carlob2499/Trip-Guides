@@ -775,3 +775,79 @@ truth — it was scoped to the one failure class that almost never occurs, so or
 gate failures never self-dispatched at all, and a per-dispatch boolean cannot bound a loop ACROSS
 dispatches; also rejected: widening the caps to compensate (the defect was routing, not budget),
 and letting a repeated terminal failure re-comment on the intake issue.
+
+**Canary #4 (uruguay) is PRODUCT-PATH GREEN — the reliability repair's live proof, not a repeat
+of the Malta/Luxembourg/Portugal RED evidence** (2026-08-23, runId `uruguay-20260823-9789de`,
+branch `research-v2/uruguay`, draft PR #77 — never merged, never turned into production
+content). Every stage reached `complete`: Pass A and Pass B on the first attempt
+(`claude-sonnet-5`/`high`); Reconcile on the FOURTH attempt, `claude-sonnet-5`/`high`
+throughout — three real `gate-failure`s (never misclassified as `agent-failure`), findings
+converging attempt over attempt (5 blocking → 2 blocking → 0), the durable auto-retry budget
+correctly consumed on attempt 1→2 and correctly refused on attempts 3 and 4 (both dispatched
+deliberately, by explicit instruction, after checking the same 6 conditions the reliability
+ruling above already requires: actionable class, ordinary content defect, converging or
+purely-repairable, no pipeline/control-plane change implicated, publication still false,
+still resumable); Critic completed on the first attempt at `claude-opus-5`/`high`, never
+Sonnet. `landingGate.status: "passed"`, `publication.published: false`, `landMode: "pr"` the
+whole way — this is what the repair's four watched seams (`docs/handoff.md`'s "Before Canary
+#4") look like exercised for real, not simulated. Two of those seams remain explicitly
+UNPROVEN by this canary and must not be claimed otherwise: a real issue-escalation comment +
+`gh` auth (this run never had an intake issue to comment on) and the cancellation-grace-window
+path (no cancellation occurred). Rejected: calling the canary green off the Actions run's own
+badge alone — the acceptance record distinguishes workflow success, stage-contract success,
+evidence-gate success, and live-reliability acceptance as four separate claims, and only the
+first three are fully earned here.
+
+**The reciprocal Claude ↔ Codex PR review loop is Claude's next integration step after Canary
+#4**, built as a dedicated `automation/claude-codex-review-loop` PR — never folded into
+Pipeline V2. Two bounded HTML-comment sections make one PR body a shared, append-only state
+machine: `<!-- claude-ready-for-codex:start/end -->` (Claude's, exact HEAD + the one work-order
+ID it last processed) and `<!-- codex-review-next:start/end -->` (Codex's own external
+watcher's — verdict, findings, `CLAUDE_ACTION_REQUIRED`, the next work order); each side
+replaces only its own section, never the other's. `scripts/codex-watcher.mjs`'s `isEligible` is
+the single source of truth for all 8 conditions (open, same-repo, EXACT head match against
+`CODEX_REVIEWED_HEAD`, action required, a work-order id present, that id never already recorded
+in `CLAUDE_PROCESSED_WORK_ORDER`, and the work order's own text scanned against a forbidden-verb
+list — merge, publish, enable the selector, weaken validation, and the rest of the same
+authority boundary this file already draws around every automated pipeline).
+
+**Security model, revision 2 → 3 (owner-authorized, PR #78, work order `codex-78-ad60316-security-1`,
+2026-08-23):** Codex's own first real review found the original design's `pull_request: edited`
+trigger left the control plane itself (this workflow file and `scripts/codex-watcher.mjs`)
+PR-editable — a same-repo PR (including one Claude's own agent pushes to) could rewrite the
+eligibility gate and have that rewritten version be what decides its own trustworthiness next
+time. Revision 2 (pushed as commit `b086f1d`) closed this with an owner-authorized narrow
+exception to the repo's standing "never `pull_request_target`" rule. **That exception was itself
+superseded within minutes, before Claude finished implementing it — a real operational miss,
+not a design one:** Codex/the owner posted a follow-up correction on the PR at 12:15 ET
+("this supersedes my prior `pull_request_target`-as-default comment") preferring explicit
+two-workflow privilege separation over `pull_request_target`, and Claude pushed the
+`pull_request_target` implementation anyway at ~12:27 ET without re-checking the PR for new
+comments first. **Standing lesson: mid-implementation on a fast-moving, comment-driven
+coordination thread, re-read the PR's current comments immediately before every push, not just
+before starting.** Revision 3, pushed next, corrected it: **`pull_request_target` is no longer
+used at all.** Two workflow files, explicit privilege separation:
+- `claude-codex-signal.yml` — UNPRIVILEGED. `pull_request: types: [edited]` only, `contents: read`
+  only, no secrets, no write token, computes/decides nothing — exists solely so the trusted
+  worker's trigger fires.
+- `claude-codex-watcher.yml` — the PRIVILEGED WORKER. Triggers on `workflow_run` (fires when the
+  signal workflow completes) + schedule + `workflow_dispatch` — **never** `pull_request` or
+  `pull_request_target` directly. A `workflow_run`-triggered workflow's own definition is
+  unconditionally read from the default branch (there is no PR-ref concept for this trigger at
+  all — no `ref:`-omission convention to get right, unlike `pull_request_target`). It never
+  trusts the signal run's own output; `github.event.workflow_run.pull_requests` (populated only
+  for a same-repo PR) is treated as a hint to re-verify, never as ground truth — the eligibility
+  check re-fetches and re-validates the PR live from trusted code regardless.
+Everything else from revision 2 is unchanged: PR content is checked out into its own path pinned
+to the exact reviewed sha, fork PRs are refused before that checkout or any later step runs,
+`npm ci`/the agent/every gate (lint, typecheck, test, build) run with NO GitHub write credential
+of any kind present in that step's environment, and only AFTER validation passes does a brand-new
+control-plane checkout (never touched by PR-controlled code) receive the validated file tree via
+`rsync` — never a git merge of untrusted history — for a git-plumbing-only commit/push.
+`.codex-work-order.md` is excluded from that copy and gitignored. A `codex-watcher-pr-<number>`
+concurrency group makes "no two watcher jobs for one PR" and "the scheduled fallback can't race
+the event trigger" both mechanical. Not yet proven: a REAL round trip against Codex's actual
+external watcher on a head that Codex accepts without a further blocking finding — Codex's first
+real review (above) DID execute the loop's mechanism (a real work order was written, consumed,
+and fixed, twice now) but both rounds drew corrections, so the loop is proven to react, not yet
+proven to reach a clean pass.

@@ -54,6 +54,26 @@ Deliberately NOT auto-retryable, so expect a visible stop rather than a repair:
 `usage-limit` · `agent-failure` · `cancelled` · `unknown` · missing findings · corrupt state ·
 either budget exhausted.
 
+## Canary #4 result — product path GREEN
+
+`uruguay`, runId `uruguay-20260823-9789de`, branch `research-v2/uruguay`, draft PR #77 (never
+merged, never production content). Every stage complete: Pass A/B first try, Reconcile on
+attempt 4 (3 real `gate-failure`s, findings converging 5→2→0 blocking, auto-retry consumed once
+then correctly refused twice — attempts 3-4 were deliberate manual dispatches), Critic first
+try at `claude-opus-5`/`high`. Research never exceeded `claude-sonnet-5`/`high`. Landing gate
+passed, `publication: false`, `landMode: pr`. Two of the four seams above remain UNPROVEN by
+this run: #2 (no intake issue existed to comment on) and #3 (no cancellation occurred) — do not
+claim otherwise. Full record: `CONTEXT.md`'s Decisions entry.
+
+**Next:** Claude's half of the reciprocal Claude↔Codex PR review loop
+(`automation/claude-codex-review-loop`, `scripts/codex-watcher.mjs`,
+`claude-codex-{signal,watcher}.yml`) — PR #78. Codex's real external watcher reviewed it twice:
+work order 1 (security architecture) fixed as revision 2 (`pull_request_target`), then a live
+correction superseded that — Claude missed it before pushing (see CONTEXT.md's Decisions entry
+for the full miss) — and revision 3 (two-workflow privilege separation, no `pull_request_target`
+at all) is now pushed. Loop mechanism proven to react twice; not yet proven: a round that reaches
+a clean (non-blocking) Codex pass.
+
 ## Canary evidence to preserve
 
 - **Malta** — Canary #1, stale reusable-workflow checkout defect. Historical RED evidence.
