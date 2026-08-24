@@ -6,6 +6,8 @@ This file is the durable technical state of Pipeline V2. It records **what exist
 
 **Draft product path: ACCEPTED / GREEN.**
 
+**Reliability acceptance: ACCEPTED / GREEN, including targeted failure-only GitHub seams.**
+
 **Production cutover: NOT YET ACCEPTED.**
 
 V2 exists beside V1. V1 remains the production default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. V2 is selected by the trusted `/new` path only when the selector is explicitly `v2`; manual V2 dispatch remains `landMode=pr` and cannot become production authority.
@@ -20,7 +22,7 @@ The accepted live canary is **Uruguay / Canary #4**:
 - `landMode`: `pr`
 - landing gate: passed
 
-The canary proved the normal draft research/product path. It did not authorize production cutover.
+The canary proved the normal draft research/product path. It did not authorize production cutover. Two failure-only paths the canary did not naturally enter were subsequently proven with smaller no-model GitHub exercises and are recorded in `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`.
 
 ## Architecture that exists
 
@@ -101,6 +103,8 @@ Current bounds remain five attempts and one automatic repair reservation. Usage 
 
 A stopped run has a visible escalation path rather than silently disappearing.
 
+The remaining live-boundary questions are now proven: Actions can authenticate the real issue read/comment path with marker deduplication, and a real cancelled job can execute the post-agent `always()` control-plane step plus the subsequent `cancelled()` escalation step inside GitHub's cancellation grace window.
+
 ## Landing and publication truth
 
 The evidence gate and landing are separate facts.
@@ -140,23 +144,34 @@ Uruguay exercised the post-repair V2 draft path end to end:
 
 This proves that normal research, retained findings, deterministic repair, stage resume, criticism, and draft landing can complete together on the repaired runtime.
 
-## Live-only seams still unproven
+## Accepted targeted failure-only proofs
 
-Uruguay did **not** exercise two failure-only runtime paths:
+Uruguay itself did **not** exercise two failure-only runtime paths; that historical limitation remains true. They are now closed separately with the smallest safe platform exercises:
 
-1. **Real escalation issue comment / `gh` authentication** from a failed stage when an intake issue exists.
-2. **Cancellation grace-window chain**, where cancellation must still complete failure recording, retry decision, and escalation before GitHub terminates the job.
+1. **Real escalation issue comment / `gh` authentication — PASS.** Issue #90 received the Actions-bot witness through the real issue read/comment path with marker deduplication; disposable PR #91 was closed unmerged.
+2. **Cancellation grace-window chain — PASS.** Tests workflow run `32680115285` cancelled a simulated active agent, then successfully completed the post-cancellation `always()` control-plane witness and the subsequent `cancelled()` escalation witness; disposable PR #92 was closed unmerged.
 
-These should be proven with the smallest safe targeted exercises that can reach the seam. Do not spend another full research canary merely to debug deterministic state or schema behavior.
+See `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` for the permanent evidence record. No additional full research canary is justified solely to reenact either failure path.
 
 ## Validation before production cutover
 
-The remaining validation program is defined in `PIPELINE_VALIDATION_PACK.md` and tracked in `SEPTEMBER_TRACKER.md`.
+The remaining validation program is defined in `VALIDATION_RUNBOOK.md`, frozen into `VALIDATION_TRIAL_PACKETS.md`, and tracked in `SEPTEMBER_TRACKER.md`.
+
+Current state:
+
+- **V01:** awaiting Combined Research Run A (Tokyo) model-backed execution;
+- **V02/V03/V05:** awaiting Combined Research Run B (Tottori/Kurayoshi/Misasa) model-backed execution;
+- **V04:** DONE deterministically;
+- **V06:** DONE from truthful available telemetry;
+- **V07:** methodology pre-registered in `V07_EVALUATION_METHOD.md`; execution waits for the Run A/B quality verdicts.
+
+A zero-credit readiness audit found no active `tokyo` or `tottori` V2 run/intake collision on current `main` and no missing deterministic evidence field that justifies changing the V2 schema before those trials. The frozen criteria remain unchanged.
 
 The important distinction is:
 
 - **draft product-path acceptance** is already green;
-- **production cutover acceptance** remains a separate decision requiring the remaining risk classes/live boundaries to be satisfied.
+- **reliability acceptance** is green, including the targeted failure-only platform seams;
+- **production cutover acceptance** remains a separate decision requiring the remaining model-backed validation and explicit cutover authority.
 
 Cutover must not be inferred from a passing unit suite, from Canary #4 alone, or from setting a repository variable temporarily.
 
@@ -181,15 +196,20 @@ After cutover, V1-only retirement should be a separate bounded change with tests
 - Do not use repeated expensive research runs to debug deterministic code.
 - Do not delete V1 before cutover acceptance.
 - Do not turn a draft/manual V2 run into production authority.
+- Do not optimize research behavior from one quirky validation destination unless there is a deterministic defect or repeated evidence.
 
 ## Current authority and next work
 
 Read together:
 
 - `DECISIONS.md` — locked decisions.
-- `PIPELINE_VALIDATION_PACK.md` — remaining validation risk classes.
+- `VALIDATION_RUNBOOK.md` — bounded validation rules and class-level PASS/FAIL criteria.
+- `VALIDATION_TRIAL_PACKETS.md` — pre-registered Run A/B scenarios.
+- `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` — targeted GitHub reliability proofs.
+- `V06_TELEMETRY_EVIDENCE.md` — truthful currently measurable telemetry.
+- `V07_EVALUATION_METHOD.md` — frozen post-validation efficiency rubric.
 - `SEPTEMBER_TRACKER.md` — delivery status/deadlines.
 - `../reference/pipeline.md` — durable lifecycle policy.
 - `../handoff.md` — current warm start.
 
-**Next engineering surface:** complete the remaining V01–V05 validation classes, obtain targeted live proof for the two named failure-only seams when safe, then make the production-cutover decision from evidence. Historical milestone logs and superseded review narratives remain available through Git history if forensic detail is ever needed.
+**Next engineering surface:** when model capacity is available, re-check the dispatch gate, execute Run A and judge V01, execute Run B and judge V02/V03/V05 separately, then execute V07. Production cutover remains a later explicit evidence-based decision. Historical milestone logs and superseded review narratives remain available through Git history if forensic detail is ever needed.
