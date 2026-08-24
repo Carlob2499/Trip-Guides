@@ -1,16 +1,5 @@
 name: Tests
 
-# Runs project invariants + lint + the Astro/TS type check + the coverage gate on every PR, so a
-# broken contract, test, type, lint rule, or coverage regression blocks the merge instead of only
-# surfacing later in the Pages deploy. PR-only since 2026-08-14: deploy.yml's build job runs the
-# same safety set on every push to main.
-#
-# paths-ignore may only skip paths `eslint .` does not lint (#39): docs/** left this
-# list because eslint DELIBERATELY lints docs/mockups/*.mjs, so a docs-only push could
-# turn main's lint red with every CI signal green — the failure then landed on the next
-# unrelated src/ commit. Md-only commits still skip via "**.md".
-# scripts/__tests__/lint-ci-scope.test.mjs asserts lint scope ⊆ CI scope and fails on
-# the commit that creates a divergence; change either list only in step with the other.
 on:
   pull_request:
     paths-ignore: [learnings/**, guides-intake/**, "**.md"]
@@ -18,8 +7,6 @@ on:
 permissions:
   contents: read
 
-# M1: cancel a superseded run for the same ref — a rapid follow-up push shouldn't burn CI
-# minutes finishing a run whose result no longer matters.
 concurrency:
   group: test-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -39,8 +26,17 @@ jobs:
       - run: npm run typecheck
       - run: npm run coverage
 
-  z06-smoke:
+  z06-permission-smoke:
     if: github.head_ref == 'proof/z06-cancellation-grace'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+      issues: write
     steps:
-      - run: echo 'Z06 smoke job registered and executed.'
+      - name: Prove write-token boundary before cancellation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:permission-smoke -->
+          Z06 permission smoke passed in Tests run ${GITHUB_RUN_ID}; actions:write and issues:write job registered."
