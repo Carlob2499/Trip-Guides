@@ -1,0 +1,69 @@
+name: One-time archive RED evidence branches
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/archive-red-branches-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preserve exact RED evidence commits as tags, then remove working branches
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          archive_branch() {
+            local branch="$1"
+            local tag="$2"
+            local expected="$3"
+            local branch_encoded tag_encoded current tagged
+
+            branch_encoded=$(jq -rn --arg value "$branch" '$value|@uri')
+            tag_encoded=$(jq -rn --arg value "$tag" '$value|@uri')
+            current=$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch_encoded}" --jq '.object.sha')
+
+            if [ "$current" != "$expected" ]; then
+              echo "::error::refusing $branch: expected $expected, found $current"
+              exit 1
+            fi
+
+            if tagged=$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag_encoded}" --jq '.object.sha' 2>/dev/null); then
+              if [ "$tagged" != "$expected" ]; then
+                echo "::error::existing tag $tag points to $tagged, expected $expected"
+                exit 1
+              fi
+            else
+              gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+                -f ref="refs/tags/${tag}" -f sha="$expected" >/dev/null
+            fi
+
+            tagged=$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag_encoded}" --jq '.object.sha')
+            if [ "$tagged" != "$expected" ]; then
+              echo "::error::tag verification failed for $tag"
+              exit 1
+            fi
+
+            gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch_encoded}"
+            echo "archived $branch -> $tag @ $expected"
+          }
+
+          archive_branch \
+            'research-v2/luxembourg' \
+            'evidence/v2-luxembourg-red-20260821' \
+            '1a6f93c6c6724e214ea6d7497297735d8b39b06a'
+
+          archive_branch \
+            'research-v2/portugal' \
+            'evidence/v2-portugal-red-20260822' \
+            '68479df348d49103d844b048f11043219cb46cef'
+
+          gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" >/dev/null
+          echo 'RED evidence is tag-pinned; main is the only working branch.'
