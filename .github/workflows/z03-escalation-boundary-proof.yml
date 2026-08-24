@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - proof/z03-escalation-boundary
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
