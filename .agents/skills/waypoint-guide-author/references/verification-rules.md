@@ -36,7 +36,7 @@ verification effort proportionate.
 **Rule:** if a fact could be wrong *because time passed since you last checked*, it is perishable
 and the date rules apply.
 
-**Then rate it (D2).** A perishable fact also carries `risk` 0–4 — how much a wrong or missing
+**Then rate it.** A perishable fact also carries `risk` 0–4 — how much a wrong or missing
 value costs, which sets its search budget (`research-efficiency.md`'s table). A price is usually
 R2; the anchor event and anything booked is R3+; a travel advisory or visa/health rule is R4
 always, whatever the search felt like.
@@ -45,8 +45,8 @@ always, whatever the search felt like.
 
 ## 3. What counts as a source (quality hierarchy)
 
-**Classify the CLAIM before picking the ladder (V2 rule, DECISIONS.md "Objective facts vs
-traveler experience"). These are different evidence types with different bars:**
+**Classify the CLAIM before picking the ladder. These are different evidence types with
+different bars:**
 
 - **Objective facts** — opening hours, prices, reservation rules, event dates, train schedules,
   entry rules. These normally require an official/primary (T0) source. The tier ladder below is
