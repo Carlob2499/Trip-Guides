@@ -1,0 +1,69 @@
+name: Z06 cancellation grace proof
+
+on:
+  push:
+    branches:
+      - proof/z06-cancellation-grace
+
+permissions:
+  contents: read
+  actions: write
+  issues: write
+
+jobs:
+  prove-cancellation-grace-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Announce proof start
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: "90"
+        run: |
+          gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:start -->
+          Z06 cancellation proof started for run ${GITHUB_RUN_ID}."
+
+      - name: Simulate running agent and request cancellation
+        id: agent
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          printf 'partial simulated agent output\n' > "$RUNNER_TEMP/agent-output.log"
+          gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
+          # Stay alive so GitHub must exercise its real cancellation signal/grace behavior.
+          sleep 60
+
+      - name: Always control-plane recovery step
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: "90"
+        run: |
+          gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:collect -->
+          Z06 post-cancellation always() control-plane step ran."
+
+      - name: Record cancelled state witness
+        if: failure() || cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: "90"
+        run: |
+          gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:record -->
+          Z06 cancellation-classification witness ran; cancelled=${{ cancelled() }} failure=${{ failure() }}."
+
+      - name: Retry-decision witness
+        if: failure() || cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: "90"
+        run: |
+          gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:retry -->
+          Z06 retry-decision witness ran after cancellation; cancelled=${{ cancelled() }} failure=${{ failure() }}."
+
+      - name: Escalation witness
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: "90"
+        run: |
+          gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:escalate -->
+          Z06 PASS witness: escalation step ran inside GitHub's real cancellation grace window."
