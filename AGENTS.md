@@ -20,11 +20,11 @@ Optimize for **minimum context-to-correct-change**:
 
 - **New guide / factual research / recertification:** use `waypoint-guide-author`. New-guide and headless research keep the full frozen research stack; narrow factual edits load only affected guide/state + verification/continuity context.
 - **Astro / CSS / UI / layout:** use `waypoint-design` plus affected source files. Presentation work must not alter factual content. Load only the relevant design authority; full `/design` work may load the broader handoff/prototypes.
-- **Pipeline V2 / validation / cutover:** start with `docs/handoff.md`, then only the relevant `docs/pipeline v2/` authority. Do not load pipeline evidence for unrelated frontend work.
+- **Pipeline V2 / validation / cutover:** SessionStart already injects the bounded `scripts/handoff-head.mjs` capsule. Use that first; open full `docs/handoff.md` only for deeper current evidence, then only the relevant `docs/pipeline v2/` authority. Do not load pipeline evidence for unrelated frontend work.
 - **Ownership/architecture ambiguity:** read `docs/reference/repo-map.md` and then the specific subsystem reference.
 - **Historical rationale:** use `CONTEXT.md` only when current code/docs do not explain the decision.
 
-`README.md` is orientation, `PRODUCT.md` is product doctrine, and `docs/handoff.md` is current operational truth. They are not a mandatory reading stack for every task.
+`README.md` is orientation, `PRODUCT.md` is product doctrine, and the SessionStart capsule is the compact current-state summary. Full `docs/handoff.md` is on-demand evidence, not a mandatory read.
 
 ## Protected current boundaries
 
