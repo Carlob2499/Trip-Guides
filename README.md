@@ -12,7 +12,7 @@ Waypoint is a personal travel command center built as a static Astro site with a
 
 Waypoint has two product lifecycles: **research** (create/research a guide) and **change** (modify an existing guide without rerunning the full research lifecycle).
 
-Product doctrine lives in `PRODUCT.md`. Current operational/cutover truth lives in `docs/handoff.md`.
+Product doctrine lives in `PRODUCT.md`. Current operational/cutover truth lives in `docs/handoff.md`; agents receive its bounded current-state capsule automatically at SessionStart.
 
 ## Current product direction
 
@@ -51,8 +51,8 @@ Use `docs/reference/repo-map.md` only when ownership is unclear.
 Agent root instructions (`AGENTS.md` / `CLAUDE.md`) route work to the smallest useful authority.
 
 - **Product decision:** `PRODUCT.md`.
-- **Current operational state / next integration step:** `docs/handoff.md`.
-- **Pipeline V2 / validation / cutover:** the relevant file under `docs/pipeline v2/`; start with `docs/handoff.md`.
+- **Current operational state / next integration step:** use the SessionStart capsule from `scripts/handoff-head.mjs`; open full `docs/handoff.md` only for deeper current evidence.
+- **Pipeline V2 / validation / cutover:** start from that capsule, then open only the relevant file under `docs/pipeline v2/`.
 - **Code ownership uncertainty:** `docs/reference/repo-map.md`, then the affected subsystem reference.
 - **Visual/UI work:** `waypoint-design` + affected code; load only the relevant design reference. Full `/design` work may load the broader handoff/prototypes.
 - **Guide facts/research:** `waypoint-guide-author`.
