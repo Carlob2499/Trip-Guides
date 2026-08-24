@@ -1,114 +1,82 @@
 # Waypoint (Trip-Guides)
 
-Waypoint is a personal travel command center built as a static Astro site with a research and verification pipeline behind it. Structured trip content becomes fast, offline-friendly guide pages; the pipeline researches, verifies, composes, and gates that content before it can publish.
+Waypoint is a personal travel command center built as a static Astro site with a research/verification pipeline behind it. Structured trip content becomes fast, offline-friendly guide pages; the pipeline researches, verifies, composes, and gates content before publication.
 
-## What Waypoint is today
+## What ships
 
-- **Static Astro travel guides** generated from structured files in `src/content/guides/`.
-- **A research backend** that turns an intake into a verified draft guide, with durable state and evidence.
-- **Field-use tools** for itinerary execution, maps/transit, Trip Split, SOS, reminders, exports, and offline use.
-- **A small Worker backend** for owner-only/live controls that cannot be done safely in a static page alone.
-- **GitHub Actions CI/deploy** with lint, typecheck, coverage, build, accessibility, project-invariant, offline, and performance checks.
+- Static Astro guides from `src/content/guides/`.
+- Research lifecycle with durable intake/state/evidence.
+- Field tools: itinerary, maps/transit, Trip Split, SOS, reminders, exports, offline use.
+- Small Worker backend for owner/live controls that cannot safely live in static pages.
+- GitHub Actions for verification and deployment.
 
-Waypoint has exactly **two product lifecycles**:
+Waypoint has two product lifecycles: **research** (create/research a guide) and **change** (modify an existing guide without rerunning the full research lifecycle).
 
-1. **Research lifecycle** — create or research a trip guide.
-2. **Change lifecycle** — modify an existing guide without re-running the entire research lifecycle.
+Product doctrine lives in `PRODUCT.md`. Current operational/cutover truth lives in `docs/handoff.md`; agents receive its bounded current-state capsule automatically at SessionStart.
 
-## Product direction
+## Current product direction
 
-Waypoint is becoming a single trip command center rather than a collection of unrelated guide tabs. The intended field-use hierarchy is:
+Field use wins ties. The intended hierarchy is **Today · Itinerary · Map · Split · Guide**. The day/trip model is the center; maps, reservations, contingencies and Split should attach to it rather than becoming unrelated mini-products.
 
-**Today · Itinerary · Map · Split · Guide**
+Trip Split, offline/poor-network behavior, accessibility, sunlight-readable mobile use and truthful uncertainty are protected requirements.
 
-The day-by-day itinerary is the center of the product. Maps, reservations, navigation, saved information, contingencies, and Trip Split should attach to the day/trip model instead of becoming separate mini-products.
+## Research engines
 
-Trip Split is a first-class protected feature. Offline/poor-network usefulness, accessibility, sunlight-readable mobile use, and truthful uncertainty are core product requirements.
+Two implementations intentionally coexist during validation:
 
-See `PRODUCT.md` for product doctrine and `docs/design-handoff/DESIGN.md` for the future Atlas design authority.
+- **V1** — `.github/workflows/research-pass.yml` + `scripts/pipeline.mjs`; production default/rollback.
+- **V2** — `.github/workflows/research-pass-v2.yml` + `scripts/pipeline-v2.mjs` + `scripts/pipeline/v2/`; staged candidate.
 
-## How a new guide is created
+`WAYPOINT_RESEARCH_ENGINE=v2` is the explicit selector. Until cutover is deliberately accepted, V1 stays available and V2 validation is not permission to retire it.
 
-```text
-/new
-  ↓
-traveler intake (frozen requirements)
-  ↓
-draft scaffold
-  ↓
-research engine
-  ↓
-durable state + evidence + coverage + events
-  ↓
-compose + verification + landing gate
-  ↓
-draft review or authorized publication
-  ↓
-Astro build → GitHub Pages
-```
-
-Two research implementations intentionally coexist during cutover:
-
-- **V1** — `.github/workflows/research-pass.yml` + `scripts/pipeline.mjs`. This remains the default/rollback path.
-- **V2** — `.github/workflows/research-pass-v2.yml` + `scripts/pipeline-v2.mjs` + `scripts/pipeline/v2/`. This is the next-generation staged research path.
-
-`WAYPOINT_RESEARCH_ENGINE=v2` is the explicit selector. Until cutover is deliberately accepted, V1 remains available and V2 must not be treated as permission to delete the rollback path.
-
-Current delivery/cutover status lives in `docs/handoff.md` and `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
-
-## Where things live
+## Ownership map
 
 | Path | Responsibility |
 | --- | --- |
-| `src/content/guides/` | Guide content rendered by Astro |
-| `guides-intake/` | Intake, run state, evidence, coverage, and research artifacts |
+| `src/content/guides/` | Rendered guide data |
+| `guides-intake/` | Intake, run state, evidence, coverage |
 | `src/features/` | Product feature ownership |
 | `src/lib/` | Shared deterministic helpers |
 | `src/pages/` | Astro routes/screens |
-| `scripts/` | Build, verification, research, audit, and pipeline tooling |
+| `scripts/` | Build, verification, audit and pipeline tooling |
 | `worker/` | Owner/live backend endpoints |
-| `.github/workflows/` | CI, deploy, guide creation, research, recertification, and scheduled checks |
-| `docs/reference/` | How the system works now |
-| `docs/design-handoff/` | Future Atlas design authority and enforcement |
+| `.github/workflows/` | CI, deploy and lifecycle orchestration |
+| `docs/reference/` | Current architecture/behavior |
+| `docs/design-handoff/` | Atlas visual authority/reference |
 
-For a deeper ownership map, read `docs/reference/repo-map.md`.
+Use `docs/reference/repo-map.md` only when ownership is unclear.
 
-## Read this repo in this order
+## Read by task, not by syllabus
 
-For normal engineering work:
+Agent root instructions (`AGENTS.md` / `CLAUDE.md`) route work to the smallest useful authority.
 
-1. `README.md` — orientation.
-2. `PRODUCT.md` — product rules and non-negotiables.
-3. `docs/handoff.md` — current operational state and next work.
-4. `docs/reference/repo-map.md` — code ownership and boundaries.
-5. The relevant file in `docs/reference/` for the subsystem you are changing.
-6. `AGENTS.md` or `CLAUDE.md` when an agent is doing the work.
+- **Product decision:** `PRODUCT.md`.
+- **Current operational state / next integration step:** use the SessionStart capsule from `scripts/handoff-head.mjs`; open full `docs/handoff.md` only for deeper current evidence.
+- **Pipeline V2 / validation / cutover:** start from that capsule, then open only the relevant file under `docs/pipeline v2/`.
+- **Code ownership uncertainty:** `docs/reference/repo-map.md`, then the affected subsystem reference.
+- **Visual/UI work:** `waypoint-design` + affected code; load only the relevant design reference. Full `/design` work may load the broader handoff/prototypes.
+- **Guide facts/research:** `waypoint-guide-author`.
+- **Historical rationale:** `CONTEXT.md` only when current code/docs do not answer it.
 
-If you are changing Pipeline V2, also read `docs/pipeline v2/DECISIONS.md`, `IMPLEMENTATION_STATE.md`, and `SEPTEMBER_TRACKER.md`.
-
-Historical plans and completed review transcripts belong in Git history, not in the active reading path.
+Do not preload all of these for ordinary engineering work.
 
 ## Verification
 
-Node.js 22+ is required.
+Node.js 22+.
 
 ```bash
 npm install
-npm run dev          # local development
-npm run check:fast   # invariants + lint + typecheck + unit tests
-npm run check        # invariants + lint + typecheck + coverage + production build
+npm run dev
+npm run check:fast
+npm run check
 npm run check:offline
-npm run ship:check   # full check + offline contract + performance budget
+npm run ship:check
 ```
 
-CI is authoritative for merge/deploy status. Do not weaken a failing gate merely to make a branch green.
+Use focused checks while iterating; CI on the exact PR head is authoritative for merge/deploy status. Do not weaken a gate merely to make a branch green.
 
-## Guide content
+## Guide content and deployment
 
-A guide lives under `src/content/guides/<slug>/`. `_guide.json` owns trip identity and metadata; numbered JSON files hold guide sections. `src/content.config.ts` is the schema authority.
+A guide lives under `src/content/guides/<slug>/`; `_guide.json` owns trip identity/metadata and numbered JSON files hold sections. `src/content.config.ts` is the schema authority. Malformed content fails the build; draft content stays quarantined until publication conditions are satisfied.
 
-Malformed content fails the build with the offending file/field instead of silently shipping. Draft content stays quarantined until its publication conditions are satisfied.
-
-## Deployment
-
-The site is built and deployed through GitHub Actions to GitHub Pages. A failed build leaves the previous working site live. Service-worker precaching and cached navigation provide offline/poor-network resilience for built guide content.
+GitHub Actions builds/deploys to GitHub Pages. A failed build leaves the previous working site live; service-worker precaching/cached navigation provide offline resilience for built guide content.

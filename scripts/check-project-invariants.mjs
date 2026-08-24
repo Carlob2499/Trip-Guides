@@ -54,6 +54,25 @@ if (normalizeAgentSpecificNames(sharedBody(agents)) !== normalizeAgentSpecificNa
   pass("Agent policy parity");
 }
 
+const maxAgentManualBytes = 6500;
+for (const [rel, text] of [["AGENTS.md", agents], ["CLAUDE.md", claude]]) {
+  const bytes = Buffer.byteLength(text, "utf8");
+  if (bytes > maxAgentManualBytes) {
+    fail(`Agent context budget: ${rel} is ${bytes} bytes; max is ${maxAgentManualBytes}`);
+  } else {
+    pass(`Agent context budget: ${rel}`);
+  }
+}
+
+// Keep a negative ownership guard without looking like a live docs citation to the generic
+// docs-integrity scanner, which intentionally treats literal docs/*.md strings as positive refs.
+const retiredRoutingDoc = ["docs", "reference", "skill-routing.md"].join("/");
+if (fs.existsSync(file(retiredRoutingDoc))) {
+  fail(`Routing authority duplication: ${retiredRoutingDoc} must stay deleted; scripts/skill-routing.mjs + tests own routing`);
+} else {
+  pass("Routing authority duplication");
+}
+
 for (const rel of [
   "README.md",
   "PRODUCT.md",
@@ -73,10 +92,8 @@ requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
 requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
 requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
 
-// The reciprocal Claude↔Codex reviewer is an autonomy control plane, not a third product
-// lifecycle. Cleanup must preserve the revision-4 trust boundary established by PR #79:
-// unprivileged signal, read-only validation/agent execution, and a separate write-capable
-// publish job that never executes PR-controlled code.
+// Preserve the reciprocal reviewer trust boundary: unprivileged signal, read-only execution,
+// then a separate write-capable publish job that never executes PR-controlled code.
 for (const rel of [
   ".github/workflows/claude-codex-watcher.yml",
   ".github/workflows/claude-codex-signal.yml",

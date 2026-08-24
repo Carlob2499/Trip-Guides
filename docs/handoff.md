@@ -10,7 +10,7 @@ The reciprocal Claude↔Codex reviewer automation remains active with the revisi
 Canary #4 proved normal fresh-run/recovery. The two failure-only seams it did not naturally exercise are now CLOSED by targeted no-model proofs: authenticated/deduped issue escalation and post-cancellation `always()` + `cancelled()` escalation execution.
 V01 and combined V02/V03/V05 remain the model-backed validation work. V04 and V06 are DONE; V07's method is pre-registered and waits for Run A/B.
 Next: when model capacity is available, re-check dispatch, execute/judge Run A, execute/judge Run B by criterion, then run V07. Keep the current research candidate stable unless new defect evidence requires a change.
-Read next: `README.md`, `PRODUCT.md`, `CONTEXT.md`, `docs/reference/pipeline.md`, `docs/reference/skill-routing.md`, `docs/pipeline v2/VALIDATION_RUNBOOK.md`, `docs/pipeline v2/VALIDATION_TRIAL_PACKETS.md`, `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`, `docs/pipeline v2/V07_EVALUATION_METHOD.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
+Read on demand, not wholesale: repo/product → `README.md` / `PRODUCT.md`; durable history → `CONTEXT.md`; pipeline architecture → `docs/reference/pipeline.md`; Run A/B → `docs/pipeline v2/VALIDATION_RUNBOOK.md` + `VALIDATION_TRIAL_PACKETS.md`; R03 proof → `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`; V07 → `V07_EVALUATION_METHOD.md`; schedule/cutover → `SEPTEMBER_TRACKER.md`.
 <!-- WARM_START_END -->
 
 ## Accepted live evidence
