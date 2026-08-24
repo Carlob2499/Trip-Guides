@@ -16,6 +16,20 @@ If the user invokes this skill without any other guidance, ask them what they wa
 design, ask some questions, and act as an expert designer who outputs HTML artifacts *or*
 production code, depending on the need.
 
+## Scope boundary
+
+This skill owns **presentation**, not destination truth.
+
+- For **presentation-only** work, keep factual guide data exactly as supplied. Preserve every
+  fact value verbatim; do not load `waypoint-guide-author` merely because the UI renders travel
+  content, and do not re-research a fact just to restyle it.
+- If the task requires **creating, correcting, or verifying destination facts** (prices, hours,
+  venues, transit, events, itineraries, recommendations), route that factual work to
+  `waypoint-guide-author`. Do not invent or silently revise facts inside a design pass.
+- For a mixed task, split ownership: `waypoint-guide-author` settles the factual change first;
+  this skill then owns how the verified result is rendered. Presentation changes must not widen
+  the research scope.
+
 ## Before you draw anything
 
 Waypoint is a field instrument, not a brochure. Two rules govern every decision and you should
