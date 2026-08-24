@@ -42,11 +42,11 @@ describe("the tracker states the CURRENT delivery phase", () => {
     }
   });
 
-  it("keeps production cutover open", () => {
+  it("keeps production cutover open while recording accepted reliability", () => {
     expect(trackerStatus("I02")).toMatch(/DONE \/ YELLOW|DRAFT PRODUCT PATH GREEN/i);
     expect(trackerStatus("I02")).not.toMatch(/^DONE$/);
     expect(trackerStatus("I06")).toMatch(/HOLD|IN PROGRESS/i);
-    expect(trackerStatus("R03")).toMatch(/DONE \/ YELLOW/i);
+    expect(trackerStatus("R03")).toMatch(/^DONE$/i);
     expect(TRACKER).toMatch(/production cutover.*pending|production cutover.*not done/i);
   });
 });
@@ -90,7 +90,7 @@ describe("retry policy prose agrees with executable policy", () => {
   });
 });
 
-describe("the handoff states exactly what the accepted canary did and did not prove", () => {
+describe("the handoff states exactly what the accepted reliability evidence proves", () => {
   it("records the accepted Uruguay draft canary", () => {
     expect(HANDOFF).toMatch(/Uruguay/i);
     expect(HANDOFF).toMatch(/Canary #4/);
@@ -99,10 +99,11 @@ describe("the handoff states exactly what the accepted canary did and did not pr
     expect(HANDOFF).not.toMatch(/Nothing about it has run in GitHub Actions/i);
   });
 
-  it("keeps the two unproven failure-only seams explicit", () => {
+  it("records the two failure-only seams as closed by targeted proofs", () => {
     expect(HANDOFF).toMatch(/escalation/i);
     expect(HANDOFF).toMatch(/cancellation/i);
-    expect(HANDOFF).toMatch(/unproven|did not exercise/i);
+    expect(HANDOFF).toMatch(/closed|proven|PASS/i);
+    expect(HANDOFF).toMatch(/R03 is fully accepted/i);
   });
 
   it("keeps temporary cleanup status out while recording the durable reciprocal reviewer boundary", () => {

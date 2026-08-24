@@ -3,15 +3,14 @@
 > Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. This file should state only what is true now and what work comes next.
 
 <!-- WARM_START_BEGIN -->
-WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-23)
-Pipeline V2 reliability repair is merged and Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains `draft: true`, `publication: false`, `landMode: pr`; it is evidence, not production content.
-V1 remains the production default/rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. Manual V2 dispatches remain draft-only; production cutover is a separate evidence-based decision.
-The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 job-level trust boundary; cleanup must not retire or weaken it.
-Canary #4 proved the normal fresh-run/recovery path, including real gate failures and bounded retry authority. Its two previously unexercised failure-only platform seams are now closed by targeted no-model proofs: real authenticated/deduped issue escalation, and real GitHub Actions post-cancellation `always()` + `cancelled()` escalation execution.
-The Progress surface now has durable V2 run events and an owner-note path keyed to exact V2 run identity; facts that the backend cannot prove remain honestly blank.
-Remaining validation work requiring model capacity is Combined Research Run A for V01 and Combined Research Run B for V02/V03/V05. V04 and V06 are DONE; V07's evaluation method is pre-registered and waits for Run A/B quality verdicts.
-Next engineering work: when model credits are available, re-check the dispatch gate, execute Run A, judge V01, execute Run B, judge V02/V03/V05 separately, then execute V07. Do not reopen deterministic cleanup without new defect evidence.
-Read next: `README.md`, `PRODUCT.md`, `CONTEXT.md`, `docs/reference/repo-map.md`, `docs/reference/pipeline.md`, `docs/pipeline v2/DECISIONS.md`, `docs/pipeline v2/IMPLEMENTATION_STATE.md`, `docs/pipeline v2/VALIDATION_RUNBOOK.md`, `docs/pipeline v2/VALIDATION_TRIAL_PACKETS.md`, `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`, `docs/pipeline v2/V07_EVALUATION_METHOD.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
+WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-24)
+Canary #4 (`uruguay-20260823-9789de`) completed the V2 draft product path GREEN. Uruguay remains `draft: true`, `publication: false`, `landMode: pr`; it is evidence, not production content.
+V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset. Manual V2 dispatches stay draft-only; production cutover remains a separate decision.
+The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
+Canary #4 proved normal fresh-run/recovery. The two failure-only seams it did not naturally exercise are now CLOSED by targeted no-model proofs: authenticated/deduped issue escalation and post-cancellation `always()` + `cancelled()` escalation execution.
+V01 and combined V02/V03/V05 remain the model-backed validation work. V04 and V06 are DONE; V07's method is pre-registered and waits for Run A/B.
+Next: when model capacity is available, re-check dispatch, execute/judge Run A, execute/judge Run B by criterion, then run V07. Keep the current research candidate stable unless new defect evidence requires a change.
+Read next: `README.md`, `PRODUCT.md`, `CONTEXT.md`, `docs/reference/pipeline.md`, `docs/reference/skill-routing.md`, `docs/pipeline v2/VALIDATION_RUNBOOK.md`, `docs/pipeline v2/VALIDATION_TRIAL_PACKETS.md`, `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`, `docs/pipeline v2/V07_EVALUATION_METHOD.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
 <!-- WARM_START_END -->
 
 ## Accepted live evidence
