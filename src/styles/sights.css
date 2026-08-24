@@ -5,6 +5,14 @@
    typographic head. Award-site restraint: one bold move (the overlaid photo),
    everything else quiet. */
 
+/* guide.css owns the legacy full-shell grid's broad composition, but its preferred
+   300px card floor used to be an absolute floor too. At the WCAG 320px viewport the
+   shell's own gutters leave <300px of content width, so the track escaped its owner and
+   body{overflow-x:clip} merely hid the missing pixels. Keep 300px as the preferred
+   multi-column minimum while allowing the one-column track to shrink with its container.
+   This mirrors Panel's existing min(100%, 340px) grid contract. */
+.block:not(.pnl):has(.sight){grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+
 /* Photo cards: kill the card padding so the media bleeds to the rounded edge;
    the body re-adds its own padding below. */
 .sight--photo{padding:0;overflow:hidden}
