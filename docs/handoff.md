@@ -7,7 +7,7 @@ WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-24)
 Canary #4 (`uruguay-20260823-9789de`) completed the V2 draft product path GREEN; Uruguay remains draft-only/unpublished. V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
 R03 is closed: fresh-run/recovery plus authenticated issue escalation and post-cancellation escalation have real-GitHub proof.
 Paving is merged: PR #94 (`527843b9`) protects agent routing/design boundaries and the frozen validation candidate; PR #95 (`8aad6f90`) adds the 320px hostile-content resilience gate, fixes reproduced narrow-owner layout defects, and reduces always-loaded agent context. Neither changed V2 research doctrine, validation criteria, selector/publication authority, or Run A/B.
-The reciprocal Claude↔Codex reviewer remains active with the revision-4 trust boundary.
+The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
 V01 and combined V02/V03/V05 remain the model-backed validation work. V04 and V06 are DONE; V07's method is pre-registered and waits for Run A/B.
 Next: when model capacity is available, re-check dispatch, execute/judge Run A, execute/judge Run B by criterion, then run V07. Keep the frozen research candidate stable unless new defect evidence requires a change.
 Read on demand: repo/product → `README.md` / `PRODUCT.md`; pipeline → `docs/reference/pipeline.md`; Run A/B → `docs/pipeline v2/VALIDATION_RUNBOOK.md` + `VALIDATION_TRIAL_PACKETS.md`; V07 → `V07_EVALUATION_METHOD.md`; schedule/cutover → `SEPTEMBER_TRACKER.md`; history → `CONTEXT.md`.
