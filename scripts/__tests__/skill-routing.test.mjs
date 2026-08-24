@@ -87,7 +87,7 @@ describe("design skill boundary", () => {
 
   it("presentation-only work preserves facts instead of invoking research", () => {
     expect(claude).toMatch(/presentation-only/i);
-    expect(claude).toMatch(/preserve.*fact.*verbatim/i);
+    expect(claude).toMatch(/Preserve every\s+fact value verbatim/i);
   });
 
   it("fact creation or verification routes to Guide Author", () => {
