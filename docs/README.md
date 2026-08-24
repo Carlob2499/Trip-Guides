@@ -4,11 +4,11 @@ This tree contains only documentation that helps Waypoint operate, recover or im
 
 ## Read by task
 
-Do not preload the documentation tree.
+Do not preload the documentation tree. Agent SessionStart already injects the bounded current-state capsule from `scripts/handoff-head.mjs`.
 
-- **Current state / next work:** `handoff.md`.
+- **Current state / next work:** use the SessionStart capsule; open full `handoff.md` only when deeper current evidence is needed.
 - **Code ownership / boundaries:** `reference/repo-map.md`, then the affected subsystem reference.
-- **Pipeline V2 / validation / cutover:** start with `handoff.md`, then read only the relevant file in `pipeline v2/`.
+- **Pipeline V2 / validation / cutover:** start from the SessionStart capsule, then read only the relevant file in `pipeline v2/`.
 - **Design/UI:** route through `waypoint-design`; load only the relevant design authority. Full `/design` work may use the broader handoff/prototypes.
 - **Historical rationale:** `../CONTEXT.md` only when current code/docs do not explain the decision.
 - **Product doctrine:** `../PRODUCT.md`.
@@ -17,7 +17,7 @@ Do not preload the documentation tree.
 
 | Path | Owns |
 | --- | --- |
-| `handoff.md` | Compact current operational state and next work |
+| `handoff.md` | Full current operational evidence; its bounded capsule is the default warm start |
 | `reference/` | How Waypoint works now |
 | `standards/` | Durable quality bars/templates |
 | `evidence/` | Durable product/research evidence |
