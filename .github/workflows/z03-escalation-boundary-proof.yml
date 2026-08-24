@@ -1,0 +1,33 @@
+name: Z03 escalation boundary proof
+
+on:
+  push:
+    branches:
+      - proof/z03-escalation-boundary
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  prove-real-issue-comment-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exercise gh issue view/comment and dedupe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: "90"
+          MARKER: "<!-- waypoint-v2-stop:z03-boundary-proof -->"
+        run: |
+          set -euo pipefail
+          existing="$(gh issue view "$ISSUE" --repo "$GITHUB_REPOSITORY" --json comments --jq '[.comments[].body] | join("\n")')"
+          if ! grep -Fq "$MARKER" <<<"$existing"; then
+            gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "$MARKER
+          **Z03 boundary proof.** Real GitHub Actions token successfully crossed the issue-comment boundary without invoking a research model."
+          fi
+
+          # Repeat the same terminal observation and prove the marker prevents duplicate posting.
+          existing_after="$(gh issue view "$ISSUE" --repo "$GITHUB_REPOSITORY" --json comments --jq '[.comments[].body] | join("\n")')"
+          count="$(grep -Fo "$MARKER" <<<"$existing_after" | wc -l | tr -d ' ')"
+          test "$count" = "1"
+          echo "Z03 PASS: real gh issue view/comment works and the repeated marker remains singular."
