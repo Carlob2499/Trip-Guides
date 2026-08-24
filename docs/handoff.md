@@ -7,10 +7,11 @@ WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-23)
 Pipeline V2 reliability repair is merged and Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains `draft: true`, `publication: false`, `landMode: pr`; it is evidence, not production content.
 V1 remains the production default/rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. Manual V2 dispatches remain draft-only; production cutover is a separate evidence-based decision.
 The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 job-level trust boundary; cleanup must not retire or weaken it.
-Canary #4 proved the normal fresh-run/recovery path, including real gate failures and bounded retry authority. Two failure-only seams remain unproven because Uruguay did not exercise them: a real escalation issue comment / `gh` path, and the cancellation grace-window chain.
+Canary #4 proved the normal fresh-run/recovery path, including real gate failures and bounded retry authority. Its two previously unexercised failure-only platform seams are now closed by targeted no-model proofs: real authenticated/deduped issue escalation, and real GitHub Actions post-cancellation `always()` + `cancelled()` escalation execution.
 The Progress surface now has durable V2 run events and an owner-note path keyed to exact V2 run identity; facts that the backend cannot prove remain honestly blank.
-Next engineering work: execute the remaining V01–V05 validation risk classes, obtain targeted live proof for the two failure-only reliability seams when it can be done safely, and approach V2 cutover only after those acceptance conditions are satisfied.
-Read next: `README.md`, `PRODUCT.md`, `CONTEXT.md`, `docs/reference/repo-map.md`, `docs/reference/pipeline.md`, `docs/pipeline v2/DECISIONS.md`, `docs/pipeline v2/IMPLEMENTATION_STATE.md`, `docs/pipeline v2/PIPELINE_VALIDATION_PACK.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
+Remaining validation work requiring model capacity is Combined Research Run A for V01 and Combined Research Run B for V02/V03/V05. V04 and V06 are DONE; V07's evaluation method is pre-registered and waits for Run A/B quality verdicts.
+Next engineering work: when model credits are available, re-check the dispatch gate, execute Run A, judge V01, execute Run B, judge V02/V03/V05 separately, then execute V07. Do not reopen deterministic cleanup without new defect evidence.
+Read next: `README.md`, `PRODUCT.md`, `CONTEXT.md`, `docs/reference/repo-map.md`, `docs/reference/pipeline.md`, `docs/pipeline v2/DECISIONS.md`, `docs/pipeline v2/IMPLEMENTATION_STATE.md`, `docs/pipeline v2/VALIDATION_RUNBOOK.md`, `docs/pipeline v2/VALIDATION_TRIAL_PACKETS.md`, `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`, `docs/pipeline v2/V07_EVALUATION_METHOD.md`, `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
 <!-- WARM_START_END -->
 
 ## Accepted live evidence
@@ -24,6 +25,15 @@ Read next: `README.md`, `PRODUCT.md`, `CONTEXT.md`, `docs/reference/repo-map.md`
 
 Canary #4 proves the draft research/product path. It does not by itself authorize production cutover.
 
+### Targeted failure-only reliability proofs
+
+The two platform paths Uruguay did not naturally exercise are now proven without another model-backed canary:
+
+1. **Authenticated issue escalation — PASS.** Issue #90 received the real Actions-bot stop witness through `gh issue view` / `gh issue comment`, with marker deduplication proven on disposable PR #91. PR #91 was closed unmerged.
+2. **Cancellation grace-window chain — PASS.** Real Tests workflow run `32680115285` cancelled a simulated active agent step, then completed the post-cancellation `always()` control-plane witness and the subsequent `cancelled()` escalation witness. Disposable PR #92 was closed unmerged.
+
+Permanent evidence is recorded in `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`.
+
 ## Current reliability boundary
 
 The repaired V2 runtime now preserves these contracts:
@@ -34,21 +44,28 @@ The repaired V2 runtime now preserves these contracts:
 - retry eligibility comes from durable V2 state, not one ephemeral workflow output;
 - automatic repair remains bounded;
 - stopped runs have a visible escalation path;
+- cancellation can reach the post-agent control plane and visible escalation path inside real GitHub Actions;
 - incomplete or failed research cannot publish.
 
-Two live-only proofs remain outstanding because Uruguay did not trigger those paths:
+R03 is fully accepted. No remaining reliability seam requires another full research canary.
 
-1. an actual escalation comment to the intake issue through authenticated `gh` in the stage job;
-2. cancellation completing retry-decision + escalation inside GitHub's cancellation grace window.
+## Validation readiness
 
-These are targeted reliability proofs. They are not a reason to repeat an expensive full research canary merely for spectacle.
+- V01/V02/V03/V05 are pre-registered and remain awaiting model-backed execution only.
+- Run A: Tokyo, V01 food/reservation/source-independence trial.
+- Run B: Tottori/Kurayoshi/Misasa, V02 native-language + V03 fragile transport + V05 group/mobility trial.
+- Current `main` has no active `tokyo` or `tottori` V2 intake/run directory or matching active branch as of the zero-credit readiness audit.
+- Existing V2 artifacts are sufficient to judge the frozen criteria: source family/independence, adaptive saturation, reservation/party rules, native-language audit, reconciliation, high-risk transport physical reality, group/luggage/mobility, coverage, and final guide refs are all inspectable.
+- V04 is DONE deterministically. Do not spend another guide run reenacting it.
+- V06 is DONE with truthful available telemetry.
+- V07 is NOT YET EXECUTED. Its method is frozen in `docs/pipeline v2/V07_EVALUATION_METHOD.md` before Run A/B output exists.
 
 ## Research-engine cutover truth
 
 - V1 workflow/orchestrator remain present and usable.
 - `/new` selects V2 only when `vars.WAYPOINT_RESEARCH_ENGINE == 'v2'`.
 - With the selector unset, V1 is the production default.
-- Manual V2 `workflow_dispatch` remains PR/draft mode.
+- Manual V2 `workflow_dispatch` remains PR/draft mode even if the selector is later set; manual input cannot mint auto-publication authority.
 - A green draft canary is necessary evidence, not sufficient authority for production cutover.
 - V1 retirement happens only after an explicit cutover decision and proven rollback/parity conditions.
 
@@ -69,6 +86,7 @@ These are targeted reliability proofs. They are not a reason to repeat an expens
 - A missing metric is an honest blank. Never invent telemetry to fill a dashboard.
 - Pipeline critic/process findings belong in process evidence, never traveler learnings.
 - Every important safety guard should have a test capable of going red when the protected behavior is removed.
+- Do not change permanent research breadth/behavior because one validation destination is quirky; require a deterministic defect or repeated evidence.
 
 ## Current authority
 
@@ -79,5 +97,9 @@ These are targeted reliability proofs. They are not a reason to repeat an expens
 - `docs/reference/pipeline.md` — durable pipeline policy.
 - `docs/pipeline v2/DECISIONS.md` — locked V2 decisions.
 - `docs/pipeline v2/IMPLEMENTATION_STATE.md` — durable V2 implementation/proof state.
-- `docs/pipeline v2/PIPELINE_VALIDATION_PACK.md` — remaining validation risk classes.
+- `docs/pipeline v2/VALIDATION_RUNBOOK.md` — bounded validation execution rules and PASS/FAIL criteria.
+- `docs/pipeline v2/VALIDATION_TRIAL_PACKETS.md` — pre-registered Run A/B scenarios.
+- `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` — targeted live issue-escalation/cancellation proofs.
+- `docs/pipeline v2/V06_TELEMETRY_EVIDENCE.md` — truthful currently measurable telemetry.
+- `docs/pipeline v2/V07_EVALUATION_METHOD.md` — pre-registered post-validation efficiency rubric.
 - `docs/pipeline v2/SEPTEMBER_TRACKER.md` — delivery/cutover status and deadlines.
