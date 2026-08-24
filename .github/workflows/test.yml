@@ -26,7 +26,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run coverage
 
-  z06-permission-smoke:
+  z06-cancellation-proof:
     if: github.head_ref == 'proof/z06-cancellation-grace'
     runs-on: ubuntu-latest
     permissions:
@@ -34,9 +34,33 @@ jobs:
       actions: write
       issues: write
     steps:
-      - name: Prove write-token boundary before cancellation
+      - name: Announce cancellation proof start
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:permission-smoke -->
-          Z06 permission smoke passed in Tests run ${GITHUB_RUN_ID}; actions:write and issues:write job registered."
+          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:start -->
+          Z06 real cancellation proof started in Tests run ${GITHUB_RUN_ID}."
+
+      - name: Simulated agent requests cancellation and remains active
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          printf 'partial simulated agent output\n' > "$RUNNER_TEMP/agent-output.log"
+          gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
+          sleep 60
+
+      - name: Always control-plane witness
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:always -->
+          Z06 post-cancellation always() control-plane step ran."
+
+      - name: Cancelled escalation witness
+        if: cancelled()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:escalate -->
+          Z06 PASS witness: cancelled() escalation step ran inside GitHub's cancellation grace window."
