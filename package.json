@@ -21,6 +21,7 @@
     "check-facts-hygiene": "node scripts/audit/check-facts-hygiene.mjs",
     "fact-usage": "node scripts/audit/fact-usage.mjs",
     "check-intake-contradictions": "node scripts/audit/check-intake-contradictions.mjs",
+    "sync-skill-mirror": "node scripts/sync-skill-mirror.mjs",
     "verify": "node scripts/verify-guide.mjs",
     "verify-live": "node scripts/verify-live.mjs",
     "pipeline": "node scripts/pipeline.mjs",

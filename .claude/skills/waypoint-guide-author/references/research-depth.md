@@ -1,4 +1,4 @@
-# Research Depth — scale effort to decision impact (V2, from DECISIONS.md)
+# Research Depth — scale effort to decision impact
 
 Binding for every research pass. The principle in one line: **research depth scales with
 decision impact, disagreement, booking friction, and transport risk** — not with a checklist.
