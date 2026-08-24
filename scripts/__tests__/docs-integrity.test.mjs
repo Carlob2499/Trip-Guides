@@ -3,7 +3,7 @@
    found the failure classes gated here: a workflow pointing at a doc that never existed, HANDOFF
    growing 10× past its own stated budget, and environment facts (OneDrive) outliving the
    environment. Each check is deterministic; judgment stays doctrine in the agent manuals. */
-// @protects-file Project docs stay within budget and every file they reference exists.
+// @protects-file Project docs stay within budget and every live file/lookup they reference resolves.
 
 import { describe, expect, test } from "vitest";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
@@ -79,6 +79,36 @@ describe("every cited docs/*.md exists (the E2_FIELD_REPORT failure class)", () 
       missing,
       "A workflow, script, or doc cites a docs/*.md path that does not exist. Fix the " +
         "reference or restore the file — an agent told to read it will search for it instead."
+    ).toEqual([]);
+  });
+});
+
+describe("archive lookup anchors remain resolvable", () => {
+  test("every live docs/archive/INDEX.md → NAME pointer has a matching index heading", () => {
+    const index = readFileSync(join(ROOT, "docs/archive/INDEX.md"), "utf8");
+    const headings = new Set(
+      [...index.matchAll(/^###\s+([A-Za-z0-9_.-]+)\s+—/gm)]
+        .map((match) => match[1].replace(/\.md$/, ""))
+    );
+    const sourceExts = [".md", ".yml", ".yaml", ".ts", ".mjs", ".js", ".astro", ".css"];
+    const sources = walk(ROOT, sourceExts).filter((file) => {
+      const rel = relative(ROOT, file).replaceAll("\\", "/");
+      return file !== SELF && !rel.startsWith("docs/archive/");
+    });
+    const missing = [];
+
+    for (const file of sources) {
+      const text = readFileSync(file, "utf8");
+      for (const match of text.matchAll(/docs\/archive\/INDEX\.md\s*→\s*([A-Za-z0-9_.-]+)/g)) {
+        const anchor = match[1].replace(/\.md$/, "");
+        if (!headings.has(anchor)) missing.push(`${relative(ROOT, file)} → ${match[1]}`);
+      }
+    }
+
+    expect(
+      missing,
+      "A live historical lookup points at an archive index heading that no longer exists. " +
+        "Restore the heading or update the live pointer; Git history is useful only if the index still resolves."
     ).toEqual([]);
   });
 });
