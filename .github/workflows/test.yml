@@ -34,81 +34,13 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Cleanup/autonomy guard: prove the architecture contracts that are too important to leave
-      # as prose (V1 rollback, V2 selector, reviewer trust boundary, Trip Split/offline/Atlas
-      # preservation, and Claude/Codex instruction parity) before the broader gates run.
       - run: npm run check:invariants
-      # Gates the class astro check and Vitest structurally cannot see: unused bindings,
-      # unreachable code, accidental globals. Its first pass found a live ReferenceError in a
-      # script's CLI that 832 green tests could not — it called an isValidSlug the module only
-      # re-exported and never imported. Wired in only once it was at zero, so a red run always
-      # means a new regression.
       - run: npm run lint
       - run: npm run typecheck
-      # A5: `npm test` + `npm run coverage` both ran the full vitest suite (coverage is a
-      # superset — it runs every test AND instruments it) — dropped the bare run since
-      # coverage already exercises every test.
-      # Gates only src/lib/** + every feature's model/ silo (see vitest.config.ts) —
-      # the pure-logic core the project actually invests test coverage in. UI glue
-      # (DOM IIFEs, untestable as-is per CLAUDE.md's sealed-silo split) is measured
-      # but never gated, so this never blocks on the intentional 0% there.
       - run: npm run coverage
 
-  # DISPOSABLE Z06 PROOF: this job exists only on proof/z06-cancellation-grace and must never merge.
-  # It asks GitHub to cancel this real workflow run, then uses issue #90 as an external witness for
-  # whether always()/cancelled() cleanup steps actually execute inside GitHub's cancellation grace.
-  z06-cancellation-proof:
+  z06-smoke:
     if: github.head_ref == 'proof/z06-cancellation-grace'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      actions: write
-      issues: write
     steps:
-      - name: Announce proof start
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:start -->
-          Z06 cancellation proof started in existing Tests workflow run ${GITHUB_RUN_ID}."
-
-      - name: Simulated agent requests real workflow cancellation
-        id: agent
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          printf 'partial simulated agent output\n' > "$RUNNER_TEMP/agent-output.log"
-          gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
-          sleep 60
-
-      - name: Always control-plane witness
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:collect -->
-          Z06 always() control-plane witness ran after the cancellation request."
-
-      - name: Cancelled-state record witness
-        if: failure() || cancelled()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:record -->
-          Z06 record witness ran; cancelled=${{ cancelled() }} failure=${{ failure() }}."
-
-      - name: Retry decision witness
-        if: failure() || cancelled()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:retry -->
-          Z06 retry-decision witness ran; cancelled=${{ cancelled() }} failure=${{ failure() }}."
-
-      - name: Escalation witness
-        if: cancelled()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh issue comment 90 --repo "$GITHUB_REPOSITORY" --body "<!-- waypoint-v2-z06:${GITHUB_RUN_ID}:escalate -->
-          Z06 PASS witness: cancelled() escalation ran inside GitHub's real cancellation grace window."
+      - run: echo 'Z06 smoke job registered and executed.'
