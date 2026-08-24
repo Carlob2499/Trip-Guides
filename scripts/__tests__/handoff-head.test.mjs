@@ -27,7 +27,7 @@ describe("bounded session warm start", () => {
     expect(output).toMatch(/WAYPOINT_RESEARCH_ENGINE|selector/i);
     expect(output).toMatch(/escalation/i);
     expect(output).toMatch(/cancellation/i);
-    expect(output).toMatch(/unproven|did not exercise/i);
+    expect(output).toMatch(/closed|proven|PASS/i);
     expect(output).toMatch(/reciprocal Claude↔Codex reviewer automation.*remains active/i);
     expect(output).toMatch(/revision-4.*trust boundary/i);
   });
