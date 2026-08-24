@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - proof/z06-cancellation-grace
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
