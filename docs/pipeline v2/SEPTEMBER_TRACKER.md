@@ -18,7 +18,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - **Canary #4 truth:** it proved the fresh-run wrapper and ordinary bounded recovery path. It did **not** exercise a real escalation issue comment/`gh` path because no intake issue existed, and it did **not** exercise the cancellation grace-window chain because no cancellation occurred. Those two failure-only seams remain targeted proofs.
 - **Production cutover:** NOT DONE. `WAYPOINT_RESEARCH_ENGINE` remains unset/off, V1 remains the production default/rollback path, and a manual V2 canary cannot mint production publication authority.
 - **Cleanup closeout:** PR #80 merged as `ca9d1b8e76d72ea95620e1c006417418855c88d0` after exact-head Project invariants, Tests/coverage, Accessibility, and Vercel passed. The revision-4 Claude↔Codex reviewer trust boundary remains active and protected.
-- **Next validation work:** execute the pre-registered V01–V05 risk trials in `VALIDATION_RUNBOOK.md`, using two combined draft research runs plus deterministic/targeted V04 where sufficient; measure only telemetry that truly exists (V06), then assess observed resource waste (V07).
+- **Next validation work:** execute the pre-registered V01–V05 risk trials in `VALIDATION_RUNBOOK.md`, using two combined draft research runs plus deterministic/targeted V04 where sufficient. V06 telemetry measurement is complete; V07 waits on V01–V05 research-quality evidence before comparing quality against resource use.
 - **Days until September 20 feature freeze:** 28
 - **Days until September 27 code freeze:** 35
 - **Days until September 30 backend complete:** 38
@@ -33,6 +33,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - Progress consumes real V2 durable run events; unavailable fetch-level/nugget/unmeasured counters remain honestly absent.
 - The reciprocal Claude↔Codex reviewer from PRs #78/#79 remains active with the revision-4 separation restored by #79: unprivileged signal, read-only validation of PR-controlled content, and a separate write-capable publish job that never executes PR content.
 - V01–V05 now have pre-registered trial cards, evidence packets, immediate-fail conditions, and a resource-efficient execution grouping in `docs/pipeline v2/VALIDATION_RUNBOOK.md`.
+- V06 telemetry evidence is recorded in `docs/pipeline v2/V06_TELEMETRY_EVIDENCE.md`: real stage/retry/model/count metrics are measured from Uruguay; tool-call/search/fetch/native-search counts, tokens, and cost remain explicitly unavailable instead of inferred.
 
 **Do not equate “green draft canary” with “production cutover complete.”** The former is accepted evidence; the latter remains a deliberate product/operations decision with its own proof.
 
@@ -72,7 +73,7 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `
 | V03 | Fragile transport / physical-transfer trial | Validation | Claude/Fable + Codex | Sep 20 | READY FOR REVIEW | I02 | Pre-registered V03 transport-risk evidence and immediate-fail conditions in `VALIDATION_RUNBOOK.md`; group with Run B | Awaiting model-backed execution only | No |
 | V04 | Conflicting-evidence / future-event trial | Validation | Claude/Fable + Codex | Sep 20 | READY FOR REVIEW | I02 | Deterministic future-event + disagreement cards and evidence requirements in `VALIDATION_RUNBOOK.md`; targeted/live only if fixtures leave a gap | Execute cheapest sufficient proof first | No |
 | V05 | Large-group / mobility trial | Validation | Claude/Fable + Codex | Sep 20 | READY FOR REVIEW | I02 | Pre-registered V05 intake-to-decision requirements in `VALIDATION_RUNBOOK.md`; group with Run B | Awaiting model-backed execution only | No |
-| V06 | Measure model/tool/token/time telemetry where truly available | Validation | Codex + Automated CI/test | Sep 20 | NOT STARTED | I02 | Real per-stage metrics only; unavailable values explicitly unavailable | Some metrics may not exist | No |
+| V06 | Measure model/tool/token/time telemetry where truly available | Validation | Codex + Automated CI/test | Sep 20 | DONE | I02 | `docs/pipeline v2/V06_TELEMETRY_EVIDENCE.md`: real Uruguay stage/retry/model/count metrics recorded; tool/search/fetch/native-search/token/cost remain honest nulls | None | No |
 | V07 | Compare research quality against resource use and identify observed waste | Validation | Codex | Sep 20 | NOT STARTED | V01–V06 | Evidence-backed duplicated reads/searches/retries or explicit no-meaningful-waste result | Requires validation evidence | No |
 | F01 | **FEATURE FREEZE** — no ordinary new backend features | Freeze | Carlo | Sep 20 | NOT STARTED | V01–V07 | Tracker status explicitly DONE; unfinished ideas deferred | Validation incomplete | Yes — Carlo alone can waive |
 | S01 | Adversarial invalid-state testing | Stabilization | Automated CI/test | Sep 27 | NOT STARTED | F01 | Unsupported facts, malformed artifacts, stale high-risk facts, corrupt state, unsafe publish fail correctly | Feature freeze not reached | No |
