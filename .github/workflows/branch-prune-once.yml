@@ -1,0 +1,83 @@
+name: One-time stale branch prune
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/branch-prune-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete only pre-audited stale branches
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          branches=(
+            'automation/claude-codex-review-loop'
+            'canary/kansai-proof'
+            'chore/zero-credit-validation-closeout'
+            'claude/waypoint-pipeline-v2-canary-4-89xzmr'
+            'claude/waypoint-skill-cleanup-w0k865'
+            'cleanup/grand-pass-2026-08-23'
+            'codex/frontend-resilience-census'
+            'codex/pipeline-v2'
+            'codex/postmerge-paving-closeout'
+            'codex/retire-handoff-archive'
+            'codex/skill-routing-paving'
+            'docs/mark-v06-complete'
+            'docs/post-cleanup-closeout'
+            'docs/post-merge-reliability-closeout'
+            'docs/v04-closeout'
+            'fable/pipeline-v2-finalize'
+            'fable/pipeline-v2-integration'
+            'fix/palette-contrast-integrity'
+            'fix/v2-gate-feedback'
+            'fix/v2-post-scaffold-checkout'
+            'fix/v2-reliability-hardening'
+            'fix/v04-evidence-linkage'
+            'hotfix/codex-watcher-job-boundary'
+            'probe/environ'
+            'proof/z03-escalation-boundary'
+            'proof/z06-cancellation-grace'
+            'research-v2/andorra'
+            'research-v2/kansai-proof'
+            'research-v2/uruguay'
+            'validation/pre-register-model-runs'
+            'validation/v01-v05-prep'
+            'validation/v04-deterministic-audit'
+            'validation/v06-telemetry-evidence'
+          )
+
+          deleted=0
+          for branch in "${branches[@]}"; do
+            case "$branch" in
+              main|research-v2/luxembourg|research-v2/portugal)
+                echo "::error::refusing protected branch $branch"
+                exit 1
+                ;;
+            esac
+
+            encoded=$(jq -rn --arg value "$branch" '$value|@uri')
+            if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${encoded}" >/dev/null 2>&1; then
+              gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${encoded}"
+              echo "deleted $branch"
+              deleted=$((deleted + 1))
+            else
+              echo "already absent $branch"
+            fi
+          done
+
+          for branch in main research-v2/luxembourg research-v2/portugal; do
+            encoded=$(jq -rn --arg value "$branch" '$value|@uri')
+            gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${encoded}" >/dev/null
+          done
+
+          echo "Deleted ${deleted} audited stale branch refs; protected refs remain."
