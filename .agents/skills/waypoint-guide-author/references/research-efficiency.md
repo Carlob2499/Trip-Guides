@@ -20,6 +20,27 @@ committed checkpoint and resume without re-research. Each stage's own prompt in 
 the exact checkpoint command; this file governs how much you spend before reaching one. Plan-mode
 first on any multi-section pass: plan cheap, execute the plan, don't wander.
 
+## Interactive fan-out limits (binding — 2026-08-22, after the Aug 21 crash)
+
+An interactive research pass on 2026-08-21 ran **20–27 live subagents for 13 minutes** (8
+researchers plus the forks they spawned), fired ~1,950 tool calls, and Windows killed the
+hook shell (`bash.exe` AppHang). Two earlier hangs (Jul 25/26) came from single sessions whose
+transcripts had grown past 25 MB. These limits exist so neither repeats:
+
+- **At most 4 researchers live at once.** Queue the rest; start the next when one reports.
+- **Researchers never delegate.** Every researcher brief carries this line verbatim:
+  `You must not call Agent, fork, or spawn any subagent. Do the research yourself and report.`
+  A researcher that ends its turn without findings is re-run with the same line, not forked.
+- **One shared WebSearch pool of 200 per session.** Budget it up front: 4 researchers × ~40
+  searches leaves headroom for reconcile. Past 150 used, researchers switch to `WebFetch` of
+  known URLs only.
+- **Session size ceiling.** At every checkpoint run `node scripts/session-size-check.mjs` — when
+  it reports the transcript above **5 MB or 100 turns**, commit, write the handoff, and resume in
+  a fresh session (`/resume` or a new session reading `docs/HANDOFF.md`). Do not push on: a 25 MB
+  transcript is what hung the app in July.
+- **Fork flag.** `CLAUDE_CODE_FORK_SUBAGENT` in `~/.claude/settings.json` is what let researchers
+  fork. Research sessions run with it unset; it stays on only for pipeline-design sessions.
+
 ## Search budget (per ENTITY — a venue, route, or event; D2, 2026-08-13)
 
 - **Batch by entity, not by mention.** Research a venue/route/event ONCE; every fact it yields

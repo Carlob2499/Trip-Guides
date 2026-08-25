@@ -263,6 +263,36 @@ not control, and spending thirty seconds there.
 
 ---
 
+## Security-Challenge Stop Rule (binding — creator ruling 2026-08-22)
+
+Never attempt to solve or interact with, inside Claude's embedded browser:
+
+- CAPTCHA
+- Cloudflare Turnstile
+- "Verify you are human"
+- security verification
+- login gates
+- MFA
+- bot challenges
+
+If encountered:
+
+1. Stop navigation immediately.
+2. Record the origin as blocked (in the ledger, HANDOFF, or wherever the run's state lives).
+3. Do not retry the browser challenge — not with a different tab, a different UA, a reload,
+   or a wait-and-retry.
+4. Seek another legitimate first-party/reference source for the same fact.
+5. If no replacement exists, keep the claim unverified or omit it — never fill it from a
+   search snippet as a substitute.
+
+**A blocked authority is evidence about access, not permission to promote a search snippet.**
+A Cloudflare wall on the primary site does not upgrade a secondary source's confidence tier —
+it stays CORROBORATED or ⚠ UNVERIFIED, exactly as if the wall didn't exist. This applies to
+every research pass in this repo (guide research, gap-fill, private/external guides alike),
+not only automated browser tooling.
+
+---
+
 ## Session Setup — Connectors (save tokens)
 
 Enable **github** + **Claude Code Remote** only (verified 2026-07-22: nothing else has a call
