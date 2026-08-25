@@ -13,7 +13,12 @@ export function createGateway(storeKey) {
   var items = {}; // id -> record (mirror of whichever source is live)
   var listeners = [];
 
-  function readLocal() { try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch (e) { return {}; } }
+  function readLocal() {
+    try {
+      var parsed = JSON.parse(localStorage.getItem(LS_KEY));
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    } catch (e) { return {}; }
+  }
   function writeLocal() { if (room) return; try { localStorage.setItem(LS_KEY, JSON.stringify(items)); } catch (e) {} }
   function clearLocal() { try { localStorage.removeItem(LS_KEY); } catch (e) {} }
   function emit() { listeners.forEach(function (fn) { fn(items); }); }

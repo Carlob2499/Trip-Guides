@@ -168,6 +168,48 @@
       "reproducer": "npx vitest run src/scripts/tools-reminders.test.ts",
       "proposedVerification": "Run the focused regression, lint/typecheck, and canonical fast gate after the Wave 2 checkpoint.",
       "protectedBoundaryInteraction": "None; local UI convenience storage only."
+    },
+    {
+      "id": "ENG-REMINDER-GATEWAY-PARSEABLE-STATE",
+      "title": "Make local reminder gateway reject parseable non-object item maps",
+      "source": "Wave 2 malformed localStorage reproduction",
+      "subsystem": "reminders gateway local fallback",
+      "owner": "src/features/reminders/gateway.js",
+      "category": "invalid-state resilience",
+      "severity": "medium",
+      "travelerImpact": "medium",
+      "securityImpact": "none",
+      "dataIntegrityImpact": "low",
+      "futureWorkEliminated": 4,
+      "unblockValue": 4,
+      "confidence": "high",
+      "status": "FIXED_AND_VERIFIED",
+      "blocker": null,
+      "evidence": "Before the repair, stored JSON primitive true became the mutable items map and gateway.add threw TypeError: Cannot create property on boolean. The focused gateway regression failed red and passes green after object-shape validation.",
+      "reproducer": "npx vitest run src/features/reminders/gateway.test.ts",
+      "proposedVerification": "Run focused tests, lint/typecheck, and canonical fast gate at the next Wave 2 checkpoint.",
+      "protectedBoundaryInteraction": "Local fallback only; Firebase sync implementation remains owned by active PR #100."
+    },
+    {
+      "id": "ENG-ROUTEOPT-PARSEABLE-STATE",
+      "title": "Make route optimization persistence reject parseable non-object state",
+      "source": "Wave 2 malformed localStorage reproduction",
+      "subsystem": "route optimization per-device persistence",
+      "owner": "src/features/route-opt/ui/route-opt.js",
+      "category": "invalid-state resilience",
+      "severity": "medium",
+      "travelerImpact": "medium",
+      "securityImpact": "none",
+      "dataIntegrityImpact": "low",
+      "futureWorkEliminated": 4,
+      "unblockValue": 4,
+      "confidence": "high",
+      "status": "FIXED_AND_VERIFIED",
+      "blocker": null,
+      "evidence": "Before the repair, stored JSON primitive true became the route optimization persisted state and the Apply action threw TypeError: Cannot create property '1' on boolean 'true'. The route-optimization regression failed red and passes green after object-shape validation.",
+      "reproducer": "npx vitest run src/features/route-opt/ui/route-opt.test.ts",
+      "proposedVerification": "Run all Wave 2 focused regressions, lint/typecheck, and canonical fast gate at the next checkpoint.",
+      "protectedBoundaryInteraction": "Local view-only route ordering; authored guide order, GPX, ICS, and print remain untouched."
     }
   ]
 }

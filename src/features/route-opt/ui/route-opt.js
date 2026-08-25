@@ -16,7 +16,12 @@ import { reducedMotion, tapHaptic, trapFocus } from "../../../scripts/util.js";
 
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
   var STORAGE_KEY = "tg-routeopt-" + storeKey;
-  function loadPersisted() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } }
+  function loadPersisted() {
+    try {
+      var parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    } catch (e) { return {}; }
+  }
   function savePersisted(state) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
   var persisted = loadPersisted();
 

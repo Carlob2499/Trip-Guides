@@ -41,7 +41,9 @@
     "Typecheck root cause confirmed: tsconfig.json omitted generated dist/** from exclude, allowing astro check to analyze production minified bundles; normal and 6 GB baseline runs exhausted Node before a repository assertion result.",
     "Fix: added dist/** to tsconfig.json exclude and a check-project-invariants.mjs contract. npm run check:invariants passes 56 contracts; npm run typecheck completes with 0 errors and 12 pre-existing hints.",
     "Post-fix canonical npm run check:fast passed: invariants, lint, authored-source typecheck, and 183 test files / 3,041 passing tests completed without a heap exhaustion.",
-    "Wave 2 reproduced a safe-to-fix browser-state defect: tools-reminders.js accepted parseable non-object localStorage (for example true), then threw on checkbox change in strict mode. The focused red test failed with Cannot create property on boolean; object-shape validation made the same test pass."
+    "Wave 2 reproduced a safe-to-fix browser-state defect: tools-reminders.js accepted parseable non-object localStorage (for example true), then threw on checkbox change in strict mode. The focused red test failed with Cannot create property on boolean; object-shape validation made the same test pass.",
+    "The same malformed-state class independently reproduced in src/features/reminders/gateway.js: boolean true became the mutable local item map and gateway.add threw. A focused red/green regression now proves object-shape validation before local fallback mutation.",
+    "A third independent case was reproduced in route-opt persistence: boolean true became the saved route-order record and Apply threw while writing a day key. The focused route-opt red/green regression proves the same object-shape boundary at this distinct owner."
   ],
   "blockers": [
     {
