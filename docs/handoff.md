@@ -1,104 +1,73 @@
 # HANDOFF — current operational state
 
-> Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. This file should state only what is true now and what work comes next.
+> Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. Keep this file to current truth and the immediate next action.
 
 <!-- WARM_START_BEGIN -->
-WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-24)
-Canary #4 (`uruguay-20260823-9789de`) completed the V2 draft product path GREEN; Uruguay remains draft-only/unpublished. V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
-R03 is closed: fresh-run/recovery plus authenticated issue escalation and post-cancellation escalation have real-GitHub proof.
-Paving is merged: PR #94 (`527843b9`) protects agent routing/design boundaries and the frozen validation candidate; PR #95 (`8aad6f90`) adds the 320px hostile-content resilience gate, fixes reproduced narrow-owner layout defects, and reduces always-loaded agent context. Neither changed V2 research doctrine, validation criteria, selector/publication authority, or Run A/B.
-The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
-V01 and combined V02/V03/V05 remain the model-backed validation work. V04 and V06 are DONE; V07's method is pre-registered and waits for Run A/B.
-Next: when model capacity is available, re-check dispatch, execute/judge Run A, execute/judge Run B by criterion, then run V07. Keep the frozen research candidate stable unless new defect evidence requires a change.
-Read on demand: repo/product → `README.md` / `PRODUCT.md`; pipeline → `docs/reference/pipeline.md`; Run A/B → `docs/pipeline v2/VALIDATION_RUNBOOK.md` + `VALIDATION_TRIAL_PACKETS.md`; V07 → `V07_EVALUATION_METHOD.md`; schedule/cutover → `SEPTEMBER_TRACKER.md`; history → `CONTEXT.md`.
+WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-25)
+Offline shared-add browser proof is complete on `codex/offline-write-reconnect-proof`, based exactly on `origin/main` `b656db630baafbcf1b6ebaafda2a9db699719cc1` in a clean dedicated worktree.
+The proof exercises the real `sync.js` outbox and error classifier with only the Firebase client/transport substituted. Focused Playwright is 4/4 and the full Playwright suite is 69/69.
+A real defect was fixed: Learnings `addAsync` promised device durability but bypassed `tg-outbox`; its first red expected one durable entry and received zero. Durable shared-add records now remain queued until server acknowledgment, and stable keys prevent replay duplication.
+The bounded branch changes five implementation/test/CI files. No Pipeline V2 research behavior, DS1 visual decision, guide content, Firebase rule, room-ID semantic, production navigation, or unrelated architecture changed.
+Canary #4 (Uruguay) remains GREEN for the V2 draft product path only. R03 is fully accepted: authenticated issue escalation and the cancellation chain are proven. The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary. Production cutover remains pending.
+Next: commit, push, and open the offline-proof PR; do not merge. The remaining live boundary is the real Firebase SDK/auth, deployed rules, and real-network delivery path.
 <!-- WARM_START_END -->
 
-## Accepted live evidence
+## Snapshot
 
-### Canary history
+### Offline shared-add contract
 
-- **Malta — RED.** Historical Canary #1. Preserve as failure evidence.
-- **Luxembourg — RED.** Historical Canary #2. Preserve as failure/convergence evidence.
-- **Portugal — RED.** Canary #3, issue #74, run `portugal-20260822-7c041e`; exposed the runtime reliability defect class repaired before Canary #4. Do not resume it as if it were a clean acceptance run.
-- **Uruguay — GREEN draft product path.** Canary #4, run `uruguay-20260823-9789de`, branch `research-v2/uruguay`. Pass A/B completed on the first attempt; Reconcile converged after three real gate failures; bounded automatic repair was consumed once and correctly refused after that; Critic completed on the first attempt; the landing gate passed. The guide did not publish.
+- `collection.add` (used by Trip Split and reminder additions) and `addAsync` (Learnings feedback) use the local durable outbox.
+- An outbox entry is removed only after server acknowledgment. `addAsync` settles only on that acknowledgment.
+- Transient and permanent transport failures leave the local record queued/pending and emit a classified `tg:sync-error`; an unverified write never becomes apparent success.
+- A permanently rejected record may retry and log again on a later join. This bounded task adds no traveler-facing dead-letter or status UI.
+- Non-add collection operations and document `set`/`update`/`remove` were traced but do not receive this durable-outbox contract here.
 
-Canary #4 proves the draft research/product path. It does not by itself authorize production cutover.
+### Browser proof
 
-### Targeted failure-only reliability proofs
+The deterministic browser harness uses the production sync/outbox/error-classification implementation and substitutes only the external Firebase client/transport boundary. It proves:
 
-The two platform paths Uruguay did not naturally exercise are now proven without another model-backed canary:
+- offline local visibility and a persisted `tg-outbox` entry;
+- persistence after page/tab recreation;
+- normal reconnect replay, server acknowledgment, and outbox removal after success;
+- stable-key idempotence across later reload/reconnect;
+- preservation of the complete payload;
+- classified failure integrity without silent discard or false success;
+- a second browser context reading the resulting canonical state.
 
-1. **Authenticated issue escalation — PASS.** Issue #90 received the real Actions-bot stop witness through `gh issue view` / `gh issue comment`, with marker deduplication proven on disposable PR #91. PR #91 was closed unmerged.
-2. **Cancellation grace-window chain — PASS.** Real Tests workflow run `32680115285` cancelled a simulated active agent step, then completed the post-cancellation `always()` control-plane witness and the subsequent `cancelled()` escalation witness. Disposable PR #92 was closed unmerged.
+This does **not** prove the Firebase SDK, authentication, deployed security rules, or a real network/backend exchange. Those remain live/environment proof.
 
-Permanent evidence is recorded in `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`.
+### Defect and bounded files
 
-## Current reliability boundary
+The first Learnings browser test failed with “expected 1 durable entry, received 0,” proving `addAsync` bypassed the outbox. The smallest fix routes it through the same durable shared-add lifecycle without refactoring adjacent Firebase architecture.
 
-The repaired V2 runtime now preserves these contracts:
+Five implementation/test/CI files are in scope:
 
-- agent exit status cannot be hidden by output logging;
-- a failed agent cannot enter the successful collection path;
-- failure classes identify the correct execution plane;
-- retry eligibility comes from durable V2 state, not one ephemeral workflow output;
-- automatic repair remains bounded;
-- stopped runs have a visible escalation path;
-- cancellation can reach the post-agent control plane and visible escalation path inside real GitHub Actions;
-- incomplete or failed research cannot publish.
+- `.github/workflows/a11y.yml`
+- `src/features/firebase/sync.js`
+- `tests/visual/fixtures/sync-proof-bundle.ts`
+- `tests/visual/offline-sync.playwright.config.ts`
+- `tests/visual/offline-sync.spec.ts`
 
-R03 is fully accepted. No remaining reliability seam requires another full research canary.
+## Verification
 
-## Validation readiness
+- Project invariants: 55 passed.
+- Targeted Firebase units: 36 passed.
+- Lint: passed.
+- Typecheck: clean, 0 errors.
+- Full unit suite: 3,041 passed, 1 todo.
+- Production build: 13 pages, passed.
+- Focused offline Playwright: 4/4 passed.
+- Full Playwright: 69/69 passed.
+- Independent review: APPROVE.
 
-- V01/V02/V03/V05 are pre-registered and remain awaiting model-backed execution only.
-- Run A: Tokyo, V01 food/reservation/source-independence trial.
-- Run B: Tottori/Kurayoshi/Misasa, V02 native-language + V03 fragile transport + V05 group/mobility trial.
-- Current `main` has no active `tokyo` or `tottori` V2 intake/run directory or matching active branch as of the zero-credit readiness audit.
-- Existing V2 artifacts are sufficient to judge the frozen criteria: source family/independence, adaptive saturation, reservation/party rules, native-language audit, reconciliation, high-risk transport physical reality, group/luggage/mobility, coverage, and final guide refs are all inspectable.
-- V04 is DONE deterministically. Do not spend another guide run reenacting it.
-- V06 is DONE with truthful available telemetry.
-- V07 is NOT YET EXECUTED. Its method is frozen in `docs/pipeline v2/V07_EVALUATION_METHOD.md` before Run A/B output exists.
+## Pipeline status preserved
 
-## Research-engine cutover truth
+- Uruguay Canary #4 remains a GREEN draft product-path proof; it does not authorize production cutover.
+- R03 is fully accepted. Authenticated issue escalation and post-cancellation escalation have targeted live proof.
+- V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
+- V01 and combined V02/V03/V05 remain the model-backed Run A/B validation work. V04 and V06 are DONE; V07 waits for Run A/B.
+- The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
 
-- V1 workflow/orchestrator remain present and usable.
-- `/new` selects V2 only when `vars.WAYPOINT_RESEARCH_ENGINE == 'v2'`.
-- With the selector unset, V1 is the production default.
-- Manual V2 `workflow_dispatch` remains PR/draft mode even if the selector is later set; manual input cannot mint auto-publication authority.
-- A green draft canary is necessary evidence, not sufficient authority for production cutover.
-- V1 retirement happens only after an explicit cutover decision and proven rollback/parity conditions.
+## Where we left off
 
-## Progress truth
-
-- V2 emits durable run events and Progress consumes them.
-- Missing fetch/nugget/token/cost counters remain empty/null unless a durable source proves them.
-- Owner notes are scoped to an exact V2 `slug + runId + issue` identity and fail closed when identity is stale or ambiguous.
-- V1 does not receive a guessed note target because it lacks the same durable issue join.
-
-## Standing operating rules
-
-- Do not use repeated full research runs to debug deterministic state/schema/CI defects.
-- Never infer one execution plane's failure from another.
-- Interactive research never attempts CAPTCHA, Turnstile, MFA, login, or security verification; mark the source blocked and use another authority.
-- Frozen intake is not rewritten by research stages.
-- Pass A and Pass B independence is a contract, not a prompt suggestion.
-- A missing metric is an honest blank. Never invent telemetry to fill a dashboard.
-- Pipeline critic/process findings belong in process evidence, never traveler learnings.
-- Every important safety guard should have a test capable of going red when the protected behavior is removed.
-- Do not change permanent research breadth/behavior because one validation destination is quirky; require a deterministic defect or repeated evidence.
-
-## Current authority
-
-- `README.md` — repository orientation and reading order.
-- `PRODUCT.md` — product identity and non-negotiables.
-- `CONTEXT.md` — durable historical decisions; read on demand, not injected wholesale into warm starts.
-- `docs/reference/repo-map.md` — ownership/boundaries.
-- `docs/reference/pipeline.md` — durable pipeline policy.
-- `docs/pipeline v2/DECISIONS.md` — locked V2 decisions.
-- `docs/pipeline v2/IMPLEMENTATION_STATE.md` — durable V2 implementation/proof state.
-- `docs/pipeline v2/VALIDATION_RUNBOOK.md` — bounded validation execution rules and PASS/FAIL criteria.
-- `docs/pipeline v2/VALIDATION_TRIAL_PACKETS.md` — pre-registered Run A/B scenarios.
-- `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` — targeted live issue-escalation/cancellation proofs.
-- `docs/pipeline v2/V06_TELEMETRY_EVIDENCE.md` — truthful currently measurable telemetry.
-- `docs/pipeline v2/V07_EVALUATION_METHOD.md` — pre-registered post-validation efficiency rubric.
-- `docs/pipeline v2/SEPTEMBER_TRACKER.md` — delivery/cutover status and deadlines.
+All requested local verification and review are green. Commit the bounded changes on `codex/offline-write-reconnect-proof`, push, and prepare a PR without merging it. The PR report must distinguish the deterministic browser proof from the remaining live Firebase SDK/auth/rules/network proof.

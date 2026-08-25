@@ -71,13 +71,12 @@ export async function joinTrip(code) {
      then rejects it, the row vanishes, and not one word reaches the user or the console. It hid
      for as long as it did because the guides it affected had no valid roomId, so the rules denied
      every write — a path nobody had ever executed.
-     The distinction that matters is PERMANENT vs transient. An offline write is queued and will
-     flush on reconnect, so the outbox entry must survive. permission_denied never will, so
-     keeping it means retrying a doomed write on every future page load. */
+     Permanent vs transient still matters to the error surface, but neither is an acknowledgment.
+     Local traveler data remains durable until a server write succeeds; a permission rejection is
+     reported and may remain pending until server policy or availability changes. */
   function onWriteFailed(fullPath, err) {
     const code = String((err && (err.code || err.message)) || "unknown");
     const permanent = isPermanentWriteError(err);
-    if (permanent) writeOutbox(removeEntry(readOutbox(), fullPath));
     try {
       console.error("[waypoint sync] write to " + fullPath + (permanent ? " REJECTED (permanent): " : " failed, will retry: ") + code);
       document.dispatchEvent(new CustomEvent("tg:sync-error", { detail: { path: fullPath, permanent, code } }));
@@ -107,11 +106,23 @@ export async function joinTrip(code) {
       // addAsync(value) → Promise<id> that settles only when the SERVER acknowledges the write.
       // While the SDK is disconnected RTDB queues the write and this promise stays PENDING (it
       // neither resolves nor rejects) — so callers that report success to a human must race it
-      // against a timeout rather than await it forever, and say "queued", not "saved".
+      // against a timeout rather than await it forever, and say "queued", not "saved". A reported
+      // transport rejection also remains pending to the caller: only an ack may settle this API.
       addAsync(value) {
         const r = push(ref(db, path));
+        const fullPath = path + "/" + r.key;
+        // addAsync has the same offline durability contract as add: the Promise being pending
+        // is precisely when a closed tab would otherwise lose the SDK's memory-only queue.
+        writeOutbox(addEntry(readOutbox(), fullPath, Object.assign({ createdBy: uid, createdAt: Date.now() }, value)));
         return set(r, Object.assign({ createdBy: uid, createdAt: serverTimestamp() }, value))
-          .then(function () { return r.key; });
+          .then(function () {
+            writeOutbox(removeEntry(readOutbox(), fullPath));
+            return r.key;
+          })
+          .catch(function (err) {
+            onWriteFailed(fullPath, err);
+            return new Promise(function () {});
+          });
       },
       set(id, value) { return set(ref(db, path + "/" + id), value); },
       update(id, patch) { return update(ref(db, path + "/" + id), patch); },
