@@ -1,0 +1,45 @@
+[
+  {
+    "type": "routes",
+    "group": "Transit",
+    "title": "Key transit routes",
+    "phase": "daily",
+    "steps": [
+      "<b>Carrasco Airport → Montevideo:</b> Official airport taxi (fixed-fare structure) from the taxi desk in arrivals, ≈25–30 min, or a public bus to Tres Cruces terminal/downtown, ≈45–60 min — ⚠ confirm the current line number at the terminal.",
+      "<b>Montevideo → Colonia del Sacramento:</b> <b>COT</b> bus from Tres Cruces terminal, ≈2h20m, frequent departures from 05:00. {{fact:cot-colonia-579-uyu}}. Buy at the terminal or <a href='https://www.cot.com.uy/horarios-tarifas.php' target='_blank' rel='noopener noreferrer'>cot.com.uy</a>.",
+      "<b>Montevideo → Punta del Este:</b> <b>COT</b> bus from Tres Cruces, ≈2h, frequent departures from 04:45. {{fact:cot-punta-466-uyu}}. Same booking channel.",
+      "<b>Getting around Montevideo:</b> Ciudad Vieja and the Rambla are walkable; city buses (STM network) and taxis/Uber cover longer hops like Bodega Bouza in Melilla (≈15 min from downtown).",
+      "<b>Getting around Punta del Este:</b> The peninsula, harbor, and Playa Brava/Mansa are walkable; a taxi or rental car makes more sense for Casapueblo/Punta Ballena (≈15 km) and La Barra (≈8 km)."
+    ],
+    "verified_on": "2026-08-23",
+    "shelf_life": "transit",
+    "source_url": "https://www.cot.com.uy/horarios-tarifas.php"
+  },
+  {
+    "type": "map",
+    "group": "Transit",
+    "title": "Orientation map — Uruguay's south coast",
+    "center": {
+      "lat": -34.775,
+      "lng": -56.32
+    },
+    "span": 3.4,
+    "points": [
+      {
+        "name": "Montevideo (Ciudad Vieja)",
+        "lat": -34.9058,
+        "lng": -56.2011
+      },
+      {
+        "name": "Colonia del Sacramento (Barrio Histórico)",
+        "lat": -34.4626,
+        "lng": -57.8398
+      },
+      {
+        "name": "Punta del Este",
+        "lat": -34.9475,
+        "lng": -54.9338
+      }
+    ]
+  }
+]

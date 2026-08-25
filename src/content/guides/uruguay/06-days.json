@@ -1,0 +1,136 @@
+[
+  {
+    "type": "days",
+    "group": "Days",
+    "title": "Day by day",
+    "items": [
+      {
+        "date": "Fri Feb 5",
+        "title": "Arrival — Montevideo",
+        "pace": "Land at Carrasco, transfer in, keep the evening light",
+        "tldr": "Land at Carrasco, settle into Ciudad Vieja or Pocitos, and keep the first evening close to the hotel.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>No nonstop flight covers JFK–MVD, so plan on arriving tired from a connection. Clear immigration (visa-free for a US passport, up to 90 days), then take the airport taxi or bus into town — both are described in the Transit tab.</p><p>Keep the first evening unambitious: a walk along the Rambla near your hotel, then a meal wherever you are staying. Mercado del Puerto is a lunch destination rather than a dinner one — the hall's own posted hours end at 17:00 — so it belongs on Sunday, not on arrival day. Uruguayan dinner service barely starts before 21:00 anyway, which is in a jet-lagged traveler's favor.</p>",
+        "constraints": [
+          "Confirm your connection buffer before booking — every JFK–MVD routing has a stop"
+        ]
+      },
+      {
+        "date": "Sat Feb 6",
+        "title": "Day trip — Colonia del Sacramento",
+        "pace": "Early bus out, full day in the old town, evening bus back",
+        "tldr": "A full day in Uruguay's UNESCO river town — cobblestones, the lighthouse, sunset over the Río de la Plata.",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Take an early COT bus from Tres Cruces (≈2h20m) to Colonia del Sacramento's Barrio Histórico, a compact 17th–19th-century quarter that earned UNESCO World Heritage status in 1995 for its fused Portuguese-Spanish street plan.</p><p>Climb the Faro de Colonia (the 1857 lighthouse built over the ruined San Francisco convent) for a rooftop view over the old town and the river toward Argentina — it's open Saturdays 10:00–12:00 and 15:00–17:00, {{fact:faro-colonia-35-uyu}}, closed-toe shoes required, bring ID. ⚠ The climb runs only when Navy staff are on site, so it can be shut on the day with no notice — don't build the trip out here around it alone.</p><p>Wander the Calle de los Suspiros and the old port gate, then catch an evening bus back to Montevideo. Buenos Aires day-tripper ferries land and depart roughly 10:00–15:00, so the early start and evening return also dodge the old town's busiest window.</p>",
+        "constraints": [
+          "Faro de Colonia opens Thu–Sun only, and only when Navy staff are on site — this day is the trip's one window for the climb"
+        ],
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Rain, or a lighthouse shut for lack of Navy staff, has the same answer: the Barrio Histórico's indoor museums, eight of which share a single {{fact:colonia-museos-150-uyu}} ticket. The Espacio del Telégrafo on Calle Del Colegio is open Saturdays 11:30–16:30.",
+          "source_url": "https://visitacolonia.com/listings/museo-espacio-del-telegrafo/",
+          "verified_on": "2026-08-23"
+        },
+        "waypoints": [
+          {
+            "name": "Colonia del Sacramento — Barrio Histórico",
+            "lat": -34.4626,
+            "lng": -57.8398,
+            "note": "UNESCO old town core"
+          }
+        ]
+      },
+      {
+        "date": "Sun Feb 7",
+        "title": "Ciudad Vieja & Carnival's home museum",
+        "pace": "Morning walking tour, Mercado del Puerto lunch, museum in the afternoon",
+        "tldr": "Montevideo's old town on foot — Palacio Salvo, a parrilla lunch at Mercado del Puerto, then the Carnival museum.",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Walk Ciudad Vieja starting at Plaza Independencia. Tour Palacio Salvo (≈45 min) for its Art Deco lobby, tango museum, and rooftop viewpoint over the city. ⚠ Red Ticket publishes the tour as a fresh listing each month, so the February 2027 dates and times only go up close to the trip — check the Palacio Salvo producer page a few weeks out and book the slot then.</p><p>Have lunch at Mercado del Puerto — the 1868 iron-frame market hall itself is worth seeing, and El Palenque is the best-known parrilla under its roof. In the afternoon, visit the Museo del Carnaval (Wed–Sun 11:00–17:00, {{fact:museo-carnaval-200-uyu}}) on the Rambla near the port — the closest thing to an official primer on the world's longest Carnival, useful groundwork before the holiday days ahead.</p>",
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://www.gub.uy/ministerio-educacion-cultura/comunicacion/noticias/horario-museos-direccion-nacional-cultura-semana-carnaval",
+        "constraints": [
+          "Palacio Salvo tickets are Red Ticket only — buy ahead, not at the door",
+          "Museo del Carnaval normally runs Wed–Sun 11:00–17:00; Carnival-week exceptions can occur, so recheck before the trip"
+        ]
+      },
+      {
+        "date": "Mon Feb 8",
+        "title": "Bodega Bouza & the Carnival holiday",
+        "pace": "Winery morning, relaxed afternoon — many museums are shut for the holiday",
+        "tldr": "A wine-country morning at Bodega Bouza, then a slow afternoon while Montevideo runs its Carnival-holiday hours.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Feb 8 is one of Uruguay's two Carnival public holidays (the dates are fixed relative to Easter, not separately announced each year) — expect government offices and some museums to close or run short hours, even though it's a normal working day by law for private business.</p><p>Spend the morning at Bodega Bouza in Melilla (≈15 min by taxi from downtown), a boutique winery known for Tannat, with a guided walk through the vineyard and a tasting or lunch. ⚠ Confirm Bouza's Monday hours directly before you go — only the winery's daily 11:00–18:00 opening is confirmed, not a guaranteed Monday tour slot.</p>",
+        "constraints": [
+          "Carnival public holiday — confirm any museum's hours before counting on it today"
+        ]
+      },
+      {
+        "date": "Tue Feb 9",
+        "title": "Travel day — on to Punta del Este",
+        "pace": "Late-morning bus, afternoon at the beach",
+        "tldr": "Uruguay's second Carnival holiday doubles as the travel day east to Punta del Este.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Feb 9 is the second Carnival public holiday — a fitting day to be in transit rather than counting on things being open. Take the COT bus from Tres Cruces to Punta del Este (≈2h), check into your lodging, and spend the afternoon at Playa Mansa (calm, bay-facing) or Playa Brava (open ocean, the one with La Mano sculpture) to reset.</p>",
+        "constraints": []
+      },
+      {
+        "date": "Wed Feb 10",
+        "title": "Punta del Este & Isla de Lobos",
+        "pace": "Town in the morning, boat excursion at midday",
+        "tldr": "La Mano, the harbor, and an afternoon boat out to South America's largest sea lion colony.",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Walk the peninsula from the harbor to Playa Brava, past La Mano de Punta del Este (the half-buried hand sculpture) and the yacht marina. At midday, join the Isla de Lobos boat excursion (daily 12:00, ≈2h round trip, {{fact:isla-lobos-70-usd}}) — the island holds South America's largest sea lion colony and is closed to landing, so this is a boat-side view.</p>",
+        "verified_on": "2026-08-23",
+        "shelf_life": "venue",
+        "source_url": "https://www.isladelobos.com.uy/en/home-english/",
+        "plan_b": {
+          "trigger": "closure",
+          "body": "If rough seas cancel the Isla de Lobos sailing, Casapueblo (Punta Ballena, open daily from 10:00) makes a same-region backup — take Thursday's Casapueblo half today and leave Thursday to La Barra.",
+          "source_url": "https://casapueblo.com.uy/",
+          "verified_on": "2026-08-23"
+        },
+        "constraints": [
+          "Isla de Lobos sails weather-permitting — no landing on the island itself"
+        ]
+      },
+      {
+        "date": "Thu Feb 11",
+        "title": "La Barra & Casapueblo",
+        "pace": "La Barra in the morning, back through town, Casapueblo for the late afternoon",
+        "tldr": "La Barra's drawbridge and beach in the morning, then Carlos Páez Vilaró's whitewashed cliffside compound for the sunset.",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Run this day in one direction. La Barra sits ≈8 km <i>east</i> of the peninsula and Casapueblo ≈15 km <i>west</i> of it, so doing Casapueblo first means crossing Punta del Este three times instead of once.</p><p>Start in La Barra — the drawbridge, the boutique strip, and Playa Montoya, a quieter, younger-skewing alternative to central Punta del Este's beaches.</p><p>Then head west to Casapueblo, the artist Carlos Páez Vilaró's sprawling whitewashed compound on Punta Ballena. It opens daily from 10:00 ({{fact:casapueblo-entrance-uyu}}) and closes at sunset, which is the hour worth being there for.</p>",
+        "constraints": []
+      },
+      {
+        "date": "Fri Feb 12",
+        "title": "Beach day, with an optional detour",
+        "pace": "Slow beach day — José Ignacio or Laguna Garzón as a lighter detour, or an early start for Cabo Polonio",
+        "tldr": "A deliberately open beach day — José Ignacio and Laguna Garzón as closer detours, Cabo Polonio's wild sea lion coast as the big-commitment option.",
+        "energy": "slow",
+        "env": "outdoor",
+        "body": "<p>Keep this day open — a beach afternoon at Playa Mansa, or a drive out to José Ignacio, a quieter beach town about 30–40 minutes away that stays noticeably calmer than central Punta del Este even in February, good for a long lunch.</p><p>Laguna Garzón, a protected lagoon past José Ignacio, has a local operator running kayak, SUP, and birdwatching outings. ⚠ The operator's own site is currently unreachable and there is no fixed daily schedule — confirm it is still running, and how to book, before you drive out.</p><p>For a more ambitious nature day, Cabo Polonio (a dune-and-lighthouse settlement with its own wild sea lion colony) is reachable as a full-day round trip — roughly 1.5 hours by road plus a 4x4 transfer across the dunes each way. Worth the detour for a nature-first traveler; not a fit if the priority is rest before departure.</p>",
+        "constraints": []
+      },
+      {
+        "date": "Sat Feb 13",
+        "title": "Return & departure",
+        "pace": "Morning bus back to Montevideo, buffer for the flight",
+        "tldr": "Bus back to Montevideo with a wide buffer, then the international flight home.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Take a mid-morning COT bus from Punta del Este back to Montevideo (≈2h) — build in a wide buffer given a connecting international itinerary, and confirm your outbound routing's check-in window before finalizing the bus time.</p>",
+        "constraints": []
+      }
+    ]
+  }
+]

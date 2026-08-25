@@ -44,12 +44,11 @@ flag.**
   networked verify, do not commit, do not land.
 - Touch nothing outside `src/content/guides/{{slug}}/` and `guides-intake/{{slug}}/`.
 
-- **Source access is recorded, never inflated.** `source.access` says how you reached the source:
-  `fetched` only when you retrieved and read the origin page itself; a search-result snippet is
-  `search-preview` (discovery, not verification); a refused/failed origin is `blocked` — record the
-  block and seek a legitimate alternative rather than promoting a preview. Reader/mirror/proxy
-  services (r.jina.ai, Google cache, 12ft.io, archive snapshots, translation proxies) are NEVER the
-  origin — cite the true origin you actually fetched, or record it blocked.
+- **`source.access` is recorded honestly, never inflated** — `fetched` only when you retrieved
+  and read the origin page itself; `search-preview` for a search-result snippet (discovery, not
+  verification); `blocked` for a refused/failed origin (record the block, seek a legitimate
+  alternative). Mirror/proxy services are never the origin. The authoritative rule:
+  `research-efficiency.md` "Fetch discipline".
 
 ## Validator feedback from the previous attempt of THIS stage
 

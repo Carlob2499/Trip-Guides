@@ -1,4 +1,4 @@
-# Research Depth — scale effort to decision impact (V2, from DECISIONS.md)
+# Research Depth — scale effort to decision impact
 
 Binding for every research pass. The principle in one line: **research depth scales with
 decision impact, disagreement, booking friction, and transport risk** — not with a checklist.
@@ -9,9 +9,11 @@ less than token efficiency and final quality.
 
 If evidence strongly disagrees AND the disagreement could change the recommendation, spend
 extra research effort investigating why. Record the investigation and its resolution (V2:
-`evidence.v2.json` `disagreements[]`, impact `recommendation-changing` | `minor`). Do not waste
-tokens on trivial disagreement — two blogs disputing which gate is prettier is not an
-investigation, two sources disputing whether the last train exists is.
+`evidence.v2.json` `disagreements[]`, impact `recommendation-changing` | `minor`). For every
+recommendation-changing disagreement, also record `evidenceIds` naming at least two distinct
+existing evidence records that actually disagree; prose alone is not proof of a conflict.
+Do not waste tokens on trivial disagreement — two blogs disputing which gate is prettier is
+not an investigation, two sources disputing whether the last train exists is.
 
 ## Reservations — a major research focus, scaled by importance
 

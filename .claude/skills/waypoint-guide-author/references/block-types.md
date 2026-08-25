@@ -52,11 +52,10 @@ alone as the card's summary: the one thing the traveler needs, in one or
 two sentences. Depth, caveats, and reference detail go in later paragraphs.
 
 **Prose SHAPE is a standard, not a preference — and it is gated.** Verification asks
-where a fact came from; nothing asked what shape the sentence carrying it was in, so
-research notes have shipped as cards. The Entry Documents item the creator flagged
-(2026-08-09) is 90 words, one bolded lead, four independent claims welded into a single
-paragraph — every fact in it sourced and correct, and unreadable on the phone it is read
-on. Correct-but-unreadable is still a defect.
+where a fact came from; nothing asks what shape the sentence carrying it is in, so
+research notes have shipped as cards — every fact sourced and correct, four claims
+welded into one 90-word paragraph, unreadable on the phone it is read on.
+Correct-but-unreadable is still a defect.
 
 Write to the corpus's own measured shape (1087 shipped paragraphs): **median 28 words,
 p75 48.** Short is the house style; the long ones are outliers.
@@ -102,9 +101,8 @@ and `raids` accept optional `collapsible: true` (renders the card as a native
   computed count ("More detail · 3 more paragraphs"), which measures *volume, not value* and
   reads as a chore. "Tax-free shopping — the Nov 1 system change" earns a tap; "8 more
   paragraphs" warns the reader off. **Write one for every fold.** It is only read on `panel`
-  and `prose` — the section union is strict, so putting it on any other type now fails the
-  build rather than being silently dropped (it was silently dropped for five japan venues
-  sections until 2026-08-02).
+  and `prose` — the section union is strict, so putting it on any other type fails the
+  build rather than being silently dropped.
 - **`fold: false`** — veto the fold entirely. The splitter already refuses to hide a `⚠` flag
   or a `<ul>/<ol>` procedure, but it cannot see content that is operational only in context.
   Set this when the remainder holds **emergency contacts** (embassy lines, 24-hour pharmacy
@@ -180,7 +178,7 @@ conventions, render behavior, and the verification rules attached to a field.
   Explicit tags only — both features stay silent on untagged days rather than
   guessing from prose. `constraints` are strings like "Closed Mondays".
 
-  **`plan_b` — the inclement-day alternate (research owes this, 2026-08-02).**
+  **`plan_b` — the inclement-day alternate (research owes this).**
   `{ trigger: "rain"|"closure", body, source_url, verified_on }` — a researched
   answer to "this day just broke": a verified refuge for a rain-window day, or the
   fallback when the day's anchor venue can close. Provenance is schema-REQUIRED —
@@ -203,7 +201,7 @@ conventions, render behavior, and the verification rules attached to a field.
   venue (area overviews, disproved claims, comparisons). Each item carries its own
   provenance fields. Use this instead of `prose` for any section that's essentially
   a list of named places with details.
-  **Constraint-bound facts (2026-08-02):** when the intake states a mobility /
+  **Constraint-bound facts:** when the intake states a mobility /
   dietary / sensory constraint, the related fact becomes MANDATORY on every
   venue item — step-free access or elevator presence for a no-stairs party,
   allergen handling for an allergy — verified per venue (`how` or `why` carries
@@ -226,15 +224,15 @@ conventions, render behavior, and the verification rules attached to a field.
 
 ## Guide-level typed features (research these like any fact)
 
-- **Phrase cards** (guide-level `phrases: {lang, items[]}`, docs/archive/INDEX.md → FEATURES #6) —
+- **Phrase cards** (guide-level `phrases: {lang, items[]}`) —
   optional; when the trip warrants it, research 15–20 situational phrases
   (allergy, taxi, help, directions) with the SAME rigor as any other fact: a
   native-script phrase is safety-adjacent (a traveler may show it to a stranger
   mid-crisis), so ship/flag/omit applies per-phrase — verify against a reliable
   bilingual source, never transliterate from memory. `lang` is the BCP-47 tag
   (e.g. `"ko-KR"`) that drives the Trip kit tab's speak button.
-- **Entry requirements** (guide-level `entry: [{homeCountry, visa, ...}]`,
-  docs/archive/INDEX.md → FEATURES #7) — one row per traveler home country (a party can mix
+- **Entry requirements** (guide-level `entry: [{homeCountry, visa, ...}]`)
+  — one row per traveler home country (a party can mix
   passports; ask during intake if unclear, never assume). `source_url` +
   `verified_on` are SCHEMA-REQUIRED here (not optional like most provenance) —
   research from each destination country's OFFICIAL immigration/entry page only,
@@ -242,7 +240,7 @@ conventions, render behavior, and the verification rules attached to a field.
   boarding, so omit the whole guide's entry card before shipping an unverified
   one. Recert re-checks this on its normal shelf-life cadence like any other fact.
 - **Travel advisory** (guide-level `advisory: {level, title, summary?, source_url,
-  verified_on}`, docs/archive/INDEX.md → FEATURES #9) — the destination's CURRENT US State
+  verified_on}`) — the destination's CURRENT US State
   Department advisory (`travel.state.gov/.../ <country-slug>-travel-advisory.html`),
   `source_url` + `verified_on` SCHEMA-REQUIRED. **The page is Cloudflare-gated
   against plain `fetch()`/`curl`/WebFetch (403)** — it only resolves through an
@@ -265,21 +263,19 @@ conventions, render behavior, and the verification rules attached to a field.
   to live data, and the weather block depends on the first `map`'s coords.
 
 
-## Group labels & the voice standard (Quiet Edition, decided 2026-07-28)
+## Group labels & the voice standard
 
 The label a traveler navigates by is LITERAL, always — one plain word that names the
 bucket at a glance: `Plan · Essentials · Transit · Days · Sights · Food · Sources`
 (plus trip-specific anchors like `Daejeon & MSI`). Never re-spend wayfinding on
 cleverness ("Pocket", "Receipts" were tried and withdrawn).
 
-**Descriptors are RARE and informational-only (creator's ruling, 2026-07-28 — this
-supersedes the original "warmth lives one level down" doctrine).** The first shipped
-set (Korea, eleven lines) was rejected by the creator as AI-sounding, and the autopsy
-is worth keeping: eight of eleven shared one machine rhythm — a short list, an em-dash
-pivot, a quip tail ("cash, data, etiquette — and 112/119 one tap away" · "every fact,
-traced and dated — the receipts") — and the quips praised the guide instead of
-informing the reader. The root cause was structural: a slot whose only job is
-personality produces fake personality, on schedule. So the slot's job changed:
+**Descriptors are RARE and informational-only (creator's ruling).** The first shipped
+set was rejected as AI-sounding: nearly every line shared one machine rhythm — a short
+list, an em-dash pivot, a quip tail ("cash, data, etiquette — and 112/119 one tap
+away") — and the quips praised the guide instead of informing the reader. The root
+cause is structural: a slot whose only job is personality produces fake personality,
+on schedule. So the slot's job is:
 
 - **Write a descriptor ONLY where the literal label cannot carry the meaning** — in
   practice, trip-specific groups a stranger wouldn't parse ("Daejeon & MSI" → "The MSI
@@ -294,16 +290,14 @@ personality produces fake personality, on schedule. So the slot's job changed:
 - **If the derived subtitle already says it, write nothing.** An absent descriptor is
   the honest-blank rule working, not a gap.
 
-**Mechanics (R5, shipped 2026-07-28):** descriptors live in `_guide.json` as a
+**Mechanics:** descriptors live in `_guide.json` as a
 `descriptors` record keyed by EXACT group name — the schema rejects a key no section
 uses, so renaming a group without moving its descriptor fails the build instead of
 silently dropping the line. And a descriptor may only assert what the guide actually
-contains — grep the group file for every claim word BEFORE writing it. Two real
-catches prove the rule earns its keep: "the rain plan" was cut because no rain plan
-existed in that group, and a drafted "GO Fest Seoul" was corrected to the "GO Fest
-Global" the content actually names.
+contains — grep the group file for every claim word BEFORE writing it (this has caught
+both an invented "rain plan" and a wrong event name).
 
-### Voice gate — banned in traveler-facing prose (P6, shipped 2026-07-29)
+### Voice gate — banned in traveler-facing prose
 
 Provenance belongs in `verified_on`, `source_url`, `⚠` flags, and the
 `intro` field — never narrated into the prose a traveler reads. The verify
@@ -327,7 +321,7 @@ carry the provenance silently. Example:
   ✗ "This research confirmed Daruma is the top pick."
   ✓ (just state the recommendation; verified_on carries the date)
 
-## Composer facets (R6, shipped 2026-07-28)
+## Composer facets
 
 Research passes may tag any section with three optional facets — they feed
 `scripts/compose-guide.mjs` (which assembles tabs deterministically) and are read by
@@ -349,7 +343,7 @@ moment); LIVE guides only ever receive a printed proposal for the creator to sig
 (`--write --creator-signed`). Tag facets during research; never retro-tag a live guide
 just to force a recomposition without the creator asking.
 
-## Cover art (R4, shipped 2026-07-28) — photo is earned, footage is signed
+## Cover art — photo is earned, footage is signed
 
 Every guide is born covered: the **Painted Atlas** (seeded terrain in the guide's accent
 under a destination-local-time sky) renders automatically whenever no photo is set. It is

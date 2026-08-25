@@ -4,7 +4,7 @@
    joinTrip(code) and bind the returned room's collection()/doc() to your state. */
 
 export { hasFirebase } from "./client.js";
-export { joinTrip, generateTripCode, normalizeCode, reportError } from "./sync.js";
+export { joinTrip, normalizeCode, reportError } from "./sync.js";
 export { isValidRoomId, resolveRoomId, parseRoomHash, isPermanentWriteError, isPostTripLocked, POST_TRIP_GRACE_DAYS, ROOM_ID_RE } from "./model/room";
 
 import { resolveRoomId } from "./model/room";

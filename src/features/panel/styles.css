@@ -230,8 +230,12 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
   gap: 1rem 1.1rem;
   align-items: start;
 }
-.pnl-body-in:has(.sight) { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-.pnl-body-in:has(.venue) { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+/* The preferred card widths are not absolute floors. Panel padding plus the guide shell can
+   leave less than 300/280px at the WCAG 320px viewport; a bare minmax(300px,1fr) then escapes
+   the panel and body{overflow-x:clip} hides the missing pixels. Keep the preferred widths for
+   multi-column layout while allowing a one-column track to shrink to its actual owner. */
+.pnl-body-in:has(.sight) { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.pnl-body-in:has(.venue) { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
 .pnl-body-in:has(.sight) > * + *,
 .pnl-body-in:has(.venue) > * + * { margin-top: 0; }
 /* The under-hairline margin goes with them, and for a sharper reason than rhythm: in a grid

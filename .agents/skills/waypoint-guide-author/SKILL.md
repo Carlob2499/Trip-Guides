@@ -30,12 +30,12 @@ Reconcile · Critic) read this skill and execute their stage from it. Each stage
 1. **`references/verification-rules.md`** — the binding fact decision layer
    (perishable-vs-durable, source tiers, ship/flag/omit, stopping conditions, the §8 self-check).
    Read before writing any fact.
-2. **`references/research-efficiency.md`** — the binding model economy, entity-batched and
-   risk-scaled search budgets, the **adaptive discovery stopping rule** (no fixed candidate
-   quotas — stop when new searches mostly duplicate/weaken the set AND unresolved evidence is
-   unlikely to change the recommendation), plus **social/video lead rules** (yt-dlp, TikTok/IG
-   indirect) and the **Research-skill discovery layer** (interactive only). Follow it instead of
-   rediscovering it.
+2. **`references/research-efficiency.md`** — the binding model economy: entity-batched,
+   risk-scaled search budgets, the **adaptive discovery stopping rule** (no fixed candidate or
+   search quotas — the full two-condition rule is stated once, under "Candidates considered"
+   below), fetch discipline + source-access honesty, **social/video lead rules** (yt-dlp,
+   TikTok/IG indirect), and the **Research-skill discovery layer** (interactive only). Follow
+   it instead of rediscovering it.
 3. **`references/research-depth.md`** — the binding decision-impact scaling layer: disagreement
    investigation, reservation depth by importance (with labeled unconfirmed booking leads),
    Worth-the-Effort/Worth-the-Detour retention, transport robustness by risk, contingency
@@ -134,11 +134,10 @@ resident / blog / forum / reddit side and ask *different* questions: When is eac
 actually empty — the off-peak hour, the side entrance, the day the tour buses skip? Where is the
 obvious pick a tourist trap, and what do locals do instead? What's the non-obvious neighborhood,
 the authentic version of the experience the guidebooks flatten? **Pass B's finds are T2 leads,
-and the bar they clear depends on the CLAIM (`verification-rules.md` §3): every objective fact
-in them (hours, prices, booking rules) must climb to a primary source before it enters the
-guide; experiential findings (crowd timing, atmosphere, transfer reality, neighborhood feel)
-are verified by corroboration instead — ≥2 recent, independent, firsthand sources, never an
-official URL pasted onto a subjective claim it does not support.** Authenticity changes *what*
+and the bar they clear depends on the CLAIM (`verification-rules.md` §3): objective facts (hours,
+prices, booking rules) climb to a primary source before they enter the guide; experiential
+findings (crowd timing, atmosphere, transfer reality, neighborhood feel) are verified by
+corroboration instead — ≥2 recent, independent, firsthand sources.** Authenticity changes *what*
 you research, never the bar it clears. **Native-language research is adaptive** — lean on it
 hardest where English results are generic, tourist-heavy, thin, or contradictory (Japan/Korea
 usually qualify); search the way locals describe the problem, never word-for-word translations
@@ -202,7 +201,7 @@ field sets how hard Pass B leans here (off-the-beaten-path → aggressive; bucke
 stays, with the timing that makes it bearable). Judged by rubric row **#12** plus #9 (party fit)
 and the bar test.
 
-### Candidates considered — the consideration set is evidence (S2/S3, 2026-08-02; D3 funnel)
+### Candidates considered — the consideration set is evidence
 Record every venue/experience you EVALUATE for a ranked priority in the intake doc's `##
 Candidates considered` tables, AS you research, as a 3-column row: `| Candidate | Verdict |
 Shortlist |` — verdict `shipped` or `rejected: <one-line reason>`; Shortlist `y`/`n` for whether
@@ -211,9 +210,9 @@ shortlist → deep-verify → shipped, and **shipped ⊆ shortlist ⊆ considere
 MUST also be marked shortlisted, or the gate fails naming it — shipped is never a side door
 around the shortlist stage. The rejections are the point: "rejected: tourist-priced chain,
 locals rank Shin Shin above it" is research evidence a survivors-only guide destroys. **Breadth
-is adaptive, not a quota** (V2 — DECISIONS.md "Research breadth" supersedes the old 16/10/6
-per-priority floors): research scales to the destination, and discovery stops only when new
-searches mostly produce duplicates or clearly weaker options AND unresolved evidence is
+is adaptive, not a quota** — no fixed candidate, venue, or search counts exist at any level:
+research scales to the destination, and discovery stops only when new searches mostly produce
+duplicates or clearly weaker options AND unresolved evidence is
 unlikely to change the recommendation — a stop the run RECORDS (V2: the `saturation` record in
 `evidence.v2.json`, with the trend and the unresolved-evidence answer). Verify still
 cross-checks every `shipped` name against the guide and the funnel invariant, so padding the
@@ -267,17 +266,17 @@ directly via `AskUserQuestion` instead — same bar for what counts as a fork.)
   plan are itinerary structure, not registry facts — leave them in prose. An existing guide is
   migrated with `node scripts/migrate-facts.mjs --slug <slug>` (propose) then `--write`; it lifts
   values VERBATIM and the built site must stay byte-identical.
-- **Three more fields, optional, D2 (`docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST`).** `entity` — every row from
-  the SAME research batch (a venue/route/event) shares one kebab id; what a batched entity visit
+- **Three more fields, optional.** `entity` — every row from the SAME research batch
+  (a venue/route/event) shares one kebab id; what a batched entity visit
   produces, not something added after the fact. `risk` (0–4) — sets the search budget
   (`research-efficiency.md`'s table); populate it as you research, from the destination's own
   weight, not by guessing after. `evidence` — a short quoted locator phrase from the source,
   required once `risk` is R3+ (a wrong plan-critical/safety fact needs a snippet a later drift
   check can search for, not just a URL that might still 200).
-- **`traveler-origin` is the ONE reserved id in the registry** (D14/ADR 0001+0003,
-  docs/archive/INDEX.md → PLAN_ATLAS_MIGRATION Stage B) — a different shape from every other row: `value`
-  is a 3-letter IATA code, `state` is `confirmed` | `unconfirmed` (not `clean`/`approx` — "do we
-  know this yet", not a sourced-approximate figure), and `source_url`/`verified_on` are optional
+- **`traveler-origin` is the ONE reserved id in the registry** — a different shape from every
+  other row: `value` is a 3-letter IATA code, `state` is `confirmed` | `unconfirmed` (not
+  `clean`/`approx` — "do we know this yet", not a sourced-approximate figure), and
+  `source_url`/`verified_on` are optional
   UNLESS `state` is `confirmed` (a personal booking has no public URL — use `source` free text
   instead; `confirmed` still owes `verified_on` + one of the two). Never reference it as
   `{{fact:traveler-origin}}` in prose — the Atlas hub's guide-record derivation

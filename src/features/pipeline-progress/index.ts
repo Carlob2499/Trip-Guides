@@ -8,9 +8,13 @@
  *
  * Batch 3 made the page the place decisions get MADE, not just watched: answers to intake
  * questions, choices on blocking forks, and approvals of feedback-driven revision proposals all
- * go out from here through the site's backend Worker. Those three controls are owner-gated (the
+ * go out from here through the site's backend Worker. Those controls are owner-gated (the
  * Worker's `X-Owner-Key` replaced the deleted approval labels) and stay hidden until a key is
  * stored in this browser — the read-only progress view is unchanged for everyone else.
+ *
+ * The owner-note control is intentionally V2-only. A V2 run durably records its source issue and
+ * run id, so the browser and Worker can prove an exact slug + runId + issue join before writing.
+ * V1 has no equivalent durable identity and therefore never receives a guessed note target.
  */
 export {
   deriveProgress,
@@ -46,7 +50,12 @@ export type { RevisionProposal, RawIssue } from "./model/proposals";
 export { createGithubGateway, createWorkerGateway } from "./gateway";
 export type { ProgressGateway, GithubGatewayOptions, WorkerGateway, WorkerGatewayOptions } from "./gateway";
 
-// A1: re-exported so the progress PAGE can boot the UI through this silo's own public
-// surface instead of a deep import into ui/ (progress/index.astro used to import
-// "../../features/pipeline-progress/ui/progress.js" directly).
-export { initProgress } from "./ui/progress.js";
+import { initProgress as initProgressView } from "./ui/progress.js";
+import { initRunNote } from "./ui/run-note.js";
+
+// A1: the page boots both pieces through this silo's public surface. The existing renderer keeps
+// ownership of polling and questions; the run-note module is event-driven and adds no poll loop.
+export function initProgress() {
+  initProgressView();
+  initRunNote();
+}

@@ -1,16 +1,8 @@
 name: Accessibility
 
-# The axe-core accessibility gate — hub + both guides, zero moderate/serious/critical violations
-# (tests/visual/a11y.spec.ts). This is docs/standards/guide-rubric.md row 13 and the design doctrine's a11y floor,
-# so it stays a hard, blocking gate.
-#
-# It used to ride inside visual.yml alongside the screenshot-diff suite. That pixel-diff gate was
-# removed (it failed on every intentional visual change — the whole point of a design change is that
-# pixels move, so a baseline compare cried wolf on every legitimate edit). This slim workflow keeps
-# the accessibility gate — which catches real, non-cosmetic regressions — without any baseline
-# machinery to drift or re-arm. (The 24 local-only behavioral specs that used to sit beside
-# a11y.spec.ts were deleted in the 2026-08-14 cleanup — nothing ran them; git history has them
-# if ever needed.) This gate can never go red for a reason unrelated to accessibility.
+# Browser safety gate — hub + both guides. Axe owns semantic accessibility; the companion
+# resilience spec owns 320px reflow and hostile-content geometry. Both use the same built site
+# and Chromium install so one workflow pays the setup cost once.
 on:
   pull_request:
     paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
@@ -21,7 +13,6 @@ on:
 permissions:
   contents: read
 
-# M1: cancel a superseded run for the same ref (see test.yml).
 concurrency:
   group: test-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -37,8 +28,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      # M1: cache the Chromium download (keyed on the pinned Playwright version) — without
-      # it, every run re-downloads the browser from scratch.
       - name: Cache Playwright browsers
         uses: actions/cache@v6
         id: playwright-cache
@@ -49,6 +38,4 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
       - run: npx playwright install-deps chromium
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-      # playwright.config.ts's webServer boots `astro preview` on :4322 automatically; the spec
-      # runs axe against the built dist under the /Trip-Guides base path.
-      - run: npx playwright test tests/visual/a11y.spec.ts
+      - run: npx playwright test tests/visual/a11y.spec.ts tests/visual/resilience.spec.ts

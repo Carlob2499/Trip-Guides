@@ -1,0 +1,84 @@
+{
+  "slug": "portugal",
+  "generatedAt": "2026-08-22T01:24:04.664Z",
+  "asks": [
+    {
+      "id": "cities",
+      "label": "Cities",
+      "value": "Lisbon, Porto, Sintra",
+      "coveredBy": null
+    },
+    {
+      "id": "dates",
+      "label": "Trip dates",
+      "value": "2027-04-10 – 2027-04-19",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-1",
+      "label": "Priority #1",
+      "value": "Food & dining",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-2",
+      "label": "Priority #2",
+      "value": "Culture / history",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-3",
+      "label": "Priority #3",
+      "value": "Nature / outdoors",
+      "coveredBy": null
+    },
+    {
+      "id": "pace",
+      "label": "Pace",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "travel-style",
+      "label": "Travel style",
+      "value": "Balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "budget",
+      "label": "Budget target",
+      "value": "Mid-range ($75–150/day)",
+      "coveredBy": null
+    },
+    {
+      "id": "party",
+      "label": "Party description",
+      "value": "two travellers in their 30s, happy walking a full day and taking trains between cities",
+      "coveredBy": null
+    },
+    {
+      "id": "travelers",
+      "label": "Number of travelers",
+      "value": "2",
+      "coveredBy": null
+    },
+    {
+      "id": "passport-countries",
+      "label": "Passport countries",
+      "value": "United States",
+      "coveredBy": null
+    },
+    {
+      "id": "departure-airport",
+      "label": "Departure airport",
+      "value": "EWR",
+      "coveredBy": null
+    },
+    {
+      "id": "comments",
+      "label": "Additional comments",
+      "value": "First time in Portugal. Lisbon and Porto by train, with Sintra as a day trip. Interested in where people actually eat rather than the tourist strips.",
+      "coveredBy": null
+    }
+  ]
+}

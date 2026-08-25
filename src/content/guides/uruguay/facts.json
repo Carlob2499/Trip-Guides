@@ -1,0 +1,79 @@
+{
+  "traveler-origin": {
+    "claim": "Traveler origin — departure airport (D14/ADR 0003)",
+    "value": "JFK",
+    "state": "unconfirmed"
+  },
+  "fx-usd-uyu-40": {
+    "claim": "USD to UYU exchange rate",
+    "value": "40.1 UYU",
+    "source_url": "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=UYU",
+    "verified_on": "2026-08-23",
+    "shelf_life": "fx",
+    "state": "approx"
+  },
+  "antel-chip-65-uyu": {
+    "claim": "Antel prepaid SIM chip price",
+    "value": "$65",
+    "source_url": "https://tienda.antel.com.uy/producto/357/chip-prepago",
+    "verified_on": "2026-08-23",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
+  "cot-colonia-579-uyu": {
+    "claim": "COT bus fare, Montevideo → Colonia del Sacramento",
+    "value": "UYU 579 one-way",
+    "source_url": "https://www.cot.com.uy/horarios-tarifas.php",
+    "verified_on": "2026-08-23",
+    "shelf_life": "transit",
+    "state": "clean"
+  },
+  "cot-punta-466-uyu": {
+    "claim": "COT bus fare, Montevideo → Punta del Este",
+    "value": "UYU 466 one-way",
+    "source_url": "https://www.cot.com.uy/horarios-tarifas.php",
+    "verified_on": "2026-08-23",
+    "shelf_life": "transit",
+    "state": "clean"
+  },
+  "faro-colonia-35-uyu": {
+    "claim": "Faro de Colonia entrance fee",
+    "value": "UYU 35",
+    "source_url": "https://visitacolonia.com/listings/visitas-al-faro-de-colonia/",
+    "verified_on": "2026-08-23",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
+  "colonia-museos-150-uyu": {
+    "claim": "Colonia del Sacramento combined museum ticket (covers 8 museums)",
+    "value": "UYU 150",
+    "source_url": "https://visitacolonia.com/listings/museo-espacio-del-telegrafo/",
+    "verified_on": "2026-08-23",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
+  "museo-carnaval-200-uyu": {
+    "claim": "Museo del Carnaval admission",
+    "value": "UYU 200",
+    "source_url": "https://www.gub.uy/ministerio-educacion-cultura/comunicacion/noticias/horario-museos-direccion-nacional-cultura-semana-carnaval",
+    "verified_on": "2026-08-23",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
+  "casapueblo-entrance-uyu": {
+    "claim": "Casapueblo admission",
+    "value": "UYU 600 adult, UYU 500 for seniors, free under 12",
+    "source_url": "https://casapueblo.com.uy/",
+    "verified_on": "2026-08-23",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
+  "isla-lobos-70-usd": {
+    "claim": "Isla de Lobos boat excursion price",
+    "value": "US$70 adults, US$50 children under 10",
+    "source_url": "https://www.isladelobos.com.uy/en/home-english/",
+    "verified_on": "2026-08-23",
+    "shelf_life": "venue",
+    "state": "clean"
+  }
+}

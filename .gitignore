@@ -29,3 +29,8 @@ reports/
 
 # impeccable skill scratch output — tool artifacts, not project docs
 .impeccable/
+
+# claude-codex-watcher.yml: Codex's work-order text for the fix agent, written into
+# pr-workspace/ at run time — defense in depth on top of the workflow's own explicit rsync
+# --exclude (Codex finding P1, PR #78) so this scratch file can never reach a real commit.
+.codex-work-order.md

@@ -45,6 +45,9 @@ transcripts had grown past 25 MB. These limits exist so neither repeats:
 
 - **Batch by entity, not by mention.** Research a venue/route/event ONCE; every fact it yields
   shares one kebab `entity:` id (`src/content.config.ts`). Never re-research the same thing
+
+- **Batch by entity, not by mention.** Research a venue/route/event ONCE; every fact it yields
+  shares one kebab `entity:` id (`src/content.config.ts`). Never re-research the same thing
   because a second prose mention needs a number.
 - **Budget scales with `risk` (0–4 on the fact), not a flat per-fact cap:**
 
@@ -53,16 +56,14 @@ transcripts had grown past 25 MB. These limits exist so neither repeats:
   | Searches | 0 | 1 | 2 | 3–4 | uncapped, logged |
 
 R4 (advisories, visa/health) MUST reach the guide — an omitted R4 fact is worse than an
-unconfirmed one. Past budget, the stopping conditions apply (`verification-rules.md` §5): flag
+unconfirmed one. Past budget, the stopping conditions apply (`verification-rules.md` §7): flag
 `⚠` or omit — more searching produces confidence, not verification.
-- **Scripts before web, always.** `lookup-venue.mjs` (does a venue still exist · hours · address
-  — never ask the model, never infer from a blog), `lookup-place.mjs` (coords/place_id),
-  `lookup-tz.mjs` (time zone — offline, resolves from the coords `lookup-place.mjs` just gave
-  you, so do it in the SAME step, not a separate search round), `search-commons.mjs` (photos),
-  `fetch-wikivoyage.mjs` (grounding leads) answer for free — never web-search what a script
-  answers. A time-zone web search ("is Arizona on daylight saving") is *slower and less reliable*
-  than the one-line, zero-network `lookup-tz.mjs` call — if you catch yourself about to search
-  for a time zone, stop and run the script instead.
+- **Scripts before web, always.** The deterministic lookup scripts (SKILL.md "Never guess what
+  a script can verify" — the one catalog) answer coords/place_id, venue status/hours/address,
+  time zone, Commons photos, and grounding leads for free — never web-search what a script
+  answers. A time-zone web search ("is Arizona on daylight saving") is *slower and less
+  reliable* than the one-line, zero-network `lookup-tz.mjs` call — if you catch yourself about
+  to search for a time zone, stop and run the script instead.
 - **Some facts are ALREADY geography- or country-driven at render time — don't re-research them
   per guide.** Weather reads live from the guide's own `map` section coordinates (Open-Meteo) —
   no research step needed beyond setting the map correctly. Currency code, public holidays, and
@@ -82,8 +83,8 @@ unconfirmed one. Past budget, the stopping conditions apply (`verification-rules
   searches for resident phrases/slang. Duties starve when the main sights spend the whole budget
   first; the run report states how many searches each duty actually used.
 - **Discovery is ADAPTIVE, not quota-driven — the per-entity budget above is a VERIFICATION
-  cap, not a breadth cap (V2, DECISIONS.md "Research breadth" — this supersedes the S2/S3 fixed
-  floors of 16/10/6 per ranked priority).** Research scales to the destination: a small town may
+  cap, not a breadth cap. No fixed candidate, search, or find quotas exist at any
+  level.** Research scales to the destination: a small town may
   hold three serious options, Tokyo may demand dozens. Stop discovering when BOTH hold: (1) new
   searches mostly produce duplicates or clearly weaker options, and (2) unresolved evidence is
   unlikely to change the final recommendation. **Record that stop** — the trend the last
@@ -109,8 +110,8 @@ When a pass runs interactively on the creator's machine, the global `Research` s
 - **Pass A** — ONE Standard-mode call to map the backbone landscape (must-dos, transit structure,
   entry-rule shape) before climbing to T0 sources fact by fact. Pass A gets no more than this:
   its sources are official pages that native search reaches fine.
-- **Pass B** — the one place a FULL deep-research sweep is sanctioned (creator's ruling,
-  2026-08-02). See "Pass B deep discovery" below.
+- **Pass B** — the one place a FULL deep-research sweep is sanctioned (creator's ruling).
+  See "Pass B deep discovery" below.
 
 **The bar does not move.** Everything the Research skill returns is a **T2 lead** — verified
 against a T0 primary source before it enters the guide, recorded in the ledger like any other
@@ -129,11 +130,11 @@ local news, hobbyist forums, the destination-language subreddit equivalents). A 
 sweep scoped to Pass B closes that, under three binding rules:
 
 1. **Native-first, by construction.** Query language(s) and known-good source domains come from
-   `src/data/destinations/<slug>.json`'s `languages` + `t0Domains` (D1/D2) — read it first, never
+   `src/data/destinations/<slug>.json`'s `languages` + `t0Domains` — read it first, never
    guess the destination's language. The English ones are a supplement, not the base. Prioritize
    sources ON the destination's own web — the ccTLD, the local platforms — and translate what
-   comes back; never skip a source for being non-English. Every lead records its source language
-   (also why S5 measures ccTLD presence).
+   comes back; never skip a source for being non-English. Every lead records its source
+   language.
 2. **Anti-default filter, stated in the sweep's own prompt.** EXCLUDE anything appearing in the
    destination's English-language top-10/"must-see" lists — Pass A already has those, and
    re-discovering them burns the sweep on what a generic guide knows. This matters MORE on a
@@ -147,8 +148,8 @@ sweep scoped to Pass B closes that, under three binding rules:
 
 **Cost posture:** one sweep per NEW guide, run interactively where the keys live, before (or
 alongside) dispatching the pipeline. An empty/absent dossier changes nothing — the headless Pass
-B runs its native aides exactly as before; the dossier accelerates the S4 floors, it isn't a
-second gate.
+B runs its native aides exactly as before; the dossier accelerates Pass B's discovery, it isn't
+a second gate or a quota.
 
 ## Social & video lead sourcing — Pass B aides
 
@@ -225,8 +226,39 @@ blogs, local news, and roundup sites.
 - **Aggregators die; officials persist** (the MangoPlate lesson — a dead-since-2020 aggregator
   shipped from training data). Aggregators are *leads only*; cite the official page, never what
   you didn't fetch.
+- **Source access is recorded, never inflated.** How you reached a source is itself a fact, in
+  three states: **fetched** — you retrieved and read the origin page itself; **search-preview**
+  — a search-result snippet (discovery, not verification); **blocked** — the origin refused or
+  failed (record the block and seek a legitimate alternative rather than promoting a preview).
+  Reader/mirror/proxy services (r.jina.ai, Google cache, 12ft.io, archive snapshots,
+  translation proxies) are NEVER the origin — cite the true origin you actually fetched, or
+  record it blocked. Where an evidence schema carries `source.access` (V2), record the state
+  there; where it doesn't, the ledger note carries it.
 - **Don't paste pages into the ledger.** Extract the row (claim · value · tier+URL · date · flag)
   and move on. The ledger is evidence, not an archive.
+
+### Security challenges are an environment boundary — never a research obstacle to solve
+
+Binding, no exceptions. A CAPTCHA, Cloudflare Turnstile, "verify you are human" interstitial,
+login wall, MFA/passkey prompt, or any other security verification is where research on that
+origin **stops**. Never attempt one in Claude's embedded browser — it is not a puzzle to work
+around, and doing so has reproducibly crashed the session.
+
+- **Stop interacting with that origin immediately.** Do not reopen the challenge to confirm it.
+- **Record the access fact**: `source.access = "blocked"` where the evidence schema carries it,
+  and a ledger note where it doesn't. A blocked authority is honest data, not a failure.
+- **Never promote a search-result preview to verification.** A snippet is a lead, not a source.
+- **Find another legitimate authority** — operator page, official/reference source — or leave the
+  claim explicitly unverified (`⚠`) or omit it under the normal evidence rules.
+- **One blocked source never fails the pass.** Mark it, keep any useful lead, continue; the
+  stopping rule is still saturation plus the normal risk/verification budget, never "keep trying
+  the blocked site."
+- **Prefer non-interactive retrieval by default** — `WebSearch`/`WebFetch` and direct official
+  pages. The embedded browser is not warranted merely because a plain fetch is inconvenient, and
+  a research task must never become an account-authentication task.
+
+Full operational rules, and the execution-plane separation that goes with them:
+`docs/reference/claude-research-runtime.md` (the authority — this is the short binding form).
 
 ## Token hygiene
 

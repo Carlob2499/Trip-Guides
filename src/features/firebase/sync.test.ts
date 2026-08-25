@@ -1,7 +1,6 @@
-// Tests for the pure/non-network-dependent helpers in sync.js: room-code generation
-// (a security invariant — the code itself is the unguessable "lock"), code normalization,
-// and the never-throw / rate-limited / no-op-without-config posture of the telemetry
-// beacons. `./client.js` is mocked so these run with no real Firebase SDK and no network.
+// Tests for the pure/non-network-dependent helpers in sync.js: code normalization and the
+// never-throw / rate-limited / no-op-without-config posture of the telemetry beacons.
+// `./client.js` is mocked so these run with no real Firebase SDK and no network.
 // @protects-file Two phones editing the same trip end up agreeing, not overwriting each other.
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -14,7 +13,7 @@ vi.mock("./client.js", () => ({
   hasFirebase: (...args: unknown[]) => hasFirebaseMock(...args),
 }));
 
-const { generateTripCode, normalizeCode, reportError } = await import("./sync.js");
+const { normalizeCode, reportError } = await import("./sync.js");
 
 // Top-level so it applies to EVERY test in the file, including the rate-limit block below —
 // `readyMock` is shared across the reportError tests (all call the same imported `ready`),
@@ -22,26 +21,6 @@ const { generateTripCode, normalizeCode, reportError } = await import("./sync.js
 beforeEach(() => {
   readyMock.mockReset();
   hasFirebaseMock.mockReset();
-});
-
-describe("generateTripCode", () => {
-  it("returns a 10-character code", () => {
-    expect(generateTripCode()).toHaveLength(10);
-  });
-
-  it("draws only from the unambiguous alphabet", () => {
-    for (let i = 0; i < 25; i++) {
-      expect(generateTripCode()).toMatch(/^[abcdefghjkmnpqrstuvwxyz23456789]{10}$/);
-    }
-  });
-
-  it("never contains a visually-ambiguous character (0/o/1/l/i)", () => {
-    // Codes are read aloud and typed on phones — this is the actual security/usability
-    // property the alphabet exists to guarantee, not just "matches this regex".
-    for (let i = 0; i < 25; i++) {
-      expect(generateTripCode()).not.toMatch(/[0o1li]/);
-    }
-  });
 });
 
 describe("normalizeCode", () => {

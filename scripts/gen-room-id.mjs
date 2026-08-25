@@ -19,10 +19,10 @@ import path from "node:path";
 
 const ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-/** A crypto-random lowercase-alphanumeric id; default 16 chars (>= the rules' write gate). */
-export function genRoomId(len = 16) {
+/** A crypto-random lowercase-alphanumeric id at the committed room contract's 16 chars. */
+export function genRoomId() {
   let s = "";
-  for (let i = 0; i < len; i++) s += ALPHABET[randomInt(ALPHABET.length)];
+  for (let i = 0; i < 16; i++) s += ALPHABET[randomInt(ALPHABET.length)];
   return s;
 }
 

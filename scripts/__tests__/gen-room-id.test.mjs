@@ -13,9 +13,10 @@ describe("genRoomId", () => {
     expect(genRoomId()).toHaveLength(16);
   });
 
-  it("honors an explicit length", () => {
-    expect(genRoomId(24)).toHaveLength(24);
-    expect(genRoomId(40)).toHaveLength(40);
+  it("cannot be caller-shortened or lengthened outside the committed room contract", () => {
+    for (const legacyLength of [0, 10, 15, 24, 40, 41, 100]) {
+      expect(genRoomId(legacyLength)).toMatch(/^[a-z0-9]{16}$/);
+    }
   });
 
   it("draws only from lowercase letters and digits", () => {

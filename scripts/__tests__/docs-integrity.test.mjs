@@ -1,9 +1,9 @@
-/* Docs are load-bearing in this repo — CLAUDE.md routes agents by path, workflows tell agents
-   which docs to read, and docs/handoff.md is injected into every session. Session #26's audit found
-   the failure classes gated here: a workflow pointing at a doc that never existed, HANDOFF
+/* Docs are load-bearing in this repo — agent manuals route by path, workflows tell agents
+   which docs to read, and SessionStart injects the bounded handoff capsule. Session #26's audit
+   found the failure classes gated here: a workflow pointing at a doc that never existed, HANDOFF
    growing 10× past its own stated budget, and environment facts (OneDrive) outliving the
-   environment. Each check is deterministic; judgment stays doctrine in CLAUDE.md. */
-// @protects-file Project docs stay within budget and every file they reference exists.
+   environment. Each check is deterministic; judgment stays doctrine in the agent manuals. */
+// @protects-file Project docs stay within budget and every live file/lookup they reference resolves.
 
 import { describe, expect, test } from "vitest";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
@@ -41,12 +41,12 @@ function liveDocs() {
 }
 
 describe("HANDOFF stays a handoff, not a chronicle", () => {
-  test("docs/handoff.md is within its line budget (move old snapshots to docs/archive/)", () => {
+  test("docs/handoff.md stays within the bounded operational budget", () => {
     const lines = readFileSync(join(ROOT, "docs/handoff.md"), "utf8").split("\n").length;
     expect(
       lines,
       "docs/handoff.md is over budget. Its header sets ~80 lines; the gate allows 120. " +
-        "Move superseded snapshots and re-prompts to docs/archive/HANDOFF_ARCHIVE.md."
+        "Keep current operational truth here and leave superseded snapshots in Git history."
     ).toBeLessThanOrEqual(120);
   });
 });
@@ -60,7 +60,7 @@ describe("every cited docs/*.md exists (the E2_FIELD_REPORT failure class)", () 
     // Live docs, whatever folder they sit in. Deliberately NOT a plain readdir of docs/:
     // the 2026-08-10 rename moved 13 of the 14 into reference/, standards/, evidence/ and
     // generated/, and a top-level-only readdir would have kept passing while checking one
-    // file. Excluded on purpose: archive/ is a historical record and may cite paths that no
+    // file. Excluded on purpose: archive/ is a historical lookup area and may cite paths that no
     // longer resolve, and design-handoff/ is a design-tool export nobody here maintains.
     ...liveDocs(),
   ];
@@ -83,9 +83,39 @@ describe("every cited docs/*.md exists (the E2_FIELD_REPORT failure class)", () 
   });
 });
 
+describe("archive lookup anchors remain resolvable", () => {
+  test("every live docs/archive/INDEX.md → NAME pointer has a matching index heading", () => {
+    const index = readFileSync(join(ROOT, "docs/archive/INDEX.md"), "utf8");
+    const headings = new Set(
+      [...index.matchAll(/^###\s+([A-Za-z0-9_.-]+)\s+—/gm)]
+        .map((match) => match[1].replace(/\.md$/, ""))
+    );
+    const sourceExts = [".md", ".yml", ".yaml", ".ts", ".mjs", ".js", ".astro", ".css"];
+    const sources = walk(ROOT, sourceExts).filter((file) => {
+      const rel = relative(ROOT, file).replaceAll("\\", "/");
+      return file !== SELF && !rel.startsWith("docs/archive/");
+    });
+    const missing = [];
+
+    for (const file of sources) {
+      const text = readFileSync(file, "utf8");
+      for (const match of text.matchAll(/docs\/archive\/INDEX\.md\s*→\s*([A-Za-z0-9_.-]+)/g)) {
+        const anchor = match[1].replace(/\.md$/, "");
+        if (!headings.has(anchor)) missing.push(`${relative(ROOT, file)} → ${match[1]}`);
+      }
+    }
+
+    expect(
+      missing,
+      "A live historical lookup points at an archive index heading that no longer exists. " +
+        "Restore the heading or update the live pointer; Git history is useful only if the index still resolves."
+    ).toEqual([]);
+  });
+});
+
 describe("no OneDrive reference outside the archive", () => {
   // The repo no longer lives under OneDrive (creator, 2026-08-03); the stale-CSS caveat that
-  // referenced it is obsolete. The archive keeps history; everything else must not mention it.
+  // referenced it is obsolete. Historical lookup material may preserve the old environment fact.
   const FORBIDDEN = new RegExp("One" + "Drive", "i");
 
   test("src, scripts, docs (minus archive), workflows, and root files are clean", () => {
@@ -102,14 +132,14 @@ describe("no OneDrive reference outside the archive", () => {
     expect(
       hits.map((f) => relative(ROOT, f)),
       "OneDrive is referenced outside docs/archive/. The repo does not live on OneDrive; " +
-        "remove the reference (history belongs in the archive)."
+        "remove the live reference and keep history in Git/archive lookup material only."
     ).toEqual([]);
   });
 });
 
 describe("internal hrefs carry the base path", () => {
-  // CLAUDE.md guardrail: every internal /-href needs import.meta.env.BASE_URL, or the link
-  // 404s the moment the site serves under a base path. Greppable, so gated.
+  // Every internal /-href needs import.meta.env.BASE_URL, or the link 404s the moment the site
+  // serves under a base path. Greppable, so gated.
   test("no .astro template hardcodes a root-absolute href", () => {
     const offenders = [];
     for (const file of walk(join(ROOT, "src"), [".astro"])) {

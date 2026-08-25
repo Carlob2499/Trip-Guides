@@ -1,84 +1,82 @@
 # Waypoint (Trip-Guides)
 
-Your travel-guide site. You write each destination as simple **content files**, and the
-project turns them into polished web pages. You do **not** need to read or write code to
-run this.
+Waypoint is a personal travel command center built as a static Astro site with a research/verification pipeline behind it. Structured trip content becomes fast, offline-friendly guide pages; the pipeline researches, verifies, composes, and gates content before publication.
 
-## The idea in one picture
+## What ships
 
+- Static Astro guides from `src/content/guides/`.
+- Research lifecycle with durable intake/state/evidence.
+- Field tools: itinerary, maps/transit, Trip Split, SOS, reminders, exports, offline use.
+- Small Worker backend for owner/live controls that cannot safely live in static pages.
+- GitHub Actions for verification and deployment.
+
+Waypoint has two product lifecycles: **research** (create/research a guide) and **change** (modify an existing guide without rerunning the full research lifecycle).
+
+Product doctrine lives in `PRODUCT.md`. Current operational/cutover truth lives in `docs/handoff.md`; agents receive its bounded current-state capsule automatically at SessionStart.
+
+## Current product direction
+
+Field use wins ties. The intended hierarchy is **Today · Itinerary · Map · Split · Guide**. The day/trip model is the center; maps, reservations, contingencies and Split should attach to it rather than becoming unrelated mini-products.
+
+Trip Split, offline/poor-network behavior, accessibility, sunlight-readable mobile use and truthful uncertainty are protected requirements.
+
+## Research engines
+
+Two implementations intentionally coexist during validation:
+
+- **V1** — `.github/workflows/research-pass.yml` + `scripts/pipeline.mjs`; production default/rollback.
+- **V2** — `.github/workflows/research-pass-v2.yml` + `scripts/pipeline-v2.mjs` + `scripts/pipeline/v2/`; staged candidate.
+
+`WAYPOINT_RESEARCH_ENGINE=v2` is the explicit selector. Until cutover is deliberately accepted, V1 stays available and V2 validation is not permission to retire it.
+
+## Ownership map
+
+| Path | Responsibility |
+| --- | --- |
+| `src/content/guides/` | Rendered guide data |
+| `guides-intake/` | Intake, run state, evidence, coverage |
+| `src/features/` | Product feature ownership |
+| `src/lib/` | Shared deterministic helpers |
+| `src/pages/` | Astro routes/screens |
+| `scripts/` | Build, verification, audit and pipeline tooling |
+| `worker/` | Owner/live backend endpoints |
+| `.github/workflows/` | CI, deploy and lifecycle orchestration |
+| `docs/reference/` | Current architecture/behavior |
+| `docs/design-handoff/` | Atlas visual authority/reference |
+
+Use `docs/reference/repo-map.md` only when ownership is unclear.
+
+## Read by task, not by syllabus
+
+Agent root instructions (`AGENTS.md` / `CLAUDE.md`) route work to the smallest useful authority.
+
+- **Product decision:** `PRODUCT.md`.
+- **Current operational state / next integration step:** use the SessionStart capsule from `scripts/handoff-head.mjs`; open full `docs/handoff.md` only for deeper current evidence.
+- **Pipeline V2 / validation / cutover:** start from that capsule, then open only the relevant file under `docs/pipeline v2/`.
+- **Code ownership uncertainty:** `docs/reference/repo-map.md`, then the affected subsystem reference.
+- **Visual/UI work:** `waypoint-design` + affected code; load only the relevant design reference. Full `/design` work may load the broader handoff/prototypes.
+- **Guide facts/research:** `waypoint-guide-author`.
+- **Historical rationale:** `CONTEXT.md` only when current code/docs do not answer it.
+
+Do not preload all of these for ordinary engineering work.
+
+## Verification
+
+Node.js 22+.
+
+```bash
+npm install
+npm run dev
+npm run check:fast
+npm run check
+npm run check:offline
+npm run ship:check
 ```
-src/content/guides/korea/           ← YOU edit these (the "recipe cards")
-  _guide.json                         · the guide's title, dates, intro
-  01-plan.json … 10-tokyo.json        · one small file per tab of the guide
-        ▼
-   the project's components          ← the "appliances" — leave these alone
-        ▼
-   finished web pages                ← built automatically when you publish
-```
 
-Everything you care about lives in **`src/content/guides/`** — one folder per destination;
-`_guide.json` holds the guide's identity, each numbered file holds one tab's sections, so
-you only ever open the small file you're changing. (A brand-new draft can also be a single
-`<name>.json` file — both shapes work.)
+Use focused checks while iterating; CI on the exact PR head is authoritative for merge/deploy status. Do not weaken a gate merely to make a branch green.
 
-## Publishing on the web (one-time, ~15 minutes)
+## Guide content and deployment
 
-The site is static — pre-built pages, served free and fast by GitHub Pages:
+A guide lives under `src/content/guides/<slug>/`; `_guide.json` owns trip identity/metadata and numbered JSON files hold sections. `src/content.config.ts` is the schema authority. Malformed content fails the build; draft content stays quarantined until publication conditions are satisfied.
 
-1. Put the project in a GitHub repository named `Trip-Guides` (the name must match `base`
-   in `astro.config.mjs`).
-2. **Settings → Pages → Source → GitHub Actions.** The recipe in
-   `.github/workflows/deploy.yml` builds and publishes for you.
-3. Wait for the green check in the **Actions** tab (~1–3 min). Your address appears at
-   Settings → Pages: `https://your-username.github.io/Trip-Guides/`.
-
-After that, **every saved change rebuilds and updates the site automatically.** Photos are
-converted to fast WebP during the build; if one can't be reached, the plain version shows
-instead — the site never breaks on a bad photo, and a failed build leaves the last working
-version live.
-
-## Start a new guide (the quick way)
-
-On the home page, click **"＋ Make a new guide."** Enter a country (plus optional cities,
-dates, party, priorities) and it opens a pre-filled GitHub issue. Submitting it commits a
-**draft scaffold** — the standard guide structure with live weather, holiday, and currency
-data wired in — as a pull request. The draft lives at its own URL (hidden from the home
-page) until a research pass fills and verifies the facts (`draft: false`), then it appears
-in the main grid. Works for any country; no setup needed.
-
-**By hand:** copy an existing guide folder (`src/content/guides/denmark/` is the best
-example), rename it (the folder name becomes the web address), and edit `title`, `country`,
-`dek`, and the `sections`. The home page picks it up automatically.
-
-**Two built-in guardrails:** a malformed guide **stops the build and names the exact file
-and field** — a broken guide can never quietly go live; and country colours live in one
-place (`src/lib/themes.ts`).
-
-## Section types
-
-Each section has a `type` and a `group` (its navigation tab): `panel`, `prose`, `list`,
-`routes`, `map`, `days`, `sights`, `budget`, `weather` (needs a `map` in the same guide),
-`holidays`, and `raids`, plus a few specialty types. `guide-template.jsonc` shows the
-common backbone; `src/content.config.ts` is the full, authoritative list of fields.
-
-## Working with Claude
-
-Because the project is just text files, Claude can read it, write guides, adjust
-components, and run the build to catch problems before you publish — smoothest via
-**Claude Code** pointed at this folder.
-
-## Running locally (optional)
-
-Install Node.js, then `npm install` once; `npm run dev` for a live preview or
-`npm run build` for the final pages in `dist/`.
-
-## Troubleshooting a failed build
-
-Open the **Actions** tab and click the red run:
-
-- **The log names a content file** — the checker caught a typo or missing field; fix that
-  file and commit. The rebuild is automatic.
-- **404 after a successful build** — the `base` in `astro.config.mjs` must match the repo
-  name (`/Trip-Guides`).
-- **A photo didn't load but the site deployed** — the safety net worked; that photo fell
-  back to the plain version.
+GitHub Actions builds/deploys to GitHub Pages. A failed build leaves the previous working site live; service-worker precaching/cached navigation provide offline resilience for built guide content.

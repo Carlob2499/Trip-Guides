@@ -1,0 +1,123 @@
+{
+  "runId": "uruguay-20260823-9789de",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-23T03:28:30.782Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T03:28:30.785Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-23T03:29:03.185Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T04:03:12.273Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 34m"
+    },
+    {
+      "at": "2026-08-23T04:03:39.314Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T04:15:51.352Z",
+      "kind": "decision",
+      "text": "Pass B (independent research) complete in 12m"
+    },
+    {
+      "at": "2026-08-23T04:16:21.815Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T04:30:35.832Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-23T04:32:01.571Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-23T04:41:46.121Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-23T05:54:32.908Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 3 of 5)"
+    },
+    {
+      "at": "2026-08-23T06:12:54.807Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 3 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-23T07:20:29.432Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 4 of 5)"
+    },
+    {
+      "at": "2026-08-23T07:34:52.561Z",
+      "kind": "decision",
+      "text": "Reconcile complete in 14m (attempt 4)"
+    },
+    {
+      "at": "2026-08-23T07:35:18.353Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 6 resolved · 4 left as honest blanks"
+    },
+    {
+      "at": "2026-08-23T07:35:47.137Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-23T08:02:06.703Z",
+      "kind": "decision",
+      "text": "Fresh-context critic complete in 26m"
+    },
+    {
+      "at": "2026-08-23T08:03:58.834Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 26 evaluated · 20 shortlisted · 14 shipped · 6 rejected · 3 kept as detours"
+    },
+    {
+      "at": "2026-08-23T08:03:58.834Z",
+      "kind": "decision",
+      "text": "Reconcile dispositioned 11 independent finding(s): 7 adopt · 4 agree"
+    },
+    {
+      "at": "2026-08-23T08:03:58.834Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+    },
+    {
+      "at": "2026-08-23T08:03:58.834Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Palacio Salvo guided-tour day/time grid and booking channel"
+    },
+    {
+      "at": "2026-08-23T08:03:58.834Z",
+      "kind": "decision",
+      "text": "Landing evidence gate PASSED"
+    },
+    {
+      "at": "2026-08-23T08:03:58.834Z",
+      "kind": "decision",
+      "text": "Draft PR #77 opened for human review"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}

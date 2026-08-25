@@ -1,20 +1,37 @@
-# docs/ — sorted by how long a document lives
+# Waypoint documentation
 
-Filenames are lowercase kebab-case. The folder tells you what you're allowed to do with the
-file before you open it, which is the question that actually matters when you land here cold.
+This tree contains only documentation that helps Waypoint operate, recover or improve now. Completed plans, superseded handoffs, cleanup ledgers and review transcripts belong in Git history.
 
-| Folder | What's in it | Can I edit it? |
-| --- | --- | --- |
-| `handoff.md` *(no folder)* | Where the last session stopped. Auto-loads at session start beside `CONTEXT.md`. | **Rewritten every session** — that's the ritual. ≤120 lines, gated. |
-| `reference/` | How the system works **today**: architecture, the two pipeline lifecycles (research and change), motion doctrine, the visual-redesign spec, issue-tracker conventions. | Yes — and you must, when behaviour changes. A stale reference doc is worse than none. |
-| `standards/` | The bar work is held to: the guide rubric, the new-guide intake template. | Rarely, and deliberately. Changing a standard changes every future guide. |
-| `evidence/` | What we learned, accumulated over time: traveller patterns, pipeline patterns, the competitive landscape. | Append, don't rewrite. These are records, and the two `*-patterns` files must never mix — one asserts lived experience, the other is process evidence from before anyone travelled. |
-| `generated/` | Written by scripts: `where-the-tests-are-blind.md`, the mutation run's roll-up. | **No.** Hand-edits are overwritten on the next run, and CI fails if these go stale. |
-| `archive/` | `INDEX.md` — one entry per finished plan or superseded snapshot, saying how it ended and printing the `git show` line for its body. Bodies live in git; the only files still kept whole are `HANDOFF_ARCHIVE.md` and `visual-redesign-history.md`. | No. History, kept honest — it may cite paths that no longer resolve, which is why the integrity gate skips it. |
-| `design-handoff/` | Design-tool exports: the Atlas system (`DESIGN.md` — R4 with the R5 guide-UI revision folded in, the single written design authority), machine-checkable gates in `enforcement/`, prototype bundles. | Only `DESIGN.md` and this bundle's own README. The rest is vendored output. |
+## Read by task
 
-**Naming rules.** Lowercase kebab-case, no underscores, no `SCREAMING_CASE` — that convention
-belongs to the repo root (`README`, `CLAUDE`, `SECURITY`), where tooling looks for
-those exact names. No live document takes an exception any more — the last one,
-`PLAN_EVIDENCE_FIRST.md`, retired on 2026-08-15. `SCREAMING_CASE` survives only as the
-heading of an `archive/INDEX.md` entry, which is the name ~35 code comments cite it by.
+Do not preload the documentation tree. Agent SessionStart already injects the bounded current-state capsule from `scripts/handoff-head.mjs`.
+
+- **Current state / next work:** use the SessionStart capsule; open full `handoff.md` only when deeper current evidence is needed.
+- **Code ownership / boundaries:** `reference/repo-map.md`, then the affected subsystem reference.
+- **Pipeline V2 / validation / cutover:** start from the SessionStart capsule, then read only the relevant file in `pipeline v2/`.
+- **Design/UI:** route through `waypoint-design`; load only the relevant design authority. Full `/design` work may use the broader handoff/prototypes.
+- **Historical rationale:** `../CONTEXT.md` only when current code/docs do not explain the decision.
+- **Product doctrine:** `../PRODUCT.md`.
+
+## Ownership
+
+| Path | Owns |
+| --- | --- |
+| `handoff.md` | Full current operational evidence; its bounded capsule is the default warm start |
+| `reference/` | How Waypoint works now |
+| `standards/` | Durable quality bars/templates |
+| `evidence/` | Durable product/research evidence |
+| `generated/` | Script-generated reports; do not hand-edit |
+| `design-handoff/` | Atlas visual authority, references and machine gates |
+| `pipeline v2/` | Locked V2 decisions, implementation/proof state, validation and schedule |
+| `mockups/` | Supporting fixtures/prototypes; not authority unless a current doc says otherwise |
+
+## Rules
+
+- Current truth wins; update or remove documentation for behavior that no longer exists.
+- One concept gets one authority. Link to the owner instead of mirroring it.
+- Do not create another status file when an existing authority owns the state.
+- Machine enforcement is preferred to permanent prose when it can encode the same invariant.
+- Completed plans and review transcripts belong in Git history, not the active read path.
+- Unknown stays unknown; never fill evidence/status gaps for presentation.
+- Root convention files keep conventional names; ordinary docs use lowercase kebab-case.

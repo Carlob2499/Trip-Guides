@@ -1,51 +1,44 @@
 ---
 name: waypoint-design
-description: Use this skill to generate well-branded interfaces and assets for Waypoint, either for production or throwaway prototypes/mocks/etc. Contains essential design guidelines, colors, type, fonts, assets, and UI kit components for prototyping.
+description: Design or implement Waypoint UI, visual assets, and prototypes while preserving its field-use, truth, and design-system contracts.
 user-invocable: true
 ---
 
-Read `docs/design-handoff/design_handoff_guide_ui/design-system/readme.md`, and explore the
-other available files in that folder — including the working prototypes one level up at
-`docs/design-handoff/design_handoff_guide_ui/prototypes/`.
+## Read only what the task needs
 
-If creating visual artifacts (slides, mocks, throwaway prototypes, etc), copy assets out and
-create static HTML files for the user to view. If working on production code, you can copy
-assets and read the rules here to become an expert in designing with this brand.
+Do **not** explore the whole design folder by default.
 
-If the user invokes this skill without any other guidance, ask them what they want to build or
-design, ask some questions, and act as an expert designer who outputs HTML artifacts *or*
-production code, depending on the need.
+- **Narrow production UI/CSS fix:** read this skill and the affected production component/style files. Load design references only when a visual rule is actually in question.
+- **One component or pattern:** additionally read the matching file under `docs/design-handoff/design_handoff_guide_ui/design-system/components/` and only the token/guideline files it uses.
+- **Whole surface or `/design` pass:** read `docs/design-handoff/design_handoff_guide_ui/design-system/readme.md`, the matching `ui_kits/` surface, and a relevant prototype only when it answers a composition question. Do not sweep every prototype.
+- **Mock/asset work:** read only the tokens/assets needed for that artifact.
+- Accessibility and responsive geometry are machine-gated. Read their tests only when a gate fails or the task changes those contracts.
 
-## Before you draw anything
+## Scope boundary
 
-Waypoint is a field instrument, not a brochure. Two rules govern every decision and you should
-be able to state them back:
+This skill owns **presentation**, not destination truth.
 
-1. **Quiet paper, loud marks.** Grounds, cards and containers stay flat, sage and
-   hairline-separated. Notation — a coordinate, a check date, a source stamp, an `≈`, a
-   `⚠`, a stated absence — may take pigment and reach display scale.
-2. **The product's claim is that every perishable fact traces to a source and a date.** If you
-   render a number you cannot point to a source for, you have broken the product. State the
-   absence instead: `⚠ NOT CONFIRMED`, plus a line saying what to do instead.
+- For **presentation-only** work, keep factual guide data exactly as supplied. **Preserve every fact value verbatim**; do not load `waypoint-guide-author` merely because UI renders travel content.
+- If the task requires **creating, correcting, or verifying destination facts** (prices, hours, venues, transit, events, itineraries, recommendations), route that factual work to `waypoint-guide-author`.
+- For mixed work, settle factual changes first, then render the verified result. Presentation changes must not widen research scope.
 
-## The five things most likely to go wrong
+## Non-negotiable design contract
 
-- **Rounding a card.** Radius is binary: `0` on anything holding content, `999px` on anything
-  you press. A rounded card is the fastest way to make this design stop looking like itself.
-- **Inventing a colour.** Reach for a CSS variable. The accent has three jobs and they are three
-  different tokens; never hand-blend a fourth at a call site.
-- **Shrinking notation to fit.** Notation relocates, it never shrinks. Desktop margins carry
-  marginalia; mobile folds them inline at unchanged scale.
-- **Corner ticks on a UI panel.** Ticks mean evidence. A panel with them is lying about what it
-  contains.
-- **Padding a surface with prose.** An empty-feeling panel is a layout problem or an honest gap.
-  Never write filler to make a screen look finished.
+Waypoint is a field instrument, not a brochure.
 
-## Starting a build
+1. **Quiet paper, loud marks.** Content surfaces stay flat, sage, and hairline-separated; notation may take pigment and scale.
+2. **Truth stays visible.** Perishable facts trace to a source/date; missing evidence is shown as an honest gap, never invented filler.
+3. **Radius is binary.** `0` for content/evidence containers, `999px` for pressable pills.
+4. **Use existing tokens.** Do not invent colours or hand-blend new semantic shades.
+5. **Notation relocates; it does not shrink to fit.** Responsive informational graphics recompose when shrinking would make them unreadable.
+6. **Ticks mean evidence.** Never put evidence corner ticks on ordinary UI panels.
+7. **Do not pad empty layouts with prose.** Fix composition or show the gap.
 
-Link `docs/design-handoff/design_handoff_guide_ui/design-system/styles.css`, set
-`data-field="day"` (or `night`) on a wrapper, and compose from
-`docs/design-handoff/design_handoff_guide_ui/design-system/components/`.
-`docs/design-handoff/design_handoff_guide_ui/design-system/ui_kits/` shows the three real
-surfaces assembled. `docs/design-handoff/design_handoff_guide_ui/design-system/guidelines/`
-holds the specimen cards if you need to check a value.
+For new visual composition, build from `design-system/styles.css`, the relevant component(s), and the matching UI kit rather than inventing a parallel system.
+
+## Design System 1.0 calibration
+
+For a task explicitly named **DS1 calibration** or **Design System 1.0 calibration**, start at
+`docs/design-handoff/design-system-1-candidate/README.md` and follow its bounded reading order.
+That package is a candidate for visual testing only. For ordinary production UI work, the R5
+contract above remains authoritative until the creator explicitly approves DS1.

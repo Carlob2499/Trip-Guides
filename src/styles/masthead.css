@@ -111,6 +111,10 @@
 .mast-eyebrow{margin:0}
 .mast-title{font-family:var(--font-display);font-weight:640;font-size:clamp(2.5rem,6vw,4.8rem);line-height:.98;letter-spacing:-.014em;margin:.2rem 0 0;color:var(--ink)}
 .mast-dek{margin:.6rem 0 0}
+/* Guide-controlled text must not raise this flex item's min-content width. `anywhere` only
+   changes line breaking when a token has no normal opportunity, so ordinary titles keep the
+   shipped composition while long names/refs cannot push the masthead wider than the phone. */
+.mast-eyebrow,.mast-title,.mast-dek{overflow-wrap:anywhere}
 
 /* Per-guide chips — emergency (ochre, tel: links) + currency. Pills, never smaller than a
    control (docs/design-handoff/DESIGN.md's Flag chip spec: "control size, pill, 1px current-ink border"). */

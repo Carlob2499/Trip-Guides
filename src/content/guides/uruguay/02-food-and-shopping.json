@@ -1,0 +1,92 @@
+[
+  {
+    "type": "venues",
+    "group": "Food & shopping",
+    "title": "What to eat",
+    "phase": "daily",
+    "rank": 1,
+    "intro": "Uruguayan food centers on the parrilla (wood-fired grill) — beef, but also the chivito (a stacked steak sandwich with ham, cheese, egg, and olives) as the national fast-food answer to it. Wine means Tannat, the country's signature red grape.",
+    "items": [
+      {
+        "name": "El Palenque",
+        "area": "Mercado del Puerto, Ciudad Vieja",
+        "address": "Pérez Castellano 1579, Montevideo",
+        "phone": "+598 2917 0190",
+        "hours": "⚠ Reported Tue–Fri 12:00–23:00, Sat–Sun 12:00–17:00 by a Montevideo restaurant directory — the restaurant's own site posts no hours, so call before you count on an evening sitting",
+        "closed": "Mondays",
+        "book": "call",
+        "how": "Inside Mercado del Puerto, a 5–10 min walk from Plaza Independencia",
+        "price": "≈$$$ (parrilla, per person)",
+        "crowd_tip": "Arrive right at opening for lunch — by 13:00 on a weekend it's standing-room only at the grill counters.",
+        "why": "Ranked among Bloomberg's top parrillas in the world; the everyday standard-bearer for Uruguayan grilled beef.",
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://www.elpalenque.com.uy/parrilla-montevideo-uruguay.html",
+        "map": {
+          "lat": -34.9056438,
+          "lng": -56.211484199999994
+        },
+        "place_id": "ChIJ1apnwYN_n5URNfl0q-0ZSwo"
+      },
+      {
+        "name": "El Palenque (Punta del Este branch)",
+        "area": "Parada 7, Av. Roosevelt",
+        "address": "Parada 7, Av. Roosevelt, Punta del Este",
+        "phone": "+598 4249 4257",
+        "hours": "⚠ Not posted on the restaurant's own site — call the branch to confirm the day and sitting",
+        "book": "call",
+        "how": "On the main beach avenue, best reached by taxi from central Punta del Este",
+        "price": "≈$$$ (parrilla, per person)",
+        "why": "The same house on the coast — a fallback if Montevideo's queue was too long the first time.",
+        "verified_on": "2026-08-23",
+        "shelf_life": "venue",
+        "source_url": "https://www.elpalenque.com.uy/parrilla-montevideo-uruguay.html",
+        "map": {
+          "lat": -34.940715399999995,
+          "lng": -54.932286700000006
+        },
+        "place_id": "ChIJlfNPtTsFdZURYUdWupQzsQk"
+      },
+      {
+        "name": "Bodega Bouza",
+        "area": "Melilla, ≈15 min from downtown Montevideo",
+        "address": "Cno. de la Redención 7658 bis, Montevideo",
+        "phone": "+598 2323 4030",
+        "hours": "⚠ Reported daily 11:00–18:00; not independently confirmed which day(s) are closed — confirm before visiting on a holiday",
+        "book": "url",
+        "book_url": "https://bodegabouza.com/",
+        "how": "Taxi or rideshare from downtown Montevideo — no direct bus",
+        "price": "⚠ ≈UYU 2,800/person (unconfirmed)",
+        "why": "A boutique Tannat producer with vintage cars on display and a vineyard-to-glass lunch — the closest thing to a proper wine-country morning without leaving greater Montevideo. The price is only a planning estimate; confirm current tour pricing directly with the winery.",
+        "verified_on": "2026-08-23",
+        "shelf_life": "venue",
+        "source_url": "https://bodegabouza.com/",
+        "map": {
+          "lat": -34.791218,
+          "lng": -56.276567
+        },
+        "place_id": "ChIJMxiy5MPToZURKVVGzseWg-k"
+      },
+      {
+        "name": "Lo de Silverio",
+        "area": "Villa Dolores, away from the port tourist core",
+        "address": "Alejo Rossell y Rius 1655 esq. 4 de Julio, Montevideo",
+        "phone": "+598 2628 4771",
+        "hours": "Tue–Sat 12:00–16:00 & 20:00–00:00, Sun 12:00–16:00",
+        "closed": "Mondays",
+        "book": "call",
+        "how": "Taxi or rideshare from downtown — a residential neighborhood, not a walk from Ciudad Vieja",
+        "price": "⚠ ask when booking — not listed online",
+        "why": "A neighborhood parrilla off the tourist circuit, in residential Villa Dolores — book ahead for dinner, capacity is limited.",
+        "verified_on": "2026-08-23",
+        "shelf_life": "hours",
+        "source_url": "https://www.lodesilverio.com/",
+        "map": {
+          "lat": -34.8970483,
+          "lng": -56.1470833
+        },
+        "place_id": "ChIJ6ceJUBuBn5UR6o294NqRTkM"
+      }
+    ]
+  }
+]
