@@ -38,9 +38,10 @@ function requireText(rel, needle, label) {
 const agents = read("AGENTS.md");
 const claude = read("CLAUDE.md");
 const sharedBody = (text) => {
+  const normalized = text.replace(/\r\n?/g, "\n");
   const marker = "\n---\n";
-  const at = text.indexOf(marker);
-  return at === -1 ? text : text.slice(at + marker.length);
+  const at = normalized.indexOf(marker);
+  return at === -1 ? normalized : normalized.slice(at + marker.length);
 };
 const normalizeAgentSpecificNames = (text) => text
   .replaceAll("Codex Remote", "<AGENT_REMOTE>")

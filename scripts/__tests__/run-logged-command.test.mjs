@@ -1,5 +1,6 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -7,6 +8,17 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const WRAPPER = path.join(ROOT, "scripts/run-logged-command.sh");
+const BASH = (() => {
+  if (process.platform !== "win32") return "bash";
+  const candidates = [
+    process.env.GIT_BASH,
+    path.join(process.env.ProgramFiles || "C:\\Program Files", "Git", "bin", "bash.exe"),
+    process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Programs", "Git", "bin", "bash.exe"),
+  ].filter(Boolean);
+  const resolved = candidates.find((candidate) => existsSync(candidate));
+  if (!resolved) throw new Error("run-logged-command tests require Git Bash on Windows");
+  return resolved;
+})();
 const dirs = [];
 
 afterEach(async () => {
@@ -20,7 +32,7 @@ async function tempLog() {
 }
 
 function run(log, script) {
-  return spawnSync("bash", [WRAPPER, log, "bash", "-lc", script], { encoding: "utf8" });
+  return spawnSync(BASH, [WRAPPER, log, BASH, "-lc", script], { encoding: "utf8" });
 }
 
 describe("run-logged-command", () => {
@@ -47,7 +59,7 @@ describe("run-logged-command", () => {
   });
 
   it("fails usage errors rather than silently running without a log target", () => {
-    const result = spawnSync("bash", [WRAPPER], { encoding: "utf8" });
+    const result = spawnSync(BASH, [WRAPPER], { encoding: "utf8" });
     expect(result.status).toBe(64);
     expect(result.stderr).toContain("usage:");
   });

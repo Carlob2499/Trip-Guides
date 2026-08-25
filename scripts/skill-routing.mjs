@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Compatibility-preserving task routing for Waypoint agent work.
 //
 // This file is deliberately NOT wired into the headless research workflows yet. It encodes the

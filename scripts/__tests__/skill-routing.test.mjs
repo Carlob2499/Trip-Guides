@@ -9,7 +9,7 @@ import { FULL_RESEARCH_REFERENCES, routeSkillTask } from "../skill-routing.mjs";
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const read = (relativePath) => readFileSync(path.join(ROOT, relativePath));
 const gitBlobSha = (relativePath) => {
-  const content = read(relativePath);
+  const content = Buffer.from(read(relativePath).toString("utf8").replace(/\r\n?/g, "\n"));
   const header = Buffer.from(`blob ${content.byteLength}\0`);
   return createHash("sha1").update(Buffer.concat([header, content])).digest("hex");
 };
