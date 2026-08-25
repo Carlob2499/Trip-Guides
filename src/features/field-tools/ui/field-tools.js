@@ -13,7 +13,7 @@
 // converter needs the rate live-data already applied, since this module loads after it.
 import { getLastRate, solarTimesFor, daylightLeftLabel, fmtClock } from "../../live-data/index.js";
 import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field-math";
-import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
+import { trapFocus, migrateStorageKey, parseStoredRecord } from "../../../scripts/util.js";
 
 (function () {
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
@@ -100,7 +100,7 @@ import { trapFocus, migrateStorageKey } from "../../../scripts/util.js";
   // R8: migrate this guide's stop check-off state from the old title-derived key.
   migrateStorageKey(localStorage, STOPS_KEY, legacyStoreKey ? "tg-stops-" + legacyStoreKey : null);
   function loadStops() {
-    try { return JSON.parse(localStorage.getItem(STOPS_KEY)) || {}; } catch (e) { return {}; }
+    try { return parseStoredRecord(localStorage.getItem(STOPS_KEY)); } catch (e) { return {}; }
   }
   var stopState = loadStops();
   document.querySelectorAll(".planner-days .day[data-day]").forEach(function (day) {

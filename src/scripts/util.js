@@ -40,6 +40,16 @@ export function migrateStorageKey(store, newKey, legacyKey) {
   } catch (e) { /* storage unavailable — nothing we can do, and nothing to lose */ }
 }
 
+/* Parse a browser-storage value that will be mutated as a string-keyed record. Storage is
+   user-writable, so successful JSON parsing is not sufficient: primitives and arrays must not
+   escape into callers that later assign a key. */
+export function parseStoredRecord(raw) {
+  try {
+    var parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch (e) { return {}; }
+}
+
 /* R3: shared focus-trap for any dialog/sheet that claims aria-modal — extracted from the
    mobile sheet's own Tab-wrap handler, which was the only one of four aria-modal dialogs
    that actually trapped focus (lightbox, SOS, the address card, and the new-guide modal

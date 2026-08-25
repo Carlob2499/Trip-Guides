@@ -32,7 +32,10 @@ import { reducedMotion, migrateStorageKey } from "./util.js";
   var reduced = reducedMotion();
 
   function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+    try {
+      var parsed = JSON.parse(localStorage.getItem(KEY));
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    } catch (e) { return {}; }
   }
   function save(mem) {
     try { localStorage.setItem(KEY, JSON.stringify(mem)); } catch (e) {}

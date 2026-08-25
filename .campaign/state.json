@@ -43,7 +43,10 @@
     "Post-fix canonical npm run check:fast passed: invariants, lint, authored-source typecheck, and 183 test files / 3,041 passing tests completed without a heap exhaustion.",
     "Wave 2 reproduced a safe-to-fix browser-state defect: tools-reminders.js accepted parseable non-object localStorage (for example true), then threw on checkbox change in strict mode. The focused red test failed with Cannot create property on boolean; object-shape validation made the same test pass.",
     "The same malformed-state class independently reproduced in src/features/reminders/gateway.js: boolean true became the mutable local item map and gateway.add threw. A focused red/green regression now proves object-shape validation before local fallback mutation.",
-    "A third independent case was reproduced in route-opt persistence: boolean true became the saved route-order record and Apply threw while writing a day key. The focused route-opt red/green regression proves the same object-shape boundary at this distinct owner."
+    "A third independent case was reproduced in route-opt persistence: boolean true became the saved route-order record and Apply threw while writing a day key. The focused route-opt red/green regression proves the same object-shape boundary at this distinct owner.",
+    "A fourth independent case was reproduced in per-tab scroll memory: boolean true became the saved tab-position map and the scroll callback threw while writing itinerary. The focused scroll-memory red/green regression proves object-shape validation at this distinct owner.",
+    "guide-ui journey-station persistence had the same parse-and-mutate structure: a stored primitive could become seen before markSeen assigned a key. It now uses the shared parseStoredRecord contract, whose records-only behavior is unit-proven; typecheck passed after integration.",
+    "field-tools stop check-off had the same parse-and-mutate structure: a stored primitive could become stopState before a traveler toggle assigned a key. It now uses parseStoredRecord; the shared records-only contract and typecheck are green after integration."
   ],
   "blockers": [
     {
@@ -109,8 +112,20 @@
       "status": "PASS",
       "result": "184 test files, 3,042 tests passed, 1 existing todo after the reminder-state regression joined the suite",
       "observedAt": "2026-08-25T23:29:00-04:00"
+    },
+    {
+      "command": "npm test",
+      "status": "PASS",
+      "result": "187 test files, 3,046 tests passed, 1 existing todo after the full Wave 2 storage-shape regression set",
+      "observedAt": "2026-08-25T23:40:00-04:00"
+    },
+    {
+      "command": "npm run check:invariants && npm run lint",
+      "status": "PASS",
+      "result": "56 protected contracts confirmed and ESLint passed after shared storage-shape integrations",
+      "observedAt": "2026-08-25T23:40:00-04:00"
     }
   ],
   "nextAction": "Conduct Wave 2 invalid-state/data discovery: exercise parser, storage, state, and cross-surface contracts for malformed, missing, stale, duplicate, and unsafe inputs without touching PR #100-owned Firebase sync paths or factual guide content.",
-  "updatedAt": "2026-08-25T23:29:00-04:00"
+  "updatedAt": "2026-08-25T23:40:00-04:00"
 }

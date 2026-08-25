@@ -15,3 +15,6 @@
 - [x] Make Tools reminder persistence fail safely for parseable but non-object localStorage payloads, with a focused regression test.
 - [x] Make the reminder gateway reject parseable but non-object localStorage item maps, with a focused regression test.
 - [x] Make route-optimization persistence reject parseable but non-object localStorage state, with a focused regression test.
+- [x] Make per-tab scroll-memory persistence reject parseable but non-object localStorage state, with a focused regression test.
+- [x] Make guide-ui journey-station session persistence reject parseable but non-object sessionStorage state, with a focused regression test.
+- [x] Make field-tools stop check-off persistence reject parseable but non-object localStorage state, with a focused regression test.
