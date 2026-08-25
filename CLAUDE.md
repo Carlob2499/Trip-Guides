@@ -66,12 +66,4 @@ Use the smallest useful check during iteration, then the repository gates before
 
 For visual/frontend work, include the existing accessibility/resilience gate and design drift checker where applicable. CI on the exact PR head is authoritative. Never weaken a gate merely to make a branch green.
 
-**`CONTEXT.md` auto-loads at session start** (SessionStart hook) and is the durable-memory
-file: the glossary, the standing creator rulings, and the architecture decisions that used to
-live as separate ADRs. Name a domain concept with the term `CONTEXT.md` defines — don't drift
-to a synonym it explicitly avoids. If your output contradicts a decision recorded there, say
-so out loud rather than silently overriding it. A concept missing from the glossary is a
-signal: either you are inventing language the project doesn't use, or there's a real gap to
-record.
-
 When a fix proves a contract, cash the proof back into simplicity: remove superseded overrides, duplicate docs/workflows, stale compatibility code, or debugging commentary when safe.
