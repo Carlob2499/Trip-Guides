@@ -37,7 +37,7 @@ import { activeFeedback, recordStageFeedback } from "../pipeline/v2/feedback.mjs
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const readRepo = (rel) => readFileSync(path.join(ROOT, rel), "utf8");
-const WORKFLOW = readRepo(".github/workflows/research-pass-v2.yml");
+const WORKFLOW = readRepo(".github/workflows/research-pass-v2.yml").replace(/\r\n?/g, "\n");
 const SLUG = "testland";
 
 // The exact line the live reconcile printed before the container exited nonzero.
