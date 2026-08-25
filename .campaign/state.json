@@ -8,8 +8,8 @@
     "remote": "origin",
     "mainRecovery": "Merged PR #101 restored main after an accidental local merge; removed an unintended .claude skill-tree expansion before the campaign branch was created."
   },
-  "phase": "wave-1-history-and-known-scars",
-  "completedWaves": ["baseline-proof"],
+  "phase": "wave-2-invalid-state-data",
+  "completedWaves": ["baseline-proof", "wave-1-history-and-known-scars"],
   "protectedBoundaries": [
     "V1 remains production default and rollback while WAYPOINT_RESEARCH_ENGINE is unset.",
     "V01/V02/V03/V05 candidate, V2 stage prompts/workflow, validation criteria, selector/publication authority, and frozen candidate are compatibility-frozen.",
@@ -40,7 +40,8 @@
     "GitHub currently has one active PR (#100) whose protected scope is recorded above.",
     "Typecheck root cause confirmed: tsconfig.json omitted generated dist/** from exclude, allowing astro check to analyze production minified bundles; normal and 6 GB baseline runs exhausted Node before a repository assertion result.",
     "Fix: added dist/** to tsconfig.json exclude and a check-project-invariants.mjs contract. npm run check:invariants passes 56 contracts; npm run typecheck completes with 0 errors and 12 pre-existing hints.",
-    "Post-fix canonical npm run check:fast passed: invariants, lint, authored-source typecheck, and 183 test files / 3,041 passing tests completed without a heap exhaustion."
+    "Post-fix canonical npm run check:fast passed: invariants, lint, authored-source typecheck, and 183 test files / 3,041 passing tests completed without a heap exhaustion.",
+    "Wave 2 reproduced a safe-to-fix browser-state defect: tools-reminders.js accepted parseable non-object localStorage (for example true), then threw on checkbox change in strict mode. The focused red test failed with Cannot create property on boolean; object-shape validation made the same test pass."
   ],
   "blockers": [
     {
@@ -88,8 +89,26 @@
       "status": "PASS",
       "result": "Post-fix canonical fast gate passed: 183 test files, 3,041 tests passed, 1 existing todo",
       "observedAt": "2026-08-25T23:21:00-04:00"
+    },
+    {
+      "command": "npx vitest run src/scripts/tools-reminders.test.ts",
+      "status": "PASS",
+      "result": "Focused malformed parseable storage regression passes after a prior red failure on boolean true",
+      "observedAt": "2026-08-25T23:28:00-04:00"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "PASS",
+      "result": "526 files, 0 errors, 0 warnings, 12 existing hints after exporting the reminder-state normalizer",
+      "observedAt": "2026-08-25T23:29:00-04:00"
+    },
+    {
+      "command": "npm test",
+      "status": "PASS",
+      "result": "184 test files, 3,042 tests passed, 1 existing todo after the reminder-state regression joined the suite",
+      "observedAt": "2026-08-25T23:29:00-04:00"
     }
   ],
-  "nextAction": "Conduct Wave 1: mine recent history, merged/closed pull requests, referenced issues, handoffs, repository-shape scars, open TODO/FIXME/assumption markers, and PR #100 residual boundaries. Classify every candidate before implementation.",
-  "updatedAt": "2026-08-25T23:21:00-04:00"
+  "nextAction": "Conduct Wave 2 invalid-state/data discovery: exercise parser, storage, state, and cross-surface contracts for malformed, missing, stale, duplicate, and unsafe inputs without touching PR #100-owned Firebase sync paths or factual guide content.",
+  "updatedAt": "2026-08-25T23:29:00-04:00"
 }

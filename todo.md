@@ -12,3 +12,4 @@
 - [ ] Run at least four fresh-eyes reviews and three materially different zero-new-high-value rediscovery sweeps before claiming engineering exhaustion.
 - [ ] Conduct and synthesize positive, negative, accessibility/HCI, field-use, and contrarian design-research sweeps without altering current design authority.
 - [ ] Remove temporary campaign artifacts before final exact-head verification, retaining only approved evidence and durable improvements.
+- [x] Make Tools reminder persistence fail safely for parseable but non-object localStorage payloads, with a focused regression test.

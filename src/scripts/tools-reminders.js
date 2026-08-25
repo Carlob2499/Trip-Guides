@@ -8,12 +8,19 @@
    Progressive by construction: with JS off the boxes still render and still toggle for the
    session — they simply do not persist, which is the honest degradation for a convenience. */
 
+export function normalizeReminderState(raw) {
+  try {
+    var parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch (e) { return {}; }
+}
+
 var list = document.querySelector("[data-tools-reminders]");
 if (list) {
   var KEY = "tg-toolsrem-" + list.getAttribute("data-tools-reminders");
 
   function read() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+    try { return normalizeReminderState(localStorage.getItem(KEY)); } catch (e) { return {}; }
   }
   function write(state) {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* private mode */ }
