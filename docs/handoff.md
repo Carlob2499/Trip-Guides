@@ -18,7 +18,9 @@ Durable shared-add decisions live in `CONTEXT.md`.
 - `collection.add` (used by Trip Split and reminder additions) and `addAsync` (Learnings feedback) use the local durable outbox.
 - Server acknowledgment removes the active outbox entry and resolves `addAsync`.
 - Offline or transient failures remain in the active durable retry outbox; `addAsync` may remain pending.
-- Confirmed permanent rejection preserves the full payload in a separate durable rejected/dead-letter bucket, removes it from active capacity and replay, and rejects `addAsync` with the original or classified error.
+- Confirmed permanent rejection normally preserves the full payload in a separate durable rejected/dead-letter bucket, removes it from active capacity and replay, and rejects `addAsync` with the original or classified error.
+- If rejected-bucket storage fails while active storage remains writable, the ordinary stable-path payload stays inside `tg-outbox` and reserved system metadata in the same atomic write marks it terminal, excluded from replay and the active 50-entry capacity.
+- If neither terminal representation can be persisted, the full original active payload remains and the caller receives an explicit `WaypointSyncDurabilityError`; retry suppression is then physically unprovable.
 - Rejected records do not retry on every room join. No traveler-facing dead-letter management UI is included.
 - This contract applies only to collection additions, not `set`, `update`, or `remove`.
 

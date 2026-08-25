@@ -2,7 +2,9 @@ import { build, type Plugin } from "vite";
 import { fileURLToPath } from "node:url";
 
 const CLIENT_ID = "\0waypoint-sync-proof-client";
+const FIREBASE_INDEX_ID = "\0waypoint-survey-proof-firebase";
 const syncEntry = fileURLToPath(new URL("../../../src/features/firebase/sync.js", import.meta.url));
+const surveyEntry = fileURLToPath(new URL("../../../src/features/learnings/ui/survey.js", import.meta.url));
 
 const fakeClientSource = String.raw`
 const listeners = new Map();
@@ -129,13 +131,31 @@ function fakeFirebaseClient(): Plugin {
     name: "waypoint-sync-proof-client-boundary",
     enforce: "pre",
     resolveId(source, importer) {
+      if (source === "waypoint-survey-proof-source") return surveyEntry;
       if (source === "./client.js" && importer?.replaceAll("\\", "/").endsWith("/src/features/firebase/sync.js")) {
         return CLIENT_ID;
+      }
+      if (source === "../../firebase/index.js" && importer?.replaceAll("\\", "/").endsWith("/src/features/learnings/ui/survey.js")) {
+        return FIREBASE_INDEX_ID;
+      }
+      return null;
+    },
+    transform(code, id) {
+      if (id.replaceAll("\\", "/") === syncEntry.replaceAll("\\", "/")) {
+        return code + '\nexport { initFeedback } from "waypoint-survey-proof-source";';
       }
       return null;
     },
     load(id) {
-      return id === CLIENT_ID ? fakeClientSource : null;
+      if (id === CLIENT_ID) return fakeClientSource;
+      if (id === FIREBASE_INDEX_ID) {
+        return `
+          export function hasFirebase() { return true; }
+          export function roomId() { return "surveyproofroom001"; }
+          export function joinTrip() { return Promise.resolve(globalThis.__proofSurveyRoom); }
+        `;
+      }
+      return null;
     },
   };
 }
@@ -149,7 +169,7 @@ export async function buildSyncProofBundle(): Promise<string> {
       target: "es2022",
       minify: false,
       lib: { entry: syncEntry, formats: ["es"] },
-      rollupOptions: { output: { entryFileNames: "sync-proof.js" } },
+      rollupOptions: { output: { entryFileNames: "sync-proof.js", inlineDynamicImports: true } },
     },
   });
   const builds = Array.isArray(result) ? result : [result];

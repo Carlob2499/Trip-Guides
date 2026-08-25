@@ -16,6 +16,7 @@ import { isPermanentWriteError } from "./model/room";
 const OUTBOX_KEY = "tg-outbox";
 const REJECTED_OUTBOX_KEY = "tg-outbox-rejected";
 const ACKED_OUTBOX_KEY = "tg-outbox-acked";
+const OUTBOX_METADATA_KEY = "__waypoint_outbox_metadata_v1__";
 function readOutbox() {
   try { return JSON.parse(localStorage.getItem(OUTBOX_KEY) || "{}"); } catch (_) { return {}; }
 }
@@ -33,19 +34,36 @@ function writeStoredMap(key, value) {
 function writeOutbox(o) {
   return writeStoredMap(OUTBOX_KEY, o);
 }
+function inlineRejectedPaths(outbox) {
+  const metadata = outbox && outbox[OUTBOX_METADATA_KEY];
+  const rejected = metadata && typeof metadata === "object" && metadata.rejected;
+  return rejected && typeof rejected === "object" ? rejected : {};
+}
 function isolateRejectedEntry(fullPath, code) {
   const active = readOutbox();
-  if (!(fullPath in active)) return;
+  if (!(fullPath in active)) return { ok: true };
   const value = active[fullPath];
   const queuedAt = value && typeof value === "object" && typeof value.createdAt === "number"
     ? value.createdAt
     : Date.now();
+  const terminal = { queuedAt, rejectedAt: Date.now(), code };
   const rejected = readStoredMap(REJECTED_OUTBOX_KEY);
   const result = writeStoredMap(REJECTED_OUTBOX_KEY, Object.assign({}, rejected, {
-    [fullPath]: { value, queuedAt, rejectedAt: Date.now(), code },
+    [fullPath]: { value, queuedAt, rejectedAt: terminal.rejectedAt, code },
   }));
-  if (!result.ok) return;
-  writeOutbox(removeEntry(readOutbox(), fullPath));
+  if (result.ok) {
+    writeOutbox(removeEntry(readOutbox(), fullPath));
+    return { ok: true };
+  }
+  // If the separate rejected bucket is unavailable, retain the ordinary payload at its stable
+  // path and atomically add system-owned terminal metadata beside it in the durable outbox.
+  const metadata = active[OUTBOX_METADATA_KEY];
+  const fallback = writeOutbox(Object.assign({}, active, {
+    [OUTBOX_METADATA_KEY]: Object.assign({}, metadata && typeof metadata === "object" ? metadata : {}, {
+      rejected: Object.assign({}, inlineRejectedPaths(active), { [fullPath]: terminal }),
+    }),
+  }));
+  return fallback.ok ? { ok: true } : { ok: false, error: fallback.error || result.error };
 }
 
 // Best-effort error beacon. A leaf feature that throws used to log ONLY to the traveler's own
@@ -97,7 +115,10 @@ export async function joinTrip(code) {
     return true;
   }
 
-  entriesForRoom(readOutbox(), base).forEach(function (e) {
+  const replayOutbox = readOutbox();
+  const inlineRejected = inlineRejectedPaths(replayOutbox);
+  entriesForRoom(replayOutbox, base).forEach(function (e) {
+    if (e.path in inlineRejected) return;
     if (e.path in readStoredMap(ACKED_OUTBOX_KEY) || e.path in readStoredMap(REJECTED_OUTBOX_KEY)) {
       consumeTerminalEntry(e.path);
       return;
@@ -113,12 +134,25 @@ export async function joinTrip(code) {
   function onWriteFailed(fullPath, err) {
     const code = String((err && (err.code || err.message)) || "unknown");
     const permanent = isPermanentWriteError(err);
-    if (permanent) isolateRejectedEntry(fullPath, code);
+    if (permanent) {
+      const isolation = isolateRejectedEntry(fullPath, code);
+      if (!isolation.ok) {
+        return {
+          permanent,
+          durabilityError: durabilityError(
+            fullPath,
+            "outbox-rejection-state-failed",
+            "Could not durably mark " + fullPath + " as permanently rejected",
+            isolation.error,
+          ),
+        };
+      }
+    }
     try {
       console.error("[waypoint sync] write to " + fullPath + (permanent ? " REJECTED (permanent): " : " failed, will retry: ") + code);
       document.dispatchEvent(new CustomEvent("tg:sync-error", { detail: { path: fullPath, permanent, code } }));
     } catch { /* no DOM (tests / SSR) — the console line above is the record */ }
-    return permanent;
+    return { permanent, durabilityError: null };
   }
 
   function durabilityError(fullPath, code, message, cause) {
@@ -156,10 +190,23 @@ export async function joinTrip(code) {
       readStoredMap(ACKED_OUTBOX_KEY),
       readStoredMap(REJECTED_OUTBOX_KEY),
     );
+    const stored = readOutbox();
+    const inlineTerminal = inlineRejectedPaths(stored);
     const active = Object.fromEntries(
-      Object.entries(readOutbox()).filter(([path]) => !(path in terminal)),
+      Object.entries(stored).filter(([path]) => (
+        path !== OUTBOX_METADATA_KEY && !(path in terminal) && !(path in inlineTerminal)
+      )),
     );
-    const result = writeOutbox(addEntry(active, fullPath, value));
+    const cappedActive = addEntry(active, fullPath, value);
+    const next = {};
+    Object.keys(stored).forEach(function (path) {
+      if (path === OUTBOX_METADATA_KEY || path in inlineTerminal) next[path] = stored[path];
+      else if (path in cappedActive) next[path] = cappedActive[path];
+    });
+    Object.keys(cappedActive).forEach(function (path) {
+      if (!(path in next)) next[path] = cappedActive[path];
+    });
+    const result = writeOutbox(next);
     if (result.ok) return null;
     return durabilityError(
       fullPath,
@@ -216,7 +263,9 @@ export async function joinTrip(code) {
           })
           .catch(function (err) {
             if (err && err.code === "outbox-ack-cleanup-failed") throw err;
-            if (onWriteFailed(fullPath, err)) throw err;
+            const failure = onWriteFailed(fullPath, err);
+            if (failure.durabilityError) throw failure.durabilityError;
+            if (failure.permanent) throw err;
             return new Promise(function () {});
           });
       },

@@ -38,6 +38,8 @@ export function initFeedback() {
   var STEPS = ["Ratings", "What we did", "In your words"];
   var cur = 0;
   var lastFocus = null;
+  var generation = 0;
+  var pendingFailures = [];
 
   // Collected answers.
   var ratings = {}; // { overall, pacing, food }
@@ -191,6 +193,29 @@ export function initFeedback() {
 
     var subBtn = navEl.querySelector(".lnw-submit");
     if (subBtn) { subBtn.disabled = true; subBtn.textContent = "Logging…"; }
+    var attemptGeneration = generation;
+    var failed = false;
+    function showFailure(error) {
+      if (failed) return;
+      failed = true;
+      if (attemptGeneration !== generation || modal.hidden) {
+        pendingFailures.push(error);
+        return;
+      }
+      var code = String((error && (error.code || error.message)) || error || "");
+      if (code === "outbox-ack-cleanup-failed" || code === "outbox-rejection-state-failed") {
+        renderNonRetryFailure(code);
+        return;
+      }
+      // A timeout may already have painted the queued state and replaced the submit
+      // button. Restore the form before presenting the same retry state used by an
+      // immediate rejection, so a later terminal failure cannot remain apparent success.
+      if (!subBtn || !subBtn.isConnected) {
+        paint();
+        subBtn = navEl.querySelector(".lnw-submit");
+      }
+      if (subBtn) { subBtn.disabled = false; subBtn.textContent = "Retry — couldn't reach the group"; }
+    }
 
     // Wait for the SERVER to acknowledge before telling anyone it landed. RTDB queues writes
     // while offline and that promise never settles, so race a timeout and say "queued" instead
@@ -198,13 +223,31 @@ export function initFeedback() {
     joinTrip(roomId())
       .then(function (room) {
         var ack = room.collection("feedback").addAsync(rec);
+        // Promise.race stops observing the write once the timeout wins. Keep an independent
+        // rejection observer on the original acknowledgment so a later permanent/durability
+        // failure replaces the provisional queued state and cannot become unhandled.
+        ack.catch(showFailure);
         var timeout = new Promise(function (resolve) { setTimeout(function () { resolve("queued"); }, 8000); });
         return Promise.race([ack.then(function () { return "saved"; }), timeout]);
       })
-      .then(function (outcome) { success(outcome === "queued"); })
-      .catch(function () {
-        if (subBtn) { subBtn.disabled = false; subBtn.textContent = "Retry — couldn't reach the group"; }
-      });
+      .then(function (outcome) {
+        if (!failed && attemptGeneration === generation && !modal.hidden) success(outcome === "queued");
+      })
+      .catch(showFailure);
+  }
+
+  function renderNonRetryFailure(code) {
+    if (titleEl) titleEl.textContent = "Sync needs attention.";
+    if (eyebrowEl) eyebrowEl.textContent = "Trip feedback";
+    var message = code === "outbox-ack-cleanup-failed"
+      ? "Your feedback reached the group, but this device couldn't finish confirming it. Don't submit it again."
+      : code === "outbox-rejection-state-failed"
+        ? "Your feedback is still saved on this device, but its sync status couldn't be confirmed. Don't submit it again; it may upload automatically later."
+        : "This feedback could not be synced. Close this message, then open feedback again if you want to submit a new response.";
+    bodyEl.innerHTML = '<p class="lnw-lede lnw-warn">' + message + "</p>";
+    navEl.innerHTML = '<button type="button" class="lnw-btn lnw-primary lnw-done">Done</button>';
+    var done = navEl.querySelector(".lnw-done");
+    if (done) { done.addEventListener("click", close); done.focus(); }
   }
 
   function flashEmpty() {
@@ -226,12 +269,17 @@ export function initFeedback() {
   /* ── open / close + focus trap ──────────────────────────────────────────── */
   function open() {
     lastFocus = document.activeElement;
+    generation += 1;
     // Reset for a fresh submission each open.
     cur = 0; ratings = {}; stopRows = []; freeform = "";
     modal.hidden = false;
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     paint();
+    if (pendingFailures.length) {
+      var pending = pendingFailures.shift();
+      renderNonRetryFailure(String((pending && (pending.code || pending.message)) || pending || ""));
+    }
     var first = modal.querySelector(".lnw-dialog");
     if (first) first.focus();
   }
