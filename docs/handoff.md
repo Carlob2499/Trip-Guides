@@ -8,8 +8,8 @@ Offline shared-add browser proof is complete on `codex/offline-write-reconnect-p
 The proof exercises the real `sync.js` outbox and error classifier with only the Firebase client/transport substituted. Focused Playwright is 4/4 and the full Playwright suite is 69/69.
 A real defect was fixed: Learnings `addAsync` promised device durability but bypassed `tg-outbox`; its first red expected one durable entry and received zero. Durable shared-add records now remain queued until server acknowledgment, and stable keys prevent replay duplication.
 The bounded branch changes five implementation/test/CI files. No Pipeline V2 research behavior, DS1 visual decision, guide content, Firebase rule, room-ID semantic, production navigation, or unrelated architecture changed.
-Canary #4 (Uruguay) remains GREEN for the V2 draft product path only. R03 is fully accepted: authenticated issue escalation and the cancellation chain are proven. The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary. Production cutover remains pending.
-Next: commit, push, and open the offline-proof PR; do not merge. The remaining live boundary is the real Firebase SDK/auth, deployed rules, and real-network delivery path.
+Canary #4 (Uruguay) remains GREEN for the V2 draft-only product path. V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset. R03 is fully accepted: authenticated issue escalation and the cancellation chain are proven. The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary. Production cutover remains pending. Durable decisions live in `CONTEXT.md`.
+Next: review PR #100; do not merge in this session. The remaining live boundary is the real Firebase SDK/auth, deployed rules, and real-network delivery path.
 <!-- WARM_START_END -->
 
 ## Snapshot
@@ -70,4 +70,4 @@ Five implementation/test/CI files are in scope:
 
 ## Where we left off
 
-All requested local verification and review are green. Commit the bounded changes on `codex/offline-write-reconnect-proof`, push, and prepare a PR without merging it. The PR report must distinguish the deterministic browser proof from the remaining live Firebase SDK/auth/rules/network proof.
+All requested local verification and review are green. PR #100 is open from `codex/offline-write-reconnect-proof` and remains unmerged. Its report distinguishes the deterministic browser proof from the remaining live Firebase SDK/auth/rules/network proof.
