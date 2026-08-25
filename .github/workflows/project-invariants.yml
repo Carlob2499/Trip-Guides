@@ -31,9 +31,8 @@ on:
       - public/sw.js
       - docs/design-handoff/**
       - src/content/guides/uruguay/_guide.json
-      # Retired reciprocal-review paths remain in the trigger list intentionally. Re-adding any
-      # one of them must run the invariant that requires the temporary integration stack to stay
-      # absent unless a future architecture decision deliberately restores it.
+      # Active reciprocal-review control-plane paths stay in the trigger list intentionally.
+      # Any change to them must re-run the invariants that protect the revision-4 trust boundary.
       - .github/workflows/claude-codex-watcher.yml
       - .github/workflows/claude-codex-signal.yml
       - scripts/codex-watcher.mjs

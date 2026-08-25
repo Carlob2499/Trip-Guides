@@ -11,9 +11,6 @@ import { ready, hasFirebase } from "./client.js";
 import { addEntry, entriesForRoom, removeEntry } from "./model/outbox";
 import { isPermanentWriteError } from "./model/room";
 
-// Unambiguous alphabet (no 0/o/1/l/i) — codes get read aloud and typed on phones.
-const CODE_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";
-
 // Durable write outbox (see model/outbox.ts). localStorage-backed so an add made offline
 // survives a tab close — RTDB's own queue is memory-only.
 const OUTBOX_KEY = "tg-outbox";
@@ -46,15 +43,6 @@ export function reportError(detail) {
       }).catch(function () {});
     }).catch(function () {});
   } catch (e) { /* beacon must never surface its own failure */ }
-}
-
-// A 10-char crypto-random room key — unguessable, so the code itself is the lock.
-export function generateTripCode() {
-  const rnd = new Uint32Array(10);
-  (globalThis.crypto || window.crypto).getRandomValues(rnd);
-  let s = "";
-  for (let i = 0; i < rnd.length; i++) s += CODE_ALPHABET[rnd[i] % CODE_ALPHABET.length];
-  return s;
 }
 
 // RTDB keys can't contain . $ # [ ] / — sanitize anything a user types/pastes.
