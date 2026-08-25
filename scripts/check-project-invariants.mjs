@@ -37,6 +37,7 @@ function requireText(rel, needle, label) {
 
 const agents = read("AGENTS.md");
 const claude = read("CLAUDE.md");
+const tsconfig = JSON.parse(read("tsconfig.json"));
 const sharedBody = (text) => {
   const normalized = text.replace(/\r\n?/g, "\n");
   const marker = "\n---\n";
@@ -85,6 +86,12 @@ for (const rel of [
   "docs/pipeline v2/IMPLEMENTATION_STATE.md",
   "docs/pipeline v2/SEPTEMBER_TRACKER.md",
 ]) requirePath(rel, `Current authority: ${rel}`);
+
+if (!Array.isArray(tsconfig.exclude) || !tsconfig.exclude.includes("dist/**")) {
+  fail("Typecheck boundary: tsconfig.json must exclude generated dist/** artifacts");
+} else {
+  pass("Typecheck boundary excludes generated dist artifacts");
+}
 
 requirePath(".github/workflows/research-pass.yml", "Pipeline V1 workflow");
 requirePath(".github/workflows/research-pass-v2.yml", "Pipeline V2 workflow");

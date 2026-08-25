@@ -8,8 +8,8 @@
     "remote": "origin",
     "mainRecovery": "Merged PR #101 restored main after an accidental local merge; removed an unintended .claude skill-tree expansion before the campaign branch was created."
   },
-  "phase": "baseline-proof",
-  "completedWaves": [],
+  "phase": "wave-1-history-and-known-scars",
+  "completedWaves": ["baseline-proof"],
   "protectedBoundaries": [
     "V1 remains production default and rollback while WAYPOINT_RESEARCH_ENGINE is unset.",
     "V01/V02/V03/V05 candidate, V2 stage prompts/workflow, validation criteria, selector/publication authority, and frozen candidate are compatibility-frozen.",
@@ -37,9 +37,59 @@
   "evidence": [
     "AGENTS.md, CLAUDE.md, PRODUCT.md, CONTEXT.md, docs/reference/repo-map.md, docs/handoff.md, docs/reference/pipeline.md, and package.json read against repaired main.",
     "Remote main advanced during setup from 325c304 to 033d5cc; delta reviewed and local main fast-forwarded before campaign branch creation.",
-    "GitHub currently has one active PR (#100) whose protected scope is recorded above."
+    "GitHub currently has one active PR (#100) whose protected scope is recorded above.",
+    "Typecheck root cause confirmed: tsconfig.json omitted generated dist/** from exclude, allowing astro check to analyze production minified bundles; normal and 6 GB baseline runs exhausted Node before a repository assertion result.",
+    "Fix: added dist/** to tsconfig.json exclude and a check-project-invariants.mjs contract. npm run check:invariants passes 56 contracts; npm run typecheck completes with 0 errors and 12 pre-existing hints.",
+    "Post-fix canonical npm run check:fast passed: invariants, lint, authored-source typecheck, and 183 test files / 3,041 passing tests completed without a heap exhaustion."
   ],
-  "blockers": [],
-  "nextAction": "Run the smallest canonical baseline gate from a clean campaign branch, classify failures as environment or product evidence, then begin history/known-scar discovery.",
-  "updatedAt": "2026-08-25T23:06:40-04:00"
+  "blockers": [
+    {
+      "id": "ENV-BASELINE-NODE-HEAP",
+      "status": "RESOLVED_REPOSITORY_CONFIG",
+      "command": "npm run typecheck",
+      "observedAt": "2026-08-25T23:08:00-04:00",
+      "resolvedAt": "2026-08-25T23:19:00-04:00",
+      "evidence": "The memory exhaustion was a repository configuration defect, not external capacity: authored-source typecheck succeeds at the default Node heap after dist/** is excluded."
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm run check:fast",
+      "status": "ENVIRONMENT_CAPACITY_FAILURE",
+      "result": "Pre-fix: Node heap out of memory before completion",
+      "observedAt": "2026-08-25T23:08:00-04:00"
+    },
+    {
+      "command": "NODE_OPTIONS=--max-old-space-size=6144 npm run check:fast",
+      "status": "ENVIRONMENT_CAPACITY_FAILURE",
+      "result": "Pre-fix: Node heap out of memory at approximately 6 GB after 153 seconds; command did not reach a repository assertion result",
+      "observedAt": "2026-08-25T23:10:30-04:00"
+    },
+    {
+      "command": "npm run check:invariants && npm run lint && npm run typecheck",
+      "status": "ENVIRONMENT_CAPACITY_FAILURE",
+      "result": "Pre-fix: combined sub-gates exhausted the default Node heap before completion; individual owner isolation required",
+      "observedAt": "2026-08-25T23:12:00-04:00"
+    },
+    {
+      "command": "npm run check:invariants",
+      "status": "PASS",
+      "result": "56 protected contracts confirmed, including generated dist exclusion",
+      "observedAt": "2026-08-25T23:18:00-04:00"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "PASS",
+      "result": "0 errors, 0 warnings, 12 existing hints; completed at default Node heap after excluding dist/**",
+      "observedAt": "2026-08-25T23:19:00-04:00"
+    },
+    {
+      "command": "npm run check:fast",
+      "status": "PASS",
+      "result": "Post-fix canonical fast gate passed: 183 test files, 3,041 tests passed, 1 existing todo",
+      "observedAt": "2026-08-25T23:21:00-04:00"
+    }
+  ],
+  "nextAction": "Conduct Wave 1: mine recent history, merged/closed pull requests, referenced issues, handoffs, repository-shape scars, open TODO/FIXME/assumption markers, and PR #100 residual boundaries. Classify every candidate before implementation.",
+  "updatedAt": "2026-08-25T23:21:00-04:00"
 }

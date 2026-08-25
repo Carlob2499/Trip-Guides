@@ -1,4 +1,4 @@
 {
   "extends": "astro/tsconfigs/base",
-  "exclude": ["docs/design-handoff/**"]
+  "exclude": ["docs/design-handoff/**", "dist/**"]
 }
