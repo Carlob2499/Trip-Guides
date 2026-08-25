@@ -34,11 +34,11 @@ Accessibility is product quality. Work should move toward WCAG 2.2 AA while pres
 
 ## Durable shared-add acknowledgment
 
-A supported durable shared-add is locally pending until the server acknowledges its stable-key write. Its outbox record is removed only after that acknowledgment, and an `addAsync` caller settles only at the same boundary. A transient or permanent transport failure must leave the record locally queued and emit the classified `tg:sync-error`; it must not turn an unverified write into apparent success or silently discard traveler state.
+A supported durable collection addition remains locally pending until the server acknowledges its stable-key write. Server acknowledgment removes the active outbox entry and resolves its `addAsync` caller. Offline or transient failure keeps the full payload in the active durable retry outbox, and `addAsync` may remain pending.
 
-Permanently rejected records may retry and log on later room joins. Waypoint does not currently expose a traveler-facing dead-letter/status surface for them. That missing surface is an explicit boundary, not permission to weaken durability or make rejection look successful.
+A confirmed permanent rejection durably preserves the full payload in a separate rejected/dead-letter local bucket, removes it from active outbox capacity and replay, does not retry it on every room join, and rejects `addAsync` with the original or classified error. Waypoint adds no traveler-facing dead-letter management UI.
 
-This decision governs durable collection additions, including Trip Split/reminder additions and Learnings feedback. It does not silently extend the same outbox guarantee to collection or document `set`, `update`, or `remove`; those paths require separate proof and an explicit contract decision.
+This decision governs durable collection additions, including Trip Split/reminder additions and Learnings feedback. It does not extend the same outbox guarantee to collection or document `set`, `update`, or `remove`; those paths require separate proof and an explicit contract decision.
 
 ## Itinerary and guide breadth
 

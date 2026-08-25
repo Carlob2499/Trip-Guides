@@ -91,6 +91,14 @@ async function outboxPaths(page: Page): Promise<string[]> {
   return page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem("tg-outbox") || "{}") as Record<string, unknown>));
 }
 
+async function rejectedOutbox(page: Page): Promise<Record<string, unknown>> {
+  return page.evaluate(() => JSON.parse(localStorage.getItem("tg-outbox-rejected") || "{}") as Record<string, unknown>);
+}
+
+async function acknowledgedOutbox(page: Page): Promise<Record<string, unknown>> {
+  return page.evaluate(() => JSON.parse(localStorage.getItem("tg-outbox-acked") || "{}") as Record<string, unknown>);
+}
+
 test("offline collection.add survives tab recreation, drains once, and converges in a second client", async ({ browser }) => {
   const roomCode = "offlineproofroom1";
   const backend = new CanonicalBackend();
@@ -250,19 +258,213 @@ test("addAsync keeps a transient rejection pending and durable without apparent 
   await context.close();
 });
 
-test("addAsync keeps a permanent rejection pending and durable without apparent success", async ({ browser }) => {
+test("collection adds stop before the backend when initial active persistence fails", async ({ browser }) => {
+  const roomCode = "persistencefail001";
+  const backend = new CanonicalBackend();
+  const context = await browser.newContext();
+  await installTransport(context, backend);
+  const page = await context.newPage();
+  await openProofPage(page);
+  await joinAndObserve(page, roomCode, "feedback");
+  await captureSyncErrors(page);
+
+  const result = await page.evaluate(async () => {
+    const proof = globalThis as ProofWindow;
+    const originalSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key: string, value: string) {
+      if (key === "tg-outbox") throw new DOMException("Storage quota unavailable", "QuotaExceededError");
+      return originalSetItem.call(this, key, value);
+    };
+    try {
+      const write = proof.__proofRoom?.collection("feedback").addAsync({ note: "Must be durable first" });
+      if (!write) throw new Error("proof room was not loaded");
+      const asyncResult = await write.then(
+        (key) => ({ state: "resolved" as const, key }),
+        (error: unknown) => {
+          const candidate = error as { name?: unknown; code?: unknown; message?: unknown };
+          return {
+            state: "rejected" as const,
+            name: String(candidate?.name || ""),
+            code: String(candidate?.code || ""),
+            message: String(candidate?.message || error),
+          };
+        },
+      );
+      let addResult: { state: "returned"; key: string } | { state: "threw"; name: string; code: string; message: string };
+      try {
+        const key = proof.__proofRoom?.collection("feedback").add({ note: "Must also be durable first" });
+        addResult = { state: "returned", key: String(key) };
+      } catch (error) {
+        const candidate = error as { name?: unknown; code?: unknown; message?: unknown };
+        addResult = {
+          state: "threw",
+          name: String(candidate?.name || ""),
+          code: String(candidate?.code || ""),
+          message: String(candidate?.message || error),
+        };
+      }
+      return { asyncResult, addResult };
+    } finally {
+      Storage.prototype.setItem = originalSetItem;
+    }
+  });
+
+  expect(result).toEqual({
+    asyncResult: {
+      state: "rejected",
+      name: "WaypointSyncDurabilityError",
+      code: "outbox-write-failed",
+      message: "Could not persist trips/persistencefail001/feedback/proof-key-0001 before sending",
+    },
+    addResult: {
+      state: "threw",
+      name: "WaypointSyncDurabilityError",
+      code: "outbox-write-failed",
+      message: "Could not persist trips/persistencefail001/feedback/proof-key-0002 before sending",
+    },
+  });
+  expect(await outboxPaths(page)).toEqual([]);
+  expect(backend.acceptedWriteCount).toBe(0);
+  expect(backend.values.size).toBe(0);
+  expect(await page.evaluate(() => Object.keys((globalThis as ProofWindow).__proofRecords || {}))).toEqual([]);
+  expect(await page.evaluate(() => (globalThis as ProofWindow).__proofSyncErrors)).toEqual([
+    { path: `trips/${roomCode}/feedback/proof-key-0001`, permanent: true, code: "outbox-write-failed" },
+    { path: `trips/${roomCode}/feedback/proof-key-0002`, permanent: true, code: "outbox-write-failed" },
+  ]);
+  await context.close();
+});
+
+test("an ack-removal storage failure is surfaced and cannot replay a duplicate canonical write", async ({ browser }) => {
+  const roomCode = "ackcleanupfail001";
+  const fullPath = `trips/${roomCode}/feedback/proof-key-0001`;
+  const backend = new CanonicalBackend();
+  const context = await browser.newContext();
+  await installTransport(context, backend);
+  const page = await context.newPage();
+  await openProofPage(page);
+  await joinAndObserve(page, roomCode, "feedback");
+  await captureSyncErrors(page);
+
+  const result = await page.evaluate(async (path) => {
+    const proof = globalThis as ProofWindow;
+    const originalSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key: string, value: string) {
+      if (key === "tg-outbox" && !(path in (JSON.parse(value) as Record<string, unknown>))) {
+        throw new DOMException("Storage quota unavailable", "QuotaExceededError");
+      }
+      return originalSetItem.call(this, key, value);
+    };
+    const write = proof.__proofRoom?.collection("feedback").addAsync({ note: "Accepted exactly once" });
+    if (!write) throw new Error("proof room was not loaded");
+    return write.then(
+      (key) => ({ state: "resolved" as const, key }),
+      (error: unknown) => {
+        const candidate = error as { name?: unknown; code?: unknown; message?: unknown };
+        return {
+          state: "rejected" as const,
+          name: String(candidate?.name || ""),
+          code: String(candidate?.code || ""),
+          message: String(candidate?.message || error),
+        };
+      },
+    );
+  }, fullPath);
+
+  expect(result).toEqual({
+    state: "rejected",
+    name: "WaypointSyncDurabilityError",
+    code: "outbox-ack-cleanup-failed",
+    message: `Server acknowledged ${fullPath}, but its active retry entry could not be removed`,
+  });
+  expect(backend.acceptedWriteCount).toBe(1);
+  expect(await outboxPaths(page)).toEqual([fullPath]);
+  expect(await acknowledgedOutbox(page)).toEqual({ [fullPath]: true });
+  expect(await page.evaluate(() => (globalThis as ProofWindow).__proofSyncErrors)).toEqual([
+    { path: fullPath, permanent: true, code: "outbox-ack-cleanup-failed" },
+  ]);
+
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await openProofPage(page);
+  await joinAndObserve(page, roomCode, "feedback");
+  await expect.poll(() => outboxPaths(page)).toEqual([]);
+  await expect.poll(() => acknowledgedOutbox(page)).toEqual({});
+  expect(backend.acceptedWriteCount).toBe(1);
+  expect([...backend.values.keys()]).toEqual([fullPath]);
+  expect(backend.read(fullPath)).toEqual({
+    createdBy: "proof-browser-user",
+    createdAt: expect.anything(),
+    note: "Accepted exactly once",
+  });
+  await context.close();
+});
+
+test("a terminal entry left active cannot evict legitimate queued capacity", async ({ browser }) => {
+  const roomCode = "terminalcapacity001";
+  const seedRoom = "terminalcapacityseed001";
+  const permanentPath = `trips/${roomCode}/feedback/proof-key-0001`;
+  const transientPath = `trips/${roomCode}/feedback/proof-key-0002`;
+  const permanentPayload = { note: "Preserve this rejected payload", nested: { traveler: "Ari" } };
+  const legitimatePaths = Array.from({ length: 49 }, (_, index) =>
+    `trips/${seedRoom}/feedback/seed-key-${String(index + 1).padStart(4, "0")}`);
   const backend = new CanonicalBackend();
   backend.mode = "permanent-error";
   const context = await browser.newContext();
   await installTransport(context, backend);
   const page = await context.newPage();
   await openProofPage(page);
-  await joinAndObserve(page, "permanentroom001", "feedback");
-  await captureSyncErrors(page);
+  await page.evaluate(({ paths, terminalPath }) => {
+    const active = Object.fromEntries(paths.map((path, index) => [path, {
+      createdBy: "proof-browser-user",
+      createdAt: 1_700_000_000_000 + index,
+      note: `Legitimate queued entry ${index + 1}`,
+    }]));
+    localStorage.setItem("tg-outbox", JSON.stringify(active));
+    const originalSetItem = Storage.prototype.setItem;
+    let failedTerminalRemoval = false;
+    Storage.prototype.setItem = function (key: string, value: string) {
+      if (
+        !failedTerminalRemoval
+        && key === "tg-outbox"
+        && !(terminalPath in (JSON.parse(value) as Record<string, unknown>))
+      ) {
+        failedTerminalRemoval = true;
+        throw new DOMException("Selective active prune failure", "QuotaExceededError");
+      }
+      return originalSetItem.call(this, key, value);
+    };
+  }, { paths: legitimatePaths, terminalPath: permanentPath });
+  await joinAndObserve(page, roomCode, "feedback");
 
-  const result = await page.evaluate(async () => {
+  const permanentResult = await page.evaluate(async (payload) => {
     const proof = globalThis as ProofWindow;
-    const write = proof.__proofRoom?.collection("feedback").addAsync({ note: "Do not claim success" });
+    const write = proof.__proofRoom?.collection("feedback").addAsync(payload);
+    if (!write) throw new Error("proof room was not loaded");
+    return write.then(
+      () => "resolved",
+      (error: unknown) => String((error as { code?: unknown; message?: unknown })?.code
+        || (error as { message?: unknown })?.message
+        || error),
+    );
+  }, permanentPayload);
+  expect(permanentResult).toBe("permission_denied");
+  expect(await outboxPaths(page)).toEqual([...legitimatePaths, permanentPath]);
+  expect(await rejectedOutbox(page)).toEqual({
+    [permanentPath]: {
+      value: {
+        createdBy: "proof-browser-user",
+        createdAt: expect.any(Number),
+        ...permanentPayload,
+      },
+      queuedAt: expect.any(Number),
+      rejectedAt: expect.any(Number),
+      code: "permission_denied",
+    },
+  });
+
+  backend.mode = "transient-error";
+  const transientResult = await page.evaluate(async () => {
+    const proof = globalThis as ProofWindow;
+    const write = proof.__proofRoom?.collection("feedback").addAsync({ note: "Keep all legitimate capacity" });
     if (!write) throw new Error("proof room was not loaded");
     return Promise.race([
       write.then(() => "resolved", () => "rejected"),
@@ -270,11 +472,139 @@ test("addAsync keeps a permanent rejection pending and durable without apparent 
     ]);
   });
 
-  expect(result).toBe("pending");
-  expect(await outboxPaths(page)).toEqual(["trips/permanentroom001/feedback/proof-key-0001"]);
+  expect(transientResult).toBe("pending");
+  expect(await outboxPaths(page)).toEqual([...legitimatePaths, transientPath]);
+  expect(await rejectedOutbox(page)).toEqual({
+    [permanentPath]: expect.objectContaining({
+      value: expect.objectContaining(permanentPayload),
+      code: "permission_denied",
+    }),
+  });
+  expect(backend.acceptedWriteCount).toBe(0);
+  await context.close();
+});
+
+test("addAsync isolates a permanent rejection without consuming active capacity or retrying it", async ({ browser }) => {
+  const roomCode = "permanentroom001";
+  const permanentPath = `trips/${roomCode}/feedback/proof-key-0001`;
+  const transientPath = `trips/${roomCode}/feedback/proof-key-0002`;
+  const seedRoom = "capacityseed001";
+  const permanentPayload = {
+    note: "Do not claim success",
+    traveler: { name: "Ari", constraints: ["step-free", "no shellfish"] },
+  };
+  const backend = new CanonicalBackend();
+  backend.mode = "permanent-error";
+  const context = await browser.newContext();
+  await installTransport(context, backend);
+  let page = await context.newPage();
+  await openProofPage(page);
+  await page.evaluate(({ otherRoom }) => {
+    const active: Record<string, unknown> = {};
+    for (let index = 1; index <= 49; index += 1) {
+      const key = `seed-key-${String(index).padStart(4, "0")}`;
+      active[`trips/${otherRoom}/feedback/${key}`] = {
+        createdBy: "proof-browser-user",
+        createdAt: 1_700_000_000_000 + index,
+        note: `Legitimate queued entry ${index}`,
+      };
+    }
+    localStorage.setItem("tg-outbox", JSON.stringify(active));
+  }, { otherRoom: seedRoom });
+  await joinAndObserve(page, roomCode, "feedback");
+  await captureSyncErrors(page);
+
+  const result = await page.evaluate(async (payload) => {
+    const proof = globalThis as ProofWindow;
+    const write = proof.__proofRoom?.collection("feedback").addAsync(payload);
+    if (!write) throw new Error("proof room was not loaded");
+    return Promise.race([
+      write.then(
+        (key) => ({ state: "resolved" as const, key }),
+        (error: unknown) => {
+          const candidate = error as { name?: unknown; code?: unknown; message?: unknown };
+          return {
+            state: "rejected" as const,
+            name: String(candidate?.name || ""),
+            code: String(candidate?.code || candidate?.message || error),
+            message: String(candidate?.message || error),
+          };
+        },
+      ),
+      new Promise<{ state: "pending" }>((resolve) => setTimeout(() => resolve({ state: "pending" }), 50)),
+    ]);
+  }, permanentPayload);
+
+  const activeAfterRejection = await outboxPaths(page);
+  const rejectedAfterRejection = await rejectedOutbox(page);
+  expect({ result, activePaths: activeAfterRejection, rejected: rejectedAfterRejection }).toEqual({
+    result: {
+      state: "rejected",
+      name: "Error",
+      code: "permission_denied",
+      message: "permission_denied",
+    },
+    activePaths: Array.from({ length: 49 }, (_, index) =>
+      `trips/${seedRoom}/feedback/seed-key-${String(index + 1).padStart(4, "0")}`),
+    rejected: {
+      [permanentPath]: {
+        value: {
+          createdBy: "proof-browser-user",
+          createdAt: expect.any(Number),
+          ...permanentPayload,
+        },
+        queuedAt: expect.any(Number),
+        rejectedAt: expect.any(Number),
+        code: "permission_denied",
+      },
+    },
+  });
+  const rejectedPermanent = rejectedAfterRejection[permanentPath] as {
+    value: { createdAt: number };
+    queuedAt: number;
+    rejectedAt: number;
+  };
+  expect(rejectedPermanent.queuedAt).toBe(rejectedPermanent.value.createdAt);
+  expect(rejectedPermanent.rejectedAt).toBeGreaterThanOrEqual(rejectedPermanent.queuedAt);
   expect(backend.values.size).toBe(0);
   expect(await page.evaluate(() => (globalThis as ProofWindow).__proofSyncErrors)).toEqual([
-    expect.objectContaining({ path: "trips/permanentroom001/feedback/proof-key-0001", permanent: true }),
+    expect.objectContaining({ path: permanentPath, permanent: true, code: "permission_denied" }),
   ]);
+
+  backend.mode = "transient-error";
+  const transientResult = await page.evaluate(async () => {
+    const proof = globalThis as ProofWindow;
+    const write = proof.__proofRoom?.collection("feedback").addAsync({ note: "Replay this once" });
+    if (!write) throw new Error("proof room was not loaded");
+    return Promise.race([
+      write.then(() => "resolved", () => "rejected"),
+      new Promise<"pending">((resolve) => setTimeout(() => resolve("pending"), 50)),
+    ]);
+  });
+  expect(transientResult).toBe("pending");
+  expect(await outboxPaths(page)).toEqual([
+    ...Array.from({ length: 49 }, (_, index) =>
+      `trips/${seedRoom}/feedback/seed-key-${String(index + 1).padStart(4, "0")}`),
+    transientPath,
+  ]);
+
+  await page.close();
+  backend.mode = "online";
+  page = await context.newPage();
+  await openProofPage(page);
+  await joinAndObserve(page, roomCode, "feedback");
+  await expect.poll(() => outboxPaths(page)).toEqual(Array.from({ length: 49 }, (_, index) =>
+    `trips/${seedRoom}/feedback/seed-key-${String(index + 1).padStart(4, "0")}`));
+  await expect.poll(() => backend.acceptedWriteCount).toBe(1);
+  expect([...backend.values.keys()]).toEqual([transientPath]);
+  expect(backend.read(`trips/${roomCode}/feedback`)).toEqual({
+    "proof-key-0002": {
+      createdBy: "proof-browser-user",
+      createdAt: expect.any(Number),
+      note: "Replay this once",
+    },
+  });
+  expect(await rejectedOutbox(page)).toEqual(rejectedAfterRejection);
+  expect(await page.evaluate(() => localStorage.getItem("tg-proof-push-seq"))).toBe("2");
   await context.close();
 });
