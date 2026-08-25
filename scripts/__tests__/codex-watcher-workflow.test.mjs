@@ -19,10 +19,10 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const WORKFLOW = fileURLToPath(new URL("../../.github/workflows/claude-codex-watcher.yml", import.meta.url));
-const yml = readFileSync(WORKFLOW, "utf8");
+const yml = readFileSync(WORKFLOW, "utf8").replace(/\r\n?/g, "\n");
 
 const SIGNAL_WORKFLOW = fileURLToPath(new URL("../../.github/workflows/claude-codex-signal.yml", import.meta.url));
-const signalYml = readFileSync(SIGNAL_WORKFLOW, "utf8");
+const signalYml = readFileSync(SIGNAL_WORKFLOW, "utf8").replace(/\r\n?/g, "\n");
 
 // Real YAML block-scalar semantics (not step-name-delimited chunking, which over-captures
 // across job/step boundaries the moment a step has no `name:` in between): a `run: |` block's
