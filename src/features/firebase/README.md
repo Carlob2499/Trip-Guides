@@ -15,7 +15,7 @@ import only from `./index.js` and never see the SDK. New features go in their ow
 |---|---|
 | `firebase-config.js` | Public web config (committed — safe; empty = sync OFF) |
 | `client.js` | Lazy SDK init + anonymous auth; `hasFirebase()`, `ready()` |
-| `sync.js` | `joinTrip(code)` → room `{ collection, doc }`; `generateTripCode()` |
+| `sync.js` | `joinTrip(code)` → room `{ collection, doc }` |
 | `index.js` | Public API barrel |
 | `rules.json` | Realtime Database security rules (paste into the console) |
 | `live.css` | Sync UI (trip-code control + "● Live" indicator) |

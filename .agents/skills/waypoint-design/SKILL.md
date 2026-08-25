@@ -35,3 +35,10 @@ Waypoint is a field instrument, not a brochure.
 7. **Do not pad empty layouts with prose.** Fix composition or show the gap.
 
 For new visual composition, build from `design-system/styles.css`, the relevant component(s), and the matching UI kit rather than inventing a parallel system.
+
+## Design System 1.0 calibration
+
+For a task explicitly named **DS1 calibration** or **Design System 1.0 calibration**, start at
+`docs/design-handoff/design-system-1-candidate/README.md` and follow its bounded reading order.
+That package is a candidate for visual testing only. For ordinary production UI work, the R5
+contract above remains authoritative until the creator explicitly approves DS1.
