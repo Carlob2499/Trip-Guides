@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "campaign": "pre-claude-engineering-and-design-research-exhaustion",
+  "startedAt": "2026-08-25T23:06:40-04:00",
+  "baseline": {
+    "mainSha": "033d5ccdb548f8fff9d3859d7077a737752ab152",
+    "branch": "manus/pre-claude-exhaustion",
+    "remote": "origin",
+    "mainRecovery": "Merged PR #101 restored main after an accidental local merge; removed an unintended .claude skill-tree expansion before the campaign branch was created."
+  },
+  "phase": "baseline-proof",
+  "completedWaves": [],
+  "protectedBoundaries": [
+    "V1 remains production default and rollback while WAYPOINT_RESEARCH_ENGINE is unset.",
+    "V01/V02/V03/V05 candidate, V2 stage prompts/workflow, validation criteria, selector/publication authority, and frozen candidate are compatibility-frozen.",
+    "Uruguay Canary #4 remains draft evidence and is not production content.",
+    "Claude↔Codex trust boundary remains unprivileged signal → read-only validation → separate write-capable publish step.",
+    "Factual guide content, research doctrine, Trip Split integrity, and future design authority are not modified without direct evidence and owning authority."
+  ],
+  "activeOwnership": [
+    {
+      "id": "PR-100",
+      "branch": "codex/offline-write-reconnect-proof",
+      "owner": "codex",
+      "scope": "offline shared-write persistence, reconnect proof, Firebase sync/Learnings UI, focused offline Playwright harness",
+      "status": "ACTIVE_PR_OWNERSHIP",
+      "rule": "Do not create competing changes in its listed paths; test or prepare only adjacent independent seams."
+    }
+  ],
+  "canonicalChecks": [
+    "npm run check:fast",
+    "npm run check",
+    "npm run check:offline",
+    "npm run check:perf",
+    "npm run ship:check"
+  ],
+  "evidence": [
+    "AGENTS.md, CLAUDE.md, PRODUCT.md, CONTEXT.md, docs/reference/repo-map.md, docs/handoff.md, docs/reference/pipeline.md, and package.json read against repaired main.",
+    "Remote main advanced during setup from 325c304 to 033d5cc; delta reviewed and local main fast-forwarded before campaign branch creation.",
+    "GitHub currently has one active PR (#100) whose protected scope is recorded above."
+  ],
+  "blockers": [],
+  "nextAction": "Run the smallest canonical baseline gate from a clean campaign branch, classify failures as environment or product evidence, then begin history/known-scar discovery.",
+  "updatedAt": "2026-08-25T23:06:40-04:00"
+}
