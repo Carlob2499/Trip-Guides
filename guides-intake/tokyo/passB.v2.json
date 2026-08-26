@@ -1,0 +1,431 @@
+{
+  "schemaVersion": "wp-evidence/2.2",
+  "slug": "tokyo",
+  "runId": "tokyo-20260826-41ae82",
+  "candidates": [
+    {
+      "id": "c-kobikicho-ohno",
+      "name": "Kobikicho Ohno",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-koumoto",
+      "name": "Koumoto",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-narukiyo",
+      "name": "Narukiyo",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Kitchen-facing seating is a standing-style counter (per its Tabelog listing), unsuited to a seated 6-person dinner; its Tabelog EN page and Time Out Tokyo coverage show it is already surfaced in English-language tourist guides, undermining the under-the-radar/local angle this pass exists to find; Tabelog also showed the phone reservation line closed at time of research, adding booking friction on top.",
+      "worth": null
+    },
+    {
+      "id": "c-kagayaki--minowa",
+      "name": "Kagayaki",
+      "branch": "Minowa",
+      "priority": "Food & dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "All-you-can-eat yakiniku/shabu-shabu buffet format — a value/quantity pick, not the quality-led anchor experience the trip's food priority calls for; better suited to a casual, low-friction meal than the deliberate Saturday anchor. Only surface-level discovery (blog + aggregator listings, no primary/operator fetch) before being dropped in favor of stronger finds.",
+      "worth": null
+    },
+    {
+      "id": "c-miyabi--roppongi",
+      "name": "Miyabi",
+      "branch": "Roppongi",
+      "priority": "Food & dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Surfaced from a single note.com blog only; a generic high-end Roppongi tourist-district yakiniku/French-fusion spot without a distinct local angle. Dropped once Kobikicho Ohno and Koumoto (native-only-discoverable, room capacity confirmed to fit a party of 6) proved stronger, better-corroborated picks.",
+      "worth": null
+    },
+    {
+      "id": "c-kaigen--tsukiji",
+      "name": "Kaigen",
+      "branch": "Tsukiji",
+      "priority": "Food & dining",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Genuinely appealing insider tuna-bowl pick inside Tsukiji Outer Market (professional-grade tuna via the Yamakoh wholesaler; arrive ~9:20am for first seating to beat the queue) — but only ONE current (≤24-month) independent firsthand account exists (asanoyoko.com, Sept 2025). The other two corroborating accounts found (shamo-rock.com, 4travel.jp) date to 2022, past the 24-month experiential-freshness bar, so the ≥2-recent-independent-source bar isn't cleared within this pass's budget. Worth re-checking with a fresh search in a later pass rather than shipping on stale corroboration.",
+      "worth": null
+    },
+    {
+      "id": "c-tsukiji-outer-market",
+      "name": "Tsukiji Outer Market",
+      "branch": null,
+      "priority": "Food & dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-ohno-single-seating",
+      "candidateId": "c-kobikicho-ohno",
+      "claim": "Kobikicho Ohno (木挽町 大野), a tea-kaiseki restaurant in Yotsuya-sanchome, accepts only one reservation/party per day — the entire restaurant serves a single seating.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://kobikityouohno.gorp.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ohno-hours",
+      "candidateId": "c-kobikicho-ohno",
+      "claim": "Official site lists dinner hours 17:00–21:00 (drinks last order 20:00), with no fixed weekly closure day but irregular ad-hoc closures ('定休日なし（不定休日あり）'); Saturday hours are not separately differentiated on the site, so confirm directly for a specific date.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://kobikityouohno.gorp.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ohno-room-capacity",
+      "candidateId": "c-kobikicho-ohno",
+      "claim": "The restaurant's only private room (horigotatsu sunken-hearth, with door and walls) seats 2–6 guests — a party of 6 fills it exactly, with no overflow buffer for a 7th guest.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://kobikityouohno.gorp.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ohno-price",
+      "candidateId": "c-kobikicho-ohno",
+      "claim": "≈¥15,000 per person average budget for dinner, per Gurunavi's operator listing (the restaurant's own official site does not publish a fixed course price).",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://r.gnavi.co.jp/gayu400/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ohno-cancellation",
+      "candidateId": "c-kobikicho-ohno",
+      "claim": "Cancellation fee tiers per Gurunavi's operator listing: 50% fee inside 7 days of the reservation date, full charge inside 3 days.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://r.gnavi.co.jp/gayu400/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ohno-english-support",
+      "candidateId": "c-kobikicho-ohno",
+      "claim": "Official site states an English-language menu and English-speaking staff are available; card acceptance is not mentioned on the official site or the Gurunavi operator page — unconfirmed, ask when booking.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://kobikityouohno.gorp.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-koumoto-hours",
+      "candidateId": "c-koumoto",
+      "claim": "Koumoto (こうもと), a soba-kappo restaurant in Nishi-Azabu/Minami-Azabu, is open Saturdays 17:00–22:00 (food last order 21:00, drinks last order 21:30), per its HotPepper Gourmet operator page.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.hotpepper.jp/strJ000862001/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-koumoto-capacity",
+      "candidateId": "c-koumoto",
+      "claim": "Two 2nd-floor private rooms (seating 2–4 and 3–8) plus additional 3rd-floor rooms, combinable up to 12 guests — comfortably fits a party of 6 with spare capacity, unlike Ohno's exact-fit room.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.hotpepper.jp/strJ000862001/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-koumoto-price",
+      "candidateId": "c-koumoto",
+      "claim": "≈¥10,000 per person starting price for dinner courses, plus a 10% service charge, per HotPepper's operator listing.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.hotpepper.jp/strJ000862001/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-koumoto-cards",
+      "candidateId": "c-koumoto",
+      "claim": "Accepts Visa, Mastercard, Diners Club, and JCB — confirmed foreign-card compatibility, stronger than Kobikicho Ohno's (unconfirmed).",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.hotpepper.jp/strJ000862001/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-tsukiji-crowd-timing-1",
+      "candidateId": "c-tsukiji-outer-market",
+      "claim": "Tsukiji Outer Market is markedly less crowded in the early morning (roughly before 9:00–9:30am) and crowding concentrates in specific hotspot areas rather than across the whole market; Wednesdays and Sundays see reduced stall operations (only about half the shops open).",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://mugippa.com/tsukiji-10info/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-03-14",
+        "family": "mugippa-tsukiji-insider-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-tsukiji-crowd-timing-2",
+      "candidateId": "c-tsukiji-outer-market",
+      "claim": "Tsukiji Outer Market is markedly less crowded in the early morning (roughly before 9:00–9:30am) and crowding concentrates in specific hotspot areas rather than across the whole market; Wednesdays and Sundays see reduced stall operations (only about half the shops open).",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://asanoyoko.com/daytrip/tsukiji2025sep",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-09-13",
+        "family": "asanoyoko-food-writer-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-kobikicho-ohno",
+      "importance": "anchor",
+      "bookingUrl": "https://kobikityouohno.gorp.jp/",
+      "releaseWindow": "No fixed advance-booking release window is published — the official site states reservations are accepted for any preferred time — but because the restaurant serves only ONE party per day, a desired Saturday date can be taken by another party with no minimum-notice guarantee.",
+      "actionDate": "Contact as early as practical for Sat 2026-10-17 (phone 050-5486-6483 or the official site) — the single-seating-per-day format makes the date itself, not a release window, the real constraint.",
+      "partyRules": "The sole private room (horigotatsu, door + walls) seats 2–6 — a party of 6 fills it exactly with no overflow buffer.",
+      "deposit": null,
+      "cancellation": "Per Gurunavi's operator listing: 50% fee within 7 days of the reservation, full charge within 3 days.",
+      "foreignFriction": "Official site states an English menu and English-speaking staff are available; card acceptance is not confirmed on either the official site or the operator listing — confirm payment method when booking.",
+      "lastSeating": "Single nightly seating from 17:00 (drinks last order 20:00, kitchen effectively closes by 21:00) — no second seating to fall back to.",
+      "walkIn": "Not viable — reservation-only, one party per day.",
+      "leads": [],
+      "alternatives": "Koumoto (soba-kappo, Nishi-Azabu) offers more flexible private-room capacity (up to 8 in one room) if Ohno's single Saturday slot is unavailable.",
+      "fallback": "If Ohno cannot be secured for 2026-10-17, book Koumoto or another private-room kaiseki/kappo house in the same window rather than defaulting to a walk-in-friendly but lower-quality option, per the intake's priority on food quality over convenience."
+    },
+    {
+      "candidateId": "c-koumoto",
+      "importance": "important",
+      "bookingUrl": "https://www.hotpepper.jp/strJ000862001/",
+      "releaseWindow": "Not specified on the operator listing; multiple reservation channels (PayPay Gourmet, Ikyu, HotPepper, Retty, Gurunavi, REGLI) exist, suggesting comparatively flexible availability versus Ohno's single-party model.",
+      "actionDate": "Book once travel dates are fixed; no evidence of an unusually tight release window.",
+      "partyRules": "Two 2nd-floor private rooms (2–4 and 3–8 guests) plus 3rd-floor rooms, combinable up to 12 — a party of 6 fits the larger room with spare capacity.",
+      "deposit": null,
+      "cancellation": "Not stated on the operator listing — confirm directly when booking.",
+      "foreignFriction": "Confirmed to accept Visa, Mastercard, Diners Club, and JCB per the operator listing — stronger confirmed foreign-card compatibility than Ohno.",
+      "lastSeating": "Saturday hours 17:00–22:00; food last order 21:00, drinks last order 21:30.",
+      "walkIn": "Not confirmed for bar/counter seating — coverage found only describes the private rooms; treat as reservation-recommended.",
+      "leads": [],
+      "alternatives": "Kobikicho Ohno for a more exclusive one-party-per-day experience if the group prioritizes exclusivity over scheduling flexibility.",
+      "fallback": null
+    }
+  ],
+  "transport": [],
+  "disagreements": [],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-kobikicho-ohno",
+        "c-koumoto"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [],
+      "notApplicableReason": "This pass researched Food & Dining only; no route reached R3+ risk — routine Tokyo train/subway transfers to these central-Tokyo restaurants are the forgiving default and weren't researched to transport-robustness depth here."
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "After roughly 19 web searches and 8 fetches, native-language searches for anchor-dinner-caliber restaurants with 6-person private rooms converged on two genuinely non-default candidates (Kobikicho Ohno, Koumoto); further searches for individual venue write-ups kept returning the same aggregator round-ups (ikyu.com, hitosara.com, Retty) rather than new venues. The one open thread — Ohno's exact Saturday 2026-10-17 availability — is a booking-logistics detail to resolve by direct contact, not a discovery gap that would change which venue to recommend, so it doesn't block stopping."
+  },
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "English/generic search results for 'Tokyo restaurant for 6' or 'best Tokyo izakaya' are dominated by SEO round-ups (ikyu.com, hitosara.com, Retty, Tabelog matome pages) and don't surface exclusive, reservation-hard venues. Japanese queries built around reservation-difficulty and room-capacity vocabulary (予約困難, 個室6名, 隠れ家, 一軒家) reached restaurants with little to no English coverage, matching the anti-default charter; yt-dlp is not installed in this environment, so the video-transcript lead channel was skipped per the bot-blocked doctrine and did not block the pass.",
+      "searchClasses": [
+        "reservation-difficulty & capacity-specific native queries (東京 6名 個室 予約困難/隠れ家)",
+        "insider/food-writer blogs for Tsukiji crowd-timing (築地場外市場 混雑 時間帯 ブログ 体験談)",
+        "operator/reservation-platform fetches to confirm objective facts once a native lead was found (ぐるなび, ホットペッパー, 食べログ, 一休.com)",
+        "corroboration searches for specific venue picks (口コミ 地元 常連 穴場)",
+        "resident-phrase/etiquette duty search (attempted; returned only Japanese-audience English-lesson content, not resident-perspective material — omitted, no evidence shipped from this class)",
+        "video/social leads via yt-dlp: tool unavailable in this environment (binary not found) — skipped per bot-blocked doctrine, never attempted"
+      ],
+      "yield": "Surfaced two non-default anchor-dinner candidates confirmed (via fetched operator/official sources) to fit a party of 6 in a private room: Kobikicho Ohno (one-party-per-day tea-kaiseki, exact 6-seat room) and Koumoto (soba-kappo, private rooms to 8, confirmed card acceptance). Corroborated Tsukiji Outer Market's early-morning off-peak window from two independent firsthand blogs. Identified and rejected three candidates that looked promising but didn't clear the bar: Narukiyo (standing-counter format wrong for a seated 6-top, and already English-tourist-discovered), Kagayaki (all-you-can-eat format mismatched to the quality-first brief), and Kaigen (appealing insider tuna-bowl pick, but its only current firsthand corroboration is a single 2025 source — the other two are 2022, past the 24-month freshness bar)."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": []
+}
