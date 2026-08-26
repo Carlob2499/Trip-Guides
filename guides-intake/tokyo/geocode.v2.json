@@ -1,54 +1,9 @@
 {
   "slug": "tokyo",
-  "attemptedAt": "2026-08-26T14:34:32.556Z",
+  "attemptedAt": "2026-08-26T17:42:55.996Z",
   "applied": true,
-  "pending": 16,
-  "resolved": [
-    {
-      "name": "Senso-ji Temple (Asakusa)",
-      "file": "07-sights.json"
-    },
-    {
-      "name": "Meiji Jingu",
-      "file": "07-sights.json"
-    },
-    {
-      "name": "Shinjuku Gyoen National Garden",
-      "file": "07-sights.json"
-    },
-    {
-      "name": "Tokyo Tower",
-      "file": "07-sights.json"
-    },
-    {
-      "name": "Yanaka Ginza",
-      "file": "07-sights.json"
-    },
-    {
-      "name": "Nihonryori RyuGin",
-      "file": "08-food-and-shopping.json"
-    },
-    {
-      "name": "Ginza Ukai-tei",
-      "file": "08-food-and-shopping.json"
-    },
-    {
-      "name": "Aragawa",
-      "file": "08-food-and-shopping.json"
-    },
-    {
-      "name": "Tsukiji Outer Market",
-      "file": "08-food-and-shopping.json"
-    },
-    {
-      "name": "Toyosu Market",
-      "file": "08-food-and-shopping.json"
-    },
-    {
-      "name": "Torien",
-      "file": "08-food-and-shopping.json"
-    }
-  ],
+  "pending": 5,
+  "resolved": [],
   "unresolved": [
     {
       "name": "teamLab Planets (Toyosu)",
