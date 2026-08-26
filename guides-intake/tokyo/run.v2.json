@@ -11,9 +11,9 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "running",
+  "status": "failed",
   "createdAt": "2026-08-26T09:02:30.736Z",
-  "updatedAt": "2026-08-26T09:03:02.589Z",
+  "updatedAt": "2026-08-26T09:15:38.186Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -43,9 +43,9 @@
       "failure": null
     },
     "passA": {
-      "status": "running",
+      "status": "failed",
       "startedAt": "2026-08-26T09:03:02.589Z",
-      "endedAt": null,
+      "endedAt": "2026-08-26T09:15:38.186Z",
       "attempts": 1,
       "model": "claude-sonnet-5",
       "effort": "high",
@@ -54,13 +54,17 @@
         {
           "attempt": 1,
           "startedAt": "2026-08-26T09:03:02.589Z",
-          "endedAt": null,
-          "status": "running",
-          "failureClass": null,
-          "durationSec": null
+          "endedAt": "2026-08-26T09:15:38.186Z",
+          "status": "failed",
+          "failureClass": "usage-limit",
+          "durationSec": 756
         }
       ],
-      "failure": null
+      "failure": {
+        "class": "usage-limit",
+        "detail": "Claude session limit reached mid-stage; re-dispatch after the window resets",
+        "at": "2026-08-26T09:15:38.186Z"
+      }
     },
     "passB": {
       "status": "queued",
@@ -104,9 +108,13 @@
   },
   "resume": {
     "nextStage": "passA",
-    "action": "stage \"passA\" was running — validate its output; re-run it if incomplete"
+    "action": "re-run stage \"passA\" (failed: usage-limit) — a resumed run repeats the interrupted stage, never skips ahead"
   },
-  "failure": null,
+  "failure": {
+    "class": "usage-limit",
+    "detail": "Claude session limit reached mid-stage; re-dispatch after the window resets",
+    "at": "2026-08-26T09:15:38.186Z"
+  },
   "publication": {
     "published": false,
     "publishedAt": null,

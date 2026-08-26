@@ -1,0 +1,28 @@
+{
+  "runId": "tokyo-20260826-41ae82",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-26T09:02:30.770Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-26T09:02:30.859Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-26T09:03:02.589Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-26T09:15:38.186Z",
+      "kind": "reject",
+      "text": "Pass A (canonical research) attempt 1 failed (usage-limit) — deterministic findings recorded for the retry"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}
