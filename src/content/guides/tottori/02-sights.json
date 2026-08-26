@@ -56,7 +56,12 @@
         "dwell_min": 60,
         "source_url": "https://tottori-tours.com/plan/saninmatsushimayuran_ogata",
         "verified_on": "2026-08-26",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 38.3696558,
+          "lng": 141.0628391
+        },
+        "place_id": "ChIJoSP545-biV8R3osIv7T_43E"
       },
       {
         "name": "Kurayoshi Shirakabe Dozo-gun",

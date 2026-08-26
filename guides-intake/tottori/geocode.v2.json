@@ -1,54 +1,33 @@
 {
   "slug": "tottori",
-  "attemptedAt": "2026-08-26T20:18:06.195Z",
+  "attemptedAt": "2026-08-26T20:54:46.837Z",
   "applied": true,
-  "pending": 10,
+  "pending": 5,
   "resolved": [
     {
-      "name": "Tottori Sand Dunes",
-      "file": "07-sights.json"
-    },
-    {
-      "name": "Sand Museum",
-      "file": "07-sights.json"
-    },
-    {
-      "name": "Tottori Castle Ruins",
-      "file": "07-sights.json"
-    },
-    {
-      "name": "Yakiniku Masashige",
-      "file": "08-food-and-shopping.json"
-    },
-    {
-      "name": "Menya Hachibee",
-      "file": "08-food-and-shopping.json"
+      "name": "Uradome Coast — San'in Matsushima sightseeing cruise",
+      "file": "02-sights.json"
     }
   ],
   "unresolved": [
     {
-      "name": "Uradome Coast — San'in Matsushima sightseeing cruise",
-      "file": "07-sights.json",
-      "why": "name mismatch — asked \"Uradome Coast — San'in Matsushima sightseeing cruise\", Places returned \"Uradome Coast Island Cruise\""
-    },
-    {
       "name": "Kurayoshi Shirakabe Dozo-gun",
-      "file": "07-sights.json",
+      "file": "02-sights.json",
       "why": "name mismatch — asked \"Kurayoshi Shirakabe Dozo-gun\", Places returned \"Kurayoshi Shirakabe Dozogun Tourist Information Center\""
     },
     {
       "name": "Sanbutsu-ji — the Nageiredo climb",
-      "file": "07-sights.json",
+      "file": "02-sights.json",
       "why": "name mismatch — asked \"Sanbutsu-ji — the Nageiredo climb\", Places returned \"Sanbutsu-ji Temple\""
     },
     {
       "name": "Nageiredo Yohaijo (viewing platform)",
-      "file": "07-sights.json",
+      "file": "02-sights.json",
       "why": "name mismatch — asked \"Nageiredo Yohaijo (viewing platform)\", Places returned \"NageireDou\""
     },
     {
       "name": "Kabuyu",
-      "file": "07-sights.json",
+      "file": "02-sights.json",
       "why": "not found"
     }
   ]
