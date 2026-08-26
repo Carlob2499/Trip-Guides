@@ -3,37 +3,41 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "body": "<p>Tottori has its own small regional airport (Tottori Sand Dunes Conan Airport, code TTJ) with ANA service to/from Haneda, but the more robust routing for a party of eight is Shinkansen to Okayama or Shin-Osaka, then a limited express (Super Inaba or Super Hakuto/Super Oki/Super Matsukaze) onward to Tottori Station — it isn't dependent on one small airport's schedule.</p><p>⚠ This guide doesn't yet have a confirmed departure airport or flight on file, so no specific routing is booked in as fact — the Booking checklist below flags it.</p>",
+    "checklist": []
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "body": "<p>Rural Tottori runs on cash more than Tokyo or Osaka does — Misasa Onsen and Kurayoshi's old town both have plenty of card-shy small shops and ryokan. 7-Eleven (Seven Bank) ATMs take foreign Visa/Mastercard/Maestro/UnionPay/Amex 24 hours nationwide and are the standard advice for withdrawing cash on a foreign card; Japan Post ATMs back them up in smaller towns but keep bank hours. ⚠ Convenience-store density drops noticeably once you're off the San'in line — stock up on cash in Tottori or Kurayoshi before settling into Misasa Onsen for the night.</p><p>Reference rate for planning: {{fact:fx-rate-usd-jpy}}.</p>",
+    "checklist": []
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "body": "<p>See the Entry requirements card for the assumed passport (US, visa-free up to 90 days). If anyone in the party carries a different passport, flag it before departure — this guide has only researched the US case.</p>",
+    "checklist": []
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "body": "<p>An eSIM (Ubigi, Airalo, and similar Japan-wide plans) or an airport pocket-wifi rental both cover this itinerary fine — San'in region coverage is standard 4G/5G along the rail line and in the towns this trip visits, including Misasa Onsen.</p>",
+    "checklist": []
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
-    "body": "",
+    "body": "<p>Two items on this trip are genuinely time-sensitive, not boilerplate: the Yakiniku Masashige dinner for eight needs a phone call, not the web form, and the Nageiredo climb is a same-day weather call with no way to pre-book around it.</p>",
     "checklist": [
-      "Flights",
-      "Accommodation",
-      "Airport transfer",
+      "Flights — no departure airport confirmed yet; pin this down early since it also decides whether Tottori Airport (ANA/Haneda) or a Shinkansen + limited express routing makes more sense",
+      "Accommodation — a Misasa Onsen ryokan with rooms for 8 (likely split across 2–4 rooms); confirm step-free or ground-floor room availability given 2 travelers with low walking tolerance",
+      "Dinner at Yakiniku Masashige, Kurayoshi — call 0858-26-2919 to book a table for 8; the online form's party-size selector doesn't reach 8 (confirmed on the booking page)",
       "Travel insurance",
-      "Any timed tickets"
+      "Nageiredo climb — no advance booking exists; treat it as a same-day go/no-go depending on weather, and have the free Yohaijo viewing platform as the fallback plan for anyone in the group who shouldn't attempt the climb"
     ]
   },
   {

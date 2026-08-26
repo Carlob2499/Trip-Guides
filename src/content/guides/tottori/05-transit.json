@@ -4,7 +4,12 @@
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
-    "steps": []
+    "steps": [
+      "<b>Tottori Station → Kurayoshi Station</b> (San'in Main Line): limited express (Super Hakuto / Super Oki / Super Matsukaze) takes ≈30 min; a local train covers the same route in ≈60 min with no reserved-seat fee. With luggage and a group of 8, the local train's lack of seat reservations is a real trade-off against the express's speed — worth deciding per day rather than defaulting to whichever train is next.",
+      "<b>Kurayoshi Station → Shirakabe Dozo-gun</b>: city-route bus, ≈10–15 min, alight at the Akagawara/Shirakabe-Dozogun stop, then a short walk. The district's tourist information center (inside Akagawara Building No. 10) opens 9:00–17:00.",
+      "<b>Kurayoshi Station → Misasa Onsen</b> (Hinomaru Bus, Kamii-Misasa/Misasa Line, route 72/73): the trip's one consequential transfer. ≈20–26 min to the Misasa-area stops. ⚠ Exact fare unconfirmed — the operator's own fare table is a PDF this pass couldn't read; secondhand sources put it around ¥340–¥480, pay cash on board. Weekday service runs roughly hourly but opens a ~100-minute gap in early afternoon (12:22 → 14:04 departures from Kurayoshi), and the last confirmed weekday departure toward Misasa is <b>19:08</b> — after that, only a taxi (≈20 min, fare unconfirmed for 2026, budget on the order of ¥3,000 and expect to need 2 cars for 8 people with bags) gets you there that night. It's a standard fare-box route bus, not a coach — no dedicated luggage hold, so boarding 8 people with suitcases takes longer than a solo traveler's transfer, and standing for the ride is a real cost for the 2 low-mobility travelers in the group. Build any Kurayoshi activity (like dinner) to end with real buffer before 19:08, not against it.",
+      "<b>Misasa Onsen → Kurayoshi Station</b> (return): morning weekday service is more frequent than the evening, with departures from around 7:30 onward — a safer window for a departure-day transfer than trying to catch a late-morning connection."
+    ]
   },
   {
     "type": "map",

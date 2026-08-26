@@ -1,0 +1,994 @@
+{
+  "schemaVersion": "wp-evidence/2.2",
+  "slug": "tottori",
+  "runId": "tottori-20260826-e29ab7",
+  "candidates": [
+    {
+      "id": "c-hinomaru-bus-kamii-misasa-line",
+      "name": "Hinomaru Bus Kamii-Misasa Line",
+      "branch": null,
+      "priority": "anchor-transit",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-tottori-sand-dunes",
+      "name": "Tottori Sand Dunes",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sand-museum",
+      "name": "Sand Museum",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sanin-matsushima-sightseeing-cruise",
+      "name": "San'in Matsushima Sightseeing Cruise",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kurayoshi-shirakabe-dozogun",
+      "name": "Kurayoshi Shirakabe Dozogun",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sanbutsu-ji-nageiredo-climb",
+      "name": "Sanbutsu-ji Nageiredo Climb",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-mitokusan-nageiredo-viewing-platform",
+      "name": "Mitokusan Nageiredo Viewing Platform",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-tottori-castle-ruins--kyusho-park",
+      "name": "Tottori Castle Ruins",
+      "branch": "Kyusho Park",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-jinpukaku",
+      "name": "Jinpukaku",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Closed for preservation/renovation work from Dec 29 2023 for approximately five years (exterior covered as of Sep 2025); only the Horyu-in garden and Hosen-an teahouse on the grounds remain open, so it does not survive as a standalone stop during this trip's window.",
+      "worth": null
+    },
+    {
+      "id": "c-kabuyu-public-bath",
+      "name": "Kabuyu Public Bath",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-yakiniku-masashige--kurayoshi",
+      "name": "Yakiniku Masashige",
+      "branch": "Kurayoshi",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-hachibee",
+      "name": "Hachibee",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kanikichi",
+      "name": "Kanikichi",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Tourist-oriented crab specialist in central Tottori city; also moot for this trip's Oct 20-23 window since matsuba-gani (the marquee Tottori crab) season does not open until Nov 6 — see disagreement d-crab-season.",
+      "worth": null
+    },
+    {
+      "id": "c-iwamoto-shokudo",
+      "name": "Iwamoto Shokudo",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Well-regarded Kurayoshi yoshoku (Tottori wagyu x pork hamburger steak) spot that cleared discovery, but redundant with the wagyu pick already shipped for the trip's one Kurayoshi dinner slot; kept as a lead for a future/longer visit rather than shipped.",
+      "worth": null
+    },
+    {
+      "id": "c-20th-century-pear-museum",
+      "name": "20th Century Pear Museum",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Thin connection to the trip's two ranked priorities (culture/history, food); a nashi-pear museum stop trades time against the Sanbutsu-ji climb window and the party's limited-mobility pace budget for a low payoff.",
+      "worth": null
+    },
+    {
+      "id": "c-mount-daisen",
+      "name": "Mount Daisen",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Roughly 90 minutes-2 hours outside the compact Tottori-Kurayoshi-Misasa loop the trip is built around; would consume a full day the 4-day, balanced-pace itinerary does not have.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-bus-route-exists",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Hinomaru Bus's (72)(73) Misasa Line connects Kurayoshi Station and Misasa Onsen on the schedule effective April 1, 2025 (current as of this pass).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-bus-downbound-schedule",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Weekday downbound (Kurayoshi toward Misasa) departures run roughly hourly through the morning, then thin to gaps of up to ~100 minutes in early afternoon (12:22 to 14:04), with the last weekday departure at 19:08.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-bus-upbound-last",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Weekday upbound (Misasa toward Kurayoshi/Ikuta depot) service thins in the evening; the last recorded weekday departure from the Misasa-area stops (Misasa depot / Onsen South Exit) is around 18:03-18:04.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=1",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-misasa-access-20min",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Misasa Onsen's own tourism portal describes the JR Kurayoshi Station to Misasa Onsen connection as approximately a 20-minute local bus ride, used for all listed rail routings (from Osaka, Tokyo, and Okayama alike).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://misasaonsen.jp/en/access/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "misasaonsen-portal",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-bus-fare-unreadable",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "The operator's own current fare table for this line exists only as a PDF; two fetch attempts returned unreadable binary content, so the exact current yen fare could not be confirmed from the primary source.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/wp/wp-content/uploads/2025/03/72運賃表202504-1.pdf",
+        "kind": "operator",
+        "access": "blocked",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-tottori-kurayoshi-express-30min",
+      "candidateId": null,
+      "claim": "Limited express trains (Super Hakuto/Super Oki/Super Matsukaze) connect Tottori Station and Kurayoshi Station in about 30 minutes on the San'in Main Line; a local (non-express) train covers the same route in about 60 minutes.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://matcha-jp.com/en/10299",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "matcha-jp",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-jrwest-limited-express-names",
+      "candidateId": null,
+      "claim": "JR West's own Tottori-Matsue area rail-pass page names Super Hakuto, Super Inaba, and Yakumo as limited express services covering this area, with non-reserved ordinary seats included on the relevant area pass — confirming these named services (rather than an invented one) are what a traveler will see on station boards.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.westjr.co.jp/travel-information/en/tickets-passes/jrwest-rail-pass/tottorimatsue/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "jrwest",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-sand-dunes-free",
+      "candidateId": "c-tottori-sand-dunes",
+      "claim": "The Tottori Sand Dunes themselves are free to enter with no admission fee; the dune-side visitor lots (e.g. the 180-car overlook lot) are free parking.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tottori-guide.jp/sakyu/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "tottori-guide",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-22"
+      }
+    },
+    {
+      "id": "ev-sand-museum-hours-price",
+      "candidateId": "c-sand-museum",
+      "claim": "Sand Museum hours are 9:00-18:00 with last entry at 17:30; adult admission is ¥800.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.sand-museum.jp/information/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "sand-museum",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-sand-museum-spain-exhibit",
+      "candidateId": "c-sand-museum",
+      "claim": "The 17th exhibition period, themed Spain (\"Sand World Travel: Spain\"), runs April 24 2026 through January 3 2027 — so it will be on display during an Oct 20-23 2026 visit.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.sand-museum.jp/information/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "sand-museum",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-cruise-schedule-fare",
+      "candidateId": "c-sanin-matsushima-sightseeing-cruise",
+      "claim": "San'in Matsushima Yuran's standard sightseeing cruise runs March through November, departing hourly 9:30-15:30 (each cruise ~40 minutes); adult fare is ¥1,800.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://tottori-tours.com/plan/saninmatsushimayuran_ogata",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "saninmatsushimayuran",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-cruise-operator-weather",
+      "candidateId": "c-sanin-matsushima-sightseeing-cruise",
+      "claim": "The operator's own homepage confirms hourly 9:30-15:30 departures for the main cruise and tells visitors to confirm current conditions before visiting — cruises are weather-dependent and can cancel.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://yourun1000.com/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "saninmatsushimayuran",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-cruise-price-discrepancy-note",
+      "candidateId": "c-sanin-matsushima-sightseeing-cruise",
+      "claim": "A separate general tourism spot page cites 'from ¥1,300' for boat options at this coast, lower than the ¥1,800 confirmed directly on the operator's own cruise-specific page — see disagreement d-cruise-fare.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://tottori-tours.com/spot/saninmatsushimayuran",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "saninmatsushimayuran",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-shirakabe-access",
+      "candidateId": "c-kurayoshi-shirakabe-dozogun",
+      "claim": "The Shirakabe Dozo-gun district is reached from Kurayoshi Station by a city-route bus (~10-15 min) alighting at the Akagawara/Shirakabe-Dozogun stop, then a short walk; the district's tourist information center sits inside Akagawara Building No. 10, open 9:00-17:00.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.kurayoshi-kankou.jp/guide",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kurayoshi-kankou",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-mitokusan-fees-rules",
+      "candidateId": "c-sanbutsu-ji-nageiredo-climb",
+      "claim": "Nageiredo climb admission is ¥1,200 adult (includes the ¥400 base temple fee); general temple admission without the climb is ¥400 adult. Reception is 8:00-15:00 with a 16:30 mandatory descent deadline. A minimum of two people is mandatory (no solo climbers); dedicated hiking-style footwear is required, and entry is prohibited in rain, snow, or other conditions the temple judges dangerous.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mitokusan.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "mitokusan",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-yohaijo-details",
+      "candidateId": "c-mitokusan-nageiredo-viewing-platform",
+      "claim": "A free public viewing platform (Nageiredo Yohaijo) at the foot of Mitokusan was completed and dedicated in November 2022, roughly 600m from Nageiredo itself (partial view, obstructed by trees); it has designated accessible parking and lets visitors view the National Treasure hall without climbing and regardless of weather.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.town.misasa.tottori.jp/1593/31543.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2022-11-19",
+        "family": "misasa-town",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-22"
+      }
+    },
+    {
+      "id": "ev-castle-jinpukaku-closed",
+      "candidateId": "c-jinpukaku",
+      "claim": "Jinpukaku entered long-term closure on Dec 29 2023 for approximately five years of preservation/restoration work; as of Sep 2025 the exterior is covered by construction sheeting. The Horyu-in garden and Hosen-an teahouse on the same grounds remain open, 9:00-17:00, closed Mondays.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.torican.jp/spot/detail_1012.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-09-01",
+        "family": "torican",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-02-22"
+      }
+    },
+    {
+      "id": "ev-kabuyu-hours-price",
+      "candidateId": "c-kabuyu-public-bath",
+      "claim": "Kabuyu public bath (Misasa Onsen's original source bath) is open 12:00-20:45 (last entry 20:15) in the late-spring/early-summer schedule listed, shifting to a 9:00 opening from June 2 onward per the same schedule; adult admission ¥400. An adjoining free footbath and drinking-spring station run daily except Mondays (footbath from 10:00 on Mondays).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://misasaonsen.jp/sightseeings/sightseeing-1072/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "misasaonsen-portal",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-masashige-hours-rooms-price",
+      "candidateId": "c-yakiniku-masashige--kurayoshi",
+      "claim": "Yakiniku Masashige Kurayoshi: dinner service 17:00-22:30 (L.O. 22:00) daily; lunch 11:30-14:30 weekends/holidays only. Closed weekday lunches, Dec 31, Jan 1. Private rooms seat 2-60 across the 116-seat restaurant. Four Tottori Wagyu course options at ¥2,800 / ¥3,800 / ¥5,500 / ¥6,600 per person.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.masashige55.com/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "masashige55",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-masashige-online-booking-cap",
+      "candidateId": "c-yakiniku-masashige--kurayoshi",
+      "claim": "The restaurant's own online reservation system tops out selectable party sizes below 8 and tells guests who can't select their real party size to call the shop directly — see disagreement d-masashige-party-size.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://yoyaku.toreta.in/262919",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "masashige55",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-crab-season-matsuba",
+      "candidateId": "c-kanikichi",
+      "claim": "Matsuba-gani (male snow crab) season in Tottori/San'in opens Nov 6 2026 and runs through Mar 20 2027, fixed by national ministerial order — the season has not started during an Oct 20-23 2026 trip.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://matsubishi.online/blogs/article/matsuba-gani_kaikinbi",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-01-01",
+        "family": "matsubishi",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-crab-season-benizuwai",
+      "candidateId": null,
+      "claim": "Beni-zuwaigani (red snow crab) season at Sakaiminato/Tottori runs Sept 1 through the following June 30, with fuller market availability from mid-to-late September onward — meaning it, not matsuba-gani, is the crab actually in season during an Oct 20-23 trip.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://marutsu.jp/blogs/news/kaikin2023",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-01-01",
+        "family": "marutsu",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-hachibee-details",
+      "candidateId": "c-hachibee",
+      "claim": "Menya Hachibee (麺屋八兵衛), a gyukotsu (beef-bone broth) ramen specialist in Kurayoshi (Fukuniwa-cho), founded 2009, signature ramen ¥780; local web coverage says it was once selected for the Michelin Guide. Hours and closed day could not be confirmed against a qualifying primary/operator source — see freshness flag.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://na-na.media/hachibe-kurayoshi/",
+        "kind": "press",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "na-na-media",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-entry-us-90days",
+      "candidateId": null,
+      "claim": "US passport holders are visa-exempt for stays of 90 days or less for tourism under Japan's reciprocal exemption arrangement.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/plan/visa-info/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "japan-travel-jnto",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-entry-mofa-blocked",
+      "candidateId": null,
+      "claim": "Japan MOFA's own visa-exemption page and the Japanese Consulate/Embassy pages returned HTTP 403 on every fetch attempt in this environment; japan.travel (JNTO, also an official Japanese-government tourism body) was used as the reachable official alternative for the entry-rules claim above.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mofa.go.jp/j_info/visit/visa/short/novisa.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": "mofa",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-emergency-numbers",
+      "candidateId": null,
+      "claim": "Japan's emergency numbers are 110 (police) and 119 (fire/ambulance); the JNTO Japan Visitor Hotline (050-3816-2787, also reachable from overseas) runs 24/7 in English, Chinese, Korean, and Japanese and explicitly covers emergency support for illness and disasters, not just tourist information.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/plan/emergencies/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "japan-travel-jnto",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-atm-coverage",
+      "candidateId": null,
+      "claim": "7-Eleven (Seven Bank) ATMs accept foreign Visa/Mastercard/Maestro/UnionPay/Amex 24 hours nationwide; Japan Post ATMs have the strongest rural coverage as a backup but run restricted hours (roughly 08:45-21:00 weekdays, shorter Saturdays, closed most Sundays). Convenience-store density drops in rural areas like the Kurayoshi/Misasa side of this trip.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan-guide.com/e/e2208.html",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "japan-guide",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-fx-rate",
+      "candidateId": null,
+      "claim": "Reference mid-market rate: 1 USD ≈ ¥159.4 (informational only — not the rate any card or exchange counter will actually give).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.xe.com/en-us/currencyconverter/convert/?Amount=1&From=USD&To=JPY",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-08-26",
+        "family": "xe",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "fx",
+        "recheckOn": "2026-09-02"
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-yakiniku-masashige--kurayoshi",
+      "importance": "important",
+      "bookingUrl": "https://yoyaku.toreta.in/262919",
+      "releaseWindow": "Online: same day up to 1 month ahead. For a party of 8, the online form's party-size selector tops out below 8 (confirmed by direct fetch of the booking page) — the site tells guests in that case to contact the restaurant directly.",
+      "actionDate": "Call ahead once dinner-night plans firm up (this trip: aim for the Day 2 Kurayoshi transit day, before the last Misasa-bound bus).",
+      "partyRules": "Private rooms run 2-60 people across 116 total seats, so 8 is comfortably within capacity — the constraint is the online tool's selector cap, not the restaurant's real capacity.",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "Online form is Japanese-only; phone (0858-26-2919) is the reliable path for a party of 8 and lets staff confirm a room that seats the whole group together.",
+      "lastSeating": "L.O. 22:00 (dinner service ends 22:30).",
+      "walkIn": "Possible off-peak given 116 total seats, but not guaranteed for a party of 8 without a reservation.",
+      "leads": [],
+      "alternatives": "Iwamoto Shokudo (yoshoku, Tottori wagyu x pork) is a considered-but-not-shipped backup — see candidate c-iwamoto-shokudo.",
+      "fallback": "If the phone line can't seat 8 together, split into two adjoining private rooms (2-6 each) rather than losing the venue."
+    },
+    {
+      "candidateId": "c-sanbutsu-ji-nageiredo-climb",
+      "importance": "anchor",
+      "bookingUrl": null,
+      "releaseWindow": "No advance reservation system — same-day registration only, at the temple.",
+      "actionDate": "Arrive by mid-morning: reception is 8:00-15:00 with a mandatory 16:30 descent deadline, and the climb itself typically runs 90-120 minutes round trip before accounting for queueing at the chain sections.",
+      "partyRules": "Minimum two people per climbing group (no solo climbers, strictly enforced); footwear is inspected at the reception desk — dedicated hiking-style soles required, rental straw sandals (waraji) available as a substitute, sneakers may be turned away.",
+      "deposit": null,
+      "cancellation": "Entry is refused outright in rain, snow, or any condition the temple judges dangerous — this is a same-day go/no-go call, not a bookable slot.",
+      "foreignFriction": null,
+      "lastSeating": null,
+      "walkIn": "Walk-in only; no reservation exists to lose.",
+      "leads": [],
+      "alternatives": "The free Nageiredo Yohaijo viewing platform (candidate c-mitokusan-nageiredo-viewing-platform) is the honest alternative for anyone in the party who can't or shouldn't attempt the climb — see the sights write-up.",
+      "fallback": "If weather closes the mountain, fall back to the viewing platform plus the ¥400 main-hall (Sanbutsu-ji hondo) visit, which doesn't require the climb."
+    }
+  ],
+  "transport": [
+    {
+      "id": "t-kurayoshi-misasa-bus",
+      "route": "Kurayoshi Station -> Misasa Onsen (Hinomaru Bus, Kamii-Misasa/Misasa Line, route 72/73)",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-bus-route-exists",
+        "ev-bus-downbound-schedule",
+        "ev-bus-upbound-last",
+        "ev-misasa-access-20min",
+        "ev-bus-fare-unreadable"
+      ],
+      "doorToDoor": "From the Kurayoshi Station bus stop, the ride to the Misasa Onsen area stops (Onsen South Exit / Misasa Onsen Tourism Center) runs about 20-26 minutes depending on the exact drop-off.",
+      "transferReality": "A standard route bus (fare box, no reserved seating, boarding by the rear door in the usual Japan local-bus pattern) rather than a coach — there is no dedicated luggage hold, so suitcases ride in the aisle/legroom area.",
+      "groupLuggageMobility": "For 8 travelers including 2 with low walking tolerance and full luggage, this is materially different from a solo traveler's transfer: boarding with bags takes longer, the bus may not have 8 adjacent seats free, and standing with luggage on a winding rural road is a real fatigue cost for the low-mobility pair. Build the transfer around a bus that isn't near-empty-standing-room, not just the next departure.",
+      "buffer": "Weekday midday service has a gap of roughly 100 minutes (12:22-14:04) — missing a bus in that window is not a 10-minute inconvenience, it's an hour-plus wait with luggage and no seating guarantee at the stop.",
+      "missedConnection": "Missing the last practical evening bus (~19:08 downbound) leaves taxi as the only same-night option to Misasa.",
+      "nextService": "Outside the midday gap, the next departure is typically within 30-90 minutes on the schedule fetched for this pass.",
+      "lastPracticalReturn": "Last confirmed weekday downbound (Kurayoshi -> Misasa) departure: 19:08. Build the Day 2 dinner in Kurayoshi to end with a real buffer before that, not against it.",
+      "fallback": "Taxi, ~20 minutes: Nikko/Chuo Taxi (0858-22-7111) or Kurayoshi Kotsu (0858-22-1511). The only fare figure located (~¥2,880) is undated-to-2009 and unconfirmed for 2026 — treat it as an order-of-magnitude estimate, not a quoted price, and expect to need 2 taxis for a party of 8 with luggage."
+    }
+  ],
+  "disagreements": [
+    {
+      "id": "d-cruise-fare",
+      "topic": "Uradome Coast sightseeing cruise adult fare: ¥1,300 vs ¥1,800",
+      "impact": "minor",
+      "evidenceIds": [
+        "ev-cruise-schedule-fare",
+        "ev-cruise-price-discrepancy-note"
+      ],
+      "investigation": "The operator's own cruise-specific page (fetched directly) states ¥1,800 for the standard/large sightseeing cruise. A separate, more general tourism-spot page from the same booking-agent domain states 'from ¥1,300', which reads as either a stale figure or a reference to a different/shorter boat option on the same coast rather than the standard cruise.",
+      "resolution": "Ship ¥1,800 as the confirmed adult fare for the standard cruise (the figure from the product-specific official page), and note in the guide that a cheaper short-boat option may exist at the dock — doesn't change which cruise the guide recommends."
+    },
+    {
+      "id": "d-masashige-party-size",
+      "topic": "Yakiniku Masashige Kurayoshi private-room capacity: 'up to 6' vs 'up to 60'",
+      "impact": "recommendation-changing",
+      "evidenceIds": [
+        "ev-masashige-hours-rooms-price",
+        "ev-masashige-online-booking-cap"
+      ],
+      "investigation": "A third-party booking aggregator summary said private rooms seat 2-6. The restaurant's own site (masashige55.com, fetched directly) states private rooms run 2-60 across 116 total seats. The online reservation widget (toreta.in, fetched directly) confirms its own party-size selector doesn't reach 8 and tells guests to call the shop directly in that case.",
+      "resolution": "The restaurant can genuinely seat a party of 8, but the self-service online booking tool cannot secure it — for this trip's group of 8, book by phone, not the web form. This is exactly the party-size feasibility decision the trip's food pick needed."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-yakiniku-masashige--kurayoshi",
+        "c-sanbutsu-ji-nageiredo-climb"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [
+        "t-kurayoshi-misasa-bus"
+      ],
+      "notApplicableReason": null
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Later searches on both ranked priorities (additional crab restaurants, additional onsen bathhouses, further day-trip peaks/temples) kept surfacing the same handful of names or options that were clearly weaker/out-of-scope for a compact 4-day, balanced-pace, no-rental-car trip (Mount Daisen too far, generic central-Tottori crab chains both touristy and out of season). The two open threads — the bus fare PDF being unreadable, and Menya Hachibee's hours lacking a qualifying primary source — affect whether a couple of figures ship clean vs. flagged, not which candidates make the guide, so they don't block stopping. Pass B's independent native-language sweep is the next real chance to surface something this pass missed."
+  },
+  "passB": null,
+  "reconciliation": []
+}

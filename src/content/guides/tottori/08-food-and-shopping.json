@@ -4,7 +4,40 @@
     "group": "Food & shopping",
     "title": "What to eat",
     "phase": "daily",
-    "items": [],
-    "rank": 2
+    "rank": 2,
+    "intro": "<p>Tottori's two food headlines are wagyu and crab — but the crab most guides mean (matsuba-gani) isn't in season for an Oct 20–23 trip; beni-zuwaigani (red snow crab) is what's actually available, worth asking for by name at a ryokan dinner rather than at a standalone restaurant.</p>",
+    "items": [
+      {
+        "name": "Yakiniku Masashige",
+        "area": "Kurayoshi",
+        "address": "589-2 Yamane, Kurayoshi, Tottori",
+        "phone": "0858-26-2919",
+        "hours": "Dinner 17:00–22:30 (L.O. 22:00) daily; lunch 11:30–14:30 weekends/holidays only",
+        "closed": "Weekday lunches, Dec 31, Jan 1",
+        "book": "call",
+        "how": "≈10–15 min bus or short taxi from Kurayoshi Station.",
+        "price": "¥2,800–¥6,600 per person (4 Tottori Wagyu course tiers)",
+        "why": "Whole-cow-sourced Tottori Wagyu at a genuinely local price point, with private rooms that scale to a group.",
+        "crowd_tip": "The restaurant's own online booking widget won't take a party of 8 — its selector tops out lower and tells you to call. Book by phone (private rooms run 2–60 across 116 total seats, so 8 is well within real capacity).",
+        "source_url": "https://www.masashige55.com/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Menya Hachibee",
+        "area": "Kurayoshi",
+        "address": "1-101 Fukuniwa-cho, Kurayoshi, Tottori",
+        "phone": "0858-26-3555",
+        "hours": "⚠ Lunch ≈10:30–14:00, dinner ≈17:30–20:00 per local coverage — not confirmed against a qualifying primary source in this pass",
+        "closed": "⚠ Reported as Thursdays, unconfirmed against a primary source",
+        "book": "walk-in",
+        "how": "Short taxi or walk from Kurayoshi Station; a counter-and-tables ramen shop, not set up for a party of 8 to book ahead.",
+        "price": "≈¥780 (signature gyukotsu ramen)",
+        "why": "Gyukotsu (beef-bone broth) ramen — a Tottori specialty most visitors never hear of — with a past Michelin Guide selection per local coverage.",
+        "source_url": "https://na-na.media/hachibe-kurayoshi/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "default"
+      }
+    ]
   }
 ]

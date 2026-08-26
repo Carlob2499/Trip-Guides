@@ -4,20 +4,111 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
-    "items": [],
-    "rank": 1
+    "rank": 1,
+    "items": [
+      {
+        "name": "Tottori Sand Dunes",
+        "kicker": "Free, and the reason people first hear of Tottori",
+        "body": "<p>Japan's largest coastal dune system, and free to walk — no ticket, no gate. The dune-side overlook lot (≈180 cars) is also free parking.</p>",
+        "dwell_min": 90,
+        "source_url": "https://www.tottori-guide.jp/sakyu/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Sand Museum",
+        "kicker": "Sand sculpture on a scale that has to be seen to make sense",
+        "body": "<p>Next to the dunes. 9:00–18:00, last entry 17:30, ¥800 adult. The 17th exhibition period, themed Spain, runs through Jan 3 2027 — so a late-Oct 2026 visit sees the Spain-themed sculptures.</p>",
+        "dwell_min": 60,
+        "source_url": "https://www.sand-museum.jp/information/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Tottori Castle Ruins",
+        "kicker": "Free park; the mansion inside it is not open",
+        "body": "<p>Kyusho Park, the castle-ruins grounds in Tottori city, is free and outdoor. Jinpukaku — the Meiji-era Western mansion generic guides list as the headline stop here — has been closed for preservation work since Dec 29, 2023 (exterior sheeted as of Sep 2025, expected to run several more years). The adjoining Horyu-in garden and Hosen-an teahouse on the same grounds remain open, 9:00–17:00.</p>",
+        "dwell_min": 45,
+        "closed_days": [],
+        "source_url": "https://www.torican.jp/spot/detail_1012.html",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Uradome Coast — San'in Matsushima sightseeing cruise",
+        "kicker": "40 minutes on the water among the coast's sea stacks",
+        "body": "<p>San'in Matsushima Yuran's standard cruise runs Mar–Nov, departing hourly 9:30–15:30, ¥1,800 adult, ≈40 min on the water. It's weather-dependent — the operator's own site tells visitors to confirm conditions before coming out.</p>",
+        "dwell_min": 60,
+        "source_url": "https://tottori-tours.com/plan/saninmatsushimayuran_ogata",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Kurayoshi Shirakabe Dozo-gun",
+        "kicker": "White-walled Edo/Meiji warehouses along the Tama River canal",
+        "body": "<p>Free to wander. Reached from Kurayoshi Station by a ≈10–15 minute city bus, alighting at the Akagawara/Shirakabe-Dozogun stop. The district's own tourist information center, inside Akagawara Building No. 10, is open 9:00–17:00 and runs paid guided-walk options (from ¥3,300) if the group wants more than a self-guided wander.</p>",
+        "dwell_min": 90,
+        "source_url": "https://www.kurayoshi-kankou.jp/guide",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Sanbutsu-ji — the Nageiredo climb",
+        "kicker": "Japan's most-cited 'dangerous' National Treasure, on a same-day weather call",
+        "body": "<p>A wooden hall wedged into a cliff face, reached by a genuine mountain climb with chains and rock scrambles — not a paved path. Reception 8:00–15:00, mandatory 16:30 descent; ¥1,200 adult includes the base temple fee (general temple admission without the climb is ¥400). A minimum of two people is required (no solo climbers), hiking-style footwear is checked at the desk, and entry is refused outright in rain, snow, or any condition the temple judges dangerous — plan it as a same-day decision, not a fixed booking.</p>",
+        "dwell_min": 150,
+        "source_url": "https://www.mitokusan.jp/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Nageiredo Yohaijo (viewing platform)",
+        "kicker": "The accessible way to see the same National Treasure",
+        "body": "<p>A free public viewing platform at the foot of Mitokusan, completed and dedicated in Nov 2022, with designated accessible parking. From roughly 600m away — partial view, some obstruction by trees — it lets anyone who can't or shouldn't attempt the Nageiredo climb still see the hall, in any weather. Pair it with the ¥400 Sanbutsu-ji main-hall visit, which also doesn't require the climb.</p>",
+        "dwell_min": 20,
+        "source_url": "https://www.town.misasa.tottori.jp/1593/31543.html",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Kabuyu",
+        "kicker": "Misasa Onsen's original source bath",
+        "body": "<p>The public bathhouse marking where Misasa Onsen's radium-spring history began, still called 'motoyu' (the original bath) locally. ¥400 adult; a free footbath and drinking-spring station sit alongside it, open daily except reduced Monday footbath hours.</p>",
+        "dwell_min": 45,
+        "source_url": "https://misasaonsen.jp/sightseeings/sightseeing-1072/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      }
+    ]
   },
   {
     "type": "divergences",
     "group": "Sights",
     "title": "What generic guides get wrong",
     "phase": "daily",
+    "rank": 1,
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "Jinpukaku, the Western-style mansion in the castle ruins park, is a top Tottori city sight.",
+        "correction": "It's been closed for preservation work since Dec 29 2023 and its exterior is currently sheeted for construction — expected to run several more years. The garden and teahouse beside it are still open; the mansion itself isn't.",
+        "category": "outdated",
+        "source_url": "https://www.torican.jp/spot/detail_1012.html",
+        "verified_on": "2026-08-26"
+      },
+      {
+        "claim": "Come to Tottori in October for the crab.",
+        "correction": "Matsuba-gani, the region's marquee crab, doesn't open until Nov 6 — after an Oct 20–23 trip. Beni-zuwaigani (red snow crab) is the one actually in season; ask for it by name.",
+        "category": "outdated",
+        "source_url": "https://matsubishi.online/blogs/article/matsuba-gani_kaikinbi",
+        "verified_on": "2026-08-26"
+      },
+      {
+        "claim": "The Nageiredo hike is a must-do photo stop on any Tottori itinerary.",
+        "correction": "It's a real mountain climb — chains, rock scrambles, a 2-person minimum, footwear inspection, and a same-day weather cancellation — not a casual add-on, especially for a group with limited-mobility travelers. The free Nageiredo Yohaijo viewing platform is the honest way for anyone who shouldn't attempt it to still see the hall.",
+        "category": "missing-context",
+        "source_url": "https://www.mitokusan.jp/",
+        "verified_on": "2026-08-26"
       }
-    ],
-    "rank": 1
+    ]
   }
 ]

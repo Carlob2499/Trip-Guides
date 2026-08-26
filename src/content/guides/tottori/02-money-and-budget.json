@@ -3,7 +3,7 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
+    "body": "<p>Japan's currency is the yen (¥); reference rate {{fact:fx-rate-usd-jpy}}. Carry more cash than a Tokyo trip would need — Misasa Onsen ryokan, the Kurayoshi bus, and Kabuyu public bath are all cash-friendlier than card-friendly.</p><p>⚠ 7-Eleven ATMs are the commonly cited option for foreign cards in Japan, but this pass only reached that guidance through a search summary, not a direct fetch of the source — confirm your specific card network works before relying on it, especially once you're away from a 7-Eleven in Kurayoshi or Misasa.</p>",
     "phase": "arrival"
   },
   {
@@ -11,34 +11,50 @@
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "intro": "Per-person estimates for the Oct 20–23 window. Lodging and food skew toward a ryokan-style stay in Misasa Onsen (dinner + breakfast typically included in the room rate there, so treat the two lines together rather than adding them twice for those nights).",
     "currency": "¥",
     "days": 4,
+    "party": 8,
     "items": [
       {
-        "label": "Lodging, per night",
+        "label": "Lodging, per night (Misasa Onsen ryokan, 2 meals included)",
         "basis": "day",
-        "est": 0
+        "est": 20000,
+        "low": 12500,
+        "high": 33000,
+        "per": "person",
+        "note": "Range from public Misasa Onsen ryokan listings — not fetched from a single primary source and not yet booked; confirm at booking."
       },
       {
-        "label": "Food & drink, per day",
+        "label": "Food & drink, per day (non-ryokan meals, snacks, drinks)",
         "basis": "day",
-        "est": 0
+        "est": 4000,
+        "low": 2000,
+        "high": 8000,
+        "per": "person"
       },
       {
-        "label": "Local transport, per day",
+        "label": "Local transport, per day (San'in Line, Hinomaru Bus, occasional taxi)",
         "basis": "day",
-        "est": 0
+        "est": 1000,
+        "low": 500,
+        "high": 2500,
+        "per": "person"
       },
       {
-        "label": "Sights & activities, per day",
+        "label": "Sights & activities, per day (Sand Museum, Uradome cruise, Nageiredo climb, Kabuyu)",
         "basis": "day",
-        "est": 0
+        "est": 1200,
+        "low": 500,
+        "high": 2500,
+        "per": "person",
+        "note": "Averaged across the trip — the Nageiredo climb day (≈¥1,200) and cruise day (¥1,800) run above this on their own days."
       },
       {
         "label": "Flights — round trip",
         "basis": "trip",
-        "est": 0
+        "est": 0,
+        "note": "No departure airport confirmed yet — see the Plan tab's Booking checklist. Left at 0 rather than guessed."
       }
     ]
   }

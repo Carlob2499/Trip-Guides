@@ -1,1 +1,11 @@
-{}
+{
+  "fx-rate-usd-jpy": {
+    "claim": "Reference USD to JPY exchange rate (informational — not a card or exchange-counter rate)",
+    "value": "≈¥159 per US$1",
+    "source_url": "https://www.xe.com/en-us/currencyconverter/convert/?Amount=1&From=USD&To=JPY",
+    "verified_on": "2026-08-26",
+    "shelf_life": "fx",
+    "state": "approx",
+    "tier": "secondary"
+  }
+}
