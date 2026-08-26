@@ -63,8 +63,8 @@
         "experiential claim \"Morning visits before the weekend crowds build are the best \" (ev-ameyoko-crowd-2) has no source date — recency is unproven for a shipped recommendation"
       ],
       "createdAt": "2026-08-26T14:14:11.861Z",
-      "status": "active",
-      "retiredAt": null
+      "status": "retired",
+      "retiredAt": "2026-08-26T14:33:58.214Z"
     }
   ]
 }
