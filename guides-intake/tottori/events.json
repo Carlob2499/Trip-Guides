@@ -23,17 +23,27 @@
       "text": "Pass A (canonical research) complete in 22m"
     },
     {
-      "at": "2026-08-26T18:56:20.835Z",
+      "at": "2026-08-26T18:56:48.867Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-26T19:18:22.844Z",
+      "kind": "decision",
+      "text": "Pass B (independent research) complete in 22m"
+    },
+    {
+      "at": "2026-08-26T19:18:22.861Z",
       "kind": "decision",
       "text": "Candidate funnel: 16 evaluated · 12 shortlisted · 11 shipped · 5 rejected"
     },
     {
-      "at": "2026-08-26T18:56:20.835Z",
+      "at": "2026-08-26T19:18:22.861Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-26T18:56:20.835Z",
+      "at": "2026-08-26T19:18:22.861Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Yakiniku Masashige Kurayoshi private-room capacity: 'up to 6' vs 'up to 60'"
     }
