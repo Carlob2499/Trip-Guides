@@ -3,6 +3,7 @@
 **Campaign branch:** `external-ai/production-field-hardening`  
 **Baseline:** `origin/main` at `c3ab203ae9b94c747fa8e08051dd2f18c28069aa`  
 **Production examined:** <https://carlob2499.github.io/Trip-Guides/>  
+**Review PR:** [#103 — Production field-hardening: restore guide Skip-link focus](https://github.com/Carlob2499/Trip-Guides/pull/103)
 **Campaign posture:** review only. This branch does not merge or change `main`.
 
 ## Scope and protected boundaries

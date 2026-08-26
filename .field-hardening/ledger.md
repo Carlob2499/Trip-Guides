@@ -43,3 +43,11 @@
 | Actual Firebase SDK/auth/deployed rules/real-network/two-client convergence | Environment/external dependency; active PR #100 ownership history | Test only through a new disposable `FIELDTEST-<timestamp>` room if the deployed UI supports safe creation. Never touch existing traveler data, weaken rules, or manufacture a rejection. |
 | Firebase disposable-room live join | Environment/service availability finding; no smallest source owner established | A fresh `FIELDTEST-20260826T061116Z` room failed closed to truthful local-only UI after the production app initiated Firebase loading and anonymous auth. Preserve the test URL/observation; do not manufacture a direct REST/owner/rules test or modify Firebase configuration/rules during this campaign. |
 | Frozen V2 validation/cutover sequence | Protected research-validation surface | Observe only; document any field finding without modifying Run A, Run B, V01/V02/V03/V05/V07, selector, publication, or research doctrine. |
+
+## Delivery
+
+| Field | Value |
+|---|---|
+| Commit | `4bb3071` — `fix(a11y): focus guide skip link target` |
+| Review pull request | [#103](https://github.com/Carlob2499/Trip-Guides/pull/103) — open for review only; no merge performed. |
+| Next action | Review the field-hardening PR. Do not merge automatically. |
