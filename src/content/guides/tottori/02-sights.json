@@ -9,9 +9,9 @@
       {
         "name": "Tottori Sand Dunes",
         "kicker": "Free, and the reason people first hear of Tottori",
-        "body": "<p>Japan's largest coastal dune system, and free to walk — no ticket, no gate. The dune-side overlook lot (≈180 cars) is also free parking.</p><p>Dawn (≈5:30–6:00am) is still the quietest time to go, but two independent 2025 firsthand accounts agree it's no longer an undiscovered secret — expect other early visitors too, a shift both attribute to social media popularizing sunrise trips. Beyond the main gate, a lesser-known ≈20-minute 'camel commute' path is worth-the-detour if the crowd at the entrance feels like the whole point — the resort's camels use it to reach their work stations around 9:15am.</p>",
+        "body": "<p>Japan's largest coastal dune system, and free — no ticket, no gate. From JR Tottori Station's bus terminal it's a ≈20-minute bus to the 鳥取砂丘（砂丘会館）stop, which is how a party with no rental car gets here; there is also a weekend-only Loop Kirin Lion bus at ≈30 minutes, no use on a Tue–Fri trip.</p><p>Early morning is still the quietest window, but two independent 2025 firsthand accounts agree it's no longer an undiscovered secret — expect other early visitors too, a shift both attribute to social media popularizing sunrise trips. ⚠ Don't inherit a clock time from a summer account: late October sunrise here is well after 6am, so check the actual time for your date before setting an alarm for eight people.</p><p>From the dune overlook, the <a href='https://www.torican.jp/feature/sakyu-morning'>official city walking route</a> down the camels' own commute path — ≈20 minutes one way to the Horse's Back ridge, ≈40 there and back — is worth-the-detour if the crowd at the entrance feels like the whole point. The camels themselves make that walk to their work stations around 9:15am.</p>",
         "dwell_min": 90,
-        "source_url": "https://www.tottori-guide.jp/sakyu/",
+        "source_url": "https://www.torican.jp/spot/detail_1064.html",
         "verified_on": "2026-08-26",
         "shelf_life": "venue",
         "map": {
@@ -52,21 +52,16 @@
       {
         "name": "Uradome Coast — San'in Matsushima sightseeing cruise",
         "kicker": "40 minutes on the water among the coast's sea stacks",
-        "body": "<p>San'in Matsushima Yuran's standard cruise runs Mar–Nov, departing hourly 9:30–15:30, ¥1,800 adult, ≈40 min on the water (≈1 hour including boarding). It's weather-dependent — the operator's own site tells visitors to confirm conditions before coming out.</p><p>It is not on the four-day plan, and that is a deliberate call rather than an oversight: the last sailing is 15:30, which rules out the arrival afternoon, and Wednesday is already the luggage-and-transfer day. It's the swap if you'd trade the Tottori Castle ruins morning for it.</p><p>⚠ Access from Tottori Station couldn't be confirmed from the operator's page — the departure point is in Iwami town, up the coast — so check the connection with the operator before committing a morning to it.</p>",
+        "body": "<p>San'in Matsushima Yuran's standard cruise runs Mar–Nov, departing hourly 9:30–15:30, ¥1,800 adult, ≈40 min on the water (≈1 hour including boarding). It's weather-dependent — the operator's own site tells visitors to confirm conditions before coming out.</p><p>It is not on the four-day plan, and that is a deliberate call rather than an oversight: the last sailing is 15:30, which rules out the arrival afternoon, and Wednesday is already the luggage-and-transfer day. It's the swap if you'd trade the Tottori Castle ruins morning for it.</p><p>⚠ Access from Tottori Station couldn't be confirmed from the operator's page — all it publishes is the departure address, 岩美郡岩美町大谷2182, up the coast in Iwami town — so check the connection with the operator (050-5433-9129) before committing a morning to it. This entry deliberately carries no map pin for the same reason: the coordinates it shipped with pointed at the other Matsushima, in Miyagi Prefecture, and no verified pin has replaced them yet.</p>",
         "dwell_min": 60,
         "source_url": "https://tottori-tours.com/plan/saninmatsushimayuran_ogata",
         "verified_on": "2026-08-26",
-        "shelf_life": "venue",
-        "map": {
-          "lat": 38.3696558,
-          "lng": 141.0628391
-        },
-        "place_id": "ChIJoSP545-biV8R3osIv7T_43E"
+        "shelf_life": "venue"
       },
       {
         "name": "Kurayoshi Shirakabe Dozo-gun",
         "kicker": "White-walled Edo/Meiji warehouses along the Tama River canal",
-        "body": "<p>Free to wander. Reached from Kurayoshi Station by a ≈10–15 minute city bus, alighting at the Akagawara/Shirakabe-Dozogun stop. The district's own tourist information center, inside Akagawara Building No. 10, is open 9:00–17:00 and runs paid guided-walk options (from ¥3,300) if the group wants more than a self-guided wander.</p>",
+        "body": "<p>Free to wander. Reached from <a href='https://www.kurayoshi-kankou.jp/bus_access/'>stand 2 at Kurayoshi Station's bus terminal</a> by a ≈12-minute city bus to the 赤瓦・白壁土蔵群 stop — every 5–10 minutes outside a few quiet hours, so it's the one leg eight people can take without timing it. The district's own tourist information center, inside Akagawara Building No. 10, is open 9:00–17:00 and runs guided walks at ¥3,300 per guide per hour if the group wants more than a self-guided wander — for eight, that's one guide, not eight tickets.</p>",
         "dwell_min": 90,
         "source_url": "https://www.kurayoshi-kankou.jp/guide",
         "verified_on": "2026-08-26",
@@ -75,7 +70,7 @@
       {
         "name": "Sanbutsu-ji — the Nageiredo climb",
         "kicker": "Japan's most-cited 'dangerous' National Treasure, on a same-day weather call",
-        "body": "<p>A wooden hall wedged into a cliff face, reached by a genuine mountain climb with chains and rock scrambles — not a paved path. Reception 8:00–15:00, mandatory 16:30 descent; ¥1,200 adult includes the base temple fee (general temple admission without the climb is ¥400). A minimum of two people is required (no solo climbers), hiking-style footwear is checked at the desk, and entry is refused outright in rain, snow, or any condition the temple judges dangerous — plan it as a same-day decision, not a fixed booking.</p><p>The route is typically closed for snow from December through March, so an Oct 20–23 visit is inside the climbing season. Rental straw sandals (waraji, ¥800) are available at the gate if your shoes don't pass the footwear check.</p><p>Car-free access is the 70/71 bus from Kurayoshi Station or the Misasa Onsen bus centre to the Mitokusan parking stop — only a handful of runs a day each way, so the bus, not the temple's own hours, is what actually sets your window here. Times are in the Transit tab.</p>",
+        "body": "<p>A wooden hall wedged into a cliff face, reached by a genuine mountain climb with chains and rock scrambles — not a paved path. Reception 8:00–15:00, mandatory 16:30 descent; ¥1,200 adult includes the base temple fee (general temple admission without the climb is ¥400). A minimum of two people is required (no solo climbers), hiking-style footwear is checked at the desk, and entry is refused outright in rain, snow, or any condition the temple judges dangerous — plan it as a same-day decision, not a fixed booking.</p><p>The route is typically closed for snow from December through March, so an Oct 20–23 visit is inside the climbing season. Rental straw sandals (waraji) are available at the gate for a fee if your shoes don't pass the footwear check — ⚠ the temple publishes no price for them, so bring cash and ask.</p><p>Car-free access is the 70/71 bus from Kurayoshi Station or the Misasa Onsen bus centre to the Mitokusan parking stop — only a handful of runs a day each way, so the bus, not the temple's own hours, is what actually sets your window here. Times are in the Transit tab.</p>",
         "dwell_min": 150,
         "source_url": "https://www.mitokusan.jp/",
         "verified_on": "2026-08-26",

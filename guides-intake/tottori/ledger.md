@@ -334,6 +334,194 @@ function the missing card was standing in for.
   booking page, a different URL from the venue homepage this entry cites. The claim stands as
   written.
 
+### Second fresh-context critic pass, 2026-08-26
+
+The first critic pass's output failed the build's `provenance:"strict"` gate, so this stage ran
+again from a clean context. The two schema errors are repaired below (finding 13), and the
+re-scan that came with them produced twelve further findings. All thirteen are implemented in the
+guide. One candidate finding was rebutted rather than edited; three residual gaps stay flagged.
+
+The recurring shape this pass: **the previous pass corrected the citations it had reason to
+doubt, and the untouched ones were the ones that were wrong.** Four separate items cited a page
+that does not publish the fact hanging off it, and one of those facts was actively contradicted
+by the official source.
+
+#### 1. A map pin 600 km outside the guide — rubric #2 (no fabrication, P0)
+**Where:** `02-sights.json` → "Uradome Coast — San'in Matsushima sightseeing cruise".
+The entry carried `map { lat 38.3696558, lng 141.0628391 }` and `place_id
+ChIJoSP545-biV8R3osIv7T_43E`. Those coordinates are **Matsushima in Miyagi Prefecture** — the
+Tohoku bay the operator's trade name borrows — roughly 600 km from Tottori and in the wrong half
+of the country. The operator's own page (`tottori-tours.com`, re-fetched this pass) publishes the
+departure address as 岩美郡岩美町大谷2182, in Iwami town, Tottori. A name-match lookup had
+resolved to the famous Matsushima and nothing downstream compares a sight's pin against the
+guide's own bbox.
+**Replacement:** `scripts/lookup-place.mjs` is not runnable in this stage, and guessing
+coordinates is forbidden, so the pin is **removed** rather than replaced. The verified departure
+address and the operator's phone (050-5433-9129) are written into the entry instead, and both the
+entry and the Sources tab say plainly why there is no pin. Recorded as R4 below.
+
+#### 2. The 9-seat jumbo taxi was priced as an ordinary cab — rubric #3, #7, #9
+**Where:** `03-transit.json` step 7 · `04-days.json` Day 2 `plan_b`.
+Both surfaces sold the jumbo taxi as the party-of-eight answer "at published metered rates (¥740
+flagfall + ¥90/279m)". Re-fetched `hinomaru-hire.com/taxi/`: ¥740 / ¥90 per 279 m is the
+**regular car**. The 9-seat jumbo has its own tariff — **¥840 for the first 1.5 km, then ¥100 per
+179 m**. On the ≈10 km Kurayoshi→Misasa run that is roughly ¥5,600, not the ≈¥3,500 the guide's
+figures implied: a ~60% understatement on the fallback a group of eight is most likely to reach
+for, after dark, with luggage.
+**Replacement:** both surfaces now carry the jumbo's own tariff with the regular-car rate beside
+it for contrast, and the Transit step links `hinomaru-hire.com/taxi/` inline (the section's single
+`source_url` is the bus timetable and never supported the tariff).
+
+#### 3. The Sand Dunes entry's citation supported none of its specifics — and one was wrong
+**Where:** `02-sights.json` → "Tottori Sand Dunes" · `04-days.json` Day 1. Rubric #2, #3.
+The entry cited `tottori-guide.jp/sakyu/` for free entry, "the dune-side overlook lot (≈180 cars)
+is also free parking", a "Dawn (≈5:30–6:00am)" quiet window, and the ≈20-minute camel-commute
+path. Fetched twice, including a targeted 入場料/駐車場/ラクダ pass: **the page carries none of
+them.** Worse, Tottori City's own visitor guide (`torican.jp/feature/hajimete`) says the opposite
+of the parking claim — 鳥取砂丘に一番近い…駐車場は駐車料500円の有料駐車場, with the free lots
+at the Sand Center and the adjacent municipal lot. The claim had also propagated into Day 1
+("free to enter with free dune-side parking").
+**Replacement:** the parking sentence is **deleted** from both surfaces — it was contradicted,
+and a party the intake says has no rental car had no use for it. The "≈5:30–6:00am" clock is
+removed too: no source carries it, and in late October sunrise here is well after 6am, so it
+would have had eight people (two with low walking tolerance) standing on a dune field in the
+dark. The entry now says "early morning" with a ⚠ to check the actual sunrise for the date. The
+item re-cites to `torican.jp/spot/detail_1064.html` (料金: 無料 — the free-entry claim's first
+real source) and the camel walk is inline-cited to `torican.jp/feature/sakyu-morning`, which does
+publish it: ≈20 min one way to the Horse's Back, ≈40 return, camels commuting 朝9:15ごろ.
+
+#### 4. The rank-1 marquee sight had no car-free access — rubric #7
+**Where:** `02-sights.json` → "Tottori Sand Dunes" · `04-days.json` Day 1 · `03-transit.json`.
+This is a **recurrence of the previous pass's own finding 2** (Nageiredo shipped with fees, rules
+and weather policy but no transport), one guide later and on the arrival day. The dunes carried a
+fee, a dwell time, crowd timing and a novel walking route, and never said how eight people
+without a rental car get there.
+**Replacement (same T0 page as finding 3):** ≈20 minutes by bus from JR Tottori Station's bus
+terminal, alighting at 鳥取砂丘（砂丘会館）; the weekend-only Loop Kirin Lion bus (≈30 min) is
+named and dismissed, because this is a Tuesday-to-Friday trip. Written into the sights entry, Day
+1, and a new first step in Transit.
+
+#### 5. Two figures attributed to pages that do not publish them — rubric #3, #10
+**Where:** `02-sights.json` → "Sanbutsu-ji — the Nageiredo climb" · `05-food-and-shopping.json` →
+Yakiniku Masashige `crowd_tip`.
+`mitokusan.jp` publishes only わらじ（有料） — "sandals, chargeable". The guide priced them at
+**¥800**. `masashige55.com` publishes the private-room range 2名様から最大60名様 and no total seat
+count; the guide asserted **"116 total seats"**. Both were re-fetched with targeted prompts to be
+sure. Note that the previous pass's citation audit recorded both of these sources as
+`supports` — the audit row was written against the fact it expected, not the figure on the page.
+**Replacement:** the ¥800 is removed and the waraji now carry an honest ⚠ ("the temple publishes
+no price — bring cash and ask"); the 116 is removed and the capacity argument rests on the
+published 2–60 room range, which is what it always actually rested on.
+
+#### 6. One source, one page, two confidence markers — rubric #3, #10
+**Where:** `05-food-and-shopping.json` → Menya Hachibee.
+`hours` and `closed` both ship ⚠ "not confirmed against a qualifying primary source"; the `price`
+from the identical `na-na.media` page shipped as **≈¥780** — the sourced-and-approximate marker, a
+tier the guide had just disclaimed for the same page. Re-fetched: the page publishes 780円,
+昼10:30~14:00 / 夜17:30～20:00, and Thursdays closed from 2025 — so the treatment is defensible for
+all three fields or none.
+**Replacement:** the price is downgraded to ⚠ with the same wording as its neighbours, and the
+Sources tab's still-flagged list now names the bowl price alongside the hours.
+
+#### 7. The party splits by ability; the return bus was written as one decision — rubric #9
+**Where:** `04-days.json` Day 3 · `03-transit.json` step 8. Common-sense lens.
+Day 3 correctly makes Mitokusan two experiences — a real climb for some, the free Yohaijo
+platform for the two low-mobility travelers — then tells the whole group to "pick the bus you're
+coming back on". The platform party's own `dwell_min` is 20 minutes; the climbers are up there for
+hours. One shared return means half the party waits at a mountain car park with a handful of
+services a day.
+**Replacement (from the timetable already fetched and shipped):** the platform-and-main-hall party
+takes the 10:25 or 11:40, the climbers the 12:50 or 14:08 — three to four hours on the mountain
+from either morning arrival. Re-fetching `misasaonsen.jp/mitokuclimb/` confirmed the previous
+pass's R3: **no round-trip time is published**, so the day carries a ⚠ saying so and steering to
+the later bus rather than inventing a duration. The same fetch surfaced two earlier northbound
+runs (8:27, 9:15) the guide's return list omitted; both leave before either morning arrival, and
+the Transit step now says that instead of presenting a silently partial list.
+
+#### 8. The anchor day's deadline left out the trip back to the station — rubric #9, common sense
+**Where:** `04-days.json` Day 2.
+The day's whole architecture is "be done well before 19:25". Yakiniku Masashige is at Yamane —
+the guide's own Food entry calls it "≈10–15 min bus or short taxi from Kurayoshi Station" — so
+"done" at 19:20 is a missed bus. No new fact needed; the guide already held both halves and never
+subtracted one from the other.
+**Replacement:** the day now counts backwards explicitly — leave the table by about 18:45, and
+have the taxi arranged rather than trusting an evening city bus nobody has checked (an honest
+unknown, not a claim).
+
+#### 9. The arrival night has no dinner — rubric #8, #10; meals & energy lens
+**Where:** `04-days.json` Day 1 · `07-sources.json`.
+Food is the intake's **#2 ranked priority**. Both shipped venues are in Kurayoshi; the party
+sleeps night 1 in Tottori city and night 2–3 on ryokan half-board. Day 1 ended at the Sand Museum
+at 18:00 and said nothing about the evening meal for eight people. The candidates table shows
+Tottori-city dining WAS considered (Kanikichi, rejected on season and tourist pricing) — it just
+left no survivor, and nothing said so.
+**Not fixed by invention — flagged.** Verifying a replacement means a Tottori-city restaurant's
+own site, a domain outside this stage's permitted fetch set (see R5). Day 1 now states the gap in
+the traveler's own terms and gives the actionable fallback (have the hotel book it, don't walk
+eight people around looking), and the Sources tab records it as a deliberate absence.
+
+#### 10. An outdoor-anchored day with no `plan_b` — inclement-cover lens
+**Where:** `04-days.json` Day 1.
+Days 2 and 3 both carry a `plan_b`; Day 1, whose anchor is an open dune field, carried none.
+**Replacement:** no new fact — the cover is already on the day. Rain gives the whole slot to the
+Sand Museum (indoors, already verified) and moves the dunes to Wednesday morning, the one early
+slot the four days contain and the slot Day 1 already names.
+
+#### 11. The same ATM guidance shipped flagged on one tab and clean on another — rubric #10
+**Where:** `01-plan.json` "Local essentials" · `06-money-and-budget.json` "Money & currency".
+Money & currency honestly ⚠-flags the 7-Eleven ATM advice as resting on a search summary rather
+than a fetched source. Local essentials stated the same thing as plain fact, in more detail
+(Visa/Mastercard/Maestro/UnionPay/Amex, 24 hours nationwide), with no flag and no source. A reader
+comparing the two tabs learns the guide doesn't know what it thinks.
+**Replacement:** Local essentials now carries the same ⚠ and points at the Money tab, and the
+duplicated FX reference rate is dropped from it — one home for the rate, which also removed the
+strict-mode failure in finding 13.
+
+#### 12. Day 4 quoted a departure time with no provenance — rubric #3
+**Where:** `04-days.json` Day 4.
+"Departures from the Misasa Onsen bus centre start before 7:40" is a transit figure on an
+undated, unsourced day card, while Days 1–3 all carry item-level provenance for exactly this
+reason (see the reconcile pass's own amendment). Added `source_url` (the same route-3450
+timetable that publishes it) + `verified_on`.
+
+#### 13. Build repair — the two schema errors that failed the previous attempt — rubric #1, #3
+**Where:** `facts.json` · `01-plan.json` §1 · `06-money-and-budget.json` §15.
+`facts.json`'s `fx-rate-usd-jpy` had `≈` typed into `value` **and** `state: "approx"`. The `≈` is
+DERIVED from state (`src/lib/facts.mjs` `renderFactValue`), so the guide would have rendered
+"≈¥159 per US$1 ≈ approx." — two markers for one figure — and, because the derived pill puts a
+literal `≈` into every section that references the fact, both referring panels tripped the
+`provenance:"strict"` gate for carrying `≈` with no `verified_on`.
+**Replacement:** `value` is now `¥159 per US$1` (state alone carries the marker). "Money &
+currency", whose subject IS the rate, gains `source_url` (XE) + `verified_on` + `shelf_life: fx`.
+"Local essentials" no longer references the fact at all (finding 11), so it owes no date — which
+is the right fix there: dating that panel to XE would have implied the ATM paragraph was sourced
+to a currency converter, the exact mis-citation this pass spent its budget catching.
+
+#### Rebutted on second look (no edit)
+- **The Kurayoshi–Misasa bus fare, "secondhand sources put it around ¥340–¥480".** This looked
+  like a bare perishable figure from a disqualified tier. It isn't: it is ⚠-flagged, given as a
+  range rather than a point, explicitly labelled secondhand, paired with the reason the primary
+  source failed (the operator's fare table is an unreadable PDF) and with the actionable
+  instruction (pay cash on board). That is precisely what `verification-rules.md` §4 licenses a
+  `⚠` to do. Left as written.
+
+#### Flagged, not fixed (source or tooling out of this stage's reach)
+- **R1 · `map.points[]` absent** (carried forward, unchanged). Still needs
+  `scripts/lookup-place.mjs`, which this stage cannot run.
+- **R2 · Uradome cruise transit access** (carried forward). The operator page publishes only the
+  address; re-fetched this pass and it still does. The address and phone are now in the entry.
+- **R3 · Nageiredo climb effort figures** (carried forward, re-tested). `misasaonsen.jp/mitokuclimb/`
+  was re-fetched this pass and explicitly publishes no distance, ascent or round-trip time; it
+  refers the reader to `mitokusan.jp`, which publishes none either. Day 3 now states the gap
+  rather than leaving it silent. Source lead unchanged: find the page that actually publishes them.
+- **R4 · NEW · Uradome cruise coordinates.** The wrong pin is removed (finding 1); a correct one
+  needs `scripts/lookup-place.mjs "山陰松島遊覧" --cc JP` on the verified address
+  岩美郡岩美町大谷2182. Not runnable in this stage.
+- **R5 · NEW · A Tottori-city dinner for eight on the arrival night.** Needs a restaurant's own
+  site — a new authority outside this stage's permitted fetch set. Source lead: `torican.jp`'s
+  gourmet listings are fetchable here and would give candidate names, but the hours, party-of-8
+  capacity and reservation rule must climb to each venue's own T0 page before anything ships.
+
 ## Citation audit
 
 Sampled 8 perishable facts, weighted toward prices, hours and the anchor transfer. Each fact's own
@@ -353,6 +541,44 @@ Sampled 8 perishable facts, weighted toward prices, hours and the anchor transfe
 Unreachable: none of the sampled sources failed to resolve. `matsubishi.online` (Pass A's original
 matsuba-gani citation, already superseded in the guide) sits outside this stage's permitted fetch
 set and was not re-checked; no shipped claim depends on it any more.
+
+### Second critic pass — citation audit, 2026-08-26
+
+Fourteen perishable facts sampled, weighted toward prices, hours and the anchor transfer, and
+deliberately **including the facts the first pass's audit had already marked `supports`** — that
+re-sampling is what caught findings 5 and 3. Every row's own `source_url` was fetched and read
+against the value the guide states.
+
+| Claim | Value in guide (before this pass) | Source fetched (y/n) | Verdict |
+|-------|-----------------------------------|----------------------|---------|
+| Sand Dunes — free entry, dune-side lot ≈180 cars free, dawn ≈5:30–6:00am, ≈20-min camel path | all four, on one citation | y — `tottori-guide.jp/sakyu/` (twice, second time targeting 入場料/駐車場/ラクダ) | **drifted → fixed** — the page carries **none** of the four. Free entry re-cited to `torican.jp/spot/detail_1064.html` (料金: 無料); camel path re-cited to `torican.jp/feature/sakyu-morning` (≈20 min one way, 朝9:15ごろ); parking claim deleted as contradicted (below); dawn clock deleted as unsourced |
+| Sand Dunes — dune-side overlook lot is free parking | "(≈180 cars) is also free parking" | y — `torican.jp/feature/hajimete` | **drifted → fixed** — official city guide says the nearest lot is 駐車料500円の有料駐車場 and the FREE lots are the Sand Center / municipal lot. Claim removed from the sights entry and from Day 1; the party has no rental car |
+| Sand Dunes — access from Tottori Station | absent entirely | y — `torican.jp/spot/detail_1064.html` | **gap → filled** — バスで約20分「鳥取砂丘（砂丘会館）」下車, plus a weekend-only loop bus at ≈30 min that this Tue–Fri trip can't use |
+| Hinomaru Hire 9-seat jumbo taxi tariff (party-of-8 fallback) | ¥740 flagfall + ¥90/279m | y — `hinomaru-hire.com/taxi/` | **drifted → fixed** — that is the REGULAR car (初乗運賃1.5kmまで740円 / 以後279mごとに90円). The jumbo is ¥840 / 1.5 km then ¥100 per 179 m. Corrected in Transit and Day 2 `plan_b` |
+| Sanbutsu-ji rental waraji price | ¥800 | y — `mitokusan.jp` (targeted re-fetch) | **drifted → fixed** — the page says only わらじ（有料）; no yen figure is published. Figure removed, ⚠ substituted |
+| Yakiniku Masashige total seats | "116 total seats" | y — `masashige55.com` (targeted re-fetch) | **drifted → fixed** — the page publishes the private-room range 2名様から最大60名様 and no total seat count. Figure removed |
+| Menya Hachibee bowl price | ≈¥780 | y — `na-na.media/hachibe-kurayoshi/` | **supports the number, drifted on tier → fixed** — page gives 780円, 昼10:30~14:00 / 夜17:30～20:00, 木曜日 closed (from 2025). Same non-primary page the guide already ⚠-flags for hours, so the price's `≈` was downgraded to ⚠ for consistency |
+| Kurayoshi→Misasa last weekday bus (ANCHOR) | route 70/71 上井三朝線, last dep. 19:25 → 三朝車庫 19:52 | y — `hinomarubus.co.jp/timetable_route/3450/?tab=2` | **supports** — (70)(71) Kamioi-Misasa line, 17 weekday departures 7:45–19:25, last arriving 三朝車庫 19:52 (27 min) |
+| Mitokusan bus runs + returns | dep. Kurayoshi 8:35 → Mitokusan 9:10; returns 10:25/11:40/12:50/14:08/15:19/16:12/17:23 | y — same page | **supports, list completed** — 8:35→9:10 confirmed; northbound also shows 8:27 and 9:15, both before either morning arrival. Transit now names them and says why they're useless here |
+| Shirakabe Dozo-gun access from Kurayoshi Station | "≈10–15 minute city bus", stop unnamed, no citation anywhere | y — `kurayoshi-kankou.jp/bus_access/` | **drifted → fixed** — 倉吉駅バスターミナル2番乗り場, 赤瓦・白壁土蔵群 stop, 約12分, 一部時間を除き5〜10分毎. Stand number and frequency added; both surfaces re-cited |
+| Shirakabe tourist information centre hours + guided walk | 9:00–17:00, "from ¥3,300" | y — `kurayoshi-kankou.jp/guide` | **supports, sharpened** — 9:00～17:00 and ガイド1人につき1時間以内3,300円 — per GUIDE per hour, so for a party of eight that's one fee, not eight. Wording corrected |
+| Uradome cruise fare, season, times, departure point | ¥1,800, Mar–Nov, hourly 9:30–15:30, ≈40 min afloat | y — `tottori-tours.com/plan/saninmatsushimayuran_ogata` | **supports** — 3月〜11月, seven departures 9:30–15:30, 大人1,800円, ≈1 h total. Departure point 〒680-0073 岩美郡岩美町大谷2182 — which is what exposed the Miyagi coordinates (finding 1) |
+| Misasakan reserved shuttle pickups | 14:10/15:30/16:20/17:30, advance booking only | y — `misasakan.co.jp/access/` | **supports, sharpened** — お迎え(倉吉駅出発) 14:10、15:30、16:20、17:30 / 要事前予約, and the page warns times shift 5–10 min with the trains. That caveat is now in the guide, because Day 2's luggage plan rides on these runs |
+| Sand Museum admission, hours, exhibition | ¥800, 9:00–18:00, last entry 17:30, Spain through Jan 3 2027 | y — `sand-museum.jp/information/` | **supports** — 800円 / 9:00～18:00（最終入館17:30）/ 2026年4月24日～2027年1月3日 |
+| Nageiredo climb fees, hours, rules, snow closure | ¥1,200 (¥400 without climb), 8:00–15:00, 16:30 descent, 2-person minimum, footwear check, Dec–Mar | y — `mitokusan.jp` | **supports** (every element except the waraji price, above) |
+| Nageiredo climb round-trip time / trail length | not shipped (R3) | y — `misasaonsen.jp/mitokuclimb/` | **unreachable → flagged** — page publishes no distance, ascent or duration and defers to `mitokusan.jp`, which publishes none either. R3 stands; Day 3 now states the gap |
+| Yohaijo platform — telescopes, 2+1 parking, "only non-climbing viewpoint" | as written | y — `misasaonsen.jp/sightseeings/sightseeing-12431/` | **supports** — ニコン製の高画質望遠鏡, 駐車場2台・身障者専用1台, 登山以外、唯一見られる場所です, renewed autumn 2022 |
+| Kabuyu admission + free footbath | ¥400, free footbath/drinking spring, reduced Monday footbath hours | y — `misasaonsen.jp/sightseeings/sightseeing-1072/` | **supports** — 大人400円, 足湯 8:00～21:00（月曜日のみ10:00～）, drinking spring 24時間 |
+| Yakiniku Masashige hours, closed days, course prices | 17:00–22:30 (L.O. 22:00), weekend-only lunch 11:30–14:30, closed weekday lunch + Dec 31/Jan 1, ¥2,800–¥6,600 | y — `masashige55.com` | **supports** (the seat count above is the one element it does not carry) |
+| Jinpukaku closure + Horyu-in/Hosen-an hours | closed since Dec 29 2023, ~several more years; garden/teahouse open 9:00–17:00 | y — `torican.jp/spot/detail_1012.html` | **supports** — 2023年12月29日より約5年間…長期休館, 宝隆院庭園と宝扇庵は引き続きご利用いただけます, 9:00～17:00 |
+| Crab seasons (matsuba-gani vs beni-zuwaigani) | 松葉がに Nov–Mar, 紅ズワイガニ Sep–Jun | y — `marutsu.jp` | **supports** — 11月～3月 and 9月～6月, one page covering both, as the previous pass re-cited it |
+
+Unreachable / not re-checked: `misasaonsen.jp/mitokuclimb/` resolved but publishes nothing on the
+climb's effort (recorded above as the R3 flag, not a dead link). `travel.state.gov` and Japan's
+MOFA visa-exemption page remain blocked to this stage's fetches, exactly as the previous pass
+recorded; both gaps stay ⚠ in the guide. `eki.jr-odekake.net` (Kurayoshi Station step-free
+access) and `xe.com` (the FX reference rate) were not re-sampled this pass — both are carried
+forward from earlier passes and are named in the guide's own re-check list.
 
 #### Continuity sweep — critic execution
 
@@ -394,3 +620,55 @@ stamp, which now names the superseded figure while explaining the correction.
 
 **Deferred to human / a networked pass:** R1 (map `points[]` — needs `lookup-place.mjs`), R2
 (Uradome transit access), R3 (climb effort figures). No other ripple was left open.
+
+**Second critic pass, 2026-08-26.**
+
+**Greps run** across the whole guide directory after editing: `180 cars` · `dune-side parking` ·
+`5:30–6:00` · `Dawn` / `dawn` · `116 total` · `¥740` · `≈¥780` · `waraji, ¥800` · `38.369` ·
+`141.062` · `place_id` · `tottori-guide` · `10–15 minute city bus` · `{{fact:` · `≈` (against the
+strict-mode gate, section by section). Remaining hits are all intentional and were each read:
+`¥740` now survives only as the explicit regular-car contrast in the two jumbo-taxi passages;
+`dawn` survives only in the divergence card whose whole subject is the "arrive at dawn" myth (its
+correction carries no clock time) and in the `_guide.json` stamp, which names the superseded
+figures while explaining the corrections.
+
+**Ripples found and fixed:**
+- The dune parking claim had propagated from the sights entry into **Day 1's body**; removed from
+  both, not just from the entry that owned it.
+- Re-citing the Sand Dunes item moved its `source_url` off `tottori-guide.jp` entirely, which left
+  that domain in the **Sources tab's "checked directly against" list supporting nothing** — a
+  source list that overstates the guide's evidence. Replaced with the two `torican.jp` pages that
+  now carry the facts, described by what each one supports. The same sweep found
+  `tottori-tours.com` (the Uradome citation actually in use) **missing** from that list while
+  `yourun1000.com` — cited by nothing — was in it; corrected both ways.
+- The Shirakabe access fix rippled to **two** surfaces (Transit step 3 and the sights entry), and
+  the guided-walk price changed meaning with it: ¥3,300 is per guide per hour, not a per-head
+  "from" price, which for a party of eight is a materially different number. Both re-worded.
+- The `map.points[]`-free Uradome entry: checked that no other surface pins it. Day cards don't
+  schedule the cruise, and the orientation `map` section carries no `points[]` at all, so removing
+  the item's coordinates orphaned nothing. The `span 0.21` bbox from the previous pass still frames
+  all three towns; the removed pin was never inside it, which is the check that should have caught
+  it upstream.
+- The Day 3 return-bus split rippled back into **Transit step 8** ("pick two, see Day 3"), so the
+  two tabs can't drift apart on it, and the same step gained the 8:27/9:15 runs it had silently
+  omitted.
+- The jumbo-taxi tariff appeared in **two** places (Transit step 7, Day 2 `plan_b`); both corrected,
+  and the Booking-checklist line that names the jumbo was re-read — it carries no fare, so it
+  needed no edit.
+- Removing the FX token from "Local essentials" left `fx-rate-usd-jpy` referenced exactly once, in
+  "Money & currency". Checked it is still referenced at all (an unreferenced registry row is a
+  lint nag, an unresolved token is a build failure) — it is, and the panel now carries the
+  provenance the strict gate wants.
+- The Sources tab's still-flagged list gained the Hachibee bowl price, the waraji price and the
+  climb's round-trip time, and a new paragraph records the two DELIBERATE absences (the missing
+  Uradome pin, the unresearched arrival-night dinner) so they don't read as oversights.
+- `_guide.json`'s verified stamp records this pass's corrections and adds the Hachibee bowl price
+  to the pre-travel re-check list.
+- Prose shape: every paragraph added this pass was kept under the ~80-word working limit the
+  previous pass adopted; the Day 3 return-bus note and the Day 1 dinner note were each written as
+  their own short paragraph rather than appended to an existing one.
+
+**Deferred to human / a networked pass:** R1 (map `points[]`), R2 (Uradome transit access), R3
+(climb effort figures — re-tested and confirmed unpublished this pass), R4 (correct Uradome
+coordinates — needs `lookup-place.mjs`), R5 (a verified Tottori-city dinner for eight on the
+arrival night — needs a venue's own site, a new authority). No other ripple was left open.
