@@ -1,0 +1,79 @@
+{
+  "slug": "tokyo",
+  "attemptedAt": "2026-08-26T14:34:32.556Z",
+  "applied": true,
+  "pending": 16,
+  "resolved": [
+    {
+      "name": "Senso-ji Temple (Asakusa)",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Meiji Jingu",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Shinjuku Gyoen National Garden",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Tokyo Tower",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Yanaka Ginza",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Nihonryori RyuGin",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Ginza Ukai-tei",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Aragawa",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Tsukiji Outer Market",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Toyosu Market",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Torien",
+      "file": "08-food-and-shopping.json"
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "teamLab Planets (Toyosu)",
+      "file": "07-sights.json",
+      "why": "name mismatch — asked \"teamLab Planets (Toyosu)\", Places returned \"teamLab Planets TOKYO DMM\""
+    },
+    {
+      "name": "Kobikicho Ohno",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Kobikicho Ohno\", Places returned \"Yotsuya-Sanchome Station\""
+    },
+    {
+      "name": "Yakiniku Ushigoro",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Yakiniku Ushigoro\", Places returned \"USHIGORO S. GINZA\""
+    },
+    {
+      "name": "Uobei Genki Sushi",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Uobei Genki Sushi\", Places returned \"Uobei Shibuya Dogenzaka Store\""
+    },
+    {
+      "name": "Ameya-Yokocho (Ameyoko)",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Ameya-Yokocho (Ameyoko)\", Places returned \"Ameyoko market\""
+    }
+  ]
+}

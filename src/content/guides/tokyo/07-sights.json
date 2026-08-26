@@ -12,7 +12,12 @@
         "dwell_min": 60,
         "source_url": "https://www.senso-ji.jp/about/",
         "verified_on": "2026-08-26",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 35.7147651,
+          "lng": 139.7966553
+        },
+        "place_id": "ChIJ8T1GpMGOGGARDYGSgpooDWw"
       },
       {
         "name": "Meiji Jingu",
@@ -21,7 +26,12 @@
         "dwell_min": 45,
         "source_url": "https://www.meijijingu.or.jp/en/visit/",
         "verified_on": "2026-08-26",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 35.6763976,
+          "lng": 139.6993259
+        },
+        "place_id": "ChIJ5SZMmreMGGARcz8QSTiJyo8"
       },
       {
         "name": "teamLab Planets (Toyosu)",
@@ -37,10 +47,17 @@
         "kicker": "A large formal garden minutes from Shinjuku's density",
         "body": "<p>Oct 1–Mar 14 hours: 9:00 AM–4:30 PM, last entry 4:00 PM. Adults ¥500. <b>Closed every Monday</b> — Mon Oct 19 falls inside this trip and isn't a substitute holiday, so plan the garden for one of the other four days.</p>",
         "dwell_min": 90,
-        "closed_days": ["mon"],
+        "closed_days": [
+          "mon"
+        ],
         "source_url": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/information/",
         "verified_on": "2026-08-26",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 35.685176299999995,
+          "lng": 139.7100517
+        },
+        "place_id": "ChIJPyOTG8KMGGARh_IXobWxHmo"
       },
       {
         "name": "Tokyo Tower",
@@ -49,13 +66,23 @@
         "dwell_min": 60,
         "source_url": "https://www.tokyotower.co.jp/en/",
         "verified_on": "2026-08-26",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 35.6585805,
+          "lng": 139.7454329
+        },
+        "place_id": "ChIJCewJkL2LGGAR3Qmk0vCTGkg"
       },
       {
         "name": "Yanaka Ginza",
         "kicker": "An old-Tokyo shopping street that IS the sightseeing — eat your way down it",
         "body": "<p>A ~170m street of 60–70 independent shops, 5 minutes from Nippori Station. Street-food staples: menchi-katsu (fried minced-meat cutlet), grilled seafood skewers. The best fit in this guide's Sights section for a food-priority trip — there's no separate \"sight\" here, the street food is the point.</p>",
-        "dwell_min": 60
+        "dwell_min": 60,
+        "map": {
+          "lat": 35.7276965,
+          "lng": 139.7657226
+        },
+        "place_id": "ChIJPYwFnNGNGGARYEeXwiYQPe8"
       }
     ]
   },

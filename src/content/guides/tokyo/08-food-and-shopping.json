@@ -19,7 +19,12 @@
         "why": "3 Michelin stars — the trip's anchor dinner, and the only finalist confirmed to seat six in one room.",
         "source_url": "https://www.nihonryori-ryugin.com/en/reserve/",
         "verified_on": "2026-08-26",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.6742704,
+          "lng": 139.7592781
+        },
+        "place_id": "ChIJaZF5wHmLGGARycW1JhshDjY"
       },
       {
         "name": "Ginza Ukai-tei",
@@ -35,7 +40,12 @@
         "why": "The anchor's low-friction fallback if RyuGin's Sept 1 booking window closes first — still Michelin-starred teppanyaki, with a confirmed group-of-6 precedent.",
         "source_url": "https://www.ukai.co.jp/english/ginza/",
         "verified_on": "2026-08-26",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.6680815,
+          "lng": 139.76718929999998
+        },
+        "place_id": "ChIJf38F8OCLGGAR3vsQeUZEBYY"
       },
       {
         "name": "Aragawa",
@@ -48,7 +58,12 @@
         "why": "Worth the Effort: independent critics rank it among the best steak experiences in Japan — a genuinely different, splurge-tier alternative if you'd rather have this than the anchor dinner.",
         "source_url": "https://www.tablecheck.com/en/shops/aragawa/reserve",
         "verified_on": "2026-08-26",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.6617716,
+          "lng": 139.75134549999999
+        },
+        "place_id": "ChIJbZZwX5WLGGARxEIRYtyVP0I"
       },
       {
         "name": "Kobikicho Ohno",
@@ -98,7 +113,12 @@
         "why": "The wholesale tuna auction moved to Toyosu in 2018, but the food stalls here never closed — still the best casual grazing breakfast in the city.",
         "source_url": "https://www.tsukiji.or.jp/english/how-to-enjoy/",
         "verified_on": "2026-08-26",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 35.6647703,
+          "lng": 139.7702515
+        },
+        "place_id": "ChIJW2cLzSGLGGARXAKXv6EkbqI"
       },
       {
         "name": "Toyosu Market",
@@ -111,7 +131,12 @@
         "why": "Where the wholesale fish trade actually is now — pairs naturally with teamLab Planets, a few minutes away.",
         "source_url": "https://www.english.metro.tokyo.lg.jp/w/016-101-003992",
         "verified_on": "2026-08-26",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 35.6440911,
+          "lng": 139.784281
+        },
+        "place_id": "ChIJW4-7z_iJGGAR3DNQUg6tv9Y"
       },
       {
         "name": "Torien",
@@ -123,7 +148,12 @@
         "why": "The practical way to eat together at Omoide Yokocho as one group of six instead of splitting across several 6-seat stalls.",
         "source_url": "https://www.hotpepper.jp/strJ000762068/",
         "verified_on": "2026-08-26",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.692944,
+          "lng": 139.69968319999998
+        },
+        "place_id": "ChIJiT0mEHGNGGARqq_ja8QvBx8"
       },
       {
         "name": "Ameya-Yokocho (Ameyoko)",
