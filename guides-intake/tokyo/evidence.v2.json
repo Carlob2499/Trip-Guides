@@ -774,7 +774,7 @@
     {
       "id": "ev-aragawa-critical-reputation",
       "candidateId": "c-aragawa",
-      "claim": "Repeatedly cited by independent food critics (Andy Hayler, Spear's magazine) as one of the most extraordinary steak experiences in Japan; charcoal-grilled Tajima-lineage beef, founded 1967.",
+      "claim": "Repeatedly cited by independent food critics as one of the most extraordinary steak experiences in Japan.",
       "kind": "experiential",
       "origin": "passA",
       "source": {
@@ -834,7 +834,7 @@
     {
       "id": "ev-aragawa-capacity-estimate-2",
       "candidateId": "c-aragawa",
-      "claim": "The dining area seats up to 22 guests — an intimate setting, unchanged in design since the restaurant's 1967 founding.",
+      "claim": "Total restaurant capacity is reported at only ≈22 seats — a secondhand press/blog estimate, not an official Aragawa-published figure. Aragawa's own site could not be reached to confirm.",
       "kind": "experiential",
       "origin": "passA",
       "source": {
@@ -974,18 +974,20 @@
     {
       "id": "ev-entry-jesta-not-yet-active",
       "candidateId": null,
-      "claim": "Japan's planned ETA-style Electronic Travel Authorization (JESTA) passed the Diet in 2026 but implementation targets FY2028 (by March 31, 2029) via a future phased rollout — it will not affect an Oct 2026 trip.",
+      "claim": "Japan's planned ETA-style Electronic Travel Authorization (JESTA) passed the Diet in 2026 (Law No. 32 of 2026, promulgated June 5, 2026); the provisions creating JESTA take effect on a date to be set by Cabinet Order no later than March 31, 2029 — it will not affect an Oct 2026 trip.",
       "kind": "objective",
       "origin": "passA",
       "source": {
-        "url": "https://www.moj.go.jp/isa/content/001446180.pdf",
+        "url": "https://www.moj.go.jp/isa/01_00643.html",
         "kind": "official",
-        "access": "blocked",
+        "access": "fetched",
         "language": "ja",
         "publishedAt": null,
         "family": null,
         "independent": null,
-        "appliesToYears": []
+        "appliesToYears": [
+          2029
+        ]
       },
       "verifiedOn": "2026-08-26",
       "firsthand": null,
@@ -1290,16 +1292,16 @@
     {
       "id": "ev-meiji-jingu-crowd-1",
       "candidateId": "c-meiji-jingu",
-      "claim": "Weekday early morning (≈7 AM) is genuinely quiet — a few hundred visitors versus tens of thousands by midday.",
+      "claim": "Weekday early morning, right at gate opening, is the genuinely quiet window at Meiji Jingu — the paths are nearly empty before tour groups arrive, with crowds building steadily through the day.",
       "kind": "experiential",
       "origin": "passA",
       "source": {
-        "url": "https://www.japan-travel-note.com/posts/306",
+        "url": "https://www.tokyotourism.org/meiji-shrine-guide/",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "en",
-        "publishedAt": null,
-        "family": "travel-blog-a",
+        "publishedAt": "2026-07-28",
+        "family": "tokyotourism-org-guide",
         "independent": true,
         "appliesToYears": []
       },
@@ -1310,16 +1312,16 @@
     {
       "id": "ev-meiji-jingu-crowd-2",
       "candidateId": "c-meiji-jingu",
-      "claim": "Coming super early in the morning gives a tranquil, peaceful experience before the crowds build.",
+      "claim": "Weekday early morning, right at gate opening, is the genuinely quiet window at Meiji Jingu — the paths are nearly empty before tour groups arrive, with crowds building steadily through the day.",
       "kind": "experiential",
       "origin": "passA",
       "source": {
-        "url": "https://www.wanderlog.com/guide/meiji-jingu-shrine",
+        "url": "https://www.karvaantours.com/blog/meiji-jingu-shrine-guide",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "en",
-        "publishedAt": null,
-        "family": "traveler-blog-b",
+        "publishedAt": "2026-08-14",
+        "family": "karvaantours-blog",
         "independent": true,
         "appliesToYears": []
       },
@@ -1498,16 +1500,16 @@
     {
       "id": "ev-tsukiji-crowd-1",
       "candidateId": "c-tsukiji-outer-market",
-      "claim": "8-9 AM has stalls fully stocked with manageable crowds; 10 AM-12 PM is peak with 30-60 min lines at famous stalls.",
+      "claim": "Early morning (roughly 6:30-9:00 AM) is the calm window at Tsukiji Outer Market; congestion builds toward late morning, peaking around 10 AM-1 PM at the busiest stalls.",
       "kind": "experiential",
       "origin": "passA",
       "source": {
         "url": "https://getlostinjapan.com/best-time-to-visit-tsukiji-market/",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "en",
-        "publishedAt": null,
-        "family": "travel-blog-c",
+        "publishedAt": "2026-02-04",
+        "family": "getlostinjapan-blog",
         "independent": true,
         "appliesToYears": []
       },
@@ -1518,16 +1520,16 @@
     {
       "id": "ev-tsukiji-crowd-2",
       "candidateId": "c-tsukiji-outer-market",
-      "claim": "9 AM-1 PM is the peak crowd window at Tsukiji Outer Market.",
+      "claim": "Early morning (roughly 6:30-9:00 AM) is the calm window at Tsukiji Outer Market; congestion builds toward late morning, peaking around 10 AM-1 PM at the busiest stalls.",
       "kind": "experiential",
       "origin": "passA",
       "source": {
         "url": "https://banzokubiology.com/tsukiji-crowd-tips",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "ja",
-        "publishedAt": null,
-        "family": "japanese-blog-a",
+        "publishedAt": "2026-06-07",
+        "family": "banzokubiology-blog",
         "independent": true,
         "appliesToYears": []
       },
@@ -1622,16 +1624,16 @@
     {
       "id": "ev-ameyoko-crowd-1",
       "candidateId": "c-ameya-yokocho",
-      "claim": "Weekday mornings after 11 AM and Tue-Thu are calmest at Ameya-Yokocho; weekends and evenings after 6 PM get packed.",
+      "claim": "Weekday mornings, especially before lunch, are calmest at Ameya-Yokocho; weekends and the pre-New Year season get significantly more crowded.",
       "kind": "experiential",
       "origin": "passA",
       "source": {
-        "url": "https://www.tripadvisor.com/ShowTopic-g298184-i861-k3160278",
+        "url": "https://www.japansophy.com/post/ameyoko-shopping-street-ueno",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "en",
-        "publishedAt": null,
-        "family": "tripadvisor-forum",
+        "publishedAt": "2026-06-26",
+        "family": "japansophy-blog",
         "independent": true,
         "appliesToYears": []
       },
@@ -1642,16 +1644,16 @@
     {
       "id": "ev-ameyoko-crowd-2",
       "candidateId": "c-ameya-yokocho",
-      "claim": "Morning visits before the weekend crowds build are the best time to see Ameyoko functioning as a real shopping street.",
+      "claim": "Weekday mornings, especially before lunch, are calmest at Ameya-Yokocho; weekends and the pre-New Year season get significantly more crowded.",
       "kind": "experiential",
       "origin": "passA",
       "source": {
-        "url": "https://japansophy.com/ameyoko-market-guide",
+        "url": "https://www.gofarther.blog/blog/free-things-to-do-in-tokyo-parks-markets-noentryfee-shrines",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "en",
-        "publishedAt": null,
-        "family": "travel-blog-f",
+        "publishedAt": "2026-05-14",
+        "family": "gofarther-travel-guide",
         "independent": true,
         "appliesToYears": []
       },
@@ -1673,7 +1675,9 @@
         "publishedAt": "2025-11-04",
         "family": null,
         "independent": null,
-        "appliesToYears": []
+        "appliesToYears": [
+          2026
+        ]
       },
       "verifiedOn": "2026-08-26",
       "firsthand": null,
