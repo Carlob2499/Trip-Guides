@@ -11,9 +11,9 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "failed",
+  "status": "running",
   "createdAt": "2026-08-26T09:02:30.736Z",
-  "updatedAt": "2026-08-26T14:19:01.610Z",
+  "updatedAt": "2026-08-26T14:19:45.152Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -91,10 +91,10 @@
       "failure": null
     },
     "reconcile": {
-      "status": "failed",
-      "startedAt": "2026-08-26T13:53:57.652Z",
-      "endedAt": "2026-08-26T14:14:11.859Z",
-      "attempts": 2,
+      "status": "running",
+      "startedAt": "2026-08-26T14:19:45.152Z",
+      "endedAt": null,
+      "attempts": 3,
       "model": "claude-sonnet-5",
       "effort": "high",
       "commit": null,
@@ -114,13 +114,17 @@
           "status": "failed",
           "failureClass": "gate-failure",
           "durationSec": 1214
+        },
+        {
+          "attempt": 3,
+          "startedAt": "2026-08-26T14:19:45.152Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
         }
       ],
-      "failure": {
-        "class": "gate-failure",
-        "detail": "\"Aragawa\" (c-aragawa) claim \"Repeatedly cited by independent food critics (Andy Hayler, S\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Aragawa\" (c-aragawa) claim \"Repeatedly cited by independent food critics as one of the m\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Aragawa\" (c-aragawa) claim \"Total restaurant capacity is reported at only ≈22 seats — a \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Aragawa\" (c-aragawa) claim \"The dining area seats up to 22 guests — an intimate setting,\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Meiji Jingu\" (c-meiji-jingu) claim \"Weekday early morning (≈7 AM) is genuinely quiet — a few hun\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Meiji Jingu\" (c-meiji-jingu) claim \"Coming super early in the morning gives a tranquil, peaceful\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Tsukiji Outer Market\" (c-tsukiji-outer-market) claim \"8-9 AM has stalls fully stocked with manageable crowds; 10 A\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Tsukiji Outer Market\" (c-tsukiji-outer-market) claim \"9 AM-1 PM is the peak crowd window at Tsukiji Outer Market.\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Ameya-Yokocho\" (c-ameya-yokocho) claim \"Weekday mornings after 11 AM and Tue-Thu are calmest at Amey\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Ameya-Yokocho\" (c-ameya-yokocho) claim \"Morning visits before the weekend crowds build are the best \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Japan's planned ETA-style Electronic Travel Authorization (JESTA) pass\" (ev-entry-jesta-not-yet-active) names 2029 without a dated publication — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2029] · \"The Japan Meteorological Corporation had not yet published a 2026 autu\" (ev-koyo-not-in-window) names 2026 but its source was published in 2025 — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2026] · experiential claim \"Weekday early morning (≈7 AM) is genuinely quiet — a few hun\" (ev-meiji-jingu-crowd-1) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Coming super early in the morning gives a tranquil, peaceful\" (ev-meiji-jingu-crowd-2) has no source date — recency is unproven for a shipped recommendation · experiential claim \"8-9 AM has stalls fully stocked with manageable crowds; 10 A\" (ev-tsukiji-crowd-1) has no source date — recency is unproven for a shipped recommendation · experiential claim \"9 AM-1 PM is the peak crowd window at Tsukiji Outer Market.\" (ev-tsukiji-crowd-2) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Weekday mornings after 11 AM and Tue-Thu are calmest at Amey\" (ev-ameyoko-crowd-1) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Morning visits before the weekend crowds build are the best \" (ev-ameyoko-crowd-2) has no source date — recency is unproven for a shipped recommendation",
-        "at": "2026-08-26T14:14:11.859Z"
-      }
+      "failure": null
     },
     "critic": {
       "status": "queued",
@@ -142,13 +146,9 @@
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "re-run stage \"reconcile\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
   },
-  "failure": {
-    "class": "gate-failure",
-    "detail": "\"Aragawa\" (c-aragawa) claim \"Repeatedly cited by independent food critics (Andy Hayler, S\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Aragawa\" (c-aragawa) claim \"Repeatedly cited by independent food critics as one of the m\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Aragawa\" (c-aragawa) claim \"Total restaurant capacity is reported at only ≈22 seats — a \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Aragawa\" (c-aragawa) claim \"The dining area seats up to 22 guests — an intimate setting,\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Meiji Jingu\" (c-meiji-jingu) claim \"Weekday early morning (≈7 AM) is genuinely quiet — a few hun\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Meiji Jingu\" (c-meiji-jingu) claim \"Coming super early in the morning gives a tranquil, peaceful\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Tsukiji Outer Market\" (c-tsukiji-outer-market) claim \"8-9 AM has stalls fully stocked with manageable crowds; 10 A\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Tsukiji Outer Market\" (c-tsukiji-outer-market) claim \"9 AM-1 PM is the peak crowd window at Tsukiji Outer Market.\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Ameya-Yokocho\" (c-ameya-yokocho) claim \"Weekday mornings after 11 AM and Tue-Thu are calmest at Amey\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Ameya-Yokocho\" (c-ameya-yokocho) claim \"Morning visits before the weekend crowds build are the best \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Japan's planned ETA-style Electronic Travel Authorization (JESTA) pass\" (ev-entry-jesta-not-yet-active) names 2029 without a dated publication — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2029] · \"The Japan Meteorological Corporation had not yet published a 2026 autu\" (ev-koyo-not-in-window) names 2026 but its source was published in 2025 — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2026] · experiential claim \"Weekday early morning (≈7 AM) is genuinely quiet — a few hun\" (ev-meiji-jingu-crowd-1) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Coming super early in the morning gives a tranquil, peaceful\" (ev-meiji-jingu-crowd-2) has no source date — recency is unproven for a shipped recommendation · experiential claim \"8-9 AM has stalls fully stocked with manageable crowds; 10 A\" (ev-tsukiji-crowd-1) has no source date — recency is unproven for a shipped recommendation · experiential claim \"9 AM-1 PM is the peak crowd window at Tsukiji Outer Market.\" (ev-tsukiji-crowd-2) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Weekday mornings after 11 AM and Tue-Thu are calmest at Amey\" (ev-ameyoko-crowd-1) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Morning visits before the weekend crowds build are the best \" (ev-ameyoko-crowd-2) has no source date — recency is unproven for a shipped recommendation",
-    "at": "2026-08-26T14:14:11.859Z"
-  },
+  "failure": null,
   "publication": {
     "published": false,
     "publishedAt": null,
