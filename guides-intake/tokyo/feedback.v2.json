@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "wp-feedback/2.0",
+  "slug": "tokyo",
+  "entries": [
+    {
+      "runId": "tokyo-20260826-41ae82",
+      "stage": "reconcile",
+      "attempt": 1,
+      "findings": [
+        "P0 research   · FAIL — 7 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ divergences item \"?\" has verified_on 2026-08-26 but no source_url to recertify against",
+        "⚠ venues item \"Uobei Genki Sushi\" has verified_on 2026-08-26 but no source_url to recertify against",
+        "⚠ venues item \"Ameya-Yokocho (Ameyoko)\" has verified_on 2026-08-26 but no source_url to recertify against",
+        "⚠ budget item \"Local transport, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ routes \"Key transit routes\" has an undated hour/price-looking figure but no verified_on (D2 advisory — precise text isn't automatically exempt from provenance)",
+        "⚠ days item \"Tsukiji, Harajuku, Shinjuku\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "P1 candidates · FAIL — structural integrity findings in the consideration set",
+        "✗ priority 1: \"**Kobikicho Ohno** (Pass B)\" is marked shipped but appears nowhere in the guide",
+        "P6 voice      · FAIL — 3 process-language leak(s):",
+        "⚠ \"this pass\" in §\"Phone & data\"",
+        "⚠ \"this pass\" in §\"Health & pharmacy\"",
+        "⚠ \"this pass\" in §\"Sources & further reading\"",
+        "P0 risk-gates · FAIL — 3 finding(s) (draft: these BLOCK publishing):",
+        "⚠ [tier-missing] R2 fact \"keisei-skyliner-2470-yen\" has no `tier`",
+        "⚠ [tier-missing] R2 fact \"keikyu-haneda-shinagawa-327-yen\" has no `tier`",
+        "⚠ [tier-missing] R2 fact \"tokyo-monorail-haneda-519-yen\" has no `tier`",
+        "P0 uncertainty· FAIL — 1 finding(s) (draft: these BLOCK publishing):",
+        "⚠ [regulatory-change-unregistered] §\"Money & currency\" states a rule change around November 1 (\"switch to\") with no facts.json row — a plan-critical change nothing will re-check or expire",
+        "⚠ [leg-duration-unverified] 2 of 3 transit-leg duration(s) carry no source — e.g. \"Key transit routes\", \"What to eat\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-26T13:52:22.223Z",
+      "status": "active",
+      "retiredAt": null
+    }
+  ]
+}

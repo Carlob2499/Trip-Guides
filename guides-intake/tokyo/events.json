@@ -43,12 +43,27 @@
       "text": "Pass B (independent research) complete in 12m"
     },
     {
-      "at": "2026-08-26T13:41:13.142Z",
-      "kind": "decision",
-      "text": "Candidate funnel: 56 evaluated · 21 shortlisted · 14 shipped · 24 rejected · 1 kept as detours"
+      "at": "2026-08-26T13:41:44.890Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 1 of 5)"
     },
     {
-      "at": "2026-08-26T13:41:13.142Z",
+      "at": "2026-08-26T13:52:22.225Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-26T13:52:22.225Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 62 evaluated · 25 shortlisted · 14 shipped · 28 rejected · 2 kept as detours"
+    },
+    {
+      "at": "2026-08-26T13:52:22.225Z",
+      "kind": "decision",
+      "text": "Reconcile dispositioned 12 independent finding(s): 6 adopt · 4 reject · 2 agree"
+    },
+    {
+      "at": "2026-08-26T13:52:22.225Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     }
