@@ -1,7 +1,7 @@
 // @protects-file Shared helpers used across the whole site behave the same everywhere.
 
-import { describe, it, expect } from "vitest";
-import { todayInTz, esc, migrateStorageKey } from "./util.js";
+import { describe, it, expect, vi } from "vitest";
+import { todayInTz, esc, migrateStorageKey, parseStoredRecord, readStoredRecord } from "./util.js";
 
 // A minimal Storage-shaped fake — no jsdom/localStorage needed, since
 // migrateStorageKey only ever calls getItem/setItem on whatever store it's given.
@@ -98,5 +98,35 @@ describe("migrateStorageKey (R8 — storeKey title→slug migration)", () => {
     const store = fakeStore({});
     migrateStorageKey(store, "new-key", "old-key");
     expect(store.getItem("new-key")).toBeNull();
+  });
+});
+
+describe("parseStoredRecord", () => {
+  it("accepts only object-shaped JSON records for later mutable persistence", () => {
+    expect(parseStoredRecord('{"itinerary":1}')).toEqual({ itinerary: 1 });
+    for (const raw of ["true", "42", "[]", "null", "{"]) {
+      expect(parseStoredRecord(raw)).toEqual({});
+    }
+  });
+});
+
+describe("readStoredRecord", () => {
+  it("returns blank state when browser storage access throws", () => {
+    const store = {
+      getItem: () => { throw new DOMException("Access denied", "SecurityError"); },
+    };
+    const provideStore = vi.fn(() => store);
+
+    expect(readStoredRecord(provideStore, "trip-state")).toEqual({});
+    expect(provideStore).toHaveBeenCalledOnce();
+  });
+
+  it("returns blank state when resolving the browser storage provider throws", () => {
+    const provideStore = vi.fn(() => {
+      throw new DOMException("Access denied", "SecurityError");
+    });
+
+    expect(readStoredRecord(provideStore, "trip-state")).toEqual({});
+    expect(provideStore).toHaveBeenCalledOnce();
   });
 });

@@ -17,7 +17,7 @@
      this module's landing scroll by design — a specific target beats a
      remembered position. */
 
-import { reducedMotion, migrateStorageKey } from "./util.js";
+import { reducedMotion, migrateStorageKey, readStoredRecord } from "./util.js";
 
 (function () {
   var tabs = document.getElementById("guideTabs");
@@ -28,11 +28,18 @@ import { reducedMotion, migrateStorageKey } from "./util.js";
   var legacyStoreKey = document.body.getAttribute("data-legacy-storekey") || null;
   var KEY = "tg-scrollmem-" + storeKey;
   // R8: migrate this guide's per-tab scroll memory from the old title-derived key.
-  migrateStorageKey(localStorage, KEY, legacyStoreKey ? "tg-scrollmem-" + legacyStoreKey : null);
+  try { migrateStorageKey(localStorage, KEY, legacyStoreKey ? "tg-scrollmem-" + legacyStoreKey : null); }
+  catch (e) { /* storage unavailable */ }
   var reduced = reducedMotion();
 
   function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+    var stored = readStoredRecord(function () { return localStorage; }, KEY);
+    var mem = Object.create(null);
+    Object.keys(stored).forEach(function (tab) {
+      var offset = stored[tab];
+      if (typeof offset === "number" && Number.isFinite(offset)) mem[tab] = offset;
+    });
+    return mem;
   }
   function save(mem) {
     try { localStorage.setItem(KEY, JSON.stringify(mem)); } catch (e) {}

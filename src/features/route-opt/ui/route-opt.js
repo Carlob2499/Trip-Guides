@@ -8,7 +8,7 @@
    Silent whenever a day has <3 located stops or reordering wouldn't help. */
 
 import { optimizeDayRoute } from "../../../lib/route-optimize";
-import { reducedMotion, tapHaptic, trapFocus } from "../../../scripts/util.js";
+import { readStoredRecord, reducedMotion, tapHaptic, trapFocus } from "../../../scripts/util.js";
 
 (function () {
   var days = document.querySelectorAll(".planner-days .day[data-day]");
@@ -16,9 +16,18 @@ import { reducedMotion, tapHaptic, trapFocus } from "../../../scripts/util.js";
 
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
   var STORAGE_KEY = "tg-routeopt-" + storeKey;
-  function loadPersisted() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } }
   function savePersisted(state) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
-  var persisted = loadPersisted();
+  var persisted = readStoredRecord(function () { return localStorage; }, STORAGE_KEY);
+
+  function isFullPermutation(order, count) {
+    if (!Array.isArray(order) || order.length !== count) return false;
+    var seen = {};
+    return order.every(function (index) {
+      if (!Number.isInteger(index) || index < 0 || index >= count || seen[index]) return false;
+      seen[index] = true;
+      return true;
+    });
+  }
 
   var sheet = null, sheetLastFocus = null;
   function buildSheet() {
@@ -58,6 +67,10 @@ import { reducedMotion, tapHaptic, trapFocus } from "../../../scripts/util.js";
     var list = day.querySelector(".stops");
     if (!list) return;
     var stopEls = Array.prototype.slice.call(list.querySelectorAll(".stop"));
+    if (Object.prototype.hasOwnProperty.call(persisted, di) && !isFullPermutation(persisted[di], stopEls.length)) {
+      delete persisted[di];
+      savePersisted(persisted);
+    }
     if (stopEls.length < 3) return;
 
     var locatedFlags = stopEls.map(function (el) {
@@ -104,7 +117,7 @@ import { reducedMotion, tapHaptic, trapFocus } from "../../../scripts/util.js";
         : "↻ Reorder could save ≈" + result.savedKm + "km";
     }
 
-    var isApplied = Array.isArray(persisted[di]);
+    var isApplied = isFullPermutation(persisted[di], stopEls.length);
     if (isApplied) applyOrder(persisted[di]);
     setChipState(isApplied);
 

@@ -1,3 +1,5 @@
+import { readStoredRecord } from "./util.js";
+
 /* Reminder ticks on the Tools screen — per device, per trip.
 
    Small, single-mount client behaviour, so it stays in src/scripts/ rather than earning a
@@ -13,7 +15,7 @@ if (list) {
   var KEY = "tg-toolsrem-" + list.getAttribute("data-tools-reminders");
 
   function read() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+    return readStoredRecord(function () { return localStorage; }, KEY);
   }
   function write(state) {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* private mode */ }
