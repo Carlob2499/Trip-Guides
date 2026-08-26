@@ -73,11 +73,6 @@
       "text": "Reconcile complete in 14m (attempt 3)"
     },
     {
-      "at": "2026-08-26T14:34:32.556Z",
-      "kind": "decision",
-      "text": "Deterministic geocode pass: 11 resolved · 5 left as honest blanks"
-    },
-    {
       "at": "2026-08-26T14:34:57.689Z",
       "kind": "check",
       "text": "Fresh-context critic started (attempt 1 of 5)"
@@ -88,17 +83,32 @@
       "text": "Fresh-context critic attempt 1 failed (usage-limit) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-26T14:38:16.368Z",
+      "at": "2026-08-26T17:42:55.996Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 0 resolved · 5 left as honest blanks"
+    },
+    {
+      "at": "2026-08-26T17:43:26.075Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-26T18:11:46.964Z",
+      "kind": "reject",
+      "text": "Fresh-context critic attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-26T18:11:46.964Z",
       "kind": "decision",
       "text": "Candidate funnel: 62 evaluated · 25 shortlisted · 14 shipped · 28 rejected · 2 kept as detours"
     },
     {
-      "at": "2026-08-26T14:38:16.368Z",
+      "at": "2026-08-26T18:11:46.964Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 12 independent finding(s): 6 adopt · 4 reject · 2 agree"
     },
     {
-      "at": "2026-08-26T14:38:16.368Z",
+      "at": "2026-08-26T18:11:46.964Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     }
