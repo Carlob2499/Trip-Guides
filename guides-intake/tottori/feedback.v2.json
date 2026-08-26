@@ -30,8 +30,8 @@
         "candidate \"San'in Matsushima Sightseeing Cruise\" has unstable id \"c-sanin-matsushima-sightseeing-cruise\" — expected \"c-san-in-matsushima-sightseeing-cruise\" from name + branch"
       ],
       "createdAt": "2026-08-26T20:01:20.216Z",
-      "status": "active",
-      "retiredAt": null
+      "status": "retired",
+      "retiredAt": "2026-08-26T20:17:37.270Z"
     }
   ]
 }

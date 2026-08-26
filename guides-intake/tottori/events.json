@@ -53,22 +53,32 @@
       "text": "Reconcile attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-26T20:01:20.213Z",
+      "at": "2026-08-26T20:14:25.709Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 3 of 5)"
+    },
+    {
+      "at": "2026-08-26T20:17:37.267Z",
+      "kind": "decision",
+      "text": "Reconcile complete in 3m (attempt 3)"
+    },
+    {
+      "at": "2026-08-26T20:17:37.275Z",
       "kind": "decision",
       "text": "Candidate funnel: 29 evaluated · 22 shortlisted · 19 shipped · 8 rejected"
     },
     {
-      "at": "2026-08-26T20:01:20.213Z",
+      "at": "2026-08-26T20:17:37.275Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 15 independent finding(s): 11 adopt · 1 agree · 1 replace · 2 reject"
     },
     {
-      "at": "2026-08-26T20:01:20.213Z",
+      "at": "2026-08-26T20:17:37.275Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-26T20:01:20.213Z",
+      "at": "2026-08-26T20:17:37.275Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Yakiniku Masashige Kurayoshi private-room capacity: 'up to 6' vs 'up to 60'"
     }
