@@ -80,6 +80,7 @@
       {
         "claim": "Meiji Jingu's forest is an ancient, natural woodland.",
         "correction": "It's a deliberately engineered forest, planted from barren grassland starting in 1915 and designed to read as ancient after roughly 150 years — impressive, but not what most guides imply.",
+        "source_url": "https://www.meijijingu.or.jp/en/whattosee/forest/",
         "verified_on": "2026-08-26"
       }
     ]

@@ -54,7 +54,7 @@
       "worth": null
     },
     {
-      "id": "c-yakiniku-ushigoro--ginza",
+      "id": "c-yakiniku-ushigoro--ginza-s-ginza",
       "name": "Yakiniku Ushigoro",
       "branch": "Ginza (S. Ginza)",
       "priority": "food",
@@ -384,7 +384,7 @@
       "worth": null
     },
     {
-      "id": "c-sushi-dai",
+      "id": "c-sushi-dai--toyosu",
       "name": "Sushi Dai",
       "branch": "Toyosu",
       "priority": "food",
@@ -394,7 +394,7 @@
       "worth": null
     },
     {
-      "id": "c-daiwa-sushi",
+      "id": "c-daiwa-sushi--toyosu",
       "name": "Daiwa Sushi",
       "branch": "Toyosu",
       "priority": "food",
@@ -434,7 +434,7 @@
       "worth": null
     },
     {
-      "id": "c-fuunji",
+      "id": "c-fuunji--shinjuku",
       "name": "Fuunji",
       "branch": "Shinjuku",
       "priority": "food",
@@ -444,7 +444,7 @@
       "worth": null
     },
     {
-      "id": "c-tatsunoya",
+      "id": "c-tatsunoya--shinjuku",
       "name": "Tatsunoya",
       "branch": "Shinjuku",
       "priority": "food",
@@ -454,7 +454,7 @@
       "worth": null
     },
     {
-      "id": "c-rokurinsha",
+      "id": "c-rokurinsha--tokyo-ramen-street",
       "name": "Rokurinsha",
       "branch": "Tokyo Ramen Street",
       "priority": "food",
@@ -877,7 +877,7 @@
     },
     {
       "id": "ev-ushigoro-group-booking",
-      "candidateId": "c-yakiniku-ushigoro--ginza",
+      "candidateId": "c-yakiniku-ushigoro--ginza-s-ginza",
       "claim": "Reservations accepted for 1 to 8 people via online TableCheck booking; the S. Ginza branch has 11 private rooms.",
       "kind": "objective",
       "origin": "passA",
@@ -1537,7 +1537,7 @@
     },
     {
       "id": "ev-sushi-dai-wait-1",
-      "candidateId": "c-sushi-dai",
+      "candidateId": "c-sushi-dai--toyosu",
       "claim": "Sushi Dai routinely runs 2-5 hour waits and sells out by 9-11am on busy days.",
       "kind": "experiential",
       "origin": "passA",
@@ -1557,7 +1557,7 @@
     },
     {
       "id": "ev-sushi-dai-wait-2",
-      "candidateId": "c-sushi-dai",
+      "candidateId": "c-sushi-dai--toyosu",
       "claim": "Multi-hour waits are standard at Sushi Dai even on an early-morning visit.",
       "kind": "experiential",
       "origin": "passA",
@@ -1577,7 +1577,7 @@
     },
     {
       "id": "ev-sushi-dai-seat-count",
-      "candidateId": "c-sushi-dai",
+      "candidateId": "c-sushi-dai--toyosu",
       "claim": "Sushi Dai has ≈12 counter seats; Daiwa Sushi is larger (≈40) but still a single shared counter — a party of 6 would very likely split into two groups seated separately. Secondhand estimate (no official seat count published), corroborated by the independent multi-hour-wait accounts above which are consistent with a very small room.",
       "kind": "experiential",
       "origin": "passA",
@@ -2030,7 +2030,7 @@
       "fallback": "RyuGin (primary) or Ginza Ukai-tei (self-service) if Aragawa can't seat 6."
     },
     {
-      "candidateId": "c-yakiniku-ushigoro--ginza",
+      "candidateId": "c-yakiniku-ushigoro--ginza-s-ginza",
       "importance": "important",
       "bookingUrl": "https://www.tablecheck.com/en/shops/ushigoro-s-ginza/reserve",
       "releaseWindow": "Online booking calendar via TableCheck",
@@ -2155,7 +2155,7 @@
         "c-nihonryori-ryugin",
         "c-ginza-ukai-tei",
         "c-aragawa",
-        "c-yakiniku-ushigoro--ginza",
+        "c-yakiniku-ushigoro--ginza-s-ginza",
         "c-kohaku--kagurazaka",
         "c-sazenka",
         "c-kobikicho-ohno",

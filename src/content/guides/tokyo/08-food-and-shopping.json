@@ -79,11 +79,14 @@
       {
         "name": "Uobei Genki Sushi",
         "area": "Shibuya (Dogenzaka)",
+        "hours": "11:00 AM–11:30 PM daily, last order 11:30 PM",
         "book": "walk-in",
-        "how": "Tablet ordering, bullet-train plate delivery — no reservation, fast even for a group.",
-        "price": "Budget kaiten-zushi, ¥120–500/plate",
+        "how": "Tablet ordering, bullet-train plate delivery — no reservation accepted (or needed), fast even for a group.",
+        "price": "Budget kaiten-zushi — plates from ¥105, premium items priced higher",
         "why": "The easiest possible group dinner for a jet-lagged arrival night — no booking, no wait to speak of.",
-        "verified_on": "2026-08-26"
+        "source_url": "https://www.hotpepper.jp/strJ001008944/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
       },
       {
         "name": "Tsukiji Outer Market",
@@ -103,7 +106,7 @@
         "closed": "Wednesdays and most Sundays",
         "book": "walk-in",
         "hours": "Public hours ≈5 AM–5 PM on operating days",
-        "how": "⚠ Closed most Sundays and all Wednesdays — no Wednesday falls in this trip, but confirm the exact October calendar closer to the date since the official grid wasn't machine-readable this pass.",
+        "how": "⚠ Closed most Sundays and all Wednesdays — no Wednesday falls in this trip, but confirm the exact October calendar closer to the date since the official closure grid wasn't machine-readable when checked.",
         "crowd_tip": "Skip Sushi Dai/Daiwa Sushi's counters — 2–5 hour waits, and a party of six will likely be split into two seatings. Browse the market itself instead and save the splurge sushi for Saturday.",
         "why": "Where the wholesale fish trade actually is now — pairs naturally with teamLab Planets, a few minutes away.",
         "source_url": "https://www.english.metro.tokyo.lg.jp/w/016-101-003992",
@@ -129,7 +132,9 @@
         "how": "≈400 shops/stalls over 500m — pure grazing, zero reservation friction.",
         "crowd_tip": "Weekday mornings after 11 AM are calmest; weekends and evenings after 6 PM get packed.",
         "why": "A real working shopping street, not a themed tourist arcade — a relaxed last-morning food crawl before the airport.",
-        "verified_on": "2026-08-26"
+        "source_url": "https://www.ameyoko.net/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
       }
     ]
   }

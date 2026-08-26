@@ -3,7 +3,7 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "<p>Currency is the Japanese yen (¥). Tokyo is more card-friendly than its reputation, but small izakaya, ramen ticket machines, and some traditional spots remain cash- or IC-card-only — carry cash as backup.</p><p><b>Seven Bank (7-Eleven) ATMs</b> are the most reliable for foreign cards: 24/7, 28,000+ locations nationwide, and they accept Visa/Plus, Mastercard/Maestro/Cirrus, UnionPay, Amex, JCB, Discover and Diners Club. Per-withdrawal limit is {{fact:atm-withdrawal-limit-100000-yen}}.</p><p>Tax-free shopping still runs on the old instant-discount system for this trip — Japan's switch to a refund-at-departure system starts November 1, 2026, after you've left.</p>",
+    "body": "<p>Currency is the Japanese yen (¥). Tokyo is more card-friendly than its reputation, but small izakaya, ramen ticket machines, and some traditional spots remain cash- or IC-card-only — carry cash as backup.</p><p><b>Seven Bank (7-Eleven) ATMs</b> are the most reliable for foreign cards: 24/7, 28,000+ locations nationwide, and they accept Visa/Plus, Mastercard/Maestro/Cirrus, UnionPay, Amex, JCB, Discover and Diners Club. Per-withdrawal limit is {{fact:atm-withdrawal-limit-100000-yen}}.</p><p>Tax-free shopping still runs on the old instant-discount system for this trip — Japan's switch to a refund-at-departure system starts {{fact:tax-free-refund-switch-nov-1-2026}}, after you've left.</p>",
     "source_url": "https://www.sevenbank.co.jp/intlcard/service2.html",
     "verified_on": "2026-08-26",
     "shelf_life": "venue",
@@ -49,7 +49,10 @@
         "est": 1200,
         "low": 600,
         "high": 2000,
-        "note": "IC-card tap fares on JR/Metro/Toei scale ¥155–¥616 per ride; figure assumes a few rides a day, not an all-day pass."
+        "note": "IC-card tap fares on JR/Metro/Toei scale ¥155–¥616 per ride; figure assumes a few rides a day, not an all-day pass.",
+        "source_url": "https://www.jrailpass.com/blog/yamanote-line",
+        "verified_on": "2026-08-26",
+        "shelf_life": "transit"
       },
       {
         "label": "Sights & activities, per day",
@@ -57,7 +60,10 @@
         "est": 1200,
         "low": 500,
         "high": 2000,
-        "note": "Light-touch sights budget: Shinjuku Gyoen ¥500, teamLab Planets ≈¥3,800–4,200, Tokyo Tower ¥1,500 — spread across the trip, not all paid stops every day."
+        "note": "Light-touch sights budget: Shinjuku Gyoen ¥500, teamLab Planets ≈¥3,800–4,200, Tokyo Tower ¥1,500 — spread across the trip, not all paid stops every day; each figure sourced individually in the Sights tab.",
+        "source_url": "https://www.teamlab.art/e/planets/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
       },
       {
         "label": "Flights — round trip",

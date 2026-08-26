@@ -4,6 +4,9 @@
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
+    "source_url": "https://www.haneda-tokyo-access.com/en/ride/fares.html",
+    "verified_on": "2026-08-26",
+    "shelf_life": "transit",
     "steps": [
       "<b>From Haneda (HND)</b>: Tokyo Monorail to Hamamatsucho (≈13 min, {{fact:tokyo-monorail-haneda-519-yen}}) or Keikyu Line to Shinagawa (11–14 min, {{fact:keikyu-haneda-shinagawa-327-yen}}) — both tap in/out with an IC card, no reservation needed.",
       "<b>From Narita (NRT)</b>: Keisei Skyliner to Nippori/Ueno ({{fact:keisei-skyliner-2470-yen}}) is the fastest option; the JR Narita Express (N'EX) runs direct to Tokyo Station for a similar fare.",

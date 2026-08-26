@@ -12,7 +12,7 @@
     {
       "homeCountry": "United States",
       "visa": "Visa-free for tourism, stays up to 90 days. Japan's planned ETA system (JESTA) does not apply yet — implementation targets FY2028, after this trip.",
-      "note": "Assumed US passport — the traveler's nationality wasn't confirmed at intake (see the traveler questions). If any traveler holds a different passport, check that country's own entry rule. mofa.go.jp and moj.go.jp both blocked automated verification in this pass (403) — reconfirm at mofa.go.jp/j_info/visit/visa/short/novisa.html before departure.",
+      "note": "Assumed US passport — the traveler's nationality wasn't confirmed at intake (see the traveler questions). If any traveler holds a different passport, check that country's own entry rule. mofa.go.jp and moj.go.jp both blocked automated verification (403) — reconfirm at mofa.go.jp/j_info/visit/visa/short/novisa.html before departure.",
       "source_url": "https://www.japan.travel/en/plan/visa-info/",
       "verified_on": "2026-08-26"
     }

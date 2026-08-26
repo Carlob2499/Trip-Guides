@@ -27,6 +27,7 @@
     "shelf_life": "transit",
     "state": "approx",
     "risk": 2,
+    "tier": "primary",
     "entity": "keisei-skyliner"
   },
   "keikyu-haneda-shinagawa-327-yen": {
@@ -37,6 +38,7 @@
     "shelf_life": "transit",
     "state": "approx",
     "risk": 2,
+    "tier": "primary",
     "entity": "keikyu-haneda"
   },
   "tokyo-monorail-haneda-519-yen": {
@@ -47,6 +49,18 @@
     "shelf_life": "transit",
     "state": "approx",
     "risk": 2,
+    "tier": "primary",
     "entity": "tokyo-monorail"
+  },
+  "tax-free-refund-switch-nov-1-2026": {
+    "claim": "Japan's tax-free shopping system switches from instant point-of-sale exemption to a refund-at-departure model",
+    "value": "November 1, 2026",
+    "source_url": "https://www.japan.travel/en/ca/news/changes-are-coming-to-tax-free-shopping-in-japan/",
+    "verified_on": "2026-08-26",
+    "shelf_life": "default",
+    "state": "clean",
+    "risk": 2,
+    "tier": "primary",
+    "entity": "tax-free-refund-switch"
   }
 }
