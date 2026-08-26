@@ -1,0 +1,60 @@
+{
+  "slug": "tottori",
+  "generatedAt": "2026-08-26T18:31:17.784Z",
+  "asks": [
+    {
+      "id": "anchor",
+      "label": "Anchor event",
+      "value": "At least one consequential public-transport transfer whose PHYSICAL feasibility matters beyond timetable arithmetic; missing that connection/service must create a meaningful delay, last-return risk, or exertion consequence. No specific venue pre-selected — research must earn every choice.",
+      "coveredBy": null
+    },
+    {
+      "id": "cities",
+      "label": "Cities",
+      "value": "Tottori, Kurayoshi, Misasa Onsen",
+      "coveredBy": null
+    },
+    {
+      "id": "dates",
+      "label": "Trip dates",
+      "value": "2026-10-20 – 2026-10-23",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-1",
+      "label": "Priority #1",
+      "value": "Culture / history",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-2",
+      "label": "Priority #2",
+      "value": "Food & dining",
+      "coveredBy": null
+    },
+    {
+      "id": "travel-style",
+      "label": "Travel style",
+      "value": "off-the-beaten-path",
+      "coveredBy": null
+    },
+    {
+      "id": "travelers",
+      "label": "Number of travelers",
+      "value": "8",
+      "coveredBy": null
+    },
+    {
+      "id": "constraints",
+      "label": "Binding mobility / dietary / sensory constraints",
+      "value": "BINDING mobility: 2 of the 8 travelers have low walking tolerance — repeated standing, stairs, long station walks, and rushed transfers are material costs, not footnotes. Luggage: the group carries luggage on the transfer from the Tottori side toward Kurayoshi / Misasa. Driving: assume no rental car unless research concludes a non-car plan becomes materially worse or unrealistic and says so explicitly.",
+      "coveredBy": null
+    },
+    {
+      "id": "comments",
+      "label": "Additional comments",
+      "value": "Combined Research Run B — V02+V03+V05 validation trial per docs/pipeline v2/VALIDATION_TRIAL_PACKETS.md (frozen Tottori regional scenario). Operational validation data, not a live traveler request. Frozen intent: (1) local character matters more than checklist tourism; (2) thin English coverage must not be read as nothing useful exists; (3) Japanese-language research is valuable only when it strengthens or changes a decision — performative native searching does not count; (4) itinerary must include at least one consequential public-transport transfer whose physical feasibility matters beyond timetable arithmetic; (5) missing that connection must create meaningful delay, last-return risk, or exertion consequence; (6) group size and mobility must change recommendations, not appear only as generic allow-extra-time prose; (7) taxi/private transport may win when evidence supports it, but availability and cost must never be invented; (8) at least one meal/venue should require an actual party-size feasibility decision for eight adults.",
+      "coveredBy": null
+    }
+  ]
+}
