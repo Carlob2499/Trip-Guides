@@ -21,7 +21,12 @@
         "crowd_tip": "The restaurant's own online booking widget won't take a party of 8 — its selector tops out lower and tells you to call. Book by phone (private rooms run 2–60 across 116 total seats, so 8 is well within real capacity).",
         "source_url": "https://www.masashige55.com/",
         "verified_on": "2026-08-26",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 35.4496117,
+          "lng": 133.84792529999999
+        },
+        "place_id": "ChIJWze23sneVTURvuSrrmTS4Ug"
       },
       {
         "name": "Menya Hachibee",
@@ -37,7 +42,12 @@
         "crowd_tip": "Small space — counter, table, and a tatami platform, no private room — and two independent 2025 accounts both describe it getting crowded at lunchtime. For a party of 8: arrive right at opening, or split across two visits/times.",
         "source_url": "https://na-na.media/hachibe-kurayoshi/",
         "verified_on": "2026-08-26",
-        "shelf_life": "default"
+        "shelf_life": "default",
+        "map": {
+          "lat": 35.463423,
+          "lng": 133.84837
+        },
+        "place_id": "ChIJKTNVKpXeVTURnIRrQxyyfWA"
       }
     ]
   }

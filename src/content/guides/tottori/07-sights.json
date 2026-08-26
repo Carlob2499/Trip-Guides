@@ -13,7 +13,12 @@
         "dwell_min": 90,
         "source_url": "https://www.tottori-guide.jp/sakyu/",
         "verified_on": "2026-08-26",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.5416178,
+          "lng": 134.2286329
+        },
+        "place_id": "ChIJbx8cHUSPVTURazEAdQKsetg"
       },
       {
         "name": "Sand Museum",
@@ -22,7 +27,12 @@
         "dwell_min": 60,
         "source_url": "https://www.sand-museum.jp/information/",
         "verified_on": "2026-08-26",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 35.5396253,
+          "lng": 134.2383683
+        },
+        "place_id": "ChIJF2dbUUWPVTUR6USg6_DP8x4"
       },
       {
         "name": "Tottori Castle Ruins",
@@ -32,7 +42,12 @@
         "closed_days": [],
         "source_url": "https://www.torican.jp/spot/detail_1012.html",
         "verified_on": "2026-08-26",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.510268599999996,
+          "lng": 134.2409327
+        },
+        "place_id": "ChIJrzZ1WoKPVTURm_05o4klTiM"
       },
       {
         "name": "Uradome Coast — San'in Matsushima sightseeing cruise",
