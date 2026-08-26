@@ -4,7 +4,60 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
-    "items": []
+    "items": [
+      {
+        "name": "Senso-ji Temple (Asakusa)",
+        "kicker": "Tokyo's oldest temple, and a food street in front of it",
+        "body": "<p>Free to enter, main hall open 6:00 AM–5:00 PM (6:30 AM Oct–Mar). Nakamise-dori, the approach street, is itself a food stop — senbei, menchi-katsu, age-manju — so this pairs naturally with a food-crawl morning rather than needing a separate stop.</p>",
+        "dwell_min": 60,
+        "source_url": "https://www.senso-ji.jp/about/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Meiji Jingu",
+        "kicker": "A forested shrine between Harajuku and Yoyogi Park",
+        "body": "<p>Free to enter the grounds; gate hours track sunrise/sunset (roughly 5:00 AM–6:40 PM depending on season). Weekday early morning is the genuinely quiet window — two independent accounts describe a few hundred visitors at 7 AM versus tens of thousands by midday.</p><p>Adjoins Harajuku/Omotesando, so it pairs well with a street-food or café stop.</p>",
+        "dwell_min": 45,
+        "source_url": "https://www.meijijingu.or.jp/en/visit/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "teamLab Planets (Toyosu)",
+        "kicker": "Immersive digital-art museum, walk barefoot through water",
+        "body": "<p>≈¥3,800 weekday / ¥4,200 weekend adult, timed entry. ⚠ Closes for maintenance roughly monthly on irregular dates — check teamlab.art's live calendar before booking. Toyosu is also where the fish market wholesale trade relocated (see below), so a sushi breakfast pairs naturally with this stop.</p>",
+        "dwell_min": 120,
+        "source_url": "https://www.teamlab.art/e/planets/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Shinjuku Gyoen National Garden",
+        "kicker": "A large formal garden minutes from Shinjuku's density",
+        "body": "<p>Oct 1–Mar 14 hours: 9:00 AM–4:30 PM, last entry 4:00 PM. Adults ¥500. <b>Closed every Monday</b> — Mon Oct 19 falls inside this trip and isn't a substitute holiday, so plan the garden for one of the other four days.</p>",
+        "dwell_min": 90,
+        "closed_days": ["mon"],
+        "source_url": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/information/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Tokyo Tower",
+        "kicker": "The cheaper, less-crowded skyline view — near Roppongi/Azabudai's dining scene",
+        "body": "<p>Main Deck from ¥1,500, opens 9:00 AM. Multiple comparisons note Tokyo Tower gives a more grounded skyline view than Skytree's 450m deck, which shrinks landmarks to miniatures — a reasonable trade for a group that isn't prioritizing sightseeing.</p>",
+        "dwell_min": 60,
+        "source_url": "https://www.tokyotower.co.jp/en/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Yanaka Ginza",
+        "kicker": "An old-Tokyo shopping street that IS the sightseeing — eat your way down it",
+        "body": "<p>A ~170m street of 60–70 independent shops, 5 minutes from Nippori Station. Street-food staples: menchi-katsu (fried minced-meat cutlet), grilled seafood skewers. The best fit in this guide's Sights section for a food-priority trip — there's no separate \"sight\" here, the street food is the point.</p>",
+        "dwell_min": 60
+      }
+    ]
   },
   {
     "type": "divergences",
@@ -13,8 +66,21 @@
     "phase": "daily",
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "Go to Tsukiji to see the famous tuna auction.",
+        "correction": "The wholesale market and its tuna auction moved to Toyosu in October 2018. Tsukiji's outer market (food stalls and restaurants) is still open and worth visiting — but the auction itself is only viewable at Toyosu now.",
+        "source_url": "https://www.japan.travel/en/spot/2034/",
+        "verified_on": "2026-08-26"
+      },
+      {
+        "claim": "teamLab Borderless is in Odaiba.",
+        "correction": "The original Odaiba location permanently closed in August 2022. teamLab Borderless reopened at Azabudai Hills in February 2024 — any guide still pointing to Odaiba is sending you to a closed building.",
+        "source_url": "https://www.teamlab.art/e/borderless-odaiba/",
+        "verified_on": "2026-08-26"
+      },
+      {
+        "claim": "Meiji Jingu's forest is an ancient, natural woodland.",
+        "correction": "It's a deliberately engineered forest, planted from barren grassland starting in 1915 and designed to read as ancient after roughly 150 years — impressive, but not what most guides imply.",
+        "verified_on": "2026-08-26"
       }
     ]
   }

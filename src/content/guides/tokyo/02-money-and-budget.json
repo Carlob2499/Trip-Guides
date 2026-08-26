@@ -3,7 +3,10 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
+    "body": "<p>Currency is the Japanese yen (¥). Tokyo is more card-friendly than its reputation, but small izakaya, ramen ticket machines, and some traditional spots remain cash- or IC-card-only — carry cash as backup.</p><p><b>Seven Bank (7-Eleven) ATMs</b> are the most reliable for foreign cards: 24/7, 28,000+ locations nationwide, and they accept Visa/Plus, Mastercard/Maestro/Cirrus, UnionPay, Amex, JCB, Discover and Diners Club. Per-withdrawal limit is {{fact:atm-withdrawal-limit-100000-yen}}.</p><p>Tax-free shopping still runs on the old instant-discount system for this trip — Japan's switch to a refund-at-departure system starts November 1, 2026, after you've left.</p>",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/service2.html",
+    "verified_on": "2026-08-26",
+    "shelf_life": "venue",
     "phase": "arrival"
   },
   {
@@ -11,34 +14,56 @@
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "intro": "Per-person estimates for a food-focused trip. Casual-day food and local transport are aggregator-sourced ranges (⚠ not a single official figure); the Saturday anchor dinner figure is RyuGin's own published course price + service charge. Lodging is left at zero — accommodation style wasn't set at intake.",
     "currency": "¥",
     "days": 5,
+    "party": 6,
     "items": [
       {
         "label": "Lodging, per night",
-        "basis": "day",
-        "est": 0
+        "basis": "trip",
+        "est": 0,
+        "note": "Not researched — accommodation style wasn't specified at intake."
       },
       {
-        "label": "Food & drink, per day",
+        "label": "Food & drink — casual days (Fri, Sun, Mon, Tue), per day",
         "basis": "day",
-        "est": 0
+        "est": 7000,
+        "low": 5000,
+        "high": 9000,
+        "note": "Aggregator-sourced range for a food-focused traveler; excludes the Saturday anchor dinner."
+      },
+      {
+        "label": "Saturday anchor dinner (RyuGin), per person",
+        "basis": "trip",
+        "est": 80500,
+        "low": 70000,
+        "high": 91000,
+        "note": "¥70,000 tasting course + 15% service charge in the private room, per RyuGin's own reservation page.",
+        "source_url": "https://www.nihonryori-ryugin.com/en/reserve/",
+        "verified_on": "2026-08-26"
       },
       {
         "label": "Local transport, per day",
         "basis": "day",
-        "est": 0
+        "est": 1200,
+        "low": 600,
+        "high": 2000,
+        "note": "IC-card tap fares on JR/Metro/Toei scale ¥155–¥616 per ride; figure assumes a few rides a day, not an all-day pass."
       },
       {
         "label": "Sights & activities, per day",
         "basis": "day",
-        "est": 0
+        "est": 1200,
+        "low": 500,
+        "high": 2000,
+        "note": "Light-touch sights budget: Shinjuku Gyoen ¥500, teamLab Planets ≈¥3,800–4,200, Tokyo Tower ¥1,500 — spread across the trip, not all paid stops every day."
       },
       {
         "label": "Flights — round trip",
         "basis": "trip",
-        "est": 0
+        "est": 0,
+        "note": "Not researched — departure airport wasn't confirmed at intake."
       }
     ]
   }

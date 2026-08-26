@@ -1,0 +1,1805 @@
+{
+  "schemaVersion": "wp-evidence/2.2",
+  "slug": "tokyo",
+  "runId": "tokyo-20260826-41ae82",
+  "candidates": [
+    {
+      "id": "c-nihonryori-ryugin",
+      "name": "Nihonryori RyuGin",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kohaku--kagurazaka",
+      "name": "Kohaku",
+      "branch": "Kagurazaka",
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "3-star innovative kaiseki, deep-verified for reputation and price, but no source confirmed private-room capacity for 6 and the restaurant's own site was blocked to fetch — real booking-window risk this close to Sept/Oct at 7.5 weeks out. Kept as a lead for a future pass rather than shipped.",
+      "worth": null
+    },
+    {
+      "id": "c-ginza-ukai-tei",
+      "name": "Ginza Ukai-tei",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-aragawa",
+      "name": "Aragawa",
+      "branch": null,
+      "priority": "food",
+      "status": "detour",
+      "shortlisted": true,
+      "reason": "Independent critics rank it among the best steak experiences in Japan, categorically different from the wagyu/kaiseki finalists — but the ~22-seat total restaurant size (press estimate, not an official figure) makes a same-night table of 6 a real risk. Preserved as Worth the Effort rather than the primary anchor.",
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-sazenka",
+      "name": "Sazenka",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "2-star Japanese-Chinese fusion; private room capacity is 2-6, exactly fitting the party, and online TableCheck booking exists — but the 2-month phone booking window is already open/closing as of this pass, and the Oct 17 dinner would land on the Shanghai-crab seasonal menu rather than the more-reviewed standard course. Kept as a lead, not shipped as primary or fallback given RyuGin/Ukai-tei cover the anchor + safety-net roles already.",
+      "worth": null
+    },
+    {
+      "id": "c-yakiniku-ushigoro--ginza",
+      "name": "Yakiniku Ushigoro",
+      "branch": "Ginza (S. Ginza)",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sukiyabashi-jiro",
+      "name": "Sukiyabashi Jiro",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Delisted from Michelin, no longer accepts general public reservations; ~10-seat counter, foreigners generally need an existing relationship via a Japanese host/concierge. Unbookable for 6 unrelated guests on this timeline.",
+      "worth": null
+    },
+    {
+      "id": "c-sushi-saito",
+      "name": "Sushi Saito",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Booking gated behind Pocket Concierge + Amex Platinum-or-higher card ownership; 8-10 seat counter. As hard to secure as Jiro, and the card-gating alone rules out a general party booking.",
+      "worth": null
+    },
+    {
+      "id": "c-sushi-yoshitake",
+      "name": "Sushi Yoshitake",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "No confirmed group-of-6 booking path found; small-counter format typical of this tier makes 6 unlikely.",
+      "worth": null
+    },
+    {
+      "id": "c-sushi-kanda",
+      "name": "Sushi Kanda",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "No reservation or foreigner-access information surfaced at all in discovery.",
+      "worth": null
+    },
+    {
+      "id": "c-sushi-masashi--aoyama",
+      "name": "Sushi Masashi",
+      "branch": "Aoyama",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "9-seat counter plus a private room for only 4 — cannot seat 6 in one sitting.",
+      "worth": null
+    },
+    {
+      "id": "c-florilege",
+      "name": "Florilège",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Multiple sources confirm a max party size of 4 guests — cannot seat 6.",
+      "worth": null
+    },
+    {
+      "id": "c-l-effervescence",
+      "name": "L'Effervescence",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "3-star; no group-of-6 capacity data found in discovery-level searches. Not deep-verified given stronger confirmed alternatives — a candidate for a future pass.",
+      "worth": null
+    },
+    {
+      "id": "c-narisawa",
+      "name": "Narisawa",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Reputation for extreme booking difficulty confirmed at discovery level; no capacity/group data found. Not deep-verified.",
+      "worth": null
+    },
+    {
+      "id": "c-den",
+      "name": "Den",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Phone-only booking up to 2 months ahead, widely described as an 'impossible reservation'; no confirmed seating capacity for 6 found — too much unquantified risk for a single-shot anchor.",
+      "worth": null
+    },
+    {
+      "id": "c-kadowaki",
+      "name": "Kadowaki",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "3-star; surfaced only in passing (20 total seats, 6 at counter). Not deep-verified.",
+      "worth": null
+    },
+    {
+      "id": "c-ishikawa",
+      "name": "Ishikawa",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "3-star; surfaced only as a name in discovery. Not deep-verified.",
+      "worth": null
+    },
+    {
+      "id": "c-wagyu-yakiniku-isshin--nakameguro",
+      "name": "Wagyu Yakiniku Isshin",
+      "branch": "Nakameguro",
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Surfaced at discovery level; not deep-verified given Ushigoro already covers the self-booked group yakiniku slot.",
+      "worth": null
+    },
+    {
+      "id": "c-inakaya--roppongi-higashi",
+      "name": "Inakaya",
+      "branch": "Roppongi Higashi",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Fun, theatrical robatayaki, well-reviewed for groups, but priced and positioned as a boisterous crowd-pleaser (¥8,000-10,000) rather than a quality-ceiling showcase — doesn't meet the anchor's 'quality difference is material' bar.",
+      "worth": null
+    },
+    {
+      "id": "c-gonpachi--nishi-azabu",
+      "name": "Gonpachi",
+      "branch": "Nishi-Azabu",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Legitimately decent, authentic-enough food, but consistently described by reviewers as tourist-oriented with inconsistent service relative to price. Fine for a casual night, not the anchor.",
+      "worth": null
+    },
+    {
+      "id": "c-unotoki--nogizaka",
+      "name": "Unotoki",
+      "branch": "Nogizaka",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Only 16 total seats (6 counter + ~5 per private room) — too small to confidently fit 6 in one seating.",
+      "worth": null
+    },
+    {
+      "id": "c-tempura-kondo--ginza",
+      "name": "Tempura Kondo",
+      "branch": "Ginza",
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Counter-format restaurants of this style are almost always small-capacity; no group-of-6 data found, not pursued given diminishing returns.",
+      "worth": null
+    },
+    {
+      "id": "c-senso-ji-temple",
+      "name": "Senso-ji Temple",
+      "branch": null,
+      "priority": "sights",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-meiji-jingu",
+      "name": "Meiji Jingu",
+      "branch": null,
+      "priority": "sights",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-teamlab-planets--toyosu",
+      "name": "teamLab Planets",
+      "branch": "Toyosu",
+      "priority": "sights",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-teamlab-borderless--azabudai-hills",
+      "name": "teamLab Borderless",
+      "branch": "Azabudai Hills",
+      "priority": "sights",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Legitimate alternative to Planets, but not shipped given light-touch sights scope for a food-priority trip — Planets pairs geographically with Toyosu Market, this doesn't pair as cleanly with a food stop.",
+      "worth": null
+    },
+    {
+      "id": "c-shinjuku-gyoen-national-garden",
+      "name": "Shinjuku Gyoen National Garden",
+      "branch": null,
+      "priority": "sights",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-tokyo-tower",
+      "name": "Tokyo Tower",
+      "branch": null,
+      "priority": "sights",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-tokyo-skytree",
+      "name": "Tokyo Skytree",
+      "branch": null,
+      "priority": "sights",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "More expensive (¥1,800-3,100 vs Tokyo Tower's ¥1,500) and, per multiple comparisons, the 450m deck makes landmarks read as miniatures — a worse trade for a group not prioritizing sightseeing. Tokyo Tower shipped instead.",
+      "worth": null
+    },
+    {
+      "id": "c-yanaka-ginza",
+      "name": "Yanaka Ginza",
+      "branch": null,
+      "priority": "sights",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-shibuya-crossing",
+      "name": "Shibuya Crossing",
+      "branch": null,
+      "priority": "sights",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "No admission/content beyond a photo op; light-touch sights scope favored food-adjacent stops (Yanaka Ginza, Asakusa) over a pass-through landmark.",
+      "worth": null
+    },
+    {
+      "id": "c-akihabara",
+      "name": "Akihabara",
+      "branch": null,
+      "priority": "sights",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Pop-culture district with a real food identity (ramen, Michelin-listed tempura/soba), but not deep-verified or shipped given the guide's light-touch sights budget was already spent on stronger food-adjacent picks.",
+      "worth": null
+    },
+    {
+      "id": "c-tsukiji-outer-market",
+      "name": "Tsukiji Outer Market",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-toyosu-market",
+      "name": "Toyosu Market",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-torien--omoide-yokocho",
+      "name": "Torien",
+      "branch": "Omoide Yokocho",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-ameya-yokocho",
+      "name": "Ameya-Yokocho",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-uobei-genki-sushi--shibuya",
+      "name": "Uobei Genki Sushi",
+      "branch": "Shibuya",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kura-sushi--oshiage",
+      "name": "Kura Sushi",
+      "branch": "Oshiage",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "World's largest kaiten-zushi (277 capacity), genuinely group-of-6 capable — but Uobei Shibuya already covers the easy-arrival-night sushi slot without duplicating the pick. Kept as a lead for a future pass or a Skytree-area day.",
+      "worth": null
+    },
+    {
+      "id": "c-sushi-dai",
+      "name": "Sushi Dai",
+      "branch": "Toyosu",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "≈12-seat counter, 2-5 hour waits, sells out by 9-11am — would force a party of 6 to split into separate seatings. Routed around explicitly in the guide's Toyosu day.",
+      "worth": null
+    },
+    {
+      "id": "c-daiwa-sushi",
+      "name": "Daiwa Sushi",
+      "branch": "Toyosu",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Larger than Sushi Dai (~40 seats) but still a single shared counter with multi-hour waits — same group-splitting problem.",
+      "worth": null
+    },
+    {
+      "id": "c-uogashi-nihon-ichi",
+      "name": "Uogashi Nihon-Ichi",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Standing sushi bar chain with only 6-7 total standing spots per branch, no seating — workable for 2, not a party of 6 eating together.",
+      "worth": null
+    },
+    {
+      "id": "c-gyutan-iroha--omoide-yokocho",
+      "name": "Gyutan Iroha",
+      "branch": "Omoide Yokocho",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Legitimate group-bookable alternative to Torien in the same alley (organizer-free-of-charge deal for parties of 5+) — Torien shipped instead since it was verified first and covers the same need.",
+      "worth": null
+    },
+    {
+      "id": "c-tsukishima-meibutsu-monja-daruma",
+      "name": "Tsukishima Meibutsu Monja Daruma",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Monjayaki is a genuinely Tokyo-local specialty most first-timer guides miss, and the format suits a group of 6 — but posted hours couldn't be reconciled between two sources (10:30-22:30 vs 11:30/11:00-23:00) to the standard this guide holds for a shipped fact. Not shipped; a good lead for a follow-up pass.",
+      "worth": null
+    },
+    {
+      "id": "c-fuunji",
+      "name": "Fuunji",
+      "branch": "Shinjuku",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Small-counter tsukemen shop, 45-90 min queues at peak; a party of 6 walking in together won't be seated together. Poor group fit despite strong reputation.",
+      "worth": null
+    },
+    {
+      "id": "c-tatsunoya",
+      "name": "Tatsunoya",
+      "branch": "Shinjuku",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Small-counter tonkotsu shop with near-constant queues — a group of 6 would likely be seated in shifts, working against the low-friction brief.",
+      "worth": null
+    },
+    {
+      "id": "c-rokurinsha",
+      "name": "Rokurinsha",
+      "branch": "Tokyo Ramen Street",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Near-constant 30-45+ minute queue at all hours — tourist-trap-adjacent given the wait-to-quality ratio for a group this size.",
+      "worth": null
+    },
+    {
+      "id": "c-ichiran",
+      "name": "Ichiran",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Individual solo-booth design defeats the point of a group meal — fine for a solo traveler, poor fit as this party's ramen night.",
+      "worth": null
+    },
+    {
+      "id": "c-afuri",
+      "name": "Afuri",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Most branches are counter-only and small (the original Ebisu branch has 9 seats); even the larger Nakameguro branch is tight for 6.",
+      "worth": null
+    },
+    {
+      "id": "c-kanda-yabu-soba",
+      "name": "Kanda Yabu Soba",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "Historic (1880) soba house that explicitly takes group reservations on its 2F course menu, unlike most soba counters — genuinely workable for 6, but not shipped since the day plan's food slots were already filled by stronger, more distinct picks.",
+      "worth": null
+    },
+    {
+      "id": "c-tempura-tsunahachi--shinjuku-honten",
+      "name": "Tempura Tsunahachi",
+      "branch": "Shinjuku Honten",
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "No explicit group-seating information found; moderate risk for 6 walking in at peak. Not deep-verified further given other picks already covered Shinjuku.",
+      "worth": null
+    },
+    {
+      "id": "c-maisen-tonkatsu--omotesando",
+      "name": "Maisen Tonkatsu",
+      "branch": "Omotesando",
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "No-reservation walk-in only, larger space than a typical counter shop (former bathhouse) — a reasonable lead, not deep-verified for group wait times.",
+      "worth": null
+    },
+    {
+      "id": "c-tendon-tenya",
+      "name": "Tendon Tenya",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Reliable no-fuss chain backup (130+ locations, no line culture) — not shipped as a named day-plan stop since the itinerary's meals were already covered, but worth knowing about as a fallback.",
+      "worth": null
+    },
+    {
+      "id": "c-isetan-shinjuku",
+      "name": "Isetan Shinjuku",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Strong depachika (basement food hall) option for an independent-grazing lunch — not shipped as a named stop given the day plan's meals were already set, a good flex option if plans change.",
+      "worth": null
+    },
+    {
+      "id": "c-mitsukoshi-ginza",
+      "name": "Mitsukoshi Ginza",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Alternative depachika near the Ginza dinner venues — not shipped as a named stop, same reasoning as Isetan Shinjuku.",
+      "worth": null
+    },
+    {
+      "id": "c-cafe-de-l-ambre",
+      "name": "Café de l'Ambre",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Historic kissaten (since 1948) with genuine café-culture credibility, but small/traditional seating is a poor fit for a party of 6 as a single stop — not shipped.",
+      "worth": null
+    },
+    {
+      "id": "c-fuji-soba",
+      "name": "Fuji Soba",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Standing-soba chain, genuinely the lowest-friction Tokyo breakfast format (ticket machine, stand-and-eat) — not shipped as a named day-plan stop since it works anywhere, mentioned as a category rather than a single pick.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-ryugin-private-rooms-capacity",
+      "candidateId": "c-nihonryori-ryugin",
+      "claim": "Private Room 1 seats 6-8 guests; Private Room 2 seats 5-8. Restaurant is 40 seats total, no counter.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nihonryori-ryugin.com/en/about/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-ryugin-booking-route",
+      "candidateId": "c-nihonryori-ryugin",
+      "claim": "Phone-only reservations (+81-3-3423-8006, 11:30-18:00); overseas guests must book through a Tokyo hotel concierge or an approved partner (e.g. My Concierge Japan / OMAKASE) — no direct self-service booking for foreign guests. Following month's reservations open the 1st of the current month, so October dates open Sept 1, 2026.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nihonryori-ryugin.com/en/reserve/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-09-05"
+      }
+    },
+    {
+      "id": "ev-ryugin-price-cancellation",
+      "candidateId": "c-nihonryori-ryugin",
+      "claim": "¥70,000/person course + 15% service charge in private rooms. No-show/same-day cancellation is ¥20,000 per absent guest; must reconfirm by phone the day before by 18:00. Minimum age 10.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nihonryori-ryugin.com/en/reserve/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-ryugin-michelin-streak",
+      "candidateId": "c-nihonryori-ryugin",
+      "claim": "Currently holds 3 Michelin stars. Discovery-level search (not independently confirmed via this fetch) suggested the streak runs 15 consecutive years since 2012 — the 3-star status itself is fetched-confirmed, the exact streak length is a secondary, less-certain detail.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Nihonryori_Ryugin",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-ukaitei-booking-price",
+      "candidateId": "c-ginza-ukai-tei",
+      "claim": "Self-service online booking via TableCheck, no concierge dependency. Grand Courses ¥27,500 or ¥38,500/person (tax incl.) + 13% service charge; Kobe A5 upgrade +¥17,000/person. Minimum 2 people per course. Dinner last order 19:30, kitchen closes 21:30. Closed Sundays + 2 Mondays/month.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ukai.co.jp/english/ginza/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-ukaitei-cancellation",
+      "candidateId": "c-ginza-ukai-tei",
+      "claim": "Cancellation: 50% fee if cancelled 1 day prior, 100% same-day (set course); seating-only cancellation ¥15,000/person (1 day prior), ¥30,000/person (same-day).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tablecheck.com/en/shops/ginzaukai-tei/reserve",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-aragawa-critical-reputation",
+      "candidateId": "c-aragawa",
+      "claim": "Repeatedly cited by independent food critics (Andy Hayler, Spear's magazine) as one of the most extraordinary steak experiences in Japan; charcoal-grilled Tajima-lineage beef, founded 1967.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.andyhayler.com/restaurant/aragawa",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "independent-food-critic",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-aragawa-critical-reputation-2",
+      "candidateId": "c-aragawa",
+      "claim": "Repeatedly cited by independent food critics as one of the most extraordinary steak experiences in Japan.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://spearswms.com/luxury/food-drink/aragawa-review-tajima-steak/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "spears-magazine",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-aragawa-capacity-estimate",
+      "candidateId": "c-aragawa",
+      "claim": "Total restaurant capacity is reported at only ≈22 seats — a secondhand press/blog estimate, not an official Aragawa-published figure. Aragawa's own site could not be reached to confirm.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.andyhayler.com/restaurant/aragawa",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "independent-food-critic",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-aragawa-capacity-estimate-2",
+      "candidateId": "c-aragawa",
+      "claim": "The dining area seats up to 22 guests — an intimate setting, unchanged in design since the restaurant's 1967 founding.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://tabelog.com/en/tokyo/A1314/A131401/13002897/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "tabelog-restaurant-guide",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-aragawa-booking-price",
+      "candidateId": "c-aragawa",
+      "claim": "Booking via TableCheck; credit card required to reserve. October seasonal 'long-term farmed Tajima beef' course ¥60,500/person (service excl., tax incl.) + 12% service charge; minimum order 2 people. Cancellation: 50% within 48 hours, 100% within 24 hours or no-show, charged automatically.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tablecheck.com/en/shops/aragawa/reserve",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-ushigoro-group-booking",
+      "candidateId": "c-yakiniku-ushigoro--ginza",
+      "claim": "Reservations accepted for 1 to 8 people via online TableCheck booking; the S. Ginza branch has 11 private rooms.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tablecheck.com/en/shops/ushigoro-s-ginza/reserve",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-sazenka-private-room-capacity",
+      "candidateId": "c-sazenka",
+      "claim": "Private room capacity is 2-6 guests (minimum 4) across three private rooms on two floors, plus a main dining hall. TableCheck's party-size selector explicitly offers 1-6.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tablecheck.com/en/shops/sazenka/reserve",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-kohaku-michelin-status",
+      "candidateId": "c-kohaku--kagurazaka",
+      "claim": "3 Michelin stars in the 2025/2026 Michelin Guide; relocated to Kagurazaka April 2024. Counter seats described as always fully booked; private room is the practical route for a group, exact capacity not published anywhere found.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://guide.michelin.com/us/en/tokyo-region/tokyo/restaurant/kohaku",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-entry-visa-us-90-days",
+      "candidateId": null,
+      "claim": "US passport holders are visa-exempt for tourism stays up to 90 days; no current ETA/pre-authorization is required for entry.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/plan/visa-info/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-entry-jesta-not-yet-active",
+      "candidateId": null,
+      "claim": "Japan's planned ETA-style Electronic Travel Authorization (JESTA) passed the Diet in 2026 but implementation targets FY2028 (by March 31, 2029) via a future phased rollout — it will not affect an Oct 2026 trip.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.moj.go.jp/isa/content/001446180.pdf",
+        "kind": "official",
+        "access": "blocked",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-mofa-blocked",
+      "candidateId": null,
+      "claim": "mofa.go.jp (the authoritative source for Japan visa-exemption policy) refuses automated fetch (HTTP 403) — verified against a reference (JNTO) source instead; recommend a manual recheck before departure.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mofa.go.jp/j_info/visit/visa/short/novisa.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-travel-advisory-blocked",
+      "candidateId": null,
+      "claim": "travel.state.gov refuses automated fetch (HTTP 403, Cloudflare-gated) — the current advisory level could not be independently verified this pass. A search-preview snippet suggests Level 1, but that is not promoted to a shipped fact.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-tipping-none",
+      "candidateId": null,
+      "claim": "Tipping is not customary in restaurants, bars, cafes, taxis, or hotels; leaving cash on the table causes confusion and staff may try to return it.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/plan/tipping-in-japan/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-dining-etiquette",
+      "candidateId": null,
+      "claim": "Otoshi (small unrequested appetizer, a few hundred yen/person) is standard izakaya practice and appears on the bill regardless of consumption; chopstick etiquette (never upright in rice, never pass chopstick-to-chopstick); shoes off on tatami seating.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan-guide.com/e/e2005.html",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-seven-bank-atm",
+      "candidateId": null,
+      "claim": "Seven Bank ATMs: 24/7, 28,000+ locations at 7-Eleven stores nationwide, accept Visa/Plus, Mastercard/Maestro/Cirrus, UnionPay, Amex, JCB, Discover, Diners Club. Per-withdrawal limit for overseas-issued cards is ¥100,000 (¥30,000 for magnetic-stripe-only cards).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.sevenbank.co.jp/intlcard/service2.html",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-tourist-pasmo",
+      "candidateId": null,
+      "claim": "Tourist PASMO: ¥1,000-¥10,000 depending on purchase point, valid 28 days from purchase, no deposit, balance not refundable. Sold at Haneda (Keikyu counters/machines) and Narita (Keisei info centers, ¥2,000 card). Launched May 20, 2026.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.pasmo.co.jp/tourist-pasmo/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-keisei-skyliner-fare",
+      "candidateId": null,
+      "claim": "Keisei Skyliner: non-stop Narita to Nippori (~36-41 min) or Ueno (~41 min); one-way fare ≈¥2,470.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.keisei.co.jp/keisei/tetudou/skyliner/us/traffic/skyliner_fares.php",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-haneda-monorail-keikyu",
+      "candidateId": null,
+      "claim": "Tokyo Monorail: Haneda to Hamamatsucho as fast as 13 min. Keikyu Line: Haneda to Shinagawa in 11-14 min depending on terminal, through-runs onto Toei Asakusa Line.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.haneda-tokyo-access.com/en/ride/fares.html",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-tax-free-system-change",
+      "candidateId": null,
+      "claim": "Japan's tax-free shopping system switches from instant point-of-sale exemption to a refund-at-departure system for purchases made on or after November 1, 2026 (refunds within 90 days of purchase, via customs inspection at departure). The Oct 16-20, 2026 trip falls entirely before this cutover, so the traveler will experience the old instant-discount system.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-no-holiday-in-window",
+      "candidateId": null,
+      "claim": "No Japanese national holiday falls within Oct 16-20, 2026 — nearest is Sports Day (Oct 12) before the trip and Culture Day (Nov 3) after.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-08",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-senso-ji-hours",
+      "candidateId": "c-senso-ji-temple",
+      "claim": "Free entry; main hall open 6:00 AM-5:00 PM (6:30 AM Oct-Mar).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.senso-ji.jp/about/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-meiji-jingu-hours",
+      "candidateId": "c-meiji-jingu",
+      "claim": "Grounds free; gate hours track sunrise/sunset (roughly 5:00 AM-6:40 PM depending on season). Museum ¥1,000 adult, closed Thursdays.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.meijijingu.or.jp/en/visit/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-meiji-jingu-crowd-1",
+      "candidateId": "c-meiji-jingu",
+      "claim": "Weekday early morning (≈7 AM) is genuinely quiet — a few hundred visitors versus tens of thousands by midday.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan-travel-note.com/posts/306",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "travel-blog-a",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-meiji-jingu-crowd-2",
+      "candidateId": "c-meiji-jingu",
+      "claim": "Coming super early in the morning gives a tranquil, peaceful experience before the crowds build.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.wanderlog.com/guide/meiji-jingu-shrine",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "traveler-blog-b",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-meiji-jingu-forest-engineered",
+      "candidateId": "c-meiji-jingu",
+      "claim": "The shrine's forest is not old-growth — it was deliberately planted from barren grassland starting in 1915, designed to read as an ancient forest after ~150 years.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ukisnow.com/posts/meiji-jingu",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-teamlab-planets-price",
+      "candidateId": "c-teamlab-planets--toyosu",
+      "claim": "≈¥3,800 weekday / ¥4,200 weekend adult, timed entry.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.teamlab.art/e/planets/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-teamlab-borderless-odaiba-closed",
+      "candidateId": "c-teamlab-borderless--azabudai-hills",
+      "claim": "The original teamLab Borderless in Odaiba is closed (the official site's own heading reads 'teamLab Borderless Odaiba (Closed)'); it reopened at Azabudai Hills in February 2024 per discovery-level search.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.teamlab.art/e/borderless-odaiba/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-shinjuku-gyoen-hours",
+      "candidateId": "c-shinjuku-gyoen-national-garden",
+      "claim": "Oct 1-Mar 14 hours: 9:00 AM-4:30 PM, last entry 4:00 PM. Adults ¥500. Closed every Monday (or the following weekday if Monday is a holiday).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/information/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-tokyo-tower-price",
+      "candidateId": "c-tokyo-tower",
+      "claim": "Main Deck admission from ¥1,500, opens 9:00 AM.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tokyotower.co.jp/en/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-tsukiji-toyosu-status",
+      "candidateId": "c-tsukiji-outer-market",
+      "claim": "The wholesale market and tuna auction relocated to Toyosu in October 2018. Tsukiji's Outer Market (food stalls/restaurants) never closed and remains open.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/spot/2034/",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-toyosu-market-schedule",
+      "candidateId": "c-toyosu-market",
+      "claim": "Toyosu tuna auction viewing ≈5:30-6:30 AM; market open 5 AM-5 PM; closed Sundays and most Wednesdays plus public holidays. The Tokyo Metropolitan Central Wholesale Market publishes an exact 2026 calendar, but its daily grid was not machine-readable this pass — exact October closure dates need a closer-to-trip recheck.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.shijou.metro.tokyo.lg.jp/calendar/2026",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-tsukiji-crowd-1",
+      "candidateId": "c-tsukiji-outer-market",
+      "claim": "8-9 AM has stalls fully stocked with manageable crowds; 10 AM-12 PM is peak with 30-60 min lines at famous stalls.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://getlostinjapan.com/best-time-to-visit-tsukiji-market/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "travel-blog-c",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-tsukiji-crowd-2",
+      "candidateId": "c-tsukiji-outer-market",
+      "claim": "9 AM-1 PM is the peak crowd window at Tsukiji Outer Market.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://banzokubiology.com/tsukiji-crowd-tips",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "japanese-blog-a",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-sushi-dai-wait-1",
+      "candidateId": "c-sushi-dai",
+      "claim": "Sushi Dai routinely runs 2-5 hour waits and sells out by 9-11am on busy days.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://expertworldtravel.com/complete-guide-sushi-dai/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": "2025-10-01",
+        "family": "travel-blog-d",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-sushi-dai-wait-2",
+      "candidateId": "c-sushi-dai",
+      "claim": "Multi-hour waits are standard at Sushi Dai even on an early-morning visit.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://ardencove.com/blogs/news/sushi-dai-omakase-at-5-am-in-toyosu-tokyo",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "travel-blog-e",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-sushi-dai-seat-count",
+      "candidateId": "c-sushi-dai",
+      "claim": "Sushi Dai has ≈12 counter seats; Daiwa Sushi is larger (≈40) but still a single shared counter — a party of 6 would very likely split into two groups seated separately. Secondhand estimate (no official seat count published), corroborated by the independent multi-hour-wait accounts above which are consistent with a very small room.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://travel-stained.com/best-sushi-in-tsukiji-fish-market-sushi-dai/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "travel-blog-g",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-torien-group-booking",
+      "candidateId": "c-torien--omoide-yokocho",
+      "claim": "150 total seats, floor rentals available for 30+ people — a party of 6 is a normal booking, not an edge case. Hours: Mon-Thu/Sun/holidays 11:30-23:30, Fri-Sat 11:30-23:45 (food last order 23:00); closed only New Year's Day. Bookable via Hot Pepper Gourmet.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.hotpepper.jp/strJ000762068/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-ameyoko-crowd-1",
+      "candidateId": "c-ameya-yokocho",
+      "claim": "Weekday mornings after 11 AM and Tue-Thu are calmest at Ameya-Yokocho; weekends and evenings after 6 PM get packed.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tripadvisor.com/ShowTopic-g298184-i861-k3160278",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "tripadvisor-forum",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ameyoko-crowd-2",
+      "candidateId": "c-ameya-yokocho",
+      "claim": "Morning visits before the weekend crowds build are the best time to see Ameyoko functioning as a real shopping street.",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://japansophy.com/ameyoko-market-guide",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "travel-blog-f",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-koyo-not-in-window",
+      "candidateId": null,
+      "claim": "The Japan Meteorological Corporation had not yet published a 2026 autumn-foliage (koyo) forecast as of this pass — the last published forecast (for the 2025 season) put Tokyo's peak at Nov 27 (yellow) / Dec 2 (red), a prior-year lead only. Either way, the Oct 16-20, 2026 trip sits well before any plausible Tokyo koyo window.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://n-kishou.com/corp/news-contents/autumn/?lang=en",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2025-11-04",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-nihonryori-ryugin",
+      "importance": "anchor",
+      "bookingUrl": "https://www.nihonryori-ryugin.com/en/reserve/",
+      "releaseWindow": "Following month opens on the 1st of the current month — October dates open Sept 1, 2026",
+      "actionDate": "2026-09-01",
+      "partyRules": "Private Room 1 (6-8) or Private Room 2 (5-8) fit a party of 6 without splitting; minimum age 10",
+      "deposit": "None stated; no-show/same-day cancellation is ¥20,000 per absent guest",
+      "cancellation": "Reconfirm by phone the day before by 18:00; ¥20,000/guest for no-show or same-day cancellation",
+      "foreignFriction": "No direct self-service booking for overseas guests — must go through a Tokyo hotel concierge or an approved partner (e.g. My Concierge Japan). Confirm accommodation before Sept 1 so a concierge can call at opening.",
+      "lastSeating": null,
+      "walkIn": "Not viable — reservation-only",
+      "leads": [
+        {
+          "claim": "My Concierge Japan and similar approved partners can book RyuGin on a guest's behalf even without a hotel concierge relationship.",
+          "status": "unconfirmed-lead",
+          "source": {
+            "url": "https://myconciergejapan.com/restaurants/ryugin/",
+            "kind": "operator",
+            "access": "search-preview",
+            "language": "en",
+            "publishedAt": null,
+            "family": null,
+            "independent": null,
+            "appliesToYears": []
+          },
+          "verifiedOn": "2026-08-26"
+        }
+      ],
+      "alternatives": "Ginza Ukai-tei (self-service TableCheck booking, no concierge needed) is the low-friction fallback; Aragawa is the Worth-the-Effort splurge alternative if capacity allows.",
+      "fallback": "If the Sept 1 window closes before booking succeeds, fall back to Ginza Ukai-tei same-day-bookable via TableCheck."
+    },
+    {
+      "candidateId": "c-ginza-ukai-tei",
+      "importance": "important",
+      "bookingUrl": "https://www.tablecheck.com/en/shops/ginzaukai-tei/reserve",
+      "releaseWindow": "Online booking calendar, no fixed monthly release window found",
+      "actionDate": null,
+      "partyRules": "Private rooms free of extra charge for parties of 4+; whole table orders the same course",
+      "deposit": "Credit card required to reserve via TableCheck",
+      "cancellation": "50% fee 1 day prior, 100% same-day (set course); seating-only ¥15,000/person (1 day prior), ¥30,000/person (same-day)",
+      "foreignFriction": "None — genuine self-service English-language online booking",
+      "lastSeating": "Dinner last order 19:30 (kitchen closes 21:30)",
+      "walkIn": "Not verified as viable given the Michelin-starred format — treat as reservation-only",
+      "leads": [],
+      "alternatives": null,
+      "fallback": "Designated fallback for the RyuGin anchor booking."
+    },
+    {
+      "candidateId": "c-aragawa",
+      "importance": "important",
+      "bookingUrl": "https://www.tablecheck.com/en/shops/aragawa/reserve",
+      "releaseWindow": "Online booking calendar via TableCheck",
+      "actionDate": null,
+      "partyRules": "Minimum order 2 people; total restaurant capacity ≈22 seats (press estimate, unofficial) — a table of 6 is a meaningful fraction of the room on a Saturday, book as early as possible",
+      "deposit": "Credit card required to reserve",
+      "cancellation": "50% within 48 hours of reservation, 100% within 24 hours or no-show, charged automatically to the card on file",
+      "foreignFriction": "None found beyond the card-on-file requirement",
+      "lastSeating": null,
+      "walkIn": "Not viable — reservation-only",
+      "leads": [],
+      "alternatives": "RyuGin or Ukai-tei if a 6-top can't be secured.",
+      "fallback": "RyuGin (primary) or Ginza Ukai-tei (self-service) if Aragawa can't seat 6."
+    },
+    {
+      "candidateId": "c-yakiniku-ushigoro--ginza",
+      "importance": "important",
+      "bookingUrl": "https://www.tablecheck.com/en/shops/ushigoro-s-ginza/reserve",
+      "releaseWindow": "Online booking calendar via TableCheck",
+      "actionDate": null,
+      "partyRules": "Reservations accepted 1-8 people; 11 private rooms at the S. Ginza branch",
+      "deposit": null,
+      "cancellation": "Not confirmed this pass — check TableCheck's cancellation terms at booking time",
+      "foreignFriction": "None — self-service English-language TableCheck booking",
+      "lastSeating": null,
+      "walkIn": "Not confirmed — book ahead given the group size",
+      "leads": [],
+      "alternatives": null,
+      "fallback": null
+    },
+    {
+      "candidateId": "c-kohaku--kagurazaka",
+      "importance": "important",
+      "bookingUrl": null,
+      "releaseWindow": "Recommended 2-3 months ahead; high-demand dates reportedly need up to 6 months",
+      "actionDate": null,
+      "partyRules": "Counter effectively unavailable (always fully booked); private room capacity for 6 not confirmed by any source reached this pass",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "No confirmed official English self-booking path; likely routes through Michelin's Resy partnership or a concierge (My Concierge Japan, TABLEALL, OMAKASE) or direct phone (+81 50-3138-5225 per the Michelin listing). The restaurant's own site (kagurazaka-kohaku.jp) could not be reached this pass.",
+      "lastSeating": null,
+      "walkIn": "Not viable",
+      "leads": [
+        {
+          "claim": "Direct phone reservation via +81 50-3138-5225 (as listed on Michelin's page) may be a working booking route for a private room.",
+          "status": "unconfirmed-lead",
+          "source": {
+            "url": "https://guide.michelin.com/us/en/tokyo-region/tokyo/restaurant/kohaku",
+            "kind": "official",
+            "access": "blocked",
+            "language": "en",
+            "publishedAt": null,
+            "family": null,
+            "independent": null,
+            "appliesToYears": []
+          },
+          "verifiedOn": "2026-08-26"
+        }
+      ],
+      "alternatives": "RyuGin (shipped) covers the same tier with confirmed group capacity.",
+      "fallback": null
+    },
+    {
+      "candidateId": "c-sazenka",
+      "importance": "important",
+      "bookingUrl": "https://www.tablecheck.com/en/shops/sazenka/reserve",
+      "releaseWindow": "Phone reservations open ≈2 months in advance (10:00-16:00) — for an Oct 17 date this window is already open/closing as of this pass",
+      "actionDate": null,
+      "partyRules": "Private room capacity 2-6 (minimum 4) — a party of 6 exactly fills the private room's max",
+      "deposit": "Credit card required to reserve via TableCheck",
+      "cancellation": "Not confirmed this pass",
+      "foreignFriction": "TableCheck self-service exists; also listed on Pocket Concierge (site blocked to fetch this pass, cross-check via search-preview only)",
+      "lastSeating": null,
+      "walkIn": "Not viable",
+      "leads": [],
+      "alternatives": "RyuGin (shipped) and Ukai-tei (shipped fallback) already cover the anchor + safety-net roles.",
+      "fallback": null
+    }
+  ],
+  "transport": [],
+  "disagreements": [
+    {
+      "id": "d-sazenka-menu-changeover",
+      "topic": "Whether Sazenka's Oct 12, 2026 menu-listing cutoff signals a closure or a seasonal menu change",
+      "impact": "minor",
+      "evidenceIds": [
+        "ev-sazenka-private-room-capacity"
+      ],
+      "investigation": "An initial search result implying the regular course 'ends Oct 12' looked like a possible closure risk for an Oct 17 dinner. A follow-up search found the restaurant shifts to a Shanghai-crab-focused seasonal course from Oct 13, 2026 through Jan 16, 2027 — a menu changeover, not a closure. Not investigated further since Sazenka wasn't shipped as primary/fallback.",
+      "resolution": "Confirmed as a seasonal menu changeover; an Oct 17 dinner at Sazenka would be on the crab-season menu, a different but not lesser experience than most published reviews describe."
+    },
+    {
+      "id": "d-ukaitei-price-framing",
+      "topic": "Ginza Ukai-tei's price — an aggregator quoted '$250-600 per couple' while the restaurant's own site lists per-person course prices",
+      "impact": "minor",
+      "evidenceIds": [
+        "ev-ukaitei-booking-price"
+      ],
+      "investigation": "One aggregator snippet framed pricing as a couple's total, inconsistent with the fetched official page's per-person figures (¥27,500-38,500/person + 13% service).",
+      "resolution": "Resolved in favor of the fetched official figures — ¥27,500-38,500/person is what ships."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-nihonryori-ryugin",
+        "c-ginza-ukai-tei",
+        "c-aragawa",
+        "c-yakiniku-ushigoro--ginza",
+        "c-kohaku--kagurazaka",
+        "c-sazenka"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [],
+      "notApplicableReason": "No route in this itinerary is fragile or single-point-of-failure — both airports have 2+ redundant frequent rail options into central Tokyo, and daily transit is dense multi-operator subway/rail with no late-event last-train dependency in this itinerary."
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Anchor-dinner discovery covered kaiseki, sushi omakase, teppanyaki, yakiniku, robatayaki, modern French-Japanese, unagi, and tempura across ~24 named candidates; later rounds (Wagyu Isshin, Inakaya, Gonpachi, Unotoki, hotel teppanyaki venues) increasingly surfaced the same aggregator ecosystem rather than new strong contenders. Casual-food discovery covered markets, ramen, sushi formats, izakaya, tempura/tonkatsu, depachika, café culture and a local specialty (monjayaki) across ~28 named candidates; by the fourth round, ramen/sushi/yokocho queries began returning the same handful of aggregator domains and the same named venues under different phrasing, indicating the readily-discoverable English-language pool was exhausted. Native-language search continued to surface non-overlapping, useful detail (Omoide Yokocho's group-bookable stalls, Tsukiji's true shop-by-shop closure pattern, Toyosu's Sunday status) through the final round — the one place further Japanese-language digging would still add marginal value is a live Toyosu/Tsukiji October calendar PDF, tracked as a pre-trip recheck rather than a blocker. Sights discovery covered the standard marquee set plus corrections (Tsukiji/Toyosu, teamLab relocation, Meiji Jingu forest). Unresolved leads (Kohaku/Sazenka booking-route confirmation, Monja Daruma's exact hours) are gaps on candidates already excluded from shipped/fallback roles by capacity, timing risk, or an unreconciled hours conflict — resolving them would not change which venues ship. No unresolved evidence gap found this pass would change the shipped recommendation set."
+  },
+  "passB": null,
+  "reconciliation": []
+}

@@ -1,1 +1,52 @@
-{}
+{
+  "atm-withdrawal-limit-100000-yen": {
+    "claim": "Seven Bank (7-Eleven) ATM per-withdrawal limit for overseas-issued cards",
+    "value": "¥100,000 per withdrawal (¥30,000 for magnetic-stripe-only cards)",
+    "source_url": "https://www.sevenbank.co.jp/intlcard/service2.html",
+    "verified_on": "2026-08-26",
+    "shelf_life": "venue",
+    "state": "clean",
+    "risk": 1,
+    "entity": "seven-bank-atm"
+  },
+  "tourist-pasmo-2000-yen": {
+    "claim": "Tourist PASMO card price at Narita (Keisei information centers)",
+    "value": "¥2,000, no deposit, valid 28 days, balance not refundable",
+    "source_url": "https://www.pasmo.co.jp/tourist-pasmo/",
+    "verified_on": "2026-08-26",
+    "shelf_life": "venue",
+    "state": "clean",
+    "risk": 1,
+    "entity": "tourist-pasmo"
+  },
+  "keisei-skyliner-2470-yen": {
+    "claim": "Keisei Skyliner one-way fare, Narita to Nippori/Ueno",
+    "value": "≈¥2,470 one-way, ~36–41 min to Nippori",
+    "source_url": "https://www.keisei.co.jp/keisei/tetudou/skyliner/us/traffic/skyliner_fares.php",
+    "verified_on": "2026-08-26",
+    "shelf_life": "transit",
+    "state": "approx",
+    "risk": 2,
+    "entity": "keisei-skyliner"
+  },
+  "keikyu-haneda-shinagawa-327-yen": {
+    "claim": "Keikyu Line one-way fare, Haneda to Shinagawa",
+    "value": "≈¥327, 11–14 min depending on terminal",
+    "source_url": "https://www.haneda-tokyo-access.com/en/ride/fares.html",
+    "verified_on": "2026-08-26",
+    "shelf_life": "transit",
+    "state": "approx",
+    "risk": 2,
+    "entity": "keikyu-haneda"
+  },
+  "tokyo-monorail-haneda-519-yen": {
+    "claim": "Tokyo Monorail one-way fare, Haneda to Hamamatsucho",
+    "value": "≈¥519 (IC card), as fast as 13 min on the Haneda Express",
+    "source_url": "https://www.tokyo-monorail.co.jp/english/",
+    "verified_on": "2026-08-26",
+    "shelf_life": "transit",
+    "state": "approx",
+    "risk": 2,
+    "entity": "tokyo-monorail"
+  }
+}

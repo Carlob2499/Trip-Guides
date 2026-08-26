@@ -3,37 +3,45 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "body": "<p>Haneda (HND) is the faster, closer airport if your flights allow it — the Tokyo Monorail reaches Hamamatsucho in as little as 13 minutes, and the Keikyu Line reaches Shinagawa in 11–14 minutes, both with an IC card tap. Narita (NRT) is 55–75 minutes out; the Narita Express (N'EX) runs direct to Tokyo Station, or the Keisei Skyliner reaches Nippori/Ueno in ~36–41 minutes.</p><p>Both airports have well-signed English rail options built for luggage — a party of six doesn't need a private transfer for either one.</p>",
+    "source_url": "https://www.haneda-tokyo-access.com/en/ride/fares.html",
+    "verified_on": "2026-08-26",
+    "shelf_life": "transit"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "body": "<p>Get an IC card (Suica or PASMO) per person on arrival — every JR, Metro, Toei, and most private-line and bus rides work with a single tap in and out, and physical cards are back in normal supply after the 2023–2025 chip shortage. A <b>Tourist PASMO</b> ({{fact:tourist-pasmo-2000-yen}}) is sold at Narita's Keisei counters with no deposit and is the simplest option for a short trip.</p><p>Tokyo is more cash-friendly than its reputation — chains, hotels, and most tourist-area restaurants take cards — but small izakaya, some ramen counters, and ticket-vending-machine shops are still cash- or IC-card-only. Carry cash as backup.</p>",
+    "source_url": "https://www.pasmo.co.jp/tourist-pasmo/",
+    "verified_on": "2026-08-26",
+    "shelf_life": "venue"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "body": "<p>US passport holders don't need a visa for a tourism stay up to 90 days. Japan's planned electronic travel authorization (JESTA) is not yet in effect for this trip — targeted rollout is FY2028.</p><p>⚠ This assumes a US passport, since the traveler's nationality wasn't confirmed at intake — if that's wrong for anyone in the party, check that country's own rule (see the entry card on the Trip Kit tab).</p>",
+    "source_url": "https://www.japan.travel/en/plan/visa-info/",
+    "verified_on": "2026-08-26"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "body": "<p>A pocket WiFi rental (pick up at an arrival-hall counter at either airport, or pre-book for pickup) connects the whole group of six on one device — the simplest option for a party this size rather than six separate eSIMs. ⚠ Rental pricing varies by provider and wasn't confirmed against an official source this pass; compare on arrival or pre-book with a provider like Ninja WiFi.</p><p>Individual eSIMs are the cheaper per-person option if everyone wants their own data.</p>"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
-    "body": "",
+    "body": "<p>The Saturday anchor dinner is the one time-sensitive booking: Nihonryori RyuGin only opens its October reservation window on <b>September 1, 2026</b>, and only takes overseas bookings through a Tokyo hotel concierge (see Food & shopping). Confirm accommodation early enough that a concierge can call at opening.</p>",
     "checklist": [
       "Flights",
-      "Accommodation",
+      "Accommodation — needed before the anchor dinner can be booked (concierge-routed)",
       "Airport transfer",
       "Travel insurance",
-      "Any timed tickets"
+      "Anchor dinner: have your hotel concierge call RyuGin on Sept 1, 2026 for Oct 17"
     ]
   },
   {

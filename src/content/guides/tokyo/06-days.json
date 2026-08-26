@@ -6,33 +6,50 @@
     "items": [
       {
         "date": "Fri Oct 16",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Arrival",
+        "pace": "Land, get IC cards sorted, no fixed plans beyond dinner.",
+        "energy": "slow",
+        "env": "mixed",
+        "tldr": "Land, sort out IC cards, and ease into Tokyo with a no-reservation conveyor-sushi dinner.",
+        "body": "<p>Get an IC card per person on arrival (Suica, PASMO, or a Tourist PASMO if landing at Narita) — everything else in this guide assumes you have one. Settle in, then keep dinner easy: Uobei Genki Sushi in Shibuya needs no reservation and moves fast even for a group of six, a forgiving first night after a long flight.</p>"
       },
       {
         "date": "Sat Oct 17",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Asakusa, then the anchor dinner",
+        "pace": "Easy morning, Asakusa mid-morning, a deliberately light afternoon before a serious dinner.",
+        "energy": "balanced",
+        "env": "mixed",
+        "tldr": "Senso-ji and Nakamise-dori in the morning, a light afternoon, then RyuGin — the trip's one splurge dinner.",
+        "body": "<p>Senso-ji and Nakamise-dori make an easy, food-forward morning — snack your way down the approach street rather than committing to a sit-down lunch. Keep lunch light and the afternoon unstructured; tonight is the anchor.</p><p>Dinner is Nihonryori RyuGin in Hibiya (see Food & shopping) — book through your hotel concierge as soon as accommodation is confirmed, since October dates only opened Sept 1, 2026.</p>",
+        "constraints": ["RyuGin reservation required — book via hotel concierge, see Food & shopping"]
       },
       {
         "date": "Sun Oct 18",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Tsukiji, Harajuku, Shinjuku",
+        "pace": "Early market morning, a shrine and a garden in the afternoon, dinner in Omoide Yokocho.",
+        "energy": "balanced",
+        "env": "outdoor",
+        "tldr": "A grazing breakfast at Tsukiji, Meiji Jingu and Shinjuku Gyoen in the afternoon, dinner at a group-friendly Omoide Yokocho stall.",
+        "body": "<p>Start at Tsukiji Outer Market before 9 AM — it gets genuinely crowded by mid-morning, and Toyosu (today being Sunday) is closed, so the outer market is the day's only market stop.</p><p>Meiji Jingu is calmest at 7 AM, which doesn't fit today's Tsukiji-first morning — expect more visitors than the guide's ideal, still worth the walk from Harajuku. Shinjuku Gyoen closes at 4:30 PM (last entry 4:00), so plan the afternoon around that.</p><p>Dinner is Torien in Omoide Yokocho — one of the few stalls there that actually books a group of six, rather than the 6-seat counters most of the alley runs on.</p>"
       },
       {
         "date": "Mon Oct 19",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Toyosu and teamLab",
+        "pace": "A bay-area morning, gallery midday, wagyu dinner back in Ginza.",
+        "energy": "balanced",
+        "env": "indoor",
+        "tldr": "Toyosu Market and teamLab Planets by day, a self-booked wagyu yakiniku dinner in Ginza at night.",
+        "body": "<p>Toyosu Market is open today — browse rather than queue for Sushi Dai/Daiwa Sushi's counters (2–5 hour waits, and a party of six will likely be split in two). teamLab Planets is a few minutes away and fills the rest of the morning/early afternoon.</p><p>Shinjuku Gyoen is closed on Mondays, so it isn't on today's plan — that's already covered from Sunday.</p><p>Dinner is Yakiniku Ushigoro in Ginza, a short ride back from Toyosu — booked online, no concierge needed.</p>",
+        "constraints": ["Shinjuku Gyoen closed Mondays"]
       },
       {
         "date": "Tue Oct 20",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Yanaka and Ameyoko, then departure",
+        "pace": "A relaxed morning food crawl, then the airport.",
+        "energy": "slow",
+        "env": "outdoor",
+        "tldr": "One last grazing morning through Yanaka Ginza and Ameyoko before heading to the airport.",
+        "body": "<p>Yanaka Ginza (via Nippori Station) and Ameya-Yokocho (Ueno–Okachimachi) are a short hop apart and both work as pure grazing — no sit-down meal to plan around a flight. Ameyoko is calmest on a weekday morning, which this is.</p><p>Work backward from your flight using the airport transit times in the Transit tab — Haneda is faster to reach from central Tokyo than Narita if your return flight gives you the choice.</p>"
       }
     ]
   }

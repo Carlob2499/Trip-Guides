@@ -1,11 +1,86 @@
 {
-  "kicker": "Field guide",
+  "kicker": "Tokyo · Oct 16–20, 2026",
   "title": "Tokyo",
-  "dek": "",
+  "dek": "A food-first long weekend for six — one Saturday splurge dinner worth the friction, everything else built to stay easy.",
   "country": "Japan",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Pass A (canonical research) in progress — Pass B, reconciliation and the verify loop haven't run yet. Every fact below is sourced, but nothing here is final.",
   "provenance": "strict",
   "roomId": "x93gr7ica8owf820",
-  "footer": ""
+  "footer": "",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, stays up to 90 days. Japan's planned ETA system (JESTA) does not apply yet — implementation targets FY2028, after this trip.",
+      "note": "Assumed US passport — the traveler's nationality wasn't confirmed at intake (see the traveler questions). If any traveler holds a different passport, check that country's own entry rule. mofa.go.jp and moj.go.jp both blocked automated verification in this pass (403) — reconfirm at mofa.go.jp/j_info/visit/visa/short/novisa.html before departure.",
+      "source_url": "https://www.japan.travel/en/plan/visa-info/",
+      "verified_on": "2026-08-26"
+    }
+  ],
+  "phrases": {
+    "lang": "ja-JP",
+    "items": [
+      {
+        "situation": "I have a food allergy",
+        "native": "[食材]アレルギーがあります",
+        "romanization": "[shokuzai] arerugii ga arimasu",
+        "note": "Fill in the allergen (e.g. ピーナッツ peanut, 小麦 wheat, 甲殻類 shellfish) before アレルギーがあります. Say it when seated, before ordering — pair with a written allergy card for clarity.",
+        "source_url": "https://speakablejapanese.com/en/lessons/natural-japanese/travel/explaining-food-allergies-in-japanese/",
+        "verified_on": "2026-08-26"
+      },
+      {
+        "situation": "I can't eat [food]",
+        "native": "[食材]は食べられません",
+        "romanization": "[shokuzai] wa taberaremasen",
+        "note": "Broader than the allergy phrase — covers dietary restrictions and preferences too.",
+        "source_url": "https://thesmartlocal.jp/japanese-phrases-food/amp/",
+        "verified_on": "2026-08-26"
+      },
+      {
+        "situation": "We have a reservation",
+        "native": "予約しています",
+        "romanization": "yoyaku shiteimasu",
+        "note": "Give the name the booking is under right after this."
+      },
+      {
+        "situation": "We are six people",
+        "native": "6人です",
+        "romanization": "roku-nin desu",
+        "note": "Useful for walk-ins — staff will ask party size (nan-mei sama desu ka) before seating."
+      },
+      {
+        "situation": "Excuse me (calling staff over)",
+        "native": "すみません",
+        "romanization": "sumimasen",
+        "note": "Standard way to get a server's attention at izakaya and counter seating, where nobody comes to the table unprompted."
+      },
+      {
+        "situation": "What do you recommend?",
+        "native": "おすすめは何ですか？",
+        "romanization": "osusume wa nan desu ka?"
+      },
+      {
+        "situation": "What is this?",
+        "native": "これは何ですか？",
+        "romanization": "kore wa nan desu ka?"
+      },
+      {
+        "situation": "Before / after eating",
+        "native": "いただきます／ごちそうさまでした",
+        "romanization": "itadakimasu / gochisōsama deshita",
+        "note": "Said before the first bite and after the last — genuinely used, not just textbook politeness."
+      },
+      {
+        "situation": "Check, please",
+        "native": "お会計お願いします",
+        "romanization": "okaikei onegaishimasu",
+        "note": "Most sit-down restaurants pay at the table or a front register on the way out, not tableside by card machine."
+      },
+      {
+        "situation": "Do you have an English menu?",
+        "native": "英語のメニューはありますか？",
+        "romanization": "eigo no menyū wa arimasu ka?"
+      }
+    ]
+  }
 }

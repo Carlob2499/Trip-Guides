@@ -4,7 +4,119 @@
     "group": "Food & shopping",
     "title": "What to eat",
     "phase": "daily",
-    "items": [],
-    "rank": 1
+    "intro": "<p>One splurge, everything else low-friction. The anchor is Saturday dinner — everything else here is walk-in or a one-tap online booking, never a project. The one trap worth naming up front: Toyosu's famous Sushi Dai/Daiwa Sushi counters run 2–5 hour waits and will likely split a party of six into two seatings — skip the queue and use the market for browsing instead.</p>",
+    "rank": 1,
+    "items": [
+      {
+        "name": "Nihonryori RyuGin",
+        "area": "Hibiya (Tokyo Midtown Hibiya, 7F)",
+        "phone": "+81-3-3423-8006",
+        "hours": "Dinner service; reservation line 11:30–18:00",
+        "book": "call",
+        "how": "Overseas guests book through a Tokyo hotel concierge or an approved partner (e.g. My Concierge Japan) — no direct self-service reservation. October dates open Sept 1, 2026; have your concierge call at opening.",
+        "price": "≈¥80,500/person (¥70,000 course + 15% service)",
+        "crowd_tip": "Private Room 1 (6–8 seats) or Private Room 2 (5–8 seats) fit a party of six without splitting the group.",
+        "why": "3 Michelin stars — the trip's anchor dinner, and the only finalist confirmed to seat six in one room.",
+        "source_url": "https://www.nihonryori-ryugin.com/en/reserve/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Ginza Ukai-tei",
+        "area": "Ginza",
+        "phone": "+81-3-3544-5252",
+        "hours": "Dinner last order 19:30 (kitchen to 21:30); closed Sundays + 2 Mondays/month",
+        "closed": "Sundays, 2 Mondays/month",
+        "book": "url",
+        "book_url": "https://www.tablecheck.com/en/shops/ginzaukai-tei/reserve",
+        "how": "Genuine self-service English-language online booking — no concierge needed.",
+        "price": "¥27,500–38,500/person + 13% service",
+        "crowd_tip": "Private rooms are free of extra charge for parties of 4+; a dedicated chef cooks tableside, and everyone orders the same course.",
+        "why": "The anchor's low-friction fallback if RyuGin's Sept 1 booking window closes first — still Michelin-starred teppanyaki, with a confirmed group-of-6 precedent.",
+        "source_url": "https://www.ukai.co.jp/english/ginza/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Aragawa",
+        "area": "Nishi-Shinbashi",
+        "book": "url",
+        "book_url": "https://www.tablecheck.com/en/shops/aragawa/reserve",
+        "how": "TableCheck online, credit card required to hold the reservation.",
+        "price": "≈¥60,500/person + 12% service (Oct Tajima-beef course)",
+        "crowd_tip": "⚠ Total restaurant capacity is reported at only ≈22 seats (a press estimate, not an official figure) — a table for six is a large fraction of the room on a Saturday. Book as early as possible if attempting this instead of RyuGin.",
+        "why": "Worth the Effort: independent critics rank it among the best steak experiences in Japan — a genuinely different, splurge-tier alternative if you'd rather have this than the anchor dinner.",
+        "source_url": "https://www.tablecheck.com/en/shops/aragawa/reserve",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Yakiniku Ushigoro",
+        "area": "Ginza (S. Ginza branch)",
+        "book": "url",
+        "book_url": "https://www.tablecheck.com/en/shops/ushigoro-s-ginza/reserve",
+        "how": "Self-service TableCheck booking, no concierge needed.",
+        "crowd_tip": "11 private rooms at this branch; reservations accepted for 1–8 people, so six is a normal booking, not an edge case.",
+        "why": "A lower-key wagyu yakiniku night — good Monday dinner without RyuGin-level booking friction.",
+        "source_url": "https://www.tablecheck.com/en/shops/ushigoro-s-ginza/reserve",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Uobei Genki Sushi",
+        "area": "Shibuya (Dogenzaka)",
+        "book": "walk-in",
+        "how": "Tablet ordering, bullet-train plate delivery — no reservation, fast even for a group.",
+        "price": "Budget kaiten-zushi, ¥120–500/plate",
+        "why": "The easiest possible group dinner for a jet-lagged arrival night — no booking, no wait to speak of.",
+        "verified_on": "2026-08-26"
+      },
+      {
+        "name": "Tsukiji Outer Market",
+        "area": "Tsukiji, Chuo-ku",
+        "book": "walk-in",
+        "hours": "Best 8–9 AM before the 10 AM–12 PM peak; many individual shops close Sundays",
+        "how": "Graze stall to stall rather than one sit-down meal — the market's own site asks visitors not to move through the narrow lanes as one large group, so split into pairs or trios while browsing.",
+        "crowd_tip": "10 AM–noon gets genuinely crowded with 30–60 min lines at the famous stalls; go earlier.",
+        "why": "The wholesale tuna auction moved to Toyosu in 2018, but the food stalls here never closed — still the best casual grazing breakfast in the city.",
+        "source_url": "https://www.tsukiji.or.jp/english/how-to-enjoy/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Toyosu Market",
+        "area": "Toyosu, Koto-ku",
+        "closed": "Wednesdays and most Sundays",
+        "book": "walk-in",
+        "hours": "Public hours ≈5 AM–5 PM on operating days",
+        "how": "⚠ Closed most Sundays and all Wednesdays — no Wednesday falls in this trip, but confirm the exact October calendar closer to the date since the official grid wasn't machine-readable this pass.",
+        "crowd_tip": "Skip Sushi Dai/Daiwa Sushi's counters — 2–5 hour waits, and a party of six will likely be split into two seatings. Browse the market itself instead and save the splurge sushi for Saturday.",
+        "why": "Where the wholesale fish trade actually is now — pairs naturally with teamLab Planets, a few minutes away.",
+        "source_url": "https://www.english.metro.tokyo.lg.jp/w/016-101-003992",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Torien",
+        "area": "Omoide Yokocho, Nishi-Shinjuku",
+        "hours": "Mon–Thu/Sun 11:30–23:30, Fri–Sat 11:30–23:45; closed only New Year's Day",
+        "book": "url",
+        "book_url": "https://www.hotpepper.jp/strJ000762068/",
+        "how": "150 seats with floor rentals for 30+ people — one of the few Omoide Yokocho stalls that actually handles a group booking rather than 2–3 seats at a tiny counter.",
+        "why": "The practical way to eat together at Omoide Yokocho as one group of six instead of splitting across several 6-seat stalls.",
+        "source_url": "https://www.hotpepper.jp/strJ000762068/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Ameya-Yokocho (Ameyoko)",
+        "area": "Ueno–Okachimachi",
+        "book": "walk-in",
+        "how": "≈400 shops/stalls over 500m — pure grazing, zero reservation friction.",
+        "crowd_tip": "Weekday mornings after 11 AM are calmest; weekends and evenings after 6 PM get packed.",
+        "why": "A real working shopping street, not a themed tourist arcade — a relaxed last-morning food crawl before the airport.",
+        "verified_on": "2026-08-26"
+      }
+    ]
   }
 ]
