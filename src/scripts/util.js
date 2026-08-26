@@ -43,11 +43,26 @@ export function migrateStorageKey(store, newKey, legacyKey) {
 /* Parse a browser-storage value that will be mutated as a string-keyed record. Storage is
    user-writable, so successful JSON parsing is not sufficient: primitives and arrays must not
    escape into callers that later assign a key. */
+export function isRecord(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
 export function parseStoredRecord(raw) {
   try {
     var parsed = JSON.parse(raw);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    return isRecord(parsed) ? parsed : {};
   } catch (e) { return {}; }
+}
+
+/* Read a mutable record from a browser Storage boundary. Resolving the Window storage property
+   and access itself can each throw (for example, a SecurityError in privacy-restricted contexts),
+   so the provider, get, and parse/shape checks share one fail-soft owner. */
+export function readStoredRecord(provideStore, key) {
+  try {
+    var store = provideStore();
+    return parseStoredRecord(store.getItem(key));
+  }
+  catch (e) { return {}; }
 }
 
 /* R3: shared focus-trap for any dialog/sheet that claims aria-modal — extracted from the

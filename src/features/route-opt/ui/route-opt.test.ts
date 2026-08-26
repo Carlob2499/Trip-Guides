@@ -3,7 +3,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("../../../lib/route-optimize", () => ({
   optimizeDayRoute: vi.fn(() => ({ order: [2, 1, 0], savedKm: 1.2 })),
 }));
-vi.mock("../../../scripts/util.js", () => ({
+vi.mock("../../../scripts/util.js", async (importOriginal) => ({
+  ...await importOriginal<typeof import("../../../scripts/util.js")>(),
   reducedMotion: vi.fn(() => false),
   tapHaptic: vi.fn(),
   trapFocus: vi.fn(),
@@ -31,60 +32,63 @@ function button() {
   };
 }
 
+async function mountRouteOpt(storedState: string) {
+  const storage = { getItem: vi.fn(() => storedState), setItem: vi.fn() };
+  const chip = button();
+  const stop = (name: string) => ({
+    getAttribute: vi.fn((key: string) => key === "data-lat" ? "55.6" : key === "data-lng" ? "12.5" : null),
+    querySelector: vi.fn((selector: string) => selector === ".stop-num" ? { textContent: "" } : selector === ".stop-name" ? { textContent: name } : null),
+  });
+  const stops = [stop("A"), stop("B"), stop("C")];
+  const list = { querySelectorAll: vi.fn(() => stops), appendChild: vi.fn() };
+  const launcher = { appendChild: vi.fn() };
+  const day = {
+    getAttribute: vi.fn(() => "1"),
+    querySelector: vi.fn((selector: string) => selector === ".stops" ? list : selector === ".b" ? launcher : null),
+  };
+  const body = {
+    getAttribute: vi.fn(() => "denmark"),
+    appendChild: vi.fn(),
+    classList: { add: vi.fn(), remove: vi.fn() },
+  };
+
+  vi.stubGlobal("localStorage", storage);
+  vi.stubGlobal("document", {
+    body,
+    activeElement: null,
+    querySelectorAll: vi.fn(() => [day]),
+    createElement: vi.fn(() => chip),
+    addEventListener: vi.fn(),
+  });
+  vi.stubGlobal("window", { scrollTo: vi.fn() });
+
+  await expect(import("./route-opt.js")).resolves.toBeDefined();
+  expect(launcher.appendChild).toHaveBeenCalledWith(chip);
+  return { storage, chip, stops, list };
+}
+
 describe("route optimization persistence", () => {
-  it("discards a parseable primitive state instead of crashing when applying an order", async () => {
-    const storage = { getItem: vi.fn(() => "true"), setItem: vi.fn() };
-    const chip = button();
-    const applyButton = button();
-    const closeButton = button();
-    const title = { textContent: "" };
-    const order = { innerHTML: "", appendChild: vi.fn() };
-    const sheet = {
-      className: "",
-      hidden: true,
-      innerHTML: "",
-      setAttribute: vi.fn(),
-      addEventListener: vi.fn(),
-      querySelector: vi.fn((selector: string) => ({
-        ".ro-sheet-x": closeButton,
-        ".ro-sheet-apply": applyButton,
-        ".ro-sheet-title": title,
-        ".ro-sheet-order": order,
-      })[selector]),
-    };
-    const stop = (name: string) => ({
-      getAttribute: vi.fn((key: string) => key === "data-lat" ? "55.6" : key === "data-lng" ? "12.5" : null),
-      querySelector: vi.fn((selector: string) => selector === ".stop-num" ? { textContent: "" } : selector === ".stop-name" ? { textContent: name } : null),
-    });
-    const stops = [stop("A"), stop("B"), stop("C")];
-    const list = { querySelectorAll: vi.fn(() => stops), appendChild: vi.fn() };
-    const launcher = { appendChild: vi.fn() };
-    const day = {
-      getAttribute: vi.fn(() => "1"),
-      querySelector: vi.fn((selector: string) => selector === ".stops" ? list : selector === ".b" ? launcher : null),
-    };
-    const body = {
-      getAttribute: vi.fn(() => "denmark"),
-      appendChild: vi.fn(),
-      classList: { add: vi.fn(), remove: vi.fn() },
-    };
+  it("restores a valid full permutation without cleaning persisted state", async () => {
+    const { storage, chip, stops, list } = await mountRouteOpt('{"1":[2,1,0]}');
 
-    vi.stubGlobal("localStorage", storage);
-    vi.stubGlobal("document", {
-      body,
-      activeElement: null,
-      querySelectorAll: vi.fn(() => [day]),
-      createElement: vi.fn((tag: string) => tag === "button" ? chip : tag === "div" ? sheet : { textContent: "" }),
-      addEventListener: vi.fn(),
-    });
-    vi.stubGlobal("window", { scrollTo: vi.fn() });
+    expect(list.appendChild.mock.calls.map(([stop]) => stop)).toEqual([stops[2], stops[1], stops[0]]);
+    expect(chip.attrs.get("aria-pressed")).toBe("true");
+    expect(storage.setItem).not.toHaveBeenCalled();
+  });
 
-    await import("./route-opt.js");
-    expect(launcher.appendChild).toHaveBeenCalledWith(chip);
+  it("discards a duplicate order without changing the authored stop order", async () => {
+    const { storage, chip, list } = await mountRouteOpt('{"1":[0,0,2]}');
 
-    chip.click();
-    expect(applyButton.onclick).toBeTypeOf("function");
-    expect(() => applyButton.onclick!()).not.toThrow();
-    expect(storage.setItem).toHaveBeenCalled();
+    expect(list.appendChild).not.toHaveBeenCalled();
+    expect(chip.attrs.get("aria-pressed")).toBe("false");
+    expect(storage.setItem).toHaveBeenCalledWith("tg-routeopt-denmark", "{}");
+  });
+
+  it("discards an out-of-range order without changing the authored stop order", async () => {
+    const { storage, chip, list } = await mountRouteOpt('{"1":[999]}');
+
+    expect(list.appendChild).not.toHaveBeenCalled();
+    expect(chip.attrs.get("aria-pressed")).toBe("false");
+    expect(storage.setItem).toHaveBeenCalledWith("tg-routeopt-denmark", "{}");
   });
 });

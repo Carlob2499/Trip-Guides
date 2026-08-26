@@ -1,4 +1,4 @@
-import { parseStoredRecord } from "./util.js";
+import { readStoredRecord } from "./util.js";
 
 /* Reminder ticks on the Tools screen — per device, per trip.
 
@@ -15,7 +15,7 @@ if (list) {
   var KEY = "tg-toolsrem-" + list.getAttribute("data-tools-reminders");
 
   function read() {
-    try { return parseStoredRecord(localStorage.getItem(KEY)); } catch (e) { return {}; }
+    return readStoredRecord(function () { return localStorage; }, KEY);
   }
   function write(state) {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* private mode */ }

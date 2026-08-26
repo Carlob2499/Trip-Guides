@@ -2,7 +2,7 @@
 // single hashed module cached across every guide page (was ~950 lines inline per
 // page). Config that used to come from Astro define:vars is now read from the
 // #tgConfig JSON script tag emitted by the layout.
-import { todayInTz, trapFocus, migrateStorageKey, tapHaptic, parseStoredRecord } from "./util.js";
+import { todayInTz, trapFocus, migrateStorageKey, tapHaptic, readStoredRecord } from "./util.js";
 import { attachSheetDrag } from "./sheet-drag.js";
 import { initDarkToggle } from "./theme.js";
 import { resolveTripDate, tripWindow, dayState } from "../lib/trip-dates";
@@ -94,7 +94,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
              sessionStorage so a reload inside one visit doesn't wipe the route walked, and NOT
              in localStorage — next week's visit is a new journey. */
           var SEEN_KEY = "tg-seen-" + STORE_KEY;
-          var seen = parseStoredRecord(sessionStorage.getItem(SEEN_KEY));
+          var seen = readStoredRecord(function () { return sessionStorage; }, SEEN_KEY);
           function markSeen(key) {
             if (key == null || seen[key]) return;
             seen[key] = 1;

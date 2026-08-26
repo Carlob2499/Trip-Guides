@@ -6,6 +6,8 @@
    localStorage key that would never be read again. */
 
 import { hasFirebase, joinTrip, roomId } from "../firebase/index.js";
+import { buildReminder } from "./model/reminders";
+import { isRecord, readStoredRecord } from "../../scripts/util.js";
 
 export function createGateway(storeKey) {
   var LS_KEY = "tg-remind-" + (storeKey || "guide");
@@ -14,10 +16,31 @@ export function createGateway(storeKey) {
   var listeners = [];
 
   function readLocal() {
-    try {
-      var parsed = JSON.parse(localStorage.getItem(LS_KEY));
-      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
-    } catch (e) { return {}; }
+    var parsed = readStoredRecord(function () { return localStorage; }, LS_KEY);
+    var valid = Object.create(null);
+    function safeRecord(record) {
+      if (typeof record.text !== "string" || !record.text.trim()) return null;
+      var input = { text: record.text, pinned: Boolean(record.pinned) };
+      if (typeof record.label === "string") input.label = record.label;
+      if (typeof record.kind === "string") input.kind = record.kind;
+      var normalized = buildReminder(input);
+      if (!normalized) return null;
+      var safe = Object.create(null);
+      safe.label = normalized.label;
+      safe.text = normalized.text;
+      safe.kind = normalized.kind;
+      safe.pinned = normalized.pinned;
+      if (typeof record.createdAt === "number" && Number.isFinite(record.createdAt)) {
+        safe.createdAt = record.createdAt;
+      }
+      return safe;
+    }
+    Object.keys(parsed).forEach(function (id) {
+      if (!isRecord(parsed[id])) return;
+      var record = safeRecord(parsed[id]);
+      if (record) valid[id] = record;
+    });
+    return valid;
   }
   function writeLocal() { if (room) return; try { localStorage.setItem(LS_KEY, JSON.stringify(items)); } catch (e) {} }
   function clearLocal() { try { localStorage.removeItem(LS_KEY); } catch (e) {} }
