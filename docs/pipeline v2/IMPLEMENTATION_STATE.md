@@ -212,4 +212,4 @@ Read together:
 - `../reference/pipeline.md` — durable lifecycle policy.
 - `../handoff.md` — current warm start.
 
-**Next engineering surface:** when model capacity is available, re-check the dispatch gate, execute Run A and judge V01, execute Run B and judge V02/V03/V05 separately, then execute V07. Production cutover remains a later explicit evidence-based decision. Historical milestone logs and superseded review narratives remain available through Git history if forensic detail is ever needed.
+**Next engineering surface:** the model-backed validation program executed 2026-08-26 concluded **NOT READY — REPAIR REQUIRED** (`V2_VALIDATION_SYNTHESIS.md`). Next work is the bounded deterministic repair program recorded there (gate parity, post-critic evidence ownership, corroboration accounting, id transcription, budget accounting, coverage honesty, ledger name contract), then one repaired-class revalidation run. Production cutover remains a later explicit evidence-based decision. Historical milestone logs and superseded review narratives remain available through Git history if forensic detail is ever needed.
