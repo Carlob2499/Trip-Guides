@@ -52,7 +52,7 @@
       {
         "name": "Uradome Coast — San'in Matsushima sightseeing cruise",
         "kicker": "40 minutes on the water among the coast's sea stacks",
-        "body": "<p>San'in Matsushima Yuran's standard cruise runs Mar–Nov, departing hourly 9:30–15:30, ¥1,800 adult, ≈40 min on the water. It's weather-dependent — the operator's own site tells visitors to confirm conditions before coming out.</p>",
+        "body": "<p>San'in Matsushima Yuran's standard cruise runs Mar–Nov, departing hourly 9:30–15:30, ¥1,800 adult, ≈40 min on the water (≈1 hour including boarding). It's weather-dependent — the operator's own site tells visitors to confirm conditions before coming out.</p><p>It is not on the four-day plan, and that is a deliberate call rather than an oversight: the last sailing is 15:30, which rules out the arrival afternoon, and Wednesday is already the luggage-and-transfer day. It's the swap if you'd trade the Tottori Castle ruins morning for it.</p><p>⚠ Access from Tottori Station couldn't be confirmed from the operator's page — the departure point is in Iwami town, up the coast — so check the connection with the operator before committing a morning to it.</p>",
         "dwell_min": 60,
         "source_url": "https://tottori-tours.com/plan/saninmatsushimayuran_ogata",
         "verified_on": "2026-08-26",
@@ -70,7 +70,7 @@
       {
         "name": "Sanbutsu-ji — the Nageiredo climb",
         "kicker": "Japan's most-cited 'dangerous' National Treasure, on a same-day weather call",
-        "body": "<p>A wooden hall wedged into a cliff face, reached by a genuine mountain climb with chains and rock scrambles — not a paved path. Reception 8:00–15:00, mandatory 16:30 descent; ¥1,200 adult includes the base temple fee (general temple admission without the climb is ¥400). A minimum of two people is required (no solo climbers), hiking-style footwear is checked at the desk, and entry is refused outright in rain, snow, or any condition the temple judges dangerous — plan it as a same-day decision, not a fixed booking.</p><p>The route is typically closed for snow from December through March, so an Oct 20–23 visit is inside the climbing season. Rental straw sandals (waraji, ¥800) are available at the gate if your shoes don't pass the footwear check.</p>",
+        "body": "<p>A wooden hall wedged into a cliff face, reached by a genuine mountain climb with chains and rock scrambles — not a paved path. Reception 8:00–15:00, mandatory 16:30 descent; ¥1,200 adult includes the base temple fee (general temple admission without the climb is ¥400). A minimum of two people is required (no solo climbers), hiking-style footwear is checked at the desk, and entry is refused outright in rain, snow, or any condition the temple judges dangerous — plan it as a same-day decision, not a fixed booking.</p><p>The route is typically closed for snow from December through March, so an Oct 20–23 visit is inside the climbing season. Rental straw sandals (waraji, ¥800) are available at the gate if your shoes don't pass the footwear check.</p><p>Car-free access is the 70/71 bus from Kurayoshi Station or the Misasa Onsen bus centre to the Mitokusan parking stop — only a handful of runs a day each way, so the bus, not the temple's own hours, is what actually sets your window here. Times are in the Transit tab.</p>",
         "dwell_min": 150,
         "source_url": "https://www.mitokusan.jp/",
         "verified_on": "2026-08-26",
@@ -79,9 +79,9 @@
       {
         "name": "Nageiredo Yohaijo (viewing platform)",
         "kicker": "The accessible way to see the same National Treasure",
-        "body": "<p>A free public viewing platform at the foot of Mitokusan — officially the only place besides climbing that Nageiredo can be seen from — completed and dedicated in Nov 2022, fitted with coin-free Nikon telescopes. From roughly 600m away — partial view, some obstruction by trees — it lets anyone who can't or shouldn't attempt the Nageiredo climb still see the hall, in any weather.</p><p>Parking is tight: 2 standard spaces plus 1 accessible space, with Mitokusan's own lots as overflow. Pair the visit with the ¥400 Sanbutsu-ji main-hall visit, which also doesn't require the climb.</p>",
+        "body": "<p>A free public viewing platform at the foot of Mitokusan — officially the only place besides climbing where Nageiredo can be seen. It was fitted out in autumn 2022 with Nikon telescopes, which are what make the distance work; the hall is a long way up a cliff from here. It reads in any weather, which is the point on a day the climb itself gets called off.</p><p>Reach it on the 70/71 bus to the Mitokusan parking stop — see the Transit tab; the platform's own parking is 2 spaces plus 1 accessible space, with Mitokusan's lots as overflow, so it was never somewhere a party of eight arrives under its own steam. Pair the visit with the Sanbutsu-ji main-hall admission, which also doesn't require the climb.</p>",
         "dwell_min": 20,
-        "source_url": "https://www.town.misasa.tottori.jp/1593/31543.html",
+        "source_url": "https://misasaonsen.jp/sightseeings/sightseeing-12431/",
         "verified_on": "2026-08-26",
         "shelf_life": "venue"
       },
@@ -112,9 +112,9 @@
       },
       {
         "claim": "Come to Tottori in October for the crab.",
-        "correction": "Matsuba-gani, the region's marquee crab, doesn't open until Nov 6 — after an Oct 20–23 trip. Beni-zuwaigani (red snow crab) is the one actually in season; ask for it by name.",
+        "correction": "Matsuba-gani, the region's marquee crab, is a November–March catch — it is not landed during an Oct 20–23 trip. Beni-zuwaigani (red snow crab) runs September–June and is the one actually in season; ask for it by name.",
         "category": "outdated",
-        "source_url": "https://www.torican.jp/feature/gourmet_crab",
+        "source_url": "https://marutsu.jp/",
         "verified_on": "2026-08-26"
       },
       {

@@ -1,0 +1,31 @@
+[
+  {
+    "type": "routes",
+    "group": "Transit",
+    "title": "Key transit routes",
+    "phase": "daily",
+    "source_url": "https://hinomarubus.co.jp/timetable_route/3450/?tab=2",
+    "verified_on": "2026-08-26",
+    "steps": [
+      "<b>Tottori Station → Kurayoshi Station</b> (San'in Main Line): limited express (Super Hakuto / Super Oki / Super Matsukaze) takes ≈30 min; a local train covers the same route in ≈60 min with no reserved-seat fee. With luggage and a group of 8, the local train's lack of seat reservations is a real trade-off against the express's speed — worth deciding per day rather than defaulting to whichever train is next.",
+      "<b>Kurayoshi Station → Shirakabe Dozo-gun</b>: city-route bus, ≈10–15 min, alight at the Akagawara/Shirakabe-Dozogun stop, then a short walk. The district's tourist information center (inside Akagawara Building No. 10) opens 9:00–17:00.",
+      "<b>Kurayoshi Station → Misasa Onsen</b> (Hinomaru Bus, Kamii-Misasa Line 上井三朝線, routes 70/71): the trip's one consequential transfer. Weekday departures from Kurayoshi Station run 7:45 through <b>19:25</b>, and 19:25 is the last one — it reaches the Misasa depot (三朝車庫) at 19:52. The ride is not a fixed length: the direct runs take ≈20–27 min, while the variants routed via Kosei Hospital and Kurayoshi East High take ≈40–50 min, so read the column for the run you are actually catching. The biggest daytime hole is 13:20 → 14:40 — 80 minutes with nothing. ⚠ Exact fare unconfirmed — the operator's own fare table is a PDF that couldn't be read; secondhand sources put it around ¥340–¥480, pay cash on board.",
+      "Hinomaru's <i>other</i> Misasa line (routes 72/73) starts from Ikuta depot in west Kurayoshi and never calls at Kurayoshi Station — its timetable is easy to find and useless to this group. Check the route name 上井三朝線 before you trust a departure time.",
+      "It's a standard fare-box route bus, not a coach — no dedicated luggage hold, so boarding 8 people with suitcases takes longer than a solo traveler's transfer, and standing for the ride is a real cost for the 2 low-mobility travelers in the group. Build any Kurayoshi activity (like dinner) to end with real buffer before <b>19:25</b>, not against it. Kurayoshi Station itself is fully step-free (elevators, no escalators, to all 3 platforms) — the last-mile choice outside the station is what actually needs planning, not the train transfer.",
+      "<b>Kurayoshi Station → Misasa Onsen</b>, two reserved alternatives to the public bus: some Misasa ryokan (e.g. Misasakan) run a free reserved shuttle from the station on fixed pickup times (14:10/15:30/16:20/17:30, advance booking only — ask when you book the room); or reserve a 9-seat Hinomaru Hire jumbo taxi (0858-22-3155, ¥740 flagfall + ¥90/279m metered, advance reservation required, not a station hail) that moves the whole party of 8 plus hand luggage in one vehicle instead of splitting across 2 regular taxis. After the last bus (19:25), one of these two is the practical way to Misasa that night — neither is walk-up, so arrange it by phone before the group is stranded, not after.",
+      "<b>To Sanbutsu-ji / Nageiredo (三徳山)</b>: the same 70/71 line runs on past Misasa to the <b>三徳山駐車場</b> (Mitokusan parking) stop — that is how a car-free party reaches the temple, and it is a handful of runs a day, not a shuttle. Weekday departures from Kurayoshi Station at 8:35 and 9:40 call at the Misasa Onsen bus centre (三朝温泉観光商工センター前) at 8:55 and 9:59 and reach Mitokusan at 9:10 and 10:14 — a ≈15-minute ride from the onsen town. Weekday returns from 三徳山駐車場 leave at 10:25, 11:40, 12:50, 14:08, 15:19, 16:12 and 17:23 (last). Pick the return before you start up the mountain, not after.",
+      "<b>Misasa Onsen → Kurayoshi Station</b> (return): weekday departures from the Misasa Onsen bus centre (三朝温泉観光商工センター前) start before 7:40 and run through 18:21. Morning service is denser than the evening service the group relied on for the Day 2 transfer — a safer window for moving eight people and their luggage on a departure day."
+    ]
+  },
+  {
+    "type": "map",
+    "group": "Transit",
+    "title": "Orientation map",
+    "phase": "daily",
+    "center": {
+      "lat": 35.47,
+      "lng": 134.04
+    },
+    "span": 0.21
+  }
+]

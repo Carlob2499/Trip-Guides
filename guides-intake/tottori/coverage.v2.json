@@ -8,9 +8,9 @@
       "ask": "At least one consequential public-transport transfer whose PHYSICAL feasibility matters beyond timetable arithmetic; missing that connection/service must create a meaningful delay, last-return risk, or exertion consequence. No specific venue pre-selected — research must earn every choice.",
       "status": "covered",
       "where": [
-        "05-transit.json#key-transit-routes",
-        "06-days.json#tottori-castle-ruins-then-the-transfer-day-kurayoshi-and-the-last-bus-to-misasa",
-        "06-days.json#departure-back-to-kurayoshi-and-onward"
+        "03-transit.json#key-transit-routes",
+        "04-days.json#tottori-castle-ruins-then-the-transfer-day-kurayoshi-and-the-last-bus-to-misasa",
+        "04-days.json#departure-back-to-kurayoshi-and-onward"
       ],
       "evidenceIds": [
         "ev-bus-route-exists",
@@ -30,8 +30,8 @@
       "ask": "Cities: Tottori, Kurayoshi, Misasa Onsen",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day",
-        "05-transit.json#orientation-map"
+        "04-days.json#day-by-day",
+        "03-transit.json#orientation-map"
       ],
       "evidenceIds": [],
       "reason": null
@@ -41,7 +41,7 @@
       "ask": "Trip dates: 2026-10-20 – 2026-10-23",
       "status": "covered",
       "where": [
-        "06-days.json#day-by-day",
+        "04-days.json#day-by-day",
         "01-plan.json#weather-for-your-dates"
       ],
       "evidenceIds": [
@@ -56,15 +56,15 @@
       "ask": "Priority #1: Culture / history",
       "status": "covered",
       "where": [
-        "07-sights.json#top-sights",
-        "07-sights.json#tottori-sand-dunes",
-        "07-sights.json#sand-museum",
-        "07-sights.json#tottori-castle-ruins",
-        "07-sights.json#uradome-coast-san-in-matsushima-sightseeing-cruise",
-        "07-sights.json#kurayoshi-shirakabe-dozo-gun",
-        "07-sights.json#sanbutsu-ji-the-nageiredo-climb",
-        "07-sights.json#nageiredo-yohaijo-viewing-platform",
-        "07-sights.json#kabuyu"
+        "02-sights.json#top-sights",
+        "02-sights.json#tottori-sand-dunes",
+        "02-sights.json#sand-museum",
+        "02-sights.json#tottori-castle-ruins",
+        "02-sights.json#uradome-coast-san-in-matsushima-sightseeing-cruise",
+        "02-sights.json#kurayoshi-shirakabe-dozo-gun",
+        "02-sights.json#sanbutsu-ji-the-nageiredo-climb",
+        "02-sights.json#nageiredo-yohaijo-viewing-platform",
+        "02-sights.json#kabuyu"
       ],
       "evidenceIds": [
         "ev-sand-dunes-free",
@@ -87,9 +87,9 @@
       "ask": "Priority #2: Food & dining",
       "status": "covered",
       "where": [
-        "08-food-and-shopping.json#what-to-eat",
-        "08-food-and-shopping.json#yakiniku-masashige",
-        "08-food-and-shopping.json#menya-hachibee"
+        "05-food-and-shopping.json#what-to-eat",
+        "05-food-and-shopping.json#yakiniku-masashige",
+        "05-food-and-shopping.json#menya-hachibee"
       ],
       "evidenceIds": [
         "ev-masashige-hours-rooms-price",
@@ -108,9 +108,9 @@
       "ask": "Travel style: off-the-beaten-path",
       "status": "covered",
       "where": [
-        "07-sights.json#what-generic-guides-get-wrong",
-        "07-sights.json#tottori-sand-dunes",
-        "08-food-and-shopping.json#menya-hachibee"
+        "02-sights.json#what-generic-guides-get-wrong",
+        "02-sights.json#tottori-sand-dunes",
+        "05-food-and-shopping.json#menya-hachibee"
       ],
       "evidenceIds": [
         "ev-dunes-crowd-current-1",
@@ -126,9 +126,9 @@
       "ask": "Number of travelers: 8",
       "status": "covered",
       "where": [
-        "02-money-and-budget.json#budget-daily-costs",
-        "06-days.json#day-by-day",
-        "05-transit.json#key-transit-routes"
+        "06-money-and-budget.json#budget-daily-costs",
+        "04-days.json#day-by-day",
+        "03-transit.json#key-transit-routes"
       ],
       "evidenceIds": [
         "ev-masashige-hours-rooms-price",
@@ -143,10 +143,10 @@
       "ask": "BINDING mobility: 2 of 8 travelers have low walking tolerance; luggage carried on the Kurayoshi-Misasa transfer; assume no rental car unless research concludes otherwise and says so explicitly.",
       "status": "covered",
       "where": [
-        "05-transit.json#key-transit-routes",
-        "07-sights.json#nageiredo-yohaijo-viewing-platform",
-        "07-sights.json#sanbutsu-ji-the-nageiredo-climb",
-        "06-days.json#misasa-onsen-nageiredo-the-onsen-town-and-crab"
+        "03-transit.json#key-transit-routes",
+        "02-sights.json#nageiredo-yohaijo-viewing-platform",
+        "02-sights.json#sanbutsu-ji-the-nageiredo-climb",
+        "04-days.json#misasa-onsen-nageiredo-the-onsen-town-and-crab"
       ],
       "evidenceIds": [
         "ev-kurayoshi-station-accessible",
@@ -164,11 +164,11 @@
       "ask": "Frozen validation-trial intent (V02+V03+V05): (1) local character over checklist tourism; (2) thin English coverage isn't nothing; (3) Japanese-language research only where it changes a decision; (4) itinerary includes a consequential transfer whose physical feasibility matters; (5) missing it must create real delay/risk/exertion consequence; (6) group size/mobility must change recommendations, not just prose; (7) taxi/private transport may win but availability/cost never invented; (8) at least one meal/venue needs a real party-of-8 feasibility decision.",
       "status": "covered",
       "where": [
-        "05-transit.json#key-transit-routes",
-        "07-sights.json#what-generic-guides-get-wrong",
-        "08-food-and-shopping.json#yakiniku-masashige",
-        "08-food-and-shopping.json#menya-hachibee",
-        "06-days.json#tottori-castle-ruins-then-the-transfer-day-kurayoshi-and-the-last-bus-to-misasa"
+        "03-transit.json#key-transit-routes",
+        "02-sights.json#what-generic-guides-get-wrong",
+        "05-food-and-shopping.json#yakiniku-masashige",
+        "05-food-and-shopping.json#menya-hachibee",
+        "04-days.json#tottori-castle-ruins-then-the-transfer-day-kurayoshi-and-the-last-bus-to-misasa"
       ],
       "evidenceIds": [
         "ev-bus-downbound-schedule",
