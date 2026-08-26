@@ -1,0 +1,43 @@
+{
+  "runId": "tottori-20260826-e29ab7",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-26T18:33:47.854Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-26T18:33:47.856Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-26T18:34:25.903Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-26T18:56:20.822Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 22m"
+    },
+    {
+      "at": "2026-08-26T18:56:20.835Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 16 evaluated · 12 shortlisted · 11 shipped · 5 rejected"
+    },
+    {
+      "at": "2026-08-26T18:56:20.835Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+    },
+    {
+      "at": "2026-08-26T18:56:20.835Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Yakiniku Masashige Kurayoshi private-room capacity: 'up to 6' vs 'up to 60'"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}

@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-26T18:33:47.811Z",
-  "updatedAt": "2026-08-26T18:34:25.903Z",
+  "updatedAt": "2026-08-26T18:56:20.835Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -43,21 +43,21 @@
       "failure": null
     },
     "passA": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-26T18:34:25.903Z",
-      "endedAt": null,
+      "endedAt": "2026-08-26T18:56:20.822Z",
       "attempts": 1,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "c500d943c54057fdf41cc5ebc663f2797219a74e",
       "history": [
         {
           "attempt": 1,
           "startedAt": "2026-08-26T18:34:25.903Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-26T18:56:20.822Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 1315
         }
       ],
       "failure": null
@@ -103,8 +103,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passA",
-    "action": "stage \"passA\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "passB",
+    "action": "run stage \"passB\""
   },
   "failure": null,
   "publication": {
@@ -127,5 +127,30 @@
     "checkedAt": null,
     "failure": null
   },
-  "telemetry": null
+  "telemetry": {
+    "schemaVersion": "wp-telemetry/2.1",
+    "stages": {
+      "passA": {
+        "durationSec": 1315,
+        "failedDurationSec": null,
+        "cumulativeDurationSec": 1315,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": null,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
+      }
+    },
+    "counts": {
+      "candidatesConsidered": 16,
+      "candidatesDeepVerified": 12,
+      "factsVerified": 28,
+      "disagreementInvestigations": 2,
+      "nativeLanguageSearches": null
+    },
+    "totalDurationSec": 1353,
+    "tokens": null,
+    "costUsd": null
+  }
 }
