@@ -19,6 +19,17 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-26T19:52:03.974Z",
+      "status": "retired",
+      "retiredAt": "2026-08-26T20:01:20.216Z"
+    },
+    {
+      "runId": "tottori-20260826-e29ab7",
+      "stage": "reconcile",
+      "attempt": 2,
+      "findings": [
+        "candidate \"San'in Matsushima Sightseeing Cruise\" has unstable id \"c-sanin-matsushima-sightseeing-cruise\" — expected \"c-san-in-matsushima-sightseeing-cruise\" from name + branch"
+      ],
+      "createdAt": "2026-08-26T20:01:20.216Z",
       "status": "active",
       "retiredAt": null
     }
