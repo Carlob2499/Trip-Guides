@@ -63,22 +63,37 @@
       "text": "Reconcile complete in 3m (attempt 3)"
     },
     {
-      "at": "2026-08-26T20:17:37.275Z",
+      "at": "2026-08-26T20:18:06.195Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 5 resolved · 5 left as honest blanks"
+    },
+    {
+      "at": "2026-08-26T20:18:31.174Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-26T20:39:10.677Z",
+      "kind": "reject",
+      "text": "Fresh-context critic attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-26T20:39:10.677Z",
       "kind": "decision",
       "text": "Candidate funnel: 29 evaluated · 22 shortlisted · 19 shipped · 8 rejected"
     },
     {
-      "at": "2026-08-26T20:17:37.275Z",
+      "at": "2026-08-26T20:39:10.677Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 15 independent finding(s): 11 adopt · 1 agree · 1 replace · 2 reject"
     },
     {
-      "at": "2026-08-26T20:17:37.275Z",
+      "at": "2026-08-26T20:39:10.677Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-26T20:17:37.275Z",
+      "at": "2026-08-26T20:39:10.677Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Yakiniku Masashige Kurayoshi private-room capacity: 'up to 6' vs 'up to 60'"
     }

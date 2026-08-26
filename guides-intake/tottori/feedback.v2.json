@@ -32,6 +32,28 @@
       "createdAt": "2026-08-26T20:01:20.216Z",
       "status": "retired",
       "retiredAt": "2026-08-26T20:17:37.270Z"
+    },
+    {
+      "runId": "tottori-20260826-e29ab7",
+      "stage": "critic",
+      "attempt": 1,
+      "findings": [
+        "> trip-guides@1.0.0 build",
+        "> astro build && node scripts/check-closed-days.mjs && node scripts/validate-palettes.mjs && tsx scripts/build-search-index.ts && node scripts/gen-sw-precache.mjs",
+        "20:39:09 [content] Syncing content",
+        "[InvalidContentEntryDataError] guides → tottori data does not match collection schema.",
+        "sections.1.verified_on: section 1 (\"Local essentials\", type \"panel\") uses ≈ but has no verified_on. Under provenance:\"strict\", ≈ asserts a fact was checked and found approximate — so it owes the date it was checked. Either add verified_on (+ source_url), or downgrade the figure to ⚠ if it was never actually confirmed.",
+        "sections.15.verified_on: section 15 (\"Money & currency\", type \"panel\") uses ≈ but has no verified_on. Under provenance:\"strict\", ≈ asserts a fact was checked and found approximate — so it owes the date it was checked. Either add verified_on (+ source_url), or downgrade the figure to ⚠ if it was never actually confirmed.",
+        "Hint:",
+        "See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.",
+        "Error reference:",
+        "https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+        "Location:",
+        "Stack trace:"
+      ],
+      "createdAt": "2026-08-26T20:39:10.675Z",
+      "status": "active",
+      "retiredAt": null
     }
   ]
 }
