@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-26T09:02:30.736Z",
-  "updatedAt": "2026-08-26T12:49:07.129Z",
+  "updatedAt": "2026-08-26T13:28:21.215Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -43,13 +43,13 @@
       "failure": null
     },
     "passA": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-26T12:49:07.129Z",
-      "endedAt": null,
+      "endedAt": "2026-08-26T13:28:21.202Z",
       "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "75480bb7bf6867d2287000d600042eceefbf52e9",
       "history": [
         {
           "attempt": 1,
@@ -62,10 +62,10 @@
         {
           "attempt": 2,
           "startedAt": "2026-08-26T12:49:07.129Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-26T13:28:21.202Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 2354
         }
       ],
       "failure": null
@@ -111,8 +111,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passA",
-    "action": "stage \"passA\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "passB",
+    "action": "run stage \"passB\""
   },
   "failure": null,
   "publication": {
@@ -135,5 +135,30 @@
     "checkedAt": null,
     "failure": null
   },
-  "telemetry": null
+  "telemetry": {
+    "schemaVersion": "wp-telemetry/2.1",
+    "stages": {
+      "passA": {
+        "durationSec": 2354,
+        "failedDurationSec": 756,
+        "cumulativeDurationSec": 3110,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": 1,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
+      }
+    },
+    "counts": {
+      "candidatesConsidered": 56,
+      "candidatesDeepVerified": 21,
+      "factsVerified": 46,
+      "disagreementInvestigations": 2,
+      "nativeLanguageSearches": null
+    },
+    "totalDurationSec": 15950,
+    "tokens": null,
+    "costUsd": null
+  }
 }
