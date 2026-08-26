@@ -825,7 +825,10 @@ const tripSummary = buildSummary(guide);
         </div>
       </nav>
 
-      <main class="content" id="content">
+      {/* tabindex=-1 is intentionally programmatic-only: the first Skip link must move keyboard
+          and assistive-technology focus into the reading region, without adding the main landmark
+          to the ordinary Tab order. */}
+      <main class="content" id="content" tabindex="-1">
         <noscript>
           <p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds section tabs, saved checklists, and the jet-lag calculator.</p>
         </noscript>

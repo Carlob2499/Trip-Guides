@@ -917,6 +917,22 @@ test("⌁ an open sheet traps focus, Escape closes it, and focus comes back to t
   await expect(opener).toBeFocused();
 });
 
+/* A fragment-only jump is not enough for keyboard and assistive-technology users: after using
+   the first focusable Skip link, focus must land on the actual reading region. The production
+   field pass reproduced the failure on Denmark when #content was a non-focusable <main> — URL
+   changed, but the reader's keyboard position did not. */
+test("⌁ Skip to content moves keyboard focus to the guide reading region", async ({ page }) => {
+  await page.setViewportSize({ width: VIEWPORTS[1].width, height: VIEWPORTS[1].height });
+  const res = await page.goto("/Trip-Guides/guides/denmark/", { waitUntil: "domcontentloaded" });
+  await assertRealPage(res, "denmark guide Skip-link focus");
+  const skip = page.locator(".skip-link");
+  await skip.focus();
+  await expect(skip).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#content$/);
+  await expect(page.locator("#content")).toBeFocused();
+});
+
 /* The nine devices SCREENS.md names, not a phone and a desktop. A 44px floor holds trivially at
    1280px and is exactly where it fails at 375 — and the Fold's 673px portrait is the width no
    breakpoint in this product is written for, which is why it is in the list. */
