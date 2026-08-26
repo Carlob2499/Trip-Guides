@@ -38,4 +38,4 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
       - run: npx playwright install-deps chromium
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-      - run: npx playwright test tests/visual/a11y.spec.ts tests/visual/resilience.spec.ts
+      - run: npx playwright test tests/visual/a11y.spec.ts tests/visual/resilience.spec.ts tests/visual/offline-sync.spec.ts

@@ -32,6 +32,14 @@ Offline/poor-network behavior is a core requirement, not a badge. Cached useful 
 
 Accessibility is product quality. Work should move toward WCAG 2.2 AA while preserving all already-proven accessibility behavior, touch targets, reduced-motion behavior, and truthful labels.
 
+## Durable shared-add acknowledgment
+
+A supported durable collection addition remains locally pending until the server acknowledges its stable-key write. Server acknowledgment removes the active outbox entry and resolves its `addAsync` caller. Offline or transient failure keeps the full payload in the active durable retry outbox, and `addAsync` may remain pending.
+
+A confirmed permanent rejection normally preserves the full payload durably in a separate rejected/dead-letter local bucket, removes it from active outbox capacity and replay, does not retry it on every room join, and rejects `addAsync` with the original or classified error. If writing that bucket fails while active storage remains writable, the ordinary payload stays at its stable path inside `tg-outbox` and system-owned metadata in the same atomic outbox write marks it terminal; marked payloads are excluded from replay and the active 50-entry capacity. If neither terminal representation can be persisted, the full original active payload remains and the caller receives an explicit `WaypointSyncDurabilityError`; retry suppression is then physically unprovable. Waypoint adds no traveler-facing dead-letter management UI.
+
+This decision governs durable collection additions, including Trip Split/reminder additions and Learnings feedback. It does not extend the same outbox guarantee to collection or document `set`, `update`, or `remove`; those paths require separate proof and an explicit contract decision.
+
 ## Itinerary and guide breadth
 
 The itinerary is the scheduled plan, not the entire knowledge base.
