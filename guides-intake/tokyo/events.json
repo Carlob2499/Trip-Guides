@@ -53,17 +53,27 @@
       "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-26T13:52:22.225Z",
+      "at": "2026-08-26T13:53:57.652Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-26T14:14:11.859Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-26T14:14:11.859Z",
       "kind": "decision",
       "text": "Candidate funnel: 62 evaluated · 25 shortlisted · 14 shipped · 28 rejected · 2 kept as detours"
     },
     {
-      "at": "2026-08-26T13:52:22.225Z",
+      "at": "2026-08-26T14:14:11.859Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 12 independent finding(s): 6 adopt · 4 reject · 2 agree"
     },
     {
-      "at": "2026-08-26T13:52:22.225Z",
+      "at": "2026-08-26T14:14:11.859Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     }
