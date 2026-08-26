@@ -159,7 +159,7 @@ The remaining validation program is defined in `VALIDATION_RUNBOOK.md`, frozen i
 
 Current state:
 
-- **V01:** awaiting Combined Research Run A (Tokyo) model-backed execution;
+- **V01:** YELLOW — Run A (`tokyo-20260826-41ae82`, 2026-08-26) passed all seven pre-registered conditions with no immediate-FAIL under the frozen candidate; the critic checkpoint/draft-PR landing remains unfinished at the attempt cap (two of five dispatches lost to account usage limits). Evidence, independent-review record, and defect classifications: `V01_RUNA_EVIDENCE.md`;
 - **V02/V03/V05:** awaiting Combined Research Run B (Tottori/Kurayoshi/Misasa) model-backed execution;
 - **V04:** DONE deterministically;
 - **V06:** DONE from truthful available telemetry;
