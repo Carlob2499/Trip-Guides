@@ -1,0 +1,95 @@
+[
+  {
+    "type": "days",
+    "group": "Days",
+    "title": "Day by day",
+    "items": [
+      {
+        "date": "Fri Oct 16",
+        "title": "Arrival",
+        "pace": "Land, get IC cards sorted, no fixed plans beyond dinner.",
+        "energy": "slow",
+        "env": "mixed",
+        "tldr": "Land, sort out IC cards, and ease into Tokyo with a no-reservation conveyor-sushi dinner.",
+        "body": "<p>Get an IC card per person on arrival (Suica, PASMO, or a Tourist PASMO at either airport) — everything else in this guide assumes you have one. Settle in, then keep dinner easy: Uobei Genki Sushi in Shibuya needs no reservation and moves fast even for a group of six.</p><p>It is counter seating and cash only, so make sure everyone has yen before you leave the airport.</p>",
+        "source_url": "https://www.hotpepper.jp/strJ001008944/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "date": "Sat Oct 17",
+        "title": "Tsukiji, then the anchor dinner",
+        "pace": "An early market breakfast, a deliberately light afternoon, then the trip's one serious dinner.",
+        "energy": "balanced",
+        "env": "mixed",
+        "tldr": "A dawn graze through Tsukiji Outer Market, an unstructured afternoon, then RyuGin — the trip's one splurge dinner.",
+        "body": "<p>Start at Tsukiji Outer Market between 6:30 and 9 AM. Saturday is a full trading day on the wholesale-market calendar its shops follow, and the lanes are calm before the 10 AM–1 PM peak.</p><p>Graze stall to stall in pairs or trios rather than moving as one block of six — the market's own site asks visitors not to move through the narrow lanes in large groups.</p><p>Then let the afternoon stay unstructured. Tsukiji, Ginza and Hibiya sit within about 2 km of each other, so you can drift west on foot instead of planning a crossing.</p><p>Dinner is Nihonryori RyuGin in Hibiya (see Food &amp; shopping) — book through your hotel concierge as soon as accommodation is confirmed, since October dates open on Sept 1, 2026. ⚠ RyuGin will not accept a reservation from anyone who declares a food allergy, and cannot serve guests who don't eat fish or seafood. Settle that across all six before the concierge calls.</p>",
+        "constraints": [
+          "RyuGin reservation required — book via hotel concierge, see Food & shopping",
+          "RyuGin: no reservations from guests declaring food allergies; everyone must eat fish/seafood; ages 10+ only"
+        ],
+        "source_url": "https://www.tsukiji.or.jp/english/how-to-enjoy/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "date": "Sun Oct 18",
+        "title": "Asakusa, Harajuku, Shinjuku",
+        "pace": "A temple-and-food-street morning, a shrine and a garden in the afternoon, dinner in Omoide Yokocho.",
+        "energy": "balanced",
+        "env": "outdoor",
+        "tldr": "Senso-ji and the Nakamise food street in the morning, Meiji Jingu and Shinjuku Gyoen in the afternoon, dinner at a group-friendly Omoide Yokocho izakaya.",
+        "body": "<p>Senso-ji and Nakamise-dori make an easy, food-forward morning — snack your way down the approach street rather than committing to a sit-down lunch. The main hall opens at 6:30 AM through October, so an early start is there if jet lag has you up.</p><p>Both afternoon stops shut early. Meiji Jingu's gates close at 4:40 PM in October, and Shinjuku Gyoen stops admitting at 4:00 PM. Do the shrine first, then the garden, and treat 4 PM as the hard edge of the day.</p><p>Neither market is a Sunday option — Toyosu is closed, and roughly half of Tsukiji's outer-market shops follow the same calendar. Saturday already covers Tsukiji.</p><p>Dinner is Torien in Omoide Yokocho — a 150-seat izakaya rather than the small counters most of the alley runs on, so six of you eat together.</p>",
+        "source_url": "https://www.meijijingu.or.jp/en/visit/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "hours"
+      },
+      {
+        "date": "Mon Oct 19",
+        "title": "Toyosu and teamLab",
+        "pace": "A bay-area morning, gallery midday, wagyu dinner back in Ginza.",
+        "energy": "balanced",
+        "env": "indoor",
+        "tldr": "Toyosu Market and teamLab Planets by day, a self-booked wagyu yakiniku dinner in Ginza at night.",
+        "body": "<p>Toyosu Market is open today — browse rather than queue for Sushi Dai/Daiwa Sushi's counters (2–5 hour waits, and a party of six will likely be split in two). teamLab Planets is a few minutes away and fills the rest of the morning and early afternoon.</p><p>Shinjuku Gyoen is closed on Mondays, so it isn't on today's plan — Sunday already covers it.</p><p>Dinner is Yakiniku Ushigoro in Ginza, a short ride back from Toyosu, booked online rather than through a concierge. It is the trip's second-most expensive meal, not a casual night — courses run ¥16,000–32,000 before the 10% service charge.</p>",
+        "constraints": [
+          "Shinjuku Gyoen closed Mondays"
+        ],
+        "plan_b": {
+          "trigger": "closure",
+          "body": "teamLab Planets sells timed-entry tickets and closes for maintenance on irregular dates. If Oct 19 turns out to be one, Tokyo Tower's Main Deck is the drop-in substitute — open 9:00 AM–11:00 PM (last entry 10:30 PM), ¥1,200–1,500 adult depending on whether you book online or buy at the window, and roughly 15 minutes from the Ginza dinner.",
+          "source_url": "https://www.tokyotower.co.jp/fee/",
+          "verified_on": "2026-08-26"
+        },
+        "source_url": "https://www.tablecheck.com/en/shops/ushigoro-s-ginza/reserve",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "date": "Tue Oct 20",
+        "title": "Yanaka and Ameyoko, then departure",
+        "pace": "A relaxed morning food crawl, then the airport.",
+        "energy": "slow",
+        "env": "outdoor",
+        "tldr": "One last grazing morning through Yanaka Ginza and Ameyoko before heading to the airport.",
+        "body": "<p>Yanaka Ginza (via Nippori Station) and Ameya-Yokocho (Ueno–Okachimachi) are a short hop apart and both work as pure grazing — no sit-down meal to plan around a flight. Ameyoko is calmest on a weekday morning, which this is.</p><p>Work backward from your flight using the airport transit times in the Transit tab — Haneda is faster to reach from central Tokyo than Narita if your return flight gives you the choice.</p>"
+      }
+    ]
+  },
+  {
+    "type": "panel",
+    "group": "Days",
+    "title": "Health & pharmacy",
+    "body": "<p>Emergency numbers: police <b>110</b>, ambulance/fire <b>119</b> — both free, 24/7, no area code needed. A non-emergency medical triage line, <b>#7119</b>, exists for uncertain cases; expect a wait for English-language support on any of these.</p><p>Pharmacies (drugstores) are widespread, but Japanese pharmacies can't fill a foreign prescription — bring enough of any regular medication for the trip. Some common US over-the-counter cold and allergy medicines (anything with pseudoephedrine, e.g. Sudafed, NyQuil, Advil Cold &amp; Sinus) are restricted or banned in Japan; check Japan Customs' import rules before packing if anyone in the group takes one.</p><p>⚠ The current US State Department travel advisory level for Japan could not be verified against a primary source — travel.state.gov blocks automated access. Check travel.state.gov directly before departure.</p>",
+    "phase": "daily"
+  },
+  {
+    "type": "panel",
+    "group": "Days",
+    "title": "Etiquette & language",
+    "body": "<p>Japan is a no-tipping culture — leaving cash on the table causes confusion, and staff have been known to chase guests down to return it. Service is already priced in.</p><p>At izakaya, an unrequested small starter (<b>otoshi</b>, a few hundred yen per person) lands on the table automatically and appears on the bill — it isn't a scam or an optional order. Calling <b>\"sumimasen\"</b> to get a server's attention is normal; nobody comes to the table unprompted the way US service does.</p><p>Chopstick basics: never stick them upright in a rice bowl, never pass food chopstick-to-chopstick, and use the opposite end (or provided serving chopsticks) when taking from a shared plate. Shoes come off before stepping onto tatami seating, common at traditional and izakaya spots.</p><p>Situational phrases for the trip — allergy/dietary, reservations, ordering — are on the Trip Kit tab.</p>",
+    "source_url": "https://www.japan.travel/en/plan/tipping-in-japan/",
+    "verified_on": "2026-08-26",
+    "phase": "daily"
+  }
+]

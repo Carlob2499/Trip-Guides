@@ -12,7 +12,7 @@
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": "<p>Get an IC card (Suica or PASMO) per person on arrival — every JR, Metro, Toei, and most private-line and bus rides work with a single tap in and out, and physical cards are back in normal supply after the 2023–2025 chip shortage. A <b>Tourist PASMO</b> ({{fact:tourist-pasmo-2000-yen}}) is sold at Narita's Keisei counters with no deposit and is the simplest option for a short trip.</p><p>Tokyo is more cash-friendly than its reputation — chains, hotels, and most tourist-area restaurants take cards — but small izakaya, some ramen counters, and ticket-vending-machine shops are still cash- or IC-card-only. Carry cash as backup.</p>",
+    "body": "<p>Get an IC card (Suica or PASMO) per person on arrival — every JR, Metro, Toei, and most private-line and bus rides work with a single tap in and out, and physical cards are back in normal supply after the 2023–2025 chip shortage. A <b>Tourist PASMO</b> is the simplest option for a short trip — {{fact:tourist-pasmo-1000-to-10000-yen}}. It's sold at ticket machines and information centres in both airports' station areas: Keikyu at Haneda, Keisei at Narita.</p><p>Tokyo is more cash-friendly than its reputation — chains, hotels, and most tourist-area restaurants take cards — but small izakaya, some ramen counters, and ticket-vending-machine shops are still cash- or IC-card-only. Carry cash as backup.</p>",
     "source_url": "https://www.pasmo.co.jp/tourist-pasmo/",
     "verified_on": "2026-08-26",
     "shelf_life": "venue"
@@ -35,14 +35,19 @@
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
-    "body": "<p>The Saturday anchor dinner is the one time-sensitive booking: Nihonryori RyuGin only opens its October reservation window on <b>September 1, 2026</b>, and only takes overseas bookings through a Tokyo hotel concierge (see Food & shopping). Confirm accommodation early enough that a concierge can call at opening.</p>",
+    "body": "<p>The Saturday anchor dinner is the one time-sensitive booking: Nihonryori RyuGin only opens its October reservation window on <b>September 1, 2026</b>, and only takes overseas bookings through a Tokyo hotel concierge (see Food &amp; shopping). Confirm accommodation early enough that a concierge can call at opening.</p><p>⚠ Check the party against RyuGin's own rules before that call. It will not accept a reservation from a guest who declares a food allergy. It cannot serve anyone who doesn't eat fish or seafood. Children must be 10 or older, and eight is the maximum party.</p>",
+    "fold": false,
     "checklist": [
       "Flights",
       "Accommodation — needed before the anchor dinner can be booked (concierge-routed)",
       "Airport transfer",
       "Travel insurance",
+      "Confirm nobody in the party has a declared food allergy or a seafood aversion — RyuGin turns those bookings away",
       "Anchor dinner: have your hotel concierge call RyuGin on Sept 1, 2026 for Oct 17"
-    ]
+    ],
+    "source_url": "https://www.nihonryori-ryugin.com/en/about/",
+    "verified_on": "2026-08-26",
+    "shelf_life": "venue"
   },
   {
     "type": "weather",

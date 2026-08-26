@@ -14,34 +14,46 @@
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Per-person estimates for a food-focused trip. Casual-day food and local transport are aggregator-sourced ranges (⚠ not a single official figure); the Saturday anchor dinner figure is RyuGin's own published course price + service charge. Lodging is left at zero — accommodation style wasn't set at intake.",
+    "intro": "Per-person estimates for a food-focused trip. Casual food and local transport are aggregator-sourced ranges (⚠ not a single official figure); the two booked dinners are the venues' own published prices plus their service charges, and each is its own line rather than folded into a daily average. Lodging is left at zero — accommodation style wasn't set at intake.",
     "currency": "¥",
     "days": 5,
     "party": 6,
     "items": [
       {
-        "label": "Lodging, per night",
+        "label": "Lodging, whole trip",
         "basis": "trip",
         "est": 0,
         "note": "Not researched — accommodation style wasn't specified at intake."
       },
       {
-        "label": "Food & drink — casual days (Fri, Sun, Mon, Tue), per day",
-        "basis": "day",
-        "est": 7000,
-        "low": 5000,
-        "high": 9000,
-        "note": "Aggregator-sourced range for a food-focused traveler; excludes the Saturday anchor dinner."
+        "label": "Food & drink — casual meals, 4 days (Fri, Sun, Mon, Tue)",
+        "basis": "trip",
+        "est": 28000,
+        "low": 20000,
+        "high": 36000,
+        "note": "≈¥5,000–9,000 a day across the four non-anchor days, aggregator-sourced. On a trip basis rather than a daily one because Saturday's food is the anchor-dinner line below, not a casual day — a per-day figure would be multiplied across all five days and count Saturday twice."
       },
       {
         "label": "Saturday anchor dinner (RyuGin), per person",
         "basis": "trip",
-        "est": 80500,
-        "low": 70000,
-        "high": 91000,
-        "note": "¥70,000 tasting course + 15% service charge in the private room, per RyuGin's own reservation page.",
-        "source_url": "https://www.nihonryori-ryugin.com/en/reserve/",
-        "verified_on": "2026-08-26"
+        "est": 88550,
+        "low": 84700,
+        "high": 88550,
+        "note": "{{fact:ryugin-course-88550-yen}}. The low figure is the same ¥77,000 course at a table seat, where the service charge is 10% rather than 15%.",
+        "source_url": "https://www.nihonryori-ryugin.com/en/menu/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
+        "label": "Monday dinner (Yakiniku Ushigoro), per person",
+        "basis": "trip",
+        "est": 19800,
+        "low": 17600,
+        "high": 35200,
+        "note": "Courses ¥16,000–32,000 tax included, plus a 10% service charge. The mid figure assumes one of the two lower courses.",
+        "source_url": "https://www.tablecheck.com/en/shops/ushigoro-s-ginza/reserve",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
       },
       {
         "label": "Local transport, per day",
@@ -60,8 +72,8 @@
         "est": 1200,
         "low": 500,
         "high": 2000,
-        "note": "Light-touch sights budget: Shinjuku Gyoen ¥500, teamLab Planets ≈¥3,800–4,200, Tokyo Tower ¥1,500 — spread across the trip, not all paid stops every day; each figure sourced individually in the Sights tab.",
-        "source_url": "https://www.teamlab.art/e/planets/",
+        "note": "Light-touch sights budget: Shinjuku Gyoen ¥500, Tokyo Tower ¥1,200–1,500, teamLab Planets ≈¥3,800–4,200 (⚠ teamlab.art publishes its prices only on a live ticket page — confirm before booking). Spread across the trip, not a paid stop every day.",
+        "source_url": "https://policies.env.go.jp/national-garden/shinjukugyoen/english/guide/information/",
         "verified_on": "2026-08-26",
         "shelf_life": "hours"
       },

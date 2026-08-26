@@ -8,7 +8,7 @@
       {
         "name": "Senso-ji Temple (Asakusa)",
         "kicker": "Tokyo's oldest temple, and a food street in front of it",
-        "body": "<p>Free to enter, main hall open 6:00 AM–5:00 PM (6:30 AM Oct–Mar). Nakamise-dori, the approach street, is itself a food stop — senbei, menchi-katsu, age-manju — so this pairs naturally with a food-crawl morning rather than needing a separate stop.</p>",
+        "body": "<p>Free to enter. The main hall runs 6:00 AM–5:00 PM, but opens at 6:30 AM from October through March — which is this trip.</p><p>Nakamise-dori, the approach street, is itself a food stop: senbei, menchi-katsu, age-manju. It pairs with a food-crawl morning rather than needing a separate stop.</p>",
         "dwell_min": 60,
         "source_url": "https://www.senso-ji.jp/about/",
         "verified_on": "2026-08-26",
@@ -22,7 +22,7 @@
       {
         "name": "Meiji Jingu",
         "kicker": "A forested shrine between Harajuku and Yoyogi Park",
-        "body": "<p>Free to enter the grounds; gate hours track sunrise/sunset (roughly 5:00 AM–6:40 PM depending on season). Weekday early morning, right at gate opening, is the genuinely quiet window — multiple recent accounts describe the paths as nearly empty before the tour groups arrive, with crowds building steadily through the day.</p><p>Adjoins Harajuku/Omotesando, so it pairs well with a street-food or café stop.</p>",
+        "body": "<p>Free to enter the grounds. Gate hours track sunrise and sunset — <b>in October that is 5:40 AM to 4:40 PM</b>, so an afternoon visit has a hard edge to work back from.</p><p>Right at gate opening is the genuinely quiet window: multiple recent accounts describe the paths as nearly empty before the tour groups arrive, with crowds building steadily through the day.</p><p>Adjoins Harajuku/Omotesando, so it pairs well with a street-food or café stop.</p>",
         "dwell_min": 45,
         "source_url": "https://www.meijijingu.or.jp/en/visit/",
         "verified_on": "2026-08-26",
@@ -36,7 +36,7 @@
       {
         "name": "teamLab Planets (Toyosu)",
         "kicker": "Immersive digital-art museum, walk barefoot through water",
-        "body": "<p>≈¥3,800 weekday / ¥4,200 weekend adult, timed entry. ⚠ Closes for maintenance roughly monthly on irregular dates — check teamlab.art's live calendar before booking. Toyosu is also where the fish market wholesale trade relocated (see below), so a sushi breakfast pairs naturally with this stop.</p>",
+        "body": "<p>Timed entry, ≈¥3,800 weekday / ¥4,200 weekend adult. ⚠ Both the price and the closure calendar live only on teamlab.art's interactive ticket page — treat the figures here as indicative and confirm on the site before you book.</p><p>It closes for maintenance roughly monthly on irregular dates, so check the date as well as the price. Toyosu is also where the wholesale fish trade relocated (see below), so a market morning pairs naturally with this stop.</p>",
         "dwell_min": 120,
         "source_url": "https://www.teamlab.art/e/planets/",
         "verified_on": "2026-08-26",
@@ -62,9 +62,9 @@
       {
         "name": "Tokyo Tower",
         "kicker": "The cheaper, less-crowded skyline view — near Roppongi/Azabudai's dining scene",
-        "body": "<p>Main Deck from ¥1,500, opens 9:00 AM. Multiple comparisons note Tokyo Tower gives a more grounded skyline view than Skytree's 450m deck, which shrinks landmarks to miniatures — a reasonable trade for a group that isn't prioritizing sightseeing.</p>",
+        "body": "<p>Main Deck adult ¥1,200 at the window or ¥1,500 booked online, open 9:00 AM–11:00 PM with last entry at 10:30 PM. No advance ticket is needed, which is what makes it the drop-in answer if Monday's teamLab slot falls through.</p><p>Multiple comparisons note Tokyo Tower gives a more grounded skyline view than Skytree's 450m deck, which shrinks landmarks to miniatures — a reasonable trade for a group that isn't prioritizing sightseeing.</p>",
         "dwell_min": 60,
-        "source_url": "https://www.tokyotower.co.jp/en/",
+        "source_url": "https://www.tokyotower.co.jp/fee/",
         "verified_on": "2026-08-26",
         "shelf_life": "hours",
         "map": {

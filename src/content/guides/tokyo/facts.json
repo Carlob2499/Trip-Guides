@@ -9,9 +9,9 @@
     "risk": 1,
     "entity": "seven-bank-atm"
   },
-  "tourist-pasmo-2000-yen": {
-    "claim": "Tourist PASMO card price at Narita (Keisei information centers)",
-    "value": "¥2,000, no deposit, valid 28 days, balance not refundable",
+  "tourist-pasmo-1000-to-10000-yen": {
+    "claim": "Tourist PASMO purchase amounts and terms (sold at Haneda/Keikyu and Narita/Keisei)",
+    "value": "sold loaded with ¥1,000–¥10,000, no deposit, valid 28 days, remaining balance not refundable",
     "source_url": "https://www.pasmo.co.jp/tourist-pasmo/",
     "verified_on": "2026-08-26",
     "shelf_life": "venue",
@@ -21,36 +21,51 @@
   },
   "keisei-skyliner-2470-yen": {
     "claim": "Keisei Skyliner one-way fare, Narita to Nippori/Ueno",
-    "value": "≈¥2,470 one-way, ~36–41 min to Nippori",
+    "value": "¥2,470 one-way, or ¥2,465 tapping an IC card at the gate",
     "source_url": "https://www.keisei.co.jp/keisei/tetudou/skyliner/us/traffic/skyliner_fares.php",
     "verified_on": "2026-08-26",
     "shelf_life": "transit",
-    "state": "approx",
+    "state": "clean",
     "risk": 2,
     "tier": "primary",
-    "entity": "keisei-skyliner"
+    "entity": "keisei-skyliner",
+    "evidence": "The Skyliner fare will be 2,465 yen when using an approved IC card"
   },
   "keikyu-haneda-shinagawa-327-yen": {
-    "claim": "Keikyu Line one-way fare, Haneda to Shinagawa",
-    "value": "≈¥327, 11–14 min depending on terminal",
+    "claim": "Keikyu Line one-way fare, Haneda to Shinagawa (11 min from Terminal 3, 14 min from Terminals 1·2)",
+    "value": "¥327",
     "source_url": "https://www.haneda-tokyo-access.com/en/ride/fares.html",
     "verified_on": "2026-08-26",
     "shelf_life": "transit",
     "state": "approx",
     "risk": 2,
     "tier": "primary",
-    "entity": "keikyu-haneda"
+    "entity": "keikyu-haneda",
+    "evidence": "Fares are calculated in 1 yen increments when a single IC card is used both to board and exit"
   },
   "tokyo-monorail-haneda-519-yen": {
-    "claim": "Tokyo Monorail one-way fare, Haneda to Hamamatsucho",
-    "value": "≈¥519 (IC card), as fast as 13 min on the Haneda Express",
-    "source_url": "https://www.tokyo-monorail.co.jp/english/",
+    "claim": "Tokyo Monorail one-way IC fare, Haneda to Monorail Hamamatsucho (the line's end-to-end maximum)",
+    "value": "¥519 with an IC card, ¥520 on a paper ticket, as fast as 13 min on the Haneda Express",
+    "source_url": "https://www.tokyo-monorail.co.jp/english/guidance/train_info.html",
     "verified_on": "2026-08-26",
     "shelf_life": "transit",
-    "state": "approx",
+    "state": "clean",
     "risk": 2,
     "tier": "primary",
-    "entity": "tokyo-monorail"
+    "entity": "tokyo-monorail",
+    "evidence": "520 yen (paper ticket) and 519 yen (IC card)"
+  },
+  "ryugin-course-88550-yen": {
+    "claim": "Nihonryori RyuGin tasting course, all-in per person in a private room (¥77,000 course incl. tax + the 15% private-room service charge)",
+    "value": "¥88,550 per person in a private room",
+    "source_url": "https://www.nihonryori-ryugin.com/en/menu/",
+    "verified_on": "2026-08-26",
+    "shelf_life": "venue",
+    "state": "clean",
+    "risk": 3,
+    "tier": "primary",
+    "entity": "nihonryori-ryugin",
+    "evidence": "77,000JPY(incl. tax) ... Service charge (Table seats 10%, Semi private rooms 15%, Private room 15%) will be added."
   },
   "tax-free-refund-switch-nov-1-2026": {
     "claim": "Japan's tax-free shopping system switches from instant point-of-sale exemption to a refund-at-departure model",
@@ -61,6 +76,7 @@
     "state": "clean",
     "risk": 2,
     "tier": "primary",
-    "entity": "tax-free-refund-switch"
+    "entity": "tax-free-refund-switch",
+    "evidence": "From November 1, 2026, the tax-free shopping system for inbound visitors to Japan will be revised"
   }
 }
