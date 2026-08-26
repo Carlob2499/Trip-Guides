@@ -25,8 +25,8 @@
         "constraints": ["Jinpukaku building closed (renovation)"],
         "plan_b": {
           "trigger": "closure",
-          "body": "If the group runs late and the 19:08 bus is missed, call for taxis (Nikko/Chuo Taxi 0858-22-7111 or Kurayoshi Kotsu 0858-22-1511) rather than waiting for a next-day bus — budget on 2 cars for 8 people with luggage, ≈20 minutes each. Confirm the fare with the driver; the only figure this pass found dates to 2009.",
-          "source_url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
+          "body": "If the group runs late and the 19:08 bus is missed, reserve a 9-seat Hinomaru Hire jumbo taxi (0858-22-3155) rather than waiting for a next-day bus — one vehicle for the whole party of 8 with luggage, ≈20 minutes, at published metered rates (¥740 flagfall + ¥90/279m). It needs advance booking, not a station hail. If your ryokan runs its own free reserved shuttle, confirm that option when you book the room. Nikko/Chuo Taxi (0858-22-7111) or Kurayoshi Kotsu (0858-22-1511) are walk-up backups but likely need 2 cars for 8 people, and the only fare figure found for them dates to 2009.",
+          "source_url": "https://www.hinomaru-hire.com/taxi/",
           "verified_on": "2026-08-26"
         }
       },

@@ -162,6 +162,136 @@
       "shortlisted": false,
       "reason": "Roughly 90 minutes-2 hours outside the compact Tottori-Kurayoshi-Misasa loop the trip is built around; would consume a full day the 4-day, balanced-pace itinerary does not have.",
       "worth": null
+    },
+    {
+      "id": "c-kurayoshi-misasa-transfer--public-route-bus",
+      "name": "Kurayoshi-Misasa Transfer",
+      "branch": "Public Route Bus",
+      "priority": "anchor-transport",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kurayoshi-misasa-transfer--ryokan-reserved-shuttle",
+      "name": "Kurayoshi-Misasa Transfer",
+      "branch": "Ryokan Reserved Shuttle",
+      "priority": "anchor-transport",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kurayoshi-misasa-transfer--jumbo-taxi",
+      "name": "Kurayoshi-Misasa Transfer",
+      "branch": "Jumbo Taxi",
+      "priority": "anchor-transport",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-mitokusan-sanbutsuji-nageiredo-climb",
+      "name": "Mitokusan Sanbutsuji Nageiredo Climb",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "The Nageiredo climb is Tottori-chubu's single most famous attraction, on every English-language top-10 list — already Pass A's anchor pick (c-sanbutsu-ji-nageiredo-climb), so not re-shipped here by design (anti-default). This pass's contribution is the concrete access rules (minimum two climbers, footwear check, ¥1,200 total, 8:00-15:00 reception, closed for snow roughly Dec-Mar) folded into the shipped candidate's evidence.",
+      "worth": null
+    },
+    {
+      "id": "c-mitokusan-nageiredo-viewing-platform--accessible-alternative",
+      "name": "Mitokusan Nageiredo Viewing Platform",
+      "branch": "Accessible Alternative",
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-tottori-sand-dunes--early-morning-crowd-reality",
+      "name": "Tottori Sand Dunes",
+      "branch": "Early Morning Crowd Reality",
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-tottori-sand-dunes--camel-commute-path",
+      "name": "Tottori Sand Dunes",
+      "branch": "Camel Commute Path",
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-matsuba-gani-crab-dinner--october-2026-visit",
+      "name": "Matsuba Gani Crab Dinner",
+      "branch": "October 2026 Visit",
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Out of season for the trip's Oct 20-23 2026 dates — Tottori's matsuba-gani (male snow crab) season is fixed by ministerial order to open Nov 6 and run through Mar 20; a generic guide recommending a 'matsuba-gani dinner' for an October Tottori trip would be factually wrong. Beni-zuwaigani (red snow crab) is the correct in-season alternative — see that candidate.",
+      "worth": null
+    },
+    {
+      "id": "c-beni-zuwaigani-red-snow-crab",
+      "name": "Beni Zuwaigani Red Snow Crab",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-menya-hachibee-gyukotsu-ramen",
+      "name": "Menya Hachibee Gyukotsu Ramen",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-kissa-sante",
+      "name": "Kissa Sante",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "Local-favorite framing and the all-you-can-eat natto-rice dish are single-sourced (na-na.media only) within this pass's budget — not independently corroborated, so kept as a lead rather than shipped.",
+      "worth": null
+    },
+    {
+      "id": "c-santo-mato-local-supermarket",
+      "name": "Santo Mato Local Supermarket",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "Genuinely local (non-tourist) shop per one 2025 local-media account, but single-sourced within budget — not independently corroborated, so kept as a lead rather than shipped.",
+      "worth": null
+    },
+    {
+      "id": "c-kurayoshi-shirakabe-dozo-townscape",
+      "name": "Kurayoshi Shirakabe Dozo Townscape",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Kurayoshi's single obvious must-see, on every top-10 list — already Pass A's pick (c-kurayoshi-shirakabe-dozogun). No crowd-timing or off-default detail could be independently corroborated within budget to justify a novel Pass B addition beyond the food angle (Menya Hachibee) shipped separately; a single-source travelogue anecdote about declining tourist numbers was not pursued further since it would not change any recommendation.",
+      "worth": null
     }
   ],
   "evidence": [
@@ -412,7 +542,8 @@
         "family": "sand-museum",
         "independent": null,
         "appliesToYears": [
-          2026
+          2026,
+          2027
         ]
       },
       "verifiedOn": "2026-08-26",
@@ -698,7 +829,8 @@
         "family": "matsubishi",
         "independent": null,
         "appliesToYears": [
-          2026
+          2026,
+          2027
         ]
       },
       "verifiedOn": "2026-08-26",
@@ -743,7 +875,7 @@
       "origin": "passA",
       "source": {
         "url": "https://na-na.media/hachibe-kurayoshi/",
-        "kind": "press",
+        "kind": "reference",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
@@ -886,6 +1018,347 @@
         "shelfLife": "fx",
         "recheckOn": "2026-09-02"
       }
+    },
+    {
+      "id": "ev-mitokusan-nageiredo-rules",
+      "candidateId": "c-mitokusan-sanbutsuji-nageiredo-climb",
+      "claim": "Climbing to Nageiredo requires reception at the temple office between 8:00 and 15:00 (last descent by 16:30), costs ¥1,200 total for one adult (¥400 main-hall admission + ¥800 climbing permit; ¥1,150/adult for groups of 20+), bars solo climbers (a minimum of two people is required), and requires non-metal-spike hiking shoes or rental waraji straw sandals (¥800) if footwear is judged unsuitable at the gate check. The route closes in bad weather and is typically closed for snow from December through March.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.mitokusan.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "mitokusan-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-nageiredo-viewing-platform",
+      "candidateId": "c-mitokusan-nageiredo-viewing-platform--accessible-alternative",
+      "claim": "Without climbing, Nageiredo can only be seen from one place: the free roadside 'Haiden' viewing platform at the foot of Mitokusan — official wording: the only place besides climbing to see it — fitted with Nikon telescopes after a 2022 renovation, about 600m from the hall; the platform has 2 standard parking spaces plus 1 accessible parking space, with Mitokusan's own parking areas as overflow.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://misasaonsen.jp/sightseeings/sightseeing-12431/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "misasaonsen-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-dunes-crowd-current-1",
+      "candidateId": "c-tottori-sand-dunes--early-morning-crowd-reality",
+      "claim": "Dawn (around sunrise, roughly 5:30-6:00am) remains the quietest time to visit the Sand Dunes, but two independent 2025 firsthand accounts confirm it is no longer an undiscovered secret — other visitors are commonly there too by then, a shift both attribute to social media popularizing early starts.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://banzokubiology.com/tottori-sand-dunes-crowd-guide/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-06",
+        "family": "banzokubiology",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-dunes-crowd-current-2",
+      "candidateId": "c-tottori-sand-dunes--early-morning-crowd-reality",
+      "claim": "Dawn (around sunrise, roughly 5:30-6:00am) remains the quietest time to visit the Sand Dunes, but two independent 2025 firsthand accounts confirm it is no longer an undiscovered secret — other visitors are commonly there too by then, a shift both attribute to social media popularizing early starts.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/nambuline_love/n/n29c3b2806c63",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-09-18",
+        "family": "nambuline-love-note",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-dunes-camel-path",
+      "candidateId": "c-tottori-sand-dunes--camel-commute-path",
+      "claim": "Beyond the main, crowded dune entrance, the official Tottori City tourism feature names a lesser-known 'camel commute' path (about 20 minutes each way) as an alternative approach route; around 9:15am the resort's tour camels can be seen walking this path to their work stations.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.torican.jp/feature/sakyu-morning",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "torican-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-matsuba-gani-season",
+      "candidateId": "c-matsuba-gani-crab-dinner--october-2026-visit",
+      "claim": "Matsuba-gani (male snow crab) season in Tottori is fixed nationally by ministerial order: it opens November 6, 2026 and runs through March 20, 2027. The official Tottori City tourism site states the season opens annually in early November with catch through March 20 and makes no mention of any October catch — October falls entirely outside the legal harvest season.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.torican.jp/feature/gourmet_crab",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "torican-official",
+        "independent": null,
+        "appliesToYears": [
+          2026,
+          2027
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-beni-zuwaigani-season",
+      "candidateId": "c-beni-zuwaigani-red-snow-crab",
+      "claim": "Beni-zuwaigani (red snow crab) landed at Sakaiminato runs September 1 through the end of June, with normal commercial market supply from mid-to-late September onward and peak quality November-February — meaning it IS in season and commercially available during an Oct 20-23, 2026 visit, unlike matsuba-gani.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://marutsu.jp/blogs/news/kaikin2023",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "marutsu",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-hachibee-seating-1",
+      "candidateId": "c-menya-hachibee-gyukotsu-ramen",
+      "claim": "Menya Hachibee is a small counter-and-table space with a tatami platform, and two independent 2025 firsthand accounts both describe it getting crowded at lunchtime — a walk-in plan for a party this size means arriving at opening or splitting across two visits.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://na-na.media/hachibe-kurayoshi/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-02-18",
+        "family": "na-na-media",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-hachibee-seating-2",
+      "candidateId": "c-menya-hachibee-gyukotsu-ramen",
+      "claim": "Menya Hachibee is a small counter-and-table space with a tatami platform, and two independent 2025 firsthand accounts both describe it getting crowded at lunchtime — a walk-in plan for a party this size means arriving at opening or splitting across two visits.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://umazeriko.hatenablog.com/entry/kurayoshi-hachibee",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-08-26",
+        "family": "umazeriko-hatenablog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-kurayoshi-misasa-bus",
+      "candidateId": "c-kurayoshi-misasa-transfer--public-route-bus",
+      "claim": "A public route bus (the Kamii-Misasa/Misasa line, run by Hinomaru Jidosha and Nihon Kotsu) connects JR Kurayoshi Station to Misasa Onsen in about 20 minutes. A 2-day unlimited pass covering this and neighbouring onsen-town routes (Yu-Yu 2-Day Pass) costs ¥1,300. No train line reaches Misasa Onsen itself — Kurayoshi Station is the nearest rail head.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.kurayoshi-kankou.jp/access/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kurayoshi-kankou-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-ryokan-shuttle",
+      "candidateId": "c-kurayoshi-misasa-transfer--ryokan-reserved-shuttle",
+      "claim": "Some Misasa Onsen ryokans run a free reserved shuttle from Kurayoshi Station instead of the public bus — e.g. Misasakan lists pickup times of 14:10/15:30/16:20/17:30 from the station and return departures of 8:20/9:30/11:00 from the ryokan, by advance reservation only, with drive time about 15-20 minutes; each ryokan sets its own times and these can shift 5-10 minutes around train arrivals.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.misasakan.co.jp/access/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "misasakan-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-jumbo-taxi",
+      "candidateId": "c-kurayoshi-misasa-transfer--jumbo-taxi",
+      "claim": "Hinomaru Hire's Kurayoshi office (0858-22-3155) offers 9-seat jumbo taxis — enough to fit a party of 8 plus hand luggage in one vehicle — as well as UD wheelchair-accessible taxis; jumbo taxis require advance reservation and are not available as a walk-up station-rank service. Standard meter rates in Tottori prefecture run ¥740 for the first 1.5km then ¥90 per 279m (regular cars) or ¥790/¥100 per 224m (large cars), per the Tottori Prefecture Hire-Taxi Association's published tariff.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.hinomaru-hire.com/taxi/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "hinomaru-hire-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-kurayoshi-station-accessible",
+      "candidateId": null,
+      "claim": "JR Kurayoshi Station (rebuilt as an elevated station in 2011) has no-step access from both its north and south entrances through to the ticket gates, and elevators (no escalators) reach all three platforms from inside the gates; accessible toilets are available outside the ticket gates. The train-side transfer itself is fully step-free — the onward bus/shuttle/taxi choice outside the station is the actual constraint for this party, not the station transfer.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://eki.jr-odekake.net/barrierfree?id=0640715",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "jr-odekake-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-kissa-sante",
+      "candidateId": "c-kissa-sante",
+      "claim": "Kissa Sante, an old-fashioned coffee shop (喫茶) in Misasa Onsen, is described by one local-media account as a hidden favorite among residents, centered on an all-you-can-eat natto-rice dish nicknamed 'God's Table' (¥550) made with a premium local soybean; single-sourced within this pass, not independently corroborated.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://na-na.media/misasa_matome-202501/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-01-18",
+        "family": "na-na-media",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-santo-mato",
+      "candidateId": "c-santo-mato-local-supermarket",
+      "claim": "Santo Mato, described as an ordinary neighborhood supermarket rather than a tourist shop near the Misasa town hall, is locally known for stocking 200+ varieties of dried fruits/vegetables with samples available to taste before buying; single-sourced within this pass, not independently corroborated.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://na-na.media/misasa_matome-202501/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-01-18",
+        "family": "na-na-media",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": true,
+      "freshness": null
     }
   ],
   "reservations": [
@@ -911,37 +1384,89 @@
       "bookingUrl": null,
       "releaseWindow": "No advance reservation system — same-day registration only, at the temple.",
       "actionDate": "Arrive by mid-morning: reception is 8:00-15:00 with a mandatory 16:30 descent deadline, and the climb itself typically runs 90-120 minutes round trip before accounting for queueing at the chain sections.",
-      "partyRules": "Minimum two people per climbing group (no solo climbers, strictly enforced); footwear is inspected at the reception desk — dedicated hiking-style soles required, rental straw sandals (waraji) available as a substitute, sneakers may be turned away.",
-      "deposit": null,
+      "partyRules": "Minimum two people per climbing group (no solo climbers, strictly enforced); footwear is inspected at the reception desk — dedicated hiking-style soles required, rental straw sandals (waraji, ¥800) available as a substitute, sneakers may be turned away.",
+      "deposit": "None — there is no advance booking to deposit against; the temple fee and climbing permit (¥1,200 total per adult) are paid same-day, in cash, at the reception desk.",
       "cancellation": "Entry is refused outright in rain, snow, or any condition the temple judges dangerous — this is a same-day go/no-go call, not a bookable slot.",
-      "foreignFriction": null,
+      "foreignFriction": "None to navigate in advance — there is no online or phone booking system (in Japanese or otherwise) to work around; the only in-person friction is the footwear/party-size check at the reception desk, which applies to every climber regardless of nationality.",
       "lastSeating": null,
       "walkIn": "Walk-in only; no reservation exists to lose.",
       "leads": [],
       "alternatives": "The free Nageiredo Yohaijo viewing platform (candidate c-mitokusan-nageiredo-viewing-platform) is the honest alternative for anyone in the party who can't or shouldn't attempt the climb — see the sights write-up.",
       "fallback": "If weather closes the mountain, fall back to the viewing platform plus the ¥400 main-hall (Sanbutsu-ji hondo) visit, which doesn't require the climb."
+    },
+    {
+      "candidateId": "c-kurayoshi-misasa-transfer--ryokan-reserved-shuttle",
+      "importance": "important",
+      "bookingUrl": "https://www.misasakan.co.jp/access/",
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": null,
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "Booking runs through the ryokan directly (advance reservation required) rather than a public online system; a non-Japanese-speaking party should book via the ryokan's own reservation channel or have their accommodation booking site relay the pickup request rather than assuming a same-day arrangement is possible.",
+      "lastSeating": null,
+      "walkIn": "Not walk-in — each ryokan sets and reserves its own fixed pickup/return times (e.g. Misasakan: pickups 14:10/15:30/16:20/17:30, returns 8:20/9:30/11:00); confirm directly with whichever ryokan the party books, since times shift with train arrivals.",
+      "leads": [],
+      "alternatives": "Public Kamii-Misasa route bus (~20 min) or a reserved 9-seat jumbo taxi.",
+      "fallback": "If the chosen ryokan doesn't offer a shuttle or the reserved time is missed, fall back to the public bus or book a jumbo taxi."
+    },
+    {
+      "candidateId": "c-kurayoshi-misasa-transfer--jumbo-taxi",
+      "importance": "important",
+      "bookingUrl": "https://www.hinomaru-hire.com/taxi/",
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": "Seats 9 — covers the full 8-person party with headroom for hand luggage; bulkier suitcases may still need a second vehicle or a luggage-forwarding (takkyubin) arrangement.",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": null,
+      "lastSeating": null,
+      "walkIn": "Jumbo taxis require advance reservation — not a hail-and-go rank option at the station.",
+      "leads": [],
+      "alternatives": "Ryokan reserved shuttle or the public route bus.",
+      "fallback": null
+    },
+    {
+      "candidateId": "c-menya-hachibee-gyukotsu-ramen",
+      "importance": "casual",
+      "bookingUrl": null,
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": null,
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": null,
+      "lastSeating": null,
+      "walkIn": "Walk-in only — the shop does not accept phone reservations. A small counter-and-table space with a tatami platform, no private room; two independent 2025 firsthand accounts describe it getting crowded at lunchtime. A party of 8 should arrive right at opening or plan to split into two smaller groups.",
+      "leads": [],
+      "alternatives": "Other Kurayoshi gyukotsu-ramen shops appear in local roundups but were not independently verified this pass.",
+      "fallback": "Split the party across two visits/times, or treat it as an optional stop for a subset of the group rather than the whole party of 8."
     }
   ],
   "transport": [
     {
       "id": "t-kurayoshi-misasa-bus",
-      "route": "Kurayoshi Station -> Misasa Onsen (Hinomaru Bus, Kamii-Misasa/Misasa Line, route 72/73)",
+      "route": "Kurayoshi Station -> Misasa Onsen (Hinomaru Bus, Kamii-Misasa/Misasa Line, route 72/73; or a ryokan shuttle / jumbo taxi)",
       "risk": 3,
       "evidenceIds": [
         "ev-bus-route-exists",
         "ev-bus-downbound-schedule",
         "ev-bus-upbound-last",
         "ev-misasa-access-20min",
-        "ev-bus-fare-unreadable"
+        "ev-bus-fare-unreadable",
+        "ev-kurayoshi-misasa-bus",
+        "ev-ryokan-shuttle",
+        "ev-jumbo-taxi",
+        "ev-kurayoshi-station-accessible"
       ],
-      "doorToDoor": "From the Kurayoshi Station bus stop, the ride to the Misasa Onsen area stops (Onsen South Exit / Misasa Onsen Tourism Center) runs about 20-26 minutes depending on the exact drop-off.",
-      "transferReality": "A standard route bus (fare box, no reserved seating, boarding by the rear door in the usual Japan local-bus pattern) rather than a coach — there is no dedicated luggage hold, so suitcases ride in the aisle/legroom area.",
-      "groupLuggageMobility": "For 8 travelers including 2 with low walking tolerance and full luggage, this is materially different from a solo traveler's transfer: boarding with bags takes longer, the bus may not have 8 adjacent seats free, and standing with luggage on a winding rural road is a real fatigue cost for the low-mobility pair. Build the transfer around a bus that isn't near-empty-standing-room, not just the next departure.",
-      "buffer": "Weekday midday service has a gap of roughly 100 minutes (12:22-14:04) — missing a bus in that window is not a 10-minute inconvenience, it's an hour-plus wait with luggage and no seating guarantee at the stop.",
-      "missedConnection": "Missing the last practical evening bus (~19:08 downbound) leaves taxi as the only same-night option to Misasa.",
+      "doorToDoor": "From the Kurayoshi Station bus stop, the ride to the Misasa Onsen area stops (Onsen South Exit / Misasa Onsen Tourism Center) runs about 20-26 minutes depending on the exact drop-off. Kurayoshi Station itself is fully step-free (elevators, no escalators, to all 3 platforms) — the last-mile choice outside the station is what needs planning, not the train transfer.",
+      "transferReality": "A standard route bus (fare box, no reserved seating, boarding by the rear door in the usual Japan local-bus pattern) rather than a coach — there is no dedicated luggage hold, so suitcases ride in the aisle/legroom area. Two lower-friction alternatives exist for this group: some Misasa ryokan (e.g. Misasakan) run a free reserved shuttle from the station on fixed pickup times (advance booking only), and Hinomaru Hire's Kurayoshi office runs 9-seat jumbo taxis (0858-22-3155, advance reservation required) that fit the whole party plus hand luggage in one vehicle.",
+      "groupLuggageMobility": "For 8 travelers including 2 with low walking tolerance and full luggage, this is materially different from a solo traveler's transfer: boarding the public bus with bags takes longer, the bus may not have 8 adjacent seats free, and standing with luggage on a winding rural road is a real fatigue cost for the low-mobility pair. The jumbo taxi or a pre-arranged ryokan shuttle avoids that risk entirely by moving the whole group in one reserved vehicle instead of relying on a walk-up bus.",
+      "buffer": "Weekday midday service has a gap of roughly 100 minutes (12:22-14:04) — missing a bus in that window is not a 10-minute inconvenience, it's an hour-plus wait with luggage and no seating guarantee at the stop. A 2-day unlimited local-bus pass (¥1,300) is available if the group expects multiple rides on this and neighboring Misasa-area routes.",
+      "missedConnection": "Missing the last practical evening bus (~19:08 downbound) leaves a reserved jumbo taxi or ryokan shuttle as the same-night options to Misasa; neither is a walk-up service, so they need to be arranged (by phone) before the group is stranded, not after.",
       "nextService": "Outside the midday gap, the next departure is typically within 30-90 minutes on the schedule fetched for this pass.",
       "lastPracticalReturn": "Last confirmed weekday downbound (Kurayoshi -> Misasa) departure: 19:08. Build the Day 2 dinner in Kurayoshi to end with a real buffer before that, not against it.",
-      "fallback": "Taxi, ~20 minutes: Nikko/Chuo Taxi (0858-22-7111) or Kurayoshi Kotsu (0858-22-1511). The only fare figure located (~¥2,880) is undated-to-2009 and unconfirmed for 2026 — treat it as an order-of-magnitude estimate, not a quoted price, and expect to need 2 taxis for a party of 8 with luggage."
+      "fallback": "Reserve a Hinomaru Hire 9-seat jumbo taxi in advance (0858-22-3155, ¥740 flagfall + ¥90/279m metered) — one vehicle for the whole party instead of splitting across 2 regular taxis — or have the booked ryokan arrange its own free reserved shuttle from Kurayoshi Station. Nikko/Chuo Taxi (0858-22-7111) or Kurayoshi Kotsu (0858-22-1511) remain walk-up backups (~20 min), but the only fare figure located for them (~¥2,880) is undated-to-2009 and unconfirmed for 2026."
     }
   ],
   "disagreements": [
@@ -966,13 +1491,27 @@
       ],
       "investigation": "A third-party booking aggregator summary said private rooms seat 2-6. The restaurant's own site (masashige55.com, fetched directly) states private rooms run 2-60 across 116 total seats. The online reservation widget (toreta.in, fetched directly) confirms its own party-size selector doesn't reach 8 and tells guests to call the shop directly in that case.",
       "resolution": "The restaurant can genuinely seat a party of 8, but the self-service online booking tool cannot secure it — for this trip's group of 8, book by phone, not the web form. This is exactly the party-size feasibility decision the trip's food pick needed."
+    },
+    {
+      "id": "d-bus-schedule-confirmability",
+      "topic": "Whether the Kurayoshi-Misasa public bus's exact frequency/last-departure time is confirmable from a primary source",
+      "impact": "minor",
+      "evidenceIds": [
+        "ev-bus-downbound-schedule",
+        "ev-bus-upbound-last"
+      ],
+      "investigation": "Pass B could not confirm the bus's exact frequency or last-departure time from a fetched primary source in its own search path (NAVITIME's timetable pages returned HTTP 403, and the operator's own PDF timetable would not extract as readable text) and, on that basis, treated the public bus as unconfirmed-schedule, favoring the ryokan shuttle or a reserved jumbo taxi for the return leg. Pass A, working the same operator, fetched hinomarubus.co.jp's own HTML timetable pages directly (not the PDF, not NAVITIME) and read the exact weekday schedule off them, including the ~100-minute midday gap and the 19:08 last downbound departure.",
+      "resolution": "Pass A's direct fetch of the operator's own HTML timetable is a genuinely read primary source and stands as the confirmed schedule (see ev-bus-downbound-schedule / ev-bus-upbound-last) — it does not change which mode is recommended as the anchor transfer. Pass B's alternative-mode findings (ryokan shuttle, jumbo taxi, station accessibility) are adopted separately, folded into the same transport finding as fallbacks that remove single-point-of-failure risk on the confirmed bus schedule for a mobility-constrained party of 8."
     }
   ],
   "depth": {
     "reservations": {
       "requiredCandidateIds": [
         "c-yakiniku-masashige--kurayoshi",
-        "c-sanbutsu-ji-nageiredo-climb"
+        "c-sanbutsu-ji-nageiredo-climb",
+        "c-kurayoshi-misasa-transfer--ryokan-reserved-shuttle",
+        "c-kurayoshi-misasa-transfer--jumbo-taxi",
+        "c-menya-hachibee-gyukotsu-ramen"
       ],
       "notApplicableReason": null
     },
@@ -987,8 +1526,98 @@
     "stopped": true,
     "trend": "duplicates",
     "unresolvedCouldChange": false,
-    "note": "Later searches on both ranked priorities (additional crab restaurants, additional onsen bathhouses, further day-trip peaks/temples) kept surfacing the same handful of names or options that were clearly weaker/out-of-scope for a compact 4-day, balanced-pace, no-rental-car trip (Mount Daisen too far, generic central-Tottori crab chains both touristy and out of season). The two open threads — the bus fare PDF being unreadable, and Menya Hachibee's hours lacking a qualifying primary source — affect whether a couple of figures ship clean vs. flagged, not which candidates make the guide, so they don't block stopping. Pass B's independent native-language sweep is the next real chance to surface something this pass missed."
+    "note": "Merged saturation across both independent passes. Pass A: later searches on both ranked priorities (additional crab restaurants, additional onsen bathhouses, further day-trip peaks/temples) kept surfacing the same handful of names or options that were clearly weaker/out-of-scope for a compact 4-day, balanced-pace, no-rental-car trip. Pass B: final native-language search rounds (Kurayoshi shirakabe-dozo 'quiet backstreet' angle, exact NAVITIME/PDF bus timetables, a second corroboration for Kissa Sante/Santo Mato) returned generic tourism-board copy, blocked pages, or no new independently-fetchable specifics. Reconciliation: the two passes disagreed on only one point of substance (bus-schedule confirmability, d-bus-schedule-confirmability, minor impact, resolved in favor of Pass A's fetched schedule) and corroborated or extended each other everywhere else (crab season, Nageiredo climb rules, the anchor transfer's real friction). Two Pass B local-food leads (Kissa Sante, Santo Mato) remain single-sourced and are kept as leads, not shipped. Nothing unresolved across either pass would change which candidates ship."
   },
-  "passB": null,
-  "reconciliation": []
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "Tottori-chubu's resident/local-blog layer — transit advisories, ramen-shop firsthand reviews, onsen-town local-food roundups, crab-season regulatory pages — writes almost exclusively in Japanese; English coverage of Misasa Onsen and Kurayoshi specifically is thin and generic (mostly reprints of the same 'top sights' list), so native-language search was the primary discovery channel, per src/data/destinations/japan.json's languages:['ja'] and t0Domains (go.jp/mlit.go.jp/japan.travel/jreast.co.jp families).",
+      "searchClasses": [
+        "Japanese-language transit searches (Kurayoshi Station <-> Misasa Onsen bus/taxi/shuttle options, station accessibility)",
+        "Japanese-language official/operator searches for Mitokusan/Nageiredo access rules and the roadside viewing-platform alternative",
+        "Japanese-language local-food searches for Misasa Onsen and Kurayoshi (resident cafes, regional gyukotsu ramen, local supermarket)",
+        "Japanese-language regulatory/industry searches for Tottori crab season dates (matsuba-gani vs beni-zuwaigani)",
+        "Japanese-language firsthand blog searches for Tottori Sand Dunes crowd timing"
+      ],
+      "yield": "Surfaced and officially verified an accessible alternative to the Nageiredo climb (the free viewing platform) plus the exact climb access rules (group-of-2 minimum, footwear check) relevant to the party's 2 low-mobility travelers; corroborated with 2 independent fresh firsthand sources that early-morning dune visits are no longer an undiscovered secret due to social media, nuancing the generic 'go at dawn' advice; found an official regulatory correction that matsuba-gani is out of season for the Oct 20-23 dates with beni-zuwaigani as the true in-season alternative; identified real Kurayoshi-Misasa transfer alternatives (ryokan-reserved free shuttle, 9-seat jumbo taxi) and a genuine party-size-feasibility food finding (Menya Hachibee's small walk-in-only gyukotsu ramen shop). Two local food leads (Kissa Sante, Santo Mato supermarket) were single-sourced within budget and kept shortlisted rather than pushed to a forced second source."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": [
+    {
+      "findingId": "ev-mitokusan-nageiredo-rules",
+      "disposition": "adopt",
+      "note": "Corroborates Pass A's ev-mitokusan-fees-rules (same ¥1,200 total, 8:00-15:00 reception, 2-person minimum, footwear check) and adds two facts Pass A didn't have: the route is typically closed for snow Dec-Mar, and rental waraji straw sandals cost ¥800. Folded into the Sanbutsu-ji sights entry and the anchor reservation's deposit/foreignFriction fields."
+    },
+    {
+      "findingId": "ev-nageiredo-viewing-platform",
+      "disposition": "adopt",
+      "note": "Corroborates Pass A's ev-yohaijo-details (same platform, same ~600m/partial-view facts) and adds the exact parking count (2 standard + 1 accessible) and the Nikon-telescope/'only other viewing point' framing. Folded into the Nageiredo Yohaijo sights entry."
+    },
+    {
+      "findingId": "ev-dunes-crowd-current-1",
+      "disposition": "adopt",
+      "note": "New experiential finding not in Pass A. Claim text consolidated with ev-dunes-crowd-current-2 (an independent second firsthand source, different family) to the substance both sources actually support — dawn is quieter but no longer empty — satisfying the 2-source corroboration rule honestly rather than attributing each source's unique color to the other. The 11:00-15:00 worst-window/tour-group detail unique to this source alone was left out of the shipped claim since it isn't independently corroborated within this pass's budget; kept as a ledger-only lead."
+    },
+    {
+      "findingId": "ev-dunes-crowd-current-2",
+      "disposition": "adopt",
+      "note": "Second independent firsthand source (distinct family from ev-dunes-crowd-current-1) corroborating the same consolidated claim — dawn at the dunes is quieter but, per two 2025 accounts, no longer empty. Folded into the Sand Dunes sights entry and a new 'what generic guides get wrong' divergence."
+    },
+    {
+      "findingId": "ev-dunes-camel-path",
+      "disposition": "adopt",
+      "note": "New official-sourced finding, not in Pass A. Folded into the Sand Dunes sights entry; the candidate carries worth:worth-the-detour."
+    },
+    {
+      "findingId": "ev-matsuba-gani-season",
+      "disposition": "adopt",
+      "note": "Corroborates Pass A's ev-crab-season-matsuba (same Nov 6 2026 - Mar 20 2027 window) from a higher source tier (torican.jp, official Tottori City tourism site) than Pass A's own citation (matsubishi.online, reference tier). The guide's 'what generic guides get wrong' divergence entry for crab season is upgraded to cite this official source per the cite-up-the-ladder rule."
+    },
+    {
+      "findingId": "ev-beni-zuwaigani-season",
+      "disposition": "agree",
+      "note": "Same claim, same URL (marutsu.jp/blogs/news/kaikin2023) as Pass A's existing ev-crab-season-benizuwai — an independent duplicate confirmation from the same operator source. No guide change needed; source.kind recorded as operator here vs Pass A's reference for the identical URL, which is the more accurate classification (marutsu.jp is the fishery/operator's own blog)."
+    },
+    {
+      "findingId": "ev-hachibee-seating-1",
+      "disposition": "adopt",
+      "note": "New experiential finding not in Pass A (Pass A's Hachibee entry had no seating/capacity detail). Claim text consolidated with ev-hachibee-seating-2 (independent second firsthand source, different family) to the substance both sources support — small counter/table/tatami seating, crowded at lunch — satisfying the 2-source corroboration rule. Directly answers the intake's ask for a real party-of-8 feasibility decision on a second venue besides Yakiniku Masashige. Folded into the Food tab's crowd_tip field and a new reservation record."
+    },
+    {
+      "findingId": "ev-hachibee-seating-2",
+      "disposition": "adopt",
+      "note": "Second independent firsthand source (distinct family from ev-hachibee-seating-1) corroborating the same consolidated claim. Folded in alongside it."
+    },
+    {
+      "findingId": "ev-kurayoshi-misasa-bus",
+      "disposition": "adopt",
+      "note": "Corroborates Pass A's confirmed ~20-minute transfer time and adds a new fact Pass A didn't find: a 2-day unlimited local-bus pass (¥1,300) covering this and neighboring Misasa-area routes. Folded into the transit section and the enriched transport finding."
+    },
+    {
+      "findingId": "ev-ryokan-shuttle",
+      "disposition": "adopt",
+      "note": "New alternative transfer mode not in Pass A — a free ryokan-reserved shuttle directly relevant to the intake's binding mobility constraint (2 of 8 travelers with low walking tolerance). Folded into the transit section, the Day 2 plan_b, and a new reservation record; required in depth.reservations for its important booking mechanics."
+    },
+    {
+      "findingId": "ev-jumbo-taxi",
+      "disposition": "replace",
+      "note": "Supersedes Pass A's weak taxi fallback (Nikko/Chuo Taxi, only fare figure dated to 2009, 2 cars needed for 8 people) with a concretely-sourced 9-seat jumbo taxi option (Hinomaru Hire, published current metered tariff, single vehicle for the whole party). Adopted as the primary reserved fallback in the transport finding and the Day 2 plan_b; Pass A's original taxi operators are kept as a secondary walk-up mention since they remain a real, if less-suited, option."
+    },
+    {
+      "findingId": "ev-kurayoshi-station-accessible",
+      "disposition": "adopt",
+      "note": "New station-accessibility finding not in Pass A, directly relevant to the intake's binding mobility constraint. Folded into the transit section and the transport finding's doorToDoor field — establishes that the constraint sits in the onward bus/shuttle/taxi choice, not the train transfer itself."
+    },
+    {
+      "findingId": "ev-kissa-sante",
+      "disposition": "reject",
+      "note": "Single-sourced (na-na.media only) within Pass B's own budget, not independently corroborated per the 2-source rule for experiential/local-favorite claims. Kept as a ledger lead (candidate status shortlisted, not shipped), not folded into the guide."
+    },
+    {
+      "findingId": "ev-santo-mato",
+      "disposition": "reject",
+      "note": "Same reason as ev-kissa-sante: single-sourced (na-na.media only), not independently corroborated. Kept as a ledger lead (candidate status shortlisted, not shipped), not folded into the guide."
+    }
+  ]
 }

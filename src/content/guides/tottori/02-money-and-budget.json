@@ -3,7 +3,7 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "<p>Japan's currency is the yen (¥); reference rate {{fact:fx-rate-usd-jpy}}. Carry more cash than a Tokyo trip would need — Misasa Onsen ryokan, the Kurayoshi bus, and Kabuyu public bath are all cash-friendlier than card-friendly.</p><p>⚠ 7-Eleven ATMs are the commonly cited option for foreign cards in Japan, but this pass only reached that guidance through a search summary, not a direct fetch of the source — confirm your specific card network works before relying on it, especially once you're away from a 7-Eleven in Kurayoshi or Misasa.</p>",
+    "body": "<p>Japan's currency is the yen (¥); reference rate {{fact:fx-rate-usd-jpy}}. Carry more cash than a Tokyo trip would need — Misasa Onsen ryokan, the Kurayoshi bus, and Kabuyu public bath are all cash-friendlier than card-friendly.</p><p>⚠ 7-Eleven ATMs are the commonly cited option for foreign cards in Japan, but that guidance here rests on a search summary rather than a direct fetch of the source — confirm your specific card network works before relying on it, especially once you're away from a 7-Eleven in Kurayoshi or Misasa.</p>",
     "phase": "arrival"
   },
   {
