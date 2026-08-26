@@ -177,3 +177,24 @@ as a ledger lead but not shipped (single-sourced, or superseded by fresher evide
   - None of the above changed which candidate ships, which venue is recommended, or any figure a
     traveler reads — they are artifact-integrity fixes, recorded here per the continuity
     discipline (any touched fact re-enters the source+date/continuity checks).
+
+- **Reconcile pass (2026-08-26), attempt 2 — 3 P0-blocking D2 provenance findings fixed in the
+  guide content.** `npm run verify`'s readiness check (`scripts/audit/check-research.mjs`, D2
+  rule) flagged 3 item-level facts as undated hour/price figures under this guide's
+  `provenance:"strict"` — blocking under strict because a precise-looking figure with no
+  `verified_on` is exactly the "could a generic AI have written this" shape the rule exists to
+  catch, even though every figure involved was already researched and cited elsewhere in the
+  guide:
+  - `02-money-and-budget.json`'s "Sights & activities, per day" budget item (¥ figures in its
+    `note`) — added `source_url`/`verified_on` (mitokusan.jp, 2026-08-26; the figure it calls out
+    by name, the Nageiredo climb day cost, is `ev-mitokusan-fees-rules`).
+  - `06-days.json`'s Day 1 ("Arrive Tottori — dunes at golden hour") item body cites the Sand
+    Museum's ¥800/9:00–18:00 hours — added `source_url`/`verified_on` (sand-museum.jp,
+    2026-08-26; `ev-sand-museum-hours-price`).
+  - `06-days.json`'s Day 3 ("Misasa Onsen — Nageiredo, the onsen town, and crab") item body cites
+    Nageiredo's ¥1,200/8:00–15:00 climb rules and Kabuyu's ¥400 admission outside its `plan_b`
+    (which already carried its own dated citation) — added the same top-level
+    `source_url`/`verified_on` (mitokusan.jp, 2026-08-26; `ev-mitokusan-fees-rules` /
+    `ev-mitokusan-nageiredo-rules`).
+  No figure, recommendation, or claim changed — every value cited was already verified and
+  present elsewhere in the guide/evidence artifact; this closes a provenance-metadata gap only.

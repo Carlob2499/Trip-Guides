@@ -48,7 +48,9 @@
         "low": 500,
         "high": 2500,
         "per": "person",
-        "note": "Averaged across the trip — the Nageiredo climb day (≈¥1,200) and cruise day (¥1,800) run above this on their own days."
+        "note": "Averaged across the trip — the Nageiredo climb day (≈¥1,200) and cruise day (¥1,800) run above this on their own days.",
+        "source_url": "https://www.mitokusan.jp/",
+        "verified_on": "2026-08-26"
       },
       {
         "label": "Flights — round trip",

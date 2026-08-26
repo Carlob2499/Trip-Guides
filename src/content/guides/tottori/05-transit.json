@@ -4,6 +4,8 @@
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
+    "source_url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
+    "verified_on": "2026-08-26",
     "steps": [
       "<b>Tottori Station → Kurayoshi Station</b> (San'in Main Line): limited express (Super Hakuto / Super Oki / Super Matsukaze) takes ≈30 min; a local train covers the same route in ≈60 min with no reserved-seat fee. With luggage and a group of 8, the local train's lack of seat reservations is a real trade-off against the express's speed — worth deciding per day rather than defaulting to whichever train is next.",
       "<b>Kurayoshi Station → Shirakabe Dozo-gun</b>: city-route bus, ≈10–15 min, alight at the Akagawara/Shirakabe-Dozogun stop, then a short walk. The district's tourist information center (inside Akagawara Building No. 10) opens 9:00–17:00.",
