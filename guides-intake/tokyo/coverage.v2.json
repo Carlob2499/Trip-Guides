@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "tokyo",
+  "runId": "tokyo-20260826-41ae82",
+  "asks": [
+    {
+      "id": "anchor",
+      "ask": "One Saturday anchor dinner (Sat 2026-10-17) worth planning the day around when the quality difference is material. Venue NOT pre-selected — candidate discovery must earn the shortlist.",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "06-days.json#asakusa-then-the-anchor-dinner",
+        "02-money-and-budget.json#saturday-anchor-dinner-ryugin-per-person"
+      ],
+      "evidenceIds": [
+        "ev-ryugin-private-rooms-capacity",
+        "ev-ryugin-booking-route",
+        "ev-ohno-single-seating",
+        "ev-ohno-room-capacity"
+      ],
+      "reason": null
+    },
+    {
+      "id": "cities",
+      "ask": "Tokyo",
+      "status": "covered",
+      "where": [
+        "01-plan.json#when-you-land",
+        "05-transit.json#orientation-map"
+      ],
+      "evidenceIds": [
+        "ev-haneda-monorail-keikyu",
+        "ev-keisei-skyliner-fare"
+      ],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "2026-10-16 – 2026-10-20",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "01-plan.json#public-holidays-closures"
+      ],
+      "evidenceIds": [
+        "ev-no-holiday-in-window"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Food & dining",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-ryugin-private-rooms-capacity",
+        "ev-ryugin-booking-route",
+        "ev-ukaitei-booking-price",
+        "ev-aragawa-booking-price",
+        "ev-ohno-single-seating",
+        "ev-ohno-room-capacity",
+        "ev-tsukiji-crowd-timing-1",
+        "ev-toyosu-market-schedule",
+        "ev-torien-group-booking",
+        "ev-ameyoko-crowd-1"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travel-style",
+      "ask": "balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "07-sights.json#top-sights"
+      ],
+      "evidenceIds": [
+        "ev-meiji-jingu-crowd-1",
+        "ev-tsukiji-crowd-timing-1"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "6",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "02-money-and-budget.json#budget-daily-costs"
+      ],
+      "evidenceIds": [
+        "ev-ryugin-private-rooms-capacity",
+        "ev-ushigoro-group-booking",
+        "ev-torien-group-booking",
+        "ev-ohno-room-capacity",
+        "ev-koumoto-capacity"
+      ],
+      "reason": null
+    },
+    {
+      "id": "comments",
+      "ask": "Combined Research Run A — V01 validation trial (frozen 6-adult Tokyo food scenario): (1) food is the top priority; (2) one Saturday anchor dinner worth planning the day around; (3) food quality outranks travel time, but logistics/booking friction stays explicit; (4) casual meals stay low-friction; (5) party of 6 must be seatable, or the venue is rejected/caveated; (6) preserve a genuinely exceptional but inconvenient option as Worth the Effort/Detour rather than deleting it; (7) no cuisine/neighborhood pre-selected to make the test easier.",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-ryugin-booking-route",
+        "ev-aragawa-capacity-estimate",
+        "ev-ohno-room-capacity",
+        "ev-torien-group-booking"
+      ],
+      "reason": null
+    }
+  ]
+}

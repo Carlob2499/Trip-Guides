@@ -51,6 +51,20 @@
         "shelf_life": "venue"
       },
       {
+        "name": "Kobikicho Ohno",
+        "area": "Yotsuya-sanchome",
+        "phone": "050-5486-6483",
+        "hours": "Dinner 17:00–21:00 (drinks last order 20:00); no fixed weekly closure day, irregular ad-hoc closures — confirm for your exact date",
+        "book": "call",
+        "how": "Serves only ONE party per day — the whole restaurant is a single nightly seating, so there's no release-window date to wait for; contact as early as practical for Sat Oct 17 since another party could take the date first. Official site lists an English menu and English-speaking staff; card acceptance isn't confirmed on either the official site or its operator listing — ask when booking.",
+        "price": "≈¥15,000/person (Gurunavi operator estimate — the official site doesn't publish a fixed course price)",
+        "crowd_tip": "The sole private room (horigotatsu, door + walls) seats 2–6 — a party of six fills it exactly, with zero buffer for a 7th guest.",
+        "why": "Worth the Effort: a tea-kaiseki restaurant discoverable only through Japanese-language search, serving a single reservation a day — a genuinely exclusive alternative to RyuGin if the concierge booking doesn't come through, at real booking-friction cost (no self-service, capacity fits 6 with no margin).",
+        "source_url": "https://kobikityouohno.gorp.jp/",
+        "verified_on": "2026-08-26",
+        "shelf_life": "venue"
+      },
+      {
         "name": "Yakiniku Ushigoro",
         "area": "Ginza (S. Ginza branch)",
         "book": "url",
@@ -75,7 +89,7 @@
         "name": "Tsukiji Outer Market",
         "area": "Tsukiji, Chuo-ku",
         "book": "walk-in",
-        "hours": "Best 8–9 AM before the 10 AM–12 PM peak; many individual shops close Sundays",
+        "hours": "Best 8–9 AM before the 10 AM–12 PM peak; two independent local accounts note roughly half the stalls close on Wednesdays as well as Sundays",
         "how": "Graze stall to stall rather than one sit-down meal — the market's own site asks visitors not to move through the narrow lanes as one large group, so split into pairs or trios while browsing.",
         "crowd_tip": "10 AM–noon gets genuinely crowded with 30–60 min lines at the famous stalls; go earlier.",
         "why": "The wholesale tuna auction moved to Toyosu in 2018, but the food stalls here never closed — still the best casual grazing breakfast in the city.",

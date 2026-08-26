@@ -45,11 +45,18 @@ Mixkit's Tokyo collection (mixkit.co/free-stock-video/tokyo/) surfaced 3 plausib
 > (resident + blog knowledge, off-peak timing, novel alternatives). Record what each pass found and
 > how conflicts resolved — this is the corroboration trail behind the guide.
 
-*(Not filled by Pass A — this table is Reconcile's deliverable, after Pass B runs independently. Pass A's full candidate/evidence trail lives in `evidence.v2.json`.)*
+Pass B ran independently (food-priority scope only, per SKILL.md's depth-on-top-priority rule) and returned 7 candidates + 12 evidence records + 2 reservation findings. Every Pass B item gets a verdict below; the machine-checked disposition for each Pass B evidence record lives in `evidence.v2.json`'s `reconciliation[]` array.
 
 | Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
 |------|--------------------|--------------------------|--------------------|---------------------------------|
-|      |                    |                          |                    |                                 |
+| Anchor dinner slot | Nihonryori RyuGin shipped as anchor; Ginza Ukai-tei fallback; Aragawa Worth-the-Effort | Kobikicho Ohno (single-seating-per-day tea-kaiseki) shipped as Pass B's own top pick; Koumoto (soba-kappo) shipped as its second pick | RyuGin stays the shipped anchor; **Kobikicho Ohno added as a second Worth-the-Effort alternative**; Koumoto kept shortlisted, not shipped | Not a factual conflict — two independent passes found disjoint, non-overlapping candidate sets for the same slot. Reconciled by ROLE: RyuGin has the deepest, best-documented booking route (confirmed concierge path, 6–8 buffer capacity); Ohno is a genuinely exceptional but harder-to-book alternative (single seating/day, exact-fit-6, less-established foreign booking) — preserved per the intake's own instruction (constraint #6) rather than silently dropped. Koumoto's role (flexible, self-service-adjacent fallback) is already covered by Ukai-tei, so shipping all three would dilute the Saturday-dinner section rather than strengthen it. |
+| Kobikicho Ohno | not found | shipped (Pass B's own anchor pick), Worth-the-Effort | **adopted** — new item in `08-food-and-shopping.json`'s "What to eat" | B-only, carried across as-is (fetched official site + operator cancellation/price terms); no re-fetch needed. |
+| Koumoto | not found | shipped (Pass B's own pick) | **not shipped** — kept `shortlisted` in `evidence.v2.json` | B-only, solid evidence (confirmed foreign-card acceptance, flexible capacity to 12) but redundant with Ukai-tei's already-shipped fallback role. Rejected for shipping, not for accuracy. |
+| Narukiyo | not found | rejected (own funnel): standing-counter seating wrong for 6, already English-tourist-discovered, phone line found closed | rejected, carried across unchanged | Pass B's own rejection — no Pass A conflict to resolve. |
+| Kagayaki (Minowa) | not found | rejected (own funnel): all-you-can-eat buffet format, not a quality-led anchor pick | rejected, carried across unchanged | Pass B's own rejection. |
+| Miyabi (Roppongi) | not found | rejected (own funnel): single-blog-only source, generic tourist-district spot | rejected, carried across unchanged | Pass B's own rejection. |
+| Kaigen (Tsukiji) | not found | rejected (own funnel): only 1 current (≤24mo) firsthand corroboration, other 2 are 2022 | rejected, carried across unchanged | Pass B's own rejection — a good lead for a future pass per the freshness rule. |
+| Tsukiji Outer Market crowd timing | Crowd-timing evidence from 2 search-preview-tier blogs (8–9 AM quiet, 9 AM–1 PM peak); Sunday closures noted | 2 fetched (not search-preview) independent Japanese blogs corroborating the same early-morning window, PLUS a new detail: Wednesdays also run at roughly half-capacity | **AGREE, enriched** — guide's Tsukiji entry now reads "...roughly half the stalls close on Wednesdays as well as Sundays" | Both passes independently converged on the same crowd pattern — strong corroboration. Pass B's sourcing is better (fetched vs. search-preview) and added the Wednesday detail Pass A had only partially sourced. |
 
 ## Discovery leads (Pass B — native-first)
 > OPTIONAL accelerant, filled by an interactive deep-research sweep BEFORE the pipeline runs
@@ -127,6 +134,12 @@ Full detail (reasons, sources, reservation depth) lives in `evidence.v2.json`; t
 | Tsukiji Outer Market | shipped (Sunday morning graze) |
 | Toyosu Market | shipped (Monday morning, routes around Sushi Dai/Daiwa's queue) |
 | Ameya-Yokocho | shipped (Tuesday morning graze) |
+| **Kobikicho Ohno** (Pass B) | shipped as Worth-the-Effort anchor alternative — single-seating-per-day tea-kaiseki, exact-fit-6 private room, native-language-only discovery |
+| **Koumoto** (Pass B) | shortlisted, not shipped — solid soba-kappo alternative, confirmed foreign-card acceptance, but Ukai-tei already covers the fallback role |
+| **Narukiyo** (Pass B) | rejected: standing-counter seating wrong for a seated 6-top, already English-tourist-discovered |
+| **Kagayaki, Minowa** (Pass B) | rejected: all-you-can-eat buffet format, not a quality-led anchor pick |
+| **Miyabi, Roppongi** (Pass B) | rejected: single-blog-only source, generic tourist-district spot |
+| **Kaigen, Tsukiji** (Pass B) | rejected: only 1 current (≤24mo) firsthand corroboration of 3 found, freshness bar not cleared |
 
 ### Priority 2 / 3: not named at intake
 
@@ -170,3 +183,4 @@ No second or third priority was stated in `intake.md` — left blank rather than
 
 - 2026-08-26: Anchor venue selected via research, per intake's own instruction ("Venue NOT pre-selected — candidate discovery must earn the shortlist"). Nihonryori RyuGin shipped as the anchor (Sat Oct 17, 2026 dinner), with Ginza Ukai-tei as the designated low-friction fallback and Aragawa preserved as a Worth-the-Effort alternative. Not a deviation from intent — this *is* the intent's fulfillment — logged here for traceability since the intake's placeholder text is now superseded by a real pick.
 - 2026-08-26: US State Dept travel advisory level left unset in `_guide.json` (no `advisory` block shipped) — travel.state.gov is Cloudflare-gated against automated fetch in this environment (confirmed 403 on repeated attempts), and a search-preview snippet is not a valid citation for a schema-required, source-dated field. Flagged in the Health & safety panel instead. A future pass with real-browser access should complete this.
+- 2026-08-26 (Reconcile): Pass B's independent native-language sweep found Kobikicho Ohno, a single-seating-per-day tea-kaiseki restaurant with no English-language coverage — genuinely exceptional and distinct from Pass A's anchor candidates. Not a factual conflict with RyuGin (the two passes simply found different restaurants), so reconciled by role rather than by disproof: RyuGin keeps the shipped anchor slot (its concierge booking route and 6–8 buffer capacity are the best-documented in the guide), and Kobikicho Ohno is added to `08-food-and-shopping.json` as a second Worth-the-Effort alternative, per the intake's own constraint (6) not to silently drop an exceptional-but-inconvenient find. Pass B's second pick, Koumoto, is a solid but redundant alternative (Ukai-tei already covers its fallback role) — kept shortlisted in `evidence.v2.json`, not shipped in guide content. Tsukiji Outer Market's crowd-timing note was enriched with Pass B's better-sourced (fetched, not search-preview) corroboration, adding a Wednesday reduced-stall detail alongside the Sunday one Pass A already had.
