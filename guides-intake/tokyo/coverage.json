@@ -1,0 +1,48 @@
+{
+  "slug": "tokyo",
+  "generatedAt": "2026-08-26T09:00:34.583Z",
+  "asks": [
+    {
+      "id": "anchor",
+      "label": "Anchor event",
+      "value": "One Saturday anchor dinner (Sat 2026-10-17) worth planning the day around when the quality difference is material. Venue NOT pre-selected — candidate discovery must earn the shortlist.",
+      "coveredBy": null
+    },
+    {
+      "id": "cities",
+      "label": "Cities",
+      "value": "Tokyo",
+      "coveredBy": null
+    },
+    {
+      "id": "dates",
+      "label": "Trip dates",
+      "value": "2026-10-16 – 2026-10-20",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-1",
+      "label": "Priority #1",
+      "value": "Food & dining",
+      "coveredBy": null
+    },
+    {
+      "id": "travel-style",
+      "label": "Travel style",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "travelers",
+      "label": "Number of travelers",
+      "value": "6",
+      "coveredBy": null
+    },
+    {
+      "id": "comments",
+      "label": "Additional comments",
+      "value": "Combined Research Run A — V01 validation trial per docs/pipeline v2/VALIDATION_TRIAL_PACKETS.md (frozen 6-adult Tokyo food scenario). Operational validation data, not a live traveler request. Frozen intent: (1) food is the top trip priority; (2) one Saturday anchor dinner is worth planning the day around when quality difference is material; (3) food quality outranks shortest travel time, but logistics and booking friction must still be explicit; (4) casual meals stay low-friction — do not turn every lunch into a reservation project; (5) party size is six — a venue whose real seating/booking rules make six implausible must be rejected or caveated; (6) preserve a genuinely exceptional but inconvenient option as Worth the Effort/Detour when evidence supports it instead of silently deleting it for convenience; (7) no cuisine or neighborhood is pre-selected merely to make the test easier.",
+      "coveredBy": null
+    }
+  ]
+}

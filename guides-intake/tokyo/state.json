@@ -1,0 +1,14 @@
+{
+  "slug": "tokyo",
+  "createdAt": "2026-08-26T09:00:34.584Z",
+  "updatedAt": "2026-08-26T09:00:34.584Z",
+  "stages": {
+    "scaffold": "2026-08-26T09:00:34.584Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}

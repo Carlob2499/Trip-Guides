@@ -1,0 +1,21 @@
+[
+  {
+    "type": "sights",
+    "group": "Sights",
+    "title": "Top sights",
+    "phase": "daily",
+    "items": []
+  },
+  {
+    "type": "divergences",
+    "group": "Sights",
+    "title": "What generic guides get wrong",
+    "phase": "daily",
+    "items": [
+      {
+        "claim": "",
+        "correction": ""
+      }
+    ]
+  }
+]
