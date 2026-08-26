@@ -1,0 +1,55 @@
+Starting video analysis...
+Submitting video analysis task...
+Task submitted (ID: video-analysis-f314536b-96c2-42cc-ad66-8deb1336baa2)
+[8s] Status: Analyzing video content with AI...
+[33s] Still processing, please wait...
+[1m3s] Still processing, please wait...
+[1m33s] Still processing, please wait...
+[2m3s] Still processing, please wait...
+[2m31s] Status: Analysis completed
+[2m31s] Analysis completed!
+Full analysis result saved to: /home/ubuntu/video_q-pUnKCUlJA_analysis_20260825_235540.md
+Note: This tool performs AI-based visual and audio analysis, not verbatim transcription. For detailed speech transcription, use `manus-speech-to-text` instead.
+Analysis result:
+
+Based on the visual and audio analysis of the presentation "Making Motion Inclusive" by Val Head, here is the detailed extraction of content regarding inclusive motion in modern interfaces.
+
+### (A) Speaker and Context
+*   **Speaker:** Val Head, Author of *Designing Interface Animation* and Senior Design Evangelist at Adobe.
+*   **Context:** A professional presentation (likely AXSCON) focused on reconciling creative interface animation with accessibility standards and inclusive design principles.
+
+### (B) Near-Exact Quotes
+1.  **On Inclusive Design:** "Inclusive design doesn't mean you're designing one thing for all people. You're designing a diversity of ways to participate so that everyone has a sense of belonging." (Quoting Susan Goltsman).
+2.  **On Loop Control (WCAG 2.2.2):** "Provide a way to pause, stop, or hide any moving, blinking, scrolling content (that lasts more than 5s) unless that moving, blinking, or scrolling content is an essential activity."
+3.  **On Flashing (WCAG 2.3.1):** "Don't include anything that flashes more than three times in any one second unless the flashing is below the general flash threshold [or] red flash threshold."
+4.  **On Interaction Motion (WCAG 2.3.3):** "Motion animation triggered by interaction can be disabled unless the animation is essential for functionality or the information being conveyed."
+5.  **On Defining Motion Animation:** "Motion animation does not include changes of color, blurring or opacity."
+6.  **On Vestibular Risk:** "Some types of motion on screen... can cause negative physical responses for people with motion sensitivities."
+7.  **On Trigger Identification:** "Any motion that creates the illusion of movement... is one that could be potentially triggering for folks with motion sensitivities."
+8.  **On User Preference Detection:** "The `prefers-reduced-motion` media feature is used to detect if the user has requested the system minimize the amount of animation or motion it uses."
+9.  **On Strategic Reduction:** "Identify potentially triggering motion... then decide on the best reduced effect based on context."
+
+### (C) Concrete Implementation and Interaction Guidance
+*   **Looping Content:** Any animation repeating infinitely (carousels, background videos, looping illustrations) must have a visible control to stop it.
+*   **Media Queries:** Use the CSS `@media (prefers-reduced-motion: reduce)` and JavaScript `window.matchMedia('(prefers-reduced-motion: reduce)')` to detect user intent.
+*   **Substitution over Removal:** Instead of simply disabling motion, substitute high-motion triggers (zooms, slides) with safer non-motion transitions like cross-fades or opacity changes.
+*   **Smart Toggles:** For high-motion experiences, provide a site-specific "Reduced Motion" toggle. It should check the OS preference first, allow user override, and persist the choice (e.g., via local storage).
+*   **Subtle Cues:** Retain subtle animations like hover effects or small affordances even in "reduced" mode if they provide essential feedback without creating large-scale screen movement.
+
+### (D) Tensions and Exceptions
+*   **Essential Activity:** Motion is permitted if stopping it would break the core functionality (e.g., a game where movement is the primary interaction).
+*   **Critical Information:** Exceptions exist for time-sensitive data, such as a live stock ticker, where stopping the motion would prevent the user from receiving necessary updates.
+*   **Loading Indicators:** Spinners are generally exempt from the 5-second rule because they provide critical feedback that a process is still active.
+*   **Color-Specific Thresholds:** Flashing the color red has a much stricter threshold than other colors due to its higher risk for triggering seizures.
+
+### (E) Non-Authoritative Observations for Traveler PWAs
+*   **Parallax Risks:** Parallax (multi-speed/multi-directional movement) is cited as a primary trigger for vestibular discomfort and should be avoided or strictly reduced for travelers who may already be in unstable environments (e.g., a moving train).
+*   **Reading Interference:** Constant motion near static text (like animated pull-quotes) creates high cognitive load and distraction, making it difficult for users to focus on essential information.
+*   **Subtle UI Motion:** Changes in color, blur, or opacity are generally considered safe and do not typically require reduction, as they do not create the "illusion of physical movement."
+*   **User Expectations:** Motion toggles are becoming a standard feature for modern, inclusive web applications, moving beyond simple compliance into expected user control.
+
+### (F) Statements Not for Direct Requirement Conversion
+*   **Philosophy over Technicality:** The statement "Inclusive design doesn't mean you're designing one thing for all people" is a guiding principle for design strategy, not a specific technical pass/fail criterion.
+*   **General Advice:** "Don't use excessive amounts of motion" is subjective and context-dependent; requirements should instead focus on the specific WCAG thresholds (e.g., the 3-flashes-per-second rule).
+*   **Vestibular Anecdotes:** Personal accounts of motion sickness (e.g., "my phone is making me sick") serve as evidence for *why* a requirement exists but are not the requirements themselves.
+*   **WCAG Definitions:** The technical definition that "motion animation" excludes color/blur/opacity is a scoping mechanism for specific success criteria, not a general prohibition on animating those properties.

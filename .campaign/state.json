@@ -8,8 +8,8 @@
     "remote": "origin",
     "mainRecovery": "Merged PR #101 restored main after an accidental local merge; removed an unintended .claude skill-tree expansion before the campaign branch was created."
   },
-  "phase": "wave-2-invalid-state-data",
-  "completedWaves": ["baseline-proof", "wave-1-history-and-known-scars"],
+  "phase": "fresh-eyes-and-rediscovery",
+  "completedWaves": ["baseline-proof", "wave-1-history-and-known-scars", "wave-2-invalid-state-data", "wave-3-security-and-trust-boundaries", "wave-4-offline-release-and-cross-surface-discovery", "design-research-positive-negative-accessibility-field-contrarian", "fresh-eyes-1-change-containment", "fresh-eyes-2-failure-semantics", "fresh-eyes-3-governance-authority", "fresh-eyes-4-field-readiness"],
   "protectedBoundaries": [
     "V1 remains production default and rollback while WAYPOINT_RESEARCH_ENGINE is unset.",
     "V01/V02/V03/V05 candidate, V2 stage prompts/workflow, validation criteria, selector/publication authority, and frozen candidate are compatibility-frozen.",
@@ -46,7 +46,14 @@
     "A third independent case was reproduced in route-opt persistence: boolean true became the saved route-order record and Apply threw while writing a day key. The focused route-opt red/green regression proves the same object-shape boundary at this distinct owner.",
     "A fourth independent case was reproduced in per-tab scroll memory: boolean true became the saved tab-position map and the scroll callback threw while writing itinerary. The focused scroll-memory red/green regression proves object-shape validation at this distinct owner.",
     "guide-ui journey-station persistence had the same parse-and-mutate structure: a stored primitive could become seen before markSeen assigned a key. It now uses the shared parseStoredRecord contract, whose records-only behavior is unit-proven; typecheck passed after integration.",
-    "field-tools stop check-off had the same parse-and-mutate structure: a stored primitive could become stopState before a traveler toggle assigned a key. It now uses parseStoredRecord; the shared records-only contract and typecheck are green after integration."
+    "field-tools stop check-off had the same parse-and-mutate structure: a stored primitive could become stopState before a traveler toggle assigned a key. It now uses parseStoredRecord; the shared records-only contract and typecheck are green after integration.",
+    "Wave 2 rescan classified remaining browser-storage readers: Trip Split and panel models validate shape before mutable use; live weather/rate caches are validator- or freshness-gated and fail soft; Atlas restore is read-only; malformed Firebase room fragments already fail closed. No additional independently owned high-confidence invalid-state candidate remained.",
+    "Wave 3 security review: Worker owner-gate, endpoint, run-note, and hostile prose tests passed (72 assertions); npm audit --omit=dev reported zero production vulnerabilities; tracked secret/credential scan found no material; inspected Trip Split/budget renderers escape dynamic values; workflow/pipeline command strings use validated slugs or argument-vector execution. Privileged V2 workflow authority remains protected and unchanged.",
+    "Wave 4 factual/release audit: hygiene checks were clean for all six guides and Uruguay intake contradiction check was clean. Fact usage reports one untokenized Uruguay money candidate (1 USD) but does not establish a bad claim, so it is recorded as a protected V2/factual residual rather than edited.",
+    "Wave 4 release proof: npm run ship:check completed through coverage, build, service-worker, and performance stages; first-paint Denmark stayed 194 KB/200 KB, total JS 367 KB/900 KB, CSS 256 KB/300 KB. The full Playwright accessibility/responsive/hostile-copy suite passed 65 tests in 1.8 minutes.",
+    "Separate design research completed across map-planning, offline field-work, inclusive motion, and contrarian travel-tool reviews. Findings are retained in temporary .campaign/design-research.md as non-authoritative hypotheses and explicit non-requirements; no current design authority or production UI changed.",
+    "Four fresh-eyes lenses completed with no new high-value independently owned candidate: containment/PR ownership, failure semantics, governance/V2 authority, and field-readiness release mechanics. See temporary .campaign/fresh-eyes.md.",
+    "Zero-New Rediscovery Sweep 1 used bounded mutation testing after the full 8,137-mutant run estimated multi-hour completion. It found one high-value partial-coordinate guard coverage gap in route optimization; the new regression killed the mutation and lifted the bounded score to 86.73%."
   ],
   "blockers": [
     {
@@ -124,8 +131,20 @@
       "status": "PASS",
       "result": "56 protected contracts confirmed and ESLint passed after shared storage-shape integrations",
       "observedAt": "2026-08-25T23:40:00-04:00"
+    },
+    {
+      "command": "npm run ship:check",
+      "status": "PASS",
+      "result": "Full coverage/build/offline/performance release gate completed; performance budgets passed",
+      "observedAt": "2026-08-25T23:45:00-04:00"
+    },
+    {
+      "command": "npm run test:e2e",
+      "status": "PASS",
+      "result": "65 Playwright accessibility, responsive, and hostile-copy tests passed in 1.8 minutes",
+      "observedAt": "2026-08-25T23:48:00-04:00"
     }
   ],
-  "nextAction": "Conduct Wave 2 invalid-state/data discovery: exercise parser, storage, state, and cross-surface contracts for malformed, missing, stale, duplicate, and unsafe inputs without touching PR #100-owned Firebase sync paths or factual guide content.",
-  "updatedAt": "2026-08-25T23:40:00-04:00"
+  "nextAction": "Conduct at least four fresh-eyes reviews and three materially distinct zero-new-high-value rediscovery sweeps. Re-check active PR ownership at each sweep; classify findings before any repair and preserve protected boundaries.",
+  "updatedAt": "2026-08-25T23:58:00-04:00"
 }

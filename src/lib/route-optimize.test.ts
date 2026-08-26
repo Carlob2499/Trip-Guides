@@ -47,6 +47,22 @@ describe("optimizeDayRoute", () => {
     expect(new Set(result!.order)).toEqual(new Set([0, 2, 3, 4]));
   });
 
+  it("excludes waypoints with only one coordinate instead of admitting invalid distance inputs", () => {
+    const withPartialCoordinates = [
+      ZIGZAG[0],
+      { lat: 37.5 } as unknown as (typeof ZIGZAG)[number],
+      { lng: 127.02 } as unknown as (typeof ZIGZAG)[number],
+      ZIGZAG[1],
+      ZIGZAG[2],
+      ZIGZAG[3],
+    ];
+    const result = optimizeDayRoute(withPartialCoordinates);
+    expect(result).not.toBeNull();
+    expect(result!.order).not.toContain(1);
+    expect(result!.order).not.toContain(2);
+    expect(new Set(result!.order)).toEqual(new Set([0, 3, 4, 5]));
+  });
+
   it("returns null when a day is already near-optimal (below the honest-blank threshold)", () => {
     // Already monotonic east — reordering has nothing meaningful to offer.
     const alreadyGood = [
