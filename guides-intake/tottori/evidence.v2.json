@@ -34,7 +34,7 @@
       "worth": null
     },
     {
-      "id": "c-sanin-matsushima-sightseeing-cruise",
+      "id": "c-san-in-matsushima-sightseeing-cruise",
       "name": "San'in Matsushima Sightseeing Cruise",
       "branch": null,
       "priority": "culture",
@@ -556,7 +556,7 @@
     },
     {
       "id": "ev-cruise-schedule-fare",
-      "candidateId": "c-sanin-matsushima-sightseeing-cruise",
+      "candidateId": "c-san-in-matsushima-sightseeing-cruise",
       "claim": "San'in Matsushima Yuran's standard sightseeing cruise runs March through November, departing hourly 9:30-15:30 (each cruise ~40 minutes); adult fare is ¥1,800.",
       "kind": "objective",
       "origin": "passA",
@@ -582,7 +582,7 @@
     },
     {
       "id": "ev-cruise-operator-weather",
-      "candidateId": "c-sanin-matsushima-sightseeing-cruise",
+      "candidateId": "c-san-in-matsushima-sightseeing-cruise",
       "claim": "The operator's own homepage confirms hourly 9:30-15:30 departures for the main cruise and tells visitors to confirm current conditions before visiting — cruises are weather-dependent and can cancel.",
       "kind": "objective",
       "origin": "passA",
@@ -608,7 +608,7 @@
     },
     {
       "id": "ev-cruise-price-discrepancy-note",
-      "candidateId": "c-sanin-matsushima-sightseeing-cruise",
+      "candidateId": "c-san-in-matsushima-sightseeing-cruise",
       "claim": "A separate general tourism spot page cites 'from ¥1,300' for boat options at this coast, lower than the ¥1,800 confirmed directly on the operator's own cruise-specific page — see disagreement d-cruise-fare.",
       "kind": "objective",
       "origin": "passA",
