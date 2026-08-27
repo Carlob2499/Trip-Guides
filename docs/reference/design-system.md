@@ -91,9 +91,13 @@ Highest-value entries per phase:
 
 Game/3D/WebGL/social-posting skills in the library are out of scope for Waypoint.
 
-Known external gaps to pull when their phase arrives (free GitHub skills; cite here once
-adopted): a rules-based WCAG/web-quality auditor and a structured multi-viewport
-design-review methodology for D6, and visual-regression CI patterns for D5.
+External gap skills, adopted 2026-08-27 and copied into the Drive library (byte-exact,
+with their `references/` docs): the `addyosmani/web-quality-skills` set (`accessibility`
+WCAG 2.2 rules auditor, `web-quality-audit`, `core-web-vitals`, `performance`,
+`best-practices`, `seo`), `visual-regression-tester` (from `patricio0312rev/skills`, for
+D5 baselines), and `design-review` (OneRedOak 7-phase multi-viewport methodology, for
+D6). Use `accessibility` + `design-review` in D6 alongside the critique suite; `seo` and
+`core-web-vitals` are secondary for a field PWA.
 
 ### `/design` canvas — where visual decisions get made
 
