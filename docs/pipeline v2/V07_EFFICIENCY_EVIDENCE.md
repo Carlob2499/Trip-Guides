@@ -10,8 +10,9 @@ Only durable facts: stage attempt histories, failure classes, durations, validat
 
 ## Per-run facts
 
-- **Tokyo** `tokyo-20260826-41ae82` (V01 YELLOW): passA 756 s usage-limit + 2 354 s; passB 744 s; reconcile 637/1 214/853 s (findings 26→18→0); critic 199 s usage-limit + 1 701 s gate-failure. 62 candidates, 25 deep-verified, 58 facts, 2 disagreement investigations. Total 19 887 s.
-- **Tottori** `tottori-20260826-e29ab7` (V02/V03/V05 FAIL): passA 1 315 s; passB 1 294 s; reconcile 1 984/476/192 s (10→1→0); critic 1 240 s gate-failure + 592 s usage-limit + 1 219 s gate-failure. 29 candidates, 22 deep-verified, 43 facts, 3 disagreement investigations. Total 6 229 s.
+- **Tokyo** `tokyo-20260826-41ae82` (V01 YELLOW): passA 756 s usage-limit + 2 354 s; passB 744 s; reconcile 637/1 214/853 s (findings 26→18→0); critic 199 s usage-limit + 1 701 s gate-failure. 62 candidates, 25 deep-verified, 58 facts, 2 disagreement investigations. State-file elapsed 19 887 s (see semantics note below).
+- **Tottori** `tottori-20260826-e29ab7` (V02/V03/V05 FAIL): passA 1 315 s; passB 1 294 s; reconcile 1 984/476/192 s (10→1→0); critic 1 240 s gate-failure + 592 s usage-limit + 1 219 s gate-failure. 29 candidates, 22 deep-verified, 43 facts, 3 disagreement investigations. State-file elapsed 6 229 s (see semantics note below).
+- **`totalDurationSec` semantics** (producer: `scripts/pipeline-v2.mjs`): the value is `state.updatedAt − state.createdAt`, and it is persisted only when a stage completes successfully — so it is run wall-clock elapsed through the last successfully recorded checkpoint, **not** a sum of model attempt durations and not a "total model work" metric. Tottori shows the gap directly: its printed attempt durations alone sum to ~8 312 s against a recorded 6 229 s, because the critic stage never completed and its wall time never persisted. The per-attempt durations above are the W1 basis; these elapsed figures are cross-run comparable only loosely (idle/queue time between stages is included, unpersisted trailing failures are not). No replacement total is invented; tool/search/fetch/token/cost metrics remain null as recorded.
 - Per the method, the cheap Tottori run earns **no efficiency credit**: its quality classes FAILed, and a failed verdict is not aggregated away.
 
 ## Waste findings — the verdict basis

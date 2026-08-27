@@ -9,20 +9,20 @@ Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, `docs/handoff.md`, and the act
 
 This file tracks delivery. It does not redefine Pipeline V2.
 
-## Dashboard — August 23, 2026
+## Dashboard — August 27, 2026
 
-- **Current phase:** post-Canary #4 validation execution; repository cleanup/autonomy hardening is merged.
+- **Current phase:** validation program executed and recorded; independent review concurred with every verdict (V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION, synthesis NOT READY — REPAIR REQUIRED). Next phase is the bounded deterministic repair program (R-A–R-F/W1) on a fresh branch, after the validation-record PR is reviewed/merged.
 - **Core engine:** P01–P13 DONE.
 - **Integration:** I01–I05 have deterministic/live evidence; I06 deliberately stays open until final V1 retirement/cutover approval.
 - **Reliability acceptance:** PR #75 repair (`253607a`) is merged; PR #76 closeout is merged; fresh Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains draft-only and unpublished. The two failure-only seams the canary did not naturally exercise are now closed by targeted real-GitHub proofs.
 - **Canary #4 truth:** the canary itself proved the fresh-run wrapper and ordinary bounded recovery path. It did **not** exercise a real escalation issue comment/`gh` path because no intake issue existed, and it did **not** exercise the cancellation grace-window chain because no cancellation occurred. Those historical limits remain true; targeted issue #90 / disposable PR #91 and real Actions run `32680115285` / disposable PR #92 now prove the two missing platform seams without rewriting what Uruguay actually did.
 - **Production cutover:** NOT DONE. `WAYPOINT_RESEARCH_ENGINE` remains unset/off, V1 remains the production default/rollback path, and a manual V2 canary cannot mint production publication authority.
 - **Cleanup closeout:** PR #80 merged as `ca9d1b8e76d72ea95620e1c006417418855c88d0` after exact-head Project invariants, Tests/coverage, Accessibility, and Vercel passed. The revision-4 Claude↔Codex reviewer trust boundary remains active and protected.
-- **Validation closeout so far:** V04 is DONE from deterministic future-event + evidence-linked disagreement proofs; V06 is DONE from truthful Uruguay telemetry evidence. Remaining model-backed coverage is V01 plus combined V02/V03/V05; V07 follows those runs. The V07 evaluation method is pre-registered before Run A/B output exists.
-- **Days until September 20 feature freeze:** 28
-- **Days until September 27 code freeze:** 35
-- **Days until September 30 backend complete:** 38
-- **Highest-risk unfinished items:** validation breadth across V01/V02/V03/V05; production cutover/publication parity; final mobile/offline/security stabilization.
+- **Validation closeout:** all seven classes are now recorded. V04 DONE (deterministic), V06 DONE (Uruguay telemetry), V01 YELLOW (Run A `tokyo-20260826-41ae82`, 2026-08-26), V02/V03/V05 FAIL (Run B `tottori-20260826-e29ab7`, 2026-08-26), V07 FAIL/ACTION (two W1 findings on the frozen pre-registered method). The runs' research evidence is immutable on `research-v2/tokyo` and `research-v2/tottori`; the disposable Tokyo/Tottori product scaffolds were removed from the validation-record branch so no unauthorized guide surfaces ship with the evidence.
+- **Days until September 20 feature freeze:** 24
+- **Days until September 27 code freeze:** 31
+- **Days until September 30 backend complete:** 34
+- **Highest-risk unfinished items:** the R-A–R-F/W1 deterministic repair program plus the pre-cutover revalidation it requires (fresh Run B-class scenario; V01 completion dispatch decision); production cutover/publication parity; final mobile/offline/security stabilization.
 
 ### Current evidence already recorded
 
