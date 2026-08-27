@@ -70,6 +70,27 @@ guides stay printable, but no new component is designed print-first.
     palette research before spending external chat turns.
 - Presentation work never alters factual content (per `waypoint-design` skill).
 
+### Design skill library (pull-on-demand)
+
+Carlo's Google Drive folder `skills` (Drive folder ID `1dtN8N2MIjI-uswbCmdUCmVoauZ3HRvtA`,
+~200+ skills) is the reference library. Do **not** enable these wholesale; fetch a skill's
+`SKILL.md` via the Google Drive connector only when the task at hand matches it.
+Highest-value entries per phase:
+
+- **D2 tokens:** `design-token`, `design-token-audit`, `spacing-system`, `color-system`,
+  `theming-system`, `typography-scale`, `readable-measure`
+- **D3 registry/governance:** `design-system-governance`, `design-system-adoption`,
+  `component-spec`, `pattern-library`, `naming-convention`, `documentation-template`
+- **D4/D5 states & themes:** `dark-mode-design`, `loading-states`, `error-handling-ux`,
+  `responsive-design`, `motion-system`, `micro-interaction-spec`
+- **D6 review:** `interface-review`, the `critique-*` suite, `heuristic-evaluation`,
+  `design-qa-checklist`, `visual-hierarchy`, plus UX-law references (`fitts-law`,
+  `hicks-law`, gestalt series)
+- **Style inspiration (advisory only):** `light-mode-paper-technical`,
+  `clean-minimal-beige-light-mode`, `editorial-tech`
+
+Game/3D/WebGL/social-posting skills in the library are out of scope for Waypoint.
+
 ## 5. Joint September schedule — design interleaved with Pipeline V2
 
 Backend hard dates (owned by `SEPTEMBER_TRACKER.md`): **feature freeze Sep 20 · code
