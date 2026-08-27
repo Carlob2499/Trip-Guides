@@ -132,17 +132,26 @@ export function checkCoverageV2(slug) {
     catch { groupAnchors.set(name, new Set()); }
   }
   let expectedAskIds = null;
+  let legacyCoverage = null;
   try {
-    const legacy = JSON.parse(readFileSync(path.join(ROOT, "guides-intake", slug, "coverage.json"), "utf8"));
-    expectedAskIds = new Set((legacy.asks || []).map((a) => a.id).filter(Boolean));
+    legacyCoverage = JSON.parse(readFileSync(path.join(ROOT, "guides-intake", slug, "coverage.json"), "utf8"));
+    expectedAskIds = new Set((legacyCoverage.asks || []).map((a) => a.id).filter(Boolean));
   } catch { /* no legacy ask registry — the V2 document still cannot be empty */ }
   let evidenceIds = null;
+  let evidenceDoc = null;
   const evidenceFile = path.join(ROOT, "guides-intake", slug, "evidence.v2.json");
   if (existsSync(evidenceFile)) {
-    try { evidenceIds = new Set((JSON.parse(readFileSync(evidenceFile, "utf8")).evidence || []).map((e) => e.id)); }
+    try {
+      evidenceDoc = JSON.parse(readFileSync(evidenceFile, "utf8"));
+      evidenceIds = new Set((evidenceDoc.evidence || []).map((e) => e.id));
+    }
     catch { return fail(["evidence.v2.json is not valid JSON — coverage citations cannot be checked against a malformed evidence artifact"]); }
   }
-  const problems = coverageProblems(doc, { groups, groupAnchors, expectedAskIds, evidenceIds });
+  const bindingAskIds = new Set();
+  for (const ask of legacyCoverage?.asks || []) {
+    if (ask.id === "constraints" && String(ask.value || "").trim()) bindingAskIds.add(ask.id);
+  }
+  const problems = coverageProblems(doc, { groups, groupAnchors, expectedAskIds, evidenceIds, evidenceDoc, bindingAskIds });
   return problems.length ? fail(problems) : { status: "pass", version: 2, problems: [], uncovered: [] };
 }
 

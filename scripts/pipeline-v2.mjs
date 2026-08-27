@@ -295,7 +295,7 @@ export async function validateStageOutput(slug, stage, { intakeDir = INTAKE_DIR,
       try {
         const coverage = await requireCoverage(slug, { intakeDir, runId: state?.runId });
         const context = await loadCoverageContext(slug, { intakeDir, guidesDir });
-        problems.push(...coverageProblems(coverage, { ...context, evidenceIds: new Set(doc.evidence.map((e) => e.id)) }));
+        problems.push(...coverageProblems(coverage, { ...context, evidenceDoc: doc }));
       } catch (err) {
         problems.push(err.message.split("\n")[0]);
       }
@@ -884,7 +884,7 @@ async function run(cmd, get, has) {
         const problems = [
           ...evidenceProblems(evidence, { fullPass: !has("--scoped") }),
           ...researchRuleProblems(evidence),
-          ...coverageProblems(coverage, { ...context, evidenceIds: new Set(evidence.evidence.map((e) => e.id)) }),
+          ...coverageProblems(coverage, { ...context, evidenceDoc: evidence }),
         ];
         if (problems.length) {
           console.error(`[pipeline-v2] ${slug} — V2 artifacts do not hold up:`);

@@ -52,7 +52,7 @@ const passBDoc = (extra = {}) => ({
   evidence: [{
     id: "b-1", candidateId: "c-hidden-izakaya", claim: "Queue-free after 20:30 on weekdays",
     kind: "experiential", origin: "passB",
-    source: { url: "https://example.com/local-blog", kind: "firsthand", language: "ja", publishedAt: "2026-06-01", family: null, independent: true },
+    source: { url: "https://example.com/local-blog", kind: "firsthand", access: "fetched", language: "ja", publishedAt: "2026-06-01", family: null, independent: true },
     verifiedOn: "2026-08-01", firsthand: true,
   }],
   reservations: [], transport: [], disagreements: [],

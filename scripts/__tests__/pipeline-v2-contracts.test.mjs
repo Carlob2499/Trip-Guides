@@ -414,6 +414,40 @@ describe("coverage — valid / rules / missing / malformed", () => {
     expect(coverageProblems(doc).join()).toMatch(/no reason/);
   });
 
+  it("coverage is honest about unresolved, invalidated and BINDING support (R-F)", () => {
+    const evidenceDoc = {
+      evidence: [
+        { id: "valid", kind: "objective", source: { kind: "official", access: "fetched" } },
+        { id: "preview", kind: "objective", source: { kind: "official", access: "search-preview" } },
+        { id: "rejected", kind: "objective", origin: "passB", source: { kind: "official", access: "fetched" } },
+      ],
+      reconciliation: [{ findingId: "rejected", disposition: "reject", note: "disproven" }],
+    };
+    const supported = validCoverage();
+    supported.asks[0].evidenceIds = ["valid"];
+    expect(coverageProblems(supported, { evidenceDoc, bindingAskIds: new Set(["ask-food"]) })).toEqual([]);
+
+    const unresolved = validCoverage();
+    unresolved.asks[0].reason = "Not adequately researched; unresolved";
+    expect(coverageProblems(unresolved, { evidenceDoc }).join()).toMatch(/claims covered while/);
+
+    const bad = validCoverage();
+    bad.asks[0].evidenceIds = ["rejected"];
+    expect(coverageProblems(bad, { evidenceDoc }).join()).toMatch(/disproven or superseded/);
+
+    const advisoryPreview = validCoverage();
+    advisoryPreview.asks[0].evidenceIds = ["preview"];
+    expect(coverageProblems(advisoryPreview, { evidenceDoc })).toEqual([]);
+
+    const binding = validCoverage();
+    binding.asks[0].evidenceIds = [];
+    expect(coverageProblems(binding, { evidenceDoc, bindingAskIds: new Set(["ask-food"]) }).join()).toMatch(/BINDING/);
+
+    const advisory = validCoverage();
+    advisory.asks[0].evidenceIds = [];
+    expect(coverageProblems(advisory, { evidenceDoc, bindingAskIds: new Set() })).toEqual([]);
+  });
+
   it("MISSING blocks where required; MALFORMED fails closed", async () => {
     await expect(requireCoverage("ghost", opts())).rejects.toThrow(/blocking failure/);
     await mkdir(path.join(dir, "bad"), { recursive: true });
