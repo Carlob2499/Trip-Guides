@@ -64,6 +64,22 @@ function monthsBetween(a, b) {
 
 export const EXPERIENTIAL_STALE_MONTHS = 24;
 
+/** A record can support deterministic truth only when the cited origin was actually fetched and
+    its typed source is appropriate for the claim. Independence keys collapse copied families
+    first, then same-origin URLs; two model passes are never themselves two sources. */
+export function qualifyingEvidence(record) {
+  if (record?.source?.access !== "fetched") return false;
+  if (record.kind === "objective") return OBJECTIVE_SOURCE_KINDS.has(record.source?.kind);
+  return record.kind === "experiential" && record.source?.kind === "firsthand" && record.firsthand === true;
+}
+
+export function sourceIndependenceKey(record) {
+  if (!qualifyingEvidence(record)) return null;
+  if (record.source?.family) return `family:${record.source.family.toLocaleLowerCase()}`;
+  try { return `origin:${new URL(record.source.url).hostname.toLocaleLowerCase()}`; }
+  catch { return null; }
+}
+
 /** Rule: evidence kind ↔ source kind. */
 export function evidenceKindProblems(doc) {
   const problems = [];
@@ -109,18 +125,44 @@ export function corroborationProblems(doc) {
     if (nonFirsthand.length) {
       problems.push(`"${candidateName}" (${candidateId}) experiential claim "${records[0].claim.slice(0, 60)}" includes non-firsthand evidence — firsthand must be explicit`);
     }
-    const families = new Set();
-    const explicitlyIndependent = new Set();
+    const independentSources = new Set();
     for (const r of records) {
-      if (r.source?.kind !== "firsthand" || r.firsthand !== true) continue;
-      if (r.source?.family) families.add(r.source.family);
-      else if (r.source?.independent === true && r.source?.url) explicitlyIndependent.add(r.source.url);
+      const key = sourceIndependenceKey(r);
+      if (key) independentSources.add(key);
     }
-    const independentCount = families.size + explicitlyIndependent.size;
+    const independentCount = independentSources.size;
     if (independentCount < 2) {
       problems.push(
         `"${candidateName}" (${candidateId}) claim "${records[0].claim.slice(0, 60)}" relies on ${records.length === 1 ? "a single" : "unproven-independent"} experiential source set — ` +
           `crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once)`,
+      );
+    }
+  }
+  return problems;
+}
+
+/** Pass A + Pass B repeating the same value is not corroboration. When both origins carry the
+    same normalized claim, each must trace to fetched qualifying evidence and the combined source
+    basis must contain at least two real independent families/origins. */
+export function independentAgreementProblems(doc) {
+  const problems = [];
+  const groups = new Map();
+  for (const record of doc.evidence || []) {
+    if (!["passA", "passB"].includes(record.origin)) continue;
+    const claim = String(record.claim).toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+    const key = `${record.candidateId || "general"}\0${claim}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(record);
+  }
+  for (const records of groups.values()) {
+    if (!records.some((r) => r.origin === "passA") || !records.some((r) => r.origin === "passB")) continue;
+    const a = records.filter((r) => r.origin === "passA" && qualifyingEvidence(r));
+    const b = records.filter((r) => r.origin === "passB" && qualifyingEvidence(r));
+    const keys = new Set([...a, ...b].map(sourceIndependenceKey).filter(Boolean));
+    if (!a.length || !b.length || keys.size < 2) {
+      problems.push(
+        `Pass A/Pass B agreement on "${records[0].claim.slice(0, 70)}" is not independent corroboration — ` +
+          `each pass needs qualifying fetched support from a genuinely distinct source family/origin`,
       );
     }
   }
@@ -398,6 +440,7 @@ export function researchRuleProblems(doc) {
   return [
     ...evidenceKindProblems(doc),
     ...corroborationProblems(doc),
+    ...independentAgreementProblems(doc),
     ...yearSafetyProblems(doc),
     ...freshnessProblems(doc),
     ...objectiveFreshnessProblems(doc),

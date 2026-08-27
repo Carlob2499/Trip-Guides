@@ -8,7 +8,7 @@ Deterministic browser-level shared-add/offline proof is complete. It executes th
 The proof covers local durability, recreation, reconnect replay, stable-key idempotence, server acknowledgment, complete-payload preservation, permanent-rejection isolation, and canonical-state visibility in a second browser context.
 It does not prove the real Firebase SDK or authentication, deployed rules, a real network/server acknowledgment, or convergence between two physical clients. Those remain live-environment work.
 Canary #4 (Uruguay) remains GREEN for the V2 draft-only product path. R03 is fully accepted: authenticated issue escalation and the cancellation chain are proven.
-V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset. V2 production cutover remains pending. The next research sequence remains Run A → Run B → V07. DS1 remains calibration/candidate work, not a production-cutover decision.
+V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset. V2 production cutover remains pending. The pre-registered Run A/Run B/V07 program is complete with V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION and overall NOT READY. Its deterministic R-A–R-F/W1 repairs are implemented on a review branch; next is independent review, then one fresh repaired-class Run-B scenario. DS1 remains calibration/candidate work, not a production-cutover decision.
 The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
 Durable shared-add decisions live in `CONTEXT.md`.
 <!-- WARM_START_END -->
@@ -29,6 +29,6 @@ Durable shared-add decisions live in `CONTEXT.md`.
 - Uruguay Canary #4 remains a GREEN draft product-path proof; it does not authorize production cutover.
 - V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
 - V2 production cutover remains pending.
-- Run A → Run B → V07 remains the next research sequence.
+- Do not rerun the historical validation sequence. Review the deterministic repair branch first; only after merge run one fresh repaired-class Run-B scenario.
 - DS1 remains calibration/candidate work, not production cutover.
 - The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.

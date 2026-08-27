@@ -17,7 +17,7 @@ import {
   markPublished, markDeployedLive, nextStageV2, runStatePath,
 } from "../pipeline/v2/run-state.mjs";
 import {
-  candidateId, readEvidence, requireEvidence, writeEvidence,
+  candidateId, normalizeCandidateIds, readEvidence, requireEvidence, writeEvidence, reconcileCriticFactCorrections,
   candidateProblems, dispositionProblems, saturationProblems, evidenceProblems, evidencePath,
 } from "../pipeline/v2/evidence.mjs";
 import { readCoverage, requireCoverage, writeCoverage, coverageProblems } from "../pipeline/v2/coverage.mjs";
@@ -258,6 +258,32 @@ describe("evidence — valid / structural rules", () => {
     expect(candidateId("だるま")).not.toBe(candidateId("一蘭"));
   });
 
+  it("control-plane normalization owns punctuation-heavy and markdown candidate ids + refs (W1-A)", () => {
+    const input = validEvidence();
+    input.candidates[0] = { ...input.candidates[0], id: "model-typed-id", name: "San'in Coast **Rail**" };
+    input.evidence[0].candidateId = "model-typed-id";
+    input.reservations = [{ candidateId: "model-typed-id" }];
+    input.depth = { reservations: { requiredCandidateIds: ["model-typed-id"] } };
+    const { doc, changed } = normalizeCandidateIds(input);
+    const expected = candidateId("San'in Coast **Rail**");
+    expect(changed).toBe(true);
+    expect(expected).toBe("c-san-in-coast-rail");
+    expect(doc.candidates[0].id).toBe(expected);
+    expect(doc.evidence[0].candidateId).toBe(expected);
+    expect(doc.reservations[0].candidateId).toBe(expected);
+    expect(doc.depth.reservations.requiredCandidateIds).toEqual([expected]);
+    expect(normalizeCandidateIds(doc)).toMatchObject({ changed: false });
+  });
+
+  it("normalization preserves uniqueness and fails closed on a semantic collision", () => {
+    const input = validEvidence();
+    input.candidates = [
+      { ...input.candidates[0], id: "one", name: "Café A" },
+      { ...input.candidates[1], id: "two", name: "Cafe A", branch: null },
+    ];
+    expect(() => normalizeCandidateIds(input)).toThrow(/identity collision/);
+  });
+
   it("shipped-but-never-shortlisted is a named violation — no side door", () => {
     const doc = validEvidence();
     doc.candidates[0].shortlisted = false;
@@ -303,6 +329,58 @@ describe("evidence — valid / structural rules", () => {
     doc.saturation = null;
     expect(saturationProblems(doc, { fullPass: true }).join()).toMatch(/must record/);
     expect(saturationProblems(doc, { fullPass: false })).toEqual([]);
+  });
+});
+
+describe("critic fact corrections preserve durable evidence truth (R-A)", () => {
+  const fact = (value) => ({
+    claim: "Mountain path walking distance", value,
+    source_url: "https://operator.example/path", verified_on: "2026-08-01", shelf_life: "transit",
+  });
+
+  async function correctionFixture({ withCorrection = true, changed = true } = {}) {
+    const guidesDir = path.join(dir, "guides");
+    const fromDir = path.join(dir, "critic");
+    await mkdir(path.join(guidesDir, "korea"), { recursive: true });
+    await mkdir(path.join(fromDir, "src", "content", "guides", "korea"), { recursive: true });
+    await mkdir(path.join(fromDir, "guides-intake", "korea"), { recursive: true });
+    await writeFile(path.join(guidesDir, "korea", "facts.json"), JSON.stringify({ "route-distance": fact("800 m") }));
+    await writeFile(path.join(fromDir, "src", "content", "guides", "korea", "facts.json"), JSON.stringify({ "route-distance": fact(changed ? "1.2 km" : "800 m") }));
+    await writeEvidence("korea", validEvidence(), opts());
+    if (withCorrection) {
+      await writeFile(path.join(fromDir, "guides-intake", "korea", "critic-corrections.v2.json"), JSON.stringify({
+        schemaVersion: "wp-critic-corrections/1.0", slug: "korea", runId: validEvidence().runId,
+        corrections: changed ? [{
+          factId: "route-distance", previousValue: "800 m", correctedValue: "1.2 km",
+          claim: "Mountain path walking distance",
+          source: { url: "https://operator.example/path", kind: "operator", access: "fetched", language: "en", publishedAt: null, family: "path-operator", independent: true, appliesToYears: [] },
+          verifiedOn: "2026-08-01", freshness: { perishable: true, shelfLife: "transit", recheckOn: "2026-10-30" },
+        }] : [],
+      }));
+    }
+    return { guidesDir, fromDir };
+  }
+
+  it("fails closed when a critic fact edit has no correction handoff", async () => {
+    const fixture = await correctionFixture({ withCorrection: false });
+    await expect(reconcileCriticFactCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId }))
+      .rejects.toThrow(/stale evidence is refused/);
+  });
+
+  it("verifies the exact edit and folds a critic-origin correction into authoritative evidence", async () => {
+    const fixture = await correctionFixture();
+    const result = await reconcileCriticFactCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId });
+    expect(result).toEqual({ changed: true, factIds: ["route-distance"] });
+    const evidence = await requireEvidence("korea", opts());
+    expect(evidence.evidence.find((item) => item.id === "critic-correction-route-distance")).toMatchObject({
+      origin: "critic", claim: "Mountain path walking distance: 1.2 km", verifiedOn: "2026-08-01",
+    });
+  });
+
+  it("ordinary critic runs without fact changes remain unchanged", async () => {
+    const fixture = await correctionFixture({ changed: false });
+    await expect(reconcileCriticFactCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId }))
+      .resolves.toEqual({ changed: false, factIds: [] });
   });
 });
 
@@ -386,6 +464,40 @@ describe("coverage — valid / rules / missing / malformed", () => {
     const doc = validCoverage();
     doc.asks[1].reason = "  ";
     expect(coverageProblems(doc).join()).toMatch(/no reason/);
+  });
+
+  it("coverage is honest about unresolved, invalidated and BINDING support (R-F)", () => {
+    const evidenceDoc = {
+      evidence: [
+        { id: "valid", kind: "objective", source: { kind: "official", access: "fetched" } },
+        { id: "preview", kind: "objective", source: { kind: "official", access: "search-preview" } },
+        { id: "rejected", kind: "objective", origin: "passB", source: { kind: "official", access: "fetched" } },
+      ],
+      reconciliation: [{ findingId: "rejected", disposition: "reject", note: "disproven" }],
+    };
+    const supported = validCoverage();
+    supported.asks[0].evidenceIds = ["valid"];
+    expect(coverageProblems(supported, { evidenceDoc, bindingAskIds: new Set(["ask-food"]) })).toEqual([]);
+
+    const unresolved = validCoverage();
+    unresolved.asks[0].reason = "Not adequately researched; unresolved";
+    expect(coverageProblems(unresolved, { evidenceDoc }).join()).toMatch(/claims covered while/);
+
+    const bad = validCoverage();
+    bad.asks[0].evidenceIds = ["rejected"];
+    expect(coverageProblems(bad, { evidenceDoc }).join()).toMatch(/disproven or superseded/);
+
+    const advisoryPreview = validCoverage();
+    advisoryPreview.asks[0].evidenceIds = ["preview"];
+    expect(coverageProblems(advisoryPreview, { evidenceDoc })).toEqual([]);
+
+    const binding = validCoverage();
+    binding.asks[0].evidenceIds = [];
+    expect(coverageProblems(binding, { evidenceDoc, bindingAskIds: new Set(["ask-food"]) }).join()).toMatch(/BINDING/);
+
+    const advisory = validCoverage();
+    advisory.asks[0].evidenceIds = [];
+    expect(coverageProblems(advisory, { evidenceDoc, bindingAskIds: new Set() })).toEqual([]);
   });
 
   it("MISSING blocks where required; MALFORMED fails closed", async () => {

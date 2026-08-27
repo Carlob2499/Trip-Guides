@@ -291,5 +291,9 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
     `    \`| YYYY-MM-DD | ${slug} | [critic] | <rubric row or lens> | <distilled pattern> | open |\``,
     "    (six cells; date real; slug and `[critic]` literal; final cell literally `open`; ≤1200 chars/row;",
     "    no headings, no prose outside rows). A malformed row fails the run.",
+    `  - If and only if you change any \`facts.json\` row, write \`guides-intake/${slug}/critic-corrections.v2.json\``,
+    `    with schema \`wp-critic-corrections/1.0\`: slug \`${slug}\`, runId \`${runId}\`, and one correction`,
+    "    per changed factId carrying exact previousValue/correctedValue/claim, fetched source metadata, verifiedOn,",
+    "    and freshness. You still may not read evidence.v2.json; the trusted control plane reconciles this handoff.",
   ].join("\n");
 }

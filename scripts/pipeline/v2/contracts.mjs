@@ -26,6 +26,7 @@ export const EVIDENCE_SCHEMA = "wp-evidence/2.2"; // 2.2: recommendation-changin
 export const COVERAGE_SCHEMA = "wp-coverage/2.0";
 export const TELEMETRY_SCHEMA = "wp-telemetry/2.1"; // 2.1: cumulative/failed attempt durations (additive)
 export const FEEDBACK_SCHEMA = "wp-feedback/2.0";
+export const CRITIC_CORRECTIONS_SCHEMA = "wp-critic-corrections/1.0";
 
 /** Fail-closed contract failure: what broke, in which file, and what to do about it. */
 export class ContractError extends Error {
@@ -198,6 +199,8 @@ export const runStateSchema = z.looseObject({
     cap: z.number().int().min(1),
     autoRetries: z.number().int().min(0).default(0),
     autoRetryCap: z.number().int().min(0).default(1),
+    availabilityRetries: z.number().int().min(0).default(0),
+    availabilityRetryCap: z.number().int().min(0).default(2),
   }),
   // Where a resumed run picks up: the interrupted stage itself, never a stage ahead of it.
   resume: z.object({
@@ -331,6 +334,28 @@ export const evidenceRecordSchema = z.object({
     shelfLife: z.enum(["fx", "transit", "hours", "venue", "default"]).nullable().default(null),
     recheckOn: isoDate.nullable().default(null),
   }).nullable().default(null),
+});
+
+// The blind critic never owns evidence.v2.json. When it changes a canonical facts.json row it
+// emits only this narrow handoff; the trusted control plane verifies the exact before/after fact
+// and folds a critic-origin record into the existing evidence owner.
+export const criticCorrectionDocSchema = z.object({
+  schemaVersion: z.string(),
+  slug: z.string().min(1),
+  runId: z.string().min(1),
+  corrections: z.array(z.object({
+    factId: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+    previousValue: z.string().nullable(),
+    correctedValue: z.string().min(1),
+    claim: z.string().min(1),
+    source: evidenceSourceSchema,
+    verifiedOn: isoDate,
+    freshness: z.object({
+      perishable: z.boolean(),
+      shelfLife: z.enum(["fx", "transit", "hours", "venue", "default"]).nullable().default(null),
+      recheckOn: isoDate.nullable().default(null),
+    }),
+  })).default([]),
 });
 
 export const reservationFindingSchema = z.object({

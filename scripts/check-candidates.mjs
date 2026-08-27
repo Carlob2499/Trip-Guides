@@ -65,8 +65,21 @@ export function parseCandidates(ledgerMd) {
   return tables;
 }
 
+/** Formatting is presentation, not identity. This removes only Markdown noise and a trailing
+    branch qualifier; descriptive prose is not transformed into a proper-name identity. */
+export function normalizeShippedName(value) {
+  return String(value || "")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`~]/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s*\([^)]*\)\s*$/, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLocaleLowerCase();
+}
+
 /** Pure: judge parsed tables — STRUCTURAL integrity only, never a quantity quota. */
-export function judgeCandidates(tables, { guideText = "" } = {}) {
+export function judgeCandidates(tables, { guideText = "", canonicalNames = null } = {}) {
   const findings = [];
   const summary = [];
   for (const t of tables) {
@@ -75,13 +88,21 @@ export function judgeCandidates(tables, { guideText = "" } = {}) {
     const shortlisted = t.rows.filter((r) => r.shortlisted === true).length;
     summary.push({ rank: t.rank, priority: t.priority, considered, shipped: shipped.length, shortlisted });
     for (const r of shipped) {
+      const normalized = normalizeShippedName(r.name);
+      const canonical = canonicalNames
+        ? [...canonicalNames].find((name) => normalizeShippedName(name) === normalized)
+        : null;
+      if (canonicalNames && !canonical) {
+        findings.push(`priority ${t.rank}: "${r.name}" is marked shipped but is not a canonical shipped entity name`);
+        continue;
+      }
       // The cross-check that makes a padded table expensive: a shipped name must exist in
       // the guide. Case-insensitive substring — names appear inside prose and item fields.
       // A ledger row may qualify the name with a branch/location parenthetical the guide
       // legitimately omits — "Wanaka (Dotonbori)" ships as "Wanaka" — so the base name (the
       // part before a trailing parenthetical) also satisfies the check. First seen live on
       // the V2 canary, where all 14 "missing" shipped candidates were qualifier mismatches.
-      const base = r.name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+      const base = canonical || r.name.replace(/\s*\([^)]*\)\s*$/, "").replace(/[*_`~]/g, "").trim();
       const present = (name) => name && guideText.toLowerCase().includes(name.toLowerCase());
       if (guideText && !present(r.name) && !present(base)) {
         findings.push(`priority ${t.rank}: "${r.name}" is marked shipped but appears nowhere in the guide`);
@@ -116,7 +137,15 @@ export async function checkCandidates(slug, { rootDir = ROOT } = {}) {
     }
   } catch { /* directory missing → shipped cross-check simply can't run */ }
 
-  return { ...judgeCandidates(tables, { guideText }), tables: tables.length };
+  let canonicalNames = null;
+  try {
+    const evidence = JSON.parse(await readFile(path.join(rootDir, "guides-intake", slug, "evidence.v2.json"), "utf8"));
+    canonicalNames = new Set((evidence.candidates || [])
+      .filter((candidate) => candidate.status === "shipped")
+      .map((candidate) => candidate.name));
+  } catch { /* V1/pre-standard evidence keeps the historical guide-presence contract */ }
+
+  return { ...judgeCandidates(tables, { guideText, canonicalNames }), tables: tables.length };
 }
 
 if (isMain(import.meta.url)) {

@@ -776,6 +776,17 @@ jobs:
               exit 1
             fi
           fi
+          # Gate parity: reconcile must not checkpoint a tree that the critic's canonical
+          # content/schema build will reject before doing any critic work. Reuse the exact same
+          # build gate and retained-feedback path; do not maintain a second schema validator.
+          if [ "$COLLECT" -eq 0 ]; then
+            npm run build 2>&1 | tee "$RUNNER_TEMP/build-out.txt" | tail -40
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage reconcile \
+                --file "$RUNNER_TEMP/build-out.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
           SCOPED=()
           if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
           node scripts/pipeline-v2.mjs finish-stage --slug "$SLUG" --stage reconcile \
@@ -1020,6 +1031,14 @@ jobs:
           RC=$?
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ "$RC" -eq 0 ]; then
+            node scripts/pipeline-v2.mjs reconcile-critic-truth --slug "$SLUG" --from "$GITHUB_WORKSPACE" 2>&1 | tee "$RUNNER_TEMP/critic-truth-out.txt"
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
+                --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
           if [ "$RC" -eq 0 ]; then rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/"; RC=$?; fi
           if [ "$RC" -eq 0 ]; then cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md"; RC=$?; fi
           if [ "$RC" -eq 0 ]; then cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/pipeline-patterns.fragment.md" "guides-intake/$SLUG/pipeline-patterns.fragment.md"; RC=$?; fi

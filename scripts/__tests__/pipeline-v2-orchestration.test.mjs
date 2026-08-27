@@ -52,7 +52,7 @@ const passBDoc = (extra = {}) => ({
   evidence: [{
     id: "b-1", candidateId: "c-hidden-izakaya", claim: "Queue-free after 20:30 on weekdays",
     kind: "experiential", origin: "passB",
-    source: { url: "https://example.com/local-blog", kind: "firsthand", language: "ja", publishedAt: "2026-06-01", family: null, independent: true },
+    source: { url: "https://example.com/local-blog", kind: "firsthand", access: "fetched", language: "ja", publishedAt: "2026-06-01", family: null, independent: true },
     verifiedOn: "2026-08-01", firsthand: true,
   }],
   reservations: [], transport: [], disagreements: [],
@@ -381,6 +381,8 @@ describe("research-pass-v2.yml — wiring", () => {
     expect(removeGit).toBeLessThan(agent);
     expect(collect).toBeGreaterThan(agent);
     expect(job).not.toContain("restore-critic");
+    expect(job).toContain("reconcile-critic-truth");
+    expect(job.indexOf("reconcile-critic-truth")).toBeLessThan(job.indexOf("rsync -a --delete"));
   });
 
   it("every stage job checkpoints start BEFORE its agent and validates AFTER (begin/finish)", () => {
@@ -393,6 +395,18 @@ describe("research-pass-v2.yml — wiring", () => {
       expect(agent).toBeGreaterThan(begin);
       expect(finish).toBeGreaterThan(agent);
     }
+  });
+
+  it("reconcile runs the critic's canonical build/schema gate before acceptance (R-C/W1-B)", () => {
+    const reconcile = text.split(/^ {2}reconcile:/m)[1].split(/^ {2}geocode:/m)[0];
+    const critic = text.split(/^ {2}critic:/m)[1].split(/^ {2}land:/m)[0];
+    const build = reconcile.indexOf("npm run build");
+    const finish = reconcile.indexOf("finish-stage --slug \"$SLUG\" --stage reconcile");
+    expect(build).toBeGreaterThan(reconcile.indexOf("Run research agent — Reconcile"));
+    expect(build).toBeLessThan(finish);
+    expect(reconcile).toContain('verify-failed --slug "$SLUG" --stage reconcile');
+    expect(critic).toContain("npm run build");
+    expect(text.indexOf("  critic:")).toBeGreaterThan(text.indexOf("  reconcile:"));
   });
 
   it("lands by the run's DURABLE intent — deterministic land-mode, never a hardcoded merge (I02)", () => {

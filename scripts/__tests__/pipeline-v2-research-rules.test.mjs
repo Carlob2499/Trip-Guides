@@ -9,6 +9,7 @@ import {
   evidenceKindProblems, corroborationProblems, yearSafetyProblems, freshnessProblems,
   objectiveFreshnessProblems, reservationProblems, transportProblems, researchRuleProblems,
   disagreementProblems,
+  independentAgreementProblems,
 } from "../pipeline/v2/research-rules.mjs";
 
 const record = (over = {}) => ({
@@ -61,15 +62,18 @@ describe("objective vs experiential (DECISIONS: 'Objective facts vs traveler exp
 describe("experiential corroboration on shipped candidates (≥2 independent firsthand)", () => {
   const exp = (id, family) => record({
     id, kind: "experiential", claim: "Queue clears by 14:00",
-    source: { url: `https://${id}.example`, kind: "firsthand", language: "ja", publishedAt: "2026-06-01", family, independent: null },
+    source: { url: `https://${id}.example`, kind: "firsthand", access: "fetched", language: "ja", publishedAt: "2026-06-01", family, independent: null },
     firsthand: true,
   });
 
   it("two records from distinct families pass; unknown independence does not", () => {
     expect(corroborationProblems(doc({ evidence: [exp("e-1", "blogA"), exp("e-2", "forumB")] }))).toEqual([]);
-    expect(corroborationProblems(doc({ evidence: [exp("e-1", null), exp("e-2", null)] })).join()).toMatch(/unproven-independent/);
+    const sameOrigin = [exp("e-1", null), exp("e-2", null)].map((e, index) => ({
+      ...e, source: { ...e.source, url: `https://same.example/post-${index}` },
+    }));
+    expect(corroborationProblems(doc({ evidence: sameOrigin })).join()).toMatch(/unproven-independent/);
     const explicit = [exp("e-1", null), exp("e-2", null)].map((e) => ({ ...e, source: { ...e.source, independent: true } }));
-    expect(corroborationProblems(doc({ evidence: explicit }))).toEqual([]);
+    expect(corroborationProblems(doc({ evidence: explicit }))).toEqual([]); // distinct real origins
   });
 
   it("a single experiential source on a shipped candidate fails", () => {
@@ -87,6 +91,37 @@ describe("experiential corroboration on shipped candidates (≥2 independent fir
     d.candidates[0].status = "rejected";
     d.candidates[0].reason = "tourist trap";
     expect(corroborationProblems(d)).toEqual([]);
+  });
+});
+
+describe("cross-pass agreement is not source independence (R-E)", () => {
+  const numeric = (id, origin, access, family, host) => record({
+    id, origin, claim: "The walk is 600 m", kind: "objective",
+    source: { ...record().source, url: `https://${host}/route`, access, family },
+  });
+
+  it("rejects the same unsupported number repeated by Pass A and Pass B", () => {
+    const records = [
+      numeric("a", "passA", "search-preview", null, "official.example"),
+      numeric("b", "passB", "search-preview", null, "other.example"),
+    ];
+    expect(independentAgreementProblems(doc({ evidence: records })).join()).toMatch(/not independent corroboration/);
+  });
+
+  it("keeps genuine corroboration from two qualifying independent fetched sources", () => {
+    const records = [
+      numeric("a", "passA", "fetched", "operator-a", "operator.example"),
+      numeric("b", "passB", "fetched", "authority-b", "authority.example"),
+    ];
+    expect(independentAgreementProblems(doc({ evidence: records }))).toEqual([]);
+  });
+
+  it("does not call two passes independent when both cite the same underlying source family", () => {
+    const records = [
+      numeric("a", "passA", "fetched", "shared-origin", "one.example"),
+      numeric("b", "passB", "fetched", "shared-origin", "two.example"),
+    ];
+    expect(independentAgreementProblems(doc({ evidence: records })).join()).toMatch(/distinct source family/);
   });
 });
 

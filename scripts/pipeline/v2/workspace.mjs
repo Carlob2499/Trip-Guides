@@ -26,6 +26,7 @@ import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ContractError, EVIDENCE_SCHEMA, evidenceDocSchema, coverageDocSchema, parseOrThrow, assertVersionCompatible } from "./contracts.mjs";
+import { normalizeCandidateIds } from "./evidence.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
@@ -40,6 +41,7 @@ export function forbiddenForPassB(slug) {
     `guides-intake/${slug}/evidence.v2.json`,
     `guides-intake/${slug}/run.v2.json`,
     `guides-intake/${slug}/coverage.v2.json`,
+    `guides-intake/${slug}/critic-corrections.v2.json`,
     `guides-intake/${slug}/passB.v2.json`,
     `guides-intake/${slug}/feedback.v2.json`,
     `guides-intake/${slug}/events.json`,
@@ -159,7 +161,7 @@ export async function collectPassB(slug, { fromDir, intoDir = ROOT, runId = null
     throw new ContractError(`Pass B artifact at ${src} is not valid JSON (${err.message}).`, { file: src });
   }
   assertVersionCompatible(raw.schemaVersion, EVIDENCE_SCHEMA, { file: src });
-  const doc = parseOrThrow(evidenceDocSchema, raw, { file: src, what: "Pass B artifact" });
+  const doc = normalizeCandidateIds(parseOrThrow(evidenceDocSchema, raw, { file: src, what: "Pass B artifact" })).doc;
   if (doc.slug !== slug) throw new ContractError(`Pass B artifact belongs to "${doc.slug}", not "${slug}"`, { file: src });
   if (runId && doc.runId !== runId) throw new ContractError(`Pass B artifact belongs to run ${doc.runId}, not active run ${runId}`, { file: src });
   // Independence cuts both ways: a Pass-B artifact may carry ONLY Pass-B findings, and it never
@@ -221,7 +223,8 @@ export async function collectStageOutput({ fromDir, intoDir = ROOT, paths }) {
       let raw;
       try { raw = JSON.parse(await readFile(dest, "utf8")); }
       catch (err) { throw new ContractError(`collected contract is invalid JSON: ${rel} (${err.message})`); }
-      const projected = parseOrThrow(schema, raw, { file: dest, what: "collected stage artifact" });
+      let projected = parseOrThrow(schema, raw, { file: dest, what: "collected stage artifact" });
+      if (schema === evidenceDocSchema) projected = normalizeCandidateIds(projected).doc;
       await writeFile(dest, JSON.stringify(projected, null, 2) + "\n");
     }
     copied.push(rel);

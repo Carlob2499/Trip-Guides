@@ -77,6 +77,22 @@ describe("judgeCandidates", () => {
     expect(absent.findings.join("\n")).toMatch(/"Wanaka \(Dotonbori\)" is marked shipped but appears nowhere/);
   });
 
+  it("a canonical shipped-name contract accepts formatting noise but rejects descriptive labels (R-D)", () => {
+    const canonicalNames = new Set(["Tsukiji Outer Market", "Tottori Sand Dunes"]);
+    const formatted = parseCandidates(doc(table(1, "Food", [["**Tsukiji Outer Market**", "shipped"]])));
+    expect(judgeCandidates(formatted, { guideText: "Tsukiji Outer Market", canonicalNames }).status).toBe("pass");
+
+    const descriptive = parseCandidates(doc(table(1, "Transit", [["Camel commute", "shipped"]])));
+    const result = judgeCandidates(descriptive, { guideText: "Try the Camel commute option", canonicalNames });
+    expect(result.status).toBe("fail");
+    expect(result.findings.join()).toMatch(/not a canonical shipped entity name/);
+  });
+
+  it("legitimate unshipped leads remain valid under the canonical shipped-name contract", () => {
+    const t = parseCandidates(doc(table(1, "Food", [["Unverified alley lead", "rejected: no qualifying source"]])));
+    expect(judgeCandidates(t, { guideText: "", canonicalNames: new Set(["Real Venue"]) }).status).toBe("pass");
+  });
+
   it("no floors exist to honor or override — small sets pass in EVERY context (amended scar)", () => {
     // Amended from the researchFloors-override test: the override existed to soften floors,
     // and both died together (the skill-parity suite separately pins researchFloors out of the

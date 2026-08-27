@@ -14,16 +14,15 @@ const gitBlobSha = (relativePath) => {
   return createHash("sha1").update(Buffer.concat([header, content])).digest("hex");
 };
 
-// Temporary compatibility fence for the pre-registered V01/V02/V03/V05 model validation runs.
-// Deliberately update/remove this list only after those runs are accepted. Until then, changing
-// the research candidate must be an explicit decision rather than accidental cleanup drift.
+// The completed validation keeps its research doctrine/prompts frozen as historical authority.
+// The workflow itself is intentionally absent: the resulting deterministic repair program is
+// authorized to repair control-plane wiring without changing these model/research inputs.
 const VALIDATION_FROZEN_BLOBS = {
   ".claude/skills/waypoint-guide-author/SKILL.md": "c80ccb7b92f5a4a64af19f87d3cf798355ec1363",
   "prompts/research-passA-v2.md": "6c0dd96512473fd8172bfcf2760cf4f14fa7f6cb",
   "prompts/research-passB-v2.md": "9bf5e6a5d27cbf77442a086f75aa850e321142d0",
   "prompts/research-reconcile-v2.md": "69c720840117a85e2993ad718cee375560e38d37",
   "prompts/research-critic-v2.md": "47be1bf75b6032cf0ab96cde6c2759c6311d5017",
-  ".github/workflows/research-pass-v2.yml": "092e002059be2f44b1a6843e1ba70bd287e6442a",
 };
 
 describe("pre-validation compatibility fence", () => {

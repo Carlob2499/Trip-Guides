@@ -18,7 +18,8 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  EVIDENCE_SCHEMA, evidenceDocSchema, parseOrThrow, assertVersionCompatible, ContractError,
+  EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, evidenceDocSchema, criticCorrectionDocSchema,
+  parseOrThrow, assertVersionCompatible, ContractError,
 } from "./contracts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -38,6 +39,48 @@ export function candidateId(name, branch = null) {
     return `u-${createHash("sha256").update(String(value).normalize("NFKC")).digest("hex").slice(0, 10)}`;
   };
   return `c-${stablePart(name)}${branch ? `--${stablePart(branch)}` : ""}`;
+}
+
+/** Make the control plane, not a model, own exact candidate-id transcription. Identity still
+    comes only from name + branch; every relational reference follows the same canonical id.
+    A semantic collision fails closed instead of merging two candidates. */
+export function normalizeCandidateIds(doc) {
+  const candidates = doc.candidates || [];
+  const byOld = new Map();
+  const owners = new Map();
+  for (const candidate of candidates) {
+    if (byOld.has(candidate.id)) {
+      throw new ContractError(`duplicate candidate id "${candidate.id}" cannot be normalized safely`);
+    }
+    const canonical = candidateId(candidate.name, candidate.branch);
+    const owner = owners.get(canonical);
+    if (owner) {
+      throw new ContractError(
+        `candidate identity collision: "${owner.name}" and "${candidate.name}" both derive "${canonical}" — ` +
+          `disambiguate the real branch/location; uniqueness cannot be repaired by guessing`,
+      );
+    }
+    owners.set(canonical, candidate);
+    byOld.set(candidate.id, canonical);
+  }
+  const ref = (id) => id == null ? id : (byOld.get(id) || id);
+  const normalized = {
+    ...doc,
+    candidates: candidates.map((candidate) => ({ ...candidate, id: byOld.get(candidate.id) })),
+    evidence: (doc.evidence || []).map((record) => ({ ...record, candidateId: ref(record.candidateId) })),
+    reservations: (doc.reservations || []).map((record) => ({ ...record, candidateId: ref(record.candidateId) })),
+    depth: doc.depth ? {
+      ...doc.depth,
+      reservations: {
+        ...doc.depth.reservations,
+        requiredCandidateIds: (doc.depth.reservations?.requiredCandidateIds || []).map(ref),
+      },
+    } : doc.depth,
+  };
+  return {
+    doc: normalized,
+    changed: candidates.some((candidate) => candidate.id !== byOld.get(candidate.id)),
+  };
 }
 
 /** Fail-closed read. Returns null ONLY when the file does not exist. */
@@ -77,13 +120,73 @@ export async function requireEvidence(slug, { intakeDir = INTAKE_DIR, runId = nu
 }
 
 export async function writeEvidence(slug, doc, { intakeDir = INTAKE_DIR } = {}) {
-  const validated = parseOrThrow(evidenceDocSchema, { schemaVersion: EVIDENCE_SCHEMA, ...doc }, {
+  const normalized = normalizeCandidateIds({ schemaVersion: EVIDENCE_SCHEMA, ...doc }).doc;
+  const validated = parseOrThrow(evidenceDocSchema, normalized, {
     file: evidencePath(slug, intakeDir), what: "V2 evidence artifact (on write)",
   });
   if (validated.slug !== slug) throw new ContractError(`refusing to write ${validated.slug} evidence into ${slug}'s run directory`);
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(evidencePath(slug, intakeDir), JSON.stringify(validated, null, 2) + "\n");
   return validated;
+}
+
+/** Reconcile a blind critic's facts.json edits into the existing evidence owner. The critic has
+    no evidence access; this trusted step proves every declared before/after value against the
+    two workspaces and refuses undeclared fact changes. */
+export async function reconcileCriticFactCorrections(slug, {
+  fromDir, intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides"), runId,
+} = {}) {
+  const beforeFile = path.join(guidesDir, slug, "facts.json");
+  const afterFile = path.join(fromDir, "src", "content", "guides", slug, "facts.json");
+  const readJson = async (file) => existsSync(file) ? JSON.parse(await readFile(file, "utf8")) : {};
+  const before = await readJson(beforeFile);
+  const after = await readJson(afterFile);
+  const changed = [...new Set([...Object.keys(before), ...Object.keys(after)])]
+    .filter((id) => JSON.stringify(before[id] ?? null) !== JSON.stringify(after[id] ?? null));
+  const rel = path.join("guides-intake", slug, "critic-corrections.v2.json");
+  const sourceFile = path.join(fromDir, rel);
+  if (!changed.length) {
+    if (existsSync(sourceFile)) {
+      const raw = JSON.parse(await readFile(sourceFile, "utf8"));
+      const declared = raw.corrections || [];
+      if (declared.length) throw new ContractError("critic declared fact corrections but facts.json did not change");
+    }
+    return { changed: false, factIds: [] };
+  }
+  if (!existsSync(sourceFile)) {
+    throw new ContractError(`critic changed facts.json (${changed.join(", ")}) without ${rel} — stale evidence is refused`);
+  }
+  const raw = JSON.parse(await readFile(sourceFile, "utf8"));
+  assertVersionCompatible(raw.schemaVersion, CRITIC_CORRECTIONS_SCHEMA, { file: sourceFile });
+  const correctionDoc = parseOrThrow(criticCorrectionDocSchema, raw, { file: sourceFile, what: "critic correction handoff" });
+  if (correctionDoc.slug !== slug || correctionDoc.runId !== runId) {
+    throw new ContractError(`critic correction identity does not match ${slug}/${runId}`);
+  }
+  const byId = new Map(correctionDoc.corrections.map((correction) => [correction.factId, correction]));
+  if (byId.size !== correctionDoc.corrections.length || changed.some((id) => !byId.has(id)) || [...byId.keys()].some((id) => !changed.includes(id))) {
+    throw new ContractError(`critic correction handoff must name exactly the changed fact ids: ${changed.join(", ")}`);
+  }
+  const evidence = await requireEvidence(slug, { intakeDir, runId });
+  for (const id of changed) {
+    const correction = byId.get(id);
+    const prior = before[id] || null;
+    const next = after[id] || null;
+    if (!next || correction.previousValue !== (prior?.value ?? null) || correction.correctedValue !== next.value ||
+        correction.claim !== next.claim || correction.source.url !== next.source_url || correction.verifiedOn !== next.verified_on) {
+      throw new ContractError(`critic correction "${id}" does not match the actual facts.json before/after/source truth`);
+    }
+    const record = {
+      id: `critic-correction-${id}`, candidateId: null, claim: `${next.claim}: ${next.value}`,
+      kind: "objective", origin: "critic", source: correction.source,
+      verifiedOn: correction.verifiedOn, firsthand: null, freshness: correction.freshness,
+    };
+    evidence.evidence = evidence.evidence.filter((item) => item.id !== record.id);
+    evidence.evidence.push(record);
+  }
+  await writeEvidence(slug, evidence, { intakeDir });
+  await mkdir(path.dirname(path.join(intakeDir, slug, "critic-corrections.v2.json")), { recursive: true });
+  await writeFile(path.join(intakeDir, slug, "critic-corrections.v2.json"), JSON.stringify(correctionDoc, null, 2) + "\n");
+  return { changed: true, factIds: changed };
 }
 
 // ── structural validation (pure) ─────────────────────────────────────────────

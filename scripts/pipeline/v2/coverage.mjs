@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 import {
   COVERAGE_SCHEMA, coverageDocSchema, parseOrThrow, assertVersionCompatible, ContractError,
 } from "./contracts.mjs";
+import { qualifyingEvidence } from "./research-rules.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const INTAKE_DIR = path.join(ROOT, "guides-intake");
@@ -68,13 +69,30 @@ export async function writeCoverage(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
 /** Coverage problems: a covered ask with no structured refs, an excluded ask with no reason,
     refs into groups the guide doesn't have, duplicate ask ids. `groups` = the guide's real
     NN-<group>.json filenames (pass null to skip existence checking). */
-export function coverageProblems(doc, { groups = null, groupAnchors = null, expectedAskIds = null, evidenceIds = null } = {}) {
+export function coverageProblems(doc, {
+  groups = null, groupAnchors = null, expectedAskIds = null, evidenceIds = null,
+  evidenceDoc = null, bindingAskIds = new Set(),
+} = {}) {
   const problems = [];
   const seen = new Set();
+  const allEvidenceIds = evidenceDoc
+    ? new Set((evidenceDoc.evidence || []).map((record) => record.id))
+    : evidenceIds;
+  const dispositions = new Map((evidenceDoc?.reconciliation || []).map((row) => [row.findingId, row.disposition]));
+  const currentEvidence = evidenceDoc ? new Set((evidenceDoc.evidence || [])
+    .filter((record) => !["reject", "replace"].includes(dispositions.get(record.id)))
+    .map((record) => record.id)) : null;
+  const qualifyingSupport = evidenceDoc ? new Set((evidenceDoc.evidence || [])
+    .filter((record) => qualifyingEvidence(record))
+    .filter((record) => currentEvidence.has(record.id))
+    .map((record) => record.id)) : null;
   for (const ask of doc.asks) {
     if (seen.has(ask.id)) problems.push(`duplicate ask id "${ask.id}"`);
     seen.add(ask.id);
     if (ask.status === "covered") {
+      if (/\b(unresearched|not researched|not adequately researched|unresolved|disproven|superseded)\b/i.test(ask.reason || "")) {
+        problems.push(`ask "${ask.id}" claims covered while its own reason says the support is unresolved or invalid`);
+      }
       if (!ask.where.length) {
         problems.push(`ask "${ask.id}" (${ask.ask.slice(0, 60)}) claims covered with no group refs — a claim of coverage is not proof of coverage`);
       } else if (groups) {
@@ -89,8 +107,14 @@ export function coverageProblems(doc, { groups = null, groupAnchors = null, expe
           }
         }
       }
-      if (evidenceIds) {
-        for (const id of ask.evidenceIds) if (!evidenceIds.has(id)) problems.push(`ask "${ask.id}" cites unknown evidence id "${id}"`);
+      if (allEvidenceIds) {
+        for (const id of ask.evidenceIds) if (!allEvidenceIds.has(id)) problems.push(`ask "${ask.id}" cites unknown evidence id "${id}"`);
+      }
+      if (currentEvidence && ask.evidenceIds.length && !ask.evidenceIds.some((id) => currentEvidence.has(id))) {
+        problems.push(`ask "${ask.id}" claims covered but all cited evidence is disproven or superseded`);
+      }
+      if (qualifyingSupport && bindingAskIds.has(ask.id) && !ask.evidenceIds.some((id) => qualifyingSupport.has(id))) {
+        problems.push(`BINDING ask "${ask.id}" has no qualifying current evidence and must fail closed`);
       }
     }
     if (ask.status === "excluded" && !(ask.reason && ask.reason.trim())) {
@@ -186,9 +210,13 @@ export async function loadCoverageContext(slug, { intakeDir = INTAKE_DIR, guides
     groupAnchors.set(name, collectAnchors(doc));
   }
   let expectedAskIds = null;
+  const bindingAskIds = new Set();
   try {
     const legacy = JSON.parse(await readFile(path.join(intakeDir, slug, "coverage.json"), "utf8"));
     expectedAskIds = new Set((legacy.asks || []).map((ask) => ask.id).filter(Boolean));
+    for (const ask of legacy.asks || []) {
+      if (ask.id === "constraints" && String(ask.value || "").trim()) bindingAskIds.add(ask.id);
+    }
   } catch { /* older manually-created scaffold: the V2 document still cannot be empty */ }
-  return { groups, groupAnchors, expectedAskIds };
+  return { groups, groupAnchors, expectedAskIds, bindingAskIds };
 }

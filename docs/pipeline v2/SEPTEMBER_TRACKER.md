@@ -11,7 +11,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 
 ## Dashboard — August 27, 2026
 
-- **Current phase:** validation program executed and recorded; independent review concurred with every verdict (V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION, synthesis NOT READY — REPAIR REQUIRED). Next phase is the bounded deterministic repair program (R-A–R-F/W1) on a fresh branch, after the validation-record PR is reviewed/merged.
+- **Current phase:** validation program executed and recorded; independent review concurred with every verdict (V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION, synthesis NOT READY — REPAIR REQUIRED). PR #104 is merged. The bounded deterministic repair program (R-A–R-F/W1) is implemented on a fresh review branch; next is independent code review, then one fresh repaired-class model-backed validation run.
 - **Core engine:** P01–P13 DONE.
 - **Integration:** I01–I05 have deterministic/live evidence; I06 deliberately stays open until final V1 retirement/cutover approval.
 - **Reliability acceptance:** PR #75 repair (`253607a`) is merged; PR #76 closeout is merged; fresh Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains draft-only and unpublished. The two failure-only seams the canary did not naturally exercise are now closed by targeted real-GitHub proofs.
@@ -22,7 +22,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - **Days until September 20 feature freeze:** 24
 - **Days until September 27 code freeze:** 31
 - **Days until September 30 backend complete:** 34
-- **Highest-risk unfinished items:** the R-A–R-F/W1 deterministic repair program plus the pre-cutover revalidation it requires (fresh Run B-class scenario; V01 completion dispatch decision); production cutover/publication parity; final mobile/offline/security stabilization.
+- **Highest-risk unfinished items:** independent review of the R-A–R-F/W1 repair branch and the pre-cutover revalidation it requires (one fresh Run B-class scenario); production cutover/publication parity; final mobile/offline/security stabilization.
 
 ### Current evidence already recorded
 
