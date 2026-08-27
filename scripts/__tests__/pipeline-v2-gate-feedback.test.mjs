@@ -28,6 +28,7 @@ import { fileURLToPath } from "node:url";
 
 import { extractGateFindings, GATE_NO_OUTPUT_FINDING } from "../pipeline/v2/feedback.mjs";
 import { recordGateFailure, allowedStagePaths, criticFetchTools } from "../pipeline-v2.mjs";
+import { forbiddenForCritic } from "../pipeline/v2/workspace.mjs";
 import {
   initRunV2, stageStart, stageComplete, readRunStateV2, V2_RESEARCH_STAGES,
 } from "../pipeline/v2/run-state.mjs";
@@ -241,11 +242,13 @@ describe("critic repair scope — validator feedback naming _guide.json is the c
     expect(CRITIC_PROMPT).toContain("composition/palette are the workflow's");
   });
 
-  it("grants NO new filesystem permission to do it — the stage scope is unchanged", () => {
+  it("keeps critic agent blindness while the trusted tail may reconcile correction truth", () => {
     expect(allowedStagePaths("testland", "critic")).toEqual([
       "src/content/guides/testland",
       "guides-intake/testland/ledger.md",
+      "guides-intake/testland/evidence.v2.json",
       "guides-intake/testland/coverage.v2.json",
+      "guides-intake/testland/critic-corrections.v2.json",
       "guides-intake/testland/pipeline-patterns.fragment.md",
       "docs/evidence/pipeline-patterns.md",
     ]);
@@ -255,5 +258,9 @@ describe("critic repair scope — validator feedback naming _guide.json is the c
     expect(tools.filter((t) => !t.startsWith("WebFetch(domain:"))).toEqual([
       "Read(//workspace/**)", "Edit(//workspace/**)", "Glob", "Grep", "WebSearch",
     ]);
+    expect(forbiddenForCritic("testland")).toEqual(expect.arrayContaining([
+      "guides-intake/testland/evidence.v2.json",
+      "guides-intake/testland/critic-corrections.v2.json",
+    ]));
   });
 });
