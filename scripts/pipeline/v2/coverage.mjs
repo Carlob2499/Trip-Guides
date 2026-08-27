@@ -80,7 +80,7 @@ export function coverageProblems(doc, {
     : evidenceIds;
   const dispositions = new Map((evidenceDoc?.reconciliation || []).map((row) => [row.findingId, row.disposition]));
   const currentEvidence = evidenceDoc ? new Set((evidenceDoc.evidence || [])
-    .filter((record) => !["reject", "replace"].includes(dispositions.get(record.id)))
+    .filter((record) => dispositions.get(record.id) !== "reject")
     .map((record) => record.id)) : null;
   const qualifyingSupport = evidenceDoc ? new Set((evidenceDoc.evidence || [])
     .filter((record) => qualifyingEvidence(record))
