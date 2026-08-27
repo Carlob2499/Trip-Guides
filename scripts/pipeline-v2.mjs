@@ -636,11 +636,11 @@ async function run(cmd, get, has) {
         console.error(`[pipeline-v2] ${slug} — safe recovery: ${decision.recovery}`);
         return 0; // the workflow escalates on allowed != 'true'; refusing is not a crash
       }
-      const { allowed, autoRetries, cap } = await recordAutoRetry(slug);
+      const { allowed, autoRetries, cap, budget } = await recordAutoRetry(slug);
       commitAndPush([`guides-intake/${slug}/run.v2.json`], `chore(pipeline-v2): ${slug} auto-retry ${autoRetries}`, { branch });
       emit("allowed", String(allowed));
       emit("run_id", state.runId);
-      console.log(`[pipeline-v2] ${slug} — automatic repair retry ${autoRetries} of ${cap}: ${allowed ? "ALLOWED" : "REFUSED (bounded)"} (${decision.reason})`);
+      console.log(`[pipeline-v2] ${slug} — ${budget} retry ${autoRetries} of ${cap}: ${allowed ? "ALLOWED" : "REFUSED (bounded)"} (${decision.reason})`);
       return 0;
     }
 

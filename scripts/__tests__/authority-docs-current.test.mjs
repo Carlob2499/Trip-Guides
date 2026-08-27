@@ -74,17 +74,16 @@ describe("the pipeline POLICY doc knows both research implementations", () => {
 });
 
 describe("retry policy prose agrees with executable policy", () => {
-  it("recordAutoRetry's comment no longer promises a usage-limit redispatch", () => {
+  it("recordAutoRetry's comment keeps usage-limit separate from quality repair", () => {
     const comment = RUN_STATE.slice(0, RUN_STATE.indexOf("export async function recordAutoRetry"))
       .split("/**").pop();
     expect(comment).not.toMatch(/for a recognized usage\/capacity interruption/i);
     expect(comment).toMatch(/usage-limit/);
-    expect(comment).toMatch(/NEVER auto-retryable|never auto-retryable/i);
+    expect(comment).toMatch(/separate bounded availability/i);
   });
 
   it("the executable policy agrees", () => {
-    expect([...AUTO_RETRYABLE_CLASSES].sort()).toEqual(["gate-failure", "void-run"]);
-    expect(AUTO_RETRYABLE_CLASSES).not.toContain("usage-limit");
+    expect([...AUTO_RETRYABLE_CLASSES].sort()).toEqual(["gate-failure", "usage-limit", "void-run"]);
     expect(AUTO_RETRYABLE_CLASSES).not.toContain("cancelled");
     expect(AUTO_RETRYABLE_CLASSES).not.toContain("agent-failure");
   });

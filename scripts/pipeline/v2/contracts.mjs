@@ -199,6 +199,8 @@ export const runStateSchema = z.looseObject({
     cap: z.number().int().min(1),
     autoRetries: z.number().int().min(0).default(0),
     autoRetryCap: z.number().int().min(0).default(1),
+    availabilityRetries: z.number().int().min(0).default(0),
+    availabilityRetryCap: z.number().int().min(0).default(2),
   }),
   // Where a resumed run picks up: the interrupted stage itself, never a stage ahead of it.
   resume: z.object({
