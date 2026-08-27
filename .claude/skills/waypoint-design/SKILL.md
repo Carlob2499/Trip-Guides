@@ -24,6 +24,9 @@ This skill owns **presentation**, not destination truth.
 
 ## Non-negotiable design contract
 
+Identity, governance, and the September design schedule are owned by
+`docs/reference/design-system.md`; load it for any design-system, token, or new-surface work.
+
 Waypoint is a field instrument, not a brochure.
 
 1. **Quiet paper, loud marks.** Content surfaces stay flat, sage, and hairline-separated; notation may take pigment and scale.
