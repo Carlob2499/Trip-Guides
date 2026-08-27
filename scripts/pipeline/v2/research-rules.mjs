@@ -76,7 +76,8 @@ export function qualifyingEvidence(record) {
 export function sourceIndependenceKey(record) {
   if (!qualifyingEvidence(record)) return null;
   if (record.source?.family) return `family:${record.source.family.toLocaleLowerCase()}`;
-  try { return `origin:${new URL(record.source.url).hostname.toLocaleLowerCase()}`; }
+  if (record.source?.independent !== true) return null;
+  try { return `origin:${new URL(record.source.url).href.toLocaleLowerCase()}`; }
   catch { return null; }
 }
 
