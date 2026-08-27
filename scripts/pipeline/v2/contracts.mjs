@@ -26,7 +26,7 @@ export const EVIDENCE_SCHEMA = "wp-evidence/2.3"; // 2.3: reconciliation rows na
 export const COVERAGE_SCHEMA = "wp-coverage/2.0";
 export const TELEMETRY_SCHEMA = "wp-telemetry/2.1"; // 2.1: cumulative/failed attempt durations (additive)
 export const FEEDBACK_SCHEMA = "wp-feedback/2.0";
-export const CRITIC_CORRECTIONS_SCHEMA = "wp-critic-corrections/2.0"; // 2.0: corrections address any guide file, and every other edited file is declared
+export const CRITIC_CORRECTIONS_SCHEMA = "wp-critic-corrections/2.1"; // 2.1: corrections address an exact JSON-pointer location, and every changed leaf is declared
 
 /** Fail-closed contract failure: what broke, in which file, and what to do about it. */
 export class ContractError extends Error {
@@ -334,40 +334,31 @@ export const evidenceRecordSchema = z.object({
   }).nullable().default(null),
 });
 
-// The blind critic never owns evidence.v2.json. When it changes ANY canonical guide file it
-// emits only this narrow handoff; the trusted control plane verifies the exact before/after
-// value against the two workspaces and folds a critic-origin record into the existing evidence
-// owner. Every changed guide file must appear here — as a factual `corrections` target or an
-// `editorialOnly` declaration — or the stage fails closed with stale evidence refused.
+// The blind critic never owns evidence.v2.json. When it changes ANY canonical guide file it emits
+// only this narrow handoff, and the trusted plane proves each declared movement at its exact
+// location. EVERY changed leaf must be declared — "that rewrite was only editorial" is the
+// critic's own assertion, so there is no editorial escape and an unaccounted change fails closed.
 export const GUIDE_FILE = /^(?:facts\.json|_guide\.json|\d\d-[a-z0-9-]+\.json)$/;
-export const CRITIC_TARGET = /^(?:facts\.json|_guide\.json|\d\d-[a-z0-9-]+\.json)#[^\s#]+$/;
-
-const criticFreshness = z.object({
-  perishable: z.boolean(),
-  shelfLife: z.enum(["fx", "transit", "hours", "venue", "default"]).nullable().default(null),
-  recheckOn: isoDate.nullable().default(null),
-});
+// "<guide file>#<RFC 6901 JSON pointer>": one exact location, so several independent facts inside
+// one item address distinctly and each correction keeps its own stable identity.
+export const CRITIC_TARGET = /^(?:facts\.json|_guide\.json|\d\d-[a-z0-9-]+\.json)#(?:\/(?:[^/~]|~[01])*)+$/;
 
 export const criticCorrectionDocSchema = z.object({
   schemaVersion: z.string(),
   slug: z.string().min(1),
   runId: z.string().min(1),
-  // `target` addresses the corrected value: "facts.json#<row id>", or "<group file>#<anchor>" /
-  // "_guide.json#<key>" for the ordinary guide files the critic is equally free to correct.
   corrections: z.array(z.object({
-    target: z.string().regex(CRITIC_TARGET, 'expected "<guide file>#<fact row id, anchor or key>"'),
+    target: z.string().regex(CRITIC_TARGET, 'expected "<guide file>#<JSON pointer>", e.g. "03-transit.json#/0/steps/2"'),
     previousValue: z.string().nullable(),
     correctedValue: z.string().min(1),
     claim: z.string().min(1),
     source: evidenceSourceSchema,
     verifiedOn: isoDate,
-    freshness: criticFreshness,
-  })).default([]),
-  // Guide files the critic edited WITHOUT changing a fact. Naming them is what makes an
-  // undeclared factual edit detectable; the note is the critic's own assertion of why.
-  editorialOnly: z.array(z.object({
-    file: z.string().regex(GUIDE_FILE, "expected a canonical guide file name"),
-    note: z.string().min(20),
+    freshness: z.object({
+      perishable: z.boolean(),
+      shelfLife: z.enum(["fx", "transit", "hours", "venue", "default"]).nullable().default(null),
+      recheckOn: isoDate.nullable().default(null),
+    }),
   })).default([]),
 });
 
@@ -434,6 +425,13 @@ export const saturationSchema = z.object({
   note: z.string().min(1),
 });
 
+/** A typed relation from one reconciliation row to prior work: WHAT KIND of relation it is,
+    plus the evidence ids it names (empty for the kinds that name no record). */
+const evidenceRelationSchema = (kinds) => z.object({
+  kind: z.enum(kinds),
+  evidenceIds: z.array(z.string().min(1)).default([]),
+});
+
 export const evidenceDocSchema = z.looseObject({
   schemaVersion: z.string(),
   slug: z.string().min(1),
@@ -465,26 +463,29 @@ export const evidenceDocSchema = z.looseObject({
   }).nullable().default(null),
   // Every independent (Pass-B origin) finding gets exactly one typed disposition, linked by id.
   // 2.3 (additive): the two relations reconciliation used to assert only in `note` prose, where
-  // nothing downstream could read them. `corroborates` names the EXISTING records this finding
-  // is claimed to confirm (so "Pass A and Pass B agree" can be tested for real independence
-  // instead of counted as two sources); `supersedes` names the records a `replace` disposition
-  // retires (so coverage can tell the current replacement from the stale evidence it replaced).
-  // Both default to [] — documents written before 2.3 legitimately lack them.
+  // nothing downstream could read them. Each is a typed DISCRIMINATOR rather than a bare id list,
+  // because the historical rows prove both have a second legitimate meaning no list can express:
+  // `corroborates` may be "recommendation" (agreement with a shortlist call, as accepted
+  // Uruguay's single-sourced `agree` leads are) and `supersedes` may be "recommendation" (Tottori's
+  // ev-jumbo-taxi replaced "Pass A's weak taxi fallback", which was never a record) — so no id is
+  // ever invented. Optional here, REQUIRED by dispositionProblems at ≥2.3: older artifacts stay
+  // valid, a 2.3 row cannot stay silent.
   reconciliation: z.array(z.object({
     findingId: z.string().min(1),
     disposition: z.enum(DISPOSITIONS),
     note: z.string().min(1),
-    corroborates: z.array(z.string().min(1)).default([]),
-    supersedes: z.array(z.string().min(1)).default([]),
+    corroborates: evidenceRelationSchema(["factual", "recommendation", "none"]).optional(),
+    supersedes: evidenceRelationSchema(["evidence", "recommendation"]).optional(),
   })).default([]),
 });
 
 /** The reader for the 2.3 `supersedes` relation: the evidence records a `replace` disposition
-    explicitly retires. Coverage and the research rules ask THIS, never a disposition note. */
+    explicitly retires. Coverage and the research rules ask THIS, never a disposition note — and
+    a `recommendation` replacement retires no record, so it can never invalidate coverage. */
 export function supersededEvidenceIds(doc) {
   return new Set((doc?.reconciliation || [])
-    .filter((row) => row.disposition === "replace")
-    .flatMap((row) => row.supersedes || []));
+    .filter((row) => row.disposition === "replace" && row.supersedes?.kind === "evidence")
+    .flatMap((row) => row.supersedes.evidenceIds || []));
 }
 
 // ── coverage ─────────────────────────────────────────────────────────────────

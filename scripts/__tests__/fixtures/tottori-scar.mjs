@@ -137,6 +137,12 @@ export const tottoriReconciliationRows = () => clone([
     "disposition": "replace",
     "note": "Supersedes Pass A's weak taxi fallback (Nikko/Chuo Taxi, only fare figure dated to 2009, 2 cars needed for 8 people) with a concretely-sourced 9-seat jumbo taxi option (Hinomaru Hire, published current metered tariff, single vehicle for the whole party). Adopted as the primary reserved fallback in the transport finding and the Day 2 plan_b; Pass A's original taxi operators are kept as a secondary walk-up mention since they remain a real, if less-suited, option."
   }
+,
+  {
+    "findingId": "ev-kurayoshi-station-accessible",
+    "disposition": "adopt",
+    "note": "New station-accessibility finding not in Pass A, directly relevant to the intake's binding mobility constraint. Folded into the transit section and the transport finding's doorToDoor field — establishes that the constraint sits in the onward bus/shuttle/taxi choice, not the train transfer itself."
+  }
 ]);
 
 export const tottoriCandidates = () => clone([
@@ -195,3 +201,76 @@ export const tottoriConstraintsAsk = () => clone({
   ],
   "reason": null
 });
+
+/** Two UNRELATED Tottori entities whose evidence claims both carry the ordinary value "¥800":
+    the Sand Museum's adult admission and Mitokusan's climbing permit / waraji rental. Verbatim
+    from b153af3. Any rule that retires evidence because another claim CONTAINS a corrected
+    string retires both when either one moves — the R-A supersession defect, on real data. */
+export const tottoriRepeatedValueRecords = () => clone([
+    {
+      "id": "ev-sand-museum-hours-price",
+      "candidateId": "c-sand-museum",
+      "claim": "Sand Museum hours are 9:00-18:00 with last entry at 17:30; adult admission is ¥800.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.sand-museum.jp/information/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "sand-museum",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-mitokusan-nageiredo-rules",
+      "candidateId": "c-mitokusan-sanbutsuji-nageiredo-climb",
+      "claim": "Climbing to Nageiredo requires reception at the temple office between 8:00 and 15:00 (last descent by 16:30), costs ¥1,200 total for one adult (¥400 main-hall admission + ¥800 climbing permit; ¥1,150/adult for groups of 20+), bars solo climbers (a minimum of two people is required), and requires non-metal-spike hiking shoes or rental waraji straw sandals (¥800) if footwear is judged unsuitable at the gate check. The route closes in bad weather and is typically closed for snow from December through March.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.mitokusan.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "mitokusan-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    }
+  ]);
+
+/** The Sand Museum admission as a canonical facts.json row. `¥800` is the figure the guide
+    really states at 07-sights.json#/0/items/1/body in b153af3 and the figure
+    `ev-sand-museum-hours-price` really sources; the row is the canonical shape production
+    facts.json rows use for exactly this kind of short, widely repeated currency value. */
+export const TOTTORI_ADMISSION_FACTS = (value) => JSON.stringify({
+  "sand-museum-admission": {
+    claim: "Sand Museum adult admission",
+    value,
+    source_url: "https://www.sand-museum.jp/information/",
+    verified_on: "2026-08-26",
+    shelf_life: "venue",
+    state: "exact",
+    tier: "primary",
+  },
+}, null, 2) + "\n";

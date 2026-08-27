@@ -238,16 +238,20 @@ async function reconcileSections({ slug, runId, intakeDir, guidesDir }) {
     "A disposition pointing at no record, a double disposition, or a silently dropped find fails the run.",
     "",
     "Two relations are DATA, not prose — a note saying \"corroborates Pass A's ev-x\" or \"supersedes the",
-    "old fallback\" is invisible to the validator and does not count:",
-    "  - `corroborates: [<evidence id>, …]` — the EXISTING records this finding is claimed to confirm.",
-    "    Required on a `agree` disposition. Pass A and Pass B converging is NOT itself independent",
-    "    corroboration: every record in a declared cross-pass set must be fetched qualifying evidence,",
-    "    and at least two of them must carry `source.independent: true` on distinct `family` values.",
-    "    Two municipal surfaces of one authority are one source however their hostnames differ.",
-    "  - `supersedes: [<evidence id>, …]` — required on a `replace` disposition, and legal on no other:",
-    "    the older records this finding retires. The replacement itself stays CURRENT; every record it",
-    "    names stops being current, so coverage citing only a superseded record no longer counts as",
-    "    covered. Every id in either list must be a real evidence record in this document.",
+    "old fallback\" is invisible to the validator. Each is a typed `{ kind, evidenceIds }`; a kind that",
+    "names no record leaves `evidenceIds` empty, and no id is ever invented to fill a shape:",
+    "  - `corroborates` — REQUIRED on EVERY row, `adopt` and `reject` included: silence is not an answer.",
+    "    Kinds: `factual` (+ the records this finding confirms), `recommendation` (agreement with a",
+    "    shortlist/disposition call — legitimately single-sourced, asserts no factual support), `none`.",
+    "    Pass A and Pass B converging is NOT itself independent corroboration: in a `factual` set spanning",
+    "    both passes every record must be fetched qualifying evidence and ≥2 must carry",
+    "    `source.independent: true` on distinct `family` values. Two municipal surfaces of one authority",
+    "    are one source, whatever the hostnames.",
+    "  - `supersedes` — REQUIRED on `replace`, legal on no other disposition. Kinds: `evidence` (+ the",
+    "    records it retires) or `recommendation` (it replaces a prior conclusion or fallback that was",
+    "    never an evidence record — use this rather than naming a record that does not exist). The",
+    "    replacement stays CURRENT; a record it retires does not, so coverage citing only that record stops",
+    "    counting as covered.",
   ];
 }
 
@@ -295,12 +299,10 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
   // critic — its owed artifacts are ledger sections + the patterns fragment; the validator for
   // the fragment is compound-patterns. State its exact row grammar from the enforced shape.
   //
-  // SCOPE, stated here on purpose. The frozen critic prompt says "touch nothing outside
-  // src/content/guides/<slug>/, ledger.md and pipeline-patterns.fragment.md". The correction
-  // handoff lives outside that list, so #105 left the agent holding two contradictory
-  // instructions. The prompt is the pre-registered validation candidate and is not this repair's
-  // to rewrite; the writable scope is owned by allowedStagePaths(), which already permits exactly
-  // this one extra path — so the generated contract amends the prompt's list explicitly instead.
+  // SCOPE. The frozen critic prompt's "touch nothing outside …" list omits the correction
+  // handoff, so #105 left the agent holding two contradictory instructions. The prompt is the
+  // pre-registered validation candidate and is not this repair's to rewrite; allowedStagePaths()
+  // already permits exactly this one extra path, so the capsule amends the list explicitly.
   return [
     ...head,
     `SCOPE AMENDMENT (this section, generated from the enforced machine scope, overrides the`,
@@ -318,17 +320,21 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
     "    no headings, no prose outside rows). A malformed row fails the run.",
     `  - If and only if you edit ANY file in \`src/content/guides/${slug}/\`, write`,
     `    \`guides-intake/${slug}/critic-corrections.v2.json\` with schema \`${CRITIC_CORRECTIONS_SCHEMA}\`:`,
-    `    slug \`${slug}\`, runId \`${runId}\`, and an account of EVERY edited file — no exceptions, and`,
-    "    `facts.json` is not special. Each FACTUAL change is one `corrections` row:",
-    "      `target` — `facts.json#<row id>`, `<NN-group>.json#<the item's exact title/name/label>`, or",
-    "        `_guide.json#<key>`; `previousValue` (null if the value is new) and `correctedValue` — verbatim",
-    "        strings as they appear before and after your edit; `claim`; fetched `source`; `verifiedOn`; `freshness`.",
-    "      The control plane re-derives your diff and proves each row against both workspaces: the corrected",
-    "      value must be present after, the previous value gone, at an address that exists in the edited file.",
-    "    Each edited file with NO factual change is one `editorialOnly` row: `file` plus a `note` (≥20 chars)",
-    "      saying what you changed and why no fact moved.",
-    "    An edited file that appears in neither list FAILS THE STAGE — the pipeline cannot tell a silent",
-    "    factual correction from a rewording, and stale evidence is refused. You still may not read",
-    "    evidence.v2.json; naming the evidence records your correction retires is the control plane's job.",
+    `    slug \`${slug}\`, runId \`${runId}\`, and one \`corrections\` row per CHANGED VALUE.`,
+    "    `facts.json` is not special. Each row carries:",
+    "      `target` — `<guide file>#<RFC 6901 JSON pointer to the value you changed>`, e.g.",
+    '        `facts.json#/route-distance/value`, `05-transit.json#/0/steps/2`, `_guide.json#/title`. The',
+    "        pointer is the literal path through the JSON (array elements are numeric indices) — it is NOT",
+    "        a title, name, label or slug. Independent facts inside one item are several rows, one per",
+    "        pointer; that is how one item carries more than one correction.",
+    "      `previousValue` — what that pointer held BEFORE your edit, verbatim (`null` if it is new);",
+    "        `correctedValue` — what it holds AFTER. A non-string value is its JSON text, e.g. `35.47`.",
+    "        Then `claim`, fetched `source`, `verifiedOn`, `freshness`.",
+    "    The control plane re-derives your diff down to every changed leaf and READS each pointer in both",
+    "    workspaces — it never searches the file text — so a wrong pointer or value fails the stage. A",
+    "    changed value no row declares FAILS THE STAGE: there is no editorial-only declaration, because",
+    '    "this rewrite moved no fact" is your assertion and the pipeline cannot prove it. Declare a',
+    "    rewording as a correction with its source, or leave the sentence alone. You still may not read",
+    "    evidence.v2.json; relating your correction to existing records is the control plane's job.",
   ].join("\n");
 }

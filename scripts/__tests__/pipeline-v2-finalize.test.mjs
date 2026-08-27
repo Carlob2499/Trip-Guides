@@ -100,19 +100,22 @@ describe("1A — generated machine contract cannot drift from the validators", (
     expect(prompt).not.toContain("critic-corrections"); // the frozen candidate stays untouched
   });
 
-  it("the critic capsule demands an account of EVERY edited guide file, not just facts.json", async () => {
+  it("the critic capsule demands an account of EVERY changed guide value, with no editorial escape", async () => {
     const cap = await generateContractCapsule("critic", { slug: "korea", runId: "r" });
     expect(cap).toContain(CRITIC_CORRECTIONS_SCHEMA);
     expect(cap).toContain("`facts.json` is not special");
-    expect(cap).toContain("editorialOnly");
+    expect(cap).toContain("there is no editorial-only declaration");
     expect(cap).toContain("FAILS THE STAGE");
   });
 
-  it("the reconcile capsule states the corroborates/supersedes relations as DATA", async () => {
+  it("the reconcile capsule states the corroborates/supersedes relations as typed DATA", async () => {
     const cap = await generateContractCapsule("reconcile", { slug: "korea", runId: "r" });
-    expect(cap).toContain("`corroborates:");
-    expect(cap).toContain("`supersedes:");
+    expect(cap).toContain("`corroborates`");
+    expect(cap).toContain("`supersedes`");
+    expect(cap).toContain("`{ kind, evidenceIds }`");
     expect(cap).toContain("Pass A and Pass B converging is NOT itself independent");
+    // The kind that replaces a conclusion which was never an evidence record — so no id is invented.
+    expect(cap).toContain("never an evidence record");
   });
 
   it("the reconcile capsule derives the guide's REAL group files and legacy ask ids", async () => {
