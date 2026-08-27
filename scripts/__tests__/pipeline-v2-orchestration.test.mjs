@@ -395,6 +395,18 @@ describe("research-pass-v2.yml — wiring", () => {
     }
   });
 
+  it("reconcile runs the critic's canonical build/schema gate before acceptance (R-C/W1-B)", () => {
+    const reconcile = text.split(/^ {2}reconcile:/m)[1].split(/^ {2}geocode:/m)[0];
+    const critic = text.split(/^ {2}critic:/m)[1].split(/^ {2}land:/m)[0];
+    const build = reconcile.indexOf("npm run build");
+    const finish = reconcile.indexOf("finish-stage --slug \"$SLUG\" --stage reconcile");
+    expect(build).toBeGreaterThan(reconcile.indexOf("Run research agent — Reconcile"));
+    expect(build).toBeLessThan(finish);
+    expect(reconcile).toContain('verify-failed --slug "$SLUG" --stage reconcile');
+    expect(critic).toContain("npm run build");
+    expect(text.indexOf("  critic:")).toBeGreaterThan(text.indexOf("  reconcile:"));
+  });
+
   it("lands by the run's DURABLE intent — deterministic land-mode, never a hardcoded merge (I02)", () => {
     const job = text.split(/^ {2}land:/m)[1].split(/^ {2}[a-zA-Z]+:$/m)[0];
     // The mode is computed by tested code from run.v2.json (product intent + every stage
