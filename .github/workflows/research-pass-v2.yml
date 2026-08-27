@@ -1031,9 +1031,18 @@ jobs:
           RC=$?
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # reconcile-critic-truth compares THIS tree (pre-critic) against the critic workspace, so
+          # it has to run before the copy. But verify-failed only retains what is dirty HERE — so a
+          # reconciliation failure used to discard the whole paid critic pass and re-spend it on the
+          # retry, the exact retained-work scar this stage already carries twice. Copy the critic's
+          # in-scope output into the tree FIRST when it fails, then record the findings.
           if [ "$RC" -eq 0 ]; then
             node scripts/pipeline-v2.mjs reconcile-critic-truth --slug "$SLUG" --from "$GITHUB_WORKSPACE" 2>&1 | tee "$RUNNER_TEMP/critic-truth-out.txt"
             if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/" || true
+              cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md" || true
+              cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/pipeline-patterns.fragment.md" "guides-intake/$SLUG/pipeline-patterns.fragment.md" || true
+              cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/critic-corrections.v2.json" "guides-intake/$SLUG/critic-corrections.v2.json" || true
               node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
                 --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
               exit 1

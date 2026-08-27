@@ -19,7 +19,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, GUIDE_FILE, evidenceDocSchema, criticCorrectionDocSchema,
-  parseOrThrow, assertVersionCompatible, parseSchemaVersion, ContractError,
+  parseOrThrow, assertVersionCompatible, ContractError,
 } from "./contracts.mjs";
 import { collectAnchors } from "./coverage.mjs";
 
@@ -135,22 +135,20 @@ export async function writeEvidence(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
 
 /** Reconcile a blind critic's guide edits into the existing evidence owner.
 
-    R-A scar (Tottori, b153af3 → b7fadad): the first version of this step diffed ONLY facts.json,
-    while the critic's real authority covers every file in `src/content/guides/<slug>/`. That run
-    rewrote 02-sights/03-transit/04-days/05-food-and-shopping/06-money-and-budget/_guide with
-    substantive factual corrections, left facts.json byte-identical, and this step reported
-    "unchanged" — so evidence.v2.json stayed stale while the guide moved. Now EVERY changed guide
-    file must be accounted for: a factual edit as a `corrections` target whose before/after this
-    step proves against the two workspaces, anything else as an explicit `editorialOnly`
-    declaration. An undeclared edit fails the stage closed. The critic still never reads
-    evidence.v2.json; naming the superseded records is this trusted plane's job, not its. */
+    R-A scar (Tottori, b153af3 → b7fadad): this step used to diff ONLY facts.json, while the
+    critic's authority covers every file in `src/content/guides/<slug>/`. That run rewrote six
+    ordinary guide files with substantive corrections, left facts.json byte-identical, reported
+    "unchanged", and evidence.v2.json stayed stale against the guide.
+
+    Every changed guide file now owes at least one `corrections` row this step proves against the
+    two workspaces. There is no editorial exemption — see contracts.mjs for why the guide contract
+    cannot prove "I only reworded it". The critic never reads evidence.v2.json; naming the records
+    a correction retires is this trusted plane's job. */
 export async function reconcileCriticCorrections(slug, {
   fromDir, intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides"), runId,
 } = {}) {
-  const beforeDir = path.join(guidesDir, slug);
-  const afterDir = path.join(fromDir, "src", "content", "guides", slug);
-  const before = await readGuideFiles(beforeDir);
-  const after = await readGuideFiles(afterDir);
+  const before = await readGuideFiles(path.join(guidesDir, slug));
+  const after = await readGuideFiles(path.join(fromDir, "src", "content", "guides", slug));
   const changedFiles = [...new Set([...before.keys(), ...after.keys()])]
     .filter((name) => canonicalJson(before.get(name)) !== canonicalJson(after.get(name))).sort();
   const rel = path.join("guides-intake", slug, "critic-corrections.v2.json");
@@ -159,11 +157,9 @@ export async function reconcileCriticCorrections(slug, {
   if (!changedFiles.length) {
     if (existsSync(sourceFile)) {
       const raw = JSON.parse(await readFile(sourceFile, "utf8"));
-      if ((raw.corrections || []).length || (raw.editorialOnly || []).length) {
-        throw new ContractError("critic declared guide corrections but no guide file changed");
-      }
+      if ((raw.corrections || []).length) throw new ContractError("critic declared guide corrections but no guide file changed");
     }
-    return { changed: false, targets: [] };
+    return { changed: false, targets: [], superseded: [] };
   }
   if (!existsSync(sourceFile)) {
     throw new ContractError(`critic changed ${changedFiles.join(", ")} without ${rel} — stale evidence is refused`);
@@ -176,51 +172,44 @@ export async function reconcileCriticCorrections(slug, {
   }
 
   // Declared set === changed set, both directions. This is the whole R-A repair: a factual
-  // correction the critic made but did not declare is exactly an undeclared file.
-  const factualFiles = new Set(correctionDoc.corrections.map((c) => targetFile(c.target)));
-  const editorialFiles = new Set(correctionDoc.editorialOnly.map((e) => e.file));
-  const both = [...factualFiles].filter((f) => editorialFiles.has(f));
-  if (both.length) throw new ContractError(`critic handoff declares ${both.join(", ")} as both a factual correction and editorial-only`);
-  const declared = new Set([...factualFiles, ...editorialFiles]);
+  // correction the critic made but did not declare is exactly an unaccounted-for file.
+  const declared = new Set(correctionDoc.corrections.map((c) => targetFile(c.target)));
   const undeclared = changedFiles.filter((f) => !declared.has(f));
   const phantom = [...declared].filter((f) => !changedFiles.includes(f)).sort();
   if (undeclared.length) {
     throw new ContractError(
-      `critic changed ${undeclared.join(", ")} without declaring the edit in ${rel} — every edited guide file is ` +
-        `either a factual correction (with its evidence) or an explicit editorial-only declaration; stale evidence is refused`,
+      `critic changed ${undeclared.join(", ")} without a proven correction in ${rel} — every edited guide file owes ` +
+        `at least one correction carrying its before/after value and source; stale evidence is refused`,
     );
   }
   if (phantom.length) throw new ContractError(`critic handoff declares ${phantom.join(", ")}, which the critic did not change`);
 
-  const targets = correctionDoc.corrections.map((c) => c.target);
-  if (new Set(targets).size !== targets.length) throw new ContractError(`critic correction handoff repeats a target: ${targets.join(", ")}`);
+  const keys = correctionDoc.corrections.map((c) => `${c.target}\u0000${c.claim}`);
+  if (new Set(keys).size !== keys.length) throw new ContractError("critic correction handoff repeats a target + claim pair");
 
   const evidence = await requireEvidence(slug, { intakeDir, runId });
   const superseded = [];
   for (const correction of correctionDoc.corrections) {
     assertCorrectionProven(correction, { before, after, slug });
-    const recordId = `critic-correction-${kebab(correction.target)}`;
-    const record = {
+    const recordId = criticRecordId(correction);
+    // A correction can retire prior evidence, but only where the artifact PROVES the link: the
+    // record cites the same origin the corrected item cites, AND still asserts the value the
+    // critic removed. A bare value scan is not scope — Tottori alone carries "¥800" in the Sand
+    // Museum's admission and in Sanbutsu-ji's waraji rental, two unrelated entities.
+    const retires = supersededByCorrection(correction, { evidence, before });
+    evidence.evidence = evidence.evidence.filter((item) => item.id !== recordId);
+    evidence.evidence.push({
       id: recordId, candidateId: null, claim: `${correction.claim}: ${correction.correctedValue}`,
       kind: "objective", origin: "critic", source: correction.source,
       verifiedOn: correction.verifiedOn, firsthand: null, freshness: correction.freshness,
-    };
-    evidence.evidence = evidence.evidence.filter((item) => item.id !== recordId);
-    evidence.evidence.push(record);
-    // R-A, second half: appending the correction while the disproven record stays CURRENT is the
-    // same desync in a new shape. The critic cannot name evidence ids (it never sees them), so
-    // the trusted plane resolves them: any non-critic record still asserting the exact
-    // previousValue the critic just corrected is superseded, explicitly, in machine state.
-    const retires = correction.previousValue && correction.previousValue.trim().length >= 2
-      ? evidence.evidence.filter((item) => item.origin !== "critic" && item.claim.includes(correction.previousValue)).map((item) => item.id)
-      : [];
+    });
     evidence.reconciliation = evidence.reconciliation.filter((row) => row.findingId !== recordId);
     evidence.reconciliation.push({
       findingId: recordId,
       disposition: retires.length ? "replace" : "adopt",
       note: retires.length
-        ? `critic correction at ${correction.target} supersedes ${retires.join(", ")}, which still asserted "${correction.previousValue}"`
-        : `critic correction at ${correction.target}; no prior evidence record asserted the corrected value`,
+        ? `critic correction at ${correction.target} supersedes ${retires.join(", ")}: same cited origin, still asserting "${correction.previousValue}"`
+        : `critic correction at ${correction.target}; no evidence record both cites this item's origin and still asserts the value it replaced`,
       corroborates: [],
       supersedes: retires,
     });
@@ -230,7 +219,79 @@ export async function reconcileCriticCorrections(slug, {
   await writeEvidence(slug, evidence, { intakeDir });
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(path.join(intakeDir, slug, "critic-corrections.v2.json"), JSON.stringify(correctionDoc, null, 2) + "\n");
-  return { changed: true, targets, superseded: [...new Set(superseded)] };
+  return { changed: true, targets: correctionDoc.corrections.map((c) => c.target), superseded: [...new Set(superseded)] };
+}
+
+/** Stable per-correction id. Several corrections legitimately share one target — the historical
+    Tottori transit item moved route identity, last departure and service gap independently — so
+    identity is target + claim, never target alone. */
+function criticRecordId(correction) {
+  const digest = createHash("sha256").update(correction.claim.normalize("NFKC")).digest("hex").slice(0, 8);
+  return `critic-correction-${kebab(correction.target)}-${digest}`;
+}
+
+/** The records a correction provably retires: records citing the SAME ORIGIN the corrected guide
+    item itself cites, which still assert the exact value the critic removed. Both halves are
+    per-record structure, so nothing is retired by resemblance.
+
+    Coverage's ask→ref and ask→evidence links look like the same thing and are not: an ask spans
+    several refs, so joining through it retires evidence belonging to the ask's OTHER locations.
+    Proven on the real artifact — Tottori's BINDING `constraints` ask points at both the transit
+    ref and Sanbutsu-ji, so a transit correction would have retired the ¥800 waraji record. */
+function supersededByCorrection(correction, { evidence, before }) {
+  if (!correction.previousValue?.trim()) return [];
+  const origins = correctedOrigins(correction, before);
+  if (!origins.size) return [];
+  return evidence.evidence
+    .filter((record) => record.origin !== "critic" && origins.has(record.source?.url) &&
+      record.claim.includes(correction.previousValue))
+    .map((record) => record.id);
+}
+
+/** The source URLs the corrected item cited BEFORE the edit: the fact row's for facts.json,
+    otherwise every `source_url` under the node the anchor addresses. */
+function correctedOrigins(correction, before) {
+  const file = targetFile(correction.target);
+  const key = targetKey(correction.target);
+  const text = before.get(file);
+  if (text === undefined) return new Set();
+  const doc = JSON.parse(text);
+  if (file === "facts.json") return new Set([doc[key]?.source_url].filter(Boolean));
+  return originsAt(doc, key) ?? sourceUrls(doc[key] ?? null);
+}
+
+const ANCHOR_KEYS = ["id", "title", "name", "label", "heading", "day"];
+
+/** Origins under the node whose id/title/name/label/heading/day slugifies to `anchor`; null when
+    no node does. Same address rule as coverage refs — one anchor grammar, not two. */
+function originsAt(value, anchor) {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const hit = originsAt(item, anchor);
+      if (hit) return hit;
+    }
+    return null;
+  }
+  if (!value || typeof value !== "object") return null;
+  if (Object.entries(value).some(([k, v]) => ANCHOR_KEYS.includes(k) && typeof v === "string" && kebab(v) === anchor)) {
+    return sourceUrls(value);
+  }
+  for (const item of Object.values(value)) {
+    const hit = originsAt(item, anchor);
+    if (hit) return hit;
+  }
+  return null;
+}
+
+function sourceUrls(value, out = new Set()) {
+  if (Array.isArray(value)) for (const item of value) sourceUrls(item, out);
+  else if (value && typeof value === "object") {
+    for (const [k, v] of Object.entries(value)) {
+      if (k === "source_url" && typeof v === "string") out.add(v);
+      sourceUrls(v, out);
+    }
+  }
+  return out;
 }
 
 async function readGuideFiles(dir) {
@@ -254,7 +315,7 @@ const targetKey = (target) => target.slice(target.indexOf("#") + 1);
 /** Prove a declared correction against the two workspaces. facts.json rows are canonical fact
     objects and keep the exact row-level proof; every other guide file is proved the only way a
     free-form document can be: the corrected value is present after and the value it replaced is
-    gone, at an address that really exists in the edited file. */
+    gone, at a SLUGIFIED anchor (coverage's addressing rule, one owner) that exists after the edit. */
 function assertCorrectionProven(correction, { before, after, slug }) {
   const file = targetFile(correction.target);
   const key = targetKey(correction.target);
@@ -274,7 +335,8 @@ function assertCorrectionProven(correction, { before, after, slug }) {
   for (const name of Object.keys(afterDoc)) addresses.add(name);
   if (!addresses.has(key)) {
     throw new ContractError(
-      `critic correction "${correction.target}" names no title/name/label/key that exists in ${slug}'s ${file} after the edit`,
+      `critic correction "${correction.target}" names no slugified title/name/label or top-level key that exists in ` +
+        `${slug}'s ${file} after the edit — legal anchors are the same ones coverage refs use`,
     );
   }
   if (!afterText.includes(correction.correctedValue)) {
@@ -319,20 +381,16 @@ export function candidateProblems(doc) {
   return problems;
 }
 
-/** True once the document is written against a schema that carries the 2.3 relations. Documents
-    written before them legitimately lack `corroborates`/`supersedes` and are not failed for it. */
-function carriesRelations(doc) {
-  const version = parseSchemaVersion(doc?.schemaVersion);
-  return Boolean(version && version.name === "wp-evidence" && (version.major > 2 || (version.major === 2 && version.minor >= 3)));
-}
+/** Independent findings (Pass-B origin evidence) that lack a typed disposition, dispositions
+    pointing at findings that do not exist, double dispositions — plus (2.3) the relations a row
+    asserts: `corroborates` and `supersedes`, referentially validated.
 
-/** Independent findings (Pass-B origin evidence) that lack a typed disposition, plus dispositions
-    pointing at findings that do not exist, plus double dispositions — plus (2.3) the relational
-    truth a reconciliation row asserts: what it corroborates and what it supersedes.
-
-    R-F scar (Tottori, b153af3): `ev-jumbo-taxi` was dispositioned `replace` with a note saying it
-    superseded "Pass A's weak taxi fallback". Nothing machine-readable named that record, so
-    coverage could not tell the current replacement from the stale evidence it replaced. */
+    R-F scar (Tottori, b153af3): `ev-jumbo-taxi` was dispositioned `replace` with the record it
+    retired named only in `note`, so coverage could not tell replacement from replaced. Neither
+    relation is ever DEMANDED, because the artifacts disprove both would-be rules: that same row
+    retires nothing recorded (the Pass-A taxi fallback has no evidence record, so requiring an id
+    only teaches the reconciler to invent one), and Uruguay uses `agree` for concurrence with Pass
+    B's own shortlist call on deliberately single-sourced leads. */
 export function dispositionProblems(doc) {
   const problems = [];
   const independent = doc.evidence.filter((e) => e.origin === "passB");
@@ -347,7 +405,6 @@ export function dispositionProblems(doc) {
     }
   }
   const evidenceIds = new Set(doc.evidence.map((e) => e.id));
-  const relational = carriesRelations(doc);
   for (const r of doc.reconciliation) {
     if (!evidenceIds.has(r.findingId)) {
       problems.push(`disposition for "${r.findingId}" points at no evidence record — a verdict on nothing proves nothing`);
@@ -356,18 +413,6 @@ export function dispositionProblems(doc) {
     const corroborates = r.corroborates || [];
     if (supersedes.length && r.disposition !== "replace") {
       problems.push(`"${r.findingId}" is dispositioned "${r.disposition}" but names superseded evidence — only "replace" retires prior evidence`);
-    }
-    if (relational && r.disposition === "replace" && !supersedes.length) {
-      problems.push(
-        `"${r.findingId}" replaces prior evidence without naming it in supersedes — ` +
-          `coverage cannot tell the replacement from what it replaced, so the replacement is refused`,
-      );
-    }
-    if (relational && r.disposition === "agree" && !corroborates.length) {
-      problems.push(
-        `"${r.findingId}" is dispositioned "agree" without naming what it agrees with in corroborates — ` +
-          `cross-pass agreement must be explicit before it can be checked for real independence`,
-      );
     }
     for (const [field, ids] of [["supersedes", supersedes], ["corroborates", corroborates]]) {
       for (const id of ids) {

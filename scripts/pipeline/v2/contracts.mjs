@@ -334,40 +334,39 @@ export const evidenceRecordSchema = z.object({
   }).nullable().default(null),
 });
 
-// The blind critic never owns evidence.v2.json. When it changes ANY canonical guide file it
-// emits only this narrow handoff; the trusted control plane verifies the exact before/after
-// value against the two workspaces and folds a critic-origin record into the existing evidence
-// owner. Every changed guide file must appear here — as a factual `corrections` target or an
-// `editorialOnly` declaration — or the stage fails closed with stale evidence refused.
+// The blind critic never owns evidence.v2.json. When it changes ANY canonical guide file it emits
+// only this narrow handoff; the trusted control plane verifies the exact before/after value
+// against the two workspaces and folds a critic-origin record into the existing evidence owner.
+//
+// There is deliberately NO "I edited this file but changed no fact" escape hatch. Guide prose has
+// no structured fact ownership — a price or a departure time lives inside a free-form `body`
+// string — so "did a fact move?" is not machine-derivable, and an agent-authored classification
+// would be an assertion, not proof. Until fact-bearing values are owned by addressable rows the
+// prose references, the only sound rule is the fail-closed one: an edited guide file owes at
+// least one correction whose before/after this pipeline can prove.
 export const GUIDE_FILE = /^(?:facts\.json|_guide\.json|\d\d-[a-z0-9-]+\.json)$/;
 export const CRITIC_TARGET = /^(?:facts\.json|_guide\.json|\d\d-[a-z0-9-]+\.json)#[^\s#]+$/;
-
-const criticFreshness = z.object({
-  perishable: z.boolean(),
-  shelfLife: z.enum(["fx", "transit", "hours", "venue", "default"]).nullable().default(null),
-  recheckOn: isoDate.nullable().default(null),
-});
 
 export const criticCorrectionDocSchema = z.object({
   schemaVersion: z.string(),
   slug: z.string().min(1),
   runId: z.string().min(1),
   // `target` addresses the corrected value: "facts.json#<row id>", or "<group file>#<anchor>" /
-  // "_guide.json#<key>" for the ordinary guide files the critic is equally free to correct.
+  // "_guide.json#<key>" for the ordinary guide files the critic is equally free to correct. One
+  // target may carry SEVERAL corrections — the historical Tottori transit rewrite moved route
+  // identity, last departure and service gap independently, each with its own source.
   corrections: z.array(z.object({
-    target: z.string().regex(CRITIC_TARGET, 'expected "<guide file>#<fact row id, anchor or key>"'),
+    target: z.string().regex(CRITIC_TARGET, 'expected "<guide file>#<fact row id, slugified anchor or key>"'),
     previousValue: z.string().nullable(),
     correctedValue: z.string().min(1),
     claim: z.string().min(1),
     source: evidenceSourceSchema,
     verifiedOn: isoDate,
-    freshness: criticFreshness,
-  })).default([]),
-  // Guide files the critic edited WITHOUT changing a fact. Naming them is what makes an
-  // undeclared factual edit detectable; the note is the critic's own assertion of why.
-  editorialOnly: z.array(z.object({
-    file: z.string().regex(GUIDE_FILE, "expected a canonical guide file name"),
-    note: z.string().min(20),
+    freshness: z.object({
+      perishable: z.boolean(),
+      shelfLife: z.enum(["fx", "transit", "hours", "venue", "default"]).nullable().default(null),
+      recheckOn: isoDate.nullable().default(null),
+    }),
   })).default([]),
 });
 

@@ -192,6 +192,29 @@ function commonEvidenceSections({ slug, runId }) {
   ];
 }
 
+/** The guide's real group files and their legal slugified anchors — one derivation, two
+    consumers (reconcile's coverage refs and the critic's correction targets address the same
+    thing, so they must never be described differently). */
+async function guideAnchorRows({ slug, intakeDir, guidesDir }) {
+  // A guide directory that does not exist yet is not an error here: the capsule is generated for
+  // whatever state the run is in, and "no group files yet" is a legal answer.
+  try {
+    const { groups, groupAnchors } = await loadCoverageContext(slug, { intakeDir, guidesDir });
+    return anchorRowsFor(groups, groupAnchors);
+  } catch {
+    return ["  - (no group files yet — anchors come from id/title/name/label/heading/day fields)"];
+  }
+}
+
+function anchorRowsFor(groups, groupAnchors) {
+  return groups.map((g) => {
+    const anchors = [...(groupAnchors.get(g) || [])];
+    const shown = anchors.slice(0, 12).map((a) => `#${a}`).join(", ");
+    const more = anchors.length > 12 ? ` … +${anchors.length - 12} more` : "";
+    return `  - \`${g}\`: ${shown || "(no anchors yet — anchors come from id/title/name/label/heading/day fields)"}${more}`;
+  });
+}
+
 async function reconcileSections({ slug, runId, intakeDir, guidesDir }) {
   const { groups, groupAnchors, expectedAskIds } = await loadCoverageContext(slug, { intakeDir, guidesDir });
   // IDs only, deliberately: ask labels/values are intake-authored traveler text, and untrusted
@@ -204,12 +227,7 @@ async function reconcileSections({ slug, runId, intakeDir, guidesDir }) {
   } catch {
     askRows = [...(expectedAskIds || [])].map((id) => `  - \`${id}\``);
   }
-  const anchorRows = groups.map((g) => {
-    const anchors = [...(groupAnchors.get(g) || [])];
-    const shown = anchors.slice(0, 12).map((a) => `#${a}`).join(", ");
-    const more = anchors.length > 12 ? ` … +${anchors.length - 12} more` : "";
-    return `  - \`${g}\`: ${shown || "(no anchors yet — anchors come from id/title/name/label/heading/day fields)"}${more}`;
-  });
+  const anchorRows = anchorRowsFor(groups, groupAnchors);
   return [
     "### Coverage contract (validator-enforced, derived from THIS guide right now)",
     `Write \`guides-intake/${slug}/coverage.v2.json\` (schema \`${COVERAGE_SCHEMA}\`). Every material intake`,
@@ -294,13 +312,12 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
   }
   // critic — its owed artifacts are ledger sections + the patterns fragment; the validator for
   // the fragment is compound-patterns. State its exact row grammar from the enforced shape.
+  const anchorRows = await guideAnchorRows({ slug, intakeDir, guidesDir });
   //
-  // SCOPE, stated here on purpose. The frozen critic prompt says "touch nothing outside
-  // src/content/guides/<slug>/, ledger.md and pipeline-patterns.fragment.md". The correction
-  // handoff lives outside that list, so #105 left the agent holding two contradictory
-  // instructions. The prompt is the pre-registered validation candidate and is not this repair's
-  // to rewrite; the writable scope is owned by allowedStagePaths(), which already permits exactly
-  // this one extra path — so the generated contract amends the prompt's list explicitly instead.
+  // SCOPE, stated here on purpose. The frozen critic prompt's "touch nothing outside" list omits
+  // the correction handoff, so #105 left the agent two contradictory instructions. The prompt is
+  // the pre-registered validation candidate and is not this repair's to rewrite; writable scope is
+  // owned by allowedStagePaths(), which already permits exactly this one extra path.
   return [
     ...head,
     `SCOPE AMENDMENT (this section, generated from the enforced machine scope, overrides the`,
@@ -317,18 +334,24 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
     "    (six cells; date real; slug and `[critic]` literal; final cell literally `open`; ≤1200 chars/row;",
     "    no headings, no prose outside rows). A malformed row fails the run.",
     `  - If and only if you edit ANY file in \`src/content/guides/${slug}/\`, write`,
-    `    \`guides-intake/${slug}/critic-corrections.v2.json\` with schema \`${CRITIC_CORRECTIONS_SCHEMA}\`:`,
-    `    slug \`${slug}\`, runId \`${runId}\`, and an account of EVERY edited file — no exceptions, and`,
-    "    `facts.json` is not special. Each FACTUAL change is one `corrections` row:",
-    "      `target` — `facts.json#<row id>`, `<NN-group>.json#<the item's exact title/name/label>`, or",
-    "        `_guide.json#<key>`; `previousValue` (null if the value is new) and `correctedValue` — verbatim",
-    "        strings as they appear before and after your edit; `claim`; fetched `source`; `verifiedOn`; `freshness`.",
-    "      The control plane re-derives your diff and proves each row against both workspaces: the corrected",
-    "      value must be present after, the previous value gone, at an address that exists in the edited file.",
-    "    Each edited file with NO factual change is one `editorialOnly` row: `file` plus a `note` (≥20 chars)",
-    "      saying what you changed and why no fact moved.",
-    "    An edited file that appears in neither list FAILS THE STAGE — the pipeline cannot tell a silent",
-    "    factual correction from a rewording, and stale evidence is refused. You still may not read",
-    "    evidence.v2.json; naming the evidence records your correction retires is the control plane's job.",
+    `    \`guides-intake/${slug}/critic-corrections.v2.json\` (schema \`${CRITIC_CORRECTIONS_SCHEMA}\`,`,
+    `    slug \`${slug}\`, runId \`${runId}\`) with at least one \`corrections\` row for EVERY edited file.`,
+    "    `facts.json` is not special, and there is no \"I only reworded it\" exemption: an edited file with",
+    "    no correction row FAILS THE STAGE — nothing downstream can tell a silent factual change from a",
+    "    rewrite. Each row carries:",
+    "      `target` — `facts.json#<row id>`, `<NN-group>.json#<anchor>` or `_guide.json#<key>`. A group",
+    "        anchor is the SLUGIFIED title/name/label coverage refs already use (lowercase, accents",
+    "        stripped, non-alphanumerics collapsed to single hyphens); this guide's legal anchors are",
+    "        listed below. ONE target may carry SEVERAL rows — rows are identified by target + claim,",
+    "        so several independent facts at one item each need their own claim.",
+    "      `previousValue` (verbatim as it read before your edit, or null if the value is new),",
+    "        `correctedValue` (verbatim as it reads after), `claim`, a fetched `source`, `verifiedOn`,",
+    "        `freshness`. The control plane re-derives your diff and proves each row against both",
+    "        workspaces: corrected value present after, previous value gone, at an address that exists.",
+    "    You still may not read evidence.v2.json; naming the records your correction retires is the",
+    "    control plane's job, resolved from the origins the corrected item itself cites.",
+    "",
+    "### Legal correction anchors (derived from THIS guide right now)",
+    ...anchorRows,
   ].join("\n");
 }

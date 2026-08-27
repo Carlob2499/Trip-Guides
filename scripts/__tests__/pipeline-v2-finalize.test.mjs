@@ -104,8 +104,10 @@ describe("1A — generated machine contract cannot drift from the validators", (
     const cap = await generateContractCapsule("critic", { slug: "korea", runId: "r" });
     expect(cap).toContain(CRITIC_CORRECTIONS_SCHEMA);
     expect(cap).toContain("`facts.json` is not special");
-    expect(cap).toContain("editorialOnly");
+    expect(cap).toContain('there is no "I only reworded it" exemption');
     expect(cap).toContain("FAILS THE STAGE");
+    expect(cap).toContain("SLUGIFIED title/name/label"); // the anchor rule the validator enforces
+    expect(cap).toContain("ONE target may carry SEVERAL rows");
   });
 
   it("the reconcile capsule states the corroborates/supersedes relations as DATA", async () => {
