@@ -41,6 +41,7 @@ export function forbiddenForPassB(slug) {
     `guides-intake/${slug}/evidence.v2.json`,
     `guides-intake/${slug}/run.v2.json`,
     `guides-intake/${slug}/coverage.v2.json`,
+    `guides-intake/${slug}/critic-corrections.v2.json`,
     `guides-intake/${slug}/passB.v2.json`,
     `guides-intake/${slug}/feedback.v2.json`,
     `guides-intake/${slug}/events.json`,

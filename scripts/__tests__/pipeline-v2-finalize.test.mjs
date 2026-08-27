@@ -692,8 +692,9 @@ describe("canary scar — coverage refs follow their anchors through composition
 
   it("the critic job runs the remap between composition and verification", () => {
     const at = (s) => WORKFLOW.indexOf(s);
-    expect(at("remap-coverage --slug")).toBeGreaterThan(at("compose-guide.mjs --slug \"$SLUG\" --write"));
-    expect(at("remap-coverage --slug")).toBeLessThan(at("verify-failed --slug \"$SLUG\" --stage critic"));
+    const remap = at("remap-coverage --slug");
+    expect(remap).toBeGreaterThan(at("compose-guide.mjs --slug \"$SLUG\" --write"));
+    expect(WORKFLOW.indexOf("verify-failed --slug \"$SLUG\" --stage critic", remap)).toBeGreaterThan(remap);
   });
 });
 

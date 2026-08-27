@@ -381,6 +381,8 @@ describe("research-pass-v2.yml — wiring", () => {
     expect(removeGit).toBeLessThan(agent);
     expect(collect).toBeGreaterThan(agent);
     expect(job).not.toContain("restore-critic");
+    expect(job).toContain("reconcile-critic-truth");
+    expect(job.indexOf("reconcile-critic-truth")).toBeLessThan(job.indexOf("rsync -a --delete"));
   });
 
   it("every stage job checkpoints start BEFORE its agent and validates AFTER (begin/finish)", () => {

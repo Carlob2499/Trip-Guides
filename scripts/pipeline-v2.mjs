@@ -33,6 +33,7 @@
 //   collect-passb --slug <s> --from <dir>            validate + transfer Pass B's artifact
 //   prepare-critic --slug <s>                        delete forbidden files from the working tree
 //   restore-critic --slug <s>                        restore them
+//   reconcile-critic-truth --slug <s> --from <dir>   fold verified blind-critic fact corrections into evidence
 //   validate --slug <s> [--scoped]                   the full artifact validation (fail closed)
 //   land-intent --slug <s> --event-name <e> --on-default <b> --engine <v>  derive init-time intent (trusted /new only mints auto)
 //   land-mode --slug <s> [--product-authority true]  emit land=auto|pr (landingMode() + landing-time authority)
@@ -59,7 +60,7 @@ import {
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock, extractGateFindings } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
 import { emitRunEvents, readGeocodeReport } from "./pipeline/v2/events.mjs";
-import { readEvidence, requireEvidence, evidenceProblems } from "./pipeline/v2/evidence.mjs";
+import { readEvidence, requireEvidence, evidenceProblems, reconcileCriticFactCorrections } from "./pipeline/v2/evidence.mjs";
 import { researchRuleProblems, isProxyHost } from "./pipeline/v2/research-rules.mjs";
 import { requireCoverage, coverageProblems, loadCoverageContext, remapCoverageRefs } from "./pipeline/v2/coverage.mjs";
 import {
@@ -149,7 +150,7 @@ export function allowedStagePaths(slug, stage) {
     reconcile: [guide, `${intake}/ledger.md`, `${intake}/evidence.v2.json`, `${intake}/coverage.v2.json`],
     // coverage.v2.json is in the critic's scope for ONE writer: the deterministic post-compose
     // ref remap in the trusted checkout — the critic agent itself never sees the file.
-    critic: [guide, `${intake}/ledger.md`, `${intake}/coverage.v2.json`, `${intake}/pipeline-patterns.fragment.md`, "docs/evidence/pipeline-patterns.md"],
+    critic: [guide, `${intake}/ledger.md`, `${intake}/evidence.v2.json`, `${intake}/coverage.v2.json`, `${intake}/critic-corrections.v2.json`, `${intake}/pipeline-patterns.fragment.md`, "docs/evidence/pipeline-patterns.md"],
   };
   return byStage[stage] || [];
 }
@@ -769,6 +770,15 @@ async function run(cmd, get, has) {
       return 0;
     }
 
+    case "reconcile-critic-truth": {
+      const from = get("--from");
+      if (!from) { console.error("[pipeline-v2] reconcile-critic-truth needs --from <critic workspace>"); return 1; }
+      const state = await readRunStateV2(slug);
+      const result = await reconcileCriticFactCorrections(slug, { fromDir: path.resolve(from), runId: state.runId });
+      console.log(`[pipeline-v2] ${slug} — critic fact truth ${result.changed ? `reconciled (${result.factIds.join(", ")})` : "unchanged"}.`);
+      return 0;
+    }
+
     case "verify-failed": {
       // An offline gate blocked this stage's output. Keep everything the retry needs: the gate's
       // findings as durable stage feedback, the in-scope work retained on the branch for repair
@@ -914,7 +924,7 @@ async function cliMain() {
   const has = (flag) => argv.includes(flag);
   const cmd = argv[0];
   if (!cmd || cmd.startsWith("--")) {
-    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|record-agent-failure|auto-retry|escalate|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|validate|land-intent|land-mode|finalize-landing|reopen-answers> --slug <slug> …");
+    console.error("Usage: node scripts/pipeline-v2.mjs <init|route|budget|begin-stage|finish-stage|fail-stage|record-agent-failure|auto-retry|escalate|prepare-passb|verify-passb-workspace|collect-passb|collect-stage|stage-feedback|contract|prepare-critic|restore-critic|reconcile-critic-truth|validate|land-intent|land-mode|finalize-landing|reopen-answers> --slug <slug> …");
     process.exit(1);
   }
   try {
