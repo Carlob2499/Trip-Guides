@@ -141,19 +141,34 @@ function commitAndPush(paths, message, { branch = null, cwd = ROOT } = {}) {
   return git(["rev-parse", "HEAD"], { cwd }).trim();
 }
 
-/** The guide directory as of a commit, parsed — the durable pre-critic baseline. Null when no
-    commit is recorded or the tree cannot be read WHOLE (a half-read baseline is not a baseline),
-    so the caller falls back to the working tree. */
-function guideDocsAt(sha, slug) {
+/** The guide directory as of a commit, parsed. Null when the tree cannot be read WHOLE — a
+    half-read baseline is not a baseline. */
+export function guideDocsAt(sha, slug, { cwd = ROOT } = {}) {
   const root = `src/content/guides/${slug}`;
   const docs = new Map();
   try {
-    for (const file of git(["ls-tree", "--name-only", sha, `${root}/`]).split("\n").filter(Boolean)) {
+    for (const file of git(["ls-tree", "--name-only", sha, `${root}/`], { cwd }).split("\n").filter(Boolean)) {
       const name = file.slice(root.length + 1);
-      if (GUIDE_FILE.test(name)) docs.set(name, JSON.parse(git(["show", `${sha}:${file}`])));
+      if (GUIDE_FILE.test(name)) docs.set(name, JSON.parse(git(["show", `${sha}:${file}`], { cwd })));
     }
   } catch { return null; }
   return docs.size ? docs : null;
+}
+
+/** The critic-truth gate's PRE-CRITIC baseline, as a hard requirement — there is NO fallback.
+    A failed critic pass deliberately retains its rejected guide edits in the working tree, so
+    falling back there compares those edits against themselves: no diff, and a missing handoff
+    passes as "unchanged". `reconcile` is the stage before `critic` and `begin-stage` only touches
+    run.v2.json, so its commit IS the tree the critic was handed; absent or unreadable, refuse. */
+export function requireCriticBaseline(state, slug, { cwd = ROOT } = {}) {
+  const sha = state?.stages?.reconcile?.commit;
+  const refuse = (why) => { throw new ContractError(
+    `critic truth needs ${slug}'s pre-critic guide baseline and ${why}. The working tree is NOT a fallback: it ` +
+      `holds the retained critic edits, and comparing them against themselves would pass an undeclared correction.`); };
+  if (!sha) refuse("run state records no completed `reconcile` commit");
+  const docs = guideDocsAt(sha, slug, { cwd });
+  if (!docs) refuse(`the tree at ${sha} is missing, incomplete or not valid JSON`);
+  return docs;
 }
 
 export function allowedStagePaths(slug, stage) {
@@ -789,16 +804,10 @@ async function run(cmd, get, has) {
       const from = get("--from");
       if (!from) { console.error("[pipeline-v2] reconcile-critic-truth needs --from <critic workspace>"); return 1; }
       const state = await readRunStateV2(slug);
-      // The PRE-CRITIC guide, pinned to a commit rather than read off the working tree: `reconcile`
-      // is the stage before `critic`, so its completion commit IS the tree the critic was handed
-      // (begin-stage only touches run.v2.json). Pinning is what lets a truth failure RETAIN the
-      // rejected guide edits — the next attempt still diffs against the original baseline.
-      const baselineDocs = state?.stages?.reconcile?.commit ? guideDocsAt(state.stages.reconcile.commit, slug) : null;
+      const baselineDocs = requireCriticBaseline(state, slug);
       const result = await reconcileCriticCorrections(slug, { fromDir: path.resolve(from), runId: state.runId, baselineDocs });
       console.log(`[pipeline-v2] ${slug} — critic guide truth ${result.changed ? `reconciled (${result.targets.join(", ")})` : "unchanged"}` +
-        `${baselineDocs ? ` against pre-critic baseline ${state.stages.reconcile.commit.slice(0, 7)}` : ""}.`);
-      if (result.superseded?.length) console.log(`[pipeline-v2] ${slug} — superseded by critic correction: ${result.superseded.join(", ")}`);
-      for (const note of result.unresolved || []) console.log(`[pipeline-v2] ${slug} — UNRESOLVED supersession: ${note}`);
+        ` against pre-critic baseline ${state.stages.reconcile.commit.slice(0, 7)}.`);
       return 0;
     }
 

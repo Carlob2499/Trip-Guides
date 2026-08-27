@@ -1047,6 +1047,12 @@ jobs:
             rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/" || return 1
             cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md" || return 1
             cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/pipeline-patterns.fragment.md" "guides-intake/$SLUG/pipeline-patterns.fragment.md" || return 1
+            # The handoff is what a malformed-handoff failure has to REPAIR, so retain it when it
+            # exists — otherwise the next critic reconstructs previous values it can no longer see.
+            # Optional on purpose: "no handoff at all" is itself one of the failures being retained.
+            if [ -f "$GITHUB_WORKSPACE/guides-intake/$SLUG/critic-corrections.v2.json" ]; then
+              cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/critic-corrections.v2.json" "guides-intake/$SLUG/critic-corrections.v2.json" || return 1
+            fi
           }
           if [ "$RC" -eq 0 ]; then
             node scripts/pipeline-v2.mjs reconcile-critic-truth --slug "$SLUG" --from "$GITHUB_WORKSPACE" 2>&1 | tee "$RUNNER_TEMP/critic-truth-out.txt"

@@ -164,7 +164,7 @@ export async function reconcileCriticCorrections(slug, {
       const raw = JSON.parse(await readFile(sourceFile, "utf8"));
       if ((raw.corrections || []).length) throw new ContractError("critic declared guide corrections but no guide value changed");
     }
-    return { changed: false, targets: [], superseded: [], unresolved: [] };
+    return { changed: false, targets: [] };
   }
   if (!existsSync(sourceFile)) {
     throw new ContractError(`critic changed ${[...changed].sort().join(", ")} without ${rel} — stale evidence is refused`);
@@ -191,8 +191,6 @@ export async function reconcileCriticCorrections(slug, {
   if (phantom.length) throw new ContractError(`critic handoff declares ${phantom.join(", ")}, which the critic did not change`);
 
   const evidence = await requireEvidence(slug, { intakeDir, runId });
-  const superseded = [];
-  const unresolved = [];
   for (const correction of correctionDoc.corrections) {
     assertCorrectionProven(correction, { before, after });
     const recordId = `critic-correction-${kebab(correction.target)}`;
@@ -202,38 +200,35 @@ export async function reconcileCriticCorrections(slug, {
       kind: "objective", origin: "critic", source: correction.source,
       verifiedOn: correction.verifiedOn, firsthand: null, freshness: correction.freshness,
     });
-    // Retire only where the mapping is UNAMBIGUOUS: the item stopped citing an origin and exactly
-    // one record rests on it, so "the evidence this item stopped resting on" names one record.
-    // One source page can support several propositions and nothing says which a correction
-    // invalidated — so a shared origin retires NOTHING and is reported unresolved. Retiring the
-    // whole origin invents coverage gaps; picking one is the claim-text similarity we avoid.
+    // Re-sourcing an item off an origin evidence still rests on is REFUSED, not guessed. Retiring
+    // the whole origin invents coverage gaps; retiring "the only record from that URL" is
+    // cardinality, not proposition identity; reading the claims is the similarity heuristic this
+    // repair avoids. The artifact has no proposition key, so the stage fails closed and reconcile
+    // declares the relation instead.
     const dropped = droppedOrigin(correction.target, { before, after });
     const resting = dropped
       ? evidence.evidence.filter((item) => item.origin !== "critic" && item.source?.url === dropped)
       : [];
-    const retires = resting.length === 1 ? [resting[0].id] : [];
-    if (resting.length > 1) {
-      unresolved.push(`${correction.target} stopped citing ${dropped}, which ${resting.length} evidence records rest on ` +
-        `(${resting.map((r) => r.id).join(", ")}) — which one it disproved is not derivable, so none is retired; ` +
-        `declare it with a reconciliation "supersedes" relation`);
+    if (resting.length) {
+      throw new ContractError(
+        `critic correction "${correction.target}" re-sourced the item off ${dropped}, which ${resting.length} evidence ` +
+          `record(s) still rest on (${resting.map((r) => r.id).join(", ")}). Which proposition it disproved is not ` +
+          `derivable — evidence records carry no proposition identity — and stale evidence must not stay eligible for ` +
+          `coverage, so reconcile must declare it: supersedes { kind: "evidence" }, or re-source the item back.`,
+      );
     }
-    superseded.push(...retires);
     evidence.reconciliation = evidence.reconciliation.filter((row) => row.findingId !== recordId);
     evidence.reconciliation.push({
-      findingId: recordId,
-      disposition: retires.length ? "replace" : "adopt",
-      note: retires.length
-        ? `critic correction at ${correction.target} re-sourced the item off ${dropped}, retiring ${retires[0]}`
-        : `critic correction proved at ${correction.target}; no single evidence record is identified as retired`,
+      findingId: recordId, disposition: "adopt",
+      note: `critic correction proved at ${correction.target}`,
       corroborates: { kind: "none", evidenceIds: [] },
-      ...(retires.length ? { supersedes: { kind: "evidence", evidenceIds: retires } } : {}),
     });
   }
 
   await writeEvidence(slug, evidence, { intakeDir });
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(path.join(intakeDir, slug, "critic-corrections.v2.json"), JSON.stringify(correctionDoc, null, 2) + "\n");
-  return { changed: true, targets, superseded: [...new Set(superseded)], unresolved };
+  return { changed: true, targets };
 }
 
 /** The guide directory, parsed. Parsing here makes reserialization invisible to the diff and a

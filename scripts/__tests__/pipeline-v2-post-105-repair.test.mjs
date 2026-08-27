@@ -19,6 +19,7 @@
 
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, readFile, rm } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, CRITIC_TARGET, criticCorrectionDocSchema, supersededEvidenceIds } from "../pipeline/v2/contracts.mjs";
@@ -26,6 +27,7 @@ import { reconcileCriticCorrections, writeEvidence, requireEvidence, disposition
 import { independentAgreementProblems } from "../pipeline/v2/research-rules.mjs";
 import { coverageProblems } from "../pipeline/v2/coverage.mjs";
 import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
+import { requireCriticBaseline } from "../pipeline-v2.mjs";
 import {
   TOTTORI_FACTS, TOTTORI_TRANSIT_BEFORE, TOTTORI_TRANSIT_AFTER, TOTTORI_ADMISSION_FACTS,
   tottoriEvidenceRecords, tottoriReconciliationRows, tottoriCandidates, tottoriConstraintsAsk,
@@ -221,117 +223,72 @@ describe("R-A — every changed guide value reaches authoritative evidence, or t
   });
 });
 
-describe("R-A — a correction retires evidence only where the mapping is unambiguous", () => {
+describe("R-A — an unresolvable supersession fails the stage, it is not logged and waved through", () => {
   const DROPPED = "https://hinomarubus.co.jp/timetable_route/3455/?tab=2";
-  const MUSEUM = "https://www.sand-museum.jp/information/";
-  const busEvidence = () => evidenceDoc({
-    candidates: [],
-    evidence: [...tottoriBusOriginRecords(), ...tottoriRepeatedValueRecords()],
-    reconciliation: [{
-      findingId: "ev-mitokusan-nageiredo-rules", disposition: "adopt",
-      note: "historical row, relation declared", corroborates: { kind: "none", evidenceIds: [] },
-    }],
+  const busEvidence = (evidence) => evidenceDoc({
+    candidates: [], evidence,
+    reconciliation: evidence.filter((r) => r.origin === "passB").map((r) => ({
+      findingId: r.id, disposition: "adopt", note: "historical row, relation declared",
+      corroborates: { kind: "none", evidenceIds: [] },
+    })),
   });
 
-  it("PRE-REPAIR: the historical transit item's origin carries TWO records asserting different things", () => {
-    // The link is in the artifact, not in a note: 05-transit.json#/0 cited this exact URL before
-    // the rewrite. But two Pass-A records rest on it, asserting different propositions — the
-    // route's identity and its timetable. Nothing in the artifact says which one a given
-    // correction invalidated.
+  it("PRE-REPAIR: the historical transit item's origin carries records asserting different things", () => {
     expect(before[0].source_url).toBe(DROPPED);
     expect(after[0].source_url).not.toBe(DROPPED);
     const resting = tottoriBusOriginRecords().filter((r) => r.source.url === DROPPED);
     expect(resting.map((r) => r.id)).toEqual(["ev-bus-route-exists", "ev-bus-downbound-schedule"]);
     expect(resting[0].claim).toContain("(72)(73)");   // route identity
     expect(resting[1].claim).toContain("19:08");      // timetable
-    // …and a third record cites the OTHER tab of the same timetable: a different origin entirely.
+    // A third record cites the OTHER tab of the same timetable: a different origin entirely.
     expect(tottoriBusOriginRecords().find((r) => r.id === "ev-bus-upbound-last").source.url).not.toBe(DROPPED);
   });
 
-  it("REPAIRED: a shared origin retires NOTHING and is reported unresolved", async () => {
-    // Retiring the whole origin would invent coverage gaps for the proposition the correction did
-    // not touch; picking one would be the claim-text similarity this repair exists to avoid. So
-    // the decision fails closed and says so, and every record stays current.
-    const fixture = await tottoriCriticScar({ corrections: declareHistorical() }, busEvidence());
-    const result = await reconcile(fixture);
-    expect(result.superseded).toEqual([]);
-    expect(result.unresolved.join("\n")).toMatch(/stopped citing .*3455.*which 2 evidence records rest on/);
-    expect(result.unresolved.join("\n")).toMatch(/ev-bus-route-exists, ev-bus-downbound-schedule/);
-    expect(result.unresolved.join("\n")).toMatch(/none is retired/);
-
-    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
-    expect(dispositionProblems(evidence)).toEqual([]);
-    expect(supersededEvidenceIds(evidence).size).toBe(0);
-    expect(evidence.reconciliation.filter((r) => r.disposition === "replace")).toEqual([]);
+  it("REPAIRED: re-sourcing an item off an origin evidence rests on is REFUSED, naming the records", async () => {
+    // Not retired (that invents coverage gaps), not guessed (that is claim-text similarity), and
+    // not logged-and-continued (that leaves disproven evidence eligible for coverage).
+    const fixture = await tottoriCriticScar({ corrections: declareHistorical() },
+      busEvidence([...tottoriBusOriginRecords(), ...tottoriRepeatedValueRecords()]));
+    await expect(reconcile(fixture)).rejects.toThrow(/re-sourced the item off https:\/\/hinomarubus[^\s]*3455/);
+    await expect(reconcile(fixture)).rejects.toThrow(/ev-bus-route-exists, ev-bus-downbound-schedule/);
+    await expect(reconcile(fixture)).rejects.toThrow(/evidence records carry no proposition identity/);
+    await expect(reconcile(fixture)).rejects.toThrow(/supersedes \{ kind: "evidence" \}/);
   });
 
-  it("REPAIRED: an unrelated record sharing the origin of a corrected one stays current", async () => {
-    // The reviewer's case, on real records: `ev-bus-route-exists` (route identity) and
-    // `ev-bus-downbound-schedule` (timetable) share one URL. Whichever the rewrite disproved, the
-    // other is untouched — and coverage resting on either still counts.
-    const fixture = await tottoriCriticScar({ corrections: declareHistorical() }, busEvidence());
-    await reconcile(fixture);
-    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
-    const ask = (ids) => ({ schemaVersion: "wp-coverage/2.0", slug: "tottori", runId: RUN_ID, asks: [{ ...tottoriConstraintsAsk(), evidenceIds: ids }] });
-    const binding = { evidenceDoc: evidence, bindingAskIds: new Set(["constraints"]) };
-    expect(coverageProblems(ask(["ev-bus-route-exists"]), binding)).toEqual([]);
-    expect(coverageProblems(ask(["ev-bus-downbound-schedule"]), binding)).toEqual([]);
+  it("REPAIRED: ONE record on the dropped origin is still refused — cardinality is not proposition identity", async () => {
+    // A page can carry several facts while the artifact happens to hold one record from it, so
+    // "the only record from that URL" proves nothing about which proposition moved.
+    const only = tottoriBusOriginRecords().filter((r) => r.id === "ev-bus-downbound-schedule");
+    const fixture = await tottoriCriticScar({ corrections: declareHistorical() }, busEvidence(only));
+    await expect(reconcile(fixture)).rejects.toThrow(/1 evidence record\(s\) still rest on \(ev-bus-downbound-schedule\)/);
   });
 
-  /** One fact row, re-sourced. Exactly one evidence record rests on the origin it dropped, so
-      "the evidence this item stopped resting on" names one record and no judgement is involved. */
-  async function reSourcedFactRow(from, to) {
+  it("REPAIRED: a correction that does not re-source its item passes, and retires nothing", async () => {
+    // The ¥800 admission edit leaves the row's source_url intact, so no link is dropped and the
+    // value itself is never scanned for — the unrelated ¥800 entity is untouched either way.
     const guidesDir = path.join(dir, "guides");
     const fromDir = path.join(dir, "critic");
     await mkdir(path.join(guidesDir, "tottori"), { recursive: true });
     await mkdir(path.join(fromDir, "src", "content", "guides", "tottori"), { recursive: true });
     await mkdir(path.join(fromDir, "guides-intake", "tottori"), { recursive: true });
-    const row = (value, url) => JSON.stringify({ "sand-museum-admission": {
-      claim: "Sand Museum adult admission", value, source_url: url,
-      verified_on: "2026-08-26", shelf_life: "venue", state: "exact", tier: "primary",
-    } }, null, 2) + "\n";
-    await writeFile(path.join(guidesDir, "tottori", "facts.json"), row("¥800", from));
-    await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "facts.json"), row("¥900", to));
-    await writeEvidence("tottori", busEvidence(), { intakeDir: dir });
-    const declareRow = (pointer, previousValue, correctedValue) => ({
-      target: `facts.json#${pointer}`, previousValue, correctedValue, claim: "Sand Museum adult admission",
-      source: { ...SOURCE, url: to, kind: "official", family: "sand-museum" },
-      verifiedOn: "2026-08-27", freshness: { perishable: true, shelfLife: "venue", recheckOn: "2026-10-27" },
-    });
-    const corrections = [declareRow("/sand-museum-admission/value", "¥800", "¥900")];
-    if (from !== to) corrections.push(declareRow("/sand-museum-admission/source_url", from, to));
+    await writeFile(path.join(guidesDir, "tottori", "facts.json"), TOTTORI_ADMISSION_FACTS("¥800"));
+    await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "facts.json"), TOTTORI_ADMISSION_FACTS("¥900"));
+    await writeEvidence("tottori", busEvidence(tottoriRepeatedValueRecords()), { intakeDir: dir });
     await writeFile(path.join(fromDir, "guides-intake", "tottori", "critic-corrections.v2.json"), JSON.stringify({
-      schemaVersion: CRITIC_CORRECTIONS_SCHEMA, slug: "tottori", runId: RUN_ID, corrections,
+      schemaVersion: CRITIC_CORRECTIONS_SCHEMA, slug: "tottori", runId: RUN_ID,
+      corrections: [{
+        target: "facts.json#/sand-museum-admission/value", previousValue: "¥800", correctedValue: "¥900",
+        claim: "Sand Museum adult admission",
+        source: { ...SOURCE, url: "https://www.sand-museum.jp/information/", kind: "official", family: "sand-museum" },
+        verifiedOn: "2026-08-27", freshness: { perishable: true, shelfLife: "venue", recheckOn: "2026-10-27" },
+      }],
     }));
-    return reconcileCriticCorrections("tottori", { guidesDir, fromDir, intakeDir: dir, runId: RUN_ID });
-  }
-
-  it("REPAIRED: a SINGLE record on the dropped origin is retired, and coverage on it fails closed", async () => {
-    const result = await reSourcedFactRow(MUSEUM, "https://www.sand-museum.jp/2026/admission/");
-    expect(result.superseded).toEqual(["ev-sand-museum-hours-price"]);
-    expect(result.unresolved).toEqual([]);
-
-    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
-    expect(dispositionProblems(evidence)).toEqual([]);
-    const row = evidence.reconciliation.find((r) => r.disposition === "replace");
-    expect(row.supersedes).toEqual({ kind: "evidence", evidenceIds: ["ev-sand-museum-hours-price"] });
-    // Unrelated entities are untouched, including the other ¥800 record a value scan would take.
-    expect(supersededEvidenceIds(evidence).has("ev-mitokusan-nageiredo-rules")).toBe(false);
-
-    const doc = { schemaVersion: "wp-coverage/2.0", slug: "tottori", runId: RUN_ID, asks: [{ ...tottoriConstraintsAsk(), evidenceIds: ["ev-sand-museum-hours-price"] }] };
-    const problems = coverageProblems(doc, { evidenceDoc: evidence, bindingAskIds: new Set(["constraints"]) }).join("\n");
-    expect(problems).toMatch(/all cited evidence is disproven or superseded/);
-    expect(problems).toMatch(/BINDING ask "constraints" has no qualifying current evidence/);
-  });
-
-  it("REPAIRED: an item that still cites its origin retires nothing, however the value moved", async () => {
-    // The ¥800 admission edit alone does not re-source the row, so the link its evidence rests on
-    // is intact and nothing is retired — the value itself is never scanned for.
-    const result = await reSourcedFactRow(MUSEUM, MUSEUM);
-    expect(result.superseded).toEqual([]);
-    expect(result.unresolved).toEqual([]);
+    const result = await reconcileCriticCorrections("tottori", { guidesDir, fromDir, intakeDir: dir, runId: RUN_ID });
+    expect(result).toEqual({ changed: true, targets: ["facts.json#/sand-museum-admission/value"] });
     const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
     expect(evidence.reconciliation.filter((r) => r.disposition === "replace")).toEqual([]);
+    expect(supersededEvidenceIds(evidence).size).toBe(0);
+    expect(dispositionProblems(evidence)).toEqual([]);
   });
 });
 
@@ -405,6 +362,106 @@ describe("R-A — the generated critic instruction and the validator share one t
       expect(target).not.toMatch(CRITIC_TARGET);
     }
     expect("05-transit.json#/0/steps/2").toMatch(CRITIC_TARGET);
+  });
+});
+
+// ── R-A: the pinned baseline, and the retry that repairs only the handoff ────
+
+describe("R-A — the pre-critic baseline is a REQUIREMENT, and the retry repairs the handoff alone", () => {
+  let repo;
+  const git = (...args) => execFileSync("git", args, { cwd: repo, encoding: "utf8" }).trim();
+
+  beforeEach(async () => {
+    repo = await mkdtemp(path.join(tmpdir(), "waypoint-baseline-"));
+    execFileSync("git", ["init", "-q", "-b", "main"], { cwd: repo });
+    git("config", "user.name", "test");
+    git("config", "user.email", "test@example.com");
+    await mkdir(path.join(repo, "src", "content", "guides", "tottori"), { recursive: true });
+    await writeFile(path.join(repo, "src", "content", "guides", "tottori", TRANSIT), TOTTORI_TRANSIT_BEFORE);
+    await writeFile(path.join(repo, "src", "content", "guides", "tottori", "facts.json"), TOTTORI_FACTS);
+    git("add", "-A");
+    git("commit", "-q", "-m", "reconcile");
+  });
+  afterEach(async () => { await rm(repo, { recursive: true, force: true }); });
+
+  const stateWith = (commit) => ({ stages: { reconcile: { commit } } });
+
+  it("REPAIRED: a missing reconcile commit REFUSES the gate — the working tree is not a fallback", () => {
+    expect(() => requireCriticBaseline(stateWith(null), "tottori", { cwd: repo }))
+      .toThrow(/records no completed .?reconcile.? commit/);
+    expect(() => requireCriticBaseline(stateWith(undefined), "tottori", { cwd: repo }))
+      .toThrow(/working tree is NOT a fallback/);
+  });
+
+  it("REPAIRED: an unreadable baseline REFUSES the gate, even with retained edits sitting in the tree", async () => {
+    // The retained corrected guide is present — exactly the state that made a silent fallback
+    // dangerous, because diffing it against itself shows no change.
+    await writeFile(path.join(repo, "src", "content", "guides", "tottori", TRANSIT), TOTTORI_TRANSIT_AFTER);
+    expect(() => requireCriticBaseline(stateWith("0".repeat(40)), "tottori", { cwd: repo }))
+      .toThrow(/working tree is NOT a fallback/);
+    // …and a baseline that exists but is not readable whole is refused too, not half-read.
+    git("rm", "-q", "--cached", `src/content/guides/tottori/${TRANSIT}`);
+    await writeFile(path.join(repo, "src", "content", "guides", "tottori", TRANSIT), "{ not json");
+    git("add", "-A"); git("commit", "-q", "-m", "broken");
+    expect(() => requireCriticBaseline(stateWith(git("rev-parse", "HEAD")), "tottori", { cwd: repo }))
+      .toThrow(/missing, incomplete or not valid JSON/);
+  });
+
+  it("REPAIRED: attempt 2 repairs ONLY the handoff — the retained guide edits are never regenerated", async () => {
+    const reconcileSha = git("rev-parse", "HEAD");           // the tree the critic was handed
+    const baselineDocs = () => requireCriticBaseline(stateWith(reconcileSha), "tottori", { cwd: repo });
+    const fromDir = path.join(dir, "critic");
+    await mkdir(path.join(fromDir, "src", "content", "guides", "tottori"), { recursive: true });
+    await mkdir(path.join(fromDir, "guides-intake", "tottori"), { recursive: true });
+    const handoffFile = path.join(fromDir, "guides-intake", "tottori", "critic-corrections.v2.json");
+    const writeHandoff = (corrections) => writeFile(handoffFile, JSON.stringify({
+      schemaVersion: CRITIC_CORRECTIONS_SCHEMA, slug: "tottori", runId: RUN_ID, corrections,
+    }, null, 2));
+    // The critic's sandbox: the corrected guide, and an INCOMPLETE handoff (one row of ten).
+    await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "facts.json"), TOTTORI_FACTS);
+    await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", TRANSIT), TOTTORI_TRANSIT_AFTER);
+    await writeHandoff([declare(TRANSIT, "/0/steps/2", before, after, "the only declared row")]);
+    await writeEvidence("tottori", evidenceDoc({ candidates: [], evidence: [], reconciliation: [] }), { intakeDir: dir });
+    const run = () => reconcileCriticCorrections("tottori", { fromDir, intakeDir: dir, runId: RUN_ID, baselineDocs: baselineDocs() });
+
+    // ATTEMPT 1 fails on the undeclared values…
+    await expect(run()).rejects.toThrow(/without declaring the edit/);
+
+    // …and the workflow retains the corrected guide AND the handoff into the trusted tree.
+    await writeFile(path.join(repo, "src", "content", "guides", "tottori", TRANSIT), TOTTORI_TRANSIT_AFTER);
+    await mkdir(path.join(repo, "guides-intake", "tottori"), { recursive: true });
+    await writeFile(path.join(repo, "guides-intake", "tottori", "critic-corrections.v2.json"), await readFile(handoffFile, "utf8"));
+    git("add", "-A");
+    git("commit", "-q", "-m", "critic attempt output (verify FAILED — retained for repair)");
+    const retained = git("rev-parse", "HEAD");
+    expect(retained).not.toBe(reconcileSha);
+
+    // ATTEMPT 2 edits ONLY the handoff. The guide bytes are byte-identical to attempt 1's — the
+    // critic regenerates nothing — and the retained handoff is what it repairs.
+    const guideBefore = await readFile(path.join(fromDir, "src", "content", "guides", "tottori", TRANSIT), "utf8");
+    const carried = JSON.parse(await readFile(path.join(repo, "guides-intake", "tottori", "critic-corrections.v2.json"), "utf8"));
+    expect(carried.corrections).toHaveLength(1);            // the previous values are still legible
+    await writeHandoff(declareHistorical());
+    expect(await readFile(path.join(fromDir, "src", "content", "guides", "tottori", TRANSIT), "utf8")).toBe(guideBefore);
+
+    // The gate still compares against the ORIGINAL reconcile commit, not the retained tree…
+    const result = await run();
+    expect(result.targets).toHaveLength(10);
+    // …which is the whole point. Read the baseline off the RETAINED tree instead and the gate
+    // sees no diff at all: the declared corrections read as phantom, and — the dangerous half —
+    // an attempt with NO handoff passes as "unchanged" with every correction still undeclared.
+    const retainedBaseline = requireCriticBaseline(stateWith(retained), "tottori", { cwd: repo });
+    expect(JSON.stringify(retainedBaseline.get(TRANSIT))).toBe(JSON.stringify(JSON.parse(TOTTORI_TRANSIT_AFTER)));
+    const againstRetained = (dir2) => reconcileCriticCorrections("tottori", { fromDir: dir2, intakeDir: dir, runId: RUN_ID, baselineDocs: retainedBaseline });
+    await expect(againstRetained(fromDir)).rejects.toThrow(/no guide value changed/);
+    const noHandoff = path.join(dir, "critic-no-handoff");
+    await mkdir(path.join(noHandoff, "src", "content", "guides", "tottori"), { recursive: true });
+    await writeFile(path.join(noHandoff, "src", "content", "guides", "tottori", "facts.json"), TOTTORI_FACTS);
+    await writeFile(path.join(noHandoff, "src", "content", "guides", "tottori", TRANSIT), TOTTORI_TRANSIT_AFTER);
+    await expect(againstRetained(noHandoff)).resolves.toEqual({ changed: false, targets: [] });
+    // Against the PINNED baseline that same handoff-less attempt is refused, as it must be.
+    await expect(reconcileCriticCorrections("tottori", { fromDir: noHandoff, intakeDir: dir, runId: RUN_ID, baselineDocs: baselineDocs() }))
+      .rejects.toThrow(/stale evidence is refused/);
   });
 });
 

@@ -470,6 +470,7 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
     // The paid critic pass: rewritten prose in the sandbox, stale copies in the trusted checkout.
     await writeFile(path.join(ws, "guides-intake", "tottori", "ledger.md"), "## Critic findings\nthe paid analysis\n");
     await writeFile(path.join(ws, "guides-intake", "tottori", "pipeline-patterns.fragment.md"), "| 2026-08-26 | tottori | [critic] | lens | pattern | open |\n");
+    await writeFile(path.join(ws, "guides-intake", "tottori", "critic-corrections.v2.json"), '{"corrections":[{"target":"05-transit.json#/0/steps/2"}]}\n');
     await writeFile(path.join(ws, "src", "content", "guides", "tottori", "05-transit.json"), '[{"note":"corrected by the critic"}]\n');
     await writeFile(path.join(collect, "guides-intake", "tottori", "ledger.md"), "## Critic findings\n(stale)\n");
     await writeFile(path.join(collect, "guides-intake", "tottori", "pipeline-patterns.fragment.md"), "(stale)\n");
@@ -491,7 +492,8 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
       // Snapshot exactly what verify-failed would find to retain, at the moment it runs.
       '  *verify-failed*) cp "guides-intake/tottori/ledger.md" "$RUNNER_TEMP/ledger-at-verify-failed.md"; ',
       '     cp "guides-intake/tottori/pipeline-patterns.fragment.md" "$RUNNER_TEMP/fragment-at-verify-failed.md"; ',
-      '     cp "src/content/guides/tottori/05-transit.json" "$RUNNER_TEMP/guide-at-verify-failed.json"; exit 0 ;;',
+      '     cp "src/content/guides/tottori/05-transit.json" "$RUNNER_TEMP/guide-at-verify-failed.json"; ',
+      '     cp "guides-intake/tottori/critic-corrections.v2.json" "$RUNNER_TEMP/handoff-at-verify-failed.json"; exit 0 ;;',
       'esac',
       "exit 0",
     ].join("\n"));
@@ -524,6 +526,8 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
       expect(readFileSync(path.join(temp, "ledger-at-verify-failed.md"), "utf8")).toContain("the paid analysis");
       expect(readFileSync(path.join(temp, "fragment-at-verify-failed.md"), "utf8")).toContain("[critic]");
       expect(readFileSync(path.join(temp, "guide-at-verify-failed.json"), "utf8")).toContain("corrected");
+      // The handoff too — a malformed-handoff failure has to be able to REPAIR it next attempt.
+      expect(readFileSync(path.join(temp, "handoff-at-verify-failed.json"), "utf8")).toContain("/0/steps/2");
       expect(readFileSync(path.join(collect, "guides-intake", "tottori", "ledger.md"), "utf8")).toContain("the paid analysis");
       expect(readFileSync(path.join(collect, "src", "content", "guides", "tottori", "05-transit.json"), "utf8")).toContain("corrected");
       // The retention happens BEFORE the findings are recorded, not after.
@@ -531,27 +535,33 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
     } finally { await rm(root, { recursive: true, force: true }); }
   });
 
-  it("the retention helper touches only the critic's own allowed paths", () => {
-    const helper = text.split("retain_critic_output() {")[1].split("\n          }")[0];
+  it("the retention helper carries the whole critic pass, and only its own allowed paths", () => {
+    const helper = text.split("retain_critic_output() {")[1].split("\n          }\n")[0];
     const lines = helper.split("\n").map((l) => l.trim()).filter((l) => l.startsWith("cp ") || l.startsWith("rsync "));
-    expect(lines).toHaveLength(3);
-    expect(lines.join("\n")).toContain("src/content/guides/$SLUG/");
-    expect(lines.join("\n")).toContain("guides-intake/$SLUG/ledger.md");
-    expect(lines.join("\n")).toContain("guides-intake/$SLUG/pipeline-patterns.fragment.md");
+    expect(lines).toHaveLength(4);
+    const joined = lines.join("\n");
+    for (const p of ["src/content/guides/$SLUG/", "guides-intake/$SLUG/ledger.md",
+      "guides-intake/$SLUG/pipeline-patterns.fragment.md", "guides-intake/$SLUG/critic-corrections.v2.json"]) {
+      expect(joined).toContain(p);
+    }
+    // The handoff is what a malformed-handoff failure repairs, so it is retained when present —
+    // and optional, because "no handoff at all" is itself one of the failures being retained.
+    expect(helper).toMatch(/if \[ -f "\$GITHUB_WORKSPACE\/guides-intake\/\$SLUG\/critic-corrections\.v2\.json" \]/);
     const allowed = allowedStagePaths("tottori", "critic");
-    for (const p of ["src/content/guides/tottori", "guides-intake/tottori/ledger.md", "guides-intake/tottori/pipeline-patterns.fragment.md"]) {
+    for (const p of ["src/content/guides/tottori", "guides-intake/tottori/ledger.md",
+      "guides-intake/tottori/pipeline-patterns.fragment.md", "guides-intake/tottori/critic-corrections.v2.json"]) {
       expect(allowed).toContain(p);
     }
   });
 
-  it("retaining the guide edits cannot let the next attempt pass: the baseline is a COMMIT, not the tree", () => {
+  it("retaining the guide edits cannot let the next attempt pass: the baseline is a REQUIRED commit", () => {
     // This is what makes retention safe. reconcile-critic-truth reads its "before" out of the
     // commit the critic stage started from — `reconcile` is the stage immediately before
-    // `critic` — so the retained edits are never compared against themselves.
+    // `critic` — and REFUSES when it cannot, rather than falling back to the retained tree.
     const cli = readFileSync(path.join(ROOT, "scripts", "pipeline-v2.mjs"), "utf8");
     const step = cli.split('case "reconcile-critic-truth"')[1].split("case \"")[0];
-    expect(step).toContain("state?.stages?.reconcile?.commit");
-    expect(step).toContain("baselineDocs");
+    expect(step).toContain("requireCriticBaseline(state, slug)");
+    expect(step).not.toMatch(/\?\s*guideDocsAt|:\s*null/); // no silent fallback in the gate's path
     expect(V2_RESEARCH_STAGES.indexOf("reconcile")).toBe(V2_RESEARCH_STAGES.indexOf("critic") - 1);
     // begin-stage only checkpoints run state, so it cannot move the baseline the critic was handed.
     const begin = cli.split('case "begin-stage"')[1].split("case \"")[0];
