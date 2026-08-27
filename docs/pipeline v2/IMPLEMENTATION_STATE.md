@@ -155,15 +155,15 @@ See `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` for the permanent evidence record. No a
 
 ## Validation before production cutover
 
-The remaining validation program is defined in `VALIDATION_RUNBOOK.md`, frozen into `VALIDATION_TRIAL_PACKETS.md`, and tracked in `SEPTEMBER_TRACKER.md`.
+The validation program is defined in `VALIDATION_RUNBOOK.md`, frozen into `VALIDATION_TRIAL_PACKETS.md`, and tracked in `SEPTEMBER_TRACKER.md`.
 
 Current state:
 
-- **V01:** awaiting Combined Research Run A (Tokyo) model-backed execution;
-- **V02/V03/V05:** awaiting Combined Research Run B (Tottori/Kurayoshi/Misasa) model-backed execution;
+- **V01:** YELLOW — Run A (`tokyo-20260826-41ae82`, 2026-08-26) passed all seven pre-registered conditions with no immediate-FAIL under the frozen candidate; the critic checkpoint/draft-PR landing remains unfinished at the attempt cap (two of five dispatches lost to account usage limits). Evidence, independent-review record, and defect classifications: `V01_RUNA_EVIDENCE.md`;
+- **V02/V03/V05:** FAIL — Run B (`tottori-20260826-e29ab7`, 2026-08-26) executed under the frozen candidate; each class tripped one pre-registered immediate-FAIL (translated ambiguity hardened; last-return misattributed to a line not serving the station; jumbo-taxi cost priced at the wrong tariff category), all caught by the run's own fresh-context critic but never repaired to a gate-accepted state inside the bounded budget. Evidence, independent-review record, and new deterministic defects (reconcile gate skips the build gate; candidate-matcher false positive recurred; dual-pass corroboration counted a shared wrong number as independence; coverage over-claims): `V0235_RUNB_EVIDENCE.md`;
 - **V04:** DONE deterministically;
 - **V06:** DONE from truthful available telemetry;
-- **V07:** methodology pre-registered in `V07_EVALUATION_METHOD.md`; execution waits for the Run A/B quality verdicts.
+- **V07:** FAIL / ACTION — the frozen method applied to both runs' durable telemetry found two W1 deterministic-waste patterns (the candidate-id contract mismatch repeated across both runs; the reconcile gate accepting a tree the critic's build gate then rejected, discarding a full critic attempt), each with a bounded control-plane-only correction; no research-behavior change is authorized. Evidence and the independent-review record: `V07_EFFICIENCY_EVIDENCE.md`.
 
 A zero-credit readiness audit found no active `tokyo` or `tottori` V2 run/intake collision on current `main` and no missing deterministic evidence field that justifies changing the V2 schema before those trials. The frozen criteria remain unchanged.
 
@@ -212,4 +212,4 @@ Read together:
 - `../reference/pipeline.md` — durable lifecycle policy.
 - `../handoff.md` — current warm start.
 
-**Next engineering surface:** when model capacity is available, re-check the dispatch gate, execute Run A and judge V01, execute Run B and judge V02/V03/V05 separately, then execute V07. Production cutover remains a later explicit evidence-based decision. Historical milestone logs and superseded review narratives remain available through Git history if forensic detail is ever needed.
+**Next engineering surface:** the model-backed validation program executed 2026-08-26 concluded **NOT READY — REPAIR REQUIRED** (`V2_VALIDATION_SYNTHESIS.md`). Next work is the bounded deterministic repair program recorded there (gate parity, post-critic evidence ownership, corroboration accounting, id transcription, budget accounting, coverage honesty, ledger name contract), then one repaired-class revalidation run. Production cutover remains a later explicit evidence-based decision. Historical milestone logs and superseded review narratives remain available through Git history if forensic detail is ever needed.
