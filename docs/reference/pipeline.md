@@ -59,9 +59,9 @@ Failure classes name the plane where the failure occurred:
 
 Partial output from a failed agent process never enters the successful collection/verification path.
 
-Automatic recovery is deliberately narrow. An actionable `gate-failure` or `void-run` with validator findings for the same run/stage may spend the single quality-repair reservation. A proven `usage-limit` interruption refunds that dispatch's quality-attempt charge and may spend only the separate bounded availability allowance. Cancellation, generic agent failure, unreadable state, missing findings, or exhausted budgets stop visibly.
+Automatic recovery is deliberately narrow. Only an actionable `gate-failure` or `void-run` with validator findings for the same run/stage may spend the single automatic quality-repair reservation. A proven `usage-limit` interruption refunds that dispatch's quality-attempt charge, then stops visibly so a deliberate redispatch can occur after account availability returns. Cancellation, generic agent failure, unreadable state, missing findings, or exhausted budgets also stop visibly.
 
-Current caps remain bounded: five quality attempts, one automatic quality-repair reservation, and two availability-recovery reservations. Availability recovery cannot reset or enlarge the quality budget.
+Current caps remain bounded: five quality attempts and one automatic quality-repair reservation. Availability interruptions do not enlarge either budget and do not trigger an immediate redispatch into the same exhausted usage window.
 
 ### Publication authority
 
