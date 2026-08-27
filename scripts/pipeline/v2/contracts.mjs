@@ -469,7 +469,11 @@ export const evidenceDocSchema = z.looseObject({
   // Uruguay's single-sourced `agree` leads are) and `supersedes` may be "recommendation" (Tottori's
   // ev-jumbo-taxi replaced "Pass A's weak taxi fallback", which was never a record) — so no id is
   // ever invented. Optional here, REQUIRED by dispositionProblems at ≥2.3: older artifacts stay
-  // valid, a 2.3 row cannot stay silent.
+  // valid, a 2.3 row cannot stay silent. Stated honestly: a row declaring `kind: "none"` is still
+  // the reconciler's own assertion, exactly as `editorialOnly` was the critic's. It is strictly
+  // better than silence — the answer is machine-readable, and a "factual" claim IS validated
+  // against the records it names — but proving a NEGATIVE would need proposition identity on
+  // evidence records, which this artifact does not carry. That ownership is the missing piece.
   reconciliation: z.array(z.object({
     findingId: z.string().min(1),
     disposition: z.enum(DISPOSITIONS),

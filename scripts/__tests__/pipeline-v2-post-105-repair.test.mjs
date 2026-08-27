@@ -21,7 +21,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, CRITIC_TARGET, criticCorrectionDocSchema } from "../pipeline/v2/contracts.mjs";
+import { EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, CRITIC_TARGET, criticCorrectionDocSchema, supersededEvidenceIds } from "../pipeline/v2/contracts.mjs";
 import { reconcileCriticCorrections, writeEvidence, requireEvidence, dispositionProblems } from "../pipeline/v2/evidence.mjs";
 import { independentAgreementProblems } from "../pipeline/v2/research-rules.mjs";
 import { coverageProblems } from "../pipeline/v2/coverage.mjs";
@@ -29,7 +29,7 @@ import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
 import {
   TOTTORI_FACTS, TOTTORI_TRANSIT_BEFORE, TOTTORI_TRANSIT_AFTER, TOTTORI_ADMISSION_FACTS,
   tottoriEvidenceRecords, tottoriReconciliationRows, tottoriCandidates, tottoriConstraintsAsk,
-  tottoriRepeatedValueRecords,
+  tottoriRepeatedValueRecords, tottoriBusOriginRecords,
 } from "./fixtures/tottori-scar.mjs";
 
 let dir;
@@ -70,37 +70,39 @@ const declare = (file, pointer, before, after, claim) => ({
 
 // ── R-A ──────────────────────────────────────────────────────────────────────
 
-describe("R-A — every changed guide value reaches authoritative evidence, or the stage fails closed", () => {
-  const TRANSIT = "05-transit.json";
-  const before = JSON.parse(TOTTORI_TRANSIT_BEFORE);
-  const after = JSON.parse(TOTTORI_TRANSIT_AFTER);
-  /** The ten locations the historical critic pass really moved. Seven of them are inside ONE
-      guide item — the `Key transit routes` anchor — which is the whole of blocker 2. */
-  const HISTORICAL = [
-    "/0/source_url", "/0/steps/2", "/0/steps/3", "/0/steps/4", "/0/steps/5", "/0/steps/6", "/0/steps/7",
-    "/1/center/lat", "/1/center/lng", "/1/span",
-  ];
-  const IN_KEY_TRANSIT_ROUTES = HISTORICAL.filter((p) => p.startsWith("/0/"));
+const TRANSIT = "05-transit.json";
+const before = JSON.parse(TOTTORI_TRANSIT_BEFORE);
+const after = JSON.parse(TOTTORI_TRANSIT_AFTER);
+/** The ten locations the historical critic pass really moved. Seven of them are inside ONE
+    guide item — the `Key transit routes` anchor — which is the whole of blocker 2. */
+const HISTORICAL = [
+  "/0/source_url", "/0/steps/2", "/0/steps/3", "/0/steps/4", "/0/steps/5", "/0/steps/6", "/0/steps/7",
+  "/1/center/lat", "/1/center/lng", "/1/span",
+];
+const declareHistorical = () => HISTORICAL.map((p) => declare(TRANSIT, p, before, after, `Tottori transfer fact at ${p}`));
 
-  /** The exact historical shape: 05-transit.json rewritten by the critic, facts.json untouched. */
-  async function tottoriCriticScar(handoff = null) {
-    const guidesDir = path.join(dir, "guides");
-    const fromDir = path.join(dir, "critic");
-    await mkdir(path.join(guidesDir, "tottori"), { recursive: true });
-    await mkdir(path.join(fromDir, "src", "content", "guides", "tottori"), { recursive: true });
-    await mkdir(path.join(fromDir, "guides-intake", "tottori"), { recursive: true });
-    await writeFile(path.join(guidesDir, "tottori", "facts.json"), TOTTORI_FACTS);
-    await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "facts.json"), TOTTORI_FACTS);
-    await writeFile(path.join(guidesDir, "tottori", TRANSIT), TOTTORI_TRANSIT_BEFORE);
-    await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", TRANSIT), TOTTORI_TRANSIT_AFTER);
-    await writeEvidence("tottori", evidenceDoc(), { intakeDir: dir });
-    if (handoff) {
-      await writeFile(path.join(fromDir, "guides-intake", "tottori", "critic-corrections.v2.json"),
-        JSON.stringify({ schemaVersion: CRITIC_CORRECTIONS_SCHEMA, slug: "tottori", runId: RUN_ID, ...handoff }));
-    }
-    return { guidesDir, fromDir };
+/** The exact historical shape: 05-transit.json rewritten by the critic, facts.json untouched. */
+async function tottoriCriticScar(handoff = null, evidence = evidenceDoc()) {
+  const guidesDir = path.join(dir, "guides");
+  const fromDir = path.join(dir, "critic");
+  await mkdir(path.join(guidesDir, "tottori"), { recursive: true });
+  await mkdir(path.join(fromDir, "src", "content", "guides", "tottori"), { recursive: true });
+  await mkdir(path.join(fromDir, "guides-intake", "tottori"), { recursive: true });
+  await writeFile(path.join(guidesDir, "tottori", "facts.json"), TOTTORI_FACTS);
+  await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "facts.json"), TOTTORI_FACTS);
+  await writeFile(path.join(guidesDir, "tottori", TRANSIT), TOTTORI_TRANSIT_BEFORE);
+  await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", TRANSIT), TOTTORI_TRANSIT_AFTER);
+  await writeEvidence("tottori", evidence, { intakeDir: dir });
+  if (handoff) {
+    await writeFile(path.join(fromDir, "guides-intake", "tottori", "critic-corrections.v2.json"),
+      JSON.stringify({ schemaVersion: CRITIC_CORRECTIONS_SCHEMA, slug: "tottori", runId: RUN_ID, ...handoff }));
   }
-  const reconcile = (fixture) => reconcileCriticCorrections("tottori", { ...fixture, intakeDir: dir, runId: RUN_ID });
+  return { guidesDir, fromDir };
+}
+const reconcile = (fixture) => reconcileCriticCorrections("tottori", { ...fixture, intakeDir: dir, runId: RUN_ID });
+
+describe("R-A — every changed guide value reaches authoritative evidence, or the stage fails closed", () => {
+  const IN_KEY_TRANSIT_ROUTES = HISTORICAL.filter((p) => p.startsWith("/0/"));
 
   it("PRE-REPAIR: the historical critic pass moved the guide while facts.json stayed identical", () => {
     // b153af3 and b7fadad hold the SAME facts.json bytes — that identity is the whole defect:
@@ -145,7 +147,7 @@ describe("R-A — every changed guide value reaches authoritative evidence, or t
 
   it("REPAIRED: ONE guide item carries SEVEN independent corrections, each with its own identity", async () => {
     const fixture = await tottoriCriticScar({
-      corrections: HISTORICAL.map((pointer) => declare(TRANSIT, pointer, before, after, `Tottori transfer fact at ${pointer}`)),
+      corrections: declareHistorical(),
     });
     const result = await reconcile(fixture);
     expect(result.changed).toBe(true);
@@ -170,7 +172,7 @@ describe("R-A — every changed guide value reaches authoritative evidence, or t
     // previousValue appeared nowhere. "19:25" occurs in three separate steps of the rewritten
     // file, so a correction pointed at the WRONG step passed that substring test.
     expect(TOTTORI_TRANSIT_AFTER.split("19:25").length - 1).toBeGreaterThan(1);
-    const corrections = HISTORICAL.map((p) => declare(TRANSIT, p, before, after, `Tottori transfer fact at ${p}`));
+    const corrections = declareHistorical();
     const misaddressed = corrections.map((c) => c.target === `${TRANSIT}#/0/steps/5`
       ? { ...c, correctedValue: valueAt(after, "/0/steps/2") } : c);
     await expect(reconcile(await tottoriCriticScar({ corrections: misaddressed })))
@@ -183,11 +185,28 @@ describe("R-A — every changed guide value reaches authoritative evidence, or t
 
   it("REPAIRED: a declared target the critic did not actually change is refused", async () => {
     const corrections = [
-      ...HISTORICAL.map((p) => declare(TRANSIT, p, before, after, `Tottori transfer fact at ${p}`)),
+      ...declareHistorical(),
       { ...declare(TRANSIT, "/0/title", before, after, "phantom"), previousValue: "Key transit routes", correctedValue: "Key transit routes" },
     ];
     await expect(reconcile(await tottoriCriticScar({ corrections })))
       .rejects.toThrow(/declares 05-transit\.json#\/0\/title, which the critic did not change/);
+  });
+
+  it("REPAIRED: a guide file the critic RENAMED or deleted is refused, not silently accepted", async () => {
+    // The real critic pass renamed 05-transit.json → 03-transit.json (composition renumbers).
+    // A dropped file reads as the whole document changing at `#/`, and a correction cannot
+    // declare that (its correctedValue would have to be absent), so the stage fails closed —
+    // renaming a guide file is not the critic's to do, and the refusal says so rather than
+    // letting an unaccounted rename through.
+    const guidesDir = path.join(dir, "guides");
+    const fromDir = path.join(dir, "critic");
+    await mkdir(path.join(guidesDir, "tottori"), { recursive: true });
+    await mkdir(path.join(fromDir, "src", "content", "guides", "tottori"), { recursive: true });
+    await writeFile(path.join(guidesDir, "tottori", TRANSIT), TOTTORI_TRANSIT_BEFORE);
+    await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "03-transit.json"), TOTTORI_TRANSIT_BEFORE);
+    await writeEvidence("tottori", evidenceDoc(), { intakeDir: dir });
+    await expect(reconcile({ guidesDir, fromDir }))
+      .rejects.toThrow(/critic changed 03-transit\.json#\/, 05-transit\.json#\/ without/);
   });
 
   it("REPAIRED: a critic pass that changed no guide value stays unchanged", async () => {
@@ -199,6 +218,91 @@ describe("R-A — every changed guide value reaches authoritative evidence, or t
     }
     await writeEvidence("tottori", evidenceDoc(), { intakeDir: dir });
     await expect(reconcile({ guidesDir, fromDir })).resolves.toEqual({ changed: false, targets: [] });
+  });
+});
+
+describe("R-A — a correction retires the evidence its item stopped resting on, and nothing else", () => {
+  const DROPPED = "https://hinomarubus.co.jp/timetable_route/3455/?tab=2";
+  const busEvidence = () => evidenceDoc({
+    candidates: [],
+    evidence: [...tottoriBusOriginRecords(), ...tottoriRepeatedValueRecords()],
+    reconciliation: [{
+      findingId: "ev-mitokusan-nageiredo-rules", disposition: "adopt",
+      note: "historical row, relation declared", corroborates: { kind: "none", evidenceIds: [] },
+    }],
+  });
+
+  it("PRE-REPAIR: the disproven records are the ones resting on the timetable the item stopped citing", () => {
+    // The link is in the artifact, not in a note: 05-transit.json#/0 cited this exact URL before
+    // the rewrite, and these Pass-A records cite it and still assert what the re-fetch disproved.
+    expect(before[0].source_url).toBe(DROPPED);
+    expect(after[0].source_url).not.toBe(DROPPED);
+    const records = byId(tottoriBusOriginRecords());
+    expect(records.get("ev-bus-route-exists").claim).toContain("(72)(73)");
+    expect(records.get("ev-bus-downbound-schedule").claim).toContain("19:08");
+    expect(records.get("ev-bus-downbound-schedule").source.url).toBe(DROPPED);
+    // …while the upbound record cites the OTHER tab of the same timetable: a different origin.
+    expect(records.get("ev-bus-upbound-last").source.url).not.toBe(DROPPED);
+  });
+
+  it("REPAIRED: the historical rewrite retires exactly the two records resting on the dropped origin", async () => {
+    const fixture = await tottoriCriticScar({ corrections: declareHistorical() }, busEvidence());
+    const result = await reconcile(fixture);
+    expect(result.superseded.sort()).toEqual(["ev-bus-downbound-schedule", "ev-bus-route-exists"]);
+
+    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
+    expect(dispositionProblems(evidence)).toEqual([]);
+    const retired = supersededEvidenceIds(evidence);
+    // Never the other tab, and never the unrelated ¥800 entities a value scan would have taken.
+    expect(retired.has("ev-bus-upbound-last")).toBe(false);
+    expect(retired.has("ev-sand-museum-hours-price")).toBe(false);
+    expect(retired.has("ev-mitokusan-nageiredo-rules")).toBe(false);
+    // The retiring row names them as data, with the typed kind — not in prose.
+    const row = evidence.reconciliation.find((r) => r.disposition === "replace");
+    expect(row.supersedes).toMatchObject({ kind: "evidence" });
+    expect(row.supersedes.evidenceIds.sort()).toEqual(["ev-bus-downbound-schedule", "ev-bus-route-exists"]);
+  });
+
+  it("REPAIRED: a BINDING ask left resting only on the disproven record fails closed", async () => {
+    // The R-A second half: appending the critic's correction while the record it disproved stays
+    // CURRENT is the same desync in a new shape. Before this, the stale 19:08 record alone still
+    // satisfied the intake's binding mobility ask.
+    const fixture = await tottoriCriticScar({ corrections: declareHistorical() }, busEvidence());
+    await reconcile(fixture);
+    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
+    const ask = { ...tottoriConstraintsAsk(), evidenceIds: ["ev-bus-downbound-schedule"] };
+    const problems = coverageProblems(
+      { schemaVersion: "wp-coverage/2.0", slug: "tottori", runId: RUN_ID, asks: [ask] },
+      { evidenceDoc: evidence, bindingAskIds: new Set(["constraints"]) },
+    ).join("\n");
+    expect(problems).toMatch(/all cited evidence is disproven or superseded/);
+    expect(problems).toMatch(/BINDING ask "constraints" has no qualifying current evidence/);
+  });
+
+  it("REPAIRED: an item that still cites its origin retires nothing, however the value moved", async () => {
+    // The ¥800 admission correction does not re-source the fact row, so the link the evidence
+    // rests on is intact and no record is retired — the value itself is never scanned for.
+    const guidesDir = path.join(dir, "guides");
+    const fromDir = path.join(dir, "critic");
+    await mkdir(path.join(guidesDir, "tottori"), { recursive: true });
+    await mkdir(path.join(fromDir, "src", "content", "guides", "tottori"), { recursive: true });
+    await mkdir(path.join(fromDir, "guides-intake", "tottori"), { recursive: true });
+    await writeFile(path.join(guidesDir, "tottori", "facts.json"), TOTTORI_ADMISSION_FACTS("¥800"));
+    await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "facts.json"), TOTTORI_ADMISSION_FACTS("¥900"));
+    await writeEvidence("tottori", busEvidence(), { intakeDir: dir });
+    await writeFile(path.join(fromDir, "guides-intake", "tottori", "critic-corrections.v2.json"), JSON.stringify({
+      schemaVersion: CRITIC_CORRECTIONS_SCHEMA, slug: "tottori", runId: RUN_ID,
+      corrections: [{
+        target: "facts.json#/sand-museum-admission/value", previousValue: "¥800", correctedValue: "¥900",
+        claim: "Sand Museum adult admission",
+        source: { ...SOURCE, url: "https://www.sand-museum.jp/information/", kind: "official", family: "sand-museum" },
+        verifiedOn: "2026-08-27", freshness: { perishable: true, shelfLife: "venue", recheckOn: "2026-10-27" },
+      }],
+    }));
+    const result = await reconcileCriticCorrections("tottori", { guidesDir, fromDir, intakeDir: dir, runId: RUN_ID });
+    expect(result.superseded).toEqual([]);
+    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
+    expect(evidence.reconciliation.filter((r) => r.disposition === "replace")).toEqual([]);
   });
 });
 
@@ -407,8 +511,9 @@ describe("R-F — supersession is machine-identified, and never invents a record
   });
 
   it("REPAIRED (1, 3): replacing a REAL older record retires it while the replacement stays current", () => {
-    // ev-jumbo-taxi also superseded a real Pass-B record in the same area — when a record truly
-    // exists, `kind: "evidence"` names it and coverage stops counting it.
+    // The relation, demonstrated on a real record: when a `replace` genuinely retires evidence,
+    // `kind: "evidence"` names it and coverage stops counting it. (The historical jumbo-taxi row
+    // retired no record at all — that case is the `recommendation` kind above.)
     const reconciliation = tottoriReconciliationRows().map(relate({
       [TAXI]: { supersedes: { kind: "evidence", evidenceIds: ["ev-kurayoshi-station-accessible"] } },
     }));

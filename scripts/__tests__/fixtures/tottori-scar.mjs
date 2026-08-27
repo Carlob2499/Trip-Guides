@@ -274,3 +274,89 @@ export const TOTTORI_ADMISSION_FACTS = (value) => JSON.stringify({
     tier: "primary",
   },
 }, null, 2) + "\n";
+
+/** The three Pass-A records that cite the Hinomaru timetable the transit item itself cited
+    before the critic re-fetched it. Verbatim from b153af3. `ev-bus-route-exists` asserts the
+    misattributed (72)(73) line and `ev-bus-downbound-schedule` the 19:08 last departure and the
+    12:22→14:04 gap — exactly what the rewrite disproved; `ev-bus-upbound-last` cites the OTHER
+    tab of the same timetable, so it is a different cited origin and is not retired. */
+export const tottoriBusOriginRecords = () => clone([
+    {
+      "id": "ev-bus-route-exists",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Hinomaru Bus's (72)(73) Misasa Line connects Kurayoshi Station and Misasa Onsen on the schedule effective April 1, 2025 (current as of this pass).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-bus-downbound-schedule",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Weekday downbound (Kurayoshi toward Misasa) departures run roughly hourly through the morning, then thin to gaps of up to ~100 minutes in early afternoon (12:22 to 14:04), with the last weekday departure at 19:08.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-bus-upbound-last",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Weekday upbound (Misasa toward Kurayoshi/Ikuta depot) service thins in the evening; the last recorded weekday departure from the Misasa-area stops (Misasa depot / Onsen South Exit) is around 18:03-18:04.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=1",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    }
+  ]);

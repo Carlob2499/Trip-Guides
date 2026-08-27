@@ -187,6 +187,7 @@ export async function reconcileCriticCorrections(slug, {
   if (phantom.length) throw new ContractError(`critic handoff declares ${phantom.join(", ")}, which the critic did not change`);
 
   const evidence = await requireEvidence(slug, { intakeDir, runId });
+  const superseded = [];
   for (const correction of correctionDoc.corrections) {
     assertCorrectionProven(correction, { before, after });
     const recordId = `critic-correction-${kebab(correction.target)}`;
@@ -196,23 +197,30 @@ export async function reconcileCriticCorrections(slug, {
       kind: "objective", origin: "critic", source: correction.source,
       verifiedOn: correction.verifiedOn, firsthand: null, freshness: correction.freshness,
     });
-    // The correction enters evidence and retires nothing on its own. #107 retired every
-    // non-critic record whose claim CONTAINED previousValue — real Tottori evidence carries ¥800
-    // for both the Sand Museum admission and the Nageiredo permit, unrelated entities. Nothing
-    // links a record to the guide location a correction moved, so supersession here would be a
-    // guess; it is the reconcile stage's explicit typed relation instead.
+    // A correction retires prior evidence only where the artifact PROVES the link: the corrected
+    // item stopped citing the origin, and the record rests on that origin. The critic never sees
+    // evidence ids, so naming them stays the trusted plane's job.
+    const dropped = retiredOrigin(correction.target, { before, after });
+    const retires = dropped
+      ? evidence.evidence.filter((item) => item.origin !== "critic" && item.source?.url === dropped).map((item) => item.id)
+      : [];
+    superseded.push(...retires);
     evidence.reconciliation = evidence.reconciliation.filter((row) => row.findingId !== recordId);
     evidence.reconciliation.push({
-      findingId: recordId, disposition: "adopt",
-      note: `critic correction proved at ${correction.target}`,
+      findingId: recordId,
+      disposition: retires.length ? "replace" : "adopt",
+      note: retires.length
+        ? `critic correction at ${correction.target} re-sourced the item off ${dropped}, retiring ${retires.join(", ")}`
+        : `critic correction proved at ${correction.target}; the item still cites the origin its evidence rests on`,
       corroborates: { kind: "none", evidenceIds: [] },
+      ...(retires.length ? { supersedes: { kind: "evidence", evidenceIds: retires } } : {}),
     });
   }
 
   await writeEvidence(slug, evidence, { intakeDir });
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(path.join(intakeDir, slug, "critic-corrections.v2.json"), JSON.stringify(correctionDoc, null, 2) + "\n");
-  return { changed: true, targets };
+  return { changed: true, targets, superseded: [...new Set(superseded)] };
 }
 
 /** The guide directory, parsed. Parsing here makes reserialization invisible to the diff and a
@@ -239,22 +247,49 @@ function changedPointers(before, after, at = "") {
   return encode(before) === encode(after) ? [] : [at || "/"];
 }
 
-/** The value at a JSON pointer as TEXT, or null when the pointer addresses nothing. */
-function textAt(doc, pointer) {
+const splitTarget = (target) => [target.slice(0, target.indexOf("#")), target.slice(target.indexOf("#") + 1)];
+const pointerParts = (pointer) => pointer.split("/").slice(1).map((raw) => raw.replace(/~1/g, "/").replace(/~0/g, "~"));
+
+/** The node a pointer path addresses, or undefined when it addresses nothing. */
+function nodeAt(doc, parts) {
   let node = doc;
-  for (const raw of pointer.split("/").slice(1)) {
-    const key = raw.replace(/~1/g, "/").replace(/~0/g, "~");
-    if (node === null || typeof node !== "object" || !(key in node)) return null;
+  for (const key of parts) {
+    if (node === null || typeof node !== "object" || !(key in node)) return undefined;
     node = node[key];
   }
+  return node;
+}
+
+/** The value at a JSON pointer as TEXT, or null when the pointer addresses nothing. */
+function textAt(doc, pointer) {
+  const node = nodeAt(doc, pointerParts(pointer));
+  if (node === undefined) return null;
   return typeof node === "string" ? node : JSON.stringify(node);
+}
+
+/** The origin a proven correction RETIRES, if any: the `source_url` the corrected item cited
+    BEFORE the edit and no longer cites after it. That `source_url` is the artifact's only
+    machine-readable link between a guide location and the evidence behind it, so supersession
+    rides on the link being dropped — never on scanning claims for a value. #107 retired every
+    record whose claim CONTAINED previousValue: real Tottori evidence carries "¥800" on the Sand
+    Museum's admission and on Sanbutsu-ji's waraji rental, so one transit edit retired both. */
+function retiredOrigin(target, { before, after }) {
+  const [file, pointer] = splitTarget(target);
+  const parts = pointerParts(pointer);
+  for (let depth = parts.length; depth >= 0; depth--) {
+    const at = parts.slice(0, depth);
+    const url = nodeAt(before.get(file), at)?.source_url;
+    if (typeof url !== "string" || !url) continue;
+    return nodeAt(after.get(file), at)?.source_url === url ? null : url;
+  }
+  return null;
 }
 
 /** Prove a declared correction at the exact addressed node. #107 asked instead whether
     previousValue/correctedValue appeared ANYWHERE in the raw file text — which a repeated string
     or a JSON-escaped quote defeats in both directions. Here the value is read, not searched. */
 function assertCorrectionProven(correction, { before, after }) {
-  const [file, pointer] = [correction.target.slice(0, correction.target.indexOf("#")), correction.target.slice(correction.target.indexOf("#") + 1)];
+  const [file, pointer] = splitTarget(correction.target);
   const refuse = (what) => { throw new ContractError(`critic correction "${correction.target}" declares a ${what} that is not what ${file} holds there`); };
   if (textAt(after.get(file), pointer) !== correction.correctedValue) refuse("correctedValue");
   if (textAt(before.get(file), pointer) !== correction.previousValue) refuse("previousValue (before the edit)");
