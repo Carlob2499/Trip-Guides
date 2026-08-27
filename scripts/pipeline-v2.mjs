@@ -46,7 +46,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isValidSlug } from "./lib/slug.mjs";
 import { isMain } from "./audit/lib.mjs";
-import { ContractError } from "./pipeline/v2/contracts.mjs";
+import { ContractError, GUIDE_FILE } from "./pipeline/v2/contracts.mjs";
 import {
   initRunV2, readRunStateV2, nextStageV2, stageStart, stageComplete, stageFail,
   bumpRunAttempt, recordAutoRetry, recordTelemetry, markLandingGate, V2_RESEARCH_STAGES,
@@ -139,6 +139,21 @@ function commitAndPush(paths, message, { branch = null, cwd = ROOT } = {}) {
   git(["commit", "--only", "-m", message, "--", ...targets], { cwd });
   if (branch) git(["push", "origin", `HEAD:${branch}`], { cwd });
   return git(["rev-parse", "HEAD"], { cwd }).trim();
+}
+
+/** The guide directory as of a commit, parsed — the durable pre-critic baseline. Null when no
+    commit is recorded or the tree cannot be read WHOLE (a half-read baseline is not a baseline),
+    so the caller falls back to the working tree. */
+function guideDocsAt(sha, slug) {
+  const root = `src/content/guides/${slug}`;
+  const docs = new Map();
+  try {
+    for (const file of git(["ls-tree", "--name-only", sha, `${root}/`]).split("\n").filter(Boolean)) {
+      const name = file.slice(root.length + 1);
+      if (GUIDE_FILE.test(name)) docs.set(name, JSON.parse(git(["show", `${sha}:${file}`])));
+    }
+  } catch { return null; }
+  return docs.size ? docs : null;
 }
 
 export function allowedStagePaths(slug, stage) {
@@ -774,9 +789,16 @@ async function run(cmd, get, has) {
       const from = get("--from");
       if (!from) { console.error("[pipeline-v2] reconcile-critic-truth needs --from <critic workspace>"); return 1; }
       const state = await readRunStateV2(slug);
-      const result = await reconcileCriticCorrections(slug, { fromDir: path.resolve(from), runId: state.runId });
-      console.log(`[pipeline-v2] ${slug} — critic guide truth ${result.changed ? `reconciled (${result.targets.join(", ")})` : "unchanged"}.`);
+      // The PRE-CRITIC guide, pinned to a commit rather than read off the working tree: `reconcile`
+      // is the stage before `critic`, so its completion commit IS the tree the critic was handed
+      // (begin-stage only touches run.v2.json). Pinning is what lets a truth failure RETAIN the
+      // rejected guide edits — the next attempt still diffs against the original baseline.
+      const baselineDocs = state?.stages?.reconcile?.commit ? guideDocsAt(state.stages.reconcile.commit, slug) : null;
+      const result = await reconcileCriticCorrections(slug, { fromDir: path.resolve(from), runId: state.runId, baselineDocs });
+      console.log(`[pipeline-v2] ${slug} — critic guide truth ${result.changed ? `reconciled (${result.targets.join(", ")})` : "unchanged"}` +
+        `${baselineDocs ? ` against pre-critic baseline ${state.stages.reconcile.commit.slice(0, 7)}` : ""}.`);
       if (result.superseded?.length) console.log(`[pipeline-v2] ${slug} — superseded by critic correction: ${result.superseded.join(", ")}`);
+      for (const note of result.unresolved || []) console.log(`[pipeline-v2] ${slug} — UNRESOLVED supersession: ${note}`);
       return 0;
     }
 

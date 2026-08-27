@@ -404,7 +404,7 @@ describe("critic corrections preserve durable evidence truth (R-A)", () => {
   });
 
   it("ordinary critic runs without guide changes remain unchanged", async () => {
-    await expect(reconcile(await correctionFixture({ changed: false }))).resolves.toEqual({ changed: false, targets: [] });
+    await expect(reconcile(await correctionFixture({ changed: false }))).resolves.toMatchObject({ changed: false, targets: [] });
   });
 });
 

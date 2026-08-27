@@ -145,8 +145,12 @@ export async function writeEvidence(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
     fails closed. The critic still never reads evidence.v2.json. */
 export async function reconcileCriticCorrections(slug, {
   fromDir, intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides"), runId,
+  baselineDocs = null,
 } = {}) {
-  const before = await readGuideDocs(path.join(guidesDir, slug));
+  // The "before" side is the PRE-CRITIC guide. Pinned by the caller (out of the commit the critic
+  // stage started from) so a failed attempt can retain the rejected guide edits without the next
+  // attempt comparing those edits against themselves.
+  const before = baselineDocs || await readGuideDocs(path.join(guidesDir, slug));
   const after = await readGuideDocs(path.join(fromDir, "src", "content", "guides", slug));
   // LOCATIONS, not files: "<file>#<pointer>" per changed leaf. That is what makes several
   // independent facts inside one item addressable, and an undeclared change impossible to hide.
@@ -160,7 +164,7 @@ export async function reconcileCriticCorrections(slug, {
       const raw = JSON.parse(await readFile(sourceFile, "utf8"));
       if ((raw.corrections || []).length) throw new ContractError("critic declared guide corrections but no guide value changed");
     }
-    return { changed: false, targets: [] };
+    return { changed: false, targets: [], superseded: [], unresolved: [] };
   }
   if (!existsSync(sourceFile)) {
     throw new ContractError(`critic changed ${[...changed].sort().join(", ")} without ${rel} — stale evidence is refused`);
@@ -188,6 +192,7 @@ export async function reconcileCriticCorrections(slug, {
 
   const evidence = await requireEvidence(slug, { intakeDir, runId });
   const superseded = [];
+  const unresolved = [];
   for (const correction of correctionDoc.corrections) {
     assertCorrectionProven(correction, { before, after });
     const recordId = `critic-correction-${kebab(correction.target)}`;
@@ -197,21 +202,29 @@ export async function reconcileCriticCorrections(slug, {
       kind: "objective", origin: "critic", source: correction.source,
       verifiedOn: correction.verifiedOn, firsthand: null, freshness: correction.freshness,
     });
-    // A correction retires prior evidence only where the artifact PROVES the link: the corrected
-    // item stopped citing the origin, and the record rests on that origin. The critic never sees
-    // evidence ids, so naming them stays the trusted plane's job.
-    const dropped = retiredOrigin(correction.target, { before, after });
-    const retires = dropped
-      ? evidence.evidence.filter((item) => item.origin !== "critic" && item.source?.url === dropped).map((item) => item.id)
+    // Retire only where the mapping is UNAMBIGUOUS: the item stopped citing an origin and exactly
+    // one record rests on it, so "the evidence this item stopped resting on" names one record.
+    // One source page can support several propositions and nothing says which a correction
+    // invalidated — so a shared origin retires NOTHING and is reported unresolved. Retiring the
+    // whole origin invents coverage gaps; picking one is the claim-text similarity we avoid.
+    const dropped = droppedOrigin(correction.target, { before, after });
+    const resting = dropped
+      ? evidence.evidence.filter((item) => item.origin !== "critic" && item.source?.url === dropped)
       : [];
+    const retires = resting.length === 1 ? [resting[0].id] : [];
+    if (resting.length > 1) {
+      unresolved.push(`${correction.target} stopped citing ${dropped}, which ${resting.length} evidence records rest on ` +
+        `(${resting.map((r) => r.id).join(", ")}) — which one it disproved is not derivable, so none is retired; ` +
+        `declare it with a reconciliation "supersedes" relation`);
+    }
     superseded.push(...retires);
     evidence.reconciliation = evidence.reconciliation.filter((row) => row.findingId !== recordId);
     evidence.reconciliation.push({
       findingId: recordId,
       disposition: retires.length ? "replace" : "adopt",
       note: retires.length
-        ? `critic correction at ${correction.target} re-sourced the item off ${dropped}, retiring ${retires.join(", ")}`
-        : `critic correction proved at ${correction.target}; the item still cites the origin its evidence rests on`,
+        ? `critic correction at ${correction.target} re-sourced the item off ${dropped}, retiring ${retires[0]}`
+        : `critic correction proved at ${correction.target}; no single evidence record is identified as retired`,
       corroborates: { kind: "none", evidenceIds: [] },
       ...(retires.length ? { supersedes: { kind: "evidence", evidenceIds: retires } } : {}),
     });
@@ -220,7 +233,7 @@ export async function reconcileCriticCorrections(slug, {
   await writeEvidence(slug, evidence, { intakeDir });
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(path.join(intakeDir, slug, "critic-corrections.v2.json"), JSON.stringify(correctionDoc, null, 2) + "\n");
-  return { changed: true, targets, superseded: [...new Set(superseded)] };
+  return { changed: true, targets, superseded: [...new Set(superseded)], unresolved };
 }
 
 /** The guide directory, parsed. Parsing here makes reserialization invisible to the diff and a
@@ -267,13 +280,13 @@ function textAt(doc, pointer) {
   return typeof node === "string" ? node : JSON.stringify(node);
 }
 
-/** The origin a proven correction RETIRES, if any: the `source_url` the corrected item cited
+/** The origin a proven correction DROPPED, if any: the `source_url` the corrected item cited
     BEFORE the edit and no longer cites after it. That `source_url` is the artifact's only
     machine-readable link between a guide location and the evidence behind it, so supersession
     rides on the link being dropped — never on scanning claims for a value. #107 retired every
     record whose claim CONTAINED previousValue: real Tottori evidence carries "¥800" on the Sand
     Museum's admission and on Sanbutsu-ji's waraji rental, so one transit edit retired both. */
-function retiredOrigin(target, { before, after }) {
+function droppedOrigin(target, { before, after }) {
   const [file, pointer] = splitTarget(target);
   const parts = pointerParts(pointer);
   for (let depth = parts.length; depth >= 0; depth--) {

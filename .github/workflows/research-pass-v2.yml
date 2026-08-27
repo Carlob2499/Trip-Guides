@@ -1031,32 +1031,33 @@ jobs:
           RC=$?
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # RETAINED PROSE (paid-work scar, R-A). The critic's output lives in the agent sandbox
-          # and reaches this trusted checkout only through the copies below, so a truth-gate exit
-          # placed BEFORE them left the collect tree clean: verify-failed found nothing in scope,
-          # committed nothing, and the retry re-spent the whole paid pass. The prose work — the
-          # ledger's findings/citation audit and the process-memory fragment — is independent of
-          # the guide diff, so the failure path retains exactly those two permitted paths first.
-          # The guide directory is deliberately NOT retained on a truth failure: the gate diffs
-          # the sandbox against this checkout's PRE-copy guide, so copying rejected guide edits
-          # in would erase the very baseline that proves them and let the retry pass with the
-          # corrections still undeclared. Scope is unchanged either way — guide dir, ledger,
-          # patterns fragment, nothing wider.
-          retain_critic_prose() {
+          # RETAINED CRITIC OUTPUT (paid-work scar, R-A). The critic's output lives in the agent
+          # sandbox and reaches this trusted checkout only through the copies below, so a
+          # truth-gate exit placed BEFORE them left the collect tree clean: verify-failed found
+          # nothing in scope, committed nothing, and the retry re-spent the whole paid pass.
+          #
+          # Retaining the GUIDE edits is safe only because the gate no longer diffs against this
+          # working tree: reconcile-critic-truth reads its pre-critic baseline out of the commit
+          # the critic stage started from (run.v2.json's `reconcile` stage commit), so the next
+          # attempt still compares the sandbox against the ORIGINAL guide. A retained edit can
+          # never satisfy the gate by being compared against itself, and a rejected handoff stays
+          # repairable without regenerating the guide work. Scope unchanged: the critic's own
+          # allowed paths — guide dir, ledger, patterns fragment — nothing wider.
+          retain_critic_output() {
+            rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/" || return 1
             cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md" || return 1
             cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/pipeline-patterns.fragment.md" "guides-intake/$SLUG/pipeline-patterns.fragment.md" || return 1
           }
           if [ "$RC" -eq 0 ]; then
             node scripts/pipeline-v2.mjs reconcile-critic-truth --slug "$SLUG" --from "$GITHUB_WORKSPACE" 2>&1 | tee "$RUNNER_TEMP/critic-truth-out.txt"
             if [ "${PIPESTATUS[0]}" -ne 0 ]; then
-              retain_critic_prose || echo "[critic] prose retention incomplete — recording findings anyway"
+              retain_critic_output || echo "[critic] retention incomplete — recording findings anyway"
               node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
                 --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
               exit 1
             fi
           fi
-          if [ "$RC" -eq 0 ]; then rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/"; RC=$?; fi
-          if [ "$RC" -eq 0 ]; then retain_critic_prose; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then retain_critic_output; RC=$?; fi
           if [ "$RC" -eq 0 ]; then node scripts/pipeline-v2.mjs compound-patterns --slug "$SLUG"; RC=$?; fi
           if [ "$RC" -eq 0 ]; then npm run extract-palette -- --slug "$SLUG"; RC=$?; fi
           if [ "$RC" -eq 0 ]; then node scripts/compose-guide.mjs --slug "$SLUG" --write; RC=$?; fi

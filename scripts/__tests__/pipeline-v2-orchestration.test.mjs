@@ -25,8 +25,8 @@ import {
   removePassBWorkspace, collectPassB, prepareCriticInput, restoreCriticInput,
 } from "../pipeline/v2/workspace.mjs";
 import { ContractError } from "../pipeline/v2/contracts.mjs";
-import { validateStageOutput, stageScopeProblems } from "../pipeline-v2.mjs";
-import { initRunV2, readRunStateV2 } from "../pipeline/v2/run-state.mjs";
+import { validateStageOutput, stageScopeProblems, allowedStagePaths } from "../pipeline-v2.mjs";
+import { initRunV2, readRunStateV2, V2_RESEARCH_STAGES } from "../pipeline/v2/run-state.mjs";
 import { writeEvidence } from "../pipeline/v2/evidence.mjs";
 import { writeCoverage } from "../pipeline/v2/coverage.mjs";
 
@@ -385,7 +385,7 @@ describe("research-pass-v2.yml — wiring", () => {
     // The gate diffs the sandbox against this checkout's PRE-copy guide, so it must stay ahead
     // of the rsync — and its failure path must still retain the critic's prose work first.
     expect(job.indexOf("reconcile-critic-truth")).toBeLessThan(job.indexOf("rsync -a --delete"));
-    expect(job.indexOf("retain_critic_prose ||")).toBeLessThan(job.indexOf("verify-failed --slug \"$SLUG\" --stage critic"));
+    expect(job.indexOf("retain_critic_output ||")).toBeLessThan(job.indexOf("verify-failed --slug \"$SLUG\" --stage critic"));
   });
 
   it("every stage job checkpoints start BEFORE its agent and validates AFTER (begin/finish)", () => {
@@ -470,20 +470,28 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
     // The paid critic pass: rewritten prose in the sandbox, stale copies in the trusted checkout.
     await writeFile(path.join(ws, "guides-intake", "tottori", "ledger.md"), "## Critic findings\nthe paid analysis\n");
     await writeFile(path.join(ws, "guides-intake", "tottori", "pipeline-patterns.fragment.md"), "| 2026-08-26 | tottori | [critic] | lens | pattern | open |\n");
-    await writeFile(path.join(ws, "src", "content", "guides", "tottori", "05-transit.json"), "[]\n");
+    await writeFile(path.join(ws, "src", "content", "guides", "tottori", "05-transit.json"), '[{"note":"corrected by the critic"}]\n');
     await writeFile(path.join(collect, "guides-intake", "tottori", "ledger.md"), "## Critic findings\n(stale)\n");
     await writeFile(path.join(collect, "guides-intake", "tottori", "pipeline-patterns.fragment.md"), "(stale)\n");
 
     const stub = (name, body) => writeFile(path.join(bin, name), `#!/bin/sh\n${body}\n`, { mode: 0o755 });
     await stub("npm", "exit 0");
-    await stub("rsync", 'echo "rsync $*" >> "$RUNNER_TEMP/calls.txt"; exit 0');
+    // Real copy semantics: the retention has to actually land the critic's guide edits, so the
+    // stub copies src→dst (the last two non-flag args) rather than just recording the call.
+    await stub("rsync", [
+      'echo "rsync $*" >> "$RUNNER_TEMP/calls.txt"',
+      'for a in "$@"; do case "$a" in -*) ;; *) src=$dst; dst=$a ;; esac; done',
+      'mkdir -p "$dst"; cp -R "$src." "$dst"',
+      "exit 0",
+    ].join("\n"));
     await stub("node", [
       'echo "node $*" >> "$RUNNER_TEMP/calls.txt"',
       'case "$*" in',
       '  *reconcile-critic-truth*) echo "critic changed 05-transit.json#/0/steps/2 without declaring the edit"; exit 1 ;;',
       // Snapshot exactly what verify-failed would find to retain, at the moment it runs.
       '  *verify-failed*) cp "guides-intake/tottori/ledger.md" "$RUNNER_TEMP/ledger-at-verify-failed.md"; ',
-      '     cp "guides-intake/tottori/pipeline-patterns.fragment.md" "$RUNNER_TEMP/fragment-at-verify-failed.md"; exit 0 ;;',
+      '     cp "guides-intake/tottori/pipeline-patterns.fragment.md" "$RUNNER_TEMP/fragment-at-verify-failed.md"; ',
+      '     cp "src/content/guides/tottori/05-transit.json" "$RUNNER_TEMP/guide-at-verify-failed.json"; exit 0 ;;',
       'esac',
       "exit 0",
     ].join("\n"));
@@ -500,7 +508,7 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
     return { root, collect, temp, status, calls: readFileSync(path.join(temp, "calls.txt"), "utf8") };
   }
 
-  it("retains the ledger and the patterns fragment BEFORE recording findings, and fails the stage", async () => {
+  it("retains the WHOLE critic pass BEFORE recording findings, and still fails the stage", async () => {
     const { root, collect, temp, status, calls } = await runFinishStep();
     try {
       // Not a green step, and the successful tail never runs.
@@ -510,27 +518,44 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
       expect(calls).not.toContain("finish-stage");
       expect(calls).not.toContain("compose-guide");
 
-      // The paid prose work is already in the trusted checkout when verify-failed runs — which
-      // is what makes it retainable at all. #107 exited before any copy, so the retry re-spent
-      // the whole critic pass for want of a ledger.
+      // Everything the pass produced — guide edits, ledger, process memory — is already in the
+      // trusted checkout when verify-failed runs, which is what makes it retainable at all.
+      // #107 exited before any copy, so the retry re-spent the whole critic pass.
       expect(readFileSync(path.join(temp, "ledger-at-verify-failed.md"), "utf8")).toContain("the paid analysis");
       expect(readFileSync(path.join(temp, "fragment-at-verify-failed.md"), "utf8")).toContain("[critic]");
+      expect(readFileSync(path.join(temp, "guide-at-verify-failed.json"), "utf8")).toContain("corrected");
       expect(readFileSync(path.join(collect, "guides-intake", "tottori", "ledger.md"), "utf8")).toContain("the paid analysis");
-
-      // …and the REJECTED guide edits are deliberately not copied in: they are the gate's own
-      // diff baseline, so retaining them would let the retry pass with the corrections still
-      // undeclared. Scope is unchanged — nothing outside the three permitted paths moves.
-      expect(calls).not.toContain("rsync");
-      expect(existsSync(path.join(collect, "src", "content", "guides", "tottori", "05-transit.json"))).toBe(false);
+      expect(readFileSync(path.join(collect, "src", "content", "guides", "tottori", "05-transit.json"), "utf8")).toContain("corrected");
+      // The retention happens BEFORE the findings are recorded, not after.
+      expect(calls.indexOf("rsync")).toBeLessThan(calls.indexOf("verify-failed"));
     } finally { await rm(root, { recursive: true, force: true }); }
   });
 
-  it("the retention helper copies only the two permitted intake paths", () => {
-    const helper = text.split("retain_critic_prose() {")[1].split("}")[0];
-    const copies = helper.split("\n").filter((line) => line.trim().startsWith("cp "));
-    expect(copies).toHaveLength(2);
-    expect(copies.join("\n")).toContain('guides-intake/$SLUG/ledger.md');
-    expect(copies.join("\n")).toContain('guides-intake/$SLUG/pipeline-patterns.fragment.md');
-    expect(helper).not.toContain("rsync");
+  it("the retention helper touches only the critic's own allowed paths", () => {
+    const helper = text.split("retain_critic_output() {")[1].split("\n          }")[0];
+    const lines = helper.split("\n").map((l) => l.trim()).filter((l) => l.startsWith("cp ") || l.startsWith("rsync "));
+    expect(lines).toHaveLength(3);
+    expect(lines.join("\n")).toContain("src/content/guides/$SLUG/");
+    expect(lines.join("\n")).toContain("guides-intake/$SLUG/ledger.md");
+    expect(lines.join("\n")).toContain("guides-intake/$SLUG/pipeline-patterns.fragment.md");
+    const allowed = allowedStagePaths("tottori", "critic");
+    for (const p of ["src/content/guides/tottori", "guides-intake/tottori/ledger.md", "guides-intake/tottori/pipeline-patterns.fragment.md"]) {
+      expect(allowed).toContain(p);
+    }
+  });
+
+  it("retaining the guide edits cannot let the next attempt pass: the baseline is a COMMIT, not the tree", () => {
+    // This is what makes retention safe. reconcile-critic-truth reads its "before" out of the
+    // commit the critic stage started from — `reconcile` is the stage immediately before
+    // `critic` — so the retained edits are never compared against themselves.
+    const cli = readFileSync(path.join(ROOT, "scripts", "pipeline-v2.mjs"), "utf8");
+    const step = cli.split('case "reconcile-critic-truth"')[1].split("case \"")[0];
+    expect(step).toContain("state?.stages?.reconcile?.commit");
+    expect(step).toContain("baselineDocs");
+    expect(V2_RESEARCH_STAGES.indexOf("reconcile")).toBe(V2_RESEARCH_STAGES.indexOf("critic") - 1);
+    // begin-stage only checkpoints run state, so it cannot move the baseline the critic was handed.
+    const begin = cli.split('case "begin-stage"')[1].split("case \"")[0];
+    expect(begin).toContain(`guides-intake/${"${slug}"}/run.v2.json`);
+    expect(begin).not.toContain("src/content/guides");
   });
 });
