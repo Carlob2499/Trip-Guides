@@ -11,7 +11,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 
 ## Dashboard — August 27, 2026
 
-- **Current phase:** validation program executed and recorded; independent review concurred with every verdict (V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION, synthesis NOT READY — REPAIR REQUIRED). PR #104 is merged. PR #105 merged the first deterministic repair implementation before its independent diff review; that post-merge review found residual R-A/R-E/R-F contract defects and several smaller deterministic issues. Draft PR #106 contains the mechanically safe corrections. Revalidation remains BLOCKED until the remaining focused contract repair is reviewed and green.
+- **Current phase:** validation program executed and recorded; independent review concurred with every verdict (V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION, synthesis NOT READY — REPAIR REQUIRED). PR #104 is merged. PR #105 merged the first deterministic repair implementation before its independent diff review; that post-merge review found residual R-A/R-E/R-F contract defects and several smaller deterministic issues. Draft PR #106 contains the mechanically safe corrections, and a draft stacked on it contains the residual R-A/R-E/R-F contract repair. Revalidation remains BLOCKED until both repair layers are independently reviewed and merged; the next validation step after that is exactly ONE fresh Run-B-class repaired validation scenario. V1 remains the production default and V2 cutover remains unauthorized.
 - **Core engine:** P01–P13 DONE.
 - **Integration:** I01–I05 have deterministic/live evidence; I06 deliberately stays open until final V1 retirement/cutover approval.
 - **Reliability acceptance:** PR #75 repair (`253607a`) is merged; PR #76 closeout is merged; fresh Canary #4 (`uruguay-20260823-9789de`) completed the draft product path GREEN. Uruguay remains draft-only and unpublished. The two failure-only seams the canary did not naturally exercise are now closed by targeted real-GitHub proofs.
@@ -22,7 +22,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - **Days until September 20 feature freeze:** 24
 - **Days until September 27 code freeze:** 31
 - **Days until September 30 backend complete:** 34
-- **Highest-risk unfinished items:** finish and independently review the residual R-A/R-E/R-F contract repair identified after PR #105, then run the single pre-cutover fresh Run-B-class revalidation; production cutover/publication parity; final mobile/offline/security stabilization.
+- **Highest-risk unfinished items:** independent review and merge of both post-#105 repair layers (PR #106 and the stacked R-A/R-E/R-F contract repair), then the single pre-cutover fresh Run-B-class revalidation; production cutover/publication parity; final mobile/offline/security stabilization.
 
 ### Current evidence already recorded
 

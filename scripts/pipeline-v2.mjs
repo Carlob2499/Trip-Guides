@@ -60,7 +60,7 @@ import {
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock, extractGateFindings } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
 import { emitRunEvents, readGeocodeReport } from "./pipeline/v2/events.mjs";
-import { readEvidence, requireEvidence, evidenceProblems, reconcileCriticFactCorrections } from "./pipeline/v2/evidence.mjs";
+import { readEvidence, requireEvidence, evidenceProblems, reconcileCriticCorrections } from "./pipeline/v2/evidence.mjs";
 import { researchRuleProblems, isProxyHost } from "./pipeline/v2/research-rules.mjs";
 import { requireCoverage, coverageProblems, loadCoverageContext, remapCoverageRefs } from "./pipeline/v2/coverage.mjs";
 import {
@@ -774,8 +774,9 @@ async function run(cmd, get, has) {
       const from = get("--from");
       if (!from) { console.error("[pipeline-v2] reconcile-critic-truth needs --from <critic workspace>"); return 1; }
       const state = await readRunStateV2(slug);
-      const result = await reconcileCriticFactCorrections(slug, { fromDir: path.resolve(from), runId: state.runId });
-      console.log(`[pipeline-v2] ${slug} — critic fact truth ${result.changed ? `reconciled (${result.factIds.join(", ")})` : "unchanged"}.`);
+      const result = await reconcileCriticCorrections(slug, { fromDir: path.resolve(from), runId: state.runId });
+      console.log(`[pipeline-v2] ${slug} — critic guide truth ${result.changed ? `reconciled (${result.targets.join(", ")})` : "unchanged"}.`);
+      if (result.superseded?.length) console.log(`[pipeline-v2] ${slug} — superseded by critic correction: ${result.superseded.join(", ")}`);
       return 0;
     }
 

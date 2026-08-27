@@ -11,7 +11,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  EVIDENCE_SCHEMA, COVERAGE_SCHEMA,
+  EVIDENCE_SCHEMA, COVERAGE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA,
   CANDIDATE_STATUSES, EVIDENCE_KINDS, SOURCE_KINDS, EVIDENCE_ORIGINS, DISPOSITIONS,
   WORTH_LABELS, SOURCE_ACCESS, GROUP_REF,
   candidateSchema, evidenceSourceSchema, evidenceRecordSchema, reservationFindingSchema,
@@ -236,6 +236,18 @@ async function reconcileSections({ slug, runId, intakeDir, guidesDir }) {
     "### Reconciliation contract",
     `Every passB-origin evidence record gets EXACTLY ONE disposition: ${DISPOSITIONS.join(" | ")}, with a note.`,
     "A disposition pointing at no record, a double disposition, or a silently dropped find fails the run.",
+    "",
+    "Two relations are DATA, not prose — a note saying \"corroborates Pass A's ev-x\" or \"supersedes the",
+    "old fallback\" is invisible to the validator and does not count:",
+    "  - `corroborates: [<evidence id>, …]` — the EXISTING records this finding is claimed to confirm.",
+    "    Required on a `agree` disposition. Pass A and Pass B converging is NOT itself independent",
+    "    corroboration: every record in a declared cross-pass set must be fetched qualifying evidence,",
+    "    and at least two of them must carry `source.independent: true` on distinct `family` values.",
+    "    Two municipal surfaces of one authority are one source however their hostnames differ.",
+    "  - `supersedes: [<evidence id>, …]` — required on a `replace` disposition, and legal on no other:",
+    "    the older records this finding retires. The replacement itself stays CURRENT; every record it",
+    "    names stops being current, so coverage citing only a superseded record no longer counts as",
+    "    covered. Every id in either list must be a real evidence record in this document.",
   ];
 }
 
@@ -282,8 +294,21 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
   }
   // critic — its owed artifacts are ledger sections + the patterns fragment; the validator for
   // the fragment is compound-patterns. State its exact row grammar from the enforced shape.
+  //
+  // SCOPE, stated here on purpose. The frozen critic prompt says "touch nothing outside
+  // src/content/guides/<slug>/, ledger.md and pipeline-patterns.fragment.md". The correction
+  // handoff lives outside that list, so #105 left the agent holding two contradictory
+  // instructions. The prompt is the pre-registered validation candidate and is not this repair's
+  // to rewrite; the writable scope is owned by allowedStagePaths(), which already permits exactly
+  // this one extra path — so the generated contract amends the prompt's list explicitly instead.
   return [
     ...head,
+    `SCOPE AMENDMENT (this section, generated from the enforced machine scope, overrides the`,
+    `prose scope line above on exactly one point): besides \`src/content/guides/${slug}/\`,`,
+    `\`guides-intake/${slug}/ledger.md\` and \`guides-intake/${slug}/pipeline-patterns.fragment.md\`,`,
+    `you may write \`guides-intake/${slug}/critic-corrections.v2.json\` — and nothing else. That file`,
+    "is the blind handoff described below; the collector rejects any path outside this list.",
+    "",
     `Your owed artifacts, validated after you finish:`,
     `  - \`guides-intake/${slug}/ledger.md\` gains \`## Critic findings\` and \`## Citation audit\` (and a`,
     "    `#### Continuity sweep — critic execution` whenever you edited the guide).",
@@ -291,9 +316,19 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
     `    \`| YYYY-MM-DD | ${slug} | [critic] | <rubric row or lens> | <distilled pattern> | open |\``,
     "    (six cells; date real; slug and `[critic]` literal; final cell literally `open`; ≤1200 chars/row;",
     "    no headings, no prose outside rows). A malformed row fails the run.",
-    `  - If and only if you change any \`facts.json\` row, write \`guides-intake/${slug}/critic-corrections.v2.json\``,
-    `    with schema \`wp-critic-corrections/1.0\`: slug \`${slug}\`, runId \`${runId}\`, and one correction`,
-    "    per changed factId carrying exact previousValue/correctedValue/claim, fetched source metadata, verifiedOn,",
-    "    and freshness. You still may not read evidence.v2.json; the trusted control plane reconciles this handoff.",
+    `  - If and only if you edit ANY file in \`src/content/guides/${slug}/\`, write`,
+    `    \`guides-intake/${slug}/critic-corrections.v2.json\` with schema \`${CRITIC_CORRECTIONS_SCHEMA}\`:`,
+    `    slug \`${slug}\`, runId \`${runId}\`, and an account of EVERY edited file — no exceptions, and`,
+    "    `facts.json` is not special. Each FACTUAL change is one `corrections` row:",
+    "      `target` — `facts.json#<row id>`, `<NN-group>.json#<the item's exact title/name/label>`, or",
+    "        `_guide.json#<key>`; `previousValue` (null if the value is new) and `correctedValue` — verbatim",
+    "        strings as they appear before and after your edit; `claim`; fetched `source`; `verifiedOn`; `freshness`.",
+    "      The control plane re-derives your diff and proves each row against both workspaces: the corrected",
+    "      value must be present after, the previous value gone, at an address that exists in the edited file.",
+    "    Each edited file with NO factual change is one `editorialOnly` row: `file` plus a `note` (≥20 chars)",
+    "      saying what you changed and why no fact moved.",
+    "    An edited file that appears in neither list FAILS THE STAGE — the pipeline cannot tell a silent",
+    "    factual correction from a rewording, and stale evidence is refused. You still may not read",
+    "    evidence.v2.json; naming the evidence records your correction retires is the control plane's job.",
   ].join("\n");
 }

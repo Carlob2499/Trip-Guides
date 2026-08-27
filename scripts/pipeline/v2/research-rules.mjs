@@ -142,11 +142,48 @@ export function corroborationProblems(doc) {
   return problems;
 }
 
-/** Pass A + Pass B repeating the same value is not corroboration. When both origins carry the
-    same normalized claim, each must trace to fetched qualifying evidence and the combined source
-    basis must contain at least two real independent families/origins. */
+/** The strict independence key, for support a run is explicitly CLAIMING is corroborated.
+    `sourceIndependenceKey` accepts a family label on its own; here independence must have been
+    established, not asserted by naming a family per hostname. R-E scar (Tottori): the 600 m
+    viewpoint distance carried `family: "misasa-town"` and `family: "misasaonsen-official"` —
+    two municipal surfaces of one body, `independent: null` on both — and two passes converging
+    on the same misattributed number were counted as two independent sources. */
+export function establishedIndependenceKey(record) {
+  if (record?.source?.independent !== true) return null;
+  return sourceIndependenceKey(record);
+}
+
+/** Pass A + Pass B convergence is never itself corroboration.
+
+    Two rules, one function. (1) Any reconciliation row that DECLARES corroboration (2.3's
+    `corroborates`) is checked against the records it names: every member must be qualifying
+    fetched evidence, and if the declared set spans both passes it must carry ≥2 sources whose
+    independence is explicitly established. Differently worded claims about the same proposition
+    are exactly the historical shape, so the relation — not the wording — is what is checked.
+    (2) The older text-identical case still fails on its own. */
 export function independentAgreementProblems(doc) {
   const problems = [];
+  const byId = new Map((doc.evidence || []).map((record) => [record.id, record]));
+  for (const row of doc.reconciliation || []) {
+    const declared = row.corroborates || [];
+    if (!declared.length) continue;
+    const finding = byId.get(row.findingId);
+    const named = declared.map((id) => byId.get(id)).filter(Boolean);
+    if (!finding || named.length !== declared.length) continue; // dispositionProblems owns dangling refs
+    const set = [finding, ...named];
+    if (!set.some((r) => r.origin === "passA") || !set.some((r) => r.origin === "passB")) continue;
+    const unqualified = set.filter((r) => !qualifyingEvidence(r));
+    const keys = new Set(set.map(establishedIndependenceKey).filter(Boolean));
+    if (unqualified.length || keys.size < 2) {
+      problems.push(
+        `reconciliation claims "${row.findingId}" corroborates ${declared.join(", ")} on "${finding.claim.slice(0, 70)}" — ` +
+          `Pass A and Pass B converging is not itself independent corroboration: ` +
+          (unqualified.length
+            ? `${unqualified.map((r) => r.id).join(", ")} is not qualifying fetched evidence`
+            : `only ${keys.size} source basis has established independence (source.independent must be true on ≥2 distinct families/origins)`),
+      );
+    }
+  }
   const groups = new Map();
   for (const record of doc.evidence || []) {
     if (!["passA", "passB"].includes(record.origin)) continue;

@@ -17,7 +17,7 @@ import {
   markPublished, markDeployedLive, nextStageV2, runStatePath,
 } from "../pipeline/v2/run-state.mjs";
 import {
-  candidateId, normalizeCandidateIds, readEvidence, requireEvidence, writeEvidence, reconcileCriticFactCorrections,
+  candidateId, normalizeCandidateIds, readEvidence, requireEvidence, writeEvidence, reconcileCriticCorrections,
   candidateProblems, dispositionProblems, saturationProblems, evidenceProblems, evidencePath,
 } from "../pipeline/v2/evidence.mjs";
 import { readCoverage, requireCoverage, writeCoverage, coverageProblems } from "../pipeline/v2/coverage.mjs";
@@ -332,55 +332,93 @@ describe("evidence — valid / structural rules", () => {
   });
 });
 
-describe("critic fact corrections preserve durable evidence truth (R-A)", () => {
+describe("critic corrections preserve durable evidence truth (R-A)", () => {
   const fact = (value) => ({
     claim: "Mountain path walking distance", value,
     source_url: "https://operator.example/path", verified_on: "2026-08-01", shelf_life: "transit",
   });
+  const source = { url: "https://operator.example/path", kind: "operator", access: "fetched", language: "en", publishedAt: null, family: "path-operator", independent: true, appliesToYears: [] };
 
-  async function correctionFixture({ withCorrection = true, changed = true } = {}) {
+  async function correctionFixture({ handoff = "full", changed = true, editorial = false } = {}) {
     const guidesDir = path.join(dir, "guides");
     const fromDir = path.join(dir, "critic");
     await mkdir(path.join(guidesDir, "korea"), { recursive: true });
     await mkdir(path.join(fromDir, "src", "content", "guides", "korea"), { recursive: true });
     await mkdir(path.join(fromDir, "guides-intake", "korea"), { recursive: true });
     await writeFile(path.join(guidesDir, "korea", "facts.json"), JSON.stringify({ "route-distance": fact("800 m") }));
-    await writeFile(path.join(fromDir, "src", "content", "guides", "korea", "facts.json"), JSON.stringify({ "route-distance": fact(changed ? "1.2 km" : "800 m") }));
+    await writeFile(path.join(fromDir, "src", "content", "guides", "korea", "facts.json"),
+      JSON.stringify({ "route-distance": fact(changed ? "1.2 km" : "800 m") }));
+    // An ordinary group file the critic ALSO edited — the surface #105 could not see at all.
+    const group = (body) => JSON.stringify({ blocks: [{ title: "Mountain path", body }] });
+    await writeFile(path.join(guidesDir, "korea", "02-sights.json"), group("<p>The path is 800 m.</p>"));
+    await writeFile(path.join(fromDir, "src", "content", "guides", "korea", "02-sights.json"),
+      group(changed ? "<p>The path is 1.2 km.</p>" : "<p>The path is 800 m.</p>"));
     await writeEvidence("korea", validEvidence(), opts());
-    if (withCorrection) {
+    if (handoff !== "none") {
       await writeFile(path.join(fromDir, "guides-intake", "korea", "critic-corrections.v2.json"), JSON.stringify({
-        schemaVersion: "wp-critic-corrections/1.0", slug: "korea", runId: validEvidence().runId,
-        corrections: changed ? [{
-          factId: "route-distance", previousValue: "800 m", correctedValue: "1.2 km",
-          claim: "Mountain path walking distance",
-          source: { url: "https://operator.example/path", kind: "operator", access: "fetched", language: "en", publishedAt: null, family: "path-operator", independent: true, appliesToYears: [] },
-          verifiedOn: "2026-08-01", freshness: { perishable: true, shelfLife: "transit", recheckOn: "2026-10-30" },
-        }] : [],
+        schemaVersion: "wp-critic-corrections/2.0", slug: "korea", runId: validEvidence().runId,
+        corrections: !changed ? [] : [
+          {
+            target: "facts.json#route-distance", previousValue: "800 m", correctedValue: "1.2 km",
+            claim: "Mountain path walking distance", source, verifiedOn: "2026-08-01",
+            freshness: { perishable: true, shelfLife: "transit", recheckOn: "2026-10-30" },
+          },
+          ...(handoff === "full" && !editorial ? [{
+            target: "02-sights.json#mountain-path", previousValue: "The path is 800 m.", correctedValue: "The path is 1.2 km.",
+            claim: "Mountain path walking distance", source, verifiedOn: "2026-08-01",
+            freshness: { perishable: true, shelfLife: "transit", recheckOn: "2026-10-30" },
+          }] : []),
+        ],
+        editorialOnly: editorial ? [{ file: "02-sights.json", note: "rephrased the walk description; no fact moved" }] : [],
       }));
     }
     return { guidesDir, fromDir };
   }
 
-  it("fails closed when a critic fact edit has no correction handoff", async () => {
-    const fixture = await correctionFixture({ withCorrection: false });
-    await expect(reconcileCriticFactCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId }))
+  it("fails closed when a critic guide edit has no correction handoff", async () => {
+    const fixture = await correctionFixture({ handoff: "none" });
+    await expect(reconcileCriticCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId }))
       .rejects.toThrow(/stale evidence is refused/);
   });
 
-  it("verifies the exact edit and folds a critic-origin correction into authoritative evidence", async () => {
-    const fixture = await correctionFixture();
-    const result = await reconcileCriticFactCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId });
-    expect(result).toEqual({ changed: true, factIds: ["route-distance"] });
-    const evidence = await requireEvidence("korea", opts());
-    expect(evidence.evidence.find((item) => item.id === "critic-correction-route-distance")).toMatchObject({
-      origin: "critic", claim: "Mountain path walking distance: 1.2 km", verifiedOn: "2026-08-01",
-    });
+  it("fails closed when the handoff accounts for only SOME of the edited guide files", async () => {
+    const fixture = await correctionFixture({ handoff: "facts-only" });
+    await expect(reconcileCriticCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId }))
+      .rejects.toThrow(/02-sights\.json without declaring the edit/);
   });
 
-  it("ordinary critic runs without fact changes remain unchanged", async () => {
+  it("verifies each edit and folds critic-origin corrections into authoritative evidence", async () => {
+    const fixture = await correctionFixture();
+    const result = await reconcileCriticCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId });
+    expect(result.changed).toBe(true);
+    expect(result.targets).toEqual(["facts.json#route-distance", "02-sights.json#mountain-path"]);
+    const evidence = await requireEvidence("korea", opts());
+    expect(evidence.evidence.find((item) => item.id === "critic-correction-facts-json-route-distance")).toMatchObject({
+      origin: "critic", claim: "Mountain path walking distance: 1.2 km", verifiedOn: "2026-08-01",
+    });
+    expect(evidence.evidence.some((item) => item.id === "critic-correction-02-sights-json-mountain-path")).toBe(true);
+  });
+
+  it("an editorial-only declaration accounts for the file; a correction the diff disproves does not", async () => {
+    const editorialFixture = await correctionFixture({ editorial: true });
+    await expect(reconcileCriticCorrections("korea", { ...editorialFixture, intakeDir: dir, runId: validEvidence().runId }))
+      .resolves.toMatchObject({ changed: true, targets: ["facts.json#route-distance"] });
+
+    // The classification itself is the critic's assertion — what the control plane CAN prove is
+    // the value movement a correction declares, against both workspaces.
+    const fixture = await correctionFixture();
+    const file = path.join(fixture.fromDir, "guides-intake", "korea", "critic-corrections.v2.json");
+    const doc = JSON.parse(await readFile(file, "utf8"));
+    doc.corrections[1].correctedValue = "The path is 9 km.";
+    await writeFile(file, JSON.stringify(doc));
+    await expect(reconcileCriticCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId }))
+      .rejects.toThrow(/does not appear in the edited 02-sights\.json/);
+  });
+
+  it("ordinary critic runs without guide changes remain unchanged", async () => {
     const fixture = await correctionFixture({ changed: false });
-    await expect(reconcileCriticFactCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId }))
-      .resolves.toEqual({ changed: false, factIds: [] });
+    await expect(reconcileCriticCorrections("korea", { ...fixture, intakeDir: dir, runId: validEvidence().runId }))
+      .resolves.toEqual({ changed: false, targets: [] });
   });
 });
 
