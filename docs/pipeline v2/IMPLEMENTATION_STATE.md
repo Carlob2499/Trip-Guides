@@ -155,7 +155,7 @@ See `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` for the permanent evidence record. No a
 
 ## Validation before production cutover
 
-The remaining validation program is defined in `VALIDATION_RUNBOOK.md`, frozen into `VALIDATION_TRIAL_PACKETS.md`, and tracked in `SEPTEMBER_TRACKER.md`.
+The validation program is defined in `VALIDATION_RUNBOOK.md`, frozen into `VALIDATION_TRIAL_PACKETS.md`, and tracked in `SEPTEMBER_TRACKER.md`.
 
 Current state:
 
