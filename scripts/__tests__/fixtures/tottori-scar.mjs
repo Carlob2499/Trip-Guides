@@ -4,14 +4,10 @@
 //   reconcile baseline        b153af3350afb3eeb320cf99e393a788ebb00ab6
 //   first retained critic out b7fadadb4856d38cc400018169002dc580b4478f
 //
-// Nothing here is edited. The transit pair is the R-A scar exactly as the critic left it: an
-// ordinary guide file rewritten with substantive factual corrections (last weekday departure
-// 19:08 → 19:25, wrong line → routes 70/71) while facts.json stayed byte-identical. The two 600 m
-// records are the R-E scar as reconcile wrote them — differently worded, one per pass,
-// `independent: null` on both. `ev-jumbo-taxi` is the R-F scar: dispositioned `replace` with the
-// record it retires named only in prose — and, as the artifact proves, that record does not exist,
-// so no rule may demand one. `ev-sand-museum-hours-price` is here for one reason: its ¥800 collides
-// with Sanbutsu-ji's ¥800 waraji rental, which is why supersession may never be a bare value scan.
+// Nothing here is edited: the two 600 m evidence records are the R-E scar exactly as reconcile
+// wrote them (differently worded, one per pass, `independent: null` on both); the transit file
+// pair is the R-A scar exactly as the critic left it (an ordinary guide file rewritten with
+// substantive factual corrections while facts.json stayed byte-identical).
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
@@ -25,85 +21,8 @@ export const TOTTORI_TRANSIT_BEFORE = "[\n  {\n    \"type\": \"routes\",\n    \"
 
 export const TOTTORI_TRANSIT_AFTER = "[\n  {\n    \"type\": \"routes\",\n    \"group\": \"Transit\",\n    \"title\": \"Key transit routes\",\n    \"phase\": \"daily\",\n    \"source_url\": \"https://hinomarubus.co.jp/timetable_route/3450/?tab=2\",\n    \"verified_on\": \"2026-08-26\",\n    \"steps\": [\n      \"<b>Tottori Station \u2192 Kurayoshi Station</b> (San'in Main Line): limited express (Super Hakuto / Super Oki / Super Matsukaze) takes \u224830 min; a local train covers the same route in \u224860 min with no reserved-seat fee. With luggage and a group of 8, the local train's lack of seat reservations is a real trade-off against the express's speed \u2014 worth deciding per day rather than defaulting to whichever train is next.\",\n      \"<b>Kurayoshi Station \u2192 Shirakabe Dozo-gun</b>: city-route bus, \u224810\u201315 min, alight at the Akagawara/Shirakabe-Dozogun stop, then a short walk. The district's tourist information center (inside Akagawara Building No. 10) opens 9:00\u201317:00.\",\n      \"<b>Kurayoshi Station \u2192 Misasa Onsen</b> (Hinomaru Bus, Kamii-Misasa Line \u4e0a\u4e95\u4e09\u671d\u7dda, routes 70/71): the trip's one consequential transfer. Weekday departures from Kurayoshi Station run 7:45 through <b>19:25</b>, and 19:25 is the last one \u2014 it reaches the Misasa depot (\u4e09\u671d\u8eca\u5eab) at 19:52. The ride is not a fixed length: the direct runs take \u224820\u201327 min, while the variants routed via Kosei Hospital and Kurayoshi East High take \u224840\u201350 min, so read the column for the run you are actually catching. The biggest daytime hole is 13:20 \u2192 14:40 \u2014 80 minutes with nothing. \u26a0 Exact fare unconfirmed \u2014 the operator's own fare table is a PDF that couldn't be read; secondhand sources put it around \u00a5340\u2013\u00a5480, pay cash on board.\",\n      \"Hinomaru's <i>other</i> Misasa line (routes 72/73) starts from Ikuta depot in west Kurayoshi and never calls at Kurayoshi Station \u2014 its timetable is easy to find and useless to this group. Check the route name \u4e0a\u4e95\u4e09\u671d\u7dda before you trust a departure time.\",\n      \"It's a standard fare-box route bus, not a coach \u2014 no dedicated luggage hold, so boarding 8 people with suitcases takes longer than a solo traveler's transfer, and standing for the ride is a real cost for the 2 low-mobility travelers in the group. Build any Kurayoshi activity (like dinner) to end with real buffer before <b>19:25</b>, not against it. Kurayoshi Station itself is fully step-free (elevators, no escalators, to all 3 platforms) \u2014 the last-mile choice outside the station is what actually needs planning, not the train transfer.\",\n      \"<b>Kurayoshi Station \u2192 Misasa Onsen</b>, two reserved alternatives to the public bus: some Misasa ryokan (e.g. Misasakan) run a free reserved shuttle from the station on fixed pickup times (14:10/15:30/16:20/17:30, advance booking only \u2014 ask when you book the room); or reserve a 9-seat Hinomaru Hire jumbo taxi (0858-22-3155, \u00a5740 flagfall + \u00a590/279m metered, advance reservation required, not a station hail) that moves the whole party of 8 plus hand luggage in one vehicle instead of splitting across 2 regular taxis. After the last bus (19:25), one of these two is the practical way to Misasa that night \u2014 neither is walk-up, so arrange it by phone before the group is stranded, not after.\",\n      \"<b>To Sanbutsu-ji / Nageiredo (\u4e09\u5fb3\u5c71)</b>: the same 70/71 line runs on past Misasa to the <b>\u4e09\u5fb3\u5c71\u99d0\u8eca\u5834</b> (Mitokusan parking) stop \u2014 that is how a car-free party reaches the temple, and it is a handful of runs a day, not a shuttle. Weekday departures from Kurayoshi Station at 8:35 and 9:40 call at the Misasa Onsen bus centre (\u4e09\u671d\u6e29\u6cc9\u89b3\u5149\u5546\u5de5\u30bb\u30f3\u30bf\u30fc\u524d) at 8:55 and 9:59 and reach Mitokusan at 9:10 and 10:14 \u2014 a \u224815-minute ride from the onsen town. Weekday returns from \u4e09\u5fb3\u5c71\u99d0\u8eca\u5834 leave at 10:25, 11:40, 12:50, 14:08, 15:19, 16:12 and 17:23 (last). Pick the return before you start up the mountain, not after.\",\n      \"<b>Misasa Onsen \u2192 Kurayoshi Station</b> (return): weekday departures from the Misasa Onsen bus centre (\u4e09\u671d\u6e29\u6cc9\u89b3\u5149\u5546\u5de5\u30bb\u30f3\u30bf\u30fc\u524d) start before 7:40 and run through 18:21. Morning service is denser than the evening service the group relied on for the Day 2 transfer \u2014 a safer window for moving eight people and their luggage on a departure day.\"\n    ]\n  },\n  {\n    \"type\": \"map\",\n    \"group\": \"Transit\",\n    \"title\": \"Orientation map\",\n    \"phase\": \"daily\",\n    \"center\": {\n      \"lat\": 35.47,\n      \"lng\": 134.04\n    },\n    \"span\": 0.21\n  }\n]\n";
 
+/** The four evidence records the R-E/R-F regressions rest on, verbatim from b153af3. */
 export const tottoriEvidenceRecords = () => clone([
-  {
-    "id": "ev-bus-route-exists",
-    "candidateId": "c-hinomaru-bus-kamii-misasa-line",
-    "claim": "Hinomaru Bus's (72)(73) Misasa Line connects Kurayoshi Station and Misasa Onsen on the schedule effective April 1, 2025 (current as of this pass).",
-    "kind": "objective",
-    "origin": "passA",
-    "source": {
-      "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
-      "kind": "operator",
-      "access": "fetched",
-      "language": "ja",
-      "publishedAt": "2025-04-01",
-      "family": "hinomarubus",
-      "independent": null,
-      "appliesToYears": [
-        2026
-      ]
-    },
-    "verifiedOn": "2026-08-26",
-    "firsthand": null,
-    "freshness": {
-      "perishable": true,
-      "shelfLife": "transit",
-      "recheckOn": "2026-10-13"
-    }
-  },
-  {
-    "id": "ev-bus-downbound-schedule",
-    "candidateId": "c-hinomaru-bus-kamii-misasa-line",
-    "claim": "Weekday downbound (Kurayoshi toward Misasa) departures run roughly hourly through the morning, then thin to gaps of up to ~100 minutes in early afternoon (12:22 to 14:04), with the last weekday departure at 19:08.",
-    "kind": "objective",
-    "origin": "passA",
-    "source": {
-      "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
-      "kind": "operator",
-      "access": "fetched",
-      "language": "ja",
-      "publishedAt": "2025-04-01",
-      "family": "hinomarubus",
-      "independent": null,
-      "appliesToYears": [
-        2026
-      ]
-    },
-    "verifiedOn": "2026-08-26",
-    "firsthand": null,
-    "freshness": {
-      "perishable": true,
-      "shelfLife": "transit",
-      "recheckOn": "2026-10-13"
-    }
-  },
-  {
-    "id": "ev-sand-museum-hours-price",
-    "candidateId": "c-sand-museum",
-    "claim": "Sand Museum hours are 9:00-18:00 with last entry at 17:30; adult admission is ¥800.",
-    "kind": "objective",
-    "origin": "passA",
-    "source": {
-      "url": "https://www.sand-museum.jp/information/",
-      "kind": "official",
-      "access": "fetched",
-      "language": "ja",
-      "publishedAt": null,
-      "family": "sand-museum",
-      "independent": null,
-      "appliesToYears": [
-        2026
-      ]
-    },
-    "verifiedOn": "2026-08-26",
-    "firsthand": null,
-    "freshness": {
-      "perishable": true,
-      "shelfLife": "hours",
-      "recheckOn": "2026-10-13"
-    }
-  },
   {
     "id": "ev-yohaijo-details",
     "candidateId": "c-mitokusan-nageiredo-viewing-platform",
@@ -128,30 +47,6 @@ export const tottoriEvidenceRecords = () => clone([
       "perishable": true,
       "shelfLife": "venue",
       "recheckOn": "2027-02-22"
-    }
-  },
-  {
-    "id": "ev-mitokusan-nageiredo-rules",
-    "candidateId": "c-mitokusan-sanbutsuji-nageiredo-climb",
-    "claim": "Climbing to Nageiredo requires reception at the temple office between 8:00 and 15:00 (last descent by 16:30), costs ¥1,200 total for one adult (¥400 main-hall admission + ¥800 climbing permit; ¥1,150/adult for groups of 20+), bars solo climbers (a minimum of two people is required), and requires non-metal-spike hiking shoes or rental waraji straw sandals (¥800) if footwear is judged unsuitable at the gate check. The route closes in bad weather and is typically closed for snow from December through March.",
-    "kind": "objective",
-    "origin": "passB",
-    "source": {
-      "url": "https://www.mitokusan.jp/",
-      "kind": "official",
-      "access": "fetched",
-      "language": "ja",
-      "publishedAt": null,
-      "family": "mitokusan-official",
-      "independent": null,
-      "appliesToYears": []
-    },
-    "verifiedOn": "2026-08-26",
-    "firsthand": null,
-    "freshness": {
-      "perishable": true,
-      "shelfLife": "venue",
-      "recheckOn": "2026-10-13"
     }
   },
   {
@@ -228,15 +123,10 @@ export const tottoriEvidenceRecords = () => clone([
   }
 ]);
 
-/** Reconciliation as reconcile actually wrote it: `ev-nageiredo-viewing-platform` claims to
-    corroborate Pass A's `ev-yohaijo-details` in a NOTE, and `ev-jumbo-taxi` claims to supersede
-    "Pass A's weak taxi fallback" — a guide recommendation, not an evidence record. */
+/** The reconciliation rows as reconcile actually wrote them: `ev-nageiredo-viewing-platform`
+    declares corroboration of Pass A's `ev-yohaijo-details` in PROSE only, and `ev-jumbo-taxi`
+    says "supersedes Pass A's weak taxi fallback" while naming no record. */
 export const tottoriReconciliationRows = () => clone([
-  {
-    "findingId": "ev-mitokusan-nageiredo-rules",
-    "disposition": "adopt",
-    "note": "Corroborates Pass A's ev-mitokusan-fees-rules (same ¥1,200 total, 8:00-15:00 reception, 2-person minimum, footwear check) and adds two facts Pass A didn't have: the route is typically closed for snow Dec-Mar, and rental waraji straw sandals cost ¥800. Folded into the Sanbutsu-ji sights entry and the anchor reservation's deposit/foreignFriction fields."
-  },
   {
     "findingId": "ev-nageiredo-viewing-platform",
     "disposition": "adopt",
@@ -246,7 +136,8 @@ export const tottoriReconciliationRows = () => clone([
     "findingId": "ev-jumbo-taxi",
     "disposition": "replace",
     "note": "Supersedes Pass A's weak taxi fallback (Nikko/Chuo Taxi, only fare figure dated to 2009, 2 cars needed for 8 people) with a concretely-sourced 9-seat jumbo taxi option (Hinomaru Hire, published current metered tariff, single vehicle for the whole party). Adopted as the primary reserved fallback in the transport finding and the Day 2 plan_b; Pass A's original taxi operators are kept as a secondary walk-up mention since they remain a real, if less-suited, option."
-  },
+  }
+,
   {
     "findingId": "ev-kurayoshi-station-accessible",
     "disposition": "adopt",
@@ -255,26 +146,6 @@ export const tottoriReconciliationRows = () => clone([
 ]);
 
 export const tottoriCandidates = () => clone([
-  {
-    "id": "c-hinomaru-bus-kamii-misasa-line",
-    "name": "Hinomaru Bus Kamii-Misasa Line",
-    "branch": null,
-    "priority": "anchor-transit",
-    "status": "shipped",
-    "shortlisted": true,
-    "reason": null,
-    "worth": null
-  },
-  {
-    "id": "c-sand-museum",
-    "name": "Sand Museum",
-    "branch": null,
-    "priority": "culture",
-    "status": "shipped",
-    "shortlisted": true,
-    "reason": null,
-    "worth": null
-  },
   {
     "id": "c-mitokusan-nageiredo-viewing-platform",
     "name": "Mitokusan Nageiredo Viewing Platform",
@@ -296,16 +167,6 @@ export const tottoriCandidates = () => clone([
     "worth": "worth-the-effort"
   },
   {
-    "id": "c-mitokusan-sanbutsuji-nageiredo-climb",
-    "name": "Mitokusan Sanbutsuji Nageiredo Climb",
-    "branch": null,
-    "priority": "culture-history",
-    "status": "rejected",
-    "shortlisted": false,
-    "reason": "The Nageiredo climb is Tottori-chubu's single most famous attraction, on every English-language top-10 list — already Pass A's anchor pick (c-sanbutsu-ji-nageiredo-climb), so not re-shipped here by design (anti-default). This pass's contribution is the concrete access rules (minimum two climbers, footwear check, ¥1,200 total, 8:00-15:00 reception, closed for snow roughly Dec-Mar) folded into the shipped candidate's evidence.",
-    "worth": null
-  },
-  {
     "id": "c-mitokusan-nageiredo-viewing-platform--accessible-alternative",
     "name": "Mitokusan Nageiredo Viewing Platform",
     "branch": "Accessible Alternative",
@@ -317,51 +178,185 @@ export const tottoriCandidates = () => clone([
   }
 ]);
 
-/** The real coverage asks, verbatim: every ask covered with reason null. `anchor` and the BINDING
-    `constraints` both point at `05-transit.json#key-transit-routes` — the declared structure that
-    scopes a critic correction at that ref to the evidence records it may retire. */
-export const tottoriCoverageAsks = () => clone([
-  {
-    "id": "anchor",
-    "ask": "At least one consequential public-transport transfer whose PHYSICAL feasibility matters beyond timetable arithmetic; missing that connection/service must create a meaningful delay, last-return risk, or exertion consequence. No specific venue pre-selected — research must earn every choice.",
-    "status": "covered",
-    "where": [
-      "05-transit.json#key-transit-routes",
-      "06-days.json#tottori-castle-ruins-then-the-transfer-day-kurayoshi-and-the-last-bus-to-misasa",
-      "06-days.json#departure-back-to-kurayoshi-and-onward"
-    ],
-    "evidenceIds": [
-      "ev-bus-route-exists",
-      "ev-bus-downbound-schedule",
-      "ev-bus-upbound-last",
-      "ev-misasa-access-20min",
-      "ev-bus-fare-unreadable",
-      "ev-kurayoshi-misasa-bus",
-      "ev-ryokan-shuttle",
-      "ev-jumbo-taxi",
-      "ev-kurayoshi-station-accessible"
-    ],
-    "reason": null
+/** The BINDING mobility ask, verbatim: covered, reason null, resting on the disproven 600 m
+    records among others. */
+export const tottoriConstraintsAsk = () => clone({
+  "id": "constraints",
+  "ask": "BINDING mobility: 2 of 8 travelers have low walking tolerance; luggage carried on the Kurayoshi-Misasa transfer; assume no rental car unless research concludes otherwise and says so explicitly.",
+  "status": "covered",
+  "where": [
+    "05-transit.json#key-transit-routes",
+    "07-sights.json#nageiredo-yohaijo-viewing-platform",
+    "07-sights.json#sanbutsu-ji-the-nageiredo-climb",
+    "06-days.json#misasa-onsen-nageiredo-the-onsen-town-and-crab"
+  ],
+  "evidenceIds": [
+    "ev-kurayoshi-station-accessible",
+    "ev-yohaijo-details",
+    "ev-nageiredo-viewing-platform",
+    "ev-jumbo-taxi",
+    "ev-ryokan-shuttle",
+    "ev-mitokusan-fees-rules",
+    "ev-mitokusan-nageiredo-rules"
+  ],
+  "reason": null
+});
+
+/** Two UNRELATED Tottori entities whose evidence claims both carry the ordinary value "¥800":
+    the Sand Museum's adult admission and Mitokusan's climbing permit / waraji rental. Verbatim
+    from b153af3. Any rule that retires evidence because another claim CONTAINS a corrected
+    string retires both when either one moves — the R-A supersession defect, on real data. */
+export const tottoriRepeatedValueRecords = () => clone([
+    {
+      "id": "ev-sand-museum-hours-price",
+      "candidateId": "c-sand-museum",
+      "claim": "Sand Museum hours are 9:00-18:00 with last entry at 17:30; adult admission is ¥800.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.sand-museum.jp/information/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "sand-museum",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-mitokusan-nageiredo-rules",
+      "candidateId": "c-mitokusan-sanbutsuji-nageiredo-climb",
+      "claim": "Climbing to Nageiredo requires reception at the temple office between 8:00 and 15:00 (last descent by 16:30), costs ¥1,200 total for one adult (¥400 main-hall admission + ¥800 climbing permit; ¥1,150/adult for groups of 20+), bars solo climbers (a minimum of two people is required), and requires non-metal-spike hiking shoes or rental waraji straw sandals (¥800) if footwear is judged unsuitable at the gate check. The route closes in bad weather and is typically closed for snow from December through March.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.mitokusan.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "mitokusan-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-13"
+      }
+    }
+  ]);
+
+/** The Sand Museum admission as a canonical facts.json row. `¥800` is the figure the guide
+    really states at 07-sights.json#/0/items/1/body in b153af3 and the figure
+    `ev-sand-museum-hours-price` really sources; the row is the canonical shape production
+    facts.json rows use for exactly this kind of short, widely repeated currency value. */
+export const TOTTORI_ADMISSION_FACTS = (value) => JSON.stringify({
+  "sand-museum-admission": {
+    claim: "Sand Museum adult admission",
+    value,
+    source_url: "https://www.sand-museum.jp/information/",
+    verified_on: "2026-08-26",
+    shelf_life: "venue",
+    state: "exact",
+    tier: "primary",
   },
-  {
-    "id": "constraints",
-    "ask": "BINDING mobility: 2 of 8 travelers have low walking tolerance; luggage carried on the Kurayoshi-Misasa transfer; assume no rental car unless research concludes otherwise and says so explicitly.",
-    "status": "covered",
-    "where": [
-      "05-transit.json#key-transit-routes",
-      "07-sights.json#nageiredo-yohaijo-viewing-platform",
-      "07-sights.json#sanbutsu-ji-the-nageiredo-climb",
-      "06-days.json#misasa-onsen-nageiredo-the-onsen-town-and-crab"
-    ],
-    "evidenceIds": [
-      "ev-kurayoshi-station-accessible",
-      "ev-yohaijo-details",
-      "ev-nageiredo-viewing-platform",
-      "ev-jumbo-taxi",
-      "ev-ryokan-shuttle",
-      "ev-mitokusan-fees-rules",
-      "ev-mitokusan-nageiredo-rules"
-    ],
-    "reason": null
-  }
-]);
+}, null, 2) + "\n";
+
+/** The three Pass-A records that cite the Hinomaru timetable the transit item itself cited
+    before the critic re-fetched it. Verbatim from b153af3. `ev-bus-route-exists` asserts the
+    misattributed (72)(73) line and `ev-bus-downbound-schedule` the 19:08 last departure and the
+    12:22→14:04 gap — exactly what the rewrite disproved; `ev-bus-upbound-last` cites the OTHER
+    tab of the same timetable, so it is a different cited origin and is not retired. */
+export const tottoriBusOriginRecords = () => clone([
+    {
+      "id": "ev-bus-route-exists",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Hinomaru Bus's (72)(73) Misasa Line connects Kurayoshi Station and Misasa Onsen on the schedule effective April 1, 2025 (current as of this pass).",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-bus-downbound-schedule",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Weekday downbound (Kurayoshi toward Misasa) departures run roughly hourly through the morning, then thin to gaps of up to ~100 minutes in early afternoon (12:22 to 14:04), with the last weekday departure at 19:08.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=2",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    },
+    {
+      "id": "ev-bus-upbound-last",
+      "candidateId": "c-hinomaru-bus-kamii-misasa-line",
+      "claim": "Weekday upbound (Misasa toward Kurayoshi/Ikuta depot) service thins in the evening; the last recorded weekday departure from the Misasa-area stops (Misasa depot / Onsen South Exit) is around 18:03-18:04.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hinomarubus.co.jp/timetable_route/3455/?tab=1",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-01",
+        "family": "hinomarubus",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-26",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-13"
+      }
+    }
+  ]);

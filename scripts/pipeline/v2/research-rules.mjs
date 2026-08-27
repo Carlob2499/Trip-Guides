@@ -142,30 +142,24 @@ export function corroborationProblems(doc) {
   return problems;
 }
 
-/** The strict independence key, for support a run is explicitly CLAIMING is corroborated.
-    `sourceIndependenceKey` accepts a family label on its own; here independence must have been
-    established, not asserted by naming a family per hostname. R-E scar (Tottori): the 600 m
-    viewpoint distance carried `family: "misasa-town"` and `family: "misasaonsen-official"` —
-    two municipal surfaces of one body, `independent: null` on both — and two passes converging
-    on the same misattributed number were counted as two independent sources. */
-export function establishedIndependenceKey(record) {
-  if (record?.source?.independent !== true) return null;
-  return sourceIndependenceKey(record);
-}
-
 /** Pass A + Pass B convergence is never itself corroboration.
 
-    Two rules, one function. (1) Any reconciliation row that DECLARES corroboration (2.3's
-    `corroborates`) is checked against the records it names: every member must be qualifying
-    fetched evidence, and if the declared set spans both passes it must carry ≥2 sources whose
-    independence is explicitly established. Differently worded claims about the same proposition
-    are exactly the historical shape, so the relation — not the wording — is what is checked.
-    (2) The older text-identical case still fails on its own. */
+    R-E scar (Tottori): the 600 m viewpoint distance carried `family: "misasa-town"` and
+    `family: "misasaonsen-official"` — two municipal surfaces of one body, `independent: null` on
+    both — and two passes converging on the same misattributed number counted as two independent
+    sources. So (1) a row declaring FACTUAL corroboration (2.3) is checked against the records it
+    NAMES, since the historical claims are worded differently and wording proves nothing: every
+    member must be qualifying fetched evidence, and a set spanning both passes needs ≥2 sources
+    whose independence is ESTABLISHED (`independent: true`, not a family label per hostname). A
+    `recommendation` kind asserts no factual support and may stay single-sourced (accepted
+    Uruguay's `agree` leads). (2) The older text-identical case still fails on its own. */
 export function independentAgreementProblems(doc) {
   const problems = [];
+  const established = (record) => record?.source?.independent === true ? sourceIndependenceKey(record) : null;
   const byId = new Map((doc.evidence || []).map((record) => [record.id, record]));
   for (const row of doc.reconciliation || []) {
-    const declared = row.corroborates || [];
+    if (row.corroborates?.kind !== "factual") continue;
+    const declared = row.corroborates.evidenceIds || [];
     if (!declared.length) continue;
     const finding = byId.get(row.findingId);
     const named = declared.map((id) => byId.get(id)).filter(Boolean);
@@ -173,7 +167,7 @@ export function independentAgreementProblems(doc) {
     const set = [finding, ...named];
     if (!set.some((r) => r.origin === "passA") || !set.some((r) => r.origin === "passB")) continue;
     const unqualified = set.filter((r) => !qualifyingEvidence(r));
-    const keys = new Set(set.map(establishedIndependenceKey).filter(Boolean));
+    const keys = new Set(set.map(established).filter(Boolean));
     if (unqualified.length || keys.size < 2) {
       problems.push(
         `reconciliation claims "${row.findingId}" corroborates ${declared.join(", ")} on "${finding.claim.slice(0, 70)}" — ` +
