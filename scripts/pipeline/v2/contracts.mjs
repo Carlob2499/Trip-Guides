@@ -151,6 +151,10 @@ const stageState = z.object({
   // The last commit that made this stage durable, when known. Null is honest — a stage that has
   // not committed yet has no durable commit to name.
   commit: z.string().regex(/^[0-9a-f]{40}$/i, "expected a full 40-character git commit SHA").nullable().default(null),
+  // The tree this stage was HANDED when it began — pinned at begin-stage, and deliberately kept
+  // across a same-tail re-open so a stage that is re-run to repair its own output still compares
+  // against what it originally received, not against its own retained work.
+  baseline: z.string().regex(/^[0-9a-f]{40}$/i, "expected a full 40-character git commit SHA").nullable().default(null),
   history: z.array(attemptRecord).default([]),
   failure,
 }).superRefine((stage, ctx) => {

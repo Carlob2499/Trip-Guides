@@ -19,7 +19,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, GUIDE_FILE, evidenceDocSchema, criticCorrectionDocSchema,
-  parseOrThrow, assertVersionCompatible, parseSchemaVersion, ContractError,
+  parseOrThrow, assertVersionCompatible, parseSchemaVersion, supersededEvidenceIds, ContractError,
 } from "./contracts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -191,6 +191,8 @@ export async function reconcileCriticCorrections(slug, {
   if (phantom.length) throw new ContractError(`critic handoff declares ${phantom.join(", ")}, which the critic did not change`);
 
   const evidence = await requireEvidence(slug, { intakeDir, runId });
+  const alreadyRetired = supersededEvidenceIds(evidence);
+  const ambiguous = [];
   for (const correction of correctionDoc.corrections) {
     assertCorrectionProven(correction, { before, after });
     const recordId = `critic-correction-${kebab(correction.target)}`;
@@ -200,35 +202,61 @@ export async function reconcileCriticCorrections(slug, {
       kind: "objective", origin: "critic", source: correction.source,
       verifiedOn: correction.verifiedOn, firsthand: null, freshness: correction.freshness,
     });
-    // Re-sourcing an item off an origin evidence still rests on is REFUSED, not guessed. Retiring
-    // the whole origin invents coverage gaps; retiring "the only record from that URL" is
-    // cardinality, not proposition identity; reading the claims is the similarity heuristic this
-    // repair avoids. The artifact has no proposition key, so the stage fails closed and reconcile
-    // declares the relation instead.
+    // Re-sourcing an item off an origin evidence rests on is not guessed. Retiring the whole
+    // origin invents coverage gaps; "the only record from that URL" is cardinality, not
+    // proposition identity; reading claims is the similarity heuristic this repair avoids. The
+    // decision belongs to the evidence owner, and is COLLECTED rather than thrown so every proven
+    // correction still reaches evidence below and the owner has real ids to point at.
     const dropped = droppedOrigin(correction.target, { before, after });
-    const resting = dropped
-      ? evidence.evidence.filter((item) => item.origin !== "critic" && item.source?.url === dropped)
+    const unresolved = dropped
+      ? evidence.evidence.filter((item) => item.origin !== "critic" && item.source?.url === dropped && !alreadyRetired.has(item.id))
       : [];
-    if (resting.length) {
-      throw new ContractError(
-        `critic correction "${correction.target}" re-sourced the item off ${dropped}, which ${resting.length} evidence ` +
-          `record(s) still rest on (${resting.map((r) => r.id).join(", ")}). Which proposition it disproved is not ` +
-          `derivable — evidence records carry no proposition identity — and stale evidence must not stay eligible for ` +
-          `coverage, so reconcile must declare it: supersedes { kind: "evidence" }, or re-source the item back.`,
-      );
+    if (unresolved.length) {
+      // One decision per dropped ORIGIN, not per correction: every correction inside a re-sourced
+      // item shares its origin, and the owner writes one relation, not seven.
+      const seen = ambiguous.find((a) => a.origin === dropped);
+      if (!seen) ambiguous.push({ correction: correction.target, recordId, origin: dropped, records: unresolved.map((r) => r.id) });
+      else if (targetPointerEndsAtSource(correction.target)) Object.assign(seen, { correction: correction.target, recordId });
     }
-    evidence.reconciliation = evidence.reconciliation.filter((row) => row.findingId !== recordId);
-    evidence.reconciliation.push({
-      findingId: recordId, disposition: "adopt",
-      note: `critic correction proved at ${correction.target}`,
-      corroborates: { kind: "none", evidenceIds: [] },
-    });
+    // A row the EVIDENCE OWNER already declared for this correction is authoritative and is left
+    // alone — overwriting it with a neutral `adopt` would erase the very relation the routed
+    // repair exists to obtain, and the class could never reach green.
+    if (!evidence.reconciliation.some((row) => row.findingId === recordId)) {
+      evidence.reconciliation.push({
+        findingId: recordId, disposition: "adopt",
+        note: `critic correction proved at ${correction.target}`,
+        corroborates: { kind: "none", evidenceIds: [] },
+      });
+    }
   }
 
+  // The corrections are proven, so they enter authoritative evidence BEFORE any refusal: that is
+  // the R-A requirement, and it is what gives the evidence owner real `critic-correction-…` ids
+  // to point a `replace` row at. Re-deriving them is deterministic, so a retry is idempotent.
   await writeEvidence(slug, evidence, { intakeDir });
   await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(path.join(intakeDir, slug, "critic-corrections.v2.json"), JSON.stringify(correctionDoc, null, 2) + "\n");
+  if (ambiguous.length) throw needsEvidenceReconciliation(slug, ambiguous);
   return { changed: true, targets };
+}
+
+/** The one critic-truth failure the critic cannot fix: a correction re-sourced its guide item off
+    an origin that existing evidence still rests on, and nothing in the artifact says which
+    proposition was disproven. The critic never reads evidence.v2.json, so retrying it with
+    "declare the relation" is an impossible instruction — this failure is ROUTED to the evidence
+    owner (the reconcile stage) instead, and carries the exact rows it must write. */
+export function needsEvidenceReconciliation(slug, ambiguous) {
+  const err = new ContractError(
+    `critic corrections reached ${slug}'s evidence, but ${ambiguous.length} of them re-sourced a guide item off an ` +
+      `origin existing evidence still rests on. Which proposition each disproved is not derivable — evidence records ` +
+      `carry no proposition identity — and stale evidence must not stay eligible for coverage. The EVIDENCE OWNER ` +
+      `(reconcile) resolves this; the blind critic cannot. For each row below, add a reconciliation row on the ` +
+      `critic-correction finding with supersedes { kind: "evidence", evidenceIds: [...] } naming the records it ` +
+      `retires, or re-source the guide item back:\n` +
+      ambiguous.map((a) => `  · ${a.correction} left ${a.origin}; finding "${a.recordId}"; still resting: ${a.records.join(", ")}`).join("\n"),
+  );
+  err.needsEvidenceReconciliation = ambiguous;
+  return err;
 }
 
 /** The guide directory, parsed. Parsing here makes reserialization invisible to the diff and a
@@ -255,6 +283,7 @@ function changedPointers(before, after, at = "") {
   return encode(before) === encode(after) ? [] : [at || "/"];
 }
 
+const targetPointerEndsAtSource = (target) => target.endsWith("/source_url");
 const splitTarget = (target) => [target.slice(0, target.indexOf("#")), target.slice(target.indexOf("#") + 1)];
 const pointerParts = (pointer) => pointer.split("/").slice(1).map((raw) => raw.replace(/~1/g, "/").replace(/~0/g, "~"));
 

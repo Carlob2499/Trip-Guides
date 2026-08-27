@@ -280,7 +280,7 @@ function requireStage(state, stage) {
 }
 
 /** Checkpoint stage START — before the agent is invoked, so a crash mid-stage is attributable. */
-export async function stageStart(slug, stage, { model = null, effort = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+export async function stageStart(slug, stage, { model = null, effort = null, baseline = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
   const st = requireStage(state, stage);
   const next = nextStageV2(state);
@@ -294,6 +294,10 @@ export async function stageStart(slug, stage, { model = null, effort = null, now
   st.startedAt = now;
   st.endedAt = null;
   st.failure = null;
+  // A starting stage has no completion snapshot: leaving the old one let a re-opened stage that
+  // legitimately completes as a NO-OP keep a stale SHA and present it downstream as fresh.
+  st.commit = null;
+  if (baseline && !st.baseline) st.baseline = baseline; // pinned once: the tree it first received
   st.attempts += 1;
   openAttempt(st, now);
   if (model) st.model = model;
@@ -318,7 +322,9 @@ export async function stageComplete(slug, stage, { commit = null, now = new Date
   st.endedAt = now;
   st.failure = null;
   closeAttempt(st, now, "complete");
-  if (commit) st.commit = commit;
+  // Unconditional: a stage that produced no new file commit still HANDS ON a tree, and the
+  // caller passes that HEAD. Writing only truthy commits kept the previous run's SHA.
+  st.commit = commit;
   recomputeResume(state);
   state.status = nextStageV2(state) ? "running" : "complete";
   return save(touch(state, now), intakeDir);
@@ -464,6 +470,44 @@ export async function finalizeMergedLanding(slug, { pr, mergedAt = new Date().to
   return save(touch(state, now), intakeDir);
 }
 
+/** ROUTE a critic-truth failure the critic has no authority to fix to the stage that does.
+
+    The blind critic never reads evidence.v2.json, so "declare the supersession relation" is an
+    instruction it cannot follow, and auto-retrying it would spend the run's one quality retry on
+    a stage that must fail again. Reconcile OWNS evidence, so the failure is recorded against
+    reconcile — honestly: reconcile's artifact is what is incomplete — while the critic returns to
+    `queued` with its retained work and pinned baseline, so the repaired run revalidates the SAME
+    output against the ORIGINAL tree. History stays: routing is visible cost, not erased cost. */
+export async function routeToEvidenceOwner(slug, { detail = "", now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+  const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
+  const reconcile = requireStage(state, "reconcile");
+  const critic = requireStage(state, "critic");
+  if (reconcile.status !== "complete") {
+    throw new ContractError(`cannot route critic truth to reconcile: reconcile is "${reconcile.status}", not complete`);
+  }
+  reconcile.status = "failed";
+  reconcile.endedAt = now;
+  reconcile.commit = null; // its completion no longer describes an accepted artifact
+  reconcile.failure = { class: "gate-failure", detail, at: now };
+  critic.status = "queued";
+  critic.startedAt = null;
+  critic.endedAt = null;
+  critic.failure = null;
+  critic.commit = null;
+  // critic.baseline is deliberately KEPT — the repaired attempt owes a diff against the tree the
+  // critic was originally handed, not against its own retained edits now sitting in the branch.
+  state.status = "failed";
+  state.failure = { class: "gate-failure", detail, at: now };
+  // The repair tail must not be dead on arrival at the attempt cap — the same bounded grant the
+  // human-answer re-open uses. The autonomous auto-retry counter is untouched.
+  if (state.attempts.total + V2_REOPEN_ATTEMPT_GRANT > state.attempts.cap) {
+    state.attempts.cap = state.attempts.total + V2_REOPEN_ATTEMPT_GRANT;
+  }
+  recomputeResume(state);
+  await save(touch(state, now), intakeDir);
+  return state;
+}
+
 /** Late answers to a COMPLETE-but-unmerged draft run (correction pass): re-open the deterministic
     resume point so the remaining work genuinely consumes the answer — reconcile re-reads the
     answered ledger cards, the critic re-judges, landing re-runs. Refuses on published/merged
@@ -481,7 +525,10 @@ export async function reopenForAnswers(slug, { now = new Date().toISOString(), i
     st.startedAt = null;
     st.endedAt = null;
     st.failure = null;
-    // history and attempts stay — the re-open is visible cost, not erased cost.
+    // A human answer opens a NEW tail: the old snapshot and the old handed-to tree both describe
+    // work about to be redone. history and attempts stay — a re-open is visible cost.
+    st.commit = null;
+    st.baseline = null;
   }
   state.status = "running";
   state.failure = null;

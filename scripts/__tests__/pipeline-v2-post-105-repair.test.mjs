@@ -29,6 +29,10 @@ import { coverageProblems } from "../pipeline/v2/coverage.mjs";
 import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
 import { requireCriticBaseline } from "../pipeline-v2.mjs";
 import {
+  initRunV2, readRunStateV2, stageStart, stageComplete, stageFail, reopenForAnswers, routeToEvidenceOwner,
+} from "../pipeline/v2/run-state.mjs";
+import { retryEligibility } from "../pipeline/v2/recovery.mjs";
+import {
   TOTTORI_FACTS, TOTTORI_TRANSIT_BEFORE, TOTTORI_TRANSIT_AFTER, TOTTORI_ADMISSION_FACTS,
   tottoriEvidenceRecords, tottoriReconciliationRows, tottoriCandidates, tottoriConstraintsAsk,
   tottoriRepeatedValueRecords, tottoriBusOriginRecords,
@@ -244,15 +248,26 @@ describe("R-A — an unresolvable supersession fails the stage, it is not logged
     expect(tottoriBusOriginRecords().find((r) => r.id === "ev-bus-upbound-last").source.url).not.toBe(DROPPED);
   });
 
-  it("REPAIRED: re-sourcing an item off an origin evidence rests on is REFUSED, naming the records", async () => {
+  it("REPAIRED: re-sourcing an item off an origin evidence rests on is REFUSED, and ROUTED to the owner", async () => {
     // Not retired (that invents coverage gaps), not guessed (that is claim-text similarity), and
     // not logged-and-continued (that leaves disproven evidence eligible for coverage).
     const fixture = await tottoriCriticScar({ corrections: declareHistorical() },
       busEvidence([...tottoriBusOriginRecords(), ...tottoriRepeatedValueRecords()]));
-    await expect(reconcile(fixture)).rejects.toThrow(/re-sourced the item off https:\/\/hinomarubus[^\s]*3455/);
-    await expect(reconcile(fixture)).rejects.toThrow(/ev-bus-route-exists, ev-bus-downbound-schedule/);
-    await expect(reconcile(fixture)).rejects.toThrow(/evidence records carry no proposition identity/);
-    await expect(reconcile(fixture)).rejects.toThrow(/supersedes \{ kind: "evidence" \}/);
+    const err = await reconcile(fixture).catch((e) => e);
+    expect(err.message).toMatch(/EVIDENCE OWNER \(reconcile\) resolves this; the blind critic cannot/);
+    expect(err.message).toMatch(/still resting: ev-bus-route-exists, ev-bus-downbound-schedule/);
+    expect(err.message).toMatch(/evidence records carry no proposition identity/);
+    // Typed, so the CLI can ROUTE it rather than auto-retrying a stage that cannot comply.
+    expect(err.needsEvidenceReconciliation).toHaveLength(1);
+    expect(err.needsEvidenceReconciliation[0]).toMatchObject({
+      correction: `${TRANSIT}#/0/source_url`, recordId: "critic-correction-05-transit-json-0-source-url",
+    });
+
+    // …and the proven corrections ARE already in authoritative evidence, which is both the R-A
+    // requirement and what gives the owner real finding ids to declare `supersedes` against.
+    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
+    expect(evidence.evidence.filter((r) => r.origin === "critic")).toHaveLength(10);
+    expect(evidence.evidence.some((r) => r.id === err.needsEvidenceReconciliation[0].recordId)).toBe(true);
   });
 
   it("REPAIRED: ONE record on the dropped origin is still refused — cardinality is not proposition identity", async () => {
@@ -260,7 +275,37 @@ describe("R-A — an unresolvable supersession fails the stage, it is not logged
     // "the only record from that URL" proves nothing about which proposition moved.
     const only = tottoriBusOriginRecords().filter((r) => r.id === "ev-bus-downbound-schedule");
     const fixture = await tottoriCriticScar({ corrections: declareHistorical() }, busEvidence(only));
-    await expect(reconcile(fixture)).rejects.toThrow(/1 evidence record\(s\) still rest on \(ev-bus-downbound-schedule\)/);
+    const err = await reconcile(fixture).catch((e) => e);
+    expect(err.needsEvidenceReconciliation[0].records).toEqual(["ev-bus-downbound-schedule"]);
+  });
+
+  it("REPAIRED: once the OWNER declares the relation, the same correction passes — repair to green", async () => {
+    // The historical class now has a path to green: reconcile declares supersedes on the
+    // critic-correction finding, and the identical critic output is re-validated and accepted.
+    const CORRECTION = "critic-correction-05-transit-json-0-source-url";
+    const RETIRED = ["ev-bus-route-exists", "ev-bus-downbound-schedule"];
+    const repaired = busEvidence([...tottoriBusOriginRecords(), ...tottoriRepeatedValueRecords()]);
+    repaired.evidence.push({
+      id: CORRECTION, candidateId: null, claim: "Tottori transfer fact at /0/source_url: " + after[0].source_url,
+      kind: "objective", origin: "critic", source: SOURCE, verifiedOn: "2026-08-26", firsthand: null, freshness: FRESHNESS,
+    });
+    repaired.reconciliation.push({
+      findingId: CORRECTION, disposition: "replace",
+      note: "the critic re-fetched the operator timetable; these rest on the timetable the item no longer cites",
+      corroborates: { kind: "none", evidenceIds: [] },
+      supersedes: { kind: "evidence", evidenceIds: RETIRED },
+    });
+    const fixture = await tottoriCriticScar({ corrections: declareHistorical() }, repaired);
+    await expect(reconcile(fixture)).resolves.toMatchObject({ changed: true });
+
+    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
+    expect(dispositionProblems(evidence)).toEqual([]);
+    // The disproven records are retired, so a BINDING ask resting only on them fails closed…
+    const ask = (ids) => ({ schemaVersion: "wp-coverage/2.0", slug: "tottori", runId: RUN_ID, asks: [{ ...tottoriConstraintsAsk(), evidenceIds: ids }] });
+    const binding = { evidenceDoc: evidence, bindingAskIds: new Set(["constraints"]) };
+    expect(coverageProblems(ask(RETIRED), binding).join("\n")).toMatch(/all cited evidence is disproven or superseded/);
+    // …while the correction that replaced them stays current and carries the ask.
+    expect(coverageProblems(ask([CORRECTION]), binding)).toEqual([]);
   });
 
   it("REPAIRED: a correction that does not re-source its item passes, and retires nothing", async () => {
@@ -384,13 +429,17 @@ describe("R-A — the pre-critic baseline is a REQUIREMENT, and the retry repair
   });
   afterEach(async () => { await rm(repo, { recursive: true, force: true }); });
 
-  const stateWith = (commit) => ({ stages: { reconcile: { commit } } });
+  const stateWith = (baseline, reconcileStatus = "complete") =>
+    ({ stages: { reconcile: { status: reconcileStatus, commit: baseline }, critic: { baseline } } });
 
   it("REPAIRED: a missing reconcile commit REFUSES the gate — the working tree is not a fallback", () => {
     expect(() => requireCriticBaseline(stateWith(null), "tottori", { cwd: repo }))
-      .toThrow(/records no completed .?reconcile.? commit/);
+      .toThrow(/recorded no baseline when it began/);
     expect(() => requireCriticBaseline(stateWith(undefined), "tottori", { cwd: repo }))
       .toThrow(/working tree is NOT a fallback/);
+    // …and a reconcile that is not recorded complete is refused too, however good the SHA.
+    expect(() => requireCriticBaseline(stateWith("0".repeat(40), "failed"), "tottori", { cwd: repo }))
+      .toThrow(/`reconcile` is not recorded complete/);
   });
 
   it("REPAIRED: an unreadable baseline REFUSES the gate, even with retained edits sitting in the tree", async () => {
@@ -462,6 +511,84 @@ describe("R-A — the pre-critic baseline is a REQUIREMENT, and the retry repair
     // Against the PINNED baseline that same handoff-less attempt is refused, as it must be.
     await expect(reconcileCriticCorrections("tottori", { fromDir: noHandoff, intakeDir: dir, runId: RUN_ID, baselineDocs: baselineDocs() }))
       .rejects.toThrow(/stale evidence is refused/);
+  });
+});
+
+// ── the stage snapshot invariant, and routing a failure the critic cannot fix ─
+
+describe("R-A — a completed stage records the tree it handed on, and an unfixable failure is routed", () => {
+  const opts = () => ({ intakeDir: dir });
+  const SHA = (n) => String(n).repeat(40).slice(0, 40);
+
+  async function runThroughReconcile() {
+    await initRunV2("tottori", { ...opts(), inputs: { section: "s", model: "m", effort: "high", criticModel: "c" } });
+    for (const [stage, sha] of [["scaffold", SHA(1)], ["passA", SHA(2)], ["passB", SHA(3)], ["reconcile", SHA(4)]]) {
+      await stageStart("tottori", stage, { ...opts(), baseline: sha });
+      await stageComplete("tottori", stage, { ...opts(), commit: sha });
+    }
+    return readRunStateV2("tottori", opts());
+  }
+
+  it("REPAIRED: a NO-OP completion records the new HEAD, never the previous stage's stale SHA", async () => {
+    // The scar: finish-stage passed commit=null when nothing was dirty and stageComplete only
+    // wrote truthy commits, so a legitimate no-op completion kept the OLD snapshot — a
+    // stale-but-readable baseline, which the missing-SHA guard cannot catch.
+    let state = await runThroughReconcile();
+    expect(state.stages.reconcile.commit).toBe(SHA(4));
+
+    // Re-open the tail (a late human answer) — which needs the run to owe nothing first…
+    await stageStart("tottori", "critic", { ...opts(), baseline: SHA(4) });
+    await stageComplete("tottori", "critic", { ...opts(), commit: SHA(4) });
+    await reopenForAnswers("tottori", opts());
+    state = await readRunStateV2("tottori", opts());
+    expect(state.stages.reconcile.commit).toBeNull();     // the stale snapshot is gone at re-open
+    expect(state.stages.reconcile.baseline).toBeNull();   // …and so is the stale handed-to tree
+    await stageStart("tottori", "reconcile", { ...opts(), baseline: SHA(5) });
+    state = await stageComplete("tottori", "reconcile", { ...opts(), commit: SHA(6) });
+    // …and the completion records the CURRENT HEAD it handed on, not SHA(4).
+    expect(state.stages.reconcile.commit).toBe(SHA(6));
+  });
+
+  it("REPAIRED: starting a stage voids its previous completion snapshot", async () => {
+    await runThroughReconcile();
+    const state = await stageStart("tottori", "critic", { ...opts(), baseline: SHA(7) });
+    expect(state.stages.critic.baseline).toBe(SHA(7));
+    // Re-starting keeps the FIRST baseline: a repaired attempt owes a diff against the tree the
+    // critic originally received, not against its own retained edits.
+    await stageFail("tottori", "critic", { ...opts(), failureClass: "gate-failure", detail: "d" });
+    const again = await stageStart("tottori", "critic", { ...opts(), baseline: SHA(8) });
+    expect(again.stages.critic.baseline).toBe(SHA(7));
+  });
+
+  it("REPAIRED: the routed failure lands on the EVIDENCE OWNER, not on the blind critic", async () => {
+    await runThroughReconcile();
+    await stageStart("tottori", "critic", { ...opts(), baseline: SHA(7) });
+    const before = await readRunStateV2("tottori", opts());
+    const autoRetriesBefore = before.attempts.autoRetries;
+
+    const state = await routeToEvidenceOwner("tottori", { ...opts(), detail: "evidence relation owed" });
+    // Reconcile owns evidence, so reconcile is the failed, retryable stage…
+    expect(state.stages.reconcile.status).toBe("failed");
+    expect(state.stages.reconcile.failure.class).toBe("gate-failure");
+    expect(state.stages.reconcile.commit).toBeNull();
+    expect(state.resume.nextStage).toBe("reconcile");
+    // …the critic is re-queued rather than failed, so the run's one quality auto-retry is not
+    // spent on a stage that cannot comply…
+    expect(state.stages.critic.status).toBe("queued");
+    expect(state.stages.critic.failure).toBeNull();
+    expect(state.attempts.autoRetries).toBe(autoRetriesBefore);
+    // …and the critic keeps the baseline it was handed, so the repaired attempt revalidates the
+    // SAME retained output against the ORIGINAL pre-critic tree.
+    expect(state.stages.critic.baseline).toBe(SHA(7));
+    // The attempt history is kept: routing is visible cost, not erased cost.
+    expect(state.stages.critic.attempts).toBe(1);
+    // And the routed failure is auto-retryable at the stage that can actually fix it.
+    expect(retryEligibility(state, { stage: "reconcile", findings: ["declare the relation"] }).allowed).toBe(true);
+  });
+
+  it("REPAIRED: routing refuses unless reconcile really completed", async () => {
+    await initRunV2("tottori", { ...opts(), inputs: { section: "s", model: "m", effort: "high", criticModel: "c" } });
+    await expect(routeToEvidenceOwner("tottori", opts())).rejects.toThrow(/reconcile is "queued", not complete/);
   });
 });
 

@@ -1056,10 +1056,21 @@ jobs:
           }
           if [ "$RC" -eq 0 ]; then
             node scripts/pipeline-v2.mjs reconcile-critic-truth --slug "$SLUG" --from "$GITHUB_WORKSPACE" 2>&1 | tee "$RUNNER_TEMP/critic-truth-out.txt"
-            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+            TRUTH_RC="${PIPESTATUS[0]}"
+            if [ "$TRUTH_RC" -ne 0 ]; then
               retain_critic_output || echo "[critic] retention incomplete — recording findings anyway"
-              node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
-                --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+              # EXIT 3: the corrections reached evidence, but a supersession only the EVIDENCE
+              # OWNER can decide is outstanding. The blind critic cannot write that relation, so
+              # retrying it would spend the run's one quality retry on a stage that must fail
+              # again — this routes the findings to reconcile and re-queues the critic with its
+              # retained work and its pinned baseline. Any other nonzero is the critic's own.
+              if [ "$TRUTH_RC" -eq 3 ]; then
+                node scripts/pipeline-v2.mjs needs-reconcile --slug "$SLUG" \
+                  --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+              else
+                node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
+                  --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+              fi
               exit 1
             fi
           fi
