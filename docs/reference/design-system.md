@@ -91,6 +91,28 @@ Highest-value entries per phase:
 
 Game/3D/WebGL/social-posting skills in the library are out of scope for Waypoint.
 
+Known external gaps to pull when their phase arrives (free GitHub skills; cite here once
+adopted): a rules-based WCAG/web-quality auditor and a structured multi-viewport
+design-review methodology for D6, and visual-regression CI patterns for D5.
+
+### `/design` canvas — where visual decisions get made
+
+The `/design` skill (Claude Design artboard canvas) is the standard vehicle for showing
+Carlo visual options before they become code, because he can inspect and hand-tweak
+elements instead of approving prose:
+
+- **D1/D2:** a token-specimen artboard set (palette, type scale, spacing, the three
+  registers side by side, light/dark) so identity decisions are approved visually.
+- **D3/D4:** component mockups on canvas *before* implementation for any new or
+  significantly reworked component; the approved artboard becomes the spec the Astro
+  implementation is checked against.
+- **D6:** candidate fixes from the taste review are mocked on canvas first when the
+  change is visual-directional rather than mechanical.
+
+Canvas output is a draft/spec, never a source of truth: the committed tokens, components,
+and gallery remain the authority, and factual guide content never gets invented for
+mockups (use placeholder data marked as such).
+
 ## 5. Joint September schedule — design interleaved with Pipeline V2
 
 Backend hard dates (owned by `SEPTEMBER_TRACKER.md`): **feature freeze Sep 20 · code
