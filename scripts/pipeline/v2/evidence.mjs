@@ -40,6 +40,48 @@ export function candidateId(name, branch = null) {
   return `c-${stablePart(name)}${branch ? `--${stablePart(branch)}` : ""}`;
 }
 
+/** Make the control plane, not a model, own exact candidate-id transcription. Identity still
+    comes only from name + branch; every relational reference follows the same canonical id.
+    A semantic collision fails closed instead of merging two candidates. */
+export function normalizeCandidateIds(doc) {
+  const candidates = doc.candidates || [];
+  const byOld = new Map();
+  const owners = new Map();
+  for (const candidate of candidates) {
+    if (byOld.has(candidate.id)) {
+      throw new ContractError(`duplicate candidate id "${candidate.id}" cannot be normalized safely`);
+    }
+    const canonical = candidateId(candidate.name, candidate.branch);
+    const owner = owners.get(canonical);
+    if (owner) {
+      throw new ContractError(
+        `candidate identity collision: "${owner.name}" and "${candidate.name}" both derive "${canonical}" — ` +
+          `disambiguate the real branch/location; uniqueness cannot be repaired by guessing`,
+      );
+    }
+    owners.set(canonical, candidate);
+    byOld.set(candidate.id, canonical);
+  }
+  const ref = (id) => id == null ? id : (byOld.get(id) || id);
+  const normalized = {
+    ...doc,
+    candidates: candidates.map((candidate) => ({ ...candidate, id: byOld.get(candidate.id) })),
+    evidence: (doc.evidence || []).map((record) => ({ ...record, candidateId: ref(record.candidateId) })),
+    reservations: (doc.reservations || []).map((record) => ({ ...record, candidateId: ref(record.candidateId) })),
+    depth: doc.depth ? {
+      ...doc.depth,
+      reservations: {
+        ...doc.depth.reservations,
+        requiredCandidateIds: (doc.depth.reservations?.requiredCandidateIds || []).map(ref),
+      },
+    } : doc.depth,
+  };
+  return {
+    doc: normalized,
+    changed: candidates.some((candidate) => candidate.id !== byOld.get(candidate.id)),
+  };
+}
+
 /** Fail-closed read. Returns null ONLY when the file does not exist. */
 export async function readEvidence(slug, { intakeDir = INTAKE_DIR } = {}) {
   const file = evidencePath(slug, intakeDir);
@@ -77,7 +119,8 @@ export async function requireEvidence(slug, { intakeDir = INTAKE_DIR, runId = nu
 }
 
 export async function writeEvidence(slug, doc, { intakeDir = INTAKE_DIR } = {}) {
-  const validated = parseOrThrow(evidenceDocSchema, { schemaVersion: EVIDENCE_SCHEMA, ...doc }, {
+  const normalized = normalizeCandidateIds({ schemaVersion: EVIDENCE_SCHEMA, ...doc }).doc;
+  const validated = parseOrThrow(evidenceDocSchema, normalized, {
     file: evidencePath(slug, intakeDir), what: "V2 evidence artifact (on write)",
   });
   if (validated.slug !== slug) throw new ContractError(`refusing to write ${validated.slug} evidence into ${slug}'s run directory`);

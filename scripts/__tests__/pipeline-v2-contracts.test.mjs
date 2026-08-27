@@ -17,7 +17,7 @@ import {
   markPublished, markDeployedLive, nextStageV2, runStatePath,
 } from "../pipeline/v2/run-state.mjs";
 import {
-  candidateId, readEvidence, requireEvidence, writeEvidence,
+  candidateId, normalizeCandidateIds, readEvidence, requireEvidence, writeEvidence,
   candidateProblems, dispositionProblems, saturationProblems, evidenceProblems, evidencePath,
 } from "../pipeline/v2/evidence.mjs";
 import { readCoverage, requireCoverage, writeCoverage, coverageProblems } from "../pipeline/v2/coverage.mjs";
@@ -256,6 +256,32 @@ describe("evidence — valid / structural rules", () => {
     expect(candidateId("Café Ñoño")).toBe(candidateId("Café Ñoño"));
     expect(candidateId("だるま")).toMatch(/^c-u-[0-9a-f]{10}$/);
     expect(candidateId("だるま")).not.toBe(candidateId("一蘭"));
+  });
+
+  it("control-plane normalization owns punctuation-heavy and markdown candidate ids + refs (W1-A)", () => {
+    const input = validEvidence();
+    input.candidates[0] = { ...input.candidates[0], id: "model-typed-id", name: "San'in Coast **Rail**" };
+    input.evidence[0].candidateId = "model-typed-id";
+    input.reservations = [{ candidateId: "model-typed-id" }];
+    input.depth = { reservations: { requiredCandidateIds: ["model-typed-id"] } };
+    const { doc, changed } = normalizeCandidateIds(input);
+    const expected = candidateId("San'in Coast **Rail**");
+    expect(changed).toBe(true);
+    expect(expected).toBe("c-san-in-coast-rail");
+    expect(doc.candidates[0].id).toBe(expected);
+    expect(doc.evidence[0].candidateId).toBe(expected);
+    expect(doc.reservations[0].candidateId).toBe(expected);
+    expect(doc.depth.reservations.requiredCandidateIds).toEqual([expected]);
+    expect(normalizeCandidateIds(doc)).toMatchObject({ changed: false });
+  });
+
+  it("normalization preserves uniqueness and fails closed on a semantic collision", () => {
+    const input = validEvidence();
+    input.candidates = [
+      { ...input.candidates[0], id: "one", name: "Café A" },
+      { ...input.candidates[1], id: "two", name: "Cafe A", branch: null },
+    ];
+    expect(() => normalizeCandidateIds(input)).toThrow(/identity collision/);
   });
 
   it("shipped-but-never-shortlisted is a named violation — no side door", () => {
