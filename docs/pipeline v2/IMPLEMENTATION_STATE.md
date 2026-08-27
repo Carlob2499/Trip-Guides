@@ -99,7 +99,7 @@ Automatic repair is decided from durable state, not a transient workflow flag. I
 - stage attempt budget remains;
 - automatic-repair budget remains.
 
-Current bounds remain five quality attempts and one automatic quality-repair reservation. A proven usage-limit interruption does not consume a quality attempt; it uses a separate durable allowance capped at two availability recoveries. Repeated usage limits therefore cannot loop forever. Cancellation, generic agent failures, unknown failures, missing findings, unreadable state, exhausted budgets, and already-published runs do not earn blind retries.
+Current bounds remain five quality attempts and one automatic quality-repair reservation. A proven usage-limit interruption does not consume a quality attempt, but it also does not auto-retry into the same exhausted usage window; the run stops visibly and can be deliberately redispatched after availability returns. Cancellation, generic agent failures, unknown failures, missing findings, unreadable state, exhausted budgets, and already-published runs do not earn blind retries.
 
 A stopped run has a visible escalation path rather than silently disappearing.
 
