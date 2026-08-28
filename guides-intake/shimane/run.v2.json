@@ -11,9 +11,9 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "failed",
+  "status": "running",
   "createdAt": "2026-08-28T02:25:08.231Z",
-  "updatedAt": "2026-08-28T03:54:08.257Z",
+  "updatedAt": "2026-08-28T03:54:38.208Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -89,10 +89,10 @@
       "failure": null
     },
     "reconcile": {
-      "status": "failed",
-      "startedAt": "2026-08-28T03:23:07.515Z",
-      "endedAt": "2026-08-28T03:53:11.052Z",
-      "attempts": 1,
+      "status": "running",
+      "startedAt": "2026-08-28T03:54:38.208Z",
+      "endedAt": null,
+      "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
       "commit": null,
@@ -106,13 +106,17 @@
           "status": "failed",
           "failureClass": "gate-failure",
           "durationSec": 1804
+        },
+        {
+          "attempt": 2,
+          "startedAt": "2026-08-28T03:54:38.208Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
         }
       ],
-      "failure": {
-        "class": "gate-failure",
-        "detail": "evidence artifact at /home/runner/work/Trip-Guides/Trip-Guides/collect/guides-intake/shimane/evidence.v2.json is not valid JSON (Unexpected non-whitespace character after JSON at position 84365 (line 1998 column 1)) — a malformed required evidence artifact is a blocking failure, never \"no evidence\". Restore or fix it.",
-        "at": "2026-08-28T03:53:11.052Z"
-      }
+      "failure": null
     },
     "critic": {
       "status": "queued",
@@ -136,13 +140,9 @@
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "re-run stage \"reconcile\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
   },
-  "failure": {
-    "class": "gate-failure",
-    "detail": "evidence artifact at /home/runner/work/Trip-Guides/Trip-Guides/collect/guides-intake/shimane/evidence.v2.json is not valid JSON (Unexpected non-whitespace character after JSON at position 84365 (line 1998 column 1)) — a malformed required evidence artifact is a blocking failure, never \"no evidence\". Restore or fix it.",
-    "at": "2026-08-28T03:53:11.052Z"
-  },
+  "failure": null,
   "publication": {
     "published": false,
     "publishedAt": null,
