@@ -1,0 +1,33 @@
+[
+  {
+    "type": "days",
+    "group": "Days",
+    "title": "Day by day",
+    "items": [
+      {
+        "date": "Tue Oct 20",
+        "title": "",
+        "pace": "",
+        "body": ""
+      },
+      {
+        "date": "Wed Oct 21",
+        "title": "",
+        "pace": "",
+        "body": ""
+      },
+      {
+        "date": "Thu Oct 22",
+        "title": "",
+        "pace": "",
+        "body": ""
+      },
+      {
+        "date": "Fri Oct 23",
+        "title": "",
+        "pace": "",
+        "body": ""
+      }
+    ]
+  }
+]

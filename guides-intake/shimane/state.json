@@ -1,0 +1,14 @@
+{
+  "slug": "shimane",
+  "createdAt": "2026-08-28T02:21:38.380Z",
+  "updatedAt": "2026-08-28T02:21:38.380Z",
+  "stages": {
+    "scaffold": "2026-08-28T02:21:38.380Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}
