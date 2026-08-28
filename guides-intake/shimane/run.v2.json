@@ -11,9 +11,9 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "running",
+  "status": "failed",
   "createdAt": "2026-08-28T02:25:08.231Z",
-  "updatedAt": "2026-08-28T05:38:04.109Z",
+  "updatedAt": "2026-08-28T05:45:03.822Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -89,9 +89,9 @@
       "failure": null
     },
     "reconcile": {
-      "status": "running",
+      "status": "failed",
       "startedAt": "2026-08-28T05:38:04.109Z",
-      "endedAt": null,
+      "endedAt": "2026-08-28T05:45:03.822Z",
       "attempts": 4,
       "model": "claude-sonnet-5",
       "effort": "high",
@@ -126,13 +126,17 @@
         {
           "attempt": 4,
           "startedAt": "2026-08-28T05:38:04.109Z",
-          "endedAt": null,
-          "status": "running",
-          "failureClass": null,
-          "durationSec": null
+          "endedAt": "2026-08-28T05:45:03.822Z",
+          "status": "failed",
+          "failureClass": "gate-failure",
+          "durationSec": 420
         }
       ],
-      "failure": null
+      "failure": {
+        "class": "gate-failure",
+        "detail": "\"Tanakaya\" (c-tanakaya) claim \"Tanakaya forms a line at midday, even past the normal lunch \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Tanakaya\" (c-tanakaya) claim \"Visitor trip reports describe 30-40 minute waits at Tanakaya\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Tanakaya\" (c-tanakaya) claim \"Tanakaya, directly across from Izumo Taisha's main entrance,\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"The Mar 2025 San-in Line ICOCA expansion extended coverage northeast t\" (ev-icoca-boundary-2025-expansion) names 2025 but its source was published in 2023 — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2025] · experiential claim \"Tanakaya forms a line at midday, even past the normal lunch \" (ev-tanakaya-crowd-1) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Visitor trip reports describe 30-40 minute waits at Tanakaya\" (ev-tanakaya-crowd-2) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Tanakaya, directly across from Izumo Taisha's main entrance,\" (ev-izumo-soba-tanakaya) has no source date — recency is unproven for a shipped recommendation · anchor reservation for c-takyo-abeke has no release window or action date — the one non-negotiable booking needs the WHEN, not just the how · anchor reservation for c-takyo-abeke has no deposit/prepayment terms · anchor reservation for c-takyo-abeke has no cancellation/no-show terms",
+        "at": "2026-08-28T05:45:03.822Z"
+      }
     },
     "critic": {
       "status": "queued",
@@ -156,9 +160,13 @@
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
+    "action": "re-run stage \"reconcile\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
   },
-  "failure": null,
+  "failure": {
+    "class": "gate-failure",
+    "detail": "\"Tanakaya\" (c-tanakaya) claim \"Tanakaya forms a line at midday, even past the normal lunch \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Tanakaya\" (c-tanakaya) claim \"Visitor trip reports describe 30-40 minute waits at Tanakaya\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Tanakaya\" (c-tanakaya) claim \"Tanakaya, directly across from Izumo Taisha's main entrance,\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"The Mar 2025 San-in Line ICOCA expansion extended coverage northeast t\" (ev-icoca-boundary-2025-expansion) names 2025 but its source was published in 2023 — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2025] · experiential claim \"Tanakaya forms a line at midday, even past the normal lunch \" (ev-tanakaya-crowd-1) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Visitor trip reports describe 30-40 minute waits at Tanakaya\" (ev-tanakaya-crowd-2) has no source date — recency is unproven for a shipped recommendation · experiential claim \"Tanakaya, directly across from Izumo Taisha's main entrance,\" (ev-izumo-soba-tanakaya) has no source date — recency is unproven for a shipped recommendation · anchor reservation for c-takyo-abeke has no release window or action date — the one non-negotiable booking needs the WHEN, not just the how · anchor reservation for c-takyo-abeke has no deposit/prepayment terms · anchor reservation for c-takyo-abeke has no cancellation/no-show terms",
+    "at": "2026-08-28T05:45:03.822Z"
+  },
   "publication": {
     "published": false,
     "publishedAt": null,

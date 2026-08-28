@@ -72,6 +72,26 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-28T05:01:53.417Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T05:45:03.825Z"
+    },
+    {
+      "runId": "shimane-20260828-0f02a5",
+      "stage": "reconcile",
+      "attempt": 4,
+      "findings": [
+        "\"Tanakaya\" (c-tanakaya) claim \"Tanakaya forms a line at midday, even past the normal lunch \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once)",
+        "\"Tanakaya\" (c-tanakaya) claim \"Visitor trip reports describe 30-40 minute waits at Tanakaya\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once)",
+        "\"Tanakaya\" (c-tanakaya) claim \"Tanakaya, directly across from Izumo Taisha's main entrance,\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once)",
+        "\"The Mar 2025 San-in Line ICOCA expansion extended coverage northeast t\" (ev-icoca-boundary-2025-expansion) names 2025 but its source was published in 2023 — a prior-year source is a LEAD unless it explicitly records appliesToYears:[2025]",
+        "experiential claim \"Tanakaya forms a line at midday, even past the normal lunch \" (ev-tanakaya-crowd-1) has no source date — recency is unproven for a shipped recommendation",
+        "experiential claim \"Visitor trip reports describe 30-40 minute waits at Tanakaya\" (ev-tanakaya-crowd-2) has no source date — recency is unproven for a shipped recommendation",
+        "experiential claim \"Tanakaya, directly across from Izumo Taisha's main entrance,\" (ev-izumo-soba-tanakaya) has no source date — recency is unproven for a shipped recommendation",
+        "anchor reservation for c-takyo-abeke has no release window or action date — the one non-negotiable booking needs the WHEN, not just the how",
+        "anchor reservation for c-takyo-abeke has no deposit/prepayment terms",
+        "anchor reservation for c-takyo-abeke has no cancellation/no-show terms"
+      ],
+      "createdAt": "2026-08-28T05:45:03.825Z",
       "status": "active",
       "retiredAt": null
     }
