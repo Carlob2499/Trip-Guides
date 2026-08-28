@@ -12,6 +12,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { startOrResumeBranch } from "../pipeline/publish.mjs";
 
+const ROOT = path.resolve(import.meta.dirname, "../..");
 const temps = [];
 afterEach(() => {
   while (temps.length) rmSync(temps.pop(), { recursive: true, force: true });
@@ -22,6 +23,11 @@ function git(cwd, ...args) {
 }
 
 describe("startOrResumeBranch — current control-plane on V2 resume", () => {
+
+  it("the V2 workflow explicitly opts resumed research branches into current-code synchronization", () => {
+    const workflow = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
+    expect(workflow).toContain('pipeline.mjs branch --slug "$SLUG" --prefix research-v2 --sync-current');
+  });
   it("preserves durable run files but synchronizes the resumed branch to the dispatch commit", () => {
     const root = mkdtempSync(path.join(tmpdir(), "waypoint-v2-resume-"));
     temps.push(root);
