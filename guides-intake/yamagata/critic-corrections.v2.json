@@ -4,290 +4,220 @@
   "runId": "yamagata-20260828-73821a",
   "corrections": [
     {
-      "target": "02-money-and-budget.json#/1/items/6/label",
-      "previousValue": null,
-      "correctedValue": "Tokyo ⇄ Yamagata Shinkansen (round trip)",
-      "claim": "The Tokyo ⇄ Yamagata Shinkansen round trip is a per-person, per-trip budget line — the guide's Day 1 opens on this train, and the budget carried no line for it.",
+      "target": "facts.json#/hanagasa-bus-fare-1000-yen/value",
+      "previousValue": "¥1,000 (cash only, ¥500 for children/disabled companions)",
+      "correctedValue": "¥1,000 (cash only; half fare, ¥500, for children and disabled passengers)",
+      "claim": "Hanagasa Bus Ginzan Line — who the ¥500 half fare applies to: the operator's fare rule reads 「料金は大人1名（片道）、小人・障がい者：半額」, i.e. children and DISABLED PASSENGERS themselves, not a disabled passenger's companion. The registry value said \"disabled companions\", a different (and separately real) Japanese fare category, on the anchor transfer of a party carrying a BINDING two-traveller mobility constraint.",
       "source": {
-        "url": "https://jr-shinkansen.net/fare-yamagata.html",
-        "kind": "reference",
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+        "kind": "operator",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "jr-shinkansen-net",
+        "family": "hanagasa-bus-taisei",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "transit",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "transit", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "02-money-and-budget.json#/1/items/6/basis",
-      "previousValue": null,
-      "correctedValue": "trip",
-      "claim": "The Shinkansen round trip is a once-per-trip cost, not a per-day one — it must not multiply by the budget block's days: 4.",
+      "target": "05-transit.json#/0/steps/3",
+      "previousValue": "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b> (¥500 child or disabled companion), no reservation needed. The operator runs a different timetable per season, each on its own page — the <b>Apr 1 – Oct 24, 2026</b> table is the one covering this trip, and it carries more daily departures than the Dec 1 – Mar 31 winter table. First bus leaves Oishida ≈6:40. ⚠ Don't plan a late arrival around <b>18:21</b> — that is the last bus <i>out</i> of Ginzan Onsen (the operator's note reads 「最終便18:21発」), not the last one in; the final inbound run is earlier, and the seasonal table is hard to read across its columns, so confirm the day's last Oishida departure before committing to a slow morning in the city. ⚠ The operator's summary page still advertises 5 round trips a day while its seasonal timetable lists more — read the timetable itself, and confirm the day of. Missing a bus can mean waiting over two hours, and the longest gap falls around midday. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
+      "correctedValue": "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b> (half fare, ¥500, for children and disabled passengers), no reservation needed. The operator runs a different timetable per season, each on its own page — the <b>Apr 1 – Oct 24, 2026</b> table is the one covering this trip, and it carries more daily departures than the Dec 1 – Mar 31 winter table. First bus leaves Oishida ≈6:40. ⚠ Don't plan a late arrival around <b>18:21</b> — that is the last bus <i>out</i> of Ginzan Onsen (the operator's note reads 「最終便18:21発」), not the last one in; the final inbound run is earlier, and the seasonal table is hard to read across its columns, so confirm the day's last Oishida departure before committing to a slow morning in the city. ⚠ The operator's summary page still advertises 5 round trips a day while its seasonal timetable lists more — read the timetable itself, and confirm the day of. Missing a bus can mean waiting over two hours, and the longest gap falls around midday. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
+      "claim": "Hanagasa Bus Ginzan Line half fare — the second surface of the same fare rule: 「料金は大人1名（片道）、小人・障がい者：半額」 covers children and disabled passengers, not companions. Continuity ripple of the facts.json correction above.",
       "source": {
-        "url": "https://jr-shinkansen.net/fare-yamagata.html",
-        "kind": "reference",
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+        "kind": "operator",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "jr-shinkansen-net",
+        "family": "hanagasa-bus-taisei",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "transit",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "transit", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "02-money-and-budget.json#/1/items/6/est",
-      "previousValue": null,
-      "correctedValue": "22900",
-      "claim": "Tokyo→Yamagata one-way in an ordinary reserved car is ¥11,450 (¥6,050 運賃 + ¥5,400 指定席特急料金), so the round trip is ¥22,900 per person.",
+      "target": "05-transit.json#/0/steps/4",
+      "previousValue": "<b>Ginzan Onsen → Oishida (return):</b> two departures to avoid, both flagged in the <a href='https://www.hanagasa-bus-taisei.co.jp/base.html'>operator's own service notes</a> — the <b>14:55</b> does not connect to a northbound (上り) Yamagata Shinkansen, and the last bus, <b>18:21</b>, is expected to be crowded with no extra service added. The operator points passengers at <b>16:35</b> instead; <b>13:25</b> is the earlier clean option. With eight people, luggage and two low-mobility travelers, pick one of those two and confirm it at Ginzanso the night before.",
+      "correctedValue": "<b>Ginzan Onsen → Oishida (return):</b> two departures to avoid, both flagged in the <a href='https://www.hanagasa-bus-taisei.co.jp/base.html'>operator's own service notes</a> — the <b>14:55</b> does not connect to a <b>Tokyo-bound</b> Yamagata Shinkansen (the operator's 上り — the up-line runs toward Tokyo, which is the direction this group leaves in, and geographically south), and the last bus, <b>18:21</b>, is expected to be crowded with no extra service added. The operator points passengers at <b>16:35</b> instead; <b>13:25</b> is the earlier clean option. With eight people, luggage and two low-mobility travelers, pick one of those two and confirm it at Ginzanso the night before.",
+      "claim": "Direction of the Yamagata Shinkansen connection the 14:55 Ginzan Onsen bus misses. The operator publishes 「※銀山温泉発14:55のバスは山形新幹線（上り）への接続が出来ません。ご注意ください。」 — 上り (the up-line) runs toward Tokyo, which from Ōishida is geographically SOUTH. The guide rendered it \"northbound\", inverting the warning on the group's departure day: northbound from Ōishida is toward Shinjo, the direction they are not travelling.",
       "source": {
-        "url": "https://jr-shinkansen.net/fare-yamagata.html",
-        "kind": "reference",
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+        "kind": "operator",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "jr-shinkansen-net",
+        "family": "hanagasa-bus-taisei",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "transit",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "transit", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "02-money-and-budget.json#/1/items/6/note",
-      "previousValue": null,
-      "correctedValue": "≈¥11,450 each way in an ordinary reserved car (¥6,050 base fare + ¥5,400 express charge). Every Tsubasa seat is reserved — book all 8 together. ⚠ Confirm the exact figure at booking",
-      "claim": "Fare breakdown ¥6,050 + ¥5,400 = ¥11,450 one way, and the Yamagata Shinkansen is all-reserved (「山形新幹線は全車指定席です。自由席はありません」); the figure carries the same ⚠ confirm-at-booking hedge the Plan and Transit surfaces already carry, because JR East's own fare page is unreachable.",
+      "target": "06-days.json#/0/items/3/body",
+      "previousValue": "<p>Ginzan Onsen empties out to almost no one before roughly 7:00 — the quietest the street gets all day, and the real payoff of staying the night instead of day-tripping in. By midday it's the most crowded window; before 11:00 is the next-best calm stretch if the group sleeps in.</p><p>Shirogane Falls rounds out the walk at the end of the street. Izu no Hana, on the main street, opens at 11:00 for a soba or dessert stop — call 0237-28-2036 ahead for a table of 8.</p><p>Check out and retrace the transfer: Hanagasa Bus to Oishida, then the JR Ōu Line back to Yamagata or onward. Two departures to avoid, both flagged on the operator's own timetable: the <b>14:55</b> doesn't connect to a northbound Yamagata Shinkansen, and the last bus, <b>18:21</b>, is expected to be crowded with no extra service added. The operator points passengers at <b>16:35</b>; <b>13:25</b> is the earlier clean option if the group would rather not wait out the afternoon with luggage.</p>",
+      "correctedValue": "<p>Ginzan Onsen empties out to almost no one before roughly 7:00 — the quietest the street gets all day, and the real payoff of staying the night instead of day-tripping in. By midday it's the most crowded window; before 11:00 is the next-best calm stretch if the group sleeps in.</p><p>Shirogane Falls rounds out the walk at the end of the street. Izu no Hana, on the main street, opens at 11:00 for a soba or dessert stop — call 0237-28-2036 ahead for a table of 8.</p><p>Check out and retrace the transfer: Hanagasa Bus to Oishida, then the JR Ōu Line back to Yamagata or onward. Two departures to avoid, both flagged on the operator's own timetable: the <b>14:55</b> doesn't connect to a <b>Tokyo-bound</b> Yamagata Shinkansen (上り, the up-line — the direction the group leaves in), and the last bus, <b>18:21</b>, is expected to be crowded with no extra service added. The operator points passengers at <b>16:35</b>; <b>13:25</b> is the earlier clean option if the group would rather not wait out the afternoon with luggage.</p>",
+      "claim": "Second surface of the same direction fact, on the departure-day card: 「山形新幹線（上り）への接続が出来ません」 — 上り is Tokyo-bound, not northbound. Continuity ripple of the transit-step correction above.",
       "source": {
-        "url": "https://jr-shinkansen.net/fare-yamagata.html",
-        "kind": "reference",
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+        "kind": "operator",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "jr-shinkansen-net",
+        "family": "hanagasa-bus-taisei",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "transit",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "transit", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "02-money-and-budget.json#/1/items/6/per",
-      "previousValue": null,
-      "correctedValue": "person",
-      "claim": "The ¥11,450 fare is a single adult ticket, so the budget line is per person, matching every other item in this block.",
+      "target": "06-days.json#/0/items/0/pace",
+      "previousValue": "Tsubasa lands early-to-mid afternoon depending on departure time. Keep the rest of the day light: a walk through the castle grounds, then the group's flagship dinner.",
+      "correctedValue": "Tsubasa lands early-to-mid afternoon depending on departure time, and that is this day's one real decision: the castle grounds stay open until 22:00, but all three stops inside them shut mid-afternoon — the Otemon Yagura gate-tower at 16:00, Kyu-Saiseikan at 16:30, the Mogami Yoshiaki museum's last admission at 16:30. Land after ≈15:30 and treat the interiors as Day 3's free city morning instead; the grounds walk and the flagship dinner hold either way.",
+      "claim": "Closing times of the three Kajo Park interior stops the arrival day is built on. Yamagata City publishes the reconstructed Otemon Yagura's FY2026 (令和8年度) public opening as 「4月3日（金曜）から11月2日（月曜）まで」 with 「4月～6月、9月～11月　9時30分　～　16時」 — a 16:00 close in the bracket this trip falls in. The day card previously stated only the PARK's 22:00 close, which reads as if the cluster is open into the evening.",
       "source": {
-        "url": "https://jr-shinkansen.net/fare-yamagata.html",
-        "kind": "reference",
+        "url": "https://www.city.yamagata-yamagata.lg.jp/bunkasports/bunkazai/1006708/1003674.html",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "jr-shinkansen-net",
+        "family": "city-yamagata",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "transit",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "02-money-and-budget.json#/1/items/6/source_url",
-      "previousValue": null,
-      "correctedValue": "https://jr-shinkansen.net/fare-yamagata.html",
-      "claim": "The fare page this budget line rests on — the same citation the Plan and Transit surfaces already use for ≈¥11,450.",
+      "target": "06-days.json#/0/items/0/body",
+      "previousValue": "<p>Kajo Park (free, open until 22:00) holds the Yamagata Castle ruins alongside several free, genuinely local history stops within a few minutes' walk of each other: the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan building, and the reconstructed Otemon Yagura gate-tower (interior open to visitors; stairs-only access isn't confirmed — worth checking ahead for the group's 2 low-mobility travelers).</p><p>Dinner is Yonezawa Beef Tokiwa's private room (up to 14 guests, ≈¥9,900/person minimum for dinner), a 5-minute walk from the station — book ahead, it's the trip's one flagship group meal.</p>",
+      "correctedValue": "<p>Kajo Park's grounds are free and open 5:00-22:00 through Oct 31, and hold the Yamagata Castle ruins alongside three free local history stops within a few minutes' walk of each other. All three close mid-afternoon, which is the whole planning problem on an arrival day: the <a href='https://www.city.yamagata-yamagata.lg.jp/bunkasports/bunkazai/1006708/1003674.html'>Otemon Yagura gate-tower</a> (reconstructed, interior open to visitors) runs 9:30-16:00 in its Sept-Nov bracket and shuts for the season after Nov 2; Kyu-Saiseikan, the octagonal Meiji-era former hospital, is 9:00-16:30; the Mogami Yoshiaki Historical Museum is 9:00-17:00 with last admission at 16:30 and is closed Mondays. Stairs-only access to the Yagura interior isn't confirmed — worth checking ahead for the group's 2 low-mobility travelers.</p><p>Dinner is Yonezawa Beef Tokiwa's private room (up to 14 guests, ≈¥9,900/person minimum for dinner), a 5-minute walk from the station — book ahead, it's the trip's one flagship group meal.</p>",
+      "claim": "Opening hours of the three free Kajo Park stops the arrival-day body names. Otemon Yagura: 「公開期間（令和8年度）4月3日（金曜）から11月2日（月曜）まで」, 「公開時間（令和8年度）4月～6月、9月～11月　9時30分　～　16時」, 入館料 無料. Kyu-Saiseikan (山形市郷土館) and the Mogami Yoshiaki museum are dated in the sight-card corrections below. The park's own grounds hours 「5時00分から22時00分（4月1日～10月31日）」 are unchanged and already cited on this item.",
       "source": {
-        "url": "https://jr-shinkansen.net/fare-yamagata.html",
-        "kind": "reference",
+        "url": "https://www.city.yamagata-yamagata.lg.jp/bunkasports/bunkazai/1006708/1003674.html",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "jr-shinkansen-net",
+        "family": "city-yamagata",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "transit",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "02-money-and-budget.json#/1/items/6/verified_on",
-      "previousValue": null,
-      "correctedValue": "2026-08-28",
-      "claim": "The fare page was re-fetched by this critic pass on 2026-08-28 and still publishes ¥6,050 + ¥5,400.",
+      "target": "07-sights.json#/0/items/0/kicker",
+      "previousValue": "Free · open until 22:00",
+      "correctedValue": "Free · grounds to 22:00 · the stops inside close 16:00-16:30",
+      "claim": "Kajo Park's 22:00 figure is the GROUNDS' close, not the cluster's. The earliest close inside is the Otemon Yagura at 16:00 in its 9月～11月 bracket 「9時30分　～　16時」; Kyu-Saiseikan closes 16:30 and the Mogami Yoshiaki museum's last admission is 16:30. The kicker previously implied the whole stop ran to 22:00.",
       "source": {
-        "url": "https://jr-shinkansen.net/fare-yamagata.html",
-        "kind": "reference",
+        "url": "https://www.city.yamagata-yamagata.lg.jp/bunkasports/bunkazai/1006708/1003674.html",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "jr-shinkansen-net",
+        "family": "city-yamagata",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "transit",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "02-money-and-budget.json#/1/items/6/shelf_life",
-      "previousValue": null,
-      "correctedValue": "transit",
-      "claim": "A rail fare is a transit fact (90-day shelf life per src/lib/staleness.ts), not a venue or default one.",
+      "target": "07-sights.json#/0/items/0/body",
+      "previousValue": "<p>The moated grounds of Yamagata Castle, free and open year-round, with several free history stops clustered inside — the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan, and the reconstructed Otemon Yagura gate-tower. The Yagura's interior is open to visitors, though stairs-only access isn't confirmed — worth checking ahead for anyone with limited mobility.</p>",
+      "correctedValue": "<p>The moated grounds of Yamagata Castle, free and open 5:00-22:00 from Apr 1 to Oct 31, with several free history stops clustered inside — the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan, and the reconstructed Otemon Yagura gate-tower. The grounds stay open into the evening; the stops inside do not, so an afternoon arrival gets the walk but not the interiors. The <a href='https://www.city.yamagata-yamagata.lg.jp/bunkasports/bunkazai/1006708/1003674.html'>Yagura</a> opens 9:30-16:00 in its Sept-Nov bracket and closes for the season after Nov 2; its interior is open to visitors, though stairs-only access isn't confirmed — worth checking ahead for anyone with limited mobility.</p>",
+      "claim": "Otemon Yagura opening period and hours, and the seasonal wording of Kajo Park's grounds hours. Yamagata City publishes 「公開期間（令和8年度）4月3日（金曜）から11月2日（月曜）まで」 and 「4月～6月、9月～11月　9時30分　～　16時」 for the gate tower; the park's own page publishes 「5時00分から22時00分（4月1日～10月31日）」, which is a seasonal bracket rather than the \"open year-round\" the card previously stated.",
       "source": {
-        "url": "https://jr-shinkansen.net/fare-yamagata.html",
-        "kind": "reference",
+        "url": "https://www.city.yamagata-yamagata.lg.jp/bunkasports/bunkazai/1006708/1003674.html",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "jr-shinkansen-net",
+        "family": "city-yamagata",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "transit",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "06-days.json#/0/items/1/body",
-      "previousValue": "<p>Risshaku-ji (山寺) is reached by a direct ≈20-minute Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}, cash only.</p><p>⚠ The temple's own <a href='https://rissyakuji.jp/'>hours table</a> publishes 8:00-16:00 for April-September and 8:30-15:00 for December-March, and nothing for October. Plan on a mid-afternoon close and confirm the day's closing time before setting out — there is no late climb here.</p><p>There is no cable car, ropeway, or shortcut anywhere on the mountain — the only way up to the Godaido viewing platform and Okunoin is on foot, via roughly 1,015 stone steps (figures vary 1,015-1,070 depending on the source), and there are no ramps or elevators anywhere on the site, including at the base.</p><p>Konponchudo, the main hall about 3 minutes' walk from the base entrance, is a genuinely worthwhile stop on its own without climbing further — the honest option for anyone who'd rather not attempt the stairs.</p><p>Lunch: Takifudo Namasoba, ≈7 min from the station near the mountain entrance, open 11:00-15:30. ⚠ Its seat counts appear only in restaurant directories, so phone 023-695-2039 ahead to hold a table for 8.</p><p>10:00-14:00 is when tour groups arrive and the paths and Godaido platform get genuinely crowded, worse still once koyo (autumn foliage) season builds — which is also the window the soba shop opens into. Climb early, eat after.</p><p>Taimenseki, right at the station, is a smaller, quicker soba stop for anyone splitting off from the group lunch or catching an earlier train.</p>",
-      "correctedValue": "<p>Risshaku-ji (山寺) is reached by a direct ≈20-minute Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}, cash only.</p><p>⚠ The temple's own <a href='https://rissyakuji.jp/'>hours table</a> publishes 8:00-16:00 for April-September and 8:30-15:00 for December-March, and nothing for October. Plan on a mid-afternoon close and confirm the day's closing time before setting out — there is no late climb here.</p><p>There is no cable car, ropeway, or shortcut anywhere on the mountain — the only way up to the Godaido viewing platform and Okunoin is on foot, via roughly 1,015 stone steps (figures vary 1,015-1,070 depending on the source), and there are no ramps or elevators anywhere on the site, including at the base.</p><p>Konponchudo, the main hall about 3 minutes' walk from the base entrance, is a genuinely worthwhile stop on its own without climbing further — the honest option for anyone who'd rather not attempt the stairs.</p><p>Lunch: Takifudo Namasoba, ≈7 min from the station near the mountain entrance, open 11:00-15:30. ⚠ Its seat counts appear only in restaurant directories, so phone 023-695-2039 ahead to hold a table for 8.</p><p>10:00-14:00 is when tour groups arrive and the paths and Godaido platform get genuinely crowded, worse still once koyo (autumn foliage) season builds — which is also the window the soba shop opens into. Climb early, eat after.</p><p>Taimenseki, right at the station, is a smaller, quicker soba stop for anyone splitting off from the group lunch or catching an earlier train.</p><p>Dinner back in the city: Inokoya Yamagatada, one minute from Yamagata Station inside the directly connected Kajo Central building, serves imoni — Yamagata's taro-and-beef stew — in individual mini-hearth pots, 17:00-22:00 daily, year-round (last order 21:00). It's walk-in, and its private rooms seat only 4-6, so eight people split across tables rather than sitting as a block; after 1,015 steps, the short covered walk is worth more than the private room. Phone 023-647-0655 to warn them a party of eight is coming.</p>",
-      "claim": "Inokoya Yamagatada is 「JR山形駅直結」 ≈1 minute from Yamagata Station in 霞城セントラル1F, serves imoni in individual 囲炉裏 pots, opens 「年中無休 17:00～22:00（L.O 21:00）」, and its telephone is 023-647-0655 — placed as Day 2's evening meal, the one evening the itinerary left without a food pick.",
+      "target": "07-sights.json#/0/items/2/kicker",
+      "previousValue": "Free · Yamagata City Folk Museum",
+      "correctedValue": "Free · 9:00-16:30 · Yamagata City Folk Museum",
+      "claim": "Kyu-Saiseikan (山形市郷土館) opening hours: the city's own facility page publishes 開館時間 「午前9時～午後4時30分」. The card carried no hour at all while the arrival-day plan depended on one.",
       "source": {
-        "url": "https://www.yamagata-da.com/cuisine/",
-        "kind": "primary",
+        "url": "https://www.city.yamagata-yamagata.lg.jp/shisetsu/bunkasports/1008032/1005895.html",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "yamagata-da",
+        "family": "city-yamagata",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "hours",
-        "recheckOn": "2026-11-26"
-      }
+      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "08-food-and-shopping.json#/0/items/3/address",
-      "previousValue": null,
-      "correctedValue": "1-1-1 Jonan-cho, Yamagata (Kajo Central Building 1F, 山形市城南町1-1-1 霞城セントラル1F)",
-      "claim": "The venue's own site publishes 〒990-8580 山形県山形市城南町1-1-1 霞城セントラル1F — the item shipped with no address at all, failing the 4-question venue rule's \"where\".",
+      "target": "07-sights.json#/0/items/2/body",
+      "previousValue": "<p>A distinctive octagonal, 3-tier former Meiji-era hospital building inside Kajo Park — free, and genuinely off the beaten path since most visitors head straight for the castle grounds instead.</p>",
+      "correctedValue": "<p>A distinctive octagonal, 3-tier former Meiji-era hospital building inside Kajo Park — free, open 9:00-16:30 with no weekly closing day (it shuts only Dec 29-Jan 3), and off the beaten path since most visitors head straight for the castle grounds instead. The 16:30 close is what decides whether an arrival-day visit works at all.</p>",
+      "claim": "Kyu-Saiseikan (山形市郷土館) hours, closure and admission: 開館時間 「午前9時～午後4時30分」, 休館日 「年末年始（12月29日～1月3日）」, 入館料 「平成21年4月1日より入館料が無料となりました。」 — free, and no weekly rest day, which is why the item's empty closed_days is correct and is now stated rather than implied.",
       "source": {
-        "url": "https://www.yamagata-da.com/cuisine/",
-        "kind": "primary",
+        "url": "https://www.city.yamagata-yamagata.lg.jp/shisetsu/bunkasports/1008032/1005895.html",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "yamagata-da",
+        "family": "city-yamagata",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "venue",
-        "recheckOn": "2027-02-24"
-      }
+      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "08-food-and-shopping.json#/0/items/3/phone",
-      "previousValue": null,
-      "correctedValue": "023-647-0655",
-      "claim": "The venue's own site publishes 023-647-0655 — the number a party of eight needs even at a walk-in venue whose rooms seat only 4-6.",
+      "target": "07-sights.json#/0/items/3/kicker",
+      "previousValue": "Free · closed Mondays",
+      "correctedValue": "Free · 9:00-17:00, last entry 16:30 · closed Mondays",
+      "claim": "Mogami Yoshiaki Historical Museum (最上義光歴史館) opening hours: its own site publishes 開館時間 「午前9時から午後5時まで（ご入館は午後4時30分まで）」. The last-admission time, not the 17:00 close, is the one an arrival-day group acts on.",
       "source": {
-        "url": "https://www.yamagata-da.com/cuisine/",
-        "kind": "primary",
+        "url": "https://mogamiyoshiaki.jp/?p=about",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "yamagata-da",
+        "family": "mogamiyoshiaki",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "venue",
-        "recheckOn": "2027-02-24"
-      }
+      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": "2026-10-13" }
     },
     {
-      "target": "08-food-and-shopping.json#/0/items/3/hours",
-      "previousValue": "17:00-22:00 daily",
-      "correctedValue": "17:00-22:00 daily, year-round (last order 21:00)",
-      "claim": "The venue's own site publishes 「年中無休　17:00～22:00（L.O 21:00）」 — the last order was missing, and it is what decides whether a party of eight arriving off the Yamadera train can still be seated.",
+      "target": "07-sights.json#/0/items/3/body",
+      "previousValue": "<p>Dedicated to the daimyo who actually built Yamagata Castle — small, free, and squarely on-theme for a culture/history-focused visit without appearing on generic top-10 lists.</p>",
+      "correctedValue": "<p>Dedicated to the daimyo who actually built Yamagata Castle — small, free, and squarely on-theme for a culture/history-focused visit without appearing on generic top-10 lists. Open 9:00-17:00 with last admission at 16:30; closed Mondays (the following day when the Monday is a public holiday).</p>",
+      "claim": "Mogami Yoshiaki Historical Museum (最上義光歴史館) hours, closure and admission: 開館時間 「午前9時から午後5時まで（ご入館は午後4時30分まで）」, 休館日 「月曜日（祝日の場合は翌日）」, 入館料 「無料」. The card asserted the Monday closure with no hours behind it; both now come from the museum's own page, and the holiday-shift rule is stated because it is what moves the closure.",
       "source": {
-        "url": "https://www.yamagata-da.com/cuisine/",
-        "kind": "primary",
+        "url": "https://mogamiyoshiaki.jp/?p=about",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "yamagata-da",
+        "family": "mogamiyoshiaki",
         "independent": true,
         "appliesToYears": [2026]
       },
       "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "hours",
-        "recheckOn": "2026-11-26"
-      }
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/3/how",
-      "previousValue": "1 min walk from Yamagata Station",
-      "correctedValue": "1 min from Yamagata Station via the directly connected Kajo Central building",
-      "claim": "The venue's own site describes the approach as ≈1 minute from JR Yamagata Station through a directly connected building (霞城セントラル) — an indoor, weather-independent approach, which is a material detail for the party's two low-mobility travellers in late October.",
-      "source": {
-        "url": "https://www.yamagata-da.com/cuisine/",
-        "kind": "primary",
-        "access": "fetched",
-        "language": "ja",
-        "publishedAt": null,
-        "family": "yamagata-da",
-        "independent": true,
-        "appliesToYears": [2026]
-      },
-      "verifiedOn": "2026-08-28",
-      "freshness": {
-        "perishable": true,
-        "shelfLife": "venue",
-        "recheckOn": "2027-02-24"
-      }
+      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": "2026-10-13" }
     }
   ]
 }

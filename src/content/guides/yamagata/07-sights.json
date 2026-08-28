@@ -8,8 +8,8 @@
     "items": [
       {
         "name": "Kajo Park (Yamagata Castle ruins)",
-        "kicker": "Free · open until 22:00",
-        "body": "<p>The moated grounds of Yamagata Castle, free and open year-round, with several free history stops clustered inside — the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan, and the reconstructed Otemon Yagura gate-tower. The Yagura's interior is open to visitors, though stairs-only access isn't confirmed — worth checking ahead for anyone with limited mobility.</p>",
+        "kicker": "Free · grounds to 22:00 · the stops inside close 16:00-16:30",
+        "body": "<p>The moated grounds of Yamagata Castle, free and open 5:00-22:00 from Apr 1 to Oct 31, with several free history stops clustered inside — the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan, and the reconstructed Otemon Yagura gate-tower. The grounds stay open into the evening; the stops inside do not, so an afternoon arrival gets the walk but not the interiors. The <a href='https://www.city.yamagata-yamagata.lg.jp/bunkasports/bunkazai/1006708/1003674.html'>Yagura</a> opens 9:30-16:00 in its Sept-Nov bracket and closes for the season after Nov 2; its interior is open to visitors, though stairs-only access isn't confirmed — worth checking ahead for anyone with limited mobility.</p>",
         "map": { "lat": 38.2535667, "lng": 140.3290444 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 45,
@@ -30,8 +30,8 @@
       },
       {
         "name": "Kyu-Saiseikan",
-        "kicker": "Free · Yamagata City Folk Museum",
-        "body": "<p>A distinctive octagonal, 3-tier former Meiji-era hospital building inside Kajo Park — free, and genuinely off the beaten path since most visitors head straight for the castle grounds instead.</p>",
+        "kicker": "Free · 9:00-16:30 · Yamagata City Folk Museum",
+        "body": "<p>A distinctive octagonal, 3-tier former Meiji-era hospital building inside Kajo Park — free, open 9:00-16:30 with no weekly closing day (it shuts only Dec 29-Jan 3), and off the beaten path since most visitors head straight for the castle grounds instead. The 16:30 close is what decides whether an arrival-day visit works at all.</p>",
         "map": { "lat": 38.2547, "lng": 140.3287 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 25,
@@ -42,8 +42,8 @@
       },
       {
         "name": "Mogami Yoshiaki Historical Museum",
-        "kicker": "Free · closed Mondays",
-        "body": "<p>Dedicated to the daimyo who actually built Yamagata Castle — small, free, and squarely on-theme for a culture/history-focused visit without appearing on generic top-10 lists.</p>",
+        "kicker": "Free · 9:00-17:00, last entry 16:30 · closed Mondays",
+        "body": "<p>Dedicated to the daimyo who actually built Yamagata Castle — small, free, and squarely on-theme for a culture/history-focused visit without appearing on generic top-10 lists. Open 9:00-17:00 with last admission at 16:30; closed Mondays (the following day when the Monday is a public holiday).</p>",
         "map": { "lat": 38.2542, "lng": 140.3283 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 30,

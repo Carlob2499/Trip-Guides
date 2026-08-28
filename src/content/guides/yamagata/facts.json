@@ -1,7 +1,7 @@
 {
   "hanagasa-bus-fare-1000-yen": {
     "claim": "Hanagasa Bus one-way adult fare, Oishida Station to Ginzan Onsen",
-    "value": "¥1,000 (cash only, ¥500 for children/disabled companions)",
+    "value": "¥1,000 (cash only; half fare, ¥500, for children and disabled passengers)",
     "source_url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
     "verified_on": "2026-08-28",
     "shelf_life": "transit",

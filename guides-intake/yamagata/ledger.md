@@ -746,6 +746,149 @@ pre-critic tree, and this stage is prepared without git history. **No further at
 it** — it needs the baseline values handed to the stage, a workspace reset on failure, or a re-pin to the
 tree each attempt actually receives.
 
+### Sixth critic pass (2026-08-28, fresh context) — three findings, all three implemented
+
+Fresh workspace: the finished guide, the frozen intake, this ledger, the skill files and the rubric — no
+evidence artifacts, no run state, no git history. Five scans again (#6 anchor · #8 priority depth · #9
+party fit · #12 authenticity · the vibe lens). Priority depth and authenticity survive without a finding
+for the third consecutive pass — the castle-park culture cluster, the group-size food analysis, the
+crowd/off-peak notes and the mobility handling are all doing work a generic guide could not. The anchor
+transfer survives a fifth independent fetch on its numbers. **What did not survive is the one WORD of
+the anchor's service note that says which way the connection runs, and the arrival day's entire indoor
+half, which the guide plans around without publishing a single opening hour.** Every changed value is
+declared in `critic-corrections.v2.json`.
+
+#### C20 — the anchor's service note is carried faithfully except for the word that says which way it runs (rubric #6 · #3 · common-sense lens) — FIXED
+
+`05-transit.json` step 5 and `06-days.json` Day 4 both warn the group off the 14:55 return bus, and both
+give the same reason: it *"does not connect to a **northbound** (上り) Yamagata Shinkansen."* Fetched, the
+operator publishes 「※銀山温泉発14:55のバスは山形新幹線（上り）への接続が出来ません。ご注意ください。」 — and
+上り, the up-line, runs **toward Tokyo**. From Ōishida that is geographically **south**. Northbound on this
+line is toward Shinjo.
+
+So the guide names the right bus, quotes the right kanji, and then tells the party the warning is about
+the direction they are *not* travelling. Day 4 is departure day: eight people, luggage, two low-mobility
+travellers, a village with a handful of buses out. A group that reads "northbound" has been given a
+positive reason to believe the 14:55 is fine for them — the one departure the operator singles out. This
+is the C1/C15 class again (the anchor's most decision-relevant content lives in the notes column), but a
+layer down: the note was read, carried and cited, and lost its meaning in translation.
+
+Both surfaces now say **Tokyo-bound**, with 上り kept beside it so a traveller reading the operator's own
+page recognises the term, and Transit spells out that the up-line runs toward Tokyo and is geographically
+south. No time, service or recommendation changed — 16:35 and 13:25 still stand, and the 18:21 direction
+fix C15 made is untouched.
+
+#### C21 — the arrival day is planned around three museums and the guide publishes not one opening hour (rubric #7 · #10 · vibe lens: common sense) — FIXED
+
+Day 1's `pace` said *"Tsubasa lands early-to-mid afternoon depending on departure time. Keep the rest of
+the day light: a walk through the castle grounds…"* and its body named three indoor stops inside Kajo
+Park — the Mogami Yoshiaki Historical Museum, Kyu-Saiseikan, and the Otemon Yagura gate-tower. The only
+clock figure anywhere near them was **the park's** 22:00 close, sitting in the same parenthesis as the
+word "free". Culture/history is this traveller's **#1 ranked priority**; this cluster is where the guide
+puts it in the city; and across the day card and three `sights` cards, not one of the three stops
+carried an opening hour, a closing hour, or a source that publishes either.
+
+Fetched, all three shut in the middle of the afternoon:
+
+- **Otemon Yagura** — Yamagata City publishes 「公開期間（令和8年度）4月3日（金曜）から11月2日（月曜）まで」 and
+  「4月～6月、9月～11月　9時30分　～　16時」. A **16:00** close in this trip's own bracket, and the season ends
+  Nov 2.
+- **Kyu-Saiseikan (山形市郷土館)** — 「午前9時～午後4時30分」, free, 休館日 only 「年末年始（12月29日～1月3日）」
+  (which confirms the item's empty `closed_days` was right).
+- **Mogami Yoshiaki Historical Museum** — 「午前9時から午後5時まで（ご入館は午後4時30分まで）」, 休館日
+  「月曜日（祝日の場合は翌日）」, 無料. Last admission 16:30 is the operative figure, not the 17:00 close.
+
+A Tsubasa that "lands early-to-mid afternoon" plus a station-to-park walk puts a party of eight — two of
+them slow on foot — at the gates somewhere between 15:00 and 16:30. The guide's own arrival estimate and
+the cluster's real hours were never put in the same sentence, so the day reads as open-ended when it has
+a hard 16:00 edge. This is the japan-2 "⚠ is not a substitute for one fetch" class inverted: there was
+no ⚠ either, just silence, and every one of these hours sits on a page two of the three items were
+**already citing**.
+
+Day 1's `pace` now states the three closes and gives the actual lever — land after ≈15:30 and the
+interiors move to Day 3's already-free city morning, while the grounds walk (open to 22:00) and the
+Tokiwa dinner hold regardless. The body carries each stop's hours inline with the Yagura's city page
+linked. The three `sights` cards carry their own hours, and Kajo Park's kicker — which read
+*"Free · open until 22:00"*, the park's figure standing in for the whole cluster — now separates the
+grounds from the stops inside them.
+
+#### C22 — the R3 anchor fare tells a mobility-bound party the half fare is for "companions" (rubric #3 · #9) — FIXED
+
+`facts.json`'s `hanagasa-bus-fare-1000-yen` — the guide's only R3 registry row, the anchor transfer's
+fare — carried `value: "¥1,000 (cash only, ¥500 for children/disabled companions)"`, echoed in
+`05-transit.json` step 4 as *"(¥500 child or disabled companion)"*. The operator's fare table reads
+「料金は大人1名（片道）、小人・障がい者：半額」 — 障がい者 is the **disabled passenger**, not a companion. A
+companion/carer half fare (介護者・同伴者) is a real and separate category in Japanese transport pricing,
+which is exactly why the wrong one reads as plausible.
+
+It is a small figure and a large mis-read for this party specifically: intake makes mobility BINDING for
+two of the eight, and this is the one fare the guide states as a registry fact. Both surfaces now say
+what the page says — half fare for children and disabled passengers. The ¥1,000 adult fare, the
+cash-only rule and the `evidence` locator are unchanged, re-confirmed on the same fetch
+(「大石田駅⇔銀山温泉　1,000円/500円」).
+
+### Considered and NOT actioned — sixth-pass rebuttals
+
+- **The `plan_b` on Day 2 quotes "¥640 for groups of 20+"** to a party of eight, which cannot reach it —
+  the same shape as Risshaku-ji's 団体30名以上 rate the earlier audits correctly noted does not apply. One
+  clause of harmless noise on a rain alternate; below the bar the fourth pass set for a declared
+  correction, and unlike C21 it changes no decision.
+- **The budget's "Local transport, per day" line is `basis: "day"` at ¥2,000 × 4** against an itinerary
+  whose real local spend is ≈¥4,300/person across the whole trip (Senzan return ¥520, the Ginzan bus
+  ¥2,000, the Ōu Line legs). It overstates in the safe direction, its note names what it covers, and
+  correcting it properly needs the Yamagata→Ōishida JR fare, which no allowed domain publishes and
+  jreast.co.jp still refuses. **Flagged for a networked pass**, not guessed.
+- **Sakaeya Honten is shipped in `08-food-and-shopping.json` and appears in no day card** — the C19 shape.
+  Not a finding here: the venues `intro` explicitly types it as an "informal single-visit pick, not a
+  group-booked meal", it is closed Wednesdays (Day 2), and a chilled-ramen speciality is a weak
+  late-October placement. It is offered, not orphaned.
+- **Day 3's dinner is never named**, on the assumption the Ginzanso booking is 夕朝食付. That assumption is
+  sourced — the budget line cites the ryokan plan as "dinner + breakfast included" — and C19 already
+  reasoned from it. Left, because writing "your ryokan will feed you" adds nothing the booking does not.
+- **"Genuinely" still appears across the guide** (now seven times after C21's body rewrite dropped one as
+  a side effect of a sourced change). The fifth pass's rebuttal stands and is the right one: a pure style
+  rewrite has no source, and this contract has no editorial-only declaration, so laundering tone edits as
+  corrections is worse than the tic.
+- **The last INBOUND Hanagasa Bus into Ginzan Onsen, and one named target outbound departure for Day 3.**
+  Fourth pass to reach this and fourth to leave it. I did not re-attempt the column extraction: three
+  prior passes got three different readings of `base4.html`'s 大石田駅発/銀山温泉着 columns, and a fourth
+  guess adds nothing but a fourth number. The ⚠ confirm-on-the-day instruction stands. **Flagged for a
+  networked pass** with the fifth pass's structural note (the 19:40 cell is an arrival at 大石田駅; the
+  18:50 service terminates there) as the lead.
+- **Eight perishable money figures still in prose rather than `facts.json`.** Fourth pass to reach it,
+  fourth to leave it, same reason: no `npm run build` in this environment to catch an unresolved
+  `{{fact:}}` token, and zero traveller-visible gain. My own C22 edit went into the registry row that
+  already exists, so the gap did not widen. Pipeline-pattern row retained.
+- **Days 1, 3 and 4 carry no `plan_b`.** Four passes have rebutted this; I reach the same answer, and
+  C21 slightly strengthens it — the arrival day's failure mode is a clock, not weather, and it now has a
+  stated lever rather than an alternate.
+- **Seven `sights` items still carry `place_id: "__VERIFICATION_REQUIRED__"`.** The legal placeholder
+  state. Unchanged.
+- **`09-sources.json` lists `yamagata-sakaeyahonten.com` under "primary sources fetched directly"** while
+  the venue item cites `visityamagata.jp`. Checked, not a finding: the domain is the shop's own site
+  (元祖冷しらーめん栄屋本店), and its published address 「〒990-0043　山形県山形市本町2-3-21」 matches the venue
+  item exactly. The Sources entry is honest.
+
+**Artifact note (baseline gap — fifth consecutive attempt, now confirmed at the source).**
+`critic-corrections.v2.json` declares the **twelve** leaves this pass changed, each `previousValue` read
+first-hand from the workspace I was handed. Eight of the twelve (`facts.json#/…/value`, both
+`06-days.json#/0/items/0/*`, all six `07-sights.json#/0/items/{0,2,3}/*`) were untouched by C1–C19, so
+their `previousValue` is also the pre-critic value and they prove against the pinned baseline. The other
+four (`05-transit.json#/0/steps/3` and `/4`, `06-days.json#/0/items/3/body`) were rewritten by
+C1/C2/C8/C15, so what I read is a prior attempt's output.
+
+What the four preceding passes inferred, this one confirms: the baseline is pinned once at the tree the
+critic FIRST received (`stageStart`, `if (baseline && !st.baseline)`), `requireCriticBaseline` refuses any
+fallback to the working tree, and the working tree deliberately retains a failed attempt's guide edits.
+The reason no attempt has ever been TOLD this is ordering: the handoff's zod parse runs before the
+declared-set-versus-changed-set check, so five attempts have each died on a different schema field
+(strings-where-objects, then `source.kind`'s enum) without the real blocker ever printing. This attempt's
+handoff is schema-clean against `criticCorrectionDocSchema` — every `source.kind` is one of
+`official`/`operator`, `access` is `fetched`, `source`/`freshness` are objects — precisely so the run
+reaches that check and prints the undeclarable set instead of a sixth field name. **The gap still needs a
+control-plane fix**, one of: hand the stage the baseline values for already-changed leaves, reset the
+guide to the baseline when an attempt fails, or re-pin the baseline to the tree each attempt receives.
+
 ## Citation audit
 
 20 perishable facts sampled across two critic passes, weighted to prices, hours and the anchor
@@ -1015,6 +1158,72 @@ a grep can look for.
 - Closure and day-of-week check re-run: Inokoya is 年中無休 (no weekly closure) and Day 2 is Wednesday, so
   nothing collides. Nothing in C18/C19 moves a stop, a date, a bus or a booking; the Tue/Wed/Thu/Fri card
   mapping and the closure table stand.
+
+### Citation audit — sixth critic pass (2026-08-28, fresh context)
+
+Seven perishable facts sampled independently, weighted to the arrival day's unpublished hours (the gap
+this pass ships against) and the anchor transfer's service note. Every source fetched; four drifted or
+were absent and were fixed.
+
+| Claim | Value | Source fetched | Verdict |
+|-------|-------|----------------|---------|
+| Direction of the Shinkansen connection the 14:55 Ginzan Onsen bus misses | shipped as "a northbound (上り) Yamagata Shinkansen" on two surfaces | y — `hanagasa-bus-taisei.co.jp/base.html` | **drifted → fixed** — 「※銀山温泉発14:55のバスは山形新幹線（上り）への接続が出来ません。ご注意ください。」 returned verbatim. 上り is the up-line, toward Tokyo — geographically south from Ōishida. Both surfaces restated as Tokyo-bound (C20) |
+| Otemon Yagura opening period + hours (Day 1's earliest deadline) | not stated anywhere in the guide | y — `city.yamagata-yamagata.lg.jp/bunkasports/bunkazai/1006708/1003674.html` | **drifted → fixed** — 「公開期間（令和8年度）4月3日（金曜）から11月2日（月曜）まで」, 「4月～6月、9月～11月　9時30分　～　16時」, 入館料 無料. A 16:00 close on the arrival day, previously unstated on any surface (C21) |
+| Kyu-Saiseikan (山形市郷土館) hours + closure | not stated; card carried `closed_days: []` with no hour | y — `city.yamagata-yamagata.lg.jp/shisetsu/bunkasports/1008032/1005895.html` | **drifted → fixed** — 「午前9時～午後4時30分」, 休館日 「年末年始（12月29日～1月3日）」, 「平成21年4月1日より入館料が無料となりました。」 The empty `closed_days` is confirmed correct; the hours were missing (C21) |
+| Mogami Yoshiaki Historical Museum hours + Monday closure | "Free · closed Mondays", no hour | y — `mogamiyoshiaki.jp/?p=about` | **drifted → fixed** — 「午前9時から午後5時まで（ご入館は午後4時30分まで）」, 休館日 「月曜日（祝日の場合は翌日）」, 入館料 無料. The shipped Monday closure supports; the last-admission time it depended on was absent (C21). A first read of the same page mis-extracted 休館日 as 無休 — re-fetched and resolved to 月曜日 before anything shipped |
+| Kajo Park grounds hours (the figure that was standing in for the whole cluster) | "free and open year-round … open until 22:00" | y — `city.yamagata-yamagata.lg.jp/kurashi/koen/1006541/1006545/1015528.html` | supports with a seasonal bracket the guide flattened — 「5時00分から22時00分（4月1日～10月31日）5時30分から22時00分（11月1日～3月31日）」. 22:00 is correct for these dates; "open year-round" restated as the Apr 1–Oct 31 bracket (C21) |
+| Hanagasa Bus half-fare eligibility (R3 anchor, `facts.json`) | "¥500 for children/disabled companions" | y — `base4.html` | **drifted → fixed** — 「料金は大人1名（片道）、小人・障がい者：半額」: children and disabled PASSENGERS, not companions. Both surfaces restated (C22) |
+| Hanagasa Bus season + fare + payment rule (R3 anchor, `facts.json`) | Apr 1 – Oct 24 2026; ¥1,000 adult one-way, cash only | y — `base4.html` | supports — 「2026/4/1～2026/10/24」, 「運賃は現金精算のみのお取り扱いとなっております。（ICカード不可）」, 「大石田駅⇔銀山温泉　1,000円/500円」. Fifth independent confirmation; the fare figure and the `evidence` locator are unchanged |
+
+Also spot-checked, no guide change: `yamagata-sakaeyahonten.com` (listed in `09-sources.json` as a
+directly-fetched primary source) resolves to the shop's own site, 元祖冷しらーめん栄屋本店, publishing
+「〒990-0043　山形県山形市本町2-3-21」 — the same address the venue item carries.
+
+Not fetchable from this stage and therefore flagged rather than re-checked: the Yamagata→Ōishida JR Ōu
+Line fare (jreast.co.jp remains refused; no allowed domain publishes it), which is what a correction to
+the budget's local-transport line would need.
+
+#### Continuity sweep — critic execution
+
+**Sixth critic pass (fresh context, 2026-08-28) — greps run** across `src/content/guides/yamagata/`:
+`northbound` · `上り` · `14:55` · `companion` · `障がい` · `open until 22:00` · `22:00` · `year-round` ·
+`Otemon` · `Kyu-Saiseikan` · `Mogami` · `9:00-16:30|16:30` · `{{fact:` · `closed_days`. Every group file
+was also read end-to-end for the five scans — the missing arrival-day hours are an ABSENCE, which no grep
+can find.
+
+**Ripples found & fixed:**
+- `northbound` appeared on **two** surfaces (`05-transit.json` step 5 and `06-days.json` Day 4) — both
+  restated to Tokyo-bound in the same pass, with 上り retained beside it so the operator's own page stays
+  recognisable. Zero occurrences of "northbound" remain.
+- The half-fare wording appeared on **two** surfaces (`facts.json`'s `value` and `05-transit.json`
+  step 4) — both restated. The `{{fact:hanagasa-bus-fare-1000-yen}}` token in `06-days.json` Day 3 was
+  NOT touched and still resolves; it now renders the corrected value, which is the registry doing exactly
+  what SKILL.md put it there for — one edit, every mention.
+- The three arrival-day stops appear on **two** surface families (`06-days.json` Day 1 `pace` + `body`,
+  and three `07-sights.json` cards). All five leaves now carry the same hours, from the same three pages.
+  Kajo Park's kicker was the load-bearing one: *"Free · open until 22:00"* was the park's figure standing
+  in for the cluster, and it is the sentence a reader would have planned the afternoon from.
+- Checked whether C21's ≈15:30 lever collides with anything downstream: Day 3's morning is already free
+  and already in this same district (Bunshokan is a few minutes from Kajo Park), the Tokiwa dinner is
+  unmoved, and Day 1's `energy`/`env`/`tldr`/`constraints` all still describe the day correctly. No day
+  card, meal, booking or bus moves.
+- `closed_days` re-check after the hours audit: Kyu-Saiseikan's empty array is confirmed correct
+  (year-end only), Mogami Yoshiaki's `["mon"]` is confirmed correct, and neither collides with the
+  Tue/Wed/Thu/Fri trip. The Otemon Yagura's season (Apr 3 – Nov 2, 2026) contains the trip dates.
+- Source-URL check: no `source_url` was changed anywhere in this pass, so no evidence origin was dropped.
+  The two new citations ride inline `<a href>` (the Yagura page), and the Kyu-Saiseikan and Mogami cards
+  were already citing the pages that publish their hours — the fact was missing, not the source.
+- `provenance: "strict"` re-check: the one new `≈` (`≈15:30`) landed in a `days` item's `pace`, which is
+  not in the strict ≈-gate's `panel`/`prose`/`list`/`routes` section list, and the item carries
+  `source_url` + `verified_on` + `shelf_life` regardless. No `≈` was added to any gated section type.
+- Prose tag allowlist re-check on every edited body: `<p>`, `<b>`, `<i>`, `<a>` only.
+
+**Deferred to human:** the critic baseline gap in the artifact note above — five attempts now, and it
+needs a control-plane change, not a seventh attempt. **Flagged for a networked pass:** the day's last
+INBOUND Hanagasa Bus and one named target outbound departure for Day 3, read off `base4.html`'s 大石田駅
+column by something that can hold its columns; the Yamagata→Ōishida JR Ōu Line fare, which the budget's
+local-transport line needs and jreast.co.jp still refuses; and `yunokaori.com`'s gas-lamp bracket, still
+outside this stage's fetchable domains.
 
 **Deferred to human:** the critic baseline gap described in the artifact note above — unchanged from the
 fourth pass, and the one thing this stage cannot clear from inside itself. **Flagged for a networked
