@@ -94,6 +94,17 @@
       "createdAt": "2026-08-28T05:45:03.825Z",
       "status": "retired",
       "retiredAt": "2026-08-28T06:38:24.340Z"
+    },
+    {
+      "runId": "shimane-20260828-0f02a5",
+      "stage": "critic",
+      "attempt": 1,
+      "findings": [
+        "[pipeline-v2] CONTRACT FAILURE: schemaVersion \"undefined\" is not a valid V2 version tag (expected \"wp-critic-corrections/2.1\" or a compatible wp-critic-corrections/2.x). If this is a V1 artifact, read it through the V1 adapter — do not hand it to the V2 reader."
+      ],
+      "createdAt": "2026-08-28T07:05:40.835Z",
+      "status": "active",
+      "retiredAt": null
     }
   ]
 }
