@@ -207,7 +207,10 @@ jobs:
 
       - name: Resume or start the V2 research branch
         id: branch
-        run: node scripts/pipeline.mjs branch --slug "$SLUG" --prefix research-v2
+        # A resumed branch owns durable run artifacts, not the version of the control-plane code.
+        # Synchronize the dispatch checkout into it before init/budget/route, then push that head
+        # because every later stage runs in a fresh job and re-checks out the remote run branch.
+        run: node scripts/pipeline.mjs branch --slug "$SLUG" --prefix research-v2 --sync-current
 
       # issue is recorded durably at init (blank = inherit on a resume) so retries and
       # answer-redispatches never re-thread it. Landing intent is DERIVED, never typed, by the

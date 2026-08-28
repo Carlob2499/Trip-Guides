@@ -47,12 +47,26 @@ The independent Codex review accepted both repairs and authorized one bounded re
 - **Feedback repair PROVEN in durable state:** the attempt-5 failure was recorded by the repaired code — feedback.v2.json now carries all 5 findings as complete bounded per-issue lines, nothing amputated. (The full 42-pointer regeneration was also exercised locally against the real run artifacts: the repaired formatter yields 42 complete findings from the same inputs that previously collapsed to one truncated line.)
 - **Terminal state:** `failed`, resume=critic, attempts 10/10. The work order capped spend at 10/10, so no further attempt was taken. The run is 5 enum-value corrections away from re-entering leaf accounting, with complete actionable feedback stored for the next authorized attempt.
 
-## Current next action
+## Final addendum — critic attempt 6 and resume-version skew
 
-Defect #3 is already repaired; do not re-fix it. PR #109 should first complete review/merge disposition for the three bounded deterministic repairs and this evidence packet. The Yamagata run remains `failed`, `resume=critic`, at the authorized 10/10 attempt cap, with five complete actionable `source.kind` enum findings from critic attempt 5. Repair-to-green is unproven. Any further paid/live critic attempt requires separate owner authorization; do not start a new Run-B, rerun Pass A/B/Reconcile, weaken the contracts, or treat deterministic coverage as a live-success claim.
+After PR #109 merged, one final critic slot was deliberately authorized (10→11) to consume the five complete `source.kind` findings without another Fable/engineering pass.
+
+- **Critic attempt 6 fixed the five enum findings.** Its retained `critic-corrections.v2.json` uses contract-valid `operator` / `official` source kinds rather than the invalid `primary` value from attempt 5.
+- **The attempt still failed, but the failure does not exercise PR #109's repaired gate.** The V2 setup command resumed by checking out `research-v2/yamagata` wholesale. That branch still carried pre-#109 `scripts/pipeline/v2/evidence.mjs` (blob `78b2a8a8…`), while merged `main` carried the repaired per-location implementation (blob `112bef65…`). The retry therefore rolled its own control-plane code backward before validation and emitted the old joined/truncated contract failure.
+- **Root cause:** durable research branches were treated as owners of both run artifacts *and* pipeline implementation version. A resume must own the former only; current dispatch code must own the latter.
+- **Repair:** PR #110 adds a real-git regression and makes V2 resumes merge/push the current dispatch commit into an existing research branch before init/budget/route. Later fresh jobs therefore re-check out the synchronized control plane while retaining run artifacts.
+- **No additional paid retry is authorized by this repair.** Attempt 6's paid output is durably retained at `37b80b5`; the validation campaign has already exceeded its bounded repair budget.
+
+## Current adjudication / next action
+
+The repaired-class Run-B campaign is **closed without repair-to-green proof**. Treat the live result as **BLOCKED / NOT READY FOR V2 CUTOVER**, with the final attempt confounded by the now-repaired resume-versioning defect rather than by a new research-quality finding. Do not extend Yamagata again and do not start another Run-B as part of this repair cycle.
+
+After PR #110 merges, freeze this deterministic repair loop. V1 remains the production default. Any future V2 acceptance canary must be a separately authorized release-readiness action, not another continuation of this exhausted Run-B.
 
 ## Repository state
 
-- Repairs + this packet: branch `claude/pipeline-v2-run-b-validation-9faans` (PR to `main`, review-gated)
-- Run state: `research-v2/yamagata` at `dd39ba0`+, `failed`, resume=critic, 10/10 attempts; critic attempts 5; active feedback contains the five complete `corrections.8–12.source.kind` findings
-- `main` untouched; nothing merged; no publication; V1 remains production default
+- Deterministic repairs #1–#3: merged via PR #109 at `dbeb721`
+- Resume-versioning repair: PR #110, review-gated
+- Durable run: `research-v2/yamagata` at `8def6d3`+, `failed`, `resume=critic`, 11/11 total attempts; critic attempts 6
+- Critic attempt 6 retained output: `37b80b5`; five prior enum findings corrected
+- No publication; V1 remains production default

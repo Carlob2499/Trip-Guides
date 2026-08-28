@@ -174,14 +174,31 @@ export async function publishGuide(slug, { gatePassed = null, guidesDir = GUIDES
 // Resume the run's branch if a prior (cut-off) run created it, so the agent starts with the
 // committed partial progress in the working tree; otherwise start it fresh. Six lines of bash
 // that were copy-pasted into three workflows and had already drifted between them.
-export function startOrResumeBranch(name, { cwd = ROOT } = {}) {
+export function startOrResumeBranch(name, { cwd = ROOT, syncCurrent = false } = {}) {
   const git = (args, opts = {}) => execFileSync("git", args, { cwd, encoding: "utf8", ...opts });
+  // Capture the workflow's current code BEFORE a resume checks out the durable run branch.
+  // Without this, the research branch can silently roll the control plane back to whatever
+  // scripts existed when the run first started (Yamagata Run-B attempt 6, after PR #109).
+  const currentHead = syncCurrent ? git(["rev-parse", "HEAD"]).trim() : null;
   let exists;
   try { git(["ls-remote", "--exit-code", "--heads", "origin", name], { stdio: "pipe" }); exists = true; }
   catch { exists = false; }
   if (exists) {
     git(["fetch", "origin", name], { stdio: "inherit" });
     git(["checkout", name], { stdio: "inherit" });
+    if (syncCurrent) {
+      const before = git(["rev-parse", "HEAD"]).trim();
+      try {
+        git(["merge", "--no-edit", currentHead], { stdio: "inherit" });
+      } catch (err) {
+        try { git(["merge", "--abort"], { stdio: "ignore" }); } catch { /* no merge to abort */ }
+        throw err;
+      }
+      const after = git(["rev-parse", "HEAD"]).trim();
+      // Later V2 stages run in fresh jobs and re-check out this remote branch, so a local-only
+      // merge is insufficient. Push only when synchronization actually moved the branch.
+      if (after !== before) git(["push", "origin", `HEAD:${name}`], { stdio: "inherit" });
+    }
   } else {
     git(["checkout", "-b", name], { stdio: "inherit" });
   }
