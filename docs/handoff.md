@@ -25,6 +25,14 @@ Durable shared-add decisions live in `CONTEXT.md`; repaired-class Run-B evidence
 - Rejected records do not retry on every room join. No traveler-facing dead-letter management UI is included.
 - This contract applies only to collection additions, not `set`, `update`, or `remove`.
 
+## Stabilization status
+
+- S01 adversarial invalid-state testing: DONE from existing fail-closed regression coverage + PR #111 full Tests/coverage pass.
+- S05 blocked/bad-source behavior: DONE; search previews cannot masquerade as reads, mirrors/proxies are refused, blocked origins stay honestly typed, and R3+ transport requires fetched evidence.
+- S06 historical regression suite: DONE on PR #111 exact code head, including Tottori/Portugal/Luxembourg/Yamagata scars.
+- Remaining stabilization work is traveler-facing: S02 mobile critical path, S03 offline/poor-network critical path, and S04 manual accessibility/interaction confirmation.
+- Do not spend Claude/Fable on S01/S05/S06; those are closed deterministic work.
+
 ## Pipeline status preserved
 
 - Uruguay Canary #4 remains a GREEN draft product-path proof; it does not authorize production cutover.
