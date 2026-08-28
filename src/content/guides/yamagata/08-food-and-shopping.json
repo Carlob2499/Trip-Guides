@@ -17,7 +17,10 @@
         "how": "5 min walk from Yamagata Station",
         "price": "¥6,600/person lunch min, ¥9,900/person dinner min",
         "why": "Private room seats up to 14 — the trip's one confirmed group-size fit for a splurge dinner. Also bookable online via TableCheck.",
-        "map": { "lat": 38.2465, "lng": 140.334 },
+        "map": {
+          "lat": 38.2465,
+          "lng": 140.334
+        },
         "place_id": "__VERIFICATION_REQUIRED__",
         "source_url": "https://www.yonezawabeef.co.jp/yamagata.html",
         "verified_on": "2026-08-28",
@@ -31,7 +34,10 @@
         "book": "call",
         "how": "Inside the Beninokura complex, ≈10 min walk from Yamagata Station",
         "why": "The private storehouse room (蔵座敷) seats up to 30, comfortably fitting the group — pairs naturally with the Beninokura warehouse visit next door.",
-        "map": { "lat": 38.253, "lng": 140.334 },
+        "map": {
+          "lat": 38.253,
+          "lng": 140.334
+        },
         "place_id": "__VERIFICATION_REQUIRED__",
         "source_url": "https://beninokura.com/300bou",
         "verified_on": "2026-08-28",
@@ -44,7 +50,10 @@
         "how": "Short walk from Yamadera Station, near the mountain entrance",
         "why": "≈50 seats plus a 2nd-floor tatami room for 50+ — the best-corroborated capacity fit for a group of 8 near Yamadera, and known for group/tour-bus dining.",
         "crowd_tip": "Call ahead in koyo (foliage) season — this is a well-known tour-group stop and walk-in risk is real once the leaves turn.",
-        "map": { "lat": 38.311, "lng": 140.436 },
+        "map": {
+          "lat": 38.311,
+          "lng": 140.436
+        },
         "place_id": "__VERIFICATION_REQUIRED__",
         "source_url": "https://www.retty.me/",
         "verified_on": "2026-08-28",
@@ -57,7 +66,10 @@
         "book": "walk-in",
         "how": "1 min walk from Yamagata Station",
         "why": "Imoni (taro stew) served year-round in individual mini-hearth pots — thematically ideal, but private rooms seat only 4-6 (curtain-divided). Good for a casual/overflow meal, not the flagship group dinner.",
-        "map": { "lat": 38.2475, "lng": 140.3335 },
+        "map": {
+          "lat": 38.2475,
+          "lng": 140.3335
+        },
         "place_id": "__VERIFICATION_REQUIRED__",
         "source_url": "https://www.yamagata-da.com/cuisine/",
         "verified_on": "2026-08-28",
@@ -74,7 +86,12 @@
         "why": "A quick soba rest-stop for imoni-soba or itasoba on the way to or from the climb — no group-booking policy is posted, so treat it as an informal option rather than a reserved group meal.",
         "source_url": "https://www.visityamagata.jp/spot-yamagatashi-oyasumidokorotaimenseki/",
         "verified_on": "2026-08-28",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 38.3113512,
+          "lng": 140.4348892
+        },
+        "place_id": "ChIJTc2gde_Oi18RuinqtuHgonw"
       },
       {
         "name": "Izu no Hana",
@@ -86,7 +103,12 @@
         "why": "A soba-and-dessert stop inside the onsen village itself — call ahead for a table of 8, since the shop takes domestic group bookings only when its own capacity allows and does not accept overseas tour-operator bookings.",
         "source_url": "https://www.izunohana.com/",
         "verified_on": "2026-08-28",
-        "shelf_life": "hours"
+        "shelf_life": "hours",
+        "map": {
+          "lat": 38.56981,
+          "lng": 140.530562
+        },
+        "place_id": "ChIJUc04x9pdiV8RKhg8j6dcHHY"
       },
       {
         "name": "Sakaeya Honten",

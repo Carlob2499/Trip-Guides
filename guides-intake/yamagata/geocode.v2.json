@@ -1,0 +1,23 @@
+{
+  "slug": "yamagata",
+  "attemptedAt": "2026-08-28T11:18:54.467Z",
+  "applied": true,
+  "pending": 3,
+  "resolved": [
+    {
+      "name": "Taimenseki",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Izu no Hana",
+      "file": "08-food-and-shopping.json"
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "Sakaeya Honten",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Sakaeya Honten\", Places returned \"Sakaeya ramen\""
+    }
+  ]
+}
