@@ -1048,11 +1048,11 @@ jobs:
           #
           # Retaining the GUIDE edits is safe only because the gate no longer diffs against this
           # working tree: reconcile-critic-truth reads its pre-critic baseline out of the commit
-          # the critic stage started from (run.v2.json's `reconcile` stage commit), so the next
-          # attempt still compares the sandbox against the ORIGINAL guide. A retained edit can
-          # never satisfy the gate by being compared against itself, and a rejected handoff stays
-          # repairable without regenerating the guide work. Scope unchanged: the critic's own
-          # allowed paths — guide dir, ledger, patterns fragment — nothing wider.
+          # PINNED ON THE CRITIC STAGE ITSELF (run.v2.json stages.critic.baseline), so the next
+          # attempt still compares against the ORIGINAL guide. A retained edit can never satisfy
+          # the gate by being compared against itself, and a rejected handoff stays repairable
+          # without regenerating the guide work. Scope unchanged: the critic's own allowed paths
+          # — guide dir, ledger, patterns fragment — nothing wider.
           retain_critic_output() {
             rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/" || return 1
             cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md" || return 1

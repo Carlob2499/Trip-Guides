@@ -478,25 +478,17 @@ export async function finalizeMergedLanding(slug, { pr, mergedAt = new Date().to
   return save(touch(state, now), intakeDir);
 }
 
-/** The routed-outcome marker, written into the failure detail rather than a new state field.
-    The critic job's generic tail (record-agent-failure, fail-stage, escalate) runs on ANY
-    failure() and must not relabel an outcome the routed path already handled — the critic is
-    deliberately left `queued`, so the usual "already failed, do not overwrite" guard does not
-    catch it and a coarse process-plane `unknown` would land on a stage that did not fail. */
-export const EVIDENCE_OWNER_ROUTE = "routed:evidence-owner";
+/** True while the critic is QUEUED FOR A DETERMINISTIC REPLAY of its retained pass.
 
-/** True while the critic's next dispatch must revalidate retained work instead of running the
-    model. Unlike isRoutedToEvidenceOwner this OUTLIVES the repair: by the time the critic job
-    runs, reconcile is complete again and the routed failure it carried is gone. */
+    One fact, three readers, and they all see the critic before it starts: begin-stage decides
+    not to invoke the model, and the job's generic failure tail (record-agent-failure, fail-stage)
+    stands down because the critic did not fail — it is deliberately queued, so the usual
+    "already failed, do not overwrite" guard does not catch it and a coarse process-plane
+    `unknown` would land on a stage that is mid-repair. Once the replay is running, a genuine
+    failure is the stage's own again and records normally. */
 export function isCriticReplay(state) {
-  return Boolean(state?.stages?.critic?.replay);
-}
-
-/** True once a critic-truth failure has been routed to the evidence owner and not yet repaired. */
-export function isRoutedToEvidenceOwner(state) {
-  return Boolean(state?.stages?.reconcile?.status === "failed" &&
-    state.stages.reconcile.failure?.detail?.startsWith(EVIDENCE_OWNER_ROUTE) &&
-    state.stages?.critic?.status === "queued");
+  const critic = state?.stages?.critic;
+  return Boolean(critic?.replay && critic.status === "queued");
 }
 
 /** ROUTE a critic-truth failure the critic has no authority to fix to the stage that does.
@@ -517,7 +509,7 @@ export async function routeToEvidenceOwner(slug, { detail = "", now = new Date()
   reconcile.status = "failed";
   reconcile.endedAt = now;
   reconcile.commit = null; // its completion no longer describes an accepted artifact
-  reconcile.failure = { class: "gate-failure", detail: `${EVIDENCE_OWNER_ROUTE} ${detail}`, at: now };
+  reconcile.failure = { class: "gate-failure", detail, at: now };
   critic.status = "queued";
   // The retained pass is REVALIDATED, not re-run: routing only re-queues the critic, so without
   // this the ordinary critic job would follow the owner's repair and spend the paid model again,
@@ -531,7 +523,7 @@ export async function routeToEvidenceOwner(slug, { detail = "", now = new Date()
   // critic.baseline is deliberately KEPT — the repaired attempt owes a diff against the tree the
   // critic was originally handed, not against its own retained edits now sitting in the branch.
   state.status = "failed";
-  state.failure = { class: "gate-failure", detail: `${EVIDENCE_OWNER_ROUTE} ${detail}`, at: now };
+  state.failure = { class: "gate-failure", detail, at: now };
   // AUTONOMOUS, so the human-answer grant does not apply: this route must not turn the ordinary
   // cap into a renewable one. The whole round trip is ONE dispatch — setup resumes at reconcile
   // and runs reconcile → critic in the same workflow run — so it needs at most one attempt of

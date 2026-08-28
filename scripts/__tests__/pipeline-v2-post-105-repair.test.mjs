@@ -30,7 +30,7 @@ import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
 import { requireCriticBaseline } from "../pipeline-v2.mjs";
 import {
   initRunV2, readRunStateV2, stageStart, stageComplete, stageFail, reopenForAnswers, routeToEvidenceOwner,
-  isRoutedToEvidenceOwner, isCriticReplay,
+  isCriticReplay,
 } from "../pipeline/v2/run-state.mjs";
 import { retryEligibility } from "../pipeline/v2/recovery.mjs";
 import {
@@ -585,8 +585,7 @@ describe("R-A — a completed stage records the tree it handed on, and an unfixa
     expect(state.stages.critic.attempts).toBe(1);
     // …and the outcome is MARKED, so the job's generic failure tail can tell it apart from an
     // ordinary critic failure and leave it alone.
-    expect(isRoutedToEvidenceOwner(state)).toBe(true);
-    expect(state.stages.reconcile.failure.detail).toMatch(/^routed:evidence-owner /);
+    expect(isCriticReplay(state)).toBe(true);
     // And the routed failure is auto-retryable at the stage that can actually fix it.
     expect(retryEligibility(state, { stage: "reconcile", findings: ["declare the relation"] }).allowed).toBe(true);
     // The cap is not turned into a renewable autonomous budget: the round trip is ONE dispatch.
@@ -599,11 +598,11 @@ describe("R-A — a completed stage records the tree it handed on, and an unfixa
     await runThroughReconcile();
     await stageStart("tottori", "critic", { ...opts(), baseline: SHA(7) });
     let state = await readRunStateV2("tottori", opts());
-    expect(isRoutedToEvidenceOwner(state)).toBe(false);
+    expect(isCriticReplay(state)).toBe(false);
     state = await stageFail("tottori", "critic", { ...opts(), failureClass: "agent-failure", detail: "the agent died" });
     expect(state.stages.critic.status).toBe("failed");
     expect(state.stages.critic.failure.class).toBe("agent-failure");
-    expect(isRoutedToEvidenceOwner(state)).toBe(false);
+    expect(isCriticReplay(state)).toBe(false);
     expect(retryEligibility(state, { stage: "critic", findings: [] }).allowed).toBe(false); // agent-failure is not auto-retryable
   });
 
@@ -634,7 +633,7 @@ describe("R-A — a completed stage records the tree it handed on, and an unfixa
     await stageStart("tottori", "reconcile", { ...opts(), baseline: SHA(9) });
     await stageComplete("tottori", "reconcile", { ...opts(), commit: SHA(9) });
     state = await readRunStateV2("tottori", opts());
-    expect(isRoutedToEvidenceOwner(state)).toBe(false);     // the routed failure is repaired…
+    expect(state.stages.reconcile.status).toBe("complete"); // the routed failure is repaired…
     expect(isCriticReplay(state)).toBe(true);               // …but the replay decision persists
 
     // The replay dispatch spends no model attempt and scars no history.
