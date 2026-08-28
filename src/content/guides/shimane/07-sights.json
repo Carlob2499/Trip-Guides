@@ -9,7 +9,7 @@
       {
         "name": "Matsue Castle",
         "kicker": "One of Japan's twelve original castle keeps",
-        "body": "<p>Built in 1611 and never rebuilt — the black-timbered keep is original, not a postwar concrete replica like most \"castles\" travelers see in Japan. Climb the narrow original staircases inside for a Lake Shinji view from the top.</p><p>Admission {{fact:matsue-castle-tenshu-1200-yen}} (adult, individual rate — prices rose from ¥800 on Jul 1 2026, funding restoration work; a generic guide still quoting the old figure is out of date). Open 8:30–17:00 October–March, last entry 16:30, no closure days.</p>",
+        "body": "<p>Built in 1611 and never rebuilt — the black-timbered keep is original, not a postwar concrete replica like most \"castles\" travelers see in Japan. Climb the narrow original staircases inside for a Lake Shinji view from the top.</p><p>Admission {{fact:matsue-castle-tenshu-1200-yen}} (adult, individual rate — prices rose from ¥800 on Jul 1 2026, funding restoration work; a generic guide still quoting the old figure is out of date). Open 8:30–17:00 October–March, last entry 16:30, no closure days.</p><p>Busiest roughly 10am–3pm, when tour buses cluster and the donjon staircase gets genuinely congested; arriving right at opening or from ~16:30 is noticeably calmer, per multiple local visitor accounts.</p>",
         "img": {
           "file": "Matsue Castle-4a.jpg",
           "alt": "The black-timbered keep of Matsue Castle seen from below",
@@ -57,6 +57,15 @@
         "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
         "verified_on": "2026-08-28",
         "shelf_life": "venue"
+      },
+      {
+        "name": "Tanabe Museum of Art",
+        "kicker": "A quiet detour inside Shiomi Nawate — same block as the castle, none of the crowd",
+        "body": "<p>Tucked inside Shiomi Nawate next to the Lafcadio Hearn Old Residence, entered through an unassuming long-gate — a lower-profile stop than the castle or the main tourist street despite sitting on the same block. Worth folding into the Day 1 walk at no extra transit cost.</p><p>⚠ Hours (commonly cited as 9:00–17:00, ¥700 adult, closed Mondays) come from a secondary reference, not a direct fetch of the museum's own page this pass — reconfirm before building a visit around them.</p>",
+        "dwell_min": 45,
+        "source_url": "https://www.tanabe-museum.or.jp/profile/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
       }
     ]
   },
@@ -93,6 +102,13 @@
         "correction": "Wednesday is the region's default closure day for small heritage-tourism operators: the Ginzan Cart, the 240-year-old Arakiya soba house at Izumo Taisha, and Gungendo's Omori café are all closed. None of this is obvious from a single venue's own page — it only shows up by checking each one.",
         "category": "missing-context",
         "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "claim": "\"Best Matsue food\" lists routinely put Kawakyo, a Shinjiko-shichin restaurant, near the top without mentioning capacity.",
+        "correction": "Two independent firsthand accounts confirm Kawakyo seats only at an 8–10 seat counter, typically booked out roughly a month ahead — it can't seat a group of 8 as one party. Matsu-no-Daidokoro Konekkoya's documented 24-seat room is the one that actually fits this trip; Kawakyo is worth the detour if the group ever splits into a smaller subset.",
+        "category": "missing-context",
+        "source_url": "https://jimohack.shimane.jp/matsue/21201/",
         "verified_on": "2026-08-28"
       }
     ]

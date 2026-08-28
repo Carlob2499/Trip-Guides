@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "shimane",
+  "runId": "shimane-20260828-0f02a5",
+  "asks": [
+    {
+      "id": "anchor",
+      "ask": "At least one consequential public-transport transfer whose PHYSICAL feasibility matters beyond timetable arithmetic; missing that connection/service must create a meaningful delay, last-return risk, or exertion consequence.",
+      "status": "covered",
+      "where": [
+        "05-transit.json#key-transit-routes",
+        "05-transit.json#iwami-ginzan-omori-townscape",
+        "06-days.json#transfer-to-omori-iwami-ginzan",
+        "07-sights.json#iwami-ginzan-omori-townscape-ryugenji-mabu-mine"
+      ],
+      "evidenceIds": [
+        "ev-ginzan-cart-capacity",
+        "ev-ginzan-cart-no-reservation",
+        "ev-ginzan-cart-closed-wed",
+        "ev-last-train-odashi-matsue",
+        "ev-iwami-ginzan-mobility",
+        "ev-iwami-ginzan-bus-limited"
+      ],
+      "reason": null
+    },
+    {
+      "id": "cities",
+      "ask": "Shimane (regional — specific towns and bases must be earned by research, none pre-selected).",
+      "status": "covered",
+      "where": [
+        "01-plan.json#when-you-land",
+        "06-days.json#day-by-day",
+        "05-transit.json#orientation-map"
+      ],
+      "evidenceIds": [
+        "ev-izumo-airport-bus",
+        "ev-jr-matsue-odashi-time-fare"
+      ],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "2026-10-20 – 2026-10-23.",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "01-plan.json#weather-for-your-dates"
+      ],
+      "evidenceIds": [
+        "ev-matsue-oct-climate-normal",
+        "ev-kamiari-2026-dates",
+        "ev-matsue-castle-koyo-after-trip"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Culture / history.",
+      "status": "covered",
+      "where": [
+        "07-sights.json#top-sights",
+        "07-sights.json#matsue-castle",
+        "07-sights.json#izumo-taisha",
+        "07-sights.json#iwami-ginzan-omori-townscape-ryugenji-mabu-mine",
+        "06-days.json#izumo-taisha"
+      ],
+      "evidenceIds": [
+        "ev-matsue-castle-original-keep",
+        "ev-izumo-taisha-four-claps",
+        "ev-adachi-museum-access",
+        "ev-shiomi-nawate-character",
+        "ev-tanabe-museum-location"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-2",
+      "ask": "Food & dining.",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "08-food-and-shopping.json#tanakaya",
+        "08-food-and-shopping.json#arakiya",
+        "08-food-and-shopping.json#yakumoan",
+        "08-food-and-shopping.json#matsu-no-daidokoro-konekkoya"
+      ],
+      "evidenceIds": [
+        "ev-tanakaya-hours-closed",
+        "ev-arakiya-hours-closed-price",
+        "ev-yakumoan-hours",
+        "ev-konekkoya-capacity",
+        "ev-nekkoya-exact-8-room",
+        "ev-kawakyo-counter-size-1"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travel-style",
+      "ask": "off-the-beaten-path — drives Pass B's aggressiveness on crowd-avoidance + novel picks.",
+      "status": "covered",
+      "where": [
+        "07-sights.json#what-generic-guides-get-wrong",
+        "07-sights.json#top-sights"
+      ],
+      "evidenceIds": [
+        "ev-matsue-castle-crowd-window-1",
+        "ev-matsue-castle-crowd-window-2",
+        "ev-shiomi-nawate-character",
+        "ev-tanabe-museum-location",
+        "ev-kawakyo-counter-size-1"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "8.",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs",
+        "08-food-and-shopping.json#matsu-no-daidokoro-konekkoya",
+        "01-plan.json#booking-checklist"
+      ],
+      "evidenceIds": [
+        "ev-konekkoya-capacity",
+        "ev-nekkoya-exact-8-room",
+        "ev-takyo-abeke-capacity"
+      ],
+      "reason": null
+    },
+    {
+      "id": "constraints",
+      "ask": "BINDING mobility: 2 of the 8 travelers have low walking tolerance. Luggage carried on the trip's main regional transfer between bases. Driving: assume no rental car unless research concludes a non-car plan becomes materially worse or unrealistic.",
+      "status": "covered",
+      "where": [
+        "03-health-and-safety.json#health-pharmacy",
+        "05-transit.json#key-transit-routes",
+        "06-days.json#transfer-to-omori-iwami-ginzan"
+      ],
+      "evidenceIds": [
+        "ev-matsue-lake-line-bus",
+        "ev-iwami-ginzan-mobility",
+        "ev-ginzan-cart-walk-time",
+        "ev-takyo-abeke-capacity"
+      ],
+      "reason": null
+    },
+    {
+      "id": "comments",
+      "ask": "Fresh repaired-class Run B validation trial context; frozen intent bullets (1)-(8): local character over checklist tourism, thin-English-coverage honesty, native-language research must change a decision, a consequential transport transfer, meaningful missed-connection consequence, group size/mobility changing recommendations (not generic prose), evidence-based taxi/private transport, and an actual party-of-8 feasibility decision for a meal/venue.",
+      "status": "covered",
+      "where": [
+        "09-sources.json#sources-further-reading",
+        "05-transit.json#key-transit-routes",
+        "08-food-and-shopping.json#matsu-no-daidokoro-konekkoya"
+      ],
+      "evidenceIds": [
+        "ev-izumo-taisha-kamiari-timing",
+        "ev-kawakyo-counter-size-1",
+        "ev-konekkoya-capacity",
+        "ev-nekkoya-exact-8-room",
+        "ev-last-train-odashi-matsue"
+      ],
+      "reason": null
+    }
+  ]
+}

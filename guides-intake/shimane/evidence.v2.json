@@ -50,7 +50,7 @@
       "priority": "culture-history",
       "status": "rejected",
       "shortlisted": true,
-      "reason": "World-famous garden museum near Yasugi, but a ≈35-47 min each-way detour that doesn't fit alongside Izumo Taisha + Iwami Ginzan in 4 days; also the most generic top-10 pick in every Shimane guide, cutting against the trip's off-the-beaten-path style.",
+      "reason": "World-famous garden museum near Yasugi, but a ≈35-47 min each-way detour that doesn't fit alongside Izumo Taisha + Iwami Ginzan in 4 days; also the most generic top-10 pick in every Shimane guide, cutting against the trip's off-the-beaten-path style. CONFLICT at reconcile: Pass B independently marked this candidate shipped, with no stated itinerary-fit reasoning (reason: null). Resolved to REJECTED for this trip — Pass A's schedule-fit analysis (no open slot in the fixed 4-day, 2-base plan without cutting Izumo Taisha or Iwami Ginzan) was never addressed or rebutted by Pass B. Pass B's crowd-timing finding (calmest right at the 9:00 opening, before roughly 10am and 1pm tour-bus waves) is retained as evidence for a future Yasugi-focused trip. See disagreement d-adachi-ship-vs-reject.",
       "worth": null
     },
     {
@@ -60,7 +60,7 @@
       "priority": "culture-history",
       "status": "rejected",
       "shortlisted": false,
-      "reason": "Reachable only via a long backtrack south/west of the Omori loop this trip already commits to; would cost a full extra transfer day this itinerary doesn't have.",
+      "reason": "Reachable only via a long backtrack south/west of the Omori loop this trip already commits to; would cost a full extra transfer day this itinerary doesn't have. Pass B independently surfaced Tsuwano as a genuine culture+food day trip (uzumemeshi, a preserved castle town) but explicitly deferred the shipped/rejected call to reconcile rather than asserting inclusion (\"flagged for reconcile ... rather than decided here\"). Reconciled to REJECTED on the same schedule-fit grounds Pass A found — a strong pick for a future, less time-constrained Shimane/Yamaguchi trip.",
       "worth": null
     },
     {
@@ -70,7 +70,7 @@
       "priority": "anchor-transport",
       "status": "rejected",
       "shortlisted": true,
-      "reason": "Real fragile-transport (Shichirui/Sakaiminato port, ≈2.5hr slow ferry or ≈1hr high-speed, weather-cancellable) but doing the islands properly costs 1.5-2 days round trip, forcing a cut of either Izumo Taisha or Iwami Ginzan from a 4-day trip. Worth a future island-focused trip.",
+      "reason": "Real fragile-transport (Shichirui/Sakaiminato port, ≈2.5hr slow ferry or ≈1hr high-speed, weather-cancellable) but doing the islands properly costs 1.5-2 days round trip, forcing a cut of either Izumo Taisha or Iwami Ginzan from a 4-day trip. Worth a future island-focused trip. See also c-oki-islands-day-trip — Pass B's separate day-trip framing of the same islands.",
       "worth": null
     },
     {
@@ -148,10 +148,10 @@
       "name": "Kawakyo",
       "branch": null,
       "priority": "food-dining",
-      "status": "rejected",
-      "shortlisted": false,
-      "reason": "\"Often fully booked\" per multiple secondary sources, and no confirmed group-of-8 capacity found — Konekkoya's documented 24-seat zashiki made it the safer pick for this party size.",
-      "worth": null
+      "status": "detour",
+      "shortlisted": true,
+      "reason": "Two independent firsthand sources (a local Matsue food/lifestyle site and a Hot Pepper diner review) confirm Kawakyo seats only at an 8-10 seat counter, typically booked out roughly a month ahead — it cannot seat this trip's full party of 8 as a single group booking. This supersedes Pass A's earlier, more general \"often fully booked\" assessment (secondary sources only) with a documented capacity constraint. Matsu-no-Daidokoro Konekkoya's confirmed 24-seat room remains the shipped pick for the full group; Kawakyo is worth the detour for a smaller subset (2-4) wanting the counter experience, ideally booked about a month out.",
+      "worth": "worth-the-detour"
     },
     {
       "id": "c-terezuko",
@@ -172,6 +172,86 @@
       "shortlisted": false,
       "reason": "Solid single-dish (shijimi kamameshi) pick but no group-booking information found; Konekkoya already covers the shijimi/shichin niche with documented group capacity.",
       "worth": null
+    },
+    {
+      "id": "c-heiwa-soba-honten",
+      "name": "Heiwa Soba Honten",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "popular with locals, ~10 min walk from the shrine with its own parking, but also draws frequent lines — kept as a backup, not the lead pick",
+      "worth": null
+    },
+    {
+      "id": "c-kizuki",
+      "name": "Kizuki",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "stone-mills its own domestic buckwheat and hand-makes noodles daily; only a single local-editorial source found within budget (no second independent corroboration), so held at shortlisted rather than shipped",
+      "worth": null
+    },
+    {
+      "id": "c-shiomi-nawate",
+      "name": "Shiomi Nawate",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-tanabe-museum-of-art",
+      "name": "Tanabe Museum of Art",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-nekkoya",
+      "name": "Nekkoya",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "sister restaurant to Konekkoya with an exact-fit, fully private 8-person room — a strong alternative if the group wants total separation, but its menu is general Shimane izakaya fare rather than the lake-view Shinjiko-shichimi theme that fits the food priority better",
+      "worth": null
+    },
+    {
+      "id": "c-yamaichi",
+      "name": "Yamaichi",
+      "branch": null,
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "has private rooms (個室あり) and serves Lake Shinji specialties, but its maximum private-room party size for a group of 8 could not be confirmed from an official source within this pass, while Konekkoya's capacity is confirmed",
+      "worth": null
+    },
+    {
+      "id": "c-yuushien-garden",
+      "name": "Yuushien Garden",
+      "branch": null,
+      "priority": "culture",
+      "status": "detour",
+      "shortlisted": true,
+      "reason": "not a substitute for Adachi's borrowed-scenery 'living painting' design philosophy — Yuushien is a peony/seasonal-event garden (illuminations, flower displays), a genuinely different genre; good on its own terms, and shares Adachi's fixed-schedule problem (near Yasugi, no slot in this trip's 4 days)",
+      "worth": "worth-the-detour"
+    },
+    {
+      "id": "c-oki-islands-day-trip",
+      "name": "Oki Islands Day Trip",
+      "branch": null,
+      "priority": "culture",
+      "status": "detour",
+      "shortlisted": true,
+      "reason": "physically possible as a day trip (~70 min each way via the Rainbow Jet high-speed boat), but it consumes a full day of a 4-day, culture/food-priority trip and leans nature/geopark rather than culture/history; the operator's own guidance confirms rough-weather sailings can be rerouted or cancelled, a real stranding risk for a mobility-constrained group of 8 with no slack day built into the itinerary. Distinct from c-oki-islands-ferry (Pass A's anchor-transport framing of the same islands).",
+      "worth": "worth-the-detour"
     }
   ],
   "evidence": [
@@ -1082,6 +1162,550 @@
         "shelfLife": "default",
         "recheckOn": "2026-10-10"
       }
+    },
+    {
+      "id": "ev-izumo-taisha-kamiari-timing",
+      "candidateId": "c-izumo-taisha",
+      "claim": "Kamiarizuki (the shrine's lunar-calendar 'month when the gods are present') and the Kamiari-sai rites have fallen entirely within November-December in recent years (2025: Nov 20-Dec 19, per the official Izumo Tourism Association). No official 2026 dates were posted as of this research, but the pattern makes an overlap with the Oct 20-23 trip window very unlikely -- this trip does NOT land in the crowded 'gods gathering' season, contrary to a common assumption about visiting Izumo Taisha in October.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://izumo-kankou.gr.jp/topics/11618",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "izumo-kankou",
+        "independent": null,
+        "appliesToYears": [
+          2025
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-matsue-castle-crowd-window-1",
+      "candidateId": "c-matsue-castle",
+      "claim": "Matsue Castle's busiest hours run roughly 10am-3pm (tour buses and day-trippers cluster then, with the donjon staircase congested); arriving in early morning (8:30-9:30) or from ~4:30pm is noticeably calmer.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://kon-checker.com/matsue-castle-crowd-conditions/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-11-29",
+        "family": "konchecker",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-matsue-castle-crowd-window-2",
+      "candidateId": "c-matsue-castle",
+      "claim": "Matsue Castle's busiest hours run roughly 10am-3pm (tour buses and day-trippers cluster then, with the donjon staircase congested); arriving in early morning (8:30-9:30) or from ~4:30pm is noticeably calmer.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://banzokubiology.com/matsuejo-koyo-konzatsu/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-06-07",
+        "family": "banzokubiology",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-matsue-castle-koyo-after-trip",
+      "candidateId": "c-matsue-castle",
+      "claim": "Peak autumn foliage color at Matsue Castle's Johzan Park typically runs mid-to-late November -- after the Oct 20-23 trip window, so the trip lands in a shoulder period, before both the koyo crowds and Kamiarizuki.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://weathernews.jp/koyo/spot/26830/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "weathernews",
+        "independent": null,
+        "appliesToYears": [
+          2025
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-matsue-lake-line-bus",
+      "candidateId": "c-matsue-castle",
+      "claim": "The 'Matsue Lake Line' loop bus runs about every 30 min (full loop ~50 min), Y250/ride or Y700 all-day pass, and covers Matsue Station, Matsue Castle, the Horikawa boat dock, Shiomi Nawate, and Matsue Shinjiko Onsen -- avoids long walks between the day's stops for the 2 low-mobility travelers.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.kankou-shimane.com/experience/72409",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kankou-shimane",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-shiomi-nawate-character",
+      "candidateId": "c-shiomi-nawate",
+      "claim": "Shiomi Nawate is a ~500m preserved samurai-residence street protected as Matsue's 'traditional beauty district' since 1973, reachable by a 15-min bus from JR Matsue Station -- a walkable, low-key counterpoint to the castle itself.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.kankou-shimane.com/destination/20454",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kankou-shimane",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-tanabe-museum-location",
+      "candidateId": "c-tanabe-museum-of-art",
+      "claim": "Tanabe Museum of Art sits inside Shiomi Nawate, adjacent to the Lafcadio Hearn Old Residence, entered through an unassuming long-gate -- a lower-profile setting than the castle or the main tourist street, despite being on the same block.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.tanabe-museum.or.jp/profile/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "tanabe-museum",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-tanabe-museum-hours-unconfirmed",
+      "candidateId": "c-tanabe-museum-of-art",
+      "claim": "Reported hours 9:00-17:00, Y700 adult admission, closed Mondays -- sourced only from a secondary reference, not fetched from the museum's own hours page in this pass. Reconfirm before relying on it.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://ja.wikipedia.org/wiki/%E7%94%B0%E9%83%A8%E7%BE%8E%E8%A1%93%E9%A4%A8",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "wikipedia-ja",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-izumo-soba-kizuki",
+      "candidateId": "c-kizuki",
+      "claim": "Kizuki, about 3 minutes' walk from Izumo Taisha's main torii, stone-mills its own domestic buckwheat and hand-makes noodles fresh daily.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://na-na.media/izumosoba_4senn/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "na-na",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-izumo-soba-tanakaya",
+      "candidateId": "c-tanakaya",
+      "claim": "Tanakaya, directly across from Izumo Taisha's main entrance, is a locally popular tri-colored wariko-soba specialist that regularly draws weekday queues.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://na-na.media/izumosoba_4senn/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "na-na",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-izumo-soba-heiwa",
+      "candidateId": "c-heiwa-soba-honten",
+      "claim": "Heiwa Soba Honten, about a 10-minute walk from Izumo Taisha with its own parking, is a popular locally-loved shop known for frequent lines even on weekdays.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://na-na.media/izumosoba_4senn/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "na-na",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-kawakyo-counter-size-1",
+      "candidateId": "c-kawakyo",
+      "claim": "Kawakyo seats only at a counter, with no tables -- multiple independent diner/guide accounts describe an 8-10 seat counter that is typically booked out roughly a month ahead, making an 8-person group booking impractical as a single party.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://jimohack.shimane.jp/matsue/21201/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "jimohack",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-kawakyo-counter-size-2",
+      "candidateId": "c-kawakyo",
+      "claim": "Kawakyo seats only at a counter, with no tables -- multiple independent diner/guide accounts describe an 8-10 seat counter that is typically booked out roughly a month ahead, making an 8-person group booking impractical as a single party.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.hotpepper.jp/strJ000111237/report/detail_rn20241026D00002/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2024-10-26",
+        "family": "hotpepper",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-konekkoya-private-room",
+      "candidateId": "c-matsu-no-daidokoro-konekkoya",
+      "claim": "Konekkoya (at the Shinjiko Shijimi-kan, 2F) has a private space seating up to 24 and serves Lake Shinji shijimi and other Shimane specialties -- a party of 8 fits comfortably, and it is on-theme for the Shinjiko-shichimi food priority (lake view, shijimi-focused menu).",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.nekko-group.com/konekko_ya/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "nekko-group",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nekkoya-exact-8-room",
+      "candidateId": "c-nekkoya",
+      "claim": "Nekkoya (Isemiya-cho) has a completely private room (kanzen kojitsu) seating exactly up to 8 -- an exact-fit alternative if the group wants total separation, though its menu is general Shimane izakaya fare rather than the lake-view shichimi specialty.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.nekko-group.com/nekko_ya/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "nekko-group",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-adachi-crowd-timing",
+      "candidateId": "c-adachi-museum-of-art",
+      "claim": "Adachi Museum of Art is calmest right at the 9:00 opening; tour-bus arrivals build within about an hour, with crowding particularly around 10am and again around 1pm.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://yasugibiyori-yasugitcho.com/less_crowded_times_at_adachi_museum/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-08-23",
+        "family": "yasugibiyori",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-adachi-crowd-timing-2",
+      "candidateId": "c-adachi-museum-of-art",
+      "claim": "Adachi Museum of Art is calmest right at the 9:00 opening; tour-bus arrivals build within about an hour, with crowding particularly around 10am and again around 1pm.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://myvacation.jp/adachi-museum-of-art/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-03-02",
+        "family": "myvacation",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-yuushien-garden-profile",
+      "candidateId": "c-yuushien-garden",
+      "claim": "Yuushien (Daikonshima) is a ~40,000 sqm pond-style landscape garden, not an Adachi-style 'living painting' -- its identity centers on seasonal event programming (peony displays, summer mist, the region's largest autumn/winter illumination); open 9:30-17:00 (last entry 16:30), Y1,000-1,800 adult.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.kankou-shimane.com/destination/20284",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kankou-shimane",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-11-01"
+      }
+    },
+    {
+      "id": "ev-iwami-ginzan-mobility",
+      "candidateId": "c-iwami-ginzan-omori-ryugenji-mabu",
+      "claim": "Cars/taxis reach only the Iwami Ginzan Park visitor center; beyond that it is a ~45-min walk one-way to the Ryugenji mine shaft, or a rental e-bike (Y700/2hr) from Daikansho Plaza, or a 6-seat 'Ginzan Cart' (Y500 one-way to the mine). The cart is the only officially confirmed mobility workaround for the 2 low-walking-tolerance travelers, and one cart does not cover a party of 8 in a single trip.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/q_a/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "ginzan-wm",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-iwami-ginzan-bus-limited",
+      "candidateId": "c-iwami-ginzan-omori-ryugenji-mabu",
+      "claim": "Local bus service (Ishimi Kotsu) from JR Ota-shi Station to Omori/Iwami Ginzan runs on limited frequency -- the operator's own traffic-info page and multiple secondary sources advise checking the round-trip timetable in advance and allowing at least half a day for the site; a taxi stand at Ota-shi Station (Fuji Daiichi Kotsu) is the fallback if a bus is missed. Exact daily bus count could not be confirmed from a live timetable within this pass.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/traffic_info/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "ginzan-wm",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-oki-ferry-crossing-times",
+      "candidateId": "c-oki-islands-day-trip",
+      "claim": "Crossing the Shimane mainland <-> Oki (Saigo) takes ~1 hour by the Rainbow Jet high-speed boat or ~2.5 hours by the regular ferry; a day trip is physically possible via the high-speed boat.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.oki-kisen.co.jp/first/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oki-kisen",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-oki-ferry-weather-risk",
+      "candidateId": "c-oki-islands-day-trip",
+      "claim": "Oki Kisen's own guidance states that in bad weather, departure/arrival locations may change or ports may become inaccessible; the high-speed boat requires seatbelts and the operator recommends seasickness medication in advance. A cancelled or rerouted last sailing has no same-day alternative back to the mainland.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.oki-kisen.co.jp/first/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oki-kisen",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-oki-ferry-prefecture-context",
+      "candidateId": "c-oki-islands-day-trip",
+      "claim": "Shimane Prefecture's own transport page frames stable year-round ferry operation as an ongoing goal rather than a guarantee, without disclosing concrete cancellation-rate figures -- consistent with the operator's own weather caveat.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.pref.shimane.lg.jp/tourism/access/access/ritokoro/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "pref-shimane",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-tsuwano-uzumemeshi",
+      "candidateId": "c-tsuwano",
+      "claim": "Uzumemeshi -- rice with vegetables, tofu, seafood and wasabi 'buried' beneath it -- is Tsuwano's signature local dish, counted among Japan's 'five great meshi,' still served as everyday local fare rather than a tourist-only novelty.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.isan-no-sekai.jp/column/7017",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "isan-no-sekai",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
     }
   ],
   "reservations": [
@@ -1114,7 +1738,7 @@
       "lastSeating": null,
       "walkIn": "not recommended for a group of 8 without a reservation",
       "leads": [],
-      "alternatives": "Kawakyo (rejected this pass — frequently full, no confirmed group capacity)",
+      "alternatives": "Nekkoya (sister restaurant, Isemiya-cho) has an exact-fit fully private 8-seat room if the group wants total separation, though its menu is general Shimane izakaya fare rather than the lake-view shichimi theme. Kawakyo is worth the detour for a smaller subset of 2-4, not the full group — counter-only 8-10 seats, booked roughly a month ahead.",
       "fallback": "any Shinjiko-shichin izakaya in central Matsue with same-day group seating"
     },
     {
@@ -1139,6 +1763,29 @@
       ],
       "alternatives": "a standard business hotel in Oda City center (10-15 min bus/taxi from Omori) — see traveler question q-shimane-1",
       "fallback": "Oda City business hotel if the two-building Omori split isn't wanted or isn't available for these dates"
+    },
+    {
+      "candidateId": "c-kawakyo",
+      "importance": "casual",
+      "bookingUrl": null,
+      "releaseWindow": "roughly 1 month ahead recommended for this counter-only, popular spot",
+      "actionDate": null,
+      "partyRules": "Counter-only seating, ≈8-10 seats total — booking the full party of 8 would take over the entire counter, which is not confirmed as standard practice; best suited to a smaller subset of the group (2-4) rather than the full party.",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": null,
+      "lastSeating": null,
+      "walkIn": null,
+      "leads": [
+        {
+          "claim": "Some visitor reports suggest the whole counter can be reserved out for a private group by special arrangement with the owners",
+          "status": "unconfirmed-lead",
+          "source": null,
+          "verifiedOn": null
+        }
+      ],
+      "alternatives": "Matsu-no-Daidokoro Konekkoya (confirmed 24-seat room, shijimi/Shinjiko theme) for the full group dinner; Kawakyo works well for a smaller subset wanting the counter experience.",
+      "fallback": "Matsu-no-Daidokoro Konekkoya or Nekkoya for the full-group dinner if Kawakyo can't accommodate the subset"
     }
   ],
   "transport": [
@@ -1156,16 +1803,38 @@
         "ev-odashi-bus-frequency-fare",
         "ev-odashi-bus-gap",
         "ev-last-train-odashi-matsue",
-        "ev-jr-matsue-odashi-time-fare"
+        "ev-jr-matsue-odashi-time-fare",
+        "ev-iwami-ginzan-mobility",
+        "ev-iwami-ginzan-bus-limited"
       ],
       "doorToDoor": "Matsue hotel to Ryugenji Mabu mine entrance runs ≈2.5-3.5 hours each way door-to-door once JR, bus, and cart wait times are stacked — this is not a quick side trip.",
-      "transferReality": "The real bottleneck isn't any single timetable — it's the Ginzan Cart's 6-seat, no-reservation, first-come-first-served design. A party of 8 should expect to split across 2 cart departures or have part of the group walk; nothing about that is stated on the operator's own booking flow because there IS no booking flow.",
-      "groupLuggageMobility": "The Matsue→Odashi leg carries all trip luggage (this is the intake's stated 'main regional transfer between bases'), which slows platform transfers and rules out a rushed connection. For the 2 low-mobility travelers, the 2.3km/45min walking fallback at the mine is a real exertion cost, not a footnote — factor it into who takes the first cart.",
+      "transferReality": "The real bottleneck isn't any single timetable — it's the Ginzan Cart's 6-seat, no-reservation, first-come-first-served design. A party of 8 should expect to split across 2 cart departures or have part of the group walk; nothing about that is stated on the operator's own booking flow because there IS no booking flow. A rental e-bike (¥700/2hr, from Daikansho Plaza) is a confirmed third option for group members who want to move faster than the walk without waiting on a cart cycle.",
+      "groupLuggageMobility": "The Matsue→Odashi leg carries all trip luggage (this is the intake's stated 'main regional transfer between bases'), which slows platform transfers and rules out a rushed connection. For the 2 low-mobility travelers, the 2.3km/45min walking fallback at the mine is a real exertion cost, not a footnote — factor it into who takes the first cart. Local bus service on the Omori Line itself runs on limited frequency per the operator's own traffic-info page, which recommends allowing at least half a day for the site.",
       "buffer": "Arrive Odashi by early-to-mid afternoon to leave enough cart cycles (≈30-40 min apart) for a group split, plus slack before the last practical train.",
       "missedConnection": "Missing the last practical Odashi→Matsue train (≈19:24) means either a taxi covering a very long rural distance or an unplanned night in Oda City without a booked room.",
       "nextService": "Not confirmed this pass whether a later, slower local service exists after 19:24 — treat 19:24 as the hard deadline until reconfirmed.",
       "lastPracticalReturn": "≈19:24 ex-Odashi (Super Oki service toward Yonago, calling at Matsue)",
-      "fallback": "A taxi from Odashi to Matsue (long and expensive, not priced this pass) or an unplanned hotel night in Oda City center."
+      "fallback": "A taxi from Odashi to Matsue (long and expensive, not priced this pass) or an unplanned hotel night in Oda City center; a taxi stand at Odashi Station (Fuji Daiichi Kotsu, confirmed via the official traffic-info page) covers the shorter Odashi↔Omori leg if a bus is missed."
+    },
+    {
+      "id": "t-oki-ferry",
+      "route": "Matsue (via connecting bus to Shichirui port) → Saigo, Oki Islands, round trip",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-oki-ferry-times",
+        "ev-oki-ferry-seasonal",
+        "ev-oki-ferry-crossing-times",
+        "ev-oki-ferry-weather-risk",
+        "ev-oki-ferry-prefecture-context"
+      ],
+      "doorToDoor": "Connecting bus from Matsue Station to Shichirui port, then the Rainbow Jet high-speed boat (~1hr) or the larger ferry (~2.5hr) to Saigo.",
+      "transferReality": "The operator's own guidance states that in bad weather, departure/arrival locations may change or ports may become inaccessible — a real risk given the trip falls in late-October's tail end of typhoon/autumn-storm season. Shimane Prefecture's own transport page frames stable year-round operation as a goal, not a guarantee.",
+      "groupLuggageMobility": "The high-speed boat requires seatbelts during transit and the operator recommends seasickness medication in advance — not ideal footing for the 2 low-mobility travelers in a swell; the larger, slower ferry is the gentler option if crossing at all.",
+      "buffer": null,
+      "missedConnection": "A cancelled or rerouted return sailing has no same-day alternative — an unplanned overnight on the islands is the practical consequence.",
+      "nextService": null,
+      "lastPracticalReturn": "Not confirmed for a specific date in this pass — check the operator's live timetable close to travel.",
+      "fallback": "None beyond an unplanned overnight on Oki; no bridge or alternative crossing exists. This is why the islands are evaluated here only as a detour idea (c-oki-islands-day-trip), not part of the shipped itinerary."
     }
   ],
   "disagreements": [
@@ -1179,6 +1848,18 @@
       ],
       "investigation": "Both are current pages, not stale copies of each other; the range likely reflects different fare legs (short hop vs. full Daikansho→Ryugenji run) that the English source collapsed into one figure. Not worth further budget — the fare is a minor sights-and-activities line item either way and doesn't change any recommendation.",
       "resolution": "Guide ships the official range (≈¥500 as a representative approx figure) and flags it as approximate rather than picking one source silently."
+    },
+    {
+      "id": "d-adachi-ship-vs-reject",
+      "topic": "Whether Adachi Museum of Art should ship — Pass A rejected it on itinerary-fit grounds (no open slot in a fixed 4-day, 2-base plan without cutting Izumo Taisha or Iwami Ginzan; also the most generic top-10 pick, cutting against the off-the-beaten-path travel style), while Pass B independently marked the same candidate id shipped, with no reason given.",
+      "impact": "recommendation-changing",
+      "evidenceIds": [
+        "ev-adachi-museum-access",
+        "ev-adachi-crowd-timing",
+        "ev-adachi-crowd-timing-2"
+      ],
+      "investigation": "Pass B's shipped call carried no stated reasoning (candidate.reason: null) and its evidence for Adachi is limited to crowd-timing detail, not an itinerary-fit argument — it never addresses where in the fixed 4 days a ~45-min-each-way Yasugi side trip would go. Pass A's fit analysis is concrete and unrebutted: the schedule is already fully committed (arrival day, Izumo Taisha day, the hard-timed Iwami Ginzan transfer day, and a short departure-day morning).",
+      "resolution": "Rejected for this trip. Pass B's crowd-timing finding (calmest at the 9:00 opening) is retained in the candidate's evidence as a ready-made note for a future, less time-constrained trip that does reach Yasugi."
     }
   ],
   "depth": {
@@ -1192,7 +1873,8 @@
     },
     "transport": {
       "requiredRouteIds": [
-        "t-iwami-ginzan-anchor-chain"
+        "t-iwami-ginzan-anchor-chain",
+        "t-oki-ferry"
       ],
       "notApplicableReason": null
     }
@@ -1201,8 +1883,254 @@
     "stopped": true,
     "trend": "duplicates",
     "unresolvedCouldChange": false,
-    "note": "Culture/history and food/dining candidate searches converged on the same small set of named options across independent queries (official tourism sites, aggregator listicles, and review platforms all surfaced the same restaurants/sights by the third or fourth search per priority); later searches for rejected food candidates (Kawakyo, Terezuko, Ajidokoro Shigeru) returned thinner, less-sourceable results than the shipped set. Two genuine open items remain — the exact evening bus timetable at Omori and whether a slower JR service exists after the 19:24 last practical train — but neither changes which candidates ship or the anchor choice; both are flagged for a pre-trip recheck instead of further research now."
+    "note": "Combined Pass A (canonical/official) and Pass B (native-language/local/crowd-aware) research converged on the same core shipped set — Izumo Taisha, Matsue Castle, Iwami Ginzan, Tanakaya, Arakiya, Yakumoan, Matsu-no-Daidokoro Konekkoya, Gungendo — with both passes independently reaching the same candidates by different routes (English official pages vs. Japanese resident/editorial sources), which is itself evidence of saturation rather than a coincidence. Pass B added real texture without changing the anchor or the food/culture backbone: Shiomi Nawate and Tanabe Museum of Art now ship as a low-cost add-on to the already-planned Day 1 walk; Matsue Castle crowd timing and the Matsue Lake Line loop bus are woven into Day 1 and Transit; Kawakyo's rejection is now evidence-backed (2 independent firsthand sources) rather than a secondary-source guess, and upgraded to a documented worth-the-detour footnote for smaller subsets; Nekkoya is recorded as the exact-8-seat alternative to Konekkoya. Two candidate-level conflicts surfaced at reconcile (Adachi Museum of Art, Tsuwano) and both resolved to REJECTED on Pass A's unrebutted itinerary-fit grounds — recorded in disagreements/candidate reasons rather than silently dropped. Remaining honest gaps — exact Iwami Ginzan bus frequency, Tanabe Museum's own hours page, whether a slower JR service exists after the 19:24 last practical train — are flagged for a pre-trip recheck rather than guessed, and none is likely to flip which candidates ship: the qualitative picture is stable across two independent research passes."
   },
-  "passB": null,
-  "reconciliation": []
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "English coverage of Shimane is either generic top-10 tourist material or thin blog fluff; Japanese-language search reaches resident tourism-association sites (kankou-shimane.com, kankou-matsue.jp, izumo-kankou.gr.jp), local editorial magazines (jimohack, na-na.media), reservation platforms, and prefecture/operator pages that carry the crowd-timing, reservation-friction, and transit-reality detail no English source surfaced.",
+      "searchClasses": [
+        "shrine seasonal-crowd verification (神在月/神在祭 dates and schedule)",
+        "local food reservation reality (地元グルメ 予約 個室 団体)",
+        "transit access specifics (バス時刻表 本数, フェリー 所要時間 欠航)",
+        "quiet/alternative culture sites (地元 穴場 美術館 混雑)"
+      ],
+      "yield": "Corrected an assumed Izumo Taisha crowd narrative (Kamiarizuki falls Nov-Dec, not Oct 20-23). Found the exact reservation friction at Kawakyo (8-10 seat counter, ~1 month lead) versus a confirmed 24-capacity private room at Konekkoya and an exact 8-seat room at sister restaurant Nekkoya -- resolving the intake's party-of-8 feasibility requirement with a named venue rather than generic 'call ahead' advice. Surfaced Iwami Ginzan's e-bike/cart mobility workaround for the 2 low-walking-tolerance travelers. Confirmed Oki ferry weather-cancellation risk directly from the operator's and the prefecture's own pages, letting the day-trip idea be evaluated and honestly rejected rather than guessed at."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": [
+    {
+      "findingId": "ev-izumo-taisha-kamiari-timing",
+      "disposition": "agree",
+      "note": "Same underlying claim as Pass A's ev-kamiari-2026-dates, from the same official source (izumo-kankou.gr.jp) refetched independently by both passes — a convergence, not an independent second source. Guide already ships the Nov 9-Dec 8, 2026 dates; no change.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-matsue-castle-crowd-window-1",
+      "disposition": "adopt",
+      "note": "Woven into Day 1 and the Matsue Castle sight card as a crowd/best-time note (8:30-9:30 or after ~16:30 vs. the 10am-3pm tour-bus window).",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-matsue-castle-crowd-window-2"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-matsue-castle-crowd-window-2",
+      "disposition": "adopt",
+      "note": "Second independent firsthand source confirming the same crowd-timing claim as ev-matsue-castle-crowd-window-1 — satisfies the 2-independent-source bar for an experiential claim on a shipped candidate.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-matsue-castle-crowd-window-1"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-matsue-castle-koyo-after-trip",
+      "disposition": "adopt",
+      "note": "New context confirming the Oct 20-23 trip window sits before both koyo season and Kamiarizuki — supports the guide's existing framing without changing any shipped fact.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-matsue-lake-line-bus",
+      "disposition": "adopt",
+      "note": "New official transit fact, directly useful for the 2 low-mobility travelers — added to the Transit routes and Day 1 body.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-shiomi-nawate-character",
+      "disposition": "adopt",
+      "note": "Formally sources a claim already present in Day 1 prose (the Shiomi Nawate walk) that previously had no dedicated evidence record; grounds it and promotes it to a formal candidate.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-tanabe-museum-location",
+      "disposition": "adopt",
+      "note": "New off-the-beaten-path culture add-on inside the Day 1 Shiomi Nawate walk, zero extra transit cost — added as a sights entry and Day 1 mention.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-tanabe-museum-hours-unconfirmed",
+      "disposition": "adopt",
+      "note": "Kept as an honest gap — hours/price are search-preview only (Wikipedia), not fetched from the museum's own page. Shipped with an explicit ⚠ reconfirm note in the guide rather than presented as clean/verified.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-izumo-soba-kizuki",
+      "disposition": "adopt",
+      "note": "Single-sourced firsthand lead; held at candidate status 'shortlisted' rather than shipped/detour since it lacks the second independent corroborating source that rule requires before a candidate's experiential claim ships.",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-izumo-soba-tanakaya",
+      "disposition": "agree",
+      "note": "Converges with Pass A's own Tanakaya crowd evidence (ev-tanakaya-crowd-1/2) on the same underlying claim (regular queues); not counted as new independent corroboration since this source and A's are not all fetched/distinct-family, but reinforces the existing shipped crowd_tip in the guide.",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-izumo-soba-heiwa",
+      "disposition": "adopt",
+      "note": "New backup soba candidate, single-sourced — kept at 'shortlisted', not shipped, and not added to the guide's venue list (Tanakaya/Arakiya already cover this niche for the trip's actual visiting day).",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-kawakyo-counter-size-1",
+      "disposition": "replace",
+      "note": "Supersedes Pass A's earlier, vaguer 'often fully booked per secondary sources' Kawakyo rejection reasoning (candidate.reason prose only — Pass A never recorded a dedicated Kawakyo evidence record) with a documented, firsthand-sourced 8-10 seat counter capacity constraint.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-kawakyo-counter-size-2"
+        ]
+      },
+      "supersedes": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-kawakyo-counter-size-2",
+      "disposition": "detour",
+      "note": "Second independent firsthand source confirming the same counter-capacity claim; together these two records support Kawakyo's final candidate status of 'detour' (worth-the-detour for a smaller subset of 2-4, not the full party of 8).",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-kawakyo-counter-size-1"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-konekkoya-private-room",
+      "disposition": "agree",
+      "note": "Refetches the exact same URL as Pass A's ev-konekkoya-capacity and confirms the same 24-seat capacity finding — a convergence on the same primary source, not an independent second source, but useful confirmation that the fact still reads the same way.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-nekkoya-exact-8-room",
+      "disposition": "adopt",
+      "note": "Genuinely new finding — Konekkoya's sister restaurant with an exact-fit 8-seat private room. Added to the guide as the alternative-for-full-separation note on the shipped Konekkoya venue and reservation entry, and to the ledger's food candidates table.",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-adachi-crowd-timing",
+      "disposition": "conflict-resolved",
+      "note": "Part of the Adachi Museum of Art ship-vs-reject conflict (see disagreement d-adachi-ship-vs-reject) — candidate stays REJECTED for this trip on Pass A's unrebutted itinerary-fit grounds. This crowd-timing finding is retained as evidence for a future Yasugi-focused trip rather than discarded.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-adachi-crowd-timing-2"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-adachi-crowd-timing-2",
+      "disposition": "conflict-resolved",
+      "note": "Second independent firsthand source confirming the same Adachi crowd-timing claim as ev-adachi-crowd-timing. Same resolution: candidate stays REJECTED for this trip; evidence retained for a future visit.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-adachi-crowd-timing"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-yuushien-garden-profile",
+      "disposition": "detour",
+      "note": "New candidate, official single source. Kept as 'detour'/worth-the-detour in the evidence artifact only — near Yasugi, which this trip's fixed 4 days never reach, so no guide-body addition this pass.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-iwami-ginzan-mobility",
+      "disposition": "adopt",
+      "note": "Refetches the same URL as Pass A's ev-ginzan-cart-walk-time (ginzan-wm.jp/q_a/) so it's not an independent second source, but it surfaces a genuinely new detail Pass A didn't record — the e-bike rental option (¥700/2hr). Folded into the shipped transport record's transferReality field and the Iwami Ginzan day's evidence trail; candidateId remapped from Pass B's 'c-iwami-ginzan-silver-mine' to Pass A's canonical 'c-iwami-ginzan-omori-ryugenji-mabu' (same real-world venue, duplicate candidate id dropped at merge).",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-iwami-ginzan-bus-limited",
+      "disposition": "adopt",
+      "note": "New primary-source detail (limited bus frequency, official 'allow half a day' guidance, the Fuji Daiichi Kotsu taxi-stand fallback at Odashi/Ota-shi Station) folded into the shipped anchor transport record's fallback and groupLuggageMobility fields. CandidateId remapped from 'c-iwami-ginzan-silver-mine' to 'c-iwami-ginzan-omori-ryugenji-mabu' for the same reason as ev-iwami-ginzan-mobility.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-oki-ferry-crossing-times",
+      "disposition": "agree",
+      "note": "Converges with Pass A's ev-oki-ferry-times (same operator, same family, different page of oki-kisen.co.jp) on essentially the same crossing-time claim — not independent, but confirms the figure still holds. Evaluated here under Pass B's separate day-trip framing (c-oki-islands-day-trip) rather than Pass A's anchor-transport framing (c-oki-islands-ferry).",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-oki-ferry-weather-risk",
+      "disposition": "detour",
+      "note": "The deciding evidence for keeping the Oki day-trip idea at 'detour' rather than shipping it — real, operator-confirmed weather-cancellation risk with no same-day fallback, unacceptable for this trip's mobility-constrained group of 8 with no slack day.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-oki-ferry-prefecture-context",
+      "disposition": "adopt",
+      "note": "Supporting context from the prefecture's own transport page, reinforcing (not independently corroborating) the operator's own weather caveat.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-tsuwano-uzumemeshi",
+      "disposition": "reject",
+      "note": "Fact itself is plausible and single-sourced (search-preview only), but Tsuwano remains REJECTED for this trip on Pass A's schedule-fit grounds (see candidate c-tsuwano reason) — the finding doesn't change the shipped set, so it isn't adopted into the guide, only retained here as a future-trip lead.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    }
+  ]
 }

@@ -57,6 +57,30 @@
     "shelf_life": "venue",
     "tier": "secondary"
   },
+  "matsue-lake-line-ride-250-yen": {
+    "claim": "Matsue Lake Line loop bus, single ride",
+    "value": "¥250",
+    "source_url": "https://www.kankou-shimane.com/experience/72409",
+    "verified_on": "2026-08-28",
+    "shelf_life": "transit",
+    "tier": "primary"
+  },
+  "matsue-lake-line-day-pass-700-yen": {
+    "claim": "Matsue Lake Line loop bus, all-day pass",
+    "value": "¥700",
+    "source_url": "https://www.kankou-shimane.com/experience/72409",
+    "verified_on": "2026-08-28",
+    "shelf_life": "transit",
+    "tier": "primary"
+  },
+  "iwami-ginzan-ebike-700-yen": {
+    "claim": "Rental e-bike from Daikansho Plaza toward Ryugenji Mabu, 2-hour rate",
+    "value": "¥700",
+    "source_url": "https://www.ginzan-wm.jp/q_a/",
+    "verified_on": "2026-08-28",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
   "traveler-origin": {
     "value": "XXX",
     "state": "unconfirmed"
