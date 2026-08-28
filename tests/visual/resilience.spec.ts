@@ -200,7 +200,9 @@ for (const [name, path] of GUIDES) {
 test("⌁ mobile traveler critical path exposes usable primary surfaces", async ({ page }) => {
   await prep(page, NEW[1], 375, 812);
   await expect(page.locator("#ngForm")).toBeVisible();
-  await expect(page.locator("[data-plain-submit]")).toBeVisible();
+  // Enhanced mode deliberately hides the no-JS submit until intake prerequisites are satisfied;
+  // the country field is the actual first traveler action and must be reachable immediately.
+  await expect(page.locator("#ngCountry")).toBeVisible();
   await expectFits(page, "new intake critical path @ 375px");
 
   await prep(page, PROGRESS[1], 375, 812);
