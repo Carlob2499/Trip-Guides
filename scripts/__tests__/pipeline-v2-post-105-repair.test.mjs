@@ -403,6 +403,18 @@ describe("R-A — the generated critic instruction and the validator share one t
     expect(capsule).not.toContain("editorialOnly");
   });
 
+  it("the capsule names the corrections doc's top-level keys exactly as the validator reads them", async () => {
+    // Yamagata Run-B scar (run yamagata-20260828-73821a, critic attempt 1): the capsule said
+    // 'with schema `wp-critic-corrections/2.1`', the critic wrote `"schema": …`, and the reader
+    // — which reads only `schemaVersion` — refused the whole retained pass. The instruction and
+    // the validator must state the same key names, verbatim.
+    const capsule = await generateContractCapsule("critic", { slug: "tottori", runId: RUN_ID });
+    for (const key of Object.keys(criticCorrectionDocSchema.shape)) {
+      expect(capsule).toContain(`"${key}"`);
+    }
+    expect(capsule).not.toMatch(/with schema `/);
+  });
+
   it("the slugified-anchor grammar #107 generated is refused by the schema", () => {
     for (const target of ["05-transit.json#key-transit-routes", "05-transit.json#Key transit routes", "05-transit.json#"]) {
       expect(target).not.toMatch(CRITIC_TARGET);
