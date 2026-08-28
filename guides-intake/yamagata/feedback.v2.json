@@ -57,6 +57,27 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-28T10:47:51.098Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T10:55:17.188Z"
+    },
+    {
+      "runId": "yamagata-20260828-73821a",
+      "stage": "reconcile",
+      "attempt": 3,
+      "findings": [
+        "> trip-guides@1.0.0 build",
+        "> astro build && node scripts/check-closed-days.mjs && node scripts/validate-palettes.mjs && tsx scripts/build-search-index.ts && node scripts/gen-sw-precache.mjs",
+        "10:55:15 [content] Syncing content",
+        "[InvalidContentEntryDataError] guides → yamagata data does not match collection schema.",
+        "sections.4.verified_on: section 4 (\"Booking checklist\", type \"panel\") uses ≈ but has no verified_on. Under provenance:\"strict\", ≈ asserts a fact was checked and found approximate — so it owes the date it was checked. Either add verified_on (+ source_url), or downgrade the figure to ⚠ if it was never actually confirmed.",
+        "Hint:",
+        "See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.",
+        "Error reference:",
+        "https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+        "Location:",
+        "Stack trace:"
+      ],
+      "createdAt": "2026-08-28T10:55:17.188Z",
       "status": "active",
       "retiredAt": null
     }
