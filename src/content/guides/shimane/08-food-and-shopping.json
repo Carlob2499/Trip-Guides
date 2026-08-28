@@ -31,7 +31,12 @@
         "price": "{{fact:arakiya-warigo-soba-1080-yen}}",
         "source_url": "https://arakiya-izumo.com/",
         "verified_on": "2026-08-28",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.397438,
+          "lng": 132.6822345
+        },
+        "place_id": "ChIJGzkhPJpcVzURBlaA8wjjs0Q"
       },
       {
         "name": "Yakumoan",
@@ -46,7 +51,12 @@
         "price": "≈¥1,200–2,000",
         "source_url": "https://www.yakumoan.jp/shop/",
         "verified_on": "2026-08-28",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.47867430000001,
+          "lng": 133.0503199
+        },
+        "place_id": "ChIJxeYQlwcFVzURo6uXwMJUBu0"
       },
       {
         "name": "Matsu-no-Daidokoro Konekkoya",
@@ -72,7 +82,12 @@
         "price": "≈¥1,500–2,500",
         "source_url": "https://www.ginzan-wm.jp/purpose_post/2401/",
         "verified_on": "2026-08-28",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.1147695,
+          "lng": 132.4457905
+        },
+        "place_id": "ChIJ-YL1-m4PWjURZdEp96OXRmA"
       }
     ]
   }

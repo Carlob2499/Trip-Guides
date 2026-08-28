@@ -16,7 +16,10 @@
           "credit": "江戸村のとくぞう · Wikimedia Commons",
           "license": "CC BY-SA 4.0"
         },
-        "map": { "lat": 35.474977, "lng": 133.050556 },
+        "map": {
+          "lat": 35.474977,
+          "lng": 133.050556
+        },
         "place_id": "W299654325",
         "dwell_min": 75,
         "source_url": "https://www.matsue-castle.jp/userguide/",
@@ -33,7 +36,10 @@
           "credit": "Kuruman · Wikimedia Commons",
           "license": "CC BY 2.0"
         },
-        "map": { "lat": 35.40194, "lng": 132.68556 },
+        "map": {
+          "lat": 35.40194,
+          "lng": 132.68556
+        },
         "place_id": "W52958212",
         "dwell_min": 120,
         "source_url": "https://izumooyashiro.or.jp/archives/news/12552",
@@ -50,10 +56,15 @@
           "credit": "663highland · Wikimedia Commons",
           "license": "CC BY-SA 4.0"
         },
-        "map": { "lat": 35.1190, "lng": 132.4462 },
+        "map": {
+          "lat": 35.119,
+          "lng": 132.4462
+        },
         "place_id": "N1423618359",
         "dwell_min": 240,
-        "closed_days": ["wed"],
+        "closed_days": [
+          "wed"
+        ],
         "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
         "verified_on": "2026-08-28",
         "shelf_life": "venue"
@@ -65,7 +76,12 @@
         "dwell_min": 45,
         "source_url": "https://www.tanabe-museum.or.jp/profile/",
         "verified_on": "2026-08-28",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "map": {
+          "lat": 35.4791482,
+          "lng": 133.0498002
+        },
+        "place_id": "ChIJT2a27AcFVzURGj9IUrkHugI"
       }
     ]
   },

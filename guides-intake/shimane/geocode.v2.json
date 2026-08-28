@@ -1,0 +1,36 @@
+{
+  "slug": "shimane",
+  "attemptedAt": "2026-08-28T06:38:48.763Z",
+  "applied": true,
+  "pending": 6,
+  "resolved": [
+    {
+      "name": "Tanabe Museum of Art",
+      "file": "07-sights.json"
+    },
+    {
+      "name": "Arakiya",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Yakumoan",
+      "file": "08-food-and-shopping.json"
+    },
+    {
+      "name": "Gungendo Main Store Café",
+      "file": "08-food-and-shopping.json"
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "Tanakaya",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Tanakaya\", Places returned \"Izumo Taisha\""
+    },
+    {
+      "name": "Matsu-no-Daidokoro Konekkoya",
+      "file": "08-food-and-shopping.json",
+      "why": "name mismatch — asked \"Matsu-no-Daidokoro Konekkoya\", Places returned \"Lake Shinji Sunset Viewing Spot - Torupa\""
+    }
+  ]
+}
