@@ -55,7 +55,26 @@ Every component must define, from creation:
 3. **One-handed phone use** — ≥44px touch targets; primary actions bottom-reachable on
    field screens; glare-readable contrast (the existing contrast doctrine).
 
-4. **Customer-facing surfaces show no inner workings** — no process commentary,
+4. **Motion is fluid, fast, and immersive — never rigid** (Carlo, 2026-08-28,
+   non-negotiable). Scrolling, perusing, and navigating must feel like Airbnb,
+   not an enterprise site. Testable rules:
+   - Transitions are *a little less than instant*: ~150–350ms, ease-out or
+     spring curves; nothing snaps, nothing lumbers past ~400ms.
+   - **Continuity over cuts**: parent→child navigation uses shared-element
+     transitions (a card's image grows into the detail view) so context is
+     never lost. Prefer the View Transitions API; Astro supports it natively.
+   - Animations are **interruptible** — a mid-transition tap responds
+     immediately; motion never blocks input.
+   - Scroll is **never hijacked**: reveal-on-scroll and parallax accents yes,
+     scroll-jacking no. Native momentum stays native.
+   - The signature Waypoint move is the **geographic fly-to** (Google
+     Earth-style map/globe travel between places) — reserved for atlas and
+     navigation moments, never decorating data regions.
+   - `prefers-reduced-motion` is honored everywhere; motion degrades to
+     opacity fades, never to broken layout.
+   - Motion has existing owners: `scroll-motion.css` and `transitions.css`.
+     New motion extends them; no per-component one-off timing values.
+5. **Customer-facing surfaces show no inner workings** — no process commentary,
    pipeline/agent vocabulary, register names, or spec annotations ever renders in the
    product. The one deliberate exception is the traveler-facing verification line
    ("Verified <date>"), which is product doctrine, not process. Internal rationale
