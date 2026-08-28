@@ -203,7 +203,7 @@
   },
   "attempts": {
     "total": 10,
-    "cap": 10,
+    "cap": 11,
     "autoRetries": 1,
     "autoRetryCap": 1
   },
