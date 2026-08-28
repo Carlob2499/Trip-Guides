@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "failed",
   "createdAt": "2026-08-28T09:25:24.411Z",
-  "updatedAt": "2026-08-28T11:41:49.969Z",
+  "updatedAt": "2026-08-28T11:46:30.249Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -170,14 +170,14 @@
     }
   },
   "attempts": {
-    "total": 6,
+    "total": 7,
     "cap": 8,
     "autoRetries": 1,
     "autoRetryCap": 1
   },
   "resume": {
     "nextStage": "critic",
-    "action": "re-run stage \"critic\" (failed: gate-failure) \u2014 a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "re-run stage \"critic\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
   },
   "failure": {
     "class": "gate-failure",
