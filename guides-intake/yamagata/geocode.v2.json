@@ -1,18 +1,9 @@
 {
   "slug": "yamagata",
-  "attemptedAt": "2026-08-28T11:18:54.467Z",
+  "attemptedAt": "2026-08-28T11:47:00.947Z",
   "applied": true,
-  "pending": 3,
-  "resolved": [
-    {
-      "name": "Taimenseki",
-      "file": "08-food-and-shopping.json"
-    },
-    {
-      "name": "Izu no Hana",
-      "file": "08-food-and-shopping.json"
-    }
-  ],
+  "pending": 1,
+  "resolved": [],
   "unresolved": [
     {
       "name": "Sakaeya Honten",
