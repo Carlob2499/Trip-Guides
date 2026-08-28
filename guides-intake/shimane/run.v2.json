@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-28T02:25:08.231Z",
-  "updatedAt": "2026-08-28T03:22:42.997Z",
+  "updatedAt": "2026-08-28T03:23:07.515Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -89,16 +89,25 @@
       "failure": null
     },
     "reconcile": {
-      "status": "queued",
-      "startedAt": null,
+      "status": "running",
+      "startedAt": "2026-08-28T03:23:07.515Z",
       "endedAt": null,
-      "attempts": 0,
-      "model": null,
-      "effort": null,
+      "attempts": 1,
+      "model": "claude-sonnet-5",
+      "effort": "high",
       "commit": null,
-      "baseline": null,
+      "baseline": "5837d19e14e5aac688b674884bf403074001f5d4",
       "replay": false,
-      "history": [],
+      "history": [
+        {
+          "attempt": 1,
+          "startedAt": "2026-08-28T03:23:07.515Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
+        }
+      ],
       "failure": null
     },
     "critic": {
@@ -123,7 +132,7 @@
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "run stage \"reconcile\""
+    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
   },
   "failure": null,
   "publication": {
