@@ -78,6 +78,16 @@
         "est": 0,
         "note": "Not researched this pass — depends on the international departure airport, which intake left blank",
         "per": "person"
+      },
+      {
+        "label": "Tokyo ⇄ Yamagata Shinkansen (round trip)",
+        "basis": "trip",
+        "est": 22900,
+        "note": "≈¥11,450 each way in an ordinary reserved car (¥6,050 base fare + ¥5,400 express charge). Every Tsubasa seat is reserved — book all 8 together. ⚠ Confirm the exact figure at booking",
+        "per": "person",
+        "source_url": "https://jr-shinkansen.net/fare-yamagata.html",
+        "verified_on": "2026-08-28",
+        "shelf_life": "transit"
       }
     ]
   }

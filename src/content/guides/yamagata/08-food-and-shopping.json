@@ -67,9 +67,11 @@
       {
         "name": "Inokoya Yamagatada",
         "area": "Yamagata Station area",
-        "hours": "17:00-22:00 daily",
+        "address": "1-1-1 Jonan-cho, Yamagata (Kajo Central Building 1F, 山形市城南町1-1-1 霞城セントラル1F)",
+        "phone": "023-647-0655",
+        "hours": "17:00-22:00 daily, year-round (last order 21:00)",
         "book": "walk-in",
-        "how": "1 min walk from Yamagata Station",
+        "how": "1 min from Yamagata Station via the directly connected Kajo Central building",
         "why": "Imoni (taro stew) served year-round in individual mini-hearth pots — thematically ideal, but private rooms seat only 4-6 (curtain-divided). Good for a casual/overflow meal, not the flagship group dinner.",
         "map": {
           "lat": 38.2475,

@@ -629,6 +629,123 @@ baseline values handed to the stage alongside the retained edits, a workspace re
 an attempt fails, or re-pinning the baseline to the tree each attempt actually receives. The
 `pipeline-patterns.fragment.md` row marks it for promotion.
 
+### Fifth critic pass (2026-08-28, fresh context) — two findings, both implemented
+
+Fresh workspace: the finished guide, the frozen intake, this ledger, the skill files and the rubric — no
+evidence artifacts, no run state, no git history. Five scans again (#6 anchor · #8 priority depth · #9
+party fit · #12 authenticity · the vibe lens). The anchor survives a fourth independent re-fetch: the
+Apr 1 – Oct 24 2026 validity range, the ¥1,000 cash-only fare with 半額 for children and disabled
+passengers, and both ※/☆ service notes all hold exactly as C1/C8/C15 state them. Priority depth, party
+fit and authenticity survive without a finding — the castle-park cluster, the group-size food analysis,
+the mobility handling and the crowd/off-peak notes are all doing work a generic guide could not. **What
+did not survive is the budget's completeness and the one evening the itinerary leaves the party with
+nothing to eat.** Every changed value is declared in `critic-corrections.v2.json`.
+
+#### C18 — the budget omits the single largest transport cost on the trip, which the guide's own Day 1 opens on (rubric #4 · vibe lens: common sense) — FIXED
+
+`02-money-and-budget.json`'s budget block prices city lodging, the ryokan night, food, **local**
+transport, sights and a ¥0 "Flights — round trip" placeholder. The intercity leg — the Tokyo ⇄ Yamagata
+Tsubasa the guide's Day 1 card, Plan → "When you land" and Transit step 1 are all built on — appears
+nowhere in it. The "Local transport, per day" note names what it does cover and, read carefully, says so:
+*"Senzan Line to Yamadera (≈¥260 each way), the Hanagasa Bus (¥1,000 each way) … plus city buses/taxis."*
+
+The figure is not unknown to this guide: ≈¥11,450 one way (¥6,050 base + ¥5,400 express) is stated
+verbatim on two surfaces and was audited to its source in the first pass. Round trip that is **¥22,900
+per person**, against a per-person estimate that otherwise totals ≈¥78,800 — the budget understates the
+trip by **29%**, ¥183,200 across a party of eight, and it does so for the one cost the traveller books
+first. "Flights not researched" is an honest blank about international air; it is not a licence to drop a
+domestic fare the guide has already verified.
+
+Added as its own `basis: "trip"`, per-person line (¥22,900) carrying the same breakdown and the same ⚠
+confirm-at-booking hedge the other two surfaces carry, cited to the fare page re-fetched this pass
+(¥6,050 運賃 + ¥5,400 指定席特急料金; 「山形新幹線は全車指定席です。自由席はありません」). Appended after
+the flights line rather than inserted, so no existing budget row moves.
+
+#### C19 — the hardest day of the trip ends with no dinner, and two shipped venues are never placed on any day (rubric #7 · vibe lens: meals & energy) — FIXED
+
+Day 2 is the `energy: "packed"` card: an early Senzan Line train, 1,015 stone steps with no ramps or
+elevators anywhere on the site, two low-mobility travellers, and a soba lunch at the mountain. The party
+is back in Yamagata city by evening and the guide says nothing about dinner — the only evening of the
+four with neither a booked meal (Day 1's Tokiwa private room) nor a ryokan kaiseki (Day 3) nor departure
+(Day 4). Meanwhile `08-food-and-shopping.json` ships **Inokoya Yamagatada** — imoni in individual
+mini-hearth pots, one minute from the station — with the research's own verdict that it is *"good for a
+casual/overflow meal, not the flagship group dinner"*, and then never uses it. A venue that clears the
+4-question rule and appears in no day card is research that never reached the traveller.
+
+It is also the *right* pick for that specific evening, which is why leaving it unplaced is the finding
+rather than a shrug: after a 1,015-step day, the constraint that matters is walking distance, and this is
+the only shipped venue whose approach is indoors and one minute long.
+
+Re-fetched the venue's own page while placing it. It gave three things the item was missing: the address
+(〒990-8580 山形市城南町1-1-1 霞城セントラル1F), the telephone **023-647-0655**, and the last order —
+「年中無休　17:00～22:00（L.O 21:00）」, which is what decides whether eight people off a late Yamadera
+train get fed. The page also states the approach is through a **directly connected** building, so the
+`how` now says so: an indoor, weather-independent minute matters in late-October Tohoku for the party's
+two low-mobility travellers. The 4-6 private-room limit is carried, not hidden — eight people split
+across tables, and the day card says that plainly rather than implying a group booking.
+
+### Considered and NOT actioned — fifth-pass rebuttals
+
+- **The last INBOUND Hanagasa Bus into Ginzan Onsen, still unnamed on Day 3.** I fetched `base4.html`
+  twice more and got closer than the third and fourth passes did — one read returned the 大石田駅発 column
+  as 6:40/9:57/12:42/14:17/16:02/17:52 with 銀山温泉着 7:05/10:26/13:11/14:53/16:31/**18:21**, and a second
+  read of the table's *structure* explains the fourth pass's stray 19:40: the outbound table runs
+  山形空港｜大石田駅｜尾花沢市役所｜尾花沢待合所｜銀山温泉, and the 18:50 service **terminates at 大石田駅 at
+  19:40** rather than continuing to the village (a 9:30 service likewise stops at 尾花沢待合所). That
+  reconciles the two earlier disagreements — but my own two reads disagree with the second and third
+  passes' on the *number* of daily services (6 against their 10, which included 7:50/10:20/15:30). An
+  extraction that drops four services cannot be trusted to have kept the last one, and publishing a
+  last-bus time off it is precisely the defect C8 was written about. **Unchanged, and the flag stands.**
+  What I can add for the networked pass: the 19:40 cell is an *arrival at Oishida*, not an Oishida
+  departure, and the column count (5, including 尾花沢市役所) is what the automated reads keep collapsing.
+- **`≈35-40 min` for the Oishida → Ginzan Onsen bus run.** The one read that returned arrival times gives
+  25-36 min across six services, mostly ≈29. That would make the guide's figure a mild overstatement in the
+  safe direction — but it rests on the same column alignment I just declined to trust for the last bus.
+  Correcting a number on an extraction I refuse to publish a different number from would be incoherent.
+  Flagged with the item above.
+- **Eight perishable money figures still live in prose rather than `facts.json`.** Third pass to reach this
+  and third to leave it: `npm run build` is unavailable in this environment, an unresolved `{{fact:}}` token
+  fails the build, and the migration moves ≈8 values across 6 files for zero change in what any of them
+  says. C18's new figure went into a `budget` item (structured, not prose), so it does not widen the gap.
+- **"Genuinely" appears eight times across the guide** — "genuinely local", "genuinely worthwhile",
+  "genuinely off the beaten path", "genuinely time-critical", "genuinely crowded". A real model tic and a
+  fair tone observation. Not actioned deliberately: this stage's contract requires every changed value to
+  ship as a declared correction with a source, and a pure style rewrite has none. Left alone rather than
+  laundered as a correction, per the contract's own instruction.
+- **No hotel is named for the two Yamagata city nights** — the Booking checklist carries a bare
+  "Accommodation (Yamagata city nights)" and the budget line says "not individually verified". A real gap
+  for a party of eight, but intake left accommodation style blank (all four options still listed), so the
+  answer is a traveller question, not a critic edit. Recorded here; the existing budget note is honest
+  about it.
+- **The walk from the Ginzan Onsen bus stop to the ryokan street**, with luggage and two low-mobility
+  travellers — the last 300m of the anchor transfer, and the one part of "physical feasibility beyond
+  timetable arithmetic" the guide never describes. I tried `ginzanonsen.jp/access/`: it publishes a shuttle
+  suspension notice and Ginzanso parking, and nothing on distances, pedestrian zoning or luggage handling.
+  No allowed domain carries it. **Flagged for a networked pass** rather than written from inference — a
+  guessed walking distance on a mobility-binding constraint is exactly the C3 defect.
+- **Days 1, 3 and 4 carry no `plan_b`.** Three passes have rebutted this; I reach the same answer for the
+  same reasons. Late-October Tohoku is not a named weather window, the one `outdoor` day has a researched
+  alternate, and Day 3's real failure mode is the bus, which has a taxi fallback with a phone number.
+- **Seven `sights` items still carry `place_id: "__VERIFICATION_REQUIRED__"`.** The legal placeholder state.
+  Unchanged.
+- **The budget's "Sights & activities" line is `basis: "day"` at ¥500 × 4** against one ¥500 admission.
+  Rebutted by the fourth pass as below the bar for a declared correction; with C18 added, the ¥1,500
+  overstatement now sits inside a materially larger and more honest total. Unchanged.
+
+**Artifact note (baseline gap — fourth consecutive attempt).** `critic-corrections.v2.json` declares the
+**thirteen** leaves THIS pass changed. Eight of the thirteen are brand-new leaves
+(`02-money-and-budget.json#/1/items/6/*`) whose `previousValue` is `null` against *any* baseline, and two
+more (`08-food-and-shopping.json#/0/items/3/address` and `/phone`) are new keys on an item no prior pass
+touched — so ten of thirteen prove correct whether the control plane diffs against the pre-C1 tree or the
+tree I was handed. The remaining three (`06-days.json#/0/items/1/body`, and the Inokoya `hours`/`how`
+leaves) carry the `previousValue` I read first-hand; the `hours` and `how` leaves were also untouched by
+C1–C17, so only the Day 2 body is baseline-sensitive. Edits were deliberately shaped this way. Everything
+C1–C17 changed and I did not remains undeclarable from inside this stage, for the reason now recorded four
+times: the workspace retains earlier attempts' guide edits, the critic baseline is pinned ONCE at the
+pre-critic tree, and this stage is prepared without git history. **No further attempt of this stage closes
+it** — it needs the baseline values handed to the stage, a workspace reset on failure, or a re-pin to the
+tree each attempt actually receives.
+
 ## Citation audit
 
 20 perishable facts sampled across two critic passes, weighted to prices, hours and the anchor
@@ -843,3 +960,67 @@ this stage is structurally unable to clear, and it needs a control-plane change,
 target outbound departure, both read directly off `base4.html`'s 大石田駅 column by something that can
 read the table's columns reliably; and whether the operator's recommended **17:00** return runs in the
 Apr–Oct season or only in the Dec–Mar one it is published beside.
+
+### Citation audit — fifth critic pass (2026-08-28, fresh context)
+
+Eight perishable facts sampled independently, weighted to the two figures this pass ships, the anchor
+transfer, and the two gaps it declined to fill. Six sources fetched and supporting or corrected; two
+confirmed as gaps their own pages do not close.
+
+| Claim | Value | Source fetched | Verdict |
+|-------|-------|----------------|---------|
+| Tokyo → Yamagata Tsubasa one-way reserved fare (the figure C18 puts in the budget) | ≈¥11,450 = ¥6,050 運賃 + ¥5,400 指定席特急料金 | y — `jr-shinkansen.net/fare-yamagata.html` | supports — the fare table gives 運賃 6,050 and 指定席特急料金 5,400 exactly as the Plan and Transit surfaces already state them; ×2 = ¥22,900 round trip per person (C18) |
+| Yamagata Shinkansen has no unreserved car | every seat reserved | y — same page | supports — 「山形新幹線は全車指定席です。自由席はありません」, matching Plan → "When you land" and the booking checklist |
+| Inokoya Yamagatada opening hours | shipped as "17:00-22:00 daily" | y — `yamagata-da.com/cuisine/` | **drifted → fixed** — the page publishes 「年中無休　17:00～22:00（L.O 21:00）」; the last order was missing, and it is the half that decides whether eight people off a late Yamadera train are seated (C19) |
+| Inokoya Yamagatada address + telephone | shipped with neither | y — same page | **drifted → fixed** — 〒990-8580 山形市城南町1-1-1 霞城セントラル1F and 023-647-0655; a venue item shipped without the 4-question rule's "where" (C19) |
+| Inokoya Yamagatada approach from the station | shipped as "1 min walk from Yamagata Station" | y — same page | **drifted → fixed** — the page describes ≈1 minute from JR Yamagata Station through a **directly connected** building; restated, because an indoor minute is the material fact for two low-mobility travellers in late October (C19) |
+| Hanagasa Bus season, fare and payment rule (R3 anchor, `facts.json`) | Apr 1 – Oct 24 2026; ¥1,000 adult one-way, cash only, half for child/disabled | y — `base4.html` | supports — table headed 「2026/4/1～2026/10/24」, 「運賃は現金精算のみのお取り扱いとなっております。（ICカード不可）」, 大石田駅→銀山温泉 「1,000円/500円」. Fourth independent confirmation; no change |
+| The ※/☆ service notes C1/C15 rest on | 14:55 no northbound connection; 18:21発 last, crowded, 増便なし, use 16:35 or 17:00 | y — `base.html` | supports — both notes returned verbatim, and the page still carries its own 「このページの情報は古いため…」 out-of-date banner, which is why C8's season citation sits on `base4.html`. No change |
+| Last INBOUND Hanagasa Bus into Ginzan Onsen | not stated in the guide | y — `base4.html`, two further reads | **unreachable → flagged** — the reads now *explain* the fourth pass's stray 19:40 (it is an arrival at 大石田駅; the 18:50 service terminates there) but disagree with the second and third passes on the service count (6 vs 10). Left as the ⚠ confirm-the-day instruction; flagged, not shipped |
+| Ginzan Onsen bus stop → ryokan street (luggage, two low-mobility travellers) | not stated in the guide | y — `ginzanonsen.jp/access/` | **unreachable → flagged** — the access page carries a shuttle-suspension notice and Ginzanso parking only; no distance, pedestrian-zone or luggage information. No allowed domain publishes it; flagged rather than inferred |
+
+#### Continuity sweep — critic execution
+
+**Fifth critic pass (fresh context, 2026-08-28) — greps run** across `src/content/guides/yamagata/`
+(case-insensitive, one combined pattern): `11,450` · `22,900|22900` · `6,050` · `5,400` · `Inokoya` ·
+`023-647` · `imoni` · `Kajo Central` · `total`. Every group file was also read end-to-end for the five
+scans, which is how the missing budget line and the empty Day 2 evening were found — neither is a string
+a grep can look for.
+
+**Ripples found & fixed:**
+- `11,450` appears on **three** surfaces after C18 (`01-plan.json` "When you land", `05-transit.json`
+  step 1, and the new budget note). All three carry the identical ¥6,050 + ¥5,400 breakdown and the same
+  ⚠ confirm-at-booking hedge — checked digit by digit against the page re-fetched this pass, so the new
+  line agrees with the two that already existed rather than adding a fourth variant.
+- No surface in the guide states a trip TOTAL, so adding a budget line ripples into no stated sum; the
+  block's own renderer derives it. `days: 4` and `party: 8` are untouched, and the new line is
+  `basis: "trip"` so it does not multiply by the day count — the exact defect C6 fixed on the lodging row.
+- The new item was **appended** at `items/6` rather than inserted before the flights placeholder, so no
+  existing budget row's index or content moves. Reading order is unaffected for the traveller.
+- `Inokoya` appears on **three** surfaces after C19 (the `08-food-and-shopping.json` intro's
+  group-size rationale, the venue item, and Day 2's new evening paragraph). All three now say the same
+  thing about the 4-6 private rooms — the intro's *"casual/overflow, not the flagship pick"* verdict is
+  what Day 2 acts on, not against: eight people split across tables, stated plainly rather than implied.
+  Day 1's Tokiwa private room remains the trip's only flagship group meal.
+- Day 2's `pace`, `tldr`, `energy` and `plan_b` were checked against the new dinner and deliberately
+  unchanged: `energy: "packed"` is still right, the rain `plan_b` swaps the mountain and not the evening,
+  and a one-minute indoor walk adds no load to the day the `pace` line describes.
+- `{{fact:…}}` tokens: Day 2's body was edited by **appending a paragraph after the final `</p>`**, so
+  `{{fact:yamadera-admission-500-yen}}` was not touched and still resolves. No token was added — C18's
+  figure went into a structured `budget` item, whose siblings all carry their figures inline.
+- `provenance: "strict"` re-check: the one new `≈` (`≈¥11,450`) landed in a `budget` item, which is not in
+  the strict ≈-gate's `panel`/`prose`/`list`/`routes` section list — and the item carries
+  `source_url` + `verified_on` + `shelf_life` regardless, so the gate is satisfied either way. The Day 2
+  and Inokoya edits introduced no `≈` at all.
+- Closure and day-of-week check re-run: Inokoya is 年中無休 (no weekly closure) and Day 2 is Wednesday, so
+  nothing collides. Nothing in C18/C19 moves a stop, a date, a bus or a booking; the Tue/Wed/Thu/Fri card
+  mapping and the closure table stand.
+
+**Deferred to human:** the critic baseline gap described in the artifact note above — unchanged from the
+fourth pass, and the one thing this stage cannot clear from inside itself. **Flagged for a networked
+pass:** (1) the day's last INBOUND Hanagasa Bus and one named target outbound departure, read off
+`base4.html`'s five-column 大石田駅 table by something that reads columns reliably — this pass narrowed it
+(the 19:40 cell is an Oishida *arrival*; the 18:50 service terminates short of the village) but could not
+close it; (2) the true Oishida → Ginzan Onsen run time, which one read puts at 25-36 min against the
+guide's ≈35-40; (3) the walk from the Ginzan Onsen bus stop to the ryokan street with luggage, which
+`ginzanonsen.jp` does not publish.
