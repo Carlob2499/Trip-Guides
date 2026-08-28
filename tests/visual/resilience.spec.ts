@@ -4,11 +4,13 @@ import { test, expect, type Page } from "@playwright/test";
 
 const NOW = new Date("2026-09-01T10:00:00+09:00");
 const HUB = ["hub", "/Trip-Guides/"] as const;
+const NEW = ["new intake", "/Trip-Guides/new/"] as const;
+const PROGRESS = ["progress", "/Trip-Guides/progress/"] as const;
 const GUIDES = [
   ["denmark", "/Trip-Guides/guides/denmark/"],
   ["korea", "/Trip-Guides/guides/korea/"],
 ] as const;
-const PAGES = [HUB, ...GUIDES] as const;
+const PAGES = [HUB, NEW, PROGRESS, ...GUIDES] as const;
 const STRESS = [
   "東京都千代田区丸の内一丁目・東京駅八重洲中央口から地下連絡通路経由",
   "Gyeongbokgung-Palace-Reservation-Confirmation-ABCDEFGHJKLMNPQRSTUVWXYZ-2026-10-21-Party-of-Eight",
@@ -193,3 +195,56 @@ for (const [name, path] of GUIDES) {
     expect(exercised, `${name}: too few real opened surfaces exercised`).toBeGreaterThanOrEqual(4);
   });
 }
+
+
+test("⌁ mobile traveler critical path exposes usable primary surfaces", async ({ page }) => {
+  await prep(page, NEW[1], 375, 812);
+  await expect(page.locator("#ngForm")).toBeVisible();
+  // Enhanced mode deliberately hides the no-JS submit until intake prerequisites are satisfied;
+  // the country field is the actual first traveler action and must be reachable immediately.
+  await expect(page.locator("#ngCountry")).toBeVisible();
+  await expectFits(page, "new intake critical path @ 375px");
+
+  await prep(page, PROGRESS[1], 375, 812);
+  await expect(page.locator("#pgMain")).toBeVisible();
+  await expect(page.locator("#pgStatusPill")).toBeVisible();
+  await expect(page.locator(".pg-empty-actions .pg-btn--go")).toBeVisible();
+  await expectFits(page, "progress critical path @ 375px");
+
+  await prep(page, GUIDES[1][1], 375, 812);
+  await expect(page.locator("#guideTabs .gtab:not([hidden])").first()).toBeVisible();
+  await expect(page.locator("main")).toBeVisible();
+  await expectFits(page, "finished guide critical path @ 375px");
+});
+
+test("⌁ a primed finished guide remains readable after the browser goes offline", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  const page = await context.newPage();
+
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "light" });
+  await page.clock.setFixedTime(NOW);
+  await page.route("**/*", (route) => route.request().url().startsWith("http://localhost:4322")
+    ? route.continue() : route.abort());
+
+  const first = await page.goto(GUIDES[1][1], { waitUntil: "networkidle" });
+  expect(first?.status(), "online prime reached an error page").toBeLessThan(400);
+  await page.addStyleTag({ content: ".reveal-pending{opacity:1!important;transform:none!important}" });
+  await expect(page.locator("#guideTabs .gtab:not([hidden])").first()).toBeVisible();
+  await page.evaluate(async () => {
+    if (!("serviceWorker" in navigator)) throw new Error("service worker unsupported");
+    await navigator.serviceWorker.ready;
+  });
+
+  await context.setOffline(true);
+  const offlinePage = await context.newPage();
+  await offlinePage.setViewportSize({ width: 375, height: 812 });
+  const offline = await offlinePage.goto(GUIDES[1][1], { waitUntil: "domcontentloaded" });
+  expect(offline?.status(), "service worker did not serve the cached guide navigation").toBeLessThan(400);
+  await offlinePage.addStyleTag({ content: ".reveal-pending{opacity:1!important;transform:none!important}" });
+  await expect(offlinePage.locator("main")).toBeVisible();
+  await expect(offlinePage.locator("#guideTabs .gtab:not([hidden])").first()).toBeVisible();
+  await expect(offlinePage.locator(".mast-title, h1").first()).toBeVisible();
+  await expectFits(offlinePage, "finished guide offline @ 375px");
+
+  await context.close();
+});
