@@ -4,14 +4,12 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-28)
-Deterministic browser-level shared-add/offline proof remains complete. It covers production sync/outbox/error-classifier behavior with only the Firebase client/transport substituted; real Firebase/auth/deployed-rules/two-physical-client convergence remain live-environment work.
-Uruguay Canary #4 remains GREEN for the V2 draft-only product path, and R03's authenticated escalation/cancellation seams remain proven.
-Pipeline V2's original pre-registered validation verdict remains V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION, overall NOT READY. The full deterministic repair stack is now merged: PRs #106/#107 repaired the post-#105 contract defects; PR #109 added the three defects exposed by the fresh repaired-class Yamagata Run-B; PR #111 fixed the final resume-version-skew defect that caused an old research branch to execute stale pre-#109 control-plane code.
-The Yamagata repaired-class Run-B (`yamagata-20260828-73821a`) is CLOSED at 11/11 total attempts / 6 critic attempts. Critic attempt 6 corrected the five remaining `source.kind` enum errors, but its terminal gate ran stale branch code, so it is not valid repair-to-green proof. Do not extend Yamagata and do not start another Run-B as part of this repair cycle.
-V2 remains NOT READY FOR PRODUCTION CUTOVER. V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
-The deterministic repair treadmill is frozen. The next phase is release-readiness/stabilization and an explicit cutover decision. Any future live V2 acceptance canary is a separately authorized release-readiness action, not a continuation of Yamagata.
-DS1 remains calibration/candidate work, not a production-cutover decision. The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
-Durable shared-add decisions live in `CONTEXT.md`; repaired-class Run-B evidence lives in `docs/pipeline v2/RUNB2_YAMAGATA_EVIDENCE.md`.
+Uruguay Canary #4 remains GREEN for the V2 draft-only product path. R03 is fully accepted: authenticated escalation and the cancellation chain are proven.
+The deterministic V2 repair stack is merged through PR #111. Yamagata Run-B `yamagata-20260828-73821a` is CLOSED at 11/11 attempts; its last critic output fixed the remaining enum findings, but stale research-branch control-plane code invalidated that attempt as repair-to-green proof. PR #111 regression-pins the version-skew repair. Do not extend Yamagata or repeat Run-B.
+V2 is still the target but remains NOT READY FOR PRODUCTION CUTOVER. V1 stays the default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
+Current phase: release-readiness/stabilization. S01/S05/S06 are closed deterministic work; remaining checks are mobile traveler path, offline/poor-network traveler path, and final accessibility/interaction confirmation before a separately authorized clean V2 acceptance canary.
+The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
+Durable shared-add decisions: `CONTEXT.md`. Run-B evidence: `docs/pipeline v2/RUNB2_YAMAGATA_EVIDENCE.md`.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
