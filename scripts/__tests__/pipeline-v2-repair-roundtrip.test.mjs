@@ -90,6 +90,12 @@ async function makeCheckout(name) {
 
 const evidenceAt = async (dir) => JSON.parse(await readFile(path.join(dir, "guides-intake", SLUG, "evidence.v2.json"), "utf8"));
 const stateAt = async (dir) => JSON.parse(await readFile(path.join(dir, "guides-intake", SLUG, "run.v2.json"), "utf8"));
+/** The five budget/history numbers the routed round trip must keep honest. */
+const accounting = (state) => ({
+  total: state.attempts.total, autoRetries: state.attempts.autoRetries,
+  reconcile: state.stages.reconcile.attempts, critic: state.stages.critic.attempts,
+  criticHistory: state.stages.critic.history.map((h) => `${h.attempt}:${h.status}/${h.failureClass ?? "-"}`),
+});
 
 beforeAll(async () => {
   root = await mkdtemp(path.join(tmpdir(), "waypoint-roundtrip-"));
@@ -282,6 +288,19 @@ describe("R-A — the routed evidence-owner repair survives a fresh checkout and
     expect(done.stages.critic.history).toHaveLength(1);
     expect(done.stages.critic.history[0].status).toBe("complete");
     expect(done.stages.critic.replay).toBeFalsy();  // the marker is spent
+
+    // ── the whole incident's budget ledger, stated exactly ──
+    // ONE paid critic pass, ONE evidence-owner repair, ONE auto-retry reservation, and no
+    // manufactured failure anywhere in the critic's history.
+    expect(accounting(done)).toEqual({
+      // attempts.total is bumped by the dispatch/setup path, which this stage-level fixture
+      // deliberately does not drive — asserting a number it never produced would be theatre.
+      total: 0,
+      autoRetries: 1,      // one reservation for one routed incident
+      reconcile: 2,        // the original pass and the repair
+      critic: 1,           // the paid pass. The replay is NOT a second one.
+      criticHistory: ["1:complete/-"],
+    });
 
     // ── and the evidence is self-consistent: the disproven records no longer carry the ask ──
     const finalEvidence = await evidenceAt(second);

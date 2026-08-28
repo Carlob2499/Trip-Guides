@@ -471,18 +471,15 @@ export const evidenceDocSchema = z.looseObject({
     noYieldReason: z.string().nullable().default(null),
   }).nullable().default(null),
   // Every independent (Pass-B origin) finding gets exactly one typed disposition, linked by id.
-  // 2.3 (additive): the two relations reconciliation used to assert only in `note` prose, where
-  // nothing downstream could read them. Each is a typed DISCRIMINATOR rather than a bare id list,
-  // because the historical rows prove both have a second legitimate meaning no list can express:
-  // `corroborates` may be "recommendation" (agreement with a shortlist call, as accepted
-  // Uruguay's single-sourced `agree` leads are) and `supersedes` may be "recommendation" (Tottori's
-  // ev-jumbo-taxi replaced "Pass A's weak taxi fallback", which was never a record) — so no id is
-  // ever invented. Optional here, REQUIRED by dispositionProblems at ≥2.3: older artifacts stay
-  // valid, a 2.3 row cannot stay silent. Stated honestly: a row declaring `kind: "none"` is still
-  // the reconciler's own assertion, exactly as `editorialOnly` was the critic's. It is strictly
-  // better than silence — the answer is machine-readable, and a "factual" claim IS validated
-  // against the records it names — but proving a NEGATIVE would need proposition identity on
-  // evidence records, which this artifact does not carry. That ownership is the missing piece.
+  // 2.3 (additive): relations reconcile used to assert only in `note` prose. Typed DISCRIMINATORS,
+  // not bare id lists, because the historical rows prove both have a second legitimate meaning:
+  // Uruguay's single-sourced `agree` corroborates a RECOMMENDATION, and Tottori's ev-jumbo-taxi
+  // supersedes "Pass A's weak taxi fallback" — never a record — so no id is ever invented.
+  // Optional here, required by dispositionProblems at ≥2.3: older artifacts stay valid, a 2.3 row
+  // cannot stay silent. Limit: `kind: "none"` is still the reconciler's own assertion. Better than
+  // silence (machine-readable, and `factual` IS validated against the records it names), but
+  // proving the negative needs proposition identity on evidence records, which this artifact
+  // does not carry.
   reconciliation: z.array(z.object({
     findingId: z.string().min(1),
     disposition: z.enum(DISPOSITIONS),
