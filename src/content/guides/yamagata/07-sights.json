@@ -55,7 +55,7 @@
       {
         "name": "Risshaku-ji (Yamadera)",
         "kicker": "≈20 min by train · 1,015 stone steps",
-        "body": "<p>A mountain temple complex climbing a cliff face above the Yamadera valley, reached by a direct Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}. No cable car or shortcut exists — the climb to the Godaido viewing platform is on foot, the whole way. Konponchudo, the main hall near the base, is a complete stop on its own for anyone who'd rather not attempt the stairs.</p>",
+        "body": "<p>A mountain temple complex climbing a cliff face above the Yamadera valley, reached by a direct Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}. No cable car or shortcut exists — the climb to the Godaido viewing platform is on foot, the whole way. Konponchudo, the main hall near the base, is a complete stop on its own for anyone who'd rather not attempt the stairs.</p><p>⚠ Hours are published seasonally — 8:00-16:00 April-September, 8:30-15:00 December-March — with <a href='https://rissyakuji.jp/'>no October bracket at all</a>. Treat it as a mid-afternoon close and confirm on the day.</p>",
         "map": { "lat": 38.312556, "lng": 140.437389 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 120,
@@ -66,7 +66,7 @@
       {
         "name": "Ginzan Onsen",
         "kicker": "Gas-lit ryokan street · best before 11:00 or after evening lamp-lighting",
-        "body": "<p>A Taisho-era wooden ryokan street along the Ginzan River, gas lamps lighting ≈16:30-17:00 (seasonal — the schedule shifts earlier as sunset comes sooner through October), plus the riverside \"Waraku\" foot bath and Shirogane Falls (22m) at the street's end. Midday is the most crowded window; staying overnight pays off here — before roughly 7:00 the street is nearly empty, well ahead of the day-trip crowds.</p>",
+        "body": "<p>A Taisho-era wooden ryokan street along the Ginzan River, with the riverside \"Waraku\" foot bath and Shirogane Falls (22m) at its end.</p><p>The gas lamps are lit at dusk — ⚠ reckon on ≈17:00 in late October, though no exact time is published; ask at your ryokan. Midday is the most crowded window. Staying overnight pays off here: before roughly 7:00 the street is nearly empty, well ahead of the day-trip crowds.</p>",
         "map": { "lat": 38.56972, "lng": 140.53111 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 90,

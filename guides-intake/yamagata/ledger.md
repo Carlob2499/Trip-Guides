@@ -375,6 +375,140 @@ and is recorded as a pipeline pattern rather than papered over.
   answer is a researched taxi fallback with a phone number in Transit, not a weather alternate — the
   first pass's rebuttal survives the second pass intact.
 
+### Third critic pass (2026-08-28, fresh context) — four findings, all four implemented
+
+Fresh workspace, no prior evidence artifacts, no run state. Five scans again (#6 anchor · #8 priority
+depth · #9 party fit · #12 authenticity · the vibe lens). The anchor transfer survives this pass intact
+— re-fetching the operator's Apr–Oct table confirmed C8's season call, the 18:21 last arrival into
+Ginzan Onsen, and the ¥1,000 cash-only fare. What did not survive is the pair of TIME facts the trip's
+two set-piece days are built on, and the guide's only safety surface. Every changed value is declared in
+`critic-corrections.v2.json`.
+
+#### C11 — Yamadera's opening time is read off a season this trip is not in, cited to a page with no hours (rubric #3 · #7 · #10) — FIXED
+
+`06-days.json` Day 2 was built on "the 8:00 opening": *"Early start: catch a Senzan Line train that
+lands you at the 8:00 opening, ahead of tour groups."* Its `source_url` is `rissyakuji.jp/sanpai/`,
+`shelf_life: "hours"`. Fetched, that page carries the admission table (500円 中学生以上, 200円 小人,
+団体30名以上 400円, 「清算は現金のみでお願いします」) and **no 拝観時間 at all**. The Risshaku-ji sight
+card cites `rissyakuji.jp/access/`, which fetches to a walking-directions page — also no hours, and
+nothing about a ropeway or a step count either. Two surfaces, two citations, neither publishes the
+fact.
+
+The temple's own top page does, and it is worse than a missing citation. It publishes exactly two
+brackets: **4月-9月: 8時～16時** and **12月-3月: 8時30分〜15時（閉門時間16時）**. There is no October
+row and no November row. This trip is **Oct 20–23**. The shipped 8:00 is the April–September figure
+applied to a month the temple does not schedule publicly, and the guide states **no closing time
+anywhere** — for the trip's one `energy: "packed"`, 1,015-step, no-ramps-anywhere day, with two low-
+mobility travelers who will be slower than the party both ways.
+
+The closing time is the decision, not the opening one: 16:00 in the published summer bracket, 15:00 in
+the winter one, unknown in the gap the trip sits in. A group that reads "8:00 opening" and nothing else
+has no way to know the mountain shuts in the mid-afternoon. Both surfaces now carry both brackets, the
+October gap named as a gap, and a ⚠ confirm-the-closing-time instruction, cited inline to
+`rissyakuji.jp`. Day 2's section `source_url` is deliberately left on `/sanpai/`: that page genuinely
+does back the admission fee and the cash-only rule the body states from `facts.json`.
+
+#### C12 — the gas-lamp time that sets Day 3's arrival target is a window its own citation does not give (rubric #3 · #10 · vibe lens: pacing) — FIXED
+
+`07-sights.json` Ginzan Onsen and `06-days.json` Day 3 both shipped *"gas lamps lighting ≈16:30-17:00
+(seasonal — the schedule shifts earlier as sunset comes sooner through October)"*, Day 3 adding *"best
+photo window 16:30-17:30"*. Both cite `yamagatakanko.com/attractions/detail_2832.html`. Fetched, that
+page says one thing about the lamps: 「夕暮れになるとガス灯に火がともり、ノスタルジックな日本情緒が漂います」
+— lit at dusk. It publishes no clock time, no bracket, and no drift.
+
+The Amendments trail records where the number really came from: a reconcile-stage re-source to
+`yunokaori.com` giving **≈17:00 for a May–October bracket** and ≈16:30 for November–April. So the
+shipped range is the two brackets averaged into one window, and the parenthetical runs the seasonal
+shift **backwards** — the move to 16:30 happens in November, after these dates, not "through October".
+For a party of eight arriving on a bus with a handful of departures, a lamp time stated 30 minutes
+early is a real cost: it is the thing the whole afternoon is timed against.
+
+Both surfaces now state what the citation supports — lit at dusk — and carry ≈17:00 as a ⚠ reckoning
+with the instruction to ask at the ryokan, since no operator publishes the time. `yunokaori.com` is
+outside this stage's fetchable domains, so the ≈17:00 figure is carried from the run's own reconcile
+record rather than re-fetched, and it is flagged accordingly rather than presented as checked today.
+The invented "best photo window" is gone.
+
+#### C13 — the guide's only safety surface promises English-speaking emergency operators, on a pharmacy how-to (rubric #3 · #10) — FIXED
+
+`03-health-and-safety.json` opened with *"Emergency numbers: police 110, ambulance/fire 119 — both
+free, nationwide, with English-speaking operators available."* The section's sole citation is
+`cotoacademy.com`'s pharmacy guide. Fetched, it mentions neither 110 nor 119 nor emergency
+interpretation. This is the **third instance in one guide** of the class C10 named — a section-level
+`source_url` treated as covering every sentence — and the previous pass caught the measles sentence in
+this same body while leaving the sentence above it.
+
+"English-speaking operators available" is also the worst kind of unsourced reassurance: it is acted on
+once, under duress, in Obanazawa or on a mountain path at Yamadera, by a party with two low-mobility
+travelers. No emergency authority is reachable from this stage's allowed domains, so per §7 the promise
+is withdrawn rather than flagged-and-kept, and replaced with the actionable half — have the ryokan or
+hotel desk place the call. The numbers themselves are durable and stay.
+
+Same edit closes the defect the second pass recorded and left standing: *"Tsuruha Drug is common across
+Tohoku"* was credited to a page that names Matsumoto Kiyoshi, Cocokara Fine and Sun Drug. The claim is
+true and durable, but there is no reason to keep a wrong citation when the right sentence is one line
+away — the body now names the chains its own source names.
+
+#### C14 — eight people check out of the hotel and then carry their luggage round a museum (rubric #9 · common-sense lens) — FIXED
+
+Day 3 is the checkout day. Its plan is a free morning at Bunshokan or Beninokura, then a ≈50-minute
+train and the cash-only bus. Intake makes mobility BINDING and the luggage explicit — *"the group
+carries luggage on the transfer from the Yamagata side toward Oishida / Ginzan Onsen"* — and Transit
+plans for the bus being unable to take it all. Nothing in the guide says what happens to eight people's
+bags between checkout and the train. The morning stop is a museum with a stair lift and loaner
+wheelchairs; arriving with eight suitcases is the version of that morning nobody planned.
+
+Added to Day 3 as an instruction, not a claim: leave the bags with the hotel's front desk for the
+morning, ⚠ confirming at booking that they will hold them after checkout. No venue, hour or price is
+asserted, so nothing new needed sourcing.
+
+### Considered and NOT actioned — third-pass rebuttals
+
+- **`base4.html` carries 「※土日祝：運休ダイヤ」 — a different Saturday/Sunday/holiday timetable — and the
+  guide never mentions it.** Not a finding for this trip: Oct 20–23, 2026 is Tue–Fri, and Japan's only
+  October national holiday (Sports Day, the 2nd Monday) falls on Oct 12. Worth carrying if the dates
+  ever move; recorded here rather than written into a guide it cannot affect.
+- **Day 3 names no target outbound bus, while Day 4 names four exact return departures.** Considered
+  and rejected as an edit. With C12's correction the arrival target is looser than the guide implied,
+  the last service into Ginzan Onsen (18:21) is already stated, and the two automated reads of the
+  operator's Apr–Oct table disagreed on which column is 大石田駅発 — publishing a to-the-minute outbound
+  recommendation off an extraction I could not resolve would be exactly the defect C8 was written
+  about. Flagged for a networked pass instead: re-read `base4.html`'s 大石田駅 column directly and name
+  one target departure for the group.
+- **Seven `sights` items still carry `place_id: "__VERIFICATION_REQUIRED__"`** while the five map points
+  were resolved. Left alone — the reconcile stage judged these non-blocking, and resolving them means
+  composing OSM ids by hand for venues rather than settlements, which is how a wrong id gets shipped
+  that looks exactly like a right one.
+- **No `moreLabel` on any folding `panel`/`prose` body in this guide** (Plan ×3, Money, Health,
+  Etiquette). A real `block-types.md` gap and a rubric #13 (P2) miss, but it is six leaves of pure
+  navigation copy with no factual basis, and under this stage's declaration rules every one of them
+  would have to ship as a "correction" carrying a source it does not have. Recorded, not forced.
+- **The Ginzanso direct-dial `0237-28-2322` in the Booking checklist.** Re-checked against
+  `ginzanonsen.jp/yado/` this pass: the directory publishes 「総室：40室／宿泊人数：200名」 for Ginzanso and
+  **no telephone number for it at all** (only the town information centre, 0237-28-3933). The second
+  pass's call stands — an unconfirmable but plausible number on the trip's one time-critical booking is
+  left in place and flagged, not deleted.
+- **C1/C2/C8's anchor-transfer work.** Re-fetched `base4.html` independently this pass: the Apr 1 –
+  Oct 24 2026 validity range, the ¥1,000 cash-only fare with 半額 for children and disabled passengers,
+  and 18:21 as the last arrival into Ginzan Onsen all hold. No change.
+
+**Artifact note (baseline gap, carried forward).** This attempt's workspace already contained C1–C10's
+edits and no git history, so `critic-corrections.v2.json` declares the seven leaves **this** pass
+changed, each with the `previousValue` it read first-hand. If the control plane diffs against the
+pre-C1 tree, C1–C10's leaves remain undeclarable from inside this stage for the same reason the second
+pass recorded: their pre-edit text is documented in the prose above but not verbatim at pointer
+granularity. The previous attempt's validator finding — `source` and `freshness` written as strings
+where `wp-critic-corrections/2.1` requires objects — is repaired: both are now objects
+(`source{url,kind,access,language,publishedAt,family,independent,appliesToYears}`,
+`freshness{perishable,shelfLife,recheckOn}`).
+
+**Scope defect to clear before collection.** This stage wrote a throwaway validation script to
+`.critic-check.mjs` at the repo root and then could not delete it — `rm`, `unlink` and `find -delete`
+are all outside the sandbox's allowed commands in this environment, and there is no delete-capable
+tool. It is scratch, referenced by nothing, and **must be removed before `stageScopeProblems` runs**,
+which will otherwise fail this stage on `touched forbidden path .critic-check.mjs`. Recorded as a
+pipeline pattern rather than hidden.
+
 ## Citation audit
 
 20 perishable facts sampled across two critic passes, weighted to prices, hours and the anchor
@@ -410,6 +544,30 @@ Also spot-checked and supporting, no guide change: Kyu-Saiseikan free with no we
 page — the item's empty `closed_days` is correct), Mogami Yoshiaki Historical Museum free and closed
 Mondays, Bunshokan assembly hall 「工事のため令和8年9月末まで見学できません」, Izu no Hana hours and its
 overseas-tour-booking refusal.
+
+### Citation audit — third critic pass (2026-08-28, fresh context)
+
+Twelve more perishable facts sampled independently, weighted to the anchor transfer, hours and the two
+time facts the set-piece days are built on. Every source fetched; four drifted and were fixed.
+
+| Claim | Value | Source fetched | Verdict |
+|-------|-------|----------------|---------|
+| Hanagasa Bus fare + payment (R3 anchor, `facts.json`) | ¥1,000 adult one-way, cash only, half for child/disabled | y — `hanagasa-bus-taisei.co.jp/base4.html` | supports — 「運賃は現金精算のみのお取り扱いとなっております。（ICカード不可）」「料金は大人1名（片道）、小人・障がい者：半額」 |
+| Hanagasa Bus season covering the trip | Apr 1 – Oct 24, 2026 | y — `base4.html` | supports — table headed 「2026/4/1～2026/10/24」 |
+| Last bus reaching Ginzan Onsen | arrives 18:21 | y — `base4.html` | supports — the last Ginzan-bound row arrives 18:21; the later service terminates short of the village |
+| Risshaku-ji opening hour (Day 2's whole plan) | "the 8:00 opening" | y — `rissyakuji.jp/sanpai/` **and** `/access/` | **drifted → fixed** — neither cited page publishes 拝観時間 at all; the temple's own table gives 4月-9月 8時～16時 and 12月-3月 8時30分〜15時 with **no October bracket**, and the guide stated no closing time anywhere (C11) |
+| Risshaku-ji admission + payment | ¥500 adult, cash only | y — `rissyakuji.jp/sanpai/` | supports — 大人（中学生以上）500円, 小人200円, 団体30名以上400円, 「清算は現金のみ」 (a party of 8 does not reach the group rate) |
+| Ginzan Onsen gas-lamp lighting time | "≈16:30-17:00, shifts earlier through October" | y — `yamagatakanko.com/attractions/detail_2832.html` | **drifted → fixed** — page says only 「夕暮れになるとガス灯に火がともり」, no clock time; the run's own record gives ≈17:00 for the May–Oct bracket and the shift to 16:30 is November's, not October's (C12) |
+| 110/119 English-speaking operators | asserted in Health & safety | y — `cotoacademy.com` pharmacy guide | **drifted → fixed** — page contains nothing on 110, 119 or emergency interpretation; promise withdrawn, actionable half kept (C13) |
+| Yamagata drugstore chains | "Tsuruha Drug is common across Tohoku" | y — same page | **drifted → fixed** — the page names Matsumoto Kiyoshi, Cocokara Fine and Sun Drug; body re-worded to its own source (C13) |
+| Bunshokan accessibility + hours + closure (the party-fit claim, re-audit of C3) | rear wheelchair entrance, 10 loaner wheelchairs, stair lift, 9:00-16:30, 1st/3rd Mon | y — `yamagatakanko.com/attractions/detail_2515.html` | supports — 「車いす貸出：有り（10台…）」「階段昇降機があり、車イス専用の出入口があります」「障がい者用駐車場：有り（建物裏）」「多目的トイレ：有り」, 9:00～16:30, 無料, 第1・第3月曜日 |
+| Yonezawa Beef Tokiwa private room + minimums + tel | room to 14; ¥6,600 lunch / ¥9,900 dinner min; 023-666-4433 | y — `yonezawabeef.co.jp/yamagata.html` | supports — 「最大14名様までのプライベートな個室」「昼6,600円以上」「夜9,900円以上」, 11:00〜22:00 L.O.21:00 |
+| Sakaeya Honten seasonal hours + closed day (re-audit of C5) | 11:30-19:30 Oct 1–Mar 18, closed Wed, ≈20 min walk | y — `visityamagata.jp/spot-yamagata-sakaeyahonten/` | supports — 「夏期間(3月19日~9月30日) 11:30～20:15 冬期間(10月1日~3月18日) 11:30～19:30」, 水曜, ≈20 min on foot |
+| Ginzanso capacity + whether the directory lists its phone | 40 rooms / 200 guests | y — `ginzanonsen.jp/yado/` | supports on capacity 「総室：40室／宿泊人数：200名」 — and confirms the directory publishes **no** number for Ginzanso (only the town office, 0237-28-3933), so the checklist's 0237-28-2322 stays flagged, not asserted |
+
+Not fetchable from this stage and therefore flagged rather than re-checked: `yunokaori.com` (the
+gas-lamp bracket behind C12's ≈17:00), and any health authority for the withdrawn measles claim — both
+outside the allowed source domains, per the second pass's note.
 
 #### Continuity sweep — critic execution
 
@@ -475,3 +633,40 @@ access in every prior stage; the Ginzanso direct-dial `0237-28-2322` in the Book
 allowed source confirms or contradicts (the operator directory lists only the town information centre,
 0237-28-3933) — flagged rather than changed, since inventing or deleting a booking phone number on the
 trip's one time-critical reservation is worse than leaving a plausible one in place.
+
+**Third critic pass (fresh context, 2026-08-28) — greps run** across `src/content/guides/yamagata/`:
+`16:30-17:00` · `best photo window` · `8:00 opening` · `sunset comes sooner` · `English-speaking` ·
+`Tsuruha` · `bot-gated` · `rissyakuji` · `拝観` · `luggage` · `{{fact:` · `18:21|19:40|15:30|16:02`.
+
+**Ripples found & fixed:**
+- The `≈16:30-17:00` gas-lamp window and its backwards seasonal parenthetical appeared in **two**
+  places (`07-sights.json` Ginzan Onsen and `06-days.json` Day 3) — both restated to "lit at dusk" with
+  the ⚠ ≈17:00 reckoning. Day 3's "best photo window 16:30-17:30" went with it; zero occurrences remain.
+- The Yamadera hours claim appeared on **two** surfaces (`06-days.json` Day 2 `pace` and its `body`,
+  plus the `07-sights.json` Risshaku-ji card) — all three now carry both published brackets, the October
+  gap, and the ⚠ closing-time instruction, cited inline to `rissyakuji.jp`. Zero occurrences of the bare
+  "8:00 opening" remain.
+- `_guide.json`'s `verified` stamp is a fact surface: its re-check list gained Risshaku-ji's unpublished
+  October closing time and the unpublished gas-lamp time, so a reader re-verifying before travel is
+  pointed at both. The same edit cleared the last traveller-facing `bot-gated` (C7's grep was recorded as
+  run, and this surface survived it) — `09-sources.json`'s paragraph is now the only occurrence in the
+  guide, which is where the second pass ruled source-access honesty belongs.
+- Day 2's section `source_url` deliberately stays on `rissyakuji.jp/sanpai/`: that page does back the
+  ¥500 cash-only admission the body carries from `facts.json`. The hours ride an inline `<a href>`
+  instead, so nothing was orphaned. Same reasoning for the Risshaku-ji sight card's `/access/`.
+- `09-sources.json` already lists `rissyakuji.jp` as the temple's official site, so the new citation
+  needed no addition there.
+- `{{fact:…}}` tokens: both bodies I edited (`06-days.json` Day 2 and Day 3) were edited **around**
+  `{{fact:yamadera-admission-500-yen}}` and `{{fact:hanagasa-bus-fare-1000-yen}}` without touching the
+  tokens; both figures were re-confirmed against their own sources in this pass's audit.
+- `provenance: "strict"` re-check: every new `⚠`/`≈` landed in `days` and `sights` items, which are not
+  in the strict `≈`-gate's section list, and all three items already carry `verified_on` + `shelf_life`.
+- Day-of-week and closure check re-run: nothing in C11–C14 moves a stop, a date or a meal, so the
+  Tue/Wed/Thu/Fri card mapping and the closure table are unchanged.
+
+**Deferred to human (third pass):** the stray `.critic-check.mjs` at the repo root — see the scope note
+under Critic findings; this stage has no delete-capable tool and must hand it to the workflow.
+**Flagged for a networked pass:** one named target departure for Day 3's outbound Hanagasa Bus, read
+directly off `base4.html`'s 大石田駅 column (two automated reads of that table disagreed on column
+alignment, so no time was shipped); and `yunokaori.com`'s gas-lamp bracket, outside this stage's
+fetchable domains.
