@@ -23,12 +23,22 @@
       "text": "Pass A (canonical research) complete in 31m"
     },
     {
-      "at": "2026-08-28T02:56:36.460Z",
+      "at": "2026-08-28T02:57:01.647Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-28T03:22:42.978Z",
+      "kind": "decision",
+      "text": "Pass B (independent research) complete in 26m"
+    },
+    {
+      "at": "2026-08-28T03:22:42.997Z",
       "kind": "decision",
       "text": "Candidate funnel: 17 evaluated · 12 shortlisted · 9 shipped · 7 rejected"
     },
     {
-      "at": "2026-08-28T02:56:36.460Z",
+      "at": "2026-08-28T03:22:42.997Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     }
