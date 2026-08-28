@@ -211,7 +211,7 @@ async function runSubcommand(cmd, rest, get) {
       const { startOrResumeBranch } = await import("./pipeline/publish.mjs");
       const suffix = get("--suffix") ? `-${get("--suffix")}` : "";
       const name = `${get("--prefix") || "research"}/${slug}${suffix}`;
-      const { resumed } = startOrResumeBranch(name);
+      const { resumed } = startOrResumeBranch(name, { syncCurrent: has("--sync-current") });
       emit("name", name);
       // Fresh-run signal (correction pass): a branch that did NOT exist means any run state in
       // the checkout is default-branch history, not an active run — init keys fresh-run
