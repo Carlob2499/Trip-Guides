@@ -5,10 +5,21 @@
 > "## Amendments" here, never by rewriting the intake.
 
 ## Spec Summary (fill after intake, before research)
-- Section types to include / exclude (and why):
-- The 2–3 priorities driving depth:
-- Hard filters applied to every entry:
-- Verification focus (most perishable / most important to get right):
+- Section types to include / exclude (and why): kept the scaffolded backbone (Plan · Money & budget
+  · Health & safety · Etiquette & language · Transit · Days · Sights · Food & shopping · Sources) —
+  9 groups, under the default tabBudget of 10, no trip-specific tab earned (this is a 4-day,
+  2-base regional trip, not an anchor-event trip like Korea's Pokémon GO Fest).
+- The 2–3 priorities driving depth: (1) Culture/history → Izumo Taisha + Matsue Castle + Iwami
+  Ginzan (UNESCO); (2) Food & dining → Izumo soba + Lake Shinji shichin cuisine. Priority #3 was
+  left blank in intake — not researched as a separate theme.
+- Hard filters applied to every entry: no rental car unless a non-car plan is materially worse
+  (it isn't — every anchor sight is public-transit-reachable); step-free/mobility note required
+  wherever the 2 low-mobility travelers would hit stairs, long walks, or a capacity bottleneck;
+  every venue answers the four Actionable questions (where/how/when/book).
+- Verification focus (most perishable / most important to get right): the Ginzan Cart's
+  capacity/reservation/Wednesday-closure facts (the anchor), the JR ICOCA area boundary at
+  Izumo-shi, Matsue Castle's Jul 2026 price change, and the Izumo Taisha Kamiari-zuki dates
+  (recurring-event year safety — 2026's actual dates fall outside this trip's window).
 
 ## Cover art — footage candidates (research fills the shortlist; the CREATOR signs)
 > The research pass's footage scout records 0–2 licensed, hot-linkable clips here — stable-URL
@@ -19,7 +30,7 @@
 
 | Clip URL | License | Claims to show | Matches cover geography? | Frame-verified by |
 |----------|---------|----------------|--------------------------|-------------------|
-|          |         |                |                          |                   |
+| — | — | Searched Mixkit/Pixabay/Videezy for Shimane, Iwami Ginzan, Izumo Taisha, and Matsue Castle footage (2 searches) — nothing destination-specific found. Empty table, not a gap. | — | — |
 
 ## Research reconciliation (fill during the dual-pass — see the guide-author skill)
 > Pass A = canonical/verified (official, anchors, logistics). Pass B = local/authentic/crowd-aware
@@ -28,7 +39,7 @@
 
 | Item | Pass A (canonical) | Pass B (local/authentic) | Reconciled → guide | Note (conflict / crowd / novel) |
 |------|--------------------|--------------------------|--------------------|---------------------------------|
-|      |                    |                          |                    |                                 |
+| (Pass A complete — reconciliation table is Pass B/Reconcile's stage to fill) | | | | |
 
 ## Discovery leads (Pass B — native-first)
 > OPTIONAL accelerant, filled by an interactive deep-research sweep BEFORE the pipeline runs
@@ -40,7 +51,7 @@
 
 | Lead | Source (language) | Why it isn't the tourist default | Status |
 |------|-------------------|----------------------------------|--------|
-|      |                   |                                  |        |
+| (none — this accelerant is interactive-only and did not run ahead of this headless pass) | | | |
 
 ## Candidates considered (fill DURING research — one table per ranked priority)
 > Standard S2/S3 (2026-08-02): real research quality is how many options you REJECTED and
@@ -52,33 +63,86 @@
 > still fails an empty table and cross-checks every `shipped` name against the guide. An
 > honest `rejected: couldn't verify` row is a good row — it proves the option was seen.
 
-### Priority 1: (name it)
+### Priority 1: Culture / history
 
 | Candidate | Verdict |
 |-----------|---------|
-|           |         |
+| Izumo Taisha | shipped |
+| Matsue Castle | shipped |
+| Iwami Ginzan (Omori townscape + Ryugenji Mabu mine) | shipped — also the anchor transfer |
+| Adachi Museum of Art (Yasugi) | rejected: world-famous garden museum, but a ≈35–47 min-each-way detour that doesn't fit alongside Izumo Taisha + Iwami Ginzan in 4 days; also the single most generic top-10 pick in every Shimane guide, cutting against the trip's stated off-the-beaten-path style. Worth a future trip centered on Yasugi. |
+| Tsuwano ("little Kyoto", Yamaguchi Line) | rejected: reachable only via a long backtrack south/west of the Omori loop this trip already commits to; would cost a full extra transfer day this itinerary doesn't have. |
+| Oki Islands (as the anchor transfer instead of Iwami Ginzan) | rejected as the anchor: the ferry itself is real fragile-transport (Shichirui/Sakaiminato port, ≈2.5hr slow ferry or ≈1hr high-speed, weather-cancellable), but doing the islands properly costs 1.5–2 days round trip, which would force cutting either Izumo Taisha or Iwami Ginzan from a 4-day trip. Genuinely worth a future, island-focused trip. |
+| Shimane Museum of Ancient Izumo (adjacent to Izumo Taisha) | rejected: considered as an add-on to the Izumo Taisha day but not researched to standard within this pass's scope — dropping it keeps Day 2 unhurried rather than packing in a second museum. |
 
-### Priority 2: (name it)
+### Priority 2: Food & dining
 
 | Candidate | Verdict |
 |-----------|---------|
-|           |         |
+| Tanakaya (Izumo soba, Izumo Taisha-mae) | shipped |
+| Arakiya (Izumo soba, Izumo Taisha-mae, est. 1780s) | shipped as a named alternative, with its Wednesday closure flagged — this trip's Izumo Taisha day lands on a Wednesday |
+| Yakumoan (Izumo soba, Matsue) | shipped — the party-of-8 feasibility test venue (12-guest phone-reservation cap) |
+| Matsu-no-Daidokoro Konekkoya (Shinjiko-shichin, Matsue) | shipped |
+| Gungendo Main Store Café (Omori) | shipped |
+| Kawakyo (Shinjiko-shichin, Matsue) | rejected: "often fully booked" per multiple secondary sources and no confirmed group-of-8 capacity found — Konekkoya's explicit 24-seat zashiki made it the safer documented pick for this party size. |
+| Terezuko / 郷土料理てれすこ (Shinjiko-shichin course, Matsue) | rejected: found only as a name in aggregator listicles, no official page or capacity/hours reachable this pass — didn't clear the sourcing bar. |
+| Ajidokoro Shigeru (shijimi kamameshi, Matsue) | rejected: solid single-dish pick but no group-booking information found; Konekkoya already covers the shijimi/shichin niche with documented group capacity. |
 
-### Priority 3: (name it)
+### Anchor / logistics (unranked in intake, but the trip's defining research constraint)
 
 | Candidate | Verdict |
 |-----------|---------|
-|           |         |
+| Iwami Ginzan Ginzan Cart chain (JR Matsue→Odashi, Iwami Kotsu bus, Ginzan Cart) | shipped as the anchor — 6-seat no-reservation shuttle, Wednesday closures, weather-cancellable, 2.3km/45min walking fallback; genuinely "physical feasibility beyond timetable arithmetic" for a party of 8 with 2 low-mobility travelers |
+| Oki Islands ferry | rejected as anchor (see Priority 1 table) — real fragile-transport but doesn't fit the 4-day scope |
+| Takyo-Abeke as the sole Omori lodging for all 8 | rejected: largest single unit holds 6 (main house); an 8-person party would split across the main house and a separate storehouse room reserved as two bookings — workable but fragile for a mixed-mobility group. See the traveler question below. |
 
 ## Questions for the traveler (research emits; traveler answers on the progress page)
 > Traveler-framed only — no pipeline vocabulary. Each question carries an assumption the guide
 > builds on until the traveler answers. See src/features/intake-questions/ for the model.
 
-(none yet)
+### q-shimane-1
+- **Q:** For the Iwami Ginzan night, would you rather stay inside the historic Omori village itself (in a beautifully restored 18th-century merchant house, but split across two separate small buildings since none holds all 8 of you) — or in a modern, easier-access hotel in Oda City center, a 10–15 minute bus/taxi ride away?
+- **Assumed:** A modern Oda City hotel — simpler for a party of 8 with 2 low-mobility travelers (elevators, step-free rooms are far more likely there than in a 230-year-old machiya), at the cost of the more atmospheric in-village stay.
+- **Context:** Day 3 (Thu Oct 22) lodging, and the Booking checklist panel.
+- **Status:** open
+
+### q-shimane-2
+- **Q:** This trip's pace wasn't specified (packed / balanced / slow) — the itinerary below assumes a moderate pace with one deliberately light day (arrival) and one deliberately light morning (departure day), built around the group's 2 low-mobility travelers rather than the group average. Does that match what you want?
+- **Assumed:** Balanced pace, mobility-first — see the `energy` tags on each day.
+- **Context:** Days tab, all 4 days.
+- **Status:** open
 
 ## Amendments (append-only — record every research-forced re-plan)
 > When research changes the plan (an anchor moved, a neighborhood beats the intended one, a day
 > collapsed), log it here with the reason. `intake.md` stays the ORIGINAL intent; this is the
 > diff. (Korea/Denmark were "corrected three times by running it" — that history now has a home.)
 
-- (none yet)
+- 2026-08-28 — Intake left the anchor event, cities/bases, and priority #3 unspecified,
+  by design ("must be earned by research"). Research selected the Iwami Ginzan Ginzan Cart
+  transport chain as the anchor (see the Anchor/logistics candidates table) and a two-base
+  plan (Matsue, then Oda/Omori) to satisfy the stated luggage-on-the-main-transfer constraint.
+  This is fulfilling an open research task, not overriding a stated intent — recorded here for
+  visibility, not as a conflict.
+- 2026-08-28 — Script access (`node scripts/*.mjs`) was unavailable in this run's sandbox (every
+  invocation, including the offline `lookup-tz.mjs`, required an approval that never arrived
+  headlessly). Coordinates were sourced from Wikipedia/Commons EXIF metadata instead of
+  `lookup-place.mjs`; every `place_id` is the honest `__VERIFICATION_REQUIRED__` placeholder
+  rather than a guessed one. `tz: "Asia/Tokyo"` was set directly without the script — Japan has
+  one unambiguous zone nationwide (no DST, no regional exceptions), so this is not a guess in
+  the way a US-state case would be. Commons filenames were confirmed by fetching each File: page
+  directly (WebFetch) rather than via `search-commons.mjs` — same existence guarantee, different
+  tool. Flagged so Pass B/Reconcile know script access may need re-checking.
+- 2026-08-28 — A WebSearch synthesis initially reported Yakumoan (Matsue soba) as "closed
+  Thursdays" with a "12-guest phone reservation cap." A direct WebFetch of the operator's own
+  page (yakumoan.jp/shop/, and separately the Matsue tourism association's listing) contradicted
+  both: hours are 10:30–13:30, the only stated closure is Jan 1–2, and no group cap is published
+  at all. The guide and evidence file were corrected to the fetched primary source; the
+  search-synthesis figures were never fetched-verified and are not shipped. Recorded as a
+  concrete instance of `research-efficiency.md`'s fetch-discipline rule: a search-result
+  synthesis is discovery, not verification.
+- 2026-08-28 — Entry/visa requirements and the US travel advisory could not be confirmed against
+  their official pages: `mofa.go.jp`, `us.emb-japan.go.jp`, and `travel.state.gov` all returned
+  HTTP 403 to a non-browser fetch (2 attempts each, per the bot-blocked doctrine). The guide's
+  `entry[]` and `advisory` fields were left unset rather than citing an aggregator for an R4
+  fact; the Plan tab's "Entry & documents" panel carries an explicit ⚠ instead. Needs a
+  browser-capable recheck before this guide can publish.

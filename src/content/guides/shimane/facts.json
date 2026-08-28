@@ -1,1 +1,64 @@
-{}
+{
+  "matsue-castle-tenshu-1200-yen": {
+    "claim": "Matsue Castle keep (tenshu) admission, individual adult, effective Jul 1 2026",
+    "value": "¥1,200",
+    "source_url": "https://www.matsue-castle.jp/userguide/",
+    "verified_on": "2026-08-28",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "izumo-taisha-treasure-hall-300-yen": {
+    "claim": "Izumo Taisha Treasure Hall (宝物殿) admission, adult",
+    "value": "¥300",
+    "source_url": "https://izumooyashiro.or.jp/archives/news/12552",
+    "verified_on": "2026-08-28",
+    "shelf_life": "venue",
+    "tier": "primary"
+  },
+  "ichibata-matsue-izumo-900-yen": {
+    "claim": "Ichibata Electric Railway, Matsue Shinjiko Onsen ↔ Izumo Taisha-mae, one way (transfer at Kawato)",
+    "value": "¥900",
+    "source_url": "https://ekitan.com/transit/fare/sf-8781/st-8677",
+    "verified_on": "2026-08-28",
+    "shelf_life": "transit",
+    "tier": "secondary"
+  },
+  "odashi-omori-bus-760-yen": {
+    "claim": "Iwami Kotsu community bus, Odashi Station → Iwami Ginzan World Heritage Center, one way",
+    "value": "¥760",
+    "source_url": "https://www.japan-guide.com/e/e5851.html",
+    "verified_on": "2026-08-28",
+    "shelf_life": "transit",
+    "tier": "corroborated"
+  },
+  "ginzan-cart-500-yen": {
+    "claim": "Ginzan Cart (Green Slow Mobility), Omori Daikansho ruins → Ryugenji Mabu mine entrance, one way",
+    "value": "≈¥500",
+    "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+    "verified_on": "2026-08-28",
+    "shelf_life": "venue",
+    "tier": "primary",
+    "state": "approx"
+  },
+  "jr-sanin-matsue-odashi-fare": {
+    "claim": "JR San-in Main Line, Matsue → Odashi, one way (limited express or local)",
+    "value": "¥1,170–3,000",
+    "source_url": "https://www.japan-guide.com/e/e5851.html",
+    "verified_on": "2026-08-28",
+    "shelf_life": "transit",
+    "tier": "secondary",
+    "state": "approx"
+  },
+  "arakiya-warigo-soba-1080-yen": {
+    "claim": "Arakiya (Izumo Taisha's oldest soba house), standard warigo soba set",
+    "value": "¥1,080",
+    "source_url": "https://arakiya-izumo.com/",
+    "verified_on": "2026-08-28",
+    "shelf_life": "venue",
+    "tier": "secondary"
+  },
+  "traveler-origin": {
+    "value": "XXX",
+    "state": "unconfirmed"
+  }
+}

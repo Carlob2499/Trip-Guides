@@ -4,20 +4,97 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
-    "items": [],
-    "rank": 1
+    "rank": 1,
+    "items": [
+      {
+        "name": "Matsue Castle",
+        "kicker": "One of Japan's twelve original castle keeps",
+        "body": "<p>Built in 1611 and never rebuilt — the black-timbered keep is original, not a postwar concrete replica like most \"castles\" travelers see in Japan. Climb the narrow original staircases inside for a Lake Shinji view from the top.</p><p>Admission {{fact:matsue-castle-tenshu-1200-yen}} (adult, individual rate — prices rose from ¥800 on Jul 1 2026, funding restoration work; a generic guide still quoting the old figure is out of date). Open 8:30–17:00 October–March, last entry 16:30, no closure days.</p>",
+        "img": {
+          "file": "Matsue Castle-4a.jpg",
+          "alt": "The black-timbered keep of Matsue Castle seen from below",
+          "credit": "江戸村のとくぞう · Wikimedia Commons",
+          "license": "CC BY-SA 4.0"
+        },
+        "map": { "lat": 35.474977, "lng": 133.050556 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 75,
+        "source_url": "https://www.matsue-castle.jp/userguide/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Izumo Taisha",
+        "kicker": "Japan's oldest shrine, and the only one worshipped with four claps",
+        "body": "<p>Second only to Ise Jingu in Shinto significance, and architecturally distinct — the honden's soaring roofline and the enormous shimenawa (braided straw rope) over the Kaguraden hall are unlike any other shrine on a typical Japan itinerary.</p><p>Grounds open 6:00–19:00, free; the rear precinct closes at 16:30 for security. The Treasure Hall (separate building, {{fact:izumo-taisha-treasure-hall-300-yen}} adult) runs 8:30–16:30, last admission 16:00.</p><p>Worship here is two bows, <b>four</b> claps, one bow — not the two-clap pattern used almost everywhere else in Japan.</p>",
+        "img": {
+          "file": "Izumo-taisha Shrine, Izumo City, Shimane Prefecture, September 2014.jpg",
+          "alt": "Izumo Taisha's torii gate and stone approach",
+          "credit": "Kuruman · Wikimedia Commons",
+          "license": "CC BY 2.0"
+        },
+        "map": { "lat": 35.40194, "lng": 132.68556 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 120,
+        "source_url": "https://izumooyashiro.or.jp/archives/news/12552",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Iwami Ginzan — Omori townscape & Ryugenji Mabu mine",
+        "kicker": "UNESCO World Heritage silver-mining valley, reached by a 6-seat cart",
+        "body": "<p>Omori was one of the world's largest silver-mining towns in the 16th–17th centuries; the preserved merchant houses along the valley road still have people living in them. The actual mine tunnel, Ryugenji Mabu, sits 2.3 km up-valley and is open for walk-through visits along a ≈400m lit stretch.</p><p>Private cars are banned past the park entrance — get there by the no-reservation Ginzan Cart (6 seats, roughly every 30–40 min, closed Wednesdays) or on foot (≈45 min each way). This bottleneck is the trip's real physical-feasibility test for a group of 8: plan for splitting across cart trips, not for everyone boarding the first one.</p>",
+        "img": {
+          "file": "180504 Omori of Iwami Ginzan Silver Mine Oda Shimane pref Japan01bs4.jpg",
+          "alt": "Red-roofed Edo-period merchant houses lining the Omori townscape valley road",
+          "credit": "663highland · Wikimedia Commons",
+          "license": "CC BY-SA 4.0"
+        },
+        "map": { "lat": 35.1190, "lng": 132.4462 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 240,
+        "closed_days": ["wed"],
+        "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      }
+    ]
   },
   {
     "type": "divergences",
     "group": "Sights",
     "title": "What generic guides get wrong",
     "phase": "daily",
+    "rank": 1,
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "\"October is when all of Japan's gods gather at Izumo Taisha\" is treated as a calendar fact travelers can time a trip around.",
+        "correction": "The Kamiari-zuki gathering follows the old lunar calendar's 10th month, not October on the Gregorian calendar. In 2026 the actual festival period is Nov 9 – Dec 8 — a trip in late October sees the shrine itself, not the gathering.",
+        "category": "misleading",
+        "source_url": "https://izumo-kankou.gr.jp/topics/11618",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "claim": "ICOCA/Suica-type IC cards \"work everywhere in Japan, including rural lines.\"",
+        "correction": "The JR West ICOCA area on the San-in Line ends at Izumo-shi Station. One stop further west — the direction of Odashi and Iwami Ginzan — IC taps stop working entirely; carry cash or buy a paper ticket before crossing that boundary.",
+        "category": "missing-context",
+        "source_url": "https://www.westjr.co.jp/press/article/2016/08/page_9133.html",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "claim": "Older trip reports quote Matsue Castle admission at ¥800.",
+        "correction": "Individual adult admission rose to ¥1,200 on Jul 1 2026, funding tenshu restoration work — a real, recent, and easy-to-miss price jump for anyone reading pre-2026 writeups.",
+        "category": "outdated",
+        "source_url": "https://www.matsue-castle.jp/userguide/",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "claim": "Iwami Ginzan and Izumo Taisha are treated as interchangeable day-trip destinations regardless of which weekday you visit.",
+        "correction": "Wednesday is the region's default closure day for small heritage-tourism operators: the Ginzan Cart, the 240-year-old Arakiya soba house at Izumo Taisha, and Gungendo's Omori café are all closed. None of this is obvious from a single venue's own page — it only shows up by checking each one.",
+        "category": "missing-context",
+        "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+        "verified_on": "2026-08-28"
       }
-    ],
-    "rank": 1
+    ]
   }
 ]

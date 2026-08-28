@@ -4,7 +4,17 @@
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
-    "steps": []
+    "steps": [
+      "<b>Izumo Airport (IZO) → Matsue</b> — airport limousine bus, departs ≈10 min after each arriving flight's baggage claim opens; confirm you're on the Matsue-route bus, not the Izumo-route one. Buy your ticket at the counter or on board.",
+      "<b>Matsue → Izumo Taisha</b> — Ichibata Electric Railway, Matsue Shinjiko Onsen Station to Izumo Taisha-mae, with a same-platform transfer at Kawato Station. ≈{{fact:ichibata-matsue-izumo-900-yen}} one way; IC cards (ICOCA/Suica) accepted.",
+      "<b>Matsue → Odashi (the base transfer, with luggage)</b> — JR San-in Main Line, ≈45–90 min depending on train (limited express vs. local), {{fact:jr-sanin-matsue-odashi-fare}}. <b>IC cards stop working at Izumo-shi Station</b> — the JR West ICOCA area ends there, so buy a paper ticket (or top up with cash at the gate) before boarding past Izumo-shi.",
+      "<b>Odashi Station → Iwami Ginzan / Omori</b> — Iwami Kotsu community bus toward the World Heritage Center, ≈30 min, {{fact:odashi-omori-bus-760-yen}} one way, roughly hourly (with a documented gap around the 10 o'clock hour — don't assume a bus is always 30 minutes away). IC cards accepted on this bus.",
+      "<b>Omori townscape → Ryugenji Mabu mine entrance</b> — the Ginzan Cart (Green Slow Mobility), a 6-seat electric cart, {{fact:ginzan-cart-500-yen}} one way, no reservations, first-come first-served, roughly every 30–40 min, 8:00–18:00. <b>Closed Wednesdays</b> and can suspend on short notice in bad weather. If it's full or not running, the walk is ≈2.3 km / 45 min one way on an unpaved forest trail — plan real time for this, not a placeholder, if traveling with the two low-mobility members of the group.",
+      "<b>Last practical return, Odashi → Matsue</b> — the last convenient upbound JR service leaves Odashi ≈19:24 (Super Oki service toward Yonago, calling at Matsue). Missing it means either a very late connection or an unplanned night away from your booked base — build the Iwami Ginzan day around this deadline, not around the cart's own 18:00 close.",
+      "<b>Omori/Odashi → Izumo Airport (departure day)</b> — reverse the JR leg to Izumo-shi, then the airport limousine bus or a taxi for the final stretch; there's no direct rail into the airport itself."
+    ],
+    "verified_on": "2026-08-28",
+    "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/"
   },
   {
     "type": "map",
@@ -12,9 +22,39 @@
     "title": "Orientation map",
     "phase": "daily",
     "center": {
-      "lat": 35.6762,
-      "lng": 139.6503
+      "lat": 35.35,
+      "lng": 132.75
     },
-    "span": 0.08
+    "span": 1.1,
+    "points": [
+      {
+        "name": "Matsue Castle",
+        "lat": 35.474977,
+        "lng": 133.050556,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "松江城"
+      },
+      {
+        "name": "Izumo Taisha",
+        "lat": 35.40194,
+        "lng": 132.68556,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "出雲大社"
+      },
+      {
+        "name": "Odashi Station",
+        "lat": 35.1928,
+        "lng": 132.4956,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "大田市駅"
+      },
+      {
+        "name": "Iwami Ginzan / Omori townscape",
+        "lat": 35.1190,
+        "lng": 132.4462,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "石見銀山 大森町"
+      }
+    ]
   }
 ]

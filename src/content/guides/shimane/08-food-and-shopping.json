@@ -4,7 +4,77 @@
     "group": "Food & shopping",
     "title": "What to eat",
     "phase": "daily",
-    "items": [],
-    "rank": 2
+    "rank": 2,
+    "intro": "Izumo soba (stacked in lacquered warigo trays, eaten with all three tiers at once) and Lake Shinji's shijimi-clam cuisine are the two dishes this trip is actually built around — both are specific to Shimane, not generic \"Japanese food.\"",
+    "items": [
+      {
+        "name": "Tanakaya",
+        "area": "Izumo Taisha-mae",
+        "how": "5-minute walk from Izumo Taisha-mae Station",
+        "hours": "11:00–16:00 or until the soba sells out",
+        "closed": "Thursdays",
+        "why": "Three-color warigo soba, a 5-minute walk from the shrine, open on the Wednesday this trip visits (unlike the more famous Arakiya).",
+        "book": "walk-in",
+        "price": "≈¥1,000–1,500",
+        "crowd_tip": "Forms a line at midday — arrive right at 11:00 or plan for a wait.",
+        "source_url": "https://soba-tanakaya.jp/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Arakiya",
+        "area": "Izumo Taisha-mae",
+        "hours": "11:00–16:00 or until the soba sells out",
+        "closed": "Wednesdays (and the following day if Wednesday is a public holiday)",
+        "why": "Izumo's oldest soba house, trading since the 1780s — worth it on any day but Wednesday.",
+        "book": "walk-in",
+        "price": "{{fact:arakiya-warigo-soba-1080-yen}}",
+        "source_url": "https://arakiya-izumo.com/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Yakumoan",
+        "area": "Matsue, Kitahori-cho",
+        "address": "308 Kitahori-cho, Matsue",
+        "phone": "0852-22-2400",
+        "how": "Renovated samurai residence near the castle moat",
+        "hours": "10:30–13:30, lunch only",
+        "closed": "Jan 1–2; no weekly closure day confirmed on the operator's own page",
+        "why": "Soba in a converted samurai house, and the party-size test for this trip: the official page doesn't list a group cap, so call ahead (0852-22-2400) to confirm seating for 8 before walking over.",
+        "book": "call",
+        "price": "≈¥1,200–2,000",
+        "source_url": "https://www.yakumoan.jp/shop/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Matsu-no-Daidokoro Konekkoya",
+        "area": "Matsue, Lake Shinji shore",
+        "how": "Lakeside, walkable from central Matsue",
+        "why": "Shinjiko-shichin (the lake's 7 signature foods — shijimi clams, whitebait, eel) in a 24-seat banquet hall built for groups — comfortably fits the full party of 8. No private-room buyout, so expect other diners nearby.",
+        "book": "call",
+        "price": "≈¥3,000–5,000",
+        "source_url": "https://www.nekko-group.com/konekko_ya/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Gungendo Main Store Café",
+        "area": "Omori, Iwami Ginzan",
+        "address": "Ha-183 Omori-cho, Oda",
+        "phone": "0854-89-0077",
+        "how": "In the Omori townscape, on the walking route to the mine",
+        "hours": "Café 11:00–17:00, lunch last order 15:00",
+        "closed": "Wednesdays",
+        "why": "A 170-year-old renovated merchant house with a courtyard garden — the obvious indoor/lunch stop on the Iwami Ginzan day (open Thursdays, when this trip visits).",
+        "book": "walk-in",
+        "price": "≈¥1,500–2,500",
+        "source_url": "https://www.ginzan-wm.jp/purpose_post/2401/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      }
+    ],
+    "verified_on": "2026-08-28"
   }
 ]

@@ -3,43 +3,55 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "body": "<p>Izumo Enmusubi Airport (IZO) is the practical gateway to Shimane — no international flights, so you connect through Tokyo (HND/NRT), Osaka (KIX/ITM), or another domestic hub. The terminal is small: one baggage carousel, a taxi rank, and a connecting bus stop just outside arrivals.</p><p>An airport limousine bus meets each arriving flight (departs roughly 10 minutes after baggage claim opens) and runs two routes — one toward Matsue, one toward Izumo city. Confirm which one you need before boarding; they don't both stop at Izumo Taisha.</p><p>⚠ Bus frequency and the exact Matsue-route stop list should be reconfirmed close to your dates — it's a small regional service and schedules move around seasonally.</p>",
+    "phase": "arrival",
+    "verified_on": "2026-08-28",
+    "source_url": "https://www.izumo-airport.co.jp/access"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "body": "<p>Shimane is cash-first outside the two main stations. ICOCA/Suica-type IC cards work on Matsue-area trains and buses and on the Ichibata Electric Railway, but the JR San-in Line's IC coverage ends at Izumo-shi Station — one stop further west, toward Oda and Omori, and you're back to paper tickets and coins.</p><p>Convenience stores (7-Eleven, Lawson) have ATMs that reliably accept foreign cards; rural Oda/Omori has far fewer of them than Matsue, so withdraw before the transfer day, not after.</p>",
+    "phase": "before",
+    "verified_on": "2026-08-28",
+    "source_url": "https://www.westjr.co.jp/press/article/2016/08/page_9133.html"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "body": "<p>US passport holders are ordinarily visa-exempt for short tourist stays in Japan (commonly cited as up to 90 days), with a Visit Japan Web pre-registration for the immigration/customs QR codes. ⚠ This pass could not confirm the current rule against Japan's own immigration ministry page — both mofa.go.jp and the nearest US–Japan consulate page refused a direct fetch (HTTP 403) in this research environment. Re-verify against MOFA's official visa-exemption page or a Japanese consulate before booking, and check each traveler's own passport country if the party isn't all US citizens.</p>",
+    "phase": "before",
+    "verified_on": "2026-08-28"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "body": "<p>⚠ Cellular coverage specifically inside the Omori valley / Ryugenji Mabu trail wasn't confirmed this pass — rural mountain valleys in Japan can have dead spots, but no source-backed claim either way exists yet. Download offline maps for the Omori townscape and the mine-trail route before you leave Matsue as a precaution, not because a gap is confirmed.</p>",
+    "phase": "before"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
-    "body": "",
+    "body": "<p>Two things need booking earlier than the rest: Omori lodging (the heritage machiya inns are genuinely small — see Days) and any soba-house meal for the full party of 8 (none of the shortlisted places publish a group-capacity figure, so a phone call to confirm seating beats a walk-in).</p>",
     "checklist": [
-      "Flights",
-      "Accommodation",
-      "Airport transfer",
+      "Flights into Izumo (IZO) or a connecting hub",
+      "Matsue lodging, 2 nights — accessible/step-free room for the 2 low-mobility travelers",
+      "Oda/Omori lodging, 1 night — book as one party-of-8 block early; heritage inns split across buildings past 6 guests",
+      "Airport transfer bus (Izumo Airport → Matsue)",
       "Travel insurance",
-      "Any timed tickets"
+      "Phone call ahead to any soba/kaiseki restaurant for a party of 8",
+      "Visit Japan Web pre-registration (immigration/customs QR)"
     ]
   },
   {
     "type": "weather",
     "group": "Plan",
-    "title": "Weather for your dates"
+    "title": "Weather for your dates",
+    "note": "Late Oct in Matsue averages a 22°C high / 13°C low with ≈126mm of rain across the month (1991–2020 normal) — still inside Japan's typhoon season tail, so a wet-weather day is a real possibility, not just a forecast quirk."
   },
   {
     "type": "holidays",

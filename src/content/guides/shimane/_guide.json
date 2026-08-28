@@ -1,11 +1,118 @@
 {
-  "kicker": "Field guide",
-  "title": "Shimane (regional — specific towns and bases must be earned by research, none pre-selected) & Japan",
-  "dek": "",
+  "kicker": "Matsue · Izumo Taisha · Iwami Ginzan — Oct 20–23, 2026",
+  "title": "Shimane",
+  "dek": "Four days on Japan's least-touristed coast: a UNESCO silver-mine town reached by a six-seat cart with no reservations, the shrine where the old calendar says all of Japan's gods are somewhere else this October, and the country's best lake-clam broth.",
   "country": "Japan",
+  "region": "Shimane Prefecture",
+  "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
   "provenance": "strict",
   "roomId": "blknya64ly2ks7w6",
-  "footer": ""
+  "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
+  "intro": "Matsue base for the castle and Izumo Taisha, then a one-way relocation with luggage to Oda/Omori for the Iwami Ginzan silver mine before looping back east to fly out of Izumo. Built for a party of 8, two with limited walking tolerance, no rental car.",
+  "verified": "⚠ Draft — Pass A (canonical/official-source) research only, 2026-08-28. Matsue Castle, Izumo Taisha, and the Iwami Ginzan transport chain (JR + Iwami Kotsu bus + Ginzan Cart) confirmed against official/operator pages. Entry/visa and the US travel advisory could NOT be confirmed this pass — both official sources (mofa.go.jp, travel.state.gov) returned HTTP 403 to a non-browser fetch; needs a networked/browser recheck before publish. Re-check before travel: Ginzan Cart operating days/hours (weather-dependent, can suspend without notice), all bus/train timetables (rural lines revise seasonally), Matsue Castle's post-Jul-2026 pricing, and the Izumo Taisha Kamiari-zuki dates for any later trip (2026's fall in Nov, not October).",
+  "phrases": {
+    "lang": "ja-JP",
+    "items": [
+      {
+        "situation": "Do you speak English?",
+        "native": "英語を話せますか？",
+        "romanization": "Eigo o hanasemasu ka?",
+        "note": "outside Matsue/Izumo station areas, English drops off fast — expect to point and show text",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "I have a food allergy",
+        "native": "食物アレルギーがあります",
+        "romanization": "Shokumotsu arerugii ga arimasu",
+        "note": "follow with the specific allergen; staff will often bring a written ingredient list",
+        "source_url": "https://livejapan.com/en/in-tokyo/in-pref-tokyo/in-tokyo_train_station/article-a0003250/",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "I am vegetarian",
+        "native": "私はベジタリアンです",
+        "romanization": "Watashi wa bejitarian desu",
+        "note": "dashi (fish stock) is in almost everything, including soba broth — ask specifically",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Please call an ambulance",
+        "native": "救急車を呼んでください",
+        "romanization": "Kyūkyūsha o yonde kudasai",
+        "note": "dial 119 directly if you can; English-speaking interpreters are patched in on both 110 and 119",
+        "source_url": "https://livejapan.com/en/in-tokyo/in-pref-tokyo/in-tokyo_train_station/article-a0003250/",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Please call the police",
+        "native": "警察を呼んでください",
+        "romanization": "Keisatsu o yonde kudasai",
+        "source_url": "https://livejapan.com/en/in-tokyo/in-pref-tokyo/in-tokyo_train_station/article-a0003250/",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Please help me",
+        "native": "助けてください",
+        "romanization": "Tasukete kudasai",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Where is the bathroom?",
+        "native": "お手洗いはどこですか？",
+        "romanization": "Otearai wa doko desu ka?",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Is this seat/cart full?",
+        "native": "満員ですか？",
+        "romanization": "Man'in desu ka?",
+        "note": "useful at the Ginzan Cart queue — a first-come, first-served 6-seat shuttle",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "A table for eight, please",
+        "native": "8人ですが、席はありますか？",
+        "romanization": "Hachinin desu ga, seki wa arimasu ka?",
+        "note": "call ahead — small soba houses here often can't seat a walk-in group of 8 without warning",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Can I pay by IC card (ICOCA/Suica)?",
+        "native": "ICOCA（交通系ICカード）は使えますか？",
+        "romanization": "ICOCA (kōtsūkei IC kādo) wa tsukaemasu ka?",
+        "note": "the answer is no once you're west of Izumo-shi Station — carry cash for Oda/Omori",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Where is the bus stop / bus to Omori?",
+        "native": "大森行きのバス乗り場はどこですか？",
+        "romanization": "Ōmori-yuki no basu noriba wa doko desu ka?",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Is there a step-free / elevator route?",
+        "native": "エレベーターはありますか？",
+        "romanization": "Erebētā wa arimasu ka?",
+        "note": "rural stations and heritage buildings often don't have one — worth confirming before committing to a route",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "situation": "Thank you very much",
+        "native": "どうもありがとうございます",
+        "romanization": "Dōmo arigatō gozaimasu",
+        "source_url": "https://en.wikivoyage.org/wiki/Japanese_phrasebook",
+        "verified_on": "2026-08-28"
+      }
+    ]
+  }
 }

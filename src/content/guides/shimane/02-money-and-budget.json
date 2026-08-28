@@ -3,42 +3,63 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
-    "phase": "arrival"
+    "body": "<p>Japanese yen (¥), cash-first once you're west of Matsue/Izumo. Convenience-store ATMs (7-Eleven, Lawson, Family Mart) reliably take foreign cards in both cities; Oda/Omori has only a handful, so carry enough cash for the whole Iwami Ginzan day before you transfer out of Matsue.</p><p>No tipping, anywhere. IC cards (ICOCA/Suica/PASMO) cover Matsue-area JR, the Ichibata Railway, and Iwami Kotsu buses, but the JR San-in Line stops accepting IC taps at Izumo-shi Station — buy a paper ticket for anything continuing to Odashi.</p>",
+    "phase": "arrival",
+    "verified_on": "2026-08-28",
+    "source_url": "https://www.westjr.co.jp/press/article/2016/08/page_9133.html"
   },
   {
     "type": "budget",
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "intro": "Per-person estimates for the 4-day/3-night trip. Lodging and food are aggregate market ranges, not single quoted prices — confirm against your actual bookings. Flights are left at ¥0 until a departure city is booked; nothing should be inferred from that zero.",
     "currency": "¥",
     "days": 4,
+    "party": 8,
     "items": [
       {
-        "label": "Lodging, per night",
+        "label": "Lodging, per night (twin/business hotel, room-only)",
         "basis": "day",
-        "est": 0
+        "est": 5000,
+        "low": 3500,
+        "high": 7300,
+        "per": "person",
+        "note": "Oda/Omori night: book the party as one block early — heritage machiya inns split across two buildings past 6 guests"
       },
       {
         "label": "Food & drink, per day",
         "basis": "day",
-        "est": 0
+        "est": 4000,
+        "low": 2500,
+        "high": 6000,
+        "per": "person",
+        "note": "soba lunch ≈¥1,080–1,500, dinner ≈¥2,500–4,000 — general market estimate, not individually sourced"
       },
       {
         "label": "Local transport, per day",
         "basis": "day",
-        "est": 0
+        "est": 2000,
+        "low": 900,
+        "high": 3800,
+        "per": "person",
+        "note": "spikes on the Matsue→Omori transfer day (JR + community bus + Ginzan Cart)"
       },
       {
         "label": "Sights & activities, per day",
         "basis": "day",
-        "est": 0
+        "est": 800,
+        "low": 0,
+        "high": 2000,
+        "per": "person",
+        "note": "Matsue Castle {{fact:matsue-castle-tenshu-1200-yen}}, Izumo Taisha Treasure Hall {{fact:izumo-taisha-treasure-hall-300-yen}}, Ginzan Cart {{fact:ginzan-cart-500-yen}} each way"
       },
       {
         "label": "Flights — round trip",
         "basis": "trip",
-        "est": 0
+        "est": 0,
+        "per": "person",
+        "note": "not estimated — depends on departure city; see Plan tab for the origin-airport gap"
       }
     ]
   }

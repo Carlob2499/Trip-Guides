@@ -6,27 +6,66 @@
     "items": [
       {
         "date": "Tue Oct 20",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Land at Izumo, settle into Matsue",
+        "tldr": "Land at Izumo, transfer to Matsue, and catch the castle before sunset over Lake Shinji.",
+        "pace": "Deliberately light: one transfer, one sight, an early dinner — the day absorbs arrival fatigue rather than fighting it.",
+        "body": "<p>The airport limousine bus meets your flight and drops you in central Matsue in under an hour. Check in, then head straight for <b>Matsue Castle</b> — one of only twelve original castle keeps left in Japan, open to 17:00 in October (last entry 16:30).</p><p>Walk the <b>Shiomi Nawate</b> samurai district along the castle moat afterward — low-key, mostly flat, and close enough to the castle that the two low-mobility travelers don't need a second transit leg. End at <b>Lake Shinji</b> for sunset; it's one of Japan's more reliably photographed sunset spots, a 10-minute walk from most central Matsue hotels.</p><p>Dinner: a Shinjiko-shichin (the lake's \"seven delicacies\" — shijimi clams, whitebait, eel among them) restaurant near the lake. Book ahead for a party of 8; most of these are small, counter-style rooms.</p>",
+        "checklist": [
+          "Confirm you're boarding the Matsue-route airport bus, not the Izumo-route one",
+          "Withdraw cash at a convenience-store ATM before the day is out"
+        ],
+        "constraints": ["Matsue Castle last entry 16:30 (Oct–Mar hours)"],
+        "energy": "balanced",
+        "env": "mixed",
+        "source_url": "https://www.matsue-castle.jp/userguide/",
+        "verified_on": "2026-08-28"
       },
       {
         "date": "Wed Oct 21",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Izumo Taisha",
+        "tldr": "A full day at Izumo Taisha — the shrine where, most years, the story is that all of Japan's gods gather every October.",
+        "pace": "A round-trip day from Matsue on the Ichibata Railway; unhurried at the shrine, no reason to rush the return.",
+        "body": "<p>The Ichibata Electric Railway runs directly from Matsue Shinjiko Onsen to Izumo Taisha-mae, with one same-platform transfer at Kawato — about an hour each way. <b>Izumo Taisha</b> itself is Japan's oldest and, to Shinto tradition, most important shrine after Ise; the grounds are open 6:00–19:00 and free to enter.</p><p>Worship here differently: it's <b>two bows, four claps, one bow</b>, not the two-clap pattern used almost everywhere else in Japan. The shrine's own explanation ties the fourth clap to the annual grand festival's eight claps, halved for everyday worship.</p><p>Many guides say October is \"the month the gods gather at Izumo,\" but that's tied to the old lunar calendar, not the Gregorian one — in 2026 the Kamiari-zuki festival period actually falls November 9 to December 8, well after this trip. Nothing about the gathering happens during these dates; visit for the shrine itself, not for the festival.</p><p>Lunch: <b>Tanakaya</b>, five minutes from Izumo Taisha-mae Station, known for its three-color warigo soba. The more famous, 240-year-old <b>Arakiya</b> is closed on Wednesdays — worth knowing before walking over expecting it to be open.</p>",
+        "constraints": ["Arakiya soba house closed Wednesdays — Tanakaya (open Wed) is the lunch pick this trip"],
+        "energy": "balanced",
+        "env": "outdoor",
+        "source_url": "https://izumooyashiro.or.jp/archives/faq/7898",
+        "verified_on": "2026-08-28"
       },
       {
         "date": "Thu Oct 22",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Transfer to Omori, Iwami Ginzan",
+        "tldr": "Check out of Matsue with the luggage, transfer to Omori, and ride the six-seat Ginzan Cart into the silver mine.",
+        "pace": "The trip's one hard-timed day — a morning train, a midday bus, a first-come shuttle, and a fixed last train home in the evening.",
+        "body": "<p>This is the day everything else on the trip is built around. Check out of Matsue with all luggage and take the JR San-in Line to Odashi (45–90 min depending on train) — <b>IC cards stop working at Izumo-shi Station</b>, so have cash or a paper ticket ready before boarding the second leg. From Odashi, the Iwami Kotsu community bus reaches the <b>Iwami Ginzan World Heritage Center</b> in about 30 minutes; drop bags at your Omori lodging first if it's on the way.</p><p><b>Iwami Ginzan</b> is a UNESCO World Heritage silver-mining town — Edo-period merchant houses lining a river valley, with the actual mine tunnel (Ryugenji Mabu) 2.3 km up the valley. Private cars are banned past the park entrance, so the only way in besides walking is the <b>Ginzan Cart</b>: a 6-seat electric shuttle, no reservations, first-come first-served, roughly every 30–40 minutes. With a party of 8 (two with limited walking tolerance), expect to split across two carts or wait one cycle — budget for it rather than assuming the first cart takes everyone. If the cart is full, not running, or the weather's turned, the walk is 2.3 km / ≈45 minutes each way on an unpaved forest trail; that's the real fallback, not a footnote.</p><p>Head back toward Odashi with real margin: the last convenient upbound JR service toward Matsue leaves Odashi at ≈19:24. Missing it costs a lot more than a wait — the next options are sparse, and Odashi itself has limited late-evening lodging.</p><p>Lunch or an afternoon coffee: <b>Gungendo's main store café</b>, a 170-year-old renovated merchant house in the townscape (closed Wednesdays — no conflict today).</p>",
+        "checklist": [
+          "Cash on hand before Izumo-shi Station (IC cards stop working past it)",
+          "Confirm Omori lodging can hold the whole party of 8 across its buildings",
+          "Track the ≈19:24 last practical train from Odashi all afternoon"
+        ],
+        "constraints": [
+          "Ginzan Cart: no reservations, 6-seat capacity, can suspend without notice in bad weather",
+          "Last practical train, Odashi → Matsue direction, ≈19:24"
+        ],
+        "energy": "packed",
+        "env": "mixed",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "The Ginzan Cart can suspend in bad weather with no notice, and the 2.3km trail alternative isn't reasonable in a downpour with the group's mobility mix. Fall back to the indoor Iwami Ginzan World Heritage Center museum (mining history, artifacts, a scale-model of the tunnel network) and Gungendo's covered courtyard café — both sit right at the townscape entrance, no extra transit needed.",
+          "source_url": "https://ginzan.city.oda.lg.jp/access/",
+          "verified_on": "2026-08-28"
+        },
+        "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+        "verified_on": "2026-08-28"
       },
       {
         "date": "Fri Oct 23",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Omori morning, fly out of Izumo",
+        "tldr": "A slow Omori morning, then the return chain east to fly out of Izumo Airport.",
+        "pace": "No fixed sight this morning — protect it for the group's slower walkers, then start the return chain by early afternoon.",
+        "body": "<p>Leave the morning unscheduled: a second, quieter pass through the Omori townscape, or simply breakfast without a transit deadline. This is the trip's built-in slack for anyone who found Thursday's mine day tiring.</p><p>From early afternoon, reverse the transfer: Iwami Kotsu bus to Odashi, JR back to Izumo-shi (re-entering IC coverage), then the airport limousine bus or a taxi for the final stretch to Izumo Airport — there's no direct rail link into the terminal.</p>",
+        "energy": "balanced",
+        "env": "mixed"
       }
     ]
   }

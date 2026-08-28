@@ -1,0 +1,1208 @@
+{
+  "schemaVersion": "wp-evidence/2.3",
+  "slug": "shimane",
+  "runId": "shimane-20260828-0f02a5",
+  "candidates": [
+    {
+      "id": "c-izumo-taisha",
+      "name": "Izumo Taisha",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-matsue-castle",
+      "name": "Matsue Castle",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-iwami-ginzan-omori-ryugenji-mabu",
+      "name": "Iwami Ginzan (Omori & Ryugenji Mabu)",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "name": "Iwami Ginzan Ginzan Cart transfer chain",
+      "branch": null,
+      "priority": "anchor-transport",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-adachi-museum-of-art",
+      "name": "Adachi Museum of Art",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "World-famous garden museum near Yasugi, but a ≈35-47 min each-way detour that doesn't fit alongside Izumo Taisha + Iwami Ginzan in 4 days; also the most generic top-10 pick in every Shimane guide, cutting against the trip's off-the-beaten-path style.",
+      "worth": null
+    },
+    {
+      "id": "c-tsuwano",
+      "name": "Tsuwano",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Reachable only via a long backtrack south/west of the Omori loop this trip already commits to; would cost a full extra transfer day this itinerary doesn't have.",
+      "worth": null
+    },
+    {
+      "id": "c-oki-islands-ferry",
+      "name": "Oki Islands ferry",
+      "branch": null,
+      "priority": "anchor-transport",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Real fragile-transport (Shichirui/Sakaiminato port, ≈2.5hr slow ferry or ≈1hr high-speed, weather-cancellable) but doing the islands properly costs 1.5-2 days round trip, forcing a cut of either Izumo Taisha or Iwami Ginzan from a 4-day trip. Worth a future island-focused trip.",
+      "worth": null
+    },
+    {
+      "id": "c-shimane-museum-of-ancient-izumo",
+      "name": "Shimane Museum of Ancient Izumo",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Considered as an Izumo Taisha day add-on but not researched to standard within this pass's scope; dropping it keeps Day 2 unhurried.",
+      "worth": null
+    },
+    {
+      "id": "c-takyo-abeke",
+      "name": "Takyo-Abeke",
+      "branch": null,
+      "priority": "lodging",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Largest single unit (main house) holds 6 guests; an 8-person party would split across the main house and a separate storehouse room as two bookings — workable but fragile for a mixed-mobility group. See traveler question q-shimane-1.",
+      "worth": null
+    },
+    {
+      "id": "c-tanakaya",
+      "name": "Tanakaya",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-arakiya",
+      "name": "Arakiya",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-yakumoan",
+      "name": "Yakumoan",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-matsu-no-daidokoro-konekkoya",
+      "name": "Matsu-no-Daidokoro Konekkoya",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-gungendo-main-store-cafe",
+      "name": "Gungendo Main Store Café",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kawakyo",
+      "name": "Kawakyo",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "\"Often fully booked\" per multiple secondary sources, and no confirmed group-of-8 capacity found — Konekkoya's documented 24-seat zashiki made it the safer pick for this party size.",
+      "worth": null
+    },
+    {
+      "id": "c-terezuko",
+      "name": "Terezuko",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Found only in aggregator listicles, no official page or capacity/hours reachable this pass — didn't clear the sourcing bar.",
+      "worth": null
+    },
+    {
+      "id": "c-ajidokoro-shigeru",
+      "name": "Ajidokoro Shigeru",
+      "branch": null,
+      "priority": "food-dining",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Solid single-dish (shijimi kamameshi) pick but no group-booking information found; Konekkoya already covers the shijimi/shichin niche with documented group capacity.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-ginzan-cart-capacity",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "The Ginzan Cart (Green Slow Mobility shuttle) carries a maximum of 6 passengers per departure",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-cart-no-reservation",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "The Ginzan Cart does not accept reservations — boarding is first-come, first-served",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/iwamiginzan_kankousyasama_oomori/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-cart-closed-wed",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "The Ginzan Cart does not operate on Wednesdays",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-cart-hours-trips",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "Ginzan Cart operates 8:00-18:00 on operating days, roughly 12-14 trips per day, and can suspend without notice in bad weather",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-cart-fare-official",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "Ginzan Cart fare ranges ¥200-700 depending on the leg ridden",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-cart-fare-reference",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "Ginzan Cart one-way fare to Ryugenji Mabu is commonly quoted at ¥400-500",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan-guide.com/e/e5851.html",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "japan-guide",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-cart-walk-alt",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "The mine entrance (Ryugenji Mabu) is 2.3km one way from Omori Park / Daikansho; if the cart is full, the walk is the alternative",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/iwamiginzan_kankousyasama_oomori/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-cart-walk-time",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "Walking to Ryugenji Mabu takes approximately 45 minutes one way, ≈2 hours round trip including viewing time",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/q_a/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-odashi-bus-frequency-fare",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "The Iwami Kotsu community bus from Odashi Station to the Iwami Ginzan World Heritage Center runs roughly hourly, ≈30 minutes, ¥760 one way (¥640 to Omori Daikansho stop)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan-guide.com/e/e5851.html",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "japan-guide",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-odashi-bus-gap",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "There is no Odashi→Iwami Ginzan bus departure during the 10 o'clock hour — the hourly pattern has a documented gap",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/q_a/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-icoca-boundary-official",
+      "candidateId": null,
+      "claim": "JR West's ICOCA IC-card area on the San-in Main Line covers Izumo-shi to Hoki-Daisen station — Izumo-shi is the western boundary",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.westjr.co.jp/press/article/2016/08/page_9133.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2016-08-01",
+        "family": "jr-west",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-icoca-boundary-2025-expansion",
+      "candidateId": null,
+      "claim": "The Mar 2025 San-in Line ICOCA expansion extended coverage northeast toward Tottori, not west toward Oda — the Izumo-shi western boundary is unchanged",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tetsudo.com/news/3040/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2023-12-16",
+        "family": "tetsudo-com",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-last-train-odashi-matsue",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "The last convenient upbound JR service from Odashi toward Matsue departs ≈19:24 (Super Oki service toward Yonago)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.jorudan.co.jp/time/to/%E5%A4%A7%E7%94%B0%E5%B8%82_%E6%9D%BE%E6%B1%9F/?r=%E5%B1%B1%E9%99%B0%E6%9C%AC%E7%B7%9A",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "jorudan",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-jr-matsue-odashi-time-fare",
+      "candidateId": "c-iwami-ginzan-ginzan-cart-transfer-chain",
+      "claim": "JR San-in Line Matsue→Odashi takes 45-90 minutes depending on train type, ¥1,170-3,000 one way",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan-guide.com/e/e5851.html",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "japan-guide",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-matsue-castle-original-keep",
+      "candidateId": "c-matsue-castle",
+      "claim": "Matsue Castle is one of Japan's 12 surviving original (pre-1868) castle keeps; its tenshu was completed in 1611 and designated a National Treasure in 2015",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://shirobito.jp/article/324",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "shirobito",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-matsue-castle-hours",
+      "candidateId": "c-matsue-castle",
+      "claim": "Matsue Castle admission hours are 8:30-17:00 Oct-Mar (last entry 16:30), 8:30-18:30 Apr-Sep, open year-round with no closure days",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.matsue-castle.jp/userguide/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "matsue-castle-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-matsue-castle-price",
+      "candidateId": "c-matsue-castle",
+      "claim": "Matsue Castle tenshu individual adult admission rose from ¥800 to ¥1,200 effective Jul 1 2026, funding restoration work",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.matsue-castle.jp/userguide/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "matsue-castle-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-izumo-taisha-hours",
+      "candidateId": "c-izumo-taisha",
+      "claim": "Izumo Taisha grounds are open 6:00-19:00, free to enter; the rear precinct closes 16:30 for security",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://izumooyashiro.or.jp/archives/news/12552",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "izumo-taisha-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-izumo-taisha-treasure-hall",
+      "candidateId": "c-izumo-taisha",
+      "claim": "Izumo Taisha Treasure Hall admission is ¥300 adult, hours 8:30-16:30 (last admission 16:00)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://izumooyashiro.or.jp/archives/news/12552",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "izumo-taisha-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-izumo-taisha-four-claps",
+      "candidateId": "c-izumo-taisha",
+      "claim": "Izumo Taisha worship follows two bows, four claps, one bow — not the standard two-clap pattern used at most Japanese shrines; the shrine ties this to its grand festival's eight-clap ritual, halved for everyday worship",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://izumooyashiro.or.jp/archives/faq/7898",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "izumo-taisha-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-kamiari-2026-dates",
+      "candidateId": "c-izumo-taisha",
+      "claim": "The 2026 Kamiari-zuki (month the gods gather at Izumo) period runs Nov 9 - Dec 8, 2026, per the lunar 10th-month reckoning — the Kamiari-sai rites cluster Nov 18-25, 2026",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://izumo-kankou.gr.jp/topics/11618",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "izumo-kanko-kyokai",
+        "independent": true,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ichibata-fare",
+      "candidateId": null,
+      "claim": "Ichibata Electric Railway one-way fare, Matsue Shinjiko Onsen to Izumo Taisha-mae (transfer at Kawato), is ¥900",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://ekitan.com/transit/fare/sf-8781/st-8677",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "ekitan",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-izumo-airport-bus",
+      "candidateId": null,
+      "claim": "The Izumo Airport limousine bus departs ≈10 minutes after each arriving flight's baggage claim opens, with separate Matsue-direction and Izumo-direction routes",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.izumo-airport.co.jp/access",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "izumo-airport",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-matsue-oct-climate-normal",
+      "candidateId": null,
+      "claim": "Matsue's October climate normal (1991-2020) is 22.0°C average high, 13.4°C average low, 126.1mm average precipitation",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=68&block_no=47741",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "jma",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-takyo-abeke-capacity",
+      "candidateId": "c-takyo-abeke",
+      "claim": "Takyo-Abeke's main house holds up to 6 guests and its separate storehouse room up to 4; the two are booked as separate units, so no single booking covers all 8 of this party",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://kurasuyado.jp/takyo-abeke",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kurasuyado",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-tanakaya-hours-closed",
+      "candidateId": "c-tanakaya",
+      "claim": "Tanakaya (soba, 5 min from Izumo Taisha-mae Station) is open 11:00-16:00 or until the soba sells out, closed Thursdays",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://soba-tanakaya.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "tanakaya-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-tanakaya-crowd-1",
+      "candidateId": "c-tanakaya",
+      "claim": "Tanakaya forms a line at midday, even past the normal lunch peak",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://na-na.media/tanakaya-izumosoba/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "na-na-media",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-tanakaya-crowd-2",
+      "candidateId": "c-tanakaya",
+      "claim": "Visitor trip reports describe 30-40 minute waits at Tanakaya even in the early-to-mid afternoon, past the typical lunch rush",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://4travel.jp/dm_shisetsu/10210520",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "4travel-jalan-reviews",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-arakiya-hours-closed-price",
+      "candidateId": "c-arakiya",
+      "claim": "Arakiya (Izumo's oldest soba house, trading since the Tenmei era, 1780s) is open 11:00-16:00 or until the soba sells out, closed Wednesdays (and the following day if Wednesday is a holiday), no reservations accepted; standard warigo soba is {{fact:arakiya-warigo-soba-1080-yen}}",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://arakiya-izumo.com/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "arakiya-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-yakumoan-hours",
+      "candidateId": "c-yakumoan",
+      "claim": "Yakumoan (soba, converted samurai residence, Matsue) serves lunch only 10:30-13:30, closed Jan 1-2; no weekly closure day or group-capacity cap is stated on the operator's own page",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.yakumoan.jp/shop/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "yakumoan-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-konekkoya-capacity",
+      "candidateId": "c-matsu-no-daidokoro-konekkoya",
+      "claim": "Matsu-no-Daidokoro Konekkoya has a 24-guest banquet hall built for groups, plus counter/table/sunken-kotatsu seating (70 seats total); no private-room buyout is offered, though a shuttle bus can carry up to 35 people",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nekko-group.com/konekko_ya/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "nekko-group",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-gungendo-cafe-hours-closed",
+      "candidateId": "c-gungendo-main-store-cafe",
+      "claim": "Gungendo's main-store café in Omori is closed Wednesdays (open if a holiday), plus New Year's; located in the Gungendo store at 183 Omori-cho, Oda",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzan-wm.jp/purpose_post/2401/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oda-city-tourism",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-oki-ferry-times",
+      "candidateId": "c-oki-islands-ferry",
+      "claim": "Ferry crossings from Shichirui port to the Oki Islands run ≈2h25m (slow ferry) or ≈55min (high-speed Rainbow Jet)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.oki-kisen.co.jp/timetable/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "oki-kisen",
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-oki-ferry-seasonal",
+      "candidateId": "c-oki-islands-ferry",
+      "claim": "The high-speed Rainbow Jet does not run in winter (Dec 21-Feb 15); typhoon-season cancellations are common Jul-Sep",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.kankou-shimane.com/pickup/5126.html",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kankou-shimane",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-adachi-museum-access",
+      "candidateId": "c-adachi-museum-of-art",
+      "claim": "Adachi Museum of Art is reached from Matsue via JR San-in Line to Yasugi Station (≈25 min) then the museum's free shuttle bus (≈20 min), ≈45 min total; the shuttle is first-come first-served, no reservations, and can deny boarding once full",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.adachi-museum.or.jp/en/access",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "adachi-museum-official",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-emergency-numbers",
+      "candidateId": null,
+      "claim": "Japan's nationwide emergency numbers are 110 (police) and 119 (ambulance/fire); Tokyo Fire Department's own page confirms English support on 119, corroborating the general national practice of interpreter-relay 3-way calls",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.city.shibuya.tokyo.jp/contents/living-in-shibuya/ja/emergencies/dial119.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "shibuya-city",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-visa-blocked-mofa",
+      "candidateId": null,
+      "claim": "Attempted fetch of Japan's official visa-exemption page for US citizens",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mofa.go.jp/j_info/visit/visa/short/novisa.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "mofa",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-advisory-blocked-state-dept",
+      "candidateId": null,
+      "claim": "Attempted fetch of the current US State Dept travel advisory level for Japan",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": "travel-state-gov",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-10"
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-yakumoan",
+      "importance": "important",
+      "bookingUrl": null,
+      "releaseWindow": "no advance-release window found — phone reservations taken during business hours ahead of the visit",
+      "actionDate": null,
+      "partyRules": "the operator's own page states no group cap or reservation policy at all — call ahead (0852-22-2400) to confirm seating for a party of 8 rather than assuming a figure; an earlier aggregator summary claimed a 12-guest cap and a Thursday closure, but neither survived a direct fetch of the operator's own page (see disagreement-style correction in the ledger's Amendments) and are NOT shipped as fact",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "phone-only booking, Japanese-language call — not confirmed whether English is spoken on the line",
+      "lastSeating": "13:30 last order (lunch-only restaurant)",
+      "walkIn": "walk-in likely fails for a group of 8 without a prior call, especially at lunch peak",
+      "leads": [],
+      "alternatives": "Tanakaya or Arakiya (both Izumo-side, walk-in) if the Matsue slot doesn't work",
+      "fallback": "any other Matsue soba house with same-day walk-in capacity for a split group"
+    },
+    {
+      "candidateId": "c-matsu-no-daidokoro-konekkoya",
+      "importance": "important",
+      "bookingUrl": null,
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": "24-guest banquet hall (70 seats total), no private-room buyout — a party of 8 fits comfortably but shares the room with other diners; call/net-reserve ahead given it's the trip's flagship group dinner",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "not confirmed — no English booking page found this pass",
+      "lastSeating": null,
+      "walkIn": "not recommended for a group of 8 without a reservation",
+      "leads": [],
+      "alternatives": "Kawakyo (rejected this pass — frequently full, no confirmed group capacity)",
+      "fallback": "any Shinjiko-shichin izakaya in central Matsue with same-day group seating"
+    },
+    {
+      "candidateId": "c-takyo-abeke",
+      "importance": "anchor",
+      "bookingUrl": "https://www3.yadosys.com/reserve/ja/plan/calendar/147/gbclghhjgcemepdfcpeoejdn/all",
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": "main house holds up to 6, separate storehouse room up to 4 — the party of 8 needs BOTH booked as separate reservations to stay together in the village; each includes dinner and breakfast",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "online booking system is Japanese-language; phone (0854-89-0022) as an alternative",
+      "lastSeating": null,
+      "walkIn": null,
+      "leads": [
+        {
+          "claim": "Some Omori-area inns may accommodate larger groups by combining rooms across sister properties on request, but this wasn't confirmed for Takyo-Abeke specifically",
+          "status": "unconfirmed-lead",
+          "source": null,
+          "verifiedOn": null
+        }
+      ],
+      "alternatives": "a standard business hotel in Oda City center (10-15 min bus/taxi from Omori) — see traveler question q-shimane-1",
+      "fallback": "Oda City business hotel if the two-building Omori split isn't wanted or isn't available for these dates"
+    }
+  ],
+  "transport": [
+    {
+      "id": "t-iwami-ginzan-anchor-chain",
+      "route": "Matsue → Odashi (JR San-in Line) → Iwami Ginzan World Heritage Center / Omori (Iwami Kotsu bus) → Ryugenji Mabu mine entrance (Ginzan Cart)",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-ginzan-cart-capacity",
+        "ev-ginzan-cart-no-reservation",
+        "ev-ginzan-cart-closed-wed",
+        "ev-ginzan-cart-hours-trips",
+        "ev-ginzan-cart-walk-alt",
+        "ev-ginzan-cart-walk-time",
+        "ev-odashi-bus-frequency-fare",
+        "ev-odashi-bus-gap",
+        "ev-last-train-odashi-matsue",
+        "ev-jr-matsue-odashi-time-fare"
+      ],
+      "doorToDoor": "Matsue hotel to Ryugenji Mabu mine entrance runs ≈2.5-3.5 hours each way door-to-door once JR, bus, and cart wait times are stacked — this is not a quick side trip.",
+      "transferReality": "The real bottleneck isn't any single timetable — it's the Ginzan Cart's 6-seat, no-reservation, first-come-first-served design. A party of 8 should expect to split across 2 cart departures or have part of the group walk; nothing about that is stated on the operator's own booking flow because there IS no booking flow.",
+      "groupLuggageMobility": "The Matsue→Odashi leg carries all trip luggage (this is the intake's stated 'main regional transfer between bases'), which slows platform transfers and rules out a rushed connection. For the 2 low-mobility travelers, the 2.3km/45min walking fallback at the mine is a real exertion cost, not a footnote — factor it into who takes the first cart.",
+      "buffer": "Arrive Odashi by early-to-mid afternoon to leave enough cart cycles (≈30-40 min apart) for a group split, plus slack before the last practical train.",
+      "missedConnection": "Missing the last practical Odashi→Matsue train (≈19:24) means either a taxi covering a very long rural distance or an unplanned night in Oda City without a booked room.",
+      "nextService": "Not confirmed this pass whether a later, slower local service exists after 19:24 — treat 19:24 as the hard deadline until reconfirmed.",
+      "lastPracticalReturn": "≈19:24 ex-Odashi (Super Oki service toward Yonago, calling at Matsue)",
+      "fallback": "A taxi from Odashi to Matsue (long and expensive, not priced this pass) or an unplanned hotel night in Oda City center."
+    }
+  ],
+  "disagreements": [
+    {
+      "id": "d-ginzan-cart-fare",
+      "topic": "Ginzan Cart one-way fare to Ryugenji Mabu — the operator's own page states a ¥200-700 range depending on the leg ridden, while a secondary English reference (japan-guide.com) states a flatter ¥400-500",
+      "impact": "minor",
+      "evidenceIds": [
+        "ev-ginzan-cart-fare-official",
+        "ev-ginzan-cart-fare-reference"
+      ],
+      "investigation": "Both are current pages, not stale copies of each other; the range likely reflects different fare legs (short hop vs. full Daikansho→Ryugenji run) that the English source collapsed into one figure. Not worth further budget — the fare is a minor sights-and-activities line item either way and doesn't change any recommendation.",
+      "resolution": "Guide ships the official range (≈¥500 as a representative approx figure) and flags it as approximate rather than picking one source silently."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-yakumoan",
+        "c-matsu-no-daidokoro-konekkoya",
+        "c-takyo-abeke"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [
+        "t-iwami-ginzan-anchor-chain"
+      ],
+      "notApplicableReason": null
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Culture/history and food/dining candidate searches converged on the same small set of named options across independent queries (official tourism sites, aggregator listicles, and review platforms all surfaced the same restaurants/sights by the third or fourth search per priority); later searches for rejected food candidates (Kawakyo, Terezuko, Ajidokoro Shigeru) returned thinner, less-sourceable results than the shipped set. Two genuine open items remain — the exact evening bus timetable at Omori and whether a slower JR service exists after the 19:24 last practical train — but neither changes which candidates ship or the anchor choice; both are flagged for a pre-trip recheck instead of further research now."
+  },
+  "passB": null,
+  "reconciliation": []
+}
