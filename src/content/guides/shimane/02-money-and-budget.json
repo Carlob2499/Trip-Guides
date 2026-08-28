@@ -52,7 +52,10 @@
         "low": 0,
         "high": 2000,
         "per": "person",
-        "note": "Matsue Castle {{fact:matsue-castle-tenshu-1200-yen}}, Izumo Taisha Treasure Hall {{fact:izumo-taisha-treasure-hall-300-yen}}, Ginzan Cart {{fact:ginzan-cart-500-yen}} each way"
+        "note": "Matsue Castle {{fact:matsue-castle-tenshu-1200-yen}}, Izumo Taisha Treasure Hall {{fact:izumo-taisha-treasure-hall-300-yen}}, Ginzan Cart {{fact:ginzan-cart-500-yen}} each way",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue",
+        "source_url": "https://www.matsue-castle.jp/userguide/"
       },
       {
         "label": "Flights — round trip",
