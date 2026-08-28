@@ -135,6 +135,17 @@
         "· corrections.5.freshness: Invalid input: expected object, received string"
       ],
       "createdAt": "2026-08-28T11:58:15.141Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T12:21:58.902Z"
+    },
+    {
+      "runId": "yamagata-20260828-73821a",
+      "stage": "critic",
+      "attempt": 3,
+      "findings": [
+        "[pipeline-v2] CONTRACT FAILURE: critic changed 01-plan.json#/0/body, 01-plan.json#/1/body, 02-money-and-budget.json#/1/items/0/basis, 02-money-and-budget.json#/1/items/0/est, 02-money-and-budget.json#/1/items/0/high, 02-money-and-budget.json#/1/items/0/label, 02-money-and-budget.json#/1/items/0/low, 02-money-and-budget.json#/1/items/0/note, 02-money-and-budget.json#/1/items/1/est, 02-money-and-bud"
+      ],
+      "createdAt": "2026-08-28T12:21:58.902Z",
       "status": "active",
       "retiredAt": null
     }
