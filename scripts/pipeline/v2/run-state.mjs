@@ -498,11 +498,12 @@ export async function routeToEvidenceOwner(slug, { detail = "", now = new Date()
   // critic was originally handed, not against its own retained edits now sitting in the branch.
   state.status = "failed";
   state.failure = { class: "gate-failure", detail, at: now };
-  // The repair tail must not be dead on arrival at the attempt cap — the same bounded grant the
-  // human-answer re-open uses. The autonomous auto-retry counter is untouched.
-  if (state.attempts.total + V2_REOPEN_ATTEMPT_GRANT > state.attempts.cap) {
-    state.attempts.cap = state.attempts.total + V2_REOPEN_ATTEMPT_GRANT;
-  }
+  // AUTONOMOUS, so the human-answer grant does not apply: this route must not turn the ordinary
+  // cap into a renewable one. The whole round trip is ONE dispatch — setup resumes at reconcile
+  // and runs reconcile → critic in the same workflow run — so it needs at most one attempt of
+  // headroom, and only when the run is already at its cap. The auto-retry reservation itself is
+  // untouched and still bounds how often this can happen at all.
+  if (state.attempts.total >= state.attempts.cap) state.attempts.cap = state.attempts.total + 1;
   recomputeResume(state);
   await save(touch(state, now), intakeDir);
   return state;

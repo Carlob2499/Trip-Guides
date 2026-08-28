@@ -208,6 +208,26 @@ export function stageScopeProblems(slug, stage, paths) {
     .map((file) => `stage ${stage} touched forbidden path ${file}`);
 }
 
+/** Commit and PUSH a failed stage's IN-SCOPE work so the next attempt starts from it. Both
+    failure paths need this and both must be durable across the workflow boundary: the retry runs
+    in a FRESH checkout, so anything left uncommitted here is simply gone. Scope is the stage's
+    own allowedStagePaths — violations are never committed and every downstream gate still fails
+    closed on this content. */
+function retainStageWork(slug, stage, message, { branch = null } = {}) {
+  const allowed = allowedStagePaths(slug, stage);
+  const inScope = dirtyPaths().filter((f) => allowed.some((root) => f === root || f.startsWith(root + "/")));
+  // The COMMIT pathspec must be commitable too, not the raw allowed list: an allowed path that
+  // does not exist in this run (no coverage artifact yet, no patterns doc) makes `commit --only`
+  // abort on the pathspec — silently retaining nothing, which is the scar itself.
+  const paths = commitablePaths(allowed);
+  if (!inScope.length || !paths.length) return [];
+  git(["add", "-A", "--", ...paths]);
+  try { git(["commit", "--only", "-m", `research-v2(${slug}): ${message}`, "--", ...paths]); }
+  catch { return []; } // nothing staged in scope
+  if (branch) git(["push", "origin", `HEAD:${branch}`]);
+  return inScope;
+}
+
 /** A failed offline gate, recorded as BOTH durable stage feedback and an honest failed stage,
     from ONE findings array. Single-sourcing that array is the whole point: the live canary
     (luxembourg-20260821-99c13e) logged "0 finding(s) recorded for the retry" and wrote
@@ -629,7 +649,12 @@ async function run(cmd, get, has) {
       let state;
       try {
         state = await readRunStateV2(slug);
-        const failedStage = get("--stage") || state?.resume?.nextStage || null;
+        // The job passes its OWN stage name, but a routed incident moves ownership: the critic is
+        // re-queued and reconcile carries the failure. Honour the named stage only while it is the
+        // one actually recorded failed; otherwise the durable resume point decides. One
+        // state-driven call, no parallel retry path.
+        const named = get("--stage");
+        const failedStage = (named && state?.stages?.[named]?.status === "failed" ? named : state?.resume?.nextStage) || named || null;
         const findings = state && failedStage
           ? await activeFeedback(slug, { runId: state.runId, stage: failedStage })
           : [];
@@ -842,14 +867,7 @@ async function run(cmd, get, has) {
         console.error("[pipeline-v2] verify-failed needs --stage <stage> --file <gate output>"); return 1;
       }
       const gateOutput = readFileSync(file, "utf8");
-      const changed = dirtyPaths();
-      const allowed = allowedStagePaths(slug, stage);
-      if (changed.some((f) => allowed.some((root) => f === root || f.startsWith(root + "/")))) {
-        git(["add", "-A", "--", ...commitablePaths(allowed)]);
-        try { git(["commit", "--only", "-m", `research-v2(${slug}): ${stage} attempt output (verify FAILED — retained for repair)`, "--", ...allowed]); }
-        catch { /* nothing staged in scope */ }
-        if (branch) git(["push", "origin", `HEAD:${branch}`]);
-      }
+      retainStageWork(slug, stage, `${stage} attempt output (verify FAILED — retained for repair)`, { branch });
       const retryFindings = await recordGateFailure(slug, stage, gateOutput);
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
       commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (offline verify)`, { branch });
@@ -865,6 +883,11 @@ async function run(cmd, get, has) {
       const file = get("--file");
       if (!file || !existsSync(file)) { console.error("[pipeline-v2] needs-reconcile needs --file <gate output>"); return 1; }
       const gateOutput = readFileSync(file, "utf8");
+      // DURABILITY FIRST. The routed repair runs in a fresh checkout, so the critic's retained
+      // guide/handoff/ledger AND the trusted critic-origin evidence records the gate just wrote
+      // must be committed and pushed here — otherwise reconcile is asked to relate records that
+      // no longer exist on the branch. Same scope as any critic retention.
+      const retained = retainStageWork(slug, "critic", "critic output + correction evidence (routed to reconcile — retained)", { branch });
       const state = await readRunStateV2(slug);
       const findings = extractGateFindings(gateOutput);
       await recordStageFeedback(slug, {
@@ -873,7 +896,7 @@ async function run(cmd, get, has) {
       await routeToEvidenceOwner(slug, { detail: `critic corrections need an evidence supersession relation: ${findings.length} finding(s)` });
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
       commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): critic truth routed to reconcile (evidence relation owed)`, { branch });
-      console.error(`[pipeline-v2] ${slug} — critic truth needs an evidence relation the critic cannot write; routed to reconcile with ${findings.length} finding(s); critic work retained.`);
+      console.error(`[pipeline-v2] ${slug} — critic truth needs an evidence relation the critic cannot write; routed to reconcile with ${findings.length} finding(s); ${retained.length} retained path(s) pushed.`);
       return 0;
     }
 

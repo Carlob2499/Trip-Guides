@@ -584,6 +584,8 @@ describe("R-A — a completed stage records the tree it handed on, and an unfixa
     expect(state.stages.critic.attempts).toBe(1);
     // And the routed failure is auto-retryable at the stage that can actually fix it.
     expect(retryEligibility(state, { stage: "reconcile", findings: ["declare the relation"] }).allowed).toBe(true);
+    // The cap is not turned into a renewable autonomous budget: the round trip is ONE dispatch.
+    expect(state.attempts.cap - before.attempts.cap).toBeLessThanOrEqual(1);
   });
 
   it("REPAIRED: routing refuses unless reconcile really completed", async () => {
