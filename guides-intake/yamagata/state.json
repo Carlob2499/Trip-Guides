@@ -1,0 +1,14 @@
+{
+  "slug": "yamagata",
+  "createdAt": "2026-08-28T09:24:11.655Z",
+  "updatedAt": "2026-08-28T09:24:11.655Z",
+  "stages": {
+    "scaffold": "2026-08-28T09:24:11.655Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}
