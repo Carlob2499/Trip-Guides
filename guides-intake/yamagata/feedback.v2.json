@@ -113,6 +113,28 @@
         "[pipeline-v2] CONTRACT FAILURE: schemaVersion \"undefined\" is not a valid V2 version tag (expected \"wp-critic-corrections/2.1\" or a compatible wp-critic-corrections/2.x). If this is a V1 artifact, read it through the V1 adapter — do not hand it to the V2 reader."
       ],
       "createdAt": "2026-08-28T11:39:18.849Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T11:58:15.141Z"
+    },
+    {
+      "runId": "yamagata-20260828-73821a",
+      "stage": "critic",
+      "attempt": 2,
+      "findings": [
+        "· corrections.0.source: Invalid input: expected object, received string",
+        "· corrections.0.freshness: Invalid input: expected object, received string",
+        "· corrections.1.source: Invalid input: expected object, received string",
+        "· corrections.1.freshness: Invalid input: expected object, received string",
+        "· corrections.2.source: Invalid input: expected object, received string",
+        "· corrections.2.freshness: Invalid input: expected object, received string",
+        "· corrections.3.source: Invalid input: expected object, received string",
+        "· corrections.3.freshness: Invalid input: expected object, received string",
+        "· corrections.4.source: Invalid input: expected object, received string",
+        "· corrections.4.freshness: Invalid input: expected object, received string",
+        "· corrections.5.source: Invalid input: expected object, received string",
+        "· corrections.5.freshness: Invalid input: expected object, received string"
+      ],
+      "createdAt": "2026-08-28T11:58:15.141Z",
       "status": "active",
       "retiredAt": null
     }

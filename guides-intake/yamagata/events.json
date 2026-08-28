@@ -5,7 +5,7 @@
     {
       "at": "2026-08-28T09:25:24.458Z",
       "kind": "check",
-      "text": "Scaffold started (attempt 1 of 5)"
+      "text": "Scaffold started (attempt 1 of 8)"
     },
     {
       "at": "2026-08-28T09:25:24.463Z",
@@ -15,7 +15,7 @@
     {
       "at": "2026-08-28T09:25:51.972Z",
       "kind": "check",
-      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+      "text": "Pass A (canonical research) started (attempt 1 of 8)"
     },
     {
       "at": "2026-08-28T10:04:07.926Z",
@@ -25,7 +25,7 @@
     {
       "at": "2026-08-28T10:04:37.824Z",
       "kind": "check",
-      "text": "Pass B (independent research) started (attempt 1 of 5)"
+      "text": "Pass B (independent research) started (attempt 1 of 8)"
     },
     {
       "at": "2026-08-28T10:19:26.914Z",
@@ -35,7 +35,7 @@
     {
       "at": "2026-08-28T10:19:52.852Z",
       "kind": "check",
-      "text": "Reconcile started (attempt 1 of 5)"
+      "text": "Reconcile started (attempt 1 of 8)"
     },
     {
       "at": "2026-08-28T10:36:43.953Z",
@@ -45,7 +45,7 @@
     {
       "at": "2026-08-28T10:37:58.442Z",
       "kind": "check",
-      "text": "Reconcile started (attempt 2 of 5)"
+      "text": "Reconcile started (attempt 2 of 8)"
     },
     {
       "at": "2026-08-28T10:47:51.101Z",
@@ -55,7 +55,7 @@
     {
       "at": "2026-08-28T10:50:16.783Z",
       "kind": "check",
-      "text": "Reconcile started (attempt 3 of 5)"
+      "text": "Reconcile started (attempt 3 of 8)"
     },
     {
       "at": "2026-08-28T10:55:17.190Z",
@@ -65,7 +65,7 @@
     {
       "at": "2026-08-28T10:56:47.018Z",
       "kind": "check",
-      "text": "Reconcile started (attempt 4 of 5)"
+      "text": "Reconcile started (attempt 4 of 8)"
     },
     {
       "at": "2026-08-28T11:00:33.829Z",
@@ -75,7 +75,7 @@
     {
       "at": "2026-08-28T11:01:47.955Z",
       "kind": "check",
-      "text": "Reconcile started (attempt 5 of 5)"
+      "text": "Reconcile started (attempt 5 of 8)"
     },
     {
       "at": "2026-08-28T11:18:33.245Z",
@@ -83,14 +83,9 @@
       "text": "Reconcile complete in 17m (attempt 5)"
     },
     {
-      "at": "2026-08-28T11:18:54.467Z",
-      "kind": "decision",
-      "text": "Deterministic geocode pass: 2 resolved · 1 left as honest blanks"
-    },
-    {
       "at": "2026-08-28T11:19:17.058Z",
       "kind": "check",
-      "text": "Fresh-context critic started (attempt 1 of 5)"
+      "text": "Fresh-context critic started (attempt 1 of 8)"
     },
     {
       "at": "2026-08-28T11:39:18.852Z",
@@ -98,22 +93,37 @@
       "text": "Fresh-context critic attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-28T11:39:18.852Z",
+      "at": "2026-08-28T11:47:00.947Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 0 resolved · 1 left as honest blanks"
+    },
+    {
+      "at": "2026-08-28T11:47:22.392Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 2 of 8)"
+    },
+    {
+      "at": "2026-08-28T11:58:15.144Z",
+      "kind": "reject",
+      "text": "Fresh-context critic attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-28T11:58:15.144Z",
       "kind": "decision",
       "text": "Candidate funnel: 33 evaluated · 27 shortlisted · 17 shipped · 13 rejected"
     },
     {
-      "at": "2026-08-28T11:39:18.852Z",
+      "at": "2026-08-28T11:58:15.144Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 12 independent finding(s): 3 agree · 2 conflict-resolved · 7 adopt"
     },
     {
-      "at": "2026-08-28T11:39:18.852Z",
+      "at": "2026-08-28T11:58:15.144Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-28T11:39:18.852Z",
+      "at": "2026-08-28T11:58:15.144Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether a seasonal private-vehicle restriction applies to Ginzan Onsen during the Oct 2026 trip window"
     }
