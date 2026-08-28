@@ -6,7 +6,7 @@
   "region": "Yamagata Prefecture, Tohoku",
   "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, which publishes a separate timetable for its Apr 1 – Oct 24 and Dec 1 – Mar 31 seasons — the April–October table is the one covering these dates. Re-check before travel: Risshaku-ji's closing time (the temple publishes hours for April–September and December–March only, and this trip falls in the unpublished October gap), Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), the Ginzan Onsen gas-lamp lighting time (lit at dusk; no exact time is published), JR fares and the Tsubasa reservation rule (JR East's own fare and timetable pages could not be reached during research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
+  "verified": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, which publishes a separate timetable for its Apr 1 – Oct 24 and Dec 1 – Mar 31 seasons — the April–October table is the one covering these dates. Re-check before travel: the day's last inbound bus into Ginzan Onsen (the operator's 18:21 is the last bus OUT of the village, not the last one in), Risshaku-ji's closing time (the temple publishes hours for April–September and December–March only, and this trip falls in the unpublished October gap), Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), the Ginzan Onsen gas-lamp lighting time (lit at dusk; no exact time is published), JR fares and the Tsubasa reservation rule (JR East's own fare and timetable pages could not be reached during research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
   "provenance": "strict",
   "roomId": "66oyjm9aq3pqwo6r",
   "footer": "",
@@ -14,7 +14,7 @@
     {
       "homeCountry": "United States",
       "visa": "Visa-free entry for short-term tourism — commonly cited as up to 90 days under Japan's general visa-exemption framework. No pre-arrival electronic authorization (the proposed \"JESTA\" system) is required for 2026 travel; it is not scheduled to launch before Japan's 2028 fiscal year at the earliest.",
-      "note": "ASSUMED passport — the traveler party's passport countries were not stated in intake. Japan's Ministry of Foreign Affairs (MOFA), the definitive source, returned a blocked/403 response on every automated fetch attempt in this research pass. This entry is corroborated via Japan's official tourism board instead and should be re-confirmed directly at mofa.go.jp, and updated once every traveler's actual passport country is known.",
+      "note": "ASSUMED passport — the traveler party's passport countries were not stated in intake. This entry rests on Japan's national tourism organization, which states the 90-day tourism exemption and that Visit Japan Web registration is optional rather than required. ⚠ The definitive country-by-country list is the Ministry of Foreign Affairs', which could not be reached during research — re-confirm at mofa.go.jp, and update this once every traveler's actual passport country is known.",
       "source_url": "https://www.japan.travel/en/plan/visa-info/",
       "verified_on": "2026-08-28"
     }
@@ -22,7 +22,7 @@
   "advisory": {
     "level": 1,
     "title": "Exercise Normal Precautions",
-    "summary": "No elevated risk factors identified for Japan — the standard baseline advisory. The primary source (travel.state.gov) was Cloudflare-gated against automated fetch throughout this research pass; re-confirm directly before travel.",
+    "summary": "No elevated risk factors identified for Japan — the standard baseline advisory. ⚠ The State Department's own advisory page could not be reached during research, so the level is carried unconfirmed; re-confirm at travel.state.gov before you travel.",
     "source_url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
     "verified_on": "2026-08-28"
   }

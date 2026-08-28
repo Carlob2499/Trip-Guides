@@ -509,6 +509,126 @@ tool. It is scratch, referenced by nothing, and **must be removed before `stageS
 which will otherwise fail this stage on `touched forbidden path .critic-check.mjs`. Recorded as a
 pipeline pattern rather than hidden.
 
+### Fourth critic pass (2026-08-28, fresh context) — three findings, all three implemented
+
+Fresh workspace: the finished guide, the frozen intake, this ledger, the skill files and the rubric —
+no evidence artifacts, no run state, no git history. Five scans again (#6 anchor · #8 priority depth ·
+#9 party fit · #12 authenticity · the vibe lens). Priority depth and authenticity survive without a
+finding: the castle-park culture cluster, the group-size food analysis and the crowd/off-peak notes are
+all doing work a generic guide could not. What did not survive is the anchor transfer's DIRECTION, the
+date on the trip's one time-critical booking, and two guide-level surfaces the voice sweep has now
+missed on three consecutive passes.
+
+#### C15 — the anchor transfer publishes one clock time as both the last bus IN and the last bus OUT (rubric #6 · #3 · common-sense lens) — FIXED
+
+`05-transit.json` step 4 said *"First bus leaves Oishida ≈6:40; the last one in reaches Ginzan Onsen at
+18:21."* Step 5 and Day 4 say the opposite of the same number: *"the last bus, **18:21**, is expected to
+be crowded with no extra service added."* One time cannot be both the last arrival into the village and
+the last departure out of it.
+
+Fetched, the operator's service note settles it: 「☆最終便18:21発は混雑が予想されます。増便はありませんので
+16:35または17:00のご利用をお勧めします」 — 発, a DEPARTURE from Ginzan Onsen, and the alternatives it
+recommends are return departures. 18:21 is the last bus **out**. Step 4 had it as the last bus **in**.
+
+That is the wrong half of the anchor to get wrong. Day 3 is the transfer day: eight people, full
+luggage, two low-mobility travelers, a cash-only bus, a village with no ATM. A group reading "the last
+one in reaches Ginzan Onsen at 18:21" can take a leisurely museum morning and find the last inbound
+service left hours earlier.
+
+I could not replace it with a number, and did not invent one. Three independent fetches of `base4.html`
+disagreed on the inbound column — one returned 18:21 as the last arrival (dep. Oishida 17:52), one
+returned 19:40, and the 大石田駅発 list came back 10:10/15:20/19:30 against the third pass's
+10:20/15:30/19:40. That is the same ambiguity the third pass refused to publish through. Step 4 now
+states what the operator's own note proves — 18:21 is the last bus out, not in — and carries a ⚠ to
+confirm the day's final Oishida departure before committing to a slow city morning. `_guide.json`'s
+`verified` re-check list gained the same item, since the stamp is the traveler's pre-trip checklist.
+
+#### C16 — the trip's one time-critical booking is dated a month late, against its own citation (rubric #3 · #11 · #9) — FIXED
+
+`01-plan.json`'s Booking checklist told the traveler that comparable Ginzan Onsen ryokan *"release
+reservations ≈3 months ahead — for Oct 20-23, 2026 that window opened around Aug 1, 2026."* Its own
+cited source, Ryokan Matsumoto's FAQ, publishes 「予約開始は3か月前の**月初**となります」 — the first of the
+month three months before the stay. For an October stay that is **Jul 1, 2026**, not Aug 1. The guide
+subtracted three months from the arrival date; the ryokan counts from the start of the month.
+
+The error runs in the dangerous direction. Ginzanso is the only property in town sized to host eight in
+one booking, `q-yamagata-2` is built on this window, and the guide understated by four weeks how late
+the group already is. Restated with the source's own wording and the correct date.
+
+Ripple recorded, not rewritten: the same "≈Aug 1, 2026" appears in this ledger's `## Candidates
+considered` (Ryokan Matsumoto row) and in `q-yamagata-2`. Those are prior stages' records and this stage
+appends rather than edits them — the guide is corrected, and this is the correction of record.
+
+#### C17 — the research environment narrates itself to the traveler on the guide-level fields nobody greps (vibe lens: tone · the voice standard) — FIXED
+
+The first pass (C7) deleted *"bot-gated against automated fetch"* from three prose bodies and recorded
+the grep. The third pass found a fourth occurrence in `_guide.json`'s `verified` stamp, cleared it, and
+wrote the pattern row: *the clean-up grep misses the guide-level fields.* It then missed three more:
+
+- `_guide.json` `entry[0].note` — *"Japan's Ministry of Foreign Affairs (MOFA), the definitive source,
+  returned a blocked/403 response on every automated fetch attempt in this research pass"* — rendered in
+  the Trip Kit's entry card, to someone checking whether they need a visa.
+- `_guide.json` `advisory.summary` — *"The primary source (travel.state.gov) was Cloudflare-gated against
+  automated fetch throughout this research pass"* — rendered in the advisory pill.
+- `01-plan.json` `checklist[0].note` — *"already time-critical as of this research pass (2026-08-28)"*,
+  on the same booking C16 corrects.
+
+Three surfaces, three different phrasings, which is exactly why two literal greps for `bot-gated` found
+none of them. The fix is C7's: delete the frame, keep the fact, let `⚠` carry the provenance. Each now
+states the gap in traveler terms ("could not be reached during research" — the register the third pass
+settled on for the stamp) and names what to re-confirm and where. `09-sources.json`'s bot-gating
+paragraph stays: the second pass ruled source-access honesty belongs there, and it still does.
+
+Both sources were re-fetched while editing them: `japan.travel/en/plan/visa-info/` still supports the
+90-day tourism exemption and the optional (not required) Visit Japan Web registration;
+`travel.state.gov` still returns HTTP 403, so the advisory level is now carried as explicitly
+unconfirmed rather than as a checked fact wearing a scraper's excuse.
+
+### Considered and NOT actioned — fourth-pass rebuttals
+
+- **The operator recommends 16:35 *or 17:00*; the guide names only 16:35.** Considered and rejected as an
+  edit. The 17:00 recommendation is published on `base.html`, the page the operator itself marks out of
+  date and which carries only the Dec–Mar table; C8 established `base4.html` as this trip's season, and I
+  could not confirm 17:00 on it. Shipping a departure I could not find on the trip's own table is exactly
+  the defect C8 was written about. Flagged for a networked pass.
+- **Day 3 still names no target outbound bus.** The third pass's rebuttal survives C15 and is strengthened
+  by it — the same column ambiguity stopped both passes. What changed is that the traveler is now told the
+  deadline exists and is earlier than 18:21, instead of being told a wrong one.
+- **`04-etiquette-and-language.json` cites a ryokan magazine's tattoo article for a body that also carries
+  onsen bathing etiquette and four Yamagata-ben words.** The same citation-coverage shape as C10/C13, but
+  the uncovered claims here are **durable** — bathing etiquette and dialect vocabulary do not age — and §2
+  does not require a live source for durable facts. Recorded, not edited.
+- **`01-plan.json`'s "Phone & data" panel rests on a single SIM-affiliate blog for "Docomo has the deepest
+  rural coverage in Tohoku".** A weak source for a semi-objective claim, but the panel already hedges the
+  part that decides anything (*"Coverage in Ginzan Onsen's mountain-valley setting wasn't independently
+  tested"*), and no carrier publishes a comparative claim to climb to. Left standing.
+- **The budget's "Sights & activities" line is `basis: "day"` at ¥500 × 4 days** while the trip's only
+  admission is Yamadera's ¥500, once. It overstates by ¥1,500/person on a ≈¥77,000 estimate and its own
+  note states the real figures — below the bar that justifies a declared correction on a blind handoff.
+- **Days 1, 3 and 4 carry no `plan_b`.** Twice rebutted; I reach the same answer. Late-October Tohoku is
+  not a named weather window, the one `outdoor` day has a researched alternate, and Day 3's real failure
+  mode is the bus, which has a taxi fallback with a phone number.
+- **Seven `sights` items still carry `place_id: "__VERIFICATION_REQUIRED__"`.** The legal placeholder
+  state; hand-composing OSM ids for venues is how a wrong id ships looking right. Unchanged.
+- **Eight perishable money figures still live in prose rather than `facts.json`.** Still the right call not
+  to migrate blind, for the second pass's reason: no build available to catch an unresolved `{{fact:}}`
+  token, and no traveler-visible gain. It stays a pipeline-pattern row.
+
+**Artifact note (baseline gap — third consecutive attempt, and why this stage cannot self-clear).**
+`critic-corrections.v2.json` declares the **five** leaves THIS pass changed, each `previousValue` read
+first-hand from the workspace I was handed. Three of the five — `01-plan.json#/4/checklist/0/note`,
+`_guide.json#/entry/0/note`, `_guide.json#/advisory/summary` — were untouched by C1–C14, so their
+`previousValue` is also the pre-critic value and they prove against the pinned baseline. The other two —
+`05-transit.json#/0/steps/3` and `_guide.json#/verified` — were rewritten by C1/C2/C8 and the third pass,
+so what I read is a prior attempt's output, not the baseline. Everything C1–C14 changed and I did not is
+undeclarable from inside this stage, for the reason now recorded three times: the workspace retains the
+earlier attempts' guide edits, the critic baseline is pinned ONCE at the pre-critic tree and never
+re-pinned across attempts, and this stage is prepared without git history. **This gap is structural, not
+an omission — a fifth or sixth attempt of this stage cannot close it either.** It needs one of: the
+baseline values handed to the stage alongside the retained edits, a workspace reset to the baseline when
+an attempt fails, or re-pinning the baseline to the tree each attempt actually receives. The
+`pipeline-patterns.fragment.md` row marks it for promotion.
+
 ## Citation audit
 
 20 perishable facts sampled across two critic passes, weighted to prices, hours and the anchor
@@ -670,3 +790,56 @@ under Critic findings; this stage has no delete-capable tool and must hand it to
 directly off `base4.html`'s 大石田駅 column (two automated reads of that table disagreed on column
 alignment, so no time was shipped); and `yunokaori.com`'s gas-lamp bracket, outside this stage's
 fetchable domains.
+
+### Citation audit — fourth critic pass (2026-08-28, fresh context)
+
+Six perishable facts sampled independently, weighted to the anchor transfer, the trip's one
+time-critical booking, and the two guide-level entry/advisory surfaces. Five sources fetched, one
+confirmed still unreachable; two drifted and were fixed.
+
+| Claim | Value | Source fetched | Verdict |
+|-------|-------|----------------|---------|
+| Direction of the Hanagasa Bus's 18:21 service (the anchor's last-service fact) | shipped as "the last one in reaches Ginzan Onsen at 18:21" | y — `hanagasa-bus-taisei.co.jp/base.html` | **drifted → fixed** — 「☆最終便18:21発は混雑が予想されます。増便はありませんので16:35または17:00のご利用をお勧めします」: 発 makes 18:21 a DEPARTURE from Ginzan Onsen, and the guide's own step 5 and Day 4 already read it that way. Step 4 restated, no inbound time invented (C15) |
+| Last INBOUND Hanagasa Bus into Ginzan Onsen | not stated in the guide after the C15 fix | y — `base4.html`, three separate reads | **unreachable → flagged** — the page loads, but the 大石田駅発/銀山温泉着 columns extracted differently each time (18:21 arr. vs 19:40 arr.; 10:10/15:20/19:30 vs the third pass's 10:20/15:30/19:40). Left as a ⚠ confirm-the-day instruction and flagged for a networked pass rather than shipped |
+| Hanagasa Bus season + payment rule (R3 anchor, `facts.json`) | Apr 1 – Oct 24 2026; cash only, half fare child/disabled | y — `base4.html` | supports on season, cash-only settlement (ICカード不可) and the half fare; the page states a ¥300–¥2,000 range across the whole Yamagata Airport–Ginzan Onsen line and this fetch did not isolate the ¥1,000 Oishida→Ginzan segment, which the first and third passes each quoted directly (「1,000円」). No change |
+| Ginzan Onsen ryokan reservation window (the trip's one time-critical booking) | "≈3 months ahead — that window opened around Aug 1, 2026" | y — `ginzan-matsumoto.com/faq/` | **drifted → fixed** — 「予約開始は3か月前の月初となります」: the first of the month three months before the stay, so an October stay opened **Jul 1, 2026**, four weeks earlier than the guide said (C16) |
+| Japan visa-free tourist entry + Visit Japan Web | up to 90 days; no pre-arrival authorization required | y — `japan.travel/en/plan/visa-info/` | supports — "do not need a visa if their period of stay in Japan is 90 days or less and they are only engaging in tourism activities"; "Registration is not required, but advance registration makes procedures like tax-free shopping more convenient." The page defers the country list to MOFA, which the entry note now says in traveler terms (C17) |
+| US State Department advisory level for Japan | Level 1, Exercise Normal Precautions | n — `travel.state.gov/…/japan-travel-advisory.html` returned HTTP 403 again | **unreachable → flagged** — the level is now carried as explicitly unconfirmed in `advisory.summary` with a re-confirm instruction, instead of as a checked fact with a scraper's excuse attached (C17) |
+
+#### Continuity sweep — critic execution
+
+**Fourth critic pass (fresh context, 2026-08-28) — greps run** across `src/content/guides/yamagata/`:
+`18:21` · `last one in` · `automated fetch` · `bot-gated` · `Cloudflare` · `403` · `research pass` ·
+`blocked` · `17:00` · `Aug 1` · `3 months` · `{{fact:`.
+
+**Ripples found & fixed:**
+- `18:21` appears on **three** surfaces. Only `05-transit.json` step 4 read it as an arrival — step 5 and
+  `06-days.json` Day 4 already read it as the operator does, a departure from Ginzan Onsen, so both are
+  correct and deliberately unchanged. Fixing step 4 brought the guide into agreement with itself.
+- `_guide.json`'s `verified` stamp is a fact surface: its re-check list gained the day's last inbound bus,
+  so a reader re-verifying before travel is pointed at the one time C15 could not pin down.
+- `research pass` / `automated fetch` / `Cloudflare` / `403` outside `09-sources.json`: **three**
+  occurrences, all fixed — `_guide.json` `entry[0].note`, `_guide.json` `advisory.summary`,
+  `01-plan.json` `checklist[0].note`. `bot-gated` itself: one occurrence, in `09-sources.json`, kept by
+  the second pass's ruling. Zero traveler-facing occurrences remain outside that paragraph.
+- The Aug 1 → Jul 1 booking-window correction has **one** occurrence in the guide (fixed) and **two** in
+  this ledger — the `## Candidates considered` Ryokan Matsumoto row and `q-yamagata-2`. Both are prior
+  stages' records that this stage appends to rather than edits; the correction of record is C16 above.
+  The checklist item's `due` (2026-08-29) and the panel body's "start today" still read correctly, and
+  more urgently, under the earlier date.
+- `{{fact:…}}` tokens: neither token sits in a leaf I edited — `05-transit.json` step 4 carries the
+  ¥1,000 figure inline (pre-existing) and `06-days.json` Day 3's token was not touched. Both still
+  resolve.
+- `provenance: "strict"` re-check: the new ⚠s landed in a `routes` step, two `_guide.json` guide-level
+  fields and a `checklist` note. `05-transit.json#/0` and `01-plan.json#/4` both already carry
+  `source_url` + `verified_on`, and **no new `≈` was introduced anywhere**, so the strict ≈-gate is
+  unaffected.
+- Day-of-week and closure check re-run: nothing in C15–C17 moves a stop, a date, a meal or a bus the
+  group actually takes. The Tue/Wed/Thu/Fri card mapping and the closure table stand.
+
+**Deferred to human:** the critic baseline gap described in the artifact note above — it is the one thing
+this stage is structurally unable to clear, and it needs a control-plane change, not another attempt.
+**Flagged for a networked pass:** the day's last INBOUND Hanagasa Bus into Ginzan Onsen and one named
+target outbound departure, both read directly off `base4.html`'s 大石田駅 column by something that can
+read the table's columns reliably; and whether the operator's recommended **17:00** return runs in the
+Apr–Oct season or only in the Dec–Mar one it is published beside.

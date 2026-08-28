@@ -4,71 +4,53 @@
   "runId": "yamagata-20260828-73821a",
   "corrections": [
     {
-      "target": "06-days.json#/0/items/1/pace",
-      "previousValue": "Early start: catch a Senzan Line train that lands you at the 8:00 opening, ahead of tour groups. Split the group at the base if it helps — Konponchudo stands on its own as a stop.",
-      "correctedValue": "Early start: catch a Senzan Line train that lands you at the gate as it opens (8:00 in the temple's April-September table), ahead of tour groups. ⚠ October falls outside both of the temple's published seasonal brackets — confirm the closing time before you set out. Split the group at the base if it helps — Konponchudo stands on its own as a stop.",
-      "claim": "Risshaku-ji publishes 拝観時間 for 4月-9月 (8:00-16:00) and 12月-3月 (8:30-15:00) only — October, the month of this trip, has no published bracket, so the 8:00 opening the day plan was built on is read off a season the trip is not in",
+      "target": "05-transit.json#/0/steps/3",
+      "previousValue": "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b> (¥500 child or disabled companion), no reservation needed. The operator runs a different timetable per season, each on its own page — the <b>Apr 1 – Oct 24, 2026</b> table is the one covering this trip, and it carries more daily departures than the Dec 1 – Mar 31 winter table. First bus leaves Oishida ≈6:40; the last one in reaches Ginzan Onsen at 18:21. ⚠ The operator's summary page still advertises 5 round trips a day while its seasonal timetable lists more — read the timetable itself, and confirm the day of. Missing a bus can mean waiting over two hours, and the longest gap falls around midday. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
+      "correctedValue": "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b> (¥500 child or disabled companion), no reservation needed. The operator runs a different timetable per season, each on its own page — the <b>Apr 1 – Oct 24, 2026</b> table is the one covering this trip, and it carries more daily departures than the Dec 1 – Mar 31 winter table. First bus leaves Oishida ≈6:40. ⚠ Don't plan a late arrival around <b>18:21</b> — that is the last bus <i>out</i> of Ginzan Onsen (the operator's note reads 「最終便18:21発」), not the last one in; the final inbound run is earlier, and the seasonal table is hard to read across its columns, so confirm the day's last Oishida departure before committing to a slow morning in the city. ⚠ The operator's summary page still advertises 5 round trips a day while its seasonal timetable lists more — read the timetable itself, and confirm the day of. Missing a bus can mean waiting over two hours, and the longest gap falls around midday. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
+      "claim": "On the Hanagasa Bus Ginzan Line, 18:21 is the last DEPARTURE from Ginzan Onsen, not the last arrival into it — the operator's service note reads 最終便18:21発 and recommends earlier departures instead",
       "source": {
-        "url": "https://rissyakuji.jp/",
-        "kind": "official",
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+        "kind": "operator",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "rissyakuji-official",
+        "family": "hanagasa-bus-taisei",
         "independent": null,
         "appliesToYears": []
       },
       "verifiedOn": "2026-08-28",
-      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": null }
+      "freshness": { "perishable": true, "shelfLife": "transit", "recheckOn": null }
     },
     {
-      "target": "06-days.json#/0/items/1/body",
-      "previousValue": "<p>Risshaku-ji (山寺) is reached by a direct ≈20-minute Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}, cash only.</p><p>There is no cable car, ropeway, or shortcut anywhere on the mountain — the only way up to the Godaido viewing platform and Okunoin is on foot, via roughly 1,015 stone steps (figures vary 1,015-1,070 depending on the source), and there are no ramps or elevators anywhere on the site, including at the base.</p><p>Konponchudo, the main hall about 3 minutes' walk from the base entrance, is a genuinely worthwhile stop on its own without climbing further — the honest option for anyone who'd rather not attempt the stairs.</p><p>Lunch: Takifudo Namasoba, ≈7 min from the station near the mountain entrance, open 11:00-15:30. ⚠ Its seat counts appear only in restaurant directories, so phone 023-695-2039 ahead to hold a table for 8.</p><p>10:00-14:00 is when tour groups arrive and the paths and Godaido platform get genuinely crowded, worse still once koyo (autumn foliage) season builds — which is also the window the soba shop opens into. Climb early, eat after.</p><p>Taimenseki, right at the station, is a smaller, quicker soba stop for anyone splitting off from the group lunch or catching an earlier train.</p>",
-      "correctedValue": "<p>Risshaku-ji (山寺) is reached by a direct ≈20-minute Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}, cash only.</p><p>⚠ The temple's own <a href='https://rissyakuji.jp/'>hours table</a> publishes 8:00-16:00 for April-September and 8:30-15:00 for December-March, and nothing for October. Plan on a mid-afternoon close and confirm the day's closing time before setting out — there is no late climb here.</p><p>There is no cable car, ropeway, or shortcut anywhere on the mountain — the only way up to the Godaido viewing platform and Okunoin is on foot, via roughly 1,015 stone steps (figures vary 1,015-1,070 depending on the source), and there are no ramps or elevators anywhere on the site, including at the base.</p><p>Konponchudo, the main hall about 3 minutes' walk from the base entrance, is a genuinely worthwhile stop on its own without climbing further — the honest option for anyone who'd rather not attempt the stairs.</p><p>Lunch: Takifudo Namasoba, ≈7 min from the station near the mountain entrance, open 11:00-15:30. ⚠ Its seat counts appear only in restaurant directories, so phone 023-695-2039 ahead to hold a table for 8.</p><p>10:00-14:00 is when tour groups arrive and the paths and Godaido platform get genuinely crowded, worse still once koyo (autumn foliage) season builds — which is also the window the soba shop opens into. Climb early, eat after.</p><p>Taimenseki, right at the station, is a smaller, quicker soba stop for anyone splitting off from the group lunch or catching an earlier train.</p>",
-      "claim": "Risshaku-ji's published 拝観時間 are 4月-9月 8時～16時 and 12月-3月 8時30分〜15時（閉門時間16時）, with no October bracket and no closing time stated anywhere in the day card for a 1,015-step climb",
+      "target": "_guide.json#/verified",
+      "previousValue": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, which publishes a separate timetable for its Apr 1 – Oct 24 and Dec 1 – Mar 31 seasons — the April–October table is the one covering these dates. Re-check before travel: Risshaku-ji's closing time (the temple publishes hours for April–September and December–March only, and this trip falls in the unpublished October gap), Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), the Ginzan Onsen gas-lamp lighting time (lit at dusk; no exact time is published), JR fares and the Tsubasa reservation rule (JR East's own fare and timetable pages could not be reached during research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
+      "correctedValue": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, which publishes a separate timetable for its Apr 1 – Oct 24 and Dec 1 – Mar 31 seasons — the April–October table is the one covering these dates. Re-check before travel: the day's last inbound bus into Ginzan Onsen (the operator's 18:21 is the last bus OUT of the village, not the last one in), Risshaku-ji's closing time (the temple publishes hours for April–September and December–March only, and this trip falls in the unpublished October gap), Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), the Ginzan Onsen gas-lamp lighting time (lit at dusk; no exact time is published), JR fares and the Tsubasa reservation rule (JR East's own fare and timetable pages could not be reached during research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
+      "claim": "The pre-travel re-check list owes the day's last INBOUND Hanagasa Bus into Ginzan Onsen, because the operator's published 18:21 is the last service out of the village",
       "source": {
-        "url": "https://rissyakuji.jp/",
-        "kind": "official",
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+        "kind": "operator",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "rissyakuji-official",
+        "family": "hanagasa-bus-taisei",
         "independent": null,
         "appliesToYears": []
       },
       "verifiedOn": "2026-08-28",
-      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": null }
+      "freshness": { "perishable": true, "shelfLife": "transit", "recheckOn": null }
     },
     {
-      "target": "07-sights.json#/0/items/4/body",
-      "previousValue": "<p>A mountain temple complex climbing a cliff face above the Yamadera valley, reached by a direct Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}. No cable car or shortcut exists — the climb to the Godaido viewing platform is on foot, the whole way. Konponchudo, the main hall near the base, is a complete stop on its own for anyone who'd rather not attempt the stairs.</p>",
-      "correctedValue": "<p>A mountain temple complex climbing a cliff face above the Yamadera valley, reached by a direct Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}. No cable car or shortcut exists — the climb to the Godaido viewing platform is on foot, the whole way. Konponchudo, the main hall near the base, is a complete stop on its own for anyone who'd rather not attempt the stairs.</p><p>⚠ Hours are published seasonally — 8:00-16:00 April-September, 8:30-15:00 December-March — with <a href='https://rissyakuji.jp/'>no October bracket at all</a>. Treat it as a mid-afternoon close and confirm on the day.</p>",
-      "claim": "Risshaku-ji's seasonal opening hours, and the fact that the trip's month falls in the gap between the two published brackets",
+      "target": "01-plan.json#/4/checklist/0/note",
+      "previousValue": "Comparable Ginzan Onsen ryokan release reservations ≈3 months ahead — for Oct 20-23, 2026 that window opened around Aug 1, 2026, so this is already time-critical as of this research pass (2026-08-28). Call Ginzanso directly (0237-28-2322) as well as checking online.",
+      "correctedValue": "Comparable Ginzan Onsen ryokan open reservations three months ahead at the START of the month, not three months to the day — Ryokan Matsumoto publishes 「予約開始は3か月前の月初となります」, which puts the window for an October stay at Jul 1, 2026. It has been open for weeks, which is what makes this the trip's most time-critical booking. Call Ginzanso directly (0237-28-2322) as well as checking online.",
+      "claim": "Ryokan Matsumoto's stated reservation window opens at the start of the month three months before the stay, so an Oct 20–23, 2026 stay became bookable on Jul 1, 2026 — not around Aug 1, 2026",
       "source": {
-        "url": "https://rissyakuji.jp/",
-        "kind": "official",
+        "url": "https://ginzan-matsumoto.com/faq/",
+        "kind": "operator",
         "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "rissyakuji-official",
-        "independent": null,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-28",
-      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": null }
-    },
-    {
-      "target": "07-sights.json#/0/items/5/body",
-      "previousValue": "<p>A Taisho-era wooden ryokan street along the Ginzan River, gas lamps lighting ≈16:30-17:00 (seasonal — the schedule shifts earlier as sunset comes sooner through October), plus the riverside \"Waraku\" foot bath and Shirogane Falls (22m) at the street's end. Midday is the most crowded window; staying overnight pays off here — before roughly 7:00 the street is nearly empty, well ahead of the day-trip crowds.</p>",
-      "correctedValue": "<p>A Taisho-era wooden ryokan street along the Ginzan River, with the riverside \"Waraku\" foot bath and Shirogane Falls (22m) at its end.</p><p>The gas lamps are lit at dusk — ⚠ reckon on ≈17:00 in late October, though no exact time is published; ask at your ryokan. Midday is the most crowded window. Staying overnight pays off here: before roughly 7:00 the street is nearly empty, well ahead of the day-trip crowds.</p>",
-      "claim": "Ginzan Onsen's gas lamps are lit at dusk — the cited page states only 「夕暮れになるとガス灯に火がともり」 and publishes no clock time, so the shipped ≈16:30-17:00 window and its within-October drift narrative are not supported",
-      "source": {
-        "url": "https://yamagatakanko.com/attractions/detail_2832.html",
-        "kind": "official",
-        "access": "fetched",
-        "language": "ja",
-        "publishedAt": null,
-        "family": "yamagatakanko-prefectural",
+        "family": "ginzan-matsumoto",
         "independent": null,
         "appliesToYears": []
       },
@@ -76,35 +58,17 @@
       "freshness": { "perishable": true, "shelfLife": "venue", "recheckOn": null }
     },
     {
-      "target": "06-days.json#/0/items/2/body",
-      "previousValue": "<p>Morning: Bunshokan (free, 9:00-16:30, with a rear wheelchair entrance, 10 loaner wheelchairs and a stair lift — the one city sight whose access is documented) or Yamagata Marugoto-kan Beninokura, a restored Edo-era merchant warehouse compound paired with Soba Sanbyakubou's 30-seat private room for lunch.</p><p>Withdraw cash before leaving the city — Ginzan Onsen has no ATM or convenience store. From Yamagata Station, take the JR Ōu Line to Oishida (≈50 min local / ≈28 min Tsubasa), then the Hanagasa Bus to Ginzan Onsen: {{fact:hanagasa-bus-fare-1000-yen}}, ≈35-40 minutes, no reservation needed, and only a handful of departures a day — the operator runs a different timetable per season, so read the April–October one. Board with the group's luggage in good time; missing a bus can mean waiting over two hours for the next.</p><p>Check into Ginzanso (the largest property in town, best odds of hosting all 8 together) and see the street's gas lamps light ≈16:30-17:00 (seasonal — earlier as October's sunset comes sooner), best photo window 16:30-17:30.</p>",
-      "correctedValue": "<p>Morning: Bunshokan (free, 9:00-16:30, with a rear wheelchair entrance, 10 loaner wheelchairs and a stair lift — the one city sight whose access is documented) or Yamagata Marugoto-kan Beninokura, a restored Edo-era merchant warehouse compound paired with Soba Sanbyakubou's 30-seat private room for lunch.</p><p>Leave the bags with the hotel's front desk for the morning rather than hauling eight people's luggage round a museum — ⚠ confirm they'll hold it after checkout when you book.</p><p>Withdraw cash before leaving the city — Ginzan Onsen has no ATM or convenience store. From Yamagata Station, take the JR Ōu Line to Oishida (≈50 min local / ≈28 min Tsubasa), then the Hanagasa Bus to Ginzan Onsen: {{fact:hanagasa-bus-fare-1000-yen}}, ≈35-40 minutes, no reservation needed, and only a handful of departures a day — the operator runs a different timetable per season, so read the April–October one. Board with the group's luggage in good time; missing a bus can mean waiting over two hours for the next.</p><p>Check into Ginzanso (the largest property in town, best odds of hosting all 8 together), then wait for the gas lamps. ⚠ They are lit at dusk — reckon on ≈17:00 in late October, but no exact time is published; ask at the desk when you check in.</p>",
-      "claim": "Ginzan Onsen's gas lamps are lit at dusk with no published clock time (cited page says only 「夕暮れになるとガス灯に火がともり」); the day's checkout-to-transfer gap also left eight people's luggage unaddressed across the morning sight",
+      "target": "_guide.json#/entry/0/note",
+      "previousValue": "ASSUMED passport — the traveler party's passport countries were not stated in intake. Japan's Ministry of Foreign Affairs (MOFA), the definitive source, returned a blocked/403 response on every automated fetch attempt in this research pass. This entry is corroborated via Japan's official tourism board instead and should be re-confirmed directly at mofa.go.jp, and updated once every traveler's actual passport country is known.",
+      "correctedValue": "ASSUMED passport — the traveler party's passport countries were not stated in intake. This entry rests on Japan's national tourism organization, which states the 90-day tourism exemption and that Visit Japan Web registration is optional rather than required. ⚠ The definitive country-by-country list is the Ministry of Foreign Affairs', which could not be reached during research — re-confirm at mofa.go.jp, and update this once every traveler's actual passport country is known.",
+      "claim": "Japan's national tourism organization states a 90-day-or-less visa-free stay for tourism for exempted nationalities and that Visit Japan Web advance registration is not required",
       "source": {
-        "url": "https://yamagatakanko.com/attractions/detail_2832.html",
+        "url": "https://www.japan.travel/en/plan/visa-info/",
         "kind": "official",
-        "access": "fetched",
-        "language": "ja",
-        "publishedAt": null,
-        "family": "yamagatakanko-prefectural",
-        "independent": null,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-28",
-      "freshness": { "perishable": true, "shelfLife": "venue", "recheckOn": null }
-    },
-    {
-      "target": "03-health-and-safety.json#/0/body",
-      "previousValue": "<p>Emergency numbers: police <b>110</b>, ambulance/fire <b>119</b> — both free, nationwide, with English-speaking operators available.</p><p>Yamagata city has ordinary drugstore chains (Tsuruha Drug is common across Tohoku) for over-the-counter needs; English support is basic, not fluent medical consultation. Ginzan Onsen and Yamadera have no pharmacy — bring what the group needs for those days.</p><p>⚠ Routine vaccinations, MMR included, should be current before departure — check your own doctor or national health authority for Japan's current recommendations.</p>",
-      "correctedValue": "<p>Emergency numbers: police <b>110</b>, ambulance/fire <b>119</b> — both free and nationwide. ⚠ English on either line is not something to count on in Obanazawa or Yamadera; where you can, have the ryokan or hotel front desk place the call.</p><p>Yamagata city has the usual national drugstore chains (Matsumoto Kiyoshi, Cocokara Fine, Sun Drug) for over-the-counter needs; English support is basic, not fluent medical consultation. Ginzan Onsen and Yamadera have no pharmacy — bring what the group needs for those days.</p><p>⚠ Routine vaccinations, MMR included, should be current before departure — check your own doctor or national health authority for Japan's current recommendations.</p>",
-      "claim": "The section's sole citation names Matsumoto Kiyoshi, Cocokara Fine and Sun Drug as the drugstore chains, and contains nothing about the 110/119 emergency lines, English-speaking operators, or Tsuruha Drug",
-      "source": {
-        "url": "https://cotoacademy.com/guide-on-navigating-japans-pharmacies/",
-        "kind": "reference",
         "access": "fetched",
         "language": "en",
         "publishedAt": null,
-        "family": "cotoacademy",
+        "family": "jnto",
         "independent": null,
         "appliesToYears": []
       },
@@ -112,22 +76,22 @@
       "freshness": { "perishable": true, "shelfLife": "default", "recheckOn": null }
     },
     {
-      "target": "_guide.json#/verified",
-      "previousValue": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, which publishes a separate timetable for its Apr 1 – Oct 24 and Dec 1 – Mar 31 seasons — the April–October table is the one covering these dates. Re-check before travel: Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), JR fares and the Tsubasa reservation rule (JR East's own fare/timetable pages were bot-gated throughout research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
-      "correctedValue": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, which publishes a separate timetable for its Apr 1 – Oct 24 and Dec 1 – Mar 31 seasons — the April–October table is the one covering these dates. Re-check before travel: Risshaku-ji's closing time (the temple publishes hours for April–September and December–March only, and this trip falls in the unpublished October gap), Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), the Ginzan Onsen gas-lamp lighting time (lit at dusk; no exact time is published), JR fares and the Tsubasa reservation rule (JR East's own fare and timetable pages could not be reached during research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
-      "claim": "The guide's re-check list owes Risshaku-ji's unpublished October closing time and the unpublished gas-lamp lighting time; the stamp also carried scraper vocabulary (\"bot-gated\") on a traveller-facing surface",
+      "target": "_guide.json#/advisory/summary",
+      "previousValue": "No elevated risk factors identified for Japan — the standard baseline advisory. The primary source (travel.state.gov) was Cloudflare-gated against automated fetch throughout this research pass; re-confirm directly before travel.",
+      "correctedValue": "No elevated risk factors identified for Japan — the standard baseline advisory. ⚠ The State Department's own advisory page could not be reached during research, so the level is carried unconfirmed; re-confirm at travel.state.gov before you travel.",
+      "claim": "Japan's US State Department advisory is carried at Level 1 (Exercise Normal Precautions) but could not be confirmed — the advisory page returned HTTP 403 on a direct fetch this pass",
       "source": {
-        "url": "https://rissyakuji.jp/",
+        "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
         "kind": "official",
-        "access": "fetched",
-        "language": "ja",
+        "access": "blocked",
+        "language": "en",
         "publishedAt": null,
-        "family": "rissyakuji-official",
+        "family": "us-state-dept",
         "independent": null,
         "appliesToYears": []
       },
       "verifiedOn": "2026-08-28",
-      "freshness": { "perishable": true, "shelfLife": "hours", "recheckOn": null }
+      "freshness": { "perishable": true, "shelfLife": "default", "recheckOn": null }
     }
   ]
 }
