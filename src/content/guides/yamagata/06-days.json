@@ -9,10 +9,13 @@
         "title": "Arrival & Kajo Park",
         "pace": "Tsubasa lands early-to-mid afternoon depending on departure time. Keep the rest of the day light: a walk through the castle grounds, then the group's flagship dinner.",
         "tldr": "Land via the Tsubasa, then an easy walk through Yamagata Castle's ruins before a private-room Yonezawa beef dinner.",
-        "body": "<p>Kajo Park (free, open until 22:00) holds the Yamagata Castle ruins alongside several free, genuinely local history stops within a few minutes' walk of each other: the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan building, and the reconstructed Otemon gate-tower.</p><p>Dinner is Yonezawa Beef Tokiwa's private room (up to 14 guests, ≈¥9,900/person minimum for dinner), a 5-minute walk from the station — book ahead, it's the trip's one flagship group meal.</p>",
+        "body": "<p>Kajo Park (free, open until 22:00) holds the Yamagata Castle ruins alongside several free, genuinely local history stops within a few minutes' walk of each other: the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan building, and the reconstructed Otemon Yagura gate-tower (interior open to visitors; stairs-only access isn't confirmed — worth checking ahead for the group's 2 low-mobility travelers).</p><p>Dinner is Yonezawa Beef Tokiwa's private room (up to 14 guests, ≈¥9,900/person minimum for dinner), a 5-minute walk from the station — book ahead, it's the trip's one flagship group meal.</p>",
         "energy": "balanced",
         "env": "mixed",
-        "constraints": ["Yonezawa Beef Tokiwa dinner reservation required for a party of 8"]
+        "constraints": ["Yonezawa Beef Tokiwa dinner reservation required for a party of 8"],
+        "source_url": "https://www.city.yamagata-yamagata.lg.jp/kurashi/koen/1006541/1006545/1015528.html",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
       },
       {
         "date": "Wed Oct 21",
@@ -27,7 +30,10 @@
           "body": "Swap Yamadera for the Yamagata Museum of Art back in the city (Monet, Renoir, Chagall; ¥800 adult, ¥640 for groups of 20+, closed Mondays) — wet stone steps on an unshielded mountain climb are a real hazard, especially for the group's 2 low-mobility travelers, and there's no indoor version of Yamadera itself to fall back on.",
           "source_url": "https://www.yamagata-art-museum.or.jp/information",
           "verified_on": "2026-08-28"
-        }
+        },
+        "source_url": "https://rissyakuji.jp/sanpai/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "hours"
       },
       {
         "date": "Thu Oct 22",
@@ -40,7 +46,10 @@
         "checklist": [
           "Withdraw cash before leaving Yamagata city — no ATM in Ginzan Onsen",
           "Confirm Ginzanso check-in time and where to bring luggage"
-        ]
+        ],
+        "source_url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+        "verified_on": "2026-08-28",
+        "shelf_life": "transit"
       },
       {
         "date": "Fri Oct 23",

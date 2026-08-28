@@ -7,7 +7,9 @@
     "shelf_life": "transit",
     "state": "clean",
     "entity": "hanagasa-bus-ginzan-line",
-    "risk": 3
+    "risk": 3,
+    "tier": "primary",
+    "evidence": "1,000円"
   },
   "yamadera-admission-500-yen": {
     "claim": "Risshaku-ji (Yamadera) adult admission",
@@ -17,6 +19,7 @@
     "shelf_life": "venue",
     "state": "clean",
     "entity": "risshaku-ji-yamadera",
-    "risk": 2
+    "risk": 2,
+    "tier": "primary"
   }
 }

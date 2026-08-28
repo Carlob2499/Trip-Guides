@@ -47,21 +47,30 @@
         "low": 4000,
         "high": 12000,
         "note": "Soba/casual lunches run ≈¥1,500-2,500; the Yonezawa Beef Tokiwa dinner alone is ¥9,900/person minimum",
-        "per": "person"
+        "per": "person",
+        "source_url": "https://www.yonezawabeef.co.jp/yamagata.html",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
       },
       {
         "label": "Local transport, per day",
         "basis": "day",
         "est": 2000,
         "note": "Senzan Line to Yamadera (≈¥260 each way), the Hanagasa Bus (¥1,000 each way) on the Ginzan Onsen day, plus city buses/taxis",
-        "per": "person"
+        "per": "person",
+        "source_url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+        "verified_on": "2026-08-28",
+        "shelf_life": "transit"
       },
       {
         "label": "Sights & activities, per day",
         "basis": "day",
         "est": 500,
         "note": "Most Yamagata city culture/history stops are free; Yamadera admission is ¥500",
-        "per": "person"
+        "per": "person",
+        "source_url": "https://rissyakuji.jp/2025-03-07/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
       },
       {
         "label": "Flights — round trip",
