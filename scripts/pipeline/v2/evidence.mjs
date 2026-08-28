@@ -145,7 +145,7 @@ export async function writeEvidence(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
     fails closed. The critic still never reads evidence.v2.json. */
 export async function reconcileCriticCorrections(slug, {
   fromDir, intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides"), runId,
-  baselineDocs = null,
+  baselineDocs = null, retainedRows = [],
 } = {}) {
   // The "before" side is the PRE-CRITIC guide. Pinned by the caller (out of the commit the critic
   // stage started from) so a failed attempt can retain the rejected guide edits without the next
@@ -166,14 +166,42 @@ export async function reconcileCriticCorrections(slug, {
     }
     return { changed: false, targets: [] };
   }
+  // Multi-location contract failures are per-location ISSUE LINES, never one joined line: the
+  // retry-feedback path caps each line at 400 chars, and the yamagata run proved a single line
+  // carrying 42 pointers reaches the blind retry amputated (attempts 3–4 could not comply).
   if (!existsSync(sourceFile)) {
-    throw new ContractError(`critic changed ${[...changed].sort().join(", ")} without ${rel} — stale evidence is refused`);
+    const issues = [...changed].sort().map((t) => `critic changed ${t} without ${rel}`);
+    throw new ContractError(
+      `critic changed ${changed.size} guide value(s) without ${rel} — stale evidence is refused\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
+    );
   }
   const raw = JSON.parse(await readFile(sourceFile, "utf8"));
   assertVersionCompatible(raw.schemaVersion, CRITIC_CORRECTIONS_SCHEMA, { file: sourceFile });
   const correctionDoc = parseOrThrow(criticCorrectionDocSchema, raw, { file: sourceFile, what: "critic correction handoff" });
   if (correctionDoc.slug !== slug || correctionDoc.runId !== runId) {
     throw new ContractError(`critic correction identity does not match ${slug}/${runId}`);
+  }
+
+  // A blind repair attempt declares only ITS OWN edits — it cannot see the pinned baseline, so it
+  // cannot reconstruct declarations an earlier attempt already made over the retained tree
+  // (yamagata scar: attempt 2 clobbered attempt 1's complete 45-row handoff and attempt 3 could
+  // never satisfy whole-stage accounting again). Earlier retained rows therefore supplement the
+  // current doc: current attempt wins per target, a row-invalid retained row contributes nothing,
+  // and a retained row for a leaf no longer changed against the baseline is dropped, never
+  // phantom. The two-way accounting below then runs on the merged set at full strength.
+  const corrections = criticCorrectionDocSchema.shape.corrections;
+  const rowSchema = (corrections.removeDefault ? corrections.removeDefault() : corrections.unwrap()).element;
+  const declaredNow = new Set(correctionDoc.corrections.map((c) => c.target));
+  for (const raw_ of retainedRows) {
+    const parsed = rowSchema.safeParse(raw_);
+    if (!parsed.success) continue;
+    const { target } = parsed.data;
+    if (!declaredNow.has(target) && changed.has(target)) {
+      correctionDoc.corrections.push(parsed.data);
+      declaredNow.add(target);
+    }
   }
 
   // Declared set === changed set, both directions. This is the whole R-A repair.
@@ -183,12 +211,22 @@ export async function reconcileCriticCorrections(slug, {
   const undeclared = [...changed].filter((t) => !declared.has(t)).sort();
   const phantom = targets.filter((t) => !changed.has(t)).sort();
   if (undeclared.length) {
+    const issues = undeclared.map((t) => `critic changed ${t} without declaring the edit in ${rel}`);
     throw new ContractError(
-      `critic changed ${undeclared.join(", ")} without declaring the edit in ${rel} — every changed guide value is a ` +
-        `factual correction carrying its own evidence, and there is no editorial-only escape; stale evidence is refused`,
+      `critic changed ${undeclared.length} guide value(s) without declaring the edit in ${rel} — every changed guide ` +
+        `value is a factual correction carrying its own evidence, and there is no editorial-only escape; stale evidence is refused\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
     );
   }
-  if (phantom.length) throw new ContractError(`critic handoff declares ${phantom.join(", ")}, which the critic did not change`);
+  if (phantom.length) {
+    const issues = phantom.map((t) => `critic handoff declares ${t}, which the critic did not change`);
+    throw new ContractError(
+      `critic handoff declares ${phantom.length} value(s) the critic did not change\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
+    );
+  }
 
   const evidence = await requireEvidence(slug, { intakeDir, runId });
   const alreadyRetired = supersededEvidenceIds(evidence);

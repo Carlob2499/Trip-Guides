@@ -24,6 +24,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, CRITIC_TARGET, criticCorrectionDocSchema, supersededEvidenceIds } from "../pipeline/v2/contracts.mjs";
 import { reconcileCriticCorrections, writeEvidence, requireEvidence, dispositionProblems } from "../pipeline/v2/evidence.mjs";
+import { extractGateFindings } from "../pipeline/v2/feedback.mjs";
 import { independentAgreementProblems } from "../pipeline/v2/research-rules.mjs";
 import { coverageProblems } from "../pipeline/v2/coverage.mjs";
 import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
@@ -213,7 +214,7 @@ describe("R-A — every changed guide value reaches authoritative evidence, or t
     await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "03-transit.json"), TOTTORI_TRANSIT_BEFORE);
     await writeEvidence("tottori", evidenceDoc(), { intakeDir: dir });
     await expect(reconcile({ guidesDir, fromDir }))
-      .rejects.toThrow(/critic changed 03-transit\.json#\/, 05-transit\.json#\/ without/);
+      .rejects.toThrow(/critic changed 03-transit\.json#\/ without[\s\S]*critic changed 05-transit\.json#\/ without/);
   });
 
   it("REPAIRED: a critic pass that changed no guide value stays unchanged", async () => {
@@ -390,6 +391,76 @@ describe("R-A — a repeated ordinary value never retires unrelated evidence", (
   });
 });
 
+describe("R-A — a multi-location contract failure reaches the retry with EVERY location (yamagata scar)", () => {
+  // Run yamagata-20260828-73821a, critic attempts 3–4: the undeclared-changes ContractError put
+  // all 42 pointers on ONE line; the retry-feedback per-line cap (400 chars) amputated it to ~8
+  // pointers, so the blind retry structurally could not comply. Machine-owned multi-location
+  // findings must arrive as bounded per-location lines the structured feedback grammar preserves.
+  it("every undeclared pointer survives the CLI print → extractGateFindings chain, one bounded finding each", async () => {
+    const fixture = await tottoriCriticScar({ corrections: [] });
+    let err;
+    await reconcile(fixture).catch((e) => { err = e; });
+    expect(err).toBeDefined();
+    // The chain the workflow really runs: cliMain prints the message, verify-failed extracts it.
+    const findings = extractGateFindings(`[pipeline-v2] CONTRACT FAILURE: ${err.message}`);
+    for (const pointer of HISTORICAL) {
+      expect(findings.some((f) => f.includes(`${TRANSIT}#${pointer}`))).toBe(true);
+    }
+    expect(findings.every((f) => f.length <= 400)).toBe(true);
+    // Per-location issues ride on the error for programmatic consumers too.
+    expect(err.issues.length).toBeGreaterThanOrEqual(HISTORICAL.length);
+  });
+
+  it("phantom declarations are also per-location findings", async () => {
+    const rows = declareHistorical();
+    const fixture = await tottoriCriticScar({
+      corrections: [...rows, { ...rows[0], target: `${TRANSIT}#/0/title` }, { ...rows[0], target: `${TRANSIT}#/0/id` }],
+    });
+    let err;
+    await reconcile(fixture).catch((e) => { err = e; });
+    const findings = extractGateFindings(`[pipeline-v2] CONTRACT FAILURE: ${err.message}`);
+    expect(findings.some((f) => f.includes(`declares ${TRANSIT}#/0/title, which the critic did not change`))).toBe(true);
+    expect(findings.some((f) => f.includes(`declares ${TRANSIT}#/0/id, which the critic did not change`))).toBe(true);
+  });
+});
+
+describe("R-A — retained attempt declarations survive a later attempt's clobbered handoff (yamagata scar)", () => {
+  // Run yamagata-20260828-73821a: attempt 1 declared all 45 changed leaves but was refused on the
+  // doc envelope; attempt 2 REPLACED that doc with 6 malformed rows; attempt 3 — blind, starting
+  // from the retained tree, unable to see the pinned baseline or git history — declared only its
+  // own 7 edits and was failed for the 43 leaves earlier attempts had already declared. Whole-
+  // stage accounting was unsatisfiable by construction. The control plane now supplements the
+  // current doc with row-valid declarations from the stage's earlier retained docs, current
+  // attempt winning per target, and only for leaves still changed against the pinned baseline.
+  it("a repair attempt declaring only its own edits passes when earlier retained rows cover the rest", async () => {
+    const [own, ...retained] = declareHistorical();
+    const fixture = await tottoriCriticScar({ corrections: [own] });
+    // Without the retained rows this exact handoff fails (pinned above in "declaring only SOME").
+    await expect(reconcile(fixture)).rejects.toThrow(/without declaring the edit/);
+    const result = await reconcileCriticCorrections("tottori", {
+      ...fixture, intakeDir: dir, runId: RUN_ID,
+      retainedRows: [
+        ...retained,
+        // A retained row for a leaf that no longer differs from the baseline is dropped, never phantom.
+        { ...retained[0], target: "05-transit.json#/0/id" },
+        // A malformed retained row (attempt 2's string-shaped source/freshness) contributes nothing.
+        { ...retained[1], source: "https://example.com", freshness: "transit" },
+      ],
+    });
+    expect(result.changed).toBe(true);
+    expect(new Set(result.targets)).toEqual(new Set(HISTORICAL.map((p) => `${TRANSIT}#${p}`)));
+  });
+
+  it("the current attempt's row wins over a retained row for the same target", async () => {
+    const rows = declareHistorical();
+    const fixture = await tottoriCriticScar({ corrections: rows });
+    const shadowed = { ...rows[1], claim: "an OLDER retained claim that must not shadow the current one" };
+    await reconcileCriticCorrections("tottori", { ...fixture, intakeDir: dir, runId: RUN_ID, retainedRows: [shadowed] });
+    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
+    expect(evidence.evidence.some((r) => r.claim.includes("an OLDER retained claim"))).toBe(false);
+  });
+});
+
 describe("R-A — the generated critic instruction and the validator share one target grammar", () => {
   it("every target the capsule shows the critic is a target the validator accepts", async () => {
     const capsule = await generateContractCapsule("critic", { slug: "tottori", runId: RUN_ID });
@@ -401,6 +472,26 @@ describe("R-A — the generated critic instruction and the validator share one t
     expect(capsule).toContain("RFC 6901 JSON pointer");
     expect(capsule).toMatch(/NOT\s+a title, name, label or slug/);
     expect(capsule).not.toContain("editorialOnly");
+  });
+
+  it("the capsule names the corrections doc's top-level keys exactly as the validator reads them", async () => {
+    // Yamagata Run-B scar (run yamagata-20260828-73821a, critic attempt 1): the capsule said
+    // 'with schema `wp-critic-corrections/2.1`', the critic wrote `"schema": …`, and the reader
+    // — which reads only `schemaVersion` — refused the whole retained pass. The instruction and
+    // the validator must state the same key names, verbatim.
+    const capsule = await generateContractCapsule("critic", { slug: "tottori", runId: RUN_ID });
+    for (const key of Object.keys(criticCorrectionDocSchema.shape)) {
+      expect(capsule).toContain(`"${key}"`);
+    }
+    expect(capsule).not.toMatch(/with schema `/);
+    // Same scar, second face (critic attempt 2): `source` and `freshness` are OBJECTS in the
+    // validator; listing them as bare field names invited string values. The capsule must show
+    // the object shapes' own keys.
+    for (const key of ["url", "kind", "access", "perishable", "shelfLife", "recheckOn"]) {
+      expect(capsule).toContain(`"${key}"`);
+    }
+    expect(capsule).toMatch(/never a bare URL string/);
+    expect(capsule).toMatch(/never a string/);
   });
 
   it("the slugified-anchor grammar #107 generated is refused by the schema", () => {
