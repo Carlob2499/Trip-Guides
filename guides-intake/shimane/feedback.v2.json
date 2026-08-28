@@ -10,6 +10,17 @@
         "collected contract is invalid JSON: guides-intake/shimane/evidence.v2.json (Unexpected non-whitespace character after JSON at position 84365 (line 1998 column 1))"
       ],
       "createdAt": "2026-08-28T03:53:09.435Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T03:53:11.054Z"
+    },
+    {
+      "runId": "shimane-20260828-0f02a5",
+      "stage": "reconcile",
+      "attempt": 1,
+      "findings": [
+        "evidence artifact at /home/runner/work/Trip-Guides/Trip-Guides/collect/guides-intake/shimane/evidence.v2.json is not valid JSON (Unexpected non-whitespace character after JSON at position 84365 (line 1998 column 1)) — a malformed required evidence artifact is a blocking failure, never \"no evidence\". Restore or fix it."
+      ],
+      "createdAt": "2026-08-28T03:53:11.054Z",
       "status": "active",
       "retiredAt": null
     }

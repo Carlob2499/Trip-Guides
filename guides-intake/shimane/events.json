@@ -33,14 +33,14 @@
       "text": "Pass B (independent research) complete in 26m"
     },
     {
-      "at": "2026-08-28T03:22:42.997Z",
-      "kind": "decision",
-      "text": "Candidate funnel: 17 evaluated · 12 shortlisted · 9 shipped · 7 rejected"
+      "at": "2026-08-28T03:23:07.515Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 1 of 5)"
     },
     {
-      "at": "2026-08-28T03:22:42.997Z",
-      "kind": "decision",
-      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+      "at": "2026-08-28T03:53:11.052Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
     }
   ],
   "nuggets": [],
