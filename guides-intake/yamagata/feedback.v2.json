@@ -157,6 +157,21 @@
         "[pipeline-v2] CONTRACT FAILURE: critic changed 01-plan.json#/0/body, 01-plan.json#/1/body, 02-money-and-budget.json#/1/items/0/basis, 02-money-and-budget.json#/1/items/0/est, 02-money-and-budget.json#/1/items/0/high, 02-money-and-budget.json#/1/items/0/label, 02-money-and-budget.json#/1/items/0/low, 02-money-and-budget.json#/1/items/0/note, 02-money-and-budget.json#/1/items/1/est, 02-money-and-bud"
       ],
       "createdAt": "2026-08-28T12:46:31.347Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T14:15:18.254Z"
+    },
+    {
+      "runId": "yamagata-20260828-73821a",
+      "stage": "critic",
+      "attempt": 5,
+      "findings": [
+        "· corrections.8.source.kind: Invalid option: expected one of \"official\"|\"operator\"|\"firsthand\"|\"press\"|\"reference\"|\"aggregator\"",
+        "· corrections.9.source.kind: Invalid option: expected one of \"official\"|\"operator\"|\"firsthand\"|\"press\"|\"reference\"|\"aggregator\"",
+        "· corrections.10.source.kind: Invalid option: expected one of \"official\"|\"operator\"|\"firsthand\"|\"press\"|\"reference\"|\"aggregator\"",
+        "· corrections.11.source.kind: Invalid option: expected one of \"official\"|\"operator\"|\"firsthand\"|\"press\"|\"reference\"|\"aggregator\"",
+        "· corrections.12.source.kind: Invalid option: expected one of \"official\"|\"operator\"|\"firsthand\"|\"press\"|\"reference\"|\"aggregator\""
+      ],
+      "createdAt": "2026-08-28T14:15:18.254Z",
       "status": "active",
       "retiredAt": null
     }

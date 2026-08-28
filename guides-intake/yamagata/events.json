@@ -113,11 +113,6 @@
       "text": "Fresh-context critic attempt 3 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-28T12:31:02.338Z",
-      "kind": "decision",
-      "text": "Deterministic geocode pass: 0 resolved · 1 left as honest blanks"
-    },
-    {
       "at": "2026-08-28T12:31:31.510Z",
       "kind": "check",
       "text": "Fresh-context critic started (attempt 4 of 10)"
@@ -128,22 +123,37 @@
       "text": "Fresh-context critic attempt 4 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-28T12:46:31.350Z",
+      "at": "2026-08-28T13:59:00.566Z",
+      "kind": "decision",
+      "text": "Deterministic geocode pass: 0 resolved · 1 left as honest blanks"
+    },
+    {
+      "at": "2026-08-28T13:59:32.538Z",
+      "kind": "check",
+      "text": "Fresh-context critic started (attempt 5 of 10)"
+    },
+    {
+      "at": "2026-08-28T14:15:18.256Z",
+      "kind": "reject",
+      "text": "Fresh-context critic attempt 5 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-28T14:15:18.256Z",
       "kind": "decision",
       "text": "Candidate funnel: 33 evaluated · 27 shortlisted · 17 shipped · 13 rejected"
     },
     {
-      "at": "2026-08-28T12:46:31.350Z",
+      "at": "2026-08-28T14:15:18.256Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 12 independent finding(s): 3 agree · 2 conflict-resolved · 7 adopt"
     },
     {
-      "at": "2026-08-28T12:46:31.350Z",
+      "at": "2026-08-28T14:15:18.256Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-28T12:46:31.350Z",
+      "at": "2026-08-28T14:15:18.256Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether a seasonal private-vehicle restriction applies to Ginzan Onsen during the Oct 2026 trip window"
     }
