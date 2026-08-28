@@ -11,9 +11,9 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "failed",
+  "status": "running",
   "createdAt": "2026-08-28T09:25:24.411Z",
-  "updatedAt": "2026-08-28T11:01:24.826Z",
+  "updatedAt": "2026-08-28T11:01:47.955Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -89,10 +89,10 @@
       "failure": null
     },
     "reconcile": {
-      "status": "failed",
-      "startedAt": "2026-08-28T10:56:47.018Z",
-      "endedAt": "2026-08-28T11:00:33.829Z",
-      "attempts": 4,
+      "status": "running",
+      "startedAt": "2026-08-28T11:01:47.955Z",
+      "endedAt": null,
+      "attempts": 5,
       "model": "claude-sonnet-5",
       "effort": "high",
       "commit": null,
@@ -130,13 +130,17 @@
           "status": "failed",
           "failureClass": "gate-failure",
           "durationSec": 227
+        },
+        {
+          "attempt": 5,
+          "startedAt": "2026-08-28T11:01:47.955Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
         }
       ],
-      "failure": {
-        "class": "gate-failure",
-        "detail": "\"Chartered taxi\" (c-chartered-taxi--oishida-ginzan-onsen) carries \"worth-the-effort\" but is shortlisted — Worth labels belong to retained options · \"Notoya Ryokan\" (c-notoya-ryokan) carries \"worth-the-effort\" but is rejected — Worth labels belong to retained options · saturation claims \"stopped\" while unresolved evidence could still change the recommendation — investigate it or keep searching · \"General guide claim\" (general) claim \"A firsthand account from a visitor with impaired leg functio\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"Yamadera is least crowded right at the 8:00 opening and on w\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"A independent photography-focused visitor blog corroborates \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"The gas lamps along Ginzan Onsen's main street begin lightin\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"Ginzan Onsen's worst crowding is around midday (~12:00); the\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"A second independent blog corroborates the midday-worst / ev\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"The path to Shirogane Falls at the end of Ginzan Onsen's mai\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Risshaku-ji (Yamadera)\" (c-risshaku-ji-yamadera) claim \"Arriving by roughly 8-9am beats the crowds at Yamadera: at t\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Risshaku-ji (Yamadera)\" (c-risshaku-ji-yamadera) claim \"Arriving by roughly 8-9am beats the crowds at Yamadera; by d\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Ginzan Onsen\" (c-ginzan-onsen) claim \"Ginzan Onsen's alley is markedly quieter before day-trip cro\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Ginzan Onsen\" (c-ginzan-onsen) claim \"Ginzan Onsen mornings are markedly quieter than daytime: wal\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once)",
-        "at": "2026-08-28T11:00:33.829Z"
-      }
+      "failure": null
     },
     "critic": {
       "status": "queued",
@@ -160,13 +164,9 @@
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "re-run stage \"reconcile\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
   },
-  "failure": {
-    "class": "gate-failure",
-    "detail": "\"Chartered taxi\" (c-chartered-taxi--oishida-ginzan-onsen) carries \"worth-the-effort\" but is shortlisted — Worth labels belong to retained options · \"Notoya Ryokan\" (c-notoya-ryokan) carries \"worth-the-effort\" but is rejected — Worth labels belong to retained options · saturation claims \"stopped\" while unresolved evidence could still change the recommendation — investigate it or keep searching · \"General guide claim\" (general) claim \"A firsthand account from a visitor with impaired leg functio\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"Yamadera is least crowded right at the 8:00 opening and on w\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"A independent photography-focused visitor blog corroborates \" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"The gas lamps along Ginzan Onsen's main street begin lightin\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"Ginzan Onsen's worst crowding is around midday (~12:00); the\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"A second independent blog corroborates the midday-worst / ev\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"General guide claim\" (general) claim \"The path to Shirogane Falls at the end of Ginzan Onsen's mai\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Risshaku-ji (Yamadera)\" (c-risshaku-ji-yamadera) claim \"Arriving by roughly 8-9am beats the crowds at Yamadera: at t\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Risshaku-ji (Yamadera)\" (c-risshaku-ji-yamadera) claim \"Arriving by roughly 8-9am beats the crowds at Yamadera; by d\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Ginzan Onsen\" (c-ginzan-onsen) claim \"Ginzan Onsen's alley is markedly quieter before day-trip cro\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once) · \"Ginzan Onsen\" (c-ginzan-onsen) claim \"Ginzan Onsen mornings are markedly quieter than daytime: wal\" relies on a single experiential source set — crowd/atmosphere claims need ≥2 recent independent firsthand sources (copied families count once)",
-    "at": "2026-08-28T11:00:33.829Z"
-  },
+  "failure": null,
   "publication": {
     "published": false,
     "publishedAt": null,
