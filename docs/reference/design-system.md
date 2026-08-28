@@ -20,9 +20,13 @@ The blend, as testable rules:
 - **Airline precision (the data).** Perishable facts, prices, hours, transit render as
   dense, ordered, engineered information — tables and rows, never decorative prose.
   Precision earns trust; it is applied to *data regions only*.
-- **Field-journal warmth (the accent).** Paper-tinted neutrals (the existing sage/cream
-  palette) and painterly touches (Painted Atlas energy) appear only in **designated accent
-  slots** — mastheads, atlas art, section marks. Warmth never carries data.
+- **Field-journal warmth (the accent).** Paper-tinted neutrals and painterly touches
+  (Painted Atlas energy) appear only in **designated accent slots** — mastheads, atlas
+  art, section marks. Warmth never carries data. Reference standard (Carlo, 2026-08-28):
+  Monocle's travel guides — calm editorial ground, rigorously tabular listings, warm
+  illustrated accents that never touch the data. When real photography is not used,
+  per-country imagery is Monocle-style editorial illustration, not stock art or
+  AI-generic gradients.
 
 Test for any new surface: could you point at each region and name which of the three
 registers it is in? A region serving two registers at once is drift.
@@ -51,8 +55,15 @@ Every component must define, from creation:
 3. **One-handed phone use** — ≥44px touch targets; primary actions bottom-reachable on
    field screens; glare-readable contrast (the existing contrast doctrine).
 
-**Deliberately excluded from first-class status:** print. `print.css` is maintained so
-guides stay printable, but no new component is designed print-first.
+4. **Customer-facing surfaces show no inner workings** — no process commentary,
+   pipeline/agent vocabulary, register names, or spec annotations ever renders in the
+   product. The one deliberate exception is the traveler-facing verification line
+   ("Verified <date>"), which is product doctrine, not process. Internal rationale
+   lives in docs and code comments only.
+
+Print remains a supported context: `print.css` is maintained and guides stay printable.
+Screens are designed screen-first, but nothing is deliberately excluded (Carlo,
+2026-08-28 — supersedes the earlier print demotion).
 
 ## 4. Governance — locked down
 
