@@ -104,6 +104,17 @@
       "createdAt": "2026-08-28T11:00:33.832Z",
       "status": "retired",
       "retiredAt": "2026-08-28T11:18:33.248Z"
+    },
+    {
+      "runId": "yamagata-20260828-73821a",
+      "stage": "critic",
+      "attempt": 1,
+      "findings": [
+        "[pipeline-v2] CONTRACT FAILURE: schemaVersion \"undefined\" is not a valid V2 version tag (expected \"wp-critic-corrections/2.1\" or a compatible wp-critic-corrections/2.x). If this is a V1 artifact, read it through the V1 adapter — do not hand it to the V2 reader."
+      ],
+      "createdAt": "2026-08-28T11:39:18.849Z",
+      "status": "active",
+      "retiredAt": null
     }
   ]
 }
