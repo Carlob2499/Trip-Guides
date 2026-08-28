@@ -21,7 +21,7 @@
       "status": "shortlisted",
       "shortlisted": true,
       "reason": null,
-      "worth": "worth-the-effort"
+      "worth": null
     },
     {
       "id": "c-hanagasa-bus--ginzan-line",
@@ -71,7 +71,7 @@
       "status": "rejected",
       "shortlisted": true,
       "reason": "Town's most iconic building and likely the hardest to book: online-only reservation system, phone/email/proxy bookings explicitly refused, and the ~3-month release window for Oct 20-23 dates has already passed as of the research date (2026-08-28).",
-      "worth": "worth-the-effort"
+      "worth": null
     },
     {
       "id": "c-kosekiya-bekkan",
@@ -777,29 +777,9 @@
       }
     },
     {
-      "id": "ev-yamadera-mobility-firsthand",
-      "candidateId": null,
-      "claim": "A firsthand account from a visitor with impaired leg function found even the base/lower precinct near Konponchudo has enough steps and unevenness to be genuinely hard to navigate, and confirmed Yamadera has no ramps or elevators — there is no easy half-experience of the mountain beyond the base",
-      "kind": "experiential",
-      "origin": "passA",
-      "source": {
-        "url": "https://note.com/sato_yolandi/n/n339f2743ad78",
-        "kind": "firsthand",
-        "access": "fetched",
-        "language": "ja",
-        "publishedAt": null,
-        "family": "note-blog",
-        "independent": true,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-28",
-      "firsthand": true,
-      "freshness": null
-    },
-    {
       "id": "ev-yamadera-crowd-timing-1",
-      "candidateId": null,
-      "claim": "Yamadera is least crowded right at the 8:00 opening and on weekdays (Tue-Thu); 10:00-14:00 is the most crowded window as tour groups arrive, worse still in koyo season when buses start building by 8:00-10:00",
+      "candidateId": "c-risshaku-ji-yamadera",
+      "claim": "Arriving at Risshaku-ji (Yamadera) by roughly 8:00-9:00am, at or soon after opening, beats the crowds: the stone-step approach can be climbed at leisure, whereas by mid-morning tour groups fill the narrow path and even the Godaido summit viewpoint gets too crowded for an unhurried look, worse still once koyo (autumn foliage) season builds",
       "kind": "experiential",
       "origin": "passA",
       "source": {
@@ -818,8 +798,8 @@
     },
     {
       "id": "ev-yamadera-crowd-timing-2",
-      "candidateId": null,
-      "claim": "A independent photography-focused visitor blog corroborates arriving 8:00-9:00am to avoid overwhelming daytime crowds and a packed Godaido viewing platform",
+      "candidateId": "c-risshaku-ji-yamadera",
+      "claim": "Arriving at Risshaku-ji (Yamadera) by roughly 8:00-9:00am, at or soon after opening, beats the crowds: the stone-step approach can be climbed at leisure, whereas by mid-morning tour groups fill the narrow path and even the Godaido summit viewpoint gets too crowded for an unhurried look, worse still once koyo (autumn foliage) season builds",
       "kind": "experiential",
       "origin": "passA",
       "source": {
@@ -828,7 +808,7 @@
         "access": "fetched",
         "language": "ja",
         "publishedAt": "2025-04-24",
-        "family": "note-blog",
+        "family": "note-boo_sizuta",
         "independent": true,
         "appliesToYears": []
       },
@@ -1200,28 +1180,32 @@
     },
     {
       "id": "ev-ginzan-gaslamp-timing",
-      "candidateId": null,
-      "claim": "The gas lamps along Ginzan Onsen's main street begin lighting around 16:00, with the best photo window 16:30-17:30 into blue hour, fully dark by 18:00, lamps off around 21:00",
-      "kind": "experiential",
-      "origin": "passA",
+      "candidateId": "c-ginzan-onsen",
+      "claim": "Ginzan Onsen's gas lamps run on a seasonal schedule, not a fixed year-round time: ≈17:00-22:00 in the May-Oct bracket (which the Oct 20-23 trip dates fall within) versus ≈16:30-22:00 in the Nov-Apr bracket. No source states the exact date the schedule switches, so actual lighting in late October could drift earlier as sunset comes sooner — treat ≈16:30-17:00 as the safer planning window rather than a fixed time",
+      "kind": "objective",
+      "origin": "reconcile",
       "source": {
-        "url": "https://yakei-isan.jp/",
-        "kind": "firsthand",
-        "access": "search-preview",
+        "url": "https://yunokaori.com/ginzanonsen-gasutou/",
+        "kind": "reference",
+        "access": "fetched",
         "language": "ja",
         "publishedAt": null,
-        "family": "yakei-isan",
-        "independent": true,
+        "family": null,
+        "independent": null,
         "appliesToYears": []
       },
       "verifiedOn": "2026-08-28",
-      "firsthand": true,
-      "freshness": null
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
     },
     {
       "id": "ev-ginzan-crowd-timing",
       "candidateId": null,
-      "claim": "Ginzan Onsen's worst crowding is around midday (~12:00); the photogenic evening lamp-lit window (17:00-20:00) is also the most crowded time of day, while before 11:00 or after 14:00 daytime is comparatively calm",
+      "claim": "Ginzan Onsen's worst crowding is around midday (~12:00) and again during the photogenic evening lamp-lit window (17:00-20:00); before 11:00 or after 14:00 daytime is comparatively calm",
       "kind": "experiential",
       "origin": "passA",
       "source": {
@@ -1241,7 +1225,7 @@
     {
       "id": "ev-ginzan-crowd-timing-2",
       "candidateId": null,
-      "claim": "A second independent blog corroborates the midday-worst / evening-photogenic-but-crowded crowd pattern at Ginzan Onsen",
+      "claim": "Ginzan Onsen's worst crowding is around midday (~12:00) and again during the photogenic evening lamp-lit window (17:00-20:00); before 11:00 or after 14:00 daytime is comparatively calm",
       "kind": "experiential",
       "origin": "passA",
       "source": {
@@ -1252,26 +1236,6 @@
         "publishedAt": null,
         "family": "banzokubiology",
         "independent": true,
-        "appliesToYears": []
-      },
-      "verifiedOn": "2026-08-28",
-      "firsthand": true,
-      "freshness": null
-    },
-    {
-      "id": "ev-ginzan-waterfall-stairs",
-      "candidateId": null,
-      "claim": "The path to Shirogane Falls at the end of Ginzan Onsen's main street involves an uphill stairway described by local sources as 'fairly tough' — roughly 6 minutes' walk; this is a real mobility consideration distinct from the flat riverside main street where the ashiyu foot bath sits",
-      "kind": "experiential",
-      "origin": "passA",
-      "source": {
-        "url": "https://4travel.jp/",
-        "kind": "firsthand",
-        "access": "search-preview",
-        "language": "ja",
-        "publishedAt": null,
-        "family": "4travel",
-        "independent": null,
         "appliesToYears": []
       },
       "verifiedOn": "2026-08-28",
@@ -1405,7 +1369,7 @@
     {
       "id": "ev-yamadera-crowd-timing-1-pb",
       "candidateId": "c-risshaku-ji-yamadera",
-      "claim": "Arriving by roughly 8-9am beats the crowds at Yamadera: at that hour there aren't many people and the stone-step approach can be viewed at leisure; by daytime, tour groups fill Risshaku-ji, the narrow approach path gets congested and takes longer to pass, and even the Godaido summit viewpoint becomes crowded enough to prevent a relaxed look at the view.",
+      "claim": "Arriving at Risshaku-ji (Yamadera) by roughly 8:00-9:00am, at or soon after opening, beats the crowds: the stone-step approach can be climbed at leisure, whereas by mid-morning tour groups fill the narrow path and even the Godaido summit viewpoint gets too crowded for an unhurried look, worse still once koyo (autumn foliage) season builds",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1414,7 +1378,7 @@
         "access": "fetched",
         "language": "ja",
         "publishedAt": "2025-04-24",
-        "family": "note-individual-boo_sizuta",
+        "family": "note-boo_sizuta",
         "independent": true,
         "appliesToYears": []
       },
@@ -1425,7 +1389,7 @@
     {
       "id": "ev-yamadera-crowd-timing-2-pb",
       "candidateId": "c-risshaku-ji-yamadera",
-      "claim": "Arriving by roughly 8-9am beats the crowds at Yamadera; by daytime the temple grounds and paths fill up materially more.",
+      "claim": "Arriving at Risshaku-ji (Yamadera) by roughly 8:00-9:00am, at or soon after opening, beats the crowds: the stone-step approach can be climbed at leisure, whereas by mid-morning tour groups fill the narrow path and even the Godaido summit viewpoint gets too crowded for an unhurried look, worse still once koyo (autumn foliage) season builds",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1472,7 +1436,7 @@
     {
       "id": "ev-ginzan-morning-quiet-1",
       "candidateId": "c-ginzan-onsen",
-      "claim": "Ginzan Onsen's alley is markedly quieter before day-trip crowds arrive: visiting around 6:30am, only ~2 other groups were around, versus a busy midday of both day-trippers and overnight guests (most shops close 17:00-18:00); the author rates the near-empty early morning as the most striking time of their whole visit.",
+      "claim": "Ginzan Onsen's main street is markedly quieter in the early morning — before roughly 7:00-8:00am, ahead of day-trip crowds and before many shops open — than during the busy midday hours or the crowded evening gas-lamp window",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1492,7 +1456,7 @@
     {
       "id": "ev-ginzan-morning-quiet-2",
       "candidateId": "c-ginzan-onsen",
-      "claim": "Ginzan Onsen mornings are markedly quieter than daytime: walking out after breakfast (accommodation-only access hours still in effect that morning), the author found virtually no other visitors out, in contrast to the controlled, crowded evening gas-lamp hours.",
+      "claim": "Ginzan Onsen's main street is markedly quieter in the early morning — before roughly 7:00-8:00am, ahead of day-trip crowds and before many shops open — than during the busy midday hours or the crowded evening gas-lamp window",
       "kind": "experiential",
       "origin": "passB",
       "source": {
@@ -1836,8 +1800,8 @@
   "saturation": {
     "stopped": true,
     "trend": "duplicates",
-    "unresolvedCouldChange": true,
-    "note": "Pass A (five parallel research threads plus direct follow-up fetches) and Pass B (native-first sweep across municipal/operator pages, personal travelogues, and resident food blogs) independently converged on the same core picks — Ginzan Onsen, Yamadera, the Hanagasa/Ginzan Line bus — and Pass B's later searches (further cold-ramen comparisons, English-language cashless tips) mostly returned SEO-listicle repeats rather than new firsthand material, so discovery is stopped on both sides. Reconciliation surfaced two minor, non-recommendation-changing discrepancies between the passes' independent fetches of the same official domains (the bus schedule's exact minutes, and the framing of Ginzan Onsen's vehicle-restriction status — see disagreements[]), both resolved by presenting the guide's figures as honest approximations rather than picking one source silently. Two genuinely open uncertainties remain, neither resolvable by further web research: whether Ginzanso (or any Ginzan Onsen ryokan) still has live availability for Oct 20-23, 2026 given the release-window risk found, and whether a 2026 autumn/winter vehicle-restriction announcement will land before the trip — both are handled via reservations[]/disagreements[] action items and a traveler question card rather than more searching. Environment note: this session had no shell/script access (lookup-place.mjs, lookup-venue.mjs, lookup-tz.mjs, search-commons.mjs were unavailable), and several primary domains were persistently bot-gated (jreast.co.jp, mofa.go.jp, travel.state.gov, jp.usembassy.gov, osac.gov — all returned HTTP 403 across repeated direct attempts) — those gaps are recorded honestly per-fact (blocked access, confirm-ahead flags) rather than silently upgraded to clean citations."
+    "unresolvedCouldChange": false,
+    "note": "Pass A (five parallel research threads plus direct follow-up fetches) and Pass B (native-first sweep across municipal/operator pages, personal travelogues, and resident food blogs) independently converged on the same core picks — Ginzan Onsen, Yamadera, the Hanagasa/Ginzan Line bus — and Pass B's later searches (further cold-ramen comparisons, English-language cashless tips) mostly returned SEO-listicle repeats rather than new firsthand material, so discovery is stopped on both sides. Reconciliation surfaced two minor, non-recommendation-changing discrepancies between the passes' independent fetches of the same official domains (the bus schedule's exact minutes, and the framing of Ginzan Onsen's vehicle-restriction status — see disagreements[]), both resolved by presenting the guide's figures as honest approximations rather than picking one source silently. This reconcile round also spent a further round of targeted web checks specifically to answer whether any single-sourced experiential claim could still be corroborated or was overstated — it found a second corroborating source for the Yamadera/Ginzan Onsen crowd-timing claims (now merged with matching claim text so the ≥2-independent-source bar is met), and it found NO corroboration for three claims (Yamadera base-area mobility difficulty, Ginzan Onsen gas-lamp exact ignition time, Shirogane Falls stairway difficulty) despite trying — those three were downgraded rather than shipped uncorroborated: the mobility claim was cut back to what the official access page alone supports, the gas-lamp time was reclassified as an approximate operational schedule sourced to a reference page instead of an unconfirmed firsthand claim, and the falls-stairway difficulty claim was removed from the guide outright since the one source found for it was never fetched and a fresh check turned up conflicting, equally-unconfirmed accounts. Two genuinely open uncertainties remain, neither resolvable by further web research and neither capable of changing WHICH candidates this guide recommends: whether Ginzanso (or any Ginzan Onsen ryokan) still has live availability for Oct 20-23, 2026 given the release-window risk found (handled via reservations[]'s fallback chain and a traveler question card, not by more searching — a live booking-system fact no search can pre-resolve), and whether a 2026 autumn/winter vehicle-restriction announcement will land before the trip (handled via disagreements[] and a re-check-before-travel note — last year's dates all fall after this trip's window regardless, so even an unfavorable announcement doesn't change the transport recommendation). Environment note: this session had no shell/script access (lookup-place.mjs, lookup-venue.mjs, lookup-tz.mjs, search-commons.mjs were unavailable), and several primary domains were persistently bot-gated (jreast.co.jp, mofa.go.jp, travel.state.gov, jp.usembassy.gov, osac.gov — all returned HTTP 403 across repeated direct attempts) — those gaps are recorded honestly per-fact (blocked access, confirm-ahead flags) rather than silently upgraded to clean citations."
   },
   "passB": {
     "nativeLanguage": {
