@@ -11,7 +11,7 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "stuck",
+  "status": "failed",
   "createdAt": "2026-08-28T09:25:24.411Z",
   "updatedAt": "2026-08-28T11:41:49.969Z",
   "stageOrder": [
@@ -171,13 +171,13 @@
   },
   "attempts": {
     "total": 6,
-    "cap": 5,
+    "cap": 8,
     "autoRetries": 1,
     "autoRetryCap": 1
   },
   "resume": {
     "nextStage": "critic",
-    "action": "re-run stage \"critic\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "re-run stage \"critic\" (failed: gate-failure) \u2014 a resumed run repeats the interrupted stage, never skips ahead"
   },
   "failure": {
     "class": "gate-failure",
