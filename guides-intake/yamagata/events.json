@@ -1,0 +1,43 @@
+{
+  "runId": "yamagata-20260828-73821a",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-28T09:25:24.458Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-28T09:25:24.463Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-28T09:25:51.972Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-28T10:04:07.926Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 38m"
+    },
+    {
+      "at": "2026-08-28T10:04:07.939Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 27 evaluated · 21 shortlisted · 11 shipped · 12 rejected"
+    },
+    {
+      "at": "2026-08-28T10:04:07.939Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+    },
+    {
+      "at": "2026-08-28T10:04:07.939Z",
+      "kind": "check",
+      "text": "Decision-changing disagreement investigated: Whether a seasonal private-vehicle restriction applies to Ginzan Onsen during the Oct 2026 trip window"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}

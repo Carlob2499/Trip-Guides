@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-28T09:25:24.411Z",
-  "updatedAt": "2026-08-28T09:25:51.972Z",
+  "updatedAt": "2026-08-28T10:04:07.939Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -45,23 +45,23 @@
       "failure": null
     },
     "passA": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-28T09:25:51.972Z",
-      "endedAt": null,
+      "endedAt": "2026-08-28T10:04:07.926Z",
       "attempts": 1,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "09c1cf29a312dc202b20baa5565d16af61f3785e",
       "baseline": "7c7d4cc73b79b4191bddfcf8944e3cc698e111c2",
       "replay": false,
       "history": [
         {
           "attempt": 1,
           "startedAt": "2026-08-28T09:25:51.972Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-28T10:04:07.926Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 2296
         }
       ],
       "failure": null
@@ -113,8 +113,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passA",
-    "action": "stage \"passA\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "passB",
+    "action": "run stage \"passB\""
   },
   "failure": null,
   "publication": {
@@ -137,5 +137,30 @@
     "checkedAt": null,
     "failure": null
   },
-  "telemetry": null
+  "telemetry": {
+    "schemaVersion": "wp-telemetry/2.1",
+    "stages": {
+      "passA": {
+        "durationSec": 2296,
+        "failedDurationSec": null,
+        "cumulativeDurationSec": 2296,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": null,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
+      }
+    },
+    "counts": {
+      "candidatesConsidered": 27,
+      "candidatesDeepVerified": 21,
+      "factsVerified": 44,
+      "disagreementInvestigations": 2,
+      "nativeLanguageSearches": null
+    },
+    "totalDurationSec": 2324,
+    "tokens": null,
+    "costUsd": null
+  }
 }
