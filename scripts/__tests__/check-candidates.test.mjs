@@ -86,6 +86,9 @@ describe("judgeCandidates", () => {
     const result = judgeCandidates(descriptive, { guideText: "Try the Camel commute option", canonicalNames });
     expect(result.status).toBe("fail");
     expect(result.findings.join()).toMatch(/not a canonical shipped entity name/);
+
+    const htmlLike = parseCandidates(doc(table(1, "Food", [["<em>Tsukiji Outer Market</em>", "shipped"]])));
+    expect(judgeCandidates(htmlLike, { guideText: "Tsukiji Outer Market", canonicalNames }).status).toBe("fail");
   });
 
   it("legitimate unshipped leads remain valid under the canonical shipped-name contract", () => {

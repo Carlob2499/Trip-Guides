@@ -99,7 +99,7 @@ Automatic repair is decided from durable state, not a transient workflow flag. I
 - stage attempt budget remains;
 - automatic-repair budget remains.
 
-Current bounds remain five quality attempts and one automatic quality-repair reservation. A proven usage-limit interruption does not consume a quality attempt; it uses a separate durable allowance capped at two availability recoveries. Repeated usage limits therefore cannot loop forever. Cancellation, generic agent failures, unknown failures, missing findings, unreadable state, exhausted budgets, and already-published runs do not earn blind retries.
+Current bounds remain five quality attempts and one automatic quality-repair reservation. A proven usage-limit interruption does not consume a quality attempt, but it also does not auto-retry into the same exhausted usage window; the run stops visibly and can be deliberately redispatched after availability returns. Cancellation, generic agent failures, unknown failures, missing findings, unreadable state, exhausted budgets, and already-published runs do not earn blind retries.
 
 A stopped run has a visible escalation path rather than silently disappearing.
 
@@ -212,4 +212,4 @@ Read together:
 - `../reference/pipeline.md` — durable lifecycle policy.
 - `../handoff.md` — current warm start.
 
-**Next engineering surface:** the model-backed validation program executed 2026-08-26 remains historical truth and concluded **NOT READY — REPAIR REQUIRED** (`V2_VALIDATION_SYNTHESIS.md`). The bounded deterministic repairs for gate parity, post-critic evidence ownership, corroboration accounting, candidate identity/name ownership, availability-vs-quality budgeting, and coverage honesty are implemented on the review branch cut from `4a37f0c`; they do not retroactively turn V01/V02/V03/V05/V07 green. Next is independent code review, then one fresh repaired-class model-backed validation run. V1 remains the production default and V2 cutover remains unauthorized until that new evidence succeeds.
+**Next engineering surface:** the model-backed validation program executed 2026-08-26 remains historical truth and concluded **NOT READY — REPAIR REQUIRED** (`V2_VALIDATION_SYNTHESIS.md`). PR #105 merged the first deterministic repair implementation, but the required independent diff review occurred post-merge and found residual R-A/R-E/R-F defects plus bounded retry/identity issues. Draft PR #106 contains the mechanically safe post-merge corrections; R-A/R-E/R-F still require a focused contract repair before any paid revalidation. Do **not** run the fresh repaired-class model-backed validation yet. V1 remains the production default and V2 cutover remains unauthorized until the remaining repair is independently reviewed and a fresh Run-B-class validation succeeds.

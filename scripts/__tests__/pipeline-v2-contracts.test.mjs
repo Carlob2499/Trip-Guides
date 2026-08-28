@@ -487,6 +487,17 @@ describe("coverage — valid / rules / missing / malformed", () => {
     bad.asks[0].evidenceIds = ["rejected"];
     expect(coverageProblems(bad, { evidenceDoc }).join()).toMatch(/disproven or superseded/);
 
+    const replacedEvidenceDoc = {
+      evidence: [
+        ...evidenceDoc.evidence,
+        { id: "replacement", kind: "objective", source: { kind: "official", access: "fetched" } },
+      ],
+      reconciliation: [{ findingId: "replacement", disposition: "replace", note: "replacement is adopted; it supersedes an older finding" }],
+    };
+    const replacement = validCoverage();
+    replacement.asks[0].evidenceIds = ["replacement"];
+    expect(coverageProblems(replacement, { evidenceDoc: replacedEvidenceDoc, bindingAskIds: new Set(["ask-food"]) })).toEqual([]);
+
     const advisoryPreview = validCoverage();
     advisoryPreview.asks[0].evidenceIds = ["preview"];
     expect(coverageProblems(advisoryPreview, { evidenceDoc })).toEqual([]);

@@ -32,7 +32,7 @@ import { FAILURE_CLASSES } from "./contracts.mjs";
 /** Classes an automatic repair retry may spend budget on. Both share one precondition, enforced
     below: the model PROCESS returned, and the deterministic validators left actionable findings
     for the retry to work from. A retry with nothing to repair is a blind re-spend. */
-export const AUTO_RETRYABLE_CLASSES = Object.freeze(["gate-failure", "void-run", "usage-limit"]);
+export const AUTO_RETRYABLE_CLASSES = Object.freeze(["gate-failure", "void-run"]);
 
 // The CLI's own printed interruption diagnostics. Machine output, not a guess — and matched only
 // against a process that ALSO exited nonzero, so a stray mention in research text can never
@@ -121,23 +121,9 @@ export function retryEligibility(state, { stage = null, findings = [] } = {}) {
   if (!AUTO_RETRYABLE_CLASSES.includes(failureClass)) {
     return deny(failedStage, failureClass, findingCount,
       `failure class "${failureClass}" is never auto-retryable — only ${AUTO_RETRYABLE_CLASSES.join(" and ")} are`,
-      "diagnose the agent/control-plane failure, then re-dispatch research-pass-v2.yml with the same slug");
-  }
-  if (failureClass === "usage-limit") {
-    if ((state.attempts?.availabilityRetries ?? 0) >= (state.attempts?.availabilityRetryCap ?? 0)) {
-      return deny(failedStage, failureClass, findingCount,
-        `availability recovery budget exhausted (${state.attempts?.availabilityRetries} of ${state.attempts?.availabilityRetryCap})`,
-        "wait for account availability, then re-dispatch research-pass-v2.yml deliberately with the same slug");
-    }
-    if ((state.attempts?.total ?? 0) >= (state.attempts?.cap ?? 0)) {
-      return deny(failedStage, failureClass, findingCount,
-        `quality attempt budget is already exhausted (${state.attempts?.total} of ${state.attempts?.cap})`,
-        "review the run before granting any further research spend");
-    }
-    return {
-      allowed: true, stage: failedStage, failureClass, findingCount, budget: "availability",
-      reason: `usage-limit at "${failedStage}" with bounded availability recovery remaining`, recovery: null,
-    };
+      failureClass === "usage-limit"
+        ? "wait for the usage window to reset, then re-dispatch research-pass-v2.yml with the same slug — the run resumes at the failed stage"
+        : "diagnose the agent/control-plane failure, then re-dispatch research-pass-v2.yml with the same slug");
   }
   if (findingCount === 0) {
     return deny(failedStage, failureClass, findingCount,
@@ -164,7 +150,6 @@ export function retryEligibility(state, { stage = null, findings = [] } = {}) {
     stage: failedStage,
     failureClass,
     findingCount,
-    budget: "quality-repair",
     reason: `${failureClass} at "${failedStage}" with ${findingCount} actionable finding(s) and budget remaining`,
     recovery: null,
   };

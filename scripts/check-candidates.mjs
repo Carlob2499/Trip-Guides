@@ -71,7 +71,6 @@ export function normalizeShippedName(value) {
   return String(value || "")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
     .replace(/[*_`~]/g, "")
-    .replace(/<[^>]+>/g, "")
     .replace(/\s*\([^)]*\)\s*$/, "")
     .replace(/\s+/g, " ")
     .trim()

@@ -33,7 +33,6 @@ export const V2_RESEARCH_STAGES = ["scaffold", "passA", "passB", "reconcile", "c
 // pins the research attempt cap at five for initial V2 compatibility), one automatic redispatch.
 export const V2_ATTEMPT_CAP = 5;
 export const V2_AUTO_RETRY_CAP = 1;
-export const V2_AVAILABILITY_RETRY_CAP = 2;
 // A human answer re-opening a completed run grants this many further dispatches for the
 // reopened tail (reconcile → critic → landing). The AUTONOMOUS cap stays what it was — the
 // grant exists only on the human-triggered reopen path, so a run still cannot loop on its own;
@@ -164,7 +163,7 @@ export function stageAttemptStats(st) {
 }
 
 /** The canonical fresh-run shape (one writer — init and fresh-run archival both use it). */
-function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, availabilityRetryCap, now, inputs, issue, landMode }) {
+function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }) {
   return {
     schemaVersion: RUN_SCHEMA,
     slug,
@@ -180,7 +179,7 @@ function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, availabilit
     stages: Object.fromEntries(stages.map((s) => [s, {
       status: "queued", startedAt: null, endedAt: null, attempts: 0, model: null, effort: null, commit: null, failure: null,
     }])),
-    attempts: { total: 0, cap, autoRetries: 0, autoRetryCap, availabilityRetries: 0, availabilityRetryCap },
+    attempts: { total: 0, cap, autoRetries: 0, autoRetryCap },
     resume: { nextStage: stages[0], action: `run stage "${stages[0]}"` },
     failure: null,
     publication: { published: false, publishedAt: null, deployedLive: null, deployedAt: null },
@@ -199,7 +198,6 @@ export async function initRunV2(slug, {
   stages = V2_RESEARCH_STAGES,
   cap = V2_ATTEMPT_CAP,
   autoRetryCap = V2_AUTO_RETRY_CAP,
-  availabilityRetryCap = V2_AVAILABILITY_RETRY_CAP,
   now = new Date().toISOString(),
   intakeDir = INTAKE_DIR,
   force = false,
@@ -223,7 +221,7 @@ export async function initRunV2(slug, {
         publishedAt: existing.publication.publishedAt || null,
         mergedPr: existing.landing?.pr ?? null,
       }];
-      const state = freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, availabilityRetryCap, now, inputs, issue, landMode });
+      const state = freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode });
       state.previousRuns = archived;
       return save(state, intakeDir);
     }
@@ -262,7 +260,7 @@ export async function initRunV2(slug, {
     }
     return existing;
   }
-  return save(freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, availabilityRetryCap, now, inputs, issue, landMode }), intakeDir);
+  return save(freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }), intakeDir);
 }
 
 function requireRun(state, slug) {
@@ -338,9 +336,8 @@ export async function stageFail(slug, stage, { failureClass = "unknown", detail 
   st.endedAt = now;
   st.failure = { class: failureClass, detail, at: now };
   closeAttempt(st, now, "failed", failureClass);
-  // An account/session availability interruption did not produce a quality attempt. Refund the
-  // dispatch's quality charge exactly once (this branch is skipped on repeated stageFail calls);
-  // its separate bounded recovery reservation is spent only when redispatch is authorized.
+  // A usage-limit is an availability interruption, not a quality attempt. Refund the dispatch
+  // charge exactly once; retry policy still stops visibly until a deliberate later redispatch.
   if (failureClass === "usage-limit" && state.attempts.total > 0) state.attempts.total -= 1;
   state.status = "failed";
   state.failure = { class: failureClass, detail, at: now };
@@ -371,24 +368,23 @@ export async function bumpRunAttempt(slug, { now = new Date().toISOString(), int
   return { state, overCap, attempts: state.attempts.total, cap: state.attempts.cap };
 }
 
-/** Reserve the appropriate bounded retry: one quality-repair reservation for rejected output,
-    or the separate availability allowance for a usage-limit interruption. Past either cap the
-    caller must NOT redispatch.
+/** Reserve the run's ONE bounded automatic repair for a policy-approved REPAIRABLE failure.
+    Bounded: past the cap the caller must NOT redispatch.
 
     This function only spends the budget — it does not decide who may. Eligibility lives in
-    `recovery.mjs` (`retryEligibility`). Gate-failure/void-run require actionable validator
-    feedback and spend the quality-repair allowance. Usage-limit proves no artifact quality and
-    therefore spends only the separate bounded availability allowance. */
+    `recovery.mjs` (`retryEligibility`) and today permits ONLY `gate-failure` and `void-run`,
+    and only with actionable validator feedback for the same runId/stage. In particular
+    `usage-limit` is deliberately NEVER auto-retryable (PR #75): an interrupted process proves
+    nothing about the artifact, and re-dispatching into a closed usage window burns the repair a
+    later real failure is owed. It stops visibly instead. */
 export async function recordAutoRetry(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
-  const availability = state.stages?.[state.resume?.nextStage]?.failure?.class === "usage-limit";
-  const usedKey = availability ? "availabilityRetries" : "autoRetries";
-  const capKey = availability ? "availabilityRetryCap" : "autoRetryCap";
-  state.attempts[usedKey] += 1;
-  const allowed = state.status !== "stuck" && state.attempts.total < state.attempts.cap &&
-    state.attempts[usedKey] <= state.attempts[capKey];
+  state.attempts.autoRetries += 1;
+  const allowed = state.status !== "stuck" &&
+    state.attempts.total < state.attempts.cap &&
+    state.attempts.autoRetries <= state.attempts.autoRetryCap;
   await save(touch(state, now), intakeDir);
-  return { state, allowed, autoRetries: state.attempts[usedKey], cap: state.attempts[capKey], budget: availability ? "availability" : "quality-repair" };
+  return { state, allowed, autoRetries: state.attempts.autoRetries, cap: state.attempts.autoRetryCap };
 }
 
 /** Publication and deployed-live are distinct facts, marked separately. */

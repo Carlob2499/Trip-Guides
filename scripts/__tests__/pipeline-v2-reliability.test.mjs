@@ -32,7 +32,6 @@ import { recordStageOutputFailure, escalationReport } from "../pipeline-v2.mjs";
 import {
   initRunV2, readRunStateV2, stageStart, stageComplete, stageFail, nextStageV2,
   bumpRunAttempt, recordAutoRetry, V2_ATTEMPT_CAP, V2_AUTO_RETRY_CAP,
-  V2_AVAILABILITY_RETRY_CAP,
 } from "../pipeline/v2/run-state.mjs";
 import { activeFeedback, recordStageFeedback } from "../pipeline/v2/feedback.mjs";
 
@@ -270,7 +269,7 @@ describe("H/I/J — an actionable gate failure repairs itself, on the SAME run",
     await runAt("passA");
     const failed = await failWith("passA", "void-run", { findings: ["Pass A owes evidence.v2.json"] });
     expect((await decide(failed, "passA")).allowed).toBe(true);
-    expect(AUTO_RETRYABLE_CLASSES).toEqual(["gate-failure", "void-run", "usage-limit"]);
+    expect(AUTO_RETRYABLE_CLASSES).toEqual(["gate-failure", "void-run"]);
   });
 
   it("I/J — the repair preserves runId, branch inputs, landMode and every completed stage", async () => {
@@ -295,42 +294,15 @@ describe("H/I/J — an actionable gate failure repairs itself, on the SAME run",
 });
 
 describe("K/L/M/N — everything else fails closed", () => {
-  it("K — usage-limit uses a separate bounded availability allowance and refunds quality budget", async () => {
+  it("K — a usage-limit interruption refunds quality budget but never auto-retries into the same exhausted window", async () => {
     await runAt("reconcile");
     const failed = await failWith("reconcile", "usage-limit", { findings: ["partial reconcile"] });
     const decision = await decide(failed, "reconcile");
-    expect(decision.allowed).toBe(true);
-    expect(decision.budget).toBe("availability");
+    expect(decision.allowed).toBe(false);
     expect(decision.reason).toContain("usage-limit");
+    expect(decision.recovery).toMatch(/usage window/i);
     expect(failed.attempts.total).toBe(0);
-    await recordAutoRetry(SLUG, { intakeDir });
-    const persisted = await readRunStateV2(SLUG, { intakeDir });
-    expect(persisted.attempts.autoRetries).toBe(0);
-    expect(persisted.attempts.availabilityRetries).toBe(1);
-  });
-
-  it("K — repeated usage-limit interruptions persist across resume and cannot loop forever", async () => {
-    const first = await runAt("reconcile");
-    await failWith("reconcile", "usage-limit");
-    await recordAutoRetry(SLUG, { intakeDir });
-    await bumpRunAttempt(SLUG, { intakeDir });
-    await stageStart(SLUG, "reconcile", { intakeDir });
-    await stageFail(SLUG, "reconcile", { failureClass: "usage-limit", intakeDir });
-    await recordAutoRetry(SLUG, { intakeDir });
-    const persisted = await readRunStateV2(SLUG, { intakeDir });
-    expect(persisted.runId).toBe(first.runId);
-    expect(persisted.attempts.total).toBe(0);
-    expect(persisted.attempts.availabilityRetries).toBe(V2_AVAILABILITY_RETRY_CAP);
-    const stopped = retryEligibility(persisted, { stage: "reconcile" });
-    expect(stopped.allowed).toBe(false);
-    expect(stopped.reason).toMatch(/availability recovery budget exhausted/);
-  });
-
-  it("a genuine gate failure still consumes the quality attempt", async () => {
-    await runAt("reconcile");
-    const failed = await failWith("reconcile", "gate-failure", { findings: ["schema defect"] });
-    expect(failed.attempts.total).toBe(1);
-    expect((await decide(failed, "reconcile")).budget).toBe("quality-repair");
+    expect(failed.attempts.autoRetries).toBe(0);
   });
 
   it("L — a true agent-failure never blindly retries", async () => {
@@ -394,16 +366,13 @@ describe("K/L/M/N — everything else fails closed", () => {
     expect(retryEligibility(stuck, { stage: "reconcile", findings: ["fix it"] }).allowed).toBe(false);
   });
 
-  it("an availability retry must not spend the quality-repair budget", async () => {
+  it("a refusal must not spend the repair budget a later failure is owed", async () => {
     // The old command incremented unconditionally; a usage-limit stop would then have consumed
     // the one retry that a genuinely repairable gate failure needed.
     await runAt("reconcile");
     const failed = await failWith("reconcile", "usage-limit", { findings: ["partial"] });
-    expect((await decide(failed, "reconcile")).allowed).toBe(true);
-    await recordAutoRetry(SLUG, { intakeDir });
-    const state = await readRunStateV2(SLUG, { intakeDir });
-    expect(state.attempts.autoRetries).toBe(0);
-    expect(state.attempts.availabilityRetries).toBe(1);
+    expect((await decide(failed, "reconcile")).allowed).toBe(false);
+    expect((await readRunStateV2(SLUG, { intakeDir })).attempts.autoRetries).toBe(0);
   });
 });
 
@@ -443,8 +412,6 @@ describe("O — a run that stops creates a visible recovery surface", () => {
   it("names slug, run, stage, class, finding count, why there was no retry, and the safe action", async () => {
     await runAt("reconcile", { issue: "74" });
     const failed = await failWith("reconcile", "usage-limit", { findings: ["partial reconcile output"] });
-    await recordAutoRetry(SLUG, { intakeDir });
-    await recordAutoRetry(SLUG, { intakeDir });
     const report = await escalationReport(SLUG, { stage: "reconcile", intakeDir });
 
     expect(report.issue).toBe("74");

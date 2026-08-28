@@ -68,10 +68,12 @@ describe("experiential corroboration on shipped candidates (≥2 independent fir
 
   it("two records from distinct families pass; unknown independence does not", () => {
     expect(corroborationProblems(doc({ evidence: [exp("e-1", "blogA"), exp("e-2", "forumB")] }))).toEqual([]);
+    const unknownFamily = [exp("e-1", null), exp("e-2", null)];
+    expect(corroborationProblems(doc({ evidence: unknownFamily })).join()).toMatch(/unproven-independent/);
     const sameOrigin = [exp("e-1", null), exp("e-2", null)].map((e, index) => ({
-      ...e, source: { ...e.source, url: `https://same.example/post-${index}` },
+      ...e, source: { ...e.source, url: `https://same.example/post-${index}`, independent: true },
     }));
-    expect(corroborationProblems(doc({ evidence: sameOrigin })).join()).toMatch(/unproven-independent/);
+    expect(corroborationProblems(doc({ evidence: sameOrigin }))).toEqual([]);
     const explicit = [exp("e-1", null), exp("e-2", null)].map((e) => ({ ...e, source: { ...e.source, independent: true } }));
     expect(corroborationProblems(doc({ evidence: explicit }))).toEqual([]); // distinct real origins
   });
