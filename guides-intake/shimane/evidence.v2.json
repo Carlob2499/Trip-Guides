@@ -533,7 +533,9 @@
         "publishedAt": "2023-12-16",
         "family": "tetsudo-com",
         "independent": true,
-        "appliesToYears": []
+        "appliesToYears": [
+          2025
+        ]
       },
       "verifiedOn": "2026-08-28",
       "firsthand": null,
@@ -858,6 +860,54 @@
       }
     },
     {
+      "id": "ev-takyo-abeke-release-window",
+      "candidateId": "c-takyo-abeke",
+      "claim": "Takyo-Abeke reservations open on the 1st of each month for stays up to 6 months out; the operator also requires booking at least 5 days before arrival",
+      "kind": "objective",
+      "origin": "reconcile",
+      "source": {
+        "url": "https://kurasuyado.jp/faq",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kurasuyado",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-takyo-abeke-cancellation",
+      "candidateId": "c-takyo-abeke",
+      "claim": "Takyo-Abeke cancellations are free 2+ days before arrival; cancelling the day before or day of arrival incurs a 100% cancellation fee (full accommodation cost); no deposit/prepayment is stated on the operator's own FAQ",
+      "kind": "objective",
+      "origin": "reconcile",
+      "source": {
+        "url": "https://kurasuyado.jp/faq",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "kurasuyado",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
       "id": "ev-tanakaya-hours-closed",
       "candidateId": "c-tanakaya",
       "claim": "Tanakaya (soba, 5 min from Izumo Taisha-mae Station) is open 11:00-16:00 or until the soba sells out, closed Thursdays",
@@ -884,16 +934,16 @@
     {
       "id": "ev-tanakaya-crowd-1",
       "candidateId": "c-tanakaya",
-      "claim": "Tanakaya forms a line at midday, even past the normal lunch peak",
+      "claim": "Izumo Taisha's soba shops, including Tanakaya, get busiest around midday (roughly 12:00-14:00); waits are shorter right at opening (~11:00) or after 15:00",
       "kind": "experiential",
-      "origin": "passA",
+      "origin": "reconcile",
       "source": {
-        "url": "https://na-na.media/tanakaya-izumosoba/",
+        "url": "https://tabi.torisetsu-shimane.com/izumotaisya-soba/",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "ja",
-        "publishedAt": null,
-        "family": "na-na-media",
+        "publishedAt": "2026-07-20",
+        "family": "torisetsu-shimane",
         "independent": true,
         "appliesToYears": []
       },
@@ -904,16 +954,16 @@
     {
       "id": "ev-tanakaya-crowd-2",
       "candidateId": "c-tanakaya",
-      "claim": "Visitor trip reports describe 30-40 minute waits at Tanakaya even in the early-to-mid afternoon, past the typical lunch rush",
+      "claim": "Izumo Taisha's soba shops, including Tanakaya, get busiest around midday (roughly 12:00-14:00); waits are shorter right at opening (~11:00) or after 15:00",
       "kind": "experiential",
-      "origin": "passA",
+      "origin": "reconcile",
       "source": {
-        "url": "https://4travel.jp/dm_shisetsu/10210520",
+        "url": "https://www.hotpepper.jp/strJ000677366/",
         "kind": "firsthand",
-        "access": "search-preview",
+        "access": "fetched",
         "language": "ja",
-        "publishedAt": null,
-        "family": "4travel-jalan-reviews",
+        "publishedAt": "2026-04-02",
+        "family": "hotpepper",
         "independent": true,
         "appliesToYears": []
       },
@@ -1374,22 +1424,26 @@
     {
       "id": "ev-izumo-soba-tanakaya",
       "candidateId": "c-tanakaya",
-      "claim": "Tanakaya, directly across from Izumo Taisha's main entrance, is a locally popular tri-colored wariko-soba specialist that regularly draws weekday queues.",
-      "kind": "experiential",
+      "claim": "Tanakaya sits directly across from Izumo Taisha's main entrance and is a tri-colored wariko-soba specialist popular enough that its own site announced a tablet queue system (2026-06-21) after visitors regularly waited outside, including in full summer sun.",
+      "kind": "objective",
       "origin": "passB",
       "source": {
-        "url": "https://na-na.media/izumosoba_4senn/",
-        "kind": "firsthand",
+        "url": "https://soba-tanakaya.jp/",
+        "kind": "official",
         "access": "fetched",
         "language": "ja",
-        "publishedAt": null,
-        "family": "na-na",
+        "publishedAt": "2026-06-21",
+        "family": "tanakaya-official",
         "independent": null,
         "appliesToYears": []
       },
       "verifiedOn": "2026-08-28",
-      "firsthand": true,
-      "freshness": null
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
     },
     {
       "id": "ev-izumo-soba-heiwa",
@@ -1745,11 +1799,11 @@
       "candidateId": "c-takyo-abeke",
       "importance": "anchor",
       "bookingUrl": "https://www3.yadosys.com/reserve/ja/plan/calendar/147/gbclghhjgcemepdfcpeoejdn/all",
-      "releaseWindow": null,
-      "actionDate": null,
+      "releaseWindow": "Bookings open on the 1st of each month for stays through the end of the month that is 6 months out (operator's own FAQ). For this trip's Oct 20-23, 2026 window, that release date was 2026-04-01 — already open as of this research date. The operator also requires booking at least 5 days before arrival.",
+      "actionDate": "Window already open (opened 2026-04-01); book now rather than waiting — the absolute latest per the operator's own 5-day minimum-notice rule is 2026-10-15, but both units (main house + storehouse) staying available for the same dates this close in is not guaranteed.",
       "partyRules": "main house holds up to 6, separate storehouse room up to 4 — the party of 8 needs BOTH booked as separate reservations to stay together in the village; each includes dinner and breakfast",
-      "deposit": null,
-      "cancellation": null,
+      "deposit": "No deposit or prepayment requirement is stated on the operator's own FAQ page.",
+      "cancellation": "Free cancellation 2+ days before arrival; cancelling the day before or day of arrival incurs a 100% cancellation fee (full accommodation cost), per the operator's own FAQ. Unavoidable circumstances (e.g. natural disasters) called in by phone may get special consideration.",
       "foreignFriction": "online booking system is Japanese-language; phone (0854-89-0022) as an alternative",
       "lastSeating": null,
       "walkIn": null,
@@ -1988,9 +2042,9 @@
     {
       "findingId": "ev-izumo-soba-tanakaya",
       "disposition": "agree",
-      "note": "Converges with Pass A's own Tanakaya crowd evidence (ev-tanakaya-crowd-1/2) on the same underlying claim (regular queues); not counted as new independent corroboration since this source and A's are not all fetched/distinct-family, but reinforces the existing shipped crowd_tip in the guide.",
+      "note": "Original Pass B source (na-na.media, published 2023-11-22) was past the 24-month experiential-freshness cap, so at reconcile this record was re-verified directly against Tanakaya's own site, which turned out to carry a dated (2026-06-21), fetched, official confirmation of the same underlying popularity/queueing fact — reclassified objective and re-sourced rather than dropped. Converges with Pass A's re-verified crowd evidence (ev-tanakaya-crowd-1/2, also re-sourced this pass) on the same real-world fact.",
       "corroborates": {
-        "kind": "recommendation",
+        "kind": "none",
         "evidenceIds": []
       }
     },

@@ -55,6 +55,8 @@
 | Kizuki / Heiwa Soba Honten (Izumo soba alternatives) | Not researched | B-only — single-sourced firsthand leads | Held at "shortlisted", not shipped or added to the guide | Single source each — doesn't clear the 2-independent-source bar for an experiential claim to ship. Tanakaya/Arakiya already cover the trip's actual visiting day. |
 | Yamaichi (Lake Shinji izakaya) | Not researched | B considered and rejected — private rooms exist but max party-of-8 capacity unconfirmed from an official source | Rejected | B's own funnel — recorded for completeness. |
 | Yuushien Garden (Daikonshima) | Not researched | B-only — official source; detour/worth-the-detour, but same fixed-schedule problem as Adachi (near Yasugi, no slot in this trip's 4 days) | Not added to the guide this pass — evidence-only | Genuinely different genre from Adachi, not a like-for-like swap; a future-trip idea. |
+| Tanakaya crowd/queue sourcing | Shipped, but originally 2 sources with no date; B's location/popularity claim originally cited a Nov 2023 source | RE-VERIFIED at the second repair pass — original Pass A/B sources for all 3 claims traced to Nov 2023, past the 24-month freshness cap. Refetched: 2 independent, dated 2026 firsthand sources for the crowd-timing claim (Izumo-resident guide + Hot Pepper review), plus Tanakaya's own site (fetched 2026-06-21) confirming a new tablet queue system installed after regular extended waits | crowd_tip rewritten to the freshly-sourced timing/queue-system detail | Not a conflict — a freshness/dating gap the first reconcile attempt missed, closed by re-fetching rather than by removing the claim. |
+| Takyo-Abeke anchor reservation terms | Capacity confirmed (main house 6 / storehouse 4); release window, deposit, cancellation left blank | Not researched | Filled in from the operator's own FAQ (kurasuyado.jp/faq): 6-month rolling release window opening the 1st of each month (this trip's window opened 2026-04-01), no deposit, 100% fee inside 2 days of arrival | The anchor's one non-negotiable booking now states the WHEN, not just the how — Booking checklist panel updated to match. |
 
 ## Discovery leads (Pass B — native-first)
 > OPTIONAL accelerant, filled by an interactive deep-research sweep BEFORE the pipeline runs
@@ -210,3 +212,28 @@
   calls "not individually sourced") instead of a fabricated verification date. No evidence record,
   candidate, disposition, or coverage ask changed status — this pass only repaired artifact/schema
   defects the previous reconcile attempts left behind.
+- 2026-08-28 — Second deterministic-gate repair pass, fixing validator findings from the prior
+  reconcile attempt. Tanakaya's three crowd/location experiential claims (`ev-tanakaya-crowd-1`,
+  `ev-tanakaya-crowd-2`, `ev-izumo-soba-tanakaya`) all traced to sources published Nov 2023 —
+  past the 24-month experiential-freshness cap, so no longer current evidence for a shipped
+  recommendation, and none carried a source date at all. Re-verified directly via WebFetch/
+  WebSearch: `ev-tanakaya-crowd-1`/`-2` now cite two independent, dated, fetched firsthand
+  sources (an Izumo-resident soba-crowding guide, 2026-07-20; a Hot Pepper Gourmet diner review,
+  2026-04-02), both on the same claim text ("busiest ~12:00-14:00, shorter waits at opening or
+  after 15:00"), clearing the 2-independent-source bar for a shipped experiential claim.
+  `ev-izumo-soba-tanakaya` was reclassified from experiential to objective and re-sourced against
+  Tanakaya's own site, which turned out to carry a dated (2026-06-21) announcement of a new
+  tablet queue system — installed because visitors were "regularly wait[ing] outside for
+  extended periods, including in direct summer sun" — an official, fetched, current confirmation
+  of the same underlying popularity fact rather than a stale aggregator quote. The guide's
+  Tanakaya `crowd_tip` was rewritten to match. Separately, `ev-icoca-boundary-2025-expansion`
+  named a 2025 date on a source published in 2023; refetching confirmed the 2023 article
+  explicitly states the "2025年春" (spring 2025) launch date for the Tottori-Kurayoshi expansion,
+  so `appliesToYears: [2025]` was added rather than downgrading the claim to a lead. Finally,
+  the `c-takyo-abeke` anchor reservation was missing its release window, action date, deposit,
+  and cancellation terms — fetched `kurasuyado.jp/faq` directly and added: bookings open the 1st
+  of each month for stays 6 months out (this trip's window opened 2026-04-01, already open), no
+  deposit is stated, and cancelling within 2 days of arrival costs a 100% fee. The Booking
+  checklist panel and checklist item were updated with the concrete dates/terms so the guide
+  itself states the WHEN, not just the how. No candidate status or shipped/rejected verdict
+  changed in this pass — these were sourcing and completeness repairs only.
