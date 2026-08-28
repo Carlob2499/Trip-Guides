@@ -92,8 +92,8 @@
         "anchor reservation for c-takyo-abeke has no cancellation/no-show terms"
       ],
       "createdAt": "2026-08-28T05:45:03.825Z",
-      "status": "active",
-      "retiredAt": null
+      "status": "retired",
+      "retiredAt": "2026-08-28T06:38:24.340Z"
     }
   ]
 }
