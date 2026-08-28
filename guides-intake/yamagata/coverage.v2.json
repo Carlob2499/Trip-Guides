@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "yamagata",
+  "runId": "yamagata-20260828-73821a",
+  "asks": [
+    {
+      "id": "cities",
+      "ask": "Yamagata,Yamadera,Ginzan Onsen",
+      "status": "covered",
+      "where": [
+        "05-transit.json#orientation-map",
+        "05-transit.json#key-transit-routes",
+        "06-days.json#day-by-day",
+        "07-sights.json#top-sights"
+      ],
+      "evidenceIds": [
+        "ev-kajo-park-hours-fee",
+        "ev-yamadera-hours",
+        "ev-ginzan-attractions",
+        "ev-hanagasa-fare"
+      ],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "2026-10-20 – 2026-10-23",
+      "status": "covered",
+      "where": [
+        "01-plan.json#weather-for-your-dates",
+        "01-plan.json#public-holidays-closures",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-holidays-none-in-window",
+        "ev-koyo-foliage-timing",
+        "ev-hanagasa-season"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Culture / history",
+      "status": "covered",
+      "where": [
+        "07-sights.json#top-sights",
+        "07-sights.json#what-generic-guides-get-wrong",
+        "06-days.json#arrival-kajo-park",
+        "06-days.json#yamadera-the-mountain-temple",
+        "06-days.json#bunshokan-then-the-transfer-to-ginzan-onsen"
+      ],
+      "evidenceIds": [
+        "ev-kajo-park-hours-fee",
+        "ev-bunshokan-hours-fee",
+        "ev-kyu-saiseikan-hours",
+        "ev-mogami-museum-hours",
+        "ev-yamadera-admission-fee",
+        "ev-yamadera-hours-admission",
+        "ev-beninokura-desc"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-2",
+      "ask": "Food & dining",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat"
+      ],
+      "evidenceIds": [
+        "ev-tokiwa-capacity-price",
+        "ev-sanbyakubou-capacity",
+        "ev-taimenseki-hours-location",
+        "ev-izunohana-hours-group-policy",
+        "ev-sakaeya-honten-origin-claim"
+      ],
+      "reason": null
+    },
+    {
+      "id": "pace",
+      "ask": "balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "06-days.json#arrival-kajo-park",
+        "06-days.json#ginzan-onsen-morning-then-onward"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "8",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs",
+        "08-food-and-shopping.json#what-to-eat",
+        "01-plan.json#booking-checklist"
+      ],
+      "evidenceIds": [
+        "ev-ginzanso-capacity",
+        "ev-tokiwa-capacity-price",
+        "ev-sanbyakubou-capacity"
+      ],
+      "reason": null
+    }
+  ]
+}

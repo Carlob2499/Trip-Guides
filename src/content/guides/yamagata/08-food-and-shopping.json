@@ -5,7 +5,7 @@
     "title": "What to eat",
     "phase": "daily",
     "rank": 2,
-    "intro": "Two group-size decisions drove this list: several well-regarded local soba shops turned out to have private rooms too small for 8 (Inokoya Yamagatada's curtain-divided rooms seat only 4-6), so they're noted as casual/overflow options rather than the flagship picks.",
+    "intro": "Two group-size decisions drove this list: several well-regarded local soba shops turned out to have private rooms too small for 8 (Inokoya Yamagatada's curtain-divided rooms seat only 4-6), so they're noted as casual/overflow options rather than the flagship picks. Taimenseki, Izu no Hana, and Sakaeya Honten are informal single-visit picks, not group-booked meals.",
     "items": [
       {
         "name": "Yonezawa Beef Tokiwa",
@@ -60,6 +60,42 @@
         "map": { "lat": 38.2475, "lng": 140.3335 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "source_url": "https://www.yamagata-da.com/cuisine/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Taimenseki",
+        "area": "Near Yamadera Station",
+        "address": "4411 Yamadera, Yamagata City",
+        "phone": "023-695-2116",
+        "hours": "8:30-17:30",
+        "book": "walk-in",
+        "how": "At the foot of the mountain, right by Yamadera Station — window seats over the Senzan Line tracks and the Tachiya River",
+        "why": "A quick soba rest-stop for imoni-soba or itasoba on the way to or from the climb — no group-booking policy is posted, so treat it as an informal option rather than a reserved group meal.",
+        "source_url": "https://www.visityamagata.jp/spot-yamagatashi-oyasumidokorotaimenseki/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Izu no Hana",
+        "area": "Ginzan Onsen",
+        "hours": "11:00-18:00 (soba last order 17:30); a reservation-only evening menu runs 17:00-19:00",
+        "closed": "Wednesdays, plus occasional irregular closures",
+        "book": "call",
+        "how": "On Ginzan Onsen's main street, an easy walk from Ginzanso",
+        "why": "A soba-and-dessert stop inside the onsen village itself — call ahead for a table of 8, since the shop takes domestic group bookings only when its own capacity allows and does not accept overseas tour-operator bookings.",
+        "source_url": "https://www.izunohana.com/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "hours"
+      },
+      {
+        "name": "Sakaeya Honten",
+        "area": "Central Yamagata city",
+        "address": "2-3-21 Honcho, Yamagata",
+        "book": "call",
+        "how": "In Honcho, central Yamagata city — exact walking distance from the station isn't confirmed",
+        "why": "Self-declared birthplace of hiyashi ramen (chilled ramen), invented here in 1952 — a genuinely local claim the city's own heritage page confirms only in outline, without naming a shop. Hours aren't posted; call ahead.",
+        "source_url": "https://yamagata-sakaeyahonten.com/",
         "verified_on": "2026-08-28",
         "shelf_life": "venue"
       }

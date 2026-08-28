@@ -6,7 +6,7 @@
   "region": "Yamagata Prefecture, Tohoku",
   "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft — Pass A (canonical/verified research) completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site. Re-check before travel: Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), JR fares and the Tsubasa reservation rule (JR East's own fare/timetable pages were bot-gated throughout this research pass), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), and the 2026 autumn foliage forecast (publishes from September). Pass B (local/authentic angle) and reconciliation have not run yet.",
+  "verified": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, though the two passes' independently fetched timetables differ by several minutes per departure — treat times as approximate. Re-check before travel: Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), JR fares and the Tsubasa reservation rule (JR East's own fare/timetable pages were bot-gated throughout research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
   "provenance": "strict",
   "roomId": "66oyjm9aq3pqwo6r",
   "footer": "",

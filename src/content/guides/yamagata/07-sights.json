@@ -66,7 +66,7 @@
       {
         "name": "Ginzan Onsen",
         "kicker": "Gas-lit ryokan street · best before 11:00 or after evening lamp-lighting",
-        "body": "<p>A Taisho-era wooden ryokan street along the Ginzan River, gas lamps lighting around 16:00, plus the riverside \"Waraku\" foot bath and Shirogane Falls at the street's end. Midday is the most crowded window; the falls are reached via an uphill stairway worth weighing against the flat main street for anyone with mobility limits.</p>",
+        "body": "<p>A Taisho-era wooden ryokan street along the Ginzan River, gas lamps lighting around 16:00, plus the riverside \"Waraku\" foot bath and Shirogane Falls at the street's end. Midday is the most crowded window; staying overnight pays off here — before roughly 7:00 the street is nearly empty, well ahead of the day-trip crowds. The falls are reached via an uphill stairway worth weighing against the flat main street for anyone with mobility limits.</p>",
         "map": { "lat": 38.56972, "lng": 140.53111 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 90,
@@ -110,7 +110,7 @@
       },
       {
         "claim": "You can drive up and park in Ginzan Onsen itself.",
-        "correction": "The town center is pedestrian-only. Day-trip parking sits on Route 188 outside the village. A widely-cited winter car restriction on top of that concluded March 1, 2026 with no announced resumption — route buses, delivery vehicles, and overnight guests' ryokan parking are exempt regardless.",
+        "correction": "The town center is pedestrian-only regardless. Day-trip parking sits on Route 188 outside the village. A winter 2025-26 car/entry-ticket restriction ran through March 1, 2026, and a shorter autumn 2025 version ran just two November weekends — 2026 dates for either aren't announced yet, so re-check closer to the trip; route buses, delivery vehicles, and overnight guests' ryokan parking are exempt regardless.",
         "category": "misleading",
         "source_url": "https://ginzan-artmuseum.com/regulated-vehicles/",
         "verified_on": "2026-08-28"
