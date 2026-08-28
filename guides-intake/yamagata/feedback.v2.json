@@ -172,6 +172,17 @@
         "· corrections.12.source.kind: Invalid option: expected one of \"official\"|\"operator\"|\"firsthand\"|\"press\"|\"reference\"|\"aggregator\""
       ],
       "createdAt": "2026-08-28T14:15:18.254Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T22:40:42.332Z"
+    },
+    {
+      "runId": "yamagata-20260828-73821a",
+      "stage": "critic",
+      "attempt": 6,
+      "findings": [
+        "[pipeline-v2] CONTRACT FAILURE: critic changed 01-plan.json#/0/body, 01-plan.json#/1/body, 01-plan.json#/4/checklist/0/note, 02-money-and-budget.json#/1/items/0/basis, 02-money-and-budget.json#/1/items/0/est, 02-money-and-budget.json#/1/items/0/high, 02-money-and-budget.json#/1/items/0/label, 02-money-and-budget.json#/1/items/0/low, 02-money-and-budget.json#/1/items/0/note, 02-money-and-budget.jso"
+      ],
+      "createdAt": "2026-08-28T22:40:42.332Z",
       "status": "active",
       "retiredAt": null
     }
