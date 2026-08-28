@@ -145,7 +145,7 @@ export async function writeEvidence(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
     fails closed. The critic still never reads evidence.v2.json. */
 export async function reconcileCriticCorrections(slug, {
   fromDir, intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides"), runId,
-  baselineDocs = null,
+  baselineDocs = null, retainedRows = [],
 } = {}) {
   // The "before" side is the PRE-CRITIC guide. Pinned by the caller (out of the commit the critic
   // stage started from) so a failed attempt can retain the rejected guide edits without the next
@@ -174,6 +174,26 @@ export async function reconcileCriticCorrections(slug, {
   const correctionDoc = parseOrThrow(criticCorrectionDocSchema, raw, { file: sourceFile, what: "critic correction handoff" });
   if (correctionDoc.slug !== slug || correctionDoc.runId !== runId) {
     throw new ContractError(`critic correction identity does not match ${slug}/${runId}`);
+  }
+
+  // A blind repair attempt declares only ITS OWN edits — it cannot see the pinned baseline, so it
+  // cannot reconstruct declarations an earlier attempt already made over the retained tree
+  // (yamagata scar: attempt 2 clobbered attempt 1's complete 45-row handoff and attempt 3 could
+  // never satisfy whole-stage accounting again). Earlier retained rows therefore supplement the
+  // current doc: current attempt wins per target, a row-invalid retained row contributes nothing,
+  // and a retained row for a leaf no longer changed against the baseline is dropped, never
+  // phantom. The two-way accounting below then runs on the merged set at full strength.
+  const corrections = criticCorrectionDocSchema.shape.corrections;
+  const rowSchema = (corrections.removeDefault ? corrections.removeDefault() : corrections.unwrap()).element;
+  const declaredNow = new Set(correctionDoc.corrections.map((c) => c.target));
+  for (const raw_ of retainedRows) {
+    const parsed = rowSchema.safeParse(raw_);
+    if (!parsed.success) continue;
+    const { target } = parsed.data;
+    if (!declaredNow.has(target) && changed.has(target)) {
+      correctionDoc.corrections.push(parsed.data);
+      declaredNow.add(target);
+    }
   }
 
   // Declared set === changed set, both directions. This is the whole R-A repair.

@@ -853,9 +853,21 @@ async function run(cmd, get, has) {
       if (!from) { console.error("[pipeline-v2] reconcile-critic-truth needs --from <critic workspace>"); return 1; }
       const state = await readRunStateV2(slug);
       const baselineDocs = requireCriticBaseline(state, slug);
+      // Declarations from the stage's earlier RETAINED attempts (committed between the pinned
+      // baseline and HEAD). A later attempt that rewrote the handoff must not lose them — see the
+      // yamagata-scar merge in reconcileCriticCorrections. Newest-first, so the most recent
+      // retained row wins where retained docs disagree; the current attempt always wins over all.
+      const correctionsRel = `guides-intake/${slug}/critic-corrections.v2.json`;
+      const retainedRows = [];
+      if (state.stages?.critic?.baseline) {
+        for (const sha of git(["log", "--format=%H", `${state.stages.critic.baseline}..HEAD`, "--", correctionsRel]).split("\n").filter(Boolean)) {
+          try { retainedRows.push(...(JSON.parse(git(["show", `${sha}:${correctionsRel}`])).corrections || [])); }
+          catch { /* an attempt with no or unparsable doc retains nothing */ }
+        }
+      }
       let result;
       try {
-        result = await reconcileCriticCorrections(slug, { fromDir: path.resolve(from), runId: state.runId, baselineDocs });
+        result = await reconcileCriticCorrections(slug, { fromDir: path.resolve(from), runId: state.runId, baselineDocs, retainedRows });
       } catch (err) {
         // EXIT 3 is the routed class: the corrections ARE in evidence, but a supersession only the
         // evidence owner can decide is outstanding. The workflow sends this to `needs-reconcile`

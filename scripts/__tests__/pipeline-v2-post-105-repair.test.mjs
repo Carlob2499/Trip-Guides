@@ -390,6 +390,43 @@ describe("R-A — a repeated ordinary value never retires unrelated evidence", (
   });
 });
 
+describe("R-A — retained attempt declarations survive a later attempt's clobbered handoff (yamagata scar)", () => {
+  // Run yamagata-20260828-73821a: attempt 1 declared all 45 changed leaves but was refused on the
+  // doc envelope; attempt 2 REPLACED that doc with 6 malformed rows; attempt 3 — blind, starting
+  // from the retained tree, unable to see the pinned baseline or git history — declared only its
+  // own 7 edits and was failed for the 43 leaves earlier attempts had already declared. Whole-
+  // stage accounting was unsatisfiable by construction. The control plane now supplements the
+  // current doc with row-valid declarations from the stage's earlier retained docs, current
+  // attempt winning per target, and only for leaves still changed against the pinned baseline.
+  it("a repair attempt declaring only its own edits passes when earlier retained rows cover the rest", async () => {
+    const [own, ...retained] = declareHistorical();
+    const fixture = await tottoriCriticScar({ corrections: [own] });
+    // Without the retained rows this exact handoff fails (pinned above in "declaring only SOME").
+    await expect(reconcile(fixture)).rejects.toThrow(/without declaring the edit/);
+    const result = await reconcileCriticCorrections("tottori", {
+      ...fixture, intakeDir: dir, runId: RUN_ID,
+      retainedRows: [
+        ...retained,
+        // A retained row for a leaf that no longer differs from the baseline is dropped, never phantom.
+        { ...retained[0], target: "05-transit.json#/0/id" },
+        // A malformed retained row (attempt 2's string-shaped source/freshness) contributes nothing.
+        { ...retained[1], source: "https://example.com", freshness: "transit" },
+      ],
+    });
+    expect(result.changed).toBe(true);
+    expect(new Set(result.targets)).toEqual(new Set(HISTORICAL.map((p) => `${TRANSIT}#${p}`)));
+  });
+
+  it("the current attempt's row wins over a retained row for the same target", async () => {
+    const rows = declareHistorical();
+    const fixture = await tottoriCriticScar({ corrections: rows });
+    const shadowed = { ...rows[1], claim: "an OLDER retained claim that must not shadow the current one" };
+    await reconcileCriticCorrections("tottori", { ...fixture, intakeDir: dir, runId: RUN_ID, retainedRows: [shadowed] });
+    const evidence = await requireEvidence("tottori", { intakeDir: dir, runId: RUN_ID });
+    expect(evidence.evidence.some((r) => r.claim.includes("an OLDER retained claim"))).toBe(false);
+  });
+});
+
 describe("R-A — the generated critic instruction and the validator share one target grammar", () => {
   it("every target the capsule shows the critic is a target the validator accepts", async () => {
     const capsule = await generateContractCapsule("critic", { slug: "tottori", runId: RUN_ID });
