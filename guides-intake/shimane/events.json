@@ -1,0 +1,38 @@
+{
+  "runId": "shimane-20260828-0f02a5",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-28T02:25:08.293Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-28T02:25:08.300Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-28T02:25:37.058Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-28T02:56:36.449Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 31m"
+    },
+    {
+      "at": "2026-08-28T02:56:36.460Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 17 evaluated · 12 shortlisted · 9 shipped · 7 rejected"
+    },
+    {
+      "at": "2026-08-28T02:56:36.460Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}
