@@ -945,6 +945,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Checkpoint stage start
+        # `replay` output: an evidence-owner routed repair re-queues this stage to REVALIDATE the
+        # retained pass, not to buy another one. Every model-input step below is gated on it.
+        id: begin
         env:
           PUSH_TOKEN: ${{ github.token }}
         run: |
@@ -956,17 +959,21 @@ jobs:
 
       - name: Stage retry feedback (validator data, this stage only)
         id: feedback
+        if: steps.begin.outputs.replay != 'true'
         run: node scripts/pipeline-v2.mjs stage-feedback --slug "$SLUG" --stage critic
 
       - name: Generate the machine-contract capsule
         id: contract
+        if: steps.begin.outputs.replay != 'true'
         run: node scripts/pipeline-v2.mjs contract --slug "$SLUG" --stage critic
 
       - name: Build the critic's source-domain fetch policy
         id: fetch_policy
+        if: steps.begin.outputs.replay != 'true'
         run: node scripts/pipeline-v2.mjs critic-fetch-tools --slug "$SLUG"
 
       - name: Prepare the critic's blind input
+        if: steps.begin.outputs.replay != 'true'
         run: node scripts/pipeline-v2.mjs prepare-critic --slug "$SLUG"
 
       - name: Remove repository credentials before the blind critic runs
@@ -976,6 +983,7 @@ jobs:
 
       - name: Compose critic prompt
         id: prompt
+        if: steps.begin.outputs.replay != 'true'
         env:
           WP_SLUG: ${{ inputs.slug }}
           WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
@@ -983,6 +991,7 @@ jobs:
         run: node scripts/pipeline.mjs prompt prompts/research-critic-v2.md > /dev/null
 
       - name: Replace git history with a local-only sandbox repository
+        if: steps.begin.outputs.replay != 'true'
         run: |
           rm -rf .git
           git init
@@ -993,6 +1002,7 @@ jobs:
 
       - name: Run research agent — Critic
         id: agent
+        if: steps.begin.outputs.replay != 'true'
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
@@ -1022,7 +1032,7 @@ jobs:
       # Deterministic tail the V1 critic used to run itself: palette + composition are code.
       - name: Collect allowed output, compose, validate, commit, checkpoint
         # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT (see Pass A).
-        if: success() && steps.agent.outcome == 'success'
+        if: success() && (steps.agent.outcome == 'success' || steps.begin.outputs.replay == 'true')
         id: finish
         working-directory: collect
         run: |
@@ -1031,17 +1041,50 @@ jobs:
           RC=$?
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # RETAINED CRITIC OUTPUT (paid-work scar, R-A). The critic's output lives in the agent
+          # sandbox and reaches this trusted checkout only through the copies below, so a
+          # truth-gate exit placed BEFORE them left the collect tree clean: verify-failed found
+          # nothing in scope, committed nothing, and the retry re-spent the whole paid pass.
+          #
+          # Retaining the GUIDE edits is safe only because the gate no longer diffs against this
+          # working tree: reconcile-critic-truth reads its pre-critic baseline out of the commit
+          # PINNED ON THE CRITIC STAGE ITSELF (run.v2.json stages.critic.baseline), so the next
+          # attempt still compares against the ORIGINAL guide. A retained edit can never satisfy
+          # the gate by being compared against itself, and a rejected handoff stays repairable
+          # without regenerating the guide work. Scope unchanged: the critic's own allowed paths
+          # — guide dir, ledger, patterns fragment — nothing wider.
+          retain_critic_output() {
+            rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/" || return 1
+            cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md" || return 1
+            cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/pipeline-patterns.fragment.md" "guides-intake/$SLUG/pipeline-patterns.fragment.md" || return 1
+            # The handoff is what a malformed-handoff failure has to REPAIR, so retain it when it
+            # exists — otherwise the next critic reconstructs previous values it can no longer see.
+            # Optional on purpose: "no handoff at all" is itself one of the failures being retained.
+            if [ -f "$GITHUB_WORKSPACE/guides-intake/$SLUG/critic-corrections.v2.json" ]; then
+              cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/critic-corrections.v2.json" "guides-intake/$SLUG/critic-corrections.v2.json" || return 1
+            fi
+          }
           if [ "$RC" -eq 0 ]; then
             node scripts/pipeline-v2.mjs reconcile-critic-truth --slug "$SLUG" --from "$GITHUB_WORKSPACE" 2>&1 | tee "$RUNNER_TEMP/critic-truth-out.txt"
-            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
-              node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
-                --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+            TRUTH_RC="${PIPESTATUS[0]}"
+            if [ "$TRUTH_RC" -ne 0 ]; then
+              retain_critic_output || echo "[critic] retention incomplete — recording findings anyway"
+              # EXIT 3: the corrections reached evidence, but a supersession only the EVIDENCE
+              # OWNER can decide is outstanding. The blind critic cannot write that relation, so
+              # retrying it would spend the run's one quality retry on a stage that must fail
+              # again — this routes the findings to reconcile and re-queues the critic with its
+              # retained work and its pinned baseline. Any other nonzero is the critic's own.
+              if [ "$TRUTH_RC" -eq 3 ]; then
+                node scripts/pipeline-v2.mjs needs-reconcile --slug "$SLUG" \
+                  --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+              else
+                node scripts/pipeline-v2.mjs verify-failed --slug "$SLUG" --stage critic \
+                  --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+              fi
               exit 1
             fi
           fi
-          if [ "$RC" -eq 0 ]; then rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/"; RC=$?; fi
-          if [ "$RC" -eq 0 ]; then cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md"; RC=$?; fi
-          if [ "$RC" -eq 0 ]; then cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/pipeline-patterns.fragment.md" "guides-intake/$SLUG/pipeline-patterns.fragment.md"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then retain_critic_output; RC=$?; fi
           if [ "$RC" -eq 0 ]; then node scripts/pipeline-v2.mjs compound-patterns --slug "$SLUG"; RC=$?; fi
           if [ "$RC" -eq 0 ]; then npm run extract-palette -- --slug "$SLUG"; RC=$?; fi
           if [ "$RC" -eq 0 ]; then node scripts/compose-guide.mjs --slug "$SLUG" --write; RC=$?; fi

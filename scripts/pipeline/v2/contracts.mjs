@@ -22,11 +22,11 @@ import { z } from "zod";
 // ── versioning ───────────────────────────────────────────────────────────────
 
 export const RUN_SCHEMA = "wp-run/2.1"; // 2.1: per-attempt stage history (additive)
-export const EVIDENCE_SCHEMA = "wp-evidence/2.2"; // 2.2: recommendation-changing disagreements link evidence records (additive)
+export const EVIDENCE_SCHEMA = "wp-evidence/2.3"; // 2.3: reconciliation rows name what they corroborate/supersede (additive)
 export const COVERAGE_SCHEMA = "wp-coverage/2.0";
 export const TELEMETRY_SCHEMA = "wp-telemetry/2.1"; // 2.1: cumulative/failed attempt durations (additive)
 export const FEEDBACK_SCHEMA = "wp-feedback/2.0";
-export const CRITIC_CORRECTIONS_SCHEMA = "wp-critic-corrections/1.0";
+export const CRITIC_CORRECTIONS_SCHEMA = "wp-critic-corrections/2.1"; // 2.1: corrections address an exact JSON-pointer location, and every changed leaf is declared
 
 /** Fail-closed contract failure: what broke, in which file, and what to do about it. */
 export class ContractError extends Error {
@@ -151,6 +151,15 @@ const stageState = z.object({
   // The last commit that made this stage durable, when known. Null is honest — a stage that has
   // not committed yet has no durable commit to name.
   commit: z.string().regex(/^[0-9a-f]{40}$/i, "expected a full 40-character git commit SHA").nullable().default(null),
+  // The tree this stage was HANDED when it began — pinned at begin-stage, and deliberately kept
+  // across a same-tail re-open so a stage that is re-run to repair its own output still compares
+  // against what it originally received, not against its own retained work.
+  baseline: z.string().regex(/^[0-9a-f]{40}$/i, "expected a full 40-character git commit SHA").nullable().default(null),
+  // The next dispatch of this stage REVALIDATES retained work deterministically instead of
+  // invoking the model. Set only by the evidence-owner route, spent by the stage that consumes
+  // it. Explicit because file existence cannot tell the two retries apart: an ordinary critic
+  // gate failure also leaves retained guide/handoff bytes on the branch.
+  replay: z.boolean().default(false),
   history: z.array(attemptRecord).default([]),
   failure,
 }).superRefine((stage, ctx) => {
@@ -334,15 +343,21 @@ export const evidenceRecordSchema = z.object({
   }).nullable().default(null),
 });
 
-// The blind critic never owns evidence.v2.json. When it changes a canonical facts.json row it
-// emits only this narrow handoff; the trusted control plane verifies the exact before/after fact
-// and folds a critic-origin record into the existing evidence owner.
+// The blind critic never owns evidence.v2.json. When it changes ANY canonical guide file it emits
+// only this narrow handoff, and the trusted plane proves each declared movement at its exact
+// location. EVERY changed leaf must be declared — "that rewrite was only editorial" is the
+// critic's own assertion, so there is no editorial escape and an unaccounted change fails closed.
+export const GUIDE_FILE = /^(?:facts\.json|_guide\.json|\d\d-[a-z0-9-]+\.json)$/;
+// "<guide file>#<RFC 6901 JSON pointer>": one exact location, so several independent facts inside
+// one item address distinctly and each correction keeps its own stable identity.
+export const CRITIC_TARGET = /^(?:facts\.json|_guide\.json|\d\d-[a-z0-9-]+\.json)#(?:\/(?:[^/~]|~[01])*)+$/;
+
 export const criticCorrectionDocSchema = z.object({
   schemaVersion: z.string(),
   slug: z.string().min(1),
   runId: z.string().min(1),
   corrections: z.array(z.object({
-    factId: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+    target: z.string().regex(CRITIC_TARGET, 'expected "<guide file>#<JSON pointer>", e.g. "03-transit.json#/0/steps/2"'),
     previousValue: z.string().nullable(),
     correctedValue: z.string().min(1),
     claim: z.string().min(1),
@@ -419,6 +434,13 @@ export const saturationSchema = z.object({
   note: z.string().min(1),
 });
 
+/** A typed relation from one reconciliation row to prior work: WHAT KIND of relation it is,
+    plus the evidence ids it names (empty for the kinds that name no record). */
+const evidenceRelationSchema = (kinds) => z.object({
+  kind: z.enum(kinds),
+  evidenceIds: z.array(z.string().min(1)).default([]),
+});
+
 export const evidenceDocSchema = z.looseObject({
   schemaVersion: z.string(),
   slug: z.string().min(1),
@@ -449,12 +471,32 @@ export const evidenceDocSchema = z.looseObject({
     noYieldReason: z.string().nullable().default(null),
   }).nullable().default(null),
   // Every independent (Pass-B origin) finding gets exactly one typed disposition, linked by id.
+  // 2.3 (additive): relations reconcile used to assert only in `note` prose. Typed DISCRIMINATORS,
+  // not bare id lists, because the historical rows prove both have a second legitimate meaning:
+  // Uruguay's single-sourced `agree` corroborates a RECOMMENDATION, and Tottori's ev-jumbo-taxi
+  // supersedes "Pass A's weak taxi fallback" — never a record — so no id is ever invented.
+  // Optional here, required by dispositionProblems at ≥2.3: older artifacts stay valid, a 2.3 row
+  // cannot stay silent. Limit: `kind: "none"` is still the reconciler's own assertion. Better than
+  // silence (machine-readable, and `factual` IS validated against the records it names), but
+  // proving the negative needs proposition identity on evidence records, which this artifact
+  // does not carry.
   reconciliation: z.array(z.object({
     findingId: z.string().min(1),
     disposition: z.enum(DISPOSITIONS),
     note: z.string().min(1),
+    corroborates: evidenceRelationSchema(["factual", "recommendation", "none"]).optional(),
+    supersedes: evidenceRelationSchema(["evidence", "recommendation"]).optional(),
   })).default([]),
 });
+
+/** The reader for the 2.3 `supersedes` relation: the evidence records a `replace` disposition
+    explicitly retires. Coverage and the research rules ask THIS, never a disposition note — and
+    a `recommendation` replacement retires no record, so it can never invalidate coverage. */
+export function supersededEvidenceIds(doc) {
+  return new Set((doc?.reconciliation || [])
+    .filter((row) => row.disposition === "replace" && row.supersedes?.kind === "evidence")
+    .flatMap((row) => row.supersedes.evidenceIds || []));
+}
 
 // ── coverage ─────────────────────────────────────────────────────────────────
 // Every material intake ask is either COVERED (with structured refs into the guide — a nonempty
