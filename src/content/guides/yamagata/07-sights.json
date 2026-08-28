@@ -4,20 +4,124 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
-    "items": [],
-    "rank": 1
+    "rank": 1,
+    "items": [
+      {
+        "name": "Kajo Park (Yamagata Castle ruins)",
+        "kicker": "Free · open until 22:00",
+        "body": "<p>The moated grounds of Yamagata Castle, free and open year-round, with several free history stops clustered inside — the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan, and the reconstructed Otemon gate.</p>",
+        "map": { "lat": 38.2535667, "lng": 140.3290444 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 45,
+        "source_url": "https://www.city.yamagata-yamagata.lg.jp/kurashi/koen/1006541/1006545/1015528.html",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Bunshokan",
+        "kicker": "Free · the most accessible culture stop in the city",
+        "body": "<p>The former prefectural capitol, a Taisho-era building with the best-documented step-free access of any Yamagata city sight — worth prioritizing for the group's 2 low-mobility travelers. The former assembly chamber was closed for construction, targeted to reopen by the end of September 2026 — re-check before counting on seeing it.</p>",
+        "map": { "lat": 38.254, "lng": 140.328 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 40,
+        "source_url": "https://www.gakushubunka.jp/bunsyokan/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Kyu-Saiseikan",
+        "kicker": "Free · Yamagata City Folk Museum",
+        "body": "<p>A distinctive octagonal, 3-tier former Meiji-era hospital building inside Kajo Park — free, and genuinely off the beaten path since most visitors head straight for the castle grounds instead.</p>",
+        "map": { "lat": 38.2547, "lng": 140.3287 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 25,
+        "closed_days": [],
+        "source_url": "https://www.city.yamagata-yamagata.lg.jp/shisetsu/bunkasports/1008032/1005895.html",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Mogami Yoshiaki Historical Museum",
+        "kicker": "Free · closed Mondays",
+        "body": "<p>Dedicated to the daimyo who actually built Yamagata Castle — small, free, and squarely on-theme for a culture/history-focused visit without appearing on generic top-10 lists.</p>",
+        "map": { "lat": 38.2542, "lng": 140.3283 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 30,
+        "closed_days": ["mon"],
+        "source_url": "https://mogamiyoshiaki.jp/?p=about",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Risshaku-ji (Yamadera)",
+        "kicker": "≈20 min by train · 1,015 stone steps",
+        "body": "<p>A mountain temple complex climbing a cliff face above the Yamadera valley, reached by a direct Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}. No cable car or shortcut exists — the climb to the Godaido viewing platform is on foot, the whole way. Konponchudo, the main hall near the base, is a complete stop on its own for anyone who'd rather not attempt the stairs.</p>",
+        "map": { "lat": 38.312556, "lng": 140.437389 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 120,
+        "source_url": "https://rissyakuji.jp/access/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Ginzan Onsen",
+        "kicker": "Gas-lit ryokan street · best before 11:00 or after evening lamp-lighting",
+        "body": "<p>A Taisho-era wooden ryokan street along the Ginzan River, gas lamps lighting around 16:00, plus the riverside \"Waraku\" foot bath and Shirogane Falls at the street's end. Midday is the most crowded window; the falls are reached via an uphill stairway worth weighing against the flat main street for anyone with mobility limits.</p>",
+        "map": { "lat": 38.56972, "lng": 140.53111 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 90,
+        "source_url": "https://yamagatakanko.com/attractions/detail_2832.html",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Yamagata Marugoto-kan Beninokura",
+        "kicker": "Free to browse · ≈10 min walk from the station",
+        "body": "<p>A restored Edo-era safflower (beniba) merchant's warehouse compound — genuinely local, easy walking distance from the station, and pairs naturally with lunch at Soba Sanbyakubou inside the same complex.</p>",
+        "map": { "lat": 38.253, "lng": 140.334 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 40,
+        "source_url": "https://www.visityamagata.jp/post-yamagata-beninokura/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
+      }
+    ]
   },
   {
     "type": "divergences",
     "group": "Sights",
     "title": "What generic guides get wrong",
     "phase": "daily",
+    "rank": 1,
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "Yamadera admission is ¥300.",
+        "correction": "Raised to ¥500 as of April 1, 2025 — many guides and aggregator sites still quote the old figure.",
+        "category": "outdated",
+        "source_url": "https://rissyakuji.jp/2025-03-07/",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "claim": "A cable car or ropeway can take you partway up Yamadera.",
+        "correction": "No mechanized assist exists anywhere on the mountain. The only way beyond the base is on foot, via roughly 1,015 stone steps.",
+        "category": "misleading",
+        "source_url": "https://rissyakuji.jp/access/",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "claim": "You can drive up and park in Ginzan Onsen itself.",
+        "correction": "The town center is pedestrian-only. Day-trip parking sits on Route 188 outside the village. A widely-cited winter car restriction on top of that concluded March 1, 2026 with no announced resumption — route buses, delivery vehicles, and overnight guests' ryokan parking are exempt regardless.",
+        "category": "misleading",
+        "source_url": "https://ginzan-artmuseum.com/regulated-vehicles/",
+        "verified_on": "2026-08-28"
+      },
+      {
+        "claim": "IC cards (Suica) work everywhere around Yamagata the way they do in Tokyo.",
+        "correction": "Ōishida Station — the gateway to Ginzan Onsen — doesn't accept IC cards, and the bus onward is cash-only regardless. Carry cash for that whole leg.",
+        "category": "missing-context",
+        "source_url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+        "verified_on": "2026-08-28"
       }
-    ],
-    "rank": 1
+    ]
   }
 ]

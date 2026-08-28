@@ -6,27 +6,50 @@
     "items": [
       {
         "date": "Tue Oct 20",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Arrival & Kajo Park",
+        "pace": "Tsubasa lands early-to-mid afternoon depending on departure time. Keep the rest of the day light: a walk through the castle grounds, then the group's flagship dinner.",
+        "tldr": "Land via the Tsubasa, then an easy walk through Yamagata Castle's ruins before a private-room Yonezawa beef dinner.",
+        "body": "<p>Kajo Park (free, open until 22:00) holds the Yamagata Castle ruins alongside several free, genuinely local history stops within a few minutes' walk of each other: the Mogami Yoshiaki Historical Museum, the octagonal Meiji-era Kyu-Saiseikan building, and the reconstructed Otemon gate-tower.</p><p>Dinner is Yonezawa Beef Tokiwa's private room (up to 14 guests, ≈¥9,900/person minimum for dinner), a 5-minute walk from the station — book ahead, it's the trip's one flagship group meal.</p>",
+        "energy": "balanced",
+        "env": "mixed",
+        "constraints": ["Yonezawa Beef Tokiwa dinner reservation required for a party of 8"]
       },
       {
         "date": "Wed Oct 21",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Yamadera — the mountain temple",
+        "pace": "Early start: catch a Senzan Line train that lands you at the 8:00 opening, ahead of tour groups. Split the group at the base if it helps — Konponchudo stands on its own as a stop.",
+        "tldr": "1,015 stone steps to Risshaku-ji's cliffside halls — climb what you want to, or spend the morning at the flat, worthwhile lower precinct instead.",
+        "body": "<p>Risshaku-ji (山寺) is reached by a direct ≈20-minute Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}, cash only.</p><p>There is no cable car, ropeway, or shortcut anywhere on the mountain — the only way up to the Godaido viewing platform and Okunoin is on foot, via roughly 1,015 stone steps (figures vary 1,015-1,070 depending on the source). A firsthand account from a visitor with limited mobility found even the base area has real steps and unevenness, with no ramps or elevators anywhere on the site.</p><p>Konponchudo, the main hall about 3 minutes' walk from the base entrance, is a genuinely worthwhile stop on its own without climbing further — the honest option for anyone who'd rather not attempt the stairs.</p><p>Lunch: Takifudo Namasoba, near the mountain entrance — ≈50 seats plus a 50-person tatami room, the best-sized option here for a group of 8. Arrive at opening or right after; 10:00-14:00 is when tour groups arrive and the paths and Godaido platform get genuinely crowded, worse still once koyo (autumn foliage) season builds.</p>",
+        "energy": "packed",
+        "env": "outdoor",
+        "plan_b": {
+          "trigger": "rain",
+          "body": "Swap Yamadera for the Yamagata Museum of Art back in the city (Monet, Renoir, Chagall; ¥800 adult, ¥640 for groups of 20+, closed Mondays) — wet stone steps on an unshielded mountain climb are a real hazard, especially for the group's 2 low-mobility travelers, and there's no indoor version of Yamadera itself to fall back on.",
+          "source_url": "https://www.yamagata-art-museum.or.jp/information",
+          "verified_on": "2026-08-28"
+        }
       },
       {
         "date": "Thu Oct 22",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Bunshokan, then the transfer to Ginzan Onsen",
+        "pace": "Free morning in the city, then the trip's one real logistics day — a train to Oishida and a cash-only bus into a gas-lit onsen village with only a handful of departures a day, carrying full luggage.",
+        "tldr": "The trip's one real transfer — a train to Oishida and a cash-only bus into a gas-lit onsen village with only a handful of departures a day.",
+        "body": "<p>Morning: Bunshokan (free, 9:00-16:30, the best-documented wheelchair access of any Yamagata city sight) or Yamagata Marugoto-kan Beninokura, a restored Edo-era merchant warehouse compound paired with Soba Sanbyakubou's 30-seat private room for lunch.</p><p>Withdraw cash before leaving the city — Ginzan Onsen has no ATM or convenience store. From Yamagata Station, take the JR Ōu Line to Oishida (≈50 min local / ≈28 min Tsubasa), then the Hanagasa Bus to Ginzan Onsen: {{fact:hanagasa-bus-fare-1000-yen}}, ≈35-40 minutes, no reservation needed, only 5-6 departures a day. Board with the group's luggage in good time — missing a bus means waiting 1.5-2.5 hours for the next.</p><p>Check into Ginzanso (the largest property in town, best odds of hosting all 8 together) and see the street's gas lamps light around 16:00, best photo window 16:30-17:30.</p>",
+        "energy": "balanced",
+        "env": "mixed",
+        "checklist": [
+          "Withdraw cash before leaving Yamagata city — no ATM in Ginzan Onsen",
+          "Confirm Ginzanso check-in time and where to bring luggage"
+        ]
       },
       {
         "date": "Fri Oct 23",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Ginzan Onsen morning, then onward",
+        "pace": "Slow morning — the foot bath and a quieter walk before midday's day-trippers arrive, then retrace the transfer back out.",
+        "tldr": "One more quiet morning in the onsen village before retracing the transfer back out.",
+        "body": "<p>Ginzan Onsen's worst crowding is around midday; before 11:00 the main street and the riverside ashiyu foot bath are comparatively calm.</p><p>Shirogane Falls, at the end of the street, is reached by an uphill stairway locals describe as genuinely tough going — worth weighing against the flat main street for the group's 2 low-mobility travelers.</p><p>Check out and retrace the transfer: Hanagasa Bus to Oishida, then the JR Ōu Line back to Yamagata or onward. If treating this leg as a same-day connection, ≈17:04 is the last practical bus out of Ginzan Onsen.</p>",
+        "energy": "slow",
+        "env": "mixed"
       }
     ]
   }

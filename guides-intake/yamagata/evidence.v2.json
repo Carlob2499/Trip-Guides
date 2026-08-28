@@ -1,0 +1,1446 @@
+{
+  "schemaVersion": "wp-evidence/2.3",
+  "slug": "yamagata",
+  "runId": "yamagata-20260828-73821a",
+  "candidates": [
+    {
+      "id": "c-rental-car",
+      "name": "Rental car",
+      "branch": null,
+      "priority": "transport",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Public transit + taxi fallback proven workable for all three stops; a self-drive car adds parking/navigation/driver-duty burden for 8 people and offers no accessibility benefit since Ginzan Onsen's town core is pedestrian-only regardless.",
+      "worth": null
+    },
+    {
+      "id": "c-chartered-taxi--oishida-ginzan-onsen",
+      "name": "Chartered taxi",
+      "branch": "Oishida–Ginzan Onsen",
+      "priority": "transport",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-hanagasa-bus--ginzan-line",
+      "name": "Hanagasa Bus",
+      "branch": "Ginzan Line",
+      "priority": "transport",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-ginzanso",
+      "name": "Ginzanso",
+      "branch": null,
+      "priority": "lodging",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-takimikan",
+      "name": "Takimikan",
+      "branch": null,
+      "priority": "lodging",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-showakan",
+      "name": "Showakan",
+      "branch": null,
+      "priority": "lodging",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-notoya-ryokan",
+      "name": "Notoya Ryokan",
+      "branch": null,
+      "priority": "lodging",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Town's most iconic building and likely the hardest to book: online-only reservation system, phone/email/proxy bookings explicitly refused, and the ~3-month release window for Oct 20-23 dates has already passed as of the research date (2026-08-28).",
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-kosekiya-bekkan",
+      "name": "Kosekiya Bekkan",
+      "branch": null,
+      "priority": "lodging",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Only 30-guest capacity across 14 rooms — too small to comfortably host a single party of 8 alongside other guests without likely needing 2+ rooms split unpredictably.",
+      "worth": null
+    },
+    {
+      "id": "c-ryokan-matsumoto",
+      "name": "Ryokan Matsumoto",
+      "branch": null,
+      "priority": "lodging",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Best-documented booking policy (own FAQ) but online-only, no wheelchair-accessible rooms, and its own stated release window (1st of the month, 3 months ahead) for Oct 20-23, 2026 opened around 2026-08-01 — already passed by the time this research ran.",
+      "worth": null
+    },
+    {
+      "id": "c-takifudo-namasoba",
+      "name": "Takifudo Namasoba",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-taimenseki",
+      "name": "Taimenseki",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-mitoya--yamadera",
+      "name": "Mitoya",
+      "branch": "Yamadera",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Well-regarded local soba (2 min from Yamadera Station) but the official site states no group-capacity or reservation policy for a party of 8 — needs a direct phone call (023-695-2506) before it could be relied on.",
+      "worth": null
+    },
+    {
+      "id": "c-honogura-yamadera-honten",
+      "name": "Honogura Yamadera Honten",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Serves limited-quantity hand-made (juwari) soba on a scarcity model — not suited to a walk-in or reserved party of 8.",
+      "worth": null
+    },
+    {
+      "id": "c-kajo-park",
+      "name": "Kajo Park",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-otemon-yagura",
+      "name": "Otemon Yagura",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kyu-saiseikan",
+      "name": "Kyu-Saiseikan",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-mogami-yoshiaki-historical-museum",
+      "name": "Mogami Yoshiaki Historical Museum",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-bunshokan",
+      "name": "Bunshokan",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-yamagata-museum-of-art",
+      "name": "Yamagata Museum of Art",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Strong Western-art collection but not distinctly Yamagata history, and admission-charging — contradicts the off-the-beaten-path/local-history brief when free, more distinctive local options exist. Kept only as a wet-weather backup (see Day 2 plan_b).",
+      "worth": null
+    },
+    {
+      "id": "c-yamagata-prefectural-museum",
+      "name": "Yamagata Prefectural Museum",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Generalist natural-history/prefecture museum, redundant with the more distinctive castle-era history sites already shortlisted in the same park.",
+      "worth": null
+    },
+    {
+      "id": "c-yamagata-marugoto-kan-beninokura",
+      "name": "Yamagata Marugoto-kan Beninokura",
+      "branch": null,
+      "priority": "culture-history",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-soba-sanbyakubou--beninokura",
+      "name": "Soba Sanbyakubou",
+      "branch": "Beninokura",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-yonezawa-beef-tokiwa--yamagata-store",
+      "name": "Yonezawa Beef Tokiwa",
+      "branch": "Yamagata store",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sobadokoro-shojiya--main-store",
+      "name": "Sobadokoro Shojiya",
+      "branch": "Main store",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Most-cited authentic local soba destination (155 years), but the official site gives no group-capacity info for a party of 8 — a same-name branch elsewhere does 20+ groups; call 023-622-1380 to confirm before booking.",
+      "worth": null
+    },
+    {
+      "id": "c-suzuki-sohonten--kitayamagata",
+      "name": "Suzuki Sohonten",
+      "branch": "Kitayamagata",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Offers group soba-kaiseki courses but exact seating capacity was not found in any source — needs a direct call (023-622-5636) before relying on it.",
+      "worth": null
+    },
+    {
+      "id": "c-inokoya-yamagatada",
+      "name": "Inokoya Yamagatada",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Thematically ideal (imoni served year-round in individual mini-hearth pots, 1 min from the station) but private rooms seat only 4-6 with curtain dividers — an 8-top would need open floor seating, not a private room. Fine as a casual/overflow stop, not the flagship group meal.",
+      "worth": null
+    },
+    {
+      "id": "c-cold-niku-soba--kahoku-cho",
+      "name": "Cold niku-soba",
+      "branch": "Kahoku-cho",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "The dish's true home is Kahoku town, a separate excursion outside the trip's three cities — noted as a genuine regional specialty but out of scope for this itinerary.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-hanagasa-fare",
+      "candidateId": "c-hanagasa-bus--ginzan-line",
+      "claim": "One-way adult fare Oishida Station → Ginzan Onsen is ¥1,000 (¥500 child/disabled companion), cash only — the fare box does not accept IC cards",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-hanagasa-season",
+      "candidateId": "c-hanagasa-bus--ginzan-line",
+      "claim": "The Ginzan Line's 2026 regular-season operating window is April 1 – October 24, 2026 — this covers the entire Oct 20-23, 2026 trip, ending the day after departure",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-hanagasa-noreservation",
+      "candidateId": "c-hanagasa-bus--ginzan-line",
+      "claim": "No reservation is required on the Ginzan Line bus; it is explicitly listed as EXEMPT from the town's day-tripper ticket/entry-restriction system",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-hanagasa-schedule",
+      "candidateId": "c-hanagasa-bus--ginzan-line",
+      "claim": "5-6 daily round trips; sample Oishida→Ginzan departures 6:40/9:57/12:42/14:17/16:02/17:52, and Ginzan→Oishida returns 7:15/8:54/11:04/13:54/15:24/17:04",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.hanagasa-bus-taisei.co.jp/product3.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-car-restriction-current",
+      "candidateId": null,
+      "claim": "Ginzan Onsen's private-vehicle demonstration restriction project concluded March 1, 2026, with no announced resumption as of the research date — route buses, delivery vehicles, and overnight guests' designated ryokan parking remain exempt regardless of any future restriction",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://ginzan-artmuseum.com/regulated-vehicles/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-ginzan-car-restriction-2025-26winter",
+      "candidateId": null,
+      "claim": "The prior winter 2025-26 restriction period ran Dec 20, 2025 – Mar 1, 2026, park-and-ride only for day-trippers; overnight guests were exempt throughout",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://ginzan-artmuseum.com/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2025,
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-ginzan-lodging-list",
+      "candidateId": null,
+      "claim": "13 ryokan are listed on the town's official lodging directory, with capacities ranging from ~12 to ~200 guests",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzanonsen.jp/yado/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-ginzanso-capacity",
+      "candidateId": "c-ginzanso",
+      "claim": "Ginzanso is the largest property in Ginzan Onsen — 40 rooms, ~200 guest capacity — the best single-property fit for hosting a group of 8",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ginzanonsen.jp/yado/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-matsumoto-booking-policy",
+      "candidateId": "c-ryokan-matsumoto",
+      "claim": "Ryokan Matsumoto accepts reservations only online (official site, Rakuten Travel, or Jalan) — phone and email reservations are not accepted; bookings open at the start of the month, 3 months ahead of the stay date",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://ginzan-matsumoto.com/faq/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-09-01"
+      }
+    },
+    {
+      "id": "ev-matsumoto-accessibility",
+      "candidateId": "c-ryokan-matsumoto",
+      "claim": "Ryokan Matsumoto has an elevator but no wheelchair-accessible (barrier-free) guest rooms, per its own FAQ",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://ginzan-matsumoto.com/faq/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-matsumoto-luggage",
+      "candidateId": "c-ryokan-matsumoto",
+      "claim": "Ryokan Matsumoto allows guests to mail luggage ahead (food items excluded; oversized items need advance email notice)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://ginzan-matsumoto.com/faq/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-notoya-booking-policy",
+      "candidateId": "c-notoya-ryokan",
+      "claim": "Notoya Ryokan accepts reservations online only — phone/email reservations and third-party (proxy) bookings are explicitly refused, for both domestic and international guests",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://notoyaryokan.com/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-09-15"
+      }
+    },
+    {
+      "id": "ev-yamadera-admission-fee",
+      "candidateId": null,
+      "claim": "Risshaku-ji (Yamadera) adult admission is ¥500 (middle-school age and up), revised from ¥300 effective April 1, 2025 — many aggregators still show the stale ¥300 figure",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://rissyakuji.jp/2025-03-07/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-03-07",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-yamadera-hours",
+      "candidateId": null,
+      "claim": "Risshaku-ji reception hours are 8:00-16:00 (Apr-Sep bracket, which covers Oct 20-23) and 8:30-15:00 in winter (Dec-Mar); cash only for admission",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://rissyakuji.jp/sanpai/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-yamadera-access-onfoot",
+      "candidateId": null,
+      "claim": "The only route from the base entrance to the upper halls (Godaido, Okunoin) is on foot via ~1,015 stone steps; the temple's own access page describes no mechanized assist, and no funicular/ropeway/shortcut exists anywhere on the mountain",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://rissyakuji.jp/access/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-yamadera-step-count-official",
+      "candidateId": null,
+      "claim": "Step count base-to-Okunoin is cited as 1,015 steps by Yamagata Prefecture's own tourism site",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://yamagatakanko.com/yamadera",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-yamadera-step-count-alt",
+      "candidateId": null,
+      "claim": "The local Yamadera tourism-association site cites 1,070 steps for the same climb — a minor counting-convention discrepancy from the prefecture's 1,015 figure, not materially different for planning",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.yamaderarisyakuji.info/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-yamadera-lower-precinct-accessible",
+      "candidateId": null,
+      "claim": "Konponchudo (the main hall, ~3 min walk from the base entrance) is a genuinely worthwhile visit without climbing the stairway — the one legitimate low-effort option at Yamadera",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://hirotravel.com/yamadera/page_thumb22.html",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-yamadera-mobility-firsthand",
+      "candidateId": null,
+      "claim": "A firsthand account from a visitor with impaired leg function found even the base/lower precinct near Konponchudo has enough steps and unevenness to be genuinely hard to navigate, and confirmed Yamadera has no ramps or elevators — there is no easy half-experience of the mountain beyond the base",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://note.com/sato_yolandi/n/n339f2743ad78",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "note-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-yamadera-crowd-timing-1",
+      "candidateId": null,
+      "claim": "Yamadera is least crowded right at the 8:00 opening and on weekdays (Tue-Thu); 10:00-14:00 is the most crowded window as tour groups arrive, worse still in koyo season when buses start building by 8:00-10:00",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://banzokubiology.com/yamadera-konzatsu-guide/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-05-29",
+        "family": "banzokubiology",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-yamadera-crowd-timing-2",
+      "candidateId": null,
+      "claim": "A independent photography-focused visitor blog corroborates arriving 8:00-9:00am to avoid overwhelming daytime crowds and a packed Godaido viewing platform",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://note.com/boo_sizuta_0707/n/n2538cb84cec9",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-24",
+        "family": "note-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-mitoya-no-capacity-data",
+      "candidateId": "c-mitoya--yamadera",
+      "claim": "Mitoya's official site (2 min from Yamadera Station, hand-made local soba) does not state a group capacity or reservation policy for parties of 8",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mitoya-yamadera.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-kajo-park-hours-fee",
+      "candidateId": "c-kajo-park",
+      "claim": "Kajo Park is free, open 5:00-22:00 (Apr-Oct) / 5:30-22:00 (Nov-Mar), never fully closed; 230 free parking spaces",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.city.yamagata-yamagata.lg.jp/kurashi/koen/1006541/1006545/1015528.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-bunshokan-hours-fee",
+      "candidateId": "c-bunshokan",
+      "claim": "Bunshokan: hours 9:00-16:30, free admission, address Hatago-cho 3-4-51, Yamagata city, closed 1st/3rd Mondays",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.gakushubunka.jp/bunsyokan/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-bunshokan-assembly-hall-closure",
+      "candidateId": "c-bunshokan",
+      "claim": "Bunshokan's former assembly hall chamber was closed for construction with a stated target of reopening by end of September 2026 — a deadline, not a confirmed reopening; re-verify closer to the Oct 2026 trip that it actually reopened on schedule",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.gakushubunka.jp/bunsyokan/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-otemon-yagura-public",
+      "candidateId": "c-otemon-yagura",
+      "claim": "The restored Otemon Yagura gate-tower is confirmed open to the public by Yamagata city's own page, which points to a separate page for exact hours; no accessibility information (stairs vs. elevator) is stated — treat as a likely skip for the 2 low-mobility travelers pending direct confirmation",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.city.yamagata-yamagata.lg.jp/kurashi/koen/1006541/1006545/1015528.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-kyu-saiseikan-hours",
+      "candidateId": "c-kyu-saiseikan",
+      "claim": "Kyu-Saiseikan (former Meiji-era hospital, octagonal 3-tier building, Yamagata City Folk Museum) hours 9:00-16:30, free admission since Apr 1, 2009, closed Dec 29-Jan 3",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.city.yamagata-yamagata.lg.jp/shisetsu/bunkasports/1008032/1005895.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-mogami-museum-hours",
+      "candidateId": "c-mogami-yoshiaki-historical-museum",
+      "claim": "Mogami Yoshiaki Historical Museum hours 9:00-17:00 (last entry 16:30), free admission since Apr 1, 2009, closed Mondays and certain holidays, address Otemachi 1-53, phone 023-625-7101",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://mogamiyoshiaki.jp/?p=about",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-museum-of-art-hours-fee",
+      "candidateId": "c-yamagata-museum-of-art",
+      "claim": "Yamagata Museum of Art hours 10:00-17:00, adult admission ¥800 (¥640 for groups of 20+), closed Mondays — sourced from a subagent's search-preview; two of my own direct WebFetch attempts to the museum's own site failed with a connection error (not a 403 block, the domain itself appears unreachable from this environment), so this ships with a confirm-ahead flag",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.yamagata-art-museum.or.jp/information",
+        "kind": "official",
+        "access": "blocked",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-beninokura-desc",
+      "candidateId": "c-yamagata-marugoto-kan-beninokura",
+      "claim": "Beninokura (山形市十日町2-1-8) is a tourist complex ≈10 min walk from JR Yamagata Station (or a 100-yen loop bus), offering local food, regional products, farm-direct sales of traditional vegetables, and a 100-yen sake-tasting vending machine",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.visityamagata.jp/post-yamagata-beninokura/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-sanbyakubou-capacity",
+      "candidateId": "c-soba-sanbyakubou--beninokura",
+      "claim": "Soba Sanbyakubou's private storehouse room (蔵座敷) seats up to 30 for dining/banquets; hours 11:00-20:00 (last order 19:30), closed Mondays",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://beninokura.com/300bou",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-tokiwa-capacity-price",
+      "candidateId": "c-yonezawa-beef-tokiwa--yamagata-store",
+      "claim": "Yonezawa Beef Tokiwa (Yamagata store) has 4 private rooms seating up to 14 guests; minimum spend ¥6,600/person lunch, ¥9,900/person dinner; hours 11:00-22:00 (last order 21:00); reservable by phone (023-666-4433) or online (TableCheck); address Sachimachi 2-9, ground floor of the Daiwa Roynet Hotel by the station",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.yonezawabeef.co.jp/yamagata.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-imoni-festival-2026-date",
+      "candidateId": null,
+      "claim": "The Nihon-ichi Imonikai Festival 2026 (Japan's largest imoni-stew festival) is confirmed for Sunday September 20, 2026 at the Mogami riverbed near Sougetsu Bridge — this falls BEFORE the Oct 20-23 trip window and does not overlap; imoni remains available year-round at restaurants regardless, and October is peak taro-harvest season locally",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://imoni-fes.jp/event_guide/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-09-25"
+      }
+    },
+    {
+      "id": "ev-entry-visa-us",
+      "candidateId": null,
+      "claim": "US passport holders qualify for Japan's general visa-exemption framework (tourism stays, no ETA/JESTA requirement in force for 2026 — the proposed pre-clearance system targets FY2028 launch at the earliest); exact stay length (commonly cited as 90 days) is published on MOFA's own exemption table, which could not be directly fetched in this research session (repeated 403s) — this is the single best-available official-adjacent corroboration and should be re-checked against mofa.go.jp before booking. ASSUMES a US passport — the traveler party's passport countries were not stated in intake.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/plan/visa-info/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-advisory-level",
+      "candidateId": null,
+      "claim": "US State Department travel advisory for Japan is Level 1 — Exercise Normal Precautions; the primary page (travel.state.gov) is Cloudflare-gated and returned HTTP 403 on every direct fetch attempt in this session (no embedded-browser tool available) — recorded honestly as blocked, corroborated only by convergent search-result snippets and the OSAC page title; a human should re-confirm directly on travel.state.gov before the guide ships",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-01"
+      }
+    },
+    {
+      "id": "ev-no-atm-ginzan-onsen",
+      "candidateId": null,
+      "claim": "Ginzan Onsen has no convenience store and no ATM in the town itself (nearest is ~30 min by car); several ryokan there are cash-only (no credit card / QR pay) — carry sufficient cash before heading there",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://ginzan-matsumoto.com/faq/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-ginzan-gaslamp-timing",
+      "candidateId": null,
+      "claim": "The gas lamps along Ginzan Onsen's main street begin lighting around 16:00, with the best photo window 16:30-17:30 into blue hour, fully dark by 18:00, lamps off around 21:00",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://yakei-isan.jp/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "yakei-isan",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ginzan-crowd-timing",
+      "candidateId": null,
+      "claim": "Ginzan Onsen's worst crowding is around midday (~12:00); the photogenic evening lamp-lit window (17:00-20:00) is also the most crowded time of day, while before 11:00 or after 14:00 daytime is comparatively calm",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://moriyoshizan.jp/2026ginzan/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "moriyoshizan",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ginzan-crowd-timing-2",
+      "candidateId": null,
+      "claim": "A second independent blog corroborates the midday-worst / evening-photogenic-but-crowded crowd pattern at Ginzan Onsen",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://banzokubiology.com/ginzan-onsen-konzatsu/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "banzokubiology",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ginzan-waterfall-stairs",
+      "candidateId": null,
+      "claim": "The path to Shirogane Falls at the end of Ginzan Onsen's main street involves an uphill stairway described by local sources as 'fairly tough' — roughly 6 minutes' walk; this is a real mobility consideration distinct from the flat riverside main street where the ashiyu foot bath sits",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://4travel.jp/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "4travel",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ginzan-attractions",
+      "candidateId": null,
+      "claim": "Ginzan Onsen's main attractions: the Taisho-era wooden ryokan street along the Ginzan River, gas lamps, Shirogane Falls (22m) at the street's end, the riverside 'Waraku' ashiyu foot bath, and rentable period costumes",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://yamagatakanko.com/attractions/detail_2832.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-koyo-foliage-timing",
+      "candidateId": null,
+      "claim": "In 2025, Yamadera/Yamagata-area koyo (autumn foliage) illumination ran Oct 26 - Nov 9; the Oct 20-23, 2026 trip dates fall roughly 1-2 weeks BEFORE that typical peak/illumination window — trees will likely be just beginning to turn rather than at full peak. This is an inference from the most recent comparable season, not a confirmed 2026 forecast (2026 forecasts are not published until September 2026) — re-check tenki.jp or weathernews.jp/koyo closer to the trip",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://weathernews.jp/koyo/spot/23521/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2025
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-09-20"
+      }
+    },
+    {
+      "id": "ev-onsen-tattoo-policy",
+      "candidateId": null,
+      "claim": "Visible tattoos are not illegal in Japan; onsen tattoo restrictions are facility-specific policy rather than a nationwide legal requirement, and many traditional ryokan still restrict them for cultural reasons — a private/family bath (kashikiri-buro) reservation is the standard workaround. Not individually confirmed for any specific Ginzan Onsen ryokan this pass.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.kashiwaya.org/e/magazine/tips-faq/why-tattoos-not-allowed-in-onsen.html",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "kashiwaya",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-01"
+      }
+    },
+    {
+      "id": "ev-holidays-none-in-window",
+      "candidateId": null,
+      "claim": "The only Japanese public holiday in October 2026 is Sports Day on Oct 12 (a Monday) — nothing falls in the Oct 20-23 trip window",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.gotokyo.org/en/story/guide/public-holidays/index.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-10"
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-ginzanso",
+      "importance": "anchor",
+      "bookingUrl": "https://www.ginzanonsen.jp/yado/",
+      "releaseWindow": "Not independently confirmed for this property (unlike Matsumoto's stated 3-month window); Ginzan Onsen ryokan generally release 2-6 months ahead and popular dates can sell out within minutes of release",
+      "actionDate": "2026-08-29 — book immediately; today's date (2026-08-28) is already inside or past the typical release window most Ginzan Onsen ryokan use for Oct 20-23, 2026 dates",
+      "partyRules": "Largest property in town (40 rooms / ~200 guests) — best odds of hosting all 8 in one property without a split, but exact single-booking group-size limits were not confirmed; call 0237-28-2322 to arrange a group booking directly",
+      "deposit": "Not confirmed this pass — ask when booking",
+      "cancellation": "Not confirmed this pass — ask when booking",
+      "foreignFriction": "Not confirmed this pass; Ginzan Onsen ryokan bookings commonly run through Rakuten Travel/Jalan (English-friendly) or direct phone (Japanese)",
+      "lastSeating": null,
+      "walkIn": "No — Ginzan Onsen ryokan do not take walk-in overnight guests during peak season",
+      "leads": [
+        {
+          "claim": "Concierge or travel-agency package booking may secure a room even after the standard release window closes, per general Japanese ryokan booking practice",
+          "status": "unconfirmed-lead",
+          "source": null,
+          "verifiedOn": null
+        }
+      ],
+      "alternatives": "Takimikan (18 rooms/70 guests, has a 50-seat banquet hall) or Showakan (13 rooms/50 guests) as single-property backups; a 2-property split (e.g. Takimikan + Showakan) as a last resort",
+      "fallback": "If no Ginzan Onsen ryokan can seat all 8 for these exact dates, fall back to splitting the group across 2 adjacent properties, or shifting the overnight to Yamagata city and treating Ginzan Onsen as a long day trip instead (loses the signature evening lamp-lit stay but keeps the itinerary intact)"
+    },
+    {
+      "candidateId": "c-yonezawa-beef-tokiwa--yamagata-store",
+      "importance": "important",
+      "bookingUrl": "https://www.yonezawabeef.co.jp/yamagata.html",
+      "releaseWindow": "Not stated as a hard window; TableCheck online booking is available for standard advance reservation, no evidence of a strict release date",
+      "actionDate": "Book 1-2 weeks ahead once the exact day is fixed, given the party of 8 needs a private room (4 rooms available, max 14 each)",
+      "partyRules": "Private rooms seat up to 14 — comfortably fits 8; minimum spend ¥6,600/person lunch or ¥9,900/person dinner applies",
+      "deposit": "Not separately confirmed; the per-person minimum spend functions as the binding commitment",
+      "cancellation": "Not confirmed this pass — ask when booking",
+      "foreignFriction": "TableCheck's interface may default to Japanese; phone booking (023-666-4433) or the site's email inquiry form are alternatives if the online system is awkward",
+      "lastSeating": "21:00 (last order; restaurant closes 22:00)",
+      "walkIn": "Possible outside peak times but risky for a party of 8 wanting a private room — reserve ahead",
+      "leads": [],
+      "alternatives": "Soba Sanbyakubou at Beninokura (confirmed 30-seat private storehouse room) as the second flagship group meal",
+      "fallback": "Open floor seating at the same restaurant, or shift the group dinner to Soba Sanbyakubou"
+    }
+  ],
+  "transport": [
+    {
+      "id": "t-oishida-ginzan-onsen-bus",
+      "route": "Oishida Station → Ginzan Onsen (Hanagasa Bus, Ginzan Line) — the trip's anchor transfer, carried with luggage",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-hanagasa-fare",
+        "ev-hanagasa-season",
+        "ev-hanagasa-noreservation",
+        "ev-hanagasa-schedule",
+        "ev-no-atm-ginzan-onsen"
+      ],
+      "doorToDoor": "Yamagata city hotel → Yamagata Station (local Ou Line ~50 min or Tsubasa ~28 min to Oishida) → Hanagasa Bus (~35-40 min) → Ginzan Onsen. Total door-to-door roughly 1-1.5 hours depending on train choice and connection wait.",
+      "transferReality": "Oishida Station has no confirmed step-free path to the bus stop and no IC card acceptance (cash ticket required); the bus stop sits just outside the station. Not independently confirmed as fully barrier-free — worth a direct check for the 2 low-mobility travelers.",
+      "groupLuggageMobility": "The Ginzan Line bus is a small retro coach with no stated luggage-space limit found in this research; boarding early/first at Oishida is the practical mitigation for 8 people with bags. If the bus is visibly full or luggage won't fit, 2-3 taxis are the fallback (see c-chartered-taxi--oishida-ginzan-onsen).",
+      "buffer": "Recommend the mid-morning or early-afternoon departure (12:42 or 14:17 from Oishida) rather than the first slot, to allow an unhurried hotel checkout and train connection without a tight transfer window.",
+      "missedConnection": "Missing a bus means waiting roughly 1.5-2.5 hours for the next one — only 5-6 buses run per day and there is no rail alternative into Ginzan Onsen.",
+      "nextService": "Sample Oishida departures: 6:40, 9:57, 12:42, 14:17, 16:02, 17:52 (2026 season).",
+      "lastPracticalReturn": "17:04 departing Ginzan Onsen is the last bus back to Oishida — relevant to the return/departure leg, not the inbound trip with luggage.",
+      "fallback": "Chartered taxi from Oishida Station (~20 min, roughly ¥6,500-8,000 per car per an independent fare-estimator site, 2-3 cars needed for 8 people + luggage) — call Ōbanazawa Taxi (0237-23-2525) ahead given a limited local fleet. A taxi directly from Yamagata city (~51 min drive) is a further fallback if the Oishida connection is missed entirely."
+    },
+    {
+      "id": "t-tokyo-yamagata-tsubasa",
+      "route": "Tokyo Station → Yamagata Station (Yamagata Shinkansen 'Tsubasa')",
+      "risk": 2,
+      "evidenceIds": [],
+      "doorToDoor": "Tokyo Station to Yamagata Station, roughly 2h22m (fastest) to 2h45-55m depending on the specific service, hourly-ish frequency, ~06:12-20:44 daily window per an independent rail-fare aggregator (not independently confirmed against JR East's own timetable — bot-gated in this session).",
+      "transferReality": "Direct through-service, no transfer required.",
+      "groupLuggageMobility": "No mandatory oversized-baggage reservation applies on this Shinkansen network (unlike Tokaido/Sanyo/Kyushu); storage is first-come, first-served overhead/behind-seat space — book all 8 seats together to keep the group's bags near their own seats.",
+      "buffer": null,
+      "missedConnection": "Roughly hourly service — a missed train costs about an hour's wait, not a lost day.",
+      "nextService": "Roughly hourly.",
+      "lastPracticalReturn": null,
+      "fallback": "Board at Ueno or Omiya instead of Tokyo Station if more convenient — the same physical train (coupled Yamabiko+Tsubasa) calls at both."
+    }
+  ],
+  "disagreements": [
+    {
+      "id": "d-ginzan-onsen-car-restriction-status",
+      "topic": "Whether a seasonal private-vehicle restriction applies to Ginzan Onsen during the Oct 2026 trip window",
+      "impact": "recommendation-changing",
+      "evidenceIds": [
+        "ev-ginzan-car-restriction-2025-26winter",
+        "ev-ginzan-car-restriction-current"
+      ],
+      "investigation": "Initial research (via a subagent) found a documented winter 2025-26 restriction period (Dec 20, 2025 - Mar 1, 2026) and flagged that 2026 autumn restriction dates were not yet published, treating a possible autumn restriction as a live open question for the Oct 2026 trip. A direct fetch of the SAME official page (ginzan-artmuseum.com/regulated-vehicles/) later in this same research pass found current text stating the whole private-vehicle demonstration-restriction project concluded March 1, 2026, with no announced resumption.",
+      "resolution": "Resolved in favor of the more current, directly-fetched page: no vehicle restriction is expected to apply to Ginzan Onsen for the Oct 20-23, 2026 trip. This doesn't change the transport recommendation (bus/taxi over rental car, since the town core is pedestrian-only regardless and public transit is already proven workable) but removes a previously-flagged access risk from the plan."
+    },
+    {
+      "id": "d-yamadera-step-count",
+      "topic": "Exact step count for the Yamadera (Risshaku-ji) climb",
+      "impact": "minor",
+      "evidenceIds": [
+        "ev-yamadera-step-count-official",
+        "ev-yamadera-step-count-alt"
+      ],
+      "investigation": "Yamagata Prefecture's own tourism site cites 1,015 steps; the local Yamadera tourism-association site cites 1,070 — likely a different counting start-point or convention.",
+      "resolution": "Treated as materially the same for trip planning (~1,000-1,070 steps); the prefecture's own figure (1,015) is used as the headline number since it is the more authoritative of the two."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-ginzanso",
+        "c-yonezawa-beef-tokiwa--yamagata-store"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [
+        "t-oishida-ginzan-onsen-bus"
+      ],
+      "notApplicableReason": null
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Five parallel research threads (Ginzan Onsen transfer/lodging, Yamadera, Yamagata city sights/food, practical essentials, Tokyo-Yamagata transit) plus direct follow-up fetches converged on a stable set of picks: later searches for additional restaurant/lodging candidates (e.g. Hanazen, Yamagata Nagaya Sakaba, further soba shops) returned weaker or capacity-unconfirmed options that would not displace the shipped picks. The one genuinely open uncertainty — whether Ginzanso (or any Ginzan Onsen ryokan) still has live availability for Oct 20-23, 2026 given the release-window risk found — is NOT resolvable by further web research; it requires a real-time booking action, which is why it is handled via the reservations[] action date, a shipped fallback plan (split across 2 properties, or convert Ginzan Onsen to a day trip), and a traveler question card rather than more searching. Environment note: this session had no shell/script access (lookup-place.mjs, lookup-venue.mjs, lookup-tz.mjs, search-commons.mjs were unavailable), and several primary domains were persistently bot-gated (jreast.co.jp, mofa.go.jp, travel.state.gov, jp.usembassy.gov, osac.gov — all returned HTTP 403 across repeated direct attempts by multiple independent fetches) — those gaps are recorded honestly per-fact (blocked access, confirm-ahead flags) rather than silently upgraded to clean citations."
+  },
+  "passB": null,
+  "reconciliation": []
+}

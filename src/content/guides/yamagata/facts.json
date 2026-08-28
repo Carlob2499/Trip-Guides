@@ -1,1 +1,22 @@
-{}
+{
+  "hanagasa-bus-fare-1000-yen": {
+    "claim": "Hanagasa Bus one-way adult fare, Oishida Station to Ginzan Onsen",
+    "value": "¥1,000 (cash only, ¥500 for children/disabled companions)",
+    "source_url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+    "verified_on": "2026-08-28",
+    "shelf_life": "transit",
+    "state": "clean",
+    "entity": "hanagasa-bus-ginzan-line",
+    "risk": 3
+  },
+  "yamadera-admission-500-yen": {
+    "claim": "Risshaku-ji (Yamadera) adult admission",
+    "value": "¥500 (revised from ¥300 on Apr 1, 2025 — many aggregators still show the old figure)",
+    "source_url": "https://rissyakuji.jp/2025-03-07/",
+    "verified_on": "2026-08-28",
+    "shelf_life": "venue",
+    "state": "clean",
+    "entity": "risshaku-ji-yamadera",
+    "risk": 2
+  }
+}

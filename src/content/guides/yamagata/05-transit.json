@@ -4,17 +4,60 @@
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
-    "steps": []
+    "steps": [
+      "<b>Tokyo → Yamagata:</b> Yamagata Shinkansen \"Tsubasa\" direct from Tokyo Station, ≈2h22m fastest (up to ≈2h45m), roughly hourly. Every seat is reserved — book all 8 together. ⚠ ≈¥11,450 one-way reserved seat, corroborated via two independent fare-table sites, not JR East's own page (bot-gated this pass) — confirm at booking.",
+      "<b>Yamagata → Yamadera:</b> JR Senzan Line direct, ≈19-23 min, roughly hourly. ⚠ ≈¥260 cash / ≈¥253 IC one-way, corroborated via aggregator only — confirm at the station. Yamadera Station is a ≈10 min walk from Risshaku-ji's base entrance.",
+      "<b>Yamagata → Oishida (for Ginzan Onsen):</b> JR Ōu Line — local train ≈50 min, or Tsubasa ≈28 min (extra limited-express surcharge). Suica/IC cards are not usable at Ōishida Station per multiple Japanese sources (not confirmed against JR East directly) — buy a paper ticket.",
+      "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b>, no reservation needed. Confirmed running Apr 1 – Oct 24, 2026 (covers the trip). Only 5-6 buses/day (sample departures 6:40/9:57/12:42/14:17/16:02/17:52 from Oishida) — missing one means a 1.5-2.5h wait. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
+      "<b>Ginzan Onsen → Oishida (return):</b> last practical bus back is ≈17:04 if attempting this as a day trip. On the overnight plan, any of the 6 daily departures works for the return leg.",
+      "<b>Getting around Yamagata city:</b> the station area is walkable (most central hotels are 5-8 min on foot), with a taxi rank and bus terminal directly outside the station."
+    ],
+    "source_url": "https://www.hanagasa-bus-taisei.co.jp/product3.html",
+    "verified_on": "2026-08-28"
   },
   {
     "type": "map",
     "group": "Transit",
     "title": "Orientation map",
     "phase": "daily",
-    "center": {
-      "lat": 38.2554,
-      "lng": 140.3396
-    },
-    "span": 0.08
+    "center": { "lat": 38.41, "lng": 140.43 },
+    "span": 0.5,
+    "points": [
+      {
+        "name": "Yamagata Station",
+        "lat": 38.248708,
+        "lng": 140.327456,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "山形駅"
+      },
+      {
+        "name": "Kajo Park (Yamagata Castle ruins)",
+        "lat": 38.2535667,
+        "lng": 140.3290444,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "霞城公園"
+      },
+      {
+        "name": "Risshaku-ji (Yamadera)",
+        "lat": 38.312556,
+        "lng": 140.437389,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "立石寺"
+      },
+      {
+        "name": "Oishida Station",
+        "lat": 38.595689,
+        "lng": 140.375292,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "大石田駅"
+      },
+      {
+        "name": "Ginzan Onsen",
+        "lat": 38.56972,
+        "lng": 140.53111,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "銀山温泉"
+      }
+    ]
   }
 ]

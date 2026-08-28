@@ -3,42 +3,72 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
-    "phase": "arrival"
+    "body": "<p>Japan runs on cash more than its cashless reputation suggests, and this trip leans further that way than a Tokyo-only itinerary would. The Hanagasa Bus to Ginzan Onsen takes cash only, and Ginzan Onsen itself has no ATM or convenience store in town.</p><p>7-Eleven and Japan Post ATMs in Yamagata city both accept foreign cards. Withdraw what you'll need for the Ginzan Onsen leg (bus fares, incidentals, any cash-only ryokan) before leaving the city — the nearest ATM from Ginzan Onsen is roughly 30 minutes away by car.</p>",
+    "phase": "arrival",
+    "source_url": "https://ginzan-matsumoto.com/faq/",
+    "verified_on": "2026-08-28",
+    "shelf_life": "default"
   },
   {
     "type": "budget",
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "intro": "Per-person estimates. The Ginzan Onsen ryokan night is priced separately since it runs far above a city hotel (it includes a multi-course dinner and breakfast, standard for the format) — figure sourced from an aggregator comparison, not the ryokan's own current rate card, so treat as approximate.",
     "currency": "¥",
     "days": 4,
+    "party": 8,
     "items": [
       {
-        "label": "Lodging, per night",
+        "label": "Lodging, Yamagata city hotel (per night)",
         "basis": "day",
-        "est": 0
+        "est": 7000,
+        "low": 5000,
+        "high": 9000,
+        "note": "Business/mid-range hotel near Yamagata Station, per person; not individually verified this pass",
+        "per": "person"
+      },
+      {
+        "label": "Lodging, Ginzan Onsen ryokan (1 night, dinner + breakfast included)",
+        "basis": "trip",
+        "est": 28750,
+        "low": 20000,
+        "high": 40000,
+        "note": "≈¥28,750/person sourced from a travel-aggregator comparison for Ginzanso's standard 2-guest room rate, not the ryokan's own current rate card — confirm at booking",
+        "per": "person",
+        "source_url": "https://www.jtb.co.jp/kokunai-hotel/htl/2435002/plan/",
+        "verified_on": "2026-08-28",
+        "shelf_life": "venue"
       },
       {
         "label": "Food & drink, per day",
         "basis": "day",
-        "est": 0
+        "est": 6000,
+        "low": 4000,
+        "high": 12000,
+        "note": "Soba/casual lunches run ≈¥1,500-2,500; the Yonezawa Beef Tokiwa dinner alone is ¥9,900/person minimum",
+        "per": "person"
       },
       {
         "label": "Local transport, per day",
         "basis": "day",
-        "est": 0
+        "est": 2000,
+        "note": "Senzan Line to Yamadera (≈¥260 each way), the Hanagasa Bus (¥1,000 each way) on the Ginzan Onsen day, plus city buses/taxis",
+        "per": "person"
       },
       {
         "label": "Sights & activities, per day",
         "basis": "day",
-        "est": 0
+        "est": 500,
+        "note": "Most Yamagata city culture/history stops are free; Yamadera admission is ¥500",
+        "per": "person"
       },
       {
         "label": "Flights — round trip",
         "basis": "trip",
-        "est": 0
+        "est": 0,
+        "note": "Not researched this pass — depends on the international departure airport, which intake left blank",
+        "per": "person"
       }
     ]
   }

@@ -1,11 +1,29 @@
 {
-  "kicker": "Field guide",
-  "title": "Yamagata,Yamadera,Ginzan Onsen & Japan",
-  "dek": "",
+  "kicker": "Yamagata · Yamadera · Ginzan Onsen — Oct 20–23, 2026",
+  "title": "Yamagata Prefecture",
+  "dek": "Castle ruins, a 1,015-step mountain temple, and a gas-lit onsen village reached by a bus that only runs a few times a day.",
   "country": "Japan",
+  "region": "Yamagata Prefecture, Tohoku",
+  "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Draft — Pass A (canonical/verified research) completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site. Re-check before travel: Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), JR fares and the Tsubasa reservation rule (JR East's own fare/timetable pages were bot-gated throughout this research pass), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), and the 2026 autumn foliage forecast (publishes from September). Pass B (local/authentic angle) and reconciliation have not run yet.",
   "provenance": "strict",
   "roomId": "66oyjm9aq3pqwo6r",
-  "footer": ""
+  "footer": "",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free entry for short-term tourism — commonly cited as up to 90 days under Japan's general visa-exemption framework. No pre-arrival electronic authorization (the proposed \"JESTA\" system) is required for 2026 travel; it is not scheduled to launch before Japan's 2028 fiscal year at the earliest.",
+      "note": "ASSUMED passport — the traveler party's passport countries were not stated in intake. Japan's Ministry of Foreign Affairs (MOFA), the definitive source, returned a blocked/403 response on every automated fetch attempt in this research pass. This entry is corroborated via Japan's official tourism board instead and should be re-confirmed directly at mofa.go.jp, and updated once every traveler's actual passport country is known.",
+      "source_url": "https://www.japan.travel/en/plan/visa-info/",
+      "verified_on": "2026-08-28"
+    }
+  ],
+  "advisory": {
+    "level": 1,
+    "title": "Exercise Normal Precautions",
+    "summary": "No elevated risk factors identified for Japan — the standard baseline advisory. The primary source (travel.state.gov) was Cloudflare-gated against automated fetch throughout this research pass; re-confirm directly before travel.",
+    "source_url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
+    "verified_on": "2026-08-28"
+  }
 }
