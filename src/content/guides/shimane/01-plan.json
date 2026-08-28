@@ -21,15 +21,14 @@
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": "<p>US passport holders are ordinarily visa-exempt for short tourist stays in Japan (commonly cited as up to 90 days), with a Visit Japan Web pre-registration for the immigration/customs QR codes. ⚠ This pass could not confirm the current rule against Japan's own immigration ministry page — both mofa.go.jp and the nearest US–Japan consulate page refused a direct fetch (HTTP 403) in this research environment. Re-verify against MOFA's official visa-exemption page or a Japanese consulate before booking, and check each traveler's own passport country if the party isn't all US citizens.</p>",
-    "phase": "before",
-    "verified_on": "2026-08-28"
+    "body": "<p>US passport holders are ordinarily visa-exempt for short tourist stays in Japan (commonly cited as up to 90 days), with a Visit Japan Web pre-registration for the immigration/customs QR codes. ⚠ The current rule could not be confirmed directly against Japan's own immigration ministry page — both mofa.go.jp and the nearest US–Japan consulate page refused a direct, non-browser fetch (HTTP 403). Re-verify against MOFA's official visa-exemption page or a Japanese consulate before booking, and check each traveler's own passport country if the party isn't all US citizens.</p>",
+    "phase": "before"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": "<p>⚠ Cellular coverage specifically inside the Omori valley / Ryugenji Mabu trail wasn't confirmed this pass — rural mountain valleys in Japan can have dead spots, but no source-backed claim either way exists yet. Download offline maps for the Omori townscape and the mine-trail route before you leave Matsue as a precaution, not because a gap is confirmed.</p>",
+    "body": "<p>⚠ Cellular coverage specifically inside the Omori valley / Ryugenji Mabu trail hasn't been confirmed — rural mountain valleys in Japan can have dead spots, but no source-backed claim either way exists yet. Download offline maps for the Omori townscape and the mine-trail route before you leave Matsue as a precaution, not because a gap is confirmed.</p>",
     "phase": "before"
   },
   {

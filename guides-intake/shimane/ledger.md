@@ -185,3 +185,28 @@
   with woven-in authenticity findings (Matsue Castle crowd timing, the Matsue Lake Line bus, the
   Iwami Ginzan e-bike option, Tanabe Museum of Art as a Day 1 add-on) — see the Research
   reconciliation table above for the full item-by-item trail.
+- 2026-08-28 — Deterministic-gate repair pass (offline `verify`, no candidate/evidence content
+  changed). Four map `place_id` placeholders (Matsue Castle, Izumo Taisha, Odashi Station, Iwami
+  Ginzan/Omori townscape) were resolved to real OSM node/way ids (`W299654325`, `W52958212`,
+  `N265997276`, `N1423618359`) by querying OpenStreetMap's Nominatim endpoint directly via
+  WebFetch — the same authoritative source `scripts/lookup-place.mjs` calls, used directly because
+  this stage has no shell/script-execution access; every returned coordinate was within ~150m of
+  the already-recorded EXIF-derived value, so lat/lng were left unchanged and only `place_id` was
+  filled in. The Iwami Ginzan sight's display name was changed from an em-dash title
+  ("Iwami Ginzan — Omori townscape & Ryugenji Mabu mine") to the evidence artifact's canonical
+  candidate name ("Iwami Ginzan (Omori & Ryugenji Mabu)") — the two had drifted apart at some
+  point after the candidate record was written, which is what made `check-candidates.mjs` report
+  it as shipped-but-absent; `coverage.v2.json`'s two refs to that sight's anchor were updated to
+  match the renamed anchor (`#iwami-ginzan-omori-ryugenji-mabu`). Four process-language leaks
+  ("this pass" / "this research") were rewritten out of reader-facing prose in Entry & documents,
+  Phone & data, and Sources & further reading (plus two more instances outside the automated
+  voice scanner's reach — the Tanabe Museum sight body and the guide-level `verified` stamp —
+  fixed for consistency, not because the gate required it). Three section-level `verified_on`
+  dates with no paired `source_url` were removed rather than backfilled with an invented citation:
+  Entry & documents (the entry rule itself is the unconfirmed fact the panel is honestly flagging),
+  What to eat (redundant with each venue item's own dated citation), and Sources & further reading
+  (a bibliography carried by its inline links, not a single dated claim). The Food & drink budget
+  line's undated price range got an explicit `⚠` (it is a general market estimate the intro already
+  calls "not individually sourced") instead of a fabricated verification date. No evidence record,
+  candidate, disposition, or coverage ask changed status — this pass only repaired artifact/schema
+  defects the previous reconcile attempts left behind.

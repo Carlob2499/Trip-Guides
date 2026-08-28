@@ -11,7 +11,7 @@
         "05-transit.json#key-transit-routes",
         "05-transit.json#iwami-ginzan-omori-townscape",
         "06-days.json#transfer-to-omori-iwami-ginzan",
-        "07-sights.json#iwami-ginzan-omori-townscape-ryugenji-mabu-mine"
+        "07-sights.json#iwami-ginzan-omori-ryugenji-mabu"
       ],
       "evidenceIds": [
         "ev-ginzan-cart-capacity",
@@ -61,7 +61,7 @@
         "07-sights.json#top-sights",
         "07-sights.json#matsue-castle",
         "07-sights.json#izumo-taisha",
-        "07-sights.json#iwami-ginzan-omori-townscape-ryugenji-mabu-mine",
+        "07-sights.json#iwami-ginzan-omori-ryugenji-mabu",
         "06-days.json#izumo-taisha"
       ],
       "evidenceIds": [

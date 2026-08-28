@@ -17,7 +17,7 @@
           "license": "CC BY-SA 4.0"
         },
         "map": { "lat": 35.474977, "lng": 133.050556 },
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "W299654325",
         "dwell_min": 75,
         "source_url": "https://www.matsue-castle.jp/userguide/",
         "verified_on": "2026-08-28",
@@ -34,14 +34,14 @@
           "license": "CC BY 2.0"
         },
         "map": { "lat": 35.40194, "lng": 132.68556 },
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "W52958212",
         "dwell_min": 120,
         "source_url": "https://izumooyashiro.or.jp/archives/news/12552",
         "verified_on": "2026-08-28",
         "shelf_life": "venue"
       },
       {
-        "name": "Iwami Ginzan — Omori townscape & Ryugenji Mabu mine",
+        "name": "Iwami Ginzan (Omori & Ryugenji Mabu)",
         "kicker": "UNESCO World Heritage silver-mining valley, reached by a 6-seat cart",
         "body": "<p>Omori was one of the world's largest silver-mining towns in the 16th–17th centuries; the preserved merchant houses along the valley road still have people living in them. The actual mine tunnel, Ryugenji Mabu, sits 2.3 km up-valley and is open for walk-through visits along a ≈400m lit stretch.</p><p>Private cars are banned past the park entrance — get there by the no-reservation Ginzan Cart (6 seats, roughly every 30–40 min, closed Wednesdays) or on foot (≈45 min each way). This bottleneck is the trip's real physical-feasibility test for a group of 8: plan for splitting across cart trips, not for everyone boarding the first one.</p>",
         "img": {
@@ -51,7 +51,7 @@
           "license": "CC BY-SA 4.0"
         },
         "map": { "lat": 35.1190, "lng": 132.4462 },
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N1423618359",
         "dwell_min": 240,
         "closed_days": ["wed"],
         "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
@@ -61,7 +61,7 @@
       {
         "name": "Tanabe Museum of Art",
         "kicker": "A quiet detour inside Shiomi Nawate — same block as the castle, none of the crowd",
-        "body": "<p>Tucked inside Shiomi Nawate next to the Lafcadio Hearn Old Residence, entered through an unassuming long-gate — a lower-profile stop than the castle or the main tourist street despite sitting on the same block. Worth folding into the Day 1 walk at no extra transit cost.</p><p>⚠ Hours (commonly cited as 9:00–17:00, ¥700 adult, closed Mondays) come from a secondary reference, not a direct fetch of the museum's own page this pass — reconfirm before building a visit around them.</p>",
+        "body": "<p>Tucked inside Shiomi Nawate next to the Lafcadio Hearn Old Residence, entered through an unassuming long-gate — a lower-profile stop than the castle or the main tourist street despite sitting on the same block. Worth folding into the Day 1 walk at no extra transit cost.</p><p>⚠ Hours (commonly cited as 9:00–17:00, ¥700 adult, closed Mondays) come from a secondary reference, not a direct fetch of the museum's own page yet — reconfirm before building a visit around them.</p>",
         "dwell_min": 45,
         "source_url": "https://www.tanabe-museum.or.jp/profile/",
         "verified_on": "2026-08-28",

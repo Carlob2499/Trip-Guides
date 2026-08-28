@@ -32,28 +32,28 @@
         "name": "Matsue Castle",
         "lat": 35.474977,
         "lng": 133.050556,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "W299654325",
         "local_script_name": "松江城"
       },
       {
         "name": "Izumo Taisha",
         "lat": 35.40194,
         "lng": 132.68556,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "W52958212",
         "local_script_name": "出雲大社"
       },
       {
         "name": "Odashi Station",
         "lat": 35.1928,
         "lng": 132.4956,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N265997276",
         "local_script_name": "大田市駅"
       },
       {
         "name": "Iwami Ginzan / Omori townscape",
         "lat": 35.1190,
         "lng": 132.4462,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N1423618359",
         "local_script_name": "石見銀山 大森町"
       }
     ]
