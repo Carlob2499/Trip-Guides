@@ -30,7 +30,7 @@ import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
 import { requireCriticBaseline } from "../pipeline-v2.mjs";
 import {
   initRunV2, readRunStateV2, stageStart, stageComplete, stageFail, reopenForAnswers, routeToEvidenceOwner,
-  isRoutedToEvidenceOwner,
+  isRoutedToEvidenceOwner, isCriticReplay,
 } from "../pipeline/v2/run-state.mjs";
 import { retryEligibility } from "../pipeline/v2/recovery.mjs";
 import {
@@ -605,6 +605,48 @@ describe("R-A — a completed stage records the tree it handed on, and an unfixa
     expect(state.stages.critic.failure.class).toBe("agent-failure");
     expect(isRoutedToEvidenceOwner(state)).toBe(false);
     expect(retryEligibility(state, { stage: "critic", findings: [] }).allowed).toBe(false); // agent-failure is not auto-retryable
+  });
+
+  it("REPAIRED: a routed replay skips the model; an ORDINARY critic retry still runs it", async () => {
+    // The discriminator the workflow gates its agent steps on must separate the two retries that
+    // both leave retained files on the branch. File existence cannot tell them apart.
+    await runThroughReconcile();
+    await stageStart("tottori", "critic", { ...opts(), baseline: SHA(7) });
+
+    // A. ordinary critic gate failure → the model must run again.
+    let state = await stageFail("tottori", "critic", { ...opts(), failureClass: "gate-failure", detail: "a critic-owned finding" });
+    expect(isCriticReplay(state)).toBe(false);
+    await stageStart("tottori", "critic", { ...opts(), baseline: SHA(7) });
+    state = await readRunStateV2("tottori", opts());
+    expect(isCriticReplay(state)).toBe(false);
+    expect(state.stages.critic.attempts).toBe(2);          // a real second model attempt
+    expect(state.stages.critic.history).toHaveLength(2);
+
+    // B. evidence-owner routed replay → the model must NOT run.
+    await stageComplete("tottori", "critic", { ...opts(), commit: SHA(8) });
+    state = await routeToEvidenceOwner("tottori", { ...opts(), detail: "supersession outstanding" });
+    expect(isCriticReplay(state)).toBe(true);
+    const attemptsAtRoute = state.stages.critic.attempts;
+    const historyAtRoute = JSON.parse(JSON.stringify(state.stages.critic.history));
+
+    // The owner repairs and re-completes; the critic marker must SURVIVE that, because by then
+    // reconcile is complete again and the routed failure it carried is gone.
+    await stageStart("tottori", "reconcile", { ...opts(), baseline: SHA(9) });
+    await stageComplete("tottori", "reconcile", { ...opts(), commit: SHA(9) });
+    state = await readRunStateV2("tottori", opts());
+    expect(isRoutedToEvidenceOwner(state)).toBe(false);     // the routed failure is repaired…
+    expect(isCriticReplay(state)).toBe(true);               // …but the replay decision persists
+
+    // The replay dispatch spends no model attempt and scars no history.
+    await stageStart("tottori", "critic", { ...opts(), baseline: SHA(10) });
+    state = await readRunStateV2("tottori", opts());
+    expect(state.stages.critic.attempts).toBe(attemptsAtRoute);
+    expect(state.stages.critic.history).toEqual(historyAtRoute);
+    expect(state.stages.critic.baseline).toBe(SHA(7));      // NOT re-pinned to the retained tree
+
+    // Completing spends the marker, so a later ordinary retry runs the model again.
+    await stageComplete("tottori", "critic", { ...opts(), commit: SHA(10) });
+    expect(isCriticReplay(await readRunStateV2("tottori", opts()))).toBe(false);
   });
 
   it("REPAIRED: routing refuses unless reconcile really completed", async () => {

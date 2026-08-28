@@ -298,8 +298,14 @@ export async function stageStart(slug, stage, { model = null, effort = null, bas
   // legitimately completes as a NO-OP keep a stale SHA and present it downstream as fresh.
   st.commit = null;
   if (baseline && !st.baseline) st.baseline = baseline; // pinned once: the tree it first received
-  st.attempts += 1;
-  openAttempt(st, now);
+  // A REPLAY revalidates retained work deterministically — no model runs, so it is not another
+  // attempt. Its original attempt is deliberately left open for stageComplete to close honestly:
+  // opening a new one here would both inflate the budget and let openAttempt's stale-attempt
+  // sweep brand the paid pass `failed/unknown` for a dependency failure that was reconcile's.
+  if (!st.replay) {
+    st.attempts += 1;
+    openAttempt(st, now);
+  }
   if (model) st.model = model;
   if (effort) st.effort = effort;
   state.status = "running";
@@ -321,6 +327,7 @@ export async function stageComplete(slug, stage, { commit = null, now = new Date
   st.status = "complete";
   st.endedAt = now;
   st.failure = null;
+  st.replay = false; // spent
   closeAttempt(st, now, "complete");
   // Unconditional: a stage that produced no new file commit still HANDS ON a tree, and the
   // caller passes that HEAD. Writing only truthy commits kept the previous run's SHA.
@@ -341,6 +348,7 @@ export async function stageFail(slug, stage, { failureClass = "unknown", detail 
   st.status = "failed";
   st.endedAt = now;
   st.failure = { class: failureClass, detail, at: now };
+  st.replay = false; // a failed replay is the stage's own again: the next retry runs the model
   closeAttempt(st, now, "failed", failureClass);
   // A usage-limit is an availability interruption, not a quality attempt. Refund the dispatch
   // charge exactly once; retry policy still stops visibly until a deliberate later redispatch.
@@ -477,6 +485,13 @@ export async function finalizeMergedLanding(slug, { pr, mergedAt = new Date().to
     catch it and a coarse process-plane `unknown` would land on a stage that did not fail. */
 export const EVIDENCE_OWNER_ROUTE = "routed:evidence-owner";
 
+/** True while the critic's next dispatch must revalidate retained work instead of running the
+    model. Unlike isRoutedToEvidenceOwner this OUTLIVES the repair: by the time the critic job
+    runs, reconcile is complete again and the routed failure it carried is gone. */
+export function isCriticReplay(state) {
+  return Boolean(state?.stages?.critic?.replay);
+}
+
 /** True once a critic-truth failure has been routed to the evidence owner and not yet repaired. */
 export function isRoutedToEvidenceOwner(state) {
   return Boolean(state?.stages?.reconcile?.status === "failed" &&
@@ -504,6 +519,11 @@ export async function routeToEvidenceOwner(slug, { detail = "", now = new Date()
   reconcile.commit = null; // its completion no longer describes an accepted artifact
   reconcile.failure = { class: "gate-failure", detail: `${EVIDENCE_OWNER_ROUTE} ${detail}`, at: now };
   critic.status = "queued";
+  // The retained pass is REVALIDATED, not re-run: routing only re-queues the critic, so without
+  // this the ordinary critic job would follow the owner's repair and spend the paid model again,
+  // regenerating the very guide/handoff being retained and judging the owner's relation against
+  // a different, nondeterministic pass. Its history stays open and unscarred (see stageStart).
+  critic.replay = true;
   critic.startedAt = null;
   critic.endedAt = null;
   critic.failure = null;

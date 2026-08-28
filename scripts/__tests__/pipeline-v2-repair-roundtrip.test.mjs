@@ -240,11 +240,48 @@ describe("R-A — the routed evidence-owner repair survives a fresh checkout and
     // lets the retained output be revalidated against the tree the critic originally received.
     expect((await stateAt(second)).stages.critic.baseline).toBe(state.stages.critic.baseline);
 
-    // ── the critic re-runs: SAME retained output, SAME pinned baseline, now green ──
-    const again = cli(second, ["reconcile-critic-truth", "--slug", SLUG, "--from", sandbox]);
+    // ── the critic job dispatches again — and THE PAID MODEL MUST NOT RUN. ──
+    // This is the seam the sixth review caught: routing to reconcile only re-queues the critic,
+    // so the ordinary critic job would follow the repair and invoke the model a second time,
+    // regenerating the very guide/handoff that was retained and revalidating the repaired
+    // relation against a NEW nondeterministic pass instead of the one the owner just judged.
+    const criticAttempts = (await stateAt(second)).stages.critic.attempts;
+    const beginOut = path.join(root, "critic-begin-output.txt");
+    await writeFile(beginOut, "");
+    const begin = cli(second, ["begin-stage", "--slug", SLUG, "--stage", "critic", "--branch", "main"],
+      { GITHUB_OUTPUT: beginOut });
+    expect(begin.code).toBe(0);
+    // The decision the workflow gates its whole model-input block on, emitted by the same command
+    // the critic job already runs. `replay=true` means: skip prepare/prompt/agent, run the tail.
+    expect(await readFile(beginOut, "utf8")).toMatch(/replay=true/);
+
+    const replayState = await stateAt(second);
+    // Attempt accounting: a deterministic replay is NOT another model attempt.
+    expect(replayState.stages.critic.attempts).toBe(criticAttempts);
+    // The original paid attempt is preserved, not closed as a synthetic failed/unknown.
+    expect(replayState.stages.critic.history).toHaveLength(1);
+    expect(replayState.stages.critic.history[0].failureClass).toBeNull();
+    expect(replayState.stages.critic.history[0].status).not.toBe("failed");
+    // …against the tree the critic was ORIGINALLY handed, never its own retained edits.
+    expect(replayState.stages.critic.baseline).toBe(state.stages.critic.baseline);
+
+    // ── the deterministic tail, over the RETAINED BYTES on the branch (no sandbox, no agent) ──
+    const again = cli(second, ["reconcile-critic-truth", "--slug", SLUG, "--from", second]);
     expect(again.code).toBe(0);
     expect(again.out).toMatch(/critic guide truth reconciled/);
     expect(again.out).toMatch(/against pre-critic baseline/);
+
+    // The stage completes on that replay. (finish-stage validates the whole critic artifact set —
+    // coverage, geocode — which this evidence-shaped fixture deliberately does not carry, so the
+    // completion is driven through the same state API finish-stage calls once validation passes.)
+    await stageComplete(SLUG, "critic", { intakeDir: path.join(second, "guides-intake"), commit: git(second, "rev-parse", "HEAD") });
+    const done = await stateAt(second);
+    expect(done.stages.critic.status).toBe("complete");
+    // Still ONE attempt, closed truthfully as complete: the paid pass succeeded, and the
+    // dependency failure that interrupted it belonged to reconcile.
+    expect(done.stages.critic.history).toHaveLength(1);
+    expect(done.stages.critic.history[0].status).toBe("complete");
+    expect(done.stages.critic.replay).toBeFalsy();  // the marker is spent
 
     // ── and the evidence is self-consistent: the disproven records no longer carry the ask ──
     const finalEvidence = await evidenceAt(second);

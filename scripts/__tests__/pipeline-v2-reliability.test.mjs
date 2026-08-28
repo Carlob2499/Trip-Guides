@@ -156,7 +156,14 @@ describe("B/C/E — the workflow observes the PRODUCER, and partial output stays
 
   it("E — the collect/verify path is explicitly gated on the agent process having returned cleanly", () => {
     const gated = WORKFLOW.match(/if: success\(\) && steps\.agent\.outcome == 'success'/g) || [];
-    expect(gated).toHaveLength(4); // Pass A, Pass B, reconcile, critic
+    expect(gated).toHaveLength(3); // Pass A, Pass B, reconcile
+    // The critic carries ONE additional admission, and it is not a loosening: an evidence-owner
+    // routed replay runs no agent at all, so there is no agent outcome to require and no partial
+    // agent output to admit. Nothing else may widen the gate — a partial agent workspace still
+    // cannot reach the success path.
+    const critic = WORKFLOW.split(/^ {2}critic:$/m)[1].split(/^ {2}land:$/m)[0];
+    expect(critic).toContain(
+      "if: success() && (steps.agent.outcome == 'success' || steps.begin.outputs.replay == 'true')");
   });
 
   it("E — the always() control-plane checkout and the failure record still run, with their own npm ci", () => {

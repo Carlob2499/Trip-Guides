@@ -945,6 +945,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Checkpoint stage start
+        # `replay` output: an evidence-owner routed repair re-queues this stage to REVALIDATE the
+        # retained pass, not to buy another one. Every model-input step below is gated on it.
+        id: begin
         env:
           PUSH_TOKEN: ${{ github.token }}
         run: |
@@ -956,17 +959,21 @@ jobs:
 
       - name: Stage retry feedback (validator data, this stage only)
         id: feedback
+        if: steps.begin.outputs.replay != 'true'
         run: node scripts/pipeline-v2.mjs stage-feedback --slug "$SLUG" --stage critic
 
       - name: Generate the machine-contract capsule
         id: contract
+        if: steps.begin.outputs.replay != 'true'
         run: node scripts/pipeline-v2.mjs contract --slug "$SLUG" --stage critic
 
       - name: Build the critic's source-domain fetch policy
         id: fetch_policy
+        if: steps.begin.outputs.replay != 'true'
         run: node scripts/pipeline-v2.mjs critic-fetch-tools --slug "$SLUG"
 
       - name: Prepare the critic's blind input
+        if: steps.begin.outputs.replay != 'true'
         run: node scripts/pipeline-v2.mjs prepare-critic --slug "$SLUG"
 
       - name: Remove repository credentials before the blind critic runs
@@ -976,6 +983,7 @@ jobs:
 
       - name: Compose critic prompt
         id: prompt
+        if: steps.begin.outputs.replay != 'true'
         env:
           WP_SLUG: ${{ inputs.slug }}
           WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
@@ -983,6 +991,7 @@ jobs:
         run: node scripts/pipeline.mjs prompt prompts/research-critic-v2.md > /dev/null
 
       - name: Replace git history with a local-only sandbox repository
+        if: steps.begin.outputs.replay != 'true'
         run: |
           rm -rf .git
           git init
@@ -993,6 +1002,7 @@ jobs:
 
       - name: Run research agent — Critic
         id: agent
+        if: steps.begin.outputs.replay != 'true'
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
@@ -1022,7 +1032,7 @@ jobs:
       # Deterministic tail the V1 critic used to run itself: palette + composition are code.
       - name: Collect allowed output, compose, validate, commit, checkpoint
         # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT (see Pass A).
-        if: success() && steps.agent.outcome == 'success'
+        if: success() && (steps.agent.outcome == 'success' || steps.begin.outputs.replay == 'true')
         id: finish
         working-directory: collect
         run: |

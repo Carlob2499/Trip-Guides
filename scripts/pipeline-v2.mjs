@@ -51,7 +51,7 @@ import {
   initRunV2, readRunStateV2, nextStageV2, stageStart, stageComplete, stageFail,
   bumpRunAttempt, recordAutoRetry, recordTelemetry, markLandingGate, V2_RESEARCH_STAGES,
   stageAttemptStats, landingMode, deriveLandIntent, reopenForAnswers, routeToEvidenceOwner,
-  isRoutedToEvidenceOwner,
+  isRoutedToEvidenceOwner, isCriticReplay,
 } from "./pipeline/v2/run-state.mjs";
 import { finalizeLandingRecovery } from "./pipeline/v2/landing-truth.mjs";
 import {
@@ -469,9 +469,15 @@ async function run(cmd, get, has) {
       // The tree this stage is HANDED, pinned before the agent runs. For the critic that is the
       // pre-critic guide the truth gate diffs against, and it survives an evidence-repair
       // re-open — retained critic edits never become their own baseline.
+      // Does this dispatch run the model, or deterministically revalidate retained work? The job
+      // gates its whole model-input block on this one output, so the decision has a single source.
+      const replay = stage === "critic" && isCriticReplay(await readRunStateV2(slug));
       await stageStart(slug, stage, { model: get("--model"), effort: get("--effort"), baseline: git(["rev-parse", "HEAD"]).trim() });
+      emit("replay", String(replay));
       commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): ${stage} started`, { branch });
-      console.log(`[pipeline-v2] ${slug} — stage "${stage}" started (checkpointed before the agent).`);
+      console.log(replay
+        ? `[pipeline-v2] ${slug} — stage "${stage}" REPLAY: revalidating the retained pass against its pinned baseline; the model is not invoked.`
+        : `[pipeline-v2] ${slug} — stage "${stage}" started (checkpointed before the agent).`);
       return 0;
     }
 

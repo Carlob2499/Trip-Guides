@@ -155,6 +155,11 @@ const stageState = z.object({
   // across a same-tail re-open so a stage that is re-run to repair its own output still compares
   // against what it originally received, not against its own retained work.
   baseline: z.string().regex(/^[0-9a-f]{40}$/i, "expected a full 40-character git commit SHA").nullable().default(null),
+  // The next dispatch of this stage REVALIDATES retained work deterministically instead of
+  // invoking the model. Set only by the evidence-owner route, spent by the stage that consumes
+  // it. Explicit because file existence cannot tell the two retries apart: an ordinary critic
+  // gate failure also leaves retained guide/handoff bytes on the branch.
+  replay: z.boolean().default(false),
   history: z.array(attemptRecord).default([]),
   failure,
 }).superRefine((stage, ctx) => {

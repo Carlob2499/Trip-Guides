@@ -443,6 +443,38 @@ describe("research-pass-v2.yml — wiring", () => {
 
 // ── R-A: paid critic work survives a deterministic critic-truth failure ──────
 
+describe("research-pass-v2.yml — a routed evidence-owner replay does not re-spend the critic (R-A)", () => {
+  const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
+  const criticJob = text.split(/^ {2}critic:$/m)[1].split(/^ {2}land:$/m)[0];
+  const step = (name) => criticJob.split(new RegExp(`^ {6}- name: ${name}$`, "m"))[1]?.split(/^ {6}- name: /m)[0] ?? "";
+
+  // Routing to reconcile only RE-QUEUES the critic, so without an explicit guard the ordinary
+  // critic job follows the repair and invokes the paid model a second time — regenerating the
+  // retained guide/handoff and revalidating the owner's relation against a different pass.
+  it("gates every model-input step on the replay decision begin-stage emits", () => {
+    // The decision is emitted by the command the job already runs, so there is no second source.
+    expect(step("Checkpoint stage start")).toMatch(/id: begin/);
+    for (const name of [
+      "Stage retry feedback \\(validator data, this stage only\\)",
+      "Generate the machine-contract capsule",
+      "Build the critic's source-domain fetch policy",
+      "Prepare the critic's blind input",
+      "Compose critic prompt",
+      "Replace git history with a local-only sandbox repository",
+      "Run research agent — Critic",
+    ]) {
+      expect(step(name)).toMatch(/if: steps\.begin\.outputs\.replay != 'true'/);
+    }
+  });
+
+  it("still runs the deterministic tail when the agent step was skipped for a replay", () => {
+    // `success() && steps.agent.outcome == 'success'` alone would skip the tail on a replay,
+    // stranding the repaired run with nothing to validate.
+    expect(step("Collect allowed output, compose, validate, commit, checkpoint"))
+      .toMatch(/steps\.begin\.outputs\.replay == 'true'/);
+  });
+});
+
 describe("research-pass-v2.yml — a critic-truth failure retains the paid critic pass (R-A)", () => {
   const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
 
