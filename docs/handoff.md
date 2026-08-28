@@ -3,14 +3,15 @@
 > Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. Keep this file to current truth and the immediate next action.
 
 <!-- WARM_START_BEGIN -->
-WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-25)
-Deterministic browser-level shared-add/offline proof is complete. It executes the production sync, outbox, and error-classifier paths with only the Firebase client/transport substituted.
-The proof covers local durability, recreation, reconnect replay, stable-key idempotence, server acknowledgment, complete-payload preservation, permanent-rejection isolation, and canonical-state visibility in a second browser context.
-It does not prove the real Firebase SDK or authentication, deployed rules, a real network/server acknowledgment, or convergence between two physical clients. Those remain live-environment work.
-Canary #4 (Uruguay) remains GREEN for the V2 draft-only product path. R03 is fully accepted: authenticated issue escalation and the cancellation chain are proven.
-V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset. V2 production cutover remains pending. The pre-registered Run A/Run B/V07 program is complete with V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION and overall NOT READY. PR #105 merged the first R-A–R-F/W1 repairs before their independent diff review, which then found residual R-A/R-E/R-F defects. Draft PR #106 carries the mechanical corrections; a draft stacked on it carries the residual R-A/R-E/R-F contract repair. Paid revalidation stays BLOCKED until both layers are reviewed and merged; only then does one fresh Run-B-class scenario run. DS1 remains calibration/candidate work, not a production-cutover decision.
-The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
-Durable shared-add decisions live in `CONTEXT.md`.
+WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-28)
+Deterministic browser-level shared-add/offline proof remains complete. It covers production sync/outbox/error-classifier behavior with only the Firebase client/transport substituted; real Firebase/auth/deployed-rules/two-physical-client convergence remain live-environment work.
+Uruguay Canary #4 remains GREEN for the V2 draft-only product path, and R03's authenticated escalation/cancellation seams remain proven.
+Pipeline V2's original pre-registered validation verdict remains V01 YELLOW, V02/V03/V05 FAIL, V07 FAIL/ACTION, overall NOT READY. The full deterministic repair stack is now merged: PRs #106/#107 repaired the post-#105 contract defects; PR #109 added the three defects exposed by the fresh repaired-class Yamagata Run-B; PR #111 fixed the final resume-version-skew defect that caused an old research branch to execute stale pre-#109 control-plane code.
+The Yamagata repaired-class Run-B (`yamagata-20260828-73821a`) is CLOSED at 11/11 total attempts / 6 critic attempts. Critic attempt 6 corrected the five remaining `source.kind` enum errors, but its terminal gate ran stale branch code, so it is not valid repair-to-green proof. Do not extend Yamagata and do not start another Run-B as part of this repair cycle.
+V2 remains NOT READY FOR PRODUCTION CUTOVER. V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
+The deterministic repair treadmill is frozen. The next phase is release-readiness/stabilization and an explicit cutover decision. Any future live V2 acceptance canary is a separately authorized release-readiness action, not a continuation of Yamagata.
+DS1 remains calibration/candidate work, not a production-cutover decision. The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
+Durable shared-add decisions live in `CONTEXT.md`; repaired-class Run-B evidence lives in `docs/pipeline v2/RUNB2_YAMAGATA_EVIDENCE.md`.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
@@ -27,8 +28,11 @@ Durable shared-add decisions live in `CONTEXT.md`.
 ## Pipeline status preserved
 
 - Uruguay Canary #4 remains a GREEN draft product-path proof; it does not authorize production cutover.
+- PRs #106, #107, #109, and #111 are merged. The bounded deterministic repair program is closed.
+- Yamagata Run-B remains durable evidence at 11/11 attempts and is frozen; do not grant another retry or repeat the historical validation campaign.
+- Attempt 6 corrected the prior five critic enum findings but cannot serve as repair-to-green proof because the run resumed with stale control-plane code; PR #111 deterministically repairs that version-skew seam.
 - V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
-- V2 production cutover remains pending.
-- Do not rerun the historical validation sequence. Both post-#105 repair layers (PR #106, and the residual R-A/R-E/R-F repair stacked on it) need independent review and merge first; only then run one fresh repaired-class Run-B scenario.
+- V2 production cutover remains pending and unauthorized.
+- The next engineering phase is release-readiness/stabilization. A future V2 acceptance canary, if authorized, is a new release-readiness proof rather than another Yamagata repair attempt.
 - DS1 remains calibration/candidate work, not production cutover.
 - The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
