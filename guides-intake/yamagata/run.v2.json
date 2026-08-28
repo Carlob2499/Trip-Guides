@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-28T09:25:24.411Z",
-  "updatedAt": "2026-08-28T11:01:47.955Z",
+  "updatedAt": "2026-08-28T11:18:33.253Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -89,13 +89,13 @@
       "failure": null
     },
     "reconcile": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-28T11:01:47.955Z",
-      "endedAt": null,
+      "endedAt": "2026-08-28T11:18:33.245Z",
       "attempts": 5,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "6445d81baa5e0719cdc08e5003f93d071d0be5e3",
       "baseline": "5c5fbcaeffd869c8dd47a9189e92af0a49155d4f",
       "replay": false,
       "history": [
@@ -134,10 +134,10 @@
         {
           "attempt": 5,
           "startedAt": "2026-08-28T11:01:47.955Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-28T11:18:33.245Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 1005
         }
       ],
       "failure": null
@@ -163,8 +163,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "reconcile",
-    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "critic",
+    "action": "run stage \"critic\""
   },
   "failure": null,
   "publication": {
@@ -211,16 +211,27 @@
         "toolCalls": null,
         "searches": null,
         "fetches": null
+      },
+      "reconcile": {
+        "durationSec": 1005,
+        "failedDurationSec": 2131,
+        "cumulativeDurationSec": 3136,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": 4,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
       }
     },
     "counts": {
-      "candidatesConsidered": 27,
-      "candidatesDeepVerified": 21,
-      "factsVerified": 44,
-      "disagreementInvestigations": 2,
+      "candidatesConsidered": 33,
+      "candidatesDeepVerified": 27,
+      "factsVerified": 54,
+      "disagreementInvestigations": 4,
       "nativeLanguageSearches": null
     },
-    "totalDurationSec": 3243,
+    "totalDurationSec": 6789,
     "tokens": null,
     "costUsd": null
   }
