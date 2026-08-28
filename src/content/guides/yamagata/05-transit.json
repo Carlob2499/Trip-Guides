@@ -27,35 +27,35 @@
         "name": "Yamagata Station",
         "lat": 38.248708,
         "lng": 140.327456,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N3585108748",
         "local_script_name": "山形駅"
       },
       {
         "name": "Kajo Park (Yamagata Castle ruins)",
         "lat": 38.2535667,
         "lng": 140.3290444,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N4871553221",
         "local_script_name": "霞城公園"
       },
       {
         "name": "Risshaku-ji (Yamadera)",
         "lat": 38.312556,
         "lng": 140.437389,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N4849389041",
         "local_script_name": "立石寺"
       },
       {
         "name": "Oishida Station",
         "lat": 38.595689,
         "lng": 140.375292,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N6138275424",
         "local_script_name": "大石田駅"
       },
       {
         "name": "Ginzan Onsen",
         "lat": 38.56972,
         "lng": 140.53111,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N8528369886",
         "local_script_name": "銀山温泉"
       }
     ]
