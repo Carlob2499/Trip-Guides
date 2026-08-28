@@ -72,6 +72,10 @@ Every component must define, from creation:
      navigation moments, never decorating data regions.
    - `prefers-reduced-motion` is honored everywhere; motion degrades to
      opacity fades, never to broken layout.
+   - **Desktop and mobile share one scroll grammar** (same reveals, same
+     continuity model), but **mobile goes all-in on fluid navigation** —
+     gesture-driven, airy movement, bottom-reachable transitions; desktop is
+     the calmer rendition of the same motion language, never a different one.
    - Motion has existing owners: `scroll-motion.css` and `transitions.css`.
      New motion extends them; no per-component one-off timing values.
 5. **Customer-facing surfaces show no inner workings** — no process commentary,
