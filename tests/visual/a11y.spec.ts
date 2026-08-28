@@ -636,6 +636,7 @@ for (const [name, path] of [
   ["hub", "/Trip-Guides/"],
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["new intake", "/Trip-Guides/new/"], // R4: THE form page — the zoom-trap test's whole reason
+  ["progress", "/Trip-Guides/progress/"], // release-readiness: slug/owner-key text inputs are traveler-facing too
 ] as const) {
   test(`form controls are >=16px so iOS never zoom-traps — ${name}`, async ({ page }) => {
     await prep(page, path, "light", VIEWPORTS[1]);
@@ -680,6 +681,7 @@ for (const [name, path] of [
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
   ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
+  ["progress", "/Trip-Guides/progress/"], // release-readiness: the run cockpit is a first-class traveler surface
   /* ⌁ `["trip tools", "/Trip-Guides/tools/korea/"]` was here and is REMOVED, not relocated.
      R5 deleted that route and this entry kept pointing at it — so for four combos the gate
      was scanning Astro's own 404 page, finding nothing, and reporting a pass under the name
@@ -1027,6 +1029,7 @@ const TARGET_PAGES = [
      different tab count) renders controls korea simply does not have. One upcoming-trip guide
      in this list closes it again; add the rebuilt japan here when it ships. */
   ["hub", "/Trip-Guides/"],
+  ["progress", "/Trip-Guides/progress/"],
 ] as const;
 
 for (const [pageName, path] of TARGET_PAGES) {
