@@ -413,6 +413,14 @@ describe("R-A — the generated critic instruction and the validator share one t
       expect(capsule).toContain(`"${key}"`);
     }
     expect(capsule).not.toMatch(/with schema `/);
+    // Same scar, second face (critic attempt 2): `source` and `freshness` are OBJECTS in the
+    // validator; listing them as bare field names invited string values. The capsule must show
+    // the object shapes' own keys.
+    for (const key of ["url", "kind", "access", "perishable", "shelfLife", "recheckOn"]) {
+      expect(capsule).toContain(`"${key}"`);
+    }
+    expect(capsule).toMatch(/never a bare URL string/);
+    expect(capsule).toMatch(/never a string/);
   });
 
   it("the slugified-anchor grammar #107 generated is refused by the schema", () => {
