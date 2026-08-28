@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "wp-feedback/2.0",
+  "slug": "yamagata",
+  "entries": [
+    {
+      "runId": "yamagata-20260828-73821a",
+      "stage": "reconcile",
+      "attempt": 1,
+      "findings": [
+        "P0 research   · FAIL — 11 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ map point \"Yamagata Station\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Kajo Park (Yamagata Castle ruins)\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Risshaku-ji (Yamadera)\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Oishida Station\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Ginzan Onsen\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ budget item \"Food & drink, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ budget item \"Local transport, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Arrival & Kajo Park\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Yamadera — the mountain temple\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Bunshokan, then the transfer to Ginzan Onsen\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "P1 candidates · FAIL — structural integrity findings in the consideration set",
+        "✗ priority 1: \"Otemon Yagura (reconstructed gate-tower interior)\" is marked shipped but appears nowhere in the guide",
+        "P0 risk-gates · FAIL — 3 finding(s) (draft: these BLOCK publishing):",
+        "⚠ [tier-missing] R3 fact \"hanagasa-bus-fare-1000-yen\" has no `tier`",
+        "⚠ [evidence-missing] R3 fact \"hanagasa-bus-fare-1000-yen\" has no `evidence` snippet — a URL that still 200s is not proof the page still says this",
+        "⚠ [tier-missing] R2 fact \"yamadera-admission-500-yen\" has no `tier`",
+        "P0 uncertainty· FAIL — 1 finding(s) (draft: these BLOCK publishing):",
+        "⚠ [weak-support] reconciliation row \"Taimenseki\" is B-only AND self-flagged as not directly fetched — it shipped on convergence alone, with a re-check intent nothing tracks",
+        "⚠ [leg-duration-unverified] 4 of 11 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Bunshokan, then the transfer to Ginzan Onsen\", \"Top sights\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-28T10:36:43.951Z",
+      "status": "active",
+      "retiredAt": null
+    }
+  ]
+}
