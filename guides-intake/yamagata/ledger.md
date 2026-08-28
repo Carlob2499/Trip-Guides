@@ -272,6 +272,82 @@ fact, let `⚠` carry the provenance. The Tsubasa fare is now stated with its ow
 because it genuinely is unconfirmed — only the scraper vocabulary went. The `Sources` section keeps its
 bot-gating paragraph: source-access honesty belongs there.
 
+### Second critic pass (2026-08-28, fresh context) — three further findings, all three implemented
+
+The first pass's C1/C2 rewrite of the anchor transfer was correct in substance and wrong in citation;
+re-fetching both operator pages surfaced that plus two unrelated provenance defects. Every changed
+value is declared in `critic-corrections.v2.json`.
+
+**Artifact note (repair round).** This stage was re-entered after its previous attempt landed its guide
+edits but produced no valid `critic-corrections.v2.json` (`schemaVersion` read as `undefined`). The
+workspace prepared for this attempt already contained the C1–C7 edits, and this stage cannot read prior
+git history, so the rewritten `critic-corrections.v2.json` declares the C8–C10 values changed in this
+attempt — the ones whose pre-edit text this stage read first-hand and can state verbatim. C1–C7's
+before/after text is documented in prose above rather than as pointer rows; if the control plane diffs
+against the pre-C1 baseline, those rows are the gap, and the ledger prose above is what a human needs to
+reconstruct them.
+
+#### C8 — the seasonal-timetable fix cites the winter page, which the operator marks out of date (rubric #6 · rubric #3 · rubric #11) — FIXED
+
+C2 established that the Hanagasa Bus runs two seasonal timetables and that the **Apr 1 – Oct 24, 2026**
+table is the one covering Oct 20–23. It then repointed `05-transit.json`'s section `source_url` to
+**`base.html`** — the page carrying only the 【12月1日～3月31日】 **winter** table, and which says of
+itself 「このページの情報は古いため、最新の情報は「時刻表・運賃」ページをご覧ください」. The correct
+season's table is on `base4.html` (headed `2026/4/1～2026/10/24`), which `facts.json`, Day 3, Plan and
+the budget section already cite. The fix named the right season and then cited the wrong page.
+
+Step 4 also described the two tables as "sitting beside it on the same page" and the Apr–Oct
+departures as running "roughly 5-7 minutes later" than the winter ones. Both are wrong on the fetched
+pages: they are two separate pages, and the Apr–Oct table is not the winter table shifted — Oishida
+departures 6:40 / 7:50 / 9:57 / 10:20 / 12:42 / 14:17 / 15:30 / 16:02 / 17:52 / 19:40 against winter's
+6:40 / 7:50 / 9:50 / 12:35 / 14:10 / 15:55 / 17:45. Two departures are identical, five are 7 minutes
+later, and **three services exist only in the trip's own season**.
+
+That propagates into the fact a party of eight with luggage actually acts on. "Missing a bus means a
+1.5-2.5h wait" is the winter table's spread; on the Apr–Oct table the gaps run from ≈23 min
+(9:57 → 10:20) to ≈2h20 (10:20 → 12:42). Both surfaces now say the wait can exceed two hours and name
+midday as the long gap. Section `source_url` repointed to `base4.html`; Day 3's echo corrected in the
+same pass.
+
+Ripple handled: the ※/☆ service notes C1 depends on (the 14:55 non-connection, the 18:21 crowding with
+「増便はありません」) are published on `base.html` **only**. With the section source moved, step 5 now
+carries its own inline link to that page. All four departures it names (13:25 / 14:55 / 16:35 / 18:21)
+were re-checked against the Apr–Oct table and all four run in this trip's season, so C1's advice
+stands unchanged.
+
+#### C9 — a "what generic guides get wrong" card asserts flatly what the rest of the guide hedges (rubric #3 · rubric #10) — FIXED
+
+`07-sights.json`'s divergences item stated as corrected fact: *"Ōishida Station — the gateway to Ginzan
+Onsen — doesn't accept IC cards, and the bus onward is cash-only regardless."* Its `source_url` is the
+bus operator's fare table, which states 「運賃は現金精算のみのお取り扱いとなっております。（ICカード不可）」
+about **the bus** and publishes nothing about the JR station's readers. The guide's own Transit step 3
+and Plan → Local essentials both carry the JR half as ⚠ *"not confirmed against JR East"*.
+
+So the one card whose whole job is to speak with more confidence than a generic guide was the one
+surface stating the unverified half without its flag — and it disagreed with two other surfaces of the
+same guide. Restated: the bus half flat and sourced, the JR-station half with the same ⚠ the rest of
+the guide carries.
+
+#### C10 — a health claim rides a citation that contains nothing about it (rubric #3 · rubric #10) — FIXED
+
+`03-health-and-safety.json` closed with *"Confirm all travelers are current on routine vaccinations
+(MMR in particular) — Japan has reported elevated measles activity in 2026."* The section's only
+citation is a pharmacy how-to; fetched, it contains no mention of measles, outbreaks, or traveller
+vaccination — it is a guide to drugstores versus yakkyoku. Same class as C3, a second instance in the
+same guide: the section-level `source_url` was treated as covering every sentence in the body.
+
+An epidemiological claim is perishable and R4-adjacent, and no health authority sits inside this pass's
+allowed source domains, so it cannot be re-sourced here. Per §7 the claim is withdrawn rather than
+flagged-and-kept; the actionable, durable half survives as a ⚠ pointing the reader at their own doctor
+or national health authority. **Source lead for a networked pass:** Japan's NIID/JIHS infectious-disease
+weekly reports and the traveller-health pages of the reader's own national authority (e.g. CDC Travel
+Health Notices) are the T0 sources this claim would need; neither was fetchable from this stage.
+
+Noted, not actioned: the same section credits "Tsuruha Drug is common across Tohoku" to that page,
+which names Matsumoto Kiyoshi, Cocokara Fine and Sun Drug instead. Left standing — a chain's regional
+presence is durable and correct, not a perishable claim — but it is the same citation-coverage defect
+and is recorded as a pipeline pattern rather than papered over.
+
 ### Considered and NOT actioned — rebuttals
 
 - **No `plan_b` on Days 1, 3 and 4.** Not a finding. Late October in Tohoku is not a named weather
@@ -291,10 +367,19 @@ bot-gating paragraph: source-access honesty belongs there.
 - **The `## Candidates considered` row for Takifudo** still reads "shipped — best-corroborated capacity
   fit (50+ seat tatami room)". Left as the reconcile stage's own record; the verdict (shipped) is still
   correct and C4 above is the correction of record.
+- **`09-sources.json` still links `base.html` as "Hanagasa Bus (Ginzan Line) — the anchor transfer's
+  operator".** Not a finding on the second pass either: that entry is the operator's site, not a
+  timetable citation, and `base.html` is where the service notes C1 rests on are published. The
+  season-specific citation is the section's own `source_url`, which C8 moved.
+- **No `plan_b` added on Day 3 or Day 4 despite C8.** The bus is Day 3's real failure mode, and its
+  answer is a researched taxi fallback with a phone number in Transit, not a weather alternate — the
+  first pass's rebuttal survives the second pass intact.
 
 ## Citation audit
 
-14 perishable facts sampled, weighted to prices, hours and the anchor transfer. Every source fetched.
+20 perishable facts sampled across two critic passes, weighted to prices, hours and the anchor
+transfer. Every source fetched. Rows 1–16 are the first pass; rows 17–22 are the fresh-context second
+pass, which re-fetched both Hanagasa Bus pages and the health section's sole citation.
 
 | Claim | Value | Source fetched | Verdict |
 |-------|-------|----------------|---------|
@@ -314,6 +399,12 @@ bot-gating paragraph: source-access honesty belongs there.
 | Tokyo→Yamagata Tsubasa reserved fare | ≈¥11,450 one-way | y — `jr-shinkansen.net/fare-yamagata.html` | supports — 運賃 6,050 + 指定席特急料金 5,400 = 11,450 |
 | Yamagata Museum of Art (Day 2 `plan_b`) | ¥800 adult, ¥640 groups 20+, closed Mon | y — `yamagata-art-museum.or.jp/information` | supports |
 | Kajo Park (Day 1 anchor) | free, open until 22:00 | y — city page | supports — 「5時00分から22時00分（4月1日～10月31日）」, 無料 |
+| Transit section's timetable citation after C2 | `base.html` | y — `base.html` | **drifted → fixed** — carries only the 【12月1日～3月31日】 winter table and states 「このページの情報は古いため…」; repointed to `base4.html` (C8) |
+| Apr–Oct vs winter departure relationship | "5-7 min later … same page" | y — `base.html` + `base4.html` | **drifted → fixed** — two separate pages; the Apr–Oct table adds three services (10:20, 15:30, 19:40) rather than shifting the winter one (C8) |
+| Wait if the group misses a Ginzan Onsen bus | "1.5-2.5h" | y — `base4.html` | **drifted → fixed** — on the trip's own table gaps run ≈23 min to ≈2h20; restated on both surfaces (C8) |
+| The 14:55 / 18:21 / 16:35 / 13:25 service notes | published on the operator's timetable | y — `base.html` | supports — 「銀山温泉発14:55のバスは山形新幹線（上り）への接続が出来ません」「最終便18:21発は混雑が予想されます。増便はありませんので16:35または17:00のご利用をお勧めします」; all four times re-checked and present on the Apr–Oct table too |
+| Ōishida Station IC-card non-acceptance | stated flatly as a corrected fact | y — `base4.html` | **drifted → fixed** — page states 「運賃は現金精算のみのお取り扱いとなっております。（ICカード不可）」 about the BUS only; JR half re-flagged ⚠ (C9) |
+| "Japan has reported elevated measles activity in 2026" | asserted in Health & safety | y — `cotoacademy.com` pharmacy guide | **drifted → fixed** — page contains nothing on measles, outbreaks or MMR; claim withdrawn, ⚠ instruction kept (C10) |
 
 Also spot-checked and supporting, no guide change: Kyu-Saiseikan free with no weekly closure (city
 page — the item's empty `closed_days` is correct), Mogami Yoshiaki Historical Museum free and closed
@@ -348,6 +439,35 @@ overseas-tour-booking refusal.
 - Day-of-week check: Oct 20–23 2026 = Tue/Wed/Thu/Fri, matching the four day cards. No closure collides
   (Mogami Yoshiaki closed Mon, Sanbyakubou closed Mon, Museum of Art closed Mon, Bunshokan closed
   1st/3rd Mon, Izu no Hana closed Wed but visited Fri, Sakaeya closed Wed and unscheduled).
+
+**Second critic pass (fresh context, 2026-08-28) — greps run** across
+`src/content/guides/yamagata/`: `1.5-2.5` · `same page` · `base.html` · `base4.html` · `product3` ·
+`17:04` · `measles` · `IC card|ICカード` · `18:21` · `14:55|16:35|13:25`.
+
+**Ripples found & fixed:**
+- The `1.5-2.5` wait figure appeared in **two** places (`05-transit.json` step 4 and `06-days.json`
+  Day 3) — both restated to "over two hours", the fact the trip's own seasonal table supports.
+- Moving the transit section's `source_url` to `base4.html` orphaned the ※/☆ service notes in step 5,
+  which are published on `base.html` alone — step 5 now carries its own inline link to that page.
+  Checked before rewriting that all four departures it names still exist on the Apr–Oct table; they do,
+  so C1's recommendation needed no change.
+- `06-days.json` Day 4's `source_url` is deliberately left on `base.html`: that card is built on the
+  service notes, not the timetable, and `base.html` is the only page publishing them.
+- `IC card` claim appears on **four** surfaces (`01-plan.json` Local essentials, `05-transit.json`
+  step 3, `07-sights.json` divergences, and the divergence's own `claim` line). Three carried the ⚠
+  hedge; only the divergences `correction` asserted it flat — brought into line with the other three
+  rather than the reverse, since JR East's own pages remain unreachable.
+- `measles`: single occurrence, no ripple. The Health & safety `verified_on` is already 2026-08-28 and
+  the section's remaining claims still rest on the cited pharmacy page.
+- `product3` / `17:04`: zero occurrences — the first pass's removals held.
+- `{{fact:…}}` tokens: Day 3's body was edited around `{{fact:hanagasa-bus-fare-1000-yen}}` without
+  touching the token; the ¥1,000 cash-only figure was re-confirmed on `base4.html` in the same fetch.
+- Day-of-week and closure check re-run after the edits: no itinerary ripple — nothing in C8/C9/C10
+  moves a stop, a time or a day.
+
+**Deferred to human (second pass):** none. **Flagged for a networked pass:** a T0 health source for the
+withdrawn measles claim (NIID/JIHS weekly reports, or the reader's own national travel-health authority)
+— outside this stage's allowed source domains, so flagged rather than fetched.
 
 **Deferred to human:** none. **Left for a follow-up pass (recorded above, not silently dropped):** the
 prose→`facts.json` money-registry migration; sight/cover photos and phrase cards, both blocked on shell

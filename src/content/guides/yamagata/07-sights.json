@@ -117,7 +117,7 @@
       },
       {
         "claim": "IC cards (Suica) work everywhere around Yamagata the way they do in Tokyo.",
-        "correction": "Ōishida Station — the gateway to Ginzan Onsen — doesn't accept IC cards, and the bus onward is cash-only regardless. Carry cash for that whole leg.",
+        "correction": "The Hanagasa Bus onward from Ōishida is cash-only — the operator's own fare table states cash settlement only, no IC cards. ⚠ Multiple Japanese sources also report that JR Ōishida Station itself doesn't accept IC cards, but that half couldn't be confirmed against JR East. Carry cash for the whole leg.",
         "category": "missing-context",
         "source_url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
         "verified_on": "2026-08-28"

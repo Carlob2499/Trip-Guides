@@ -1,412 +1,61 @@
 {
-  "schema": "wp-critic-corrections/2.1",
+  "schemaVersion": "wp-critic-corrections/2.1",
   "slug": "yamagata",
   "runId": "yamagata-20260828-73821a",
   "corrections": [
     {
-      "target": "05-transit.json#/0/steps/4",
-      "previousValue": "<b>Ginzan Onsen → Oishida (return):</b> aim for a mid-afternoon departure, not the last one — the operator's own pages list differing last-bus times (as early as ≈17:04, as late as 18:21 and flagged by the operator itself as usually crowded). Confirm the exact schedule at Ginzanso or the bus stop rather than relying on either figure.",
-      "correctedValue": "<b>Ginzan Onsen → Oishida (return):</b> two departures to avoid, both flagged on the operator's own timetable — the <b>14:55</b> does not connect to a northbound (上り) Yamagata Shinkansen, and the last bus, <b>18:21</b>, is expected to be crowded with no extra service added. The operator points passengers at <b>16:35</b> instead; <b>13:25</b> is the earlier clean option. With eight people, luggage and two low-mobility travelers, pick one of those two and confirm it at Ginzanso the night before.",
-      "claim": "Hanagasa Bus Ginzan Line return: the operator's own timetable notes state 「※銀山温泉発14:55のバスは山形新幹線（上り）への接続が出来ません。ご注意ください。」 and 「☆最終便18:21発は混雑が予想されます。増便はありませんので16:35または17:00のご利用をお勧めします」. The guide's ≈17:04 'earlier last bus' is not published anywhere on the operator's site; 13:25 and 16:35 are real Ginzan Onsen departures.",
-      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+      "target": "05-transit.json#/0/source_url",
+      "previousValue": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+      "correctedValue": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+      "claim": "The Ginzan Line timetable covering an Oct 20-23, 2026 trip is the one headed 2026/4/1～2026/10/24, published on base4.html. base.html carries only the 12月1日～3月31日 winter table and states of itself 「このページの情報は古いため、最新の情報は「時刻表・運賃」ページをご覧ください」 — so the transit section's timetable citation pointed at the wrong season, on a page the operator marks out of date.",
+      "source": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
       "verifiedOn": "2026-08-28",
       "freshness": "transit"
     },
     {
       "target": "05-transit.json#/0/steps/3",
-      "previousValue": "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b>, no reservation needed. Confirmed running Apr 1 – Oct 24, 2026 (covers the trip). Only 5-7 buses/day — two independently fetched pages of the operator's own site put Oishida departures a few minutes apart from each other (clustering around 6:40, ≈9:50-9:57, ≈12:35-12:42, ≈14:10-14:17, ≈15:55-16:02, ≈17:45-17:52) — treat exact times as ⚠ approximate and confirm the day of. Missing one means a 1.5-2.5h wait. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
-      "correctedValue": "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b> (¥500 child or disabled companion), no reservation needed. The operator publishes a different timetable per season — the <b>Apr 1 – Oct 24, 2026</b> table is the one covering this trip, and its departures run roughly 5-7 minutes later than the Dec 1 – Mar 31 winter table sitting beside it on the same page. First bus leaves Oishida ≈6:40; the last one in reaches Ginzan Onsen at 18:21. ⚠ The operator's summary page still advertises 5 round trips a day while its seasonal timetable lists more — read the timetable itself, and confirm the day of. Missing a bus means a 1.5-2.5h wait. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
-      "claim": "The Ginzan Line timetable is seasonal: base.html carries the table labelled 【12月1日～3月31日までの定期季節運行】 (Oishida departures 6:40 / 7:50 / 9:50 / 12:35 / 14:10 / 15:55 / 17:45) and base4.html the 2026/4/1～2026/10/24 table (…9:57 / 12:42 / 14:17 / 16:02 / 17:52). The guide's ±5-15 min 'clusters' were one time from each seasonal table, not a source conflict. Fare ¥1,000 adult / ¥500 child·disabled, cash only. Last inbound service reaches Ginzan Onsen 18:21 in both tables.",
-      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "05-transit.json#/0/source_url",
-      "previousValue": "https://www.hanagasa-bus-taisei.co.jp/product3.html",
-      "correctedValue": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "claim": "product3.html publishes no per-departure timetable at all — it states 「１日５往復（大石田駅からは５便、銀山温泉からは６便）」 and directs the reader to 「詳しい時刻表は【路線バス時刻表・運賃】のタブをクリックしてご覧ください」. base.html is the operator page that actually carries the Ginzan Line timetable and its two service notes.",
-      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "06-days.json#/0/items/3/body",
-      "previousValue": "<p>Ginzan Onsen empties out to almost no one before roughly 7:00 — the quietest the street gets all day, and the real payoff of staying the night instead of day-tripping in. By midday it's the most crowded window; before 11:00 is the next-best calm stretch if the group sleeps in.</p><p>Shirogane Falls rounds out the walk at the end of the street. Izu no Hana, on the main street, works for a late-morning soba or dessert stop — call ahead for a table of 8.</p><p>Check out and retrace the transfer: Hanagasa Bus to Oishida, then the JR Ōu Line back to Yamagata or onward. Aim for a mid-afternoon departure rather than the last one — the operator's own pages list differing last-bus times (as early as ≈17:04, as late as 18:21 and flagged by the operator itself as crowded); confirm the day's exact schedule at Ginzanso or the bus stop.</p>",
-      "correctedValue": "<p>Ginzan Onsen empties out to almost no one before roughly 7:00 — the quietest the street gets all day, and the real payoff of staying the night instead of day-tripping in. By midday it's the most crowded window; before 11:00 is the next-best calm stretch if the group sleeps in.</p><p>Shirogane Falls rounds out the walk at the end of the street. Izu no Hana, on the main street, opens at 11:00 for a soba or dessert stop — call 0237-28-2036 ahead for a table of 8.</p><p>Check out and retrace the transfer: Hanagasa Bus to Oishida, then the JR Ōu Line back to Yamagata or onward. Two departures to avoid, both flagged on the operator's own timetable: the <b>14:55</b> doesn't connect to a northbound Yamagata Shinkansen, and the last bus, <b>18:21</b>, is expected to be crowded with no extra service added. The operator points passengers at <b>16:35</b>; <b>13:25</b> is the earlier clean option if the group would rather not wait out the afternoon with luggage.</p>",
-      "claim": "Day 4's departure advice ('aim for a mid-afternoon departure') pointed at 14:55, the one service the operator explicitly flags as not connecting to a northbound Yamagata Shinkansen. Operator notes: 14:55 no 上り Shinkansen connection; 18:21 last bus expected crowded, no extra service, 16:35 recommended. Izu no Hana opens 11:00, tel 0237-28-2036.",
-      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "06-days.json#/0/items/3/source_url",
-      "previousValue": null,
-      "correctedValue": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "claim": "Day 4 carried perishable bus-departure claims with no provenance fields at all, unlike the other three day cards. Provenance added against the operator's own timetable page.",
-      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "06-days.json#/0/items/3/verified_on",
-      "previousValue": null,
-      "correctedValue": "2026-08-28",
-      "claim": "Day 4 verification date for the Hanagasa Bus return-departure facts it carries.",
-      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "06-days.json#/0/items/3/shelf_life",
-      "previousValue": null,
-      "correctedValue": "transit",
-      "claim": "Day 4's load-bearing facts are bus departure times — transit shelf life (90d) per src/lib/staleness.ts.",
-      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "07-sights.json#/0/items/1/body",
-      "previousValue": "<p>The former prefectural capitol, a Taisho-era building with the best-documented step-free access of any Yamagata city sight — worth prioritizing for the group's 2 low-mobility travelers. The former assembly chamber was closed for construction, targeted to reopen by the end of September 2026 — re-check before counting on seeing it.</p>",
-      "correctedValue": "<p>The former prefectural capitol, a Taisho-era building — and the one Yamagata city sight whose access is actually documented. Free, 9:00-16:30, with a wheelchair-only entrance and accessible parking at the rear of the building, 10 loaner wheelchairs, a stair lift and a multipurpose toilet. Worth prioritizing for the group's 2 low-mobility travelers.</p><p>Closed the 1st and 3rd Monday of each month. The former assembly chamber is <a href='https://www.gakushubunka.jp/bunsyokan/'>closed for construction until the end of September 2026</a> — re-check before counting on seeing it.</p>",
-      "claim": "Bunshokan accessibility, verbatim from Yamagata Prefecture's official tourism site: 「車いす貸出：有り（10台…）」「階段昇降機があり、車イス専用の出入口があります。」「障がい者用駐車場：有り（建物裏）」「多目的トイレ：有り」. Hours 9:00～16:30, admission 無料, closed 第1・第3月曜日. The previously cited page (gakushubunka.jp, incl. its /access/ subpage) publishes no accessibility information at all.",
-      "source": "https://yamagatakanko.com/attractions/detail_2515.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "07-sights.json#/0/items/1/source_url",
-      "previousValue": "https://www.gakushubunka.jp/bunsyokan/",
-      "correctedValue": "https://yamagatakanko.com/attractions/detail_2515.html",
-      "claim": "The item's load-bearing claim is step-free access under a BINDING mobility constraint; gakushubunka.jp does not document accessibility, the prefecture's official tourism page does. The assembly-hall closure fact that gakushubunka.jp does support is retained as an inline citation in the body.",
-      "source": "https://yamagatakanko.com/attractions/detail_2515.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "06-days.json#/0/items/2/body",
-      "previousValue": "<p>Morning: Bunshokan (free, 9:00-16:30, the best-documented wheelchair access of any Yamagata city sight) or Yamagata Marugoto-kan Beninokura, a restored Edo-era merchant warehouse compound paired with Soba Sanbyakubou's 30-seat private room for lunch.</p><p>Withdraw cash before leaving the city — Ginzan Onsen has no ATM or convenience store. From Yamagata Station, take the JR Ōu Line to Oishida (≈50 min local / ≈28 min Tsubasa), then the Hanagasa Bus to Ginzan Onsen: {{fact:hanagasa-bus-fare-1000-yen}}, ≈35-40 minutes, no reservation needed, only 5-6 departures a day. Board with the group's luggage in good time — missing a bus means waiting 1.5-2.5 hours for the next.</p><p>Check into Ginzanso (the largest property in town, best odds of hosting all 8 together) and see the street's gas lamps light ≈16:30-17:00 (seasonal — earlier as October's sunset comes sooner), best photo window 16:30-17:30.</p>",
-      "correctedValue": "<p>Morning: Bunshokan (free, 9:00-16:30, with a rear wheelchair entrance, 10 loaner wheelchairs and a stair lift — the one city sight whose access is documented) or Yamagata Marugoto-kan Beninokura, a restored Edo-era merchant warehouse compound paired with Soba Sanbyakubou's 30-seat private room for lunch.</p><p>Withdraw cash before leaving the city — Ginzan Onsen has no ATM or convenience store. From Yamagata Station, take the JR Ōu Line to Oishida (≈50 min local / ≈28 min Tsubasa), then the Hanagasa Bus to Ginzan Onsen: {{fact:hanagasa-bus-fare-1000-yen}}, ≈35-40 minutes, no reservation needed, and only a handful of departures a day — the operator runs a different timetable per season, so read the April–October one. Board with the group's luggage in good time; missing a bus means waiting 1.5-2.5 hours for the next.</p><p>Check into Ginzanso (the largest property in town, best odds of hosting all 8 together) and see the street's gas lamps light ≈16:30-17:00 (seasonal — earlier as October's sunset comes sooner), best photo window 16:30-17:30.</p>",
-      "claim": "Bunshokan's concrete accessibility facilities (rear wheelchair entrance, 10 loaner wheelchairs, stair lift) replace an unsupported superlative; and the '5-6 departures a day' count is replaced by the seasonal-timetable fact, since the operator's summary page (5往復) and its seasonal tables disagree on the count.",
-      "source": "https://yamagatakanko.com/attractions/detail_2515.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/source_url",
-      "previousValue": "https://www.retty.me/",
-      "correctedValue": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "claim": "The Day 2 group lunch for eight was cited to the bare homepage of a review aggregator, which carries nothing about this venue. Yamagata's prefecture-backed tourism portal has a page-specific entry with tel, address, hours and access.",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/why",
-      "previousValue": "≈50 seats plus a 2nd-floor tatami room for 50+ — the best-corroborated capacity fit for a group of 8 near Yamadera, and known for group/tour-bus dining.",
-      "correctedValue": "The nearest sizeable soba house to Yamadera's base — but ⚠ its ≈50 seats and 50-person tatami room appear only in restaurant directories, never on an official page, so phone ahead to confirm a table for 8.",
-      "claim": "The seat-count and tatami-room capacity figures are objective facts published only by restaurant directories (Hot Pepper / Retty listings); neither the venue nor the prefecture's tourism page states any 席数. Under the objective-fact source ladder they cannot ship as a clean 'best-corroborated capacity fit' and are downgraded to ⚠ call-ahead.",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/crowd_tip",
-      "previousValue": "Call ahead in koyo (foliage) season — this is a well-known tour-group stop and walk-in risk is real once the leaves turn.",
-      "correctedValue": "It opens at 11:00, which is already inside the 10:00-14:00 tour-group window — call ahead in koyo (foliage) season rather than counting on a walk-in for eight.",
-      "claim": "Opening hours 11:00～15:30 — the shop opens inside the 10:00-14:00 tour-group window the guide elsewhere tells the traveler to beat, so 'arrive at opening' was not a crowd-avoidance tactic.",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/hours",
-      "previousValue": null,
-      "correctedValue": "11:00-15:30",
-      "claim": "瀧不動生蕎麦 opening hours: 「11:00～15:30」.",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/phone",
-      "previousValue": null,
-      "correctedValue": "023-695-2039",
-      "claim": "瀧不動生蕎麦 telephone: 「023-695-2039」. The item said book: \"call\" with no number.",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/address",
-      "previousValue": null,
-      "correctedValue": "4395 Ōaza Yamadera, Yamagata City (山形市大字山寺4395)",
-      "claim": "瀧不動生蕎麦 address: 「山形市大字山寺4395」.",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/closed",
-      "previousValue": null,
-      "correctedValue": "Irregular (不定休) — no fixed rest day",
-      "claim": "瀧不動生蕎麦 closed days: 「不定休」 (irregular).",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/how",
-      "previousValue": "Short walk from Yamadera Station, near the mountain entrance",
-      "correctedValue": "≈7 min walk from Yamadera Station, near the mountain entrance",
-      "claim": "The tourism portal states the shop is approximately 7 minutes on foot from Yamadera Station.",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/2/shelf_life",
-      "previousValue": "venue",
-      "correctedValue": "hours",
-      "claim": "The item now carries posted opening hours, so its most perishable fact is an hours fact (90d) rather than a venue fact (180d).",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "06-days.json#/0/items/1/body",
-      "previousValue": "<p>Risshaku-ji (山寺) is reached by a direct ≈20-minute Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}, cash only.</p><p>There is no cable car, ropeway, or shortcut anywhere on the mountain — the only way up to the Godaido viewing platform and Okunoin is on foot, via roughly 1,015 stone steps (figures vary 1,015-1,070 depending on the source), and there are no ramps or elevators anywhere on the site, including at the base.</p><p>Konponchudo, the main hall about 3 minutes' walk from the base entrance, is a genuinely worthwhile stop on its own without climbing further — the honest option for anyone who'd rather not attempt the stairs.</p><p>Lunch: Takifudo Namasoba, near the mountain entrance — ≈50 seats plus a 50-person tatami room, the best-sized option here for a group of 8. Arrive at opening or right after; 10:00-14:00 is when tour groups arrive and the paths and Godaido platform get genuinely crowded, worse still once koyo (autumn foliage) season builds.</p><p>Taimenseki, right at the station, is a smaller, quicker soba stop for anyone splitting off from the group lunch or catching an earlier train.</p>",
-      "correctedValue": "<p>Risshaku-ji (山寺) is reached by a direct ≈20-minute Senzan Line train from Yamagata. Admission is {{fact:yamadera-admission-500-yen}}, cash only.</p><p>There is no cable car, ropeway, or shortcut anywhere on the mountain — the only way up to the Godaido viewing platform and Okunoin is on foot, via roughly 1,015 stone steps (figures vary 1,015-1,070 depending on the source), and there are no ramps or elevators anywhere on the site, including at the base.</p><p>Konponchudo, the main hall about 3 minutes' walk from the base entrance, is a genuinely worthwhile stop on its own without climbing further — the honest option for anyone who'd rather not attempt the stairs.</p><p>Lunch: Takifudo Namasoba, ≈7 min from the station near the mountain entrance, open 11:00-15:30. ⚠ Its seat counts appear only in restaurant directories, so phone 023-695-2039 ahead to hold a table for 8.</p><p>10:00-14:00 is when tour groups arrive and the paths and Godaido platform get genuinely crowded, worse still once koyo (autumn foliage) season builds — which is also the window the soba shop opens into. Climb early, eat after.</p><p>Taimenseki, right at the station, is a smaller, quicker soba stop for anyone splitting off from the group lunch or catching an earlier train.</p>",
-      "claim": "Day 2's group lunch carried the unsupported directory seat-counts and the incoherent instruction to 'arrive at opening' to beat a 10:00-14:00 crowd window the 11:00 opening sits inside. Hours 11:00～15:30, tel 023-695-2039, ≈7 min on foot from Yamadera Station.",
-      "source": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/6/source_url",
-      "previousValue": "https://yamagata-sakaeyahonten.com/",
-      "correctedValue": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
-      "claim": "The shop's own site is a net-shop front that publishes no telephone (only a FAX line), no written opening hours and no access distance; the guide shipped 'Hours aren't posted'. Yamagata's tourism portal publishes all of them.",
-      "source": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/6/hours",
-      "previousValue": null,
-      "correctedValue": "11:30-19:30 (Oct 1-Mar 18, the bracket these dates fall in); 11:30-20:15 Mar 19-Sep 30. Last order 20 min before close",
-      "claim": "栄屋本店 hours: 夏期（3月19日～9月30日）11:30～20:15、冬期（10月1日～3月18日）11:30～19:30, last order 20 minutes before closing. The Oct 20-23 trip falls in the winter bracket.",
-      "source": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/6/closed",
-      "previousValue": null,
-      "correctedValue": "Wednesdays (the following day when Wednesday is a public holiday)",
-      "claim": "栄屋本店 closed days: 「水曜（水曜が祝日の場合は翌日休み）」.",
-      "source": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/6/phone",
-      "previousValue": null,
-      "correctedValue": "023-623-0766",
-      "claim": "栄屋本店 telephone: 「023-623-0766」. The item said book: \"call\" with no number.",
-      "source": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/6/how",
-      "previousValue": "In Honcho, central Yamagata city — exact walking distance from the station isn't confirmed",
-      "correctedValue": "≈20 min walk from Yamagata Station, or ≈5 min by taxi",
-      "claim": "「山形駅から約20分」 on foot; about 5 minutes by car from the station.",
-      "source": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/6/why",
-      "previousValue": "Self-declared birthplace of hiyashi ramen (chilled ramen), invented here in 1952 — a genuinely local claim the city's own heritage page confirms only in outline, without naming a shop. Hours aren't posted; call ahead.",
-      "correctedValue": "Self-declared birthplace of hiyashi ramen (chilled ramen), developed over about a year and finished in 1952 — the city's own heritage page confirms the dish's local origin in outline, without naming a shop.",
-      "claim": "The shop's own account: the recipe took about a year to develop and was completed in 1952. The 'hours aren't posted' hedge is removed because the hours are published on the prefecture's tourism portal and now ship in the item's hours field.",
-      "source": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/6/shelf_life",
-      "previousValue": "venue",
-      "correctedValue": "hours",
-      "claim": "The item now carries seasonal opening hours, so its most perishable fact is an hours fact (90d).",
-      "source": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/5/phone",
-      "previousValue": null,
-      "correctedValue": "0237-28-2036",
-      "claim": "伊豆の華 telephone: 「0237-28-2036」. The item and Day 4 both said 'call ahead' with no number.",
-      "source": "https://www.izunohana.com/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/5/address",
-      "previousValue": null,
-      "correctedValue": "440 Ōaza Ginzan-Shinhata, Obanazawa (山形県尾花沢市大字銀山新畑440)",
-      "claim": "伊豆の華 address: 「〒999-4333 山形県尾花沢市大字銀山新畑440」.",
-      "source": "https://www.izunohana.com/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/5/hours",
-      "previousValue": "11:00-18:00 (soba last order 17:30); a reservation-only evening menu runs 17:00-19:00",
-      "correctedValue": "11:00-18:00 (soba last order 17:30); a reservation-only evening menu runs 17:00-19:00 (last order 18:30)",
-      "claim": "伊豆の華 evening 酒刻メニュー 17:00～19:00, last order 18:30, reservation required.",
-      "source": "https://www.izunohana.com/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/1/phone",
-      "previousValue": null,
-      "correctedValue": "023-622-6965",
-      "claim": "そば処 三百坊 telephone: 「023-622-6965」. The item said book: \"call\" with no number.",
-      "source": "https://beninokura.com/300bou",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "08-food-and-shopping.json#/0/items/1/closed",
-      "previousValue": "Mondays",
-      "correctedValue": "Mondays (the following Tuesday when Monday is a public holiday)",
-      "claim": "「毎週月曜日（月曜日が祝日の場合、火曜日休業）」.",
-      "source": "https://beninokura.com/300bou",
-      "verifiedOn": "2026-08-28",
-      "freshness": "hours"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/0/basis",
-      "previousValue": "day",
-      "correctedValue": "trip",
-      "claim": "The trip is 4 day cards but 3 nights, of which only 2 (Oct 20, Oct 21) are Yamagata-city hotel nights — Oct 22 is the Ginzan Onsen ryokan, priced as its own line. On basis \"day\" the calculator multiplied the city-hotel rate by the 4-day dayCount, billing four city nights.",
-      "source": "guides-intake/yamagata/intake.md (trip dates 2026-10-20 – 2026-10-23) + src/content/guides/yamagata/06-days.json (4 day cards; the Oct 22 night is the Ginzan Onsen ryokan)",
-      "verifiedOn": "2026-08-28",
-      "freshness": "durable"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/0/est",
-      "previousValue": "7000",
-      "correctedValue": "14000",
-      "claim": "Two Yamagata-city hotel nights at the same ≈¥7,000/person/night estimate = ¥14,000/person for the trip, replacing a per-day figure the calculator multiplied by 4.",
-      "source": "guides-intake/yamagata/intake.md (trip dates 2026-10-20 – 2026-10-23) + src/content/guides/yamagata/06-days.json (4 day cards; the Oct 22 night is the Ginzan Onsen ryokan)",
-      "verifiedOn": "2026-08-28",
-      "freshness": "durable"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/0/low",
-      "previousValue": "5000",
-      "correctedValue": "10000",
-      "claim": "Low bound restated on the trip basis: 2 nights × ¥5,000/person.",
-      "source": "guides-intake/yamagata/intake.md (trip dates 2026-10-20 – 2026-10-23) + src/content/guides/yamagata/06-days.json (4 day cards; the Oct 22 night is the Ginzan Onsen ryokan)",
-      "verifiedOn": "2026-08-28",
-      "freshness": "durable"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/0/high",
-      "previousValue": "9000",
-      "correctedValue": "18000",
-      "claim": "High bound restated on the trip basis: 2 nights × ¥9,000/person.",
-      "source": "guides-intake/yamagata/intake.md (trip dates 2026-10-20 – 2026-10-23) + src/content/guides/yamagata/06-days.json (4 day cards; the Oct 22 night is the Ginzan Onsen ryokan)",
-      "verifiedOn": "2026-08-28",
-      "freshness": "durable"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/0/label",
-      "previousValue": "Lodging, Yamagata city hotel (per night)",
-      "correctedValue": "Lodging, Yamagata city hotel (2 nights)",
-      "claim": "The label must state the trip-basis quantity now that the line is no longer per-day: two city nights.",
-      "source": "guides-intake/yamagata/intake.md (trip dates 2026-10-20 – 2026-10-23) + src/content/guides/yamagata/06-days.json (4 day cards; the Oct 22 night is the Ginzan Onsen ryokan)",
-      "verifiedOn": "2026-08-28",
-      "freshness": "durable"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/0/note",
-      "previousValue": "Business/mid-range hotel near Yamagata Station, per person; not individually verified this pass",
-      "correctedValue": "Two city nights only (Oct 20 and 21) — Oct 22 is the Ginzan Onsen ryokan, priced separately below. Around ¥7,000/person/night, business/mid-range near Yamagata Station; not individually verified",
-      "claim": "The note now names which nights the line covers, so nights and days cannot be conflated again; the per-night estimate is preserved inside it.",
-      "source": "guides-intake/yamagata/intake.md (trip dates 2026-10-20 – 2026-10-23) + src/content/guides/yamagata/06-days.json (4 day cards; the Oct 22 night is the Ginzan Onsen ryokan)",
-      "verifiedOn": "2026-08-28",
-      "freshness": "durable"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/1/est",
-      "previousValue": "28750",
-      "correctedValue": "30800",
-      "claim": "Citation audit drift: the cited booking page's lowest listed plan for 仙峡の宿 銀山荘 is 「税込 30,800円」 per adult (2-guest room, one night, dinner + breakfast). It does not support ¥28,750.",
-      "source": "https://www.jtb.co.jp/kokunai-hotel/htl/2435002/plan/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/1/low",
-      "previousValue": "20000",
-      "correctedValue": "30800",
-      "claim": "The low bound sat ¥10,800 below the cheapest plan the cited page actually lists; raised to that floor.",
-      "source": "https://www.jtb.co.jp/kokunai-hotel/htl/2435002/plan/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "02-money-and-budget.json#/1/items/1/note",
-      "previousValue": "≈¥28,750/person sourced from a travel-aggregator comparison for Ginzanso's standard 2-guest room rate, not the ryokan's own current rate card — confirm at booking",
-      "correctedValue": "≈¥30,800/person is the lowest plan listed for Ginzanso (2-guest room, tax included, dinner + breakfast) on a booking agent, not the ryokan's own rate card — confirm at booking",
-      "claim": "Restated to the figure the cited page carries today, with its basis (tax included, 2-guest room, half board).",
-      "source": "https://www.jtb.co.jp/kokunai-hotel/htl/2435002/plan/",
-      "verifiedOn": "2026-08-28",
-      "freshness": "venue"
-    },
-    {
-      "target": "_guide.json#/verified",
-      "previousValue": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, though the two passes' independently fetched timetables differ by several minutes per departure — treat times as approximate. Re-check before travel: Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), JR fares and the Tsubasa reservation rule (JR East's own fare/timetable pages were bot-gated throughout research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
-      "correctedValue": "⚠ Draft — Pass A (canonical/verified) + Pass B (local/authentic) + reconciliation completed 2026-08-28 for the Oct 20–23, 2026 trip. The anchor transfer (Oishida Station → Ginzan Onsen bus) is verified against the operator's own site, which publishes a separate timetable for its Apr 1 – Oct 24 and Dec 1 – Mar 31 seasons — the April–October table is the one covering these dates. Re-check before travel: Ginzan Onsen ryokan availability (a real booking-window risk — see Plan → Booking checklist), JR fares and the Tsubasa reservation rule (JR East's own fare/timetable pages were bot-gated throughout research), the Bunshokan assembly-hall reopening (targeted end of Sept 2026), the 2026 autumn foliage forecast (publishes from September), and whether a 2026 autumn/winter Ginzan Onsen vehicle-restriction window is announced (last year's dates weren't published until shortly before the season). Offline verify + networked verify have not run yet.",
-      "claim": "The stamp asserted a cross-pass timetable disagreement that does not exist: base.html carries the 【12月1日～3月31日までの定期季節運行】 table and base4.html the 2026/4/1～2026/10/24 table, and the two passes read one time from each. Restated as the seasonal fact it actually is.",
-      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "01-plan.json#/0/body",
-      "previousValue": "<p>The Yamagata Shinkansen \"Tsubasa\" runs direct from Tokyo Station to Yamagata Station, about 2h22m at its fastest (up to ~2h45m on slower services), roughly hourly.</p><p>Every seat on Tsubasa is reserved — there is no unreserved car (JR East dropped it in spring 2022). Book all 8 seats together well ahead so the group sits as a block. ⚠ JR East's own fare pages were bot-gated against automated fetch; the reserved-seat fare is corroborated at ≈¥11,450 one-way (ordinary car) across two independent Japanese fare-table sites — confirm the exact figure at booking (eki-net.com) or a ticket window.</p><p>No oversized-baggage reservation is required on this Shinkansen network (unlike the Tokaido/Sanyo/Kyushu lines) — storage is first-come, first-served overhead or behind the last row, so board together and claim space as a group.</p>",
-      "correctedValue": "<p>The Yamagata Shinkansen \"Tsubasa\" runs direct from Tokyo Station to Yamagata Station, about 2h22m at its fastest (up to ~2h45m on slower services), roughly hourly.</p><p>Every seat on Tsubasa is reserved — there is no unreserved car (JR East dropped it in spring 2022). Book all 8 seats together well ahead so the group sits as a block. ⚠ The reserved-seat fare is ≈¥11,450 one-way in an ordinary car (¥6,050 base fare + ¥5,400 express charge) — confirm the exact figure at booking (eki-net.com) or a ticket window.</p><p>No oversized-baggage reservation is required on this Shinkansen network (unlike the Tokaido/Sanyo/Kyushu lines) — storage is first-come, first-served overhead or behind the last row, so board together and claim space as a group.</p>",
-      "claim": "Tokyo→Yamagata one-way reserved ordinary car: 11,450 yen (運賃 6,050 + 指定席特急料金 5,400). The scraper-status narration ('bot-gated against automated fetch') is research-log language in traveler-facing prose; the ⚠ and the confirm-at-booking instruction carry the honest gap without it.",
-      "source": "https://jr-shinkansen.net/fare-yamagata.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "05-transit.json#/0/steps/0",
-      "previousValue": "<b>Tokyo → Yamagata:</b> Yamagata Shinkansen \"Tsubasa\" direct from Tokyo Station, ≈2h22m fastest (up to ≈2h45m), roughly hourly. Every seat is reserved — book all 8 together. ⚠ ≈¥11,450 one-way reserved seat, corroborated via two independent fare-table sites, not JR East's own page (bot-gated against automated fetch) — confirm at booking.",
-      "correctedValue": "<b>Tokyo → Yamagata:</b> Yamagata Shinkansen \"Tsubasa\" direct from Tokyo Station, ≈2h22m fastest (up to ≈2h45m), roughly hourly. Every seat is reserved — book all 8 together. ⚠ ≈¥11,450 one-way in an ordinary reserved car (¥6,050 base fare + ¥5,400 express charge) — confirm at booking.",
-      "claim": "Same fare fact as the Plan card, with the fare's own breakdown replacing the scraper-status narration.",
-      "source": "https://jr-shinkansen.net/fare-yamagata.html",
-      "verifiedOn": "2026-08-28",
-      "freshness": "transit"
-    },
-    {
-      "target": "01-plan.json#/1/body",
-      "previousValue": "<p>Carry cash for this trip — more than a Tokyo itinerary would need. The Hanagasa Bus to Ginzan Onsen is cash-only (¥1,000/adult, no IC card), and Ginzan Onsen itself has no convenience store or ATM in town (nearest is ≈30 min by car); several ryokan there don't take cards.</p><p>Suica/IC coverage thins out fast once you leave central Yamagata city. ⚠ Multiple Japanese sources agree Ōishida Station (the gateway to Ginzan Onsen) doesn't accept IC cards, though this couldn't be confirmed directly against JR East's own site (bot-gated against automated fetch) — buy a paper ticket or plan to pay cash there regardless.</p><p>7-Eleven and Japan Post ATMs in Yamagata city itself accept foreign cards normally.</p>",
-      "correctedValue": "<p>Carry cash for this trip — more than a Tokyo itinerary would need. The Hanagasa Bus to Ginzan Onsen is cash-only (¥1,000/adult, no IC card), and Ginzan Onsen itself has no convenience store or ATM in town (nearest is ≈30 min by car); several ryokan there don't take cards.</p><p>Suica/IC coverage thins out fast once you leave central Yamagata city. ⚠ Multiple Japanese sources agree Ōishida Station (the gateway to Ginzan Onsen) doesn't accept IC cards, though this couldn't be confirmed against JR East's own site — buy a paper ticket or plan to pay cash there regardless.</p><p>7-Eleven and Japan Post ATMs in Yamagata city itself accept foreign cards normally.</p>",
-      "claim": "Hanagasa Bus fare 「大人片道１,０００円/小人半額」 and 「運賃は現金精算のみのお取り扱いとなっております。（ICカード不可）」. The unverified Ōishida-Station IC claim keeps its full ⚠ hedge; only the scraper-status parenthetical is removed.",
+      "previousValue": "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b> (¥500 child or disabled companion), no reservation needed. The operator publishes a different timetable per season — the <b>Apr 1 – Oct 24, 2026</b> table is the one covering this trip, and its departures run roughly 5-7 minutes later than the Dec 1 – Mar 31 winter table sitting beside it on the same page. First bus leaves Oishida ≈6:40; the last one in reaches Ginzan Onsen at 18:21. ⚠ The operator's summary page still advertises 5 round trips a day while its seasonal timetable lists more — read the timetable itself, and confirm the day of. Missing a bus means a 1.5-2.5h wait. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
+      "correctedValue": "<b>Oishida → Ginzan Onsen (the anchor transfer, carried with luggage):</b> Hanagasa Bus, Ginzan Line, ≈35-40 min, <b>¥1,000/adult one-way, cash only</b> (¥500 child or disabled companion), no reservation needed. The operator runs a different timetable per season, each on its own page — the <b>Apr 1 – Oct 24, 2026</b> table is the one covering this trip, and it carries more daily departures than the Dec 1 – Mar 31 winter table. First bus leaves Oishida ≈6:40; the last one in reaches Ginzan Onsen at 18:21. ⚠ The operator's summary page still advertises 5 round trips a day while its seasonal timetable lists more — read the timetable itself, and confirm the day of. Missing a bus can mean waiting over two hours, and the longest gap falls around midday. Board early with the group's luggage; if the bus can't take it all, a taxi (≈20 min, ≈¥6,500-8,000/car, 2-3 cars for 8 people — call Ōbanazawa Taxi 0237-23-2525 ahead) is the fallback.",
+      "claim": "The two seasonal Ginzan Line tables are on two separate pages (winter on base.html, Apr 1 – Oct 24 2026 on base4.html), and the trip's Apr-Oct table is not the winter table shifted 5-7 minutes: it lists Oishida departures 6:40 / 7:50 / 9:57 / 10:20 / 12:42 / 14:17 / 15:30 / 16:02 / 17:52 / 19:40 against the winter table's 6:40 / 7:50 / 9:50 / 12:35 / 14:10 / 15:55 / 17:45 — more services, not merely later ones. The largest gap on the trip's own table is the midday 10:20 → 12:42 (≈2h20), so the previous flat '1.5-2.5h wait' was read off the wrong season.",
       "source": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
       "verifiedOn": "2026-08-28",
       "freshness": "transit"
+    },
+    {
+      "target": "05-transit.json#/0/steps/4",
+      "previousValue": "<b>Ginzan Onsen → Oishida (return):</b> two departures to avoid, both flagged on the operator's own timetable — the <b>14:55</b> does not connect to a northbound (上り) Yamagata Shinkansen, and the last bus, <b>18:21</b>, is expected to be crowded with no extra service added. The operator points passengers at <b>16:35</b> instead; <b>13:25</b> is the earlier clean option. With eight people, luggage and two low-mobility travelers, pick one of those two and confirm it at Ginzanso the night before.",
+      "correctedValue": "<b>Ginzan Onsen → Oishida (return):</b> two departures to avoid, both flagged in the <a href='https://www.hanagasa-bus-taisei.co.jp/base.html'>operator's own service notes</a> — the <b>14:55</b> does not connect to a northbound (上り) Yamagata Shinkansen, and the last bus, <b>18:21</b>, is expected to be crowded with no extra service added. The operator points passengers at <b>16:35</b> instead; <b>13:25</b> is the earlier clean option. With eight people, luggage and two low-mobility travelers, pick one of those two and confirm it at Ginzanso the night before.",
+      "claim": "The ※/☆ service notes 「銀山温泉発14:55のバスは山形新幹線（上り）への接続が出来ません」 and 「最終便18:21発は混雑が予想されます。増便はありませんので16:35または17:00のご利用をお勧めします」 are published on base.html only, not on the Apr-Oct table page — so once the section's own source_url moved to base4.html this step needed its own citation to the page that carries the notes. All four named departures (13:25 / 14:55 / 16:35 / 18:21) also appear on the 2026/4/1～2026/10/24 table, so the advice holds for these dates.",
+      "source": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "06-days.json#/0/items/2/body",
+      "previousValue": "<p>Morning: Bunshokan (free, 9:00-16:30, with a rear wheelchair entrance, 10 loaner wheelchairs and a stair lift — the one city sight whose access is documented) or Yamagata Marugoto-kan Beninokura, a restored Edo-era merchant warehouse compound paired with Soba Sanbyakubou's 30-seat private room for lunch.</p><p>Withdraw cash before leaving the city — Ginzan Onsen has no ATM or convenience store. From Yamagata Station, take the JR Ōu Line to Oishida (≈50 min local / ≈28 min Tsubasa), then the Hanagasa Bus to Ginzan Onsen: {{fact:hanagasa-bus-fare-1000-yen}}, ≈35-40 minutes, no reservation needed, and only a handful of departures a day — the operator runs a different timetable per season, so read the April–October one. Board with the group's luggage in good time; missing a bus means waiting 1.5-2.5 hours for the next.</p><p>Check into Ginzanso (the largest property in town, best odds of hosting all 8 together) and see the street's gas lamps light ≈16:30-17:00 (seasonal — earlier as October's sunset comes sooner), best photo window 16:30-17:30.</p>",
+      "correctedValue": "<p>Morning: Bunshokan (free, 9:00-16:30, with a rear wheelchair entrance, 10 loaner wheelchairs and a stair lift — the one city sight whose access is documented) or Yamagata Marugoto-kan Beninokura, a restored Edo-era merchant warehouse compound paired with Soba Sanbyakubou's 30-seat private room for lunch.</p><p>Withdraw cash before leaving the city — Ginzan Onsen has no ATM or convenience store. From Yamagata Station, take the JR Ōu Line to Oishida (≈50 min local / ≈28 min Tsubasa), then the Hanagasa Bus to Ginzan Onsen: {{fact:hanagasa-bus-fare-1000-yen}}, ≈35-40 minutes, no reservation needed, and only a handful of departures a day — the operator runs a different timetable per season, so read the April–October one. Board with the group's luggage in good time; missing a bus can mean waiting over two hours for the next.</p><p>Check into Ginzanso (the largest property in town, best odds of hosting all 8 together) and see the street's gas lamps light ≈16:30-17:00 (seasonal — earlier as October's sunset comes sooner), best photo window 16:30-17:30.</p>",
+      "claim": "Continuity ripple of the same fact: on the trip's own Apr 1 – Oct 24, 2026 table the gap between Oishida departures runs from ≈23 minutes (9:57 → 10:20) to ≈2h20 (10:20 → 12:42), so the flat '1.5-2.5 hours' figure — carried from the winter table — understates the day's real worst case and overstates its best.",
+      "source": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "07-sights.json#/1/items/3/correction",
+      "previousValue": "Ōishida Station — the gateway to Ginzan Onsen — doesn't accept IC cards, and the bus onward is cash-only regardless. Carry cash for that whole leg.",
+      "correctedValue": "The Hanagasa Bus onward from Ōishida is cash-only — the operator's own fare table states cash settlement only, no IC cards. ⚠ Multiple Japanese sources also report that JR Ōishida Station itself doesn't accept IC cards, but that half couldn't be confirmed against JR East. Carry cash for the whole leg.",
+      "claim": "The cited page (the bus operator's Ginzan Line fare table) documents only the bus fare being cash-only — 「運賃は現金精算のみのお取り扱いとなっております。（ICカード不可）」. It carries nothing about JR Ōishida Station's IC readers, which the guide's own Transit step 3 and Plan → Local essentials both flag as unconfirmed against JR East. A divergences card asserting the unsourced half as corrected fact contradicted two other surfaces of the same guide.",
+      "source": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "03-health-and-safety.json#/0/body",
+      "previousValue": "<p>Emergency numbers: police <b>110</b>, ambulance/fire <b>119</b> — both free, nationwide, with English-speaking operators available.</p><p>Yamagata city has ordinary drugstore chains (Tsuruha Drug is common across Tohoku) for over-the-counter needs; English support is basic, not fluent medical consultation. Ginzan Onsen and Yamadera have no pharmacy — bring what the group needs for those days.</p><p>Confirm all travelers are current on routine vaccinations (MMR in particular) — Japan has reported elevated measles activity in 2026.</p>",
+      "correctedValue": "<p>Emergency numbers: police <b>110</b>, ambulance/fire <b>119</b> — both free, nationwide, with English-speaking operators available.</p><p>Yamagata city has ordinary drugstore chains (Tsuruha Drug is common across Tohoku) for over-the-counter needs; English support is basic, not fluent medical consultation. Ginzan Onsen and Yamadera have no pharmacy — bring what the group needs for those days.</p><p>⚠ Routine vaccinations, MMR included, should be current before departure — check your own doctor or national health authority for Japan's current recommendations.</p>",
+      "claim": "The section's only citation is a pharmacy how-to that contains no information about measles activity, outbreaks in Japan in 2026, or recommended traveller vaccinations — confirmed by direct fetch. A perishable epidemiological claim carried on a citation that does not contain it is unsourced under verification-rules.md §3, and no health authority is reachable from this pass's allowed source domains, so the claim is withdrawn and the actionable, durable instruction kept with a ⚠.",
+      "source": "https://cotoacademy.com/guide-on-navigating-japans-pharmacies/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
     }
   ]
 }
