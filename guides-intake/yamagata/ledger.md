@@ -152,3 +152,206 @@ Several primary domains were persistently bot-gated (HTTP 403) against automated
     - `saturation.unresolvedCouldChange` flipped from `true` to `false`: the two open items (Ginzanso live-availability risk, unannounced 2026 autumn/winter restriction dates) are live, date-gated facts no amount of further searching resolves today, and neither changes WHICH candidates this guide recommends — both are already carried as action items via `reservations[]`/`disagreements[]`/the traveler question card, not as unresolved research.
     - Corroboration: the validator buckets experiential evidence by exact (candidateId, normalized claim text) — several genuinely-corroborating record pairs used different wording and so each landed in its own 1-source bucket. Unified claim text (and, for the two Yamadera passA records, added the honest `candidateId: "c-risshaku-ji-yamadera"`) across: the 4-record Yamadera crowd-timing cluster (`ev-yamadera-crowd-timing-1`/`-2` passA + `-1-pb`/`-2-pb` passB — also aligned the `-2`/`-1-pb` pair's `source.family` to `note-boo_sizuta` since both cite the SAME note.com URL and were wrongly double-counted as independent under two different family labels), the 2-record Ginzan Onsen morning-quiet cluster (`ev-ginzan-morning-quiet-1`/`-2`), and the 2-record Ginzan Onsen midday-crowd cluster (`ev-ginzan-crowd-timing`/`-2`). No underlying fact changed — only the machine-readable claim text now matches what was already true: these records corroborate each other.
     - Spent one further round of targeted web checks (WebSearch/WebFetch, available this run) specifically to try to corroborate or correct three claims that were genuinely single-sourced: (1) Yamadera base-area mobility difficulty (`ev-yamadera-mobility-firsthand`, one note.com account) — no second source found; the claim is REMOVED from evidence.v2.json and from `06-days.json`'s Day 2 body, which now states only what the official access page independently supports ("no ramps or elevators anywhere on the site, including at the base"). (2) Ginzan Onsen gas-lamp ignition time (`ev-ginzan-gaslamp-timing`, previously a search-preview-only firsthand claim of "~16:00") — re-sourced to a fetched reference page (yunokaori.com) that gives a seasonal schedule (≈17:00 May-Oct bracket, ≈16:30 Nov-Apr) instead; reclassified `kind: "objective"` (an operational lighting schedule, not an atmosphere claim) so it no longer needs experiential corroboration, and the guide text in `06-days.json`/`07-sights.json` now says "≈16:30-17:00 (seasonal)" instead of a flat "16:00". (3) Shirogane Falls stairway difficulty (`ev-ginzan-waterfall-stairs`, previously an un-fetched, generic-domain search-preview) — a fresh check found conflicting, equally-unconfirmed accounts (one 2015 firsthand blog and one route-difficulty page both suggest an easy, "beginner"-rated walking path, not a tough stairway); the claim is REMOVED from evidence.v2.json and from both `06-days.json` (Day 4) and `07-sights.json` (Ginzan Onsen body), which now mention the falls without an unconfirmed accessibility claim.
+
+## Critic findings
+
+Fresh-context critic, 2026-08-28 — five scans (rubric #6 anchor · #8 priority depth · #9 party fit ·
+#12 authenticity, plus the vibe lens). **Seven findings, all seven implemented in the guide.** Every
+changed value is declared in `critic-corrections.v2.json`.
+
+### C1 — Day 4 points the group at the one bus the operator explicitly warns about (rubric #6 · common-sense lens) — FIXED
+
+`06-days.json` Day 4 (Fri Oct 23) and `05-transit.json` step 5 both said: *"aim for a mid-afternoon
+departure, not the last one — the operator's own pages list differing last-bus times (as early as
+≈17:04, as late as 18:21…)"*. Mid-afternoon out of Ginzan Onsen is the **14:55**, and the operator's
+own timetable carries a note about exactly that service: 「※銀山温泉発14:55のバスは山形新幹線（上り）
+への接続が出来ません。ご注意ください。」 — it does not connect to a northbound Yamagata Shinkansen.
+The guide's headline advice for the trip's final leg named the single departure the operator flags as
+unusable, on the day eight people with luggage and two low-mobility travelers have to get out of a
+village with no ATM.
+
+The same page carries a second note the guide never used: 「☆最終便18:21発は混雑が予想されます。増便は
+ありませんので16:35または17:00のご利用をお勧めします」 — the last bus is expected to be crowded, **no
+extra bus is added**, and the operator recommends 16:35. "No extra service" is the fact that decides
+this for a party of eight, and it was replaced by an invented time range.
+
+The "≈17:04" earlier-last-bus figure appears nowhere on the operator's site. Both surfaces now name
+the two departures to avoid (14:55, 18:21) and the two that work (16:35, or 13:25 for an earlier
+exit), sourced to `base.html`. Day 4 also had **no `source_url`/`verified_on`/`shelf_life` at all**
+while carrying perishable bus times — the only day card missing them; added.
+
+### C2 — the anchor transfer's "timetable conflict" is two seasonal timetables, not a source disagreement (rubric #6 · rubric #3) — FIXED
+
+The ledger's headline reconciliation row (`d-hanagasa-bus-schedule-discrepancy`) recorded that Pass A
+and Pass B fetched "two pages of the operator's own site" whose departures "differ by 5-15 min per
+slot", and the guide shipped that as manufactured uncertainty: *"clustering around 6:40, ≈9:50-9:57,
+≈12:35-12:42, ≈14:10-14:17, ≈15:55-16:02, ≈17:45-17:52 — treat exact times as ⚠ approximate."*
+
+`base.html` carries a table headed 【12月1日～3月31日までの定期季節運行】 — the **winter** timetable
+(Oishida departures 6:40 / 7:50 / 9:50 / 12:35 / 14:10 / 15:55 / 17:45). `base4.html` carries the
+**2026/4/1～2026/10/24** table (… 9:57 / 12:42 / 14:17 / 16:02 / 17:52). Each of the guide's "clusters"
+is one time from each season. There is no conflict, and the season that covers Oct 20–23 is the
+April–October one. The traveler was handed a shrug where the operator publishes a definite answer.
+
+Separately, `05-transit.json`'s `source_url` pointed at **`product3.html`, which publishes no
+timetable at all** — it states 「１日５往復（大石田駅からは５便、銀山温泉からは６便）」 and then says
+「詳しい時刻表は【路線バス時刻表・運賃】のタブをクリックしてご覧ください」. A summary page whose own
+round-trip count disagrees with the detailed table was cited as the timetable source. Repointed to
+`base.html`; step 4 now states the seasonal split, keeps the count honest (the operator's summary
+still says 5 round trips while its seasonal tables list more), and the `_guide.json` `verified` stamp
+no longer asserts the phantom cross-pass disagreement.
+
+### C3 — the guide's single most party-fit-load-bearing claim rests on a page that does not contain it (rubric #9 · rubric #3) — FIXED
+
+Intake makes mobility **BINDING**: 2 of 8 have low walking tolerance. The guide's answer is Bunshokan,
+described in `07-sights.json` as *"the best-documented step-free access of any Yamagata city sight"*
+and in Day 3 as *"the best-documented wheelchair access of any Yamagata city sight"* — both cited to
+`gakushubunka.jp/bunsyokan/`. That page, **and its `/access/` subpage**, publish nothing about
+accessibility: hours, closures, parking, free admission, nothing else. Per `verification-rules.md` §3
+an official URL pasted onto a claim it does not support is a fabricated citation, and per
+`block-types.md` "Constraint-bound facts" a stated mobility constraint makes the access fact
+mandatory and verified per venue.
+
+The claim is true — it is just sourced from nowhere. Yamagata Prefecture's official tourism site
+(`yamagatakanko.com`, a domain this guide already cites) documents it: 「車いす貸出：有り（10台…）」
+「階段昇降機があり、車イス専用の出入口があります。」「障がい者用駐車場：有り（建物裏）」「多目的トイレ：
+有り」. Re-cited, and the vague superlative replaced with the specifics a low-mobility traveler
+actually acts on: a wheelchair-only entrance and accessible parking at the rear of the building, 10
+loaner wheelchairs, a stair lift, a multipurpose toilet. Added the 1st/3rd-Monday closure (confirmed on
+both sources; Day 3 is a Thursday, no itinerary ripple). The assembly-hall closure, which
+gakushubunka.jp *does* support, is kept as an inline citation.
+
+### C4 — the Day 2 group lunch for eight is sourced to a review site's bare homepage (rubric #3 · rubric #7) — FIXED
+
+`08-food-and-shopping.json` Takifudo Namasoba carried `source_url: "https://www.retty.me/"` — the
+homepage of a review aggregator, not a page about this venue — behind the objective claim that decided
+the pick: *"≈50 seats plus a 2nd-floor tatami room for 50+ — the best-corroborated capacity fit for a
+group of 8."* Neither the venue nor the prefecture's tourism page states any 席数; the figures exist
+only in restaurant-directory listings, which are T2 leads for an objective fact. Direct recurrence of
+the OPEN uruguay pattern *"the aggregator law gets applied per-venue instead of per-claim-type"*.
+
+Repointed to the prefecture-backed tourism portal's own page for the shop
+(`visityamagata.jp/spot-yamagatashi-takifudoukisoba/`), which gave what the item was missing: tel
+**023-695-2039**, address 山形市大字山寺4395, hours **11:00–15:30**, 不定休, ≈7 min on foot from
+Yamadera Station. The capacity claim is downgraded to a ⚠ call-ahead rather than dropped.
+
+That fetch also broke an incoherence the guide had shipped: Day 2 said *"Arrive at opening or right
+after; 10:00-14:00 is when tour groups arrive"* — the shop **opens at 11:00, inside that window**, so
+"arrive at opening" was never a crowd-avoidance move. Day 2 now says climb early, eat after, and call.
+
+### C5 — four venues say "call ahead" and give no phone number (rubric #7, 4-question venue rule) — FIXED
+
+Soba Sanbyakubou, Takifudo Namasoba, Izu no Hana and Sakaeya Honten all shipped `book: "call"` with no
+`phone`. Sakaeya went further and shipped *"Hours aren't posted; call ahead"* — the japan-2 pattern
+*"⚠ used as a substitute for one fetch"*: the hours are published, and they are **seasonal in a way
+that matters for these dates** (11:30–20:15 Mar 19–Sep 30; **11:30–19:30 Oct 1–Mar 18**, the bracket
+Oct 20–23 falls in), plus closed Wednesdays and ≈20 min on foot from the station — where the guide had
+said the walking distance "isn't confirmed". Its own site is a net-shop front listing only a FAX line.
+
+Added: Sanbyakubou 023-622-6965 (+ the Monday-holiday closure rule), Takifudo 023-695-2039, Izu no Hana
+0237-28-2036 and its address and evening last order, Sakaeya 023-623-0766 with hours, closed day and
+walking time. Day 4's *"call ahead for a table of 8"* now carries Izu no Hana's number.
+
+### C6 — the budget bills four city-hotel nights on a 3-night trip (rubric #5) — FIXED
+
+`02-money-and-budget.json` had "Lodging, Yamagata city hotel (per night)" on `basis: "day"` with
+`days: 4`, so the calculator multiplied ¥7,000 by the day count: ¥28,000 of city lodging on a trip with
+**two** city nights (Oct 20, 21) — Oct 22 is the Ginzan Onsen ryokan, already priced as its own
+`basis: "trip"` line, and Oct 23 is the departure day. Verbatim recurrence of the OPEN uruguay pattern
+*"one budget `days` field cannot serve both nights and days … lodging belongs on `basis: 'trip'`"*.
+Moved to `basis: "trip"`, ¥14,000 (2 × ¥7,000), bounds rescaled, and the note now names which nights
+the line covers. `days: 4` is correct and untouched — it matches the day-card count.
+
+### C7 — research-log language in traveler-facing prose (vibe lens: tone / the voice standard) — FIXED
+
+*"bot-gated against automated fetch"* appeared in three traveler-facing surfaces (`01-plan.json` "When
+you land" and "Local essentials", `05-transit.json` step 1), narrating a scraper's HTTP status to
+someone deciding how to buy a train ticket. `block-types.md`'s voice gate: delete the frame, keep the
+fact, let `⚠` carry the provenance. The Tsubasa fare is now stated with its own breakdown (¥6,050 base
++ ¥5,400 express = ≈¥11,450) instead of a sourcing apology; the Ōishida IC claim keeps its full ⚠ hedge
+because it genuinely is unconfirmed — only the scraper vocabulary went. The `Sources` section keeps its
+bot-gating paragraph: source-access honesty belongs there.
+
+### Considered and NOT actioned — rebuttals
+
+- **No `plan_b` on Days 1, 3 and 4.** Not a finding. Late October in Tohoku is not a named weather
+  window (no jangma/monsoon equivalent), all three days are tagged `env: "mixed"`, and the one
+  `outdoor` day — Yamadera — has a researched, sourced alternate. Day 3's real failure mode is the bus,
+  and that already has a researched taxi fallback with a phone number in Transit.
+- **Nine nav groups where the doctrine suggests folding money/health/etiquette into `Essentials`.** A
+  real tab-budget observation, but composition runs after this stage and owns that decision; a critic
+  re-grouping sections by hand would collide with `compose-guide.mjs`.
+- **Eight perishable money figures still live in prose rather than `facts.json`** (Tsubasa ≈¥11,450,
+  Senzan ≈¥260, Tokiwa ¥6,600/¥9,900, museum ¥800/¥640, taxi ≈¥6,500-8,000, ryokan ≈¥30,800). SKILL.md
+  is explicit that these belong in the registry. Left for a follow-up pass rather than migrated here:
+  the migration moves ~8 values across 6 files for zero change in what any of them says, and doing it
+  blind — without `npm run build` available in this environment to catch an unresolved `{{fact:}}`
+  token, which fails the build — trades a real risk for no traveler-visible gain. Recorded as a
+  pipeline-pattern row instead.
+- **The `## Candidates considered` row for Takifudo** still reads "shipped — best-corroborated capacity
+  fit (50+ seat tatami room)". Left as the reconcile stage's own record; the verdict (shipped) is still
+  correct and C4 above is the correction of record.
+
+## Citation audit
+
+14 perishable facts sampled, weighted to prices, hours and the anchor transfer. Every source fetched.
+
+| Claim | Value | Source fetched | Verdict |
+|-------|-------|----------------|---------|
+| Hanagasa Bus one-way adult fare (R3 anchor, `facts.json`) | ¥1,000, cash only (¥500 child/disabled) | y — `hanagasa-bus-taisei.co.jp/base4.html` | supports — 「大人片道１,０００円/小人半額」「現金精算のみ（ICカード不可）」 |
+| Hanagasa Bus operating season covers the trip | Apr 1 – Oct 24, 2026 | y — `base4.html` | supports — 「2026/4/1～2026/10/24」 |
+| Ginzan Onsen last return bus | "as early as ≈17:04, as late as 18:21" | y — `base.html` | **drifted → fixed** — ≈17:04 is on no operator page; the real notes are 14:55 = no northbound Shinkansen connection, 18:21 = crowded with no extra service, 16:35 recommended (C1) |
+| Oishida departure times | "≈9:50-9:57, ≈12:35-12:42, ≈14:10-14:17…" | y — `base.html` + `base4.html` | **drifted → fixed** — the pairs are the Dec–Mar and Apr–Oct seasonal tables, not a source conflict (C2) |
+| Transit section's cited timetable page | `product3.html` | y | **drifted → fixed** — that page carries no timetable, only 「１日５往復」 and a pointer to the timetable tab (C2) |
+| Risshaku-ji adult admission (`facts.json`) | ¥500, revised Apr 1 2025 | y — `rissyakuji.jp/2025-03-07/` | supports — ¥500 for middle-school age and up, 令和７年4月1日改定 |
+| Yonezawa Beef Tokiwa dinner minimum + private room | ¥9,900/person min; room to 14 | y — `yonezawabeef.co.jp/yamagata.html` | supports — 「9,900円以上」「最大14名様までのプライベートな個室」; tel 023-666-4433, 11:00-22:00 L.O.21:00 all confirmed |
+| Soba Sanbyakubou 蔵座敷 capacity | seats 30 | y — `beninokura.com/300bou` | supports — 「蔵座敷はお食事・ご宴会で30名様までご利用いただけます」 |
+| Ginzanso capacity (the group-of-8 lodging pick) | 40 rooms / ≈200 guests | y — `ginzanonsen.jp/yado/` | supports — 「総室：40室／宿泊人数：200名」 |
+| Ginzanso nightly rate (budget line) | ≈¥28,750/person | y — `jtb.co.jp/…/2435002/plan/` | **drifted → fixed** — the page's lowest listed plan is 「税込 30,800円」/adult; est and low corrected |
+| Bunshokan step-free access (party-fit claim) | "best-documented step-free access" | y — `gakushubunka.jp/bunsyokan/` **and** `/access/` | **drifted → fixed** — cited page contains no accessibility information at all; re-cited to `yamagatakanko.com` and restated concretely (C3) |
+| Takifudo Namasoba capacity | ≈50 seats + 50-person tatami room | y — `retty.me` (homepage, carries nothing on this venue) | **drifted → fixed** — re-cited to `visityamagata.jp`; capacity downgraded to ⚠ call-ahead (C4) |
+| Sakaeya Honten hours | "Hours aren't posted" | y — `visityamagata.jp/spot-yamagata-sakaeyahonten/` | **drifted → fixed** — published and seasonal: 11:30-19:30 Oct 1–Mar 18, closed Wed (C5) |
+| Tokyo→Yamagata Tsubasa reserved fare | ≈¥11,450 one-way | y — `jr-shinkansen.net/fare-yamagata.html` | supports — 運賃 6,050 + 指定席特急料金 5,400 = 11,450 |
+| Yamagata Museum of Art (Day 2 `plan_b`) | ¥800 adult, ¥640 groups 20+, closed Mon | y — `yamagata-art-museum.or.jp/information` | supports |
+| Kajo Park (Day 1 anchor) | free, open until 22:00 | y — city page | supports — 「5時00分から22時00分（4月1日～10月31日）」, 無料 |
+
+Also spot-checked and supporting, no guide change: Kyu-Saiseikan free with no weekly closure (city
+page — the item's empty `closed_days` is correct), Mogami Yoshiaki Historical Museum free and closed
+Mondays, Bunshokan assembly hall 「工事のため令和8年9月末まで見学できません」, Izu no Hana hours and its
+overseas-tour-booking refusal.
+
+#### Continuity sweep — critic execution
+
+**Greps run** across `src/content/guides/yamagata/`: `17:04` · `bot-gated` · `retty` ·
+`best-documented` · `best-corroborated` · `product3` · `28,750|28750` · `Hours aren't posted` ·
+`per night` · `17:45-17:52` · `9:50-9:57`.
+
+**Ripples found & fixed:**
+- `17:04` / the invented last-bus range appeared in **two** places (`05-transit.json` step 5 and
+  `06-days.json` Day 4) — both rewritten together.
+- The "best-documented … access" superlative appeared in **two** places (`07-sights.json` Bunshokan and
+  `06-days.json` Day 3) — both restated to the concrete facilities, from the same new source.
+- The Takifudo capacity claim appeared in **two** places (`08-food-and-shopping.json` `why` and
+  `06-days.json` Day 2 lunch) — both downgraded to the ⚠ call-ahead, with the phone number added to
+  both.
+- Changing step 4's departure-count wording orphaned Day 3's "only 5-6 departures a day", which no
+  source supports — Day 3 restated to the seasonal-timetable fact.
+- `product3.html` was the section `source_url` only; `09-sources.json` already links `base.html`, so the
+  Sources list needed no change.
+- Izu no Hana's new phone number was pushed into Day 4, which had told the reader to "call ahead"
+  with no number.
+- `_guide.json`'s `verified` stamp asserted the phantom timetable disagreement — corrected in the same
+  pass as C2, since the stamp is a fact surface like any other.
+- `{{fact:…}}` tokens: both (`hanagasa-bus-fare-1000-yen`, `yamadera-admission-500-yen`) re-checked
+  against their sources (both support) and both still resolve — Day 2 and Day 3 bodies were edited
+  around them without touching the tokens.
+- Day-of-week check: Oct 20–23 2026 = Tue/Wed/Thu/Fri, matching the four day cards. No closure collides
+  (Mogami Yoshiaki closed Mon, Sanbyakubou closed Mon, Museum of Art closed Mon, Bunshokan closed
+  1st/3rd Mon, Izu no Hana closed Wed but visited Fri, Sakaeya closed Wed and unscheduled).
+
+**Deferred to human:** none. **Left for a follow-up pass (recorded above, not silently dropped):** the
+prose→`facts.json` money-registry migration; sight/cover photos and phrase cards, both blocked on shell
+access in every prior stage; the Ginzanso direct-dial `0237-28-2322` in the Booking checklist, which no
+allowed source confirms or contradicts (the operator directory lists only the town information centre,
+0237-28-3933) — flagged rather than changed, since inventing or deleting a booking phone number on the
+trip's one time-critical reservation is worse than leaving a plausible one in place.

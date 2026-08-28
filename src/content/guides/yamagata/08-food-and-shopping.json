@@ -29,8 +29,9 @@
       {
         "name": "Soba Sanbyakubou",
         "area": "Beninokura",
+        "phone": "023-622-6965",
         "hours": "11:00-20:00 (last order 19:30)",
-        "closed": "Mondays",
+        "closed": "Mondays (the following Tuesday when Monday is a public holiday)",
         "book": "call",
         "how": "Inside the Beninokura complex, ≈10 min walk from Yamagata Station",
         "why": "The private storehouse room (蔵座敷) seats up to 30, comfortably fitting the group — pairs naturally with the Beninokura warehouse visit next door.",
@@ -46,18 +47,22 @@
       {
         "name": "Takifudo Namasoba",
         "area": "Near Yamadera Station",
+        "address": "4395 Ōaza Yamadera, Yamagata City (山形市大字山寺4395)",
+        "phone": "023-695-2039",
+        "hours": "11:00-15:30",
+        "closed": "Irregular (不定休) — no fixed rest day",
         "book": "call",
-        "how": "Short walk from Yamadera Station, near the mountain entrance",
-        "why": "≈50 seats plus a 2nd-floor tatami room for 50+ — the best-corroborated capacity fit for a group of 8 near Yamadera, and known for group/tour-bus dining.",
-        "crowd_tip": "Call ahead in koyo (foliage) season — this is a well-known tour-group stop and walk-in risk is real once the leaves turn.",
+        "how": "≈7 min walk from Yamadera Station, near the mountain entrance",
+        "why": "The nearest sizeable soba house to Yamadera's base — but ⚠ its ≈50 seats and 50-person tatami room appear only in restaurant directories, never on an official page, so phone ahead to confirm a table for 8.",
+        "crowd_tip": "It opens at 11:00, which is already inside the 10:00-14:00 tour-group window — call ahead in koyo (foliage) season rather than counting on a walk-in for eight.",
         "map": {
           "lat": 38.311,
           "lng": 140.436
         },
         "place_id": "__VERIFICATION_REQUIRED__",
-        "source_url": "https://www.retty.me/",
+        "source_url": "https://www.visityamagata.jp/spot-yamagatashi-takifudoukisoba/",
         "verified_on": "2026-08-28",
-        "shelf_life": "venue"
+        "shelf_life": "hours"
       },
       {
         "name": "Inokoya Yamagatada",
@@ -96,7 +101,9 @@
       {
         "name": "Izu no Hana",
         "area": "Ginzan Onsen",
-        "hours": "11:00-18:00 (soba last order 17:30); a reservation-only evening menu runs 17:00-19:00",
+        "address": "440 Ōaza Ginzan-Shinhata, Obanazawa (山形県尾花沢市大字銀山新畑440)",
+        "phone": "0237-28-2036",
+        "hours": "11:00-18:00 (soba last order 17:30); a reservation-only evening menu runs 17:00-19:00 (last order 18:30)",
         "closed": "Wednesdays, plus occasional irregular closures",
         "book": "call",
         "how": "On Ginzan Onsen's main street, an easy walk from Ginzanso",
@@ -114,12 +121,15 @@
         "name": "Sakaeya Honten",
         "area": "Central Yamagata city",
         "address": "2-3-21 Honcho, Yamagata",
+        "phone": "023-623-0766",
+        "hours": "11:30-19:30 (Oct 1-Mar 18, the bracket these dates fall in); 11:30-20:15 Mar 19-Sep 30. Last order 20 min before close",
+        "closed": "Wednesdays (the following day when Wednesday is a public holiday)",
         "book": "call",
-        "how": "In Honcho, central Yamagata city — exact walking distance from the station isn't confirmed",
-        "why": "Self-declared birthplace of hiyashi ramen (chilled ramen), invented here in 1952 — a genuinely local claim the city's own heritage page confirms only in outline, without naming a shop. Hours aren't posted; call ahead.",
-        "source_url": "https://yamagata-sakaeyahonten.com/",
+        "how": "≈20 min walk from Yamagata Station, or ≈5 min by taxi",
+        "why": "Self-declared birthplace of hiyashi ramen (chilled ramen), developed over about a year and finished in 1952 — the city's own heritage page confirms the dish's local origin in outline, without naming a shop.",
+        "source_url": "https://www.visityamagata.jp/spot-yamagata-sakaeyahonten/",
         "verified_on": "2026-08-28",
-        "shelf_life": "venue"
+        "shelf_life": "hours"
       }
     ]
   }

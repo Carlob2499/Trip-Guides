@@ -20,11 +20,11 @@
       {
         "name": "Bunshokan",
         "kicker": "Free · the most accessible culture stop in the city",
-        "body": "<p>The former prefectural capitol, a Taisho-era building with the best-documented step-free access of any Yamagata city sight — worth prioritizing for the group's 2 low-mobility travelers. The former assembly chamber was closed for construction, targeted to reopen by the end of September 2026 — re-check before counting on seeing it.</p>",
+        "body": "<p>The former prefectural capitol, a Taisho-era building — and the one Yamagata city sight whose access is actually documented. Free, 9:00-16:30, with a wheelchair-only entrance and accessible parking at the rear of the building, 10 loaner wheelchairs, a stair lift and a multipurpose toilet. Worth prioritizing for the group's 2 low-mobility travelers.</p><p>Closed the 1st and 3rd Monday of each month. The former assembly chamber is <a href='https://www.gakushubunka.jp/bunsyokan/'>closed for construction until the end of September 2026</a> — re-check before counting on seeing it.</p>",
         "map": { "lat": 38.254, "lng": 140.328 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 40,
-        "source_url": "https://www.gakushubunka.jp/bunsyokan/",
+        "source_url": "https://yamagatakanko.com/attractions/detail_2515.html",
         "verified_on": "2026-08-28",
         "shelf_life": "venue"
       },

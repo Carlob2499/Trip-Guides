@@ -3,7 +3,7 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": "<p>The Yamagata Shinkansen \"Tsubasa\" runs direct from Tokyo Station to Yamagata Station, about 2h22m at its fastest (up to ~2h45m on slower services), roughly hourly.</p><p>Every seat on Tsubasa is reserved — there is no unreserved car (JR East dropped it in spring 2022). Book all 8 seats together well ahead so the group sits as a block. ⚠ JR East's own fare pages were bot-gated against automated fetch; the reserved-seat fare is corroborated at ≈¥11,450 one-way (ordinary car) across two independent Japanese fare-table sites — confirm the exact figure at booking (eki-net.com) or a ticket window.</p><p>No oversized-baggage reservation is required on this Shinkansen network (unlike the Tokaido/Sanyo/Kyushu lines) — storage is first-come, first-served overhead or behind the last row, so board together and claim space as a group.</p>",
+    "body": "<p>The Yamagata Shinkansen \"Tsubasa\" runs direct from Tokyo Station to Yamagata Station, about 2h22m at its fastest (up to ~2h45m on slower services), roughly hourly.</p><p>Every seat on Tsubasa is reserved — there is no unreserved car (JR East dropped it in spring 2022). Book all 8 seats together well ahead so the group sits as a block. ⚠ The reserved-seat fare is ≈¥11,450 one-way in an ordinary car (¥6,050 base fare + ¥5,400 express charge) — confirm the exact figure at booking (eki-net.com) or a ticket window.</p><p>No oversized-baggage reservation is required on this Shinkansen network (unlike the Tokaido/Sanyo/Kyushu lines) — storage is first-come, first-served overhead or behind the last row, so board together and claim space as a group.</p>",
     "source_url": "https://jr-shinkansen.net/fare-yamagata.html",
     "verified_on": "2026-08-28",
     "shelf_life": "transit"
@@ -12,7 +12,7 @@
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": "<p>Carry cash for this trip — more than a Tokyo itinerary would need. The Hanagasa Bus to Ginzan Onsen is cash-only (¥1,000/adult, no IC card), and Ginzan Onsen itself has no convenience store or ATM in town (nearest is ≈30 min by car); several ryokan there don't take cards.</p><p>Suica/IC coverage thins out fast once you leave central Yamagata city. ⚠ Multiple Japanese sources agree Ōishida Station (the gateway to Ginzan Onsen) doesn't accept IC cards, though this couldn't be confirmed directly against JR East's own site (bot-gated against automated fetch) — buy a paper ticket or plan to pay cash there regardless.</p><p>7-Eleven and Japan Post ATMs in Yamagata city itself accept foreign cards normally.</p>",
+    "body": "<p>Carry cash for this trip — more than a Tokyo itinerary would need. The Hanagasa Bus to Ginzan Onsen is cash-only (¥1,000/adult, no IC card), and Ginzan Onsen itself has no convenience store or ATM in town (nearest is ≈30 min by car); several ryokan there don't take cards.</p><p>Suica/IC coverage thins out fast once you leave central Yamagata city. ⚠ Multiple Japanese sources agree Ōishida Station (the gateway to Ginzan Onsen) doesn't accept IC cards, though this couldn't be confirmed against JR East's own site — buy a paper ticket or plan to pay cash there regardless.</p><p>7-Eleven and Japan Post ATMs in Yamagata city itself accept foreign cards normally.</p>",
     "source_url": "https://www.hanagasa-bus-taisei.co.jp/base4.html",
     "verified_on": "2026-08-28",
     "shelf_life": "transit"
