@@ -1,0 +1,433 @@
+{
+  "schemaVersion": "wp-evidence/2.3",
+  "slug": "yamagata",
+  "runId": "yamagata-20260828-73821a",
+  "candidates": [
+    {
+      "id": "c-ginzan-onsen",
+      "name": "Ginzan Onsen",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-risshaku-ji-yamadera",
+      "name": "Risshaku-ji (Yamadera)",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-taimenseki",
+      "name": "Taimenseki",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Soba/rest stop right at Yamadera Station, away from the cluster of tourist food stalls partway up the mountain path; river + train-view seating, open early (8:30) so it also works as a pre-climb stop.",
+      "worth": null
+    },
+    {
+      "id": "c-izu-no-hana",
+      "name": "Izu no Hana",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sakaeya-honten",
+      "name": "Sakaeya Honten",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sakaeya-bunten",
+      "name": "Sakaeya Bunten",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Native-lead was 'locals prefer this branch's cold ramen over the famous original honten' (press-sourced). Deep-verified against the one firsthand account found (fullpokko.com, Sep 2024) — it reviews Bunten on its own merits but makes no comparison to honten and no locals-prefer claim. Could not reach the required 2 independent firsthand sources for the comparative claim, so it does not ship; honten (well-documented, self-declared originator) ships instead.",
+      "worth": null
+    },
+    {
+      "id": "c-ginzan-line-bus",
+      "name": "Ginzan Line Bus",
+      "branch": null,
+      "priority": "transit",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-yamadera-hours-admission",
+      "candidateId": "c-risshaku-ji-yamadera",
+      "claim": "Risshaku-ji (Yamadera) visiting hours: 8:00-16:00 Apr-Sep, 8:30-15:00 (closing by 16:00) Dec-Mar, may close earlier in bad winter weather. Admission: adults (middle school+) ¥500, children (4+) ¥200, group rate (30+) ¥400/¥300/¥100; cash only.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://rissyakuji.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-yamadera-crowd-timing-1",
+      "candidateId": "c-risshaku-ji-yamadera",
+      "claim": "Arriving by roughly 8-9am beats the crowds at Yamadera: at that hour there aren't many people and the stone-step approach can be viewed at leisure; by daytime, tour groups fill Risshaku-ji, the narrow approach path gets congested and takes longer to pass, and even the Godaido summit viewpoint becomes crowded enough to prevent a relaxed look at the view.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/boo_sizuta_0707/n/n2538cb84cec9",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-04-24",
+        "family": "note-individual-boo_sizuta",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-yamadera-crowd-timing-2",
+      "candidateId": "c-risshaku-ji-yamadera",
+      "claim": "Arriving by roughly 8-9am beats the crowds at Yamadera; by daytime the temple grounds and paths fill up materially more.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/oldman_travel27/n/n782459dce858",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-04-10",
+        "family": "note-individual-oldman_travel27",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ginzan-entry-restriction-history",
+      "candidateId": "c-ginzan-onsen",
+      "claim": "Ginzan Onsen has run a day-visitor/private-car entry-management scheme in recent cold seasons: autumn 2025 restriction was only Nov 1-3 & Nov 22-24 (6 days), and winter 2025-26 restriction ran Dec 20, 2025-Mar 1, 2026 (private cars diverted to paid park-and-ride, day visitors after 17:00 needing a reservable ¥1,150 entry ticket). The scheme's own site confirms it ended Mar 1, 2026, and as of this check no autumn/winter 2026 dates have been announced yet - last year's dates were only published shortly before the season, so this must be rechecked close to the Oct 20-23, 2026 trip rather than assumed clear.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://ginzan-artmuseum.com/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-04-20",
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2025,
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-ginzan-morning-quiet-1",
+      "candidateId": "c-ginzan-onsen",
+      "claim": "Ginzan Onsen's alley is markedly quieter before day-trip crowds arrive: visiting around 6:30am, only ~2 other groups were around, versus a busy midday of both day-trippers and overnight guests (most shops close 17:00-18:00); the author rates the near-empty early morning as the most striking time of their whole visit.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://againsakutabi.com/ginzanonsentime/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-03-13",
+        "family": "againsakutabi-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ginzan-morning-quiet-2",
+      "candidateId": "c-ginzan-onsen",
+      "claim": "Ginzan Onsen mornings are markedly quieter than daytime: walking out after breakfast (accommodation-only access hours still in effect that morning), the author found virtually no other visitors out, in contrast to the controlled, crowded evening gas-lamp hours.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://4travel.jp/travelogue/11968935",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-01-01",
+        "family": "4travel-individual-milalan",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ginzan-bus-fare-schedule",
+      "candidateId": "c-ginzan-line-bus",
+      "claim": "The Ginzan Line bus (privately operated, contracted local route) connects JR Oishida Station and Ginzan Onsen in about 30-40 minutes. Adult one-way fare ¥1,000 (exact change, ¥1,000 bills only); no reservation needed, it's a regular route bus not subject to the entry-ticket system. Departures from Oishida Station: 6:40, 7:50, 9:50, 12:35, 14:10, 15:55, 17:45. The operator itself flags the 14:55 departure from Ginzan Onsen as not connecting to the northbound Shinkansen, and flags the last return departure from Ginzan Onsen (18:21) as typically crowded, recommending an earlier bus. Winter operation can be significantly disrupted by weather.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.hanagasa-bus-taisei.co.jp/base.html",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-izunohana-hours-group-policy",
+      "candidateId": "c-izu-no-hana",
+      "claim": "Izu no Hana (Ginzan Onsen soba/dessert shop) is open 11:00-18:00 (soba L.O. 17:30); an evening menu runs 17:00-19:00 (L.O. 18:30) but is reservation-only; closed Wednesdays (plus occasional irregular closures). It states it does not accept group bookings from overseas tour operators, and accepts domestic tour-group bookings only when its own crowding/kitchen-capacity conditions are met - i.e. a walk-in table for a party of 8 is not guaranteed.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.izunohana.com/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-taimenseki-hours-location",
+      "candidateId": "c-taimenseki",
+      "claim": "Taimenseki (お休み処 対面石), a soba rest-stop at the foot of Yamadera near the station (Yamagata City, Yamadera 4411; tel 023-695-2116), is open 8:30-17:30; parking available; window seats look out on the Senzan Line tracks and the Tachiya River. Known for imoni-soba and itasoba plus basho-yaki dumplings for dessert.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.visityamagata.jp/spot-yamagatashi-oyasumidokorotaimenseki/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-hiyashi-ramen-origin-city",
+      "candidateId": null,
+      "claim": "Yamagata City is the birthplace of hiyashi ramen (chilled ramen): roughly 70 years ago, the proprietor of an established soba shop developed it after extensive experimentation with ingredients, fat content and flavor so the broth's oil wouldn't solidify when iced. The city's own heritage page does not name the specific shop.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.yamagatakara.jp/takara/specialties/hiyashi-ramen.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-sakaeya-honten-origin-claim",
+      "candidateId": "c-sakaeya-honten",
+      "claim": "Sakaeya Honten (Yamagata City, Honcho 2-3-21) states it is the specific shop that created Japan's first hiyashi ramen, in 1952 after about a year refining the recipe to keep oil from solidifying in cold broth. This is the shop's own claim (widely repeated in press coverage but not confirmed by the city's own heritage page, which names no shop). Exact current restaurant operating hours are not posted on its own site - only that the physical shop and online shop share the same closed-days calendar - so confirm hours by phone/fax before visiting.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://yamagata-sakaeyahonten.com/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-11-15"
+      }
+    },
+    {
+      "id": "ev-yamagata-dialect-phrases",
+      "candidateId": null,
+      "claim": "A handful of Yamagata-dialect (山形弁) words a visitor may hear or use: おばんです (evening greeting, standard こんばんは), さすけね (no problem/that's fine, standard 大丈夫), わがんね (I don't understand, standard 分からない), 一緒いぐべ (let's go together, standard 一緒に行こう). Distinct enough from standard Japanese that locals themselves point it out to newcomers.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.furusato-web.jp/topics/p43837/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-28",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-izu-no-hana",
+      "importance": "important",
+      "bookingUrl": null,
+      "releaseWindow": null,
+      "actionDate": null,
+      "partyRules": "No online booking; phone-only (0237-28-2036). States it accepts domestic tour-group reservations only when its own crowding/kitchen-capacity conditions are met, and refuses group bookings from overseas tour operators outright. No confirmed minimum-party threshold for a self-organized (non-tour) party of 8.",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "Phone-only reservation channel; no evidence of English support or online booking found in this pass.",
+      "lastSeating": "Soba L.O. 17:30; a reservation-only evening (酒刻) menu runs 17:00-19:00, L.O. 18:30.",
+      "walkIn": "Walk-in works for small parties, but a group of 8 risks being turned away or seated separately during busy periods without calling ahead - the shop's own group policy exists precisely because of capacity limits.",
+      "leads": [
+        {
+          "claim": "Calling ahead directly (rather than going through a tour operator) can secure a table for a self-organized party of 8 even though the posted policy language is aimed at commercial tour groups.",
+          "status": "unconfirmed-lead",
+          "source": null,
+          "verifiedOn": null
+        }
+      ],
+      "alternatives": "Other Ginzan Onsen soba/dining spots (e.g. Ginzanso's day-use dining) as options if Izu no Hana can't accommodate 8.",
+      "fallback": "Split into two smaller tables/seatings, or eat at the ryokan instead, if Izu no Hana can't seat the full party together."
+    }
+  ],
+  "transport": [
+    {
+      "id": "t-oishida-ginzan-bus",
+      "route": "JR Oishida Station ⇄ Ginzan Onsen (Ginzan Line, private-operator local bus)",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-ginzan-bus-fare-schedule"
+      ],
+      "doorToDoor": "Yamagata Station → JR (Ou Main Line / Yamagata Shinkansen Tsubasa) to Oishida Station → Ginzan Line bus (~30-40 min, ¥1,000/adult one-way) → Ginzan Onsen. No same-platform transfer; the bus stop is outside the station and departures are infrequent, so timing the train to a bus departure matters more than raw travel time.",
+      "transferReality": "Only about 7 bus departures/day each direction from Oishida, with gaps over two hours in places (e.g. 9:50 to 12:35) - missing a planned bus is a long wait, not a quick re-route.",
+      "groupLuggageMobility": "This is a standard local/private bus, not a large coach. The intake confirms the group carries its own luggage on this exact leg toward Ginzan Onsen, and 2 of the 8 travelers have low walking tolerance; no accessible/low-floor vehicle spec or luggage-forwarding (takkyubin/hands-free) service to Ginzan Onsen was found in this pass - worth confirming directly with the operator or ryokan before relying on this leg with bags in hand.",
+      "buffer": "Treat the operator's own advisory as the buffer: it flags the last return bus from Ginzan Onsen (18:21) as typically crowded and recommends taking an earlier one rather than cutting it close.",
+      "missedConnection": "Missing a given Oishida departure can mean waiting over two hours for the next bus (worse for a party including low-mobility travelers standing at a small rural stop).",
+      "nextService": "Oishida-bound departures: 6:40, 7:50, 9:50, 12:35, 14:10, 15:55, 17:45.",
+      "lastPracticalReturn": "Last bus ex-Ginzan Onsen departs 18:21 and is flagged by the operator itself as usually crowded; treat an earlier bus as the practical last return for a party of 8 with luggage and mobility constraints.",
+      "fallback": "Taxi from Oishida Station (used in Ginzan Onsen's own winter access guidance as a guaranteed-entry alternative to the bus) - exact fare and whether one taxi can fit 8 people + luggage (likely needs 2 taxis) was not confirmed in this pass."
+    }
+  ],
+  "disagreements": [],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-izu-no-hana"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [
+        "t-oishida-ginzan-bus"
+      ],
+      "notApplicableReason": null
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": true,
+    "note": "Later searches (cold-ramen shop comparisons beyond Sakaeya, English-language cashless/language-barrier tips) mostly returned repeats of the same SEO listicles rather than new firsthand material, so discovery stopped there. One genuine unresolved item remains: Ginzan Onsen's autumn/winter 2026 entry-restriction dates are not yet announced (last season's dates were only published shortly before the season itself). This can't change which candidates ship, but could change day-of logistics for the Oct 20-23, 2026 dates, so it's carried as a near-term recheck (ev-ginzan-entry-restriction-history) rather than left open-ended."
+  },
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "English-language coverage of Ginzan Onsen's 2025-2026 car/entry-restriction scheme, Yamadera's actual hour-by-hour crowd pattern, the real fare/schedule for the Oishida-Ginzan Onsen bus, and Yamagata's own food/dialect color is thin, generic, or SEO-templated. Japanese municipal, operator, and personal-travelogue sources carried the specific, current, firsthand detail this resident-angle pass needed on a small regional destination.",
+      "searchClasses": [
+        "official/operator municipal & transit pages (city.obanazawa.yamagata.jp, hanagasa-bus-taisei.co.jp, ginzan-artmuseum.com, rissyakuji.jp, izunohana.com, yamagata-sakaeyahonten.com, yamagatakara.jp)",
+        "personal firsthand travelogues for crowd-timing corroboration (4travel.jp and note.com individual authors)",
+        "local resident food blogs (fullpokko.com / やまがたぐらし)",
+        "dialect/phrase reference pages (furusato-web.jp)"
+      ],
+      "yield": "Surfaced a live logistics fact English sources miss entirely (Ginzan Onsen's day-visitor entry-ticket/car-restriction system and its real 2025-26 date pattern), the actual fare/schedule/crowding notes for the Oishida-Ginzan Onsen bus straight from its operator, official hours/admission for Yamadera, a genuine party-size booking constraint at a Ginzan Onsen soba shop, and two independently corroborated firsthand crowd-timing windows each for Yamadera and Ginzan Onsen. One native lead (a 'locals prefer the cold-ramen branch shop over the famous original' claim) did not survive corroboration and was rejected rather than shipped."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": []
+}
