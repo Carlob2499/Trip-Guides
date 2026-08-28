@@ -54,6 +54,24 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-28T04:18:14.474Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T05:01:53.417Z"
+    },
+    {
+      "runId": "shimane-20260828-0f02a5",
+      "stage": "reconcile",
+      "attempt": 3,
+      "findings": [
+        "P0 research   · FAIL — 1 blocking, 1 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ [leg-duration-unverified] 2 of 6 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Top sights\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-28T05:01:53.417Z",
       "status": "active",
       "retiredAt": null
     }
