@@ -10,7 +10,7 @@
   "roomId": "blknya64ly2ks7w6",
   "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
   "intro": "Matsue base for the castle and Izumo Taisha, then a one-way relocation with luggage to Oda/Omori for the Iwami Ginzan silver mine before looping back east to fly out of Izumo. Built for a party of 8, two with limited walking tolerance, no rental car.",
-  "verified": "⚠ Draft — reconciled from two independent research passes (Pass A canonical/official-source, Pass B native-language/local/crowd-aware), 2026-08-28. Matsue Castle, Izumo Taisha, and the Iwami Ginzan transport chain (JR + Iwami Kotsu bus + Ginzan Cart) confirmed against official/operator pages; Pass B corroborated the core picks independently and added crowd-timing, the Matsue Lake Line bus, and Shiomi Nawate/Tanabe Museum of Art. Entry/visa and the US travel advisory could NOT be confirmed — both official sources (mofa.go.jp, travel.state.gov) returned HTTP 403 to a non-browser fetch; needs a networked/browser recheck before publish. Re-check before travel: Ginzan Cart operating days/hours (weather-dependent, can suspend without notice), all bus/train timetables (rural lines revise seasonally), Matsue Castle's post-Jul-2026 pricing, the Izumo Taisha Kamiari-zuki dates for any later trip (2026's fall in Nov, not October), and Tanabe Museum of Art's own hours page (only confirmed via a secondary source so far).",
+  "verified": "⚠ Draft — reconciled from two independent research passes (Pass A canonical/official-source, Pass B native-language/local/crowd-aware), 2026-08-28. Matsue Castle, Izumo Taisha, and the Iwami Ginzan transport chain (JR + Iwami Kotsu bus + Ginzan Cart) confirmed against official/operator pages; Pass B corroborated the core picks independently and added crowd-timing, the Matsue Lake Line bus, and Shiomi Nawate/Tanabe Museum of Art. Entry/visa and the US travel advisory could NOT be confirmed — both official sources (mofa.go.jp, travel.state.gov) returned HTTP 403 to a non-browser fetch; needs a networked/browser recheck before publish. Re-check before travel: the last Iwami Kotsu bus out of Omori toward Ota-shi on the Iwami Ginzan day (seasonal, not published online — ask at the World Heritage Center desk on arrival), Ginzan Cart operating days/hours (weather-dependent, can suspend without notice), all bus/train timetables (rural lines revise seasonally), Matsue Castle's post-Jul-2026 pricing, the Izumo Taisha Kamiari-zuki dates for any later trip (2026's fall in Nov, not October), and whether a special exhibition is running at the Tanabe Museum of Art (special-exhibition pricing replaces the ¥700 standard rate).",
   "phrases": {
     "lang": "ja-JP",
     "items": [
@@ -42,7 +42,7 @@
         "situation": "Please call an ambulance",
         "native": "救急車を呼んでください",
         "romanization": "Kyūkyūsha o yonde kudasai",
-        "note": "dial 119 directly if you can; English-speaking interpreters are patched in on both 110 and 119",
+        "note": "dial 119 directly if you can, and lead with the place name — English handling depends on the local fire HQ and isn't confirmed for Matsue or Oda (see Health &amp; safety)",
         "source_url": "https://livejapan.com/en/in-tokyo/in-pref-tokyo/in-tokyo_train_station/article-a0003250/",
         "verified_on": "2026-08-28"
       },

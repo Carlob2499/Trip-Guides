@@ -237,3 +237,205 @@
   checklist panel and checklist item were updated with the concrete dates/terms so the guide
   itself states the WHEN, not just the how. No candidate status or shipped/rejected verdict
   changed in this pass — these were sourcing and completeness repairs only.
+
+## Critic findings
+
+Fresh-context read of the finished guide against the rubric (#6 anchor · #8 priority depth · #9
+party fit · #12 authenticity) plus the vibe lens. Ten findings, all implemented in the guide;
+every changed value is declared in `critic-corrections.v2.json`. Two judgments I did NOT act on
+are rebutted at the end.
+
+**1. The anchor day was built around a train the itinerary never takes.** (`06-days.json`, Thu
+Oct 22 — `pace`, body ¶3, `checklist[2]`, `constraints[1]`; `05-transit.json` `steps[6]`.)
+Rubric #5 (itinerary integrity) + #6 (anchor coverage) + the common-sense lens. The day's stated
+deadline was "the last convenient upbound JR service toward Matsue leaves Odashi at ≈19:24 …
+build the Iwami Ginzan day around this deadline", and the transit card repeated it as "an
+unplanned night away from your booked base". But this is the two-base transfer day: the party
+checks out of Matsue that morning WITH the luggage, the Booking checklist reserves "Oda/Omori
+lodging, 1 night", and Day 4 opens in Omori. There is no Matsue return to miss — while the
+connection that CAN strand a mobility-mixed group of 8 in a valley with no evening service went
+unnamed. The 19:24 figure also carried no source of its own (the section cites the Ginzan Cart
+page). Replaced with the real terminal constraint: the last Iwami Kotsu bus out of Omori /the
+World Heritage Center toward Ota-shi, flagged ⚠ because Iwami Kotsu's timetable is seasonal and
+is NOT published on the World Heritage Center's site (it links the operator's own timetable), so
+the guide now tells the group to confirm it at the centre's information desk on arrival — plus a
+named fallback: the centre's own transport page lists the Ota-shi taxi firms, 富士第一交通
+0854-82-0660 and 日本交通大田営業所 0854-82-0456 (fetched 2026-08-28), which for eight people is
+two or three cars.
+
+**2. The anchor's own capacity arithmetic was optimistic, and its fare was an invented midpoint.**
+(`facts.json` `ginzan-cart-500-yen`; `05-transit.json` `steps[5]`; `06-days.json` Thu Oct 22 body;
+`07-sights.json` Iwami Ginzan item.) Rubric #3 (provenance) + #6. The operator publishes
+"■運賃：200円～700円" — a range by boarding point — and the guide shipped "≈¥500", a figure the
+source never states (with the ≈ typed into `value`, which the registry derives from `state`).
+Worse for the plan: the guide said the cart runs "roughly every 30–40 minutes" three times, while
+the operator publishes a COUNT and no interval — "■運行便数：１日12～14便程度" across
+"営業時間：水曜日を除く8時～18時". Twelve to fourteen runs over ten hours is up to an hour between
+carts, and this trip's whole physical-feasibility premise is 8 people boarding a 6-seat cart in
+two loads. Fixed to the published range and to "12–14 runs a day, no fixed interval — budget up
+to an hour", with the day card now telling the group to decide who waits and who walks at the
+stop rather than discovering the split when the cart pulls away with six.
+
+**3. The guide contradicted itself on IC cards, and shipped the risky half.** (`05-transit.json`
+`steps[2]`, `steps[4]`; `02-money-and-budget.json` `[0]`; `01-plan.json` `[1]`.) Rubric #3 + #10,
+common-sense lens. Four surfaces (Plan, the divergences card, the phrase card, the Thu Oct 22
+body) told the traveler IC stops working west of Izumo-shi and to carry cash for Oda/Omori — while
+the transit card said "IC cards accepted on this bus" for the Iwami Kotsu run into Omori and the
+money panel listed "Iwami Kotsu buses" as IC-covered. Neither operator publishes any such thing.
+Checking the third IC claim in passing: Ichibata Electric Railway's own 運賃のご案内 /
+普通運賃のご案内 / お得なきっぷ pages never mention ICOCA, Suica or 交通系IC at all (its fare table
+is a PDF, revised 2025-03-01), so "IC cards (ICOCA/Suica) accepted" on the Izumo Taisha leg was
+equally unsourced. Both downgraded: the bus leg now says carry cash, the Ichibata leg ships as ⚠
+with the reason. JR's own San-in ICOCA boundary at Izumo-shi (JR West's 2016 release, 出雲市〜
+伯耆大山) is untouched — that one is real.
+
+**4. A price citation pointed at a page that says nothing about it.** (`facts.json`
+`izumo-taisha-treasure-hall-300-yen`; `07-sights.json` Izumo Taisha body.) Rubric #3. The ¥300
+Treasure Hall admission and its 8:30–16:30 / last-admission-16:00 hours were credited to
+`izumooyashiro.or.jp/archives/news/12552`. That page carries the shrine's visiting hours and the
+16:30 rear-precinct closure — both of which the guide also uses, correctly — but not one word
+about the Treasure Hall. Checked the shrine's own 神祜殿 precinct page and its second visiting-hours
+notice too: the shrine publishes no fee or hours for the hall anywhere. The value itself is right;
+re-sourced to the Izumo tourism association's shrine page ("大人300円", "8:30～16:30（入館は16:00まで）"),
+`tier` honestly downgraded primary → secondary, and the sight body now says inline where the figure
+comes from instead of implying the shrine published it.
+
+**5. A ⚠ was standing in for one page nobody fetched.** (`07-sights.json` Tanabe Museum item;
+`06-days.json` Tue Oct 20 body.) Rubric #10 — and a straight recurrence of the japan-2 2026-08-14
+pattern ("⚠ is for what can't be sourced, never for what wasn't looked up"). The museum shipped
+with "⚠ its posted hours (commonly cited as 9:00–17:00, ¥700, closed Mondays) come from a secondary
+source". The museum's own ご利用案内 page was one click from the `/profile/` URL already cited:
+"9時～17時（入館は16時30分迄）", "毎週月曜日（但、祝祭日の場合は開館）", "大人 700円（600円）
+大学・高校生 500円（400円）". Shipped clean, with two things the secondary source never carried:
+the bracketed rate is a **10-person** group discount, so this party of 8 pays individual admission,
+and "特別展の場合は別途料金となります" — a special exhibition replaces the standing collection and is
+priced separately, with no 2026 calendar published. That last one keeps an honest ⚠ (with the
+phone number), which is what the flag is actually for. `source_url` moved to the page that carries
+the facts.
+
+**6. The venue that answers the intake's hardest requirement failed the four-question rule.**
+(`08-food-and-shopping.json` Konekkoya item.) Rubric #7 + #9 (party fit). The intake demands "at
+least one meal/venue should require an actual party-size feasibility decision for eight adults",
+the reconciliation ledger picked Konekkoya for exactly that, the Booking checklist says to phone
+ahead — and the item shipped with no address, no phone, no hours, `book: "call"`, and a price band
+of "≈¥3,000–5,000". From the operator's own page: 千鳥町36, 宍道湖しじみ館2F; 0852-28-7511; lunch
+11:00–14:30 (LO 14:00) and dinner 17:00–21:00 (L.O. 20:30); 70 seats with the 24-seat banquet room
+and 貸し切り不可; courses 3,500円／5,000円／6,000円. The shipped band both invented a floor below the
+cheapest course and hid the tier a group booking is most likely to be offered. Day 1's dinner
+paragraph now names the restaurant, the number and the last-order time instead of "a
+Shinjiko-shichin restaurant near the lake".
+
+**7. A Shibuya ward page was testifying about Shimane.** (`03-health-and-safety.json` `[0]`;
+`_guide.json` `phrases.items[3].note`.) Rubric #3 — the "official URL pasted onto a claim it does
+not support" class. "Both connect callers to an interpreter for English (and other languages)" was
+sourced to `city.shibuya.tokyo.jp`'s dial-119 page: a Tokyo ward's own service page, which can
+only speak for that ward. 119 is answered by the municipal fire headquarters, so the guarantee
+cannot be generalised to Matsue or Oda, and nothing published for either confirms it. Rewritten to
+say so and to give the group a workable substitute (front desk places the call; phrase cards on a
+lock screen; place name first), and re-sourced to a page that states exactly the surviving durable
+claim — the two national numbers. The same sentence had leaked into the ambulance phrase card;
+fixed there too.
+
+**8. The budget billed a fourth night nobody sleeps.** (`02-money-and-budget.json` `[1]`,
+`items[0]`.) Rubric #5. Lodging shipped as "per night" on `basis: "day"`, and `BudgetBlock.astro`
+multiplies day-basis items by the section's `days: 4` — but Oct 20–23 is four days and **three**
+nights (the guide's own checklist: 2 Matsue nights + 1 Oda/Omori night). Every traveler's headline
+carried ¥20,000 of lodging against a ¥15,000 stay. Moved to `basis: "trip"` with the three-night
+totals (est ¥15,000, ¥10,500–21,900) and relabelled; `days: 4` stays correct for food, local
+transport and sights. This is a verbatim recurrence of the uruguay 2026-08-23 row — see the
+fragment.
+
+**9. Arrival day stacked two identical cut-offs and hoped.** (`06-days.json` Tue Oct 20 body.)
+Vibe lens — pacing arc + common sense. The day lands a party of 8 (two low-mobility), checks in,
+then wants Matsue Castle (last entry 16:30), a Shiomi Nawate walk, the Tanabe Museum, Lake Shinji
+at sunset and dinner — while separately advising that the castle is calmest "from ~16:30". With
+the museum's real last admission now confirmed at 16:30 too, the two cannot both happen on any
+arrival after mid-afternoon, and the guide gave the traveler no way to see that. Rewritten as an
+explicit fork with a time on it: at the castle gate by ~15:00 takes both; later than that, castle
+plus the moat walk and let the museum go. No new venue, no new fact — the two 16:30s were already
+in the guide, unconnected.
+
+**10. The rain plan sent a soaked group somewhere it thought was next door.** (`06-days.json` Thu
+Oct 22 `plan_b`; ripples in `05-transit.json` `steps[4]` and `07-sights.json` Iwami Ginzan body.)
+Vibe lens — inclement cover + geography. The `plan_b` for the trip's one weather-exposed day named
+the World Heritage Center museum and Gungendo's café and said "both sit right at the townscape
+entrance, no extra transit needed". The operator's own Q&A: "石見銀山世界遺産センターは、大森の町並みから
+車で５分程度離れた場所にあります" — it is a road trip from the village, on a bus whose timetable the
+same page tells visitors to check. In a downpour that is two bus legs and two waits, which is the
+opposite of a fallback. Gungendo genuinely IS in the townscape and is now named as the
+zero-transit dry option; the centre is kept as the bigger wet-weather choice with its true cost
+stated. The same "the centre is not the village" correction went into the arrival step and the
+sight card so the three can't drift apart again.
+
+### Disagreements — judged and NOT acted on
+
+- **Aggregator-sourced fares (`facts.json` `odashi-omori-bus-760-yen`, `jr-sanin-matsue-odashi-fare`
+  via japan-guide.com; `ichibata-matsue-izumo-900-yen` via ekitan.com).** These are perishable
+  transit fares on T2 sources, which the rules would normally send back to the operator. The
+  operator authorities are Iwami Kotsu's own timetable (`iwamigroup.jp/publics/index/6/`, linked
+  from the verified `ginzan-wm.jp/traffic_info/`) and Ichibata's fare-table PDF (linked from
+  `railway.ichibata.co.jp/fare/futsu/`, revised 2025-03-01) — both outside this stage's fetch
+  allowlist, and the Ichibata PDF is not machine-readable through this tooling anyway. Flagged
+  rather than papered over: the values are unchanged, their `tier` fields already say secondary/
+  corroborated, and the exact source leads are recorded here for the networked gate.
+- **`facts.json` id `ginzan-cart-500-yen` now carries a superseded figure** (ids are supposed to
+  carry the value). Left alone deliberately: renaming the key would orphan its two `{{fact:}}`
+  references and a key move cannot be expressed as a changed value in the corrections ledger. One
+  for the next recert, not for a blind critic pass.
+- **`_guide.json.tz`, `place_id` values, and the entry/advisory blanks** were left untouched —
+  the tz is Japan's single unambiguous zone, and the entry/advisory gap is honestly flagged and
+  explicitly owed to a browser-capable recheck. Nothing to add without a fetch I cannot make.
+
+## Citation audit
+
+Fifteen sampled facts, weighted to prices, hours and the anchor chain. Every row's own
+`source_url` was fetched today unless the "fetched" column says otherwise.
+
+| Claim | Value | Source fetched (y/n) | Verdict |
+|-------|-------|----------------------|---------|
+| Matsue Castle keep admission, adult, from Jul 1 2026 | ¥1,200 | y — matsue-castle.jp/userguide | supports ("令和8年7月1日から…料金を改定します", ¥960 for groups of 30+) |
+| Matsue Castle Oct–Mar hours / last entry | 8:30–17:00, last entry 16:30 | y — matsue-castle.jp/userguide | supports |
+| Ginzan Cart one-way fare | ≈¥500 | y — ginzan-wm.jp/purpose_post/ginzancart-gsm | drifted → fixed (source publishes "200円～700円"; value now ¥200–700) |
+| Ginzan Cart service interval | "roughly every 30–40 min" | y — same page | drifted → fixed (source publishes "１日12～14便程度", no interval; guide now says 12–14 runs, up to an hour) |
+| Izumo Taisha Treasure Hall admission + hours | ¥300, 8:30–16:30, last adm. 16:00 | y — izumooyashiro.or.jp/archives/news/12552 | drifted → fixed (cited page carries no Treasure Hall content at all; value confirmed and re-sourced to izumo-kankou.gr.jp/676, tier → secondary) |
+| Izumo Taisha grounds hours + rear-precinct closure | 6:00–19:00; rear closes 16:30 | y — izumooyashiro.or.jp/archives/news/12552 | supports ("６：００～１９：００"; "御本殿より裏側の区域は…午後4時30分に閉鎖致します") |
+| Matsue Lake Line single ride / day pass / interval | ¥250 / ¥700 / ≈30 min, 50-min loop | y — kankou-shimane.com/experience/72409 | supports ("大人250円", "大人700円", "概ね30分間隔", "1周約50分") |
+| Arakiya warigo soba set + Wednesday closure | ¥1,080; closed Wed | y — arakiya-izumo.com | supports ("1,080円", "水曜定休日（祝日の場合は翌日）", 11:00–16:00 or sell-out) |
+| Tanakaya hours, Thursday closure, tablet queue | 11:00–16:00, closed Thu, LINE queue | y — soba-tanakaya.jp | supports (queue announcement dated 2026-06-21, LINE notification, TableCheck fast pass) |
+| Iwami Ginzan e-bike, 2-hour rate | ¥700 | y — ginzan-wm.jp/q_a | supports ("２時間で700円です") — renter named as レンタサイクル河村 near 代官所前ひろば, now in the guide |
+| Ryugenji Mabu walk from the park | 2.3 km / ≈45 min one way | y — ginzan-wm.jp/q_a | supports ("徒歩で片道45分"; "最低でも半日を目途に") |
+| Tanabe Museum hours / admission / closures | ⚠ "commonly cited 9:00–17:00, ¥700, closed Mon" | y — tanabe-museum.or.jp/information | drifted → fixed (official page confirms and adds last admission 16:30, the 10-person group threshold, and separately-priced special exhibitions; ⚠ retired) |
+| Konekkoya price band | ≈¥3,000–5,000 | y — nekko-group.com/konekko_ya | drifted → fixed (courses "3,500円／5,000円／6,000円"; address, phone, hours, 24-seat room and 貸し切り不可 added) |
+| JR West ICOCA western limit on the San-in Line | ends at Izumo-shi | y — westjr.co.jp/press/article/2016/08/page_9133.html | supports — but note the fetch returned only unrelated body text; the claim rests on the release's own title, 山陰線（出雲市〜伯耆大山駅間）…ICOCAがご利用できるようになります |
+| Ichibata Electric Railway IC-card acceptance | "IC cards (ICOCA/Suica) accepted" | y — railway.ichibata.co.jp (/, /fare/, /fare/futsu/, /tichet/free/) | unreachable → flagged (no IC statement anywhere on the operator's own pages; fare table is a PDF revised 2025-03-01 — claim downgraded to ⚠, cash advised) |
+
+Not fetched, and why: `odashi-omori-bus-760-yen` and `jr-sanin-matsue-odashi-fare` (japan-guide.com).
+Their operator authorities — Iwami Kotsu's timetable at `iwamigroup.jp/publics/index/6/` and Oda
+City's 生活バス page — are outside this stage's fetch allowlist (the Oda City URL was mechanically
+refused when tried). Values unchanged, leads recorded above.
+
+#### Continuity sweep — critic execution
+
+- **Greps run** over `src/content/guides/shimane/`: `19:24`, `30–40`, `every 30–40`, `≈¥500`,
+  `Daikansho Plaza`, `interpreter`, `IC cards (ICOCA`, `IC cards accepted`, `Iwami Kotsu buses`,
+  `per night`, `news/12552`, `profile/`, `city.shibuya`.
+- **Ripples found and fixed beyond the edited sections:** (1) the Thu Oct 22 `pace` line still
+  promised "a fixed last train home in the evening" after the body was corrected — rewritten;
+  (2) `_guide.json` `phrases.items[3].note` repeated the unsupported "English-speaking interpreters
+  are patched in on both 110 and 119" — rewritten to match Health & safety; (3) the `_guide.json`
+  `verified` stamp's re-check list still owed "Tanabe Museum of Art's own hours page", a gap now
+  closed, and never named the one genuinely unpublished perishable — swapped for the last Iwami
+  Kotsu bus and for the Tanabe special-exhibition pricing; (4) `facts.json`
+  `iwami-ginzan-ebike-700-yen.claim` still located the rental at "Daikansho Plaza" — corrected to
+  name レンタサイクル河村, matching the prose; (5) the cart's frequency correction was applied in
+  all three places it appears (transit step, day body, sight body) plus the day's `constraints[0]`,
+  and the World Heritage Center geography in all three (transit step, day body, sight body) plus
+  the `plan_b`.
+- **Checked and clean:** every `{{fact:}}` token still resolves (`ginzan-cart-500-yen` and
+  `iwami-ginzan-ebike-700-yen` gained references in the Thu Oct 22 body; no record was renamed or
+  removed); the Wednesday-closure chain (Ginzan Cart, Arakiya, Gungendo) is unaffected by any edit;
+  `09-sources.json`, `04-etiquette-and-language.json` and the map/weather/holidays sections were not
+  touched.
+- **Deferred to human / the networked gate:** the two aggregator-sourced fares and the
+  `ginzan-cart-500-yen` id rename, both with their exact source leads recorded under "Disagreements"
+  above. Nothing else deferred.

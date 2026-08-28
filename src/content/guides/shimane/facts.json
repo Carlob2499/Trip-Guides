@@ -10,10 +10,10 @@
   "izumo-taisha-treasure-hall-300-yen": {
     "claim": "Izumo Taisha Treasure Hall (宝物殿) admission, adult",
     "value": "¥300",
-    "source_url": "https://izumooyashiro.or.jp/archives/news/12552",
+    "source_url": "https://izumo-kankou.gr.jp/676",
     "verified_on": "2026-08-28",
     "shelf_life": "venue",
-    "tier": "primary"
+    "tier": "secondary"
   },
   "ichibata-matsue-izumo-900-yen": {
     "claim": "Ichibata Electric Railway, Matsue Shinjiko Onsen ↔ Izumo Taisha-mae, one way (transfer at Kawato)",
@@ -33,7 +33,7 @@
   },
   "ginzan-cart-500-yen": {
     "claim": "Ginzan Cart (Green Slow Mobility), Omori Daikansho ruins → Ryugenji Mabu mine entrance, one way",
-    "value": "≈¥500",
+    "value": "¥200–700",
     "source_url": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
     "verified_on": "2026-08-28",
     "shelf_life": "venue",
@@ -74,7 +74,7 @@
     "tier": "primary"
   },
   "iwami-ginzan-ebike-700-yen": {
-    "claim": "Rental e-bike from Daikansho Plaza toward Ryugenji Mabu, 2-hour rate",
+    "claim": "Rental e-bike toward Ryugenji Mabu (Rentacycle Kawamura, by the Daikansho-mae plaza), 2-hour rate",
     "value": "¥700",
     "source_url": "https://www.ginzan-wm.jp/q_a/",
     "verified_on": "2026-08-28",

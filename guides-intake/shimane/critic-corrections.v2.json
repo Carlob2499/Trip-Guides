@@ -1,0 +1,349 @@
+{
+  "schema": "wp-critic-corrections/2.1",
+  "slug": "shimane",
+  "runId": "shimane-20260828-0f02a5",
+  "corrections": [
+    {
+      "target": "_guide.json#/verified",
+      "previousValue": "⚠ Draft — reconciled from two independent research passes (Pass A canonical/official-source, Pass B native-language/local/crowd-aware), 2026-08-28. Matsue Castle, Izumo Taisha, and the Iwami Ginzan transport chain (JR + Iwami Kotsu bus + Ginzan Cart) confirmed against official/operator pages; Pass B corroborated the core picks independently and added crowd-timing, the Matsue Lake Line bus, and Shiomi Nawate/Tanabe Museum of Art. Entry/visa and the US travel advisory could NOT be confirmed — both official sources (mofa.go.jp, travel.state.gov) returned HTTP 403 to a non-browser fetch; needs a networked/browser recheck before publish. Re-check before travel: Ginzan Cart operating days/hours (weather-dependent, can suspend without notice), all bus/train timetables (rural lines revise seasonally), Matsue Castle's post-Jul-2026 pricing, the Izumo Taisha Kamiari-zuki dates for any later trip (2026's fall in Nov, not October), and Tanabe Museum of Art's own hours page (only confirmed via a secondary source so far).",
+      "correctedValue": "⚠ Draft — reconciled from two independent research passes (Pass A canonical/official-source, Pass B native-language/local/crowd-aware), 2026-08-28. Matsue Castle, Izumo Taisha, and the Iwami Ginzan transport chain (JR + Iwami Kotsu bus + Ginzan Cart) confirmed against official/operator pages; Pass B corroborated the core picks independently and added crowd-timing, the Matsue Lake Line bus, and Shiomi Nawate/Tanabe Museum of Art. Entry/visa and the US travel advisory could NOT be confirmed — both official sources (mofa.go.jp, travel.state.gov) returned HTTP 403 to a non-browser fetch; needs a networked/browser recheck before publish. Re-check before travel: the last Iwami Kotsu bus out of Omori toward Ota-shi on the Iwami Ginzan day (seasonal, not published online — ask at the World Heritage Center desk on arrival), Ginzan Cart operating days/hours (weather-dependent, can suspend without notice), all bus/train timetables (rural lines revise seasonally), Matsue Castle's post-Jul-2026 pricing, the Izumo Taisha Kamiari-zuki dates for any later trip (2026's fall in Nov, not October), and whether a special exhibition is running at the Tanabe Museum of Art (special-exhibition pricing replaces the ¥700 standard rate).",
+      "claim": "The re-check list named a gap that is now closed (Tanabe hours, confirmed against the museum's own visitor page) and omitted the trip's one genuinely unpublished perishable: the last Iwami Kotsu bus out of Omori.",
+      "source": "https://www.tanabe-museum.or.jp/information/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "_guide.json#/phrases/items/3/note",
+      "previousValue": "dial 119 directly if you can; English-speaking interpreters are patched in on both 110 and 119",
+      "correctedValue": "dial 119 directly if you can, and lead with the place name — English handling depends on the local fire HQ and isn't confirmed for Matsue or Oda (see Health &amp; safety)",
+      "claim": "No source reachable this pass states that 110/119 calls in Shimane are patched to an English interpreter; 119 is answered by the municipal fire headquarters, so the claim cannot be made prefecture-wide. The cited emergency reference states only the two numbers.",
+      "source": "https://livejapan.com/en/in-tokyo/in-pref-tokyo/in-tokyo_train_station/article-a0003250/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "facts.json#/izumo-taisha-treasure-hall-300-yen/source_url",
+      "previousValue": "https://izumooyashiro.or.jp/archives/news/12552",
+      "correctedValue": "https://izumo-kankou.gr.jp/676",
+      "claim": "Izumo Taisha Treasure Hall (Shinkoden) adult admission ¥300, 8:30–16:30, last admission 16:00. The cited shrine news page carries visiting hours and the 16:30 rear-precinct closure but says nothing about the Treasure Hall's fee or hours; the Izumo tourism association's shrine page states \"大人300円\" and \"8:30～16:30（入館は16:00まで）\".",
+      "source": "https://izumo-kankou.gr.jp/676",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "facts.json#/izumo-taisha-treasure-hall-300-yen/tier",
+      "previousValue": "primary",
+      "correctedValue": "secondary",
+      "claim": "The shrine itself does not publish the Treasure Hall's fee or hours on its own site (checked the news, precinct and Shinkoden pages), so the surviving source is the regional tourism association's listing — authoritative secondary, not primary.",
+      "source": "https://izumooyashiro.or.jp/precinct/keidai-index/shinkoden",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "facts.json#/ginzan-cart-500-yen/value",
+      "previousValue": "≈¥500",
+      "correctedValue": "¥200–700",
+      "claim": "The Ginzan Cart operator publishes a fare RANGE, \"■運賃：200円～700円\", not a single figure — the shipped ≈¥500 was a midpoint the source never states (and typed the ≈ into `value`, which the registry derives from `state`).",
+      "source": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "facts.json#/iwami-ginzan-ebike-700-yen/claim",
+      "previousValue": "Rental e-bike from Daikansho Plaza toward Ryugenji Mabu, 2-hour rate",
+      "correctedValue": "Rental e-bike toward Ryugenji Mabu (Rentacycle Kawamura, by the Daikansho-mae plaza), 2-hour rate",
+      "claim": "The operator's Q&A names the rental outlet: \"代官所前ひろば近くのレンタサイクル河村\" — the plaza is the landmark, not the renter, and a traveler looking for a counter at \"Daikansho Plaza\" is looking for the wrong thing.",
+      "source": "https://www.ginzan-wm.jp/q_a/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "01-plan.json#/1/body",
+      "previousValue": "<p>Shimane is cash-first outside the two main stations. ICOCA/Suica-type IC cards work on Matsue-area trains and buses and on the Ichibata Electric Railway, but the JR San-in Line's IC coverage ends at Izumo-shi Station — one stop further west, toward Oda and Omori, and you're back to paper tickets and coins.</p><p>Convenience stores (7-Eleven, Lawson) have ATMs that reliably accept foreign cards; rural Oda/Omori has far fewer of them than Matsue, so withdraw before the transfer day, not after.</p>",
+      "correctedValue": "<p>Shimane is cash-first outside the two main stations. ICOCA/Suica-type IC cards work on JR around Matsue — the JR West ICOCA area on the San-in Line reaches west only as far as Izumo-shi Station, and one stop beyond it, toward Oda and Omori, you're back to paper tickets and coins. Off JR, don't assume either: neither the Ichibata Electric Railway nor the Iwami Kotsu buses out to Omori publish IC acceptance on their own pages, so treat every non-JR leg of this trip as a cash leg until a gate proves otherwise.</p><p>Convenience stores (7-Eleven, Lawson) have ATMs that reliably accept foreign cards; rural Oda/Omori has far fewer of them than Matsue, so withdraw before the transfer day, not after.</p>",
+      "claim": "Ichibata Electric Railway publishes no IC-card acceptance anywhere in its own fare/ticket pages (fare table is a PDF, last revised 2025-03-01); the guide asserted IC works there while three other sections told the traveler to carry cash. JR West's own press release title fixes the San-in ICOCA area as 出雲市〜伯耆大山.",
+      "source": "https://railway.ichibata.co.jp/fare/futsu/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "02-money-and-budget.json#/0/body",
+      "previousValue": "<p>Japanese yen (¥), cash-first once you're west of Matsue/Izumo. Convenience-store ATMs (7-Eleven, Lawson, Family Mart) reliably take foreign cards in both cities; Oda/Omori has only a handful, so carry enough cash for the whole Iwami Ginzan day before you transfer out of Matsue.</p><p>No tipping, anywhere. IC cards (ICOCA/Suica/PASMO) cover Matsue-area JR, the Ichibata Railway, and Iwami Kotsu buses, but the JR San-in Line stops accepting IC taps at Izumo-shi Station — buy a paper ticket for anything continuing to Odashi.</p>",
+      "correctedValue": "<p>Japanese yen (¥), cash-first once you're west of Matsue/Izumo. Convenience-store ATMs (7-Eleven, Lawson, Family Mart) reliably take foreign cards in both cities; Oda/Omori has only a handful, so carry enough cash for the whole Iwami Ginzan day before you transfer out of Matsue.</p><p>No tipping, anywhere. IC cards (ICOCA/Suica/PASMO) cover JR around Matsue, but the JR San-in Line stops accepting IC taps at Izumo-shi Station — buy a paper ticket for anything continuing to Odashi. The two non-JR legs this trip actually uses, the Ichibata Railway out to Izumo Taisha and the Iwami Kotsu bus into Omori, advertise no IC acceptance of their own: budget cash for both rather than finding out at the door with eight people behind you.</p>",
+      "claim": "Same contradiction from the money side: the panel promised IC on the Ichibata Railway and on Iwami Kotsu buses, which neither operator publishes, while the same paragraph told the traveler the area is cash-first.",
+      "source": "https://railway.ichibata.co.jp/fare/futsu/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "02-money-and-budget.json#/1/items/0/label",
+      "previousValue": "Lodging, per night (twin/business hotel, room-only)",
+      "correctedValue": "Lodging, 3 nights total (twin/business hotel, room-only)",
+      "claim": "The trip is 4 day cards (Oct 20–23) and 3 nights; a per-night lodging line on `basis: \"day\"` is multiplied by the section's `days: 4`, billing a fourth night nobody sleeps.",
+      "source": "guides-intake/shimane/intake.md (dates 2026-10-20 – 2026-10-23) + src/components/blocks/BudgetBlock.astro:27 (`basis === \"day\" ? est * days : est`) + 01-plan.json booking checklist (2 Matsue nights + 1 Oda/Omori night)",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "02-money-and-budget.json#/1/items/0/basis",
+      "previousValue": "day",
+      "correctedValue": "trip",
+      "claim": "Nights (3) differ from days (4), so lodging must be a trip-basis total; `days` stays 4 for the genuinely per-day rows (food, local transport, sights).",
+      "source": "guides-intake/shimane/intake.md (dates 2026-10-20 – 2026-10-23) + src/components/blocks/BudgetBlock.astro:27",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "02-money-and-budget.json#/1/items/0/est",
+      "previousValue": "5000",
+      "correctedValue": "15000",
+      "claim": "¥5,000 per person per night × 3 nights = ¥15,000 per person for the stay (previously rendered as ¥20,000 via the 4-day multiplier).",
+      "source": "guides-intake/shimane/intake.md (dates 2026-10-20 – 2026-10-23) + src/components/blocks/BudgetBlock.astro:27",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "02-money-and-budget.json#/1/items/0/low",
+      "previousValue": "3500",
+      "correctedValue": "10500",
+      "claim": "¥3,500 per person per night × 3 nights = ¥10,500 low end.",
+      "source": "guides-intake/shimane/intake.md (dates 2026-10-20 – 2026-10-23) + src/components/blocks/BudgetBlock.astro:27",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "02-money-and-budget.json#/1/items/0/high",
+      "previousValue": "7300",
+      "correctedValue": "21900",
+      "claim": "¥7,300 per person per night × 3 nights = ¥21,900 high end.",
+      "source": "guides-intake/shimane/intake.md (dates 2026-10-20 – 2026-10-23) + src/components/blocks/BudgetBlock.astro:27",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "03-health-and-safety.json#/0/body",
+      "previousValue": "<p>Police: <b>110</b>. Ambulance/fire: <b>119</b>. Both connect callers to an interpreter for English (and other languages) — speak slowly and stay on the line rather than hanging up if the first responder doesn't have English.</p><p>Matsue has full-service pharmacies and hospitals near the station. Oda City has a smaller hospital and a handful of pharmacies in the town center; the Omori heritage district itself has none — anyone needing regular medication should carry it, not plan to refill it there.</p><p>The Iwami Ginzan mine trail and the Ginzan Cart route involve uneven ground, some stairs, and long stretches without shade or seating — pace the two low-mobility travelers' day around it rather than the group average (see Days).</p>",
+      "correctedValue": "<p>Police: <b>110</b>. Ambulance/fire: <b>119</b>. ⚠ Don't plan on English on either line here: 119 is answered by the local fire headquarters, so any interpreter service is a municipal one that differs between Matsue and Oda, and nothing published for either confirms it. Work around that instead — where you can, have the lodging's front desk place the call; keep the ambulance and police phrase cards (Etiquette &amp; language) reachable on a lock screen; and if you do call alone, give the place name first and repeat it slowly rather than hanging up.</p><p>Matsue has full-service pharmacies and hospitals near the station. Oda City has a smaller hospital and a handful of pharmacies in the town center; the Omori heritage district itself has none — anyone needing regular medication should carry it, not plan to refill it there.</p><p>The Iwami Ginzan mine trail and the Ginzan Cart route involve uneven ground, some stairs, and long stretches without shade or seating — pace the two low-mobility travelers' day around it rather than the group average (see Days).</p>",
+      "claim": "The interpreter promise was carried by a Shibuya City (Tokyo) ward page, which can only testify to Shibuya's own 119 service — an official URL pasted onto a claim it does not support. 119 is dispatched by municipal fire headquarters, so the guarantee cannot be generalised to Matsue or Oda.",
+      "source": "https://livejapan.com/en/in-tokyo/in-pref-tokyo/in-tokyo_train_station/article-a0003250/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "03-health-and-safety.json#/0/source_url",
+      "previousValue": "https://www.city.shibuya.tokyo.jp/contents/living-in-shibuya/ja/emergencies/dial119.html",
+      "correctedValue": "https://livejapan.com/en/in-tokyo/in-pref-tokyo/in-tokyo_train_station/article-a0003250/",
+      "claim": "The panel's surviving claim is the pair of national emergency numbers (\"Dial 119 to call an ambulance and 110 to call the police\") — a durable fact the replacement source states plainly, without asserting a Shibuya-specific service for Shimane.",
+      "source": "https://livejapan.com/en/in-tokyo/in-pref-tokyo/in-tokyo_train_station/article-a0003250/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "default"
+    },
+    {
+      "target": "05-transit.json#/0/steps/2",
+      "previousValue": "<b>Matsue → Izumo Taisha</b> — Ichibata Electric Railway, Matsue Shinjiko Onsen Station to Izumo Taisha-mae, with a same-platform transfer at Kawato Station. ≈{{fact:ichibata-matsue-izumo-900-yen}} one way; IC cards (ICOCA/Suica) accepted.",
+      "correctedValue": "<b>Matsue → Izumo Taisha</b> — Ichibata Electric Railway, Matsue Shinjiko Onsen Station to Izumo Taisha-mae, with a same-platform transfer at Kawato Station. ≈{{fact:ichibata-matsue-izumo-900-yen}} one way. ⚠ Don't count on tapping through: Ichibata is a private line and publishes nothing about ICOCA/Suica acceptance anywhere in its own fare pages (its fare table is a PDF, last revised Mar 2025) — buy paper tickets for the eight of you, and allow a minute at the window.",
+      "claim": "Ichibata's own fare pages (運賃のご案内 / 普通運賃のご案内 / お得なきっぷ) never mention 交通系ICカード, ICOCA or Suica; the fare table is published as a PDF revised 2025-03-01. An unverifiable perishable claim ships as ⚠, not as fact.",
+      "source": "https://railway.ichibata.co.jp/fare/futsu/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "05-transit.json#/0/steps/4",
+      "previousValue": "<b>Odashi Station → Iwami Ginzan / Omori</b> — Iwami Kotsu community bus toward the World Heritage Center, ≈30 min, {{fact:odashi-omori-bus-760-yen}} one way, roughly hourly (with a documented gap around the 10 o'clock hour — don't assume a bus is always 30 minutes away). IC cards accepted on this bus.",
+      "correctedValue": "<b>Odashi Station → Iwami Ginzan / Omori</b> — Iwami Kotsu community bus toward the World Heritage Center, ≈30 min, {{fact:odashi-omori-bus-760-yen}} one way, roughly hourly (with a documented gap around the 10 o'clock hour — don't assume a bus is always 30 minutes away). Carry cash: this is past the ICOCA boundary and nothing on the operator's or the World Heritage Center's pages promises IC acceptance out here. <b>The World Heritage Center is not the village</b> — the site's own Q&A puts it about five minutes by road from the Omori townscape, with a further bus leg between them, so check where your service actually terminates before boarding.",
+      "claim": "Two defects in one step: the IC-accepted claim contradicted the guide's own cash-first rule for everything west of Izumo-shi and is published nowhere; and the World Heritage Center is not the townscape — \"石見銀山世界遺産センターは、大森の町並みから車で５分程度離れた場所にあります\", with the operator telling visitors to check the connecting bus timetable.",
+      "source": "https://www.ginzan-wm.jp/q_a/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "05-transit.json#/0/steps/5",
+      "previousValue": "<b>Omori townscape → Ryugenji Mabu mine entrance</b> — the Ginzan Cart (Green Slow Mobility), a 6-seat electric cart, {{fact:ginzan-cart-500-yen}} one way, no reservations, first-come first-served, roughly every 30–40 min, 8:00–18:00. <b>Closed Wednesdays</b> and can suspend on short notice in bad weather. If it's full or not running, the walk is ≈2.3 km / 45 min one way on an unpaved forest trail — plan real time for this, not a placeholder, if traveling with the two low-mobility members of the group. A rental e-bike from Daikansho Plaza ({{fact:iwami-ginzan-ebike-700-yen}} for 2hr) is a confirmed third option.",
+      "correctedValue": "<b>Omori townscape → Ryugenji Mabu mine entrance</b> — the Ginzan Cart (Green Slow Mobility), a 6-seat electric cart, {{fact:ginzan-cart-500-yen}} one way depending on where you board, no reservations, first-come first-served, 8:00–18:00. The operator publishes <b>12–14 runs a day and no interval</b>, so budget up to an hour for the next cart rather than the half-hour a group of 8 would like it to be. <b>Closed Wednesdays</b> and can suspend on short notice in bad weather. If it's full or not running, the walk is ≈2.3 km / 45 min one way on an unpaved forest trail — plan real time for this, not a placeholder, if traveling with the two low-mobility members of the group. A rental e-bike ({{fact:iwami-ginzan-ebike-700-yen}} for 2hr) from Rentacycle Kawamura by the Daikansho-mae plaza is a confirmed third option, and the operator recommends the electric bikes over ordinary ones because the valley road climbs.",
+      "claim": "The operator publishes \"■運行便数：１日12～14便程度\" over \"営業時間：水曜日を除く8時～18時\" and no interval at all — \"roughly every 30–40 min\" was an inference, and an optimistic one on the trip's single capacity bottleneck. The rental outlet is レンタサイクル河村 near the 代官所前ひろば, and the operator recommends the electric bikes because of the climb.",
+      "source": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "05-transit.json#/0/steps/6",
+      "previousValue": "<b>Last practical return, Odashi → Matsue</b> — the last convenient upbound JR service leaves Odashi ≈19:24 (Super Oki service toward Yonago, calling at Matsue). Missing it means either a very late connection or an unplanned night away from your booked base — build the Iwami Ginzan day around this deadline, not around the cart's own 18:00 close.",
+      "correctedValue": "<b>Last practical return out of the valley (Iwami Ginzan day)</b> — the deadline is the last Iwami Kotsu bus from Omori / the World Heritage Center toward Ota-shi, not a train: the trip sleeps on this side that night. ⚠ The timetable is seasonal and isn't published on the World Heritage Center's site — confirm the day's last departure at its information desk on arrival. Fallback if you miss it: the centre's <a href='https://www.ginzan-wm.jp/traffic_info/'>transport page</a> lists Ota-shi taxi firms — Fuji Daiichi Kotsu 0854-82-0660, Nihon Kotsu Ota office 0854-82-0456 — and eight people is two or three cars.",
+      "claim": "The itinerary relocates base to Oda/Omori on the Iwami Ginzan day and sleeps there, so no return to Matsue exists to miss; the real last-connection risk is the community bus out of the valley. The World Heritage Center's transport page publishes no bus times (it links Iwami Kotsu's own timetable) but does list the Ota-shi taxi operators and their numbers: 富士第一交通株式会社 0854-82-0660, 日本交通株式会社大田営業所 0854-82-0456.",
+      "source": "https://www.ginzan-wm.jp/traffic_info/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "06-days.json#/0/items/0/body",
+      "previousValue": "<p>The airport limousine bus meets your flight and drops you in central Matsue in under an hour. Check in, then head for <b>Matsue Castle</b> — one of only twelve original castle keeps left in Japan, open to 17:00 in October (last entry 16:30). The donjon staircase gets genuinely congested with tour-bus arrivals roughly 10am–3pm; arriving right after opening or from ~16:30 is noticeably calmer, per multiple local visitor accounts.</p><p>The <b>Matsue Lake Line</b> loop bus (≈every 30 min, ¥250/ride or ¥700 all-day pass) links the station, the castle, the Horikawa boat dock, Shiomi Nawate, and Matsue Shinjiko Onsen — worth the pass if you'd rather not walk each leg with the group's 2 low-mobility travelers.</p><p>Walk the <b>Shiomi Nawate</b> samurai district along the castle moat afterward — low-key, mostly flat, and close enough to the castle that the two low-mobility travelers don't need a second transit leg. Tucked inside it, behind an unassuming long-gate next to the Lafcadio Hearn Old Residence, the small <b>Tanabe Museum of Art</b> is a quieter detour on the same block — ⚠ its posted hours (commonly cited as 9:00–17:00, ¥700, closed Mondays) come from a secondary source, not the museum's own page, so confirm before counting on it. End at <b>Lake Shinji</b> for sunset; it's one of Japan's more reliably photographed sunset spots, a 10-minute walk from most central Matsue hotels.</p><p>Dinner: a Shinjiko-shichin (the lake's \"seven delicacies\" — shijimi clams, whitebait, eel among them) restaurant near the lake. Book ahead for a party of 8; most of these are small, counter-style rooms.</p>",
+      "correctedValue": "<p>The airport limousine bus meets your flight and drops you in central Matsue in under an hour. Check in, then head for <b>Matsue Castle</b> — one of only twelve original castle keeps left in Japan, open to 17:00 in October (last entry 16:30). The donjon staircase gets genuinely congested with tour-bus arrivals roughly 10am–3pm; arriving right after opening or from ~16:30 is noticeably calmer, per multiple local visitor accounts.</p><p>The <b>Matsue Lake Line</b> loop bus (≈every 30 min, ¥250/ride or ¥700 all-day pass) links the station, the castle, the Horikawa boat dock, Shiomi Nawate, and Matsue Shinjiko Onsen — worth the pass if you'd rather not walk each leg with the group's 2 low-mobility travelers.</p><p>Walk the <b>Shiomi Nawate</b> samurai district along the castle moat afterward — low-key, mostly flat, and close enough to the castle that the two low-mobility travelers don't need a second transit leg. Tucked inside it, behind an unassuming long-gate next to the Lafcadio Hearn Old Residence, the small <b>Tanabe Museum of Art</b> is a quieter detour on the same block (9:00–17:00, <b>last admission 16:30</b>, ¥700 adult — its group rate needs 10 people, so a party of 8 pays individually).</p><p>Those two 16:30 cut-offs are the day's one real decision. The castle and the museum stop admitting at the same minute, so you can have the calm late-afternoon castle OR the museum, not both: if the group is checked in and at the castle gate by about 15:00, take the castle first and the museum after; land later than that and take the castle alone, then walk Shiomi Nawate at whatever pace the two slower walkers want. Marching eight people between two 16:30 deadlines on arrival day is exactly the kind of day this trip is meant not to have. End at <b>Lake Shinji</b> for sunset; it's one of Japan's more reliably photographed sunset spots, a 10-minute walk from most central Matsue hotels.</p><p>Dinner: <b>Matsu-no-Daidokoro Konekkoya</b> (2F of the Shinjiko Shijimikan, Chidori-cho; 0852-28-7511) for Shinjiko-shichin — the lake's \"seven delicacies\", shijimi clams, whitebait and eel among them. Dinner service runs 17:00–21:00 with last orders at 20:30, and its 24-seat banquet room is the one nearby room documented to hold all eight of you at one table; courses run ¥3,500 / ¥5,000 / ¥6,000. Phone ahead — the room is shared, not a buyout, and the smaller counter places along the lake can't take a group of 8 at all.</p>",
+      "claim": "Tanabe Museum's own visitor page publishes \"9時～17時（入館は16時30分迄）\", \"毎週月曜日（但、祝祭日の場合は開館）\", \"大人 700円（600円）\" with the bracketed rate a 10-person group discount — the ⚠ stood in for a page that was one click away. That 16:30 last admission is the same minute as the castle's, which makes the day's stop order a real choice on an arrival afternoon; and the shipped dinner pick (Konekkoya) publishes address, phone, dinner service 17:00–21:00 (L.O. 20:30) and course prices ¥3,500/5,000/6,000, so \"book ahead\" can name the place and the number.",
+      "source": "https://www.tanabe-museum.or.jp/information/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "06-days.json#/0/items/2/pace",
+      "previousValue": "The trip's one hard-timed day — a morning train, a midday bus, a first-come shuttle, and a fixed last train home in the evening.",
+      "correctedValue": "The trip's one hard-timed day — a morning train with the luggage, a midday bus, a first-come shuttle, and a last bus out of the valley whose time you have to ask for on arrival.",
+      "claim": "There is no \"last train home\" on this day: the party checks out of Matsue that morning and sleeps in Oda/Omori. The day's terminal constraint is the last Iwami Kotsu bus out of the valley, whose timetable the World Heritage Center does not publish.",
+      "source": "https://www.ginzan-wm.jp/traffic_info/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "06-days.json#/0/items/2/body",
+      "previousValue": "<p>This is the day everything else on the trip is built around. Check out of Matsue with all luggage and take the JR San-in Line to Odashi (45–90 min depending on train) — <b>IC cards stop working at Izumo-shi Station</b>, so have cash or a paper ticket ready before boarding the second leg. From Odashi, the Iwami Kotsu community bus reaches the <b>Iwami Ginzan World Heritage Center</b> in about 30 minutes; drop bags at your Omori lodging first if it's on the way.</p><p><b>Iwami Ginzan</b> is a UNESCO World Heritage silver-mining town — Edo-period merchant houses lining a river valley, with the actual mine tunnel (Ryugenji Mabu) 2.3 km up the valley. Private cars are banned past the park entrance, so the only way in besides walking is the <b>Ginzan Cart</b>: a 6-seat electric shuttle, no reservations, first-come first-served, roughly every 30–40 minutes. With a party of 8 (two with limited walking tolerance), expect to split across two carts or wait one cycle — budget for it rather than assuming the first cart takes everyone. If the cart is full, not running, or the weather's turned, the walk is 2.3 km / ≈45 minutes each way on an unpaved forest trail — a rental e-bike from Daikansho Plaza (¥700/2hr) is a third, confirmed option for anyone who'd rather not wait out a cart cycle or walk the whole way. Local bus service into Omori itself runs on limited frequency — the operator's own guidance is to check the timetable ahead and allow at least half a day for the site.</p><p>Head back toward Odashi with real margin: the last convenient upbound JR service toward Matsue leaves Odashi at ≈19:24. Missing it costs a lot more than a wait — the next options are sparse, and Odashi itself has limited late-evening lodging.</p><p>Lunch or an afternoon coffee: <b>Gungendo's main store café</b>, a 170-year-old renovated merchant house in the townscape (closed Wednesdays — no conflict today).</p>",
+      "correctedValue": "<p>This is the day everything else on the trip is built around. Check out of Matsue with all luggage and take the JR San-in Line to Odashi (45–90 min depending on train) — <b>IC cards stop working at Izumo-shi Station</b>, so have cash or a paper ticket ready before boarding the second leg. From Odashi, the Iwami Kotsu community bus reaches the <b>Iwami Ginzan World Heritage Center</b> in about 30 minutes — but the centre is <b>not</b> the village: the operator puts it roughly five minutes by road from the Omori townscape, with another bus leg in between. Check which stop your service actually terminates at before you load eight people and the luggage onto it, and drop bags at your Omori lodging first if it's on the way.</p><p><b>Iwami Ginzan</b> is a UNESCO World Heritage silver-mining town — Edo-period merchant houses lining a river valley, with the actual mine tunnel (Ryugenji Mabu) 2.3 km up the valley. Private cars are banned past the park entrance, so the only way in besides walking is the <b>Ginzan Cart</b>: a 6-seat electric shuttle, no reservations, first-come first-served, {{fact:ginzan-cart-500-yen}} depending on where you board. The operator publishes 12–14 runs a day between 8:00 and 18:00 and no fixed interval, so the honest planning number is up to an hour to the next cart, not half an hour. With a party of 8 (two with limited walking tolerance), that means two loads minimum and a second group left standing — decide at the stop who waits and who walks, rather than discovering the split when the cart pulls away with six. If the cart is full, not running, or the weather's turned, the walk is 2.3 km / ≈45 minutes each way on an unpaved forest trail — a rental e-bike ({{fact:iwami-ginzan-ebike-700-yen}} for 2hr, from Rentacycle Kawamura by the Daikansho-mae plaza) is a third, confirmed option for anyone who'd rather not wait out a cart cycle or walk the whole way; the operator recommends the electric bikes over ordinary ones because the valley road climbs. Local bus service into Omori itself runs on limited frequency — the operator's own guidance is to check the timetable ahead and allow at least half a day for the site.</p><p>The deadline that ends this day is <b>the last bus out of the valley, not a train</b> — you checked out of Matsue this morning and you are sleeping on this side tonight, so nothing here depends on catching a JR service back east. What you can miss is the last Iwami Kotsu bus from Omori / the World Heritage Center toward Ota-shi and your Oda base, and the cart's own 18:00 close is not that deadline. ⚠ Iwami Kotsu revises this timetable seasonally and doesn't publish it on the World Heritage Center's site — ask at the centre's information desk the moment you arrive, and write the last departure down. If it goes: the centre's own transport page lists the Ota-shi taxi firms, Fuji Daiichi Kotsu (0854-82-0660) and Nihon Kotsu's Ota office (0854-82-0456) — a party of 8 is two or three cars, so call before the last bus leaves, not after.</p><p>Lunch or an afternoon coffee: <b>Gungendo's main store café</b>, a 170-year-old renovated merchant house in the townscape (closed Wednesdays — no conflict today).</p>",
+      "claim": "Three corrections on the anchor day: the World Heritage Center sits ~5 minutes by road from the Omori townscape (\"車で５分程度離れた場所\") rather than at its entrance; the Ginzan Cart runs \"１日12～14便程度\" between 8:00 and 18:00 with no published interval and a ¥200–700 fare; and the day's terminal deadline is the last community bus out of the valley — the party sleeps in Oda/Omori, so the 19:24 train toward Matsue it was built around is a connection this itinerary never makes. Taxi fallback numbers from the centre's own transport page.",
+      "source": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "06-days.json#/0/items/2/checklist/2",
+      "previousValue": "Track the ≈19:24 last practical train from Odashi all afternoon",
+      "correctedValue": "Ask the World Heritage Center desk for today's last bus toward Ota-shi on arrival, and note the taxi numbers",
+      "claim": "The checklist tracked a train the itinerary never takes; the actionable equivalent is confirming the unpublished last bus on arrival.",
+      "source": "https://www.ginzan-wm.jp/traffic_info/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "06-days.json#/0/items/2/constraints/0",
+      "previousValue": "Ginzan Cart: no reservations, 6-seat capacity, can suspend without notice in bad weather",
+      "correctedValue": "Ginzan Cart: no reservations, 6-seat capacity, 12–14 runs a day (no fixed interval), can suspend without notice in bad weather",
+      "claim": "\"１日12～14便程度\" with no published interval is itself a constraint for a party of 8 that cannot board in one load.",
+      "source": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "06-days.json#/0/items/2/constraints/1",
+      "previousValue": "Last practical train, Odashi → Matsue direction, ≈19:24",
+      "correctedValue": "Last Iwami Kotsu bus out of Omori toward Ota-shi — seasonal timetable, confirm it on arrival",
+      "claim": "Same defect as the body: the constraint named a Matsue-bound train on the night the party sleeps in Oda/Omori.",
+      "source": "https://www.ginzan-wm.jp/traffic_info/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "06-days.json#/0/items/2/plan_b/body",
+      "previousValue": "The Ginzan Cart can suspend in bad weather with no notice, and the 2.3km trail alternative isn't reasonable in a downpour with the group's mobility mix. Fall back to the indoor Iwami Ginzan World Heritage Center museum (mining history, artifacts, a scale-model of the tunnel network) and Gungendo's covered courtyard café — both sit right at the townscape entrance, no extra transit needed.",
+      "correctedValue": "The Ginzan Cart can suspend in bad weather with no notice, and the 2.3km trail alternative isn't reasonable in a downpour with the group's mobility mix. In the village itself, Gungendo's main store — a covered merchant house with its courtyard café — is the dry stop that needs no transit at all. The indoor Iwami Ginzan World Heritage Center is the bigger wet-weather option, but it is NOT at the townscape entrance: the operator puts it about five minutes by road away, so it costs a bus each way and a wait at each end. Check the return time before you commit to it in the rain, or the fallback becomes its own problem.",
+      "claim": "The rain plan claimed both fallbacks sit at the townscape entrance with \"no extra transit needed\"; the operator states \"石見銀山世界遺産センターは、大森の町並みから車で５分程度離れた場所にあります\" and tells visitors to check the connecting bus timetable — a wet-weather fallback that needs two bus legs must say so.",
+      "source": "https://www.ginzan-wm.jp/q_a/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "06-days.json#/0/items/2/plan_b/source_url",
+      "previousValue": "https://ginzan.city.oda.lg.jp/access/",
+      "correctedValue": "https://www.ginzan-wm.jp/q_a/",
+      "claim": "The plan_b's load-bearing claim is now the centre-to-townscape separation, which the operator's Q&A states; the previous access page renders its access detail as images and states none of it in text.",
+      "source": "https://www.ginzan-wm.jp/q_a/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "07-sights.json#/0/items/1/body",
+      "previousValue": "<p>Second only to Ise Jingu in Shinto significance, and architecturally distinct — the honden's soaring roofline and the enormous shimenawa (braided straw rope) over the Kaguraden hall are unlike any other shrine on a typical Japan itinerary.</p><p>Grounds open 6:00–19:00, free; the rear precinct closes at 16:30 for security. The Treasure Hall (separate building, {{fact:izumo-taisha-treasure-hall-300-yen}} adult) runs 8:30–16:30, last admission 16:00.</p><p>Worship here is two bows, <b>four</b> claps, one bow — not the two-clap pattern used almost everywhere else in Japan.</p>",
+      "correctedValue": "<p>Second only to Ise Jingu in Shinto significance, and architecturally distinct — the honden's soaring roofline and the enormous shimenawa (braided straw rope) over the Kaguraden hall are unlike any other shrine on a typical Japan itinerary.</p><p>Grounds open 6:00–19:00, free; the rear precinct — including Soga-no-yashiro behind the main hall — closes at 16:30 for security, so leave the back of the precinct for the early afternoon, not the end of the visit. The <a href='https://izumo-kankou.gr.jp/676'>Treasure Hall</a> (Shinkoden, a separate building, {{fact:izumo-taisha-treasure-hall-300-yen}} adult) runs 8:30–16:30, last admission 16:00 — the shrine's own site doesn't publish the hall's fee or hours, so this comes from the Izumo tourism association's listing.</p><p>Worship here is two bows, <b>four</b> claps, one bow — not the two-clap pattern used almost everywhere else in Japan.</p>",
+      "claim": "The item's cited shrine page supports the 6:00–19:00 grounds hours and \"御本殿より裏側の区域は、警備の都合上、午後4時30分に閉鎖致します\" (naming Soga-no-yashiro), but carries nothing on the Treasure Hall — that fee/hours pair comes from the Izumo tourism association, and the guide now says so inline instead of implying the shrine published it.",
+      "source": "https://izumo-kankou.gr.jp/676",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "07-sights.json#/0/items/2/body",
+      "previousValue": "<p>Omori was one of the world's largest silver-mining towns in the 16th–17th centuries; the preserved merchant houses along the valley road still have people living in them. The actual mine tunnel, Ryugenji Mabu, sits 2.3 km up-valley and is open for walk-through visits along a ≈400m lit stretch.</p><p>Private cars are banned past the park entrance — get there by the no-reservation Ginzan Cart (6 seats, roughly every 30–40 min, closed Wednesdays) or on foot (≈45 min each way). This bottleneck is the trip's real physical-feasibility test for a group of 8: plan for splitting across cart trips, not for everyone boarding the first one.</p>",
+      "correctedValue": "<p>Omori was one of the world's largest silver-mining towns in the 16th–17th centuries; the preserved merchant houses along the valley road still have people living in them. The actual mine tunnel, Ryugenji Mabu, sits 2.3 km up-valley and is open for walk-through visits along a ≈400m lit stretch.</p><p>Private cars are banned past the park entrance — get there by the no-reservation Ginzan Cart (6 seats, closed Wednesdays) or on foot (≈45 min each way). The operator publishes a daily run COUNT, not an interval — 12–14 runs across 8:00–18:00 — so treat the next cart as up to an hour away rather than half an hour. That is the trip's real physical-feasibility test for a group of 8: two loads minimum, and the second half of the party can lose most of an hour waiting, which is why this sight owns a whole afternoon rather than a slot.</p><p>Note the arrival geography: the Iwami Ginzan World Heritage Center, where the bus from Ota-shi runs, is <b>not</b> in the village — the operator puts it about five minutes by road from the Omori townscape, with another bus leg between the two.</p>",
+      "claim": "Same two source facts as the transit step and day card, carried into the sight card so the three cannot drift apart again: \"１日12～14便程度\" over \"8時～18時\" with no published interval, and \"石見銀山世界遺産センターは、大森の町並みから車で５分程度離れた場所にあります\".",
+      "source": "https://www.ginzan-wm.jp/purpose_post/ginzancart-gsm/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "07-sights.json#/0/items/3/body",
+      "previousValue": "<p>Tucked inside Shiomi Nawate next to the Lafcadio Hearn Old Residence, entered through an unassuming long-gate — a lower-profile stop than the castle or the main tourist street despite sitting on the same block. Worth folding into the Day 1 walk at no extra transit cost.</p><p>⚠ Hours (commonly cited as 9:00–17:00, ¥700 adult, closed Mondays) come from a secondary reference, not a direct fetch of the museum's own page yet — reconfirm before building a visit around them.</p>",
+      "correctedValue": "<p>Tucked inside Shiomi Nawate next to the Lafcadio Hearn Old Residence, entered through an unassuming long-gate — a lower-profile stop than the castle or the main tourist street despite sitting on the same block. The collection is tea-ceremony ware — scrolls, ceramics, lacquer — gathered across 23 generations by the Tanabe family, tatara ironmasters at Yoshida (now Unnan) since the Muromachi period, which is a straighter line into Shimane's own history than the castle gives you. 310-5 Kitahori-cho, Matsue · 0852-26-2211. Worth folding into the Day 1 walk at no extra transit cost.</p><p>The museum's own visitor page gives 9:00–17:00, <b>last admission 16:30</b>, closed Mondays (open when a public holiday falls on one); ¥700 adult, ¥500 high-school/university, free below that. The group discount starts at 10 people, so a party of 8 pays the individual rate — don't wait at the desk expecting otherwise.</p><p>⚠ Two catches worth a phone call: the museum swaps the permanent display for special exhibitions, which are priced separately and replace the standing collection entirely, and it doesn't publish a 2026 exhibition calendar online. Also note the 16:30 last admission is the same as the castle's — see Day 1 for which one wins on a late arrival.</p>",
+      "claim": "Fetched the museum's own ご利用案内: \"9時～17時（入館は16時30分迄）\", \"毎週月曜日（但、祝祭日の場合は開館）\", \"大人 700円（600円）大学・高校生 500円（400円）\" with the bracketed figures a 10-or-more group rate, and \"特別展の場合は別途料金となります\"; the collection's provenance from the profile page (\"田部家が現在の雲南市吉田町で室町時代から営んでいた「たたら製鉄」\", 23 generations of collecting). The ⚠ that shipped stood in for one unfetched page, and the remaining honest gap is the unpublished exhibition calendar.",
+      "source": "https://www.tanabe-museum.or.jp/information/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "07-sights.json#/0/items/3/source_url",
+      "previousValue": "https://www.tanabe-museum.or.jp/profile/",
+      "correctedValue": "https://www.tanabe-museum.or.jp/information/",
+      "claim": "The item's perishable facts are now hours/closures/admission, which live on the museum's ご利用案内 page; /profile/ carries only the address and collection history.",
+      "source": "https://www.tanabe-museum.or.jp/information/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "08-food-and-shopping.json#/0/items/3/address",
+      "previousValue": null,
+      "correctedValue": "36 Chidori-cho, Matsue — 2F of the Shinjiko Shijimikan",
+      "claim": "The trip's party-of-8 dinner pick shipped with no address at all. Operator's page: \"〒690-0852 島根県松江市千鳥町36 宍道湖しじみ館2F\".",
+      "source": "https://www.nekko-group.com/konekko_ya/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "08-food-and-shopping.json#/0/items/3/phone",
+      "previousValue": null,
+      "correctedValue": "0852-28-7511",
+      "claim": "The item said \"book: call\" and gave no number. Operator's page: \"0852-28-7511\".",
+      "source": "https://www.nekko-group.com/konekko_ya/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "08-food-and-shopping.json#/0/items/3/hours",
+      "previousValue": null,
+      "correctedValue": "Lunch 11:00–14:30 (LO 14:00), dinner 17:00–21:00 (LO 20:30)",
+      "claim": "Operator's page: \"11:00〜14:30（LO14:00）\" and \"17:00～21:00（L.O.20:30）\" — the last-order time decides whether a sunset-then-dinner arrival day works.",
+      "source": "https://www.nekko-group.com/konekko_ya/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "hours"
+    },
+    {
+      "target": "08-food-and-shopping.json#/0/items/3/closed",
+      "previousValue": null,
+      "correctedValue": "Year-end/New Year only",
+      "claim": "Operator's page states the only stated closure as \"年末年始\" — relevant here because Wednesday closures shut three other picks on this trip.",
+      "source": "https://www.nekko-group.com/konekko_ya/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "08-food-and-shopping.json#/0/items/3/how",
+      "previousValue": "Lakeside, walkable from central Matsue",
+      "correctedValue": "Lake-shore, walkable from central Matsue; Matsue Lake Line loop bus if the group's slower walkers would rather not",
+      "claim": "The four-question \"how from base\" answer ignored the binding mobility constraint the rest of the guide plans around; the Lake Line loop bus serves this shore and is already a shipped route.",
+      "source": "https://www.kankou-shimane.com/experience/72409",
+      "verifiedOn": "2026-08-28",
+      "freshness": "transit"
+    },
+    {
+      "target": "08-food-and-shopping.json#/0/items/3/why",
+      "previousValue": "Shinjiko-shichin (the lake's 7 signature foods — shijimi clams, whitebait, eel) in a 24-seat banquet hall built for groups — comfortably fits the full party of 8. No private-room buyout, so expect other diners nearby. Sister restaurant Nekkoya (Isemiya-cho, same operator) has an exact-fit fully private 8-seat room if the group wants total separation instead, though its menu is general Shimane izakaya fare rather than this lake-view shichimi theme.",
+      "correctedValue": "Shinjiko-shichin (the lake's 7 signature foods — shijimi clams, whitebait, eel) in a 24-seat banquet hall built for groups — comfortably fits the full party of 8, and it is the one lake-side room in this guide with a documented capacity above eight. No private-room buyout, so expect other diners nearby. Sister restaurant Nekkoya (Isemiya-cho, same operator) has an exact-fit fully private 8-seat room if the group wants total separation instead, though its menu is general Shimane izakaya fare rather than this lake-view shichimi theme.",
+      "claim": "Operator's page confirms 70 seats overall with a banquet room seating up to 24 and \"貸し切り 不可\" — worth stating that this is the only shipped lake-side room whose capacity is documented above the party size, since the guide rejected Kawakyo and Yamaichi on exactly that test.",
+      "source": "https://www.nekko-group.com/konekko_ya/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    },
+    {
+      "target": "08-food-and-shopping.json#/0/items/3/price",
+      "previousValue": "≈¥3,000–5,000",
+      "correctedValue": "Courses ¥3,500 / ¥5,000 / ¥6,000; the nanjamonja lunch set ¥2,400",
+      "claim": "The operator publishes three named course tiers, \"3,500円／5,000円／6,000円\", and a \"なんじゃもんじゃ\" lunch set at \"2,400円\" — the shipped ≈¥3,000–5,000 band both invented a floor below the cheapest course and hid the top tier a group booking is most likely to be offered.",
+      "source": "https://www.nekko-group.com/konekko_ya/",
+      "verifiedOn": "2026-08-28",
+      "freshness": "venue"
+    }
+  ]
+}

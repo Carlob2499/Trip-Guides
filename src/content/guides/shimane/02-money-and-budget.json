@@ -3,7 +3,7 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "<p>Japanese yen (¥), cash-first once you're west of Matsue/Izumo. Convenience-store ATMs (7-Eleven, Lawson, Family Mart) reliably take foreign cards in both cities; Oda/Omori has only a handful, so carry enough cash for the whole Iwami Ginzan day before you transfer out of Matsue.</p><p>No tipping, anywhere. IC cards (ICOCA/Suica/PASMO) cover Matsue-area JR, the Ichibata Railway, and Iwami Kotsu buses, but the JR San-in Line stops accepting IC taps at Izumo-shi Station — buy a paper ticket for anything continuing to Odashi.</p>",
+    "body": "<p>Japanese yen (¥), cash-first once you're west of Matsue/Izumo. Convenience-store ATMs (7-Eleven, Lawson, Family Mart) reliably take foreign cards in both cities; Oda/Omori has only a handful, so carry enough cash for the whole Iwami Ginzan day before you transfer out of Matsue.</p><p>No tipping, anywhere. IC cards (ICOCA/Suica/PASMO) cover JR around Matsue, but the JR San-in Line stops accepting IC taps at Izumo-shi Station — buy a paper ticket for anything continuing to Odashi. The two non-JR legs this trip actually uses, the Ichibata Railway out to Izumo Taisha and the Iwami Kotsu bus into Omori, advertise no IC acceptance of their own: budget cash for both rather than finding out at the door with eight people behind you.</p>",
     "phase": "arrival",
     "verified_on": "2026-08-28",
     "source_url": "https://www.westjr.co.jp/press/article/2016/08/page_9133.html"
@@ -19,11 +19,11 @@
     "party": 8,
     "items": [
       {
-        "label": "Lodging, per night (twin/business hotel, room-only)",
-        "basis": "day",
-        "est": 5000,
-        "low": 3500,
-        "high": 7300,
+        "label": "Lodging, 3 nights total (twin/business hotel, room-only)",
+        "basis": "trip",
+        "est": 15000,
+        "low": 10500,
+        "high": 21900,
         "per": "person",
         "note": "Oda/Omori night: book the party as one block early — heritage machiya inns split across two buildings past 6 guests"
       },
