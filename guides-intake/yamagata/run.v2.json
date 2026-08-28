@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-28T09:25:24.411Z",
-  "updatedAt": "2026-08-28T10:04:37.824Z",
+  "updatedAt": "2026-08-28T10:19:26.933Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -67,23 +67,23 @@
       "failure": null
     },
     "passB": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-28T10:04:37.824Z",
-      "endedAt": null,
+      "endedAt": "2026-08-28T10:19:26.914Z",
       "attempts": 1,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "e6dd7be20cac522929a13f1091d6b161db0130f7",
       "baseline": "938c262ddd909d4cbee23d85f7553186c809a9b6",
       "replay": false,
       "history": [
         {
           "attempt": 1,
           "startedAt": "2026-08-28T10:04:37.824Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-28T10:19:26.914Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 889
         }
       ],
       "failure": null
@@ -122,8 +122,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passB",
-    "action": "stage \"passB\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "reconcile",
+    "action": "run stage \"reconcile\""
   },
   "failure": null,
   "publication": {
@@ -159,6 +159,17 @@
         "toolCalls": null,
         "searches": null,
         "fetches": null
+      },
+      "passB": {
+        "durationSec": 889,
+        "failedDurationSec": null,
+        "cumulativeDurationSec": 889,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": null,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
       }
     },
     "counts": {
@@ -168,7 +179,7 @@
       "disagreementInvestigations": 2,
       "nativeLanguageSearches": null
     },
-    "totalDurationSec": 2324,
+    "totalDurationSec": 3243,
     "tokens": null,
     "costUsd": null
   }
