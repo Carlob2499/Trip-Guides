@@ -170,6 +170,27 @@ describe("R-A — the routed evidence-owner repair survives a fresh checkout and
     expect(routed.code).toBe(0);
     expect(routed.out).toMatch(/routed to reconcile/);
 
+    // ── the job is STILL in failure(), so its generic tail runs. It must not relabel a routed
+    //    outcome: the critic is deliberately queued, so the usual "already failed" guard misses it
+    //    and a coarse process-plane `unknown` would land on a stage that did not fail. ──
+    const beforeTail = await stateAt(first);
+    const tail = cli(first, ["record-agent-failure", "--slug", SLUG, "--stage", "critic",
+      "--agent-conclusion", "success", "--branch", "main"]);
+    expect(tail.code).toBe(0);
+    expect(tail.out).toMatch(/ROUTED to the evidence owner/);
+    const afterTail = await stateAt(first);
+    expect(afterTail.stages.critic.status).toBe("queued");                       // still queued
+    expect(afterTail.stages.critic.failure).toBeNull();                          // not relabelled
+    expect(afterTail.stages.critic.baseline).toBe(beforeTail.stages.critic.baseline);
+    expect(afterTail.stages.critic.history).toEqual(beforeTail.stages.critic.history);
+    expect(afterTail.stages.reconcile.failure.class).toBe("gate-failure");        // owner keeps it
+    expect(afterTail.failure.class).toBe("gate-failure");                         // run-level intact
+    expect(afterTail.resume.nextStage).toBe("reconcile");
+    // The workflow's other generic recorder is guarded identically.
+    const failStage = cli(first, ["fail-stage", "--slug", SLUG, "--stage", "critic", "--class", "gate-failure", "--detail", "generic"]);
+    expect(failStage.code).toBe(0);
+    expect((await stateAt(first)).stages.critic.status).toBe("queued");
+
     // ── destroy the checkout: everything that matters must now be on the remote ──
     await rm(first, { recursive: true, force: true });
     const second = await makeCheckout("attempt2");

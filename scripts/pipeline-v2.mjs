@@ -51,6 +51,7 @@ import {
   initRunV2, readRunStateV2, nextStageV2, stageStart, stageComplete, stageFail,
   bumpRunAttempt, recordAutoRetry, recordTelemetry, markLandingGate, V2_RESEARCH_STAGES,
   stageAttemptStats, landingMode, deriveLandIntent, reopenForAnswers, routeToEvidenceOwner,
+  isRoutedToEvidenceOwner,
 } from "./pipeline/v2/run-state.mjs";
 import { finalizeLandingRecovery } from "./pipeline/v2/landing-truth.mjs";
 import {
@@ -548,6 +549,12 @@ async function run(cmd, get, has) {
 
     case "fail-stage": {
       const stage = get("--stage");
+      // Same guard as record-agent-failure: a routed critic-truth outcome is already handled and
+      // must not be relabelled by the job's generic failure tail.
+      if (stage === "critic" && isRoutedToEvidenceOwner(await readRunStateV2(slug))) {
+        console.log(`[pipeline-v2] ${slug} — critic truth was ROUTED to the evidence owner; leaving the routed record intact.`);
+        return 0;
+      }
       await stageFail(slug, stage, { failureClass: get("--class") || "unknown", detail: get("--detail") || "" });
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
       commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED`, { branch });
@@ -711,6 +718,14 @@ async function run(cmd, get, has) {
       const stage = get("--stage");
       if (!V2_RESEARCH_STAGES.includes(stage)) {
         console.error(`[pipeline-v2] record-agent-failure needs --stage <${V2_RESEARCH_STAGES.join("|")}>`); return 1;
+      }
+      // A routed critic-truth outcome is ALREADY handled: the critic is deliberately queued, its
+      // work retained, and the owner carries the failure. The job is still in failure() here, so
+      // without this the generic process-plane classifier would mark the critic failed again with
+      // a coarse `unknown` and overwrite the routed run-level context.
+      if (stage === "critic" && isRoutedToEvidenceOwner(await readRunStateV2(slug))) {
+        console.log(`[pipeline-v2] ${slug} — critic truth was ROUTED to the evidence owner; leaving the critic queued and the routed failure intact.`);
+        return 0;
       }
       const logFile = get("--agent-log");
       const agentOutput = logFile && existsSync(logFile) ? readFileSync(logFile, "utf8") : "";

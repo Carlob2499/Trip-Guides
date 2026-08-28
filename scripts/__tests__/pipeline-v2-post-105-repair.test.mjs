@@ -30,6 +30,7 @@ import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
 import { requireCriticBaseline } from "../pipeline-v2.mjs";
 import {
   initRunV2, readRunStateV2, stageStart, stageComplete, stageFail, reopenForAnswers, routeToEvidenceOwner,
+  isRoutedToEvidenceOwner,
 } from "../pipeline/v2/run-state.mjs";
 import { retryEligibility } from "../pipeline/v2/recovery.mjs";
 import {
@@ -582,10 +583,28 @@ describe("R-A — a completed stage records the tree it handed on, and an unfixa
     expect(state.stages.critic.baseline).toBe(SHA(7));
     // The attempt history is kept: routing is visible cost, not erased cost.
     expect(state.stages.critic.attempts).toBe(1);
+    // …and the outcome is MARKED, so the job's generic failure tail can tell it apart from an
+    // ordinary critic failure and leave it alone.
+    expect(isRoutedToEvidenceOwner(state)).toBe(true);
+    expect(state.stages.reconcile.failure.detail).toMatch(/^routed:evidence-owner /);
     // And the routed failure is auto-retryable at the stage that can actually fix it.
     expect(retryEligibility(state, { stage: "reconcile", findings: ["declare the relation"] }).allowed).toBe(true);
     // The cap is not turned into a renewable autonomous budget: the round trip is ONE dispatch.
     expect(state.attempts.cap - before.attempts.cap).toBeLessThanOrEqual(1);
+  });
+
+  it("REPAIRED: the routed marker is what the tail reads — an ORDINARY critic failure is untouched", async () => {
+    // The guard must be specific to the routed outcome. A genuine critic failure has no routed
+    // marker, so the job's generic recorders behave exactly as before.
+    await runThroughReconcile();
+    await stageStart("tottori", "critic", { ...opts(), baseline: SHA(7) });
+    let state = await readRunStateV2("tottori", opts());
+    expect(isRoutedToEvidenceOwner(state)).toBe(false);
+    state = await stageFail("tottori", "critic", { ...opts(), failureClass: "agent-failure", detail: "the agent died" });
+    expect(state.stages.critic.status).toBe("failed");
+    expect(state.stages.critic.failure.class).toBe("agent-failure");
+    expect(isRoutedToEvidenceOwner(state)).toBe(false);
+    expect(retryEligibility(state, { stage: "critic", findings: [] }).allowed).toBe(false); // agent-failure is not auto-retryable
   });
 
   it("REPAIRED: routing refuses unless reconcile really completed", async () => {
