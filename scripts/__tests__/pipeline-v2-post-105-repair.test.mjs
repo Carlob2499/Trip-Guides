@@ -24,6 +24,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, CRITIC_TARGET, criticCorrectionDocSchema, supersededEvidenceIds } from "../pipeline/v2/contracts.mjs";
 import { reconcileCriticCorrections, writeEvidence, requireEvidence, dispositionProblems } from "../pipeline/v2/evidence.mjs";
+import { extractGateFindings } from "../pipeline/v2/feedback.mjs";
 import { independentAgreementProblems } from "../pipeline/v2/research-rules.mjs";
 import { coverageProblems } from "../pipeline/v2/coverage.mjs";
 import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
@@ -213,7 +214,7 @@ describe("R-A — every changed guide value reaches authoritative evidence, or t
     await writeFile(path.join(fromDir, "src", "content", "guides", "tottori", "03-transit.json"), TOTTORI_TRANSIT_BEFORE);
     await writeEvidence("tottori", evidenceDoc(), { intakeDir: dir });
     await expect(reconcile({ guidesDir, fromDir }))
-      .rejects.toThrow(/critic changed 03-transit\.json#\/, 05-transit\.json#\/ without/);
+      .rejects.toThrow(/critic changed 03-transit\.json#\/ without[\s\S]*critic changed 05-transit\.json#\/ without/);
   });
 
   it("REPAIRED: a critic pass that changed no guide value stays unchanged", async () => {
@@ -387,6 +388,39 @@ describe("R-A — a repeated ordinary value never retires unrelated evidence", (
     expect(evidence.reconciliation.find((r) => r.findingId.startsWith("critic-correction-")))
       .toMatchObject({ disposition: "adopt", corroborates: { kind: "none", evidenceIds: [] } });
     expect(dispositionProblems(evidence)).toEqual([]);
+  });
+});
+
+describe("R-A — a multi-location contract failure reaches the retry with EVERY location (yamagata scar)", () => {
+  // Run yamagata-20260828-73821a, critic attempts 3–4: the undeclared-changes ContractError put
+  // all 42 pointers on ONE line; the retry-feedback per-line cap (400 chars) amputated it to ~8
+  // pointers, so the blind retry structurally could not comply. Machine-owned multi-location
+  // findings must arrive as bounded per-location lines the structured feedback grammar preserves.
+  it("every undeclared pointer survives the CLI print → extractGateFindings chain, one bounded finding each", async () => {
+    const fixture = await tottoriCriticScar({ corrections: [] });
+    let err;
+    await reconcile(fixture).catch((e) => { err = e; });
+    expect(err).toBeDefined();
+    // The chain the workflow really runs: cliMain prints the message, verify-failed extracts it.
+    const findings = extractGateFindings(`[pipeline-v2] CONTRACT FAILURE: ${err.message}`);
+    for (const pointer of HISTORICAL) {
+      expect(findings.some((f) => f.includes(`${TRANSIT}#${pointer}`))).toBe(true);
+    }
+    expect(findings.every((f) => f.length <= 400)).toBe(true);
+    // Per-location issues ride on the error for programmatic consumers too.
+    expect(err.issues.length).toBeGreaterThanOrEqual(HISTORICAL.length);
+  });
+
+  it("phantom declarations are also per-location findings", async () => {
+    const rows = declareHistorical();
+    const fixture = await tottoriCriticScar({
+      corrections: [...rows, { ...rows[0], target: `${TRANSIT}#/0/title` }, { ...rows[0], target: `${TRANSIT}#/0/id` }],
+    });
+    let err;
+    await reconcile(fixture).catch((e) => { err = e; });
+    const findings = extractGateFindings(`[pipeline-v2] CONTRACT FAILURE: ${err.message}`);
+    expect(findings.some((f) => f.includes(`declares ${TRANSIT}#/0/title, which the critic did not change`))).toBe(true);
+    expect(findings.some((f) => f.includes(`declares ${TRANSIT}#/0/id, which the critic did not change`))).toBe(true);
   });
 });
 

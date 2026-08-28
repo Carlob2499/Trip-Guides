@@ -166,8 +166,16 @@ export async function reconcileCriticCorrections(slug, {
     }
     return { changed: false, targets: [] };
   }
+  // Multi-location contract failures are per-location ISSUE LINES, never one joined line: the
+  // retry-feedback path caps each line at 400 chars, and the yamagata run proved a single line
+  // carrying 42 pointers reaches the blind retry amputated (attempts 3–4 could not comply).
   if (!existsSync(sourceFile)) {
-    throw new ContractError(`critic changed ${[...changed].sort().join(", ")} without ${rel} — stale evidence is refused`);
+    const issues = [...changed].sort().map((t) => `critic changed ${t} without ${rel}`);
+    throw new ContractError(
+      `critic changed ${changed.size} guide value(s) without ${rel} — stale evidence is refused\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
+    );
   }
   const raw = JSON.parse(await readFile(sourceFile, "utf8"));
   assertVersionCompatible(raw.schemaVersion, CRITIC_CORRECTIONS_SCHEMA, { file: sourceFile });
@@ -203,12 +211,22 @@ export async function reconcileCriticCorrections(slug, {
   const undeclared = [...changed].filter((t) => !declared.has(t)).sort();
   const phantom = targets.filter((t) => !changed.has(t)).sort();
   if (undeclared.length) {
+    const issues = undeclared.map((t) => `critic changed ${t} without declaring the edit in ${rel}`);
     throw new ContractError(
-      `critic changed ${undeclared.join(", ")} without declaring the edit in ${rel} — every changed guide value is a ` +
-        `factual correction carrying its own evidence, and there is no editorial-only escape; stale evidence is refused`,
+      `critic changed ${undeclared.length} guide value(s) without declaring the edit in ${rel} — every changed guide ` +
+        `value is a factual correction carrying its own evidence, and there is no editorial-only escape; stale evidence is refused\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
     );
   }
-  if (phantom.length) throw new ContractError(`critic handoff declares ${phantom.join(", ")}, which the critic did not change`);
+  if (phantom.length) {
+    const issues = phantom.map((t) => `critic handoff declares ${t}, which the critic did not change`);
+    throw new ContractError(
+      `critic handoff declares ${phantom.length} value(s) the critic did not change\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
+    );
+  }
 
   const evidence = await requireEvidence(slug, { intakeDir, runId });
   const alreadyRetired = supersededEvidenceIds(evidence);
