@@ -21,6 +21,39 @@
         "evidence artifact at /home/runner/work/Trip-Guides/Trip-Guides/collect/guides-intake/shimane/evidence.v2.json is not valid JSON (Unexpected non-whitespace character after JSON at position 84365 (line 1998 column 1)) — a malformed required evidence artifact is a blocking failure, never \"no evidence\". Restore or fix it."
       ],
       "createdAt": "2026-08-28T03:53:11.054Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T04:18:14.474Z"
+    },
+    {
+      "runId": "shimane-20260828-0f02a5",
+      "stage": "reconcile",
+      "attempt": 2,
+      "findings": [
+        "P0 research   · FAIL — 9 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ map point \"Matsue Castle\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Izumo Taisha\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Odashi Station\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Iwami Ginzan / Omori townscape\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ panel \"Entry & documents\" has verified_on 2026-08-28 but no source_url to recertify against",
+        "⚠ venues \"What to eat\" has verified_on 2026-08-28 but no source_url to recertify against",
+        "⚠ prose \"Sources & further reading\" has verified_on 2026-08-28 but no source_url to recertify against",
+        "⚠ budget item \"Food & drink, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "P1 candidates · FAIL — structural integrity findings in the consideration set",
+        "✗ priority 1: \"Iwami Ginzan (Omori townscape + Ryugenji Mabu mine)\" is marked shipped but appears nowhere in the guide",
+        "P6 voice      · FAIL — 4 process-language leak(s):",
+        "⚠ \"This pass\" in §\"Entry & documents\"",
+        "⚠ \"this research\" in §\"Entry & documents\"",
+        "⚠ \"this pass\" in §\"Phone & data\"",
+        "⚠ \"this pass\" in §\"Sources & further reading\"",
+        "⚠ [leg-duration-unverified] 2 of 6 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Top sights\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-28T04:18:14.474Z",
       "status": "active",
       "retiredAt": null
     }
