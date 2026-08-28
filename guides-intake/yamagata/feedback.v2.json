@@ -35,6 +35,28 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-28T10:36:43.951Z",
+      "status": "retired",
+      "retiredAt": "2026-08-28T10:47:51.098Z"
+    },
+    {
+      "runId": "yamagata-20260828-73821a",
+      "stage": "reconcile",
+      "attempt": 2,
+      "findings": [
+        "P0 research   · FAIL — 5 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ map point \"Yamagata Station\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Kajo Park (Yamagata Castle ruins)\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Risshaku-ji (Yamadera)\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Oishida Station\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Ginzan Onsen\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ [leg-duration-unverified] 3 of 11 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Top sights\", \"What to eat\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-28T10:47:51.098Z",
       "status": "active",
       "retiredAt": null
     }

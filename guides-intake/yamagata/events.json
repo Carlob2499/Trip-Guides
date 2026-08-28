@@ -43,22 +43,32 @@
       "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-28T10:36:43.953Z",
+      "at": "2026-08-28T10:37:58.442Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-28T10:47:51.101Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 2 failed (gate-failure) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-28T10:47:51.101Z",
       "kind": "decision",
       "text": "Candidate funnel: 33 evaluated · 27 shortlisted · 17 shipped · 13 rejected"
     },
     {
-      "at": "2026-08-28T10:36:43.953Z",
+      "at": "2026-08-28T10:47:51.101Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 12 independent finding(s): 3 agree · 2 conflict-resolved · 7 adopt"
     },
     {
-      "at": "2026-08-28T10:36:43.953Z",
+      "at": "2026-08-28T10:47:51.101Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-28T10:36:43.953Z",
+      "at": "2026-08-28T10:47:51.101Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether a seasonal private-vehicle restriction applies to Ginzan Onsen during the Oct 2026 trip window"
     }
