@@ -1,6 +1,6 @@
 # Repaired-class Combined Research Run B #2 (Yamagata) — evidence packet
 
-Status: **RUN-B BLOCKED — REPAIR SURFACE EXCEEDS BOUNDED VALIDATION**
+Status: **RUN-B BLOCKED — REPAIR SURFACE EXCEEDS BOUNDED VALIDATION** (defect #3 since repaired under Codex work order `runb-feedback-truncation-109-15a77ac`; see addendum)
 Authority: `VALIDATION_RUNBOOK.md` §V02/§V03/§V05 · frozen scenario `VALIDATION_TRIAL_PACKETS.md` §"Combined Research Run B" · post-#106/#107 repaired-class authorization (`docs/handoff.md`)
 Bounded self-repair budget: one fresh Run-B, at most two deterministic repair cycles. Both cycles were spent on real defects; a third independent defect stops the pass by rule.
 
@@ -37,6 +37,15 @@ Not exercised live (covered deterministically by the 137-test prerequisite suite
 1. **REPAIRED (cycle 1) — capsule/validator corrections-handoff mismatch.** The critic capsule said 'write … with schema `wp-critic-corrections/2.1`' and listed `source`/`freshness` as bare names; the validator reads `schemaVersion` and requires objects. Critic attempts 1–2 were refused on exactly those two faces. Fixed in `contract-capsule.mjs` (keys and object shapes stated verbatim); red-first regression pins every schema key and both "never a …" guardrails into the generated capsule.
 2. **REPAIRED (cycle 2) — retained declarations lost across repair attempts.** Whole-stage leaf accounting spans pinned-baseline→final tree, but each blind repair attempt declares only its own edits and its raw workspace doc clobbers the retained one (attempt 2 replaced attempt 1's complete 45-target handoff with 6 malformed rows; attempts 3–4 could never satisfy accounting again). `reconcile-critic-truth` now supplements the current doc with row-valid declarations from the stage's earlier retained docs (newest first, current attempt winning per target, rows for no-longer-changed leaves dropped, never phantom). Red-first regression drives the exact scar shape.
 3. **OPEN (defect #3, out of budget) — retry feedback truncation starves multi-location contract findings.** `feedback.mjs` caps every stored finding line at `FINDING_MAX_CHARS = 400`, and `stage-feedback` feeds the retry from that store. The corrections contract failure is ONE line enumerating every undeclared pointer (42 of them, ~2.5KB); the retrying critic received ~8 pointers and structurally could not comply — observed on critic attempts 3 and 4, which each declared only the few edits they could see. Additionally, attempt 1's rows carried string `source`/`freshness` (pre-cycle-1 capsule), so the cycle-2 merge cannot honestly resurrect the 42 leaf declarations — the run cannot reach green without either the truncation fix plus a fresh critic attempt, or re-research.
+
+## Addendum — work order `runb-feedback-truncation-109-15a77ac` (2026-08-28, post-verdict)
+
+The independent Codex review accepted both repairs and authorized one bounded repair of defect #3 plus one further critic-owned attempt on this same run.
+
+- **Defect #3 REPAIRED (red-first):** the undeclared/phantom/no-handoff ContractErrors now emit one bounded `  · ` issue line per location (the repo's existing idiom, which the structured feedback grammar preserves end-to-end). Regression drives the real chain (ContractError → CLI print → `extractGateFindings`) for both classes. Production LOC +21; no cap, validator, or prompt-security semantics changed.
+- **Critic attempt 5 (10/10, one paid critic invocation):** dispatched on the repaired head. Note honestly: its retry feedback was the attempt-4 entry *stored pre-fix* (still truncated) — a cancel issued on realizing this did not reach the container, so the attempt ran anyway. Despite that, the critic declared a full corrections handoff (13+ rows spanning the previously undeclared surface); the doc was refused by the schema on exactly **5 precise findings** (`corrections.8–12.source.kind` invalid enum value), before leaf accounting ran.
+- **Feedback repair PROVEN in durable state:** the attempt-5 failure was recorded by the repaired code — feedback.v2.json now carries all 5 findings as complete bounded per-issue lines, nothing amputated. (The full 42-pointer regeneration was also exercised locally against the real run artifacts: the repaired formatter yields 42 complete findings from the same inputs that previously collapsed to one truncated line.)
+- **Terminal state:** `failed`, resume=critic, attempts 10/10. The work order capped spend at 10/10, so no further attempt was taken. The run is 5 enum-value corrections away from re-entering leaf accounting, with complete actionable feedback stored for the next authorized attempt.
 
 ## Recommended next engineering pass
 
