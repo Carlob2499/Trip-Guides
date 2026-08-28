@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "wp-feedback/2.0",
+  "slug": "shimane",
+  "entries": [
+    {
+      "runId": "shimane-20260828-0f02a5",
+      "stage": "reconcile",
+      "attempt": 1,
+      "findings": [
+        "collected contract is invalid JSON: guides-intake/shimane/evidence.v2.json (Unexpected non-whitespace character after JSON at position 84365 (line 1998 column 1))"
+      ],
+      "createdAt": "2026-08-28T03:53:09.435Z",
+      "status": "active",
+      "retiredAt": null
+    }
+  ]
+}
