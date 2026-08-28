@@ -20,7 +20,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-bar,.pg,.pg-foot{position:relative;z-index:1}
 
 .pg-bar{max-width:74rem;margin:0 auto;width:100%;padding:1.1rem 1.2rem 0;display:flex;align-items:center;justify-content:space-between;gap:.8rem}
-.pg-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.pg-wordmark{display:inline-flex;align-items:center;min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
 .pg-wordmark:hover{color:var(--accent-ink)}
 .pg-wordmark:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
 .pg-bar-right{display:flex;align-items:center;gap:.6rem}
@@ -34,8 +34,9 @@ body{min-height:100vh;display:flex;flex-direction:column}
 [data-tone="crit"]{--pg-tone:var(--crit)}
 
 .pg-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.32rem .8rem;border-radius:999px;border:1px solid var(--pg-tone,var(--rule));background:color-mix(in srgb,var(--pg-tone,var(--rule)) 12%,var(--card));color:var(--pg-tone,var(--muted));font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.pg-pill[data-tone="muted"]{color:var(--ink)}
 
-.pg-theme-btn{display:inline-flex;align-items:center;justify-content:center;min-width:38px;min-height:38px;padding:0 .6rem;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;transition:background var(--dur-tap) ease,border-color var(--dur-tap) ease}
+.pg-theme-btn{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 .6rem;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;transition:background var(--dur-tap) ease,border-color var(--dur-tap) ease}
 .pg-theme-btn:hover{border-color:var(--ink)}
 .pg-theme-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .tb-ico{width:17px;height:17px;flex:none;display:block}
@@ -179,7 +180,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 /* ── The owner-key affordance — the quietest thing here: maintenance furniture. ── */
 .pg-key{padding-top:.4rem}
 .pg-key[hidden]{display:none}
-.pg-key-toggle{padding:0;border:0;background:none;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-decoration:underline;cursor:pointer}
+.pg-key-toggle{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:none;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-decoration:underline;cursor:pointer}
 .pg-key-toggle:hover{color:var(--accent-ink)}
 .pg-key-form{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.7rem}
 .pg-key-form[hidden]{display:none}
