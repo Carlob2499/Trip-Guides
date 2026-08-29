@@ -134,23 +134,15 @@ describe("resumeLine", () => {
   });
 });
 
-/* R5 TESTS.md §2 — the thumb bar against a REAL 13-station guide.
-   The existing cases above use small synthetic sets, which is where the defect hid: review
-   found hard-coded slots that left 9 of Korea's 13 groups with no current slot, and every
-   assertion in this file passed while that was true because none of them looked past the
-   first two groups. These do. */
-describe("the thumb bar on a 13-station guide", () => {
-  // Korea's own groups, in the guide's own order. Not a fixture shape — the real names, so a
-  // rename that breaks slotLabel shows up here rather than in production.
-  const KOREA = [
-    "Plan", "Essentials", "Transit", "Days", "Sights", "Daejeon & MSI", "Gaming & anime",
-    "Food & shopping", "Pokémon GO", "Tokyo", "Sources", "Field log", "Tools",
-  ];
+/* The thumb bar ranks Korea's traveler-facing destinations only. Raw subject groups and
+   secondary evidence/utilities never enter this model. */
+describe("the thumb bar on Korea's canonical destinations", () => {
+  const KOREA = ["Days", "Food", "Explore", "Essentials"];
 
-  it("seats the CURRENT group for every one of the 13 — not just the first two", () => {
+  it("seats the current destination for all four — not just the first two", () => {
     /* ⌁ regression. The bar can never show a set that excludes where the reader is standing:
        a navigation control that omits your own position is worse than none, because it reads
-       as "you are nowhere". Asserted for all 13, which is the assertion that was missing. */
+       as "you are nowhere". */
     for (let i = 0; i < KOREA.length; i++) {
       expect(promoted({}, KOREA, i), `group ${i} (${KOREA[i]}) lost its slot`).toContain(i);
     }
@@ -158,7 +150,7 @@ describe("the thumb bar on a 13-station guide", () => {
 
   it("still seats the current group when another is far more used", () => {
     // Habit ranks the OTHER slot. It must never evict the reader's own position to do it.
-    const heavy = { Sights: 40, "Food & shopping": 30, Tokyo: 25 };
+    const heavy = { Explore: 40, Food: 30 };
     for (let i = 0; i < KOREA.length; i++) {
       expect(promoted(heavy, KOREA, i), `group ${i} evicted by a popular one`).toContain(i);
     }
@@ -180,14 +172,10 @@ describe("the thumb bar on a 13-station guide", () => {
 
   it("abbreviates only where a slot cannot hold the name, and keeps it readable", () => {
     // A compound name keeps its head, whole and unmarked — nothing was cut mid-thought.
-    expect(slotLabel("Food & shopping")).toBe("Food");
-    expect(slotLabel("Gaming & anime")).toBe("Gaming");
-    // A single long name is cut at its last word boundary and MARKED, so the label never
-    // pretends to be the whole name.
-    expect(slotLabel("Pokémon GO")).toBe("Pokémon…");
-    // Short names are untouched.
-    expect(slotLabel("Plan")).toBe("Plan");
-    expect(slotLabel("Sources")).toBe("Sources");
+    expect(slotLabel("Food")).toBe("Food");
+    expect(slotLabel("Explore")).toBe("Explore");
+    expect(slotLabel("Essentials")).toBe("Essential…");
+    expect(slotLabel("Days")).toBe("Days");
   });
 
   it("is always a marked prefix of the real name — never a different string", () => {
@@ -208,7 +196,7 @@ describe("the thumb bar on a 13-station guide", () => {
          · a multi-word name must break on the boundary
          · a single word may not be dropped or blanked instead */
     expect(slotLabel("Essentials")).toBe("Essential…");  // one word, no boundary — cut and mark
-    expect(slotLabel("Pokémon GO")).toBe("Pokémon…");    // boundary exists, so it is used
+    expect(slotLabel("Getting Around")).toBe("Getting…"); // boundary exists, so it is used
     for (const name of KOREA) {
       const label = slotLabel(name);
       if (label.endsWith("…") && /\s/.test(name)) {

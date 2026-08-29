@@ -15,7 +15,7 @@ import { progressGeometry } from "../model/stations.js";
 
 /** Read the station count off the rail itself, so nothing restates it. */
 function stationCount(track) {
-  return track.querySelectorAll(".grail-stop").length;
+  return track.querySelectorAll('.gtab[data-primary="true"]:not([hidden])').length;
 }
 
 /**
@@ -29,12 +29,14 @@ function stationCount(track) {
 function paintProgress(rail, track) {
   const fill = rail.querySelector(".grail-fill");
   if (!fill) return;
-  const stops = Array.prototype.slice.call(track.querySelectorAll(".grail-stop"));
+  const stops = Array.prototype.slice.call(track.querySelectorAll('.gtab[data-primary="true"]:not([hidden])'));
   const index = stops.findIndex((s) => s.classList.contains("gtab-active"));
-  // No active stop is a real state during boot, before the router has run. Leave the fill
-  // exactly where it is rather than snapping it to zero, which would read as "back to the
-  // start" for one frame on every load.
-  if (index < 0) return;
+  // Secondary panels are reachable but are not positions on the primary journey.
+  if (index < 0) {
+    fill.style.left = "0%";
+    fill.style.width = "0%";
+    return;
+  }
   const geom = progressGeometry(index, stationCount(track));
   fill.style.left = geom.left + "%";
   fill.style.width = geom.width + "%";
@@ -48,7 +50,7 @@ function paintProgress(rail, track) {
  * away. Setting scrollLeft on the one element that should move cannot do that.
  */
 function centreActive(track) {
-  const active = track.querySelector(".gtab-active");
+  const active = track.querySelector('.gtab-active[data-primary="true"]:not([hidden])');
   if (!active || track.scrollWidth <= track.clientWidth) return;
   const target = active.offsetLeft - (track.clientWidth - active.offsetWidth) / 2;
   const max = track.scrollWidth - track.clientWidth;
@@ -79,7 +81,7 @@ export function initGuideRail(root) {
      for every route into a station — thumb slot, swipe, sheet, hash — where a click listener
      would only catch the ones that came through this rail. */
   const observer = new MutationObserver(sync);
-  track.querySelectorAll(".grail-stop").forEach((stop) => {
+  track.querySelectorAll('.gtab[data-primary="true"]').forEach((stop) => {
     observer.observe(stop, { attributes: true, attributeFilter: ["class"] });
   });
 

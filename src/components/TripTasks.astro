@@ -1,0 +1,41 @@
+---
+import Panel from "./Panel.astro";
+import ReminderRow from "./ReminderRow.astro";
+import type { TripTools } from "../features/trip-tools/index";
+
+interface Props {
+  active: TripTools;
+}
+
+const { active } = Astro.props;
+const r = active.record;
+const bookAhead = r.reminders.filter((item) => item.book);
+const rest = r.reminders.filter((item) => !item.book);
+---
+<Panel id={`tools-reminders-${r.slug}`} kicker="TRIP TASKS" title="Everything this trip asks you to do" fullWidth={bookAhead.length > 5}
+       hint="Every line is a checklist item the guide already carries — nothing here was written by this screen. Items with a booking deadline come first. Ticks are saved on this device.">
+  {r.reminders.length > 0 ? (
+    <>
+      <p class="tools-count">
+        {bookAhead.length > 0
+          ? <><b>{bookAhead.length}</b> of {r.reminders.length} have a door that closes</>
+          : <><b>{r.reminders.length}</b> items, none time-critical</>}
+      </p>
+      <div data-tools-reminders={r.storeKey}>
+        <ul class="tools-rem">
+          {bookAhead.map((item) => <ReminderRow item={item} />)}
+        </ul>
+        {rest.length > 0 && (
+          <details class="tools-more">
+            <summary>The other {rest.length} — packing, logistics, on-the-day notes</summary>
+            <ul class="tools-rem">
+              {rest.map((item) => <ReminderRow item={item} />)}
+            </ul>
+          </details>
+        )}
+      </div>
+    </>
+  ) : (
+    <p class="tools-blank">This guide carries no checklist items yet, so there is nothing to remind you of.</p>
+  )}
+</Panel>

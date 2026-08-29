@@ -1,6 +1,7 @@
 ---
 import Icon from "./Icon.astro";
-// Trip kit — a tool tab (like Budget/Vote/Reminders) housing focused, on-the-ground
+// Trip kit — a focused readiness panel in the canonical Essentials destination, housing
+// on-the-ground
 // helpers (docs/archive/INDEX.md → FEATURES #5 arrival autopilot, #6 phrase cards, #7 entry requirements,
 // F1 prep timeline, F4 packing strip). Server-rendered from data the guide already carries;
 // no new client JS needed for content (checkbox persistence is the existing global
@@ -19,10 +20,15 @@ interface Props {
   storeKey: string; country: string; days: any[]; sections?: any[];
   phrases?: { lang?: string; items: any[] } | null;
   entry?: any[] | null;
-  /** R5: rendered inside the Plan group rather than as its own tool panel. */
+  /** R6: rendered inside the Essentials destination rather than as its own tool panel. */
   inGroup?: boolean;
+  /** The canonical TripTasks rollup may own these same checklist lines. */
+  suppressArrivalChecklist?: boolean;
 }
-const { storeKey, country, days, sections = [], phrases = null, entry = null, inGroup = false } = Astro.props;
+const {
+  storeKey, country, days, sections = [], phrases = null, entry = null, inGroup = false,
+  suppressArrivalChecklist = false,
+} = Astro.props;
 const arrival = deriveArrivalPlan(days);
 const bookBy = deriveBookByTimeline(sections);
 const hasPhrases = !!(phrases && Array.isArray(phrases.items) && phrases.items.length);
@@ -129,7 +135,7 @@ const BUCKET_LABEL: Record<string, string> = { overdue: "Overdue", soon: "Next 2
         </ol>
       )}
 
-      {arrival.checklist.length > 0 && (
+      {!suppressArrivalChecklist && arrival.checklist.length > 0 && (
         <div class="tk-checklist">
           <p class="tk-checklist-label">Before you go</p>
           {arrival.checklist.map((item, j) => (

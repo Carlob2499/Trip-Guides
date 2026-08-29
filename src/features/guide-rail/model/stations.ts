@@ -1,75 +1,68 @@
-/* The station list — the spine rail's single source of truth.
-
-   R5 replaced the tab-pill rail with a SPINE: one horizontal line, every section group a stop
-   on it, and the reader's position marked. The change that matters is not visual. A pill rail
-   says "these are categories"; a spine says "this is one journey and you are here", and that
-   claim is only honest if the stops are the guide's own — so this module derives them from the
-   guide and never from a list anyone maintains by hand.
-
-   Two stations are not groups and are appended here rather than authored into any guide:
-     · Field log — the post-trip record, drawn only when the guide HAS one. An empty Field log
-       is a promise the guide cannot keep, so its absence is absence, not an empty station.
-     · Tools     — always last, always present. Its one entry point is this station.
-
-   Korea produces 13 (11 groups + both), Sedona 9 (8 groups + Tools alone). Neither number is
-   written down anywhere; both fall out of the guide. */
+/* Primary traveler destinations plus the secondary routes retained for evidence, recap and
+   utilities. All routes share one contiguous index space so existing deep links and the panel
+   router keep one code path; `primary` decides what may paint in the visible rail. */
 
 /** What a station IS, which decides how it renders and where its content comes from. */
-export type StationKind = "group" | "fieldlog" | "tools";
+export type StationKind = "group" | "sources" | "recap" | "tools";
 
 export interface Station {
   /** Stable id for the DOM, the URL's `group` param and localStorage keys. */
   key: string;
-  /* The full, unmodified name. It is BOTH the visible label and the accessible name, and the
-     rail deliberately does not shorten it: COMPONENTS.md §2 gives a station label two lines to
-     wrap into, and the pill row scrolls, so neither surface is short of room. The one place a
-     name is abbreviated is the thumb bar, whose four fixed slots genuinely cannot hold
-     "Etiquette & language" — and that abbreviation lives in mobile-nav's own slotLabel(), where
-     the rule "only if the stub stays readable" is already written and tested. A second,
-     dumber shortener here would quietly override it. */
+  /** Full canonical or secondary label; only the thumb bar may abbreviate it. */
   full: string;
   kind: StationKind;
+  /** Secondary destinations remain routable but never paint in primary navigation. */
+  primary: boolean;
   /** Position in the rail, 0-based. The progress line reads this. */
   index: number;
 }
 
 export interface StationInput {
-  /** The guide's own group order, exactly as `bucket()` produced it. */
+  /** Canonical traveler destinations, already projected into their fixed order. */
   groups: string[];
+  /** True when authored evidence sections need a secondary route. */
+  hasSources?: boolean;
   /** True only when `_guide.json` carries a `learnings` record. */
   hasLearnings: boolean;
 }
 
-/** The two appended stations' labels, named once so nothing restates them as literals. */
-export const FIELD_LOG_LABEL = "Field log";
-export const TOOLS_LABEL = "Tools";
+/** Secondary labels, named once so navigation surfaces cannot drift. */
+export const SOURCES_LABEL = "Sources & verification";
+export const RECAP_LABEL = "Recap";
+export const TOOLS_LABEL = "Trip utilities";
 
-/* A group name becomes a DOM id and a URL parameter, so it needs an ASCII-safe key — but the
-   LABEL must not be touched. "Pokémon GO" and "Food & shopping" render with their accent and
-   their ampersand intact; only the key is slugged. Index is appended because two different
-   names can slug identically (an all-punctuation name slugs to ""), and a collision would make
-   two stations share one panel. */
-function groupKey(name: string, index: number): string {
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  return slug ? `${slug}-${index}` : `group-${index}`;
+function groupKey(name: string): string {
+  const key = name.toLowerCase();
+  if (key === "days" || key === "food" || key === "explore" || key === "essentials") return key;
+  throw new Error(`Unknown traveler destination: ${name}`);
 }
 
-/**
- * Build the rail. Order is the guide's own, then Field log if the guide has one, then Tools.
- */
-export function buildStations({ groups, hasLearnings }: StationInput): Station[] {
+/** Build primary destinations first, followed by the available secondary routes. */
+export function buildStations({ groups, hasSources = false, hasLearnings }: StationInput): Station[] {
   const stations: Station[] = groups.map((full, i) => ({
-    key: groupKey(full, i),
+    key: groupKey(full),
     full,
     kind: "group" as const,
+    primary: true,
     index: i,
   }));
 
+  if (hasSources) {
+    stations.push({
+      key: "sources",
+      full: SOURCES_LABEL,
+      kind: "sources",
+      primary: false,
+      index: stations.length,
+    });
+  }
+
   if (hasLearnings) {
     stations.push({
-      key: "field-log",
-      full: FIELD_LOG_LABEL,
-      kind: "fieldlog",
+      key: "recap",
+      full: RECAP_LABEL,
+      kind: "recap",
+      primary: false,
       index: stations.length,
     });
   }
@@ -78,6 +71,7 @@ export function buildStations({ groups, hasLearnings }: StationInput): Station[]
     key: "tools",
     full: TOOLS_LABEL,
     kind: "tools",
+    primary: false,
     index: stations.length,
   });
 

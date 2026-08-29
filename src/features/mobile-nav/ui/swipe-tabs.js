@@ -32,7 +32,7 @@ export function initSwipeTabs(ctx) {
   var tabs = ctx.tabs;
   var content = document.getElementById("content");
   if (!content) return;
-  var count = document.querySelectorAll(".catblock").length;
+  var count = tabs.querySelectorAll('.gtab[data-primary="true"]:not([hidden])').length;
   if (count < 2) return;
   var reduced = reducedMotion();
   var bar = ctx.bar;
@@ -42,7 +42,7 @@ export function initSwipeTabs(ctx) {
     var a = tabs.querySelector(".gtab-active");
     if (!a) return -1;
     var v = parseInt(a.getAttribute("data-tab"), 10);
-    return isNaN(v) ? -1 : v; // a tool panel is open → no swipe
+    return isNaN(v) || a.getAttribute("data-primary") !== "true" ? -1 : v;
   }
 
   // A touch that begins inside a horizontally scrollable region (or an itinerary map,
@@ -108,7 +108,7 @@ export function initSwipeTabs(ctx) {
   }
 
   content.addEventListener("touchstart", function (e) {
-    tracking = e.touches.length === 1 && !overlayOpen() && !ownsGesture(e.target);
+    tracking = e.touches.length === 1 && currentIdx() >= 0 && !overlayOpen() && !ownsGesture(e.target);
     locked = false;
     if (!tracking) return;
     sx = lx = e.touches[0].clientX;
@@ -157,7 +157,7 @@ export function initSwipeTabs(ctx) {
     var next = resolveCommit(dx, vx, window.innerWidth, currentIdx(), count);
     if (next === null) { release(null); return; }
     tapHaptic();
-    var btn = tabs.querySelector('.gtab[data-tab="' + next + '"]');
+    var btn = tabs.querySelector('.gtab[data-primary="true"][data-tab="' + next + '"]');
     if (!btn) { release(null); return; }
     btn.click();
     release(dx < 0 ? window.innerWidth * 0.28 : -window.innerWidth * 0.28);

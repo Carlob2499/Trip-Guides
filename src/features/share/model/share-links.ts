@@ -12,14 +12,13 @@
  * rather than read off `location.href` — otherwise every share link points at whatever
  * section happened to be open on first load.
  *
- * `baseHref` should already have any existing hash stripped. `activeTabDataAttr` is the
- * `data-tab` attribute of the currently-active `.gtab` element, or null/undefined if
- * none is active (a special panel like Budget, or nothing selected yet) — only a
- * NUMBERED content tab gets a `#grp-N` deep link; special panels share the base URL.
+ * `baseHref` should already have any existing hash stripped. `activeRoute` is the stable
+ * `data-route` of the currently-active station. Positional tab indices are deliberately not
+ * accepted because their meaning changes when guide information architecture changes.
  */
-export function buildPageUrl(baseHref: string, activeTabDataAttr: string | null | undefined): string {
-  const t = activeTabDataAttr;
-  return t && /^\d+$/.test(t) ? baseHref + "#grp-" + t : baseHref;
+export function buildPageUrl(baseHref: string, activeRoute: string | null | undefined): string {
+  const publicRoutes = new Set(["days", "food", "explore", "essentials", "sources", "recap", "tools"]);
+  return activeRoute && publicRoutes.has(activeRoute) ? baseHref + "#dest-" + activeRoute : baseHref;
 }
 
 export function buildWhatsAppShareUrl(pageUrl: string): string {

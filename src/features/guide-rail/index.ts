@@ -9,6 +9,8 @@
    keeps scroll memory, the session key, telemetry and the thumb bar on one code path.
 
    Public surface — the only sanctioned imports from outside this silo. */
-export { buildStations, progressGeometry, FIELD_LOG_LABEL, TOOLS_LABEL } from "./model/stations";
+export { buildStations, progressGeometry, SOURCES_LABEL, RECAP_LABEL, TOOLS_LABEL } from "./model/stations";
 export type { Station, StationKind, StationInput, Geometry } from "./model/stations";
+export { canonicalHome, legacyRouteAnchors, projectTravelerDestinations, routeForHome, TRAVELER_DESTINATION_ORDER } from "./model/destinations";
+export type { CanonicalSectionHome, GuideRoute, LegacyRouteAnchor, ProjectedSection, SectionLike, TravelerDestination, TravelerDestinationName, TravelerProjection } from "./model/destinations";
 export { initGuideRail } from "./ui/rail.js";

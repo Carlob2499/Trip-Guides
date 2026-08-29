@@ -43,8 +43,8 @@ export function initSharePanel(lockScroll, unlockScroll) {
   function currentPageUrl() {
     var base = window.location.href.split("#")[0];
     var active = document.querySelector(".gtab.gtab-active");
-    var t = active && active.getAttribute("data-tab");
-    return buildPageUrl(base, t);
+    var route = active && active.getAttribute("data-route");
+    return buildPageUrl(base, route);
   }
 
   function qrUnavailable() {
