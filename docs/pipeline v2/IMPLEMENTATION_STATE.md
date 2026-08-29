@@ -10,6 +10,8 @@ This file is the durable technical state of Pipeline V2. It records **what exist
 
 **Production cutover: NOT YET ACCEPTED.**
 
+**Final release-readiness acceptance canary: FAILED — MODEL / CONTENT (Fukuoka, 2026-08-29).**
+
 V2 exists beside V1. V1 remains the production default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. V2 is selected by the trusted `/new` path only when the selector is explicitly `v2`; manual V2 dispatch remains `landMode=pr` and cannot become production authority.
 
 The accepted live canary is **Uruguay / Canary #4**:
@@ -99,7 +101,7 @@ Automatic repair is decided from durable state, not a transient workflow flag. I
 - stage attempt budget remains;
 - automatic-repair budget remains.
 
-Current bounds remain five quality attempts and one automatic quality-repair reservation. A proven usage-limit interruption does not consume a quality attempt, but it also does not auto-retry into the same exhausted usage window; the run stops visibly and can be deliberately redispatched after availability returns. Cancellation, generic agent failures, unknown failures, missing findings, unreadable state, exhausted budgets, and already-published runs do not earn blind retries.
+Current bounds remain five quality attempts and one automatic quality-repair reservation. A proven usage-limit interruption does not consume a quality attempt, but it also does not auto-retry into the same exhausted usage window; the run stops visibly and can be deliberately redispatched after availability returns. This remains true for repeated proven usage-limit interruptions: each refunded availability failure reuses the bounded quality budget rather than extending it. Autonomous control-plane routing, including critic-truth routing back to the evidence owner, may not raise the attempt cap. Only an explicitly human-triggered answer re-open uses the separately defined bounded reopen grant. Cancellation, generic agent failures, unknown failures, missing findings, unreadable state, exhausted budgets, and already-published runs do not earn blind retries.
 
 A stopped run has a visible escalation path rather than silently disappearing.
 
@@ -164,8 +166,9 @@ Current state:
 - **V04:** DONE deterministically;
 - **V06:** DONE from truthful available telemetry;
 - **V07:** FAIL / ACTION — the frozen method applied to both runs' durable telemetry found two W1 deterministic-waste patterns (the candidate-id contract mismatch repeated across both runs; the reconcile gate accepting a tree the critic's build gate then rejected, discarding a full critic attempt), each with a bounded control-plane-only correction; no research-behavior change is authorized. Evidence and the independent-review record: `V07_EFFICIENCY_EVIDENCE.md`.
+- **Final acceptance / Fukuoka:** FAIL — run `fukuoka-20260829-7cb4fa` exhausted its authorized 5/5 quality attempts at Reconcile with the final active finding that a Showa Bus objective claim cited an official origin only as `search-preview`, not a fetched/read source. The critic never ran, landing never ran, publication remained false, and main stayed on the accepted base. Exact Actions #59–#65 accounting and authority: `FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md`.
 
-A zero-credit readiness audit found no active `tokyo` or `tottori` V2 run/intake collision on current `main` and no missing deterministic evidence field that justifies changing the V2 schema before those trials. The frozen criteria remain unchanged.
+The Fukuoka failure is the current production-readiness fact. It does not erase the historical V01–V07 evidence, and it does not authorize continuing the failed branch past its cap. Two deterministic repository defects found in independent closeout review are fixed separately: the Claude↔Codex watcher missing-artifact YAML fallback and the autonomous evidence-owner +1 cap escape hatch.
 
 The important distinction is:
 
@@ -208,8 +211,9 @@ Read together:
 - `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` — targeted GitHub reliability proofs.
 - `V06_TELEMETRY_EVIDENCE.md` — truthful currently measurable telemetry.
 - `V07_EVALUATION_METHOD.md` — frozen post-validation efficiency rubric.
+- `FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md` — authoritative final acceptance run/accounting and terminal failure.
 - `SEPTEMBER_TRACKER.md` — delivery status/deadlines.
 - `../reference/pipeline.md` — durable lifecycle policy.
 - `../handoff.md` — current warm start.
 
-**Next engineering surface:** the model-backed validation program executed 2026-08-26 remains historical truth and concluded **NOT READY — REPAIR REQUIRED** (`V2_VALIDATION_SYNTHESIS.md`). PR #105 merged the first deterministic repair implementation, but the required independent diff review occurred post-merge and found residual R-A/R-E/R-F defects plus bounded retry/identity issues. Draft PR #106 contains the mechanically safe post-merge corrections; a draft stacked on #106 contains the residual R-A/R-E/R-F contract repair, revised after a second independent adversarial review — post-critic evidence truth now accounts for EVERY changed guide value at an exact JSON-pointer location with no editorial-escape declaration, reconciliation rows carry typed `corroborates`/`supersedes` relations that can say "this replaced a recommendation, not a record" without inventing an evidence id, coverage reads supersession from that relation instead of a prose note, and a critic-truth failure retains the critic's paid ledger/process-memory work instead of discarding it. Both layers await independent review and merge; do **not** run the fresh repaired-class model-backed validation until they land. V1 remains the production default and V2 cutover remains unauthorized until the remaining repair is independently reviewed and a fresh Run-B-class validation succeeds.
+**Next engineering surface:** the final release-readiness Fukuoka canary has now run and failed on model-produced evidence provenance before critic/landing. Preserve that branch as failed evidence; do not continue it past 5/5, do not infer production authority, and do not launch another full Fable canary merely to chase the same run green. This deterministic closeout repairs the watcher no-artifact YAML seam and removes autonomous evidence-owner cap extension, then returns the repository to a truthful blocked state. A future model/content remediation and acceptance run require separate justification/authority. V1 remains the production default and rollback path until production cutover is explicitly accepted.
