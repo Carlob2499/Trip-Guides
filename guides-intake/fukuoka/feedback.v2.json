@@ -23,6 +23,39 @@
       "createdAt": "2026-08-29T03:11:08.222Z",
       "status": "retired",
       "retiredAt": "2026-08-29T03:36:30.164Z"
+    },
+    {
+      "runId": "fukuoka-20260829-7cb4fa",
+      "stage": "reconcile",
+      "attempt": 1,
+      "findings": [
+        "P0 research   · FAIL — 8 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ map point \"Fukuoka Airport\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Hakata Station\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Dazaifu Tenmangu\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ map point \"Sakurai Futamigaura (Itoshima)\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ budget item \"Sights & activities, per day\" (in budget \"Budget & daily costs\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Arrival — settle in, then a yatai crawl\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Dazaifu day trip — the shrine, the museum, the approach street\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "⚠ days item \"Nokonoshima's flowers, Hakata Okunchi, and the flight home\" (in days \"Day by day\") has an undated hour/price-looking figure but no verified_on (D2 advisory)",
+        "P1 candidates · FAIL — structural integrity findings in the consideration set",
+        "✗ priority 1: \"Daichan / Gion Daichan (yatai udon)\" is marked shipped but is not a canonical shipped entity name",
+        "✗ priority 1: \"Itoshima oyster huts (kaki-goya, seasonal)\" is marked shipped but appears nowhere in the guide",
+        "✗ priority 1: \"*(Pass B)* Fukuya\" is marked shipped but is not a canonical shipped entity name",
+        "P6 voice      · FAIL — 1 process-language leak(s):",
+        "⚠ \"this pass\" in §\"Hakata ramen, motsunabe & mentaiko\"",
+        "P0 uncertainty· FAIL — 1 finding(s) (draft: these BLOCK publishing):",
+        "⚠ [regulatory-change-unregistered] §\"Money & currency\" states a rule change around Nov 1 (\"switches to\") with no facts.json row — a plan-critical change nothing will re-check or expire",
+        "⚠ [leg-duration-unverified] 4 of 7 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Dazaifu day trip — the shrine, the museum, the approach street\", \"Nokonoshima's flowers, Hakata Okunchi, and the flight home\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-29T04:12:46.259Z",
+      "status": "active",
+      "retiredAt": null
     }
   ]
 }
