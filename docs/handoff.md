@@ -4,12 +4,13 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-29)
-Uruguay Canary #4 remains GREEN historical proof of the V2 draft-only path; R03 escalation/cancellation seams remain proven.
+Uruguay Canary #4 remains GREEN historical proof of the V2 draft-only path. R03 is fully accepted: authenticated escalation and the cancellation chain are proven.
 Fukuoka `fukuoka-20260829-7cb4fa` remains a terminal **FAIL — MODEL / CONTENT** at Reconcile (5/5 quality attempts, 1/1 auto-retry); critic/landing never ran, publication stayed false. Preserve `research-v2/fukuoka`; never continue or repair-merge it.
 PR #116 deterministic closeout and PR #117 post-Fukuoka repair-first model-input remediation are merged.
 Fresh acceptance candidate: Kumamoto branch `acceptance/v2-kumamoto-20260902`, frozen head `99d758756a2f4a53fef5f3072d72388da4ebdb17`, accepted base `82d8d78a6411c2d8c944087df598ccf03afec940`. Closed PR #120 exact-head preflight is GREEN: Tests, Accessibility, CodeQL actions, CodeQL JS/TS all PASS. No model-backed Kumamoto run has started.
 NEXT BACKEND ACTION: on Sep 2, manually dispatch `research-pass-v2.yml` from that frozen acceptance ref for slug `kumamoto` with Sonnet 5/high and Opus 5/high critic. No cap extension, artifact hand-edit, production repair inside the run, selector change, publication, or canary merge.
 PR #115 is closed/deferred outside backend acceptance. V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset.
+The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
 Durable shared decisions: `CONTEXT.md`.
 <!-- WARM_START_END -->
 
@@ -32,7 +33,7 @@ Durable shared decisions: `CONTEXT.md`.
 - S02 mobile critical path: DONE by PR #114 browser proof across /new, /progress, and a finished guide.
 - S03 offline/poor-network traveler path: DONE by PR #114's fresh-page offline service-worker read plus the existing durable sync/replay suite.
 - S04 accessibility: automated portion PASS after PR #114 exposed and repaired progress status contrast and undersized controls; one physical-device interaction spot check remains as a traveler/UI check, not as retroactive authority for the already-run Fukuoka acceptance canary.
-- Do not spend Claude/Fable on another full acceptance run from this closeout. The failed Fukuoka evidence is frozen until a separately justified model/content remediation and new acceptance authorization exist.
+- The failed Fukuoka evidence remains frozen. A separately justified post-Fukuoka remediation is merged, and the fresh Kumamoto acceptance is now explicitly authorized only on its preflight-green frozen candidate; do not repurpose this authority into any other canary.
 
 ## Pipeline status preserved
 
@@ -43,6 +44,6 @@ Durable shared decisions: `CONTEXT.md`.
 - V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
 - Final Fukuoka acceptance `fukuoka-20260829-7cb4fa` FAILED at reconcile on an unfetched official-source claim. Durable state is 5/5 quality attempts, 1/1 auto-retries, critic queued/0 attempts, publication false, landing pending.
 - V2 production cutover remains pending and unauthorized. The failed Fukuoka branch is evidence, not content to repair-and-merge.
-- No new acceptance canary is authorized by the deterministic closeout. Any future model-backed run must follow a separately justified remediation/acceptance decision rather than continuing Fukuoka past its cap.
-- DS1 and PR #115 remain separate design/UI work, not production cutover.
+- Fresh Kumamoto acceptance is separately authorized under `FINAL_V2_ACCEPTANCE_KUMAMOTO.md`; it is not a continuation of Fukuoka and may not inherit or extend Fukuoka's attempt authority.
+- DS1 remains separate design/UI work. PR #115 is closed/deferred and is not production-cutover evidence.
 - The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
