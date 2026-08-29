@@ -27,6 +27,16 @@ Live inspection after PR #129 still reports `main` with branch protection disabl
 
 GitHub's documented protection/ruleset model supports required status checks, pull-request requirements, force-push blocking, and branch deletion protection; these controls must be configured in repository settings because the connected GitHub capability used by this automation can read but cannot modify branch protection/rulesets.
 
+### Protection compatibility finding
+
+A settings-only PR/status-check rule cannot be enabled blindly. The production `/new` scaffold path in `.github/workflows/new-guide.yml` intentionally lands its draft scaffold directly on `main` before starting the selected research engine. GitHub required-status protection can reject a direct push whose new commit has not already satisfied the required checks, so a naive PR-only/required-check configuration can break guide creation.
+
+Issue #130 now requires a protected-branch-compatible write-path design and a no-Claude compatibility proof before F01 is considered mechanically enforced. The preferred direction is to migrate the scaffold write to a branch/PR landing path while preserving draft quarantine, global scaffold serialization, slug collision safety, issue reply/close behavior, V1 default routing, and the trusted V2 `workflow_call` cutover boundary.
+
+A broad GitHub Actions bypass is not accepted as an automatic substitute. Repository audit shows multiple workflows with `contents: write`, including new-guide, change/mutation, V1/V2 research, feedback/recertification, watcher publication, and deployment-related automation. Any integration bypass must therefore be deliberately bounded and reviewed as a repository-wide trust decision rather than treated as a single-purpose scaffold exception.
+
+No protection setting has been changed yet, and this finding does not alter Pipeline V2 runtime, acceptance criteria, or the frozen Kumamoto candidate.
+
 ## Acceptance isolation
 
 The rebuilt Kumamoto candidate remains `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`. PR #129 changed only release-governance workflow/tests/labels and does not mutate the frozen acceptance candidate, its model inputs, Pipeline V2 runtime, attempt authority, evidence/landing gates, selector, publication state, Fukuoka evidence, or V1 behavior.
