@@ -4,11 +4,25 @@
    (through the real tab buttons). The compass answers "take me anywhere";
    the spine answers "where am I in the whole guide". ≥1100px only. */
 
+/** The spine is a primary-destination progress indicator, not a route index. */
+export function primarySpineTabs(tabs) {
+  return Array.prototype.slice.call(tabs.querySelectorAll(".gtab"))
+    .filter(function (t) {
+      return t.getAttribute("data-primary") === "true" && !t.hidden &&
+        /^\d+$/.test(t.getAttribute("data-tab") || "");
+    });
+}
+
+/** Return the tick position, rather than the station's contiguous route index. */
+export function spineActiveIndex(stations, active) {
+  return active ? stations.indexOf(active) : -1;
+}
+
 (function () {
+  if (typeof document === "undefined") return;
   var tabs = document.getElementById("guideTabs");
   if (!tabs) return;
-  var gtabs = Array.prototype.slice.call(tabs.querySelectorAll(".gtab"))
-    .filter(function (t) { return /^\d+$/.test(t.getAttribute("data-tab")); });
+  var gtabs = primarySpineTabs(tabs);
   if (gtabs.length < 3) return;
 
   var rail = document.createElement("nav");
@@ -30,8 +44,7 @@
   var seen = {};
   function activeIdx() {
     var a = tabs.querySelector(".gtab-active");
-    var v = a ? parseInt(a.getAttribute("data-tab"), 10) : NaN;
-    return isNaN(v) ? -1 : v;
+    return spineActiveIndex(gtabs, a);
   }
   var ticking = false;
   function update() {
