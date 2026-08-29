@@ -71,8 +71,8 @@
 /* The visible pause chip — a real control (doctrine: obvious clickability), same
    badge-on-photo surface treatment as .mast-credit below. Play glyph shows only in the
    paused state. 40px hit target. Inset clears the corner tick's 20px arm. */
-.mast-pause{position:absolute;right:1.2rem;bottom:1.2rem;z-index:2;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:rgba(248,250,243,.92);background:rgba(12,15,18,.68);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.mast-pause:hover{color:#fff;background:rgba(12,15,18,.8)}
+.mast-pause{position:absolute;right:1.2rem;bottom:1.2rem;z-index:2;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:rgba(248,250,243,.92);background:rgba(var(--shadow-rgb),.68);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.mast-pause:hover{color:#fff;background:rgba(var(--shadow-rgb),.8)}
 .mast-pause svg{width:16px;height:16px}
 .mast-pause .mp-play{display:none}
 .mast-pause.is-paused .mp-play{display:block}
@@ -99,8 +99,8 @@
 
 /* Same badge-on-photo pattern as sights.css's .imgcredit--onphoto, same fix: .42 alpha composited
    to 2.23:1 against a worst-case white photo pixel. .68 clears 4.79:1. Inset clears the tick arm. */
-.mast-credit{position:absolute;right:1.2rem;top:1.2rem;z-index:2;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(248,250,243,.82);background:rgba(12,15,18,.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
-.mast-credit:hover{color:#fff;background:rgba(12,15,18,.62)}
+.mast-credit{position:absolute;right:1.2rem;top:1.2rem;z-index:2;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(248,250,243,.82);background:rgba(var(--shadow-rgb),.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
+.mast-credit:hover{color:#fff;background:rgba(var(--shadow-rgb),.62)}
 
 /* The text column beside the plate — a grid so the content anchors to the BOTTOM of the
    column (matching the plate's height) rather than sitting at the top with a gap below,

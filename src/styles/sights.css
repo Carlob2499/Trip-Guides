@@ -34,7 +34,7 @@
 .sight-media.media-fail::after{content:"Photo loads online";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.04em;color:var(--muted)}
 .sight-media.media-fail .imgcredit{display:none}
 
-.sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,13,16,.82) 0%,rgba(10,13,16,.30) 42%,rgba(10,13,16,0) 68%)}
+.sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(var(--shadow-rgb),.82) 0%,rgba(var(--shadow-rgb),.30) 42%,rgba(var(--shadow-rgb),0) 68%)}
 /* The scrim exists to make near-white text legible over PHOTO pixels, so it paints only once a
    photo is actually there. Gated on .media-ok rather than suppressed on .media-fail (which is what
    this was, and which left the DEFAULT/still-loading state painting a dark scrim over the light
@@ -63,8 +63,8 @@
    photo is actually painted behind the caption. @media screen: print already flattens this pair to
    #111 unconditionally (see the @media print block below) and must keep winning there. */
 @media screen{
-  .sight-media.media-ok .tag--onphoto{color:#e9ede2;text-shadow:0 1px 6px rgba(0,0,0,.4)}
-  .sight-media.media-ok .sight-name--onphoto{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.4)}
+  .sight-media.media-ok .tag--onphoto{color:#e9ede2;text-shadow:0 1px 6px rgba(var(--shadow-rgb),.4)}
+  .sight-media.media-ok .sight-name--onphoto{color:#fff;text-shadow:0 1px 12px rgba(var(--shadow-rgb),.4)}
   /* The provenance dot rides inline with the (now white) title, so it needs the same
      on-photo treatment .tag--onphoto/.sight-name--onphoto get, gated the same way. */
   .sight-media.media-ok .prov-dot--onphoto{color:rgba(255,255,255,.75);border-color:rgba(255,255,255,.75)}
@@ -76,9 +76,9 @@
    white while staying visually a translucent pill, not a solid one (verified: computed the actual
    composited RGB against white, not just eyeballed the alpha). Hover's .62 was already fine
    (5.51:1 with #fff text) and is untouched. */
-.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:var(--text-nano);color:rgba(248,250,243,.85);background:rgba(10,13,16,.68);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.imgcredit--onphoto{position:absolute;top:.55rem;right:.55rem;left:auto;margin:0;padding:.2rem .5rem;font-size:var(--text-nano);color:rgba(248,250,243,.85);background:rgba(var(--shadow-rgb),.68);border-radius:999px;text-align:right;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .imgcredit--onphoto a,.imgcredit--onphoto{border-bottom:0;text-decoration:none}
-.imgcredit--onphoto:hover{background:rgba(10,13,16,.62);color:#fff}
+.imgcredit--onphoto:hover{background:rgba(var(--shadow-rgb),.62);color:#fff}
 
 /* Bodies */
 .sight--photo .sight-body{padding:1rem 1.3rem 1.15rem}

@@ -77,7 +77,7 @@
   /* Elevated, because it is a card lying ON the globe and not a panel printed into the page.
      Flat, it read as part of the map. Same elevation idiom the mobile ping/menu sheets
      already use (atlas-mobile.css) — the one place this system does spend a shadow. */
-  box-shadow: 0 10px 30px rgba(16, 20, 24, .28);
+  box-shadow: 0 10px 30px rgba(var(--shadow-rgb),.28);
   pointer-events: auto; will-change: transform; opacity: 0;
   /* The card GLIDES to its new seat. The solver only re-seats on 90px of globe drift, so
      without this the cards teleport in 90px steps while the globe turns smoothly under them —
@@ -115,7 +115,7 @@
    brightness neither theme controls. */
 .atlas-pincard-credit {
   position: absolute; left: 8px; top: calc(var(--plate-h, 0px) - 26px);
-  padding: 3px 7px; background: rgba(16, 20, 24, .74); color: #f4f6f1;
+  padding: 3px 7px; background: rgba(var(--shadow-rgb),.74); color: #f4f6f1;
   font-family: var(--font-data); font-size: var(--text-nano); letter-spacing: .06em;
   pointer-events: none;
 }

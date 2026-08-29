@@ -23,7 +23,7 @@
 /* ── The preview shell — matches .share-modal/.share-backdrop's own established
    pattern (fixed backdrop + centred panel, border/no-shadow edges) rather than
    inventing a second modal language. ──────────────────────────────────────── */
-.bsp-backdrop{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.5)}
+.bsp-backdrop{position:fixed;inset:0;z-index:900;background:rgba(var(--shadow-rgb),.5)}
 .bsp-modal{position:fixed;inset:2.5vh 2.5vw;z-index:910;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--rule2);border-radius:0;overflow:hidden}
 .bsp-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1.1rem;background:var(--card);border-bottom:1px solid var(--rule)}
 .bsp-bar-label{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:640;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}

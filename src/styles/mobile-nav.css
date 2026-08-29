@@ -29,15 +29,15 @@
      single owner of the mobile navigation's appearance. */
   .botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule2)}
   /* Slide-up sheet backdrop */
-  .sheet-backdrop{display:block;position:fixed;inset:0;z-index:45;background:rgba(16,20,24,0);pointer-events:none;transition:background .25s}
-  .sheet-backdrop.open{background:rgba(16,20,24,.45);pointer-events:auto}
+  .sheet-backdrop{display:block;position:fixed;inset:0;z-index:45;background:rgba(var(--shadow-rgb),0);pointer-events:none;transition:background .25s}
+  .sheet-backdrop.open{background:rgba(var(--shadow-rgb),.45);pointer-events:auto}
   /* Slide-up sheet */
   /* 16px was pre-Atlas drift the migration missed (the system has 0 and 999px, nothing else),
      and it was also the misleading affordance: a softly rounded top edge is the universal
      "drag me" cue, so the sheet promised a gesture the browser kept taking away. The container
      is square because it holds content; the GRAB HANDLE below is a pill because it is the part
      you press. Same rule, applied to the right two elements. */
-  .sheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;z-index:46;max-height:80vh;background:var(--bg);border-radius:0;border-top:1px solid var(--rule2);box-shadow:0 -10px 34px rgba(16,20,24,.28);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding-bottom:max(.5rem,var(--safe-bottom))}
+  .sheet{display:flex;flex-direction:column;position:fixed;left:0;right:0;bottom:0;z-index:46;max-height:80vh;background:var(--bg);border-radius:0;border-top:1px solid var(--rule2);box-shadow:0 -10px 34px rgba(var(--shadow-rgb),.28);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding-bottom:max(.5rem,var(--safe-bottom))}
   /* The explicit handle the rounded corner was standing in for — same 38x4 pill the SOS sheet
      uses, so both sheets say "drag" the same way. `flex:none` keeps it off the list's scroll. */
   .sheet::before{content:"";flex:none;display:block;width:38px;height:4px;border-radius:999px;background:var(--rule2);margin:.5rem auto .35rem}
@@ -298,7 +298,7 @@
       left:50%;right:auto;transform:translateX(-50%);
       width:min(560px,calc(100% - 2rem));bottom:max(.75rem,var(--safe-bottom));
       padding-bottom:.4rem;border:1px solid var(--rule2);border-radius:0;
-      box-shadow:0 6px 24px rgba(16,20,24,.18),0 2px 6px rgba(16,20,24,.08);
+      box-shadow:0 6px 24px rgba(var(--shadow-rgb),.18),0 2px 6px rgba(var(--shadow-rgb),.08);
     }
     .botbar-ind{top:auto;bottom:0}
     /* A floating pill sits ABOVE the page edge, so the last line of content needs the

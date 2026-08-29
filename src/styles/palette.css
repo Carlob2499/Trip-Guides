@@ -1,5 +1,5 @@
 /* === COMMAND PALETTE (Ctrl/Cmd+K or "/") ==================================== */
-.pal-backdrop{position:fixed;inset:0;z-index:200;display:none;background:rgba(10,14,18,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.pal-backdrop{position:fixed;inset:0;z-index:200;display:none;background:rgba(var(--shadow-rgb),.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .pal-backdrop.pal-open{display:flex;align-items:flex-start;justify-content:center;padding:12vh 1rem 0}
 /* Atlas re-expression (Stage F, feature 4). Square corners on both containers, and the drop
    shadow deleted: the palette sits on its own scrim, which already lifts it off the page, so

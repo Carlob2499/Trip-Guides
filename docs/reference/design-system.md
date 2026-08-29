@@ -193,7 +193,7 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `READY FOR REVIEW` · `DONE`
 | ID | Item | Owner | Target | Status |
 |---|---|---|---|---|
 | D1 | This constitution approved by Carlo | Claude → Carlo | Sep 2 | READY FOR REVIEW |
-| D2 | Token core consolidated; raw values outside core fail tests | Claude | Sep 9 | NOT STARTED |
+| D2 | Token core consolidated; raw values outside core fail tests | Claude | Sep 9 | READY FOR REVIEW |
 | D3 | Approved-component registry + CI check (locked-down enforcement) | Claude | Sep 16 | NOT STARTED |
 | D4 | Component gallery page: all components × themes × light/dark × data states | Claude | Sep 16 | NOT STARTED |
 | D5 | Dark-mode core remap + gallery screenshot baselines (in before Sep 20) | Claude | Sep 19 | NOT STARTED |

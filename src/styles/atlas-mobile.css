@@ -140,7 +140,7 @@
   align-items: center; justify-content: center;
   background: var(--cta); color: var(--cta-ink); border: 0; cursor: pointer;
   font-family: var(--font-data); font-weight: 700; font-size: var(--text-body);
-  box-shadow: 0 8px 24px rgba(16, 20, 24, .28);
+  box-shadow: 0 8px 24px rgba(var(--shadow-rgb),.28);
 }
 
 .atlas-menuscrim {
@@ -152,7 +152,7 @@
   position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(74px + var(--safe-bottom));
   z-index: 5; width: min(240px, 72vw);
   background: var(--card); border: 1px solid var(--rule2);
-  box-shadow: 0 14px 40px rgba(16, 20, 24, .3);
+  box-shadow: 0 14px 40px rgba(var(--shadow-rgb),.3);
 }
 .atlas-menusheet-kicker {
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-nano); letter-spacing: .18em;
@@ -172,7 +172,7 @@
   background: var(--card); border-top: 2px solid var(--accent);
   padding: 14px max(16px, var(--safe-right)) calc(14px + var(--safe-bottom)) max(16px, var(--safe-left));
   gap: 9px;
-  box-shadow: 0 -12px 34px rgba(16, 20, 24, .24);
+  box-shadow: 0 -12px 34px rgba(var(--shadow-rgb),.24);
 }
 /* The sheet was a country code, a title and a clock on a plain ground — accurate and
    completely anonymous (creator, 2026-08-09: "the globe boxes are quite sterile ... where is

@@ -27,7 +27,7 @@
   display: none; position: absolute; z-index: 100;
   background: var(--card); border: 1px solid var(--accent);
   border-radius: 0; padding: 0.75em 1em; min-width: 200px; max-width: 300px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12); font-size: var(--text-control); line-height: 1.4;
+  box-shadow: 0 4px 16px rgba(var(--shadow-rgb),0.12); font-size: var(--text-control); line-height: 1.4;
   color: var(--ink);
 }
 .prov-popover[data-open] { display: block; }

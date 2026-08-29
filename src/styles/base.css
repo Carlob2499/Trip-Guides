@@ -117,6 +117,20 @@
   --dark-ink-3:#c7ccc0;
   --dark-ink-4:#b9beb2;
   --dark-rule:rgba(255,255,255,.14);
+  /* D2 (2026-08-29) — CONSOLIDATED SHADOW/SCRIM TINT. Before this token, "near-black" for a
+     box-shadow or backdrop scrim was independently reinvented six times across 30 call
+     sites — rgba(0,0,0,·), (16,20,24,·), (10,14,18,·), (8,11,14,·), (12,15,18,·) and
+     (10,13,16,·) — the exact "authors reaching past the scale" shape --text-micro's own
+     comment describes, just for colour instead of size. Declared as an RGB TRIPLET (not a
+     hex) so every call site keeps its OWN alpha via rgba(var(--shadow-rgb),alpha) — the
+     alpha is a legitimate per-use elevation/opacity decision, only the base colour was
+     drifting. Deliberately NOT reusing --ink or its var() form: --ink re-maps per theme
+     (dark mode's --ink is near-WHITE, for text), while a shadow must stay near-black in
+     BOTH themes — an object, not page ink, so it is declared once in :root only, exactly
+     like --dark-ground/--crit-fill/--on-crit above, and never touched by the dark block.
+     Value is --ink's own light-mode hex (#0f141a) decomposed to a triplet — reused, not
+     invented, per the governance rule against hand-picking new colours. */
+  --shadow-rgb:15,20,26;
   /* --cta/--cta-ink are the one genuinely NEW pair, and the only ones here that are not
      aliases. docs/design-handoff/DESIGN.md specs the primary button as chart-room-slate on card-paper and gives no
      dark variant — but in dark mode chart-room-slate IS the page ground, so a fixed value

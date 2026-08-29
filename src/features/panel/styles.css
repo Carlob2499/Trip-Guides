@@ -76,7 +76,7 @@
 .pnl--drag {
   opacity: .65;
   pointer-events: none;
-  box-shadow: 0 6px 18px rgba(16, 20, 24, .18);
+  box-shadow: 0 6px 18px rgba(var(--shadow-rgb),.18);
 }
 [data-panel-dragging] { cursor: grabbing; }
 [data-panel-dragging] .pnl-grip { cursor: grabbing; }
