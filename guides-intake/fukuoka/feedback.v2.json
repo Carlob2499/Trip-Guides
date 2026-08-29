@@ -72,6 +72,28 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-29T07:52:00.521Z",
+      "status": "retired",
+      "retiredAt": "2026-08-29T08:07:17.118Z"
+    },
+    {
+      "runId": "fukuoka-20260829-7cb4fa",
+      "stage": "reconcile",
+      "attempt": 4,
+      "findings": [
+        "> trip-guides@1.0.0 build",
+        "> astro build && node scripts/check-closed-days.mjs && node scripts/validate-palettes.mjs && tsx scripts/build-search-index.ts && node scripts/gen-sw-precache.mjs",
+        "08:07:15 [content] Syncing content",
+        "[InvalidContentEntryDataError] guides → fukuoka data does not match collection schema.",
+        "sections.19.items.2.book: Invalid option: expected one of \"url\"|\"walk-in\"|\"call\"",
+        "sections.19.items.4.book: Invalid option: expected one of \"url\"|\"walk-in\"|\"call\"",
+        "Hint:",
+        "See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.",
+        "Error reference:",
+        "https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+        "Location:",
+        "Stack trace:"
+      ],
+      "createdAt": "2026-08-29T08:07:17.118Z",
       "status": "active",
       "retiredAt": null
     }
