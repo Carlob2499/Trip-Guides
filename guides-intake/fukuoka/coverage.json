@@ -1,0 +1,78 @@
+{
+  "slug": "fukuoka",
+  "generatedAt": "2026-08-29T00:15:56.792Z",
+  "asks": [
+    {
+      "id": "cities",
+      "label": "Cities",
+      "value": "Fukuoka, Dazaifu, Itoshima",
+      "coveredBy": null
+    },
+    {
+      "id": "dates",
+      "label": "Trip dates",
+      "value": "2026-10-19 – 2026-10-23",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-1",
+      "label": "Priority #1",
+      "value": "Food & dining",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-2",
+      "label": "Priority #2",
+      "value": "Culture / history",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-3",
+      "label": "Priority #3",
+      "value": "Nature / outdoors",
+      "coveredBy": null
+    },
+    {
+      "id": "niche",
+      "label": "Niche interest",
+      "value": "yatai etiquette, regional specialties, and public-transit day trips",
+      "coveredBy": null
+    },
+    {
+      "id": "pace",
+      "label": "Pace",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "travel-style",
+      "label": "Travel style",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "budget",
+      "label": "Budget target",
+      "value": "Mid-range; practical group costs",
+      "coveredBy": null
+    },
+    {
+      "id": "party",
+      "label": "Party description",
+      "value": "8 adults traveling together",
+      "coveredBy": null
+    },
+    {
+      "id": "travelers",
+      "label": "Number of travelers",
+      "value": "8",
+      "coveredBy": null
+    },
+    {
+      "id": "comments",
+      "label": "Additional comments",
+      "value": "Returning Japan travelers; public transit preferred; moderate walking; verify reservations, group seating/capacity, last practical return times, closures, and availability rather than assuming.",
+      "coveredBy": null
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "fukuoka",
+  "createdAt": "2026-08-29T00:15:56.793Z",
+  "updatedAt": "2026-08-29T00:15:56.793Z",
+  "stages": {
+    "scaffold": "2026-08-29T00:15:56.793Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}
