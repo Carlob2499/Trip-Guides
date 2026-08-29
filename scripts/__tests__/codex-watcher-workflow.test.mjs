@@ -204,6 +204,12 @@ describe("claude-codex-watcher.yml — real job-boundary separation (CodeQL find
     expect(publishJob()).toMatch(/name:\s*validated-pr-\$\{\{\s*matrix\.pr\s*\}\}/);
   });
 
+  it("artifact transfer actions are immutable SHA pins, never floating major-version tags", () => {
+    expect(validateJob()).toContain("actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7");
+    expect(publishJob()).toContain("actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7");
+    expect(yml).not.toMatch(/actions\/(?:upload|download)-artifact@v\d+/);
+  });
+
   it("publish tolerates a missing artifact (validate was ineligible/failed) as a clean no-op, never an error", () => {
     const download = stepBlock("Download the validated file tree (if validate produced one)", publishJob());
     expect(download).toMatch(/continue-on-error:\s*true/);
