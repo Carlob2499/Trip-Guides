@@ -170,6 +170,7 @@
 
 /* ── Sheet list ───────────────────────────────────────────────────────────────────────── */
 .atlas-sheets { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+.atlas-sheets > li { min-width: 0; }
 .atlas-sheet {
   display: flex; align-items: center; gap: 14px; padding: 14px 4px;
   border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink);
