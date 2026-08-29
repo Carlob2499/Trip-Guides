@@ -52,6 +52,11 @@ preview merely to clear a gate.
 - Apply the deterministic constraints you can prove from the artifacts. The workflow runs offline
   verify and build after your output; never silence a flag you cannot source — downgrade to `⚠`
   or omit.
+- If retained validator feedback names a map-point `__VERIFICATION_REQUIRED__` place ID, do NOT
+  attempt `lookup-place.mjs` or any shell command. Use only a targeted authoritative map/geocoder
+  fetch available through WebFetch, and accept an ID only when the returned entity matches the
+  point's name and existing coordinates. If identity is ambiguous, leave it unresolved rather than
+  guessing. This is a narrow repair, not a reason to restart destination research.
 - STOP when the merge, dispositions, coverage, and your artifact-level self-check are done. The
   workflow runs offline verify/build after you return. Do not attempt shell/node/npm, do not run the
   networked verify, do not commit, do not land.
