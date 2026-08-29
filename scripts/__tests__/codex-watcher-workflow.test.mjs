@@ -209,6 +209,12 @@ describe("claude-codex-watcher.yml — real job-boundary separation (CodeQL find
     expect(download).toMatch(/continue-on-error:\s*true/);
     const noop = stepBlock("Nothing to publish — clean no-op", publishJob());
     expect(noop).toMatch(/if:.*steps\.download\.outcome != 'success'/);
+    // YAML plain scalars treat " #" as a comment marker even when it appears inside what the
+    // shell would consider quotes. Keep this command in a block scalar so "#$PR" reaches bash
+    // intact instead of truncating the command to an unterminated quote.
+    expect(noop).toMatch(/run:\s*\|/);
+    expect(noop).toContain('echo "[codex-watcher] PR #$PR — no validated artifact (not eligible, no changes, or a gate failed upstream)."');
+    expect(noop).not.toMatch(/run:\s*echo\s+"\[codex-watcher\] PR #/);
   });
 
   it("every step in publish after the download is gated on steps.download.outcome == 'success' — nothing runs on a missing/failed artifact", () => {
