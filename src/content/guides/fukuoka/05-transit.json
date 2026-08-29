@@ -1,10 +1,36 @@
 [
   {
+    "type": "panel",
+    "group": "Transit",
+    "title": "IC cards & tickets",
+    "body": "<p>Buy a <b>Nimoca</b> card (Nishitetsu's regional IC card) at any subway/railway ticket machine or the airport bus counter — ¥2,000 total (¥500 refundable deposit + ¥1,500 usable credit), top-up to ¥20,000. Nationwide cards (Suica, Pasmo, Icoca, Sugoca) all work interchangeably on the subway, Nishitetsu, JR Kyushu and local buses, so anyone already holding one from a prior Japan trip doesn't need a second card.</p><p>There's no group-gate — each of the 8 taps in individually at the ticket gate, same as everywhere else in Japan. Budget a few extra seconds at gates during busy periods. Nimoca refunds (minus a ¥220 fee) aren't available at the airport's International Terminal, so cash out downtown if anyone wants their deposit back before flying home.</p>",
+    "phase": "daily",
+    "verified_on": "2026-08-29",
+    "shelf_life": "transit",
+    "source_url": "https://www.nimoca.jp/language/en"
+  },
+  {
     "type": "routes",
     "group": "Transit",
     "title": "Key transit routes",
     "phase": "daily",
-    "steps": []
+    "steps": [
+      "<b>Fukuoka Airport → Hakata/Tenjin.</b> International arrivals: take the free shuttle bus to the Domestic Terminal first (every 5–15 min). From the Domestic Terminal, the <b>Kuko subway line</b> reaches Hakata in ≈5 min (≈¥260) and Tenjin in ≈11 min (≈¥260) — one of the shortest airport-to-downtown links in Japan.",
+      "<b>Hakata/Tenjin → Dazaifu, by train.</b> Nishitetsu <b>Tenjin-Omuta Line</b> from Nishitetsu Fukuoka (Tenjin) Station to <b>Nishitetsu-Futsukaichi Station</b>, then transfer to the <b>Dazaifu Line</b> for the last stop. No through train — always one transfer. ⚠ Nishitetsu raised fares system-wide Apr 1, 2026; the current fare is ≈¥480 per an unconfirmed aggregator figure (the last officially-confirmed pre-revision figure was ¥400) — confirm at the ticket machine.",
+      "<b>Hakata/Fukuoka Airport → Dazaifu, by direct bus.</b> The Nishitetsu <b>Dazaifu Liner \"Tabito\"</b> runs direct with no transfer: from Hakata Bus Terminal (¥800, ≈40 min) or Fukuoka Airport's International Terminal (¥700, ≈25 min), ¥20 cheaper by IC/credit card, no reservation. Frequent (28 trips/day weekdays, 36–37 weekends) but can deny boarding once full — for a party of 8, aim for an off-peak departure or be ready to split across two buses.",
+      "<b>Hakata/Tenjin → Itoshima.</b> <b>JR Chikuhi Line</b> from Meinohama reaches Chikuzen-Maebaru Station, the jumping-off point for Itoshima's coast. The train does NOT reach the coastal sights themselves (Sakurai Futamigaura, Shiraito Falls) — a Showa Bus connection or a taxi covers the last leg. Bus frequency on these coastal routes is sparse; given the group's size and the distance between sights, a taxi or rental car for the day is the realistic way to see more than one Itoshima stop.",
+      "<b>Getting to Nokonoshima Island Park.</b> The Fukuoka City Municipal Ferry runs from Meinohama to Nokonoshima — ¥230 one-way, 10 min, roughly hourly (≈23 sailings/day, first ≈5:00, last ≈23:00). A connecting Nishitetsu bus (≈10 min) covers the short hop from the ferry terminal to the park itself."
+    ],
+    "verified_on": "2026-08-29",
+    "shelf_life": "transit",
+    "source_url": "https://www.nishitetsu.jp/en/train/"
+  },
+  {
+    "type": "panel",
+    "group": "Transit",
+    "title": "Last trains & buffers",
+    "body": "<p>Exact last-train times for the Nishitetsu Dazaifu Line and the JR Chikuhi Line aren't pinned to a specific weekday — both operators' printable timetables are image-only PDFs, and both lines had schedule revisions in March 2026. As a planning buffer: aim to leave Dazaifu or Itoshima's coast by early evening, and target arriving back at the connecting station at least 90 minutes before you'd expect a last train, rather than cutting it close to an unconfirmed time.</p>",
+    "phase": "daily"
   },
   {
     "type": "map",
@@ -12,9 +38,39 @@
     "title": "Orientation map",
     "phase": "daily",
     "center": {
-      "lat": 33.5902,
-      "lng": 130.4017
+      "lat": 33.58,
+      "lng": 130.4
     },
-    "span": 0.08
+    "span": 0.45,
+    "points": [
+      {
+        "name": "Fukuoka Airport",
+        "lat": 33.58444,
+        "lng": 130.45167,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "福岡空港"
+      },
+      {
+        "name": "Hakata Station",
+        "lat": 33.589803,
+        "lng": 130.420681,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "博多駅"
+      },
+      {
+        "name": "Dazaifu Tenmangu",
+        "lat": 33.52139,
+        "lng": 130.535,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "太宰府天満宮"
+      },
+      {
+        "name": "Sakurai Futamigaura (Itoshima)",
+        "lat": 33.640472,
+        "lng": 130.196639,
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "local_script_name": "桜井二見ヶ浦"
+      }
+    ]
   }
 ]

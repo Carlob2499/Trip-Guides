@@ -3,7 +3,10 @@
     "type": "panel",
     "group": "Health & safety",
     "title": "Health & pharmacy",
-    "body": "",
-    "phase": "daily"
+    "body": "<p>Emergency numbers: <b>110</b> for police, <b>119</b> for ambulance/fire — both free, 24/7, from any phone. For English-language help with an injury, illness, or general emergency, the Japan National Tourism Organization runs a 24/7 multilingual hotline: <b>050-3816-2787</b> (or +81-50-3816-2787 from a foreign line). A non-emergency medical advice line, <b>#7119</b>, triages whether a symptom needs a hospital visit.</p><p>A <b>Matsumoto Kiyoshi</b> pharmacy sits right in Fukuoka Airport's International Terminal (3F, 7:30–18:00) for anything forgotten on the flight over, with further branches at Tenjin (Mina Tenjin B1) and Canal City Hakata (B1F) for restocking mid-trip.</p><p>Check the current <a href='https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html' target='_blank' rel='noopener noreferrer'>US State Department travel advisory for Japan</a> before you go — the page blocks automated lookups, so it needs a direct visit rather than a link-and-trust.</p>",
+    "phase": "daily",
+    "verified_on": "2026-08-29",
+    "shelf_life": "default",
+    "source_url": "https://www.japan.travel/en/plan/emergencies/"
   }
 ]

@@ -6,33 +6,54 @@
     "items": [
       {
         "date": "Mon Oct 19",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Arrival — settle in, then a yatai crawl",
+        "tldr": "Land, subway into Hakata/Tenjin, and ease into the trip with a split-group yatai crawl once everyone's checked in.",
+        "pace": "Light — arrival day. Subway from the airport, check-in, rest, then an evening out once everyone's ready.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>However the flight lands, the subway puts you in Hakata or Tenjin within 5–11 minutes for ≈¥260 — no need to rush anything else today.</p><p>For dinner, split into 2–3 smaller groups rather than trying to eat together: Fukuoka's yatai stalls seat roughly 8–10 people <i>total</i>, including other customers, and the city's own tourism board recommends parties of 2–3. Head for Nagahama or Tenjin (Nakasu is the third, unofficial cluster) — stalls open ≈18:00–19:00 and it's cash-only almost everywhere, so split the cash too. Regroup after for a nightcap wherever you land.</p>",
+        "constraints": [
+          "Yatai are weather- and owner-dependent — a stormy night can mean a stall simply doesn't open"
+        ]
       },
       {
         "date": "Tue Oct 20",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Central Fukuoka — castle ruins, Kushida Shrine, Hakata ramen",
+        "tldr": "A walkable loop through Fukuoka's own history and its most famous export, tonkotsu ramen, from the shop that started it.",
+        "pace": "Balanced — a morning park walk, a ramen lunch, then shrine and shopping in the afternoon.",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Start at <b>Fukuoka Castle Ruins (Maizuru Park)</b> and the adjoining <b>Ohori Park</b> — free, and an easy ≈2 km loop around the pond if anyone wants the walk. October means no cherry blossoms, but the stone walls and foundations are there year-round.</p><p>For lunch, Hakata tonkotsu ramen at its source: <b>Ichiran's Nakasu original shop</b> (open 24 hours) or <b>Ippudo's Daimyo original store</b>, both walking distance from central Tenjin. Spend the afternoon at <b>Kushida Shrine</b> — its ornamental Hakata Gion Yamakasa float is on year-round display, free with the shrine grounds — then browse Nakasu for mentaiko at <b>Fukuya</b>, the shop credited with inventing it in 1949.</p><p>Dinner: <b>motsunabe</b>, Fukuoka's offal hot pot — order the champon-noodle \"shime\" to finish the broth. Motsunabe Rakutenchi near Hakata Station has tatami seating that can actually hold a group of 8, unlike most of tonight's other stops.</p>"
       },
       {
         "date": "Wed Oct 21",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Dazaifu day trip — the shrine, the museum, the approach street",
+        "tldr": "A half-hour out to Japan's shrine of scholarship, its national museum next door, and mochi on the walk between them.",
+        "pace": "Balanced — one destination town, most of the day, back to Fukuoka for the evening.",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Take the direct <b>Dazaifu Liner \"Tabito\" bus</b> from Hakata (≈40 min, no transfer) rather than the train, which requires changing at Nishitetsu-Futsukaichi. Arrive as close to opening (≈6:30 AM in autumn) as the group can manage — <b>Dazaifu Tenmangu</b> gets genuinely crowded with tour groups by midday.</p><p>The shrine grounds are free; its Treasure Hall and history museum are small paid add-ons (¥500 / ¥200) if anyone wants them. Right next door, the <b>Kyushu National Museum</b> (¥700, closed Mondays — today works) covers Japan's early cultural exchange with the rest of Asia. Walk the <b>Omotesando</b> approach street between the two for umegae mochi, the local grilled-mochi specialty sold at shops the whole length of the street.</p><p>Return to Fukuoka by early evening — Dazaifu has little to do after dark, and it sets up tomorrow's earlier Itoshima start.</p>",
+        "constraints": [
+          "Kyushu National Museum is closed Mondays"
+        ]
       },
       {
         "date": "Thu Oct 22",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Itoshima day trip — the coast",
+        "tldr": "A car-or-taxi day on Kyushu's coast: a torii gate standing in the ocean, a waterfall, and trout for lunch.",
+        "pace": "A longer day — Itoshima's sights are spread out and public transit there is sparse, so budget the whole day for fewer stops covered well.",
+        "energy": "packed",
+        "env": "outdoor",
+        "body": "<p>Itoshima's coastal sights aren't served by rail, and the connecting local buses run infrequently — for a group of 8 covering more than one stop, a taxi or rental car for the day is the realistic call over stitching together bus connections.</p><p>Anchor the day on <b>Sakurai Futamigaura</b> — the shrine torii gate standing offshore, Itoshima's signature shot, at its best near sunset — and <b>Shiraito Falls</b>, a 24m waterfall with an on-site restaurant serving yamame (mountain trout) set meals, a genuine regional specialty. If the season's begun, Itoshima's oyster huts (grilled-oyster shacks, roughly October–April) are a strong option for lunch or an early dinner instead.</p><p>Check the forecast before committing to the full coastal loop — today's stops are outdoors with no researched indoor fallback nearby; a wet forecast is reason to swap this day with Wednesday's more indoor-friendly Dazaifu plan rather than push through the rain.</p>"
       },
       {
         "date": "Fri Oct 23",
-        "title": "",
-        "pace": "",
-        "body": ""
+        "title": "Nokonoshima's flowers, Hakata Okunchi, and the flight home",
+        "tldr": "A ferry to a flower island in the morning, a free citywide festival if there's time, then the airport.",
+        "pace": "Light and flexible — scale today entirely to your flight time; treat both stops as optional add-ons, not commitments.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>If the flight's in the afternoon or later, a morning ferry from Meinohama (¥230, 10 min) reaches <b>Nokonoshima Island Park</b>, whose cosmos flowers are typically in bloom this exact week — though the precise 2026 bloom status isn't published this far ahead, so treat it as likely rather than guaranteed.</p><p>Today also happens to be the first day of <b>Hakata Okunchi</b>, a free festival at Kushida Shrine (harvest market and free amazake 10:00–16:00, lantern lighting in the evening) — an easy add if it's on the way to the airport and there's time before check-in.</p><p>Pack the morning around whichever of these actually fits your flight, not both — this is a departure day first.</p>"
       }
     ]
   }

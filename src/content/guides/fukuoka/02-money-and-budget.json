@@ -3,43 +3,65 @@
     "type": "panel",
     "group": "Money & budget",
     "title": "Money & currency",
-    "body": "",
-    "phase": "arrival"
+    "body": "<p>Japan runs on cash more than its high-tech reputation suggests, especially at yatai and small local shops — plan to carry yen rather than assume cards work everywhere. <b>Seven Bank ATMs</b> (28,000+ nationwide, inside every 7-Eleven) accept foreign-issued Visa, Mastercard, Amex, JCB, Discover and Diners Club cards 24/7, with an English-language screen — the reliable cash source for the whole trip.</p><p>Tax-free shopping is still on the <b>instant point-of-sale exemption</b> system for this trip: show your passport at a tax-free-registered store and the 10% consumption tax comes off at checkout. Japan switches to a refund-at-departure model on Nov 1, 2026 — after these dates — so it doesn't affect this itinerary. ⚠ The minimum per-store purchase threshold (commonly cited elsewhere as ¥5,000) isn't confirmed against an official source — ask at the register.</p>",
+    "phase": "arrival",
+    "verified_on": "2026-08-29",
+    "shelf_life": "default",
+    "source_url": "https://www.japan.travel/en/ca/news/changes-are-coming-to-tax-free-shopping-in-japan/"
   },
   {
     "type": "budget",
     "group": "Money & budget",
     "title": "Budget & daily costs",
     "phase": "before",
-    "intro": "Rough per-person estimates — replace the zeros with researched figures.",
+    "intro": "Per-person estimates for a mid-range group trip. Confirmed price points from research (subway ¥260, ferry ¥230, museum ¥700) anchor the low end; lodging and food ranges are planning estimates, not sourced quotes — replace with real numbers once bookings are made.",
     "currency": "¥",
     "days": 5,
+    "party": 8,
     "budgetTarget": "Mid-range; practical group costs",
     "items": [
       {
-        "label": "Lodging, per night",
-        "basis": "day",
-        "est": 0
+        "label": "Lodging, 4 nights (per person, split 8 ways)",
+        "basis": "trip",
+        "est": 32000,
+        "low": 20000,
+        "high": 48000,
+        "per": "person",
+        "note": "⚠ planning estimate for 4 nights (Mon–Thu) — depends entirely on the accommodation style chosen"
       },
       {
         "label": "Food & drink, per day",
         "basis": "day",
-        "est": 0
+        "est": 5000,
+        "low": 3000,
+        "high": 8000,
+        "per": "person",
+        "note": "Yatai + ramen + a sit-down dinner most days; convenience-store breakfasts pull this down"
       },
       {
         "label": "Local transport, per day",
         "basis": "day",
-        "est": 0
+        "est": 1200,
+        "low": 700,
+        "high": 2500,
+        "per": "person",
+        "note": "Subway/bus/rail fares — higher on the Dazaifu and Itoshima day-trip days"
       },
       {
         "label": "Sights & activities, per day",
         "basis": "day",
-        "est": 0
+        "est": 800,
+        "low": 0,
+        "high": 1500,
+        "per": "person",
+        "note": "Most sights on this itinerary (shrines, parks, the coast) are free; museum entry is ¥700"
       },
       {
         "label": "Flights — round trip",
         "basis": "trip",
-        "est": 0
+        "est": 0,
+        "per": "person",
+        "note": "⚠ not yet researched — depends on the origin airport, which isn't confirmed"
       }
     ]
   }

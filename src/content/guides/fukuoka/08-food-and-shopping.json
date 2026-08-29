@@ -1,10 +1,78 @@
 [
   {
-    "type": "venues",
+    "type": "prose",
     "group": "Food & shopping",
     "title": "What to eat",
-    "phase": "daily",
-    "items": [],
-    "rank": 1
+    "body": "<p>Fukuoka's food identity is built on four things: <b>tonkotsu ramen</b> (the pork-bone broth style that started here), <b>motsunabe</b> (offal hot pot), <b>mentaiko</b> (spicy marinated pollock roe, invented in Nakasu in 1949), and <b>yatai</b> — the open-air street stalls that turn a meal into a crawl. Hakata is also traditionally credited as the birthplace of udon in Japan, via a 13th-century monk who brought milling techniques back from China.</p><p>Nakasu is the through-line: Ichiran's original ramen shop, Fukuya's original mentaiko store, and a cluster of yatai are all within a few blocks of each other.</p>"
+  },
+  {
+    "type": "venues",
+    "group": "Food & shopping",
+    "title": "Hakata ramen, motsunabe & mentaiko",
+    "intro": "<p>Prices marked ⚠ aren't confirmed against an official source — check on arrival.</p>",
+    "items": [
+      {
+        "name": "Ichiran Nakasu Souhonten",
+        "area": "Nakasu",
+        "address": "5-3-2 Nakasu, Hakata-ku, Fukuoka",
+        "hours": "24 hours (⚠ subject to change without notice per the shop's own listing)",
+        "book": "walk-in",
+        "how": "Short walk from Nakasu-Kawabata or Tenjin subway stations.",
+        "why": "Ichiran's original shop and head office — the tonkotsu chain's founding location, individual flavor-concentration booths.",
+        "crowd_tip": "Booths seat individually, not communally — a group of 8 can all be seated but won't sit together as one table.",
+        "source_url": "https://en.ichiran.com/shop/kyushu/sohonten/",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Ippudo Daimyo Honten",
+        "area": "Daimyo, Chuo-ku",
+        "address": "1-13-14 Daimyo, Chuo-ku, Fukuoka",
+        "hours": "⚠ Mon–Thu 11:00–23:00, Fri/holidays 11:00–24:00, Sat 10:30–24:00, Sun 10:30–23:00 — sourced via search, not independently confirmed on the operator's own page",
+        "book": "walk-in",
+        "how": "Walking distance from central Tenjin.",
+        "why": "Ippudo's original store, founded 1985 — the other pillar of Hakata tonkotsu ramen alongside Ichiran.",
+        "crowd_tip": "Smaller than Ichiran — expect a queue at peak lunch/dinner hours."
+      },
+      {
+        "name": "Motsunabe Rakutenchi",
+        "area": "Hakata Ekimae",
+        "address": "2-5-23 Hakata Ekimae, Hakata-ku, Fukuoka",
+        "hours": "17:00–24:00 (last order 23:30)",
+        "book": "walk-in",
+        "how": "Short walk from Hakata Station.",
+        "why": "44 years running, tatami seating that can genuinely hold a group of 8 — order the champon-noodle \"shime\" to finish the broth.",
+        "crowd_tip": "The one dinner stop on this itinerary the whole group can sit together for.",
+        "source_url": "https://www.crossroadfukuoka.jp/en/inbound-shop/15394",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Fukuya — Nakasu main store",
+        "area": "Nakasu",
+        "address": "2-6-10 Nakasu, Hakata-ku, Fukuoka",
+        "hours": "Weekdays 9:00–22:00; Sundays/holidays 9:30–18:00",
+        "book": "walk-in",
+        "how": "Short walk from Nakasu-Kawabata station.",
+        "why": "The shop credited with inventing modern mentaiko in 1949 — a retail stop, not a sit-down meal; good for a souvenir pack.",
+        "source_url": "https://www.fukuya.com/en/",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Daichan (Gion Daichan)",
+        "area": "Nakasu",
+        "address": "1-8 Nakasu, Hakata-ku, Fukuoka",
+        "hours": "Evening only, ≈18:00–midnight, weather- and owner-dependent (standard yatai hours) — no advance way to confirm a specific night is open",
+        "book": "walk-in",
+        "how": "≈10-min walk from Nakasu-Kawabata Station, Exit 1.",
+        "price": "Cash only",
+        "why": "A yatai specializing in udon — Hakata's regional noodle in its most local format.",
+        "crowd_tip": "Same yatai group-size rule applies: split into 2–3, don't try to seat 8 at once.",
+        "source_url": "https://gofukuoka.jp/spots/detail/124492",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      }
+    ]
   }
 ]

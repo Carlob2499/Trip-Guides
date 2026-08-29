@@ -1,11 +1,101 @@
 {
-  "kicker": "Field guide",
-  "title": "Fukuoka — Autumn Field Guide",
-  "dek": "",
+  "kicker": "Fukuoka · Dazaifu · Itoshima — Oct 19–23, 2026",
+  "title": "Fukuoka",
+  "dek": "Five days in Kyushu for a party of eight — yatai crawls, Hakata ramen, Dazaifu's shrine, and a coastal day trip to Itoshima. Balanced pace, public transit where it's practical.",
   "country": "Japan",
+  "tz": "Asia/Tokyo",
   "draft": true,
-  "verified": "⚠ Draft scaffold — nothing here is researched or verified yet. This is a starting skeleton; every price, hour, address and fact must be added and checked against a primary source before use (see the intake spec + CLAUDE.md).",
+  "verified": "⚠ Pass A (canonical research) — checked 2026-08-29 for the Oct 19–23, 2026 trip. Entry rules, the transit backbone (Fukuoka Airport↔city, Dazaifu, Itoshima), Dazaifu Tenmangu, Kyushu National Museum, Itoshima's coast, central Fukuoka sights, yatai etiquette, and Hakata's regional specialties (ramen, motsunabe, mentaiko, udon) are checked against official/primary sources. Pass B (local/authentic corroboration) and reconciliation have not run yet — some facts below are single-pass only. ⚠ re-check before travel: the Nishitetsu Tenjin–Dazaifu fare (Nishitetsu raised fares system-wide Apr 1, 2026; the current figure is only an unconfirmed ≈¥480 aggregator estimate), Nishitetsu and JR Kyushu exact train times (both lines revised their timetables in Mar 2026), Showa Bus Itoshima frequencies and fares (published only as unreadable PDFs this pass), the US State Department advisory level for Japan (travel.state.gov blocks automated access), Nokonoshima Island Park's admission price (aggregator-sourced only), and Hakata Okunchi's exact 2026 program (inferred from the fixed Oct 23–24 annual date pattern — not yet posted for 2026).",
   "provenance": "strict",
   "roomId": "5sp5hcalp2lbmueh",
-  "footer": ""
+  "footer": "Transit fares, hours, and admission figures are sourced from official operators and city/prefecture tourism sites — tap any citation for the source page.",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-free for tourism, stays up to 90 days.",
+      "note": "Assumed for all 8 travelers — the intake didn't confirm passport country/countries; confirm each traveler's passport before booking (see the traveler question in the research ledger).",
+      "source_url": "https://www.japan.travel/en/plan/visa-info/",
+      "verified_on": "2026-08-29"
+    }
+  ],
+  "phrases": {
+    "lang": "ja-JP",
+    "items": [
+      {
+        "situation": "Hello",
+        "native": "こんにちは",
+        "romanization": "Konnichiwa",
+        "source_url": "https://boutiquejapan.com/essential-japanese-words-phrases-for-travelers/",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "Thank you",
+        "native": "ありがとうございます",
+        "romanization": "Arigatou gozaimasu",
+        "source_url": "https://boutiquejapan.com/essential-japanese-words-phrases-for-travelers/",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "Excuse me / sorry",
+        "native": "すみません",
+        "romanization": "Sumimasen",
+        "source_url": "https://boutiquejapan.com/essential-japanese-words-phrases-for-travelers/",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "Ordering at a yatai or restaurant",
+        "native": "＿をください",
+        "romanization": "___ o kudasai",
+        "note": "Point at the menu or dish and say this — the standard way to order at a yatai stall.",
+        "source_url": "https://boutiquejapan.com/essential-japanese-words-phrases-for-travelers/",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "Where is the bathroom?",
+        "native": "お手洗いはどこですか？",
+        "romanization": "Otearai wa doko desu ka?",
+        "source_url": "https://www.jrailpass.com/blog/basic-japanese-phrases-for-traveling",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "How much is this?",
+        "native": "いくらですか？",
+        "romanization": "Ikura desu ka?",
+        "source_url": "https://www.jrailpass.com/blog/basic-japanese-phrases-for-traveling",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "Do you speak English?",
+        "native": "英語を話しますか？",
+        "romanization": "Eigo wo hanashimasu ka?",
+        "source_url": "https://www.jrailpass.com/blog/basic-japanese-phrases-for-traveling",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "Toast, before the first drink together",
+        "native": "乾杯！",
+        "romanization": "Kanpai!",
+        "note": "Raise your glass together at a yatai or izakaya before anyone drinks.",
+        "source_url": "https://jisho.org/search/kanpai",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "Said before eating",
+        "native": "いただきます",
+        "romanization": "Itadakimasu",
+        "source_url": "https://boutiquejapan.com/essential-japanese-words-phrases-for-travelers/",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "situation": "Said after finishing a meal, on the way out",
+        "native": "ごちそうさまでした",
+        "romanization": "Gochisousama deshita",
+        "source_url": "https://jisho.org/search/gochisousama",
+        "verified_on": "2026-08-29"
+      }
+    ]
+  },
+  "descriptors": {
+    "Yatai & specialties": "Fukuoka's street-food stalls and regional dishes."
+  }
 }

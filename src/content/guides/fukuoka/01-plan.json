@@ -3,37 +3,48 @@
     "type": "panel",
     "group": "Plan",
     "title": "When you land",
-    "body": ""
+    "body": "<p>Fukuoka Airport's domestic and international terminals are separate buildings, linked by a free shuttle bus (every 5–6 min at peak, 6–15 min off-peak). The <b>Kuko (Airport) subway line</b> only stops at the Domestic Terminal, so international arrivals take the shuttle first.</p><p>From the Domestic Terminal, the subway reaches <b>Hakata Station in ≈5 min (≈¥260)</b> and <b>Tenjin in ≈11 min (≈¥260)</b> — one of the shortest airport-to-downtown rides in Japan. Register everyone's passport in <a href='https://services.digital.go.jp/en/visit-japan-web/' target='_blank' rel='noopener noreferrer'>Visit Japan Web</a> before departure to speed up immigration and customs; paper arrival/customs cards are still accepted if anyone skips it.</p>",
+    "verified_on": "2026-08-29",
+    "shelf_life": "transit",
+    "source_url": "https://www.fukuoka-airport.jp/en/access/subway.html"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Local essentials",
-    "body": ""
+    "body": "<p>Japan runs on 100V power with US-style Type A/B plugs — no adapter needed for US devices, though a few high-wattage appliances may need a voltage converter. Tipping isn't practiced anywhere, including restaurants and yatai — a service charge is never expected and offering cash tips can cause confusion.</p><p>Japan is exceptionally low-crime; the practical safety concerns for this trip are jaywalking habits (Japan enforces crosswalks) and October's occasional lingering typhoon activity — check forecasts a few days out. Convenience stores (7-Eleven, Lawson, FamilyMart) are everywhere in Hakata/Tenjin for basics, ATMs, and quick food.</p>"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Entry & documents",
-    "body": ""
+    "body": "<p>US passport holders enter Japan visa-free for tourism, stays up to 90 days — no visa application needed for this trip. <b>This assumes all 8 travelers hold US passports</b>, which the intake didn't explicitly confirm; if anyone in the group carries a different passport, their entry rule needs its own check before booking.</p><p>Bring proof of onward/return travel and be ready to state your accommodation address on arrival. Declare cash over ¥1,000,000 at customs. A few high-wattage appliances aside, no other paperwork is required beyond the passport itself.</p>",
+    "verified_on": "2026-08-29",
+    "shelf_life": "default",
+    "source_url": "https://www.japan.travel/en/plan/visa-info/"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Phone & data",
-    "body": ""
+    "body": "<p>Fukuoka Airport's International Terminal (1F, landside) has a Sakura Mobile counter (7:00–21:00) selling SIM cards and renting pocket wifi routers, plus a second Global WiFi/Ninja WiFi counter. For a group of 8, an <b>eSIM bought and activated before departure</b> (Sakura Mobile, Ubigi, Airalo all serve Japan) skips the counter queue entirely — worth doing individually before you fly rather than lining up 8-deep at the airport.</p>",
+    "verified_on": "2026-08-29",
+    "shelf_life": "default",
+    "source_url": "https://www.fukuoka-airport.jp/en/service/og-wifi-intl.html"
   },
   {
     "type": "panel",
     "group": "Plan",
     "title": "Booking checklist",
-    "body": "",
+    "body": "<p>Nothing on this itinerary needs an advance-purchase timed ticket — Dazaifu Tenmangu is free, Kyushu National Museum and Nokonoshima Island Park sell same-day, and yatai don't take reservations. The checklist below is what actually needs sorting before you land.</p>",
     "checklist": [
       "Flights",
-      "Accommodation",
-      "Airport transfer",
+      "Accommodation — confirm it sleeps/splits a party of 8 sensibly",
+      "Airport transfer — subway is simplest; confirm terminal (domestic vs. international)",
       "Travel insurance",
-      "Any timed tickets"
+      "Register everyone in Visit Japan Web",
+      "Each traveler's eSIM or data plan activated before departure",
+      "Confirm every traveler's passport country (see the traveler question)"
     ]
   },
   {

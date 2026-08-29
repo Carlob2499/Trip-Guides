@@ -1,0 +1,1820 @@
+{
+  "schemaVersion": "wp-evidence/2.3",
+  "slug": "fukuoka",
+  "runId": "fukuoka-20260829-7cb4fa",
+  "candidates": [
+    {
+      "id": "c-ichiran--nakasu-souhonten",
+      "name": "Ichiran",
+      "branch": "Nakasu Souhonten",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-ippudo--daimyo-honten",
+      "name": "Ippudo",
+      "branch": "Daimyo Honten",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-shin-shin--tenjin",
+      "name": "Shin Shin",
+      "branch": "Tenjin",
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "No official website located; hours are only available via press/aggregator sources (DanielFoodDiary, GoodLuckTrip, RamenAdventures) — couldn't climb to a T0 source within this pass's budget, so left off the shipped venue list pending a follow-up phone/Tabelog check.",
+      "worth": null
+    },
+    {
+      "id": "c-motsunabe-rakutenchi--hakata-ekimae",
+      "name": "Motsunabe Rakutenchi",
+      "branch": "Hakata Ekimae",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-fukuya--nakasu-main-store",
+      "name": "Fukuya",
+      "branch": "Nakasu main store",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-daichan-gion-daichan",
+      "name": "Daichan (Gion Daichan)",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-inaba-udon",
+      "name": "Inaba Udon",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Fukuoka City's own history page names it as the enduring Hakata udon shop (running since 1951, recipe unchanged) but publishes no address, phone, or hours — couldn't answer the where/when/book questions from a primary source this pass, so it isn't shipped even as historical color.",
+      "worth": null
+    },
+    {
+      "id": "c-itoshima-oyster-huts",
+      "name": "Itoshima oyster huts",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-shiki-no-chaya--shiraito-falls",
+      "name": "Shiki no Chaya",
+      "branch": "Shiraito Falls",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-canal-city-hakata",
+      "name": "Canal City Hakata",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Fountain-show programming and current hours could only be confirmed via search-preview — canalcity.co.jp itself returned HTTP 403 on 3 separate fetch attempts. With Kushida Shrine, ramen and mentaiko already filling day 2's culture-plus-food balance, cut for pacing rather than shipped on weak sourcing.",
+      "worth": null
+    },
+    {
+      "id": "c-dazaifu-tenmangu",
+      "name": "Dazaifu Tenmangu",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kyushu-national-museum",
+      "name": "Kyushu National Museum",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-fukuoka-castle-ruins--maizuru-park",
+      "name": "Fukuoka Castle Ruins",
+      "branch": "Maizuru Park",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-kushida-shrine",
+      "name": "Kushida Shrine",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-hakata-okunchi",
+      "name": "Hakata Okunchi",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-komorebi-kagura-village",
+      "name": "Komorebi Kagura Village",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Named in the original research brief as a possible Dazaifu Tenmangu attraction, but no official source (shrine site, city site, or Dazaifu Tourism Association) confirms this facility exists — dropped rather than guessed at.",
+      "worth": null
+    },
+    {
+      "id": "c-dazaifu-jinkosai",
+      "name": "Dazaifu Jinkosai",
+      "branch": null,
+      "priority": "culture",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "The shrine's major annual festival, but its confirmed 2026 dates (Sept 21–25) fall a full month before this trip's Oct 19–23 window — doesn't apply to these dates. Surfaced instead as a corrected assumption in the Sights divergences section.",
+      "worth": null
+    },
+    {
+      "id": "c-omotesando--dazaifu-approach-street",
+      "name": "Omotesando",
+      "branch": "Dazaifu approach street",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-ohori-park",
+      "name": "Ohori Park",
+      "branch": null,
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-sakurai-futamigaura",
+      "name": "Sakurai Futamigaura",
+      "branch": null,
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-shiraito-falls",
+      "name": "Shiraito Falls",
+      "branch": null,
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-nokonoshima-island-park",
+      "name": "Nokonoshima Island Park",
+      "branch": null,
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-entry-visa-us",
+      "candidateId": null,
+      "claim": "Passport holders of countries with visa-exemption arrangements (incl. the US, per corroborating sources) may enter Japan visa-free for tourism, stays of 90 days or less",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/plan/visa-info/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-entry-visa-mofa-blocked",
+      "candidateId": null,
+      "claim": "Japan's Ministry of Foreign Affairs (mofa.go.jp) states 90-day visa exemption for reciprocal-arrangement countries incl. the US",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.mofa.go.jp/j_info/visit/visa/short/novisa.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-visit-japan-web",
+      "candidateId": null,
+      "claim": "Visit Japan Web is the official digital pre-registration system for immigration/customs; not mandatory, paper cards still accepted",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://services.digital.go.jp/en/visit-japan-web/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-seven-bank-atm",
+      "candidateId": null,
+      "claim": "Seven Bank ATMs (28,000+ at 7-Eleven stores nationwide) accept foreign-issued Visa/Plus/Mastercard/Maestro/Cirrus/UnionPay/Amex/JCB/Discover/Diners cards, 24/7, English-language screen",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.sevenbank.co.jp/intlcard/index2.html",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-tax-free-system-window",
+      "candidateId": null,
+      "claim": "Japan's instant point-of-sale tax exemption for tourists remains in effect through Oct 31, 2026; a refund-at-departure system replaces it Nov 1, 2026 — this trip (Oct 19–23) falls entirely under the current instant-exemption system",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/ca/news/changes-are-coming-to-tax-free-shopping-in-japan/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-fukuoka-airport-esim-counters",
+      "candidateId": null,
+      "claim": "Fukuoka Airport's International Terminal (1F, landside) hosts a Sakura Mobile SIM/pocket-wifi counter (7:00–21:00) and a separate Global WiFi/Ninja WiFi counter",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.fukuoka-airport.jp/en/service/og-wifi-intl.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-emergency-numbers",
+      "candidateId": null,
+      "claim": "Japan's emergency numbers are 110 (police) and 119 (ambulance/fire), free 24/7 from any phone; JNTO runs a 24/7 multilingual visitor hotline at 050-3816-2787; #7119 triages non-urgent medical questions",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.japan.travel/en/plan/emergencies/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-matsumoto-kiyoshi-airport",
+      "candidateId": null,
+      "claim": "Matsumoto Kiyoshi drugstore operates a branch inside Fukuoka Airport's International Terminal (3F), hours 7:30–18:00",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.fukuoka-airport.jp/en/shops/matsumotokiyoshi.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-state-dept-advisory-blocked",
+      "candidateId": null,
+      "claim": "US State Department travel advisory level for Japan could not be confirmed — travel.state.gov blocks automated access",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/japan-travel-advisory.html",
+        "kind": "official",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-jma-october-normals",
+      "candidateId": null,
+      "claim": "JMA 1991–2020 climate normals for Fukuoka in October: average temp 19.6°C, average max 23.7°C, average min 16.0°C, average precipitation 94.5mm for the month",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=82&block_no=47807",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-no-national-holiday-window",
+      "candidateId": null,
+      "claim": "No Japanese national public holiday falls between Oct 19–23, 2026 — nearest holidays are Sports Day (Oct 12) and Culture Day (Nov 3)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nippon.com/en/japan-data/h02302/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-hakata-okunchi-2026-dates",
+      "candidateId": "c-hakata-okunchi",
+      "claim": "Hakata Okunchi runs on fixed annual dates, Oct 23–24, at Kushida Shrine — harvest market and free amazake 10:00–16:00 on Oct 23, ox-cart mikoshi procession Oct 24; free admission",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/articles/detail/6be7cc4b-4c73-4c4a-8cef-7769691265e2",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2025
+        ]
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-dazaifu-jinkosai-2026-dates",
+      "candidateId": "c-dazaifu-jinkosai",
+      "claim": "Dazaifu Tenmangu's major annual festival, Jinkosai, is confirmed for Sept 21–25, 2026 — a month before this trip's Oct 19–23 window",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://dazaifu.org/events/event5403/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-yatai-count-and-areas",
+      "candidateId": null,
+      "claim": "Over 100 yatai stalls operate around Fukuoka City, concentrated in Nagahama and Tenjin (Nakasu commonly cited as a third cluster in secondary sources)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/yatai.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-yatai-hours",
+      "candidateId": null,
+      "claim": "Most yatai open ≈18:00–19:00 (a few as early as 18:00), closing around midnight; stalls may not open in stormy weather or if the owner is unwell",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/yatai.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-yatai-group-size-official",
+      "candidateId": null,
+      "claim": "Fukuoka City's official yatai guide recommends groups of 2–3; large groups may not be able to enter due to limited seating",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/yatai-howto.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-yatai-seat-count",
+      "candidateId": null,
+      "claim": "A typical yatai stall has roughly 8–10 total seats, including all other customers present",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://arigatotravel.com/blog/yatai-etiquette",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "yatai-etiquette-blog-arigatotravel",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-yatai-seat-count-corroboration",
+      "candidateId": null,
+      "claim": "A typical yatai stall has roughly 6–10 total seats — consistent with the 8–10 figure from an independent source",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://kuokoaday.com/food-stalls-in-fukuoka/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "yatai-etiquette-blog-kuokoaday",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-yatai-cash-only-ratio",
+      "candidateId": null,
+      "claim": "Most yatai only accept cash — only about 10% of stalls accept credit cards",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/yatai-howto.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-yatai-etiquette-headcount",
+      "candidateId": null,
+      "claim": "Tell the owner your headcount before sitting; wait for the whole group to arrive before joining the queue; order roughly one drink and one dish per person; pay by asking for the bill at the end",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/yatai-howto.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-yatai-time-pressure-1",
+      "candidateId": null,
+      "claim": "If a seat is held for a long time without much ordering when the stall is busy, someone else may lose their chance — turnover is a real etiquette expectation, don't linger once finished",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://arigatotravel.com/blog/yatai-etiquette",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "yatai-etiquette-blog-arigatotravel",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-yatai-time-pressure-2",
+      "candidateId": null,
+      "claim": "Turnover pressure at a busy yatai is real — don't stay too long, and free your seat promptly once you're finished eating",
+      "kind": "experiential",
+      "origin": "passA",
+      "source": {
+        "url": "https://kuokoaday.com/food-stalls-in-fukuoka/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "yatai-etiquette-blog-kuokoaday",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-ichiran-nakasu-address-hours",
+      "candidateId": "c-ichiran--nakasu-souhonten",
+      "claim": "Ichiran's Nakasu Souhonten (head shop/office) is at 5-3-2 Nakasu, Hakata-ku, Fukuoka; open 24 hours, subject to change without notice",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.ichiran.com/shop/kyushu/sohonten/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-ichiran-founding-1960",
+      "candidateId": "c-ichiran--nakasu-souhonten",
+      "claim": "Ichiran's tonkotsu recipe dates to 1960, per the chain's own \"Since 1960\" tagline and company history page",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.ichiran.com/company/history.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-ichiran-nakasu-founding-corroboration",
+      "candidateId": "c-ichiran--nakasu-souhonten",
+      "claim": "Ichiran began in Nakasu in 1960 as a ramen stall named \"Futaba Ramen,\" renamed Ichiran in 1966 — corroborating that the Nakasu Souhonten sits at the brand's founding location",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Ichiran",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-ippudo-daimyo-address",
+      "candidateId": "c-ippudo--daimyo-honten",
+      "claim": "Ippudo Daimyo Main Store is at 1-13-14 Daimyo, Chuo-ku, Fukuoka-shi",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://stores.ippudo.com/en/1001",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-ippudo-daimyo-hours-unconfirmed",
+      "candidateId": "c-ippudo--daimyo-honten",
+      "claim": "Ippudo Daimyo Honten hours (Mon–Thu 11:00–23:00, Fri/holidays 11:00–24:00, Sat 10:30–24:00, Sun 10:30–23:00) surfaced via search synthesis referencing stores.ippudo.com, but a direct fetch of that same URL only rendered a last-orders note, not the full table — treated as unconfirmed",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://stores.ippudo.com/en/1001",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-motsunabe-fukuoka-specialty",
+      "candidateId": null,
+      "claim": "Motsunabe (offal hot pot) is a hallmark Fukuoka-Hakata dish; a common local custom finishes the meal by adding champon noodles to the leftover broth (\"shime\")",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/en/articles/detail/4b1d9d6e-9215-485b-978f-b3ef3f8f0f9e",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-motsunabe-rakutenchi-details",
+      "candidateId": "c-motsunabe-rakutenchi--hakata-ekimae",
+      "claim": "Motsunabe Rakutenchi (2-5-23 Hakata Ekimae, Hakata-ku) has run 44 years, hours 17:00–24:00 (last order 23:30), with counter seating plus a tatami area",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.crossroadfukuoka.jp/en/inbound-shop/15394",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-fukuya-mentaiko-origin",
+      "candidateId": "c-fukuya--nakasu-main-store",
+      "claim": "Fukuya, founded by Toshio Kawahara, first sold karashi mentaiko in 1949 from a small Nakasu, Hakata grocery store — credited as the originator of modern mentaiko; the recipe was never patented",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.fukuya.com/en/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-fukuya-nakasu-hours",
+      "candidateId": "c-fukuya--nakasu-main-store",
+      "claim": "Fukuya's Nakasu main store is at 2-6-10 Nakasu, Hakata-ku; hours weekdays 9:00–22:00, Sundays/holidays 9:30–18:00",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.fukuya.com/en/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-daichan-yatai-address",
+      "candidateId": "c-daichan-gion-daichan",
+      "claim": "Daichan (Gion Daichan), a yatai specializing in udon, is listed at 1-8 Nakasu, Hakata-ku, ≈10-min walk from Nakasu-Kawabata Station Exit 1; cards not accepted",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/spots/detail/124492",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-hakata-udon-origin",
+      "candidateId": null,
+      "claim": "Hakata is traditionally credited as the birthplace of udon (and soba) in Japan — a stone monument at Jotenji Temple marks the claim, attributed to 13th-century Zen monk Shoichi Kokushi (Enni Ben'en), who brought milling techniques back from Song-dynasty China in 1241",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/articles/detail/fa5972ef-38ec-46d1-ab27-622103958889",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-hakata-udon-origin-corroboration",
+      "candidateId": null,
+      "claim": "Jotenji Temple's founding (completed 1242) and Enni's role bringing back flour-milling technique are corroborated independently",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/J%C5%8Dten-ji",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-itoshima-oyster-huts-season",
+      "candidateId": "c-itoshima-oyster-huts",
+      "claim": "Itoshima's oyster huts (kaki-goya) serve fresh grilled oysters roughly October through April",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://kanko-itoshima.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-shiraito-falls-restaurant",
+      "candidateId": "c-shiki-no-chaya--shiraito-falls",
+      "claim": "Shiki no Chaya, an on-site restaurant at Shiraito Falls, serves yamame (mountain trout) set meals and hand-pulled soba; seasonal nagashi somen from early summer through autumn",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://kanko-itoshima.jp/spot/shiraitonotaki/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-canal-city-hours-unconfirmed",
+      "candidateId": "c-canal-city-hakata",
+      "claim": "Canal City Hakata shop/restaurant hours and its fountain show schedule could only be sourced via search snippets — canalcity.co.jp returned HTTP 403 on 3 direct fetch attempts (root EN page, fountain-show page, events page)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://canalcity.co.jp/event/",
+        "kind": "operator",
+        "access": "blocked",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-dazaifu-tenmangu-free-and-hours",
+      "candidateId": "c-dazaifu-tenmangu",
+      "claim": "Dazaifu Tenmangu shrine grounds are free to enter; opens ≈6:30 AM in autumn (spring-equinox-to-autumn-equinox window opens 6:00 AM), closes ≈19:00 in autumn depending on exact seasonal cutover",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.dazaifutenmangu.or.jp/en/plan/faq/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-dazaifu-treasure-hall-museum-prices",
+      "candidateId": "c-dazaifu-tenmangu",
+      "claim": "Dazaifu Tenmangu's Treasure Hall admission: adults ¥500, university/HS ¥200, JHS/elementary ¥100. Kanko Rekishikan museum: adults ¥200, university/HS ¥150, JHS/elementary ¥100. Both open 9:00–16:30, last entry 16:00",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.city.dazaifu.lg.jp/site/kanko/11449.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-dazaifu-tenmangu-crowd-tip",
+      "candidateId": "c-dazaifu-tenmangu",
+      "claim": "The shrine's own site recommends dawn (near opening) or dusk for a quieter visit, ahead of tour-bus traffic",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.dazaifutenmangu.or.jp/en/plan/faq/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-11-27"
+      }
+    },
+    {
+      "id": "ev-omotesando-umegae-mochi",
+      "candidateId": "c-omotesando--dazaifu-approach-street",
+      "claim": "Dazaifu Tenmangu's Omotesando approach street is lined with shops selling umegae mochi, the local grilled-mochi specialty, alongside cafes and souvenir stores",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://dazaifu.org/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-kyuhaku-hours-and-price",
+      "candidateId": "c-kyushu-national-museum",
+      "claim": "Kyushu National Museum: 9:30–17:00 (last entry 16:30), extended Saturdays during special exhibitions; closed Mondays (or the following day if Monday is a holiday); regular collection admission ¥700, free under-18 and 70+",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.kyuhaku.jp/visit/visit_top.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-kyuhaku-no-special-exhibit-oct2026",
+      "candidateId": "c-kyushu-national-museum",
+      "claim": "No special exhibition runs during Oct 19–23, 2026 — the prior special exhibit closed Oct 4, 2026, and the next opens Oct 31, 2026; only the ¥700 regular collection is viewable during the trip",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.kyuhaku.jp/exhibition/exhibition_schedule.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-fukuoka-castle-park-hours",
+      "candidateId": "c-fukuoka-castle-ruins--maizuru-park",
+      "claim": "Maizuru Park (Fukuoka Castle Ruins) hours: Apr–Sep 9:00–19:00, Oct–Mar 9:00–18:00, closed Dec 29–Jan 3; free access to grounds/ruins",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.midorimachi.jp/maiduru/abouts/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-ohori-park-facts",
+      "candidateId": "c-ohori-park",
+      "claim": "Ohori Park: ~398,000 sqm with a 226,000 sqm pond, opened 1927, a ~2km path circles the pond; free, always accessible",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ohorikouen.jp/about/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-kushida-shrine-hours-and-float",
+      "candidateId": "c-kushida-shrine",
+      "claim": "Kushida Shrine main hall accessible 4:00–22:00, free admission; a ≈13m ornamental Hakata Gion Yamakasa float is on free, year-round display except during June; founded 757 CE, with a 1,000+ year old ginkgo tree",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://yokanavi.com/spots/26906",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-sakurai-futamigaura-access",
+      "candidateId": "c-sakurai-futamigaura",
+      "claim": "Sakurai Futamigaura (the ocean torii/\"husband and wife rocks\") is free public beach/shrine access; the sacred rocks sit ≈150m offshore, part of Sakurai Shrine; paid parking ≈¥300/hour, ≈47 spaces",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://kanko-itoshima.jp/spot/sakuraihutamigaura/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2027-01-15"
+      }
+    },
+    {
+      "id": "ev-shiraito-falls-access",
+      "candidateId": "c-shiraito-falls",
+      "claim": "Shiraito Falls is free, a 24m drop at 530m elevation on Mt. Hagane; the adjacent Fureai no Sato facility runs 9:00–17:00 (extended to 18:00 Jul–Aug)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://kanko-itoshima.jp/spot/shiraitonotaki/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nokonoshima-hours",
+      "candidateId": "c-nokonoshima-island-park",
+      "claim": "Nokonoshima Island Park hours: weekdays 9:00–17:30, Sundays/holidays 9:00–18:30; open year-round with no closed days",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://gofukuoka.jp/spots/detail/26801",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nokonoshima-price-unconfirmed",
+      "candidateId": "c-nokonoshima-island-park",
+      "claim": "Nokonoshima Island Park admission (≈¥1,500 adult, per one aggregator) could not be confirmed against an official source — nokonoshima.com returned only page titles with no body content on 4 fetch attempts, and gofukuoka.jp's listing doesn't state a price",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://nokonoshima.com/en/info",
+        "kind": "operator",
+        "access": "blocked",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-fukuoka-airport-subway",
+      "candidateId": null,
+      "claim": "The Fukuoka City Subway Airport (Kuko) Line connects directly to Fukuoka Airport's Domestic Terminal via escalator; the International Terminal requires the free shuttle bus first",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.fukuoka-airport.jp/en/access/subway.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-fukuoka-airport-shuttle-bus",
+      "candidateId": null,
+      "claim": "The free shuttle bus between Fukuoka Airport's International and Domestic Terminals runs every 5–6 min at peak (7:00–18:00), 6–15 min off-peak; the North Bus Stop at the Domestic Terminal is discontinued since Dec 3, 2024 (South Bus Stop only, construction-related)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.fukuoka-airport.jp/en/access/bus2.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-subway-fare-airport-hakata-tenjin",
+      "candidateId": null,
+      "claim": "Fukuoka City Subway fare from the Airport to both Hakata and Tenjin is ¥260 (adult); Airport→Hakata ≈5 min, Airport→Tenjin ≈11 min",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.hakatastation.com/fukuoka-subway-kuko-line-for-fukuoka-airport-tenjin/",
+        "kind": "reference",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "fukuoka-transit-guides",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nimoca-card-details",
+      "candidateId": null,
+      "claim": "Nimoca IC card costs ¥2,000 total (¥500 deposit + ¥1,500 credit), top-up to ¥20,000; refund fee ¥220, not available at the Airport's International Terminal; nationwide cards (Suica, Pasmo, Icoca, Sugoca) work interchangeably on Fukuoka transit",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nimoca.jp/language/en",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-ic-card-per-person-tap",
+      "candidateId": null,
+      "claim": "IC card boarding is per-person, not group-batched — each rider taps in/out individually at the gate; no group-gate mechanism exists",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nishitetsu.jp/en/train/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-nishitetsu-tenjin-dazaifu-route",
+      "candidateId": null,
+      "claim": "Reaching Dazaifu by train from Nishitetsu Fukuoka (Tenjin) requires the Tenjin-Omuta Line to Nishitetsu-Futsukaichi, then a transfer to the Dazaifu Line — no through train exists",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nishitetsu.jp/en/train/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-dazaifu-liner-tabito",
+      "candidateId": null,
+      "claim": "The Nishitetsu Dazaifu Liner \"Tabito\" runs direct, no-transfer, from Hakata Bus Terminal (¥800, ≈40 min) and Fukuoka Airport's International Terminal (¥700, ≈25 min); ¥20 IC/card discount; no reservation; 28 trips/day weekdays, 36–37 weekends; can deny boarding once full",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nishitetsu.jp/bus/rosen/dazaihu_liner/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nishitetsu-fare-revision",
+      "candidateId": null,
+      "claim": "Nishitetsu raised fares system-wide effective Apr 1, 2026 (base fare ¥170→¥180, ¥60 fare bands) on the Tenjin-Omuta and Dazaifu lines — the pre-revision Tenjin-Dazaifu figure (¥400) is now stale; a post-revision figure of ≈¥480 appears only in an aggregator projection, not independently confirmed against Nishitetsu's own dynamic fare-search tool",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nishitetsu.jp/train/2026_unchin-kaitei-ninka/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-jr-chikuhi-line-itoshima",
+      "candidateId": null,
+      "claim": "The JR Chikuhi Line runs from Meinohama through Itoshima (Chikuzen-Maebaru, Chikuzen-Fukae) toward Karatsu; train stations do not reach the coastal sights (Sakurai Futamigaura, Shiraito Falls) directly",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.jrkyushu.co.jp/railway/station/1191698_1601.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-showa-bus-itoshima-routes",
+      "candidateId": null,
+      "claim": "Showa Bus's Itoshima Sunset Line and Nishinoura Line connect Nishinoura/Chikuzen-Maebaru to Keya, serving Futamigaura and Nogita; a separate Keya Line runs Maebaru Station North Exit → Keya (≈26 min) — exact frequency and fares couldn't be extracted (PDF/binary, unparseable)",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.showa-bus.jp/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-showa-bus-stop-rename",
+      "candidateId": null,
+      "claim": "The \"Futamigaura Meoto-iwa-mae\" Showa Bus stop is discontinued and replaced by \"Okuguchi Sakurai Shrine West Entrance\" on multiple coastal routes, effective Apr 4, 2026 — in effect for this trip",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.showa-bus.jp/category/traininfo/",
+        "kind": "official",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-nokonoshima-ferry",
+      "candidateId": "c-nokonoshima-island-park",
+      "claim": "Fukuoka City Municipal Ferry, Meinohama→Nokonoshima: adult one-way ¥230, 10 min, ≈23 daily departures (21 Sundays/holidays), roughly hourly, first ≈5:00, last ≈23:00; a connecting Nishitetsu bus (≈10 min) reaches the park itself",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.city.fukuoka.lg.jp/kowan/kyakusen/hakata-port/hyo.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-chikuhi-line-last-train-caveat",
+      "candidateId": null,
+      "claim": "JR Chikuhi Line's own timetable subdomain returned a Saturday schedule (last observed departure from Chikuzen-Maebaru toward Fukuoka Airport/Meinohama/Hakata: 23:10) despite requesting a weekday view twice — weekday last-train time for Oct 19–23, 2026 (all weekdays) is unconfirmed",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.jrkyushu-timetable.jp/cgi-bin/jr-k_time/tt_dep.cgi?c=28224",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    },
+    {
+      "id": "ev-dazaifu-line-last-train-blocked",
+      "candidateId": null,
+      "claim": "Nishitetsu's own printable per-station timetable (updated for the Mar 14, 2026 schedule revision) exists at a known official URL but is image/vector-encoded and could not be parsed for the exact last-train time from Dazaifu",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.nnr.co.jp/pdf/train/diagram_print/D02-2026.pdf",
+        "kind": "official",
+        "access": "blocked",
+        "language": "ja",
+        "publishedAt": "2026-03-14",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-15"
+      }
+    }
+  ],
+  "reservations": [],
+  "transport": [
+    {
+      "id": "t-itoshima-coastal-connections",
+      "route": "Chikuzen-Maebaru Station ↔ Sakurai Futamigaura / Shiraito Falls (Showa Bus + taxi)",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-showa-bus-itoshima-routes",
+        "ev-showa-bus-stop-rename",
+        "ev-jr-chikuhi-line-itoshima",
+        "ev-chikuhi-line-last-train-caveat"
+      ],
+      "doorToDoor": "From central Fukuoka: JR Chikuhi Line to Chikuzen-Maebaru (≈40–50 min), then a sparse Showa Bus connection or a taxi for the final leg to each coastal sight — no single transit leg covers the whole route.",
+      "transferReality": "Bus frequency on the coastal routes (Nishinoura Line, Itoshima Sunset Line) is low, and exact daily frequency couldn't be confirmed this pass — the fare/schedule PDFs were unparseable. The Sakurai Futamigaura stop itself is being renamed from 'Futamigaura Meoto-iwa-mae' to 'Okuguchi Sakurai Shrine West Entrance' effective Apr 4, 2026, already in effect for this trip.",
+      "groupLuggageMobility": "A party of 8 relying on a single sparse bus is itself a capacity risk on top of the frequency problem — two taxis or a rental van is the more reliable way to move the whole group between sights in one day, which is why the guide recommends that directly.",
+      "buffer": "Plan to leave the coast by early evening rather than targeting a specific last bus or train precisely.",
+      "missedConnection": "A missed bus connection back to Chikuzen-Maebaru likely means a long wait for the next one, or calling a taxi from a rural stop — inconvenient, not stranding, but a real risk given the sparse service this pass couldn't fully quantify.",
+      "nextService": "⚠ Not confirmed this pass — Showa Bus's fare/frequency documents were PDF/binary and unreadable by the fetch tool used.",
+      "lastPracticalReturn": "⚠ Not confirmed this pass for the specific weekday — plan to be back at Chikuzen-Maebaru well before dark rather than relying on an unverified last-service time.",
+      "fallback": "Taxi is the practical fallback for the whole day, not just emergencies — reflected directly in the guide's own recommendation to use a taxi or rental car rather than public transit for this leg."
+    }
+  ],
+  "disagreements": [],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [],
+      "notApplicableReason": "No shipped or detour candidate this pass is a scarce-release booking — every shipped food pick is walk-in (yatai take no reservations by design), Dazaifu Tenmangu and the sights are free/no-ticket, and Kyushu National Museum and Nokonoshima sell same-day. Nothing clears the reservation-depth bar."
+    },
+    "transport": {
+      "requiredRouteIds": [
+        "t-itoshima-coastal-connections"
+      ],
+      "notApplicableReason": null
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Across four parallel research batches (logistics/entry/money/health, transit, Dazaifu/Itoshima sights, Fukuoka food/yatai), later searches within each topic converged on the same core set of official sources and named venues rather than surfacing new serious contenders — e.g. Nakasu kept resurfacing as the shared hub for Ichiran, Fukuya and yatai across three independent search threads, and Itoshima's coastal-sight list (Sakurai Futamigaura, Shiraito Falls) was stable across both the sights-focused and transit-focused batches. Remaining gaps (exact post-revision Nishitetsu fare, Showa Bus frequencies, exact last-train times, the US State Dept advisory level, Nokonoshima's admission price) are all read-only precision gaps on facts already directionally established — none of them would change which venues, routes, or days are recommended, only refine a number or a flag. The one genuinely unresolved item with a small chance of mattering — Hakata Okunchi's exact 2026 program, inferred from a consistent multi-year date pattern rather than a 2026-dated announcement — is already treated as optional, flight-time-dependent color on the departure day rather than a fixed commitment, so an eventual correction wouldn't restructure the itinerary."
+  },
+  "passB": null,
+  "reconciliation": []
+}

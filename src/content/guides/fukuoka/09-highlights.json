@@ -1,9 +1,22 @@
 [
   {
     "type": "panel",
-    "group": "Highlights",
-    "title": "yatai etiquette, regional specialties, and public-transit day trips",
-    "body": "",
-    "phase": "daily"
+    "group": "Yatai & specialties",
+    "title": "Yatai etiquette — the real rules",
+    "body": "<p>Fukuoka City's own tourism board is explicit: <b>go in twos and threes, not eights.</b> A yatai stall seats roughly 8–10 people total, everyone included — a party of 8 can fill or exceed one on its own, and the city's own guidance warns a large group may simply be turned away. Split up, stall-hop independently, and regroup after.</p><p>Tell the owner your headcount before you sit — \"Two people, OK?\" — and wait until your whole subgroup has arrived before joining the line; sending one person to hold a spot isn't done. Order at least one drink and one dish per person once seated, and don't linger once you've finished — if the stall's busy, someone else is waiting for that seat. Pay at the end by asking for the bill, not as you go.</p><p>Cash only at roughly 90% of stalls, so each subgroup needs its own. No tipping — it isn't part of Japanese dining anywhere, yatai included. Stalls run evenings only, roughly 18:00/19:00 to midnight, and skip stormy nights or whenever the owner isn't up to it — there's no way to guarantee a specific stall is open on a specific night.</p>",
+    "phase": "daily",
+    "verified_on": "2026-08-29",
+    "shelf_life": "default",
+    "source_url": "https://gofukuoka.jp/yatai-howto.html"
+  },
+  {
+    "type": "panel",
+    "group": "Yatai & specialties",
+    "title": "Regional specialties, in one place",
+    "body": "<p><b>Tonkotsu ramen</b> — the pork-bone broth style, born in Fukuoka; Ichiran and Ippudo both still run their original shops here. <b>Motsunabe</b> — offal hot pot, traced to Korean immigrant coal-mine workers using cuts that used to be discarded; finish it with champon noodles. <b>Mentaiko</b> — spicy marinated pollock roe, invented in Nakasu in 1949 by Fukuya, who never patented the recipe, which is why it's everywhere now. <b>Hakata udon</b> — Fukuoka's claim as udon's Japanese birthplace, via a 13th-century monk's milling technique brought back from China.</p><p>Seasonal add-on: Itoshima's oyster huts run roughly October through April, right at the start of this trip's window — grilled oysters at simple coastal shacks, worth building into the Itoshima day if the season's begun.</p>",
+    "phase": "daily",
+    "verified_on": "2026-08-29",
+    "shelf_life": "default",
+    "source_url": "https://gofukuoka.jp/en/articles/detail/4b1d9d6e-9215-485b-978f-b3ef3f8f0f9e"
   }
 ]

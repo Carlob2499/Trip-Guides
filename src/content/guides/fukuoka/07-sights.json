@@ -4,20 +4,123 @@
     "group": "Sights",
     "title": "Top sights",
     "phase": "daily",
-    "items": [],
-    "rank": 2
+    "rank": 2,
+    "items": [
+      {
+        "name": "Dazaifu Tenmangu",
+        "kicker": "Shrine of scholarship, over Michizane's grave",
+        "body": "<p>Built over the grave of Sugawara no Michizane, deified as Tenjin — the head shrine of roughly 12,000 Tenjin shrines nationwide, and a pilgrimage site for students praying over exams. Free to enter; the small Treasure Hall and history museum are optional paid add-ons. Arrive near opening to beat the tour-bus crowds.</p>",
+        "map": { "lat": 33.52139, "lng": 130.535 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 60,
+        "source_url": "https://www.dazaifutenmangu.or.jp/en/plan/first-time-visitors/",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Kyushu National Museum",
+        "kicker": "Japan's cultural exchange with Asia, next door to the shrine",
+        "body": "<p>One of Japan's four national museums, focused on Japan's historical exchange with the rest of Asia. ¥700 for the regular collection; no special exhibition runs during this trip's exact dates. Closed Mondays.</p>",
+        "map": { "lat": 33.5183556, "lng": 130.5382972 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 75,
+        "closed_days": ["mon"],
+        "source_url": "https://www.kyuhaku.jp/visit/visit_top.html",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Fukuoka Castle Ruins (Maizuru Park)",
+        "kicker": "Free stone-wall ruins in a central city park",
+        "body": "<p>The stone foundations and walls of Fukuoka's Edo-period castle, free to walk year-round. The park's famous for cherry blossoms in spring, which this October trip won't see — the ruins themselves are the draw regardless of season.</p>",
+        "map": { "lat": 33.585, "lng": 130.38306 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 45,
+        "source_url": "https://www.midorimachi.jp/maiduru/abouts/",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Ohori Park",
+        "kicker": "A ~2km pond loop next to the castle ruins",
+        "body": "<p>A large central pond ringed by a walking/jogging path, opened in 1927 on a former Hakata Bay inlet. Free, always open, and an easy pairing with the adjacent castle ruins for a morning walk.</p>",
+        "map": { "lat": 33.585861, "lng": 130.37625 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 40,
+        "source_url": "https://www.ohorikouen.jp/about/",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Kushida Shrine",
+        "kicker": "Hakata's guardian shrine, with a year-round festival float",
+        "body": "<p>Founded 757 CE, home to a 1,000-plus-year-old ginkgo tree and a ≈13m ornamental Hakata Gion Yamakasa float on year-round display (except June). Free to enter; on Oct 23–24 the shrine hosts Hakata Okunchi, a free harvest festival.</p>",
+        "map": { "lat": 33.592972, "lng": 130.410472 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 25,
+        "source_url": "https://yokanavi.com/spots/26906",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Sakurai Futamigaura",
+        "kicker": "A shrine torii gate standing in the ocean",
+        "body": "<p>Itoshima's signature photo spot — two \"husband and wife\" rocks joined by a sacred rope ≈150m offshore, with a torii gate in the water. Free, best at sunset. Public buses run infrequently; a taxi or car is the practical way in.</p>",
+        "map": { "lat": 33.640472, "lng": 130.196639 },
+        "place_id": "__VERIFICATION_REQUIRED__",
+        "dwell_min": 40,
+        "source_url": "https://kanko-itoshima.jp/spot/sakuraihutamigaura/",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Shiraito Falls",
+        "kicker": "A 24m waterfall with trout for lunch",
+        "body": "<p>A free waterfall on Mt. Hagane, with an on-site restaurant (Shiki no Chaya) serving yamame mountain-trout set meals and hand-pulled soba — a genuine regional specialty. Bus access is a sparse connection plus a ≈30-minute walk; a taxi or car is more realistic for a group.</p>",
+        "dwell_min": 90,
+        "source_url": "https://kanko-itoshima.jp/spot/shiraitonotaki/",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      },
+      {
+        "name": "Nokonoshima Island Park",
+        "kicker": "A flower park reached by a short city ferry",
+        "body": "<p>An island flower park a 10-minute municipal ferry ride from Meinohama (¥230 each way), with cosmos flowers typically in bloom in this exact window — though the 2026 bloom timing itself isn't published this far ahead. Open year-round, no closed days.</p>",
+        "dwell_min": 120,
+        "source_url": "https://gofukuoka.jp/spots/detail/26801",
+        "verified_on": "2026-08-29",
+        "shelf_life": "venue"
+      }
+    ]
   },
   {
     "type": "divergences",
     "group": "Sights",
     "title": "What generic guides get wrong",
     "phase": "daily",
+    "rank": 2,
     "items": [
       {
-        "claim": "",
-        "correction": ""
+        "claim": "Dazaifu Tenmangu's big autumn festival makes late September through October a can't-miss window.",
+        "correction": "The shrine's major annual festival, Jinkosai, runs Sept 21–25 — a full month before this trip. Visiting Oct 19–23 means missing both the festival and its crowds; the shrine's daily quiet-hour advice (near opening) matters more than any festival timing for this trip.",
+        "category": "outdated",
+        "source_url": "https://dazaifu.org/events/event5403/",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "claim": "Kushida Shrine's Hakata Gion Yamakasa float is a special, paid attraction.",
+        "correction": "The ornamental float is on free, year-round display as part of the shrine grounds (except during June) — no separate ticket. Paid seating only applies to the live Yamakasa event itself, which runs in July, not this trip.",
+        "category": "misleading",
+        "source_url": "https://yokanavi.com/spots/26906",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "claim": "A group can just walk into a yatai stall together for dinner.",
+        "correction": "Fukuoka's own tourism board recommends parties of 2–3 at a yatai and warns larger groups may be turned away outright — stalls seat roughly 8–10 total, including everyone else already there. An 8-person group needs to split up, not queue together.",
+        "category": "missing-context",
+        "source_url": "https://gofukuoka.jp/yatai-howto.html",
+        "verified_on": "2026-08-29"
       }
-    ],
-    "rank": 2
+    ]
   }
 ]
