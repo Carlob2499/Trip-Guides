@@ -361,7 +361,8 @@ jobs:
 
       - name: Nothing to publish — clean no-op
         if: steps.download.outcome != 'success'
-        run: echo "[codex-watcher] PR #$PR — no validated artifact (not eligible, no changes, or a gate failed upstream)."
+        run: |
+          echo "[codex-watcher] PR #$PR — no validated artifact (not eligible, no changes, or a gate failed upstream)."
 
       - name: Read the validated tree's metadata
         if: steps.download.outcome == 'success'
