@@ -312,6 +312,27 @@ describe("K/L/M/N — everything else fails closed", () => {
     expect(failed.attempts.autoRetries).toBe(0);
   });
 
+  it("K — repeated proven usage-limit interruptions refund quality budget without extending authority", async () => {
+    await runAt("reconcile");
+    const first = await failWith("reconcile", "usage-limit", { findings: ["first interrupted reconcile"] });
+    expect(first.attempts.total).toBe(0);
+    expect(first.attempts.cap).toBe(V2_ATTEMPT_CAP);
+    expect(first.attempts.autoRetries).toBe(0);
+
+    // A deliberate later redispatch after availability returns spends the same quality slot again.
+    const resumedBudget = await bumpRunAttempt(SLUG, { intakeDir });
+    expect(resumedBudget.overCap).toBe(false);
+    await stageStart(SLUG, "reconcile", { intakeDir });
+    const second = await failWith("reconcile", "usage-limit", { findings: ["second interrupted reconcile"] });
+
+    expect(second.attempts.total).toBe(0);
+    expect(second.attempts.cap).toBe(V2_ATTEMPT_CAP);
+    expect(second.attempts.autoRetries).toBe(0);
+    const decision = await decide(second, "reconcile");
+    expect(decision.allowed).toBe(false);
+    expect(decision.reason).toContain("usage-limit");
+  });
+
   it("L — a true agent-failure never blindly retries", async () => {
     await runAt("passB");
     const failed = await failWith("passB", "agent-failure", { findings: ["container died"] });
