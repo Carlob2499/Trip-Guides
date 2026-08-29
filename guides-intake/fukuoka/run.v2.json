@@ -11,9 +11,9 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "failed",
+  "status": "running",
   "createdAt": "2026-08-29T00:17:35.510Z",
-  "updatedAt": "2026-08-29T03:12:07.872Z",
+  "updatedAt": "2026-08-29T03:12:33.817Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -75,10 +75,10 @@
       "failure": null
     },
     "passB": {
-      "status": "failed",
-      "startedAt": "2026-08-29T02:45:27.437Z",
-      "endedAt": "2026-08-29T03:11:08.211Z",
-      "attempts": 1,
+      "status": "running",
+      "startedAt": "2026-08-29T03:12:33.817Z",
+      "endedAt": null,
+      "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
       "commit": null,
@@ -92,13 +92,17 @@
           "status": "failed",
           "failureClass": "void-run",
           "durationSec": 1541
+        },
+        {
+          "attempt": 2,
+          "startedAt": "2026-08-29T03:12:33.817Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
         }
       ],
-      "failure": {
-        "class": "void-run",
-        "detail": "Pass B owes its artifact: guides-intake/fukuoka/passB.v2.json (transferred by collect-passb)",
-        "at": "2026-08-29T03:11:08.211Z"
-      }
+      "failure": null
     },
     "reconcile": {
       "status": "queued",
@@ -135,13 +139,9 @@
   },
   "resume": {
     "nextStage": "passB",
-    "action": "re-run stage \"passB\" (failed: void-run) — a resumed run repeats the interrupted stage, never skips ahead"
+    "action": "stage \"passB\" was running — validate its output; re-run it if incomplete"
   },
-  "failure": {
-    "class": "void-run",
-    "detail": "Pass B owes its artifact: guides-intake/fukuoka/passB.v2.json (transferred by collect-passb)",
-    "at": "2026-08-29T03:11:08.211Z"
-  },
+  "failure": null,
   "publication": {
     "published": false,
     "publishedAt": null,
