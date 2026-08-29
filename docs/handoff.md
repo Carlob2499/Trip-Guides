@@ -3,13 +3,14 @@
 > Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. Keep this file to current truth and the immediate next action.
 
 <!-- WARM_START_BEGIN -->
-WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-28)
-Uruguay Canary #4 remains GREEN for the V2 draft-only product path. R03 is fully accepted: authenticated escalation and the cancellation chain are proven.
-The deterministic V2 repair stack is merged through PR #111. Yamagata Run-B `yamagata-20260828-73821a` is CLOSED at 11/11 attempts; its last critic output fixed the remaining enum findings, but stale research-branch control-plane code invalidated that attempt as repair-to-green proof. PR #111 regression-pins the version-skew repair. Do not extend Yamagata or repeat Run-B.
-V2 is still the target but remains NOT READY FOR PRODUCTION CUTOVER. V1 stays the default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
-Current phase: release-readiness. S01/S02/S03/S05/S06 are closed and S04's automated gate is green after PR #114 found/fixed progress contrast + target-size defects. Only a brief physical-device interaction spot check remains before a separately authorized clean V2 acceptance canary.
-The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
-Durable shared-add decisions: `CONTEXT.md`. Run-B evidence: `docs/pipeline v2/RUNB2_YAMAGATA_EVIDENCE.md`.
+WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-29)
+Uruguay Canary #4 remains GREEN as historical proof of the V2 draft-only product path. R03 is fully accepted: authenticated escalation and the cancellation chain are proven.
+The separately authorized final release-readiness acceptance canary, Fukuoka `fukuoka-20260829-7cb4fa`, ran against accepted main `6fdae06af63e3890d7e147e13e08af056bb150b6` and **FAILED at Reconcile on model/content evidence provenance**. It ended at 5/5 quality attempts with the single auto-retry spent; critic and landing were never reached; publication remained false; main was unchanged.
+The authoritative run/accounting record is `docs/pipeline v2/FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md`. It corrects the dispatch SHA to `0a52ea1eb423f2d942b690942c3e9b62265b3c43` and records five manual resumes plus one system auto-retry across Actions #59–#65.
+The post-canary deterministic closeout fixes two independent defects without altering the failed research evidence: the watcher no-artifact YAML command is block-scalar safe, and autonomous evidence-owner routing may no longer extend the 5-attempt cap.
+V2 remains NOT READY FOR PRODUCTION CUTOVER. V1 stays the default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset. Do not launch another Fable acceptance canary, publish, merge the failed Fukuoka research branch, or enable V2 from this closeout.
+PR #115 remains a separate traveler-navigation/UI cleanup and is intentionally outside this backend repair.
+The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary. Durable shared decisions remain in `CONTEXT.md`; this capsule carries only the pointer.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
@@ -30,8 +31,8 @@ Durable shared-add decisions: `CONTEXT.md`. Run-B evidence: `docs/pipeline v2/RU
 - S06 historical regression suite: DONE on PR #111 exact code head, including Tottori/Portugal/Luxembourg/Yamagata scars.
 - S02 mobile critical path: DONE by PR #114 browser proof across /new, /progress, and a finished guide.
 - S03 offline/poor-network traveler path: DONE by PR #114's fresh-page offline service-worker read plus the existing durable sync/replay suite.
-- S04 accessibility: automated portion PASS after PR #114 exposed and repaired progress status contrast and undersized controls; one physical-device interaction spot check remains.
-- Do not spend Claude/Fable on stabilization; the next model-owned work is the clean V2 acceptance canary after the physical spot check.
+- S04 accessibility: automated portion PASS after PR #114 exposed and repaired progress status contrast and undersized controls; one physical-device interaction spot check remains as a traveler/UI check, not as retroactive authority for the already-run Fukuoka acceptance canary.
+- Do not spend Claude/Fable on another full acceptance run from this closeout. The failed Fukuoka evidence is frozen until a separately justified model/content remediation and new acceptance authorization exist.
 
 ## Pipeline status preserved
 
@@ -40,7 +41,8 @@ Durable shared-add decisions: `CONTEXT.md`. Run-B evidence: `docs/pipeline v2/RU
 - Yamagata Run-B remains durable evidence at 11/11 attempts and is frozen; do not grant another retry or repeat the historical validation campaign.
 - Attempt 6 corrected the prior five critic enum findings but cannot serve as repair-to-green proof because the run resumed with stale control-plane code; PR #111 deterministically repairs that version-skew seam.
 - V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
-- V2 production cutover remains pending and unauthorized.
-- The next engineering phase is release-readiness/stabilization. A future V2 acceptance canary, if authorized, is a new release-readiness proof rather than another Yamagata repair attempt.
-- DS1 remains calibration/candidate work, not production cutover.
+- Final Fukuoka acceptance `fukuoka-20260829-7cb4fa` FAILED at reconcile on an unfetched official-source claim. Durable state is 5/5 quality attempts, 1/1 auto-retries, critic queued/0 attempts, publication false, landing pending.
+- V2 production cutover remains pending and unauthorized. The failed Fukuoka branch is evidence, not content to repair-and-merge.
+- No new acceptance canary is authorized by the deterministic closeout. Any future model-backed run must follow a separately justified remediation/acceptance decision rather than continuing Fukuoka past its cap.
+- DS1 and PR #115 remain separate design/UI work, not production cutover.
 - The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.

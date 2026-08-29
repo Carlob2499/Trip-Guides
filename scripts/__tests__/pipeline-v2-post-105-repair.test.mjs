@@ -31,7 +31,7 @@ import { generateContractCapsule } from "../pipeline/v2/contract-capsule.mjs";
 import { requireCriticBaseline } from "../pipeline-v2.mjs";
 import {
   initRunV2, readRunStateV2, stageStart, stageComplete, stageFail, reopenForAnswers, routeToEvidenceOwner,
-  isCriticReplay,
+  bumpRunAttempt, isCriticReplay,
 } from "../pipeline/v2/run-state.mjs";
 import { retryEligibility } from "../pipeline/v2/recovery.mjs";
 import {
@@ -679,8 +679,31 @@ describe("R-A — a completed stage records the tree it handed on, and an unfixa
     expect(isCriticReplay(state)).toBe(true);
     // And the routed failure is auto-retryable at the stage that can actually fix it.
     expect(retryEligibility(state, { stage: "reconcile", findings: ["declare the relation"] }).allowed).toBe(true);
-    // The cap is not turned into a renewable autonomous budget: the round trip is ONE dispatch.
-    expect(state.attempts.cap - before.attempts.cap).toBeLessThanOrEqual(1);
+    // Routing changes ownership, never authority: it cannot grow the quality-attempt cap.
+    expect(state.attempts.cap).toBe(before.attempts.cap);
+  });
+
+  it("REPAIRED: evidence-owner routing at the cap stays stopped instead of minting a sixth attempt", async () => {
+    await runThroughReconcile();
+    // Put the durable run exactly at its authorized five-quality-attempt ceiling while critic
+    // work is still owed. This is the final-acceptance shape that exposed the old +1 escape hatch.
+    for (let i = 0; i < 5; i += 1) {
+      const budget = await bumpRunAttempt("tottori", opts());
+      expect(budget.overCap).toBe(false);
+    }
+    await stageStart("tottori", "critic", { ...opts(), baseline: SHA(7) });
+    const before = await readRunStateV2("tottori", opts());
+    expect(before.attempts.total).toBe(5);
+    expect(before.attempts.cap).toBe(5);
+
+    const routed = await routeToEvidenceOwner("tottori", { ...opts(), detail: "evidence relation owed at cap" });
+    expect(routed.resume.nextStage).toBe("reconcile");
+    expect(routed.attempts.total).toBe(before.attempts.total);
+    expect(routed.attempts.cap).toBe(before.attempts.cap);
+
+    const decision = retryEligibility(routed, { stage: "reconcile", findings: ["declare the relation"] });
+    expect(decision.allowed).toBe(false);
+    expect(decision.reason).toMatch(/attempt budget exhausted/);
   });
 
   it("REPAIRED: the routed marker is what the tail reads — an ORDINARY critic failure is untouched", async () => {
