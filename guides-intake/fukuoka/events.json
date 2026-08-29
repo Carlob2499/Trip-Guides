@@ -63,22 +63,32 @@
       "text": "Reconcile attempt 1 failed (gate-failure) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-29T04:12:46.261Z",
+      "at": "2026-08-29T04:25:37.119Z",
+      "kind": "check",
+      "text": "Reconcile started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-29T04:35:02.939Z",
+      "kind": "reject",
+      "text": "Reconcile attempt 2 failed (usage-limit) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-29T04:35:02.939Z",
       "kind": "decision",
       "text": "Candidate funnel: 35 evaluated · 30 shortlisted · 21 shipped · 8 rejected · 1 kept as detours"
     },
     {
-      "at": "2026-08-29T04:12:46.261Z",
+      "at": "2026-08-29T04:35:02.939Z",
       "kind": "decision",
       "text": "Reconcile dispositioned 26 independent finding(s): 15 adopt · 9 agree · 2 conflict-resolved"
     },
     {
-      "at": "2026-08-29T04:12:46.261Z",
+      "at": "2026-08-29T04:35:02.939Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     },
     {
-      "at": "2026-08-29T04:12:46.261Z",
+      "at": "2026-08-29T04:35:02.939Z",
       "kind": "check",
       "text": "Decision-changing disagreement investigated: Whether Ichiran's Nakasu original shop is the right default ramen pick for a group wanting the real Hakata-tonkotsu experience, given two independent local sources say residents skip it as pricier, non-traditional 'creative ramen'"
     }

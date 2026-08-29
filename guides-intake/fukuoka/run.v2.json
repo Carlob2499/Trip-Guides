@@ -11,9 +11,9 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "running",
+  "status": "failed",
   "createdAt": "2026-08-29T00:17:35.510Z",
-  "updatedAt": "2026-08-29T04:25:37.119Z",
+  "updatedAt": "2026-08-29T04:35:02.939Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -105,9 +105,9 @@
       "failure": null
     },
     "reconcile": {
-      "status": "running",
+      "status": "failed",
       "startedAt": "2026-08-29T04:25:37.119Z",
-      "endedAt": null,
+      "endedAt": "2026-08-29T04:35:02.939Z",
       "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
@@ -126,13 +126,17 @@
         {
           "attempt": 2,
           "startedAt": "2026-08-29T04:25:37.119Z",
-          "endedAt": null,
-          "status": "running",
-          "failureClass": null,
-          "durationSec": null
+          "endedAt": "2026-08-29T04:35:02.939Z",
+          "status": "failed",
+          "failureClass": "usage-limit",
+          "durationSec": 566
         }
       ],
-      "failure": null
+      "failure": {
+        "class": "usage-limit",
+        "detail": "Claude session limit reached mid-stage; re-dispatch after the window resets",
+        "at": "2026-08-29T04:35:02.939Z"
+      }
     },
     "critic": {
       "status": "queued",
@@ -149,16 +153,20 @@
     }
   },
   "attempts": {
-    "total": 3,
+    "total": 2,
     "cap": 5,
     "autoRetries": 1,
     "autoRetryCap": 1
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
+    "action": "re-run stage \"reconcile\" (failed: usage-limit) — a resumed run repeats the interrupted stage, never skips ahead"
   },
-  "failure": null,
+  "failure": {
+    "class": "usage-limit",
+    "detail": "Claude session limit reached mid-stage; re-dispatch after the window resets",
+    "at": "2026-08-29T04:35:02.939Z"
+  },
   "publication": {
     "published": false,
     "publishedAt": null,
