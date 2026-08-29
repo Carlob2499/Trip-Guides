@@ -23,8 +23,12 @@ describe("September freeze policy", () => {
     expect(freezePhase("2026-10-01")).toBe("code-freeze");
   });
 
-  it("classifies backend/product/control-plane paths while leaving docs and guide content editable", () => {
+  it("classifies backend/product/control-plane paths, including locked doctrine Markdown", () => {
     for (const file of [
+      "AGENTS.md",
+      "CLAUDE.md",
+      "PRODUCT.md",
+      "docs/pipeline v2/DECISIONS.md",
       ".github/workflows/research-pass-v2.yml",
       ".agents/skills/waypoint-guide-author/SKILL.md",
       "prompts/research-reconcile-v2.md",
@@ -33,9 +37,12 @@ describe("September freeze policy", () => {
       "public/sw.js",
       "package-lock.json",
     ]) expect(isCodePath(file), file).toBe(true);
+  });
 
+  it("leaves status/evidence bookkeeping and guide content editable", () => {
     for (const file of [
       "docs/pipeline v2/SEPTEMBER_TRACKER.md",
+      "docs/pipeline v2/IMPLEMENTATION_STATE.md",
       "docs/handoff.md",
       "src/content/guides/tokyo/02-food.json",
       "guides-intake/kumamoto/evidence.v2.json",
@@ -64,7 +71,7 @@ describe("September freeze policy", () => {
     expect(evaluateFreeze({ date: "2026-09-27", labels: [FREEZE_WAIVER_LABEL], files: ["scripts/x.mjs"] }).allowed).toBe(true);
   });
 
-  it("does not block documentation or guide-content-only work in either freeze", () => {
+  it("does not block status docs or guide-content-only work in either freeze", () => {
     const files = ["docs/handoff.md", "src/content/guides/osaka/02-food.json"];
     expect(evaluateFreeze({ date: "2026-09-20", files }).allowed).toBe(true);
     expect(evaluateFreeze({ date: "2026-09-30", files }).allowed).toBe(true);
