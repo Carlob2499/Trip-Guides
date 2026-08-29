@@ -54,6 +54,24 @@
         "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
       ],
       "createdAt": "2026-08-29T04:12:46.259Z",
+      "status": "retired",
+      "retiredAt": "2026-08-29T07:52:00.521Z"
+    },
+    {
+      "runId": "fukuoka-20260829-7cb4fa",
+      "stage": "reconcile",
+      "attempt": 3,
+      "findings": [
+        "P0 research   · FAIL — 1 blocking, 0 advisory   (fabrication · provenance · completeness · itinerary)",
+        "⚠ map point \"Dazaifu Tenmangu\" still has __VERIFICATION_REQUIRED__ place_id",
+        "⚠ [leg-duration-unverified] 2 of 7 transit-leg duration(s) carry no source — e.g. \"Day by day\", \"Hakata ramen, motsunabe & mentaiko\". An `≈` is honest notation, but nothing has checked these legs against a routing authority",
+        "⚠ [routes-not-configured] GOOGLE_ROUTES_KEY is not set, so leg durations are checked only against the physical floor, never a live routing authority — this check is advisory by design (config-gated, default OFF) and never fails a run",
+        "·  #6  Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips",
+        "·  #8  Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut",
+        "·  #9  Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party",
+        "·  #12 Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"
+      ],
+      "createdAt": "2026-08-29T07:52:00.521Z",
       "status": "active",
       "retiredAt": null
     }
