@@ -1,0 +1,40 @@
+name: September freeze policy
+
+# Trusted-base policy check for the Sep 20 feature freeze and Sep 27 backend code freeze.
+# pull_request_target is intentional here: this job checks metadata + changed filenames only and
+# checks out the BASE commit. It never executes or checks out PR-controlled code.
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled, ready_for_review]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: september-freeze-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  freeze-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out trusted base policy
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+      - name: Enforce September release window
+        if: github.event_name == 'pull_request_target'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/check-september-freeze.mjs
+      - name: Manual policy smoke check
+        if: github.event_name == 'workflow_dispatch'
+        run: node -e "import('./scripts/check-september-freeze.mjs').then(m => console.log(m.freezePhase('2026-09-27')))"
