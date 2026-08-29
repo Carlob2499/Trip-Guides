@@ -524,12 +524,10 @@ export async function routeToEvidenceOwner(slug, { detail = "", now = new Date()
   // critic was originally handed, not against its own retained edits now sitting in the branch.
   state.status = "failed";
   state.failure = { class: "gate-failure", detail, at: now };
-  // AUTONOMOUS, so the human-answer grant does not apply: this route must not turn the ordinary
-  // cap into a renewable one. The whole round trip is ONE dispatch — setup resumes at reconcile
-  // and runs reconcile → critic in the same workflow run — so it needs at most one attempt of
-  // headroom, and only when the run is already at its cap. The auto-retry reservation itself is
-  // untouched and still bounds how often this can happen at all.
-  if (state.attempts.total >= state.attempts.cap) state.attempts.cap = state.attempts.total + 1;
+  // This route is autonomous control-plane bookkeeping, not new spending authority. It may
+  // reassign the failed artifact to its real owner, but it MUST NOT mint attempt headroom. If the
+  // run is already at its quality-attempt cap, retryEligibility() leaves the routed failure
+  // visible and requires a human decision rather than manufacturing an unauthorized sixth try.
   recomputeResume(state);
   await save(touch(state, now), intakeDir);
   return state;
