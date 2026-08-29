@@ -170,6 +170,8 @@ Current state:
 
 The Fukuoka failure is the current production-readiness fact. It does not erase the historical V01–V07 evidence, and it does not authorize continuing the failed branch past its cap. Two deterministic repository defects found in independent closeout review are fixed separately: the Claude↔Codex watcher missing-artifact YAML fallback and the autonomous evidence-owner +1 cap escape hatch.
 
+**Post-Fukuoka model-input remediation:** PR #117 defines a deliberately new, hash-pinned acceptance candidate rather than rewriting Fukuoka history. Same-stage validator findings are presented before broad research instructions; a retry is explicitly repair-first and preserves unaffected work; a `search-preview` provenance failure must be repaired by fetching/reading the true origin or honestly removing/flagging unsupported content rather than relabeling access; and Reconcile is no longer instructed to execute node/npm/offline gates its sandbox cannot run. The historical Fukuoka prompt blob SHAs remain pinned separately. This remediation itself grants **no** production authority: a future fresh acceptance canary must still prove clean Reconcile → Critic → landing on the new candidate.
+
 The important distinction is:
 
 - **draft product-path acceptance** is already green;
