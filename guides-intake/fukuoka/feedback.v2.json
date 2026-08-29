@@ -94,6 +94,17 @@
         "Stack trace:"
       ],
       "createdAt": "2026-08-29T08:07:17.118Z",
+      "status": "retired",
+      "retiredAt": "2026-08-29T08:25:42.425Z"
+    },
+    {
+      "runId": "fukuoka-20260829-7cb4fa",
+      "stage": "reconcile",
+      "attempt": 5,
+      "findings": [
+        "objective claim \"The \"Futamigaura Meoto-iwa-mae\" Showa Bus stop is discontinu\" (ev-showa-bus-stop-rename) cites an official source with access \"search-preview\" — a search preview referencing the official page is not a read of it; fetch the origin or record the block"
+      ],
+      "createdAt": "2026-08-29T08:25:42.425Z",
       "status": "active",
       "retiredAt": null
     }

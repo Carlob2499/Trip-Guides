@@ -11,9 +11,9 @@
   },
   "issue": null,
   "landMode": "pr",
-  "status": "running",
+  "status": "failed",
   "createdAt": "2026-08-29T00:17:35.510Z",
-  "updatedAt": "2026-08-29T08:22:18.396Z",
+  "updatedAt": "2026-08-29T08:25:42.423Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -105,9 +105,9 @@
       "failure": null
     },
     "reconcile": {
-      "status": "running",
+      "status": "failed",
       "startedAt": "2026-08-29T08:22:18.396Z",
-      "endedAt": null,
+      "endedAt": "2026-08-29T08:25:42.423Z",
       "attempts": 5,
       "model": "claude-sonnet-5",
       "effort": "high",
@@ -150,13 +150,17 @@
         {
           "attempt": 5,
           "startedAt": "2026-08-29T08:22:18.396Z",
-          "endedAt": null,
-          "status": "running",
-          "failureClass": null,
-          "durationSec": null
+          "endedAt": "2026-08-29T08:25:42.423Z",
+          "status": "failed",
+          "failureClass": "gate-failure",
+          "durationSec": 204
         }
       ],
-      "failure": null
+      "failure": {
+        "class": "gate-failure",
+        "detail": "objective claim \"The \"Futamigaura Meoto-iwa-mae\" Showa Bus stop is discontinu\" (ev-showa-bus-stop-rename) cites an official source with access \"search-preview\" — a search preview referencing the official page is not a read of it; fetch the origin or record the block",
+        "at": "2026-08-29T08:25:42.423Z"
+      }
     },
     "critic": {
       "status": "queued",
@@ -180,9 +184,13 @@
   },
   "resume": {
     "nextStage": "reconcile",
-    "action": "stage \"reconcile\" was running — validate its output; re-run it if incomplete"
+    "action": "re-run stage \"reconcile\" (failed: gate-failure) — a resumed run repeats the interrupted stage, never skips ahead"
   },
-  "failure": null,
+  "failure": {
+    "class": "gate-failure",
+    "detail": "objective claim \"The \"Futamigaura Meoto-iwa-mae\" Showa Bus stop is discontinu\" (ev-showa-bus-stop-rename) cites an official source with access \"search-preview\" — a search preview referencing the official page is not a read of it; fetch the origin or record the block",
+    "at": "2026-08-29T08:25:42.423Z"
+  },
   "publication": {
     "published": false,
     "publishedAt": null,
