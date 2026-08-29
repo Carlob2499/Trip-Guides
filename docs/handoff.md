@@ -4,12 +4,13 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-29)
-Uruguay Canary #4 remains GREEN as historical proof of the V2 draft-only product path. R03 remains accepted.
+Uruguay Canary #4 remains GREEN as historical proof of the V2 draft-only product path. R03 is fully accepted: authenticated escalation and the cancellation chain are proven.
 The separately authorized final release-readiness acceptance canary, Fukuoka `fukuoka-20260829-7cb4fa`, ran against accepted main `6fdae06af63e3890d7e147e13e08af056bb150b6` and **FAILED at Reconcile on model/content evidence provenance**. It ended at 5/5 quality attempts with the single auto-retry spent; critic and landing were never reached; publication remained false; main was unchanged.
 The authoritative run/accounting record is `docs/pipeline v2/FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md`. It corrects the dispatch SHA to `0a52ea1eb423f2d942b690942c3e9b62265b3c43` and records five manual resumes plus one system auto-retry across Actions #59–#65.
 The post-canary deterministic closeout fixes two independent defects without altering the failed research evidence: the watcher no-artifact YAML command is block-scalar safe, and autonomous evidence-owner routing may no longer extend the 5-attempt cap.
 V2 remains NOT READY FOR PRODUCTION CUTOVER. V1 stays the default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset. Do not launch another Fable acceptance canary, publish, merge the failed Fukuoka research branch, or enable V2 from this closeout.
 PR #115 remains a separate traveler-navigation/UI cleanup and is intentionally outside this backend repair.
+The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary. Durable shared decisions remain in `CONTEXT.md`; this capsule carries only the pointer.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
