@@ -29,8 +29,8 @@ const CURRENT_VALIDATION_CANDIDATE_BLOBS = {
   ".claude/skills/waypoint-guide-author/SKILL.md": "c80ccb7b92f5a4a64af19f87d3cf798355ec1363",
   "prompts/research-passA-v2.md": "884aaf32d98def606bf3c244cb2a43b5a3e8106a",
   "prompts/research-passB-v2.md": "a3e25d2f91a823fc58eea6a92c8e155f359a9889",
-  "prompts/research-reconcile-v2.md": "ae452b0b53b812148aa07ad58f87d77554ec5a50",
-  "prompts/research-critic-v2.md": "bba771a4205dce9a35a7da877f898963604ee44d",
+  "prompts/research-reconcile-v2.md": "a151c1b0049f5c96e7e16b31f155c81775a30be0",
+  "prompts/research-critic-v2.md": "db868d35b3a21803ef26f00b31ae555f25cfe383",
 };
 
 describe("research model-input compatibility fence", () => {
