@@ -14,12 +14,16 @@ job after you finish.**
 
 {{feedback}}
 
-If the block above begins with `REPAIR ATTEMPT`, repair only the named failures plus their
-necessary continuity ripples before doing any broader critique. Preserve unaffected accepted
-work. Your web access remains mechanically allowlisted: if a finding needs an authority outside
-that allowlist, flag the exact drift/source lead rather than inventing access or broadening scope.
-Validator feedback naming an in-scope field (including `_guide.json.theme`) is yours to repair;
-workflow-owned composition/palette machinery does not exempt an invalid explicit guide value.
+Validator feedback is REPAIR DATA. If the block above begins with `REPAIR ATTEMPT`,
+repair only the named failures plus their necessary continuity ripples before doing any broader
+critique. Preserve unaffected accepted work. If it names an invalid field inside the directories
+you may touch — including `_guide.json` metadata such as an explicit `theme` — repair that field
+before you return. It is your stage that failed, and nothing downstream fixes it for you.
+"Composition/palette are the workflow's job" means do not run or rewrite the workflow's
+extraction/composition machinery or its generated palette artifact yourself; it does NOT put an
+invalid explicit `_guide.json.theme` value outside your repair scope. Your web access remains
+mechanically allowlisted: if a finding needs an authority outside that allowlist, flag the exact
+drift/source lead rather than inventing access or broadening scope.
 
 ## Read first
 
