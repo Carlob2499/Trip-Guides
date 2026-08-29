@@ -35,9 +35,11 @@ describe("startOrResumeBranch — current control-plane on V2 resume", () => {
     const work = path.join(root, "work");
 
     git(root, "init", "--bare", remote);
-    git(root, "clone", remote, work);
+    git(root, "clone", "-c", "core.autocrlf=false", remote, work);
     git(work, "config", "user.name", "Waypoint Test");
     git(work, "config", "user.email", "waypoint@example.invalid");
+    // The assertion is byte-preservation, not Git's platform-specific checkout conversion.
+    git(work, "config", "core.autocrlf", "false");
 
     writeFileSync(path.join(work, "control-plane.txt"), "old-control-plane\n");
     git(work, "add", "control-plane.txt");
@@ -68,5 +70,5 @@ describe("startOrResumeBranch — current control-plane on V2 resume", () => {
     const localHead = git(work, "rev-parse", "HEAD");
     const remoteHead = git(work, "ls-remote", "origin", "refs/heads/research-v2/yamagata").split(/\s+/)[0];
     expect(remoteHead).toBe(localHead);
-  });
+  }, 30_000);
 });

@@ -745,7 +745,7 @@ describe("retry authority — a `yes` must always be able to name an auto-retrya
       if (decision.allowed) expect(AUTO_RETRYABLE_CLASSES).toContain(recorded);
       else expect(decision.reason).toBeTruthy();
     }
-  });
+  }, 30_000);
 
   it("the invariant would catch a disagreement, and its refusal is honest about being a bug", () => {
     // Simulating the regression Codex described: eligibility says yes for a cancelled stage.

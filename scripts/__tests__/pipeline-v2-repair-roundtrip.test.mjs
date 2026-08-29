@@ -78,13 +78,19 @@ function cli(cwd, args, env = {}) {
     temp repo and every git call it makes touches the fixture, never the real tree. */
 async function makeCheckout(name) {
   const dir = path.join(root, name);
-  execFileSync("git", ["clone", "-q", origin, dir]);
+  // Disable checkout conversion so the round-trip assertion tests durable bytes, not the
+  // developer machine's global core.autocrlf preference.
+  execFileSync("git", ["clone", "-c", "core.autocrlf=false", "-q", origin, dir]);
   git(dir, "config", "user.name", "test");
   git(dir, "config", "user.email", "test@example.com");
   await cp(path.join(REPO, "scripts"), path.join(dir, "scripts"), { recursive: true });
   await cp(path.join(REPO, "src", "lib"), path.join(dir, "src", "lib"), { recursive: true }); // the CLI imports it
   await cp(path.join(REPO, "package.json"), path.join(dir, "package.json"));
-  if (!existsSync(path.join(dir, "node_modules"))) await symlink(path.join(REPO, "node_modules"), path.join(dir, "node_modules"));
+  if (!existsSync(path.join(dir, "node_modules"))) {
+    // Directory symlinks require elevated privileges on Windows; a junction has the same
+    // fixture semantics and is permitted for ordinary users. Keep a real symlink on runners.
+    await symlink(path.join(REPO, "node_modules"), path.join(dir, "node_modules"), process.platform === "win32" ? "junction" : "dir");
+  }
   return dir;
 }
 

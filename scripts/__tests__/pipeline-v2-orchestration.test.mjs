@@ -32,6 +32,12 @@ import { writeCoverage } from "../pipeline/v2/coverage.mjs";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const SLUG = "testland";
+const BASH = process.platform === "win32"
+  ? [process.env.ProgramFiles, process.env["ProgramFiles(x86)"]]
+    .filter(Boolean)
+    .map((root) => path.join(root, "Git", "bin", "bash.exe"))
+    .find((candidate) => existsSync(candidate)) || "bash"
+  : "bash";
 
 // ── a real repo fixture: scaffold commit, then Pass-A commit ────────────────
 
@@ -306,7 +312,7 @@ describe("routing + bounded attempts survive a resume (state on disk)", () => {
 // ── workflow wiring — the YAML carries the isolation, pinned as text ─────────
 
 describe("research-pass-v2.yml — wiring", () => {
-  const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
+  const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8").replace(/\r\n/g, "\n");
 
   it("is dispatchable + callable ONLY — and only new-guide.yml calls it (the trusted product entry)", () => {
     expect(text).toContain("workflow_dispatch:");
@@ -444,7 +450,7 @@ describe("research-pass-v2.yml — wiring", () => {
 // ── R-A: paid critic work survives a deterministic critic-truth failure ──────
 
 describe("research-pass-v2.yml — a routed evidence-owner replay does not re-spend the critic (R-A)", () => {
-  const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
+  const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8").replace(/\r\n/g, "\n");
   const criticJob = text.split(/^ {2}critic:$/m)[1].split(/^ {2}land:$/m)[0];
   const step = (name) => criticJob.split(new RegExp(`^ {6}- name: ${name}$`, "m"))[1]?.split(/^ {6}- name: /m)[0] ?? "";
 
@@ -476,7 +482,7 @@ describe("research-pass-v2.yml — a routed evidence-owner replay does not re-sp
 });
 
 describe("research-pass-v2.yml — a critic-truth failure retains the paid critic pass (R-A)", () => {
-  const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
+  const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8").replace(/\r\n/g, "\n");
 
   /** The `Collect allowed output…` step's real shell body, dedented so it can be executed. */
   function finishScript() {
@@ -534,9 +540,11 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
 
     let status = 0;
     try {
-      execFileSync("bash", [path.join(root, "finish.sh")], {
+      execFileSync(BASH, [path.join(root, "finish.sh")], {
         cwd: collect,
-        env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, SLUG: "tottori", BRANCH: "research-v2/tottori", GITHUB_WORKSPACE: ws, RUNNER_TEMP: temp },
+        // Preserve the host PATH delimiter: this test executes a bash workflow body on both
+        // Linux runners and Windows developer machines.
+        env: { ...process.env, PATH: [bin, process.env.PATH].join(path.delimiter), SLUG: "tottori", BRANCH: "research-v2/tottori", GITHUB_WORKSPACE: ws, RUNNER_TEMP: temp },
       });
     } catch (err) { status = err.status; }
     return { root, collect, temp, status, calls: readFileSync(path.join(temp, "calls.txt"), "utf8") };

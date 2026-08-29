@@ -28,8 +28,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
-const WORKFLOW = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
+// Workflow parsing is a line-oriented contract. Normalize checkout line endings so the same
+// assertions exercise the YAML on Windows (core.autocrlf=true) and Linux runners.
+const WORKFLOW = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8").replace(/\r\n/g, "\n");
 const SLUG = "tottori";
+const BASH = process.platform === "win32"
+  ? [process.env.ProgramFiles, process.env["ProgramFiles(x86)"]]
+    .filter(Boolean)
+    .map((root) => path.join(root, "Git", "bin", "bash.exe"))
+    .find((candidate) => existsSync(candidate)) || "bash"
+  : "bash";
 const RETAINED_GUIDE = '[{"title":"Key transit routes","source_url":"https://hinomarubus.co.jp/timetable_route/3450/?tab=2"}]\n';
 const RETAINED_HANDOFF = '{"corrections":[{"target":"05-transit.json#/0/source_url"}]}\n';
 
@@ -179,10 +187,13 @@ async function runCriticJob({ replay }) {
     const cwd = /working-directory: collect/.test(step.body) ? collect : ws;
     let status = 0;
     try {
-      execFileSync("bash", [script], {
+      execFileSync(BASH, [script], {
         cwd: step.name.startsWith("Collect allowed output") || step.name.startsWith("Record agent failure") ? collect : cwd,
         env: {
-          ...process.env, PATH: `${bin}:${process.env.PATH}`,
+          // The workflow body runs under bash, but Vitest may be launched from Windows where
+          // PATH entries are semicolon-delimited. Use the host delimiter so the command stubs
+          // are discoverable on both platforms.
+          ...process.env, PATH: [bin, process.env.PATH].join(path.delimiter),
           SLUG, BRANCH: `research-v2/${SLUG}`, GITHUB_WORKSPACE: ws, RUNNER_TEMP: temp,
           GITHUB_OUTPUT: ghOutput, GITHUB_REPOSITORY: "Carlob2499/Trip-Guides",
           WP_TEST_REPLAY: String(replay),
