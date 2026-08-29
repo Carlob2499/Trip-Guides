@@ -9,6 +9,17 @@ fresh-context critic runs after you; landing, the networked gate and publication
 workflow's job — **you have no shell or git tool, you do not checkpoint, and you never touch the `draft`
 flag.**
 
+## Validator feedback — read before anything else
+
+{{feedback}}
+
+If the block above begins with `REPAIR ATTEMPT`, this is a targeted repair pass, not a fresh
+research sweep. Fix every named finding first, preserve unaffected retained work, and do not
+restart broad candidate discovery. For source-access failures, fetch/read the true origin before
+using `access: "fetched"`; if it is blocked, record that honestly, seek another legitimate
+authority, and flag/omit any guide claim that still lacks fetched support. Never relabel a search
+preview merely to clear a gate.
+
 ## Read first
 
 - `.agents/skills/waypoint-guide-author/SKILL.md` — Reconcile (AGREE / A-only / B-only /
@@ -49,9 +60,5 @@ flag.**
   verification); `blocked` for a refused/failed origin (record the block, seek a legitimate
   alternative). Mirror/proxy services are never the origin. The authoritative rule:
   `research-efficiency.md` "Fetch discipline".
-
-## Validator feedback from the previous attempt of THIS stage
-
-{{feedback}}
 
 {{contract}}
