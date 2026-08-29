@@ -12,6 +12,8 @@ This file is the durable technical state of Pipeline V2. It records **what exist
 
 **Final release-readiness acceptance canary: FAILED — MODEL / CONTENT (Fukuoka, 2026-08-29).**
 
+**Fresh post-remediation acceptance candidate: KUMAMOTO — PRE-FLIGHT GREEN; MODEL RUN PENDING.**
+
 V2 exists beside V1. V1 remains the production default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. V2 is selected by the trusted `/new` path only when the selector is explicitly `v2`; manual V2 dispatch remains `landMode=pr` and cannot become production authority.
 
 The accepted live canary is **Uruguay / Canary #4**:
@@ -170,7 +172,9 @@ Current state:
 
 The Fukuoka failure is the current production-readiness fact. It does not erase the historical V01–V07 evidence, and it does not authorize continuing the failed branch past its cap. Two deterministic repository defects found in independent closeout review are fixed separately: the Claude↔Codex watcher missing-artifact YAML fallback and the autonomous evidence-owner +1 cap escape hatch.
 
-**Post-Fukuoka model-input remediation:** PR #117 defines a deliberately new, hash-pinned acceptance candidate rather than rewriting Fukuoka history. Same-stage validator findings are presented before broad research instructions; a retry is explicitly repair-first and preserves unaffected work; a `search-preview` provenance failure must be repaired by fetching/reading the true origin or honestly removing/flagging unsupported content rather than relabeling access; and Reconcile is no longer instructed to execute node/npm/offline gates its sandbox cannot run. The historical Fukuoka prompt blob SHAs remain pinned separately. This remediation itself grants **no** production authority: a future fresh acceptance canary must still prove clean Reconcile → Critic → landing on the new candidate.
+**Post-Fukuoka model-input remediation:** PR #117 is merged and defines a deliberately new, hash-pinned acceptance candidate rather than rewriting Fukuoka history. Same-stage validator findings are presented before broad research instructions; a retry is explicitly repair-first and preserves unaffected work; a `search-preview` provenance failure must be repaired by fetching/reading the true origin or honestly removing/flagging unsupported content rather than relabeling access; Reconcile is no longer instructed to execute node/npm/offline gates its sandbox cannot run; and map-placeholder retries use a narrow, no-guess targeted fetch path. The historical Fukuoka prompt blob SHAs remain pinned separately.
+
+**Kumamoto preflight:** a fresh acceptance scaffold was built from corrected main `82d8d78a6411c2d8c944087df598ccf03afec940` and frozen on `acceptance/v2-kumamoto-20260902` at `99d758756a2f4a53fef5f3072d72388da4ebdb17`. The first preflight (closed PR #118) exposed a deterministic hostile-copy viewport failure; PR #119 repaired the owning Atlas text-wrap rule on main; the candidate was rebuilt from that corrected main. Closed PR #120 then passed Tests, Accessibility, CodeQL actions, and CodeQL javascript-typescript on the exact frozen head. No model-backed Kumamoto workflow has been dispatched, so this is **preflight proof, not release-readiness acceptance**.
 
 The important distinction is:
 
@@ -218,4 +222,4 @@ Read together:
 - `../reference/pipeline.md` — durable lifecycle policy.
 - `../handoff.md` — current warm start.
 
-**Next engineering surface:** the final release-readiness Fukuoka canary has now run and failed on model-produced evidence provenance before critic/landing. Preserve that branch as failed evidence; do not continue it past 5/5, do not infer production authority, and do not launch another full Fable canary merely to chase the same run green. This deterministic closeout repairs the watcher no-artifact YAML seam and removes autonomous evidence-owner cap extension, then returns the repository to a truthful blocked state. A future model/content remediation and acceptance run require separate justification/authority. V1 remains the production default and rollback path until production cutover is explicitly accepted.
+**Next engineering surface:** the deterministic preflight program is complete for the rebuilt Kumamoto candidate. The next backend milestone is one fresh, model-backed release-readiness run from frozen ref `acceptance/v2-kumamoto-20260902` at `99d758756a2f4a53fef5f3072d72388da4ebdb17`, using the pre-registered criteria in `FINAL_V2_ACCEPTANCE_KUMAMOTO.md`. Do not mutate that candidate, continue Fukuoka, extend the quality cap, hand-edit model-owned output, change the production selector, publish, or merge the canary. A deterministic implementation defect during the run invalidates the evidence and requires repair on main plus a newly rebuilt candidate; a genuine bounded model/content failure is recorded as such. V1 remains the production default and rollback path until a fresh acceptance passes and production cutover is explicitly approved.
