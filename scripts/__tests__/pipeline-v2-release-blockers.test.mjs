@@ -63,7 +63,12 @@ beforeEach(async () => {
   g("remote", "add", "origin", origin);
   g("push", "-q", "-u", "origin", "main");
 }, 30_000);
-afterEach(async () => { await rm(dir, { recursive: true, force: true }); });
+// Real Git subprocesses can still be releasing packfiles when Vitest starts teardown under
+// full-suite contention. Node's recursive rm retry contract handles transient ENOTEMPTY/EBUSY
+// without hiding assertion failures or weakening any release-blocker behavior under test.
+afterEach(async () => {
+  await rm(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
+});
 
 const gitAt = (cwd) => (args) => execFileSync("git", args, { cwd, encoding: "utf8" });
 const showOrigin = (ref, rel) =>
@@ -173,8 +178,7 @@ describe("B1 — answers-route: an active Run B owns answers even when Run A is 
     await seedOriginBranch(BRANCH, {
       [`guides-intake/${SLUG}/run.v2.json`]: JSON.stringify({
         runId: `${SLUG}-20260810-aaa111`, status: "complete",
-        landing: { outcome: "merged", pr: 80, mergedAt: "2026-08-10T10:00:00Z" },
-        publication: { published: true },
+        landing: { outcome: "merged", pr: 80, mergedAt: "2026-08-10T10:00:00Z" }, publication: { published: true },
       }),
     });
     const d = await route();
