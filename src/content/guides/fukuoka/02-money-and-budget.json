@@ -54,7 +54,10 @@
         "low": 0,
         "high": 1500,
         "per": "person",
-        "note": "Most sights on this itinerary (shrines, parks, the coast) are free; museum entry is ¥700"
+        "note": "Most sights on this itinerary (shrines, parks, the coast) are free; museum entry is ¥700",
+        "source_url": "https://www.kyuhaku.jp/visit/visit_top.html",
+        "verified_on": "2026-08-29",
+        "shelf_life": "hours"
       },
       {
         "label": "Flights — round trip",

@@ -47,14 +47,14 @@
         "name": "Fukuoka Airport",
         "lat": 33.58444,
         "lng": 130.45167,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "W529445584",
         "local_script_name": "福岡空港"
       },
       {
         "name": "Hakata Station",
         "lat": 33.589803,
         "lng": 130.420681,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "W72653571",
         "local_script_name": "博多駅"
       },
       {
@@ -68,7 +68,7 @@
         "name": "Sakurai Futamigaura (Itoshima)",
         "lat": 33.640472,
         "lng": 130.196639,
-        "place_id": "__VERIFICATION_REQUIRED__",
+        "place_id": "N6386259585",
         "local_script_name": "桜井二見ヶ浦"
       }
     ]
