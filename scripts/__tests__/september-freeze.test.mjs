@@ -15,12 +15,13 @@ describe("September freeze policy", () => {
     expect(easternDate(new Date("2026-09-20T04:30:00Z"))).toBe("2026-09-20");
   });
 
-  it("enters the feature freeze Sep 20 and backend code freeze Sep 27", () => {
+  it("enters the feature freeze Sep 20, backend code freeze Sep 27, and expires Oct 1", () => {
     expect(freezePhase("2026-09-19")).toBe("open");
     expect(freezePhase("2026-09-20")).toBe("feature-freeze");
     expect(freezePhase("2026-09-26")).toBe("feature-freeze");
     expect(freezePhase("2026-09-27")).toBe("code-freeze");
-    expect(freezePhase("2026-10-01")).toBe("code-freeze");
+    expect(freezePhase("2026-09-30")).toBe("code-freeze");
+    expect(freezePhase("2026-10-01")).toBe("open");
   });
 
   it("classifies backend/product/control-plane paths, including locked doctrine Markdown", () => {
@@ -65,10 +66,10 @@ describe("September freeze policy", () => {
     }
   });
 
-  it("requires release-blocker or owner waiver from Sep 27 onward", () => {
+  it("requires release-blocker or owner waiver from Sep 27 through Sep 30", () => {
     expect(evaluateFreeze({ date: "2026-09-27", labels: [STABILIZATION_LABEL], files: ["scripts/x.mjs"] }).allowed).toBe(false);
-    expect(evaluateFreeze({ date: "2026-09-27", labels: [RELEASE_BLOCKER_LABEL], files: ["scripts/x.mjs"] }).allowed).toBe(true);
-    expect(evaluateFreeze({ date: "2026-09-27", labels: [FREEZE_WAIVER_LABEL], files: ["scripts/x.mjs"] }).allowed).toBe(true);
+    expect(evaluateFreeze({ date: "2026-09-30", labels: [RELEASE_BLOCKER_LABEL], files: ["scripts/x.mjs"] }).allowed).toBe(true);
+    expect(evaluateFreeze({ date: "2026-09-30", labels: [FREEZE_WAIVER_LABEL], files: ["scripts/x.mjs"] }).allowed).toBe(true);
   });
 
   it("does not block status docs or guide-content-only work in either freeze", () => {
