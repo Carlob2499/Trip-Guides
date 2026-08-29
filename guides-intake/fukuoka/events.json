@@ -21,6 +21,26 @@
       "at": "2026-08-29T00:55:05.020Z",
       "kind": "reject",
       "text": "Pass A (canonical research) attempt 1 failed (usage-limit) — deterministic findings recorded for the retry"
+    },
+    {
+      "at": "2026-08-29T02:12:47.132Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-29T02:44:56.204Z",
+      "kind": "decision",
+      "text": "Pass A (canonical research) complete in 32m (attempt 2)"
+    },
+    {
+      "at": "2026-08-29T02:44:56.217Z",
+      "kind": "decision",
+      "text": "Candidate funnel: 22 evaluated · 21 shortlisted · 17 shipped · 5 rejected"
+    },
+    {
+      "at": "2026-08-29T02:44:56.217Z",
+      "kind": "decision",
+      "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     }
   ],
   "nuggets": [],

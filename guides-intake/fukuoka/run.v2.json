@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-29T00:17:35.510Z",
-  "updatedAt": "2026-08-29T02:12:47.132Z",
+  "updatedAt": "2026-08-29T02:44:56.217Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -45,13 +45,13 @@
       "failure": null
     },
     "passA": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-29T02:12:47.132Z",
-      "endedAt": null,
+      "endedAt": "2026-08-29T02:44:56.204Z",
       "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "924d5f7d5dcf1fd543d777610e0d87cd61ead767",
       "baseline": "7fb43984fca7f29cc9afedf67169ec16a87ae4da",
       "replay": false,
       "history": [
@@ -66,10 +66,10 @@
         {
           "attempt": 2,
           "startedAt": "2026-08-29T02:12:47.132Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-29T02:44:56.204Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 1929
         }
       ],
       "failure": null
@@ -121,8 +121,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passA",
-    "action": "stage \"passA\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "passB",
+    "action": "run stage \"passB\""
   },
   "failure": null,
   "publication": {
@@ -145,5 +145,30 @@
     "checkedAt": null,
     "failure": null
   },
-  "telemetry": null
+  "telemetry": {
+    "schemaVersion": "wp-telemetry/2.1",
+    "stages": {
+      "passA": {
+        "durationSec": 1929,
+        "failedDurationSec": 2218,
+        "cumulativeDurationSec": 4147,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": 1,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
+      }
+    },
+    "counts": {
+      "candidatesConsidered": 22,
+      "candidatesDeepVerified": 21,
+      "factsVerified": 64,
+      "disagreementInvestigations": 0,
+      "nativeLanguageSearches": null
+    },
+    "totalDurationSec": 8841,
+    "tokens": null,
+    "costUsd": null
+  }
 }
