@@ -1,0 +1,84 @@
+{
+  "slug": "kumamoto",
+  "generatedAt": "2026-08-29T10:14:45.498Z",
+  "asks": [
+    {
+      "id": "cities",
+      "label": "Cities",
+      "value": "Kumamoto, Aso, Kurokawa Onsen",
+      "coveredBy": null
+    },
+    {
+      "id": "dates",
+      "label": "Trip dates",
+      "value": "2026-11-09 – 2026-11-13",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-1",
+      "label": "Priority #1",
+      "value": "Food & dining",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-2",
+      "label": "Priority #2",
+      "value": "Culture / history",
+      "coveredBy": null
+    },
+    {
+      "id": "priority-3",
+      "label": "Priority #3",
+      "value": "Nature / outdoors",
+      "coveredBy": null
+    },
+    {
+      "id": "niche",
+      "label": "Niche interest",
+      "value": "regional food, onsen etiquette, and public-transit mountain day trips",
+      "coveredBy": null
+    },
+    {
+      "id": "pace",
+      "label": "Pace",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "travel-style",
+      "label": "Travel style",
+      "value": "balanced",
+      "coveredBy": null
+    },
+    {
+      "id": "budget",
+      "label": "Budget target",
+      "value": "Mid-range; practical group costs",
+      "coveredBy": null
+    },
+    {
+      "id": "party",
+      "label": "Party description",
+      "value": "8 adults traveling together",
+      "coveredBy": null
+    },
+    {
+      "id": "travelers",
+      "label": "Number of travelers",
+      "value": "8",
+      "coveredBy": null
+    },
+    {
+      "id": "constraints",
+      "label": "Binding constraints",
+      "value": "One traveler needs alternatives to sustained stairs where verifiable.",
+      "coveredBy": null
+    },
+    {
+      "id": "comments",
+      "label": "Additional comments",
+      "value": "Returning Japan travelers; public transit preferred; moderate walking. Verify group reservations/capacity, transfers, last practical service, luggage friction, closures, accessibility, and onsen policy rather than assuming.",
+      "coveredBy": null
+    }
+  ]
+}

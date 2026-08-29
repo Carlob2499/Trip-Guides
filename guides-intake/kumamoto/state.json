@@ -1,0 +1,14 @@
+{
+  "slug": "kumamoto",
+  "createdAt": "2026-08-29T10:14:45.498Z",
+  "updatedAt": "2026-08-29T10:14:45.498Z",
+  "stages": {
+    "scaffold": "2026-08-29T10:14:45.498Z",
+    "passA": null,
+    "passB": null,
+    "reconcile": null,
+    "verified": null
+  },
+  "attempts": 0,
+  "notes": []
+}
