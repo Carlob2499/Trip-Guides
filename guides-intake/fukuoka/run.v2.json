@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-29T00:17:35.510Z",
-  "updatedAt": "2026-08-29T02:44:56.217Z",
+  "updatedAt": "2026-08-29T02:45:27.437Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -75,16 +75,25 @@
       "failure": null
     },
     "passB": {
-      "status": "queued",
-      "startedAt": null,
+      "status": "running",
+      "startedAt": "2026-08-29T02:45:27.437Z",
       "endedAt": null,
-      "attempts": 0,
-      "model": null,
-      "effort": null,
+      "attempts": 1,
+      "model": "claude-sonnet-5",
+      "effort": "high",
       "commit": null,
-      "baseline": null,
+      "baseline": "4e7a17a952bff5ff9286bee0c2c842d7b21c50ba",
       "replay": false,
-      "history": [],
+      "history": [
+        {
+          "attempt": 1,
+          "startedAt": "2026-08-29T02:45:27.437Z",
+          "endedAt": null,
+          "status": "running",
+          "failureClass": null,
+          "durationSec": null
+        }
+      ],
       "failure": null
     },
     "reconcile": {
@@ -122,7 +131,7 @@
   },
   "resume": {
     "nextStage": "passB",
-    "action": "run stage \"passB\""
+    "action": "stage \"passB\" was running — validate its output; re-run it if incomplete"
   },
   "failure": null,
   "publication": {
