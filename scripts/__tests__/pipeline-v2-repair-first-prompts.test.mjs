@@ -38,6 +38,14 @@ describe("post-Fukuoka repair-first model inputs", () => {
     expect(prompt).toMatch(/Never relabel a search preview merely to clear a gate/i);
   });
 
+  it("does not tell Reconcile to run gates its sandbox cannot execute", () => {
+    const prompt = read("prompts/research-reconcile-v2.md");
+    expect(prompt).toMatch(/no shell or git tool/i);
+    expect(prompt).toMatch(/Do not spend time attempting node\/npm\/shell commands/i);
+    expect(prompt).toMatch(/workflow runs offline verify\/build after you return/i);
+    expect(prompt).not.toMatch(/STOP when .*offline verify are done/i);
+  });
+
   it("keeps critic repair-first without widening its mechanical fetch authority", () => {
     const prompt = read("prompts/research-critic-v2.md");
     expect(prompt).toMatch(/mechanically allowlisted/i);
