@@ -14,7 +14,13 @@ export const STABILIZATION_LABEL = "stabilization";
 export const RELEASE_BLOCKER_LABEL = "release-blocker";
 export const FREEZE_WAIVER_LABEL = "freeze-waiver";
 
+// Files whose text changes executable/agent product doctrine even though some are Markdown.
+// Status/evidence bookkeeping docs are intentionally NOT here so release truth can still be updated.
 const TOP_LEVEL_CODE = new Set([
+  "AGENTS.md",
+  "CLAUDE.md",
+  "PRODUCT.md",
+  "docs/pipeline v2/DECISIONS.md",
   "package.json",
   "package-lock.json",
   "astro.config.mjs",
@@ -41,8 +47,9 @@ export function freezePhase(date) {
 }
 
 /**
- * Backend/product code surface. Guide content and documentation remain editable because the
- * September tracker freezes engineering, not factual recertification or authority bookkeeping.
+ * Backend/product/control-plane surface. Guide content and release-status documentation remain
+ * editable because the September tracker freezes engineering, not factual recertification or
+ * honest authority/evidence bookkeeping. Locked doctrine Markdown is treated as code above.
  */
 export function isCodePath(file) {
   if (TOP_LEVEL_CODE.has(file)) return true;
