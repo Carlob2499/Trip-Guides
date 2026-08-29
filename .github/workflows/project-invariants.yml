@@ -18,7 +18,11 @@ on:
       - docs/pipeline v2/IMPLEMENTATION_STATE.md
       - docs/pipeline v2/SEPTEMBER_TRACKER.md
       - scripts/check-project-invariants.mjs
+      - scripts/check-september-freeze.mjs
+      - scripts/__tests__/september-freeze.test.mjs
       - .github/workflows/project-invariants.yml
+      - .github/workflows/september-freeze.yml
+      - .github/workflows/ensure-labels.yml
       - .github/workflows/new-guide.yml
       - .github/workflows/research-pass.yml
       - .github/workflows/research-pass-v2.yml
