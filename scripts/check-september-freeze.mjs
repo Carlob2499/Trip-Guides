@@ -114,7 +114,7 @@ async function changedFiles({ repository, number, token }) {
 
 async function main() {
   const eventPath = process.env.GITHUB_EVENT_PATH;
-  if (!eventPath) return; // imported by tests/local tools
+  if (!eventPath) throw new Error("GITHUB_EVENT_PATH is required when the freeze checker is executed directly");
 
   const { readFile } = await import("node:fs/promises");
   const event = JSON.parse(await readFile(eventPath, "utf8"));
@@ -137,4 +137,9 @@ async function main() {
   if (!verdict.allowed) process.exitCode = 1;
 }
 
-await main();
+// Keep imports side-effect free. GitHub Actions invokes this file directly; Vitest imports the
+// exported policy functions without accidentally reading the Actions event or requiring a token.
+if (process.argv[1]) {
+  const { pathToFileURL } = await import("node:url");
+  if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();
+}
