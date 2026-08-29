@@ -2,13 +2,15 @@
 //
 // The tracker has two deliberately different freezes:
 //   Sep 20-26: FEATURE FREEZE — code changes must be stabilization/release work.
-//   Sep 27+:   BACKEND CODE FREEZE — code changes must be a release blocker or explicit owner waiver.
+//   Sep 27-30: BACKEND CODE FREEZE — code changes must be a release blocker or explicit owner waiver.
+// The special September freeze expires Oct 1; future release policy is a separate decision.
 //
 // This script is pure/testable at the policy seam and, when run by GitHub Actions, reads only the
 // trusted pull_request_target event + GitHub's changed-file API. It never executes PR-controlled code.
 
 const FEATURE_FREEZE = "2026-09-20";
 const CODE_FREEZE = "2026-09-27";
+const FREEZE_END = "2026-10-01";
 
 export const STABILIZATION_LABEL = "stabilization";
 export const RELEASE_BLOCKER_LABEL = "release-blocker";
@@ -41,7 +43,7 @@ export function easternDate(date = new Date()) {
 }
 
 export function freezePhase(date) {
-  if (date < FEATURE_FREEZE) return "open";
+  if (date < FEATURE_FREEZE || date >= FREEZE_END) return "open";
   if (date < CODE_FREEZE) return "feature-freeze";
   return "code-freeze";
 }
