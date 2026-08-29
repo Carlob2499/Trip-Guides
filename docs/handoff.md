@@ -4,13 +4,12 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-29)
-Uruguay Canary #4 remains GREEN historical proof of the V2 draft-only path. R03 is fully accepted: authenticated escalation and the cancellation chain are proven.
-Fukuoka `fukuoka-20260829-7cb4fa` remains a terminal **FAIL — MODEL / CONTENT** at Reconcile (5/5 quality attempts, 1/1 auto-retry); critic/landing never ran, publication stayed false. Preserve `research-v2/fukuoka`; never continue or repair-merge it.
-PR #116 deterministic closeout, PR #117 post-Fukuoka repair-first model-input remediation, and PR #122 blocked-evidence retirement repair are merged. Because #122 changed deterministic evidence handling after the first Kumamoto candidate was built, that earlier frozen candidate is invalid for dispatch.
-Fresh acceptance candidate: Kumamoto branch `acceptance/v2-kumamoto-20260902-r2`, frozen head `621dd43238d18b2b918827a9dca2268cd6f28c56`, accepted base `a171af0988a49e6f18f4c5e312c46b9a674ed189`. Closed-unmerged PR #123 exact-head preflight is GREEN: Tests run `33252721880`, Accessibility run `33252721875`, CodeQL `CodeQL`, `Analyze (actions)`, and `Analyze (javascript-typescript)` all PASS. No model-backed Kumamoto run has started.
-NEXT BACKEND ACTION: on Sep 2, manually dispatch `research-pass-v2.yml` from frozen acceptance ref `acceptance/v2-kumamoto-20260902-r2` for slug `kumamoto` with Sonnet 5/high and Opus 5/high critic. Do not dispatch the obsolete `acceptance/v2-kumamoto-20260902` candidate. No cap extension, artifact hand-edit, production repair inside the run, selector change, publication, or canary merge.
-PR #115 is closed/deferred outside backend acceptance. V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset.
-The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
+Uruguay Canary #4 remains GREEN historical proof of the V2 draft-only path. R03 escalation and cancellation are proven.
+Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL — MODEL / CONTENT at Reconcile (5/5 attempts, 1/1 auto-retry); critic/landing never ran; publication false. Preserve `research-v2/fukuoka`; never continue or repair-merge it.
+PRs #116/#117/#122 are merged. #122 changed deterministic evidence handling and invalidated the first Kumamoto candidate for dispatch.
+Current Kumamoto authority: `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`, based on `a171af0988a49e6f18f4c5e312c46b9a674ed189`. Closed-unmerged PR #123 exact-head preflight GREEN: Tests `33252721880`, Accessibility `33252721875`, CodeQL/actions/JS-TS PASS. No model-backed Kumamoto run has started.
+NEXT: Sep 2 dispatch `research-pass-v2.yml` exactly from that frozen r2 ref for `kumamoto`, Sonnet 5/high + Opus 5/high critic. Never dispatch superseded `acceptance/v2-kumamoto-20260902`; no cap extension, artifact edits, production repair inside run, selector change, publication, or canary merge.
+V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset. Reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
 Durable shared decisions: `CONTEXT.md`.
 <!-- WARM_START_END -->
 
