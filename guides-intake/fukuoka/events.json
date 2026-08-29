@@ -1,0 +1,28 @@
+{
+  "runId": "fukuoka-20260829-7cb4fa",
+  "fetches": [],
+  "decisions": [
+    {
+      "at": "2026-08-29T00:17:35.554Z",
+      "kind": "check",
+      "text": "Scaffold started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-29T00:17:35.568Z",
+      "kind": "decision",
+      "text": "Scaffold complete in 0s"
+    },
+    {
+      "at": "2026-08-29T00:18:06.627Z",
+      "kind": "check",
+      "text": "Pass A (canonical research) started (attempt 1 of 5)"
+    },
+    {
+      "at": "2026-08-29T00:55:05.020Z",
+      "kind": "reject",
+      "text": "Pass A (canonical research) attempt 1 failed (usage-limit) — deterministic findings recorded for the retry"
+    }
+  ],
+  "nuggets": [],
+  "counters": null
+}
