@@ -35,7 +35,7 @@ describe("post-Fukuoka repair-first model inputs", () => {
   ])("%s makes search-preview repair an evidence action, not a relabel", (file) => {
     const prompt = read(file);
     expect(prompt).toMatch(/fetch\/read the true origin/i);
-    expect(prompt).toMatch(/Never relabel a search preview merely to clear a gate/i);
+    expect(prompt).toMatch(/Never relabel a search\\s+preview merely to clear a gate/i);
   });
 
   it("does not tell Reconcile to run gates its sandbox cannot execute", () => {
@@ -49,7 +49,7 @@ describe("post-Fukuoka repair-first model inputs", () => {
   it("keeps critic repair-first without widening its mechanical fetch authority", () => {
     const prompt = read("prompts/research-critic-v2.md");
     expect(prompt).toMatch(/mechanically allowlisted/i);
-    expect(prompt).toMatch(/flag the exact drift\/source lead/i);
+    expect(prompt).toMatch(/flag the exact\\s+drift\\/source lead/i);
     expect(prompt).toMatch(/REPAIR DATA/i);
     expect(prompt).toContain("_guide.json.theme");
   });
