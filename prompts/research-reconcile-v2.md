@@ -51,7 +51,8 @@ preview merely to clear a gate.
 - Apply the deterministic constraints you can prove from the artifacts. The workflow runs offline
   verify and build after your output; never silence a flag you cannot source — downgrade to `⚠`
   or omit.
-- STOP when the merge, dispositions, coverage and offline verify are done. Do not run the
+- STOP when the merge, dispositions, coverage, and your artifact-level self-check are done. The
+  workflow runs offline verify/build after you return. Do not attempt shell/node/npm, do not run the
   networked verify, do not commit, do not land.
 - Touch nothing outside `src/content/guides/{{slug}}/` and `guides-intake/{{slug}}/`.
 
