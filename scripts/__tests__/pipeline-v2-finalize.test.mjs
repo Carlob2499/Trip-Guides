@@ -360,6 +360,26 @@ describe("P2 — fetched vs discovered vs blocked; a mirror is never the origin"
     expect(blockedCurrentEvidenceProblems(superseded)).toEqual([]);
   });
 
+  it("does not let a non-qualifying replacement retire blocked evidence", () => {
+    const blocked = rec({}, { access: "blocked" });
+    const weakReplacement = rec({
+      id: "e-weak-replacement",
+      claim: blocked.claim,
+      origin: "reconcile",
+    }, { access: "search-preview" });
+    const doc = base({
+      evidence: [blocked, weakReplacement],
+      reconciliation: [{
+        findingId: weakReplacement.id,
+        disposition: "replace",
+        note: "Weak replacement must not retire the blocked record.",
+        corroborates: { kind: "none", evidenceIds: [] },
+        supersedes: { kind: "evidence", evidenceIds: [blocked.id] },
+      }],
+    });
+    expect(blockedCurrentEvidenceProblems(doc).join("\n")).toMatch(/blocked access is audit bookkeeping, not proof/);
+  });
+
   it("an announced event date (appliesToYears) requires the announcement to have been READ", () => {
     const e = rec({ claim: "Festival runs Oct 10, 2027" }, { access: "blocked", publishedAt: "2027-01-01", appliesToYears: [2027] });
     const problems = sourceAccessProblems(base({ evidence: [e] }));
