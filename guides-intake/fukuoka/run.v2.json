@@ -13,7 +13,7 @@
   "landMode": "pr",
   "status": "running",
   "createdAt": "2026-08-29T00:17:35.510Z",
-  "updatedAt": "2026-08-29T03:12:33.817Z",
+  "updatedAt": "2026-08-29T03:36:30.173Z",
   "stageOrder": [
     "scaffold",
     "passA",
@@ -75,13 +75,13 @@
       "failure": null
     },
     "passB": {
-      "status": "running",
+      "status": "complete",
       "startedAt": "2026-08-29T03:12:33.817Z",
-      "endedAt": null,
+      "endedAt": "2026-08-29T03:36:30.154Z",
       "attempts": 2,
       "model": "claude-sonnet-5",
       "effort": "high",
-      "commit": null,
+      "commit": "0152ac886fbe0e92e3b8aaf64d87752cba15aa36",
       "baseline": "4e7a17a952bff5ff9286bee0c2c842d7b21c50ba",
       "replay": false,
       "history": [
@@ -96,10 +96,10 @@
         {
           "attempt": 2,
           "startedAt": "2026-08-29T03:12:33.817Z",
-          "endedAt": null,
-          "status": "running",
+          "endedAt": "2026-08-29T03:36:30.154Z",
+          "status": "complete",
           "failureClass": null,
-          "durationSec": null
+          "durationSec": 1436
         }
       ],
       "failure": null
@@ -138,8 +138,8 @@
     "autoRetryCap": 1
   },
   "resume": {
-    "nextStage": "passB",
-    "action": "stage \"passB\" was running — validate its output; re-run it if incomplete"
+    "nextStage": "reconcile",
+    "action": "run stage \"reconcile\""
   },
   "failure": null,
   "publication": {
@@ -175,6 +175,17 @@
         "toolCalls": null,
         "searches": null,
         "fetches": null
+      },
+      "passB": {
+        "durationSec": 1436,
+        "failedDurationSec": 1541,
+        "cumulativeDurationSec": 2977,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "retries": 1,
+        "toolCalls": null,
+        "searches": null,
+        "fetches": null
       }
     },
     "counts": {
@@ -184,7 +195,7 @@
       "disagreementInvestigations": 0,
       "nativeLanguageSearches": null
     },
-    "totalDurationSec": 8841,
+    "totalDurationSec": 11935,
     "tokens": null,
     "costUsd": null
   }

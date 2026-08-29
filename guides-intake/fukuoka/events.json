@@ -43,12 +43,22 @@
       "text": "Pass B (independent research) attempt 1 failed (void-run) — deterministic findings recorded for the retry"
     },
     {
-      "at": "2026-08-29T03:11:08.211Z",
+      "at": "2026-08-29T03:12:33.817Z",
+      "kind": "check",
+      "text": "Pass B (independent research) started (attempt 2 of 5)"
+    },
+    {
+      "at": "2026-08-29T03:36:30.154Z",
+      "kind": "decision",
+      "text": "Pass B (independent research) complete in 24m (attempt 2)"
+    },
+    {
+      "at": "2026-08-29T03:36:30.173Z",
       "kind": "decision",
       "text": "Candidate funnel: 22 evaluated · 21 shortlisted · 17 shipped · 5 rejected"
     },
     {
-      "at": "2026-08-29T03:11:08.211Z",
+      "at": "2026-08-29T03:36:30.173Z",
       "kind": "decision",
       "text": "Adaptive search stopped: trend \"duplicates\", unresolved evidence could not change the recommendation"
     }

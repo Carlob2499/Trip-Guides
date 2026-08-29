@@ -21,8 +21,8 @@
         "Pass B owes its artifact: guides-intake/fukuoka/passB.v2.json (transferred by collect-passb)"
       ],
       "createdAt": "2026-08-29T03:11:08.222Z",
-      "status": "active",
-      "retiredAt": null
+      "status": "retired",
+      "retiredAt": "2026-08-29T03:36:30.164Z"
     }
   ]
 }
