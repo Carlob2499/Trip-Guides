@@ -14,28 +14,42 @@ const gitBlobSha = (relativePath) => {
   return createHash("sha1").update(Buffer.concat([header, content])).digest("hex");
 };
 
-// The completed validation keeps its research doctrine/prompts frozen as historical authority.
-// The workflow itself is intentionally absent: the resulting deterministic repair program is
-// authorized to repair control-plane wiring without changing these model/research inputs.
-const VALIDATION_FROZEN_BLOBS = {
-  ".claude/skills/waypoint-guide-author/SKILL.md": "c80ccb7b92f5a4a64af19f87d3cf798355ec1363",
+// Fukuoka's exact prompt blobs remain historical evidence. The failed canary does not freeze
+// those model inputs forever: its terminal MODEL / CONTENT verdict authorizes a deliberate new
+// candidate. Pin the replacement here so later prompt drift is still impossible without an
+// explicit review that updates this fence.
+const FUKUOKA_HISTORICAL_PROMPT_BLOBS = {
   "prompts/research-passA-v2.md": "6c0dd96512473fd8172bfcf2760cf4f14fa7f6cb",
   "prompts/research-passB-v2.md": "9bf5e6a5d27cbf77442a086f75aa850e321142d0",
   "prompts/research-reconcile-v2.md": "69c720840117a85e2993ad718cee375560e38d37",
   "prompts/research-critic-v2.md": "47be1bf75b6032cf0ab96cde6c2759c6311d5017",
 };
 
-describe("pre-validation compatibility fence", () => {
-  for (const [file, sha] of Object.entries(VALIDATION_FROZEN_BLOBS)) {
-    it(`${file} remains the pre-registered validation candidate`, () => {
+const CURRENT_VALIDATION_CANDIDATE_BLOBS = {
+  ".claude/skills/waypoint-guide-author/SKILL.md": "c80ccb7b92f5a4a64af19f87d3cf798355ec1363",
+  "prompts/research-passA-v2.md": "884aaf32d98def606bf3c244cb2a43b5a3e8106a",
+  "prompts/research-passB-v2.md": "a3e25d2f91a823fc58eea6a92c8e155f359a9889",
+  "prompts/research-reconcile-v2.md": "b94836fb07136ebd62eae73c3d5028eae6fb7a07",
+  "prompts/research-critic-v2.md": "bba771a4205dce9a35a7da877f898963604ee44d",
+};
+
+describe("research model-input compatibility fence", () => {
+  for (const [file, sha] of Object.entries(CURRENT_VALIDATION_CANDIDATE_BLOBS)) {
+    it(`${file} remains the explicitly registered post-Fukuoka candidate`, () => {
       expect(gitBlobSha(file)).toBe(sha);
+    });
+  }
+
+  for (const [file, historicalSha] of Object.entries(FUKUOKA_HISTORICAL_PROMPT_BLOBS)) {
+    it(`${file} is deliberately different from the failed Fukuoka candidate`, () => {
+      expect(gitBlobSha(file)).not.toBe(historicalSha);
     });
   }
 });
 
 describe("skill routing contract", () => {
   it.each(["headless-passA", "headless-passB", "headless-reconcile", "headless-critic"])(
-    "%s keeps the full research stack while validation is pending",
+    "%s keeps the full research stack for the registered acceptance candidate",
     (mode) => {
       const route = routeSkillTask(mode);
       expect(route.skill).toBe("waypoint-guide-author");
