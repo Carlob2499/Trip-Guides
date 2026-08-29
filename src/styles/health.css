@@ -38,7 +38,7 @@
 .hl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
 .hl-item{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1rem 1.1rem}
 
-/* The stamp (SPEC-COMPONENTS §6 typography: Source Sans 3, .82rem, .08em, 640, 1px of its
+/* The stamp (SPEC-COMPONENTS §6 typography: the data face (--font-data), .82rem, .08em, 640, 1px of its
    own ink, square). The spec writes the size as .82rem; --text-control renders that exact value,
    so the token carries it rather than a literal the type-scale gate would have to except.
    --green and --warn are already contrast-tested on --card; support has no

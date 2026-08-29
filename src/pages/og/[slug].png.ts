@@ -23,7 +23,7 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
   // Palette mirrors base.css light-mode tokens (cartographic paper + map ink).
   // Quiet Edition parity (uniform application across surfaces): the title is a SERIF
   // (Liberation Serif standing in for Literata display) and the small data labels are a
-  // plain SANS (Liberation Sans standing in for Source Sans 3) — no webfonts in librsvg.
+  // plain SANS (Liberation Sans standing in for the data face) — no webfonts in librsvg.
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#e3e7dc"/>
   <rect x="0" y="0" width="8" height="630" fill="${accent}"/>

@@ -152,7 +152,7 @@
      display + body are BOTH Literata — one serif wearing both hats through its real
      optical-size axis (the `standard` fontsource variant carries wght+opsz, and
      font-optical-sizing:auto means big headings get the display cut, prose the text cut,
-     with zero per-rule settings). data = Source Sans 3, one quiet humanist sans for
+     with zero per-rule settings). data = Atkinson Hyperlegible Next, one hyperlegible humanist sans (chosen 2026-08-27, see docs/reference/design-system.md) for
      times/prices/coords/stamps/labels. Bricolage Grotesque and Spline Sans Mono retired
      here — grep for their names should find only this comment. */
   /* CJK fallback: Korea guide content renders real Hangul through all three roles (.addr-card-big
@@ -172,7 +172,7 @@
      rather than an invented font name. */
   --font-display:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
   --font-body:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
-  --font-data:'Source Sans 3 Variable',-apple-system,system-ui,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',sans-serif;
+  --font-data:'Atkinson Hyperlegible Next Variable',-apple-system,system-ui,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',sans-serif;
   /* Type SCALE — semantic size steps. Anchored to two values that were ALREADY load-bearing
      before this scale existed, not invented fresh: --text-body matches body's own font-size
      (which now READS the token, below, so the anchor is stated once instead of duplicated),

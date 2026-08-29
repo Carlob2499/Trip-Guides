@@ -32,7 +32,7 @@
 }
 .prov-popover[data-open] { display: block; }
 /* The label rows (Checked / Source / Evidence / Research / Status) are SPEC-COMPONENTS §2's
-   Stamp mark — Source Sans 3, .82rem, .08em, 640, "1px of its own ink, square" — the same
+   Stamp mark — the data face (--font-data), .82rem, .08em, 640, "1px of its own ink, square" — the same
    declaration set .checked-stamp (guide.css) and .mast-stamp already make. `.prov-popover`
    declares no font-family, so without the explicit --font-data these inherited the prose
    serif from their ancestor and rendered a data label in the reading voice, which SPEC rule 4
