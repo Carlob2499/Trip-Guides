@@ -4,8 +4,8 @@ Status: PRE-REGISTERED — CRITERIA FROZEN BEFORE DISPATCH
 
 Canary ID: v2-acceptance-kumamoto-20260902
 Slug: kumamoto
-Dispatch branch: acceptance/v2-kumamoto-20260902
-Accepted base: 82d8d78a6411c2d8c944087df598ccf03afec940
+Dispatch branch: acceptance/v2-kumamoto-20260902-r2
+Accepted base: a171af0988a49e6f18f4c5e312c46b9a674ed189
 
 Purpose:
 One fresh post-Fukuoka, post-remediation Pipeline V2 acceptance canary before
