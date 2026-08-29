@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "wp-feedback/2.0",
+  "slug": "fukuoka",
+  "entries": [
+    {
+      "runId": "fukuoka-20260829-7cb4fa",
+      "stage": "passB",
+      "attempt": 1,
+      "findings": [
+        "Pass B native-language audit is missing or incomplete"
+      ],
+      "createdAt": "2026-08-29T03:11:06.949Z",
+      "status": "active",
+      "retiredAt": null
+    }
+  ]
+}
