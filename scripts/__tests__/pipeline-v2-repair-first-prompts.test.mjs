@@ -46,6 +46,16 @@ describe("post-Fukuoka repair-first model inputs", () => {
     expect(prompt).not.toMatch(/STOP when .*offline verify are done/i);
   });
 
+  it("gives map-placeholder retries a narrow no-guess WebFetch path", () => {
+    const prompt = read("prompts/research-reconcile-v2.md");
+    expect(prompt).toContain("__VERIFICATION_REQUIRED__");
+    expect(prompt).toMatch(/do NOT\s+attempt `lookup-place\.mjs`/i);
+    expect(prompt).toMatch(/targeted authoritative map\/geocoder/i);
+    expect(prompt).toMatch(/matches the\s+point's name and existing coordinates/i);
+    expect(prompt).toMatch(/leave it unresolved rather than\s+guessing/i);
+    expect(prompt).toMatch(/not a reason to restart destination research/i);
+  });
+
   it("keeps critic repair-first without widening its mechanical fetch authority", () => {
     const prompt = read("prompts/research-critic-v2.md");
     expect(prompt).toMatch(/mechanically allowlisted/i);
