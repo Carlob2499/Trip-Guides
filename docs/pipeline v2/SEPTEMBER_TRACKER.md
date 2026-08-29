@@ -16,7 +16,7 @@ This file tracks delivery. It does not redefine Pipeline V2.
 - **Deterministic closeout:** independent review found and repaired two bounded repository defects without touching the failed Fukuoka research evidence: the Claude↔Codex watcher no-artifact YAML command and `routeToEvidenceOwner()`'s unauthorized autonomous +1 attempt-cap extension. Regression tests pin both, plus repeated usage-limit refund semantics.
 - **Core engine:** P01–P13 DONE.
 - **Integration:** I01–I05 have deterministic/live evidence; I06 remains open until explicit production cutover/V1 retirement approval.
-- **Reliability acceptance:** Uruguay Canary #4 and the targeted failure-only seams remain accepted historical proof. They do not override the later Fukuoka production-readiness failure.
+- **Reliability acceptance:** Uruguay Canary #4 remains accepted historical proof that the **draft product path GREEN** contract can complete, and the targeted escalation/cancellation failure-only seams remain proven. They do not override the later Fukuoka production-readiness failure.
 - **Production cutover:** NOT DONE / BLOCKED. `WAYPOINT_RESEARCH_ENGINE` remains unset/off; V1 remains the production default/rollback path. Fukuoka grants no publication, merge, or cutover authority.
 - **Preservation rule:** do not repair-and-merge `research-v2/fukuoka`, do not continue it past the cap, and do not launch a replacement Fable acceptance run from this closeout. See `FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md`.
 - **UI/design isolation:** PR #115 remains separate traveler-navigation work and is not part of this backend closeout.
