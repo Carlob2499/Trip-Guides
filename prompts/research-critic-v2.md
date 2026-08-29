@@ -20,8 +20,7 @@ critique. Preserve unaffected accepted work. If it names an invalid field inside
 you may touch — including `_guide.json` metadata such as an explicit `theme` — repair that field
 before you return. It is your stage that failed, and nothing downstream fixes it for you.
 "Composition/palette are the workflow's job" means do not run or rewrite the workflow's
-extraction/composition machinery or its generated palette artifact yourself; it does NOT put an
-invalid explicit `_guide.json.theme` value outside your repair scope. Your web access remains
+extraction/composition machinery or its generated palette artifact yourself; it does NOT put an invalid explicit `_guide.json.theme` value outside your repair scope. Your web access remains
 mechanically allowlisted: if a finding needs an authority outside that allowlist, flag the exact
 drift/source lead rather than inventing access or broadening scope.
 
