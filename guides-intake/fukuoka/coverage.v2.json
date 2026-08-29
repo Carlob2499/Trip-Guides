@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "fukuoka",
+  "runId": "fukuoka-20260829-7cb4fa",
+  "asks": [
+    {
+      "id": "cities",
+      "ask": "Fukuoka, Dazaifu, Itoshima",
+      "status": "covered",
+      "where": [
+        "01-plan.json#when-you-land",
+        "05-transit.json#key-transit-routes",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-fukuoka-airport-subway",
+        "ev-nishitetsu-tenjin-dazaifu-route",
+        "ev-itoshima-bus-taxi-reality"
+      ],
+      "reason": null
+    },
+    {
+      "id": "dates",
+      "ask": "2026-10-19 – 2026-10-23",
+      "status": "covered",
+      "where": [
+        "01-plan.json#weather-for-your-dates",
+        "01-plan.json#public-holidays-closures",
+        "06-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-no-national-holiday-window",
+        "ev-jma-october-normals"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-1",
+      "ask": "Food & dining",
+      "status": "covered",
+      "where": [
+        "08-food-and-shopping.json#what-to-eat",
+        "08-food-and-shopping.json#hakata-ramen-motsunabe-mentaiko",
+        "09-highlights.json#yatai-etiquette-the-real-rules",
+        "09-highlights.json#regional-specialties-in-one-place"
+      ],
+      "evidenceIds": [
+        "ev-ichiran-nakasu-address-hours",
+        "ev-motsunabe-kobayashi-course",
+        "ev-kizuimaru-venue-facts",
+        "ev-fukuya-nakasu-hours",
+        "ev-ichiran-locals-avoid-1"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-2",
+      "ask": "Culture / history",
+      "status": "covered",
+      "where": [
+        "07-sights.json#top-sights",
+        "07-sights.json#dazaifu-tenmangu",
+        "07-sights.json#kyushu-national-museum",
+        "07-sights.json#fukuoka-castle-ruins-maizuru-park",
+        "07-sights.json#kushida-shrine"
+      ],
+      "evidenceIds": [
+        "ev-dazaifu-tenmangu-free-and-hours",
+        "ev-kyuhaku-hours-and-price",
+        "ev-fukuoka-castle-park-hours",
+        "ev-kushida-shrine-hours-and-float"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-3",
+      "ask": "Nature / outdoors",
+      "status": "covered",
+      "where": [
+        "07-sights.json#ohori-park",
+        "07-sights.json#sakurai-futamigaura",
+        "07-sights.json#shiraito-falls",
+        "07-sights.json#nokonoshima-island-park"
+      ],
+      "evidenceIds": [
+        "ev-ohori-park-facts",
+        "ev-sakurai-futamigaura-access",
+        "ev-shiraito-falls-access",
+        "ev-nokonoshima-hours",
+        "ev-futamigaura-sunset-crowds-2"
+      ],
+      "reason": null
+    },
+    {
+      "id": "niche",
+      "ask": "yatai etiquette, regional specialties, and public-transit day trips",
+      "status": "covered",
+      "where": [
+        "09-highlights.json#yatai-etiquette-the-real-rules",
+        "09-highlights.json#regional-specialties-in-one-place",
+        "05-transit.json#key-transit-routes",
+        "06-days.json#dazaifu-day-trip-the-shrine-the-museum-the-approach-street",
+        "06-days.json#itoshima-day-trip-the-coast"
+      ],
+      "evidenceIds": [
+        "ev-yatai-group-size-official",
+        "ev-yatai-etiquette-headcount",
+        "ev-nakasu-tourist-pricing-1",
+        "ev-kizuimaru-venue-facts",
+        "ev-dazaifu-liner-bus",
+        "ev-itoshima-bus-taxi-reality"
+      ],
+      "reason": null
+    },
+    {
+      "id": "pace",
+      "ask": "balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "05-transit.json#last-trains-buffers"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "travel-style",
+      "ask": "balanced",
+      "status": "covered",
+      "where": [
+        "06-days.json#day-by-day",
+        "07-sights.json#what-generic-guides-get-wrong"
+      ],
+      "evidenceIds": [
+        "ev-nakasu-tourist-pricing-1",
+        "ev-dazaifu-crowd-timing-1",
+        "ev-komyozenji-access-suspended"
+      ],
+      "reason": null
+    },
+    {
+      "id": "budget",
+      "ask": "Mid-range; practical group costs",
+      "status": "covered",
+      "where": [
+        "02-money-and-budget.json#budget-daily-costs",
+        "02-money-and-budget.json#money-currency"
+      ],
+      "evidenceIds": [
+        "ev-seven-bank-atm",
+        "ev-tax-free-system-window"
+      ],
+      "reason": null
+    },
+    {
+      "id": "party",
+      "ask": "8 adults traveling together",
+      "status": "covered",
+      "where": [
+        "09-highlights.json#yatai-etiquette-the-real-rules",
+        "08-food-and-shopping.json#hakata-ramen-motsunabe-mentaiko",
+        "05-transit.json#ic-cards-tickets"
+      ],
+      "evidenceIds": [
+        "ev-yatai-group-size-official",
+        "ev-motsunabe-kobayashi-course",
+        "ev-kizuimaru-venue-facts",
+        "ev-ic-card-per-person-tap",
+        "ev-itoshima-bus-taxi-reality"
+      ],
+      "reason": null
+    },
+    {
+      "id": "travelers",
+      "ask": "8",
+      "status": "covered",
+      "where": [
+        "01-plan.json#booking-checklist",
+        "05-transit.json#ic-cards-tickets"
+      ],
+      "evidenceIds": [
+        "ev-ic-card-per-person-tap",
+        "ev-nimoca-card-details"
+      ],
+      "reason": null
+    },
+    {
+      "id": "comments",
+      "ask": "Returning Japan travelers; public transit preferred; moderate walking; verify reservations, group seating/capacity, last practical return times, closures, and availability rather than assuming.",
+      "status": "covered",
+      "where": [
+        "05-transit.json#last-trains-buffers",
+        "08-food-and-shopping.json#hakata-ramen-motsunabe-mentaiko",
+        "09-highlights.json#yatai-etiquette-the-real-rules"
+      ],
+      "evidenceIds": [
+        "ev-motsunabe-kobayashi-course",
+        "ev-kizuimaru-closure-note-unresolved",
+        "ev-itoshima-bus-taxi-reality",
+        "ev-chikuhi-line-last-train-caveat"
+      ],
+      "reason": null
+    }
+  ]
+}

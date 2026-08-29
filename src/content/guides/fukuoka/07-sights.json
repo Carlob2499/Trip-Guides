@@ -65,7 +65,7 @@
       {
         "name": "Sakurai Futamigaura",
         "kicker": "A shrine torii gate standing in the ocean",
-        "body": "<p>Itoshima's signature photo spot — two \"husband and wife\" rocks joined by a sacred rope ≈150m offshore, with a torii gate in the water. Free, best at sunset. Public buses run infrequently; a taxi or car is the practical way in.</p>",
+        "body": "<p>Itoshima's signature photo spot — two \"husband and wife\" rocks joined by a sacred rope ≈150m offshore, with a torii gate in the water. Free, best at sunset. Public buses run infrequently; a taxi or car is the practical way in. The sunset view draws real crowds and a parking lot that fills fast, especially around the summer solstice and weekend/holiday evenings — arrive at least an hour early, or visit midday/on a weekday to skip the worst of it.</p>",
         "map": { "lat": 33.640472, "lng": 130.196639 },
         "place_id": "__VERIFICATION_REQUIRED__",
         "dwell_min": 40,
@@ -119,6 +119,13 @@
         "correction": "Fukuoka's own tourism board recommends parties of 2–3 at a yatai and warns larger groups may be turned away outright — stalls seat roughly 8–10 total, including everyone else already there. An 8-person group needs to split up, not queue together.",
         "category": "missing-context",
         "source_url": "https://gofukuoka.jp/yatai-howto.html",
+        "verified_on": "2026-08-29"
+      },
+      {
+        "claim": "Komyozenji, the moss-garden temple next to Dazaifu Tenmangu, is a reliable quiet alternative worth building the day around.",
+        "correction": "It's genuinely calmer than the shrine whenever it's open — but a maintained English-language travel reference describes it as not regularly open to the public, and several visitors independently report finding the gate closed on arrival. Treat it as a zero-commitment \"check on arrival\" peek, not a planned stop.",
+        "category": "missing-context",
+        "source_url": "https://www.japan-guide.com/e/e4852.html",
         "verified_on": "2026-08-29"
       }
     ]

@@ -222,6 +222,136 @@
       "shortlisted": true,
       "reason": null,
       "worth": null
+    },
+    {
+      "id": "c-nakasu-yatai",
+      "name": "Nakasu Yatai",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Most photographed/famous yatai cluster, but two independent local sources describe it as catering to sightseeing groups with noticeably inflated prices and a rushed, crowded feel — the tourist-trap version of the exact experience this group's stated niche interest (yatai etiquette) wants to route around.",
+      "worth": null
+    },
+    {
+      "id": "c-tenjin-yatai",
+      "name": "Tenjin Yatai",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-nagahama-yatai",
+      "name": "Nagahama Yatai",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "Best pocket for the ramen-stall version of yatai specifically; corroborated as the most local of the three main districts.",
+      "worth": null
+    },
+    {
+      "id": "c-hakata-yatai-yokocho-kizuimaru--daimyo",
+      "name": "Hakata Yatai Yokocho Kizuimaru",
+      "branch": "Daimyo",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Indoor, all-weather mini-yatai space (6 stalls, ~10 seats each) that runs a 'taisho experience' group course for 7+ people — a direct answer to the real logistics problem a party of 8 has at an actual street yatai (which seat ~10 total and expect groups to ask first / split up). Shipped with a recheck flag: an aggregator listing separately noted a since-unconfirmed March 2026 renovation closure that the operator's own site does not currently reflect.",
+      "worth": "worth-the-effort"
+    },
+    {
+      "id": "c-ichiran",
+      "name": "Ichiran",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Two independent local sources (a resident forum thread and a local food blogger) describe Ichiran as pricier 'creative ramen' that doesn't fit the traditional Hakata/Nagahama/Kurume tonkotsu styles; residents default to cheaper, more traditional shops. Fails the bar as the generic default pick. Reconciled as a CONFLICT against Pass A's shipped Nakasu Souhonten — see disagreements[] — rather than a silent drop: Ichiran stays shipped for its T0-verified founding-shop/booth experience, with an authenticity note added pointing to Shin-Shin.",
+      "worth": null
+    },
+    {
+      "id": "c-shin-shin",
+      "name": "Shin-Shin",
+      "branch": null,
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "Founder trained across multiple Fukuoka yatai before opening in 2004; known locally for a lighter ('assari') tonkotsu broth distinct from the heavier tourist-chain norm, with a Tenjin honten that draws consistent local lines rather than only tour groups. Not shipped as a full venue entry — like Pass A's own c-shin-shin--tenjin finding, no official site could be climbed to a T0 source this pass for address/hours — but named as authenticity color against Ichiran.",
+      "worth": null
+    },
+    {
+      "id": "c-motsunabe-kobayashi",
+      "name": "Motsunabe Kobayashi",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Direct fit for this exact party size: the operator's own site advertises an all-you-can-drink motsunabe course with the organizer's meal free for parties of 8+, online booking available, 5 minutes from Nishitetsu Tenjin Station. Promoted to the Day 2 dinner anchor over Pass A's Motsunabe Rakutenchi, which has no group discount or booking mechanism; Rakutenchi is kept as the walk-in fallback.",
+      "worth": null
+    },
+    {
+      "id": "c-motsu-shigeru--akasaka",
+      "name": "Motsu Shigeru",
+      "branch": "Akasaka",
+      "priority": "food",
+      "status": "considered",
+      "shortlisted": false,
+      "reason": "Michelin-recognized, deeply loved locally for a motsu-sukiyaki twist on the standard dish — genuinely excellent per local sources, but no group-size incentive or clear large-party online booking path surfaced within this pass's budget. Worth remembering for a smaller-subgroup dinner rather than the full party of 8.",
+      "worth": null
+    },
+    {
+      "id": "c-fukuya",
+      "name": "Fukuya",
+      "branch": null,
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Independently reaches the same shop Pass A shipped as c-fukuya--nakasu-main-store, plus community-ties color (the founder helped establish Nakasu's Hakata Gion Yamakasa contingent).",
+      "worth": null
+    },
+    {
+      "id": "c-komyozenji",
+      "name": "Komyozenji",
+      "branch": null,
+      "priority": "culture",
+      "status": "detour",
+      "shortlisted": true,
+      "reason": "Genuinely quieter, moss-garden alternative literally next door to Dazaifu Tenmangu's crowds — but a maintained English travel reference (updated 2025) currently describes it as not regularly open to the public, consistent with several 2021-2023 firsthand reports of an unexpectedly closed gate. Ship only as a zero-detour 'check on arrival' peek, never as a planned stop.",
+      "worth": null
+    },
+    {
+      "id": "c-nokonoshima-island",
+      "name": "Nokonoshima Island",
+      "branch": null,
+      "priority": "nature",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "Independently reaches the same island Pass A shipped as c-nokonoshima-island-park; corroborates the ferry connection and adds the sparse-connector-bus caveat.",
+      "worth": null
+    },
+    {
+      "id": "c-oguchi-beach",
+      "name": "Oguchi Beach",
+      "branch": null,
+      "priority": "nature",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Aggregator-listed as a quieter alternative to Futamigaura ~10 minutes away, but a second independent search collided with an unrelated Shima (Mie Prefecture) region and produced no genuine second corroborating source for the 'quieter' claim within this pass's budget. Left as an unproven lead, not shipped.",
+      "worth": null
+    },
+    {
+      "id": "c-dazaifu-liner-bus-tabito",
+      "name": "Dazaifu Liner Bus Tabito",
+      "branch": null,
+      "priority": "transit",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Direct, no-transfer alternative to the standard Nishitetsu Tenjin→Futsukaichi→Dazaifu train transfer, departing Hakata Bus Terminal (and Fukuoka Airport) — corroborates Pass A's own ev-dazaifu-liner-tabito finding; the guide already ships this as the Day 3 route.",
+      "worth": null
     }
   ],
   "evidence": [
@@ -716,7 +846,7 @@
     {
       "id": "ev-yatai-time-pressure-1",
       "candidateId": null,
-      "claim": "If a seat is held for a long time without much ordering when the stall is busy, someone else may lose their chance — turnover is a real etiquette expectation, don't linger once finished",
+      "claim": "Turnover pressure at a busy yatai is real — don't hold a seat without ordering much, and free it promptly once you've finished eating so someone else can sit",
       "kind": "experiential",
       "origin": "passA",
       "source": {
@@ -740,7 +870,7 @@
     {
       "id": "ev-yatai-time-pressure-2",
       "candidateId": null,
-      "claim": "Turnover pressure at a busy yatai is real — don't stay too long, and free your seat promptly once you're finished eating",
+      "claim": "Turnover pressure at a busy yatai is real — don't hold a seat without ordering much, and free it promptly once you've finished eating so someone else can sit",
       "kind": "experiential",
       "origin": "passA",
       "source": {
@@ -1772,9 +1902,658 @@
         "shelfLife": "transit",
         "recheckOn": "2026-10-15"
       }
+    },
+    {
+      "id": "ev-nakasu-tourist-pricing-1",
+      "candidateId": "c-nakasu-yatai",
+      "claim": "Compared to Tenjin, Nakasu's yatai cater more heavily to sightseeing/tour groups, with noticeably inflated prices and a busier, less conversational atmosphere.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://japanactivity.com/fukuoka-yatai-food-stalls-guide",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "japanactivity",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-nakasu-tourist-pricing-2",
+      "candidateId": "c-nakasu-yatai",
+      "claim": "Compared to Tenjin, Nakasu's yatai cater more heavily to sightseeing/tour groups, with noticeably inflated prices and a busier, less conversational atmosphere.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://yokatoko-fukuoka.jp/column/nakasu-tenjin-yatai/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "yokatoko-fukuoka",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-tenjin-local-atmosphere-1",
+      "candidateId": "c-tenjin-yatai",
+      "claim": "Tenjin's yatai are used daily by local salarymen/OL and couples, feel calmer than Nakasu, and can run about ¥100-200 cheaper per ramen bowl.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://yokatoko-fukuoka.jp/column/nakasu-tenjin-yatai/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "yokatoko-fukuoka",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-tenjin-local-atmosphere-2",
+      "candidateId": "c-tenjin-yatai",
+      "claim": "Tenjin's yatai are used daily by local salarymen/OL and couples, feel calmer than Nakasu, and can run about ¥100-200 cheaper per ramen bowl.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.naruhodo-fukuoka.com/tenjin-nakasu-yatai",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "naruhodo-fukuoka",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-nagahama-local-ramen-1",
+      "candidateId": "c-nagahama-yatai",
+      "claim": "Nagahama's yatai district is regarded as the most authentically local of Fukuoka's yatai areas, especially for tonkotsu ramen stalls.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://arigatotravel.com/blog/yatai-etiquette",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": "arigatotravel",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-nagahama-local-ramen-2",
+      "candidateId": "c-nagahama-yatai",
+      "claim": "Nagahama's yatai district is regarded as the most authentically local of Fukuoka's yatai areas, especially for tonkotsu ramen stalls.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://nomadinjapan.com/fukuoka-yatai-food-stalls/",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "en",
+        "publishedAt": null,
+        "family": "nomadinjapan",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-yatai-seating-etiquette",
+      "candidateId": null,
+      "claim": "A yatai stall seats roughly 10 people total; the expected etiquette for a large party is to ask the owner before sitting, order at least one item per person, and keep the visit brief so seats turn over for other customers rather than spreading out or lingering.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://yokanavi.com/features/230117",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "yokanavi",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-ichiran-locals-avoid-1",
+      "candidateId": "c-ichiran",
+      "claim": "Fukuoka locals largely skip Ichiran, viewing it as 'creative ramen' that doesn't belong to any of the three traditional Kyushu tonkotsu lineages (Kurume/Nagahama/Hakata) and costs more than the cheaper local alternatives residents actually eat.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q13167856418",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "yahoo-chiebukuro",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-ichiran-locals-avoid-2",
+      "candidateId": "c-ichiran",
+      "claim": "Fukuoka locals largely skip Ichiran, viewing it as 'creative ramen' that doesn't belong to any of the three traditional Kyushu tonkotsu lineages (Kurume/Nagahama/Hakata) and costs more than the cheaper local alternatives residents actually eat.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/agi0702/n/nec9e871d8288",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "note-agi0702",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-shinshin-local-roots-1",
+      "candidateId": "c-shin-shin",
+      "claim": "Shin-Shin's founder learned ramen-making across several Fukuoka yatai stalls before opening the shop in 2004, bringing a lighter ('assari') tonkotsu broth distinct from typical rich versions; the Hakata-eki branch has a long-standing reputation for lines.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://rkb.jp/article/116590/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "rkb",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-shinshin-local-roots-2",
+      "candidateId": "c-shin-shin",
+      "claim": "Shin-Shin's founder learned ramen-making across several Fukuoka yatai stalls before opening the shop in 2004, bringing a lighter ('assari') tonkotsu broth distinct from typical rich versions; the Hakata-eki branch has a long-standing reputation for lines.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://note.com/agi0702/n/nec9e871d8288",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "note-agi0702",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-kizuimaru-venue-facts",
+      "candidateId": "c-hakata-yatai-yokocho-kizuimaru--daimyo",
+      "claim": "Hakata Yatai Yokocho Kizuimaru (Daimyo 1-8-31, Libertus Daimyo 1F; 5 min walk from Akasaka Station) is an indoor, all-weather yatai-style space with 6 mini-stalls of ~10 seats each; open 12:00-23:00 (food L.O. 22:00, drinks L.O. 22:30), closed Wednesdays.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://f082720.gorp.jp/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-kizuimaru-closure-note-unresolved",
+      "candidateId": "c-hakata-yatai-yokocho-kizuimaru--daimyo",
+      "claim": "A booking-aggregator listing (hotpepper.jp) separately states this venue was closing 2026-03-22 for renovation; the operator's own site, fetched 2026-08-29, shows normal current hours with no closure notice, and a 2026-08-13 local-news write-up (fanfun.jp) describes it as an active, ongoing feature. The renovation note is not corroborated elsewhere and could be stale aggregator data — reconfirm by phone (092-791-3090) close to the trip date rather than assuming either signal.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://f082720.gorp.jp/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-motsunabe-kobayashi-course",
+      "candidateId": "c-motsunabe-kobayashi",
+      "claim": "Motsunabe Kobayashi (Imaizumi 1-13-5, Burg Imaizumi 2F, 5 min walk from Nishitetsu Tenjin south exit) runs an all-you-can-drink motsunabe full course (8 dishes) at ¥4,850/person with the organizer's meal free for parties of 8 or more; open 17:00-01:00 daily, online booking available.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://f441900.gorp.jp/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-fukuya-community-ties",
+      "candidateId": "c-fukuya",
+      "claim": "Fukuya, founded 1949 in Nakasu, was the first company to commercially sell mentaiko in Japan and remains closely tied to the local Hakata community (its founder helped establish the Nakasu contingent of the Hakata Gion Yamakasa festival) — a locally-rooted pick rather than only an airport souvenir brand.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://takahan.co/gurume/4926/",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "takahan",
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-dazaifu-hours",
+      "candidateId": "c-dazaifu-tenmangu",
+      "claim": "Dazaifu Tenmangu opens 6:00 (spring equinox–day before autumn equinox) or 6:30 (rest of year); in October it closes 19:00. No admission fee for the shrine grounds.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.city.dazaifu.lg.jp/site/kanko/11449.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-dazaifu-crowd-timing-1",
+      "candidateId": "c-dazaifu-tenmangu",
+      "claim": "Dazaifu Tenmangu is markedly quieter before roughly 9:00-10:00 and after about 16:00; weekday mornings are the best combination for avoiding both crowds and tour groups.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://banzokubiology.com/dazaifu-konzatsu/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-06-12",
+        "family": "banzokubiology",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-dazaifu-crowd-timing-2",
+      "candidateId": "c-dazaifu-tenmangu",
+      "claim": "Dazaifu Tenmangu is markedly quieter before roughly 9:00-10:00 and after about 16:00; weekday mornings are the best combination for avoiding both crowds and tour groups.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://japanactivity.com/dazaifu-tenmangu-shrine-visitor-guide",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-05-28",
+        "family": "japanactivity",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-komyozenji-access-suspended",
+      "candidateId": "c-komyozenji",
+      "claim": "Komyozenji's interior and moss garden are, per a maintained English-language travel reference last updated 2025-02-25, 'currently not regularly open to the public' — no fixed hours or admission fee are publishable while this stands; several 2021-2023 visitor accounts independently describe finding the gate closed on arrival.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.japan-guide.com/e/e4852.html",
+        "kind": "reference",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2025-02-25",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-komyozenji-quiet-when-open-1",
+      "candidateId": "c-komyozenji",
+      "claim": "When Komyozenji is open, the atmosphere is markedly calmer than Dazaifu Tenmangu next door — visitors describe foot traffic dropping considerably just by stepping off the main shrine approach onto the temple's path.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://4travel.jp/dm_shisetsu/10004080",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "4travel",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-komyozenji-quiet-when-open-2",
+      "candidateId": "c-komyozenji",
+      "claim": "When Komyozenji is open, the atmosphere is markedly calmer than Dazaifu Tenmangu next door — visitors describe foot traffic dropping considerably just by stepping off the main shrine approach onto the temple's path.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.tabirai.net/sightseeing/column/0005718.aspx",
+        "kind": "firsthand",
+        "access": "search-preview",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "tabirai",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-komyozenji-quiet-corroboration-reconcile",
+      "candidateId": "c-komyozenji",
+      "claim": "When Komyozenji is open, the atmosphere is markedly calmer than Dazaifu Tenmangu next door — visitors describe foot traffic dropping considerably just by stepping off the main shrine approach onto the temple's path.",
+      "kind": "experiential",
+      "origin": "reconcile",
+      "source": {
+        "url": "https://www.zenbunka.or.jp/zenken/?p=1064",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "zenbunka",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-noko-ferry-schedule",
+      "candidateId": "c-nokonoshima-island",
+      "claim": "The Fukuoka municipal ferry from Meinohama to Nokonoshima runs 23 sailings/day (5:00-22:45, one early sailing suspended on Sundays/holidays), a 10-minute crossing, ¥230 one-way adult fare, first-come first-served with no reservations.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.city.fukuoka.lg.jp/kowan/kyakusen/hakata-port/hyo.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-noko-bus-connector-sparse",
+      "candidateId": "c-nokonoshima-island",
+      "claim": "The bus connecting Tenjin/Hakata to Meinohama pier runs far less often than the ferry itself — roughly 1-2/hour, worse on weekends — so the bus leg, not the ferry, is the tighter connection to plan around; the ferry can also fill past capacity on a busy holiday, occasionally leaving a queue for the next sailing.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://fukuoka-travel.net/archives/2098",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": "fukuoka-travel-net",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-itoshima-bus-taxi-reality",
+      "candidateId": null,
+      "claim": "Itoshima's own tourism association describes local bus frequency as 'extremely limited' with no loop route linking the peninsula's scattered sights (flat ¥200 fare); it recommends compact taxis (max 4 passengers) to fill gaps, meaning a party of 8 needs two taxis together, and notes hourly-rental sightseeing-taxi packages exist for cost-sharing groups.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://kanko-itoshima.jp/in-itoshima/",
+        "kind": "official",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-dazaifu-liner-bus",
+      "candidateId": "c-dazaifu-liner-bus-tabito",
+      "claim": "The Nishitetsu 'Tabito' liner bus runs direct from Hakata Bus Terminal (1F, bay 11) to Dazaifu with no transfer — 40 minutes, ¥800 (¥20 off with IC/credit), 28 weekday / 36 weekend-holiday trips each direction; also runs from Fukuoka Airport (25 min, ¥700). No reservation required, capacity-dependent boarding.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.nishitetsu.jp/bus/rosen/dazaihu_liner/",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-05"
+      }
+    },
+    {
+      "id": "ev-futamigaura-sunset-crowds-2",
+      "candidateId": "c-sakurai-futamigaura",
+      "claim": "Sakurai Futamigaura's iconic sunset-between-the-rocks view draws heavy crowds and full parking, especially around the summer solstice and on weekend/holiday evenings; arriving at least an hour before sunset (or visiting midday instead of at sunset, or choosing a weekday) is how locals avoid the worst of it.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://tsurukisou.jp/archives/208",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2026-05-16",
+        "family": "tsurukisou",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
+    },
+    {
+      "id": "ev-futamigaura-crowds-4travel-reconcile",
+      "candidateId": "c-sakurai-futamigaura",
+      "claim": "Sakurai Futamigaura's iconic sunset-between-the-rocks view draws heavy crowds and full parking, especially around the summer solstice and on weekend/holiday evenings; arriving at least an hour before sunset (or visiting midday instead of at sunset, or choosing a weekday) is how locals avoid the worst of it.",
+      "kind": "experiential",
+      "origin": "reconcile",
+      "source": {
+        "url": "https://4travel.jp/dm_shisetsu/10011700",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-03-10",
+        "family": "4travel-itoshima",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-08-29",
+      "firsthand": true,
+      "freshness": null
     }
   ],
-  "reservations": [],
+  "reservations": [
+    {
+      "candidateId": "c-motsunabe-kobayashi",
+      "importance": "anchor",
+      "bookingUrl": "https://motsunabe-kobayashi.jp/",
+      "releaseWindow": "Not stated by the operator; no evidence of a long advance-booking window for a standard group course.",
+      "actionDate": null,
+      "partyRules": "8+ diners qualifies for the organizer-free motsunabe course (¥4,850/head, all-you-can-drink included); course pricing is per person, confirm exact headcount at booking.",
+      "deposit": "⚠ Not stated on the operator's own site this pass — no deposit/prepayment terms surfaced for the group course; confirm at time of booking.",
+      "cancellation": "⚠ Not stated on the operator's own site this pass — ask about cancellation/no-show policy when booking, especially for a party of 8.",
+      "foreignFriction": "Booking interface and phone line appear Japanese-only; no English support evidence found — hotel concierge or a Japanese-speaking call may be needed.",
+      "lastSeating": "Food L.O. 24:00, drinks L.O. 24:30; open 17:00-01:00, so a late group dinner is workable.",
+      "walkIn": "Not evaluated this pass — treat as reservation-recommended for a party of 8.",
+      "leads": [],
+      "alternatives": "Motsu Shigeru (Akasaka, Michelin-recognized, motsu-sukiyaki twist) and Yamachuu (locally rated for the richest broth) are strong smaller-subgroup alternatives; neither had group-size reservation depth researched this pass.",
+      "fallback": "Motsunabe Rakutenchi (Hakata Ekimae) is the guide's own walk-in fallback if Kobayashi's course is unavailable or fully booked — no group discount, but its tatami seating genuinely holds a party of 8 without a reservation."
+    },
+    {
+      "candidateId": "c-hakata-yatai-yokocho-kizuimaru--daimyo",
+      "importance": "important",
+      "bookingUrl": null,
+      "releaseWindow": "Reservation required by the day before the visit (前日までに予約が必要), by phone only.",
+      "actionDate": null,
+      "partyRules": "The 'taisho experience' group course requires a minimum of 7 guests (adults or elementary-age children).",
+      "deposit": null,
+      "cancellation": null,
+      "foreignFriction": "Phone-only booking (092-791-3090) in Japanese; no online reservation channel found on the operator's own site — real friction for a foreign group, plan for hotel-concierge assistance.",
+      "lastSeating": "Food L.O. 22:00, drinks L.O. 22:30, closes 23:00.",
+      "walkIn": "The venue has 6 indoor stalls seating ~10 each (60 total); a walk-in party of 8 could plausibly fit at one stall for a normal (non-course) meal without the group reservation, but this was not independently confirmed.",
+      "leads": [
+        {
+          "claim": "Taisho-experience group course priced at ¥5,000/adult (7+ people), with all-you-can-drink plus all-you-can-eat mentaiko and a free happi-coat 'taisho' role-play for one designated member, per aggregator listings (hotpepper.jp, fanfun.jp).",
+          "status": "unconfirmed-lead",
+          "source": {
+            "url": "https://www.hotpepper.jp/strJ003672242/",
+            "kind": "aggregator",
+            "access": "fetched",
+            "language": "ja",
+            "publishedAt": null,
+            "family": "hotpepper",
+            "independent": null,
+            "appliesToYears": []
+          },
+          "verifiedOn": null
+        }
+      ],
+      "alternatives": "A real Tenjin street-yatai crawl split into two sub-groups of ~4 is the more 'authentic' version of this experience, at the cost of the group not sharing one table.",
+      "fallback": "If closed or unavailable, Motsunabe Kobayashi's organizer-free 8+ course is a full-group alternative that doesn't depend on yatai seating limits."
+    }
+  ],
   "transport": [
     {
       "id": "t-itoshima-coastal-connections",
@@ -1788,23 +2567,72 @@
       ],
       "doorToDoor": "From central Fukuoka: JR Chikuhi Line to Chikuzen-Maebaru (≈40–50 min), then a sparse Showa Bus connection or a taxi for the final leg to each coastal sight — no single transit leg covers the whole route.",
       "transferReality": "Bus frequency on the coastal routes (Nishinoura Line, Itoshima Sunset Line) is low, and exact daily frequency couldn't be confirmed this pass — the fare/schedule PDFs were unparseable. The Sakurai Futamigaura stop itself is being renamed from 'Futamigaura Meoto-iwa-mae' to 'Okuguchi Sakurai Shrine West Entrance' effective Apr 4, 2026, already in effect for this trip.",
-      "groupLuggageMobility": "A party of 8 relying on a single sparse bus is itself a capacity risk on top of the frequency problem — two taxis or a rental van is the more reliable way to move the whole group between sights in one day, which is why the guide recommends that directly.",
+      "groupLuggageMobility": "A party of 8 relying on a single sparse bus is itself a capacity risk on top of the frequency problem — two taxis or a rental van is the more reliable way to move the whole group between sights in one day, which is why the guide recommends that directly. Itoshima's own tourism association corroborates this from the taxi side: local taxis are compact (max ~4 passengers), so a party of 8 concretely needs two taxis together, not one.",
       "buffer": "Plan to leave the coast by early evening rather than targeting a specific last bus or train precisely.",
       "missedConnection": "A missed bus connection back to Chikuzen-Maebaru likely means a long wait for the next one, or calling a taxi from a rural stop — inconvenient, not stranding, but a real risk given the sparse service this pass couldn't fully quantify.",
       "nextService": "⚠ Not confirmed this pass — Showa Bus's fare/frequency documents were PDF/binary and unreadable by the fetch tool used.",
       "lastPracticalReturn": "⚠ Not confirmed this pass for the specific weekday — plan to be back at Chikuzen-Maebaru well before dark rather than relying on an unverified last-service time.",
       "fallback": "Taxi is the practical fallback for the whole day, not just emergencies — reflected directly in the guide's own recommendation to use a taxi or rental car rather than public transit for this leg."
+    },
+    {
+      "id": "t-itoshima-peninsula-local-transit",
+      "route": "Fukuoka city → Itoshima Peninsula sights (Sakurai Futamigaura area, coastal cafes) via Showa Bus + local taxi",
+      "risk": 3,
+      "evidenceIds": [
+        "ev-itoshima-bus-taxi-reality"
+      ],
+      "doorToDoor": "No single loop connects the peninsula's scattered sights; expect a bus leg plus taxi legs between stops, on the order of 60-90+ minutes door-to-door depending on the starting point in Fukuoka city.",
+      "transferReality": "Itoshima's community buses are fixed-schedule, point-to-point routes (not a loop) at a flat ¥200 fare; some stops only serve one direction, and the peninsula is 'unexpectedly sprawling' per its own tourism association.",
+      "groupLuggageMobility": "Local taxis are compact (max ~4 passengers), so a party of 8 needs two taxis coordinated together for any taxi leg — not a solo/small-group ride; hourly-rental sightseeing-taxi packages exist and may suit a group better than metered point-to-point fares.",
+      "buffer": "Build slack around each bus connection rather than chaining tight transfers; the tourism association itself frames bus frequency as a planning constraint, not routine city transit.",
+      "missedConnection": "Missing a connecting bus on a sparse route can mean a long wait for the next one; not independently pinned to an exact worst-case interval this pass.",
+      "nextService": "Not uniformly confirmed across all routes this pass — flag ⚠ and check the specific route's timetable for the travel date.",
+      "lastPracticalReturn": "Not independently confirmed this pass — flag ⚠ and check the same-day last bus/taxi availability before heading out, especially for a sunset visit to Futamigaura.",
+      "fallback": "Treat two coordinated taxis as the default connector between clustered stops rather than relying on bus transfers for a multi-stop day; whether a rental car is realistic for this group is a question for Pass A / reconcile."
+    },
+    {
+      "id": "t-nokonoshima-ferry",
+      "route": "Meinohama Pier (Fukuoka city) → Nokonoshima Island via the Fukuoka municipal ferry",
+      "risk": 2,
+      "evidenceIds": [
+        "ev-noko-ferry-schedule",
+        "ev-noko-bus-connector-sparse"
+      ],
+      "doorToDoor": "Bus from Tenjin (~30 min) or Hakata (~40 min) to Meinohama pier, then a 10-minute ferry crossing.",
+      "transferReality": "Ferry runs 23 sailings/day (5:00-22:45), no reservations, first-come first-served boarding; the connecting bus from Tenjin/Hakata to the pier is the tighter link at roughly 1-2/hour.",
+      "groupLuggageMobility": "Ferry capacity comfortably absorbs a party of 8; watch the bus leg instead.",
+      "buffer": null,
+      "missedConnection": "A missed ferry means waiting for the next of 23 daily sailings — low-stakes on a normal day; a busy holiday can fill a sailing past capacity per local reports.",
+      "nextService": "Roughly every 30-60 minutes depending on time of day.",
+      "lastPracticalReturn": "Last ferry ~22:45, but Nokonoshima Island Park's own facilities close much earlier — plan around the park's hours, not the ferry's (park hours not verified this pass).",
+      "fallback": null
     }
   ],
-  "disagreements": [],
+  "disagreements": [
+    {
+      "id": "d-ichiran-vs-shinshin",
+      "topic": "Whether Ichiran's Nakasu original shop is the right default ramen pick for a group wanting the real Hakata-tonkotsu experience, given two independent local sources say residents skip it as pricier, non-traditional 'creative ramen'",
+      "impact": "recommendation-changing",
+      "evidenceIds": [
+        "ev-ichiran-founding-1960",
+        "ev-ichiran-locals-avoid-1"
+      ],
+      "investigation": "Pass A verified Ichiran's Nakasu Souhonten as the brand's genuine founding location (1960 recipe, T0-sourced address/hours) and shipped it as a Day 2 ramen anchor alongside Ippudo. Pass B, researching in Japanese, found two independent firsthand accounts (a Yahoo Chiebukuro forum answer and a local blogger, both fetched) describing Ichiran as 'creative ramen' outside the three traditional Kyushu tonkotsu lineages (Kurume/Nagahama/Hakata), pricier than what residents actually eat, and generally skipped by locals in favor of shops like Shin-Shin. Pass B's own candidate table rejected Ichiran outright in favor of Shin-Shin (shortlisted, but itself lacking an official site for a T0-sourced address/hours).",
+      "resolution": "Kept Ichiran shipped — it is real, T0-verified, and its individual-booth founding-shop experience has standalone value distinct from 'best bowl in town.' Added an authenticity note to the Day 2 body and the food venues panel naming Shin-Shin as the shop locals themselves default to, with the caveat that Shin-Shin's own hours/address couldn't be climbed to a T0 source this pass — named as color/an alternative to ask about locally, not shipped as a fully actionable venue entry."
+    }
+  ],
   "depth": {
     "reservations": {
-      "requiredCandidateIds": [],
-      "notApplicableReason": "No shipped or detour candidate this pass is a scarce-release booking — every shipped food pick is walk-in (yatai take no reservations by design), Dazaifu Tenmangu and the sights are free/no-ticket, and Kyushu National Museum and Nokonoshima sell same-day. Nothing clears the reservation-depth bar."
+      "requiredCandidateIds": [
+        "c-motsunabe-kobayashi",
+        "c-hakata-yatai-yokocho-kizuimaru--daimyo"
+      ],
+      "notApplicableReason": null
     },
     "transport": {
       "requiredRouteIds": [
-        "t-itoshima-coastal-connections"
+        "t-itoshima-coastal-connections",
+        "t-itoshima-peninsula-local-transit"
       ],
       "notApplicableReason": null
     }
@@ -1813,8 +2641,289 @@
     "stopped": true,
     "trend": "duplicates",
     "unresolvedCouldChange": false,
-    "note": "Across four parallel research batches (logistics/entry/money/health, transit, Dazaifu/Itoshima sights, Fukuoka food/yatai), later searches within each topic converged on the same core set of official sources and named venues rather than surfacing new serious contenders — e.g. Nakasu kept resurfacing as the shared hub for Ichiran, Fukuya and yatai across three independent search threads, and Itoshima's coastal-sight list (Sakurai Futamigaura, Shiraito Falls) was stable across both the sights-focused and transit-focused batches. Remaining gaps (exact post-revision Nishitetsu fare, Showa Bus frequencies, exact last-train times, the US State Dept advisory level, Nokonoshima's admission price) are all read-only precision gaps on facts already directionally established — none of them would change which venues, routes, or days are recommended, only refine a number or a flag. The one genuinely unresolved item with a small chance of mattering — Hakata Okunchi's exact 2026 program, inferred from a consistent multi-year date pattern rather than a 2026-dated announcement — is already treated as optional, flight-time-dependent color on the departure day rather than a fixed commitment, so an eventual correction wouldn't restructure the itinerary."
+    "note": "Pass A (four batches: logistics/entry/money/health, transit, Dazaifu/Itoshima sights, Fukuoka food/yatai) and Pass B (native-Japanese yatai/ramen/motsunabe/crowd research) independently converged on the same core venues and official sources — Nakasu as the shared Ichiran/Fukuya/yatai hub, Itoshima's coastal-sight list (Sakurai Futamigaura, Shiraito Falls) — while Pass B's resident angle surfaced real, non-duplicate additions: the Nakasu-vs-Tenjin/Nagahama yatai character difference, an indoor group-yatai venue (Kizuimaru) that directly answers this party's yatai-seating-for-8 problem, a motsunabe restaurant (Kobayashi) with a genuine 8+-person organizer-free course, corroborated local sentiment that Ichiran is a tourist rather than local default (resolved as a recommendation-changing disagreement, not a silent swap), a Dazaifu alternative (Komyozenji) with a real access caveat caught rather than glossed over, and Itoshima's exact taxi-capacity constraint (max ~4/taxi, so 2 taxis for this party). Reconcile closed two research-quality gaps Pass A/B alone couldn't: two Pass A yatai-etiquette claims were independently worded near-duplicates, harmonized to actually corroborate each other; and two shipped-candidate experiential claims (Dazaifu crowd timing, Futamigaura sunset crowds) needed a second genuinely-fetched, dated, independent source — found via direct fetch during reconcile (japanactivity.com for Dazaifu; a dated 4travel.jp review and a fresh zenbunka.or.jp post for Futamigaura/Komyozenji respectively). One Pass B finding (a Yahoo News piece on Futamigaura sunset crowds) turned out, once its true publish date was fetched during reconcile, to be from June 2022 — over 4 years old and outside the 24-month experiential-freshness window — and was excluded from the merged evidence rather than kept with a fabricated recent date; its substance is preserved by the two fresher sources that replace it. Remaining precision-only gaps (exact post-revision Nishitetsu fare, Showa Bus frequencies, exact last-train times, the US State Dept advisory level, Nokonoshima's admission price, Kizuimaru's exact post-renovation status, Komyozenji's day-of access, Itoshima's exact bus timetable) would refine a number or a flag, not flip which venues, routes, or days are recommended — none of them reopen the stop."
   },
-  "passB": null,
-  "reconciliation": []
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "English coverage of Fukuoka yatai crowd-reality, motsunabe group logistics, and local ramen preference is thin, generic, or tourist-templated; Japanese-language forums, local bloggers, and municipal/operator sites carry the resident perspective this pass needs, especially given the traveler's explicit yatai-etiquette niche interest and an 8-person group-fit problem English sources don't address at all.",
+      "searchClasses": [
+        "Japanese crowd/etiquette queries for yatai districts (中洲/天神/屋台 マナー, 観光客少ない)",
+        "Japanese local-blogger 'best of' roundups for motsunabe and ramen (地元民 おすすめ)",
+        "Japanese forum Q&A (Yahoo知恵袖) on whether locals actually eat at Ichiran",
+        "Japanese municipal/operator sites for hours, fares, and group-course terms (Dazaifu city, Itoshima city, Nishitetsu, Fukuoka City ferry, restaurant-operator gorp.jp sites)",
+        "Japanese searches for lesser-known temple alternatives near Dazaifu Tenmangu and their current access status"
+      ],
+      "yield": "High: surfaced the Tenjin-over-Nakasu yatai distinction with real pricing/character detail, an indoor group-taisho-experience venue (Kizuimaru) that directly solves this 8-person group's yatai seating problem, a motsunabe restaurant (Kobayashi) with an exact 8+-person organizer-free course and working online booking, two independent local sources confirming Ichiran is a tourist rather than local default, a genuine access-status catch on a promising Dazaifu alternative (Komyozenji), and the sparse point-to-point nature of Itoshima's local bus network straight from its own tourism association."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": [
+    {
+      "findingId": "ev-nakasu-tourist-pricing-1",
+      "disposition": "adopt",
+      "note": "New authenticity color not found by Pass A — strengthens the existing Day 1 steer toward Nagahama/Tenjin over Nakasu with a concrete reason (pricing/atmosphere). Woven into 09-highlights.json's yatai panel and 06-days.json Day 1.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-nakasu-tourist-pricing-2"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-nakasu-tourist-pricing-2",
+      "disposition": "adopt",
+      "note": "Paired with ev-nakasu-tourist-pricing-1 (distinct source family) for the same claim.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-nakasu-tourist-pricing-1"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-tenjin-local-atmosphere-1",
+      "disposition": "agree",
+      "note": "Corroborates Pass A's existing (previously unsourced) Day 1 steer toward Nagahama/Tenjin with real local-atmosphere evidence.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-tenjin-local-atmosphere-2"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-tenjin-local-atmosphere-2",
+      "disposition": "agree",
+      "note": "Paired with ev-tenjin-local-atmosphere-1 (distinct source family) for the same claim.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-tenjin-local-atmosphere-1"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-nagahama-local-ramen-1",
+      "disposition": "agree",
+      "note": "Corroborates Pass A's existing Day 1 steer toward Nagahama as one of the two recommended yatai districts.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-nagahama-local-ramen-2"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-nagahama-local-ramen-2",
+      "disposition": "agree",
+      "note": "Paired with ev-nagahama-local-ramen-1 (distinct source family) for the same claim.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-nagahama-local-ramen-1"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-yatai-seating-etiquette",
+      "disposition": "agree",
+      "note": "Matches Pass A's own yatai group-size/etiquette findings (ev-yatai-group-size-official, ev-yatai-etiquette-headcount) — not declared factual cross-pass corroboration since neither side carries an established source.independent:true on a distinct family, per the R-E scar rule.",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-ichiran-locals-avoid-1",
+      "disposition": "conflict-resolved",
+      "note": "CONFLICT against Pass A's shipped Ichiran pick — resolved as disagreement d-ichiran-vs-shinshin. Ichiran stays shipped for its T0-verified founding-shop value; an authenticity note naming Shin-Shin was added to Day 2 and the food venues panel.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-ichiran-locals-avoid-2"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-ichiran-locals-avoid-2",
+      "disposition": "conflict-resolved",
+      "note": "Paired with ev-ichiran-locals-avoid-1 (distinct source family) for the same claim; see d-ichiran-vs-shinshin.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-ichiran-locals-avoid-1"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-shinshin-local-roots-1",
+      "disposition": "adopt",
+      "note": "New authenticity alternative named in the Day 2 body and food venues panel as the shop locals default to — not shipped as a full venue entry since no official site could be climbed to a T0 source for address/hours.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-shinshin-local-roots-2"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-shinshin-local-roots-2",
+      "disposition": "adopt",
+      "note": "Paired with ev-shinshin-local-roots-1 (distinct source family) for the same claim.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-shinshin-local-roots-1"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-kizuimaru-venue-facts",
+      "disposition": "adopt",
+      "note": "New B-only venue directly solving the yatai-for-8 logistics problem — shipped into 08-food-and-shopping.json and 09-highlights.json, and into reservations[]/depth.reservations as an 'important' finalist.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-kizuimaru-closure-note-unresolved",
+      "disposition": "adopt",
+      "note": "Kept as an honest ⚠ gap in both the guide venue entry and the reservation record's foreignFriction/leads — not resolved, not silenced.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-motsunabe-kobayashi-course",
+      "disposition": "adopt",
+      "note": "Promoted to the Day 2 dinner anchor over Pass A's Motsunabe Rakutenchi, which has no group discount or booking mechanism; Rakutenchi kept as the walk-in fallback in both the guide and the reservation record.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-fukuya-community-ties",
+      "disposition": "agree",
+      "note": "Independently reaches the venue Pass A shipped as c-fukuya--nakasu-main-store (ev-fukuya-mentaiko-origin, ev-fukuya-nakasu-hours) — id renamed from the original ev-fukuya-mentaiko-origin, which collided with an existing Pass A evidence id of the same name. Not declared factual cross-pass corroboration (neither side carries source.independent:true).",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-dazaifu-hours",
+      "disposition": "agree",
+      "note": "Matches Pass A's ev-dazaifu-tenmangu-free-and-hours (same official source, same figures).",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-dazaifu-crowd-timing-1",
+      "disposition": "adopt",
+      "note": "New crowd-timing color. During reconcile, re-fetched its own source to confirm a real publish date (2025-06-12, previously unrecorded) — required for a shipped candidate's experiential evidence under the freshness rule.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-dazaifu-crowd-timing-2"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-dazaifu-crowd-timing-2",
+      "disposition": "adopt",
+      "note": "Was search-preview only; reconcile fetched the actual page (japanactivity.com), confirmed it supports the claim, and upgraded access to fetched with its real publish date (2026-05-28) — both needed to satisfy the shipped-candidate freshness/corroboration rules alongside ev-dazaifu-crowd-timing-1.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-dazaifu-crowd-timing-1"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-komyozenji-access-suspended",
+      "disposition": "adopt",
+      "note": "New B-only candidate (detour) — shipped only as a zero-commitment 'check on arrival' aside in the Dazaifu day body, never as a planned stop, per Pass B's own caveat.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-komyozenji-quiet-when-open-1",
+      "disposition": "adopt",
+      "note": "Paired with ev-komyozenji-quiet-when-open-2 and a new reconcile-origin record (ev-komyozenji-quiet-corroboration-reconcile) added during reconcile after the tabirai.net search-preview source returned HTTP 403 on a direct fetch attempt — a fresh independent firsthand source (zenbunka.or.jp) was found instead to reach 2 qualifying sources.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-komyozenji-quiet-when-open-2",
+          "ev-komyozenji-quiet-corroboration-reconcile"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-komyozenji-quiet-when-open-2",
+      "disposition": "adopt",
+      "note": "Kept as search-preview (tabirai.net blocked on direct fetch during reconcile) — the qualifying pair for this claim is ev-komyozenji-quiet-when-open-1 + the new reconcile-origin zenbunka.or.jp record.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-komyozenji-quiet-when-open-1",
+          "ev-komyozenji-quiet-corroboration-reconcile"
+        ]
+      }
+    },
+    {
+      "findingId": "ev-noko-ferry-schedule",
+      "disposition": "agree",
+      "note": "Matches Pass A's ev-nokonoshima-ferry (same official source, same figures).",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-noko-bus-connector-sparse",
+      "disposition": "adopt",
+      "note": "New detail not in Pass A — folded into t-nokonoshima-ferry's transferReality field.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-itoshima-bus-taxi-reality",
+      "disposition": "adopt",
+      "note": "New concrete detail (taxi capacity ~4, so 2 taxis for a party of 8) not in Pass A's own Itoshima transport record — added to t-itoshima-coastal-connections' groupLuggageMobility field and woven into 05-transit.json and Day 4's body.",
+      "corroborates": {
+        "kind": "none",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-dazaifu-liner-bus",
+      "disposition": "agree",
+      "note": "Matches Pass A's ev-dazaifu-liner-tabito (same operator source, same figures) — the guide already ships this route.",
+      "corroborates": {
+        "kind": "recommendation",
+        "evidenceIds": []
+      }
+    },
+    {
+      "findingId": "ev-futamigaura-sunset-crowds-2",
+      "disposition": "adopt",
+      "note": "Kept — genuinely fetched, dated 2026-05-16. Its original pairing (ev-futamigaura-sunset-crowds-1, a Yahoo News piece) was excluded from the merged evidence during reconcile once a direct fetch revealed its true publish date was June 2022 (>24 months old, outside the experiential freshness window for a shipped candidate) — see the saturation note. A new reconcile-origin record (ev-futamigaura-crowds-4travel-reconcile, dated 2025-03-10) replaces it as the second qualifying independent source.",
+      "corroborates": {
+        "kind": "factual",
+        "evidenceIds": [
+          "ev-futamigaura-crowds-4travel-reconcile"
+        ]
+      }
+    }
+  ]
 }
