@@ -1,8 +1,11 @@
 // Compatibility-preserving task routing for Waypoint agent work.
 //
 // This file is deliberately NOT wired into the headless research workflows yet. It encodes the
-// intended progressive-disclosure map while V01/V02/V03/V05 validate the current research
-// candidate. The headless routes therefore preserve the existing full research stack exactly.
+// intended progressive-disclosure map without silently changing model context. The original
+// V01/V02/V03/V05/Fukuoka prompt candidate remains historical evidence; after Fukuoka's terminal
+// model/content failure, the headless prompts were deliberately revised as a NEW repair-first
+// acceptance candidate. compatibilityFrozen means that current candidate is hash-pinned until
+// another explicit model-input revision is authorized.
 
 export const FULL_RESEARCH_REFERENCES = Object.freeze([
   "references/verification-rules.md",

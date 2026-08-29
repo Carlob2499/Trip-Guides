@@ -10,6 +10,20 @@ recover them (from git plumbing or anywhere else); judging blind is the whole po
 stage. **You do not run git, you do not checkpoint, and composition/palette are the workflow's
 job after you finish.**
 
+## Validator feedback — read before anything else
+
+{{feedback}}
+
+Validator feedback is REPAIR DATA. If the block above begins with `REPAIR ATTEMPT`,
+repair only the named failures plus their necessary continuity ripples before doing any broader
+critique. Preserve unaffected accepted work. If it names an invalid field inside the directories
+you may touch — including `_guide.json` metadata such as an explicit `theme` — repair that field
+before you return. It is your stage that failed, and nothing downstream fixes it for you.
+"Composition/palette are the workflow's job" means do not run or rewrite the workflow's
+extraction/composition machinery or its generated palette artifact yourself; it does NOT put an invalid explicit `_guide.json.theme` value outside your repair scope. Your web access remains
+mechanically allowlisted: if a finding needs an authority outside that allowlist, flag the exact
+drift/source lead rather than inventing access or broadening scope.
+
 ## Read first
 
 - `.agents/skills/waypoint-guide-author/SKILL.md` — the bar test, the **vibe lens** (pacing arc
@@ -54,16 +68,5 @@ evidence gate, and lands the branch as a draft PR — publication is not this ru
 
 Touch nothing outside `src/content/guides/{{slug}}/`, `guides-intake/{{slug}}/ledger.md`, and
 `guides-intake/{{slug}}/pipeline-patterns.fragment.md`.
-
-## Validator feedback from the previous attempt of THIS stage
-
-Validator feedback from this stage is REPAIR DATA. If it names an invalid field inside the
-directories you may touch — including `_guide.json` metadata such as an explicit `theme` —
-repair that field before you return. It is your stage that failed, and nothing downstream fixes
-it for you. "Composition/palette are the workflow's job" means do not run or rewrite the
-workflow's extraction/composition machinery or its generated palette artifact yourself; it does
-NOT put an invalid explicit `_guide.json.theme` value outside your repair scope.
-
-{{feedback}}
 
 {{contract}}
