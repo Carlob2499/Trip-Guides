@@ -31,6 +31,13 @@ The blend, as testable rules:
 Test for any new surface: could you point at each region and name which of the three
 registers it is in? A region serving two registers at once is drift.
 
+**Typography (decided 2026-08-27, from the type-pairing canvas):** display and body stay
+**Literata Variable** (journal voice; keeps the existing CJK fallback stack in
+`--font-display`/`--font-body`). The data register moves to **Atkinson Hyperlegible
+Next** (field-grade glare/low-vision legibility, tabular numerals) replacing Source Sans 3
+in `--font-data` — implemented in D2, self-hosted like the current faces, preserving the
+existing CJK fallbacks in the stack. Data tables set `font-variant-numeric: tabular-nums`.
+
 **Palette direction (Carlo, 2026-08-28): Night Navy & Amber on warm paper.** Deep navy
 (~#1d3557) carries structure and identity; amber (~#f0a24b) is the highlight/action
 color; the ground shifts from sage to warm cream paper (~#ede9e1 / card #faf7f0). Dark
