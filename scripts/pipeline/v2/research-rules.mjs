@@ -26,6 +26,8 @@
 // not fail it — unknown is unknown, and inventing a verdict would be the exact sin these
 // rules exist to catch.
 
+import { supersededEvidenceIds } from "./contracts.mjs";
+
 export const OBJECTIVE_SOURCE_KINDS = new Set(["official", "operator", "reference"]);
 export const EXPERIENTIAL_FORBIDDEN = new Set(["official", "operator"]);
 
@@ -445,6 +447,29 @@ export function sourceAccessProblems(doc) {
   return problems;
 }
 
+/** A blocked fetch is honest HISTORY, never current factual authority. Keep the record for the
+    audit trail, but retire it explicitly: either reject that evidence record or supersede it with
+    a replacement. This prevents a model from clearing a search-preview finding by merely
+    relabeling the same unsupported record "blocked". */
+export function blockedCurrentEvidenceProblems(doc) {
+  const problems = [];
+  const rejected = new Set(
+    (doc.reconciliation || [])
+      .filter((row) => row.disposition === "reject")
+      .map((row) => row.findingId),
+  );
+  const superseded = supersededEvidenceIds(doc);
+
+  for (const e of doc.evidence || []) {
+    if (e.source?.access !== "blocked") continue;
+    if (rejected.has(e.id) || superseded.has(e.id)) continue;
+    problems.push(
+      `blocked evidence "${e.id}" remains current for "${e.claim.slice(0, 70)}" — blocked access is audit bookkeeping, not proof; fetch a qualifying replacement and supersede this record, or reject it explicitly`,
+    );
+  }
+  return problems;
+}
+
 /** Rule: high-risk transport owes the physical reality; routine transit stays simple. */
 export function transportProblems(doc) {
   const problems = [];
@@ -478,6 +503,7 @@ export function researchRuleProblems(doc) {
     ...objectiveFreshnessProblems(doc),
     ...reservationProblems(doc),
     ...sourceAccessProblems(doc),
+    ...blockedCurrentEvidenceProblems(doc),
     ...transportProblems(doc),
     ...depthScopeProblems(doc),
     ...passBSubstanceProblems(doc),
