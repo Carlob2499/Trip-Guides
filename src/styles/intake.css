@@ -7,11 +7,8 @@
 
 /* ── Page chrome ──────────────────────────────────────────────────────────── */
 body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-width:100%}
-/* The survey ground — same contract as the hub's .page-contours: fixed, the terrain
-   holds still while the sheet scrolls over it. */
-.itk-contours{position:fixed;inset:0;z-index:0;pointer-events:none}
-.itk-contours svg{position:absolute;inset:0;width:100%;height:100%}
-.itk-contours polyline{fill:none;stroke:color-mix(in srgb,var(--muted) 16%,transparent);stroke-width:1.1}
+/* The survey ground is the shared <Contours/> component; these siblings sit above its
+   fixed layer (the terrain holds still while the sheet scrolls over it). */
 .itk-bar,.intake,.itk-foot{position:relative;z-index:1}
 .itk-bar{max-width:52rem;margin:0 auto;width:100%;padding:1.1rem 1.2rem 0}
 .itk-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
@@ -192,7 +189,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 
 /* Print: the checklist is an interactive surface — print the flat truth, not the chrome. */
 @media print{
-  .itk-contours,.itk-bar,.itk-foot,.itk-meter,.itk-sec-foot,.itk-dz{display:none!important}
+  .itk-bar,.itk-foot,.itk-meter,.itk-sec-foot,.itk-dz{display:none!important}
   html,body{background:#fff!important;color:#111!important}
   body::before{display:none!important}
   .itk-sec-body{display:block!important}

@@ -108,7 +108,9 @@ Screens are designed screen-first, but nothing is deliberately excluded (Carlo,
 
 - Agents compose **only** from approved components and core tokens. New colors, spacing
   values, fonts, or components require Carlo's approval and land in the core/registry
-  first; a component registry + CI check (D3 below) makes this mechanical.
+  first. The registry is `docs/reference/component-registry.json` and
+  `src/component-registry.test.ts` enforces it (bidirectional file↔entry existence,
+  feature-index import discipline) — an unregistered component fails the build.
 - **Division of labor:**
   - **Claude** authors all binding design authority: this document, tokens, registry,
     enforcement tests, migrations, major design specs.
@@ -194,7 +196,7 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `READY FOR REVIEW` · `DONE`
 |---|---|---|---|---|
 | D1 | This constitution approved by Carlo | Claude → Carlo | Sep 2 | READY FOR REVIEW |
 | D2 | Token core consolidated; raw values outside core fail tests | Claude | Sep 9 | READY FOR REVIEW |
-| D3 | Approved-component registry + CI check (locked-down enforcement) | Claude | Sep 16 | NOT STARTED |
+| D3 | Approved-component registry + CI check (locked-down enforcement) | Claude | Sep 16 | READY FOR REVIEW |
 | D4 | Component gallery page: all components × themes × light/dark × data states | Claude | Sep 16 | NOT STARTED |
 | D5 | Dark-mode core remap + gallery screenshot baselines (in before Sep 20) | Claude | Sep 19 | NOT STARTED |
 | D6 | Holistic taste review of gallery; punch list | Claude | Sep 30 | NOT STARTED |

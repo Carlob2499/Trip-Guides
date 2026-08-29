@@ -15,9 +15,6 @@
 /* ── Page chrome — deliberately the same metrics as progress.css's, so /new/, /progress/ and
       /change/ are visibly one site rather than three. ───────────────────────────────────────── */
 
-.cp-contours { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-.cp-contours svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.cp-contours polyline { fill: none; stroke: color-mix(in srgb, var(--muted) 14%, transparent); stroke-width: 1.1; }
 
 .cp-bar, .cp, .cp-foot { position: relative; z-index: 1; }
 
@@ -454,5 +451,5 @@
 }
 
 @media print {
-  .cp-contours, .cp-bar, .cp-foot, .cp-seg, .cp-send, .cp-tri-btn { display: none !important; }
+  .cp-bar, .cp-foot, .cp-seg, .cp-send, .cp-tri-btn { display: none !important; }
 }

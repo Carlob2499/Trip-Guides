@@ -14,9 +14,6 @@
 
 /* ── Page ground ───────────────────────────────────────────────────────────── */
 body{min-height:100vh;display:flex;flex-direction:column}
-.pg-contours{position:fixed;inset:0;z-index:0;pointer-events:none}
-.pg-contours svg{position:absolute;inset:0;width:100%;height:100%}
-.pg-contours polyline{fill:none;stroke:color-mix(in srgb,var(--muted) 14%,transparent);stroke-width:1.1}
 .pg-bar,.pg,.pg-foot{position:relative;z-index:1}
 
 .pg-bar{max-width:74rem;margin:0 auto;width:100%;padding:1.1rem 1.2rem 0;display:flex;align-items:center;justify-content:space-between;gap:.8rem}
@@ -253,6 +250,6 @@ body{min-height:100vh;display:flex;flex-direction:column}
 }
 
 @media print{
-  .pg-contours,.pg-bar,.pg-foot,.pg-key,.pg-notify{display:none!important}
+  .pg-bar,.pg-foot,.pg-key,.pg-notify{display:none!important}
   .pg-note{position:static;box-shadow:none}
 }
