@@ -30,7 +30,7 @@ import {
   initRunV2, stageStart, stageComplete, stageFail, readRunStateV2, stageAttemptStats,
 } from "../pipeline/v2/run-state.mjs";
 import { stageFacts, mergeTelemetry, emptyTelemetry } from "../pipeline/v2/telemetry.mjs";
-import { sourceAccessProblems, PROXY_HOSTS, isProxyHost, OBJECTIVE_RECHECK_MAX_DAYS } from "../pipeline/v2/research-rules.mjs";
+import { sourceAccessProblems, blockedCurrentEvidenceProblems, PROXY_HOSTS, isProxyHost, OBJECTIVE_RECHECK_MAX_DAYS } from "../pipeline/v2/research-rules.mjs";
 import { forbiddenForPassB, forbiddenForCritic } from "../pipeline/v2/workspace.mjs";
 import { writeReport } from "../geocode-venues.mjs";
 import { allowedStagePaths } from "../pipeline-v2.mjs";
@@ -320,9 +320,64 @@ describe("P2 — fetched vs discovered vs blocked; a mirror is never the origin"
     expect(problems.some((p) => p.includes("not a read of it"))).toBe(true);
   });
 
-  it("official citation fetched or honestly blocked passes this rule", () => {
+  it("source-access bookkeeping accepts an honestly recorded block, but current-truth validation does not", () => {
+    const blocked = base({ evidence: [rec({}, { access: "blocked" })] });
     expect(sourceAccessProblems(base({ evidence: [rec()] }))).toEqual([]);
-    expect(sourceAccessProblems(base({ evidence: [rec({}, { access: "blocked" })] }))).toEqual([]);
+    expect(sourceAccessProblems(blocked)).toEqual([]);
+    expect(blockedCurrentEvidenceProblems(blocked).join("\n")).toMatch(/blocked access is audit bookkeeping, not proof/);
+  });
+
+  it("a blocked record is valid only after explicit rejection or supersession", () => {
+    const blocked = rec({}, { access: "blocked" });
+
+    const rejected = base({
+      evidence: [blocked],
+      reconciliation: [{
+        findingId: blocked.id,
+        disposition: "reject",
+        note: "Origin could not be read; do not use this claim.",
+        corroborates: { kind: "none", evidenceIds: [] },
+        supersedes: { kind: "none", evidenceIds: [] },
+      }],
+    });
+    expect(blockedCurrentEvidenceProblems(rejected)).toEqual([]);
+
+    const replacement = rec({
+      id: "e-replacement",
+      claim: blocked.claim,
+      origin: "reconcile",
+    }, { access: "fetched" });
+    const superseded = base({
+      evidence: [blocked, replacement],
+      reconciliation: [{
+        findingId: replacement.id,
+        disposition: "replace",
+        note: "Fetched authority replaces the blocked record.",
+        corroborates: { kind: "none", evidenceIds: [] },
+        supersedes: { kind: "evidence", evidenceIds: [blocked.id] },
+      }],
+    });
+    expect(blockedCurrentEvidenceProblems(superseded)).toEqual([]);
+  });
+
+  it("does not let a non-qualifying replacement retire blocked evidence", () => {
+    const blocked = rec({}, { access: "blocked" });
+    const weakReplacement = rec({
+      id: "e-weak-replacement",
+      claim: blocked.claim,
+      origin: "reconcile",
+    }, { access: "search-preview" });
+    const doc = base({
+      evidence: [blocked, weakReplacement],
+      reconciliation: [{
+        findingId: weakReplacement.id,
+        disposition: "replace",
+        note: "Weak replacement must not retire the blocked record.",
+        corroborates: { kind: "none", evidenceIds: [] },
+        supersedes: { kind: "evidence", evidenceIds: [blocked.id] },
+      }],
+    });
+    expect(blockedCurrentEvidenceProblems(doc).join("\n")).toMatch(/blocked access is audit bookkeeping, not proof/);
   });
 
   it("an announced event date (appliesToYears) requires the announcement to have been READ", () => {

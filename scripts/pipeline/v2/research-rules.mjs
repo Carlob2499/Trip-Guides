@@ -445,6 +445,39 @@ export function sourceAccessProblems(doc) {
   return problems;
 }
 
+/** A blocked fetch is honest HISTORY, never current factual authority. Keep the record for the
+    audit trail, but retire it explicitly: either reject that evidence record or supersede it with
+    a qualifying fetched replacement. This prevents a model from clearing a search-preview finding
+    by merely relabeling the same unsupported record "blocked". */
+export function blockedCurrentEvidenceProblems(doc) {
+  const problems = [];
+  const reconciliation = doc.reconciliation || [];
+  const byId = new Map((doc.evidence || []).map((record) => [record.id, record]));
+  const rejected = new Set(
+    reconciliation
+      .filter((row) => row.disposition === "reject")
+      .map((row) => row.findingId),
+  );
+  const supersededByQualifyingReplacement = new Set();
+  for (const row of reconciliation) {
+    if (row.disposition !== "replace" || row.supersedes?.kind !== "evidence") continue;
+    const replacement = byId.get(row.findingId);
+    if (!qualifyingEvidence(replacement)) continue;
+    for (const retiredId of row.supersedes.evidenceIds || []) {
+      supersededByQualifyingReplacement.add(retiredId);
+    }
+  }
+
+  for (const e of doc.evidence || []) {
+    if (e.source?.access !== "blocked") continue;
+    if (rejected.has(e.id) || supersededByQualifyingReplacement.has(e.id)) continue;
+    problems.push(
+      `blocked evidence "${e.id}" remains current for "${e.claim.slice(0, 70)}" — blocked access is audit bookkeeping, not proof; fetch a qualifying replacement and supersede this record, or reject it explicitly`,
+    );
+  }
+  return problems;
+}
+
 /** Rule: high-risk transport owes the physical reality; routine transit stays simple. */
 export function transportProblems(doc) {
   const problems = [];
@@ -478,6 +511,7 @@ export function researchRuleProblems(doc) {
     ...objectiveFreshnessProblems(doc),
     ...reservationProblems(doc),
     ...sourceAccessProblems(doc),
+    ...blockedCurrentEvidenceProblems(doc),
     ...transportProblems(doc),
     ...depthScopeProblems(doc),
     ...passBSubstanceProblems(doc),
