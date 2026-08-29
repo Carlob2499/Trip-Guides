@@ -10,6 +10,17 @@
         "Pass B native-language audit is missing or incomplete"
       ],
       "createdAt": "2026-08-29T03:11:06.949Z",
+      "status": "retired",
+      "retiredAt": "2026-08-29T03:11:08.222Z"
+    },
+    {
+      "runId": "fukuoka-20260829-7cb4fa",
+      "stage": "passB",
+      "attempt": 1,
+      "findings": [
+        "Pass B owes its artifact: guides-intake/fukuoka/passB.v2.json (transferred by collect-passb)"
+      ],
+      "createdAt": "2026-08-29T03:11:08.222Z",
       "status": "active",
       "retiredAt": null
     }
