@@ -447,8 +447,8 @@ export function sourceAccessProblems(doc) {
 
 /** A blocked fetch is honest HISTORY, never current factual authority. Keep the record for the
     audit trail, but retire it explicitly: either reject that evidence record or supersede it with
-    a replacement. This prevents a model from clearing a search-preview finding by merely
-    relabeling the same unsupported record "blocked". */
+    a qualifying fetched replacement. This prevents a model from clearing a search-preview finding
+    by merely relabeling the same unsupported record "blocked". */
 export function blockedCurrentEvidenceProblems(doc) {
   const problems = [];
   const reconciliation = doc.reconciliation || [];
