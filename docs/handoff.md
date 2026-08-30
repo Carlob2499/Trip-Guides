@@ -4,11 +4,12 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-29)
+Uruguay Canary #4 is GREEN draft-only product-path proof. R03 is fully accepted: targeted escalation and cancellation seams are closed/proven. The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary. See `CONTEXT.md` only for deeper historical context.
 Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL — MODEL / CONTENT at Reconcile (5/5 attempts, 1/1 auto-retry); preserve `research-v2/fukuoka`; never continue or repair-merge it.
-Current Kumamoto authority is only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; closed PR #123 proved that exact frozen head preflight GREEN. No model-backed Kumamoto run has started.
-Release-governance repository work is complete through #142: #137 removed mutation direct-main writes; #138 added always-reporting Required gate; #139 proved unattended GITHUB_TOKEN PR gating; #140 moved `/new` scaffolds to exact-head checked PR landing; #142 removed the temporary proof workflow. Issue #130 now contains only the owner/tooling repository-settings step: protect `main`, require `Required gate / required-gate`, block force-push/deletion, no broad Actions bypass.
-PR #143 moved ordinary frontend engineering into September: U01/U02 by Sep 19, U03 by Sep 26, final engineering handoff Sep 30. October is content/reverification/field bugs, not planned architecture/UI completion.
-NEXT: finish deterministic frontend/release-governance work that does not alter the frozen acceptance candidate; then Sep 2 dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto`, Sonnet 5/high + Opus 5/high critic. No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge.
+Kumamoto authority is only frozen `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model-backed run has started.
+Release-governance repository prerequisites are implemented through #142; issue #130 is the owner/tooling settings step: protect `main`, require current gates/up-to-date integration, block force-push/deletion, no broad Actions bypass.
+PR #143 moves engineering completion into September: U01/U02 Sep 19, U03 Sep 26, final handoff Sep 30; October is content/reverification/field bugs.
+NEXT: finish deterministic frontend/release-governance work; then Sep 2 dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto`, Sonnet 5/high + Opus 5/high critic. No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge.
 V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset.
 <!-- WARM_START_END -->
 
@@ -31,6 +32,7 @@ V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset.
 - S02 mobile critical path: DONE by PR #114 browser proof across /new, /progress, and a finished guide.
 - S03 offline/poor-network traveler path: DONE by PR #114's fresh-page offline service-worker read plus the existing durable sync/replay suite.
 - S04 accessibility: automated portion PASS after PR #114 exposed and repaired progress status contrast and undersized controls; one physical-device interaction spot check remains as a traveler/UI check, not as retroactive authority for the already-run Fukuoka acceptance canary.
+- R03 is fully accepted: targeted escalation and cancellation failure-only seams are closed/proven; Uruguay Canary #4 remains GREEN draft-only evidence, not production-cutover authority.
 - Release-governance repository prerequisites are complete. `main` still reports unprotected with no required-status enforcement/ruleset, so issue #130 is now only the final owner/tooling settings mutation and post-settings verification.
 - The failed Fukuoka evidence remains frozen. A separately justified post-Fukuoka remediation is merged, and the fresh Kumamoto acceptance is authorized only on rebuilt preflight-green candidate `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`; do not repurpose this authority into any other canary and do not dispatch the superseded candidate.
 - September engineering completion now includes frontend: U01/U02 target Sep 19, U03 Sep 26, and final engineering handoff Sep 30. PR #115 remains historical/deferred implementation evidence, not a branch to merge wholesale onto current main.
