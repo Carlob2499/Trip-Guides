@@ -26,6 +26,7 @@ on:
       - .github/workflows/new-guide.yml
       - .github/workflows/research-pass.yml
       - .github/workflows/research-pass-v2.yml
+      - .github/workflows/mutation.yml
       - scripts/pipeline.mjs
       - scripts/pipeline-v2.mjs
       - src/features/trip-split/**
