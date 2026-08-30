@@ -6,8 +6,9 @@ import { buildPageUrl, buildWhatsAppShareUrl, buildMailtoUrl, buildSummaryShareT
 describe("buildPageUrl", () => {
   const BASE = "https://carlob2499.github.io/Trip-Guides/guides/korea/";
 
-  it("adds a #grp-N deep link for a numbered active tab", () => {
-    expect(buildPageUrl(BASE, "3")).toBe(BASE + "#grp-3");
+  it("adds a stable named destination for every public guide route", () => {
+    for (const route of ["days", "food", "explore", "essentials", "sources", "recap", "tools"])
+      expect(buildPageUrl(BASE, route)).toBe(BASE + "#dest-" + route);
   });
 
   it("returns the bare base URL when no tab is active", () => {
@@ -15,9 +16,7 @@ describe("buildPageUrl", () => {
     expect(buildPageUrl(BASE, undefined)).toBe(BASE);
   });
 
-  it("returns the bare base URL for a SPECIAL panel (budget/vote/remind/learn) — not numeric", () => {
-    // Special panels use string ids like "split"/"vote"/"learn"/"remind" for data-tab,
-    // not a digit — those must not produce a nonsense "#grp-split" link.
+  it("returns the bare base URL for retired special panels", () => {
     expect(buildPageUrl(BASE, "split")).toBe(BASE);
     expect(buildPageUrl(BASE, "learn")).toBe(BASE);
   });
@@ -26,22 +25,19 @@ describe("buildPageUrl", () => {
     expect(buildPageUrl(BASE, "")).toBe(BASE);
   });
 
-  it("accepts tab index 0 — falsy but a real, valid tab", () => {
-    // A naive `if (t)` check would drop tab 0 (the first tab) silently; this must not.
-    expect(buildPageUrl(BASE, "0")).toBe(BASE + "#grp-0");
-  });
-
-  it("rejects a non-purely-numeric tab id (defensive against unexpected markup)", () => {
+  it("does not publish positional or malformed route ids", () => {
+    expect(buildPageUrl(BASE, "0")).toBe(BASE);
+    expect(buildPageUrl(BASE, "3")).toBe(BASE);
     expect(buildPageUrl(BASE, "3abc")).toBe(BASE);
-    expect(buildPageUrl(BASE, "-1")).toBe(BASE); // no leading sign allowed
+    expect(buildPageUrl(BASE, "-1")).toBe(BASE);
   });
 });
 
 describe("buildWhatsAppShareUrl", () => {
   it("URL-encodes the shared link", () => {
-    const url = buildWhatsAppShareUrl("https://x.test/g/#grp-2");
-    expect(url).toBe("https://wa.me/?text=" + encodeURIComponent("https://x.test/g/#grp-2"));
-    expect(url).not.toContain("#grp-2"); // raw # would truncate the wa.me query string
+    const url = buildWhatsAppShareUrl("https://x.test/g/#dest-explore");
+    expect(url).toBe("https://wa.me/?text=" + encodeURIComponent("https://x.test/g/#dest-explore"));
+    expect(url).not.toContain("#dest-explore"); // raw # would truncate the wa.me query string
   });
 });
 
@@ -55,7 +51,6 @@ describe("buildMailtoUrl", () => {
   });
 
   it("encodes an ampersand in the title so it can't be mistaken for a mailto param separator", () => {
-    // An unencoded "&" in the subject would be parsed as starting a new mailto field.
     const url = buildMailtoUrl("Food & Shopping", "https://x.test/");
     expect(url).not.toMatch(/subject=Food & Shopping/);
     expect(url).toContain(encodeURIComponent("Food & Shopping"));
