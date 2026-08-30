@@ -43,7 +43,7 @@ describe("resolveScaffoldArgs — argv/env seam", () => {
   it("the workflow provides protected-landing permissions, names, and quoted flags", () => {
     const wf = readFileSync(path.join(ROOT, ".github", "workflows", "new-guide.yml"), "utf8");
     const step = wf.split("Land scaffold through protected checks")[1].split("- name:")[0];
-    expect(wf).toMatch(/permissions:\n  contents: write\n  pull-requests: write\n  issues: write\n  actions: write/);
+    expect(wf).toMatch(/permissions:\n {2}contents: write\n {2}pull-requests: write\n {2}issues: write\n {2}actions: write/);
     for (const needle of ["SLUG:", "COUNTRY:", "ISSUE:", '--slug "$SLUG"', '--country "$COUNTRY"', '--issue "$ISSUE"']) {
       expect(step).toContain(needle);
     }
@@ -120,7 +120,7 @@ describe("landScaffold protected transaction", () => {
     expect(flattened.some((line) => line.includes("HEAD:main"))).toBe(false);
     expect(flattened.some((line) => line.includes("gh workflow run required-gate.yml") && line.includes("--ref scaffold/andorra-64"))).toBe(true);
     expect(flattened.some((line) => line.includes("gh workflow run september-freeze.yml") && line.includes("pr_number=77"))).toBe(true);
-    expect(flattened.some((line) => line.includes(`gh pr merge 77`) && line.includes(`--match-head-commit ${HEAD}`))).toBe(true);
+    expect(flattened.some((line) => line.includes("gh pr merge 77") && line.includes(`--match-head-commit ${HEAD}`))).toBe(true);
     const mergeAt = flattened.findIndex((line) => line.includes("gh pr merge 77"));
     const closeAt = flattened.findIndex((line) => line.includes("gh issue close 64"));
     expect(mergeAt).toBeGreaterThan(-1);
