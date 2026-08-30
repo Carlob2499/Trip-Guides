@@ -14,6 +14,8 @@
    Korea produces 13 (11 groups + both), Sedona 9 (8 groups + Tools alone). Neither number is
    written down anywhere; both fall out of the guide. */
 
+import type { TravelerDestinationName } from "./destinations";
+
 /** What a station IS, which decides how it renders and where its content comes from. */
 export type StationKind = "group" | "fieldlog" | "tools";
 
@@ -78,6 +80,76 @@ export function buildStations({ groups, hasLearnings }: StationInput): Station[]
     key: "tools",
     full: TOOLS_LABEL,
     kind: "tools",
+    index: stations.length,
+  });
+
+  return stations;
+}
+
+/** Traveler-first routing keeps primary destinations distinct from secondary evidence/utility routes. */
+export type TravelerStationKind = "group" | "sources" | "recap" | "tools";
+
+export interface TravelerStation {
+  key: "days" | "food" | "explore" | "essentials" | "sources" | "recap" | "tools";
+  full: TravelerDestinationName | "Sources & verification" | "Recap" | "Trip utilities";
+  kind: TravelerStationKind;
+  primary: boolean;
+  index: number;
+}
+
+export interface TravelerStationInput {
+  /** Canonical destinations produced by projectTravelerDestinations(), in their projected order. */
+  groups: TravelerDestinationName[];
+  /** True only when authored evidence sections exist. */
+  hasSources: boolean;
+  /** True only when the guide carries a learnings record. */
+  hasLearnings: boolean;
+}
+
+export const SOURCES_LABEL = "Sources & verification";
+export const RECAP_LABEL = "Recap";
+export const TRIP_UTILITIES_LABEL = "Trip utilities";
+
+/**
+ * Build the traveler-first route list without changing the legacy rail yet.
+ * Primary destinations paint in navigation; secondary routes remain reachable but do not
+ * compete with the traveler's main hierarchy. This contract is intentionally separate from
+ * buildStations() until GuideLayout migrates atomically.
+ */
+export function buildTravelerStations({ groups, hasSources, hasLearnings }: TravelerStationInput): TravelerStation[] {
+  const stations: TravelerStation[] = groups.map((full, index) => ({
+    key: full.toLowerCase() as TravelerStation["key"],
+    full,
+    kind: "group",
+    primary: true,
+    index,
+  }));
+
+  if (hasSources) {
+    stations.push({
+      key: "sources",
+      full: SOURCES_LABEL,
+      kind: "sources",
+      primary: false,
+      index: stations.length,
+    });
+  }
+
+  if (hasLearnings) {
+    stations.push({
+      key: "recap",
+      full: RECAP_LABEL,
+      kind: "recap",
+      primary: false,
+      index: stations.length,
+    });
+  }
+
+  stations.push({
+    key: "tools",
+    full: TRIP_UTILITIES_LABEL,
+    kind: "tools",
+    primary: false,
     index: stations.length,
   });
 

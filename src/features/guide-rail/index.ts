@@ -9,8 +9,25 @@
    keeps scroll memory, the session key, telemetry and the thumb bar on one code path.
 
    Public surface — the only sanctioned imports from outside this silo. */
-export { buildStations, progressGeometry, FIELD_LOG_LABEL, TOOLS_LABEL } from "./model/stations";
-export type { Station, StationKind, StationInput, Geometry } from "./model/stations";
+export {
+  buildStations,
+  buildTravelerStations,
+  progressGeometry,
+  FIELD_LOG_LABEL,
+  TOOLS_LABEL,
+  SOURCES_LABEL,
+  RECAP_LABEL,
+  TRIP_UTILITIES_LABEL,
+} from "./model/stations";
+export type {
+  Station,
+  StationKind,
+  StationInput,
+  TravelerStation,
+  TravelerStationKind,
+  TravelerStationInput,
+  Geometry,
+} from "./model/stations";
 export {
   canonicalHome,
   legacyRouteAnchors,
