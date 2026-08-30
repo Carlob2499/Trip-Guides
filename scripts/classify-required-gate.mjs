@@ -2,6 +2,18 @@
 import { appendFileSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
+const AUTHORITY_MARKDOWN = new Set([
+  "AGENTS.md",
+  "CLAUDE.md",
+  "PRODUCT.md",
+  "docs/handoff.md",
+  "docs/reference/pipeline.md",
+  "docs/pipeline v2/CODEX_HANDOFF.md",
+  "docs/pipeline v2/DECISIONS.md",
+  "docs/pipeline v2/IMPLEMENTATION_STATE.md",
+  "docs/pipeline v2/SEPTEMBER_TRACKER.md",
+]);
+
 function normalize(path) {
   return String(path || "").trim().replaceAll("\\", "/");
 }
@@ -13,9 +25,11 @@ function isMarkdown(path) {
 export function classifyChangedPaths(paths) {
   const changed = paths.map(normalize).filter(Boolean);
   const full = changed.some((path) =>
-    !path.startsWith("learnings/") &&
-    !path.startsWith("guides-intake/") &&
-    !isMarkdown(path)
+    AUTHORITY_MARKDOWN.has(path) || (
+      !path.startsWith("learnings/") &&
+      !path.startsWith("guides-intake/") &&
+      !isMarkdown(path)
+    )
   );
   const a11y = changed.some((path) =>
     !path.startsWith("docs/") &&

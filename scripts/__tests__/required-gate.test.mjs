@@ -6,8 +6,21 @@ const readWorkflow = (name) => readFileSync(new URL(`../../.github/workflows/${n
 const workflow = readWorkflow("required-gate.yml");
 
 describe("required gate path classification", () => {
-  test("Markdown-only changes stay on the cheap invariant path", () => {
-    expect(classifyChangedPaths(["README.md", "docs/handoff.md"])).toEqual({ full: false, a11y: false });
+  test("ordinary Markdown stays cheap but current authority Markdown runs the full deterministic suite", () => {
+    expect(classifyChangedPaths(["README.md", "notes/history.md"])).toEqual({ full: false, a11y: false });
+    for (const path of [
+      "docs/handoff.md",
+      "docs/reference/pipeline.md",
+      "docs/pipeline v2/CODEX_HANDOFF.md",
+      "docs/pipeline v2/SEPTEMBER_TRACKER.md",
+      "docs/pipeline v2/IMPLEMENTATION_STATE.md",
+      "docs/pipeline v2/DECISIONS.md",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "PRODUCT.md",
+    ]) {
+      expect(classifyChangedPaths([path]), path).toEqual({ full: true, a11y: false });
+    }
   });
 
   test("intake and learnings data do not trigger code/browser gates", () => {
