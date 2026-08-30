@@ -60,7 +60,7 @@ Research an unfamiliar failure class before changing architecture. Prefer a narr
 
 ### Release execution
 
-Current `main` contracts/tests and authority docs outrank PRs, issues, closed branches, and historical artifacts. History is evidence unless current authority points to it.
+Current `main` contracts/tests and authority docs outrank PRs, issues, closed branches, and historical artifacts. History is evidence unless authority cites it.
 
 For September, `docs/pipeline v2/SEPTEMBER_TRACKER.md` is the queue. Re-audit after each safe task and continue the next unblocked deterministic milestone. No open PR is not a stop; stop only at a real owner, future, provider/model, or acceptance boundary.
 
