@@ -9,7 +9,6 @@ Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL — MODEL / CONTENT at Reconc
 PRs #116/#117/#122 are merged. #122 changed deterministic evidence handling and invalidated the first Kumamoto candidate for dispatch.
 Current Kumamoto authority: `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`, based on `a171af0988a49e6f18f4c5e312c46b9a674ed189`. Closed-unmerged PR #123 exact-head preflight GREEN: Tests `33252721880`, Accessibility `33252721875`, CodeQL/actions/JS-TS PASS. No model-backed Kumamoto run has started.
 NEXT: Sep 2 dispatch `research-pass-v2.yml` exactly from that frozen r2 ref for `kumamoto`, Sonnet 5/high + Opus 5/high critic. Never dispatch superseded `acceptance/v2-kumamoto-20260902`; no cap extension, artifact edits, production repair inside run, selector change, publication, or canary merge.
-RELEASE GOVERNANCE: `main` is still unprotected with required-status enforcement off and no rulesets. Issue #130 owns the blocker. Do not enable naive PR-only protection: trusted `/new` scaffold and manual `mutation.yml` currently write directly to `main`. First design and prove a no-Claude protected-branch-compatible write path or narrowly justified bypass; broad GitHub Actions bypass is not accepted evidence.
 V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset. Reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
 Durable shared decisions: `CONTEXT.md`.
 <!-- WARM_START_END -->
