@@ -2,7 +2,8 @@ import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 import { classifyChangedPaths } from "../classify-required-gate.mjs";
 
-const workflow = readFileSync(new URL("../../.github/workflows/required-gate.yml", import.meta.url), "utf8");
+const readWorkflow = (name) => readFileSync(new URL(`../../.github/workflows/${name}`, import.meta.url), "utf8");
+const workflow = readWorkflow("required-gate.yml");
 
 describe("required gate path classification", () => {
   test("Markdown-only changes stay on the cheap invariant path", () => {
@@ -32,6 +33,13 @@ describe("required gate workflow contract", () => {
     expect(workflow).toMatch(/\n {2}pull_request:\n/);
     expect(workflow).toMatch(/\n {2}workflow_dispatch:\n/);
     expect(workflow).not.toMatch(/^\s+paths(?:-ignore)?:/m);
+  });
+
+  test("is the sole repository PR test/a11y/invariant workflow", () => {
+    for (const name of ["test.yml", "a11y.yml", "project-invariants.yml"]) {
+      expect(readWorkflow(name), `${name} must not duplicate Required gate on pull_request`).not.toMatch(/\n {2}pull_request:/);
+    }
+    expect(readWorkflow("a11y.yml")).toMatch(/\n {2}push:\n/);
   });
 
   test("uses trusted pinned actions and the repository's existing merge evidence", () => {
