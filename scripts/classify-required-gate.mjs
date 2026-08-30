@@ -8,6 +8,7 @@ const AUTHORITY_MARKDOWN = new Set([
   "PRODUCT.md",
   "docs/handoff.md",
   "docs/reference/pipeline.md",
+  "docs/pipeline v2/CODEX_HANDOFF.md",
   "docs/pipeline v2/DECISIONS.md",
   "docs/pipeline v2/IMPLEMENTATION_STATE.md",
   "docs/pipeline v2/SEPTEMBER_TRACKER.md",
