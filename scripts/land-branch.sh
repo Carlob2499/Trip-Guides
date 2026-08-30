@@ -10,6 +10,7 @@
 # hard failures; executeLanding owns durable re-quarantine for passed auto-landings.
 #
 # Usage: scripts/land-branch.sh <branch> <base> <title> <body-file> <passed:true|false> [announce-url] [slug]
+# The optional slug argument overrides the workflow's inherited SLUG environment variable.
 # Prints exactly one final line:
 #   merged:<pr-number> announce=<ok|failed|skipped>
 #   draft:<pr-number>
@@ -22,7 +23,7 @@ TITLE="${3:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:tr
 BODY_FILE="${4:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>}"
 PASSED="${5:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>}"
 ANNOUNCE_URL="${6:-}"
-SLUG="${7:-}"
+LANDING_SLUG="${7:-${SLUG:-}}"
 REPO="${GITHUB_REPOSITORY:-}"
 
 PR_NUM="$(gh pr view "$BRANCH" --json number -q .number 2>/dev/null || true)"
@@ -43,7 +44,7 @@ if [ "$PASSED" != "true" ]; then
   exit 0
 fi
 
-if [ -z "$SLUG" ]; then
+if [ -z "$LANDING_SLUG" ]; then
   echo "[land-branch] a passing auto-landing requires the guide slug so final integrated evidence can be rerun" >&2
   exit 1
 fi
@@ -88,7 +89,7 @@ if ! npm run build; then
   echo "[land-branch] final integrated build failed; refusing auto-merge" >&2
   exit 1
 fi
-if ! npm run verify -- --slug "$SLUG" --network; then
+if ! npm run verify -- --slug "$LANDING_SLUG" --network; then
   echo "[land-branch] final integrated network verification failed; refusing auto-merge" >&2
   exit 1
 fi
