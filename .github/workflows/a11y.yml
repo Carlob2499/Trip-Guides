@@ -1,14 +1,13 @@
 name: Accessibility
 
-# Browser safety gate — hub + both guides. Axe owns semantic accessibility; the companion
-# resilience spec owns 320px reflow and hostile-content geometry. Both use the same built site
-# and Chromium install so one workflow pays the setup cost once.
+# Post-merge/manual browser safety diagnostic. Pull-request enforcement lives in Required gate so
+# the same build + Playwright matrix is not paid twice on every code PR. Push-to-main remains as a
+# deployment-adjacent regression signal.
 on:
-  pull_request:
-    paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
   push:
     branches: [main]
     paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
+  workflow_dispatch:
 
 permissions:
   contents: read

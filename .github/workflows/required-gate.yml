@@ -1,0 +1,100 @@
+name: Required gate
+
+# This is the one status intended to become globally required on main. It always reports on a PR;
+# path classification happens inside the job so Markdown/content-only PRs succeed quickly instead
+# of leaving a path-filtered required workflow permanently pending. workflow_dispatch exists for
+# trusted automation-created PRs whose GITHUB_TOKEN does not recursively emit pull_request events.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      base:
+        description: Base branch used to classify changed files
+        required: false
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: required-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  required-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Classify changed files
+        id: scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          DISPATCH_BASE: ${{ inputs.base || 'main' }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$BASE_SHA" "$HEAD_SHA" > "$RUNNER_TEMP/changed-files.txt"
+          else
+            git fetch origin "+refs/heads/${DISPATCH_BASE}:refs/remotes/origin/${DISPATCH_BASE}" --depth=1
+            git diff --name-only "origin/${DISPATCH_BASE}...HEAD" > "$RUNNER_TEMP/changed-files.txt"
+          fi
+          cat "$RUNNER_TEMP/changed-files.txt"
+          node scripts/classify-required-gate.mjs "$RUNNER_TEMP/changed-files.txt"
+
+      # Cheap and unconditional: authority/architecture contracts must still be checked when a PR
+      # only changes Markdown and the heavier code workflows correctly have nothing to do.
+      - name: Project invariants
+        run: node scripts/check-project-invariants.mjs
+
+      - name: Install dependencies
+        if: steps.scope.outputs.full == 'true'
+        run: npm ci
+      - name: Lint
+        if: steps.scope.outputs.full == 'true'
+        run: npm run lint
+      - name: Typecheck
+        if: steps.scope.outputs.full == 'true'
+        run: npm run typecheck
+      - name: Unit and coverage gate
+        if: steps.scope.outputs.full == 'true'
+        run: npm run coverage
+
+      # Mirrors the existing Accessibility workflow's merge evidence, but only when a path that
+      # workflow would have accepted changed. Keeping it inside this always-reporting job makes
+      # one required check safe across docs-only and code PRs.
+      - name: Production build
+        if: steps.scope.outputs.a11y == 'true'
+        run: npm run build
+      - name: Cache Playwright browsers
+        if: steps.scope.outputs.a11y == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Chromium
+        if: steps.scope.outputs.a11y == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Install Chromium system dependencies
+        if: steps.scope.outputs.a11y == 'true' && steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - name: Accessibility and resilience
+        if: steps.scope.outputs.a11y == 'true'
+        run: npx playwright test tests/visual/a11y.spec.ts tests/visual/resilience.spec.ts tests/visual/offline-sync.spec.ts
+
+      - name: Gate scope summary
+        if: always()
+        run: |
+          echo "full=${{ steps.scope.outputs.full }}"
+          echo "a11y=${{ steps.scope.outputs.a11y }}"
