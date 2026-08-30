@@ -137,6 +137,7 @@ jobs:
     # died with HTTP 403 — live run 32379790925 (2026-08-20), the first real exercise of this
     # M6 path. The resolve job keeps the narrower workflow-level set.
     permissions:
+      checks: read
       contents: write
       pull-requests: write
       issues: write

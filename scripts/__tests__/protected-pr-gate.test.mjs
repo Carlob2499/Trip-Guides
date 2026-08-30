@@ -16,13 +16,38 @@ describe("protected unattended PR gate", () => {
       "Analyze (actions)",
       "Analyze (javascript-typescript)",
     ]);
-    expect(protectedCheckState(PROTECTED_PR_REQUIRED_CHECKS.map((name, i) => ({ id: i + 1, name, status: "completed", conclusion: "success" }))).toMatchObject({ passed: true, missing: [], pending: [], failed: [] });
+    expect(
+      protectedCheckState(
+        PROTECTED_PR_REQUIRED_CHECKS.map((name, i) => ({
+          id: i + 1,
+          name,
+          status: "completed",
+          conclusion: "success",
+        })),
+      ),
+    ).toMatchObject({ passed: true, missing: [], pending: [], failed: [] });
   });
 
   test("fails closed on missing, pending, or unsuccessful checks", () => {
     expect(protectedCheckState([]).passed).toBe(false);
     expect(protectedCheckState([{ id: 1, name: "required-gate", status: "in_progress" }]).pending).toContain("required-gate");
     expect(protectedCheckState([{ id: 1, name: "required-gate", status: "completed", conclusion: "failure" }]).failed).toContain("required-gate=failure");
+  });
+
+  test("does not let stale explicit-dispatch checks satisfy a new transaction", () => {
+    const checks = PROTECTED_PR_REQUIRED_CHECKS.map((name, i) => ({
+      id: i + 1,
+      name,
+      status: "completed",
+      conclusion: "success",
+    }));
+    expect(protectedCheckState(checks, PROTECTED_PR_REQUIRED_CHECKS, {
+      "required-gate": 1,
+      "freeze-policy": 2,
+    })).toMatchObject({
+      passed: false,
+      missing: ["required-gate", "freeze-policy"],
+    });
   });
 
   test("dispatches exact-base gates and rejects head/base drift", async () => {
@@ -32,12 +57,21 @@ describe("protected unattended PR gate", () => {
     const ghRun = (args) => {
       calls.push(args);
       if (args[0] === "api" && args[1].includes("/branches/main")) return `${base}\n`;
+      if (args[0] === "api" && args[1].includes("/check-runs")) {
+        return JSON.stringify({
+          check_runs: [
+            { id: 41, name: "required-gate", status: "completed", conclusion: "success" },
+            { id: 42, name: "freeze-policy", status: "completed", conclusion: "success" },
+          ],
+        });
+      }
       if (args[0] === "pr" && args[1] === "view") return `${head}\n`;
       if (args[0] === "workflow") return "";
       throw new Error(`unexpected gh call: ${args.join(" ")}`);
     };
-    const waitForChecks = async () => {
+    const waitForChecks = async ({ minimumIds }) => {
       expect(calls.some((args) => args.includes(`base_sha=${BASE}`))).toBe(true);
+      expect(minimumIds).toEqual({ "required-gate": 41, "freeze-policy": 42 });
     };
 
     await expect(gateProtectedPr({

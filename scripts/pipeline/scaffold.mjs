@@ -12,15 +12,18 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { gh } from "../lib/cli.mjs";
 import { isValidSlug } from "../lib/slug.mjs";
+import {
+  PROTECTED_PR_REQUIRED_CHECKS,
+  gateProtectedPr,
+  protectedCheckState,
+  waitForProtectedChecks,
+} from "../protected-pr-gate.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
-export const SCAFFOLD_REQUIRED_CHECKS = [
-  "required-gate",
-  "freeze-policy",
-  "Analyze (actions)",
-  "Analyze (javascript-typescript)",
-];
+export const SCAFFOLD_REQUIRED_CHECKS = PROTECTED_PR_REQUIRED_CHECKS;
+export const scaffoldCheckState = protectedCheckState;
+export const waitForScaffoldChecks = waitForProtectedChecks;
 
 export function scaffoldBranchName(slug, issue) {
   return `scaffold/${slug}-${issue}`;
@@ -39,57 +42,6 @@ export function scaffoldComment({ slug, repo, guideUrl, progressUrl, prNumber })
 \`\`\`
 WP_SLUG=${slug} WP_SECTION="full pass" node scripts/pipeline.mjs prompt prompts/research-passA.md
 \`\`\``;
-}
-
-function latestCheckByName(checkRuns) {
-  const latest = new Map();
-  for (const check of checkRuns || []) {
-    if (!check?.name) continue;
-    const previous = latest.get(check.name);
-    if (!previous || Number(check.id || 0) > Number(previous.id || 0)) latest.set(check.name, check);
-  }
-  return latest;
-}
-
-export function scaffoldCheckState(checkRuns, required = SCAFFOLD_REQUIRED_CHECKS) {
-  const latest = latestCheckByName(checkRuns);
-  const missing = [];
-  const pending = [];
-  const failed = [];
-  for (const name of required) {
-    const check = latest.get(name);
-    if (!check) missing.push(name);
-    else if (check.status !== "completed") pending.push(name);
-    else if (check.conclusion !== "success") failed.push(`${name}=${check.conclusion || "unknown"}`);
-  }
-  return { missing, pending, failed, passed: missing.length === 0 && pending.length === 0 && failed.length === 0 };
-}
-
-const defaultSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export async function waitForScaffoldChecks({
-  repo,
-  headSha,
-  ghRun = gh,
-  required = SCAFFOLD_REQUIRED_CHECKS,
-  timeoutMs = 20 * 60 * 1000,
-  pollMs = 5000,
-  now = () => Date.now(),
-  sleep = defaultSleep,
-}) {
-  const started = now();
-  while (true) {
-    const raw = ghRun(["api", `repos/${repo}/commits/${headSha}/check-runs?per_page=100`]);
-    const payload = JSON.parse(raw || "{}");
-    const state = scaffoldCheckState(payload.check_runs, required);
-    if (state.failed.length) throw new Error(`scaffold checks failed for ${headSha}: ${state.failed.join(", ")}`);
-    if (state.passed) return state;
-    if (now() - started >= timeoutMs) {
-      const detail = [...state.missing.map((name) => `${name}=missing`), ...state.pending.map((name) => `${name}=pending`)];
-      throw new Error(`timed out waiting for scaffold checks on ${headSha}: ${detail.join(", ") || "unknown state"}`);
-    }
-    await sleep(pollMs);
-  }
 }
 
 export async function landScaffold(
@@ -131,18 +83,16 @@ export async function landScaffold(
   const prNumber = Number(String(ghRun(["pr", "view", branch, "--repo", repo, "--json", "number", "--jq", ".number"])).trim());
   if (!Number.isSafeInteger(prNumber) || prNumber < 1) throw new Error(`could not resolve scaffold PR number for ${branch}`);
 
-  // Explicit dispatch is mandatory for GITHUB_TOKEN-created PRs. Pin Required gate to the exact
-  // main SHA that this scaffold head rebased onto; then reject any base movement before merge.
-  ghRun(["workflow", "run", "required-gate.yml", "--repo", repo, "--ref", branch, "-f", "base=main", "-f", `base_sha=${baseSha}`]);
-  ghRun(["workflow", "run", "september-freeze.yml", "--repo", repo, "--ref", branch, "-f", `pr_number=${prNumber}`]);
-  await waitForChecks({ repo, headSha, ghRun });
-
-  const currentBaseSha = String(ghRun(["api", `repos/${repo}/branches/main`, "--jq", ".commit.sha"])).trim();
-  if (currentBaseSha !== baseSha) {
-    throw new Error(`main moved after scaffold checks: tested ${baseSha}, now ${currentBaseSha}; issue remains open and research will not start`);
-  }
-  const currentHeadSha = String(ghRun(["pr", "view", String(prNumber), "--repo", repo, "--json", "headRefOid", "--jq", ".headRefOid"])).trim();
-  if (currentHeadSha !== headSha) throw new Error(`scaffold PR #${prNumber} head moved after checks: expected ${headSha}, found ${currentHeadSha}`);
+  await gateProtectedPr({
+    repo,
+    prNumber,
+    branch,
+    headSha,
+    base: "main",
+    baseSha,
+    ghRun,
+    waitForChecks,
+  });
 
   ghRun(["pr", "merge", String(prNumber), "--repo", repo, "--merge", "--match-head-commit", headSha, "--delete-branch"]);
   const merged = JSON.parse(ghRun(["pr", "view", String(prNumber), "--repo", repo, "--json", "mergedAt,state"]));

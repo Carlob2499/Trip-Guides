@@ -2,6 +2,10 @@ import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 
 const lander = readFileSync(new URL("../land-branch.sh", import.meta.url), "utf8");
+const changeWorkflow = readFileSync(new URL("../../.github/workflows/change.yml", import.meta.url), "utf8");
+const newGuideWorkflow = readFileSync(new URL("../../.github/workflows/new-guide.yml", import.meta.url), "utf8");
+const v1Workflow = readFileSync(new URL("../../.github/workflows/research-pass.yml", import.meta.url), "utf8");
+const v2Workflow = readFileSync(new URL("../../.github/workflows/research-pass-v2.yml", import.meta.url), "utf8");
 
 describe("protected automated landing contract", () => {
   test("passing research/change landing synchronizes base before final evidence", () => {
@@ -23,5 +27,12 @@ describe("protected automated landing contract", () => {
     expect(lander).toMatch(/conflict\|automatic merge failed/i);
     expect(lander).toContain("leaving PR #$PR_NUM for human triage");
     expect(lander).toContain("not silently downgrading to draft-PR triage");
+  });
+
+  test("grants every automated landing the narrow dispatch and check-read scopes", () => {
+    expect(changeWorkflow).toMatch(/change:\n[\s\S]*?permissions:\n(?:\s+.*\n)*?\s+checks: read[\s\S]*?\s+actions: write/);
+    expect(newGuideWorkflow).toMatch(/permissions:\n\s+checks: read[\s\S]*?\s+actions: write/);
+    expect(v1Workflow).toMatch(/permissions:\n\s+checks: read[\s\S]*?\s+actions: write/);
+    expect(v2Workflow).toMatch(/# ── Land[\s\S]*?permissions:\n\s+actions: write\n\s+checks: read/);
   });
 });

@@ -71,6 +71,7 @@ on:
         default: false
 
 permissions:
+  checks: read
   contents: write
   pull-requests: write
   issues: write

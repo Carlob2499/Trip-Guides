@@ -17,18 +17,19 @@ export const PROTECTED_PR_REQUIRED_CHECKS = [
   "Analyze (javascript-typescript)",
 ];
 
-function latestCheckByName(checkRuns) {
+function latestCheckByName(checkRuns, minimumIds = {}) {
   const latest = new Map();
   for (const check of checkRuns || []) {
     if (!check?.name) continue;
+    if (Number(check.id || 0) <= Number(minimumIds[check.name] || 0)) continue;
     const previous = latest.get(check.name);
     if (!previous || Number(check.id || 0) > Number(previous.id || 0)) latest.set(check.name, check);
   }
   return latest;
 }
 
-export function protectedCheckState(checkRuns, required = PROTECTED_PR_REQUIRED_CHECKS) {
-  const latest = latestCheckByName(checkRuns);
+export function protectedCheckState(checkRuns, required = PROTECTED_PR_REQUIRED_CHECKS, minimumIds = {}) {
+  const latest = latestCheckByName(checkRuns, minimumIds);
   const missing = [];
   const pending = [];
   const failed = [];
@@ -64,6 +65,7 @@ export async function waitForProtectedChecks({
   headSha,
   ghRun = gh,
   required = PROTECTED_PR_REQUIRED_CHECKS,
+  minimumIds = {},
   timeoutMs = 20 * 60 * 1000,
   pollMs = 5000,
   now = () => Date.now(),
@@ -72,7 +74,7 @@ export async function waitForProtectedChecks({
   const started = now();
   while (true) {
     const payload = JSON.parse(ghRun(["api", `repos/${repo}/commits/${headSha}/check-runs?per_page=100`]) || "{}");
-    const state = protectedCheckState(payload.check_runs, required);
+    const state = protectedCheckState(payload.check_runs, required, minimumIds);
     if (state.failed.length) throw new Error(`protected PR checks failed for ${headSha}: ${state.failed.join(", ")}`);
     if (state.passed) return state;
     if (now() - started >= timeoutMs) {
@@ -95,7 +97,7 @@ export async function gateProtectedPr({
 }) {
   if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(String(repo))) throw new Error(`invalid repository "${repo}"`);
   if (!Number.isSafeInteger(Number(prNumber)) || Number(prNumber) < 1) throw new Error(`invalid PR number "${prNumber}"`);
-  if (!branch || !/^[A-Za-z0-9._\/-]+$/.test(branch)) throw new Error(`invalid branch "${branch}"`);
+  if (!branch || !/^[A-Za-z0-9._/-]+$/.test(branch)) throw new Error(`invalid branch "${branch}"`);
   if (!validSha(headSha) || !validSha(baseSha)) throw new Error("exact 40-character head and base SHAs are required");
 
   const initialBase = currentBaseSha({ repo, base, ghRun });
@@ -103,9 +105,18 @@ export async function gateProtectedPr({
   const initialHead = currentPrHead({ repo, prNumber, ghRun });
   if (initialHead !== headSha) throw new Error(`PR #${prNumber} head moved before protected checks: expected ${headSha}, found ${initialHead}`);
 
+  // A retried landing may already have successful checks on this commit. Record the newest
+  // explicitly dispatched gate IDs so only runs created by this transaction can satisfy those
+  // two controls. CodeQL may legitimately have completed when the branch head was pushed.
+  const beforePayload = JSON.parse(ghRun(["api", `repos/${repo}/commits/${headSha}/check-runs?per_page=100`]) || "{}");
+  const before = latestCheckByName(beforePayload.check_runs);
+  const minimumIds = Object.fromEntries(
+    ["required-gate", "freeze-policy"].map((name) => [name, Number(before.get(name)?.id || 0)]),
+  );
+
   ghRun(["workflow", "run", "required-gate.yml", "--repo", repo, "--ref", branch, "-f", `base=${base}`, "-f", `base_sha=${baseSha}`]);
   ghRun(["workflow", "run", "september-freeze.yml", "--repo", repo, "--ref", branch, "-f", `pr_number=${prNumber}`]);
-  await waitForChecks({ repo, headSha, ghRun });
+  await waitForChecks({ repo, headSha, ghRun, minimumIds });
 
   const finalHead = currentPrHead({ repo, prNumber, ghRun });
   if (finalHead !== headSha) throw new Error(`PR #${prNumber} head moved after protected checks: expected ${headSha}, found ${finalHead}`);

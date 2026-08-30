@@ -44,7 +44,7 @@ describe("resolveScaffoldArgs — argv/env seam", () => {
   it("the workflow provides protected-landing permissions, names, and quoted flags", () => {
     const wf = readFileSync(path.join(ROOT, ".github", "workflows", "new-guide.yml"), "utf8");
     const step = wf.split("Land scaffold through protected checks")[1].split("- name:")[0];
-    expect(wf).toMatch(/permissions:\n {2}contents: write\n {2}pull-requests: write\n {2}issues: write\n {2}actions: write/);
+    expect(wf).toMatch(/permissions:\n {2}checks: read\n {2}contents: write\n {2}pull-requests: write\n {2}issues: write\n {2}actions: write/);
     for (const needle of ["SLUG:", "COUNTRY:", "ISSUE:", '--slug "$SLUG"', '--country "$COUNTRY"', '--issue "$ISSUE"']) {
       expect(step).toContain(needle);
     }
@@ -99,6 +99,7 @@ describe("landScaffold protected transaction", () => {
 
   it("pins base + head, merges only after exact checks, then closes the issue", async () => {
     const events = [];
+    let checkReads = 0;
     const gitRun = (args) => {
       events.push(["git", ...args]);
       if (args[0] === "rev-parse" && args[1] === "HEAD") return HEAD;
@@ -108,7 +109,10 @@ describe("landScaffold protected transaction", () => {
     const ghRun = (args) => {
       events.push(["gh", ...args]);
       if (args[0] === "pr" && args[1] === "view" && args.includes("number")) return "77\n";
-      if (args[0] === "api" && args[1].includes("/check-runs")) return JSON.stringify({ check_runs: successChecks() });
+      if (args[0] === "api" && args[1].includes("/check-runs")) {
+        checkReads += 1;
+        return JSON.stringify({ check_runs: checkReads === 1 ? [] : successChecks() });
+      }
       if (args[0] === "api" && args[1].includes("/branches/main")) return `${BASE}\n`;
       if (args[0] === "pr" && args[1] === "view" && args.includes("headRefOid")) return `${HEAD}\n`;
       if (args[0] === "pr" && args[1] === "view") return JSON.stringify({ mergedAt: "2026-08-30T00:00:00Z", state: "MERGED" });
@@ -134,6 +138,7 @@ describe("landScaffold protected transaction", () => {
 
   it("refuses merge and research when main moves after exact-head checks", async () => {
     const events = [];
+    let baseReads = 0;
     const gitRun = (args) => {
       events.push(["git", ...args]);
       if (args[0] === "rev-parse" && args[1] === "HEAD") return HEAD;
@@ -144,13 +149,18 @@ describe("landScaffold protected transaction", () => {
     const ghRun = (args) => {
       events.push(["gh", ...args]);
       if (args[0] === "pr" && args[1] === "view" && args.includes("number")) return "77\n";
-      if (args[0] === "api" && args[1].includes("/check-runs")) return JSON.stringify({ check_runs: successChecks() });
-      if (args[0] === "api" && args[1].includes("/branches/main")) return `${moved}\n`;
+      if (args[0] === "api" && args[1].includes("/check-runs")) return JSON.stringify({ check_runs: [] });
+      if (args[0] === "api" && args[1].includes("/branches/main")) {
+        baseReads += 1;
+        return `${baseReads === 1 ? BASE : moved}\n`;
+      }
+      if (args[0] === "pr" && args[1] === "view" && args.includes("headRefOid")) return `${HEAD}\n`;
+      if (args[0] === "workflow") return "";
       return "";
     };
     await expect(landScaffold({
       slug: "andorra", country: "Andorra", issue: "64", siteBase: "https://x.test", repo: "o/r",
-    }, { gitRun, ghRun })).rejects.toThrow(/main moved after scaffold checks/);
+    }, { gitRun, ghRun, waitForChecks: async () => {} })).rejects.toThrow(/main moved after protected checks/);
     const flattened = events.map((event) => event.join(" "));
     expect(flattened.some((line) => line.includes("gh pr merge"))).toBe(false);
     expect(flattened.some((line) => line.includes("gh issue close"))).toBe(false);
@@ -158,6 +168,7 @@ describe("landScaffold protected transaction", () => {
 
   it("leaves the issue open and never merges when an exact-head check fails", async () => {
     const events = [];
+    let checkReads = 0;
     const gitRun = (args) => {
       events.push(["git", ...args]);
       if (args[0] === "rev-parse" && args[1] === "HEAD") return HEAD;
@@ -167,7 +178,12 @@ describe("landScaffold protected transaction", () => {
     const ghRun = (args) => {
       events.push(["gh", ...args]);
       if (args[0] === "pr" && args[1] === "view" && args.includes("number")) return "77\n";
+      if (args[0] === "api" && args[1].includes("/branches/main")) return `${BASE}\n`;
+      if (args[0] === "pr" && args[1] === "view" && args.includes("headRefOid")) return `${HEAD}\n`;
+      if (args[0] === "workflow") return "";
       if (args[0] === "api" && args[1].includes("/check-runs")) {
+        checkReads += 1;
+        if (checkReads === 1) return JSON.stringify({ check_runs: [] });
         const checks = successChecks();
         checks[0] = { ...checks[0], conclusion: "failure" };
         return JSON.stringify({ check_runs: checks });
@@ -176,7 +192,7 @@ describe("landScaffold protected transaction", () => {
     };
     await expect(landScaffold({
       slug: "andorra", country: "Andorra", issue: "64", siteBase: "https://x.test", repo: "o/r",
-    }, { gitRun, ghRun })).rejects.toThrow(/scaffold checks failed/);
+    }, { gitRun, ghRun })).rejects.toThrow(/protected PR checks failed/);
     const flattened = events.map((event) => event.join(" "));
     expect(flattened.some((line) => line.includes("gh pr merge"))).toBe(false);
     expect(flattened.some((line) => line.includes("gh issue close"))).toBe(false);
