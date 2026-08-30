@@ -48,9 +48,13 @@ describe("required gate workflow contract", () => {
     expect(workflow).not.toMatch(/^\s+paths(?:-ignore)?:/m);
   });
 
-  test("dispatch mode verifies the prospective integration tree, not only the isolated head", () => {
+  test("dispatch mode pins and verifies the exact prospective integration tree", () => {
+    expect(workflow).toContain("base_sha:");
+    expect(workflow).toContain("EXPECTED_BASE_SHA: ${{ inputs.base_sha }}");
+    expect(workflow).toContain('actual_base_sha="$(git rev-parse "origin/${DISPATCH_BASE}")"');
     expect(workflow).toContain('git diff --name-only "origin/${DISPATCH_BASE}...HEAD"');
     expect(workflow).toContain('git merge --no-commit --no-ff "origin/${DISPATCH_BASE}"');
+    expect(workflow).toMatch(/Expected .* refusing to test a different integration tree/);
   });
 
   test("is the sole repository PR test/a11y/invariant workflow", () => {
