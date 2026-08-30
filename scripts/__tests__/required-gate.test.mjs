@@ -7,7 +7,7 @@ const workflow = readWorkflow("required-gate.yml");
 
 describe("required gate path classification", () => {
   test("ordinary Markdown stays cheap but current authority Markdown runs the full deterministic suite", () => {
-    expect(classifyChangedPaths(["README.md", "docs/notes/history.md"])).toEqual({ full: false, a11y: false });
+    expect(classifyChangedPaths(["README.md", "notes/history.md"])).toEqual({ full: false, a11y: false });
     for (const path of [
       "docs/handoff.md",
       "docs/reference/pipeline.md",
