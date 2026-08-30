@@ -62,11 +62,11 @@ Research an unfamiliar failure class before changing architecture. Prefer a narr
 
 Current `main` contracts/tests and authority docs outrank PRs, issues, closed branches, and historical artifacts. History is evidence unless current authority points to it.
 
-For September, `docs/pipeline v2/SEPTEMBER_TRACKER.md` is the queue. After each safe task, re-audit and continue the next unblocked deterministic milestone; no open PR is not a stop. Stop only at an owner/product fork, future gate, provider/model boundary, or preserved acceptance.
+For September, `docs/pipeline v2/SEPTEMBER_TRACKER.md` is the queue. Re-audit after each safe task and continue the next unblocked deterministic milestone. No open PR is not a stop; stop only at a real owner, future, provider/model, or acceptance boundary.
 
-Before model-backed acceptance: freeze the exact SHA; make deterministic/schema/provenance/retry-cap/build/a11y/security/exact-head CI green; audit control-plane drift; confirm no known deterministic blocker. Never use a research/critic model to debug deterministic failure.
+Before model acceptance, freeze the exact SHA; make deterministic/schema/provenance/retry-cap/build/a11y/security/exact-head CI green; audit control-plane drift; confirm no known deterministic blocker. Never use research/critic models to debug deterministic failure.
 
-Effort follows task: tooling first; low/medium for mechanical/docs; normal/high for implementation/failure analysis; strongest only for irreducible architecture/security or pre-registered model/content acceptance. Failure does not authorize cap extension or green-chasing.
+Effort follows task: tooling first; low/medium for mechanical/docs; normal/high for implementation/debug; strongest only for irreducible architecture/security or pre-registered model/content acceptance. Failure never authorizes cap extension or green-chasing.
 
 ## Verification
 
