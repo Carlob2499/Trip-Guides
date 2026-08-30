@@ -26,25 +26,16 @@ export function initSharePanel(lockScroll, unlockScroll) {
   var shareQrEl = document.getElementById("shareQr");
   if (!shareBtn || !shareModal) return;
 
-  // The modal + backdrop are authored inside .sticky-chrome, which carries a
-  // backdrop-filter — and a filtered ancestor becomes the containing block for
-  // position:fixed, so the modal anchored to the ~175px chrome instead of the
-  // viewport and flew off-screen once the page was scrolled. Reparent both to
-  // <body> (mirroring how the SOS sheet / command palette mount) so `fixed` is
-  // viewport-relative and the modal centers correctly at any scroll position.
   if (shareModal.parentElement !== document.body) document.body.appendChild(shareModal);
   if (shareBackdrop && shareBackdrop.parentElement !== document.body) document.body.appendChild(shareBackdrop);
 
   var pageTitle = document.title;
 
-  // The URL to share must point at the SECTION the reader is on — tabs switch without
-  // changing the URL, so this is built fresh from the active tab every time it's
-  // needed, never cached across calls.
   function currentPageUrl() {
     var base = window.location.href.split("#")[0];
     var active = document.querySelector(".gtab.gtab-active");
-    var t = active && active.getAttribute("data-tab");
-    return buildPageUrl(base, t);
+    var route = active && active.getAttribute("data-route");
+    return buildPageUrl(base, route);
   }
 
   function qrUnavailable() {
@@ -53,14 +44,10 @@ export function initSharePanel(lockScroll, unlockScroll) {
     shareQrEl.textContent = "QR unavailable — use Copy link";
   }
 
-  // Render the QR for `url` into #shareQr. The generator is VENDORED (npm `qrcode`, lazy-
-  // import()ed into its own chunk) — no runtime CDN, so it works offline too, unlike the old
-  // jsdelivr <script>. Draws to a canvas with the current theme's ink/paper, read live from the tokens
-  // (util.js's qrColors — see the note there for the bug the old literals carried).
   function renderQR(url) {
     if (!shareQrEl) return;
     shareQrEl.style.cssText = "";
-    shareQrEl.innerHTML = ""; // regenerate — the section may have changed
+    shareQrEl.innerHTML = "";
     var canvas = document.createElement("canvas");
     shareQrEl.appendChild(canvas);
     import("qrcode").then(function (mod) {
@@ -73,13 +60,10 @@ export function initSharePanel(lockScroll, unlockScroll) {
   }
 
   function openShare() {
-    // Always open the modal (on every device) so the QR, copy-link, social links,
-    // file downloads (.gpx/.ics), and Share-summary action are all reachable. Native
-    // OS share is offered by the Share-summary button.
     shareModal.removeAttribute("hidden");
     shareBackdrop.classList.add("open");
     lockScroll();
-    var pageUrl = currentPageUrl(); // fresh each open — carries the section
+    var pageUrl = currentPageUrl();
     if (shareUrlTxt) shareUrlTxt.textContent = pageUrl;
     if (shareWALink) shareWALink.href = buildWhatsAppShareUrl(pageUrl);
     if (shareEmailLink) shareEmailLink.href = buildMailtoUrl(pageTitle, pageUrl);
@@ -100,10 +84,6 @@ export function initSharePanel(lockScroll, unlockScroll) {
   if (shareCloseBtn) shareCloseBtn.addEventListener("click", closeShare);
   if (shareBackdrop) shareBackdrop.addEventListener("click", closeShare);
 
-  // Share-summary — a brief theme + planned-days + key-spots digest. Native OS share
-  // on devices that support it; clipboard copy (with a toast) otherwise. Standalone
-  // button, reachable WITHOUT the share modal ever having been opened — so it must
-  // never depend on state the modal's own open flow set up.
   var summaryBtn = document.getElementById("btnShareSummary");
   var summaryEl = document.getElementById("tripSummary");
   if (summaryBtn && summaryEl) {
@@ -114,7 +94,7 @@ export function initSharePanel(lockScroll, unlockScroll) {
     }
     summaryBtn.addEventListener("click", function () {
       var text = (summaryEl.textContent || "").trim();
-      var pageUrl = currentPageUrl(); // own computation — see file header
+      var pageUrl = currentPageUrl();
       if (navigator.share) {
         navigator.share({ title: pageTitle, text: text, url: pageUrl }).catch(function () {});
         return;
@@ -137,7 +117,7 @@ export function initSharePanel(lockScroll, unlockScroll) {
   if (shareCopyBtn) {
     shareCopyBtn.addEventListener("click", function () {
       var btn = shareCopyBtn;
-      var url = btn.dataset.url || currentPageUrl(); // section-specific
+      var url = btn.dataset.url || currentPageUrl();
       function flash() { btn.textContent = "Copied!"; setTimeout(function () { btn.textContent = "Copy link"; }, 2200); }
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).then(flash).catch(function () { fallbackCopy(); });
@@ -148,10 +128,6 @@ export function initSharePanel(lockScroll, unlockScroll) {
         ta.style.cssText = "position:fixed;opacity:0;top:0;left:0;width:1px;height:1px";
         document.body.appendChild(ta);
         ta.focus(); ta.select();
-        // execCommand is deprecated and stays ON PURPOSE: this whole function is the FALLBACK for
-        // browsers where navigator.clipboard is missing or rejects (older iOS Safari, and any
-        // non-secure context). The modern API is already tried first at the top of the handler —
-        // deleting this branch would make "Copy link" silently do nothing for those visitors.
         try { document.execCommand("copy"); flash(); } catch (e) {}
         document.body.removeChild(ta);
       }
