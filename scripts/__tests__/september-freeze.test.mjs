@@ -18,7 +18,7 @@ describe("September freeze policy", () => {
     expect(easternDate(new Date("2026-09-20T04:30:00Z"))).toBe("2026-09-20");
   });
 
-  it("enters the feature freeze Sep 20, backend code freeze Sep 27, and expires Oct 1", () => {
+  it("enters the feature freeze Sep 20, engineering code freeze Sep 27, and expires Oct 1", () => {
     expect(freezePhase("2026-09-19")).toBe("open");
     expect(freezePhase("2026-09-20")).toBe("feature-freeze");
     expect(freezePhase("2026-09-26")).toBe("feature-freeze");
@@ -27,7 +27,7 @@ describe("September freeze policy", () => {
     expect(freezePhase("2026-10-01")).toBe("open");
   });
 
-  it("classifies backend/product/control-plane paths, including locked doctrine Markdown", () => {
+  it("classifies engineering/product/control-plane paths, including locked doctrine Markdown", () => {
     for (const file of [
       "AGENTS.md",
       "CLAUDE.md",
