@@ -35,6 +35,11 @@ describe("required gate workflow contract", () => {
     expect(workflow).not.toMatch(/^\s+paths(?:-ignore)?:/m);
   });
 
+  test("dispatch mode verifies the prospective integration tree, not only the isolated head", () => {
+    expect(workflow).toContain('git diff --name-only "origin/${DISPATCH_BASE}...HEAD"');
+    expect(workflow).toContain('git merge --no-commit --no-ff "origin/${DISPATCH_BASE}"');
+  });
+
   test("is the sole repository PR test/a11y/invariant workflow", () => {
     for (const name of ["test.yml", "a11y.yml", "project-invariants.yml"]) {
       expect(readWorkflow(name), `${name} must not duplicate Required gate on pull_request`).not.toMatch(/\n {2}pull_request:/);

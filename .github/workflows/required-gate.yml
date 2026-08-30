@@ -1,16 +1,17 @@
 name: Required gate
 
-# This is the one status intended to become globally required on main. It always reports on a PR;
-# path classification happens inside the job so Markdown/content-only PRs succeed quickly instead
-# of leaving a path-filtered required workflow permanently pending. workflow_dispatch exists for
-# trusted automation-created PRs whose GITHUB_TOKEN does not recursively emit pull_request events.
+# The one repository-owned status intended to become globally required on main. It always reports
+# on a PR; scope is classified inside the job so docs/content work cannot strand a required check.
+# workflow_dispatch is the unattended path for trusted automation-created PR branches. In that
+# mode the job also merges current base into the checkout without committing, so the exact-head
+# status proves the prospective integration tree rather than testing the branch in isolation.
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
     inputs:
       base:
-        description: Base branch used to classify changed files
+        description: Base branch used for scope and prospective-merge verification
         required: false
         default: main
         type: string
@@ -35,7 +36,7 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Classify changed files
+      - name: Classify changed files and prepare integration tree
         id: scope
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -51,9 +52,10 @@ jobs:
           fi
           cat "$RUNNER_TEMP/changed-files.txt"
           node scripts/classify-required-gate.mjs "$RUNNER_TEMP/changed-files.txt"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            git merge --no-commit --no-ff "origin/${DISPATCH_BASE}"
+          fi
 
-      # Cheap and unconditional: authority/architecture contracts must still be checked when a PR
-      # only changes Markdown and the heavier code workflows correctly have nothing to do.
       - name: Project invariants
         run: node scripts/check-project-invariants.mjs
 
@@ -70,9 +72,6 @@ jobs:
         if: steps.scope.outputs.full == 'true'
         run: npm run coverage
 
-      # Mirrors the existing Accessibility workflow's merge evidence, but only when a path that
-      # workflow would have accepted changed. Keeping it inside this always-reporting job makes
-      # one required check safe across docs-only and code PRs.
       - name: Production build
         if: steps.scope.outputs.a11y == 'true'
         run: npm run build

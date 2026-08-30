@@ -5,8 +5,10 @@
 //   Sep 27-30: BACKEND CODE FREEZE — code changes must be a release blocker or explicit owner waiver.
 // The special September freeze expires Oct 1; future release policy is a separate decision.
 //
-// This script is pure/testable at the policy seam and, when run by GitHub Actions, reads only the
-// trusted pull_request_target event + GitHub's changed-file API. It never executes PR-controlled code.
+// pull_request_target is the ordinary trusted path. An automated scaffold PR cannot rely on a
+// GITHUB_TOKEN-created PR recursively starting that event, so workflow_dispatch may supply the PR
+// number explicitly; the job still checks out trusted main and this script fetches PR metadata and
+// changed filenames from GitHub rather than executing PR-controlled content.
 
 const FEATURE_FREEZE = "2026-09-20";
 const CODE_FREEZE = "2026-09-27";
@@ -16,8 +18,6 @@ export const STABILIZATION_LABEL = "stabilization";
 export const RELEASE_BLOCKER_LABEL = "release-blocker";
 export const FREEZE_WAIVER_LABEL = "freeze-waiver";
 
-// Files whose text changes executable/agent product doctrine even though some are Markdown.
-// Status/evidence bookkeeping docs are intentionally NOT here so release truth can still be updated.
 const TOP_LEVEL_CODE = new Set([
   "AGENTS.md",
   "CLAUDE.md",
@@ -30,7 +30,6 @@ const TOP_LEVEL_CODE = new Set([
   "wrangler.toml",
 ]);
 
-/** YYYY-MM-DD in the project release timezone, not runner UTC. */
 export function easternDate(date = new Date()) {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/New_York",
@@ -48,11 +47,6 @@ export function freezePhase(date) {
   return "code-freeze";
 }
 
-/**
- * Backend/product/control-plane surface. Guide content and release-status documentation remain
- * editable because the September tracker freezes engineering, not factual recertification or
- * honest authority/evidence bookkeeping. Locked doctrine Markdown is treated as code above.
- */
 export function isCodePath(file) {
   if (TOP_LEVEL_CODE.has(file)) return true;
   if (/^(?:astro|vite|vitest|playwright|eslint|prettier)\.config\./.test(file)) return true;
@@ -102,18 +96,28 @@ export function evaluateFreeze({ date, labels = [], files = [] }) {
   };
 }
 
+function githubHeaders(token) {
+  return {
+    Accept: "application/vnd.github+json",
+    Authorization: `Bearer ${token}`,
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": "waypoint-september-freeze-guard",
+  };
+}
+
+async function pullRequest({ repository, number, token }) {
+  const response = await fetch(`https://api.github.com/repos/${repository}/pulls/${number}`, {
+    headers: githubHeaders(token),
+  });
+  if (!response.ok) throw new Error(`GitHub pull-request query failed: ${response.status} ${response.statusText}`);
+  return response.json();
+}
+
 async function changedFiles({ repository, number, token }) {
   const out = [];
   for (let page = 1; ; page += 1) {
     const url = `https://api.github.com/repos/${repository}/pulls/${number}/files?per_page=100&page=${page}`;
-    const response = await fetch(url, {
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${token}`,
-        "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "waypoint-september-freeze-guard",
-      },
-    });
+    const response = await fetch(url, { headers: githubHeaders(token) });
     if (!response.ok) throw new Error(`GitHub changed-files query failed: ${response.status} ${response.statusText}`);
     const rows = await response.json();
     out.push(...rows.map((row) => row.filename));
@@ -122,32 +126,38 @@ async function changedFiles({ repository, number, token }) {
 }
 
 async function main() {
-  const eventPath = process.env.GITHUB_EVENT_PATH;
-  if (!eventPath) throw new Error("GITHUB_EVENT_PATH is required when the freeze checker is executed directly");
-
-  const { readFile } = await import("node:fs/promises");
-  const event = JSON.parse(await readFile(eventPath, "utf8"));
-  const number = event.pull_request?.number;
-  if (!number) throw new Error("September freeze guard requires a pull_request_target event");
-
   const repository = process.env.GITHUB_REPOSITORY;
   const token = process.env.GITHUB_TOKEN;
   if (!repository || !token) throw new Error("GITHUB_REPOSITORY and GITHUB_TOKEN are required");
 
+  const dispatchedNumber = process.env.WAYPOINT_FREEZE_PR_NUMBER || "";
+  let number;
+  let labels;
+  if (dispatchedNumber) {
+    if (!/^\d+$/.test(dispatchedNumber)) throw new Error(`invalid WAYPOINT_FREEZE_PR_NUMBER "${dispatchedNumber}"`);
+    number = Number(dispatchedNumber);
+    const pr = await pullRequest({ repository, number, token });
+    labels = (pr.labels || []).map((label) => label.name);
+  } else {
+    const eventPath = process.env.GITHUB_EVENT_PATH;
+    if (!eventPath) throw new Error("GITHUB_EVENT_PATH is required without WAYPOINT_FREEZE_PR_NUMBER");
+    const { readFile } = await import("node:fs/promises");
+    const event = JSON.parse(await readFile(eventPath, "utf8"));
+    number = event.pull_request?.number;
+    if (!number) throw new Error("September freeze guard requires a pull request or explicit dispatched PR number");
+    labels = (event.pull_request.labels || []).map((label) => label.name);
+  }
+
   const date = process.env.WAYPOINT_FREEZE_DATE || easternDate();
-  const labels = (event.pull_request.labels || []).map((label) => label.name);
   const files = await changedFiles({ repository, number, token });
   const verdict = evaluateFreeze({ date, labels, files });
 
-  console.log(`[september-freeze] date=${date} phase=${verdict.phase} codeFiles=${verdict.codeFiles.length}`);
+  console.log(`[september-freeze] pr=#${number} date=${date} phase=${verdict.phase} codeFiles=${verdict.codeFiles.length}`);
   console.log(`[september-freeze] ${verdict.allowed ? "ALLOW" : "BLOCK"}: ${verdict.reason}`);
   if (verdict.codeFiles.length) console.log(verdict.codeFiles.map((file) => `  - ${file}`).join("\n"));
-
   if (!verdict.allowed) process.exitCode = 1;
 }
 
-// Keep imports side-effect free. GitHub Actions invokes this file directly; Vitest imports the
-// exported policy functions without accidentally reading the Actions event or requiring a token.
 if (process.argv[1]) {
   const { pathToFileURL } = await import("node:url");
   if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();

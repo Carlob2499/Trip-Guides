@@ -59,21 +59,13 @@ if (normalizeAgentSpecificNames(sharedBody(agents)) !== normalizeAgentSpecificNa
 const maxAgentManualBytes = 6500;
 for (const [rel, text] of [["AGENTS.md", agents], ["CLAUDE.md", claude]]) {
   const bytes = Buffer.byteLength(text, "utf8");
-  if (bytes > maxAgentManualBytes) {
-    fail(`Agent context budget: ${rel} is ${bytes} bytes; max is ${maxAgentManualBytes}`);
-  } else {
-    pass(`Agent context budget: ${rel}`);
-  }
+  if (bytes > maxAgentManualBytes) fail(`Agent context budget: ${rel} is ${bytes} bytes; max is ${maxAgentManualBytes}`);
+  else pass(`Agent context budget: ${rel}`);
 }
 
-// Keep a negative ownership guard without looking like a live docs citation to the generic
-// docs-integrity scanner, which intentionally treats literal docs/*.md strings as positive refs.
 const retiredRoutingDoc = ["docs", "reference", "skill-routing.md"].join("/");
-if (fs.existsSync(file(retiredRoutingDoc))) {
-  fail(`Routing authority duplication: ${retiredRoutingDoc} must stay deleted; scripts/skill-routing.mjs + tests own routing`);
-} else {
-  pass("Routing authority duplication");
-}
+if (fs.existsSync(file(retiredRoutingDoc))) fail(`Routing authority duplication: ${retiredRoutingDoc} must stay deleted; scripts/skill-routing.mjs + tests own routing`);
+else pass("Routing authority duplication");
 
 for (const rel of [
   "README.md",
@@ -87,11 +79,8 @@ for (const rel of [
   "docs/pipeline v2/SEPTEMBER_TRACKER.md",
 ]) requirePath(rel, `Current authority: ${rel}`);
 
-if (!Array.isArray(tsconfig.exclude) || !tsconfig.exclude.includes("dist/**")) {
-  fail("Typecheck boundary: tsconfig.json must exclude generated dist/** artifacts");
-} else {
-  pass("Typecheck boundary excludes generated dist artifacts");
-}
+if (!Array.isArray(tsconfig.exclude) || !tsconfig.exclude.includes("dist/**")) fail("Typecheck boundary: tsconfig.json must exclude generated dist/** artifacts");
+else pass("Typecheck boundary excludes generated dist artifacts");
 
 requirePath(".github/workflows/research-pass.yml", "Pipeline V1 workflow");
 requirePath(".github/workflows/research-pass-v2.yml", "Pipeline V2 workflow");
@@ -100,20 +89,26 @@ requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
 requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
 requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
 
-// Release-governance hardening: mutation testing is diagnostic-only and must never regain a
-// generic direct-main write path. `/new` scaffold remains the one known protected-main
-// compatibility exception tracked by issue #130; do not broaden the exception surface here.
+// Release governance: mutation testing is diagnostic-only and `/new` must remain compatible with
+// protected main. Neither path may regain a direct-main push as an invisible convenience.
 const mutationWorkflow = read(".github/workflows/mutation.yml");
-if (!mutationWorkflow.includes("permissions:\n  contents: read")) {
-  fail("Release governance: mutation workflow must remain contents: read");
-} else if (/git\s+push[^\n]*\bmain\b/.test(mutationWorkflow)) {
-  fail("Release governance: mutation workflow must not push directly to main");
-} else {
-  pass("Release governance: mutation workflow is read-only to repository contents");
-}
+if (!mutationWorkflow.includes("permissions:\n  contents: read")) fail("Release governance: mutation workflow must remain contents: read");
+else if (/git\s+push[^\n]*\bmain\b/.test(mutationWorkflow)) fail("Release governance: mutation workflow must not push directly to main");
+else pass("Release governance: mutation workflow is read-only to repository contents");
 
-// Preserve the reciprocal reviewer trust boundary: unprivileged signal, read-only execution,
-// then a separate write-capable publish job that never executes PR-controlled code.
+const newGuideWorkflow = read(".github/workflows/new-guide.yml");
+const scaffoldLanding = read("scripts/pipeline/scaffold.mjs");
+if (!newGuideWorkflow.includes("pull-requests: write")) fail("Release governance: /new scaffold needs pull-requests: write for protected landing");
+else pass("Release governance: /new has bounded PR write authority");
+if (/HEAD:main|refs\/heads\/main/.test(scaffoldLanding)) fail("Release governance: scaffold landing must not push directly to main");
+else pass("Release governance: scaffold landing has no direct-main push");
+for (const required of ["required-gate", "freeze-policy", "Analyze (actions)", "Analyze (javascript-typescript)"]) {
+  if (!scaffoldLanding.includes(required)) fail(`Release governance: scaffold landing must require ${required}`);
+  else pass(`Release governance scaffold check: ${required}`);
+}
+requireText(".github/workflows/required-gate.yml", "git merge --no-commit --no-ff", "Required gate prospective-merge proof");
+requireText(".github/workflows/september-freeze.yml", "pr_number:", "Freeze policy automated-PR dispatch");
+
 for (const rel of [
   ".github/workflows/claude-codex-watcher.yml",
   ".github/workflows/claude-codex-signal.yml",

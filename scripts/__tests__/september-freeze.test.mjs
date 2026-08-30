@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   easternDate,
@@ -8,6 +9,8 @@ import {
   RELEASE_BLOCKER_LABEL,
   FREEZE_WAIVER_LABEL,
 } from "../check-september-freeze.mjs";
+
+const workflow = readFileSync(new URL("../../.github/workflows/september-freeze.yml", import.meta.url), "utf8");
 
 describe("September freeze policy", () => {
   it("uses America/New_York for release dates", () => {
@@ -85,5 +88,12 @@ describe("September freeze policy", () => {
     });
     expect(verdict.allowed).toBe(false);
     expect(verdict.codeFiles).toEqual(["scripts/pipeline-v2.mjs"]);
+  });
+
+  it("supports automated scaffold dispatch while still checking out trusted main", () => {
+    expect(workflow).toMatch(/workflow_dispatch:\n {4}inputs:\n {6}pr_number:/);
+    expect(workflow).toContain("WAYPOINT_FREEZE_PR_NUMBER: ${{ inputs.pr_number }}");
+    expect(workflow).toContain("github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || 'main'");
+    expect(workflow).toContain("if: github.event_name == 'pull_request_target' || inputs.pr_number != ''");
   });
 });
