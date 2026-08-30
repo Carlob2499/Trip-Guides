@@ -1,13 +1,10 @@
 name: Protected landing live proof
 
-# Disposable zero-model proof for issue #130. Merge this workflow only after the repository-side
-# protected landing controls are final and immediately before activating main protection. Its first
-# push to main creates and lands a harmless marker PR through the real unattended path, then removes
-# that marker through a second protected landing. The workflow never dispatches research or models.
+# Disposable zero-model proof for issue #130. Land this workflow while main is still unprotected,
+# then activate the intended main protection/ruleset, and only then dispatch this workflow manually.
+# This sequencing prevents an unprotected push from being mistaken for protected-main evidence.
+# The workflow never dispatches research or models.
 on:
-  push:
-    branches: [main]
-    paths: [.github/workflows/protected-landing-live-proof.yml]
   workflow_dispatch:
 
 permissions:
@@ -35,6 +32,16 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+
+      - name: Assert main protection is active before proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          protected="$(gh api "repos/${GITHUB_REPOSITORY}/branches/main" --jq '.protected')"
+          if [[ "$protected" != "true" ]]; then
+            echo "Refusing protected-main proof because main.protected=$protected" >&2
+            exit 1
+          fi
 
       - name: Create and land disposable proof marker
         id: proof
