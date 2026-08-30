@@ -108,6 +108,7 @@ body.chrome-yield .grail{transform:translateY(calc(-1 * var(--hdr-h)))}
   font-size:var(--text-control-sm);font-weight:650;cursor:pointer
 }
 .grail-secondary-link:hover{color:var(--ink);border-color:var(--accent)}
+.grail-secondary-link[aria-current="true"]{color:var(--aink);border-color:var(--accent);font-weight:750}
 .grail-secondary-link:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* --- TABLET (720-1179): the vertical spine --------------------------------------------------
