@@ -4,13 +4,13 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-30)
-Uruguay Canary #4 is GREEN draft-only product-path proof; R03 escalation/cancellation seams are proven. The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary. See `CONTEXT.md` for deeper history.
-Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL at Reconcile (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka` and never continue or repair-merge it.
-Kumamoto authority is only frozen `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run has started.
-Release governance is implemented through #150; #130 awaits owner/tooling settings and the protected-main proof: gates/current integration, no force-push/deletion, no broad Actions bypass.
-PR #143 puts U01/U02 by Sep 19, U03 by Sep 26, and handoff Sep 30; October is content/reverification/field bugs. #151 begins U02 truthfulness cleanup. #153 begins U01: the traveler-destination model preserves authored sections/legacy anchors and routes side-trip/event food to Explore; rendering/navigation are unstarted.
-NEXT: selectively wire the proven U01 projection into the traveler-first guide hierarchy, retaining product IA, secondary routes, and legacy links; complete protected-main settings/proof; then Sep 2 dispatch `research-pass-v2.yml` from r2 for `kumamoto` (Sonnet 5/high, Opus 5/high critic). No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge.
-V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset.
+Uruguay Canary #4 remains GREEN draft-only proof; R03 escalation/cancellation failure seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
+Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
+Kumamoto authority: only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run has started.
+Release governance is implemented through #150; #130 awaits only owner/tooling branch-protection settings + live proof. No broad Actions bypass.
+September frontend: U01/U02 Sep 19, U03 Sep 26, engineering handoff Sep 30; October is content/reverification/field bugs. #151 started U02. U01 foundations #153/#155/#156 are merged; live GuideLayout/router/mobile-nav migration is still pending.
+NEXT: migrate GuideLayout + guide routing + mobile navigation atomically onto the proven traveler projection/station/rail seams. Do not transplant isolated PR #115 fragments. On Sep 2 only, if model-burn preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
+No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
@@ -36,7 +36,7 @@ V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset.
 - Release-governance repository prerequisites are complete through #150. `main` still reports unprotected with no required-status enforcement/ruleset, so issue #130 is now only the final owner/tooling settings mutation and post-settings verification.
 - The failed Fukuoka evidence remains frozen. A separately justified post-Fukuoka remediation is merged, and the fresh Kumamoto acceptance is authorized only on rebuilt preflight-green candidate `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`; do not repurpose this authority into any other canary and do not dispatch the superseded candidate.
 - September engineering completion now includes frontend: U01/U02 target Sep 19, U03 Sep 26, and final engineering handoff Sep 30. PR #115 remains historical/deferred implementation evidence, not a branch to merge wholesale onto current main. PR #151 is the first merged U02 truthfulness cleanup.
-- PR #153 is the merged U01 model foundation. Its exact reviewed head `3f37c85a4607cc24c89b68571901ec4ab94ea24d` passed Required Gate, freeze policy, and both CodeQL analyses before merge; main `1fe293c06c6a728b17ed4664f922f1aed2c6ff1f` then passed deployment, worker, CodeQL, and the 93-test accessibility/resilience/offline browser suite.
+- U01 is IN PROGRESS. PR #153 merged the traveler-destination model foundation; #155 merged the separate traveler-station contract; #156 merged primary-route-aware rail compatibility. The live GuideLayout/router/mobile-navigation switch is intentionally still pending so the migration can land atomically rather than as incompatible half-steps.
 
 ## Pipeline status preserved
 
