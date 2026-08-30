@@ -4,13 +4,13 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-30)
-Uruguay Canary #4 is GREEN draft-only product-path proof; R03 escalation/cancellation seams are proven. The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary. See `CONTEXT.md` for deeper history.
-Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL at Reconcile (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka` and never continue or repair-merge it.
-Kumamoto authority is only frozen `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run has started.
-Release governance is implemented through #150; #130 awaits owner/tooling settings and the protected-main proof: gates/current integration, no force-push/deletion, no broad Actions bypass.
-PR #143 puts U01/U02 by Sep 19, U03 by Sep 26, and handoff Sep 30; October is content/reverification/field bugs. #151 begins U02 truthfulness cleanup. U01 foundations are now merged through #156: #153 projects authored sections into traveler destinations while preserving legacy ownership, #155 defines primary/secondary traveler stations without changing the legacy runtime, and #156 makes the rail runtime compatible with primary-only progress geometry while preserving the current renderer.
-NEXT: migrate GuideLayout + guide routing + mobile navigation atomically onto the proven traveler projection/station/rail seams; do not apply isolated historical PR #115 UI fragments that assume the rest of its diverged renderer. Complete protected-main settings/proof when tooling permits. On Sep 2 only, after the model-burn preflight remains satisfied, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high, Opus 5/high critic). No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge.
-V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset.
+Uruguay Canary #4 remains GREEN draft-only proof; R03 failure seams are proven. See `CONTEXT.md` for history.
+Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
+Kumamoto authority: only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run has started.
+Release governance is implemented through #150; #130 awaits only owner/tooling branch-protection settings + live proof. No broad Actions bypass.
+September frontend: U01/U02 Sep 19, U03 Sep 26, engineering handoff Sep 30; October is content/reverification/field bugs. #151 started U02. U01 foundations #153/#155/#156 are merged; live GuideLayout/router/mobile-nav migration is still pending.
+NEXT: migrate GuideLayout + guide routing + mobile navigation atomically onto the proven traveler projection/station/rail seams. Do not transplant isolated PR #115 fragments. On Sep 2 only, if model-burn preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
+No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
