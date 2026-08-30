@@ -409,32 +409,33 @@ import { trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts
     }
   })();
 
-  /* ── 4b. Section position ("3/13") ─────────────────────────────────────── */
-  /* Two homes since the bottom bar became a five-slot tab bar: `.bs-pos` stays beside
-     #curCat inside the Groups button — now visually hidden, so it reads as part of that
-     button's accessible name — and #sheetPos shows it visibly in the sheet head, where
-     there is room for it. One computation, both surfaces. */
+  /* ── 4b. Primary destination position ──────────────────────────────────── */
+  /* Position is measured only across traveler-primary destinations. Secondary routes remain
+     reachable but must not inflate the journey count or pretend to be progress stops. */
   var bsCur = document.getElementById("curCat");
   var tabsEl = document.getElementById("guideTabs");
   if (bsCur && tabsEl) {
-    var numTabs = tabsEl.querySelectorAll('.gtab[data-tab]');
-    var totalSections = Array.prototype.filter.call(numTabs, function (tab) {
-      return /^\d+$/.test(tab.getAttribute("data-tab"));
-    }).length;
+    var primaryTabs = Array.prototype.slice.call(
+      tabsEl.querySelectorAll('.gtab[data-primary="true"]:not([hidden])')
+    );
+    var totalSections = primaryTabs.length;
     var posEl = document.createElement("span");
     posEl.className = "bs-pos mn-sr";
     bsCur.insertAdjacentElement("afterend", posEl);
     var sheetPos = document.getElementById("sheetPos");
     function syncPos() {
       var active = tabsEl.querySelector(".gtab-active");
-      var num = active ? parseInt(active.getAttribute("data-tab"), 10) : NaN;
-      posEl.textContent = isNaN(num) ? "" : (num + 1) + "/" + totalSections;
-      if (sheetPos) sheetPos.textContent = isNaN(num) ? "" : (num + 1) + " of " + totalSections;
+      var num = primaryTabs.indexOf(active);
+      var secondary = active && active.getAttribute("data-primary") !== "true"
+        ? (active.getAttribute("data-full") || "More")
+        : "";
+      posEl.textContent = num < 0 ? (secondary ? " · " + secondary : "") : (num + 1) + "/" + totalSections;
+      if (sheetPos) sheetPos.textContent = num < 0 ? secondary : (num + 1) + " of " + totalSections;
+      if (active) bsCur.textContent = active.getAttribute("data-full") || "";
     }
-    // Every switch route ends in a class change on the strip — a click listener missed
-    // swipes, the bottom bar, keyboard arrows and deep links, so the position silently
-    // went stale on all four. Observe the state instead of one of the ways to reach it.
-    new MutationObserver(syncPos).observe(tabsEl, { subtree: true, attributes: true, attributeFilter: ["class"] });
+    new MutationObserver(syncPos).observe(tabsEl, {
+      subtree: true, attributes: true, attributeFilter: ["class"],
+    });
     syncPos();
   }
 })();
