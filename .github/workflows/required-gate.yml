@@ -3,8 +3,9 @@ name: Required gate
 # The one repository-owned status intended to become globally required on main. It always reports
 # on a PR; scope is classified inside the job so docs/content work cannot strand a required check.
 # workflow_dispatch is the unattended path for trusted automation-created PR branches. In that
-# mode the job also merges current base into the checkout without committing, so the exact-head
-# status proves the prospective integration tree rather than testing the branch in isolation.
+# mode the caller may pin the exact base SHA; the job refuses base movement, then merges that base
+# into the checkout without committing so the exact-head status proves the intended integration
+# tree rather than testing the branch in isolation.
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -14,6 +15,10 @@ on:
         description: Base branch used for scope and prospective-merge verification
         required: false
         default: main
+        type: string
+      base_sha:
+        description: Optional exact base SHA captured by trusted unattended landing automation
+        required: false
         type: string
 
 permissions:
@@ -43,11 +48,17 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           DISPATCH_BASE: ${{ inputs.base || 'main' }}
+          EXPECTED_BASE_SHA: ${{ inputs.base_sha }}
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
             git diff --name-only "$BASE_SHA" "$HEAD_SHA" > "$RUNNER_TEMP/changed-files.txt"
           else
             git fetch origin "+refs/heads/${DISPATCH_BASE}:refs/remotes/origin/${DISPATCH_BASE}" --depth=1
+            actual_base_sha="$(git rev-parse "origin/${DISPATCH_BASE}")"
+            if [ -n "$EXPECTED_BASE_SHA" ] && [ "$actual_base_sha" != "$EXPECTED_BASE_SHA" ]; then
+              echo "Expected ${DISPATCH_BASE} at ${EXPECTED_BASE_SHA}, found ${actual_base_sha}; refusing to test a different integration tree." >&2
+              exit 1
+            fi
             git diff --name-only "origin/${DISPATCH_BASE}...HEAD" > "$RUNNER_TEMP/changed-files.txt"
           fi
           cat "$RUNNER_TEMP/changed-files.txt"
