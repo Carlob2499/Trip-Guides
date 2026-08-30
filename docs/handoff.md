@@ -9,6 +9,7 @@ Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL — MODEL / CONTENT at Reconc
 PRs #116/#117/#122 are merged. #122 changed deterministic evidence handling and invalidated the first Kumamoto candidate for dispatch.
 Current Kumamoto authority: `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`, based on `a171af0988a49e6f18f4c5e312c46b9a674ed189`. Closed-unmerged PR #123 exact-head preflight GREEN: Tests `33252721880`, Accessibility `33252721875`, CodeQL/actions/JS-TS PASS. No model-backed Kumamoto run has started.
 NEXT: Sep 2 dispatch `research-pass-v2.yml` exactly from that frozen r2 ref for `kumamoto`, Sonnet 5/high + Opus 5/high critic. Never dispatch superseded `acceptance/v2-kumamoto-20260902`; no cap extension, artifact edits, production repair inside run, selector change, publication, or canary merge.
+RELEASE GOVERNANCE: `main` is still unprotected with required-status enforcement off and no rulesets. Issue #130 owns the blocker. Do not enable naive PR-only protection: trusted `/new` scaffold and manual `mutation.yml` currently write directly to `main`. First design and prove a no-Claude protected-branch-compatible write path or narrowly justified bypass; broad GitHub Actions bypass is not accepted evidence.
 V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` stays unset. Reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
 Durable shared decisions: `CONTEXT.md`.
 <!-- WARM_START_END -->
@@ -32,6 +33,7 @@ Durable shared decisions: `CONTEXT.md`.
 - S02 mobile critical path: DONE by PR #114 browser proof across /new, /progress, and a finished guide.
 - S03 offline/poor-network traveler path: DONE by PR #114's fresh-page offline service-worker read plus the existing durable sync/replay suite.
 - S04 accessibility: automated portion PASS after PR #114 exposed and repaired progress status contrast and undersized controls; one physical-device interaction spot check remains as a traveler/UI check, not as retroactive authority for the already-run Fukuoka acceptance canary.
+- Release governance is not mechanically closed: `main` remains unprotected, required checks are not enforceable by repository settings, and no ruleset targets `main`. Issue #130 is the current owner. Protection must preserve the intended trusted automated write paths; a no-Claude compatibility proof is required before this is treated as closed.
 - The failed Fukuoka evidence remains frozen. A separately justified post-Fukuoka remediation is merged, and the fresh Kumamoto acceptance is authorized only on rebuilt preflight-green candidate `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`; do not repurpose this authority into any other canary and do not dispatch the superseded candidate.
 
 ## Pipeline status preserved
