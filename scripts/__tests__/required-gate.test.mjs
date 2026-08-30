@@ -29,8 +29,8 @@ describe("required gate path classification", () => {
 
 describe("required gate workflow contract", () => {
   test("always reports for pull requests and can be dispatched on automation-created branches", () => {
-    expect(workflow).toMatch(/\n  pull_request:\n/);
-    expect(workflow).toMatch(/\n  workflow_dispatch:\n/);
+    expect(workflow).toMatch(/\n {2}pull_request:\n/);
+    expect(workflow).toMatch(/\n {2}workflow_dispatch:\n/);
     expect(workflow).not.toMatch(/^\s+paths(?:-ignore)?:/m);
   });
 
