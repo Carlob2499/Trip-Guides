@@ -23,7 +23,7 @@ describe("required gate path classification", () => {
   });
 
   test("mixed changes fail closed to the strongest applicable scope", () => {
-    expect(classifyChangedPaths(["docs/notes.md", "src/lib/foo.ts"])).toEqual({ full: true, a11y: true });
+    expect(classifyChangedPaths(["docs/handoff.md", "src/lib/foo.ts"])).toEqual({ full: true, a11y: true });
   });
 });
 
