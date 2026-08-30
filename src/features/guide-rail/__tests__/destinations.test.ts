@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
+  canonicalHome,
   legacyRouteAnchors,
   projectTravelerDestinations,
   TRAVELER_DESTINATION_ORDER,
@@ -61,6 +62,19 @@ describe("traveler destination projection", () => {
     ]);
     expect(projected.sources.map((entry) => entry.section.title)).toEqual(["Official references"]);
     expect(projected.destinations.map((destination) => destination.name)).toEqual(["Days"]);
+  });
+
+  it("keeps food mentions inside side-trip and event groups in Explore", () => {
+    expect(canonicalHome({
+      type: "venues",
+      group: "Day trips",
+      title: "Shopping, food & the full-day plan for Malmö",
+    })).toBe("Explore");
+    expect(canonicalHome({
+      type: "venues",
+      group: "Daejeon & MSI",
+      title: "Beyond the arena — Daejeon food",
+    })).toBe("Explore");
   });
 });
 

@@ -67,7 +67,9 @@ export function canonicalHome(section: SectionLike): CanonicalSectionHome {
   const foodGroup = /\b(food|dining|restaurants?|eating)\b/.test(group);
   const combinedShoppingGroup = foodGroup && /\bshopping\b/.test(group);
   if (combinedShoppingGroup && isShoppingSubject(subject) && !isFoodSubject(subject)) return "Explore";
-  if (foodGroup || isFoodSubject(subject)) return "Food";
+  // A title alone cannot override its authored context: side-trip and event sections often
+  // mention where to eat, but remain part of the destination/activity the traveler chose.
+  if (foodGroup) return "Food";
 
   return "Explore";
 }
