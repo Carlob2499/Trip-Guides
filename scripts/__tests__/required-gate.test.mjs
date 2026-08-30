@@ -11,6 +11,7 @@ describe("required gate path classification", () => {
     for (const path of [
       "docs/handoff.md",
       "docs/reference/pipeline.md",
+      "docs/pipeline v2/CODEX_HANDOFF.md",
       "docs/pipeline v2/SEPTEMBER_TRACKER.md",
       "docs/pipeline v2/IMPLEMENTATION_STATE.md",
       "docs/pipeline v2/DECISIONS.md",
