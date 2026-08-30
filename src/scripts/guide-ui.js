@@ -153,7 +153,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             if (!btn) return false;
             var idx = parseInt(btn.dataset.tab, 10);
             if (isNaN(idx)) return false;
-            showTab(idx);
+            // Route through the real station click so scroll memory and every other listener
+            // observe the same navigation path as the visible primary rail.
+            btn.click();
             return true;
           }
 
@@ -359,7 +361,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
 
           /* ── 3. SCROLL-SPY ───────────────────────────────────────────── */
           function setActive(secId, cat) {
-            var cur = document.getElementById("curCat"); if (cur) cur.textContent = order[cat] || "";
+            var cur = document.getElementById("curCat");
+            var currentStation = guideTabs && guideTabs.querySelector('.gtab[data-tab="' + cat + '"]');
+            if (cur) cur.textContent = (currentStation && currentStation.dataset.full) || order[cat] || "";
             document.querySelectorAll(".sheet-link").forEach(function (link) {
               var on = link.getAttribute("href") === "#" + secId;
               link.classList.toggle("active", on);
