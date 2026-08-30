@@ -100,6 +100,18 @@ requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
 requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
 requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
 
+// Release-governance hardening: mutation testing is diagnostic-only and must never regain a
+// generic direct-main write path. `/new` scaffold remains the one known protected-main
+// compatibility exception tracked by issue #130; do not broaden the exception surface here.
+const mutationWorkflow = read(".github/workflows/mutation.yml");
+if (!mutationWorkflow.includes("permissions:\n  contents: read")) {
+  fail("Release governance: mutation workflow must remain contents: read");
+} else if (/git\s+push[^\n]*\bmain\b/.test(mutationWorkflow)) {
+  fail("Release governance: mutation workflow must not push directly to main");
+} else {
+  pass("Release governance: mutation workflow is read-only to repository contents");
+}
+
 // Preserve the reciprocal reviewer trust boundary: unprivileged signal, read-only execution,
 // then a separate write-capable publish job that never executes PR-controlled code.
 for (const rel of [
