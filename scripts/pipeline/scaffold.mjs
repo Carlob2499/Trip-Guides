@@ -78,15 +78,14 @@ export async function waitForScaffoldChecks({
   sleep = defaultSleep,
 }) {
   const started = now();
-  let last = { missing: [...required], pending: [], failed: [], passed: false };
   while (true) {
     const raw = ghRun(["api", `repos/${repo}/commits/${headSha}/check-runs?per_page=100`]);
     const payload = JSON.parse(raw || "{}");
-    last = scaffoldCheckState(payload.check_runs, required);
-    if (last.failed.length) throw new Error(`scaffold checks failed for ${headSha}: ${last.failed.join(", ")}`);
-    if (last.passed) return last;
+    const state = scaffoldCheckState(payload.check_runs, required);
+    if (state.failed.length) throw new Error(`scaffold checks failed for ${headSha}: ${state.failed.join(", ")}`);
+    if (state.passed) return state;
     if (now() - started >= timeoutMs) {
-      const detail = [...last.missing.map((name) => `${name}=missing`), ...last.pending.map((name) => `${name}=pending`)];
+      const detail = [...state.missing.map((name) => `${name}=missing`), ...state.pending.map((name) => `${name}=pending`)];
       throw new Error(`timed out waiting for scaffold checks on ${headSha}: ${detail.join(", ") || "unknown state"}`);
     }
     await sleep(pollMs);
