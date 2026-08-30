@@ -3,9 +3,10 @@
 // issue-to-scaffold.mjs writes a quarantined draft into the checkout. This module commits that
 // draft to an isolated scaffold branch, opens a PR, explicitly dispatches the checks that a
 // GITHUB_TOKEN-created PR cannot be trusted to trigger recursively, waits for the exact branch
-// head to pass every required check, merges the PR, and only THEN replies/closes the intake issue.
-// Research starts after this function returns, so a failed/unknown gate leaves the draft isolated
-// and the issue open instead of starting research from content that never reached main.
+// head to pass every required check, verifies that the tested main base is still current, merges
+// the PR, and only THEN replies/closes the intake issue. Research starts after this function
+// returns, so a failed/unknown gate or a moved base leaves the draft isolated and the issue open
+// instead of starting research from content that never reached main.
 
 import { execFileSync } from "node:child_process";
 import path from "node:path";
@@ -65,6 +66,18 @@ export function scaffoldCheckState(checkRuns, required = SCAFFOLD_REQUIRED_CHECK
   return { missing, pending, failed, passed: missing.length === 0 && pending.length === 0 && failed.length === 0 };
 }
 
+export function assertScaffoldBaseUnmoved({ testedBaseSha, currentBaseSha }) {
+  if (!/^[0-9a-f]{40}$/.test(String(testedBaseSha))) {
+    throw new Error(`could not resolve tested scaffold base SHA: "${testedBaseSha}"`);
+  }
+  if (!/^[0-9a-f]{40}$/.test(String(currentBaseSha))) {
+    throw new Error(`could not resolve current main SHA before scaffold merge: "${currentBaseSha}"`);
+  }
+  if (testedBaseSha !== currentBaseSha) {
+    throw new Error(`main moved after scaffold verification: tested ${testedBaseSha}, current ${currentBaseSha}; refusing stale merge`);
+  }
+}
+
 const defaultSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function waitForScaffoldChecks({
@@ -117,6 +130,8 @@ export async function landScaffold(
   // Preserve the existing serialization/collision behavior: reconcile with whatever reached main
   // since checkout before publishing the isolated branch. A conflict fails before any PR merge.
   runGit(["pull", "--rebase", "origin", "main"]);
+  const testedBaseSha = String(runGit(["rev-parse", "origin/main"], { capture: true })).trim();
+  if (!/^[0-9a-f]{40}$/.test(testedBaseSha)) throw new Error(`could not resolve tested scaffold base SHA: "${testedBaseSha}"`);
   const headSha = String(runGit(["rev-parse", "HEAD"], { capture: true })).trim();
   if (!/^[0-9a-f]{40}$/.test(headSha)) throw new Error(`could not resolve scaffold head SHA: "${headSha}"`);
   runGit(["push", "origin", `HEAD:refs/heads/${branch}`]);
@@ -136,6 +151,13 @@ export async function landScaffold(
   ghRun(["workflow", "run", "september-freeze.yml", "--repo", repo, "--ref", branch, "-f", `pr_number=${prNumber}`]);
   await waitForChecks({ repo, headSha, ghRun });
 
+  // Required-gate dispatch proves the prospective merge against the base that existed when the
+  // branch was rebased and checks were launched. Do not allow a later main advance to turn that
+  // proof into a stale-base merge; repository up-to-date protection will provide the platform
+  // enforcement once issue #130's final settings mutation is available.
+  const currentBaseSha = String(ghRun(["api", `repos/${repo}/branches/main`, "--jq", ".commit.sha"])).trim();
+  assertScaffoldBaseUnmoved({ testedBaseSha, currentBaseSha });
+
   ghRun(["pr", "merge", String(prNumber), "--repo", repo, "--merge", "--match-head-commit", headSha, "--delete-branch"]);
   const merged = JSON.parse(ghRun(["pr", "view", String(prNumber), "--repo", repo, "--json", "mergedAt,state"]));
   if (!merged?.mergedAt || merged.state !== "MERGED") {
@@ -151,7 +173,7 @@ export async function landScaffold(
   });
   ghRun(["issue", "comment", String(issue), "--repo", repo, "--body", body]);
   ghRun(["issue", "close", String(issue), "--repo", repo]);
-  return { slug, issue: String(issue), branch, headSha, prNumber };
+  return { slug, issue: String(issue), branch, testedBaseSha, headSha, prNumber };
 }
 
 /** Argument resolution, pure and testable. Flags win; env names match new-guide.yml exactly. */
