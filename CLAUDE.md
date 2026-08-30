@@ -58,6 +58,16 @@ Ask only for genuine user/product forks. Do not ask for facts the repository can
 
 Research an unfamiliar failure class before changing architecture. Prefer a narrow reproducer or failing test first, then fix the owner, then simplify/delete the workaround that proof makes obsolete.
 
+### Authority precedence and autonomous release loop
+
+When repository surfaces disagree, **current `main` authority wins**: executable contracts/tests and current authority docs outrank PR bodies, issue prose, closed branches, historical canary artifacts, and old handoff text. Historical surfaces are evidence, not current instructions, unless a current authority explicitly points to them.
+
+For September release work, use `docs/pipeline v2/SEPTEMBER_TRACKER.md` as the delivery queue. After each safe task, re-read current repository state and continue with the next unblocked deterministic milestone. Do not stop merely because a PR merged, no PR is open, or a historical canary is green. Stop only for a genuine owner/product fork, a future-dated gate, a provider/model availability boundary, or an explicitly preserved acceptance boundary.
+
+Before spending a scarce model-backed acceptance attempt, enforce a **model-burn firewall**: freeze the exact candidate SHA; run all applicable deterministic, schema, provenance, retry/cap, build, accessibility, security, and exact-head CI checks; audit relevant control-plane drift since the candidate base; and confirm there is no known deterministic blocker. If deterministic evidence can answer the question, do not use a research/critic model to debug it.
+
+Allocate agent effort by task, not brand: deterministic tooling first; low/medium effort for mechanical bounded fixes and documentation truth; normal/high effort for implementation and difficult failure analysis; strongest/highest-cost models only for irreducible architecture/security review or pre-registered model/content acceptance. A failed model run is evidence, not permission to extend caps or rerun until green.
+
 ## Verification
 
 Use the smallest useful check during iteration, then the repository gates before merge:
