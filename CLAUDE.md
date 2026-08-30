@@ -60,13 +60,13 @@ Research an unfamiliar failure class before changing architecture. Prefer a narr
 
 ### Release execution
 
-On disagreement, current `main` executable contracts/tests and authority docs outrank PRs, issues, closed branches, and historical artifacts. History is evidence unless current authority points to it.
+Current `main` contracts/tests and authority docs outrank PRs, issues, closed branches, and historical artifacts. History is evidence unless current authority points to it.
 
-For September, `docs/pipeline v2/SEPTEMBER_TRACKER.md` is the delivery queue. After each safe task, re-audit and continue the next unblocked deterministic milestone; no open PR is not a stop condition. Stop only at a real owner/product fork, future gate, provider/model boundary, or preserved acceptance boundary.
+For September, `docs/pipeline v2/SEPTEMBER_TRACKER.md` is the queue. After each safe task, re-audit and continue the next unblocked deterministic milestone; no open PR is not a stop. Stop only at an owner/product fork, future gate, provider/model boundary, or preserved acceptance.
 
-Before model-backed acceptance: freeze the exact SHA; make deterministic/schema/provenance/retry-cap/build/a11y/security/exact-head CI green; audit relevant control-plane drift; confirm no known deterministic blocker. Never spend a research/critic model debugging a deterministic failure.
+Before model-backed acceptance: freeze the exact SHA; make deterministic/schema/provenance/retry-cap/build/a11y/security/exact-head CI green; audit control-plane drift; confirm no known deterministic blocker. Never use a research/critic model to debug deterministic failure.
 
-Effort follows task, not brand: tooling first; low/medium for mechanical/docs; normal/high for implementation/failure analysis; strongest only for irreducible architecture/security or pre-registered model/content acceptance. Failure does not authorize cap extension or green-chasing reruns.
+Effort follows task: tooling first; low/medium for mechanical/docs; normal/high for implementation/failure analysis; strongest only for irreducible architecture/security or pre-registered model/content acceptance. Failure does not authorize cap extension or green-chasing.
 
 ## Verification
 
