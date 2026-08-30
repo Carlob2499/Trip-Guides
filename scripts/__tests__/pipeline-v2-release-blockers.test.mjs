@@ -39,6 +39,7 @@ import { ContractError } from "../pipeline/v2/contracts.mjs";
 
 const SLUG = "blockerland";
 const BRANCH = `research-v2/${SLUG}`;
+const V3_BRANCH = `research-v3/${SLUG}`;
 
 let dir, repo, origin, g, intakeDir, guidesDir;
 beforeEach(async () => {
@@ -129,6 +130,37 @@ describe("B1 — answers-route: an active Run B owns answers even when Run A is 
     });
     const d = await route();
     expect(d).toMatchObject({ target: "research", branch: BRANCH });
+  });
+
+  it("published main + correctly stamped ACTIVE V3 run → target the V3 branch", async () => {
+    await publishGuideOnMain();
+    await seedOriginBranch(V3_BRANCH, {
+      [`guides-intake/${SLUG}/run.v2.json`]: JSON.stringify({
+        engine: "v3", runId: `${SLUG}-20260820-ccc333`, status: "running",
+      }),
+    });
+    const d = await route();
+    expect(d).toMatchObject({ target: "research", branch: V3_BRANCH });
+  });
+
+  it("a V3 branch with legacy V2 identity refuses answer routing instead of disappearing", async () => {
+    await seedOriginBranch(V3_BRANCH, {
+      [`guides-intake/${SLUG}/run.v2.json`]: JSON.stringify({
+        runId: `${SLUG}-20260820-ccc333`, status: "running",
+      }),
+    });
+    const d = await route();
+    expect(d.error).toMatch(/research-v3\/blockerland.*expected "v3"/);
+  });
+
+  it("a V2 branch carrying V3 identity refuses cross-generation answer routing", async () => {
+    await seedOriginBranch(BRANCH, {
+      [`guides-intake/${SLUG}/run.v2.json`]: JSON.stringify({
+        engine: "v3", runId: `${SLUG}-20260820-ccc333`, status: "running",
+      }),
+    });
+    const d = await route();
+    expect(d.error).toMatch(/research-v2\/blockerland.*expected "v2"/);
   });
 
   it("published main + COMPLETE-but-unmerged Run B draft → Run B still owns the late answer", async () => {

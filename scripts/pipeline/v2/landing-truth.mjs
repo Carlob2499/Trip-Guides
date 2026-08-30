@@ -19,6 +19,7 @@ import { emitRunEvents, readGeocodeReport } from "./events.mjs";
 import { readEvidence } from "./evidence.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const researchLabel = (slug, engine = "v2") => `research-${engine}(${slug})`;
 
 function makeGh(cwd) {
   return (args) => execFileSync("gh", args, { cwd, encoding: "utf8" });
@@ -84,7 +85,7 @@ export function verifyMergedPr({ slug, pr, expectedRunId, base = "main", branch 
     throw new ContractError(`PR #${pr} merged into "${doc.baseRefName}", not the expected default branch "${base}" — not this run's landing`);
   }
   if (doc.headRefName !== branch) {
-    throw new ContractError(`PR #${pr}'s head is "${doc.headRefName}", not "${branch}" — it is not ${slug}'s V2 landing, whatever else it merged`);
+    throw new ContractError(`PR #${pr}'s head is "${doc.headRefName}", not "${branch}" — it is not ${slug}'s staged research landing, whatever else it merged`);
   }
   const mergeOid = doc.mergeCommit?.oid;
   if (!mergeOid) {
@@ -153,6 +154,7 @@ export async function finalizeLandingRecovery(slug, {
   pr,
   announced = null,
   base = null,
+  branch = null,
   cwd = ROOT,
   intakeDir = undefined,
   gh,
@@ -170,8 +172,9 @@ export async function finalizeLandingRecovery(slug, {
   const stateOpts = intakeDir ? { intakeDir } : {};
   const durable = await readRunStateV2(slug, stateOpts);
   if (!durable) {
-    throw new ContractError(`no durable V2 run state for "${slug}" on this ${resolvedBase} checkout — nothing to finalize`);
+    throw new ContractError(`no durable research run state for "${slug}" on this ${resolvedBase} checkout — nothing to finalize`);
   }
+  const resolvedBranch = branch || `${durable.engine === "v3" ? "research-v3" : "research-v2"}/${slug}`;
   const alreadyFinalized = durable.landing?.outcome === "merged" && durable.publication?.published;
   if (!alreadyFinalized && announced == null && durable.landing?.announced == null) {
     throw new ContractError(
@@ -180,7 +183,7 @@ export async function finalizeLandingRecovery(slug, {
         `or --announced skipped (no announce URL was configured for this landing).`,
     );
   }
-  const verified = verifyMergedPr({ slug, pr, expectedRunId: durable.runId, base: resolvedBase, gh, git: runGit, cwd });
+  const verified = verifyMergedPr({ slug, pr, expectedRunId: durable.runId, base: resolvedBase, branch: resolvedBranch, gh, git: runGit, cwd });
   const announcedValue = announced === "skipped" ? null : announced;
   const state = await finalizeMergedLanding(slug, { pr, mergedAt: verified.mergedAt, announced: announcedValue, ...stateOpts });
   await emitRunEvents(slug, {
@@ -194,7 +197,7 @@ export async function finalizeLandingRecovery(slug, {
     git: runGit,
     branch: resolvedBase,
     paths: [`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`],
-    message: `research-v2(${slug}): landing finalized — PR #${pr} merged`,
+    message: `${researchLabel(slug, durable.engine || "v2")}: landing finalized — PR #${pr} merged`,
   });
   return { state, base: resolvedBase, mergedAt: verified.mergedAt };
 }

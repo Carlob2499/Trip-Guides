@@ -29,6 +29,7 @@ import { ContractError, EVIDENCE_SCHEMA, evidenceDocSchema, coverageDocSchema, p
 import { normalizeCandidateIds } from "./evidence.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const researchLabel = (slug, engine = "v2") => `research-${engine}(${slug})`;
 
 function git(args, { cwd = ROOT } = {}) {
   return execFileSync("git", args, { cwd, encoding: "utf8" });
@@ -59,8 +60,9 @@ export function forbiddenForCritic(slug) {
 }
 
 /** The prior run's MUTABLE artifacts that must not become a new run's inputs when a fresh
-    research-v2 branch is cut over merged history (run.v2.json is handled separately — the fresh
-    run replaces it; geocode.v2.json is the merged run's process report, same class of leak). */
+    research-v2/research-v3 branch is cut over merged history (run.v2.json is handled separately
+    — the fresh run replaces it; geocode.v2.json is the merged run's process report, same class
+    of leak). */
 export function staleRunArtifactPaths(slug) {
   return [
     ...forbiddenForPassB(slug).filter((rel) => !rel.endsWith("/run.v2.json")),
@@ -68,15 +70,16 @@ export function staleRunArtifactPaths(slug) {
   ];
 }
 
-/** FRESH-RUN WORKSPACE RESET (hardening pass, 2026-08-20). A fresh research-v2 branch cut from
-    merged history CONTAINS the previous run's evidence/coverage/passB/feedback/events/geocode
-    artifacts and its run.v2.json — files Pass B's workspace contract forbids and Pass A must
-    never consume as current-run inputs. This removes them from the branch's tree (and drops the
-    prior run.v2.json from the index while keeping the freshly-minted one on disk, untracked),
-    commits the reset, and returns the resulting commit — the CLEAN scaffold baseline the new
-    run records for Pass B. Main's history is untouched: the old artifacts remain immutable
-    history there. A first-ever run (nothing tracked) commits nothing and returns HEAD as-is. */
-export function resetFreshRunWorkspace(slug, { cwd = ROOT } = {}) {
+/** FRESH-RUN WORKSPACE RESET (hardening pass, 2026-08-20). A fresh research-v2/research-v3
+    branch cut from merged history CONTAINS the previous run's evidence/coverage/passB/feedback/
+    events/geocode artifacts and its run.v2.json — files Pass B's workspace contract forbids
+    and Pass A must never consume as current-run inputs. This removes them from the branch's tree
+    (and drops the prior run.v2.json from the index while keeping the freshly-minted one on disk,
+    untracked), commits the reset, and returns the resulting commit — the CLEAN scaffold baseline
+    the new run records for Pass B. Main's history is untouched: the old artifacts remain
+    immutable history there. A first-ever run (nothing tracked) commits nothing and returns HEAD
+    as-is. */
+export function resetFreshRunWorkspace(slug, { cwd = ROOT, engine = "v2" } = {}) {
   const runRel = `guides-intake/${slug}/run.v2.json`;
   // Tracked stale artifacts: removed from index AND disk. --ignore-unmatch keeps a first run
   // (nothing to remove) from failing; untracked leftovers are cleared from disk separately.
@@ -87,7 +90,7 @@ export function resetFreshRunWorkspace(slug, { cwd = ROOT } = {}) {
   git(["rm", "--cached", "-q", "--ignore-unmatch", "--", runRel], { cwd });
   const staged = git(["diff", "--cached", "--name-only"], { cwd }).trim();
   if (staged) {
-    git(["commit", "-m", `research-v2(${slug}): fresh-run reset — prior run artifacts removed from the run branch`], { cwd });
+    git(["commit", "-m", `${researchLabel(slug, engine)}: fresh-run reset — prior run artifacts removed from the run branch`], { cwd });
   }
   const baseline = git(["rev-parse", "HEAD"], { cwd }).trim();
   // Fail closed on the COMMIT's tree (the working tree legitimately holds the fresh untracked

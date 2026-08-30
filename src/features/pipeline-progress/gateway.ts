@@ -26,7 +26,7 @@ import { postToWorker, failureMessage } from "../../lib/worker-client.js";
 // THE shared active-generation resolver (hardening pass) — the same semantic answers routing
 // uses server-side, so Progress, questions, events and answers can never disagree about which
 // generation owns the slug. Plain .mjs, consumed by Node and Vite alike (allowJs).
-import { resolveActiveGeneration } from "../../lib/run-generation.mjs";
+import { generationEngineMatches, resolveActiveGeneration } from "../../lib/run-generation.mjs";
 
 export interface ProgressGateway {
   /** The most-current pipeline state for `slug`, or null if none exists (yet, or never will —
@@ -34,9 +34,9 @@ export interface ProgressGateway {
    *  long to wait before treating a persistent null as "check back later"). */
   fetchState(slug: string): Promise<PipelineState | null>;
   /**
-   * The generation-aware read (M7): the V2 run record (research-v2/<slug> branch, run.v2.json)
-   * when one exists — with its REAL run status, failure classification and deployed-live fact —
-   * else the V1 state through the same shape with those facts honestly null. A V2 file that
+   * The generation-aware read (M7): the V3 or V2 run record (research-v3/<slug> or
+   * research-v2/<slug>, run.v2.json) when one exists — with its REAL run status, failure
+   * classification and deployed-live fact — else the V1 state through the same shape with those facts honestly null. A V2/V3 file that
    * exists but cannot be read comes back `malformed: true`, never as "no run".
    */
   fetchRun(slug: string): Promise<RunSnapshot>;
@@ -58,7 +58,7 @@ export interface ProgressGateway {
   /**
    * Live telemetry for the run — what it fetched, decided and learned (model/run-events.ts).
    *
-   * V2 EMITS THIS FOR REAL: scripts/pipeline/v2/events.mjs rebuilds events.json from the durable
+   * V2/V3 EMIT THIS FOR REAL: the shared events emitter rebuilds events.json from the durable
    * run artifacts at every stage finish/fail and at landing, so a V2 run's stage decisions,
    * failures, geocode outcomes and landing verdict are actual emitted data. What the emitter
    * cannot prove stays honestly absent — fetch-level events, nuggets and unmeasured counters
@@ -127,6 +127,9 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
    *  reads, so no two panels of one poll can disagree about which generation owns the slug.
    *  The memo's TTL is well under the 15s poll interval — each poll re-resolves. */
   interface GenerationRead {
+    v3Text: string | null;
+    v3State: unknown | null;
+    v3Malformed: boolean;
     v2Text: string | null;
     v2State: unknown | null;
     v2Malformed: boolean;
@@ -138,22 +141,47 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
   let genMemo: { slug: string; at: number; read: Promise<GenerationRead> } | null = null;
 
   async function readGeneration(slug: string): Promise<GenerationRead> {
-    const [v2Text, v1State] = await Promise.all([
+    // Keep the historical V2/V1 reads first for stable cache and request behavior; V3 is an
+    // additional candidate, not a replacement for the legacy fallback while the selector is
+    // still unset.
+    const [v2Text, v1State, v3Text] = await Promise.all([
       getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`)),
       getJson(raw(`research/${slug}`, `guides-intake/${slug}/state.json`)),
+      getText(raw(`research-v3/${slug}`, `guides-intake/${slug}/run.v2.json`)),
     ]);
+    let v3State: unknown | null = null;
+    let v3Malformed = false;
+    if (v3Text != null) {
+      try {
+        v3State = JSON.parse(v3Text);
+        // A V3 branch is authoritative only when its durable identity says V3. This avoids
+        // mistaking a legacy V2-shaped response (or a stale CDN/mock response) for V3.
+        if (!generationEngineMatches(v3State, "v3")) {
+          v3State = null;
+          v3Malformed = true;
+        }
+      } catch { v3Malformed = true; }
+    }
     let v2State: unknown | null = null;
     let v2Malformed = false;
     if (v2Text != null) {
-      try { v2State = JSON.parse(v2Text); } catch { v2Malformed = true; }
+      try {
+        v2State = JSON.parse(v2Text);
+        if (!generationEngineMatches(v2State, "v2")) {
+          v2State = null;
+          v2Malformed = true;
+        }
+      } catch { v2Malformed = true; }
     }
     const resolved = resolveActiveGeneration({
+      v3Exists: v3State != null && !v3Malformed,
+      v3State,
       v2Exists: v2Text != null && !v2Malformed,
       v2State,
       v1Exists: v1State != null,
       v1State,
     }) as { decision: string; conflict: boolean };
-    return { v2Text, v2State, v2Malformed, v1State, decision: resolved.decision, conflict: resolved.conflict };
+    return { v3Text, v3State, v3Malformed, v2Text, v2State, v2Malformed, v1State, decision: resolved.decision, conflict: resolved.conflict };
   }
 
   function generation(slug: string): Promise<GenerationRead> {
@@ -186,16 +214,21 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       //   · nothing on either branch                → main history (V2 record, then V1)
       // A V2 branch file that EXISTS but cannot be parsed reads as MALFORMED — never "no run".
       const g = await generation(slug);
-      if (g.v2Malformed) return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
+      if (g.v3Malformed || g.v2Malformed) return { ...EMPTY_SNAPSHOT, version: 2, malformed: true };
       if (g.conflict) return { ...EMPTY_SNAPSHOT, conflict: true };
+      if (g.decision === "v3-active" || g.decision === "v3-complete-draft" || g.decision === "v3-history") {
+        return adaptV2Snapshot(g.v3State);
+      }
       if (g.decision === "v2-active" || g.decision === "v2-complete-draft" || g.decision === "v2-history") {
         return adaptV2Snapshot(g.v2State);
       }
       if (g.decision === "v1-active") return { ...EMPTY_SNAPSHOT, version: 1, state: g.v1State as PipelineState };
-      const v2Main = await getText(raw(baseBranch, `guides-intake/${slug}/run.v2.json`));
-      if (v2Main != null) {
+      // V2 and V3 deliberately share the durable main-branch filename; the engine stamp on the
+      // record is the distinction, so this is one read rather than two aliases of the same URL.
+      const mainRun = await getText(raw(baseBranch, `guides-intake/${slug}/run.v2.json`));
+      if (mainRun != null) {
         let parsed: unknown;
-        try { parsed = JSON.parse(v2Main); } catch { parsed = null; }
+        try { parsed = JSON.parse(mainRun); } catch { parsed = null; }
         return adaptV2Snapshot(parsed);
       }
       const v1Main = await getJson(raw(baseBranch, `guides-intake/${slug}/state.json`));
@@ -231,14 +264,17 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       const g = await generation(slug);
       if (g.conflict) return [];
       let md: string | null;
-      if (g.decision === "v2-active" || g.decision === "v2-complete-draft") {
+      if (g.decision === "v3-active" || g.decision === "v3-complete-draft") {
+        md = await getText(raw(`research-v3/${slug}`, `guides-intake/${slug}/ledger.md`));
+      } else if (g.decision === "v2-active" || g.decision === "v2-complete-draft") {
         md = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/ledger.md`));
       } else if (g.decision === "v1-active") {
         md = await getText(raw(`research/${slug}`, `guides-intake/${slug}/ledger.md`));
       } else {
         // No active run — legacy fallback order (branches are typically gone; both reads 404).
+        const v3 = await getText(raw(`research-v3/${slug}`, `guides-intake/${slug}/ledger.md`));
         const v2 = await getText(raw(`research-v2/${slug}`, `guides-intake/${slug}/ledger.md`));
-        md = v2 ?? await getText(raw(`research/${slug}`, `guides-intake/${slug}/ledger.md`));
+        md = v3 ?? v2 ?? await getText(raw(`research/${slug}`, `guides-intake/${slug}/ledger.md`));
       }
       if (md == null) return [];
       return parseQuestionsFromIntake(md);
@@ -267,6 +303,10 @@ export function createGithubGateway(opts: GithubGatewayOptions): ProgressGateway
       if (g.conflict) return parseRunEvents(null);
       if (g.decision === "v1-active") {
         return parseRunEvents(await getJson(raw(`research/${slug}`, `guides-intake/${slug}/events.json`)));
+      }
+      if (g.decision === "v3-active" || g.decision === "v3-complete-draft" || g.decision === "v3-history") {
+        const v3 = await getJson(raw(`research-v3/${slug}`, `guides-intake/${slug}/events.json`));
+        if (v3) return parseRunEvents(v3);
       }
       const v2 = await getJson(raw(`research-v2/${slug}`, `guides-intake/${slug}/events.json`))
         ?? await getJson(raw(baseBranch, `guides-intake/${slug}/events.json`));

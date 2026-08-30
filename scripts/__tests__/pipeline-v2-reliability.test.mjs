@@ -366,7 +366,7 @@ describe("K/L/M/N — everything else fails closed", () => {
 
   it("M — corrupt/absent run state is never a licence to retry", () => {
     expect(retryEligibility(null, { stage: "reconcile", findings: ["x"] }).allowed).toBe(false);
-    expect(retryEligibility(null, {}).reason).toMatch(/no durable V2 run state/);
+    expect(retryEligibility(null, {}).reason).toMatch(/no durable research run state/);
   });
 
   it("N — the automatic repair budget stops the loop across dispatches", async () => {

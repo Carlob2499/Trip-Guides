@@ -292,7 +292,7 @@ async function runSubcommand(cmd, rest, get) {
       const d = await resolveAnswerRouting(slug, { hasAnswers });
       if (d.error) { console.error(`[answers-route] ${d.error}`); return 1; }
       if (d.conflict) {
-        console.error(`[answers-route] BOTH research-v2/${slug} (status ${d.v2Status}) and research/${slug} are active — refusing to guess which run owns the answer. Resolve the duplicate run first.`);
+        console.error(`[answers-route] Multiple research generations are active for ${slug} (V3: ${d.v3Status ?? "none"}; V2: ${d.v2Status ?? "none"}; V1: ${d.v1Status ?? "none"}) — refusing to guess which run owns the answer. Resolve the duplicate run first.`);
         return 1;
       }
       emit("target", d.target);
@@ -425,13 +425,18 @@ async function runSubcommand(cmd, rest, get) {
       // checkout carries a historical run.v2.json (a V1 rollback after a product merge) must not
       // read, mutate, or emit V2 state — that file is another generation's history. Exact match:
       // research-v2/<this slug> is the one branch whose landing owns this slug's V2 run.
-      const isV2Landing = branch === `research-v2/${slug}`;
+      const isV2Landing = branch === `research-v2/${slug}` || branch === `research-v3/${slug}`;
       let v2state = null;
       if (isV2Landing) {
         const { readRunStateV2 } = await import("./pipeline/v2/run-state.mjs");
         v2state = await readRunStateV2(slug); // fail-closed: malformed throws, absent is null
         if (!v2state) {
-          console.error(`[land] ${branch} carries no run.v2.json — a V2 landing without its own run state is refused.`);
+          console.error(`[land] ${branch} carries no run.v2.json — a research landing without its own run state is refused.`);
+          return 1;
+        }
+        const expectedEngine = branch === `research-v3/${slug}` ? "v3" : "v2";
+        if (v2state.engine !== expectedEngine) {
+          console.error(`[land] ${branch} carries engine "${v2state.engine}"; expected "${expectedEngine}" — cross-generation landing refused.`);
           return 1;
         }
         // AUTHORITY, enforced at the CLI seam too: a draft/test run (landMode "pr") cannot be

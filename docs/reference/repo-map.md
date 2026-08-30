@@ -11,7 +11,7 @@ Waypoint is a static Astro travel product with a research/verification backend a
   ↓
 traveler intake
   ↓
-research engine (V1 default / V2 behind selector)
+  research engine (V3 selected / V1 rollback / V2 historical evidence)
   ↓
 durable state + evidence + coverage + events
   ↓
@@ -82,7 +82,7 @@ These folders share vocabulary, not ownership. Similar names are not evidence th
 
 ## Research pipeline generations
 
-Two implementations intentionally coexist during cutover:
+Three implementations exist, but only one is the forward route:
 
 ### V1
 
@@ -90,7 +90,7 @@ Two implementations intentionally coexist during cutover:
 - `scripts/pipeline.mjs`
 - associated V1 prompts/state paths
 
-V1 remains the default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is not set to `v2`.
+V1 remains the default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is not set to `v3`.
 
 ### V2
 
@@ -98,21 +98,29 @@ V1 remains the default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is not
 - `scripts/pipeline-v2.mjs`
 - `scripts/pipeline/v2/`
 
-V2 owns staged durable run state, mechanical Pass A/Pass B isolation, evidence/coverage contracts, events, bounded retry/recovery, and V2 landing authority.
+V2 is preserved trial evidence: staged durable run state, mechanical Pass A/Pass B isolation, evidence/coverage contracts, events, bounded retry/recovery, and the historical canary path V3 reuses.
+
+### V3
+
+- `.github/workflows/research-pass-v3.yml`
+- `scripts/pipeline-v3.mjs`
+- `scripts/pipeline/v3/`
+
+V3 is the single forward research route. It keeps V2's durable control plane and adds deterministic artifact compilation before strict collection, while V1 remains the explicit rollback path.
 
 V1 retirement is a cutover decision, not a cleanup inference.
 
-## Pipeline V2 authority
+## Research authority
 
-If changing V2, read these before editing:
+If changing research behavior, read these before editing:
 
 1. `docs/pipeline v2/DECISIONS.md` — locked decisions.
-2. `docs/pipeline v2/IMPLEMENTATION_STATE.md` — current implementation/proof state.
+2. `docs/pipeline v2/IMPLEMENTATION_STATE.md` — historical implementation/proof state.
 3. `docs/pipeline v2/PIPELINE_VALIDATION_PACK.md` — remaining validation risk classes.
 4. `docs/pipeline v2/SEPTEMBER_TRACKER.md` — delivery/cutover status.
 5. `docs/reference/pipeline.md` — durable pipeline policy.
 
-Do not create another parallel V2 status/plan document.
+Do not create another parallel research status/plan document.
 
 ## Performance-sensitive dependencies
 

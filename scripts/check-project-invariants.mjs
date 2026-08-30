@@ -58,7 +58,8 @@ if (normalizeAgentSpecificNames(sharedBody(agents)) !== normalizeAgentSpecificNa
 
 const maxAgentManualBytes = 6500;
 for (const [rel, text] of [["AGENTS.md", agents], ["CLAUDE.md", claude]]) {
-  const bytes = Buffer.byteLength(text, "utf8");
+  // Count policy content, not checkout line-ending style (CRLF otherwise adds one byte per line).
+  const bytes = Buffer.byteLength(text.replace(/\r\n?/g, "\n"), "utf8");
   if (bytes > maxAgentManualBytes) fail(`Agent context budget: ${rel} is ${bytes} bytes; max is ${maxAgentManualBytes}`);
   else pass(`Agent context budget: ${rel}`);
 }
@@ -84,14 +85,16 @@ else pass("Typecheck boundary excludes generated dist artifacts");
 
 requirePath(".github/workflows/research-pass.yml", "Pipeline V1 workflow");
 requirePath(".github/workflows/research-pass-v2.yml", "Pipeline V2 workflow");
+requirePath(".github/workflows/research-pass-v3.yml", "Pipeline V3 workflow");
 requirePath("scripts/pipeline.mjs", "Pipeline V1 orchestrator");
 requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
-requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
+requirePath("scripts/pipeline-v3.mjs", "Pipeline V3 orchestrator");
+requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v3'", "Explicit V3 selector gate");
 requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
 
 // Release governance: mutation testing is diagnostic-only and `/new` must remain compatible with
 // protected main. Neither path may regain a direct-main push as an invisible convenience.
-const mutationWorkflow = read(".github/workflows/mutation.yml");
+const mutationWorkflow = read(".github/workflows/mutation.yml").replace(/\r\n?/g, "\n");
 if (!mutationWorkflow.includes("permissions:\n  contents: read")) fail("Release governance: mutation workflow must remain contents: read");
 else if (/git\s+push[^\n]*\bmain\b/.test(mutationWorkflow)) fail("Release governance: mutation workflow must not push directly to main");
 else pass("Release governance: mutation workflow is read-only to repository contents");

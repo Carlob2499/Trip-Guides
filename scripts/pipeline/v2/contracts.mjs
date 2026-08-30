@@ -179,6 +179,9 @@ const stageState = z.object({
 
 export const runStateSchema = z.looseObject({
   schemaVersion: z.string(),
+  // V3 deliberately reuses this proven state implementation and file format. Recording the
+  // engine prevents a V2 command path from silently resuming a V3 run (or vice versa).
+  engine: z.enum(["v2", "v3"]).default("v2"),
   slug: z.string().min(1),
   // Immutable per run. Ordinary redispatch always keeps it; a deliberately forced new run is a
   // separate operator decision with a fresh branch.

@@ -34,6 +34,14 @@ import { FAILURE_CLASSES } from "./contracts.mjs";
     for the retry to work from. A retry with nothing to repair is a blind re-spend. */
 export const AUTO_RETRYABLE_CLASSES = Object.freeze(["gate-failure", "void-run"]);
 
+function normalizeEngine(engine = "v2") {
+  return engine === "v3" ? "v3" : "v2";
+}
+
+export function workflowFileForEngine(engine = "v2") {
+  return normalizeEngine(engine) === "v3" ? "research-pass-v3.yml" : "research-pass-v2.yml";
+}
+
 // The CLI's own printed interruption diagnostics. Machine output, not a guess — and matched only
 // against a process that ALSO exited nonzero, so a stray mention in research text can never
 // reclassify a healthy run.
@@ -75,8 +83,8 @@ export function classifyAgentFailure({ agentConclusion = "", agentOutput = "" } 
   };
 }
 
-function deny(stage, failureClass, findingCount, reason, recovery) {
-  return { allowed: false, stage, failureClass, findingCount, reason, recovery };
+function deny(stage, failureClass, findingCount, reason, recovery, engine = "v2") {
+  return { allowed: false, stage, failureClass, findingCount, reason, recovery, engine: normalizeEngine(engine) };
 }
 
 /** May this run repair itself, automatically, right now? Pure over the DURABLE record — the
@@ -85,65 +93,78 @@ function deny(stage, failureClass, findingCount, reason, recovery) {
     stage feedback for this runId/stage (feedback.mjs), already scoped by the caller. */
 export function retryEligibility(state, { stage = null, findings = [] } = {}) {
   const findingCount = (findings || []).length;
+  const engine = normalizeEngine(state?.engine);
+  const workflow = workflowFileForEngine(engine);
   if (!state) {
     return deny(stage, null, findingCount,
-      "no durable V2 run state — retry eligibility is decided by run.v2.json alone",
-      "check out the research branch and inspect guides-intake/<slug>/run.v2.json before re-dispatching");
+      "no durable research run state — retry eligibility is decided by run.v2.json alone",
+      "check out the research branch and inspect guides-intake/<slug>/run.v2.json before re-dispatching",
+      engine);
   }
   if (state.publication?.published) {
     return deny(stage, null, findingCount,
       `run ${state.runId} is already published — a published run never auto-retries`,
-      "take the change lifecycle (change.yml), not a research retry");
+      "take the change lifecycle (change.yml), not a research retry",
+      engine);
   }
   const failedStage = stage || state.resume?.nextStage || null;
   if (!failedStage) {
     return deny(null, null, findingCount,
       `run ${state.runId} records no failed stage to retry`,
-      "re-dispatch research-pass-v2.yml for this slug to re-run the landing gate");
+      `re-dispatch ${workflow} for this slug to re-run the landing gate`,
+      engine);
   }
   const st = state.stages?.[failedStage];
   if (!st) {
     return deny(failedStage, null, findingCount,
       `run ${state.runId} has no stage "${failedStage}"`,
-      "inspect run.v2.json — a stage set that disagrees with the pipeline is a control-plane integrity failure");
+      "inspect run.v2.json — a stage set that disagrees with the pipeline is a control-plane integrity failure",
+      engine);
   }
   const failureClass = st.failure?.class || (st.status === "failed" ? state.failure?.class : null) || null;
   if (st.status !== "failed") {
     return deny(failedStage, failureClass, findingCount,
       `stage "${failedStage}" is recorded "${st.status}", not failed — only a recorded failure is retryable`,
-      "re-dispatch research-pass-v2.yml; the run resumes at its durable resume point");
+      `re-dispatch ${workflow}; the run resumes at its durable resume point`,
+      engine);
   }
   if (!FAILURE_CLASSES.includes(failureClass)) {
     return deny(failedStage, failureClass, findingCount,
       `stage "${failedStage}" failed with an unrecognized class "${failureClass}"`,
-      "inspect run.v2.json's failure record; re-dispatch by hand once the cause is understood");
+      "inspect run.v2.json's failure record; re-dispatch by hand once the cause is understood",
+      engine);
   }
   if (!AUTO_RETRYABLE_CLASSES.includes(failureClass)) {
     return deny(failedStage, failureClass, findingCount,
       `failure class "${failureClass}" is never auto-retryable — only ${AUTO_RETRYABLE_CLASSES.join(" and ")} are`,
       failureClass === "usage-limit"
-        ? "wait for the usage window to reset, then re-dispatch research-pass-v2.yml with the same slug — the run resumes at the failed stage"
-        : "diagnose the agent/control-plane failure, then re-dispatch research-pass-v2.yml with the same slug");
+        ? `wait for the usage window to reset, then re-dispatch ${workflow} with the same slug — the run resumes at the failed stage`
+        : `diagnose the agent/control-plane failure, then re-dispatch ${workflow} with the same slug`,
+      engine);
   }
   if (findingCount === 0) {
     return deny(failedStage, failureClass, findingCount,
       `no actionable validator feedback is recorded for ${state.runId}/${failedStage} — a retry with nothing to repair re-spends research blind`,
-      "read the run log, fix the cause (or record findings), then re-dispatch research-pass-v2.yml with the same slug");
+      `read the run log, fix the cause (or record findings), then re-dispatch ${workflow} with the same slug`,
+      engine);
   }
   if (state.status === "stuck") {
     return deny(failedStage, failureClass, findingCount,
       `run ${state.runId} is stuck at its attempt cap (${state.attempts?.cap})`,
-      "review the run's evidence and decide by hand whether it is worth more spend");
+      "review the run's evidence and decide by hand whether it is worth more spend",
+      engine);
   }
   if ((state.attempts?.total ?? 0) >= (state.attempts?.cap ?? 0)) {
     return deny(failedStage, failureClass, findingCount,
       `attempt budget exhausted (${state.attempts?.total} of ${state.attempts?.cap})`,
-      "review the run's evidence and decide by hand whether it is worth more spend");
+      "review the run's evidence and decide by hand whether it is worth more spend",
+      engine);
   }
   if ((state.attempts?.autoRetries ?? 0) >= (state.attempts?.autoRetryCap ?? 0)) {
     return deny(failedStage, failureClass, findingCount,
       `automatic repair budget exhausted (${state.attempts?.autoRetries} of ${state.attempts?.autoRetryCap})`,
-      "read the recorded findings, repair by hand or re-dispatch research-pass-v2.yml deliberately");
+      `read the recorded findings, repair by hand or re-dispatch ${workflow} deliberately`,
+      engine);
   }
   return {
     allowed: true,
@@ -152,6 +173,7 @@ export function retryEligibility(state, { stage = null, findings = [] } = {}) {
     findingCount,
     reason: `${failureClass} at "${failedStage}" with ${findingCount} actionable finding(s) and budget remaining`,
     recovery: null,
+    engine,
   };
 }
 
@@ -173,15 +195,18 @@ export function stopNoticeMarker({ runId, stage, failureClass, attempt, kind = "
     report "automatic repair budget exhausted", which reads as though a repair actually launched;
     that is the misreport this function exists to prevent. */
 export function dispatchFailedDecision(eligible) {
+  const engine = normalizeEngine(eligible?.engine);
+  const workflow = workflowFileForEngine(engine);
   return {
     allowed: false,
     kind: "dispatch-failed",
     stage: eligible.stage,
     failureClass: eligible.failureClass,
     findingCount: eligible.findingCount,
+    engine,
     reason: "the automatic repair was ELIGIBLE, but the workflow re-dispatch itself failed — " +
       "no repair run was created, and the run's single auto-retry reservation is already spent",
-    recovery: "re-dispatch research-pass-v2.yml by hand with the SAME slug — the run resumes at " +
+    recovery: `re-dispatch ${workflow} by hand with the SAME slug — the run resumes at ` +
       "the failed stage with its recorded findings, and no completed research is repeated. The " +
       "automatic repair budget is spent, so a further failure will stop here again.",
   };
@@ -200,6 +225,7 @@ export function renderStopNotice({ slug, state, decision, runUrl = null }) {
   const failureClass = decision.failureClass || "unknown";
   const runId = state?.runId || "(no run state)";
   const attempt = state?.stages?.[stage]?.attempts ?? 0;
+  const workflow = workflowFileForEngine(decision.engine || state?.engine);
   const marker = stopNoticeMarker({ runId, stage, failureClass, attempt, kind: decision.kind || "refused" });
   const detail = state?.stages?.[stage]?.failure?.detail || state?.failure?.detail || null;
 
@@ -218,7 +244,7 @@ export function renderStopNotice({ slug, state, decision, runUrl = null }) {
     "",
     `**Why it did not retry itself:** ${decision.reason}`,
     "",
-    `**Safe recovery:** ${decision.recovery || "re-dispatch research-pass-v2.yml with the same slug — the run resumes at its durable resume point."}`,
+    `**Safe recovery:** ${decision.recovery || `re-dispatch ${workflow} with the same slug — the run resumes at its durable resume point.`}`,
     "",
     detail ? `<details><summary>Recorded failure detail</summary>\n\n\`\`\`\n${String(detail).slice(0, 2000)}\n\`\`\`\n\n</details>` : null,
     runUrl ? `\n[Workflow run](${runUrl})` : null,
@@ -228,7 +254,7 @@ export function renderStopNotice({ slug, state, decision, runUrl = null }) {
 
   const actionsError = `research run ${runId} (${slug}) STOPPED at stage ${stage} — ${failureClass}; ` +
     `${decision.findingCount} recorded finding(s); no automatic retry: ${decision.reason}. ` +
-    `Recovery: ${decision.recovery || "re-dispatch research-pass-v2.yml with the same slug."}`;
+    `Recovery: ${decision.recovery || `re-dispatch ${workflow} with the same slug.`}`;
 
   return { marker, body, actionsError, stage, failureClass, runId, attempt };
 }

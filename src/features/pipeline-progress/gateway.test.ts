@@ -172,12 +172,13 @@ describe("createGithubGateway().fetchRunEvents", () => {
 
     const out = await gw.fetchRunEvents("testland");
 
-    // Two resolution reads (run.v2.json + state.json) precede the events read — the shared
-    // active-generation resolver decides WHICH branch's events are the run's own.
-    expect(calls).toHaveLength(3);
+    // V2 and V1 resolution reads come first, followed by the V3 identity probe; the shared
+    // active-generation resolver then decides WHICH branch's events are the run's own.
+    expect(calls).toHaveLength(4);
     expect(calls[0].url).toContain("/research-v2/testland/guides-intake/testland/run.v2.json");
     expect(calls[1].url).toContain("/research/testland/guides-intake/testland/state.json");
-    expect(calls[2].url).toContain("/research-v2/testland/guides-intake/testland/events.json");
+    expect(calls[2].url).toContain("/research-v3/testland/guides-intake/testland/run.v2.json");
+    expect(calls[3].url).toContain("/research-v2/testland/guides-intake/testland/events.json");
     expect(out.available).toBe(true);
     expect(out.counters).toEqual({ pages: 148, facts: 62, kept: 51, dropped: 11 });
   });
@@ -278,7 +279,9 @@ describe("createGithubGateway().fetchRun — active runs beat history, across ge
   });
 
   it("prefers the V2 run record and carries its REAL status through", async () => {
-    const { impl, calls } = stubFetch({ "run.v2.json": V2_RUN });
+    const { impl, calls } = stubFetch({
+      "/research-v2/testland/guides-intake/testland/run.v2.json": V2_RUN,
+    });
     const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
     const run = await gw.fetchRun("testland");
     expect(calls[0].url).toContain("/research-v2/testland/guides-intake/testland/run.v2.json");
@@ -309,6 +312,28 @@ describe("createGithubGateway().fetchRun — active runs beat history, across ge
     expect(run.state).toBe(null);
   });
 
+  it("a V3 branch carrying V2 identity is malformed — never silently treated as absent", async () => {
+    const { impl } = stubFetch({
+      "/research-v3/testland/guides-intake/testland/run.v2.json": { ...V2_RUN, engine: "v2" },
+    });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.version).toBe(2);
+    expect(run.malformed).toBe(true);
+    expect(run.state).toBe(null);
+  });
+
+  it("a V2 branch carrying V3 identity is malformed — never cross-routed", async () => {
+    const { impl } = stubFetch({
+      "/research-v2/testland/guides-intake/testland/run.v2.json": { ...V2_RUN, engine: "v3" },
+    });
+    const gw = createGithubGateway({ owner: "o", repo: "r", fetchImpl: impl });
+    const run = await gw.fetchRun("testland");
+    expect(run.version).toBe(2);
+    expect(run.malformed).toBe(true);
+    expect(run.state).toBe(null);
+  });
+
   it("a stale COMPLETE-but-unmerged V2 branch never outranks an ACTIVE V1 branch (resolver CASE A)", async () => {
     const { impl } = stubFetch({
       "/research-v2/testland/guides-intake/testland/run.v2.json": { ...V2_RUN, status: "complete" },
@@ -332,7 +357,7 @@ describe("createGithubGateway().fetchRun — active runs beat history, across ge
   });
 
   it("the snapshot carries the RUN's OWN publication + landing facts — Run B never inherits Run A's (R6)", async () => {
-    const { impl } = stubFetch({ "run.v2.json": { ...V2_RUN, status: "complete",
+    const { impl } = stubFetch({ "/research-v2/testland/guides-intake/testland/run.v2.json": { ...V2_RUN, status: "complete",
       stages: { scaffold: { status: "complete", endedAt: "2026-08-17T10:01:00Z" }, passA: { status: "complete", endedAt: "2026-08-17T10:02:00Z" }, passB: { status: "complete", endedAt: "2026-08-17T10:03:00Z" }, reconcile: { status: "complete", endedAt: "2026-08-17T10:04:00Z" }, critic: { status: "complete", endedAt: "2026-08-17T10:05:00Z" } },
       landingGate: { status: "passed", checkedAt: "2026-08-17T10:06:00Z", failure: null },
       landing: { outcome: "pending" },

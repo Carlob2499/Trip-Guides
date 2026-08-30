@@ -44,7 +44,9 @@ export async function executeLanding(slug, {
   log = console.log,
   error = console.error,
 } = {}) {
-  const isV2Landing = branch === `research-v2/${slug}`;
+  const isV2Landing = branch === `research-v2/${slug}` || branch === `research-v3/${slug}`;
+  const expectedEngine = branch === `research-v3/${slug}` ? "v3" : "v2";
+  const researchTag = `research-${expectedEngine}(${slug})`;
   const guideOpts = guidesDir ? { guidesDir } : {};
   const stateOpts = intakeDir ? { intakeDir } : {};
   const runGit = git || ((args) => execFileSync("git", args, { cwd, encoding: "utf8" }));
@@ -54,7 +56,11 @@ export async function executeLanding(slug, {
     const { readRunStateV2 } = await import("./v2/run-state.mjs");
     runState = await readRunStateV2(slug, stateOpts); // fail-closed: malformed throws
     if (!runState) {
-      error(`[land] ${branch} carries no run.v2.json — a V2 landing without its own run state is refused.`);
+      error(`[land] ${branch} carries no run.v2.json — a research landing without its own run state is refused.`);
+      return { code: 1, outcome: null, pr: null };
+    }
+    if (runState.engine !== expectedEngine) {
+      error(`[land] ${branch} carries engine "${runState.engine}"; expected "${expectedEngine}" — cross-generation landing refused.`);
       return { code: 1, outcome: null, pr: null };
     }
   }
@@ -93,7 +99,7 @@ export async function executeLanding(slug, {
       const { markLandingGate } = await import("./v2/run-state.mjs");
       await markLandingGate(slug, { passed: true, ...stateOpts });
       await emitV2Events();
-      log(`[land] ${slug} — V2 gate verdict recorded (phase 1); publication awaits the confirmed merge.`);
+      log(`[land] ${slug} — ${expectedEngine.toUpperCase()} gate verdict recorded (phase 1); publication awaits the confirmed merge.`);
     }
     const published = await publishGuide(slug, { gatePassed: true, ...guideOpts });
     if (published.ok) {
@@ -105,7 +111,7 @@ export async function executeLanding(slug, {
     } else if (isV2Landing) {
       // Already-published guide (a V2 re-research): the gate record still has to ride the
       // merge — commitAll no-ops when the tree is clean, so this is safe either way.
-      commitAll(`chore(${slug}): V2 landing gate verdict — verify PASS`, { cwd });
+      commitAll(`chore(${slug}): ${expectedEngine.toUpperCase()} landing gate verdict — verify PASS`, { cwd });
     }
   }
 
@@ -140,7 +146,7 @@ export async function executeLanding(slug, {
         ...stateOpts,
       });
       await emitV2Events();
-      try { commitV2Record(`research-v2(${slug}): landing FAILED (no merge, no publication)`, branch); }
+      try { commitV2Record(`${researchTag}: landing FAILED (no merge, no publication)`, branch); }
       catch (recErr) { error(`[land] could not persist the failed-landing record to origin/${branch}: ${recErr?.message || recErr}`); }
     }
     throw err;
@@ -169,7 +175,7 @@ export async function executeLanding(slug, {
           ...stateOpts,
         });
         await emitV2Events();
-        try { commitV2Record(`research-v2(${slug}): landing BLOCKED — conflict fallback could not be re-quarantined`, branch); }
+        try { commitV2Record(`${researchTag}: landing BLOCKED — conflict fallback could not be re-quarantined`, branch); }
         catch (recErr) { error(`[land] could not persist the blocked-landing record to origin/${branch}: ${recErr?.message || recErr}`); }
       }
       emit("outcome", "failed");
@@ -195,14 +201,15 @@ export async function executeLanding(slug, {
         runGit(["fetch", "origin", base]);
         runGit(["checkout", "-B", base, `origin/${base}`]);
         const { verifyMergedPr } = await import("./v2/landing-truth.mjs");
-        const verified = verifyMergedPr({ slug, pr: result.pr, expectedRunId: runState?.runId, base, gh, git: runGit, cwd });
+        const verified = verifyMergedPr({ slug, pr: result.pr, expectedRunId: runState?.runId, base, branch, gh, git: runGit, cwd });
         await finalizeMergedLanding(slug, { pr: result.pr, mergedAt: verified.mergedAt, announced: result.announced ?? null, ...stateOpts });
         await emitV2Events();
-        commitV2Record(`research-v2(${slug}): landing finalized — PR #${result.pr} merged`, base);
+        commitV2Record(`${researchTag}: landing finalized — PR #${result.pr} merged`, base);
         log(`[land] ${slug} — merge confirmed (PR #${result.pr}, merged ${verified.mergedAt}); publication finalized on ${base}.`);
       } catch (err) {
         error(`[land] MERGE SUCCEEDED (PR #${result.pr}) but post-merge finalization failed: ${err?.message || err}`);
-        error(`[land] retry on a ${base} checkout: node scripts/pipeline-v2.mjs finalize-landing --slug ${slug} --pr ${result.pr}${annFlag}`);
+        const finalizeCli = expectedEngine === "v3" ? "pipeline-v3.mjs" : "pipeline-v2.mjs";
+        error(`[land] retry on a ${base} checkout: node scripts/${finalizeCli} finalize-landing --slug ${slug} --pr ${result.pr}${annFlag}`);
         emit("outcome", result.outcome);
         emit("pr", String(result.pr));
         emit("gate", passed ? "passed" : "failed");
@@ -218,7 +225,7 @@ export async function executeLanding(slug, {
         ...stateOpts,
       });
       await emitV2Events();
-      commitV2Record(`research-v2(${slug}): landing outcome draft (PR #${result.pr})`, branch);
+      commitV2Record(`${researchTag}: landing outcome draft (PR #${result.pr})`, branch);
     }
   }
 

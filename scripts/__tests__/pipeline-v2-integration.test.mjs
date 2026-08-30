@@ -447,22 +447,22 @@ describe("reopenForAnswers — a late answer genuinely re-enters the work", () =
 describe("new-guide.yml — the /new dispatch", () => {
   const text = readRepo(".github/workflows/new-guide.yml");
 
-  it("the V2 product invocation is a workflow_call threading the intake issue — and NO landing input exists to pass", () => {
-    // The trusted entry point (hardening pass): a reusable-workflow call, which runs the V2
+  it("the V3 product invocation is a workflow_call threading the intake issue — and NO landing input exists to pass", () => {
+    // The trusted entry point (hardening pass): a reusable-workflow call, which runs the V3
     // pipeline under THIS workflow's "issues" event — the provenance deriveLandIntent trusts —
     // and which `gh workflow run` (workflow_dispatch) structurally cannot impersonate.
-    const job = text.split(/^ {2}research-v2:$/m)[1];
-    expect(job).toContain("uses: ./.github/workflows/research-pass-v2.yml");
+    const job = text.split(/^ {2}research-v3:$/m)[1];
+    expect(job).toContain("uses: ./.github/workflows/research-pass-v3.yml");
     expect(job).toContain("slug: ${{ needs.scaffold.outputs.slug }}");
     expect(job).toContain("issue: ${{ format('{0}', github.event.issue.number) }}");
     expect(job).toContain("secrets: inherit");
     expect(job).not.toMatch(/^\s+land:/m); // authority is derived, never typed (side-door scar)
-    expect(job).toContain("if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'");
+    expect(job).toContain("if: vars.WAYPOINT_RESEARCH_ENGINE == 'v3'");
     // Per-slug exclusion survives the call: a reusable workflow's own workflow-level
     // concurrency is not applied, so the caller job carries the guide-<slug> group.
     expect(job).toContain("group: guide-${{ needs.scaffold.outputs.slug }}");
-    // No `gh workflow run research-pass-v2` remains anywhere in /new — the call is the only V2 path.
-    expect(text).not.toContain("gh workflow run research-pass-v2.yml");
+    // No `gh workflow run research-pass-v3` remains anywhere in /new — the call is the only V3 path.
+    expect(text).not.toContain("gh workflow run research-pass-v3.yml");
   });
 
   it("the V1 dispatch still threads the issue — V1 behavior preserved as the unconditional default", () => {

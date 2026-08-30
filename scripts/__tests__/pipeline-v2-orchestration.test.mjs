@@ -308,19 +308,18 @@ describe("routing + bounded attempts survive a resume (state on disk)", () => {
 describe("research-pass-v2.yml — wiring", () => {
   const text = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
 
-  it("is dispatchable + callable ONLY — and only new-guide.yml calls it (the trusted product entry)", () => {
+  it("is dispatchable + callable as a historical path; new-guide.yml calls only the V3 route", () => {
     expect(text).toContain("workflow_dispatch:");
     expect(text).toContain("workflow_call:");
     expect(text).not.toMatch(/^\s+issues:\s*$/m);
     expect(text).not.toContain("schedule:");
-    // The cutover contract (finalization, I01 + hardening): /new routes to V2 ONLY behind the
-    // explicit WAYPOINT_RESEARCH_ENGINE=v2 repository variable, via the workflow_call job; V1
-    // is the unconditional else-default, so an unset variable can never silently route an
-    // intake to the unproven path.
+    // V2 remains callable for historical replay and rollback evidence. The trusted product entry
+    // routes explicit V3 selections to V3 and keeps V1 as the unset/non-V3 fallback.
     const newGuide = readFileSync(path.join(ROOT, ".github", "workflows", "new-guide.yml"), "utf8");
     expect(newGuide).toContain("gh workflow run research-pass.yml");
-    expect(newGuide).toContain("uses: ./.github/workflows/research-pass-v2.yml");
-    expect(newGuide).toContain("if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'");
+    expect(newGuide).toContain("uses: ./.github/workflows/research-pass-v3.yml");
+    expect(newGuide).not.toContain("uses: ./.github/workflows/research-pass-v2.yml");
+    expect(newGuide).toContain("if: vars.WAYPOINT_RESEARCH_ENGINE == 'v3'");
     expect(newGuide).toContain("ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}");
     // …and new-guide.yml is the ONLY caller in the repo (the trust boundary is structural).
     const workflowsDir = path.join(ROOT, ".github", "workflows");

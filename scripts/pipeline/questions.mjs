@@ -116,7 +116,7 @@ export async function resolveAnswerRouting(slug, {
 } = {}) {
   const { execFileSync } = await import("node:child_process");
   const runGit = git || ((args, opts = {}) => execFileSync("git", args, { cwd, encoding: "utf8", ...opts }));
-  const { resolveActiveGeneration } = await import("../../src/lib/run-generation.mjs");
+  const { resolveActiveGeneration, generationEngineMatches } = await import("../../src/lib/run-generation.mjs");
 
   // The active truth lives on the research branches, not main. Both namespaces are inspected
   // BEFORE any publication check, and the decision itself is THE shared active-generation
@@ -124,35 +124,44 @@ export async function resolveAnswerRouting(slug, {
   // read through, so no subsystem can invent its own precedence rule. Matrix: active V2 wins;
   // an active V1 rollback outranks a stale complete-draft V2; both genuinely active REFUSES;
   // a merged V2 remnant is history and owns nothing.
-  const inspect = (b, stateFile) => {
+  const inspect = (b, stateFile, expectedEngine = null) => {
     try {
       runGit(["ls-remote", "--exit-code", "--heads", "origin", b], { stdio: "pipe" });
     } catch { return { exists: false }; }
     try {
       runGit(["fetch", "--depth=1", "origin", b], { stdio: "pipe" });
       const raw = runGit(["show", `FETCH_HEAD:${stateFile}`], { stdio: ["ignore", "pipe", "pipe"] });
-      return { exists: true, state: JSON.parse(raw) };
+      const state = JSON.parse(raw);
+      if (expectedEngine && !generationEngineMatches(state, expectedEngine)) {
+        const actual = state?.engine ?? "v2 (legacy default)";
+        return { exists: true, error: `durable engine is ${JSON.stringify(actual)}; expected ${JSON.stringify(expectedEngine)}` };
+      }
+      return { exists: true, state };
     } catch (err) {
       return { exists: true, error: err.message };
     }
   };
-  const v2 = inspect(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`);
+  const v3 = inspect(`research-v3/${slug}`, `guides-intake/${slug}/run.v2.json`, "v3");
+  const v2 = inspect(`research-v2/${slug}`, `guides-intake/${slug}/run.v2.json`, "v2");
   const v1 = inspect(`research/${slug}`, `guides-intake/${slug}/state.json`);
-  for (const [b, r] of [[`research-v2/${slug}`, v2], [`research/${slug}`, v1]]) {
+  for (const [b, r] of [[`research-v3/${slug}`, v3], [`research-v2/${slug}`, v2], [`research/${slug}`, v1]]) {
     if (r.error) return { error: `${b} exists but its committed state is unreadable: ${r.error}` };
   }
   const resolved = resolveActiveGeneration({
+    v3Exists: v3.exists, v3State: v3.state ?? null,
     v2Exists: v2.exists, v2State: v2.state ?? null,
     v1Exists: v1.exists, v1State: v1.state ?? null,
   });
   if (resolved.conflict) {
     // Two generations both mid-research on one slug is not a routing preference — it is a
     // state error a human untangles. Refusing beats guessing (matrix rule 5).
-    return { conflict: true, v2Status: v2.state?.status };
+    return { conflict: true, v3Status: v3.state?.status, v2Status: v2.state?.status, v1Status: v1.state?.status };
   }
   let researchBranch = null;
   let researchActive = false;
-  if (resolved.decision === "v2-active" || resolved.decision === "v2-complete-draft") {
+  if (resolved.decision === "v3-active" || resolved.decision === "v3-complete-draft") {
+    researchBranch = `research-v3/${slug}`; researchActive = true;
+  } else if (resolved.decision === "v2-active" || resolved.decision === "v2-complete-draft") {
     researchBranch = `research-v2/${slug}`; researchActive = true;
   } else if (resolved.decision === "v1-active") {
     researchBranch = `research/${slug}`; researchActive = true;

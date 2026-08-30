@@ -10,7 +10,8 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  resolveActiveGeneration, isV2RunActive, isV2CompleteDraft, isV1RunActive, V2_ACTIVE_STATUSES,
+  resolveActiveGeneration, generationEngineMatches, isV2RunActive, isV2CompleteDraft,
+  isV1RunActive, V2_ACTIVE_STATUSES,
 } from "../../src/lib/run-generation.mjs";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
@@ -81,6 +82,13 @@ describe("resolveActiveGeneration — the required matrix", () => {
     expect(isV2CompleteDraft({ status: "complete" })).toBe(true); // absent landing/publication = unmerged draft
     expect(isV1RunActive({})).toBe(true); // a V1 state with no stages recorded owes everything
     expect(isV1RunActive(null)).toBe(false);
+  });
+
+  it("requires an explicit V3 engine stamp while preserving legacy unstamped V2 history", () => {
+    expect(generationEngineMatches({ status: "running" }, "v2")).toBe(true);
+    expect(generationEngineMatches({ engine: "v2" }, "v3")).toBe(false);
+    expect(generationEngineMatches({ engine: "v3" }, "v2")).toBe(false);
+    expect(generationEngineMatches({ engine: "v3" }, "v3")).toBe(true);
   });
 });
 

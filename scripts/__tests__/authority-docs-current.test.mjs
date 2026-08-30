@@ -17,6 +17,7 @@ const read = (rel) => readFileSync(path.join(ROOT, rel), "utf8");
 const TRACKER = read("docs/pipeline v2/SEPTEMBER_TRACKER.md");
 const PIPELINE = read("docs/reference/pipeline.md");
 const HANDOFF = read("docs/handoff.md");
+const REPO_MAP = read("docs/reference/repo-map.md");
 const RUN_STATE = read("scripts/pipeline/v2/run-state.mjs");
 
 /** The status cell of a master-tracker row, by ID. */
@@ -27,13 +28,12 @@ function trackerStatus(id) {
 }
 
 describe("the tracker states the CURRENT delivery phase", () => {
-  it("records accepted draft reliability evidence without claiming production cutover", () => {
-    const dash = TRACKER.split("# Master tracker")[0];
-    expect(dash).toMatch(/Canary #4/);
-    expect(dash).toMatch(/draft product path GREEN/i);
-    expect(dash).toMatch(/production cutover.*NOT DONE/i);
-    expect(dash).not.toMatch(/Carlo's next action:.*Fable proof/i);
-    expect(dash).not.toMatch(/2,566/);
+  it("records V3 implementation without pretending cutover or acceptance already happened", () => {
+    const dash = TRACKER.split("### Current evidence already recorded")[0];
+    expect(dash).toMatch(/V3 deterministic replacement route is implemented and preflight-tested/i);
+    expect(dash).toMatch(/V1 remains the production default\/rollback path/i);
+    expect(dash).toMatch(/no model-backed V3 acceptance has been dispatched yet/i);
+    expect(dash).toMatch(/production cutover.*NOT DONE|production cutover.*BLOCKED/i);
   });
 
   it("integration work that shipped is no longer NOT STARTED", () => {
@@ -42,21 +42,24 @@ describe("the tracker states the CURRENT delivery phase", () => {
     }
   });
 
-  it("keeps production cutover open while recording accepted reliability", () => {
-    expect(trackerStatus("I02")).toMatch(/DONE \/ YELLOW|DRAFT PRODUCT PATH GREEN/i);
+  it("keeps V3 acceptance and V1 fallback open while recording accepted reliability history", () => {
+    expect(trackerStatus("I02")).toMatch(/IN PROGRESS|MODEL ACCEPTANCE PENDING|DETERMINISTIC PATH GREEN/i);
     expect(trackerStatus("I02")).not.toMatch(/^DONE$/);
     expect(trackerStatus("I06")).toMatch(/HOLD|IN PROGRESS/i);
     expect(trackerStatus("R03")).toMatch(/^DONE$/i);
+    expect(trackerStatus("A04")).toMatch(/NOT STARTED|PRE-FLIGHT READY/i);
     expect(TRACKER).toMatch(/production cutover.*pending|production cutover.*not done/i);
   });
 });
 
-describe("the pipeline POLICY doc knows both research implementations", () => {
-  it("names V1 and V2 during the cutover, with V1 as the rollback/default", () => {
+describe("the pipeline POLICY doc knows the V1/V2/V3 research state", () => {
+  it("names V1 rollback, V2 history, and V3 as the selected route", () => {
+    expect(PIPELINE).toMatch(/research-pass-v3\.yml/);
     expect(PIPELINE).toMatch(/research-pass-v2\.yml/);
     expect(PIPELINE).toMatch(/WAYPOINT_RESEARCH_ENGINE/);
     expect(PIPELINE).toMatch(/rollback/i);
     expect(PIPELINE).toMatch(/landMode=pr/);
+    expect(PIPELINE).toMatch(/V3 is the replacement route|single replacement route|trusted `\/new` routes to V3/i);
   });
 
   it("still asserts exactly two product lifecycles", () => {
@@ -64,12 +67,20 @@ describe("the pipeline POLICY doc knows both research implementations", () => {
     expect(PIPELINE).toMatch(/two \*\*product\*\* lifecycles|exactly \*\*two\*\* product lifecycles|two PRODUCT lifecycles|exactly \*\*two\*\* product/i);
   });
 
-  it("states V2's failure semantics as PR #75 left them", () => {
-    const v2 = PIPELINE.slice(PIPELINE.indexOf("Two GENERATION implementations"));
-    expect(v2).toMatch(/workflow-owned/i);
-    expect(v2).toMatch(/never `agent-failure`|never .agent-failure./);
-    expect(v2).toMatch(/gate-failure/);
-    expect(v2).toMatch(/usage-limit/);
+  it("states V3's failure semantics and honest claim boundary", () => {
+    expect(PIPELINE).toMatch(/What V3 can honestly claim/);
+    expect(PIPELINE).toMatch(/55% smaller/i);
+    expect(PIPELINE).toMatch(/gate-failure/);
+    expect(PIPELINE).toMatch(/usage-limit/);
+    expect(PIPELINE).toMatch(/No live V3 acceptance run exists yet/i);
+  });
+});
+
+describe("the repo map matches the V3-forward route", () => {
+  it("describes V3 as selected, V1 as rollback, and V2 as historical evidence", () => {
+    expect(REPO_MAP).toMatch(/V3 selected \/ V1 rollback \/ V2 historical evidence/i);
+    expect(REPO_MAP).toMatch(/research-pass-v3\.yml/);
+    expect(REPO_MAP).toMatch(/single forward research route|only one is the forward route/i);
   });
 });
 
@@ -103,12 +114,13 @@ describe("the handoff states exactly what the accepted reliability evidence prov
     expect(HANDOFF).toMatch(/escalation/i);
     expect(HANDOFF).toMatch(/cancellation/i);
     expect(HANDOFF).toMatch(/closed|proven|PASS/i);
-    expect(HANDOFF).toMatch(/R03 is fully accepted/i);
+    expect(HANDOFF).toMatch(/R03 escalation\/cancellation seams are proven/i);
   });
 
-  it("keeps temporary cleanup status out while recording the durable reciprocal reviewer boundary", () => {
+  it("keeps temporary cleanup status out while recording the durable reciprocal reviewer boundary and local green proof", () => {
     expect(HANDOFF).not.toMatch(/draft cleanup PR|cleanup\/grand-pass/i);
     expect(HANDOFF).toMatch(/reciprocal Claude↔Codex reviewer automation.*remains active/i);
     expect(HANDOFF).toMatch(/revision-4.*trust boundary/i);
+    expect(HANDOFF).toMatch(/198\/198 passed/i);
   });
 });

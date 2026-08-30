@@ -146,11 +146,12 @@ describe("R1 — landing intent: manual dispatch can never mint auto, whatever r
     expect(init).toContain("EVENT_NAME: ${{ github.event_name }}");
     expect(init).toContain('--event-name "$EVENT_NAME"');
     expect(init).not.toMatch(/LAND=auto/); // the old shell derivation is gone
-    // The trusted entry point is a workflow_call — declared on the V2 workflow…
+    // The trusted entry point is a workflow_call — declared on the historical V2 workflow…
     expect(text).toMatch(/^ {2}workflow_call:$/m);
-    // …and new-guide.yml is its caller, with no `gh workflow run research-pass-v2` dispatch left.
+    // …and new-guide.yml now calls the single forward V3 workflow, with no V2 dispatch left.
     const newGuide = readRepo(".github/workflows/new-guide.yml");
-    expect(newGuide).toContain("uses: ./.github/workflows/research-pass-v2.yml");
+    expect(newGuide).toContain("uses: ./.github/workflows/research-pass-v3.yml");
+    expect(newGuide).not.toContain("uses: ./.github/workflows/research-pass-v2.yml");
     expect(newGuide).not.toContain("gh workflow run research-pass-v2.yml");
     expect(newGuide).toContain("gh workflow run research-pass.yml"); // V1 default preserved
   });

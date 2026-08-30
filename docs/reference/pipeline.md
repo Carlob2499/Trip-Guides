@@ -2,7 +2,7 @@
 
 Waypoint has exactly **two product lifecycles**: **Research** creates or re-researches a guide; **Change** edits a guide that already exists. Everything else is infrastructure serving one of those two.
 
-This file owns durable pipeline policy. Current delivery status belongs in `docs/handoff.md` and `docs/pipeline v2/SEPTEMBER_TRACKER.md`. V2 implementation/proof detail belongs in `docs/pipeline v2/IMPLEMENTATION_STATE.md`.
+This file owns durable pipeline policy. Current delivery status belongs in `docs/handoff.md` and `docs/pipeline v2/SEPTEMBER_TRACKER.md`. V2 implementation/proof detail remains historical evidence in `docs/pipeline v2/IMPLEMENTATION_STATE.md`; V3 is the replacement route.
 
 ## Two lifecycles, and nothing else
 
@@ -10,7 +10,7 @@ This file owns durable pipeline policy. Current delivery status belongs in `docs
 | --- | --- | --- |
 | Purpose | Build or re-research a guide | Modify an existing guide |
 | Entry | `/new` / research dispatch | request, answers, date-lock, staleness, approved feedback |
-| Workflow | V1 or V2 research implementation | `change.yml` |
+| Workflow | V3 (V1 remains rollback; V2 is historical) | `change.yml` |
 | Expensive work | staged and resumable | scoped edit; failed run can restart |
 | Publication | evidence-gated | evidence-gated; unsolicited changes remain PR-only |
 
@@ -18,18 +18,17 @@ A helper workflow, CI job, Worker endpoint, progress page, or review tool is not
 
 ## Research lifecycle
 
-> **Two GENERATION implementations, one Research lifecycle.**
+> **One production Research route.** V1 is the rollback path, V2 is preserved trial evidence, and V3 is the replacement implementation.
 
-| | V1 | V2 |
-| --- | --- | --- |
-| Workflow | `research-pass.yml` | `research-pass-v2.yml` |
-| Orchestrator | `scripts/pipeline.mjs` | `scripts/pipeline-v2.mjs` + `scripts/pipeline/v2/` |
-| Role | **default and rollback path** until cutover | next-generation staged research path |
-| Selected by | default while selector is unset | trusted `/new` only when `WAYPOINT_RESEARCH_ENGINE == 'v2'` |
-| Manual V2 dispatch | n/a | always `landMode=pr`; cannot become production authority |
-| State ownership | V1 checkpoints/state | workflow-owned `run.v2.json` |
-| Pass A/B independence | separate research invocations | mechanically isolated at the recorded baseline |
-| Critic | fresh context | mechanically stripped of forbidden prior-run artifacts |
+| | V1 | V2 (historical) | V3 |
+| --- | --- | --- | --- |
+| Workflow | `research-pass.yml` | `research-pass-v2.yml` | `research-pass-v3.yml` |
+| Orchestrator | `scripts/pipeline.mjs` | `scripts/pipeline-v2.mjs` + `scripts/pipeline/v2/` | `scripts/pipeline-v3.mjs` + V3 compiler |
+| Role | rollback path | preserved canary evidence | single replacement route |
+| Selected by | when selector is unset | no longer selected by `/new` | trusted `/new` only when `WAYPOINT_RESEARCH_ENGINE == 'v3'` |
+| State ownership | V1 checkpoints/state | workflow-owned `run.v2.json` | same proven state, durably stamped `engine: v3` |
+| Pass A/B independence | contractual | mechanically isolated | mechanically isolated + deterministic metadata compilation |
+| Critic | fresh context | mechanically stripped of forbidden prior-run artifacts | same fresh-context critic and evidence synchronization |
 
 V1 retirement is not a cleanup decision. It happens only after explicit cutover acceptance and proven rollback/parity conditions.
 
@@ -41,13 +40,20 @@ V1 retirement is not a cleanup decision. It happens only after explicit cutover 
 
 Pass A and Pass B are independent research passes, not two turns of one conversation. Reconcile is responsible for comparing them and recording dispositions. The critic receives fresh context and audits the resulting product rather than inheriting the research transcript.
 
-### V2 state and resume
+### V3 state and resume
 
-V2 uses durable run identity and per-stage state. A resume continues the same run and does not silently skip an owed stage. Completed expensive stages remain completed unless an explicit contract reopens them.
+V3 uses the proven durable run identity and per-stage state. A resume continues the same run and does not silently skip an owed stage. Completed expensive stages remain completed unless an explicit contract reopens them. The V3 compiler owns schema, slug, run, stage-origin, and candidate-id metadata. Frozen intake still owns the exact coverage registry, which the existing gate enforces.
 
 A fresh second run for the same slug receives a new run identity; stale mutable artifacts from the prior run must not contaminate the new baseline.
 
-### V2 failure semantics
+### What V3 can honestly claim
+
+- The four model prompts are 55% smaller than V2's combined prompt files; this reduces instruction load, not research depth.
+- V3 keeps V2's evidence, source-access, freshness, corroboration, coverage, retry, and landing gates, so it does not buy speed by lowering the factual bar.
+- No live V3 acceptance run exists yet. Faster total runtime, lower token use, and equal-or-better factual accuracy remain hypotheses until the fresh acceptance records them.
+- Deterministic metadata compilation removes known clerical reruns; semantic research errors still require bounded model repair or a failed run.
+
+### V3 failure semantics
 
 Failure classes name the plane where the failure occurred:
 
@@ -69,7 +75,7 @@ Research truth and publication truth are separate facts.
 
 A gate may pass before a merge occurs. V2 publication is a two-phase transaction: the evidence/landing gate must pass first; publication is finalized only after GitHub proves the intended PR/merge identity. A failed/conflicted auto landing leaves the guide quarantined as draft content.
 
-Manual V2 dispatches remain `landMode=pr` regardless of selector state.
+Manual V3 dispatches remain `landMode=pr` regardless of selector state. V2 remains available only as preserved historical evidence and is not selected by `/new`.
 
 ## Change lifecycle
 
@@ -99,9 +105,9 @@ Human-judgment rows remain human judgment; deterministic checks must never manuf
 
 `new-guide.yml` owns the trusted product entry.
 
-- selector unset / not `v2` → V1 remains the default research path;
-- `WAYPOINT_RESEARCH_ENGINE == 'v2'` → trusted `/new` may route to V2;
-- manual V2 dispatch → draft/PR authority only.
+- selector unset / not `v3` → V1 remains the rollback/default research path;
+- `WAYPOINT_RESEARCH_ENGINE == 'v3'` → trusted `/new` routes to V3;
+- manual V3 dispatch → draft/PR authority only.
 
 The selector changes routing. It does not, by itself, delete V1, authorize publication, or prove production cutover.
 
@@ -119,7 +125,7 @@ Owner-capable endpoints fail closed when owner authentication is absent or inval
 - Missing fetch/nugget/token/cost metrics stay null/empty unless a durable source proves them.
 - Active-generation resolution happens before historical publication state, so a newer run cannot be hidden by an older live guide.
 - Conflicting active generations fail visibly rather than choosing one arbitrarily.
-- Owner notes target only a verifiable V2 `slug + runId + issue` identity; the Worker independently re-verifies the same tuple before writing to GitHub.
+- Owner notes target only a verifiable durable `slug + runId + issue` identity from V2 or V3; the Worker independently re-verifies the same tuple before writing to GitHub.
 - V1 does not receive a guessed note target because it lacks that durable issue join.
 
 A stalled run must not animate as if work is progressing. A passed research gate must not be described as a successful landing until landing is actually proven.
@@ -138,7 +144,7 @@ A stalled run must not animate as if work is progressing. A passed research gate
 - Never infer one execution plane's failure from another.
 - Never bypass a failing evidence gate to make a deadline or dashboard green.
 - Keep V1 available until cutover is explicitly accepted.
-- Keep V2 decisions aligned with `docs/pipeline v2/DECISIONS.md`.
+- Keep V2 decisions aligned with `docs/pipeline v2/DECISIONS.md` while preserving V3 as the single forward route.
 
 ## Current proof and next validation
 

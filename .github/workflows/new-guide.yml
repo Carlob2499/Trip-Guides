@@ -93,33 +93,33 @@ jobs:
 
       # `issue` threads the intake issue through so the research pass can surface any questions it
       # had to assume its way past back to the person who filed it. A notification channel only —
-      # research never waits on an answer. V1 carries it per dispatch; V2 records it durably in
-      # run.v2.json at init, so V2 resumes/retries never need it re-threaded.
+      # research never waits on an answer. V1 carries it per dispatch; V3 records it durably in
+      # run.v2.json at init, so resumes/retries never need it re-threaded.
       #
       # THE CUTOVER SWITCH. One repository variable, WAYPOINT_RESEARCH_ENGINE, selects the
-      # research engine: unset or anything but "v2" keeps V1. Setting it to "v2" after independent
-      # V2 acceptance routes /new to the reusable research-v2 job below. The called run executes
-      # under this workflow's trusted issues event, allowing product landing intent; manual V2
-      # workflow_dispatch remains draft-only. V1 stays intact and dispatchable either way.
+      # research engine: unset or anything but "v3" keeps V1. Setting it to "v3" after independent
+      # V3 acceptance routes /new to the reusable research-v3 job below. The called run executes
+      # under this workflow's trusted issues event, allowing product landing intent; manual V3
+      # workflow_dispatch remains draft-only. V1 stays intact as the explicit rollback path.
       - name: Auto-start the research pass (V1 engine)
         env:
           SLUG: ${{ steps.gen.outputs.slug }}
           ISSUE: ${{ github.event.issue.number }}
           ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}
         run: |
-          if [ "$ENGINE" = "v2" ]; then
-            echo "V2 engine selected — the research-v2 job takes over via workflow_call (the trusted product invocation)."
+          if [ "$ENGINE" = "v3" ]; then
+            echo "V3 engine selected — the research-v3 job takes over via workflow_call (the trusted product invocation)."
           else
             gh workflow run research-pass.yml -f slug="$SLUG" \
               -f issue="$ISSUE"
           fi
 
-  # Trusted V2 product invocation. workflow_call — not `gh workflow run` — preserves the structural
-  # distinction from manual draft-only workflow_dispatch. The V2 workflow refreshes trusted main
+  # Trusted V3 product invocation. workflow_call — not `gh workflow run` — preserves the structural
+  # distinction from manual draft-only workflow_dispatch. The V3 workflow refreshes trusted main
   # after the scaffold job, so it sees the check-gated scaffold merge before initializing the run.
-  research-v2:
+  research-v3:
     needs: scaffold
-    if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'
+    if: vars.WAYPOINT_RESEARCH_ENGINE == 'v3'
     permissions:
       checks: read
       contents: write
@@ -129,7 +129,7 @@ jobs:
     concurrency:
       group: guide-${{ needs.scaffold.outputs.slug }}
       cancel-in-progress: false
-    uses: ./.github/workflows/research-pass-v2.yml
+    uses: ./.github/workflows/research-pass-v3.yml
     with:
       slug: ${{ needs.scaffold.outputs.slug }}
       issue: ${{ format('{0}', github.event.issue.number) }}

@@ -163,9 +163,10 @@ export function stageAttemptStats(st) {
 }
 
 /** The canonical fresh-run shape (one writer — init and fresh-run archival both use it). */
-function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }) {
+function freshRunState(slug, { engine, lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }) {
   return {
     schemaVersion: RUN_SCHEMA,
+    engine,
     slug,
     runId: newRunId(slug, { now: new Date(now) }),
     lifecycle,
@@ -194,6 +195,7 @@ function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs
     fresh-run signal from the workflow's branch step: the research-v2 branch did NOT exist and
     was just created from the default branch, so any state found on disk is inherited history. */
 export async function initRunV2(slug, {
+  engine = "v2",
   lifecycle = "research",
   stages = V2_RESEARCH_STAGES,
   cap = V2_ATTEMPT_CAP,
@@ -221,7 +223,7 @@ export async function initRunV2(slug, {
         publishedAt: existing.publication.publishedAt || null,
         mergedPr: existing.landing?.pr ?? null,
       }];
-      const state = freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode });
+      const state = freshRunState(slug, { engine, lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode });
       state.previousRuns = archived;
       return save(state, intakeDir);
     }
@@ -236,6 +238,11 @@ export async function initRunV2(slug, {
     // Complete and stuck records are deliberately durable too. A redispatch may re-run landing
     // or surface the stuck state, but it must not silently mint a new run whose "baseline"
     // already contains the prior run's evidence.
+    if (existing.engine !== engine) {
+      throw new ContractError(
+        `run ${existing.runId} belongs to engine "${existing.engine}" — refusing to resume it through engine "${engine}"`,
+      );
+    }
     if (JSON.stringify(existing.inputs) !== JSON.stringify(inputs)) {
       throw new ContractError(
         `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel recorded in run.v2.json`,
@@ -260,7 +267,7 @@ export async function initRunV2(slug, {
     }
     return existing;
   }
-  return save(freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }), intakeDir);
+  return save(freshRunState(slug, { engine, lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }), intakeDir);
 }
 
 function requireRun(state, slug) {
@@ -424,7 +431,7 @@ export function landingMode(state) {
     selector live still gets a draft-PR run. Missing/blank provenance fails safe to "pr". */
 export function deriveLandIntent({ eventName = "", onDefault = false, engine = "" } = {}) {
   const trustedProvenance = Boolean(eventName) && eventName !== "workflow_dispatch";
-  return trustedProvenance && onDefault === true && engine === "v2" ? "auto" : "pr";
+  return trustedProvenance && onDefault === true && ["v2", "v3"].includes(engine) ? "auto" : "pr";
 }
 
 // ── the landing transaction (correction pass, 2026-08-20) ────────────────────

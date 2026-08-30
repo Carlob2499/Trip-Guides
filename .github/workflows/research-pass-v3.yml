@@ -1,0 +1,1331 @@
+name: Research pass (V3)
+
+# V3 keeps the proven V2 control plane and adds deterministic artifact compilation before strict
+# collection. Pass B and the critic remain mechanically isolated; durable state owns retries and
+# resume; landing authority is derived from trusted /new provenance, default-branch execution,
+# and the V3 selector. Manual and feature-ref runs remain draft/PR-only. Durable policy lives in
+# docs/reference/pipeline.md; V2 trial history remains under docs/pipeline v2/.
+on:
+  # THE TRUSTED PRODUCT ENTRY POINT (hardening pass): new-guide.yml calls this workflow via
+  # workflow_call, which ordinary workflow_dispatch cannot impersonate — a called run executes
+  # under the CALLER's event ("issues"), and only workflows already committed to the default
+  # branch can call it from that ref. Init derives landMode from exactly that provenance.
+  workflow_call:
+    inputs:
+      slug:
+        required: true
+        type: string
+      section:
+        required: false
+        type: string
+        default: ""
+      model:
+        required: false
+        type: string
+        default: claude-sonnet-5
+      effort:
+        required: false
+        type: string
+        default: high
+      critic_model:
+        required: false
+        type: string
+        default: claude-opus-5
+      issue:
+        required: false
+        type: string
+        default: ""
+      void_retry:
+        required: false
+        type: boolean
+        default: false
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Guide slug (must already be scaffolded — V3 researches an existing scaffold)."
+        required: true
+        type: string
+      section:
+        description: "Section focus for a scoped pass. Leave blank for a full pass."
+        required: false
+        type: string
+        default: ""
+      model:
+        description: "Model for Pass A + reconcile (Pass B is always Sonnet)."
+        required: false
+        type: choice
+        options:
+          - claude-sonnet-5
+          - claude-opus-5
+        default: claude-sonnet-5
+      effort:
+        description: "Reasoning effort for every agent."
+        required: false
+        type: choice
+        options:
+          - high
+          - xhigh
+          - medium
+        default: high
+      critic_model:
+        description: "Model for the fresh-context critic."
+        required: false
+        type: choice
+        options:
+          - claude-opus-5
+          - claude-sonnet-5
+        default: claude-opus-5
+      issue:
+        description: "Intake issue number for traveler-question continuity (set automatically by new-guide.yml). Blank on a resume: the run's durable record already carries it."
+        required: false
+        type: string
+        default: ""
+      # There is deliberately NO `land` input (correction pass): landing authority is never a
+      # dispatch input anyone can type. Product intent is DERIVED inside setup from two
+      # infrastructure facts — the dispatch ref is the default branch AND the
+      # WAYPOINT_RESEARCH_ENGINE selector is "v3" — and re-checked at landing time, so a manual
+      # or feature-ref dispatch structurally cannot request auto publication.
+      void_retry:
+        description: "Internal — set by the bounded auto-retry. Leave false."
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write # the bounded auto-retry re-dispatches this workflow
+
+env:
+  WAYPOINT_PIPELINE_V3: "1"
+  SLUG: ${{ inputs.slug }}
+  SECTION: ${{ inputs.section }}
+
+# SAME guide-<slug> group as V1 research AND the change lifecycle, deliberately: any two runs
+# on one slug — any research generation or a change — queue behind each other instead of
+# interleaving (M6's exclusion boundary).
+concurrency:
+  group: guide-${{ inputs.slug }}
+  cancel-in-progress: false
+
+jobs:
+  # ── setup: branch, init/resume, budget, route ──────────────────────────────
+  setup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    outputs:
+      branch: ${{ steps.branch.outputs.name }}
+      should_run: ${{ steps.budget.outputs.should_run }}
+      next: ${{ steps.route.outputs.next }}
+      baseline: ${{ steps.route.outputs.baseline }}
+      run_id: ${{ steps.route.outputs.run_id }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+    steps:
+      # Phase-4 runtime guard: even if the REAL workflow file ever lands on the default branch,
+      # a dispatch on that ref cannot start research (and spends nothing). The escape hatch is a
+      # deliberate repository variable — the cutover switch, set only after independent review.
+      - name: Guard — research never starts from the default branch
+        if: github.ref_name == github.event.repository.default_branch && vars.WAYPOINT_RESEARCH_ENGINE != 'v3'
+        run: |
+          echo "::error::research-pass-v3 was dispatched on the default branch. The default-branch copy of this workflow is an inert registration stub; run the real pipeline from its feature branch, or set the WAYPOINT_RESEARCH_ENGINE repository variable to v3 after an accepted cutover. No research was started and nothing was spent."
+          exit 1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      # The trusted product entry (new-guide.yml's workflow_call) runs a REUSED workflow at the
+      # CALLER's triggering SHA — the issue-label event's SHA, which predates the scaffold job's
+      # own commit to the default branch (both jobs are steps of the SAME workflow run). The
+      # checkout above therefore lands on pre-scaffold main, and this run's slug is invisible to
+      # V3 init even though the scaffold already exists on the real remote default branch
+      # (first production canary, malta/#69, run 32454262582 — recorded live evidence). A
+      # workflow_dispatch's checked-out ref is the developer's own choice and must never be
+      # silently replaced, so this refresh runs ONLY for the non-dispatch (trusted) path — before
+      # setup-node/npm ci, so nothing installs or runs against the stale pre-scaffold tree.
+      - name: Refresh the trusted product checkout to the post-scaffold default branch
+        if: github.event_name != 'workflow_dispatch'
+        env:
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          git fetch --no-tags origin "$BASE"
+          git checkout -B "$BASE" FETCH_HEAD
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Resume or start the V3 research branch
+        id: branch
+        # A resumed branch owns durable run artifacts, not the version of the control-plane code.
+        # Synchronize the dispatch checkout into it before init/budget/route, then push that head
+        # because every later stage runs in a fresh job and re-checks out the remote run branch.
+        run: node scripts/pipeline.mjs branch --slug "$SLUG" --prefix research-v3 --sync-current
+
+      # issue is recorded durably at init (blank = inherit on a resume) so retries and
+      # answer-redispatches never re-thread it. Landing intent is DERIVED, never typed, by the
+      # tested deriveLandIntent(): auto ONLY for the trusted product invocation — the event is
+      # NOT workflow_dispatch (new-guide.yml's workflow_call runs under its own "issues" event;
+      # every manual/developer dispatch IS workflow_dispatch) AND the ref is the default branch
+      # AND the selector is "v3". A maintainer typing `gh workflow run` on main with the
+      # selector live still creates a draft-only (pr) run. --branch-fresh tells init whether the
+      # research branch was just created (any state found then is default-branch HISTORY: a
+      # merged prior run starts a NEW run with the old one archived and its mutable artifacts
+      # removed from the fresh branch; anything else fresh is refused).
+      - name: Init or resume the V3 run
+        env:
+          BRANCH: ${{ steps.branch.outputs.name }}
+          BRANCH_RESUMED: ${{ steps.branch.outputs.resumed }}
+          ISSUE: ${{ inputs.issue }}
+          ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}
+          ON_DEFAULT: ${{ github.ref_name == github.event.repository.default_branch }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          LAND=$(node scripts/pipeline-v3.mjs land-intent --slug "$SLUG" \
+            --event-name "$EVENT_NAME" --on-default "$ON_DEFAULT" --engine "$ENGINE")
+          FRESH=false
+          if [ "$BRANCH_RESUMED" = "false" ]; then FRESH=true; fi
+          node scripts/pipeline-v3.mjs init --slug "$SLUG" --section "$SECTION" --branch "$BRANCH" \
+            --model "${{ inputs.model || 'claude-sonnet-5' }}" --effort "${{ inputs.effort || 'high' }}" \
+            --critic-model "${{ inputs.critic_model || 'claude-opus-5' }}" \
+            --issue "$ISSUE" --land "$LAND" --branch-fresh "$FRESH"
+
+      - name: Attempt budget (bounded)
+        id: budget
+        env:
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: node scripts/pipeline-v3.mjs budget --slug "$SLUG" --branch "$BRANCH"
+
+      - name: File the stuck issue past the cap
+        if: steps.budget.outputs.should_run == 'false'
+        run: node scripts/pipeline.mjs gate stuck --slug "$SLUG"
+
+      - name: Preflight — check intake for contradictions
+        if: steps.budget.outputs.should_run == 'true'
+        env:
+          BRANCH: ${{ steps.branch.outputs.name }}
+        run: node scripts/pipeline.mjs gate preflight --slug "$SLUG" --branch "$BRANCH"
+
+      - name: Route to next stage
+        id: route
+        if: steps.budget.outputs.should_run == 'true'
+        run: node scripts/pipeline-v3.mjs route --slug "$SLUG"
+
+  # ── Pass A ─────────────────────────────────────────────────────────────────
+  passA:
+    needs: setup
+    if: needs.setup.outputs.should_run == 'true' && needs.setup.outputs.next == 'passA'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+      # issues: write is REQUIRED by the stop/escalation step, and a job-level permissions
+      # block sets every omitted scope to `none` — the workflow-level grant does not survive
+      # the override. Without it `gh issue comment` 403s in exactly the failure path the
+      # escalation exists to make visible (Codex review B1). Least privilege: the token is
+      # still never passed into the agent container.
+      issues: write
+    env:
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkpoint stage start
+        env:
+          PUSH_TOKEN: ${{ github.token }}
+        run: |
+          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
+          node scripts/pipeline-v3.mjs begin-stage --slug "$SLUG" --stage passA \
+            --model "${{ inputs.model || 'claude-sonnet-5' }}" \
+            --effort "${{ inputs.effort || 'high' }}" \
+            --branch "$BRANCH"
+
+      - name: Remove repository credentials before untrusted research input is read
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
+
+      - name: Stage retry feedback (validator data, this stage only)
+        id: feedback
+        run: node scripts/pipeline-v3.mjs stage-feedback --slug "$SLUG" --stage passA
+
+      - name: Generate the machine-contract capsule
+        id: contract
+        run: node scripts/pipeline-v3.mjs contract --slug "$SLUG" --stage passA
+
+      - name: Compose Pass A prompt
+        id: prompt
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+          WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
+          WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
+          WP_CONTRACT: ${{ steps.contract.outputs.capsule }}
+        run: node scripts/pipeline.mjs prompt prompts/research-passA-v3.md > /dev/null
+
+      - name: Replace repository history with an unprivileged local workspace
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
+
+      - name: Run research agent — Pass A
+        id: agent
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
+          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+        # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
+        # so a Claude process that printed "You've hit your session limit" and exited nonzero was
+        # recorded as a SUCCESSFUL step and the partial workspace went on to be verified. The
+        # wrapper keeps the identical combined-output log while propagating the PRODUCER's status.
+        run: |
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+
+      - name: Checkout a fresh control-plane copy after Pass A
+        if: always()
+        id: collect
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: collect
+
+      # Validate the owed artifact, commit the work, checkpoint completion — or record the
+      # failure (void → one bounded auto-retry below).
+      # set +e: a failed collection must still reach finish-stage, which records the failure
+      # (with the validator's field-level findings as durable retry feedback) and pushes it —
+      # aborting on collect left the stage "running" and the feedback unpushed (canary attempt 2).
+      - name: Validate, commit, checkpoint
+        # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT: an agent process that did not return cleanly
+        # leaves attempt evidence, never a stage to validate. Explicit, not ambient.
+        if: success() && steps.agent.outcome == 'success'
+        id: finish
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          set +e
+          node scripts/pipeline-v3.mjs collect-stage --slug "$SLUG" --stage passA --from "$GITHUB_WORKSPACE" --branch "$BRANCH"
+          COLLECT=$?
+          SCOPED=()
+          if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
+          node scripts/pipeline-v3.mjs finish-stage --slug "$SLUG" --stage passA \
+            --branch "$BRANCH" "${SCOPED[@]}"
+          FINISH=$?
+          if [ "$COLLECT" -ne 0 ] || [ "$FINISH" -ne 0 ]; then exit 1; fi
+
+      - name: Record agent failure honestly
+        if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v3.mjs record-agent-failure --slug "$SLUG" --stage passA \
+            --agent-conclusion "${{ steps.agent.conclusion }}" \
+            --agent-log "$RUNNER_TEMP/agent-output.log" \
+            --branch "$BRANCH"
+
+      # BOUNDED AUTOMATIC REPAIR (reliability pass, 2026-08-22). This gate used to read one
+      # ephemeral step output — `void == 'true'` — so the commonest repairable failure there is,
+      # an ordinary deterministic gate failure, never reached the retry command at all. The
+      # DURABLE run state now decides: the recorded failure class must be auto-retryable
+      # (gate-failure/void-run only), actionable validator findings must exist for this
+      # runId/stage, and the attempt + auto-retry budgets must both have room. `void_retry` is
+      # still accepted as a workflow input for compatibility, but it is no longer consulted —
+      # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
+      - name: Bounded automatic repair retry (durable run state decides)
+        # failure() and cancelled() are DISJOINT status functions: on a cancelled run failure()
+        # is false, so gating on it alone skipped both this decision and the escalation below —
+        # leaving `cancelled` recorded but silent, against the contract (Codex review B3). The
+        # state machine still REFUSES cancelled; asking it is what produces the visible stop.
+        if: failure() || cancelled()
+        id: retry
+        working-directory: collect
+        run: node scripts/pipeline-v3.mjs auto-retry --slug "$SLUG" --stage passA --branch "$BRANCH"
+
+      - name: Re-dispatch the repair attempt once
+        if: failure() && steps.retry.outputs.allowed == 'true'
+        id: redispatch
+        continue-on-error: true
+        # working-directory: the workspace root's .git was replaced by the agent sandbox (no
+        # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
+        # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
+        # on canary run 32260514104. The re-dispatch carries the SAME slug, so setup resumes the
+        # SAME runId, branch, intake and landMode, and every completed stage is skipped.
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run research-pass-v3.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
+            -f section="$SECTION" -f model="${{ inputs.model }}" \
+            -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
+            -f void_retry=true
+
+      # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
+      # Actions error and, when the run knows its intake issue, one deduped issue comment naming
+      # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      # A repair that was ELIGIBLE but whose re-dispatch failed is also a stop: the auto-retry
+      # reservation is already durably consumed and no repair run exists, so skipping the notice
+      # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
+      - name: Escalate — this run stopped and needs a human
+        if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/pipeline-v3.mjs escalate --slug "$SLUG" --stage passA \
+            --dispatch-failed "${{ steps.redispatch.outcome == 'failure' }}"
+
+  # ── Pass B — mechanically isolated ─────────────────────────────────────────
+  passB:
+    needs: [setup, passA]
+    # Runs when routing says passB is next, whether passA ran this dispatch or a previous one.
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.passA.result == 'success' || (needs.passA.result == 'skipped' && needs.setup.outputs.next == 'passB'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+      # issues: write is REQUIRED by the stop/escalation step, and a job-level permissions
+      # block sets every omitted scope to `none` — the workflow-level grant does not survive
+      # the override. Without it `gh issue comment` 403s in exactly the failure path the
+      # escalation exists to make visible (Codex review B1). Least privilege: the token is
+      # still never passed into the agent container.
+      issues: write
+    env:
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+    steps:
+      # Control-plane world, used ONLY to checkpoint stage start; deleted before the agent.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: .control
+      # No `cache: npm` here: this job's first checkout lands in .control/, so there is no
+      # package-lock.json at the workspace root and the cache resolver would fail the job.
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+      - name: Checkpoint stage start (control-plane checkout)
+        working-directory: .control
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v3.mjs begin-stage --slug "$SLUG" --stage passB \
+            --model claude-sonnet-5 --effort "${{ inputs.effort || 'high' }}" \
+            --branch "$BRANCH"
+      - name: Stage retry feedback (validator data, this stage only)
+        id: feedback
+        working-directory: .control
+        run: node scripts/pipeline-v3.mjs stage-feedback --slug "$SLUG" --stage passB
+
+      - name: Generate the machine-contract capsule
+        id: contract
+        working-directory: .control
+        run: node scripts/pipeline-v3.mjs contract --slug "$SLUG" --stage passB
+
+      - name: Remove the control-plane world before the agent
+        run: rm -rf .control
+
+      # THE ISOLATION: the agent's entire world is the baseline commit — Pass A's outputs are
+      # not in the tree and (fetch-depth 1) not in history either.
+      - name: Checkout the clean baseline workspace
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.baseline }}
+          fetch-depth: 1
+          persist-credentials: false
+      - run: npm ci
+      - name: Verify the prepared workspace excludes Pass-A outputs
+        run: node scripts/pipeline-v3.mjs verify-passb-workspace --slug "$SLUG" --dest .
+
+      - name: Compose Pass B prompt
+        id: prompt
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+          WP_RUN_ID: ${{ needs.setup.outputs.run_id }}
+          WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
+          WP_CONTRACT: ${{ steps.contract.outputs.capsule }}
+        run: node scripts/pipeline.mjs prompt prompts/research-passB-v3.md > /dev/null
+
+      - name: Replace git history with a local-only sandbox repository
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
+
+      - name: Run research agent — Pass B (isolated)
+        id: agent
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: claude-sonnet-5
+          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:github.com),WebFetch(domain:api.github.com),WebFetch(domain:raw.githubusercontent.com),WebFetch(domain:githubusercontent.com),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+        # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
+        # so a Claude process that printed "You've hit your session limit" and exited nonzero was
+        # recorded as a SUCCESSFUL step and the partial workspace went on to be verified. The
+        # wrapper keeps the identical combined-output log while propagating the PRODUCER's status.
+        run: |
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+
+      # The workflow — not Pass B — validates and transfers the artifact, then commits. The
+      # control-plane checkout happens AFTER the agent (always(), so failure recording has a
+      # world to write to even when the agent step failed).
+      - name: Checkout the run branch for collection
+        if: always()
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: collect
+
+      - name: Transfer the Pass B artifact
+        # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT (see Pass A).
+        if: success() && steps.agent.outcome == 'success'
+        id: transfer
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          set +e
+          node scripts/pipeline-v3.mjs collect-passb --slug "$SLUG" --from "$GITHUB_WORKSPACE" --branch "$BRANCH"
+          COLLECT=$?
+          node scripts/pipeline-v3.mjs finish-stage --slug "$SLUG" --stage passB --branch "$BRANCH"
+          FINISH=$?
+          if [ "$COLLECT" -ne 0 ] || [ "$FINISH" -ne 0 ]; then exit 1; fi
+
+      - name: Record agent failure honestly
+        if: (failure() || cancelled()) && steps.transfer.conclusion != 'failure'
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v3.mjs record-agent-failure --slug "$SLUG" --stage passB \
+            --agent-conclusion "${{ steps.agent.conclusion }}" \
+            --agent-log "$RUNNER_TEMP/agent-output.log" \
+            --branch "$BRANCH"
+
+      # BOUNDED AUTOMATIC REPAIR (reliability pass, 2026-08-22). This gate used to read one
+      # ephemeral step output — `void == 'true'` — so the commonest repairable failure there is,
+      # an ordinary deterministic gate failure, never reached the retry command at all. The
+      # DURABLE run state now decides: the recorded failure class must be auto-retryable
+      # (gate-failure/void-run only), actionable validator findings must exist for this
+      # runId/stage, and the attempt + auto-retry budgets must both have room. `void_retry` is
+      # still accepted as a workflow input for compatibility, but it is no longer consulted —
+      # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
+      - name: Bounded automatic repair retry (durable run state decides)
+        # failure() and cancelled() are DISJOINT status functions: on a cancelled run failure()
+        # is false, so gating on it alone skipped both this decision and the escalation below —
+        # leaving `cancelled` recorded but silent, against the contract (Codex review B3). The
+        # state machine still REFUSES cancelled; asking it is what produces the visible stop.
+        if: failure() || cancelled()
+        id: retry
+        working-directory: collect
+        run: node scripts/pipeline-v3.mjs auto-retry --slug "$SLUG" --stage passB --branch "$BRANCH"
+
+      - name: Re-dispatch the repair attempt once
+        if: failure() && steps.retry.outputs.allowed == 'true'
+        id: redispatch
+        continue-on-error: true
+        # working-directory: the workspace root's .git was replaced by the agent sandbox (no
+        # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
+        # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
+        # on canary run 32260514104. The re-dispatch carries the SAME slug, so setup resumes the
+        # SAME runId, branch, intake and landMode, and every completed stage is skipped.
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run research-pass-v3.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
+            -f section="$SECTION" -f model="${{ inputs.model }}" \
+            -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
+            -f void_retry=true
+
+      # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
+      # Actions error and, when the run knows its intake issue, one deduped issue comment naming
+      # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      # A repair that was ELIGIBLE but whose re-dispatch failed is also a stop: the auto-retry
+      # reservation is already durably consumed and no repair run exists, so skipping the notice
+      # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
+      - name: Escalate — this run stopped and needs a human
+        if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/pipeline-v3.mjs escalate --slug "$SLUG" --stage passB \
+            --dispatch-failed "${{ steps.redispatch.outcome == 'failure' }}"
+
+  # ── Reconcile ──────────────────────────────────────────────────────────────
+  reconcile:
+    needs: [setup, passB]
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.passB.result == 'success' || (needs.passB.result == 'skipped' && needs.setup.outputs.next == 'reconcile'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+      # issues: write is REQUIRED by the stop/escalation step, and a job-level permissions
+      # block sets every omitted scope to `none` — the workflow-level grant does not survive
+      # the override. Without it `gh issue comment` 403s in exactly the failure path the
+      # escalation exists to make visible (Codex review B1). Least privilege: the token is
+      # still never passed into the agent container.
+      issues: write
+    env:
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkpoint stage start
+        env:
+          PUSH_TOKEN: ${{ github.token }}
+        run: |
+          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
+          node scripts/pipeline-v3.mjs begin-stage --slug "$SLUG" --stage reconcile \
+            --model "${{ inputs.model || 'claude-sonnet-5' }}" \
+            --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
+
+      - name: Remove repository credentials before untrusted research input is read
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
+
+      - name: Stage retry feedback (validator data, this stage only)
+        id: feedback
+        run: node scripts/pipeline-v3.mjs stage-feedback --slug "$SLUG" --stage reconcile
+
+      - name: Generate the machine-contract capsule
+        id: contract
+        run: node scripts/pipeline-v3.mjs contract --slug "$SLUG" --stage reconcile
+
+      - name: Compose reconcile prompt
+        id: prompt
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+          WP_SECTION: ${{ inputs.section || 'full pass — all sections' }}
+          WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
+          WP_CONTRACT: ${{ steps.contract.outputs.capsule }}
+        run: node scripts/pipeline.mjs prompt prompts/research-reconcile-v3.md > /dev/null
+
+      - name: Replace repository history with an unprivileged local workspace
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
+
+      - name: Run research agent — Reconcile
+        id: agent
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
+          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
+        # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
+        # so a Claude process that printed "You've hit your session limit" and exited nonzero was
+        # recorded as a SUCCESSFUL step and the partial workspace went on to be verified. The
+        # wrapper keeps the identical combined-output log while propagating the PRODUCER's status.
+        run: |
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+
+      - name: Checkout a fresh control-plane copy after reconcile
+        if: always()
+        id: collect
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: collect
+
+      # A failed collection still reaches finish-stage so the validator's findings become
+      # durable, pushed retry feedback (the canary-attempt-2 lesson). An offline-verify failure
+      # keeps the old semantics: the stage stays running and re-runs.
+      - name: Collect, verify offline, checkpoint
+        # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT: this is the exact step Portugal's masked
+        # session-limit failure reached, where it manufactured a content-gate story about a
+        # reconcile the model never finished.
+        if: success() && steps.agent.outcome == 'success'
+        id: finish
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          set +e
+          node scripts/pipeline-v3.mjs collect-stage --slug "$SLUG" --stage reconcile --from "$GITHUB_WORKSPACE" --branch "$BRANCH"
+          COLLECT=$?
+          if [ "$COLLECT" -eq 0 ]; then
+            npm run verify -- --slug "$SLUG" 2>&1 | tee "$RUNNER_TEMP/verify-scorecard.txt"
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              # Keep the retry cheap: findings become durable stage feedback, in-scope work is
+              # retained on the branch, the stage fails honestly (verify-failed does all three).
+              node scripts/pipeline-v3.mjs verify-failed --slug "$SLUG" --stage reconcile \
+                --file "$RUNNER_TEMP/verify-scorecard.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
+          # Gate parity: reconcile must not checkpoint a tree that the critic's canonical
+          # content/schema build will reject before doing any critic work. Reuse the exact same
+          # build gate and retained-feedback path; do not maintain a second schema validator.
+          if [ "$COLLECT" -eq 0 ]; then
+            npm run build 2>&1 | tee "$RUNNER_TEMP/build-out.txt" | tail -40
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              node scripts/pipeline-v3.mjs verify-failed --slug "$SLUG" --stage reconcile \
+                --file "$RUNNER_TEMP/build-out.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
+          SCOPED=()
+          if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
+          node scripts/pipeline-v3.mjs finish-stage --slug "$SLUG" --stage reconcile \
+            --branch "$BRANCH" "${SCOPED[@]}"
+          FINISH=$?
+          if [ "$COLLECT" -ne 0 ] || [ "$FINISH" -ne 0 ]; then exit 1; fi
+
+      - name: Record agent failure honestly
+        if: (failure() || cancelled()) && steps.collect.outcome == 'success' && steps.finish.conclusion != 'failure'
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v3.mjs record-agent-failure --slug "$SLUG" --stage reconcile \
+            --agent-conclusion "${{ steps.agent.conclusion }}" \
+            --agent-log "$RUNNER_TEMP/agent-output.log" \
+            --branch "$BRANCH"
+
+      # BOUNDED AUTOMATIC REPAIR (reliability pass, 2026-08-22). This gate used to read one
+      # ephemeral step output — `void == 'true'` — so the commonest repairable failure there is,
+      # an ordinary deterministic gate failure, never reached the retry command at all. The
+      # DURABLE run state now decides: the recorded failure class must be auto-retryable
+      # (gate-failure/void-run only), actionable validator findings must exist for this
+      # runId/stage, and the attempt + auto-retry budgets must both have room. `void_retry` is
+      # still accepted as a workflow input for compatibility, but it is no longer consulted —
+      # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
+      - name: Bounded automatic repair retry (durable run state decides)
+        # failure() and cancelled() are DISJOINT status functions: on a cancelled run failure()
+        # is false, so gating on it alone skipped both this decision and the escalation below —
+        # leaving `cancelled` recorded but silent, against the contract (Codex review B3). The
+        # state machine still REFUSES cancelled; asking it is what produces the visible stop.
+        if: failure() || cancelled()
+        id: retry
+        working-directory: collect
+        run: node scripts/pipeline-v3.mjs auto-retry --slug "$SLUG" --stage reconcile --branch "$BRANCH"
+
+      - name: Re-dispatch the repair attempt once
+        if: failure() && steps.retry.outputs.allowed == 'true'
+        id: redispatch
+        continue-on-error: true
+        # working-directory: the workspace root's .git was replaced by the agent sandbox (no
+        # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
+        # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
+        # on canary run 32260514104. The re-dispatch carries the SAME slug, so setup resumes the
+        # SAME runId, branch, intake and landMode, and every completed stage is skipped.
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run research-pass-v3.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
+            -f section="$SECTION" -f model="${{ inputs.model }}" \
+            -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
+            -f void_retry=true
+
+      # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
+      # Actions error and, when the run knows its intake issue, one deduped issue comment naming
+      # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      # A repair that was ELIGIBLE but whose re-dispatch failed is also a stop: the auto-retry
+      # reservation is already durably consumed and no repair run exists, so skipping the notice
+      # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
+      - name: Escalate — this run stopped and needs a human
+        if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/pipeline-v3.mjs escalate --slug "$SLUG" --stage reconcile \
+            --dispatch-failed "${{ steps.redispatch.outcome == 'failure' }}"
+
+  # ── Deterministic geocoding (blocker 1D) — after Reconcile, before the Critic ──
+  # No agent runs in this job; PLACES_API_KEY is scoped to the single lookup step and research
+  # agents never see it. Idempotent: complete items are skipped, refusals stay honest blanks,
+  # and the attempt report distinguishes "attempted but unresolved" from "never attempted".
+  geocode:
+    needs: [setup, reconcile]
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.reconcile.result == 'success' || (needs.reconcile.result == 'skipped' && needs.setup.outputs.next == 'critic'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deterministic geocode pass (Places key scoped to THIS step only)
+        env:
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+        run: |
+          if [ -z "$PLACES_API_KEY" ]; then
+            echo "PLACES_API_KEY is not configured — geocoding NOT attempted (the absent report says so honestly)."
+            exit 0
+          fi
+          node scripts/geocode-venues.mjs --slug "$SLUG" --write --report "guides-intake/$SLUG/geocode.v2.json"
+
+      - name: Commit applied coordinates + attempt report
+        run: |
+          git add "src/content/guides/$SLUG" || true
+          git add "guides-intake/$SLUG/geocode.v2.json" || true
+          if ! git diff --cached --quiet; then
+            git commit -m "research-v3($SLUG): deterministic geocode pass"
+            git push origin "HEAD:$BRANCH"
+          else
+            echo "geocode pass changed nothing to commit."
+          fi
+
+  # ── Critic — mechanically blind ────────────────────────────────────────────
+  critic:
+    needs: [setup, geocode]
+    if: >-
+      always() && needs.setup.outputs.should_run == 'true' &&
+      (needs.geocode.result == 'success' || (needs.geocode.result == 'skipped' && needs.setup.outputs.next == 'critic'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+      # issues: write is REQUIRED by the stop/escalation step, and a job-level permissions
+      # block sets every omitted scope to `none` — the workflow-level grant does not survive
+      # the override. Without it `gh issue comment` 403s in exactly the failure path the
+      # escalation exists to make visible (Codex review B1). Least privilege: the token is
+      # still never passed into the agent container.
+      issues: write
+    env:
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+    steps:
+      # fetch-depth 1: prior git history is mechanically absent from the critic's world.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkpoint stage start
+        # `replay` output: an evidence-owner routed repair re-queues this stage to REVALIDATE the
+        # retained pass, not to buy another one. Every model-input step below is gated on it.
+        id: begin
+        env:
+          PUSH_TOKEN: ${{ github.token }}
+        run: |
+          AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
+          node scripts/pipeline-v3.mjs begin-stage --slug "$SLUG" --stage critic \
+            --model "${{ inputs.critic_model || 'claude-opus-5' }}" \
+            --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
+
+      - name: Stage retry feedback (validator data, this stage only)
+        id: feedback
+        if: steps.begin.outputs.replay != 'true'
+        run: node scripts/pipeline-v3.mjs stage-feedback --slug "$SLUG" --stage critic
+
+      - name: Generate the machine-contract capsule
+        id: contract
+        if: steps.begin.outputs.replay != 'true'
+        run: node scripts/pipeline-v3.mjs contract --slug "$SLUG" --stage critic
+
+      - name: Build the critic's source-domain fetch policy
+        id: fetch_policy
+        if: steps.begin.outputs.replay != 'true'
+        run: node scripts/pipeline-v3.mjs critic-fetch-tools --slug "$SLUG"
+
+      - name: Prepare the critic's blind input
+        if: steps.begin.outputs.replay != 'true'
+        run: node scripts/pipeline-v3.mjs prepare-critic --slug "$SLUG"
+
+      - name: Remove repository credentials before the blind critic runs
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
+
+      - name: Compose critic prompt
+        id: prompt
+        if: steps.begin.outputs.replay != 'true'
+        env:
+          WP_SLUG: ${{ inputs.slug }}
+          WP_FEEDBACK: ${{ steps.feedback.outputs.findings }}
+          WP_CONTRACT: ${{ steps.contract.outputs.capsule }}
+        run: node scripts/pipeline.mjs prompt prompts/research-critic-v3.md > /dev/null
+
+      - name: Replace git history with a local-only sandbox repository
+        if: steps.begin.outputs.replay != 'true'
+        run: |
+          rm -rf .git
+          git init
+          git config user.name "waypoint-agent-sandbox"
+          git config user.email "sandbox@invalid"
+          git add -A
+          git commit -m "sandbox baseline"
+
+      - name: Run research agent — Critic
+        id: agent
+        if: steps.begin.outputs.replay != 'true'
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          WP_PROMPT: ${{ steps.prompt.outputs.text }}
+          WP_MODEL: ${{ inputs.critic_model || 'claude-opus-5' }}
+          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_TOOLS: ${{ steps.fetch_policy.outputs.tools }}
+          WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**)
+        # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
+        # so a Claude process that printed "You've hit your session limit" and exited nonzero was
+        # recorded as a SUCCESSFUL step and the partial workspace went on to be verified. The
+        # wrapper keeps the identical combined-output log while propagating the PRODUCER's status.
+        run: |
+          bash "$GITHUB_WORKSPACE/scripts/run-logged-command.sh" "$RUNNER_TEMP/agent-output.log" \
+            docker run --rm --user "$(id -u):$(id -g)" --mount type=bind,src="$GITHUB_WORKSPACE",dst=/workspace \
+            --workdir /workspace -e HOME=/tmp -e CLAUDE_CODE_OAUTH_TOKEN -e WP_PROMPT -e WP_MODEL -e WP_EFFORT -e WP_TOOLS -e WP_DENY \
+            node:22-bookworm-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 \
+            sh -lc 'npx --yes @anthropic-ai/claude-code@2.1.233 --safe-mode --no-session-persistence -p "$WP_PROMPT" --model "$WP_MODEL" --effort "$WP_EFFORT" --allowedTools "$WP_TOOLS" --disallowedTools "$WP_DENY"'
+
+      - name: Checkout a fresh control-plane copy after the critic
+        if: always()
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+          path: collect
+
+      # Deterministic tail the V1 critic used to run itself: palette + composition are code.
+      - name: Collect allowed output, compose, validate, commit, checkpoint
+        # PARTIAL OUTPUT IS NOT SUCCESSFUL OUTPUT (see Pass A).
+        if: success() && (steps.agent.outcome == 'success' || steps.begin.outputs.replay == 'true')
+        id: finish
+        working-directory: collect
+        run: |
+          set +e
+          npm ci
+          RC=$?
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # RETAINED CRITIC OUTPUT (paid-work scar, R-A). The critic's output lives in the agent
+          # sandbox and reaches this trusted checkout only through the copies below, so a
+          # truth-gate exit placed BEFORE them left the collect tree clean: verify-failed found
+          # nothing in scope, committed nothing, and the retry re-spent the whole paid pass.
+          #
+          # Retaining the GUIDE edits is safe only because the gate no longer diffs against this
+          # working tree: reconcile-critic-truth reads its pre-critic baseline out of the commit
+          # PINNED ON THE CRITIC STAGE ITSELF (run.v2.json stages.critic.baseline), so the next
+          # attempt still compares against the ORIGINAL guide. A retained edit can never satisfy
+          # the gate by being compared against itself, and a rejected handoff stays repairable
+          # without regenerating the guide work. Scope unchanged: the critic's own allowed paths
+          # — guide dir, ledger, patterns fragment — nothing wider.
+          retain_critic_output() {
+            rsync -a --delete "$GITHUB_WORKSPACE/src/content/guides/$SLUG/" "src/content/guides/$SLUG/" || return 1
+            cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/ledger.md" "guides-intake/$SLUG/ledger.md" || return 1
+            cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/pipeline-patterns.fragment.md" "guides-intake/$SLUG/pipeline-patterns.fragment.md" || return 1
+            # The handoff is what a malformed-handoff failure has to REPAIR, so retain it when it
+            # exists — otherwise the next critic reconstructs previous values it can no longer see.
+            # Optional on purpose: "no handoff at all" is itself one of the failures being retained.
+            if [ -f "$GITHUB_WORKSPACE/guides-intake/$SLUG/critic-corrections.v2.json" ]; then
+              cp "$GITHUB_WORKSPACE/guides-intake/$SLUG/critic-corrections.v2.json" "guides-intake/$SLUG/critic-corrections.v2.json" || return 1
+            fi
+          }
+          if [ "$RC" -eq 0 ]; then
+            node scripts/pipeline-v3.mjs reconcile-critic-truth --slug "$SLUG" --from "$GITHUB_WORKSPACE" 2>&1 | tee "$RUNNER_TEMP/critic-truth-out.txt"
+            TRUTH_RC="${PIPESTATUS[0]}"
+            if [ "$TRUTH_RC" -ne 0 ]; then
+              retain_critic_output || echo "[critic] retention incomplete — recording findings anyway"
+              # EXIT 3: the corrections reached evidence, but a supersession only the EVIDENCE
+              # OWNER can decide is outstanding. The blind critic cannot write that relation, so
+              # retrying it would spend the run's one quality retry on a stage that must fail
+              # again — this routes the findings to reconcile and re-queues the critic with its
+              # retained work and its pinned baseline. Any other nonzero is the critic's own.
+              if [ "$TRUTH_RC" -eq 3 ]; then
+                node scripts/pipeline-v3.mjs needs-reconcile --slug "$SLUG" \
+                  --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+              else
+                node scripts/pipeline-v3.mjs verify-failed --slug "$SLUG" --stage critic \
+                  --file "$RUNNER_TEMP/critic-truth-out.txt" --branch "$BRANCH"
+              fi
+              exit 1
+            fi
+          fi
+          if [ "$RC" -eq 0 ]; then retain_critic_output; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then node scripts/pipeline-v3.mjs compound-patterns --slug "$SLUG"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then npm run extract-palette -- --slug "$SLUG"; RC=$?; fi
+          if [ "$RC" -eq 0 ]; then node scripts/compose-guide.mjs --slug "$SLUG" --write; RC=$?; fi
+          # Composition renumbers group files under the tab budget; coverage refs follow their
+          # anchors to the composed filenames (deterministic, fail-closed — canary scar). A remap
+          # failure keeps the stage's work + findings exactly like a verify failure (second scar:
+          # a discarded critic pass is 15 agent-minutes re-spent for want of a findings file).
+          if [ "$RC" -eq 0 ]; then
+            node scripts/pipeline-v3.mjs remap-coverage --slug "$SLUG" 2>&1 | tee "$RUNNER_TEMP/remap-out.txt"
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              node scripts/pipeline-v3.mjs verify-failed --slug "$SLUG" --stage critic \
+                --file "$RUNNER_TEMP/remap-out.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
+          # The schema gate runs HERE, not first at landing: a schema error surfacing only at
+          # land is a dead end (all stages complete, nothing to retry) — at the critic it is a
+          # normal stage failure with retained work and findings (canary scar: two facts.json
+          # evidence strings over the 240-char cap reached the landing gate).
+          if [ "$RC" -eq 0 ]; then
+            npm run build 2>&1 | tee "$RUNNER_TEMP/build-out.txt" | tail -40
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              node scripts/pipeline-v3.mjs verify-failed --slug "$SLUG" --stage critic \
+                --file "$RUNNER_TEMP/build-out.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
+          if [ "$RC" -eq 0 ]; then
+            npm run verify -- --slug "$SLUG" 2>&1 | tee "$RUNNER_TEMP/verify-scorecard.txt"
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              node scripts/pipeline-v3.mjs verify-failed --slug "$SLUG" --stage critic \
+                --file "$RUNNER_TEMP/verify-scorecard.txt" --branch "$BRANCH"
+              exit 1
+            fi
+          fi
+          if [ "$RC" -eq 0 ]; then
+            node scripts/pipeline-v3.mjs finish-stage --slug "$SLUG" --stage critic --branch "$BRANCH"
+          else
+            node scripts/pipeline-v3.mjs fail-stage --slug "$SLUG" --stage critic --class gate-failure \
+              --detail "critic collection, process-memory, compose, or coverage remap failed" --branch "$BRANCH"
+            exit 1
+          fi
+
+      - name: Record agent failure honestly
+        if: (failure() || cancelled())
+        working-directory: collect
+        run: |
+          npm ci
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          node scripts/pipeline-v3.mjs record-agent-failure --slug "$SLUG" --stage critic \
+            --agent-conclusion "${{ steps.agent.conclusion }}" \
+            --agent-log "$RUNNER_TEMP/agent-output.log" \
+            --branch "$BRANCH"
+
+      # BOUNDED AUTOMATIC REPAIR (reliability pass, 2026-08-22). This gate used to read one
+      # ephemeral step output — `void == 'true'` — so the commonest repairable failure there is,
+      # an ordinary deterministic gate failure, never reached the retry command at all. The
+      # DURABLE run state now decides: the recorded failure class must be auto-retryable
+      # (gate-failure/void-run only), actionable validator findings must exist for this
+      # runId/stage, and the attempt + auto-retry budgets must both have room. `void_retry` is
+      # still accepted as a workflow input for compatibility, but it is no longer consulted —
+      # run.v2.json's own autoRetries counter is what bounds the loop across dispatches.
+      - name: Bounded automatic repair retry (durable run state decides)
+        # failure() and cancelled() are DISJOINT status functions: on a cancelled run failure()
+        # is false, so gating on it alone skipped both this decision and the escalation below —
+        # leaving `cancelled` recorded but silent, against the contract (Codex review B3). The
+        # state machine still REFUSES cancelled; asking it is what produces the visible stop.
+        if: failure() || cancelled()
+        id: retry
+        working-directory: collect
+        run: node scripts/pipeline-v3.mjs auto-retry --slug "$SLUG" --stage critic --branch "$BRANCH"
+
+      - name: Re-dispatch the repair attempt once
+        if: failure() && steps.retry.outputs.allowed == 'true'
+        id: redispatch
+        continue-on-error: true
+        # working-directory: the workspace root's .git was replaced by the agent sandbox (no
+        # remotes), so gh cannot resolve the repo there. --ref: without it gh dispatches the
+        # DEFAULT branch's copy — the inert stub — instead of this run's own ref. Both observed
+        # on canary run 32260514104. The re-dispatch carries the SAME slug, so setup resumes the
+        # SAME runId, branch, intake and landMode, and every completed stage is skipped.
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run research-pass-v3.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
+            -f section="$SECTION" -f model="${{ inputs.model }}" \
+            -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
+            -f void_retry=true
+
+      # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
+      # Actions error and, when the run knows its intake issue, one deduped issue comment naming
+      # the stage, class, finding count, why no retry happened and the exact safe recovery.
+      # A repair that was ELIGIBLE but whose re-dispatch failed is also a stop: the auto-retry
+      # reservation is already durably consumed and no repair run exists, so skipping the notice
+      # here would bypass the visible-stop contract on a control-plane failure (Codex review B2).
+      - name: Escalate — this run stopped and needs a human
+        if: (failure() || cancelled()) && (steps.retry.outputs.allowed != 'true' || steps.redispatch.outcome == 'failure')
+        working-directory: collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/pipeline-v3.mjs escalate --slug "$SLUG" --stage critic \
+            --dispatch-failed "${{ steps.redispatch.outcome == 'failure' }}"
+
+  # ── Land — always a draft PR while V3 is being proven ──────────────────────
+  land:
+    needs: [setup, critic]
+    # needs.setup.result guards the canary-observed case: setup fails AFTER its budget step has
+    # already emitted should_run=true (outputs of failed jobs remain readable), which used to
+    # start a doomed landing job on a run that never routed.
+    if: >-
+      always() && needs.setup.result == 'success' && needs.setup.outputs.should_run == 'true' &&
+      (needs.critic.result == 'success' || (needs.critic.result == 'skipped' && needs.setup.outputs.next == ''))
+    runs-on: ubuntu-latest
+    # issues:write exists for exactly one reason (correction pass): a product merge files the
+    # vetoable "🚀 Auto-published" safety notice, and this job override used to drop the
+    # permission the workflow level would have granted — every notice died silently behind
+    # land-branch.sh's old `|| true`. The notice failure is now also recorded durably
+    # (landing.announced=false) instead of swallowed.
+    permissions:
+      actions: write
+      checks: read
+      contents: write
+      pull-requests: write
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+      SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
+      PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+      GOOGLE_ROUTES_KEY: ${{ secrets.GOOGLE_ROUTES_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.setup.outputs.branch }}
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Configure git identity
+        run: |
+          git config user.name  "waypoint-research-v3[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Fail-closed artifact validation BEFORE landing: evidence, dispositions, saturation,
+      # coverage. A malformed or missing artifact blocks here.
+      - name: Validate V3 artifacts
+        id: artifacts
+        run: |
+          SCOPED=()
+          if [ -n "$SECTION" ]; then SCOPED=(--scoped); fi
+          node scripts/pipeline-v3.mjs validate --slug "$SLUG" "${SCOPED[@]}"
+
+      # The deterministic landing decision: auto ONLY when the run's durable record says product
+      # intent AND every stage is complete AND landing-time PRODUCT AUTHORITY holds — this run is
+      # on the default branch with the selector still "v3" RIGHT NOW. A feature-ref dispatch can
+      # therefore never auto-merge its research branch into main (the previously possible
+      # side-door), and revoking the selector mid-run downgrades the landing to a draft PR.
+      - name: Determine the landing mode
+        id: mode
+        env:
+          ENGINE: ${{ vars.WAYPOINT_RESEARCH_ENGINE }}
+          ON_DEFAULT: ${{ github.ref_name == github.event.repository.default_branch }}
+        run: |
+          AUTHORITY=false
+          if [ "$ON_DEFAULT" = "true" ] && [ "$ENGINE" = "v3" ]; then AUTHORITY=true; fi
+          node scripts/pipeline-v3.mjs land-mode --slug "$SLUG" --product-authority "$AUTHORITY"
+
+      # The REAL evidence gate (build + networked verify) runs inside `land --gate`; the
+      # scorecard becomes the PR body. Mode pr (controlled/draft runs): never merges, never
+      # publishes. Mode auto (product runs): the same evidence-gated publication path V1 uses,
+      # as a TWO-PHASE transaction — the gate verdict rides the branch into the merge, and the
+      # publication fact is finalized on the default branch only AFTER gh confirms the merge
+      # (schema-refused any earlier). The --announce URL files the vetoable auto-published
+      # notice on a real merge; a notice failure is recorded durably, never swallowed.
+      - name: Land the branch
+        id: evidence_gate
+        env:
+          LAND: ${{ steps.mode.outputs.land }}
+        run: |
+          node scripts/pipeline.mjs land --slug "$SLUG" \
+            --branch "$BRANCH" --gate --land "$LAND" \
+            --title "Research pass (V3): $SLUG" \
+            --announce "${SITE_BASE_URL}/guides/${SLUG}/"
+
+      # The land step exits 0 even when the gate FAILS (draft PR is the designed fallback), so
+      # the record keys on the emitted gate verdict, never on step success — the canary's first
+      # landing recorded a pass the gate never earned by conflating the two. A MERGED product
+      # landing is skipped here: its gate verdict rode the merge commit (phase 1) and its
+      # publication record was finalized on the default branch after the confirmed merge
+      # (phase 2, inside `land`); its branch is gone — pushing a post-record would only
+      # resurrect a zombie branch.
+      - name: Record the real landing gate verdict
+        if: success() && steps.evidence_gate.outputs.outcome != 'merged'
+        run: |
+          if [ "${{ steps.evidence_gate.outputs.gate }}" = "passed" ]; then
+            node scripts/pipeline-v3.mjs landing-gate --slug "$SLUG" --status passed --branch "$BRANCH"
+          else
+            node scripts/pipeline-v3.mjs landing-gate --slug "$SLUG" --status failed \
+              --detail "evidence gate failed (build or configured network verify) — landed as a draft PR only" --branch "$BRANCH"
+          fi
+
+      # RESEARCH-GATE TRUTH AND LANDING TRUTH ARE SEPARATE (hardening pass). This crash handler
+      # used to rewrite a legitimate gate PASS into gate FAIL whenever a LATER GitHub operation
+      # (merge auth/API error, post-merge finalization) crashed the land step — and, worse, its
+      # push recreated the just-deleted research branch on the merged-but-finalization-failed
+      # path. It now keys on the emitted gate verdict (the land CLI emits it on every path,
+      # including hard landing failures): a passed gate is never rewritten — the landing failure
+      # is already recorded durably as landing.outcome=failed by the CLI — and a MERGED outcome
+      # records nothing here at all (the branch is gone; finalize-landing is the retry).
+      - name: Record the landing gate failure (step crashed)
+        if: failure() && steps.evidence_gate.outputs.gate != 'passed'
+        run: |
+          node scripts/pipeline-v3.mjs landing-gate --slug "$SLUG" --status failed \
+            --detail "artifact, build, or configured network evidence gate failed" --branch "$BRANCH" || true
+
+      - name: Preserve the passed gate verdict after a landing-side crash
+        if: failure() && steps.evidence_gate.outputs.gate == 'passed' && steps.evidence_gate.outputs.outcome != 'merged'
+        run: |
+          # The gate PASSED and the failure was landing-side (recorded by the CLI as
+          # landing.outcome=failed). Make sure the durable gate verdict says PASS — on pr-mode
+          # landings phase 1 never wrote it — without ever touching a merged run's gone branch.
+          node scripts/pipeline-v3.mjs landing-gate --slug "$SLUG" --status passed --branch "$BRANCH" || true
+
+  # ── questions: surface, never gate (I01 — V1's product-communication contract) ──────────────
+  # The traveler sees what was assumed on their behalf. always(): a run cut off mid-stage still
+  # asks what it managed to. The issue number comes from the run's DURABLE record (set at init by
+  # /new's dispatch), never from this dispatch's inputs — so a resume/retry, which carries no
+  # issue input, still reports to the right thread. Deduped by question id inside `questions`.
+  questions:
+    needs: [setup, land]
+    if: always() && needs.setup.result == 'success' && needs.setup.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SLUG: ${{ inputs.slug }}
+      BRANCH: ${{ needs.setup.outputs.branch }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # The run's ledger lives on the research branch while it exists. A merged product landing
+      # DELETES that branch and the merge lands after this workflow's dispatch SHA — so the
+      # default checkout above can predate the merge (correction pass: it used to be read as-is
+      # and could miss the merged ledger entirely). Explicitly fetch whichever home is current:
+      # the branch when it survives, the LATEST default branch otherwise. The branch can also
+      # vanish between the existence check and the fetch (the merge races this job) — that
+      # falls through to the default-branch fetch rather than failing.
+      - name: Check out the run's current home (branch, or post-merge default branch)
+        env:
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1 \
+             && git fetch origin "$BRANCH" 2>/dev/null; then
+            git checkout -B "$BRANCH" FETCH_HEAD
+          else
+            git fetch origin "$BASE"
+            git checkout -B "$BASE" FETCH_HEAD
+          fi
+      # Non-gating for research quality, but delivery failure is OBSERVABLE: the surfacer prints
+      # a ::warning:: annotation when it cannot post, instead of pretending delivery succeeded.
+      - name: Surface traveler questions on the intake issue
+        continue-on-error: true
+        run: |
+          ISSUE=$(node -e 'try { console.log(require(`./guides-intake/${process.env.SLUG}/run.v2.json`).issue || "") } catch { console.log("") }')
+          if [ -n "$ISSUE" ]; then
+            node scripts/pipeline.mjs questions --slug "$SLUG" --issue "$ISSUE"
+          else
+            echo "no intake issue recorded on this run — nothing to surface (manual dispatch)."
+          fi

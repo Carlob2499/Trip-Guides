@@ -193,11 +193,19 @@ jobs:
           git fetch origin "$RBRANCH"
           git checkout "$RBRANCH"
           node scripts/pipeline.mjs answers-apply --slug "$SLUG" --branch "$RBRANCH"
-          if [[ "$RBRANCH" == research-v2/* ]]; then
+          if [[ "$RBRANCH" == research-v3/* ]]; then
             # A COMPLETE-but-unmerged draft run has no stage left to absorb the answer — without
             # this, the redispatch would just re-land the unchanged product (correction pass).
             # reopen-answers re-opens reconcile+critic deterministically (no-op while work is
             # still owed; published runs never reach here — they route to the change lifecycle).
+            node scripts/pipeline-v3.mjs reopen-answers --slug "$SLUG" --branch "$RBRANCH"
+            SECTION=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.section')
+            MODEL=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.model')
+            EFFORT=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.effort')
+            CRITIC=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.criticModel')
+            gh workflow run research-pass-v3.yml -f slug="$SLUG" -f section="$SECTION" \
+              -f model="$MODEL" -f effort="$EFFORT" -f critic_model="$CRITIC"
+          elif [[ "$RBRANCH" == research-v2/* ]]; then
             node scripts/pipeline-v2.mjs reopen-answers --slug "$SLUG" --branch "$RBRANCH"
             SECTION=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.section')
             MODEL=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.model')

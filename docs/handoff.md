@@ -4,13 +4,13 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-30)
-Uruguay Canary #4 remains GREEN draft-only proof; R03 escalation/cancellation failure seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
-Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
-Kumamoto authority: only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run has started.
-Release governance is implemented through #150; #130 awaits only owner/tooling branch-protection settings + live proof. No broad Actions bypass.
-September frontend: U01/U02 Sep 19, U03 Sep 26, engineering handoff Sep 30; October is content/reverification/field bugs. #151 started U02. U01 foundations #153/#155/#156 are merged; live GuideLayout/router/mobile-nav migration is still pending.
-NEXT: migrate GuideLayout + guide routing + mobile navigation atomically onto the proven traveler projection/station/rail seams. Do not transplant isolated PR #115 fragments. On Sep 2 only, if model-burn preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
-No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
+Uruguay Canary #4 remains GREEN draft-only proof; R03 escalation/cancellation seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
+V3 is the single replacement route: V1 remains default/rollback fallback; V2 is historical evidence; fresh V3 acceptance is pending.
+Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5); preserve `research-v2/fukuoka`. Frozen V2 Kumamoto candidate is evidence only.
+Governance is implemented through #150; #130 still needs owner/tooling branch-protection settings and live proof. Frontend migration remains due Sep 19–30.
+NEXT: finish deterministic V3 scar and integration proof, then run one fresh V3 Kumamoto acceptance from a new V3 candidate (draft/PR-only). Do not repurpose the frozen V2 Kumamoto candidate, extend caps, hand-edit artifacts, publish, merge, or change the selector before that acceptance is green. If V3 misses acceptance, keep V1 as the trip-safe production route.
+No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge. `WAYPOINT_RESEARCH_ENGINE` stays unset.
+Local proof: 198/198 passed for V3 integration and 307 broader focused tests passed; lint, typecheck, invariants, and build are green. Reserve adversarial reviewers remain usage-blocked and uncounted.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
@@ -46,6 +46,8 @@ No cap extension, artifact edits, selector change, publication, cutover, V1 reti
 - Attempt 6 corrected the prior five critic enum findings but cannot serve as repair-to-green proof because the run resumed with stale control-plane code; PR #111 deterministically repairs that version-skew seam.
 - V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
 - Final Fukuoka acceptance `fukuoka-20260829-7cb4fa` FAILED at reconcile on an unfetched official-source claim. Durable state is 5/5 quality attempts, 1/1 auto-retries, critic queued/0 attempts, publication false, landing pending.
-- V2 production cutover remains pending and unauthorized. The failed Fukuoka branch is evidence, not content to repair-and-merge.
-- Fresh Kumamoto acceptance is separately authorized under `FINAL_V2_ACCEPTANCE_KUMAMOTO.md`; it is not a continuation of Fukuoka and may not inherit or extend Fukuoka's attempt authority. Current authority is rebuilt candidate `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`, exact-head green in closed-unmerged PR #123.
+- V3 production cutover remains pending and unauthorized. V1 stays the production default until one fresh V3 draft-only acceptance is green.
+- The failed Fukuoka branch remains preserved V2 evidence, not content to repair-and-merge.
+- The frozen Kumamoto branch remains V2 historical evidence only; the next acceptance must be a new V3 candidate and may not inherit or extend Fukuoka's attempt authority.
+- The adversarial and careful-engineer reviewer calls were retried but remained usage-blocked; no external review is claimed.
 - The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.

@@ -73,6 +73,8 @@ import { emptyTelemetry, stageFacts, countsFromEvidence, mergeTelemetry } from "
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const INTAKE_DIR = path.join(ROOT, "guides-intake");
 const GUIDES_DIR = path.join(ROOT, "src", "content", "guides");
+const pipelineLabel = (engine = "v2") => `pipeline-${engine}`;
+const researchLabel = (slug, engine = "v2") => `research-${engine}(${slug})`;
 
 function emit(key, value) {
   if (String(value).includes("\n")) throw new Error(`step output "${key}" carries a newline`);
@@ -214,7 +216,7 @@ export function stageScopeProblems(slug, stage, paths) {
     in a FRESH checkout, so anything left uncommitted here is simply gone. Scope is the stage's
     own allowedStagePaths — violations are never committed and every downstream gate still fails
     closed on this content. */
-function retainStageWork(slug, stage, message, { branch = null } = {}) {
+function retainStageWork(slug, stage, message, { branch = null, engine = "v2" } = {}) {
   const allowed = allowedStagePaths(slug, stage);
   const inScope = dirtyPaths().filter((f) => allowed.some((root) => f === root || f.startsWith(root + "/")));
   // The COMMIT pathspec must be commitable too, not the raw allowed list: an allowed path that
@@ -223,7 +225,7 @@ function retainStageWork(slug, stage, message, { branch = null } = {}) {
   const paths = commitablePaths(allowed);
   if (!inScope.length || !paths.length) return [];
   git(["add", "-A", "--", ...paths]);
-  try { git(["commit", "--only", "-m", `research-v2(${slug}): ${message}`, "--", ...paths]); }
+  try { git(["commit", "--only", "-m", `${researchLabel(slug, engine)}: ${message}`, "--", ...paths]); }
   catch { return []; } // nothing staged in scope
   if (branch) git(["push", "origin", `HEAD:${branch}`]);
   return inScope;
@@ -376,16 +378,20 @@ export async function validateStageOutput(slug, stage, { intakeDir = INTAKE_DIR,
 /** The exit-3 route leaves the run mid-repair: reconcile owns the failure, the critic is queued
     with its work retained. The job is STILL in failure() there, so its generic tail runs — and
     must not relabel an outcome that is already handled. */
-async function standDownForReplay(slug, stage) {
+async function standDownForReplay(slug, stage, { engine = "v2" } = {}) {
   if (stage !== "critic" || !isCriticReplay(await readRunStateV2(slug))) return false;
-  console.log(`[pipeline-v2] ${slug} — critic truth was ROUTED to the evidence owner; leaving the critic queued for replay and the routed failure intact.`);
+  console.log(`[${pipelineLabel(engine)}] ${slug} — critic truth was ROUTED to the evidence owner; leaving the critic queued for replay and the routed failure intact.`);
   return true;
 }
 
-async function run(cmd, get, has) {
+export async function run(cmd, get, has, { engine = "v2" } = {}) {
   const slug = get("--slug");
+  const planeTag = pipelineLabel(engine);
+  const workflowFile = engine === "v3" ? "research-pass-v3.yml" : "research-pass-v2.yml";
+  const runMessage = (detail) => `${researchLabel(slug || "<slug>", engine)}: ${detail}`;
+  const choreMessage = (detail) => `chore(${planeTag}): ${detail}`;
   if (!slug || !isValidSlug(slug)) {
-    console.error(`[pipeline-v2] ${cmd} needs a valid --slug (lowercase, digits, single hyphens).`);
+    console.error(`[${planeTag}] ${cmd} needs a valid --slug (lowercase, digits, single hyphens).`);
     return 1;
   }
   const branch = get("--branch");
@@ -393,21 +399,22 @@ async function run(cmd, get, has) {
   switch (cmd) {
     case "init": {
       const sectionProblem = validateSectionInput(get("--section"));
-      if (sectionProblem) { console.error(`[pipeline-v2] ${sectionProblem}`); return 1; }
+      if (sectionProblem) { console.error(`[${planeTag}] ${sectionProblem}`); return 1; }
       // A V2 run REQUIRES an existing scaffold (new-guide.yml owns scaffolding). The baseline
       // commit recorded on the scaffold stage is what Pass B's clean checkout derives from.
       const scaffoldProblems = await validateStageOutput(slug, "scaffold");
       if (scaffoldProblems.length) {
-        console.error(`[pipeline-v2] ${slug} is not scaffolded — V2 researches an existing scaffold, it does not create one:`);
+        console.error(`[${planeTag}] ${slug} is not scaffolded — ${engine.toUpperCase()} researches an existing scaffold, it does not create one:`);
         for (const p of scaffoldProblems) console.error(`  · ${p}`);
         return 1;
       }
       const issue = get("--issue") || "";
-      if (issue && !/^\d+$/.test(issue)) { console.error(`[pipeline-v2] "${issue}" isn't an issue number.`); return 1; }
+      if (issue && !/^\d+$/.test(issue)) { console.error(`[${planeTag}] "${issue}" isn't an issue number.`); return 1; }
       const landInput = get("--land") || "";
-      if (landInput && !["pr", "auto"].includes(landInput)) { console.error(`[pipeline-v2] --land must be pr or auto, not "${landInput}".`); return 1; }
+      if (landInput && !["pr", "auto"].includes(landInput)) { console.error(`[${planeTag}] --land must be pr or auto, not "${landInput}".`); return 1; }
       const branchFresh = get("--branch-fresh") === "true";
       let state = await initRunV2(slug, {
+        engine,
         inputs: {
           section: get("--section") || "",
           model: get("--model") || "claude-sonnet-5",
@@ -426,27 +433,27 @@ async function run(cmd, get, has) {
         // tree). Remove them from the run branch BEFORE the scaffold baseline is captured, so
         // Pass B's clean-workspace contract holds and Pass A never reads a previous run's
         // evidence as its own. No-op on a first-ever run. (Hardening pass, 2026-08-20.)
-        const { baseline, reset } = resetFreshRunWorkspace(slug);
-        if (reset) console.log(`[pipeline-v2] ${slug} — fresh-run reset: prior run artifacts removed; clean baseline ${baseline.slice(0, 7)}.`);
+        const { baseline, reset } = resetFreshRunWorkspace(slug, { engine });
+        if (reset) console.log(`[${planeTag}] ${slug} — fresh-run reset: prior run artifacts removed; clean baseline ${baseline.slice(0, 7)}.`);
       }
       if (state.stages.scaffold.status !== "complete") {
         const head = git(["rev-parse", "HEAD"]).trim();
         await stageStart(slug, "scaffold");
         state = await stageComplete(slug, "scaffold", { commit: head });
-        console.log(`[pipeline-v2] ${slug} — scaffold baseline recorded at ${head.slice(0, 7)}.`);
+        console.log(`[${planeTag}] ${slug} — scaffold baseline recorded at ${head.slice(0, 7)}.`);
       }
-      commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): init run ${state.runId}`, { branch });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`], runMessage(`init run ${state.runId}`), { branch });
       emit("run_id", state.runId);
       emit("baseline", state.stages.scaffold.commit || "");
       emit("next", nextStageV2(state) || "");
-      console.log(`[pipeline-v2] ${slug} — run ${state.runId}, next stage: ${nextStageV2(state) || "(none)"}`);
+      console.log(`[${planeTag}] ${slug} — run ${state.runId}, next stage: ${nextStageV2(state) || "(none)"}`);
       return 0;
     }
 
     case "route": {
       const state = await readRunStateV2(slug);
       if (!state) {
-        console.error(`[pipeline-v2] no V2 run for ${slug} — run init first.`);
+        console.error(`[${planeTag}] no ${engine.toUpperCase()} run for ${slug} — run init first.`);
         return 1;
       }
       const next = nextStageV2(state);
@@ -456,20 +463,20 @@ async function run(cmd, get, has) {
       emit("run_id", state.runId);
       emit("status", state.status);
       if (has("--json")) console.log(JSON.stringify({ slug, runId: state.runId, next, status: state.status, resume: state.resume }));
-      else console.log(`[pipeline-v2] ${slug} — ${state.status}; next: ${next || "(none)"}; ${state.resume.action}`);
+      else console.log(`[${planeTag}] ${slug} — ${state.status}; next: ${next || "(none)"}; ${state.resume.action}`);
       return 0;
     }
 
     case "budget": {
       const { overCap, attempts, cap } = await bumpRunAttempt(slug);
-      commitAndPush([`guides-intake/${slug}/run.v2.json`], `chore(pipeline-v2): ${slug} attempt ${attempts}`, { branch });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`], choreMessage(`${slug} attempt ${attempts}`), { branch });
       emit("attempts", String(attempts));
       emit("should_run", String(!overCap));
       if (overCap) {
-        console.error(`[pipeline-v2] ${slug} — attempt ${attempts} exceeds the cap of ${cap}; run is STUCK. No agent spend.`);
+        console.error(`[${planeTag}] ${slug} — attempt ${attempts} exceeds the cap of ${cap}; run is STUCK. No agent spend.`);
         return 0; // the workflow branches on should_run and files the stuck issue; not a crash
       }
-      console.log(`[pipeline-v2] ${slug} — attempt ${attempts} of ${cap}, proceeding.`);
+      console.log(`[${planeTag}] ${slug} — attempt ${attempts} of ${cap}, proceeding.`);
       return 0;
     }
 
@@ -483,10 +490,10 @@ async function run(cmd, get, has) {
       const replay = stage === "critic" && isCriticReplay(await readRunStateV2(slug));
       await stageStart(slug, stage, { model: get("--model"), effort: get("--effort"), baseline: git(["rev-parse", "HEAD"]).trim() });
       emit("replay", String(replay));
-      commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): ${stage} started`, { branch });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`], runMessage(`${stage} started`), { branch });
       console.log(replay
-        ? `[pipeline-v2] ${slug} — stage "${stage}" REPLAY: revalidating the retained pass against its pinned baseline; the model is not invoked.`
-        : `[pipeline-v2] ${slug} — stage "${stage}" started (checkpointed before the agent).`);
+        ? `[${planeTag}] ${slug} — stage "${stage}" REPLAY: revalidating the retained pass against its pinned baseline; the model is not invoked.`
+        : `[${planeTag}] ${slug} — stage "${stage}" started (checkpointed before the agent).`);
       return 0;
     }
 
@@ -513,16 +520,16 @@ async function run(cmd, get, has) {
           const inScope = changed.filter((file) => allowed.some((root) => file === root || file.startsWith(root + "/")));
           if (inScope.length) {
             git(["add", "-A", "--", ...commitablePaths(allowed)]);
-            try { git(["commit", "--only", "-m", `research-v2(${slug}): ${stage} attempt output (INVALID — retained for repair)`, "--", ...allowed]); }
+            try { git(["commit", "--only", "-m", runMessage(`${stage} attempt output (INVALID — retained for repair)`), "--", ...allowed]); }
             catch { /* nothing staged in scope */ }
             if (branch) git(["push", "origin", `HEAD:${branch}`]);
           }
         }
         await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
-        commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (${isVoid ? "void" : "invalid output"})`, { branch });
+        commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], runMessage(`${stage} FAILED (${isVoid ? "void" : "invalid output"})`), { branch });
         emit("void", String(isVoid));
         emit("failure_class", failureClass);
-        console.error(`[pipeline-v2] ${slug} — stage "${stage}" output does not hold up:`);
+        console.error(`[${planeTag}] ${slug} — stage "${stage}" output does not hold up:`);
         for (const p of problems) console.error(`  · ${p}`);
         return 1;
       }
@@ -530,7 +537,7 @@ async function run(cmd, get, has) {
       if (dirty) {
         const paths = commitablePaths(allowedStagePaths(slug, stage));
         git(["add", "-A", "--", ...paths]);
-        git(["commit", "--only", "-m", `research-v2(${slug}): ${stage}`, "--", ...paths]);
+        git(["commit", "--only", "-m", runMessage(stage), "--", ...paths]);
         if (branch) git(["push", "origin", `HEAD:${branch}`]);
       }
       // HEAD either way: a stage that changed nothing still hands the next stage a tree, and
@@ -555,20 +562,20 @@ async function run(cmd, get, has) {
       await recordTelemetry(slug, telemetry);
       // Phase 9: rebuild the truthful Progress event log from the durable artifacts.
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: evidenceDoc, geocode: await readGeocodeReport(slug) });
-      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} complete`, { branch });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], runMessage(`${stage} complete`), { branch });
       emit("void", "false");
       emit("next", nextStageV2(state) || "");
-      console.log(`[pipeline-v2] ${slug} — stage "${stage}" complete${workCommit ? ` (work at ${workCommit.slice(0, 7)})` : ""}; next: ${nextStageV2(state) || "(none)"}`);
+      console.log(`[${planeTag}] ${slug} — stage "${stage}" complete${workCommit ? ` (work at ${workCommit.slice(0, 7)})` : ""}; next: ${nextStageV2(state) || "(none)"}`);
       return 0;
     }
 
     case "fail-stage": {
       const stage = get("--stage");
-      if (await standDownForReplay(slug, stage)) return 0;
+      if (await standDownForReplay(slug, stage, { engine })) return 0;
       await stageFail(slug, stage, { failureClass: get("--class") || "unknown", detail: get("--detail") || "" });
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
-      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED`, { branch });
-      console.error(`[pipeline-v2] ${slug} — stage "${stage}" recorded as failed (${get("--class") || "unknown"}); branch stays manually resumable.`);
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], runMessage(`${stage} FAILED`), { branch });
+      console.error(`[${planeTag}] ${slug} — stage "${stage}" recorded as failed (${get("--class") || "unknown"}); branch stays manually resumable.`);
       return 0;
     }
 
@@ -586,7 +593,7 @@ async function run(cmd, get, has) {
       const mode = authority && intent === "auto" ? "auto" : "pr";
       emit("land", mode);
       emit("issue", state?.issue || "");
-      console.log(`[pipeline-v2] ${slug} — landing mode ${mode} (intent ${state?.landMode || "(no run)"}; decision ${intent}; product authority ${authority ? "granted" : "absent"}).`);
+      console.log(`[${planeTag}] ${slug} — landing mode ${mode} (intent ${state?.landMode || "(no run)"}; decision ${intent}; product authority ${authority ? "granted" : "absent"}).`);
       return 0;
     }
 
@@ -600,16 +607,17 @@ async function run(cmd, get, has) {
       const pr = Number(get("--pr"));
       const announcedFlag = get("--announced") || "";
       if (announcedFlag && !["ok", "failed", "skipped"].includes(announcedFlag)) {
-        console.error(`[pipeline-v2] --announced must be ok, failed or skipped, not "${announcedFlag}".`); return 1;
+        console.error(`[${planeTag}] --announced must be ok, failed or skipped, not "${announcedFlag}".`); return 1;
       }
       // Omitted --announced passes null through — the recovery FAILS CLOSED on it unless the
       // durable state already records the fact; "skipped" is the explicit no-announce-URL case.
       const { state, base, mergedAt } = await finalizeLandingRecovery(slug, {
         pr,
+        branch: get("--branch") || null,
         announced: announcedFlag === "ok" ? true : announcedFlag === "failed" ? false : announcedFlag === "skipped" ? "skipped" : null,
         base: get("--base") || null,
       });
-      console.log(`[pipeline-v2] ${slug} — landing finalized (PR #${pr}, merged ${mergedAt}); publication recorded ${state.publication.publishedAt}; pushed to origin/${base}.`);
+      console.log(`[${planeTag}] ${slug} — landing finalized (PR #${pr}, merged ${mergedAt}); publication recorded ${state.publication.publishedAt}; pushed to origin/${base}.`);
       return 0;
     }
 
@@ -625,7 +633,7 @@ async function run(cmd, get, has) {
         engine: get("--engine") || "",
       });
       emit("land", intent);
-      console.error(`[pipeline-v2] ${slug} — landing intent ${intent} (event ${get("--event-name") || "(none)"}; default-branch ${get("--on-default") || "false"}; selector ${get("--engine") || "(unset)"}).`);
+      console.error(`[${planeTag}] ${slug} — landing intent ${intent} (event ${get("--event-name") || "(none)"}; default-branch ${get("--on-default") || "false"}; selector ${get("--engine") || "(unset)"}).`);
       console.log(intent);
       return 0;
     }
@@ -638,11 +646,11 @@ async function run(cmd, get, has) {
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
       commitAndPush(
         [`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`],
-        `research-v2(${slug}): re-opened at reconcile for a traveler answer`,
+        runMessage("re-opened at reconcile for a traveler answer"),
         { branch },
       );
       emit("reopened", String(reopened));
-      console.log(`[pipeline-v2] ${slug} — ${reopened ? `re-opened at reconcile (run ${state.runId}) — the answer will be absorbed by the re-run` : "work still owed; the active run absorbs the answer as-is"}.`);
+      console.log(`[${planeTag}] ${slug} — ${reopened ? `re-opened at reconcile (run ${state.runId}) — the answer will be absorbed by the re-run` : "work still owed; the active run absorbs the answer as-is"}.`);
       return 0;
     }
 
@@ -650,7 +658,7 @@ async function run(cmd, get, has) {
       const passed = get("--status") === "passed";
       await markLandingGate(slug, { passed, detail: get("--detail") });
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
-      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): landing gate ${passed ? "PASS" : "FAIL"}`, { branch });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], runMessage(`landing gate ${passed ? "PASS" : "FAIL"}`), { branch });
       return passed ? 0 : 1;
     }
 
@@ -680,7 +688,7 @@ async function run(cmd, get, has) {
         // Corrupt/unreadable durable state is never a licence to retry — it fails closed, loudly.
         emit("allowed", "false");
         emit("reason", "run state unreadable");
-        console.error(`[pipeline-v2] ${slug} — automatic repair retry REFUSED: ${err.message.split("\n")[0]}`);
+        console.error(`[${planeTag}] ${slug} — automatic repair retry REFUSED: ${err.message.split("\n")[0]}`);
         return 1;
       }
       emit("stage", decision.stage || "");
@@ -702,22 +710,22 @@ async function run(cmd, get, has) {
             reason: `refused by the retry-authority invariant: stage "${decision.stage}" records class ` +
               `"${recorded}", which is not auto-retryable (eligibility said otherwise — that disagreement is itself the bug)`,
             recovery: "report this: the retry decision and the durable record disagree. Re-dispatch " +
-              "research-pass-v2.yml by hand with the same slug once the cause is understood.",
+              `${workflowFile} by hand with the same slug once the cause is understood.`,
           };
           emit("reason", decision.reason.replace(/\s+/g, " "));
         }
       }
       if (!decision.allowed) {
         emit("allowed", "false");
-        console.error(`[pipeline-v2] ${slug} — automatic repair retry REFUSED: ${decision.reason}`);
-        console.error(`[pipeline-v2] ${slug} — safe recovery: ${decision.recovery}`);
+        console.error(`[${planeTag}] ${slug} — automatic repair retry REFUSED: ${decision.reason}`);
+        console.error(`[${planeTag}] ${slug} — safe recovery: ${decision.recovery}`);
         return 0; // the workflow escalates on allowed != 'true'; refusing is not a crash
       }
       const { allowed, autoRetries, cap } = await recordAutoRetry(slug);
-      commitAndPush([`guides-intake/${slug}/run.v2.json`], `chore(pipeline-v2): ${slug} auto-retry ${autoRetries}`, { branch });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`], choreMessage(`${slug} auto-retry ${autoRetries}`), { branch });
       emit("allowed", String(allowed));
       emit("run_id", state.runId);
-      console.log(`[pipeline-v2] ${slug} — automatic repair retry ${autoRetries} of ${cap}: ${allowed ? "ALLOWED" : "REFUSED (bounded)"} (${decision.reason})`);
+      console.log(`[${planeTag}] ${slug} — automatic repair retry ${autoRetries} of ${cap}: ${allowed ? "ALLOWED" : "REFUSED (bounded)"} (${decision.reason})`);
       return 0;
     }
 
@@ -727,9 +735,9 @@ async function run(cmd, get, has) {
       // by every stage job — the four inline bash copies this replaced could (and did) drift.
       const stage = get("--stage");
       if (!V2_RESEARCH_STAGES.includes(stage)) {
-        console.error(`[pipeline-v2] record-agent-failure needs --stage <${V2_RESEARCH_STAGES.join("|")}>`); return 1;
+        console.error(`[${planeTag}] record-agent-failure needs --stage <${V2_RESEARCH_STAGES.join("|")}>`); return 1;
       }
-      if (await standDownForReplay(slug, stage)) return 0;
+      if (await standDownForReplay(slug, stage, { engine })) return 0;
       const logFile = get("--agent-log");
       const agentOutput = logFile && existsSync(logFile) ? readFileSync(logFile, "utf8") : "";
       const { class: failureClass, detail } = classifyAgentFailure({
@@ -742,12 +750,12 @@ async function run(cmd, get, has) {
       const after = await stageFail(slug, stage, { failureClass, detail });
       const recorded = after.stages?.[stage]?.failure?.class || failureClass;
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
-      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (${recorded})`, { branch });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], runMessage(`${stage} FAILED (${recorded})`), { branch });
       emit("failure_class", recorded);
       console.error(
         recorded === failureClass
-          ? `[pipeline-v2] ${slug} — stage "${stage}" recorded as failed (${recorded}: ${detail}); branch stays resumable.`
-          : `[pipeline-v2] ${slug} — stage "${stage}" already carries the more specific class "${recorded}"; the process-plane observation (${failureClass}) does not overwrite it.`,
+          ? `[${planeTag}] ${slug} — stage "${stage}" recorded as failed (${recorded}: ${detail}); branch stays resumable.`
+          : `[${planeTag}] ${slug} — stage "${stage}" already carries the more specific class "${recorded}"; the process-plane observation (${failureClass}) does not overwrite it.`,
       );
       return 0;
     }
@@ -762,7 +770,7 @@ async function run(cmd, get, has) {
       });
       console.log(`::error::${report.actionsError}`);
       if (!report.issue) {
-        console.error(`[pipeline-v2] ${slug} — no intake issue recorded; the Actions error above is the recovery surface.`);
+        console.error(`[${planeTag}] ${slug} — no intake issue recorded; the Actions error above is the recovery surface.`);
         return 0;
       }
       const gh = (args) => execFileSync("gh", args, { cwd: ROOT, encoding: "utf8" });
@@ -770,48 +778,48 @@ async function run(cmd, get, has) {
       try {
         existing = JSON.parse(gh(["issue", "view", String(report.issue), "--json", "comments"])).comments.map((c) => c.body);
       } catch (err) {
-        console.error(`[pipeline-v2] could not read issue #${report.issue}'s comments (${err.message.split("\n")[0]}) — refusing to risk a duplicate.`);
+        console.error(`[${planeTag}] could not read issue #${report.issue}'s comments (${err.message.split("\n")[0]}) — refusing to risk a duplicate.`);
         return 0;
       }
       if (alreadyNotified(existing, report.marker)) {
-        console.log(`[pipeline-v2] ${slug} — this terminal failure is already reported on issue #${report.issue}; not posting again.`);
+        console.log(`[${planeTag}] ${slug} — this terminal failure is already reported on issue #${report.issue}; not posting again.`);
         return 0;
       }
       gh(["issue", "comment", String(report.issue), "--body", report.body]);
-      console.log(`[pipeline-v2] ${slug} — stop notice filed on issue #${report.issue}.`);
+      console.log(`[${planeTag}] ${slug} — stop notice filed on issue #${report.issue}.`);
       return 0;
     }
 
     case "prepare-passb": {
       const dest = get("--dest");
-      if (!dest) { console.error("[pipeline-v2] prepare-passb needs --dest <dir>"); return 1; }
+      if (!dest) { console.error(`[${planeTag}] prepare-passb needs --dest <dir>`); return 1; }
       const state = await readRunStateV2(slug);
       const baseline = state?.stages?.scaffold?.commit;
       preparePassBWorkspace(slug, { baseCommit: baseline, destDir: dest });
-      console.log(`[pipeline-v2] ${slug} — clean Pass-B workspace at ${dest} (baseline ${String(baseline).slice(0, 7)}).`);
+      console.log(`[${planeTag}] ${slug} — clean Pass-B workspace at ${dest} (baseline ${String(baseline).slice(0, 7)}).`);
       return 0;
     }
 
     case "verify-passb-workspace": {
       const dest = get("--dest") || ".";
       verifyPassBWorkspace(slug, dest);
-      console.log(`[pipeline-v2] ${slug} — workspace ${dest} verified clean of Pass-A outputs.`);
+      console.log(`[${planeTag}] ${slug} — workspace ${dest} verified clean of Pass-A outputs.`);
       return 0;
     }
 
     case "collect-passb": {
       const from = get("--from");
-      if (!from) { console.error("[pipeline-v2] collect-passb needs --from <dir>"); return 1; }
+      if (!from) { console.error(`[${planeTag}] collect-passb needs --from <dir>`); return 1; }
       const state = await readRunStateV2(slug);
       try {
         const { dest } = await collectPassB(slug, { fromDir: from, runId: state?.runId });
-        console.log(`[pipeline-v2] ${slug} — Pass B artifact validated and transferred to ${dest}.`);
+        console.log(`[${planeTag}] ${slug} — Pass B artifact validated and transferred to ${dest}.`);
         return 0;
       } catch (err) {
         // 1B: the collection validator's exact finding is what the retry needs to see.
         if (err instanceof ContractError && state) {
           await recordStageFeedback(slug, { runId: state.runId, stage: "passB", attempt: state.stages?.passB?.attempts || 0, findings: [err.message] });
-          commitAndPush([`guides-intake/${slug}/feedback.v2.json`], `research-v2(${slug}): passB validator findings recorded`, { branch });
+          commitAndPush([`guides-intake/${slug}/feedback.v2.json`], runMessage("passB validator findings recorded"), { branch });
         }
         throw err;
       }
@@ -821,19 +829,19 @@ async function run(cmd, get, has) {
       const stage = get("--stage");
       const from = get("--from");
       if (!V2_RESEARCH_STAGES.includes(stage) || !from) {
-        console.error("[pipeline-v2] collect-stage needs --stage <stage> --from <dir>"); return 1;
+        console.error(`[${planeTag}] collect-stage needs --stage <stage> --from <dir>`); return 1;
       }
       try {
         const copied = await collectStageOutput({ fromDir: path.resolve(from), paths: allowedStagePaths(slug, stage) });
         if (!copied.length) throw new ContractError(`stage ${stage} produced no owned artifacts`);
-        console.log(`[pipeline-v2] ${slug} — collected ${stage}: ${copied.join(", ")}`);
+        console.log(`[${planeTag}] ${slug} — collected ${stage}: ${copied.join(", ")}`);
         return 0;
       } catch (err) {
         if (err instanceof ContractError) {
           const state = await readRunStateV2(slug).catch(() => null);
           if (state) {
             await recordStageFeedback(slug, { runId: state.runId, stage, attempt: state.stages?.[stage]?.attempts || 0, findings: [err.message] });
-            commitAndPush([`guides-intake/${slug}/feedback.v2.json`], `research-v2(${slug}): ${stage} validator findings recorded`, { branch });
+            commitAndPush([`guides-intake/${slug}/feedback.v2.json`], runMessage(`${stage} validator findings recorded`), { branch });
           }
         }
         throw err;
@@ -844,13 +852,13 @@ async function run(cmd, get, has) {
       // Deterministic, trusted-checkout step: follow coverage anchors to the group files
       // composition renamed. Fails closed when an anchor no longer resolves anywhere.
       const { changed } = await remapCoverageRefs(slug);
-      console.log(`[pipeline-v2] ${slug} — coverage refs ${changed ? "remapped to the composed group files" : "already current"}.`);
+      console.log(`[${planeTag}] ${slug} — coverage refs ${changed ? "remapped to the composed group files" : "already current"}.`);
       return 0;
     }
 
     case "reconcile-critic-truth": {
       const from = get("--from");
-      if (!from) { console.error("[pipeline-v2] reconcile-critic-truth needs --from <critic workspace>"); return 1; }
+      if (!from) { console.error(`[${planeTag}] reconcile-critic-truth needs --from <critic workspace>`); return 1; }
       const state = await readRunStateV2(slug);
       const baselineDocs = requireCriticBaseline(state, slug);
       // Declarations from the stage's earlier RETAINED attempts (committed between the pinned
@@ -876,7 +884,7 @@ async function run(cmd, get, has) {
         console.error(err.message);
         return 3;
       }
-      console.log(`[pipeline-v2] ${slug} — critic guide truth ${result.changed ? `reconciled (${result.targets.join(", ")})` : "unchanged"}` +
+      console.log(`[${planeTag}] ${slug} — critic guide truth ${result.changed ? `reconciled (${result.targets.join(", ")})` : "unchanged"}` +
         ` against pre-critic baseline ${state.stages.critic.baseline.slice(0, 7)}.`);
       return 0;
     }
@@ -894,14 +902,14 @@ async function run(cmd, get, has) {
       const stage = get("--stage");
       const file = get("--file");
       if (!V2_RESEARCH_STAGES.includes(stage) || !file || !existsSync(file)) {
-        console.error("[pipeline-v2] verify-failed needs --stage <stage> --file <gate output>"); return 1;
+        console.error(`[${planeTag}] verify-failed needs --stage <stage> --file <gate output>`); return 1;
       }
       const gateOutput = readFileSync(file, "utf8");
-      retainStageWork(slug, stage, `${stage} attempt output (verify FAILED — retained for repair)`, { branch });
+      retainStageWork(slug, stage, `${stage} attempt output (verify FAILED — retained for repair)`, { branch, engine });
       const retryFindings = await recordGateFailure(slug, stage, gateOutput);
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
-      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (offline verify)`, { branch });
-      console.error(`[pipeline-v2] ${slug} — ${stage} failed offline verify; ${retryFindings.length} finding(s) recorded for the retry; work retained.`);
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], runMessage(`${stage} FAILED (offline verify)`), { branch });
+      console.error(`[${planeTag}] ${slug} — ${stage} failed offline verify; ${retryFindings.length} finding(s) recorded for the retry; work retained.`);
       return 0;
     }
 
@@ -911,13 +919,13 @@ async function run(cmd, get, has) {
       // on them and moves the resume point there. The critic is NOT failed — it is re-queued with
       // its baseline, so the repaired run revalidates the same output against the same tree.
       const file = get("--file");
-      if (!file || !existsSync(file)) { console.error("[pipeline-v2] needs-reconcile needs --file <gate output>"); return 1; }
+      if (!file || !existsSync(file)) { console.error(`[${planeTag}] needs-reconcile needs --file <gate output>`); return 1; }
       const gateOutput = readFileSync(file, "utf8");
       // DURABILITY FIRST. The routed repair runs in a fresh checkout, so the critic's retained
       // guide/handoff/ledger AND the trusted critic-origin evidence records the gate just wrote
       // must be committed and pushed here — otherwise reconcile is asked to relate records that
       // no longer exist on the branch. Same scope as any critic retention.
-      const retained = retainStageWork(slug, "critic", "critic output + correction evidence (routed to reconcile — retained)", { branch });
+      const retained = retainStageWork(slug, "critic", "critic output + correction evidence (routed to reconcile — retained)", { branch, engine });
       const state = await readRunStateV2(slug);
       const findings = extractGateFindings(gateOutput);
       await recordStageFeedback(slug, {
@@ -925,8 +933,8 @@ async function run(cmd, get, has) {
       });
       await routeToEvidenceOwner(slug, { detail: `critic corrections need an evidence supersession relation: ${findings.length} finding(s)` });
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
-      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): critic truth routed to reconcile (evidence relation owed)`, { branch });
-      console.error(`[pipeline-v2] ${slug} — critic truth needs an evidence relation the critic cannot write; routed to reconcile with ${findings.length} finding(s); ${retained.length} retained path(s) pushed.`);
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], runMessage("critic truth routed to reconcile (evidence relation owed)"), { branch });
+      console.error(`[${planeTag}] ${slug} — critic truth needs an evidence relation the critic cannot write; routed to reconcile with ${findings.length} finding(s); ${retained.length} retained path(s) pushed.`);
       return 0;
     }
 
@@ -935,13 +943,13 @@ async function run(cmd, get, has) {
       // instructions; other stages' findings never leak into this prompt.
       const stage = get("--stage");
       if (!V2_RESEARCH_STAGES.includes(stage)) {
-        console.error("[pipeline-v2] stage-feedback needs --stage <stage>"); return 1;
+        console.error(`[${planeTag}] stage-feedback needs --stage <stage>`); return 1;
       }
       const state = await readRunStateV2(slug);
       const findings = state ? await activeFeedback(slug, { runId: state.runId, stage }) : [];
       const block = renderFeedbackBlock(findings);
       emitMultiline("findings", block);
-      console.log(`[pipeline-v2] ${slug} — ${stage} retry feedback: ${findings.length} finding(s).`);
+      console.log(`[${planeTag}] ${slug} — ${stage} retry feedback: ${findings.length} finding(s).`);
       return 0;
     }
 
@@ -952,21 +960,21 @@ async function run(cmd, get, has) {
       const state = await readRunStateV2(slug);
       const capsule = await generateContractCapsule(stage, { slug, runId: state?.runId || get("--run-id") || "<run-id>" });
       emitMultiline("capsule", capsule);
-      console.log(`[pipeline-v2] ${slug} — ${stage} contract capsule generated (${capsule.length} chars).`);
+      console.log(`[${planeTag}] ${slug} — ${stage} contract capsule generated (${capsule.length} chars).`);
       return 0;
     }
 
     case "prepare-critic": {
       const { deleted } = prepareCriticInput(slug);
       emit("deleted", deleted.join(","));
-      console.log(`[pipeline-v2] ${slug} — critic input prepared; removed: ${deleted.join(", ") || "(nothing present)"}`);
+      console.log(`[${planeTag}] ${slug} — critic input prepared; removed: ${deleted.join(", ") || "(nothing present)"}`);
       return 0;
     }
 
     case "critic-fetch-tools": {
       const tools = criticFetchTools(slug);
       emit("tools", tools);
-      console.log(`[pipeline-v2] ${slug} — critic fetch policy permits only source domains already present in its blind input.`);
+      console.log(`[${planeTag}] ${slug} — critic fetch policy permits only source domains already present in its blind input.`);
       return 0;
     }
 
@@ -999,7 +1007,7 @@ async function run(cmd, get, has) {
 
     case "restore-critic": {
       const { restored } = restoreCriticInput(slug);
-      console.log(`[pipeline-v2] ${slug} — restored: ${restored.join(", ") || "(nothing tracked)"}`);
+      console.log(`[${planeTag}] ${slug} — restored: ${restored.join(", ") || "(nothing tracked)"}`);
       return 0;
     }
 
@@ -1017,20 +1025,20 @@ async function run(cmd, get, has) {
           ...coverageProblems(coverage, { ...context, evidenceDoc: evidence }),
         ];
         if (problems.length) {
-          console.error(`[pipeline-v2] ${slug} — V2 artifacts do not hold up:`);
+          console.error(`[${planeTag}] ${slug} — ${engine.toUpperCase()} artifacts do not hold up:`);
           for (const p of problems) console.error(`  · ${p}`);
           return 1;
         }
       } catch (err) {
-        console.error(`[pipeline-v2] ${err.message}`);
+        console.error(`[${planeTag}] ${err.message}`);
         return 1;
       }
-      console.log(`[pipeline-v2] ${slug} — V2 artifacts validate.`);
+      console.log(`[${planeTag}] ${slug} — ${engine.toUpperCase()} artifacts validate.`);
       return 0;
     }
 
     default:
-      console.error(`[pipeline-v2] unknown subcommand "${cmd}"`);
+      console.error(`[${planeTag}] unknown subcommand "${cmd}"`);
       return 1;
   }
 }
