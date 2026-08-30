@@ -1,40 +1,47 @@
 name: September freeze policy
 
 # Trusted-base policy check for the Sep 20 feature freeze and Sep 27 backend code freeze.
-# pull_request_target is intentional here: this job checks metadata + changed filenames only and
-# checks out the BASE commit. It never executes or checks out PR-controlled code.
+# Ordinary PRs use pull_request_target: metadata + changed filenames only, with trusted base code.
+# Automated scaffold PRs explicitly dispatch this workflow on their branch head and pass pr_number;
+# the job still checks out main, so PR-controlled content is never executed by the policy check.
 on:
   pull_request_target:
     branches: [main]
     types: [opened, synchronize, reopened, edited, labeled, unlabeled, ready_for_review]
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Optional PR number to evaluate for an automation-created scaffold
+        required: false
+        type: string
 
 permissions:
   contents: read
   pull-requests: read
 
 concurrency:
-  group: september-freeze-${{ github.event.pull_request.number || github.run_id }}
+  group: september-freeze-${{ github.event.pull_request.number || inputs.pr_number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   freeze-policy:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out trusted base policy
+      - name: Check out trusted policy
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || 'main' }}
           persist-credentials: false
       - name: Set up Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
       - name: Enforce September release window
-        if: github.event_name == 'pull_request_target'
+        if: github.event_name == 'pull_request_target' || inputs.pr_number != ''
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          WAYPOINT_FREEZE_PR_NUMBER: ${{ inputs.pr_number }}
         run: node scripts/check-september-freeze.mjs
       - name: Manual policy smoke check
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && inputs.pr_number == ''
         run: node -e "import('./scripts/check-september-freeze.mjs').then(m => console.log(m.freezePhase('2026-09-27')))"
