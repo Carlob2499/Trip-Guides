@@ -3,9 +3,9 @@
 // issue-to-scaffold.mjs writes a quarantined draft into the checkout. This module commits that
 // draft to an isolated scaffold branch, opens a PR, explicitly dispatches the checks that a
 // GITHUB_TOKEN-created PR cannot be trusted to trigger recursively, waits for the exact branch
-// head to pass every required check, merges the PR, and only THEN replies/closes the intake issue.
-// Research starts after this function returns, so a failed/unknown gate leaves the draft isolated
-// and the issue open instead of starting research from content that never reached main.
+// head to pass every required check against an exact base SHA, merges the PR, and only THEN
+// replies/closes the intake issue. Research starts after this function returns, so a failed,
+// unknown, or stale-base gate leaves the draft isolated and the issue open.
 
 import { execFileSync } from "node:child_process";
 import path from "node:path";
@@ -114,11 +114,13 @@ export async function landScaffold(
 
   runGit(["add", "src/content/guides", "guides-intake"]);
   runGit(["commit", "-m", title]);
-  // Preserve the existing serialization/collision behavior: reconcile with whatever reached main
-  // since checkout before publishing the isolated branch. A conflict fails before any PR merge.
+  // Preserve serialization/collision behavior and make the scaffold head contain the base that
+  // will be tested. A later main movement is detected after checks and refused before merge.
   runGit(["pull", "--rebase", "origin", "main"]);
   const headSha = String(runGit(["rev-parse", "HEAD"], { capture: true })).trim();
+  const baseSha = String(runGit(["rev-parse", "origin/main"], { capture: true })).trim();
   if (!/^[0-9a-f]{40}$/.test(headSha)) throw new Error(`could not resolve scaffold head SHA: "${headSha}"`);
+  if (!/^[0-9a-f]{40}$/.test(baseSha)) throw new Error(`could not resolve scaffold base SHA: "${baseSha}"`);
   runGit(["push", "origin", `HEAD:refs/heads/${branch}`]);
 
   ghRun([
@@ -129,12 +131,18 @@ export async function landScaffold(
   const prNumber = Number(String(ghRun(["pr", "view", branch, "--repo", repo, "--json", "number", "--jq", ".number"])).trim());
   if (!Number.isSafeInteger(prNumber) || prNumber < 1) throw new Error(`could not resolve scaffold PR number for ${branch}`);
 
-  // PRs created with GITHUB_TOKEN are not allowed to rely on recursive pull_request workflow
-  // dispatch. Explicit workflow_dispatch is the trusted unattended path for the two repo-owned
-  // checks; CodeQL default-setup Analyze checks attach to the pushed exact head separately.
-  ghRun(["workflow", "run", "required-gate.yml", "--repo", repo, "--ref", branch, "-f", "base=main"]);
+  // Explicit dispatch is mandatory for GITHUB_TOKEN-created PRs. Pin Required gate to the exact
+  // main SHA that this scaffold head rebased onto; then reject any base movement before merge.
+  ghRun(["workflow", "run", "required-gate.yml", "--repo", repo, "--ref", branch, "-f", "base=main", "-f", `base_sha=${baseSha}`]);
   ghRun(["workflow", "run", "september-freeze.yml", "--repo", repo, "--ref", branch, "-f", `pr_number=${prNumber}`]);
   await waitForChecks({ repo, headSha, ghRun });
+
+  const currentBaseSha = String(ghRun(["api", `repos/${repo}/branches/main`, "--jq", ".commit.sha"])).trim();
+  if (currentBaseSha !== baseSha) {
+    throw new Error(`main moved after scaffold checks: tested ${baseSha}, now ${currentBaseSha}; issue remains open and research will not start`);
+  }
+  const currentHeadSha = String(ghRun(["pr", "view", String(prNumber), "--repo", repo, "--json", "headRefOid", "--jq", ".headRefOid"])).trim();
+  if (currentHeadSha !== headSha) throw new Error(`scaffold PR #${prNumber} head moved after checks: expected ${headSha}, found ${currentHeadSha}`);
 
   ghRun(["pr", "merge", String(prNumber), "--repo", repo, "--merge", "--match-head-commit", headSha, "--delete-branch"]);
   const merged = JSON.parse(ghRun(["pr", "view", String(prNumber), "--repo", repo, "--json", "mergedAt,state"]));
@@ -151,7 +159,7 @@ export async function landScaffold(
   });
   ghRun(["issue", "comment", String(issue), "--repo", repo, "--body", body]);
   ghRun(["issue", "close", String(issue), "--repo", repo]);
-  return { slug, issue: String(issue), branch, headSha, prNumber };
+  return { slug, issue: String(issue), branch, headSha, baseSha, prNumber };
 }
 
 /** Argument resolution, pure and testable. Flags win; env names match new-guide.yml exactly. */
