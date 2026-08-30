@@ -172,6 +172,12 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             var active = guideTabs.querySelector(".gtab-active");
             if (!active) return;
             railKicker.textContent = active.dataset.full || "";
+            document.querySelectorAll('[data-action="guide-route"]').forEach(function (control) {
+              var on = control.dataset.route === active.dataset.route;
+              control.classList.toggle("active", on);
+              if (on) control.setAttribute("aria-current", "true");
+              else control.removeAttribute("aria-current");
+            });
             if (!railDesc) return;
             var panel = active.getAttribute("aria-controls")
               ? document.getElementById(active.getAttribute("aria-controls"))
