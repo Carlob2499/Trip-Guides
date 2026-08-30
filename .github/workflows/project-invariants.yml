@@ -19,8 +19,11 @@ on:
       - docs/pipeline v2/SEPTEMBER_TRACKER.md
       - scripts/check-project-invariants.mjs
       - scripts/check-september-freeze.mjs
+      - scripts/classify-required-gate.mjs
       - scripts/__tests__/september-freeze.test.mjs
+      - scripts/__tests__/required-gate.test.mjs
       - .github/workflows/project-invariants.yml
+      - .github/workflows/required-gate.yml
       - .github/workflows/september-freeze.yml
       - .github/workflows/ensure-labels.yml
       - .github/workflows/new-guide.yml
