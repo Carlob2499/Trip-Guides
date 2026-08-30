@@ -1,10 +1,10 @@
 # September freeze guard evidence
 
-Date: 2026-08-29
+Date: 2026-08-30
 
-This note records the deterministic release-window control prepared ahead of the September deadlines. It does not move F01/F02/F03/F04 early and does not authorize V2 cutover.
+This note records the deterministic release-window and protected-main compatibility controls prepared ahead of the September deadlines. It does not move F01/F02/F03/F04 early and does not authorize V2 cutover.
 
-## Shipped control
+## Shipped freeze control
 
 PR #129 merged the repository-side September freeze policy on main at `5c5df669ec4729c4a0a4eb046e69de07f952f83b`.
 
@@ -17,26 +17,27 @@ Policy:
 - traveler guide content and release-status/evidence bookkeeping stay editable;
 - locked engineering doctrine (`AGENTS.md`, `CLAUDE.md`, `PRODUCT.md`, Pipeline V2 `DECISIONS.md`) is classified with code.
 
-The guard runs as a trusted-base `pull_request_target` workflow. It checks out the base SHA and reads only PR metadata/changed filenames; it never executes PR-controlled code. Regression coverage pins New York date boundaries, path classification, label authority, mixed PR behavior, and Oct 1 expiry.
+The ordinary freeze guard uses trusted-base `pull_request_target`: it reads PR metadata/changed filenames and never executes PR-controlled code. PR #140 also added an explicit `workflow_dispatch` PR-number path for automation-created scaffold PRs; that path still checks out trusted `main` and reads the target PR through GitHub APIs.
 
-The label bootstrap creates `stabilization`, `release-blocker`, and `freeze-waiver`; its first post-merge main run was successful.
+## Protected-main repository prerequisites
 
-## Remaining repository-settings blocker
+The compatibility defects identified by issue #130 are now repaired repository-side:
 
-Live inspection after PR #129 still reports `main` with branch protection disabled, required status-check enforcement off, and no repository rulesets. Therefore the repository-side freeze check is observable but not unbypassable until repository settings require pull requests/checks. Issue #130 is the durable owner/tooling action for that configuration.
+- PR #137 removed `mutation.yml`'s direct-main report write and reduced it to `contents: read`; the mutation report remains an Actions artifact.
+- PR #138 added the always-reporting `Required gate / required-gate`, with path scope classified inside the job rather than through PR path filters. Trusted automation may explicitly dispatch it on an exact branch head; dispatched runs also form a prospective integration tree against current `main` before verification.
+- PR #139 added a temporary zero-Claude compatibility probe. Main run `33285553280` created disposable GITHUB_TOKEN PR #141 at exact head `ba2de093ff52461d9ce7d9b5ce3f409ca1337b95`, explicitly dispatched Required gate run `33285560957`, verified that exact-head run succeeded, then closed PR #141 and deleted `proof/protected-main-33285553280`. The same bot-created PR head also received successful platform `Analyze (actions)` and `Analyze (javascript-typescript)` checks.
+- PR #140 converted `/new` scaffold landing from direct-main push to a quarantined `scaffold/<slug>-<issue>` branch/PR transaction. It explicitly dispatches Required gate and trusted freeze evaluation, waits fail-closed for exact-head `required-gate`, `freeze-policy`, `Analyze (actions)`, and `Analyze (javascript-typescript)`, merges with exact-head matching, deletes the scaffold branch, and only then comments/closes the intake issue and allows existing V1/V2 research routing to continue. Regression tests pin no direct-main push, exact-head check requirements, fail-closed ordering, workflow permissions, and the public-country shell boundary.
 
-GitHub's documented protection/ruleset model supports required status checks, pull-request requirements, force-push blocking, and branch deletion protection; these controls must be configured in repository settings because the connected GitHub capability used by this automation can read but cannot modify branch protection/rulesets.
+The temporary PR #139 proof workflow is removed after its successful one-shot evidence is recorded here; it is not a permanent privileged write surface.
 
-### Protection compatibility finding
+A broad GitHub Actions bypass is neither required nor authorized by these controls.
 
-A settings-only PR/status-check rule cannot be enabled blindly. The production `/new` scaffold path in `.github/workflows/new-guide.yml` intentionally lands its draft scaffold directly on `main` before starting the selected research engine. GitHub required-status protection can reject a direct push whose new commit has not already satisfied the required checks, so a naive PR-only/required-check configuration can break guide creation.
+## Remaining settings-only blocker
 
-Issue #130 now requires a protected-branch-compatible write-path design and a no-Claude compatibility proof before F01 is considered mechanically enforced. The preferred direction is to migrate the scaffold write to a branch/PR landing path while preserving draft quarantine, global scaffold serialization, slug collision safety, issue reply/close behavior, V1 default routing, and the trusted V2 `workflow_call` cutover boundary.
+Repository-side compatibility work is complete, but live repository settings still have to mechanically enforce it. `main` remains unprotected with required-status enforcement off and no repository ruleset. The connected GitHub capability used by this operator can inspect but cannot mutate branch protection/rulesets, so issue #130 remains open solely for the final owner/tooling settings action and verification.
 
-A broad GitHub Actions bypass is not accepted as an automatic substitute. The audit identified two intentional direct-to-`main` workflow paths: the production `new-guide.yml` scaffold and the manually dispatched `mutation.yml` report refresh. Other trusted workflows hold `contents: write` to create/update research or review branches and PRs (`change.yml`, `research-pass.yml`, `research-pass-v2.yml`, `feedback-export.yml`, and the Claude↔Codex watcher's isolated publish job). Because a ruleset bypass for the GitHub Actions integration is actor-wide rather than scoped to one workflow, any such bypass must be deliberately reviewed as a repository-wide trust decision rather than treated as a single-purpose scaffold exception.
-
-No protection setting has been changed yet, and this finding does not alter Pipeline V2 runtime, acceptance criteria, or the frozen Kumamoto candidate.
+The intended settings contract is: require pull requests for ordinary engineering, require the repository's always-reporting release gate(s) without path-filter deadlocks, block force-pushes and branch deletion on `main`, and avoid a generic GitHub Actions bypass. Settings must remain compatible with the now-proven automation-created scaffold PR path.
 
 ## Acceptance isolation
 
-The rebuilt Kumamoto candidate remains `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`. PR #129 changed only release-governance workflow/tests/labels and does not mutate the frozen acceptance candidate, its model inputs, Pipeline V2 runtime, attempt authority, evidence/landing gates, selector, publication state, Fukuoka evidence, or V1 behavior.
+The rebuilt Kumamoto candidate remains `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`. Release-governance work does not mutate that frozen candidate, its model inputs, Pipeline V2 runtime, attempt authority, evidence/landing gates, selector, publication state, Fukuoka evidence, or V1 research behavior.
