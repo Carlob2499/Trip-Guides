@@ -14,6 +14,7 @@ on:
 
 # Least privilege for the protected scaffold PR, issue reply/close, and research dispatch.
 permissions:
+  checks: read
   contents: write
   pull-requests: write
   issues: write
@@ -120,6 +121,7 @@ jobs:
     needs: scaffold
     if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'
     permissions:
+      checks: read
       contents: write
       pull-requests: write
       issues: write

@@ -98,12 +98,15 @@ else pass("Release governance: mutation workflow is read-only to repository cont
 
 const newGuideWorkflow = read(".github/workflows/new-guide.yml");
 const scaffoldLanding = read("scripts/pipeline/scaffold.mjs");
+const protectedPrGate = read("scripts/protected-pr-gate.mjs");
 if (!newGuideWorkflow.includes("pull-requests: write")) fail("Release governance: /new scaffold needs pull-requests: write for protected landing");
 else pass("Release governance: /new has bounded PR write authority");
 if (/HEAD:main|refs\/heads\/main/.test(scaffoldLanding)) fail("Release governance: scaffold landing must not push directly to main");
 else pass("Release governance: scaffold landing has no direct-main push");
+if (!scaffoldLanding.includes("gateProtectedPr")) fail("Release governance: scaffold landing must delegate to the shared protected PR gate");
+else pass("Release governance: scaffold landing delegates to the shared protected PR gate");
 for (const required of ["required-gate", "freeze-policy", "Analyze (actions)", "Analyze (javascript-typescript)"]) {
-  if (!scaffoldLanding.includes(required)) fail(`Release governance: scaffold landing must require ${required}`);
+  if (!protectedPrGate.includes(required)) fail(`Release governance: protected PR gate must require ${required}`);
   else pass(`Release governance scaffold check: ${required}`);
 }
 requireText(".github/workflows/required-gate.yml", "git merge --no-commit --no-ff", "Required gate prospective-merge proof");

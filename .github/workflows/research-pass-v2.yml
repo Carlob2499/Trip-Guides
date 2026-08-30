@@ -1210,6 +1210,8 @@ jobs:
     # land-branch.sh's old `|| true`. The notice failure is now also recorded durably
     # (landing.announced=false) instead of swallowed.
     permissions:
+      actions: write
+      checks: read
       contents: write
       pull-requests: write
       issues: write

@@ -1,36 +1,19 @@
 #!/usr/bin/env bash
-# Land a finished branch: open a PR and auto-merge it immediately if the caller says the work
-# already passed its gates (build + verify), or open/keep a draft PR for human triage otherwise.
-# Idempotent — safe to call again on a branch that already has a PR from a prior (interrupted)
-# run; it edits that PR in place rather than opening a second one.
+# Land a finished research/change branch through the same protected-main checks required of normal
+# engineering PRs. The caller's guide evidence gate remains authoritative; before an auto-merge we
+# additionally synchronize the current base into the branch, rerun build + network verify on that
+# final integrated head, explicitly dispatch unattended Required/freeze checks, wait for security
+# checks, and refuse if either head or base moves. Branch protection is the final atomic guard.
 #
-# Shared by research-pass.yml (new-guide dual-pass) and modify-guide.yml (scoped edit requests)
-# so the git/gh merge mechanics live in exactly one tested place instead of two copies in two
-# workflow YAMLs that could quietly drift apart.
+# Idempotent: reuse an existing PR rather than opening duplicates. A caller-declared gate failure
+# or a mergeability conflict remains a draft PR. Auth/permission/check/base-drift failures are loud
+# hard failures; executeLanding owns durable re-quarantine for passed auto-landings.
 #
-# Requires: GH_TOKEN in the environment (standard `gh` CLI convention — set it in the calling
-# workflow step's `env:`). Requires `main` to have no branch-protection rules requiring review
-# (confirmed true for this repo — see new-guide.yml's own comment) so a plain `--merge` needs no
-# admin bypass.
-#
-# Usage: scripts/land-branch.sh <branch> <base> <title> <body-file> <passed:true|false> [announce-url]
-# The optional 6th arg is the auto-publish "probation" hook (see the audit / Finding #5): when a
-# guide reaches `verified` and lands with NO human in the loop, passing its live URL here makes the
-# script file a visible, vetoable "🚀 just auto-published" notice with a one-line rollback path — so
-# a silent self-publish becomes a self-publish someone can still catch. Absent (the modify-guide
-# scoped-edit path) it's skipped: an edit to an already-live guide isn't a new publication.
-# Prints exactly one line to stdout:
+# Usage: scripts/land-branch.sh <branch> <base> <title> <body-file> <passed:true|false> [announce-url] [slug]
+# The optional slug argument overrides the workflow's inherited SLUG environment variable.
+# Prints exactly one final line:
 #   merged:<pr-number> announce=<ok|failed|skipped>
-#                        — landed on <base>, branch deleted. announce reports whether the
-#                          auto-published safety notice actually filed (skipped = no URL given);
-#                          a failed notice NEVER un-claims the merge, it is reported for the
-#                          caller to record durably.
-#   draft:<pr-number>    — a draft PR exists for human triage (either the caller says the work
-#                          hasn't passed yet, or the auto-merge attempt hit a conflict)
-# Exits non-zero only on a genuine unexpected failure (bad args, `gh` auth/API failure). A merge
-# conflict is NOT treated as a script failure — it's the documented fallback path, so the caller
-# doesn't need to distinguish "clean NEEDS WORK" from "conflict on merge"; both land as a draft
-# PR and print the same shape.
+#   draft:<pr-number>
 
 set -euo pipefail
 
@@ -39,12 +22,11 @@ BASE="${2:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:tru
 TITLE="${3:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>}"
 BODY_FILE="${4:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>}"
 PASSED="${5:?usage: land-branch.sh <branch> <base> <title> <body-file> <passed:true|false>}"
-ANNOUNCE_URL="${6:-}"  # optional; only used on a successful auto-publish merge (see header)
+ANNOUNCE_URL="${6:-}"
+LANDING_SLUG="${7:-${SLUG:-}}"
+REPO="${GITHUB_REPOSITORY:-}"
 
-# Reuse an existing PR for this branch if a prior (interrupted) run already opened one — never
-# open a second PR for the same branch.
 PR_NUM="$(gh pr view "$BRANCH" --json number -q .number 2>/dev/null || true)"
-
 if [ -z "$PR_NUM" ]; then
   if [ "$PASSED" = "true" ]; then
     gh pr create --base "$BASE" --head "$BRANCH" --title "$TITLE" --body-file "$BODY_FILE" >/dev/null
@@ -57,23 +39,71 @@ else
 fi
 
 if [ "$PASSED" != "true" ]; then
-  # Not passing yet — make sure it reads as a draft (in case a prior run had marked it ready)
-  # and stop; a human triages it from here.
   gh pr ready "$PR_NUM" --undo >/dev/null 2>&1 || true
   echo "draft:$PR_NUM"
   exit 0
 fi
 
-# Passing — try to land it for real.
+if [ -z "$LANDING_SLUG" ]; then
+  echo "[land-branch] a passing auto-landing requires the guide slug so final integrated evidence can be rerun" >&2
+  exit 1
+fi
+if [ -z "$REPO" ]; then
+  echo "[land-branch] GITHUB_REPOSITORY is required for protected unattended landing" >&2
+  exit 1
+fi
+
 gh pr ready "$PR_NUM" >/dev/null 2>&1 || true
+
+# Make the branch itself contain the current base before final publication evidence. This is what
+# allows strict/up-to-date branch protection to work after issue #130 is activated. Conflict is the
+# existing safe draft fallback; do not mutate the branch when the integration cannot be resolved.
+git fetch origin "$BASE" >/dev/null
+BASE_SHA="$(git rev-parse "origin/$BASE")"
+BEFORE_HEAD="$(git rev-parse HEAD)"
+if ! git merge-base --is-ancestor "$BASE_SHA" HEAD; then
+  MERGE_BASE_ERR="$(mktemp)"
+  if ! git merge --no-edit "origin/$BASE" 2>"$MERGE_BASE_ERR"; then
+    MERGE_ERR="$(cat "$MERGE_BASE_ERR")"
+    rm -f "$MERGE_BASE_ERR"
+    git merge --abort >/dev/null 2>&1 || true
+    if echo "$MERGE_ERR" | grep -qiE "conflict|automatic merge failed"; then
+      echo "[land-branch] current $BASE conflicts with $BRANCH — leaving PR #$PR_NUM for human triage" >&2
+      gh pr ready "$PR_NUM" --undo >/dev/null 2>&1 || true
+      echo "draft:$PR_NUM"
+      exit 0
+    fi
+    echo "[land-branch] failed to synchronize $BASE before final evidence:" >&2
+    echo "$MERGE_ERR" >&2
+    exit 1
+  fi
+fi
+HEAD_SHA="$(git rev-parse HEAD)"
+if [ "$HEAD_SHA" != "$BEFORE_HEAD" ]; then
+  git push origin "HEAD:$BRANCH" >/dev/null
+fi
+
+# Base synchronization happened after the caller's original landing gate. Re-run both parts on the
+# exact integrated head so publication never relies on evidence from a pre-integration tree.
+if ! npm run build; then
+  echo "[land-branch] final integrated build failed; refusing auto-merge" >&2
+  exit 1
+fi
+if ! npm run verify -- --slug "$LANDING_SLUG" --network; then
+  echo "[land-branch] final integrated network verification failed; refusing auto-merge" >&2
+  exit 1
+fi
+
+# Explicit unattended checks are mandatory: GITHUB_TOKEN-created PRs cannot be trusted to emit
+# recursive pull_request events. The helper pins both the exact head and exact base, dispatches the
+# repo-owned Required/freeze gates, waits for platform Analyze checks, and rejects drift.
+node scripts/protected-pr-gate.mjs \
+  --repo "$REPO" --pr "$PR_NUM" --branch "$BRANCH" --head-sha "$HEAD_SHA" \
+  --base "$BASE" --base-sha "$BASE_SHA"
+
 MERGE_ERR_FILE="$(mktemp)"
-if gh pr merge "$PR_NUM" --merge --delete-branch >/dev/null 2>"$MERGE_ERR_FILE"; then
+if gh pr merge "$PR_NUM" --merge --delete-branch --match-head-commit "$HEAD_SHA" >/dev/null 2>"$MERGE_ERR_FILE"; then
   rm -f "$MERGE_ERR_FILE"
-  # Auto-publish probation: the guide just merged with nobody approving it first. File a loud,
-  # vetoable heads-up so that safety net isn't gone entirely. The merge itself is already done
-  # and is NEVER un-claimed here — but a notice that failed to file is a real, reportable fact,
-  # not something to swallow: the final line carries announce=ok|failed|skipped so the caller
-  # records it durably (correction pass — the old `|| true` hid every failure).
   ANNOUNCE="skipped"
   if [ -n "$ANNOUNCE_URL" ]; then
     NOTE_FILE="$(mktemp)"
@@ -93,10 +123,6 @@ if gh pr merge "$PR_NUM" --merge --delete-branch >/dev/null 2>"$MERGE_ERR_FILE";
   fi
   echo "merged:$PR_NUM announce=$ANNOUNCE"
 else
-  # P4: only a genuine mergeability conflict is the documented "fall back to draft PR" path.
-  # Any other failure (auth, permissions, branch protection, rate limit) is a real error that
-  # would otherwise silently masquerade as "needs human triage" forever — surface it and fail
-  # loudly instead.
   MERGE_ERR="$(cat "$MERGE_ERR_FILE")"
   rm -f "$MERGE_ERR_FILE"
   if echo "$MERGE_ERR" | grep -qiE "not mergeable|conflict"; then
