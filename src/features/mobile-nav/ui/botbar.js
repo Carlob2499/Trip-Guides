@@ -54,7 +54,9 @@ export function initBotBar(ctx) {
      `data-kind` is the one thing the station asserts about itself that survives both. */
   function toolStation() {
     var b = tabs.querySelector('.gtab[data-kind="tools"]');
-    return b && !b.hidden ? b : null;
+    // U01 keeps secondary router stations hidden from the primary rail. A hidden station
+    // is still the single routing owner and remains programmatically clickable.
+    return b || null;
   }
 
   /** Park the underline over the live group slot (or hide it inside a tool panel). */

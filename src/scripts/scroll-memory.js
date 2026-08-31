@@ -2,7 +2,7 @@
    Replaces the old jump-to-page-top on tab change (which re-showed the hero
    and lost the reader's place on every switch). Behavior:
    · While reading, the active section's scroll position is saved (throttled)
-     per guide+tab in localStorage — it survives app reopens mid-trip.
+     per guide+named route in localStorage — it survives app reopens mid-trip.
    · On a section change, scroll goes to that section's SAVED position; a
      never-visited section starts at the top of the content area (just under
      the sticky chrome), and if the reader is still up in the hero nothing
@@ -26,9 +26,10 @@ import { reducedMotion, migrateStorageKey, readStoredRecord } from "./util.js";
 
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
   var legacyStoreKey = document.body.getAttribute("data-legacy-storekey") || null;
-  var KEY = "tg-scrollmem-" + storeKey;
-  // R8: migrate this guide's per-tab scroll memory from the old title-derived key.
-  try { migrateStorageKey(localStorage, KEY, legacyStoreKey ? "tg-scrollmem-" + legacyStoreKey : null); }
+  var KEY = "tg-r6-scrollmem-" + storeKey;
+  // Keep title→slug migration inside R6. Importing the unversioned positional record could
+  // reinterpret an old group index as a different traveler destination.
+  try { migrateStorageKey(localStorage, KEY, legacyStoreKey ? "tg-r6-scrollmem-" + legacyStoreKey : null); }
   catch (e) { /* storage unavailable */ }
   var reduced = reducedMotion();
 
@@ -46,7 +47,10 @@ import { reducedMotion, migrateStorageKey, readStoredRecord } from "./util.js";
   }
   function activeTab() {
     var a = tabs.querySelector(".gtab-active");
-    return a ? a.getAttribute("data-tab") : null;
+    if (!a) return null;
+    // Canonical destinations have stable named routes; retain a numeric fallback for
+    // legacy fixtures/markup so the persistence helper remains safe during hydration.
+    return a.getAttribute("data-route") || a.getAttribute("data-tab");
   }
   function contentTop() {
     var chrome = document.querySelector(".sticky-chrome");
@@ -101,7 +105,7 @@ import { reducedMotion, migrateStorageKey, readStoredRecord } from "./util.js";
   tabs.addEventListener("click", function (e) {
     var btn = e.target.closest && e.target.closest(".gtab");
     if (!btn) return;
-    var t = btn.getAttribute("data-tab");
+    var t = btn.getAttribute("data-route") || btn.getAttribute("data-tab");
     var mem = load();
     var ct = contentTop();
     var target = (mem[t] != null && mem[t] > ct) ? mem[t] : ct;
