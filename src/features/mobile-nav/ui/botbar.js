@@ -29,7 +29,7 @@ import { tapHaptic } from "../../../scripts/util.js";
 export function initBotBar(ctx) {
   var bar = ctx.bar, tabs = ctx.tabs, order = ctx.order;
 
-  var allGroupSlots = Array.prototype.slice.call(bar.querySelectorAll(".botslot:not(.botslot-tool)"));
+  var allGroupSlots = Array.prototype.slice.call(bar.querySelectorAll("[data-group-slot]"));
   // A guide with only ONE group can't fill a second content slot — asking for two would
   // seat a duplicate. The bar degrades to the slots the guide can actually fill.
   var wantGroups = Math.min(2, order.length);
@@ -37,25 +37,12 @@ export function initBotBar(ctx) {
   // Park any slot this guide can't fill, and keep renderGroups away from it.
   allGroupSlots.slice(wantGroups).forEach(function (el) { el.hidden = true; });
 
-  var toolSlot = bar.querySelector(".botslot-tool");
-  if (!groupSlots.length && !toolSlot) return;
+  if (!groupSlots.length) return;
 
   var COUNT_KEY = "tg-tabuse-" + ctx.storeKey;
   var counts = parseCounts(ctx.store.read(COUNT_KEY));
   var seated = groupSlots.map(function () { return null; });
   var ind = bar.querySelector(".botbar-ind");
-
-  /* The Tools station, found by KIND rather than by index or by name.
-     Neither of the other two handles works. A hardcoded index cannot: the rail is built from
-     the guide's own groups, so Tools is stop 12 on Korea and stop 8 on Sedona. The old string
-     keys ("split"/"vote"/"remind"/"kit"/"learn") cannot either: R5 folded those five panels
-     into this one station and every `.gtab` has carried a numeric index ever since — the
-     filter that looked for them matched nothing, which hid this slot on every guide.
-     `data-kind` is the one thing the station asserts about itself that survives both. */
-  function toolStation() {
-    var b = tabs.querySelector('.gtab[data-kind="tools"]');
-    return b && !b.hidden ? b : null;
-  }
 
   /** Park the underline over the live group slot (or hide it inside a tool panel). */
   function moveIndicator() {
@@ -82,12 +69,6 @@ export function initBotBar(ctx) {
     // outside `order`, so a station past the last group seats no group slot either way.
     return isNaN(v) ? -1 : v;
   }
-  /** The Tools station's index when it is the open one — the tool slot's own "you are here". */
-  function currentTool() {
-    var a = tabs.querySelector(".gtab-active");
-    return a && a.getAttribute("data-kind") === "tools" ? a.getAttribute("data-tab") : null;
-  }
-
   function renderGroups(cur) {
     seated = seat(seated, promoted(counts, order, cur, groupSlots.length));
     groupSlots.forEach(function (el, k) {
@@ -96,6 +77,8 @@ export function initBotBar(ctx) {
       el.hidden = false;
       var name = order[i];
       el.setAttribute("data-tab", String(i));
+      var station = tabs.querySelector('.gtab[data-primary="true"][data-tab="' + i + '"]');
+      if (station && station.getAttribute("data-route")) el.setAttribute("data-route", station.getAttribute("data-route"));
       el.setAttribute("aria-label", name);
       var txt = el.querySelector(".bslot-txt");
       if (txt) txt.textContent = slotLabel(name);
@@ -106,47 +89,25 @@ export function initBotBar(ctx) {
     });
   }
 
-  function renderTool(cur) {
-    if (!toolSlot) return;
-    var station = toolStation();
-    if (!station) { toolSlot.hidden = true; return; }
-    toolSlot.hidden = false;
-    // Taken from the station rather than trusted from the markup, so the slot cannot drift
-    // from the rail stop it clicks even if the two are ever rendered from different sources.
-    var key = station.getAttribute("data-tab");
-    if (key != null) toolSlot.setAttribute("data-tab", key);
-    // Label and accessible name are server-rendered and FIXED under R5 — one station, one
-    // name — so there is nothing to rewrite. R4 rewrote both every render because the slot
-    // stood for whichever of five tools this device opened most.
-    // A class, not `hidden`: the UA's `[hidden]{display:none}` does not apply to SVG
-    // elements inside an HTML document, so mobile-nav.css hides .bslot-ico by rule and shows
-    // the .bsi-on one. The slot ships exactly one icon now, and it is always the right one.
-    toolSlot.querySelectorAll(".bslot-ico").forEach(function (ico) { ico.classList.add("bsi-on"); });
-    var on = key != null && key === cur;
-    toolSlot.classList.toggle("botslot-on", on);
-    if (on) toolSlot.setAttribute("aria-current", "true");
-    else toolSlot.removeAttribute("aria-current");
-  }
-
   function render() {
     renderGroups(currentIdx());
-    renderTool(currentTool());
     moveIndicator();
   }
 
-  groupSlots.concat(toolSlot ? [toolSlot] : []).forEach(function (el) {
+  groupSlots.forEach(function (el) {
     el.addEventListener("click", function () {
       var t = this.getAttribute("data-tab");
-      if (t == null) return;
+      var route = this.getAttribute("data-route");
+      if (t == null || !route) return;
       tapHaptic();
-      if (this.classList.contains("botslot-on") && !this.classList.contains("botslot-tool")) {
+      if (this.classList.contains("botslot-on")) {
         // Tapping the group you are already in scrolls it back to the top — the platform
         // convention for re-tapping an active tab, and the cheapest "start over".
-        var cb = document.getElementById("grp-" + t);
+        var cb = document.getElementById("dest-" + route);
         if (cb) cb.scrollIntoView({ behavior: "smooth", block: "start" });
         return;
       }
-      var btn = tabs.querySelector('.gtab[data-tab="' + t + '"]');
+      var btn = tabs.querySelector('.gtab[data-route="' + route + '"]');
       if (btn) btn.click();
     });
   });

@@ -17,7 +17,7 @@
 import type { TravelerDestinationName } from "./destinations";
 
 /** What a station IS, which decides how it renders and where its content comes from. */
-export type StationKind = "group" | "fieldlog" | "tools";
+export type StationKind = "group" | "sources" | "recap" | "tools";
 
 export interface Station {
   /** Stable id for the DOM, the URL's `group` param and localStorage keys. */
@@ -31,47 +31,65 @@ export interface Station {
      dumber shortener here would quietly override it. */
   full: string;
   kind: StationKind;
+  /** Secondary destinations remain routable but never paint in primary navigation. */
+  primary: boolean;
   /** Position in the rail, 0-based. The progress line reads this. */
   index: number;
 }
 
 export interface StationInput {
-  /** The guide's own group order, exactly as `bucket()` produced it. */
+  /** Canonical traveler destinations, already projected into their fixed order. */
   groups: string[];
+  /** True when authored evidence sections need a secondary route. */
+  hasSources?: boolean;
   /** True only when `_guide.json` carries a `learnings` record. */
   hasLearnings: boolean;
 }
 
 /** The two appended stations' labels, named once so nothing restates them as literals. */
-export const FIELD_LOG_LABEL = "Field log";
-export const TOOLS_LABEL = "Tools";
+export const SOURCES_LABEL = "Sources & verification";
+export const RECAP_LABEL = "Recap";
+export const TOOLS_LABEL = "Trip utilities";
 
 /* A group name becomes a DOM id and a URL parameter, so it needs an ASCII-safe key — but the
    LABEL must not be touched. "Pokémon GO" and "Food & shopping" render with their accent and
    their ampersand intact; only the key is slugged. Index is appended because two different
    names can slug identically (an all-punctuation name slugs to ""), and a collision would make
    two stations share one panel. */
-function groupKey(name: string, index: number): string {
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  return slug ? `${slug}-${index}` : `group-${index}`;
+function groupKey(name: string): string {
+  const key = name.toLowerCase();
+  if (key === "days" || key === "food" || key === "explore" || key === "essentials") return key;
+  throw new Error(`Unknown traveler destination: ${name}`);
 }
 
 /**
  * Build the rail. Order is the guide's own, then Field log if the guide has one, then Tools.
  */
-export function buildStations({ groups, hasLearnings }: StationInput): Station[] {
+export function buildStations({ groups, hasSources = false, hasLearnings }: StationInput): Station[] {
   const stations: Station[] = groups.map((full, i) => ({
-    key: groupKey(full, i),
+    key: groupKey(full),
     full,
     kind: "group" as const,
+    primary: true,
     index: i,
   }));
 
+  if (hasSources) {
+    stations.push({
+      key: "sources",
+      full: SOURCES_LABEL,
+      kind: "sources",
+      primary: false,
+      index: stations.length,
+    });
+  }
+
   if (hasLearnings) {
     stations.push({
-      key: "field-log",
-      full: FIELD_LOG_LABEL,
-      kind: "fieldlog",
+      key: "recap",
+      full: RECAP_LABEL,
+      kind: "recap",
+      primary: false,
       index: stations.length,
     });
   }
@@ -80,6 +98,7 @@ export function buildStations({ groups, hasLearnings }: StationInput): Station[]
     key: "tools",
     full: TOOLS_LABEL,
     kind: "tools",
+    primary: false,
     index: stations.length,
   });
 

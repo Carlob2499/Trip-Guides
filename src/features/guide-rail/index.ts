@@ -13,7 +13,6 @@ export {
   buildStations,
   buildTravelerStations,
   progressGeometry,
-  FIELD_LOG_LABEL,
   TOOLS_LABEL,
   SOURCES_LABEL,
   RECAP_LABEL,

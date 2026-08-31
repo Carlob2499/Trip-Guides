@@ -26,9 +26,9 @@ import { reducedMotion, migrateStorageKey, readStoredRecord } from "./util.js";
 
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
   var legacyStoreKey = document.body.getAttribute("data-legacy-storekey") || null;
-  var KEY = "tg-scrollmem-" + storeKey;
+  var KEY = "tg-r6-scrollmem-" + storeKey;
   // R8: migrate this guide's per-tab scroll memory from the old title-derived key.
-  try { migrateStorageKey(localStorage, KEY, legacyStoreKey ? "tg-scrollmem-" + legacyStoreKey : null); }
+  try { migrateStorageKey(localStorage, KEY, legacyStoreKey ? "tg-r6-scrollmem-" + legacyStoreKey : null); }
   catch (e) { /* storage unavailable */ }
   var reduced = reducedMotion();
 
@@ -46,7 +46,7 @@ import { reducedMotion, migrateStorageKey, readStoredRecord } from "./util.js";
   }
   function activeTab() {
     var a = tabs.querySelector(".gtab-active");
-    return a ? a.getAttribute("data-tab") : null;
+    return a ? (a.getAttribute("data-route") || a.getAttribute("data-tab")) : null;
   }
   function contentTop() {
     var chrome = document.querySelector(".sticky-chrome");
@@ -101,7 +101,7 @@ import { reducedMotion, migrateStorageKey, readStoredRecord } from "./util.js";
   tabs.addEventListener("click", function (e) {
     var btn = e.target.closest && e.target.closest(".gtab");
     if (!btn) return;
-    var t = btn.getAttribute("data-tab");
+    var t = btn.getAttribute("data-route") || btn.getAttribute("data-tab");
     var mem = load();
     var ct = contentTop();
     var target = (mem[t] != null && mem[t] > ct) ? mem[t] : ct;
