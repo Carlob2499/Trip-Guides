@@ -88,6 +88,7 @@ jobs:
           persist-credentials: false
 
       - name: Fresh date, authority, selector, and drift firewall
+        id: firewall
         shell: bash
         run: |
           set -euo pipefail
@@ -95,6 +96,7 @@ jobs:
           today="$(TZ=America/New_York date +%F)"
           if [[ "$today" < "$NOT_BEFORE" ]]; then
             echo "Kumamoto is date-gated until $NOT_BEFORE America/New_York; no model dispatch."
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -160,7 +162,10 @@ jobs:
             exit 1
           fi
 
+          echo "eligible=true" >> "$GITHUB_OUTPUT"
+
       - name: Do not overlap a legitimate acceptance run
+        if: steps.firewall.outputs.eligible == 'true'
         id: active
         shell: bash
         run: |
@@ -177,7 +182,7 @@ jobs:
           fi
 
       - name: Dispatch once or resume only a proven usage-limit
-        if: steps.active.outputs.count == '0'
+        if: steps.firewall.outputs.eligible == 'true' && steps.active.outputs.count == '0'
         shell: bash
         run: |
           set -euo pipefail
