@@ -45,4 +45,5 @@ export type {
   TravelerDestinationName,
   TravelerProjection,
 } from "./model/destinations";
+export { legacyAnchorsFor, normalizeGuideRoute, routeForLegacyHash } from "./model/routing";
 export { initGuideRail } from "./ui/rail.js";
