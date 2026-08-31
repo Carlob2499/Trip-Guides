@@ -2,7 +2,7 @@
 //
 // The tracker has two deliberately different freezes:
 //   Sep 20-26: FEATURE FREEZE — code changes must be stabilization/release work.
-//   Sep 27-30: BACKEND CODE FREEZE — code changes must be a release blocker or explicit owner waiver.
+//   Sep 27-30: ENGINEERING CODE FREEZE — code changes must be a release blocker or explicit owner waiver.
 // The special September freeze expires Oct 1; future release policy is a separate decision.
 //
 // pull_request_target is the ordinary trusted path. An automated scaffold PR cannot rely on a
@@ -92,7 +92,7 @@ export function evaluateFreeze({ date, labels = [], files = [] }) {
     allowed: false,
     phase,
     codeFiles,
-    reason: `backend code freeze is active: code/control-plane changes require ${RELEASE_BLOCKER_LABEL} or ${FREEZE_WAIVER_LABEL}`,
+    reason: `engineering code freeze is active: code/control-plane changes require ${RELEASE_BLOCKER_LABEL} or ${FREEZE_WAIVER_LABEL}`,
   };
 }
 
