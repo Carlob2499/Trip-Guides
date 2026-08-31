@@ -4,12 +4,12 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-31)
-Uruguay Canary #4 remains GREEN draft-only proof; R03 escalation/cancellation failure seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
+Uruguay Canary #4 remains GREEN draft-only proof; R03 failure seams are proven. See `CONTEXT.md` for history.
 Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
 Kumamoto authority: only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run has started.
 Release governance is implemented through #150; #130 awaits only owner/tooling branch-protection settings + live proof. No broad Actions bypass.
-September frontend: U01/U02 are DONE through merged #160. U03 deterministic engineering is DONE / YELLOW: PR #162 repaired the reproduced phone bottom-nav visual/DOM focus-order mismatch on exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f`; Required Gate `33352620168` passed invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience. PR #163 synchronized that evidence on main `b6756a24ffd9ec23d2450860e8d8d9951d6ec12d`. The physical-device interaction spot check remains an explicit manual evidence gap, not an ordinary engineering blocker. Engineering handoff remains Sep 30 and October stays content/reverification/field bugs.
-NEXT: no further ordinary U03 code is planned without a reproduced defect. Continue deterministic release-readiness/governance work that is not future-gated; keep the physical-device spot check explicit. On Sep 2 only, if model-burn preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
+Frontend: U01/U02 DONE. U03 deterministic engineering DONE / YELLOW via #162 exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f`; Required Gate `33352620168` passed full deterministic + Accessibility/resilience checks. #163 synced evidence to main `b6756a24ffd9ec23d2450860e8d8d9951d6ec12d`. Physical-device spot check remains an explicit manual gap; reopen only for a reproduced defect.
+NEXT: continue non-future-gated deterministic release work. On Sep 2 only, if model-burn preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
 No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
