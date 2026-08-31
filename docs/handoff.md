@@ -6,11 +6,11 @@
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-31)
 Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
 Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
-Kumamoto authority: only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run started.
+Kumamoto r2 `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56` is preserved but STALE FOR DISPATCH: merged #149 changed protected-main landing/control-plane semantics after its base and explicitly requires a fresh rebuilt/preflighted candidate before model burn. No model run started.
 #130 awaits only owner/tooling branch protection + live proof; no broad Actions bypass.
-Frontend: U01/U02 DONE. U03 deterministic engineering DONE / YELLOW via #162 exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f`, Required Gate `33352620168` PASS; #164 closed authority on main `abdf30fa3d6a2d98e960f5ebbd0021d758168324`. Physical-device spot check remains manual; reopen only for a reproduced defect.
-NEXT: continue non-future-gated deterministic release work. Sep 2 only, if preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
-No cap extension, artifact edits, selector/cutover/publication changes, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
+Frontend: U01/U02 DONE. U03 deterministic engineering DONE / YELLOW via #162 exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f`, Required Gate `33352620168` PASS; #164 closed authority and #165 synced it. Physical-device spot check remains manual; reopen only for a reproduced defect.
+NEXT: rebuild the identical pre-registered Kumamoto scenario from current repaired main using repository deterministic scaffold contracts, freeze a new exact SHA, then obtain full deterministic preflight before any Sep 2 model dispatch. Do not dispatch r2.
+No cap extension, artifact hand-edit, selector/cutover/publication changes, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
@@ -34,9 +34,9 @@ No cap extension, artifact edits, selector/cutover/publication changes, V1 retir
 - S04 accessibility: automated portion PASS after PR #114 exposed and repaired progress status contrast and undersized controls; one physical-device interaction spot check remains as a traveler/UI check, not as retroactive authority for the already-run Fukuoka acceptance canary.
 - R03 is fully accepted: targeted escalation and cancellation failure-only seams are closed/proven; Uruguay Canary #4 remains GREEN draft-only evidence, not production-cutover authority.
 - Release-governance repository prerequisites are complete through #150. `main` still reports unprotected with no required-status enforcement/ruleset, so issue #130 is now only the final owner/tooling settings mutation and post-settings verification.
-- The failed Fukuoka evidence remains frozen. A separately justified post-Fukuoka remediation is merged, and the fresh Kumamoto acceptance is authorized only on rebuilt preflight-green candidate `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`; do not repurpose this authority into any other canary and do not dispatch the superseded candidate.
+- The failed Fukuoka evidence remains frozen. Post-Fukuoka remediation is merged. Kumamoto r2 remains preserved as preflight evidence but is no longer dispatch authority: PR #149 changed shared protected-main landing/control-plane behavior after r2's accepted base and explicitly requires a fresh rebuilt, exact-head-preflighted candidate before any model-backed acceptance.
 - September engineering completion now includes frontend: U01/U02 target Sep 19, U03 Sep 26, and final engineering handoff Sep 30. PR #115 remains historical/deferred implementation evidence, not a branch to merge wholesale onto current main.
-- U01/U02 are DONE through PR #160. U03 deterministic engineering is DONE / YELLOW: PR #162 aligned the phone bottom-nav DOM/focus order with its visual order and exact-head Required Gate `33352620168` passed invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience. PR #164 closed the deterministic frontend authority on main `abdf30fa3d6a2d98e960f5ebbd0021d758168324`. The physical-device spot check remains honestly pending and may reopen U03 only if it reproduces a real defect.
+- U01/U02 are DONE through PR #160. U03 deterministic engineering is DONE / YELLOW: PR #162 aligned the phone bottom-nav DOM/focus order with its visual order and exact-head Required Gate `33352620168` passed invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience. PR #164 closed the deterministic frontend authority; the physical-device spot check remains honestly pending and may reopen U03 only if it reproduces a real defect.
 
 ## Pipeline status preserved
 
@@ -47,5 +47,5 @@ No cap extension, artifact edits, selector/cutover/publication changes, V1 retir
 - V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
 - Final Fukuoka acceptance `fukuoka-20260829-7cb4fa` FAILED at reconcile on an unfetched official-source claim. Durable state is 5/5 quality attempts, 1/1 auto-retries, critic queued/0 attempts, publication false, landing pending.
 - V2 production cutover remains pending and unauthorized. The failed Fukuoka branch is evidence, not content to repair-and-merge.
-- Fresh Kumamoto acceptance is separately authorized under `FINAL_V2_ACCEPTANCE_KUMAMOTO.md`; it is not a continuation of Fukuoka and may not inherit or extend Fukuoka's attempt authority. Current authority is rebuilt candidate `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`, exact-head green in closed-unmerged PR #123.
+- Kumamoto r2 is separately preserved under `FINAL_V2_ACCEPTANCE_KUMAMOTO.md`; it is not a continuation of Fukuoka and may not inherit or extend Fukuoka's attempt authority. Closed-unmerged PR #123 proved r2 exact-head green against its then-current base, but merged PR #149 later changed landing/control-plane semantics and explicitly invalidated that frozen candidate for dispatch. A fresh candidate must be rebuilt from repaired main and independently preflighted before acceptance.
 - The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
