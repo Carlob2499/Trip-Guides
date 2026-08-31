@@ -3,13 +3,13 @@
 > Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. Keep this file to current truth and the immediate next action.
 
 <!-- WARM_START_BEGIN -->
-WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-30)
+WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-31)
 Uruguay Canary #4 remains GREEN draft-only proof; R03 escalation/cancellation failure seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
 Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
 Kumamoto authority: only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run has started.
 Release governance is implemented through #150; #130 awaits only owner/tooling branch-protection settings + live proof. No broad Actions bypass.
-September frontend: U01/U02 are DONE through merged #160 on main `248babc0701bdb7102b92c7bc679ac6aba507b49`; post-merge Accessibility `33343557016` and intake-worker deploy are green. U03 final accessibility/interaction polish is next; engineering handoff remains Sep 30 and October stays content/reverification/field bugs.
-NEXT: execute U03 deterministically from current main, using existing accessibility/resilience and design-drift gates; keep the remaining physical-device spot check explicit rather than fabricating proof. On Sep 2 only, if model-burn preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
+September frontend: U01/U02 are DONE through merged #160. U03 is IN PROGRESS: merged PR #162 repaired the phone bottom-nav visual/DOM focus-order mismatch and landed as main `f21c0eb0fe9562662d51b69eaa48ba88c4b7bcaa`; post-merge Pages and intake-worker deploys are green. Engineering handoff remains Sep 30 and October stays content/reverification/field bugs.
+NEXT: continue U03 deterministically from current main, using existing accessibility/resilience and design-drift gates; keep the remaining physical-device spot check explicit rather than fabricating proof. On Sep 2 only, if model-burn preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
 No cap extension, artifact edits, selector change, publication, cutover, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
@@ -36,7 +36,7 @@ No cap extension, artifact edits, selector change, publication, cutover, V1 reti
 - Release-governance repository prerequisites are complete through #150. `main` still reports unprotected with no required-status enforcement/ruleset, so issue #130 is now only the final owner/tooling settings mutation and post-settings verification.
 - The failed Fukuoka evidence remains frozen. A separately justified post-Fukuoka remediation is merged, and the fresh Kumamoto acceptance is authorized only on rebuilt preflight-green candidate `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`; do not repurpose this authority into any other canary and do not dispatch the superseded candidate.
 - September engineering completion now includes frontend: U01/U02 target Sep 19, U03 Sep 26, and final engineering handoff Sep 30. PR #115 remains historical/deferred implementation evidence, not a branch to merge wholesale onto current main.
-- U01/U02 are DONE through PR #160. The traveler-first GuideLayout/router/mobile-navigation switch, named-route persistence/share behavior, primary-only rail geometry, and Progress truthfulness/hierarchy changes are merged on main `248babc0701bdb7102b92c7bc679ac6aba507b49`; post-merge Accessibility run `33343557016` passed. U03 is the next frontend/stabilization boundary, with the physical-device spot check still honestly pending.
+- U01/U02 are DONE through PR #160. U03 is IN PROGRESS: PR #162 aligned the phone bottom-nav DOM/focus order with its visual order, with focused idempotence regression coverage, and merged as main `f21c0eb0fe9562662d51b69eaa48ba88c4b7bcaa`. The physical-device spot check remains honestly pending.
 
 ## Pipeline status preserved
 
