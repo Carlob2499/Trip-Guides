@@ -38,6 +38,29 @@ export const localStore = {
 };
 
 /**
+ * Keep DOM/focus order congruent with the phone bar's visual order.
+ * GuideLayout renders Tools before Groups for historical reasons while mobile-nav.css
+ * visually swaps them with flex `order`. CSS reordering does not change sequential
+ * keyboard/assistive-tech focus order, so without this normalization a keyboard user
+ * sees [group, group, Groups, Tools] but tabs [group, group, Tools, Groups].
+ *
+ * Do the smallest safe runtime repair at the mobile-nav owner before any handlers are
+ * bound. When GuideLayout's source order is eventually migrated, this becomes a no-op.
+ */
+export function alignBotbarFocusOrder(bar) {
+  if (!bar || typeof bar.querySelector !== "function") return false;
+  var groups = bar.querySelector(".botmini-groups");
+  var tools = bar.querySelector(".botslot-tool");
+  if (!groups || !tools || typeof bar.insertBefore !== "function") return false;
+
+  // Already aligned: Groups immediately precedes Tools in DOM order.
+  if (groups.nextElementSibling === tools) return false;
+
+  bar.insertBefore(groups, tools);
+  return true;
+}
+
+/**
  * Boot the mobile navigation for one guide.
  * `cfg` = { order: string[], storeKey: string }. Returns silently on any page that
  * isn't a guide (no tab bar, no bottom bar) so importing is always safe.
@@ -53,6 +76,8 @@ function initMobileNav(cfg, store) {
     destTz: (cfg && cfg.destTzIana) || null,
     store: store || localStore,
   };
+  // Normalize source/focus order before any mobile-nav handlers read or bind slots.
+  if (bar) alignBotbarFocusOrder(bar);
   // Section memory feeds the sheet's resume lines and must run even where the bar
   // doesn't (a desktop session still records where you were, for the next phone one).
   initSectionMemory(ctx);
