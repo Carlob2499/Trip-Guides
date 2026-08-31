@@ -8,7 +8,7 @@ Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams a
 Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
 Kumamoto authority: only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run started.
 #130 awaits only owner/tooling branch protection + live proof; no broad Actions bypass.
-Frontend: U01/U02 DONE. U03 deterministic engineering DONE / YELLOW via #162 exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f`, Required Gate `33352620168` PASS; #163 synced evidence to main `b6756a24ffd9ec23d2450860e8d8d9951d6ec12d`. Physical-device spot check remains manual; reopen only for a reproduced defect.
+Frontend: U01/U02 DONE. U03 deterministic engineering DONE / YELLOW via #162 exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f`, Required Gate `33352620168` PASS; #164 closed authority on main `abdf30fa3d6a2d98e960f5ebbd0021d758168324`. Physical-device spot check remains manual; reopen only for a reproduced defect.
 NEXT: continue non-future-gated deterministic release work. Sep 2 only, if preflight remains green, dispatch `research-pass-v2.yml` exactly from r2 for `kumamoto` (Sonnet 5/high; Opus 5/high critic).
 No cap extension, artifact edits, selector/cutover/publication changes, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
@@ -36,7 +36,7 @@ No cap extension, artifact edits, selector/cutover/publication changes, V1 retir
 - Release-governance repository prerequisites are complete through #150. `main` still reports unprotected with no required-status enforcement/ruleset, so issue #130 is now only the final owner/tooling settings mutation and post-settings verification.
 - The failed Fukuoka evidence remains frozen. A separately justified post-Fukuoka remediation is merged, and the fresh Kumamoto acceptance is authorized only on rebuilt preflight-green candidate `acceptance/v2-kumamoto-20260902-r2` at `621dd43238d18b2b918827a9dca2268cd6f28c56`; do not repurpose this authority into any other canary and do not dispatch the superseded candidate.
 - September engineering completion now includes frontend: U01/U02 target Sep 19, U03 Sep 26, and final engineering handoff Sep 30. PR #115 remains historical/deferred implementation evidence, not a branch to merge wholesale onto current main.
-- U01/U02 are DONE through PR #160. U03 deterministic engineering is DONE / YELLOW: PR #162 aligned the phone bottom-nav DOM/focus order with its visual order and exact-head Required Gate `33352620168` passed invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience. PR #163 synchronized the merged repair onto main `b6756a24ffd9ec23d2450860e8d8d9951d6ec12d`. The physical-device spot check remains honestly pending and may reopen U03 only if it reproduces a real defect.
+- U01/U02 are DONE through PR #160. U03 deterministic engineering is DONE / YELLOW: PR #162 aligned the phone bottom-nav DOM/focus order with its visual order and exact-head Required Gate `33352620168` passed invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience. PR #164 closed the deterministic frontend authority on main `abdf30fa3d6a2d98e960f5ebbd0021d758168324`. The physical-device spot check remains honestly pending and may reopen U03 only if it reproduces a real defect.
 
 ## Pipeline status preserved
 
