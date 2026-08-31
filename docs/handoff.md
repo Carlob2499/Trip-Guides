@@ -7,9 +7,9 @@ WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-31)
 Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
 Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
 Kumamoto r2 `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56` is preserved stale evidence only. Current dispatch authority is rebuilt r3 `acceptance/v2-kumamoto-20260902-r3` @ `56e513000792bc71bf4e18c0a0909724fe5cebac`, based on repaired main `57e320535d1cb6e861a5001f8c26cc718dcfd93d`; closed-unmerged PR #167 exact-head preflight passed Required Gate `33368339507`, freeze-policy, CodeQL and both analyses. No model run started.
-#130 awaits only owner/tooling branch protection + live proof; no broad Actions bypass. PR #171 added a temporary hourly September completion watch: while protection is absent it stays inert for #130; once protection is live it dispatches the existing zero-model protected-landing proof once.
+#130 owner/tooling branch protection + live proof remain pending; no broad Actions bypass. #171's temporary hourly watch runs the zero-model proof once protection is live.
 Frontend U01/U02 DONE; U03 deterministic engineering DONE / YELLOW via #162 exact head `1251d57083e735cc21ecc35b8521a44cd66f1f`, Required Gate `33352620168` PASS. Physical-device spot check remains manual; reopen only for a reproduced defect.
-NEXT: preserve r3 unchanged. Sep 2 only, the temporary #171 watch performs a fresh date/authority/selector/drift firewall before the exact pre-registered Kumamoto r3 dispatch. It may later redispatch only a durably recorded `usage-limit` interruption using the same frozen control ref and durable run inputs; quality/deterministic failures never receive blind hourly retries.
+NEXT: preserve r3 unchanged. Sep 2+, #171 drift-firewalls the exact r3 dispatch and may later redispatch only durable `usage-limit`; never quality/deterministic failures.
 No cap extension, artifact hand-edit, selector/cutover/publication changes, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
