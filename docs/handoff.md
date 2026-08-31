@@ -4,7 +4,7 @@
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-08-31)
-Uruguay Canary #4 remains GREEN draft-only proof; R03 failure seams are proven. See `CONTEXT.md` for history.
+Uruguay Canary #4 remains GREEN draft-only proof; R03 escalation/cancellation seams are proven. See `CONTEXT.md` for history.
 Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
 Kumamoto authority: only `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56`; no model run has started.
 Release governance is implemented through #150; #130 awaits only owner/tooling branch-protection settings + live proof. No broad Actions bypass.
