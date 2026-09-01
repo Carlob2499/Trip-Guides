@@ -133,4 +133,11 @@ jobs:
     with:
       slug: ${{ needs.scaffold.outputs.slug }}
       issue: ${{ format('{0}', github.event.issue.number) }}
+      # Product V2 routing is explicit here so /new cannot silently inherit a changed reusable
+      # workflow default: Sonnet gathers evidence; Opus performs judgment. Pass B is additionally
+      # hard-locked to Sonnet inside research-pass-v2.yml.
+      model: claude-sonnet-5
+      effort: medium
+      critic_model: claude-opus-5
+      critic_effort: medium
     secrets: inherit
