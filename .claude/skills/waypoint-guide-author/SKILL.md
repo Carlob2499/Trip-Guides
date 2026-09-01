@@ -183,6 +183,23 @@ The ledger proves the itinerary was corroborated, not single-sourced. A re-plan 
 reconciliation also gets appended to the ledger's **`## Amendments`** section — that section
 exists precisely so a research-forced change of plan never has to rewrite the frozen intake.
 
+#### Traveler-facing synthesis is part of Reconcile — not a fifth stage
+
+Reconcile is not finished when the evidence rows agree; it is finished when those decisions are
+expressed as the actual traveler-facing Waypoint guide. After dispositions, coverage and material
+conflicts are settled, apply `block-types.md` **"Group labels & the voice standard"** to every
+traveler-facing field you touched: turn research-note language into useful instructions, make the
+lead immediately actionable, give consequential recommendations enough rationale to be trusted,
+and move dense operational detail into the existing typed fields instead of prose.
+
+This final expression step is **fact-locked**. It may rewrite, shorten, reorder, derive a day
+`tldr` from that day's existing content, or expose an already-supported caveat more clearly. It
+may NOT invent a venue, sensory detail, historical assertion, local preference, price, time,
+accessibility claim, crowd claim or other factual proposition merely to make the copy richer. If
+better writing truly needs a new fact, reopen the normal verification path *inside Reconcile*,
+record that evidence/disposition, then use it. The Critic is the independent final judge and
+repairer of this finished product; it is not a substitute first writing pass.
+
 ### Checkpoint each stage — the run is resumable
 The pipeline tracks progress in `guides-intake/<slug>/state.json` (stages: scaffold → passA →
 passB → reconcile → verified) so a long run that gets interrupted resumes instead of restarting.
@@ -380,7 +397,10 @@ Then these guide-content gates, on top of it:
      transit?
    - **MEALS & ENERGY** — are food picks where the day actually puts the traveler at mealtimes? A
      late night followed by a dawn start?
-   - **TONE** — does any copy read like a brochure or a model? Flat, useful, human.
+   - **TONE / EXPRESSION** — apply `block-types.md` **"Group labels & the voice standard"**:
+     practical first, direct and restrained, with atmosphere only where it adds useful sense of
+     place. No brochure copy, model mannerisms, research-note leakage, or personality performed
+     for its own sake. The guide must read as a finished traveler product, not reconciled notes.
    - **INCLEMENT COVER** — does every day inside a known weather window (jangma, monsoon, rainy
      season) or anchored on a closable venue carry a researched `plan_b`, or an explicit "no good
      alternate" note in the ledger? A rain-window day with neither is a finding: the traveler will
