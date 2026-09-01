@@ -203,8 +203,9 @@ jobs:
             MODEL=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.model')
             EFFORT=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.effort')
             CRITIC=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.criticModel')
+            CRITIC_EFFORT=$(node -p 'require(`./guides-intake/${process.env.SLUG}/run.v2.json`).inputs.criticEffort || ""')
             gh workflow run research-pass-v2.yml -f slug="$SLUG" -f section="$SECTION" \
-              -f model="$MODEL" -f effort="$EFFORT" -f critic_model="$CRITIC"
+              -f model="$MODEL" -f effort="$EFFORT" -f critic_model="$CRITIC" -f critic_effort="$CRITIC_EFFORT"
           else
             gh workflow run research-pass.yml -f slug="$SLUG"
           fi
