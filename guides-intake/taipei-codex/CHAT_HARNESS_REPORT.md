@@ -78,6 +78,16 @@ Durable stage commits:
 
 Research quality was not the main friction. The notable friction was artifact transfer across Chat tool sandboxes: web/reasoning state and GitHub write calls do not share one local filesystem/object runtime, so evidence had to be explicitly normalized into GitHub writes. This costs orchestration effort but did not require weaker sourcing.
 
+## Deterministic repository verification
+
+The first final-head Required Gate reached Unit and coverage after project invariants, lint and typecheck passed, then failed one exact scaffold-equivalence check: `taipei-codex` had no valid `roomId`. The gate reported 3,225 passing tests and one failure in `guide-room-id.test.mjs`.
+
+Repair-first response: add one freshly generated 24-character lowercase-alphanumeric `roomId` to `_guide.json`; no research, evidence, itinerary recommendation, validator, or standard was weakened.
+
+Required Gate #91 on repaired head `3d125334b9c3258b57dd8d824f928e6b4bf91338`: **PASS** — project invariants, lint, typecheck, Unit and coverage, Production build, Accessibility and resilience, and Gallery screenshot baselines all succeeded.
+
+This was a Chat scaffold-equivalence defect, not a research defect. It is useful harness evidence: direct Chat composition needs either the repository scaffolder or an explicit scaffold-contract check before first gate.
+
 ## Provisional suitability verdict (not the missing official six-metric score)
 
 - Independent verification of Claude research: **YES — strongly supported by this run.**
