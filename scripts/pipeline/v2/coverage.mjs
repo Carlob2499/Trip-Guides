@@ -9,7 +9,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  COVERAGE_SCHEMA, coverageDocSchema, parseOrThrow, assertVersionCompatible, ContractError,
+  COVERAGE_SCHEMA, coverageDocSchema, parseOrThrow, assertVersionCompatible, supersededEvidenceIds, ContractError,
 } from "./contracts.mjs";
 import { qualifyingEvidence } from "./research-rules.mjs";
 
@@ -79,8 +79,11 @@ export function coverageProblems(doc, {
     ? new Set((evidenceDoc.evidence || []).map((record) => record.id))
     : evidenceIds;
   const dispositions = new Map((evidenceDoc?.reconciliation || []).map((row) => [row.findingId, row.disposition]));
+  // Current = neither disproven (`reject`) nor explicitly retired by a `replace` that named it.
+  // The REPLACEMENT finding itself stays current; the record it superseded does not (R-F).
+  const superseded = supersededEvidenceIds(evidenceDoc);
   const currentEvidence = evidenceDoc ? new Set((evidenceDoc.evidence || [])
-    .filter((record) => !["reject", "replace"].includes(dispositions.get(record.id)))
+    .filter((record) => dispositions.get(record.id) !== "reject" && !superseded.has(record.id))
     .map((record) => record.id)) : null;
   const qualifyingSupport = evidenceDoc ? new Set((evidenceDoc.evidence || [])
     .filter((record) => qualifyingEvidence(record))
@@ -214,6 +217,10 @@ export async function loadCoverageContext(slug, { intakeDir = INTAKE_DIR, guides
   try {
     const legacy = JSON.parse(await readFile(path.join(intakeDir, slug, "coverage.json"), "utf8"));
     expectedAskIds = new Set((legacy.asks || []).map((ask) => ask.id).filter(Boolean));
+    // The intake contract has exactly ONE binding row: scaffold-guide.mjs renders
+    // "Constraints (mobility · dietary · sensory) — BINDING" from `answers.constraints` and
+    // registers it as the `constraints` ask. Generalizing beyond that id would invent asks the
+    // intake cannot produce, so this stays pinned to the canonical row (see the parity test).
     for (const ask of legacy.asks || []) {
       if (ask.id === "constraints" && String(ask.value || "").trim()) bindingAskIds.add(ask.id);
     }

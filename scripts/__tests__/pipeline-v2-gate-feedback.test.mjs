@@ -213,13 +213,18 @@ describe("recordGateFailure — one findings array, one count, everywhere", () =
   });
 
   it("keeps the in-scope work: verify-failed commits the stage's paths BEFORE recording the failure", () => {
-    // The retention commit is git-side and lives in the CLI case; pin that it is still there and
-    // still scoped to allowedStagePaths, since a discarded critic pass is the original scar.
+    // The retention commit is git-side; both failure paths now share ONE helper, so pin that the
+    // helper is still scoped to allowedStagePaths and still PUSHES (the retry runs in a fresh
+    // checkout), and that verify-failed calls it before recording — a discarded critic pass is
+    // the original scar, and an unpushed one is the same scar across the workflow boundary.
     const cli = readFileSync(path.join(ROOT, "scripts", "pipeline-v2.mjs"), "utf8");
+    const helper = cli.slice(cli.indexOf("function retainStageWork("), cli.indexOf("/** A failed offline gate"));
+    expect(helper).toContain("allowedStagePaths(slug, stage)");
+    expect(helper).toContain('git(["push", "origin", `HEAD:${branch}`])');
     const caseBody = cli.slice(cli.indexOf('case "verify-failed":'), cli.indexOf('case "stage-feedback":'));
     expect(caseBody).toContain("retained for repair");
-    expect(caseBody).toContain("allowedStagePaths(slug, stage)");
-    expect(caseBody.indexOf("retained for repair")).toBeLessThan(caseBody.indexOf("recordGateFailure"));
+    expect(caseBody).toContain("retainStageWork(slug, stage,");
+    expect(caseBody.indexOf("retainStageWork")).toBeLessThan(caseBody.indexOf("recordGateFailure"));
     // FIX B, structurally: one array name feeds the record, the detail and the console line.
     expect(caseBody).toContain("const retryFindings = await recordGateFailure(slug, stage, gateOutput)");
     expect(caseBody).toContain("${retryFindings.length} finding(s) recorded for the retry");

@@ -78,7 +78,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           /* ── TAB BAR ─────────────────────────────────────────────────── */
           var guideTabs  = document.getElementById("guideTabs");
           var catblocks  = Array.prototype.slice.call(document.querySelectorAll(".catblock"));
-          /* Every destination is a NUMBERED station now — Field log and Tools included. The
+          /* Every canonical and secondary destination is a numbered station. The
              string-keyed "special panel" map that used to sit here (Budget, Reminders, Vote,
              Trip kit, Learnings) is gone, and with it the whole string-vs-index branch showTab
              carried: `hasPanel()`, the `isSpecial` short-circuit, and the sessionStorage
@@ -87,13 +87,13 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
              station addressed by name would want it back. It would not: a station addressed by
              name is a station, and stations are what the rail already builds. */
 
-          var TAB_KEY = "tg-tab-" + STORE_KEY;
+          var TAB_KEY = "tg-r6-tab-" + STORE_KEY;
 
           /* R3 — the journey line's stations. A section you have moved on from stays solid;
              the one you are in fills as you scroll it (the progress-bar block below). Kept in
              sessionStorage so a reload inside one visit doesn't wipe the route walked, and NOT
              in localStorage — next week's visit is a new journey. */
-          var SEEN_KEY = "tg-seen-" + STORE_KEY;
+          var SEEN_KEY = "tg-r6-seen-" + STORE_KEY;
           var seen = readStoredRecord(function () { return sessionStorage; }, SEEN_KEY);
           function markSeen(key) {
             if (key == null || seen[key]) return;
@@ -106,7 +106,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             if (guideTabs) {
               // Leaving a section counts as having been through it.
               var leaving = guideTabs.querySelector(".gtab-active");
-              if (leaving && leaving.dataset.tab !== String(idx)) markSeen(leaving.dataset.tab);
+              if (leaving && leaving.dataset.tab !== String(idx)) markSeen(leaving.dataset.route);
               guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
                 var match = btn.dataset.tab === String(idx);
                 /* R5: aria-current, not aria-selected. The rail is a <nav> of plain buttons
@@ -117,26 +117,46 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
                 if (match) btn.setAttribute("aria-current", "true");
                 else btn.removeAttribute("aria-current");
                 btn.classList.toggle("gtab-active", match);
-                if (Object.prototype.hasOwnProperty.call(seen, btn.dataset.tab)) btn.dataset.visited = "";
+                if (Object.prototype.hasOwnProperty.call(seen, btn.dataset.route)) btn.dataset.visited = "";
                 // A section not yet walked starts empty; the scroll handler fills it.
-                if (match && !(btn.dataset.tab in seen)) btn.style.setProperty("--st-fill", "0");
+                if (match && !(btn.dataset.route in seen)) btn.style.setProperty("--st-fill", "0");
               });
               /* Keep the active stop in view WITHIN THE RAIL'S OWN SCROLLER.
                  scrollIntoView() was here and is banned by ACCEPTANCE: it walks the ancestor
                  chain and scrolls every scrollable box it finds, the document included — so
                  switching station also threw away the reader's page position. Setting
                  scrollLeft on the one element that should move cannot do that. */
-              var active = guideTabs.querySelector(".gtab-active");
+              var active = guideTabs.querySelector('.gtab-active[data-primary="true"]:not([hidden])');
               if (active && guideTabs.scrollWidth > guideTabs.clientWidth) {
                 var want = active.offsetLeft - (guideTabs.clientWidth - active.offsetWidth) / 2;
                 var max = guideTabs.scrollWidth - guideTabs.clientWidth;
                 guideTabs.scrollLeft = Math.min(Math.max(want, 0), max);
               }
             }
-            try { sessionStorage.setItem(TAB_KEY, String(idx)); } catch (_) {}
+            var activePanel = catblocks[idx];
+            if (activePanel && activePanel.dataset.route) {
+              try { sessionStorage.setItem(TAB_KEY, activePanel.dataset.route); } catch (_) {}
+            }
             syncTabIndex();
             syncJetLag(idx);
             syncRailContext();
+          }
+
+          function showRoute(route) {
+            if (!guideTabs || !route) return false;
+            // Session storage is user-controlled state. Match the route value through the
+            // DOM dataset rather than interpolating it into a selector, so a stale or tampered
+            // value cannot throw a SyntaxError and abort the rest of guide boot.
+            var btn = Array.prototype.find.call(guideTabs.querySelectorAll(".gtab"), function (candidate) {
+              return candidate.dataset.route === route;
+            });
+            if (!btn) return false;
+            var idx = parseInt(btn.dataset.tab, 10);
+            if (isNaN(idx)) return false;
+            // Route through the real station click so scroll memory and every other listener
+            // observe the same navigation path as the visible primary rail.
+            btn.click();
+            return true;
           }
 
           /* The rail's context line — the active station's name and its descriptor. Both are
@@ -152,6 +172,12 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             var active = guideTabs.querySelector(".gtab-active");
             if (!active) return;
             railKicker.textContent = active.dataset.full || "";
+            document.querySelectorAll('[data-action="guide-route"]').forEach(function (control) {
+              var on = control.dataset.route === active.dataset.route;
+              control.classList.toggle("active", on);
+              if (on) control.setAttribute("aria-current", "true");
+              else control.removeAttribute("aria-current");
+            });
             if (!railDesc) return;
             var panel = active.getAttribute("aria-controls")
               ? document.getElementById(active.getAttribute("aria-controls"))
@@ -178,8 +204,11 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
 
           function syncTabIndex() {
             if (!guideTabs) return;
+            var primary = Array.prototype.slice.call(guideTabs.querySelectorAll('.gtab[data-primary="true"]:not([hidden])'));
+            var recovery = primary.find(function (btn) { return btn.classList.contains("gtab-active"); }) ||
+              primary.find(function (btn) { return btn.dataset.route === "days"; }) || primary[0];
             guideTabs.querySelectorAll(".gtab").forEach(function (btn) {
-              btn.setAttribute("tabindex", btn.classList.contains("gtab-active") ? "0" : "-1");
+              btn.setAttribute("tabindex", btn === recovery ? "0" : "-1");
             });
           }
 
@@ -196,7 +225,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             guideTabs.addEventListener("keydown", function (e) {
               // Skip hidden tabs (e.g. Learnings before a trip is reflected on) so arrow
               // navigation never lands focus on an invisible control.
-              var tabs = Array.prototype.slice.call(guideTabs.querySelectorAll(".gtab:not([hidden])"));
+              var tabs = Array.prototype.slice.call(guideTabs.querySelectorAll('.gtab[data-primary="true"]:not([hidden])'));
               var idx  = tabs.indexOf(document.activeElement);
               if (idx === -1) return;
               var next;
@@ -212,6 +241,14 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             });
           }
 
+          // Every visible secondary entry point (desktop More, mobile sheet, share callout)
+          // carries the same action. Named routes keep those surfaces off positional indices.
+          document.addEventListener("click", function (e) {
+            var control = e.target.closest && e.target.closest('[data-action="guide-route"]');
+            if (!control) return;
+            showRoute(control.dataset.route);
+          });
+
           // Activate tab from URL hash on page load
           function tabForHash() {
             var hash = window.location.hash;
@@ -223,9 +260,9 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             return parseInt(cb.dataset.ci, 10);
           }
 
-          // Default tab: try session storage, then hash, then 0
-          var savedTab;
-          try { savedTab = sessionStorage.getItem(TAB_KEY); } catch (_) {}
+          // Default route: explicit hash, then this R6 session's stable route, then first primary.
+          var savedRoute;
+          try { savedRoute = sessionStorage.getItem(TAB_KEY); } catch (_) {}
           var hashTabIdx = tabForHash();
           // An explicit deep link (e.g. #grp-9) is a deliberate destination — it must
           // win over the automatic "jump to today" below during the trip window.
@@ -233,8 +270,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           if (deepLinkedTab) {
             showTab(hashTabIdx);
           } else {
-            var si = parseInt(savedTab || "0", 10);
-            showTab(isNaN(si) || si >= catblocks.length ? 0 : si);
+            if (!showRoute(savedRoute)) showTab(0);
           }
 
           /* R4: the old whole-page scroll-position system that lived here (a raw
@@ -289,7 +325,7 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
             sheet.querySelectorAll("a").forEach(function (link) {
               link.addEventListener("click", function () {
                 var tab = this.dataset.tab;
-                if (tab !== undefined && tab !== "") showTab(parseInt(tab, 10));
+                if (this.dataset.action !== "guide-route" && tab !== undefined && tab !== "") showTab(parseInt(tab, 10));
                 closeSheet();
               });
             });
@@ -311,31 +347,29 @@ const legacyStoreKey    = _cfg.legacyStoreKey || null;
           /* ── 2b. JOURNEY BAR DESTINATIONS (R2) ───────────────────────── */
           // Today: open the Days group and land on today's card when the trip is live
           // (data-date matches the visitor's local "Www Mmm D"), else the group's top.
-          // It lives in the Groups sheet's tool row since the bar went to four slots
-          // (2026-08-08) — an <a href="#">, so the default jump-to-top has to be stopped
-          // or it fights the scrollIntoView below.
-          var botToday = document.getElementById("botToday");
-          if (botToday) botToday.addEventListener("click", function (e) {
-            e.preventDefault();
-            var dayEl = document.querySelector(".day");
-            if (!dayEl) return;
-            var grp = dayEl.closest('[id^="grp-"]');
-            var cat = grp ? parseInt(grp.id.slice(4), 10) : 0;
-            showTab(cat);
-            var now = new Date();
-            var DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-            var todayStr = DOW[now.getDay()] + " " + MON[now.getMonth()] + " " + now.getDate();
-            var hit = document.querySelector('.day[data-date="' + todayStr + '"]');
-            (hit || grp || dayEl).scrollIntoView({ behavior: "smooth", block: "start" });
+          // The rail, bottom bar and mobile sheet share one action marker and behavior.
+          document.querySelectorAll("[data-today-action]").forEach(function (todayControl) {
+            todayControl.addEventListener("click", function (e) {
+              e.preventDefault();
+              var dayEl = document.querySelector(".day");
+              if (!dayEl) return;
+              var grp = dayEl.closest(".catblock");
+              var cat = grp ? parseInt(grp.dataset.ci, 10) : 0;
+              showTab(cat);
+              var now = new Date();
+              var DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+              var todayStr = DOW[now.getDay()] + " " + MON[now.getMonth()] + " " + now.getDate();
+              var hit = document.querySelector('.day[data-date="' + todayStr + '"]');
+              (hit || grp || dayEl).scrollIntoView({ behavior: "smooth", block: "start" });
+            });
           });
-          // Kit left the bottom bar in the tab-bar rebuild (2026-07-30) and Map left it
-          // when the bar went to four slots (2026-08-08) — both are reached through the
-          // Groups sheet now (Trip Kit in its tool row, the map as a section link under
-          // its own group), wired by the generic sheet handler above.
+          // Other sheet destinations are wired by the generic handler above.
 
           /* ── 3. SCROLL-SPY ───────────────────────────────────────────── */
           function setActive(secId, cat) {
-            var cur = document.getElementById("curCat"); if (cur) cur.textContent = order[cat] || "";
+            var cur = document.getElementById("curCat");
+            var currentStation = guideTabs && guideTabs.querySelector('.gtab[data-tab="' + cat + '"]');
+            if (cur) cur.textContent = (currentStation && currentStation.dataset.full) || order[cat] || "";
             document.querySelectorAll(".sheet-link").forEach(function (link) {
               var on = link.getAttribute("href") === "#" + secId;
               link.classList.toggle("active", on);

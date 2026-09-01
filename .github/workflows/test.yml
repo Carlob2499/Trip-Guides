@@ -1,25 +1,15 @@
 name: Tests
 
-# Runs project invariants + lint + the Astro/TS type check + the coverage gate on every PR, so a
-# broken contract, test, type, lint rule, or coverage regression blocks the merge instead of only
-# surfacing later in the Pages deploy. PR-only since 2026-08-14: deploy.yml's build job runs the
-# same safety set on every push to main.
-#
-# paths-ignore may only skip paths `eslint .` does not lint (#39): docs/** left this
-# list because eslint DELIBERATELY lints docs/mockups/*.mjs, so a docs-only push could
-# turn main's lint red with every CI signal green — the failure then landed on the next
-# unrelated src/ commit. Md-only commits still skip via "**.md".
-# scripts/__tests__/lint-ci-scope.test.mjs asserts lint scope ⊆ CI scope and fails on
-# the commit that creates a divergence; change either list only in step with the other.
+# Manual diagnostic copy of the deterministic code gate. Pull-request enforcement moved to the
+# always-reporting Required gate so docs/content PRs cannot leave a path-filtered required status
+# pending, and code PRs do not pay for the same full suite twice. deploy.yml still runs the safety
+# set on pushes to main.
 on:
-  pull_request:
-    paths-ignore: [learnings/**, guides-intake/**, "**.md"]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
-# M1: cancel a superseded run for the same ref — a rapid follow-up push shouldn't burn CI
-# minutes finishing a run whose result no longer matters.
 concurrency:
   group: test-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -28,28 +18,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Cleanup/autonomy guard: prove the architecture contracts that are too important to leave
-      # as prose (V1 rollback, V2 selector, reviewer trust boundary, Trip Split/offline/Atlas
-      # preservation, and Claude/Codex instruction parity) before the broader gates run.
       - run: npm run check:invariants
-      # Gates the class astro check and Vitest structurally cannot see: unused bindings,
-      # unreachable code, accidental globals. Its first pass found a live ReferenceError in a
-      # script's CLI that 832 green tests could not — it called an isValidSlug the module only
-      # re-exported and never imported. Wired in only once it was at zero, so a red run always
-      # means a new regression.
       - run: npm run lint
       - run: npm run typecheck
-      # A5: `npm test` + `npm run coverage` both ran the full vitest suite (coverage is a
-      # superset — it runs every test AND instruments it) — dropped the bare run since
-      # coverage already exercises every test.
-      # Gates only src/lib/** + every feature's model/ silo (see vitest.config.ts) —
-      # the pure-logic core the project actually invests test coverage in. UI glue
-      # (DOM IIFEs, untestable as-is per CLAUDE.md's sealed-silo split) is measured
-      # but never gated, so this never blocks on the intentional 0% there.
       - run: npm run coverage

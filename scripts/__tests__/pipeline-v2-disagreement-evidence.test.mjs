@@ -42,8 +42,8 @@ const rawDoc = (disagreement) => ({
 });
 
 describe("V04 disagreement evidence linkage", () => {
-  it("bumps the additive evidence contract to 2.2", () => {
-    expect(EVIDENCE_SCHEMA).toBe("wp-evidence/2.2");
+  it("keeps the disagreement linkage inside the additive wp-evidence/2.x line", () => {
+    expect(EVIDENCE_SCHEMA).toBe("wp-evidence/2.3");
   });
 
   it("keeps historical 2.0/2.1-shaped disagreements parseable with an honest empty default", () => {

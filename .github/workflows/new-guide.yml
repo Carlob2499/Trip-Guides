@@ -4,38 +4,37 @@ name: New guide scaffold
 # (.github/ISSUE_TEMPLATE/new-guide.yml) auto-applies that label, so submitting the form is
 # enough; ensure-labels.yml creates the label itself.
 #
-# The scaffold commits straight to main — no branch, no PR. A scaffold is `draft: true`, and the
-# draft quarantine (content.config.ts / GuideLayout.astro) already keeps unverified guides off the
-# hub grid and out of search, so a review gate here was ceremony.
+# The scaffold is quarantined twice: draft content is hidden from normal discovery, and the files
+# land through a dedicated scaffold branch/PR only after the exact head passes the repository's
+# required gate, freeze policy, and platform Analyze checks. Research starts only after that PR is
+# merged to main.
 on:
   issues:
     types: [labeled]
 
-# Least privilege: commit to main, comment/close the issue, dispatch research-pass.yml.
+# Least privilege for the protected scaffold PR, issue reply/close, and research dispatch.
 permissions:
+  checks: read
   contents: write
+  pull-requests: write
   issues: write
   actions: write
 
-# The scaffold serialization group lives on the scaffold JOB, not the workflow (hardening
-# pass): the run now contains the full called V2 research pipeline, and a workflow-level group
-# would hold the new-guide slot for the research's whole multi-hour duration — every later
-# scaffold queued behind someone else's research. The job-level group keeps the original
-# guarantee (scaffold commits to main never interleave) at the original cost.
+# The scaffold serialization group lives on the scaffold JOB, not the workflow: the run may also
+# contain the full V2 research pipeline, and a workflow-level group would hold the new-guide slot
+# for research's whole multi-hour duration. The job-level group serializes only scaffold landing.
 
 jobs:
   scaffold:
     # A single GLOBAL group, not per-issue: the country isn't known until issue-to-scaffold.mjs
     # parses the body INSIDE the job, so two different issues for the same country can't be told
-    # apart by a pre-job key — and when they ran concurrently both computed the same uniqueSlug
-    # from independent checkouts and the second `git pull --rebase` hit an add/add conflict.
-    # Scaffolds are fast and infrequent; serializing them trades a little parallelism for
-    # correctness. Queue, never cancel — a scaffold commit is not idempotent to interrupt.
+    # apart by a pre-job key. Scaffolds are fast and infrequent; serialization preserves slug
+    # collision safety. Queue, never cancel — scaffold landing is not safe to interrupt halfway.
     concurrency:
       group: new-guide-scaffold
       cancel-in-progress: false
     # The public issue form auto-labels submissions. Only the owner/collaborators may turn that
-    # label into a write-token scaffold + Claude spend; outsider issues remain readable for a
+    # label into a write-token scaffold + model spend; outsider issues remain readable for a
     # maintainer to dispatch deliberately.
     if: >-
       github.event.label.name == 'new-guide' &&
@@ -47,8 +46,8 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       SITE_BASE_URL: ${{ vars.SITE_BASE_URL || 'https://carlob2499.github.io/Trip-Guides' }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
@@ -75,14 +74,15 @@ jobs:
           git config user.name  "waypoint-scaffold[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # Commit + rebase + push, then reply to the filer and close the issue. The reply text lives
-      # in scripts/pipeline/scaffold.mjs, where it can be tested and grepped.
+      # Commit to an isolated branch, rebase onto current main, open the scaffold PR, explicitly
+      # dispatch the unattended required/freeze checks, wait for all exact-head checks, merge, then
+      # reply to and close the intake issue. scripts/pipeline/scaffold.mjs owns the transaction.
       #
       # `country` is whatever the filer typed into a PUBLIC issue form (or sent through the
       # Worker's anonymous intake), so it reaches this step as an environment variable and is read
       # as "$COUNTRY". Written as `${{ }}` inside the script it would be text spliced into the
       # command line before bash parsed it — i.e. a destination name is code.
-      - name: Land the scaffold on main
+      - name: Land scaffold through protected checks
         env:
           SLUG: ${{ steps.gen.outputs.slug }}
           COUNTRY: ${{ steps.gen.outputs.country }}
@@ -96,17 +96,11 @@ jobs:
       # research never waits on an answer. V1 carries it per dispatch; V2 records it durably in
       # run.v2.json at init, so V2 resumes/retries never need it re-threaded.
       #
-      # THE CUTOVER SWITCH (Pipeline V2 finalization). One repository variable,
-      # WAYPOINT_RESEARCH_ENGINE, selects the research engine: unset or anything but "v2" keeps
-      # V1 — the production default is never switched silently. Setting it to "v2" (a deliberate,
-      # reviewable repo-settings change reserved for after independent V2 acceptance) routes /new
-      # to the V2 pipeline through the research-v2 JOB below — a workflow_call, the TRUSTED
-      # product invocation (hardening pass): the called run executes under this workflow's own
-      # "issues" event, which is what lets V2's init mint product (auto) landing intent. A
-      # manual dispatch of research-pass-v2 is a workflow_dispatch and can only ever
-      # create a draft-only (pr) run, whatever ref or selector it runs under. Landing authority
-      # is still never a typed input anywhere. V1 stays intact and dispatchable either way —
-      # nothing here deletes or bypasses it.
+      # THE CUTOVER SWITCH. One repository variable, WAYPOINT_RESEARCH_ENGINE, selects the
+      # research engine: unset or anything but "v2" keeps V1. Setting it to "v2" after independent
+      # V2 acceptance routes /new to the reusable research-v2 job below. The called run executes
+      # under this workflow's trusted issues event, allowing product landing intent; manual V2
+      # workflow_dispatch remains draft-only. V1 stays intact and dispatchable either way.
       - name: Auto-start the research pass (V1 engine)
         env:
           SLUG: ${{ steps.gen.outputs.slug }}
@@ -120,17 +114,14 @@ jobs:
               -f issue="$ISSUE"
           fi
 
-  # The trusted V2 product invocation (hardening pass). workflow_call — not `gh workflow run` —
-  # so the V2 pipeline can distinguish this product entry point structurally: the called run's
-  # github.event_name is "issues" (this workflow's own trigger), which ordinary
-  # workflow_dispatch cannot impersonate, and only workflows committed to the default branch
-  # run on the default-branch ref at all. The job-level concurrency mirrors the V2 workflow's
-  # own guide-<slug> group (a reusable workflow's workflow-level concurrency is not applied on
-  # call), so V1/V2 research and change runs on one slug still queue instead of interleaving.
+  # Trusted V2 product invocation. workflow_call — not `gh workflow run` — preserves the structural
+  # distinction from manual draft-only workflow_dispatch. The V2 workflow refreshes trusted main
+  # after the scaffold job, so it sees the check-gated scaffold merge before initializing the run.
   research-v2:
     needs: scaffold
     if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'
     permissions:
+      checks: read
       contents: write
       pull-requests: write
       issues: write

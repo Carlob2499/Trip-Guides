@@ -40,7 +40,7 @@ describe("scroll-memory persistence", () => {
     expect(scrollHandler).toBeTypeOf("function");
 
     expect(() => scrollHandler!()).not.toThrow();
-    expect(storage.setItem).toHaveBeenCalledWith("tg-scrollmem-denmark", JSON.stringify({ itinerary: 440 }));
+    expect(storage.setItem).toHaveBeenCalledWith("tg-r6-scrollmem-denmark", JSON.stringify({ itinerary: 440 }));
   });
 
   it("treats a non-numeric saved offset as absent during reload restore", async () => {

@@ -7,8 +7,11 @@ import Learnings from "../components/Learnings.astro";
 import Reminders from "../components/Reminders.astro";
 import TripKit from "../components/TripKit.astro";
 import JetLag from "../components/JetLag.astro";
-import { bucket } from "../lib/buckets";
-import { buildStations } from "../features/guide-rail/index";
+import {
+  buildTravelerStations,
+  legacyRouteAnchors,
+  projectTravelerDestinations,
+} from "../features/guide-rail/index";
 import "../features/guide-rail/styles.css";
 import { emergencyFor, FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
 import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
@@ -83,20 +86,30 @@ const holidayData = import.meta.glob("../data/holidays/*.json", { eager: true, i
 // guide. Nothing else on a guide page addresses GitHub.
 
 const { guide } = Astro.props;
-const { order, byG } = bucket(guide.sections);
+const travelerProjection = projectTravelerDestinations(guide.sections);
+const order = travelerProjection.destinations.map((destination) => destination.name);
+const byG = Object.fromEntries(travelerProjection.destinations.map((destination) => [
+  destination.name,
+  destination.sections.map((entry) => ({ s: entry.section, i: entry.index, rawGroup: entry.rawGroup })),
+]));
 
-/* R5 — the spine rail's stops, derived from THIS guide rather than from any list. Korea yields
-   13 (11 groups + Field log + Tools), Sedona 9 (8 + Tools alone, because it has no learnings
-   record and an empty Field log is a promise the guide cannot keep). Neither number appears in
-   this file or in the rail's markup; both fall out of the guide. */
-const stations = buildStations({
+/* U01 — the authored raw groups remain intact in guide data, but the runtime navigation is
+   projected into four traveler-facing destinations. Sources, recap and utilities remain
+   routable secondary destinations and never participate in primary progress geometry. */
+const stations = buildTravelerStations({
   groups: order,
+  hasSources: travelerProjection.sources.length > 0,
   hasLearnings: !!(guide as any).learnings,
 });
-/* The group descriptor the context line reads. Creator-signed where one exists; otherwise
-   nothing — an invented descriptor would be copy about content nobody wrote. */
-const stationDesc = (s: { kind: string; full: string }) =>
-  s.kind === "group" ? ((guide as any).descriptors?.[s.full] ?? null) : null;
+const primaryStations = stations.filter((station) => station.primary);
+const secondaryStations = stations.filter((station) => !station.primary);
+const legacyAnchors = legacyRouteAnchors(guide.sections, { hasLearnings: !!(guide as any).learnings });
+const legacyAnchorsFor = (route: string) => legacyAnchors.filter((anchor) => anchor.route === route);
+
+/* Creator-authored descriptors are only reused when their key already matches the canonical
+   traveler destination. A synthetic descriptor would claim meaning the guide never authored. */
+const stationDesc = (s?: { kind: string; full: string }) =>
+  s?.kind === "group" ? ((guide as any).descriptors?.[s.full] ?? null) : null;
 
 // The jet-lag calculator is an ARRIVAL tool, and it used to sit above EVERY tab of every
 // guide (creator, 2026-07-30: "quite useless and doesn't need to be there on every screen,
@@ -109,7 +122,8 @@ order.forEach((g: string, ci: number) => (byG[g] || []).forEach((o: any) => {
   const t = String(o.s.title ?? o.s.name ?? "");
   if (jlGroup === null && /jet[\s-]?lag|arriv|when you land/i.test(t)) jlGroup = ci;
 }));
-const jlGroupIdx = jlGroup ?? 0;
+const essentialsIndex = order.indexOf("Essentials");
+const jlGroupIdx = jlGroup ?? (essentialsIndex >= 0 ? essentialsIndex : 0);
 
 // R5 deleted shortLabel(). The tab strip it existed for is gone: a spine-rail station label
 // wraps to two lines and a pill row scrolls, so neither surface needs an abbreviation. The one
@@ -326,9 +340,8 @@ const liveProgress = [
 ].filter(Boolean).join(" · ") || null;
 
 const toolsStationIndex = stations.find((s) => s.kind === "tools")!.index;
-/* null for a guide with no learnings record — the station is not in the rail either, so the
-   two cannot disagree about whether this guide has a Field log. */
-const fieldLogIndex = stations.find((s) => s.kind === "fieldlog")?.index ?? null;
+const sourcesStationIndex = stations.find((s) => s.kind === "sources")?.index ?? null;
+const recapStationIndex = stations.find((s) => s.kind === "recap")?.index ?? null;
 
 const daysForBanner = (daysSec?.items ?? []).map((d: any) => ({
   date: d.date as string, title: d.title as string, fit: (d.fit as string) ?? null,
@@ -797,31 +810,37 @@ const tripSummary = buildSummary(guide);
           ═══════════════════════════════════════════════════════════════════ */}
       <nav class="grail" aria-label="Guide sections" data-hint-anchor>
         <div class="grail-track" id="guideTabs">
-          {stations.map((s) => (
-            /* aria-controls ONLY where the panel it names actually exists. Field log and Tools
-               are stations before they are panels (steps 5 and 4 build those), and an
-               aria-controls pointing at a missing id is a critical aria-valid-attr-value
-               violation — axe caught exactly this on Korea's #gtab-11/#gtab-12 and Denmark's
-               #gtab-8/#gtab-9. Naming a control that is not there is worse than naming
-               nothing: it promises a screen-reader user a region they can never reach. */
-            <button class="gtab grail-stop" type="button" id={`gtab-${s.index}`}
-                    data-tab={s.index} data-full={s.full} data-kind={s.kind}
-                    aria-controls={`grp-${s.index}`}
+          {primaryStations.map((s) => (
+            <button class="gtab grail-stop" type="button" id={`gtab-${s.key}`}
+                    data-tab={s.index} data-route={s.key} data-full={s.full} data-kind={s.kind}
+                    data-primary="true" aria-controls={`dest-${s.key}`}
                     aria-current={s.index === 0 ? "true" : undefined}>
               <span class="grail-dot" aria-hidden="true"></span>
               <span class="grail-label">{s.full}</span>
             </button>
           ))}
+          {/* Secondary routes remain real router stations but do not paint in the primary
+              traveler rail. Stable route keys keep every other entry point on one code path. */}
+          {secondaryStations.map((s) => (
+            <button class="gtab" type="button" id={`gtab-${s.key}`}
+                    data-tab={s.index} data-route={s.key} data-full={s.full} data-kind={s.kind}
+                    data-primary="false" aria-controls={`dest-${s.key}`} hidden>
+              {s.full}
+            </button>
+          ))}
         </div>
-        {/* Phone only: the ordinal position a rail with unreachable ends cannot give. */}
         <div class="grail-prog" aria-hidden="true"><span class="grail-fill"></span></div>
         <div class="grail-ctx">
-          <p class="grail-kicker" data-rail-kicker>{stations[0]?.full}</p>
-          {stationDesc(stations[0]) && <p class="grail-desc" data-rail-desc>{stationDesc(stations[0])}</p>}
-          {/* No resume line here. mobile-nav's section memory CREATES one when there is
-              something to resume and removes it when there is not — an empty <p> reserving
-              space for a memory nobody has is the quiet version of a fabricated "start here",
-              and ACCEPTANCE asks for it to be absent from the DOM entirely. */}
+          <p class="grail-kicker" data-rail-kicker>{primaryStations[0]?.full}</p>
+          {stationDesc(primaryStations[0]) && <p class="grail-desc" data-rail-desc>{stationDesc(primaryStations[0])}</p>}
+        </div>
+        <div class="grail-secondary" role="group" aria-label="More guide sections">
+          {secondaryStations.map((station) => (
+            <button type="button" class="grail-secondary-link"
+                    data-action="guide-route" data-route={station.key}>
+              {station.full}
+            </button>
+          ))}
         </div>
       </nav>
 
@@ -834,16 +853,19 @@ const tripSummary = buildSummary(guide);
         </noscript>
         {order.map((g, ci) => {
           const solo = byG[g].length === 1;
-          // R5: a creator-signed descriptor wins the line under the title (rare,
-          // informational-only — voice standard rev. 2026-07-28); without one, the
-          // chapter-opener falls back to the derived contents line — what's inside,
-          // from the section titles already in the data (no invented copy).
           const descriptor = (guide as any).descriptors?.[g] ?? null;
-          const subParts = solo || descriptor ? [] : byG[g].map((o) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
+          const subParts = solo || descriptor ? [] : byG[g].map((o: any) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
           const sub = collapseSubPrefixes(subParts.slice(0, 4)).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
-          const isPanelGroup = ((guide as any).panelGroups ?? []).includes(g);
+          const panelGroups = (guide as any).panelGroups ?? [];
+          /* A canonical destination may combine several authored groups. Keep Panel behavior
+             only when every contributing authored group opted into it; mixed destinations
+             render as ordinary blocks rather than pretending one grid owns another group's order. */
+          const isPanelGroup = byG[g].every((entry: any) => panelGroups.includes(entry.rawGroup));
           return (
-            <div class="catblock" id={`grp-${ci}`} data-ci={ci} data-desc={descriptor ?? undefined} role="region" aria-labelledby={`gtab-${ci}`} hidden={ci > 0}>
+            <div class="catblock" id={`dest-${primaryStations[ci].key}`} data-ci={ci}
+                 data-route={primaryStations[ci].key} data-desc={descriptor ?? undefined}
+                 role="region" aria-labelledby={`gtab-${primaryStations[ci].key}`} hidden={ci > 0}>
+              {legacyAnchorsFor(primaryStations[ci].key).map((anchor) => <span id={anchor.id} aria-hidden="true"></span>)}
               <header class="cat-opener">
                 <span class="cat-num" aria-hidden="true">{String(ci + 1).padStart(2, "0")}</span>
                 {groupImgs[g] && (
@@ -856,52 +878,35 @@ const tripSummary = buildSummary(guide);
                 <h2 class="cat-title">{g}</h2>
                 {descriptor && <p class="cat-desc">{descriptor}</p>}
                 {sub && <p class="cat-sub">{sub}</p>}
-                {/* README:281 — "Each section group also gets a COLLAPSE ALL / EXPAND ALL
-                    control in its header." Only meaningful where this group IS Panels (the
-                    non-Panel path has nothing to collapse); no-JS-safe the same way the Panel
-                    toggle itself is — hidden until src/features/panel/ui/collapse.js confirms
-                    the grid exists and unhides + labels it. */}
                 {isPanelGroup && (
                   <button class="cat-collapse-all" type="button" data-panel-collapse-all hidden>Collapse all</button>
                 )}
               </header>
               {isPanelGroup ? (
                 <>
-                  {/* Atlas Phase 2: this group's sections are Panels on the grid —
-                      collapse + reorder, persisted per reader under this scope. The
-                      scope key is per GROUP, not per guide, so a later-phase grid in
-                      another tab never interleaves its order with this one. */}
                   <div class="pnl-grid" data-panel-grid data-panel-scope={`${storeKey}:${g}`}>
-                    {byG[g].map((o) => (
-                      <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null} country={guide.country} panelHost={true} />
+                    {byG[g].map((o: any) => (
+                      <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo}
+                             holidays={holidayInfo} learnings={guide.learnings ?? null}
+                             mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null}
+                             country={guide.country} panelHost={true} />
                     ))}
                   </div>
-                  {/* The guide surface's own reset control (the Panel deliberately
-                      carries none). Doubly gated: CSS hides it until the reorder
-                      wiring exists; reorder.js unhides it only while a custom order
-                      is actually saved. */}
                   <p class="pnl-reset-row">
                     <button class="pnl-reset" type="button" data-panel-order-reset hidden>Reset panel order</button>
                   </p>
-                  {/* R5 — Trip kit's CONTENT, rehomed into Plan (creator ruling 2026-08-11).
-                      The tool tab is retired, but what it rendered is not a tool: entry
-                      requirements, phrase cards, the book-by timeline, the arrival plan and the
-                      packing strip are all the guide's own verified data, and Korea/Denmark/Japan
-                      carry real records for them. Deleting the tab without rehoming the content
-                      would have orphaned 10 phrase cards and 3 entry records — the JSON keeps
-                      them and nothing renders them, which is the quietest way to lose a fact.
-                      Plan is where they belong: every one answers a question you have before you
-                      go. Rendered only on the Plan group, and TripKit itself draws nothing for a
-                      guide with none of them. */}
-                  {ci === jlGroupIdx && (
-                    <TripKit storeKey={storeKey} country={guide.country} days={daysSec?.items ?? []}
-                             sections={_flat} phrases={guide.phrases ?? null} entry={guide.entry ?? null} inGroup />
-                  )}
                 </>
               ) : (
-                byG[g].map((o) => (
-                  <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo} holidays={holidayInfo} learnings={guide.learnings ?? null} mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null} country={guide.country} />
+                byG[g].map((o: any) => (
+                  <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo}
+                         holidays={holidayInfo} learnings={guide.learnings ?? null}
+                         mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null}
+                         country={guide.country} />
                 ))
+              )}
+              {ci === jlGroupIdx && (
+                <TripKit storeKey={storeKey} country={guide.country} days={daysSec?.items ?? []}
+                         sections={_flat} phrases={guide.phrases ?? null} entry={guide.entry ?? null} inGroup />
               )}
               {byG[g].some((o: any) => o.s.type === "days") && (
                 <div class="lnw-cta">
@@ -921,30 +926,30 @@ const tripSummary = buildSummary(guide);
             </div>
           );
         })}
-        {/* ── THE FIELD LOG STATION — after Sources, and NOT DRAWN AT ALL without a record.
-            R4 rendered the retrospective inline at the bottom of the guide body, which put
-            post-trip content in front of a reader who is mid-trip. It is its own station now.
-            The `hasLearnings` guard is the whole point: `us` and `japan` have no learnings
-            record, so they get no station and no panel — an empty Field log is a promise the
-            guide cannot keep, and the rail is built from the guide precisely so this absence
-            costs nothing to express. */}
-        {fieldLogIndex !== null && (
-          <div class="catblock catblock--fieldlog" id={`grp-${fieldLogIndex}`} data-ci={fieldLogIndex}
-               role="region" aria-labelledby={`gtab-${fieldLogIndex}`} hidden>
+        {sourcesStationIndex !== null && (
+          <div class="catblock" id="dest-sources" data-ci={sourcesStationIndex} data-route="sources"
+               role="region" aria-labelledby="gtab-sources" hidden>
+            {legacyAnchorsFor("sources").map((anchor) => <span id={anchor.id} aria-hidden="true"></span>)}
+            <header class="cat-opener">
+              <h2 class="cat-title">Sources & verification</h2>
+            </header>
+            {travelerProjection.sources.map((entry) => (
+              <Block sec={entry.section} sid={`sec-${entry.index}`} ci={sourcesStationIndex}
+                     solo={travelerProjection.sources.length === 1} holidays={holidayInfo}
+                     learnings={guide.learnings ?? null} country={guide.country} />
+            ))}
+          </div>
+        )}
+        {recapStationIndex !== null && (
+          <div class="catblock catblock--fieldlog" id="dest-recap" data-ci={recapStationIndex}
+               data-route="recap" role="region" aria-labelledby="gtab-recap" hidden>
+            {legacyAnchorsFor("recap").map((anchor) => <span id={anchor.id} aria-hidden="true"></span>)}
             <Learnings storeKey={storeKey} learnings={guide.learnings ?? null} slug={guideSlug} title={guide.title} />
           </div>
         )}
-        {/* ── THE TOOLS STATION — the last stop on the rail, and Tools' ONE entry point.
-            R4 reached Tools from four places (hub header, guide header, table view, mobile ☰);
-            SPEC-COMPONENTS §7 had already warned that the call site which forgets
-            ensureGuide(slug) is the one that ships, and on mobile the ☰ was the only route in.
-            One route cannot be forgotten. Rendered by the same ToolsScreen the standalone
-            surface used, so the guide's ledger and any other surface's cannot disagree. */}
-        <div class="catblock catblock--tools" id={`grp-${toolsStationIndex}`} data-ci={toolsStationIndex}
-             role="region" aria-labelledby={`gtab-${toolsStationIndex}`} hidden>
-          {/* Reminders kept its panel when its tool TAB was retired. It is the group's shared
-              scratchpad, not a Vote/Trip-kit-style surface R5 removed — dropping it with them
-              would have deleted a live Firebase-backed feature by association. */}
+        <div class="catblock catblock--tools" id="dest-tools" data-ci={toolsStationIndex}
+             data-route="tools" role="region" aria-labelledby="gtab-tools" hidden>
+          {legacyAnchorsFor("tools").map((anchor) => <span id={anchor.id} aria-hidden="true"></span>)}
           <ToolsScreen active={toolsTrip} base={base}>
             <Reminders storeKey={storeKey} />
           </ToolsScreen>
@@ -1101,39 +1106,32 @@ const tripSummary = buildSummary(guide);
       <div class="sheet-list">
         {order.map((g, ci) => (
           <>
-            {/* Card count (design-handoff README, "The Groups sheet"): every section listed
-                WITH how much is inside it, so the sheet says what a group costs to open
-                rather than just naming it. Derived from the guide's own bucketed sections —
-                counted, never authored. The numeral is aria-hidden with a spoken equivalent
-                beside it: a screen reader saying "Food & shopping 4" is a riddle. */}
-            <a class="sheet-cat" data-cat={ci} data-tab={ci} href={`#grp-${ci}`}>
+            <a class="sheet-cat" data-cat={ci} data-tab={ci} data-action="guide-route"
+               data-route={primaryStations[ci].key} href={`#dest-${primaryStations[ci].key}`}>
               <span class="sheet-cat-name">{g}</span>
               <span class="sheet-count" aria-hidden="true">{byG[g].length}</span>
               <span class="mn-sr">{byG[g].length === 1 ? " — 1 section" : ` — ${byG[g].length} sections`}</span>
             </a>
-            {byG[g].length > 1 && byG[g].map((o) => (
+            {byG[g].length > 1 && byG[g].map((o: any) => (
               <a class="sheet-link" data-tab={ci} href={`#sec-${o.i}`}>{navLabel(o.s, g)}</a>
             ))}
           </>
         ))}
-        {/* U2: `sheet-tool` marks every tool link (layout chrome, not a content group) so
-            mobile-nav.css can exclude ALL FIVE from the bearing-number counter in one rule.
-            Previously only split/vote had their own :not() exclusions — Reminders/
-            Learnings/Trip Kit kept incrementing the counter as if they were real content
-            chapters, so the sheet's numbering lied about how many sections a guide has. */}
-        {/* The Today jump moved here from the bottom bar when that bar became the
-            README's four slots (2026-08-08). Same handler, same behaviour — it lands on
-            today's card when the trip is live, the Days group's top otherwise. It carries
-            no data-tab on purpose: the sheet's generic link handler would then try to
-            switch to a tab named "" and the jump below already picks the right group. */}
-        <a class="sheet-cat sheet-tool sheet-today-link" id="botToday" href="#" aria-label="Jump to today in the itinerary">
+        <a class="sheet-cat sheet-tool sheet-today-link" id="botToday" data-today-action href="#"
+           aria-label="Jump to today in the itinerary">
           <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="sheet-ico"><circle cx="8" cy="8" r="3"/><path d="M8 1.2v2M8 12.8v2M1.2 8h2M12.8 8h2M3.3 3.3l1.4 1.4M11.3 11.3l1.4 1.4M12.7 3.3l-1.4 1.4M4.7 11.3l-1.4 1.4"/></svg>Today
         </a>
-        {/* One row, one destination. The five tool links became one station: Budget and
-            Reminders live inside it, Vote and Trip kit are retired (Trip kit's phrases and
-            entry requirements moved into Plan, where they are content rather than a tool), and
-            Learnings became the Field log station listed with the groups above. */}
-        <a class="sheet-cat sheet-tool sheet-tools-link" data-tab={toolsStationIndex} href="#"><Icon name="budget" class="sheet-ico" />Trip tools</a>
+        <p class="sheet-more-label">More for this trip</p>
+        {sourcesStationIndex !== null && (
+          <a class="sheet-cat sheet-tool" data-action="guide-route" data-route="sources"
+             href="#dest-sources">Sources & verification</a>
+        )}
+        {recapStationIndex !== null && (
+          <a class="sheet-cat sheet-tool" data-action="guide-route" data-route="recap"
+             href="#dest-recap">Recap</a>
+        )}
+        <a class="sheet-cat sheet-tool sheet-tools-link" data-action="guide-route"
+           data-route="tools" href="#dest-tools"><Icon name="budget" class="sheet-ico" />Trip utilities</a>
       </div>
     </div>
 

@@ -204,11 +204,23 @@ describe("claude-codex-watcher.yml — real job-boundary separation (CodeQL find
     expect(publishJob()).toMatch(/name:\s*validated-pr-\$\{\{\s*matrix\.pr\s*\}\}/);
   });
 
+  it("artifact transfer actions are immutable SHA pins, never floating major-version tags", () => {
+    expect(validateJob()).toContain("actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7");
+    expect(publishJob()).toContain("actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7");
+    expect(yml).not.toMatch(/actions\/(?:upload|download)-artifact@v\d+/);
+  });
+
   it("publish tolerates a missing artifact (validate was ineligible/failed) as a clean no-op, never an error", () => {
     const download = stepBlock("Download the validated file tree (if validate produced one)", publishJob());
     expect(download).toMatch(/continue-on-error:\s*true/);
     const noop = stepBlock("Nothing to publish — clean no-op", publishJob());
     expect(noop).toMatch(/if:.*steps\.download\.outcome != 'success'/);
+    // YAML plain scalars treat " #" as a comment marker even when it appears inside what the
+    // shell would consider quotes. Keep this command in a block scalar so "#$PR" reaches bash
+    // intact instead of truncating the command to an unterminated quote.
+    expect(noop).toMatch(/run:\s*\|/);
+    expect(noop).toContain('echo "[codex-watcher] PR #$PR — no validated artifact (not eligible, no changes, or a gate failed upstream)."');
+    expect(noop).not.toMatch(/run:\s*echo\s+"\[codex-watcher\] PR #/);
   });
 
   it("every step in publish after the download is gated on steps.download.outcome == 'success' — nothing runs on a missing/failed artifact", () => {

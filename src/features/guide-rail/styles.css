@@ -98,11 +98,26 @@ body.chrome-yield .grail{transform:translateY(calc(-1 * var(--hdr-h)))}
   margin-left:auto;font-family:var(--font-data);font-size:var(--text-caption);color:var(--aink);
 }
 
+/* Secondary destinations are reachable, but they are deliberately not stations on the
+   primary traveler progress line. Phones expose them in the Groups sheet; wider layouts get a
+   quiet utility row below the rail context. */
+.grail-secondary{display:none}
+.grail-secondary-link{
+  min-height:44px;padding:.35rem .8rem;border:var(--rw) solid var(--rule2);border-radius:999px;
+  background:transparent;color:var(--muted);font-family:var(--font-data);
+  font-size:var(--text-control-sm);font-weight:650;cursor:pointer
+}
+.grail-secondary-link:hover{color:var(--ink);border-color:var(--accent)}
+.grail-secondary-link[aria-current="true"]{color:var(--aink);border-color:var(--accent);font-weight:750}
+.grail-secondary-link:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
 /* --- TABLET (720-1179): the vertical spine --------------------------------------------------
    Thirteen stops do not fit a 720px horizontal line, and a tablet has vertical room to spare —
    so the spine turns rather than shrinking its stops or scrolling out of sight. */
 /* bp:TABLET_MIN — src/lib/breakpoints.ts */
 @container guide (min-width: 720px){
+  .grail-secondary{display:flex;flex-wrap:wrap;gap:.4rem;padding:.75rem .9rem 0}
+
   .grail{
     /* Beside the reading column, not above it. .shell's grid places this in column one. */
     border-bottom:0;border-inline-end:var(--rw) solid var(--rule);

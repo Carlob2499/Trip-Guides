@@ -1,0 +1,138 @@
+name: Protected landing live proof
+
+# Disposable zero-model proof for issue #130. Land this workflow while main is still unprotected,
+# then activate the intended main protection/ruleset, and only then dispatch this workflow manually.
+# This sequencing prevents an unprotected push from being mistaken for protected-main evidence.
+# The workflow never dispatches research or models.
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  checks: read
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: protected-landing-live-proof
+  cancel-in-progress: false
+
+jobs:
+  prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Assert main protection is active before proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          protected="$(gh api "repos/${GITHUB_REPOSITORY}/branches/main" --jq '.protected')"
+          if [[ "$protected" != "true" ]]; then
+            echo "Refusing protected-main proof because main.protected=$protected" >&2
+            exit 1
+          fi
+
+      - name: Create and land disposable proof marker
+        id: proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          proof_branch="proof/protected-landing-${GITHUB_RUN_ID}"
+          marker="docs/generated/protected-landing-proof-${GITHUB_RUN_ID}.md"
+          body_file="$(mktemp)"
+          printf '%s\n' \
+            'Disposable zero-model compatibility proof for issue #130.' \
+            '' \
+            "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+            > "$marker"
+          printf '%s\n' \
+            'Zero-model protected-main compatibility proof. This marker is removed by the same run after landing.' \
+            > "$body_file"
+
+          git checkout -b "$proof_branch"
+          git add "$marker"
+          git commit -m "test: protected landing live proof marker"
+          git push origin "HEAD:$proof_branch"
+
+          result="$(bash scripts/land-branch.sh \
+            "$proof_branch" main "test: protected landing live proof" \
+            "$body_file" true "" denmark | tail -n 1)"
+          if [[ ! "$result" =~ ^merged:([0-9]+)\ announce=skipped$ ]]; then
+            echo "Unexpected proof landing result: $result" >&2
+            exit 1
+          fi
+          echo "proof_pr=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+          echo "marker=$marker" >> "$GITHUB_OUTPUT"
+
+      - name: Remove marker through the same protected landing path
+        id: cleanup
+        shell: bash
+        env:
+          MARKER: ${{ steps.proof.outputs.marker }}
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git checkout -B main origin/main
+
+          cleanup_branch="proof/protected-landing-cleanup-${GITHUB_RUN_ID}"
+          body_file="$(mktemp)"
+          printf '%s\n' \
+            'Removes the disposable marker created by the zero-model protected-main compatibility proof.' \
+            > "$body_file"
+
+          git checkout -b "$cleanup_branch"
+          git rm "$MARKER"
+          git commit -m "test: clean protected landing live proof marker"
+          git push origin "HEAD:$cleanup_branch"
+
+          result="$(bash scripts/land-branch.sh \
+            "$cleanup_branch" main "test: clean protected landing live proof" \
+            "$body_file" true "" denmark | tail -n 1)"
+          if [[ ! "$result" =~ ^merged:([0-9]+)\ announce=skipped$ ]]; then
+            echo "Unexpected cleanup landing result: $result" >&2
+            exit 1
+          fi
+          echo "cleanup_pr=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify disposable artifacts are gone
+        shell: bash
+        env:
+          MARKER: ${{ steps.proof.outputs.marker }}
+          PROOF_PR: ${{ steps.proof.outputs.proof_pr }}
+          CLEANUP_PR: ${{ steps.cleanup.outputs.cleanup_pr }}
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          if git cat-file -e "origin/main:${MARKER}" 2>/dev/null; then
+            echo "Disposable proof marker remains on main: $MARKER" >&2
+            exit 1
+          fi
+          if git ls-remote --exit-code --heads origin \
+            "proof/protected-landing-${GITHUB_RUN_ID}" \
+            "proof/protected-landing-cleanup-${GITHUB_RUN_ID}" >/dev/null; then
+            echo "Disposable proof branch remains after protected landing" >&2
+            exit 1
+          fi
+          {
+            echo "## Protected-main live proof passed"
+            echo
+            echo "- Proof PR: #${PROOF_PR}"
+            echo "- Cleanup PR: #${CLEANUP_PR}"
+            echo "- Exact-base Required Gate, freeze policy, and both CodeQL analyses passed before each merge."
+            echo "- No model, research, selector, publication, or acceptance-attempt path was invoked."
+            echo "- The disposable marker and both automation branches were removed."
+          } >> "$GITHUB_STEP_SUMMARY"

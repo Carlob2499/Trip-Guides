@@ -33,7 +33,6 @@ export const V2_RESEARCH_STAGES = ["scaffold", "passA", "passB", "reconcile", "c
 // pins the research attempt cap at five for initial V2 compatibility), one automatic redispatch.
 export const V2_ATTEMPT_CAP = 5;
 export const V2_AUTO_RETRY_CAP = 1;
-export const V2_AVAILABILITY_RETRY_CAP = 2;
 // A human answer re-opening a completed run grants this many further dispatches for the
 // reopened tail (reconcile → critic → landing). The AUTONOMOUS cap stays what it was — the
 // grant exists only on the human-triggered reopen path, so a run still cannot loop on its own;
@@ -164,7 +163,7 @@ export function stageAttemptStats(st) {
 }
 
 /** The canonical fresh-run shape (one writer — init and fresh-run archival both use it). */
-function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, availabilityRetryCap, now, inputs, issue, landMode }) {
+function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }) {
   return {
     schemaVersion: RUN_SCHEMA,
     slug,
@@ -180,7 +179,7 @@ function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, availabilit
     stages: Object.fromEntries(stages.map((s) => [s, {
       status: "queued", startedAt: null, endedAt: null, attempts: 0, model: null, effort: null, commit: null, failure: null,
     }])),
-    attempts: { total: 0, cap, autoRetries: 0, autoRetryCap, availabilityRetries: 0, availabilityRetryCap },
+    attempts: { total: 0, cap, autoRetries: 0, autoRetryCap },
     resume: { nextStage: stages[0], action: `run stage "${stages[0]}"` },
     failure: null,
     publication: { published: false, publishedAt: null, deployedLive: null, deployedAt: null },
@@ -199,7 +198,6 @@ export async function initRunV2(slug, {
   stages = V2_RESEARCH_STAGES,
   cap = V2_ATTEMPT_CAP,
   autoRetryCap = V2_AUTO_RETRY_CAP,
-  availabilityRetryCap = V2_AVAILABILITY_RETRY_CAP,
   now = new Date().toISOString(),
   intakeDir = INTAKE_DIR,
   force = false,
@@ -223,7 +221,7 @@ export async function initRunV2(slug, {
         publishedAt: existing.publication.publishedAt || null,
         mergedPr: existing.landing?.pr ?? null,
       }];
-      const state = freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, availabilityRetryCap, now, inputs, issue, landMode });
+      const state = freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode });
       state.previousRuns = archived;
       return save(state, intakeDir);
     }
@@ -262,7 +260,7 @@ export async function initRunV2(slug, {
     }
     return existing;
   }
-  return save(freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, availabilityRetryCap, now, inputs, issue, landMode }), intakeDir);
+  return save(freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }), intakeDir);
 }
 
 function requireRun(state, slug) {
@@ -282,7 +280,7 @@ function requireStage(state, stage) {
 }
 
 /** Checkpoint stage START — before the agent is invoked, so a crash mid-stage is attributable. */
-export async function stageStart(slug, stage, { model = null, effort = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+export async function stageStart(slug, stage, { model = null, effort = null, baseline = null, now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
   const st = requireStage(state, stage);
   const next = nextStageV2(state);
@@ -296,8 +294,18 @@ export async function stageStart(slug, stage, { model = null, effort = null, now
   st.startedAt = now;
   st.endedAt = null;
   st.failure = null;
-  st.attempts += 1;
-  openAttempt(st, now);
+  // A starting stage has no completion snapshot: leaving the old one let a re-opened stage that
+  // legitimately completes as a NO-OP keep a stale SHA and present it downstream as fresh.
+  st.commit = null;
+  if (baseline && !st.baseline) st.baseline = baseline; // pinned once: the tree it first received
+  // A REPLAY revalidates retained work deterministically — no model runs, so it is not another
+  // attempt. Its original attempt is deliberately left open for stageComplete to close honestly:
+  // opening a new one here would both inflate the budget and let openAttempt's stale-attempt
+  // sweep brand the paid pass `failed/unknown` for a dependency failure that was reconcile's.
+  if (!st.replay) {
+    st.attempts += 1;
+    openAttempt(st, now);
+  }
   if (model) st.model = model;
   if (effort) st.effort = effort;
   state.status = "running";
@@ -319,8 +327,11 @@ export async function stageComplete(slug, stage, { commit = null, now = new Date
   st.status = "complete";
   st.endedAt = now;
   st.failure = null;
+  st.replay = false; // spent
   closeAttempt(st, now, "complete");
-  if (commit) st.commit = commit;
+  // Unconditional: a stage that produced no new file commit still HANDS ON a tree, and the
+  // caller passes that HEAD. Writing only truthy commits kept the previous run's SHA.
+  st.commit = commit;
   recomputeResume(state);
   state.status = nextStageV2(state) ? "running" : "complete";
   return save(touch(state, now), intakeDir);
@@ -337,10 +348,10 @@ export async function stageFail(slug, stage, { failureClass = "unknown", detail 
   st.status = "failed";
   st.endedAt = now;
   st.failure = { class: failureClass, detail, at: now };
+  st.replay = false; // a failed replay is the stage's own again: the next retry runs the model
   closeAttempt(st, now, "failed", failureClass);
-  // An account/session availability interruption did not produce a quality attempt. Refund the
-  // dispatch's quality charge exactly once (this branch is skipped on repeated stageFail calls);
-  // its separate bounded recovery reservation is spent only when redispatch is authorized.
+  // A usage-limit is an availability interruption, not a quality attempt. Refund the dispatch
+  // charge exactly once; retry policy still stops visibly until a deliberate later redispatch.
   if (failureClass === "usage-limit" && state.attempts.total > 0) state.attempts.total -= 1;
   state.status = "failed";
   state.failure = { class: failureClass, detail, at: now };
@@ -371,24 +382,23 @@ export async function bumpRunAttempt(slug, { now = new Date().toISOString(), int
   return { state, overCap, attempts: state.attempts.total, cap: state.attempts.cap };
 }
 
-/** Reserve the appropriate bounded retry: one quality-repair reservation for rejected output,
-    or the separate availability allowance for a usage-limit interruption. Past either cap the
-    caller must NOT redispatch.
+/** Reserve the run's ONE bounded automatic repair for a policy-approved REPAIRABLE failure.
+    Bounded: past the cap the caller must NOT redispatch.
 
     This function only spends the budget — it does not decide who may. Eligibility lives in
-    `recovery.mjs` (`retryEligibility`). Gate-failure/void-run require actionable validator
-    feedback and spend the quality-repair allowance. Usage-limit proves no artifact quality and
-    therefore spends only the separate bounded availability allowance. */
+    `recovery.mjs` (`retryEligibility`) and today permits ONLY `gate-failure` and `void-run`,
+    and only with actionable validator feedback for the same runId/stage. In particular
+    `usage-limit` is deliberately NEVER auto-retryable (PR #75): an interrupted process proves
+    nothing about the artifact, and re-dispatching into a closed usage window burns the repair a
+    later real failure is owed. It stops visibly instead. */
 export async function recordAutoRetry(slug, { now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
   const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
-  const availability = state.stages?.[state.resume?.nextStage]?.failure?.class === "usage-limit";
-  const usedKey = availability ? "availabilityRetries" : "autoRetries";
-  const capKey = availability ? "availabilityRetryCap" : "autoRetryCap";
-  state.attempts[usedKey] += 1;
-  const allowed = state.status !== "stuck" && state.attempts.total < state.attempts.cap &&
-    state.attempts[usedKey] <= state.attempts[capKey];
+  state.attempts.autoRetries += 1;
+  const allowed = state.status !== "stuck" &&
+    state.attempts.total < state.attempts.cap &&
+    state.attempts.autoRetries <= state.attempts.autoRetryCap;
   await save(touch(state, now), intakeDir);
-  return { state, allowed, autoRetries: state.attempts[usedKey], cap: state.attempts[capKey], budget: availability ? "availability" : "quality-repair" };
+  return { state, allowed, autoRetries: state.attempts.autoRetries, cap: state.attempts.autoRetryCap };
 }
 
 /** Publication and deployed-live are distinct facts, marked separately. */
@@ -468,6 +478,61 @@ export async function finalizeMergedLanding(slug, { pr, mergedAt = new Date().to
   return save(touch(state, now), intakeDir);
 }
 
+/** True while the critic is QUEUED FOR A DETERMINISTIC REPLAY of its retained pass.
+
+    One fact, three readers, and they all see the critic before it starts: begin-stage decides
+    not to invoke the model, and the job's generic failure tail (record-agent-failure, fail-stage)
+    stands down because the critic did not fail — it is deliberately queued, so the usual
+    "already failed, do not overwrite" guard does not catch it and a coarse process-plane
+    `unknown` would land on a stage that is mid-repair. Once the replay is running, a genuine
+    failure is the stage's own again and records normally. */
+export function isCriticReplay(state) {
+  const critic = state?.stages?.critic;
+  return Boolean(critic?.replay && critic.status === "queued");
+}
+
+/** ROUTE a critic-truth failure the critic has no authority to fix to the stage that does.
+
+    The blind critic never reads evidence.v2.json, so "declare the supersession relation" is an
+    instruction it cannot follow, and auto-retrying it would spend the run's one quality retry on
+    a stage that must fail again. Reconcile OWNS evidence, so the failure is recorded against
+    reconcile — honestly: reconcile's artifact is what is incomplete — while the critic returns to
+    `queued` with its retained work and pinned baseline, so the repaired run revalidates the SAME
+    output against the ORIGINAL tree. History stays: routing is visible cost, not erased cost. */
+export async function routeToEvidenceOwner(slug, { detail = "", now = new Date().toISOString(), intakeDir = INTAKE_DIR } = {}) {
+  const state = requireRun(await readRunStateV2(slug, { intakeDir }), slug);
+  const reconcile = requireStage(state, "reconcile");
+  const critic = requireStage(state, "critic");
+  if (reconcile.status !== "complete") {
+    throw new ContractError(`cannot route critic truth to reconcile: reconcile is "${reconcile.status}", not complete`);
+  }
+  reconcile.status = "failed";
+  reconcile.endedAt = now;
+  reconcile.commit = null; // its completion no longer describes an accepted artifact
+  reconcile.failure = { class: "gate-failure", detail, at: now };
+  critic.status = "queued";
+  // The retained pass is REVALIDATED, not re-run: routing only re-queues the critic, so without
+  // this the ordinary critic job would follow the owner's repair and spend the paid model again,
+  // regenerating the very guide/handoff being retained and judging the owner's relation against
+  // a different, nondeterministic pass. Its history stays open and unscarred (see stageStart).
+  critic.replay = true;
+  critic.startedAt = null;
+  critic.endedAt = null;
+  critic.failure = null;
+  critic.commit = null;
+  // critic.baseline is deliberately KEPT — the repaired attempt owes a diff against the tree the
+  // critic was originally handed, not against its own retained edits now sitting in the branch.
+  state.status = "failed";
+  state.failure = { class: "gate-failure", detail, at: now };
+  // This route is autonomous control-plane bookkeeping, not new spending authority. It may
+  // reassign the failed artifact to its real owner, but it MUST NOT mint attempt headroom. If the
+  // run is already at its quality-attempt cap, retryEligibility() leaves the routed failure
+  // visible and requires a human decision rather than manufacturing an unauthorized sixth try.
+  recomputeResume(state);
+  await save(touch(state, now), intakeDir);
+  return state;
+}
+
 /** Late answers to a COMPLETE-but-unmerged draft run (correction pass): re-open the deterministic
     resume point so the remaining work genuinely consumes the answer — reconcile re-reads the
     answered ledger cards, the critic re-judges, landing re-runs. Refuses on published/merged
@@ -485,7 +550,10 @@ export async function reopenForAnswers(slug, { now = new Date().toISOString(), i
     st.startedAt = null;
     st.endedAt = null;
     st.failure = null;
-    // history and attempts stay — the re-open is visible cost, not erased cost.
+    // A human answer opens a NEW tail: the old snapshot and the old handed-to tree both describe
+    // work about to be redone. history and attempts stay — a re-open is visible cost.
+    st.commit = null;
+    st.baseline = null;
   }
   state.status = "running";
   state.failure = null;

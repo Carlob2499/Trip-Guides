@@ -11,7 +11,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  EVIDENCE_SCHEMA, COVERAGE_SCHEMA,
+  EVIDENCE_SCHEMA, COVERAGE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA,
   CANDIDATE_STATUSES, EVIDENCE_KINDS, SOURCE_KINDS, EVIDENCE_ORIGINS, DISPOSITIONS,
   WORTH_LABELS, SOURCE_ACCESS, GROUP_REF,
   candidateSchema, evidenceSourceSchema, evidenceRecordSchema, reservationFindingSchema,
@@ -154,8 +154,11 @@ function commonEvidenceSections({ slug, runId }) {
     "`source.access` records HOW the source was reached: `fetched` = the origin page itself was retrieved",
     "and read; `search-preview` = only a search-result snippet was seen (discovery, NOT verification);",
     "`blocked` = the origin refused/failed and that is recorded honestly; `unknown` only where genuinely",
-    "unknowable. An objective claim citing an official/operator source must be `fetched` or `blocked` —",
-    "a search preview referencing an official page is never \"verified against the official source\".",
+    "unknowable. For official/operator objective records, `blocked` is valid ACCESS BOOKKEEPING but is not",
+    "qualifying proof: only `fetched` means the origin was actually read. A `blocked` evidence record may",
+    "remain only as retired audit history: explicitly reject it or supersede it with a fetched replacement.",
+    "A search preview referencing an official page is never \"verified against the official source\"; never repair that defect by relabeling",
+    "the same unsupported record blocked/fetched.",
     "Event-date claims recording `appliesToYears` must be `fetched`. Reader/mirror/proxy services",
     `(${PROXY_HOSTS.join(", ")}) are never the origin — cite the true origin or record it blocked.`,
     "",
@@ -236,6 +239,22 @@ async function reconcileSections({ slug, runId, intakeDir, guidesDir }) {
     "### Reconciliation contract",
     `Every passB-origin evidence record gets EXACTLY ONE disposition: ${DISPOSITIONS.join(" | ")}, with a note.`,
     "A disposition pointing at no record, a double disposition, or a silently dropped find fails the run.",
+    "",
+    "Two relations are DATA, not prose — a note saying \"corroborates Pass A's ev-x\" or \"supersedes the",
+    "old fallback\" is invisible to the validator. Each is a typed `{ kind, evidenceIds }`; a kind that",
+    "names no record leaves `evidenceIds` empty, and no id is ever invented to fill a shape:",
+    "  - `corroborates` — REQUIRED on EVERY row, `adopt` and `reject` included: silence is not an answer.",
+    "    Kinds: `factual` (+ the records this finding confirms), `recommendation` (agreement with a",
+    "    shortlist/disposition call — legitimately single-sourced, asserts no factual support), `none`.",
+    "    Pass A and Pass B converging is NOT itself independent corroboration: in a `factual` set spanning",
+    "    both passes every record must be fetched qualifying evidence and ≥2 must carry",
+    "    `source.independent: true` on distinct `family` values. Two municipal surfaces of one authority",
+    "    are one source, whatever the hostnames.",
+    "  - `supersedes` — REQUIRED on `replace`, legal on no other disposition. Kinds: `evidence` (+ the",
+    "    records it retires) or `recommendation` (it replaces a prior conclusion or fallback that was",
+    "    never an evidence record — use this rather than naming a record that does not exist). The",
+    "    replacement stays CURRENT; a record it retires does not, so coverage citing only that record stops",
+    "    counting as covered.",
   ];
 }
 
@@ -282,8 +301,19 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
   }
   // critic — its owed artifacts are ledger sections + the patterns fragment; the validator for
   // the fragment is compound-patterns. State its exact row grammar from the enforced shape.
+  //
+  // SCOPE. The frozen critic prompt's "touch nothing outside …" list omits the correction
+  // handoff, so #105 left the agent holding two contradictory instructions. The prompt is the
+  // pre-registered validation candidate and is not this repair's to rewrite; allowedStagePaths()
+  // already permits exactly this one extra path, so the capsule amends the list explicitly.
   return [
     ...head,
+    `SCOPE AMENDMENT (this section, generated from the enforced machine scope, overrides the`,
+    `prose scope line above on exactly one point): besides \`src/content/guides/${slug}/\`,`,
+    `\`guides-intake/${slug}/ledger.md\` and \`guides-intake/${slug}/pipeline-patterns.fragment.md\`,`,
+    `you may write \`guides-intake/${slug}/critic-corrections.v2.json\` — and nothing else. That file`,
+    "is the blind handoff described below; the collector rejects any path outside this list.",
+    "",
     `Your owed artifacts, validated after you finish:`,
     `  - \`guides-intake/${slug}/ledger.md\` gains \`## Critic findings\` and \`## Citation audit\` (and a`,
     "    `#### Continuity sweep — critic execution` whenever you edited the guide).",
@@ -291,9 +321,27 @@ export async function generateContractCapsule(stage, { slug, runId = "<run-id>",
     `    \`| YYYY-MM-DD | ${slug} | [critic] | <rubric row or lens> | <distilled pattern> | open |\``,
     "    (six cells; date real; slug and `[critic]` literal; final cell literally `open`; ≤1200 chars/row;",
     "    no headings, no prose outside rows). A malformed row fails the run.",
-    `  - If and only if you change any \`facts.json\` row, write \`guides-intake/${slug}/critic-corrections.v2.json\``,
-    `    with schema \`wp-critic-corrections/1.0\`: slug \`${slug}\`, runId \`${runId}\`, and one correction`,
-    "    per changed factId carrying exact previousValue/correctedValue/claim, fetched source metadata, verifiedOn,",
-    "    and freshness. You still may not read evidence.v2.json; the trusted control plane reconciles this handoff.",
+    `  - If and only if you edit ANY file in \`src/content/guides/${slug}/\`, write`,
+    `    \`guides-intake/${slug}/critic-corrections.v2.json\`. Its top-level keys, read verbatim:`,
+    `    \`"schemaVersion"\` (exactly that key, not \`"schema"\`) holding \`${CRITIC_CORRECTIONS_SCHEMA}\`,`,
+    `    \`"slug"\` (\`${slug}\`), \`"runId"\` (\`${runId}\`), and \`"corrections"\` — one row per CHANGED VALUE.`,
+    "    `facts.json` is not special. Each row carries:",
+    "      `target` — `<guide file>#<RFC 6901 JSON pointer to the value you changed>`, e.g.",
+    '        `facts.json#/route-distance/value`, `05-transit.json#/0/steps/2`, `_guide.json#/title`. The',
+    "        pointer is the literal path through the JSON (array elements are numeric indices) — it is NOT",
+    "        a title, name, label or slug. Independent facts inside one item are several rows, one per",
+    "        pointer; that is how one item carries more than one correction.",
+    "      `previousValue` — what that pointer held BEFORE your edit, verbatim (`null` if it is new);",
+    "        `correctedValue` — what it holds AFTER. A non-string value is its JSON text, e.g. `35.47`.",
+    "        Then `claim` (string); `source` — an OBJECT, never a bare URL string:",
+    `        \`{ "url": "https://…", "kind": ${SOURCE_KINDS.map((k) => `"${k}"`).join("|")}, "access": ${SOURCE_ACCESS.map((k) => `"${k}"`).join("|")}, "language": <BCP-47 or null> }\`;`,
+    '        `verifiedOn` (`YYYY-MM-DD`); `freshness` — an OBJECT, never a string:',
+    '        `{ "perishable": true|false, "shelfLife": "fx"|"transit"|"hours"|"venue"|"default"|null, "recheckOn": "YYYY-MM-DD"|null }`.',
+    "    The control plane re-derives your diff down to every changed leaf and READS each pointer in both",
+    "    workspaces — it never searches the file text — so a wrong pointer or value fails the stage. A",
+    "    changed value no row declares FAILS THE STAGE: there is no editorial-only declaration, because",
+    '    "this rewrite moved no fact" is your assertion and the pipeline cannot prove it. Declare a',
+    "    rewording as a correction with its source, or leave the sentence alone. You still may not read",
+    "    evidence.v2.json; relating your correction to existing records is the control plane's job.",
   ].join("\n");
 }

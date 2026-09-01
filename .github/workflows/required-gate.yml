@@ -1,0 +1,110 @@
+name: Required gate
+
+# The one repository-owned status intended to become globally required on main. It always reports
+# on a PR; scope is classified inside the job so docs/content work cannot strand a required check.
+# workflow_dispatch is the unattended path for trusted automation-created PR branches. In that
+# mode the caller may pin the exact base SHA; the job refuses base movement, then merges that base
+# into the checkout without committing so the exact-head status proves the intended integration
+# tree rather than testing the branch in isolation.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      base:
+        description: Base branch used for scope and prospective-merge verification
+        required: false
+        default: main
+        type: string
+      base_sha:
+        description: Optional exact base SHA captured by trusted unattended landing automation
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: required-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  required-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Classify changed files and prepare integration tree
+        id: scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          DISPATCH_BASE: ${{ inputs.base || 'main' }}
+          EXPECTED_BASE_SHA: ${{ inputs.base_sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$BASE_SHA" "$HEAD_SHA" > "$RUNNER_TEMP/changed-files.txt"
+          else
+            git fetch origin "+refs/heads/${DISPATCH_BASE}:refs/remotes/origin/${DISPATCH_BASE}" --depth=1
+            actual_base_sha="$(git rev-parse "origin/${DISPATCH_BASE}")"
+            if [ -n "$EXPECTED_BASE_SHA" ] && [ "$actual_base_sha" != "$EXPECTED_BASE_SHA" ]; then
+              echo "Expected ${DISPATCH_BASE} at ${EXPECTED_BASE_SHA}, found ${actual_base_sha}; refusing to test a different integration tree." >&2
+              exit 1
+            fi
+            git diff --name-only "origin/${DISPATCH_BASE}...HEAD" > "$RUNNER_TEMP/changed-files.txt"
+          fi
+          cat "$RUNNER_TEMP/changed-files.txt"
+          node scripts/classify-required-gate.mjs "$RUNNER_TEMP/changed-files.txt"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            git merge --no-commit --no-ff "origin/${DISPATCH_BASE}"
+          fi
+
+      - name: Project invariants
+        run: node scripts/check-project-invariants.mjs
+
+      - name: Install dependencies
+        if: steps.scope.outputs.full == 'true'
+        run: npm ci
+      - name: Lint
+        if: steps.scope.outputs.full == 'true'
+        run: npm run lint
+      - name: Typecheck
+        if: steps.scope.outputs.full == 'true'
+        run: npm run typecheck
+      - name: Unit and coverage gate
+        if: steps.scope.outputs.full == 'true'
+        run: npm run coverage
+
+      - name: Production build
+        if: steps.scope.outputs.a11y == 'true'
+        run: npm run build
+      - name: Cache Playwright browsers
+        if: steps.scope.outputs.a11y == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Chromium
+        if: steps.scope.outputs.a11y == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Install Chromium system dependencies
+        if: steps.scope.outputs.a11y == 'true' && steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - name: Accessibility and resilience
+        if: steps.scope.outputs.a11y == 'true'
+        run: npx playwright test tests/visual/a11y.spec.ts tests/visual/resilience.spec.ts tests/visual/offline-sync.spec.ts
+
+      - name: Gate scope summary
+        if: always()
+        run: |
+          echo "full=${{ steps.scope.outputs.full }}"
+          echo "a11y=${{ steps.scope.outputs.a11y }}"

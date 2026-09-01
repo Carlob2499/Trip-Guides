@@ -103,7 +103,9 @@ export function initRailResume(ctx) {
 
   function paint() {
     var active = track.querySelector('.grail-stop[aria-current="true"]') || track.querySelector(".grail-stop.gtab-active");
-    var line = active ? resumeLine(readMap(ctx)[active.dataset.full]) : null;
+    // Section memory is keyed by the canonical destination's numeric primary index.
+    // Looking it up by the human label made the rail resume line permanently empty.
+    var line = active ? resumeLine(readMap(ctx)[active.dataset.tab]) : null;
     var el = rail.querySelector(".grail-resume");
     if (!line) { if (el) el.remove(); return; }
     if (!el) {

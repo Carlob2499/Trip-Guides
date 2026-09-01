@@ -307,7 +307,7 @@ jobs:
       # loudly instead of silently uploading nothing.
       - name: Upload the validated file tree for the publish job
         if: steps.check.outputs.eligible == 'true' && steps.gates.outcome == 'success'
-        uses: actions/upload-artifact@v7 # matches this repo's existing convention (mutation.yml) — not SHA-pinned like checkout/setup-node above because no verified SHA for this action was available in this session; worth tightening later.
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: validated-pr-${{ matrix.pr }}
           path: pr-workspace
@@ -354,14 +354,15 @@ jobs:
       - name: Download the validated file tree (if validate produced one)
         id: download
         continue-on-error: true
-        uses: actions/download-artifact@v7 # see the upload step's note on why this isn't SHA-pinned
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           name: validated-pr-${{ matrix.pr }}
           path: validated
 
       - name: Nothing to publish — clean no-op
         if: steps.download.outcome != 'success'
-        run: echo "[codex-watcher] PR #$PR — no validated artifact (not eligible, no changes, or a gate failed upstream)."
+        run: |
+          echo "[codex-watcher] PR #$PR — no validated artifact (not eligible, no changes, or a gate failed upstream)."
 
       - name: Read the validated tree's metadata
         if: steps.download.outcome == 'success'

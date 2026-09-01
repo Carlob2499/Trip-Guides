@@ -416,6 +416,28 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // element — the featured guide now renders once, as the hero grid cell, so no tag
     // floats over a photo. The zero-tolerance novelty gate below still catches any new one.
   },
+  progress: {
+    /* Release-readiness audit (2026-08-28): /progress uses a fixed decorative contour SVG
+       behind z-index:1 content, the same axe paint-order limitation already documented for
+       /new and the hub. Measured instead of guessed: the contour stroke is 14% --muted over
+       --bg, yielding #ccd0c4 light / #222728 dark. The weakest real text pair is --muted on
+       that stroke: 6.41:1 light / 5.76:1 dark, both above 4.5:1. The route-map SVG labels are
+       also reported as imgNode because the surrounding SVG is itself the image node. The
+       opaque .pg-card ground means the stat label's bgOverlap is not a real overlap; the fixed
+       contour sits behind the card. Counts are the exact first-audit maxima and may only fall. */
+    "color-contrast/imgNode": {
+      max: 10,
+      why: "Decorative contour/route SVG makes axe decline paint-order contrast; measured weakest real pair is 5.76:1 dark / 6.41:1 light.",
+    },
+    "color-contrast/elmPartiallyObscuring": {
+      max: 2,
+      why: "Fixed .pg-contours is behind z-index:1 content; axe stacking reconstruction treats it as obscuring text, but measured composite clears 4.5:1.",
+    },
+    "color-contrast/bgOverlap": {
+      max: 1,
+      why: "The flagged progress stat label paints on opaque .pg-card; the contour SVG is behind the card, not its text backdrop.",
+    },
+  },
   "new intake": {
     // R4: /new sits on the fixed survey-contour ground (.itk-contours, an inline SVG behind
     // z-index:1 content). Axe declines to rate any text with an image node in its background
@@ -636,6 +658,7 @@ for (const [name, path] of [
   ["hub", "/Trip-Guides/"],
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["new intake", "/Trip-Guides/new/"], // R4: THE form page — the zoom-trap test's whole reason
+  ["progress", "/Trip-Guides/progress/"], // release-readiness: slug/owner-key text inputs are traveler-facing too
 ] as const) {
   test(`form controls are >=16px so iOS never zoom-traps — ${name}`, async ({ page }) => {
     await prep(page, path, "light", VIEWPORTS[1]);
@@ -680,6 +703,7 @@ for (const [name, path] of [
   ["korea guide", "/Trip-Guides/guides/korea/"],
   ["denmark guide", "/Trip-Guides/guides/denmark/"],
   ["new intake", "/Trip-Guides/new/"], // R4: the composed intake — gated from birth
+  ["progress", "/Trip-Guides/progress/"], // release-readiness: the run cockpit is a first-class traveler surface
   /* ⌁ `["trip tools", "/Trip-Guides/tools/korea/"]` was here and is REMOVED, not relocated.
      R5 deleted that route and this entry kept pointing at it — so for four combos the gate
      was scanning Astro's own 404 page, finding nothing, and reporting a pass under the name
@@ -1027,6 +1051,7 @@ const TARGET_PAGES = [
      different tab count) renders controls korea simply does not have. One upcoming-trip guide
      in this list closes it again; add the rebuilt japan here when it ships. */
   ["hub", "/Trip-Guides/"],
+  ["progress", "/Trip-Guides/progress/"],
 ] as const;
 
 for (const [pageName, path] of TARGET_PAGES) {

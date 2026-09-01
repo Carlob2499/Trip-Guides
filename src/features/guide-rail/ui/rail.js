@@ -13,9 +13,19 @@
 
 import { progressGeometry } from "../model/stations.js";
 
+/**
+ * Return the visible primary traveler stops when the new hierarchy is present. Until GuideLayout
+ * switches, fall back to the legacy .grail-stop set so this migration seam is behavior-neutral on
+ * current main. Once data-primary lands, secondary routes stop participating in rail geometry.
+ */
+function primaryStops(track) {
+  const marked = Array.prototype.slice.call(track.querySelectorAll('.gtab[data-primary="true"]:not([hidden])'));
+  return marked.length ? marked : Array.prototype.slice.call(track.querySelectorAll(".grail-stop"));
+}
+
 /** Read the station count off the rail itself, so nothing restates it. */
 function stationCount(track) {
-  return track.querySelectorAll(".grail-stop").length;
+  return primaryStops(track).length;
 }
 
 /**
@@ -29,12 +39,17 @@ function stationCount(track) {
 function paintProgress(rail, track) {
   const fill = rail.querySelector(".grail-fill");
   if (!fill) return;
-  const stops = Array.prototype.slice.call(track.querySelectorAll(".grail-stop"));
+  const stops = primaryStops(track);
   const index = stops.findIndex((s) => s.classList.contains("gtab-active"));
-  // No active stop is a real state during boot, before the router has run. Leave the fill
-  // exactly where it is rather than snapping it to zero, which would read as "back to the
-  // start" for one frame on every load.
-  if (index < 0) return;
+  // During the legacy phase, no active stop is a real boot state and the existing fill should
+  // stay put. With primary markers present, an absent primary active stop means a secondary
+  // route is open; secondary routes are deliberately not positions on the traveler rail.
+  if (index < 0) {
+    if (!track.querySelector('.gtab[data-primary="true"]')) return;
+    fill.style.left = "0%";
+    fill.style.width = "0%";
+    return;
+  }
   const geom = progressGeometry(index, stationCount(track));
   fill.style.left = geom.left + "%";
   fill.style.width = geom.width + "%";
@@ -48,7 +63,10 @@ function paintProgress(rail, track) {
  * away. Setting scrollLeft on the one element that should move cannot do that.
  */
 function centreActive(track) {
-  const active = track.querySelector(".gtab-active");
+  const markedPrimary = track.querySelector('.gtab[data-primary="true"]');
+  const active = markedPrimary
+    ? track.querySelector('.gtab-active[data-primary="true"]:not([hidden])')
+    : track.querySelector(".gtab-active");
   if (!active || track.scrollWidth <= track.clientWidth) return;
   const target = active.offsetLeft - (track.clientWidth - active.offsetWidth) / 2;
   const max = track.scrollWidth - track.clientWidth;
@@ -77,9 +95,10 @@ export function initGuideRail(root) {
 
   /* React to the router rather than to clicks. A MutationObserver on the class attribute fires
      for every route into a station — thumb slot, swipe, sheet, hash — where a click listener
-     would only catch the ones that came through this rail. */
+     would only catch the ones that came through this rail. Observe only primary stops once the
+     traveler-first markers exist; before that, preserve the legacy rail exactly. */
   const observer = new MutationObserver(sync);
-  track.querySelectorAll(".grail-stop").forEach((stop) => {
+  primaryStops(track).forEach((stop) => {
     observer.observe(stop, { attributes: true, attributeFilter: ["class"] });
   });
 

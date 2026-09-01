@@ -46,11 +46,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isValidSlug } from "./lib/slug.mjs";
 import { isMain } from "./audit/lib.mjs";
-import { ContractError } from "./pipeline/v2/contracts.mjs";
+import { ContractError, GUIDE_FILE } from "./pipeline/v2/contracts.mjs";
 import {
   initRunV2, readRunStateV2, nextStageV2, stageStart, stageComplete, stageFail,
   bumpRunAttempt, recordAutoRetry, recordTelemetry, markLandingGate, V2_RESEARCH_STAGES,
-  stageAttemptStats, landingMode, deriveLandIntent, reopenForAnswers,
+  stageAttemptStats, landingMode, deriveLandIntent, reopenForAnswers, routeToEvidenceOwner,
+  isCriticReplay,
 } from "./pipeline/v2/run-state.mjs";
 import { finalizeLandingRecovery } from "./pipeline/v2/landing-truth.mjs";
 import {
@@ -60,7 +61,7 @@ import {
 import { recordStageFeedback, retireFeedback, activeFeedback, renderFeedbackBlock, extractGateFindings } from "./pipeline/v2/feedback.mjs";
 import { generateContractCapsule } from "./pipeline/v2/contract-capsule.mjs";
 import { emitRunEvents, readGeocodeReport } from "./pipeline/v2/events.mjs";
-import { readEvidence, requireEvidence, evidenceProblems, reconcileCriticFactCorrections } from "./pipeline/v2/evidence.mjs";
+import { readEvidence, requireEvidence, evidenceProblems, reconcileCriticCorrections } from "./pipeline/v2/evidence.mjs";
 import { researchRuleProblems, isProxyHost } from "./pipeline/v2/research-rules.mjs";
 import { requireCoverage, coverageProblems, loadCoverageContext, remapCoverageRefs } from "./pipeline/v2/coverage.mjs";
 import {
@@ -141,6 +142,37 @@ function commitAndPush(paths, message, { branch = null, cwd = ROOT } = {}) {
   return git(["rev-parse", "HEAD"], { cwd }).trim();
 }
 
+/** The guide directory as of a commit, parsed. Null when the tree cannot be read WHOLE — a
+    half-read baseline is not a baseline. */
+export function guideDocsAt(sha, slug, { cwd = ROOT } = {}) {
+  const root = `src/content/guides/${slug}`;
+  const docs = new Map();
+  try {
+    for (const file of git(["ls-tree", "--name-only", sha, `${root}/`], { cwd }).split("\n").filter(Boolean)) {
+      const name = file.slice(root.length + 1);
+      if (GUIDE_FILE.test(name)) docs.set(name, JSON.parse(git(["show", `${sha}:${file}`], { cwd })));
+    }
+  } catch { return null; }
+  return docs.size ? docs : null;
+}
+
+/** The critic-truth gate's PRE-CRITIC baseline, as a hard requirement — there is NO fallback.
+    A failed critic pass deliberately retains its rejected guide edits in the working tree, so
+    falling back there compares those edits against themselves: no diff, and a missing handoff
+    passes as "unchanged". `reconcile` is the stage before `critic` and `begin-stage` only touches
+    run.v2.json, so its commit IS the tree the critic was handed; absent or unreadable, refuse. */
+export function requireCriticBaseline(state, slug, { cwd = ROOT } = {}) {
+  const sha = state?.stages?.critic?.baseline;
+  const refuse = (why) => { throw new ContractError(
+    `critic truth needs ${slug}'s pre-critic guide baseline and ${why}. The working tree is NOT a fallback: it ` +
+      `holds the retained critic edits, and comparing them against themselves would pass an undeclared correction.`); };
+  if (state?.stages?.reconcile?.status !== "complete") refuse("`reconcile` is not recorded complete");
+  if (!sha) refuse("the critic stage recorded no baseline when it began");
+  const docs = guideDocsAt(sha, slug, { cwd });
+  if (!docs) refuse(`the tree at ${sha} is missing, incomplete or not valid JSON`);
+  return docs;
+}
+
 export function allowedStagePaths(slug, stage) {
   const guide = `src/content/guides/${slug}`;
   const intake = `guides-intake/${slug}`;
@@ -175,6 +207,26 @@ export function stageScopeProblems(slug, stage, paths) {
   const allowed = allowedStagePaths(slug, stage);
   return paths.filter((file) => !allowed.some((root) => file === root || file.startsWith(root + "/")))
     .map((file) => `stage ${stage} touched forbidden path ${file}`);
+}
+
+/** Commit and PUSH a failed stage's IN-SCOPE work so the next attempt starts from it. Both
+    failure paths need this and both must be durable across the workflow boundary: the retry runs
+    in a FRESH checkout, so anything left uncommitted here is simply gone. Scope is the stage's
+    own allowedStagePaths — violations are never committed and every downstream gate still fails
+    closed on this content. */
+function retainStageWork(slug, stage, message, { branch = null } = {}) {
+  const allowed = allowedStagePaths(slug, stage);
+  const inScope = dirtyPaths().filter((f) => allowed.some((root) => f === root || f.startsWith(root + "/")));
+  // The COMMIT pathspec must be commitable too, not the raw allowed list: an allowed path that
+  // does not exist in this run (no coverage artifact yet, no patterns doc) makes `commit --only`
+  // abort on the pathspec — silently retaining nothing, which is the scar itself.
+  const paths = commitablePaths(allowed);
+  if (!inScope.length || !paths.length) return [];
+  git(["add", "-A", "--", ...paths]);
+  try { git(["commit", "--only", "-m", `research-v2(${slug}): ${message}`, "--", ...paths]); }
+  catch { return []; } // nothing staged in scope
+  if (branch) git(["push", "origin", `HEAD:${branch}`]);
+  return inScope;
 }
 
 /** A failed offline gate, recorded as BOTH durable stage feedback and an honest failed stage,
@@ -321,6 +373,15 @@ export async function validateStageOutput(slug, stage, { intakeDir = INTAKE_DIR,
 
 // ── subcommands ──────────────────────────────────────────────────────────────
 
+/** The exit-3 route leaves the run mid-repair: reconcile owns the failure, the critic is queued
+    with its work retained. The job is STILL in failure() there, so its generic tail runs — and
+    must not relabel an outcome that is already handled. */
+async function standDownForReplay(slug, stage) {
+  if (stage !== "critic" || !isCriticReplay(await readRunStateV2(slug))) return false;
+  console.log(`[pipeline-v2] ${slug} — critic truth was ROUTED to the evidence owner; leaving the critic queued for replay and the routed failure intact.`);
+  return true;
+}
+
 async function run(cmd, get, has) {
   const slug = get("--slug");
   if (!slug || !isValidSlug(slug)) {
@@ -414,9 +475,18 @@ async function run(cmd, get, has) {
 
     case "begin-stage": {
       const stage = get("--stage");
-      await stageStart(slug, stage, { model: get("--model"), effort: get("--effort") });
+      // The tree this stage is HANDED, pinned before the agent runs. For the critic that is the
+      // pre-critic guide the truth gate diffs against, and it survives an evidence-repair
+      // re-open — retained critic edits never become their own baseline.
+      // Does this dispatch run the model, or deterministically revalidate retained work? The job
+      // gates its whole model-input block on this one output, so the decision has a single source.
+      const replay = stage === "critic" && isCriticReplay(await readRunStateV2(slug));
+      await stageStart(slug, stage, { model: get("--model"), effort: get("--effort"), baseline: git(["rev-parse", "HEAD"]).trim() });
+      emit("replay", String(replay));
       commitAndPush([`guides-intake/${slug}/run.v2.json`], `research-v2(${slug}): ${stage} started`, { branch });
-      console.log(`[pipeline-v2] ${slug} — stage "${stage}" started (checkpointed before the agent).`);
+      console.log(replay
+        ? `[pipeline-v2] ${slug} — stage "${stage}" REPLAY: revalidating the retained pass against its pinned baseline; the model is not invoked.`
+        : `[pipeline-v2] ${slug} — stage "${stage}" started (checkpointed before the agent).`);
       return 0;
     }
 
@@ -457,14 +527,15 @@ async function run(cmd, get, has) {
         return 1;
       }
       // Commit the stage's work (the WORKFLOW commits, never the agent), then checkpoint.
-      let workCommit = null;
       if (dirty) {
         const paths = commitablePaths(allowedStagePaths(slug, stage));
         git(["add", "-A", "--", ...paths]);
         git(["commit", "--only", "-m", `research-v2(${slug}): ${stage}`, "--", ...paths]);
         if (branch) git(["push", "origin", `HEAD:${branch}`]);
-        workCommit = git(["rev-parse", "HEAD"]).trim();
       }
+      // HEAD either way: a stage that changed nothing still hands the next stage a tree, and
+      // recording null let a no-op completion keep a stale SHA downstream baselines trusted.
+      const workCommit = git(["rev-parse", "HEAD"]).trim();
       const state = await stageComplete(slug, stage, { commit: workCommit });
       // 1B: this stage's active feedback is resolved — retire it, keep the audit history.
       await retireFeedback(slug, { stage });
@@ -493,6 +564,7 @@ async function run(cmd, get, has) {
 
     case "fail-stage": {
       const stage = get("--stage");
+      if (await standDownForReplay(slug, stage)) return 0;
       await stageFail(slug, stage, { failureClass: get("--class") || "unknown", detail: get("--detail") || "" });
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
       commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED`, { branch });
@@ -594,7 +666,12 @@ async function run(cmd, get, has) {
       let state;
       try {
         state = await readRunStateV2(slug);
-        const failedStage = get("--stage") || state?.resume?.nextStage || null;
+        // The job passes its OWN stage name, but a routed incident moves ownership: the critic is
+        // re-queued and reconcile carries the failure. Honour the named stage only while it is the
+        // one actually recorded failed; otherwise the durable resume point decides. One
+        // state-driven call, no parallel retry path.
+        const named = get("--stage");
+        const failedStage = (named && state?.stages?.[named]?.status === "failed" ? named : state?.resume?.nextStage) || named || null;
         const findings = state && failedStage
           ? await activeFeedback(slug, { runId: state.runId, stage: failedStage })
           : [];
@@ -636,11 +713,11 @@ async function run(cmd, get, has) {
         console.error(`[pipeline-v2] ${slug} — safe recovery: ${decision.recovery}`);
         return 0; // the workflow escalates on allowed != 'true'; refusing is not a crash
       }
-      const { allowed, autoRetries, cap, budget } = await recordAutoRetry(slug);
+      const { allowed, autoRetries, cap } = await recordAutoRetry(slug);
       commitAndPush([`guides-intake/${slug}/run.v2.json`], `chore(pipeline-v2): ${slug} auto-retry ${autoRetries}`, { branch });
       emit("allowed", String(allowed));
       emit("run_id", state.runId);
-      console.log(`[pipeline-v2] ${slug} — ${budget} retry ${autoRetries} of ${cap}: ${allowed ? "ALLOWED" : "REFUSED (bounded)"} (${decision.reason})`);
+      console.log(`[pipeline-v2] ${slug} — automatic repair retry ${autoRetries} of ${cap}: ${allowed ? "ALLOWED" : "REFUSED (bounded)"} (${decision.reason})`);
       return 0;
     }
 
@@ -652,6 +729,7 @@ async function run(cmd, get, has) {
       if (!V2_RESEARCH_STAGES.includes(stage)) {
         console.error(`[pipeline-v2] record-agent-failure needs --stage <${V2_RESEARCH_STAGES.join("|")}>`); return 1;
       }
+      if (await standDownForReplay(slug, stage)) return 0;
       const logFile = get("--agent-log");
       const agentOutput = logFile && existsSync(logFile) ? readFileSync(logFile, "utf8") : "";
       const { class: failureClass, detail } = classifyAgentFailure({
@@ -774,8 +852,32 @@ async function run(cmd, get, has) {
       const from = get("--from");
       if (!from) { console.error("[pipeline-v2] reconcile-critic-truth needs --from <critic workspace>"); return 1; }
       const state = await readRunStateV2(slug);
-      const result = await reconcileCriticFactCorrections(slug, { fromDir: path.resolve(from), runId: state.runId });
-      console.log(`[pipeline-v2] ${slug} — critic fact truth ${result.changed ? `reconciled (${result.factIds.join(", ")})` : "unchanged"}.`);
+      const baselineDocs = requireCriticBaseline(state, slug);
+      // Declarations from the stage's earlier RETAINED attempts (committed between the pinned
+      // baseline and HEAD). A later attempt that rewrote the handoff must not lose them — see the
+      // yamagata-scar merge in reconcileCriticCorrections. Newest-first, so the most recent
+      // retained row wins where retained docs disagree; the current attempt always wins over all.
+      const correctionsRel = `guides-intake/${slug}/critic-corrections.v2.json`;
+      const retainedRows = [];
+      if (state.stages?.critic?.baseline) {
+        for (const sha of git(["log", "--format=%H", `${state.stages.critic.baseline}..HEAD`, "--", correctionsRel]).split("\n").filter(Boolean)) {
+          try { retainedRows.push(...(JSON.parse(git(["show", `${sha}:${correctionsRel}`])).corrections || [])); }
+          catch { /* an attempt with no or unparsable doc retains nothing */ }
+        }
+      }
+      let result;
+      try {
+        result = await reconcileCriticCorrections(slug, { fromDir: path.resolve(from), runId: state.runId, baselineDocs, retainedRows });
+      } catch (err) {
+        // EXIT 3 is the routed class: the corrections ARE in evidence, but a supersession only the
+        // evidence owner can decide is outstanding. The workflow sends this to `needs-reconcile`
+        // instead of auto-retrying the blind critic with an instruction it cannot follow.
+        if (!err.needsEvidenceReconciliation) throw err;
+        console.error(err.message);
+        return 3;
+      }
+      console.log(`[pipeline-v2] ${slug} — critic guide truth ${result.changed ? `reconciled (${result.targets.join(", ")})` : "unchanged"}` +
+        ` against pre-critic baseline ${state.stages.critic.baseline.slice(0, 7)}.`);
       return 0;
     }
 
@@ -795,18 +897,36 @@ async function run(cmd, get, has) {
         console.error("[pipeline-v2] verify-failed needs --stage <stage> --file <gate output>"); return 1;
       }
       const gateOutput = readFileSync(file, "utf8");
-      const changed = dirtyPaths();
-      const allowed = allowedStagePaths(slug, stage);
-      if (changed.some((f) => allowed.some((root) => f === root || f.startsWith(root + "/")))) {
-        git(["add", "-A", "--", ...commitablePaths(allowed)]);
-        try { git(["commit", "--only", "-m", `research-v2(${slug}): ${stage} attempt output (verify FAILED — retained for repair)`, "--", ...allowed]); }
-        catch { /* nothing staged in scope */ }
-        if (branch) git(["push", "origin", `HEAD:${branch}`]);
-      }
+      retainStageWork(slug, stage, `${stage} attempt output (verify FAILED — retained for repair)`, { branch });
       const retryFindings = await recordGateFailure(slug, stage, gateOutput);
       await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
       commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): ${stage} FAILED (offline verify)`, { branch });
       console.error(`[pipeline-v2] ${slug} — ${stage} failed offline verify; ${retryFindings.length} finding(s) recorded for the retry; work retained.`);
+      return 0;
+    }
+
+    case "needs-reconcile": {
+      // The routed critic-truth failure (exit 3). The critic's work is already retained by the
+      // workflow; this records the gate's findings as durable feedback for the stage that can act
+      // on them and moves the resume point there. The critic is NOT failed — it is re-queued with
+      // its baseline, so the repaired run revalidates the same output against the same tree.
+      const file = get("--file");
+      if (!file || !existsSync(file)) { console.error("[pipeline-v2] needs-reconcile needs --file <gate output>"); return 1; }
+      const gateOutput = readFileSync(file, "utf8");
+      // DURABILITY FIRST. The routed repair runs in a fresh checkout, so the critic's retained
+      // guide/handoff/ledger AND the trusted critic-origin evidence records the gate just wrote
+      // must be committed and pushed here — otherwise reconcile is asked to relate records that
+      // no longer exist on the branch. Same scope as any critic retention.
+      const retained = retainStageWork(slug, "critic", "critic output + correction evidence (routed to reconcile — retained)", { branch });
+      const state = await readRunStateV2(slug);
+      const findings = extractGateFindings(gateOutput);
+      await recordStageFeedback(slug, {
+        runId: state.runId, stage: "reconcile", attempt: state.stages?.reconcile?.attempts || 0, findings,
+      });
+      await routeToEvidenceOwner(slug, { detail: `critic corrections need an evidence supersession relation: ${findings.length} finding(s)` });
+      await emitRunEvents(slug, { state: await readRunStateV2(slug), evidence: await readEvidence(slug).catch(() => null), geocode: await readGeocodeReport(slug) });
+      commitAndPush([`guides-intake/${slug}/run.v2.json`, `guides-intake/${slug}/feedback.v2.json`, `guides-intake/${slug}/events.json`], `research-v2(${slug}): critic truth routed to reconcile (evidence relation owed)`, { branch });
+      console.error(`[pipeline-v2] ${slug} — critic truth needs an evidence relation the critic cannot write; routed to reconcile with ${findings.length} finding(s); ${retained.length} retained path(s) pushed.`);
       return 0;
     }
 

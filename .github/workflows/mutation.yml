@@ -4,10 +4,10 @@ name: Mutation testing
 # A green suite proves the tests RAN; this proves they would CATCH something — the difference
 # between a test that guards behaviour and one that merely asserts a shape.
 #
-# WEEKLY, not per-push, and NON-BLOCKING on purpose. It takes ~3 minutes locally over 6000
-# mutants and the number is meant to be read, not enforced: a mutation score is a map of the thin
-# ice, not a grade, and gating on it would push people to write tests that satisfy the metric.
-# The output is docs/generated/where-the-tests-are-blind.md, which is the thing worth reading.
+# NON-BLOCKING on purpose. It takes ~3 minutes locally over 6000 mutants and the number is meant
+# to be read, not enforced: a mutation score is a map of the thin ice, not a grade, and gating on
+# it would push people to write tests that satisfy the metric. The generated summary is uploaded
+# with the raw mutation report; this diagnostic workflow never writes directly to `main`.
 #
 # Scope is stryker.config.json: the pure model logic (src/features/*/model, src/lib) where a
 # silently wrong answer is possible and expensive. UI and build scripts are excluded — their real
@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: mutation-${{ github.ref }}
@@ -29,8 +29,8 @@ jobs:
   mutate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
@@ -40,20 +40,11 @@ jobs:
       # as a POSITIONAL argument — there is no --config flag, and passing one exits 1 in a second.
       - run: npx stryker run stryker.config.json
       - run: node scripts/mutation-report.mjs
-      - name: Commit the report if it moved
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/generated/where-the-tests-are-blind.md
-          git diff --staged --quiet && exit 0
-          git commit -m "chore(tests): refresh the mutation-testing report"
-          # A weekly job can land on a main that moved since checkout; rebase rather than fail
-          # the run over a docs commit.
-          git pull --rebase origin main
-          git push origin HEAD:main
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: always()
         with:
           name: mutation-report
-          path: reports/mutation/
+          path: |
+            reports/mutation/
+            docs/generated/where-the-tests-are-blind.md
           retention-days: 14

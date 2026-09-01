@@ -93,7 +93,7 @@ const contours = [
               server-rendered default is the empty one, which is the honest first paint: a
               bookmarked link has told us nothing yet, and "Building …" would claim otherwise. */}
           <h1 class="pg-title">
-            <span class="pg-title-empty">Nothing running.</span>
+            <span class="pg-title-empty">No guide is being built.</span>
             <span class="pg-title-run">Building <span class="pg-slug" id="pgSlug">your guide</span></span>
           </h1>
           <p class="pg-line" id="pgLine">No research run is attached to this page yet.</p>
@@ -114,7 +114,7 @@ const contours = [
           <div class="pg-col">
             {/* ── The route ───────────────────────────────────────────────────────────── */}
             <section class="pg-card pg-route-card" aria-labelledby="pgRouteHead">
-              <h2 class="pg-card-head" id="pgRouteHead">The route</h2>
+              <h2 class="pg-card-head" id="pgRouteHead">Guide build</h2>
               <svg
                 class="pg-route"
                 id="pgRoute"
@@ -161,16 +161,25 @@ const contours = [
               <ol class="pg-sr" id="pgSteps"></ol>
             </section>
 
+            {/* The pipeline's diagnostic detail stays available without competing with the
+                traveler-facing answer above: what is happening, whether action is needed, and
+                whether the guide is ready. No second status model is introduced here. */}
+            <details class="pg-diagnostics">
+              <summary>
+                <span>Research details</span>
+                <span class="pg-diagnostics-note">stages, sources and decisions</span>
+              </summary>
+              <div class="pg-diagnostics-body">
             {/* ── Phases ──────────────────────────────────────────────────────────────── */}
             <section class="pg-card" aria-labelledby="pgPhasesHead">
-              <h2 class="pg-card-head" id="pgPhasesHead">Phases</h2>
+              <h2 class="pg-card-head" id="pgPhasesHead">Internal stages</h2>
               <div class="pg-phases" id="pgPhases"></div>
             </section>
 
             {/* ── What it is reading ──────────────────────────────────────────────────── */}
             <section class="pg-card" aria-labelledby="pgFetchHead">
               <h2 class="pg-card-head" id="pgFetchHead">
-                What it is reading
+                Sources being checked
                 <span class="pg-dot" id="pgFetchDot" hidden aria-hidden="true"></span>
               </h2>
               <ul class="pg-log pg-log--fetch" id="pgFetchList" aria-live="polite" aria-busy="false"></ul>
@@ -182,19 +191,21 @@ const contours = [
 
             {/* ── Calls it is making ──────────────────────────────────────────────────── */}
             <section class="pg-card" aria-labelledby="pgJudgeHead">
-              <h2 class="pg-card-head" id="pgJudgeHead">Calls it is making</h2>
+              <h2 class="pg-card-head" id="pgJudgeHead">Research decisions</h2>
               <ul class="pg-log pg-log--judge" id="pgJudgeList" aria-live="polite"></ul>
               <p class="pg-log-empty" id="pgJudgeEmpty">
                 Nothing reported yet. What the research keeps, what it throws out and why will
                 appear here as it decides — not summarised afterwards.
               </p>
             </section>
+              </div>
+            </details>
           </div>
 
           <div class="pg-col pg-col--side">
             {/* ── Worth knowing ───────────────────────────────────────────────────────── */}
             <section class="pg-card" aria-labelledby="pgNugHead">
-              <h2 class="pg-card-head" id="pgNugHead">Worth knowing</h2>
+              <h2 class="pg-card-head" id="pgNugHead">Useful findings</h2>
               <ul class="pg-nuggets" id="pgNugList" aria-live="polite"></ul>
               <p class="pg-log-empty" id="pgNugEmpty">
                 Nothing yet. When the research turns up something you'd want to know before you
@@ -211,10 +222,10 @@ const contours = [
 
             {/* ── Tell me when it's done ──────────────────────────────────────────────── */}
             <section class="pg-card pg-notify" id="pgNotify" aria-labelledby="pgNotifyHead">
-              <h2 class="pg-card-head" id="pgNotifyHead">No need to watch</h2>
+              <h2 class="pg-card-head" id="pgNotifyHead">You can leave this page</h2>
               <p class="pg-notify-copy">
-                Research takes 1–2 hours. Close the tab if you like — the address stays the same,
-                and this page picks up exactly where the run is whenever you come back.
+                Close the tab if you like — the address stays the same, and this page picks up
+                exactly where the run is whenever you come back.
               </p>
               <button type="button" class="pg-btn" id="pgNotifyBtn">Notify me when it's done</button>
               <p class="pg-notify-status" id="pgNotifyStatus" role="status" aria-live="polite"></p>

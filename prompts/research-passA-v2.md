@@ -11,6 +11,17 @@ output; a third agent reconciles both; a fourth judges the result.
 it, and records the stage — a stage whose owed artifact is missing is recorded as a void
 failure, so the artifact below is your deliverable, not a courtesy.
 
+## Validator feedback — read before anything else
+
+{{feedback}}
+
+If the block above begins with `REPAIR ATTEMPT`, this is a targeted repair pass, not a fresh
+research sweep. Fix every named finding first, preserve unaffected retained work, and do not
+restart broad candidate discovery. For source-access failures, fetch/read the true origin before
+using `access: "fetched"`; if it is blocked, record that honestly, seek another legitimate
+authority, and flag/omit any guide claim that still lacks fetched support. Never relabel a search
+preview merely to clear a gate.
+
 ## Read first
 
 The `waypoint-guide-author` skill is the single source of truth for how to research and what
@@ -70,9 +81,5 @@ The `waypoint-guide-author` skill is the single source of truth for how to resea
   verification); `blocked` for a refused/failed origin (record the block, seek a legitimate
   alternative). Mirror/proxy services are never the origin. The authoritative rule:
   `research-efficiency.md` "Fetch discipline".
-
-## Validator feedback from the previous attempt of THIS stage
-
-{{feedback}}
 
 {{contract}}

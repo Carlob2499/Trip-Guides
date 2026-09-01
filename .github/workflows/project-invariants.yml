@@ -1,44 +1,9 @@
 name: Project invariants
 
-# Lightweight guard for architecture/authority files that the full Tests workflow may
-# intentionally skip when a PR changes only Markdown. This uses only Node built-ins, so it
-# needs no npm install and stays cheap enough to run whenever a protected contract moves.
+# Manual lightweight architecture/authority diagnostic. Every pull request now runs these
+# invariants inside the always-reporting Required gate, so this workflow no longer emits a second
+# path-selected PR status that would be unsafe to require globally.
 on:
-  pull_request:
-    paths:
-      - AGENTS.md
-      - CLAUDE.md
-      - README.md
-      - PRODUCT.md
-      - package.json
-      - docs/README.md
-      - docs/handoff.md
-      - docs/reference/**
-      - docs/pipeline v2/DECISIONS.md
-      - docs/pipeline v2/IMPLEMENTATION_STATE.md
-      - docs/pipeline v2/SEPTEMBER_TRACKER.md
-      - scripts/check-project-invariants.mjs
-      - .github/workflows/project-invariants.yml
-      - .github/workflows/new-guide.yml
-      - .github/workflows/research-pass.yml
-      - .github/workflows/research-pass-v2.yml
-      - scripts/pipeline.mjs
-      - scripts/pipeline-v2.mjs
-      - src/features/trip-split/**
-      - src/features/itinerary/**
-      - src/features/maps/**
-      - src/features/sos/**
-      - public/sw.js
-      - docs/design-handoff/**
-      - src/content/guides/uruguay/_guide.json
-      # Active reciprocal-review control-plane paths stay in the trigger list intentionally.
-      # Any change to them must re-run the invariants that protect the revision-4 trust boundary.
-      - .github/workflows/claude-codex-watcher.yml
-      - .github/workflows/claude-codex-signal.yml
-      - scripts/codex-watcher.mjs
-      - scripts/__tests__/codex-watcher.test.mjs
-      - scripts/__tests__/codex-watcher-workflow.test.mjs
-      - prompts/codex-work-order.md
   workflow_dispatch:
 
 permissions:

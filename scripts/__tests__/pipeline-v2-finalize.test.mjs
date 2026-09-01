@@ -16,7 +16,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
-  EVIDENCE_SCHEMA, COVERAGE_SCHEMA, FEEDBACK_SCHEMA,
+  EVIDENCE_SCHEMA, COVERAGE_SCHEMA, FEEDBACK_SCHEMA, CRITIC_CORRECTIONS_SCHEMA,
   evidenceDocSchema, coverageDocSchema,
   CANDIDATE_STATUSES, SOURCE_KINDS, DISPOSITIONS, SOURCE_ACCESS,
 } from "../pipeline/v2/contracts.mjs";
@@ -30,9 +30,10 @@ import {
   initRunV2, stageStart, stageComplete, stageFail, readRunStateV2, stageAttemptStats,
 } from "../pipeline/v2/run-state.mjs";
 import { stageFacts, mergeTelemetry, emptyTelemetry } from "../pipeline/v2/telemetry.mjs";
-import { sourceAccessProblems, PROXY_HOSTS, isProxyHost, OBJECTIVE_RECHECK_MAX_DAYS } from "../pipeline/v2/research-rules.mjs";
+import { sourceAccessProblems, blockedCurrentEvidenceProblems, PROXY_HOSTS, isProxyHost, OBJECTIVE_RECHECK_MAX_DAYS } from "../pipeline/v2/research-rules.mjs";
 import { forbiddenForPassB, forbiddenForCritic } from "../pipeline/v2/workspace.mjs";
 import { writeReport } from "../geocode-venues.mjs";
+import { allowedStagePaths } from "../pipeline-v2.mjs";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const WORKFLOW = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
@@ -84,6 +85,37 @@ describe("1A — generated machine contract cannot drift from the validators", (
     const cap = await generateContractCapsule("passB", { slug: "korea", runId: "r" });
     expect(cap).toContain("c-example-venue--riverside-branch");
     expect(cap).toContain("c-cafe-akersberga");
+  });
+
+  it("the critic capsule reconciles the frozen prompt's scope line with the enforced machine scope", async () => {
+    // #105 left the critic two contradictory instructions: the prompt's "touch nothing outside"
+    // list, and a capsule telling it to write a file outside that list. The prompt is the frozen
+    // validation candidate; the amendment belongs where machine scope is actually owned.
+    const cap = await generateContractCapsule("critic", { slug: "korea", runId: "r" });
+    expect(cap).toContain("SCOPE AMENDMENT");
+    expect(cap).toContain("guides-intake/korea/critic-corrections.v2.json");
+    expect(allowedStagePaths("korea", "critic")).toContain("guides-intake/korea/critic-corrections.v2.json");
+    const prompt = readFileSync(path.join(ROOT, "prompts", "research-critic-v2.md"), "utf8");
+    expect(prompt).toContain("Touch nothing outside");
+    expect(prompt).not.toContain("critic-corrections"); // the frozen candidate stays untouched
+  });
+
+  it("the critic capsule demands an account of EVERY changed guide value, with no editorial escape", async () => {
+    const cap = await generateContractCapsule("critic", { slug: "korea", runId: "r" });
+    expect(cap).toContain(CRITIC_CORRECTIONS_SCHEMA);
+    expect(cap).toContain("`facts.json` is not special");
+    expect(cap).toContain("there is no editorial-only declaration");
+    expect(cap).toContain("FAILS THE STAGE");
+  });
+
+  it("the reconcile capsule states the corroborates/supersedes relations as typed DATA", async () => {
+    const cap = await generateContractCapsule("reconcile", { slug: "korea", runId: "r" });
+    expect(cap).toContain("`corroborates`");
+    expect(cap).toContain("`supersedes`");
+    expect(cap).toContain("`{ kind, evidenceIds }`");
+    expect(cap).toContain("Pass A and Pass B converging is NOT itself independent");
+    // The kind that replaces a conclusion which was never an evidence record — so no id is invented.
+    expect(cap).toContain("never an evidence record");
   });
 
   it("the reconcile capsule derives the guide's REAL group files and legacy ask ids", async () => {
@@ -288,9 +320,64 @@ describe("P2 — fetched vs discovered vs blocked; a mirror is never the origin"
     expect(problems.some((p) => p.includes("not a read of it"))).toBe(true);
   });
 
-  it("official citation fetched or honestly blocked passes this rule", () => {
+  it("source-access bookkeeping accepts an honestly recorded block, but current-truth validation does not", () => {
+    const blocked = base({ evidence: [rec({}, { access: "blocked" })] });
     expect(sourceAccessProblems(base({ evidence: [rec()] }))).toEqual([]);
-    expect(sourceAccessProblems(base({ evidence: [rec({}, { access: "blocked" })] }))).toEqual([]);
+    expect(sourceAccessProblems(blocked)).toEqual([]);
+    expect(blockedCurrentEvidenceProblems(blocked).join("\n")).toMatch(/blocked access is audit bookkeeping, not proof/);
+  });
+
+  it("a blocked record is valid only after explicit rejection or supersession", () => {
+    const blocked = rec({}, { access: "blocked" });
+
+    const rejected = base({
+      evidence: [blocked],
+      reconciliation: [{
+        findingId: blocked.id,
+        disposition: "reject",
+        note: "Origin could not be read; do not use this claim.",
+        corroborates: { kind: "none", evidenceIds: [] },
+        supersedes: { kind: "none", evidenceIds: [] },
+      }],
+    });
+    expect(blockedCurrentEvidenceProblems(rejected)).toEqual([]);
+
+    const replacement = rec({
+      id: "e-replacement",
+      claim: blocked.claim,
+      origin: "reconcile",
+    }, { access: "fetched" });
+    const superseded = base({
+      evidence: [blocked, replacement],
+      reconciliation: [{
+        findingId: replacement.id,
+        disposition: "replace",
+        note: "Fetched authority replaces the blocked record.",
+        corroborates: { kind: "none", evidenceIds: [] },
+        supersedes: { kind: "evidence", evidenceIds: [blocked.id] },
+      }],
+    });
+    expect(blockedCurrentEvidenceProblems(superseded)).toEqual([]);
+  });
+
+  it("does not let a non-qualifying replacement retire blocked evidence", () => {
+    const blocked = rec({}, { access: "blocked" });
+    const weakReplacement = rec({
+      id: "e-weak-replacement",
+      claim: blocked.claim,
+      origin: "reconcile",
+    }, { access: "search-preview" });
+    const doc = base({
+      evidence: [blocked, weakReplacement],
+      reconciliation: [{
+        findingId: weakReplacement.id,
+        disposition: "replace",
+        note: "Weak replacement must not retire the blocked record.",
+        corroborates: { kind: "none", evidenceIds: [] },
+        supersedes: { kind: "evidence", evidenceIds: [blocked.id] },
+      }],
+    });
+    expect(blockedCurrentEvidenceProblems(doc).join("\n")).toMatch(/blocked access is audit bookkeeping, not proof/);
   });
 
   it("an announced event date (appliesToYears) requires the announcement to have been READ", () => {

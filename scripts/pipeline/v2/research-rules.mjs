@@ -76,7 +76,8 @@ export function qualifyingEvidence(record) {
 export function sourceIndependenceKey(record) {
   if (!qualifyingEvidence(record)) return null;
   if (record.source?.family) return `family:${record.source.family.toLocaleLowerCase()}`;
-  try { return `origin:${new URL(record.source.url).hostname.toLocaleLowerCase()}`; }
+  if (record.source?.independent !== true) return null;
+  try { return `origin:${new URL(record.source.url).href.toLocaleLowerCase()}`; }
   catch { return null; }
 }
 
@@ -141,11 +142,42 @@ export function corroborationProblems(doc) {
   return problems;
 }
 
-/** Pass A + Pass B repeating the same value is not corroboration. When both origins carry the
-    same normalized claim, each must trace to fetched qualifying evidence and the combined source
-    basis must contain at least two real independent families/origins. */
+/** Pass A + Pass B convergence is never itself corroboration.
+
+    R-E scar (Tottori): the 600 m viewpoint distance carried `family: "misasa-town"` and
+    `family: "misasaonsen-official"` — two municipal surfaces of one body, `independent: null` on
+    both — and two passes converging on the same misattributed number counted as two independent
+    sources. So (1) a row declaring FACTUAL corroboration (2.3) is checked against the records it
+    NAMES, since the historical claims are worded differently and wording proves nothing: every
+    member must be qualifying fetched evidence, and a set spanning both passes needs ≥2 sources
+    whose independence is ESTABLISHED (`independent: true`, not a family label per hostname). A
+    `recommendation` kind asserts no factual support and may stay single-sourced (accepted
+    Uruguay's `agree` leads). (2) The older text-identical case still fails on its own. */
 export function independentAgreementProblems(doc) {
   const problems = [];
+  const established = (record) => record?.source?.independent === true ? sourceIndependenceKey(record) : null;
+  const byId = new Map((doc.evidence || []).map((record) => [record.id, record]));
+  for (const row of doc.reconciliation || []) {
+    if (row.corroborates?.kind !== "factual") continue;
+    const declared = row.corroborates.evidenceIds || [];
+    if (!declared.length) continue;
+    const finding = byId.get(row.findingId);
+    const named = declared.map((id) => byId.get(id)).filter(Boolean);
+    if (!finding || named.length !== declared.length) continue; // dispositionProblems owns dangling refs
+    const set = [finding, ...named];
+    if (!set.some((r) => r.origin === "passA") || !set.some((r) => r.origin === "passB")) continue;
+    const unqualified = set.filter((r) => !qualifyingEvidence(r));
+    const keys = new Set(set.map(established).filter(Boolean));
+    if (unqualified.length || keys.size < 2) {
+      problems.push(
+        `reconciliation claims "${row.findingId}" corroborates ${declared.join(", ")} on "${finding.claim.slice(0, 70)}" — ` +
+          `Pass A and Pass B converging is not itself independent corroboration: ` +
+          (unqualified.length
+            ? `${unqualified.map((r) => r.id).join(", ")} is not qualifying fetched evidence`
+            : `only ${keys.size} source basis has established independence (source.independent must be true on ≥2 distinct families/origins)`),
+      );
+    }
+  }
   const groups = new Map();
   for (const record of doc.evidence || []) {
     if (!["passA", "passB"].includes(record.origin)) continue;
@@ -413,6 +445,39 @@ export function sourceAccessProblems(doc) {
   return problems;
 }
 
+/** A blocked fetch is honest HISTORY, never current factual authority. Keep the record for the
+    audit trail, but retire it explicitly: either reject that evidence record or supersede it with
+    a qualifying fetched replacement. This prevents a model from clearing a search-preview finding
+    by merely relabeling the same unsupported record "blocked". */
+export function blockedCurrentEvidenceProblems(doc) {
+  const problems = [];
+  const reconciliation = doc.reconciliation || [];
+  const byId = new Map((doc.evidence || []).map((record) => [record.id, record]));
+  const rejected = new Set(
+    reconciliation
+      .filter((row) => row.disposition === "reject")
+      .map((row) => row.findingId),
+  );
+  const supersededByQualifyingReplacement = new Set();
+  for (const row of reconciliation) {
+    if (row.disposition !== "replace" || row.supersedes?.kind !== "evidence") continue;
+    const replacement = byId.get(row.findingId);
+    if (!qualifyingEvidence(replacement)) continue;
+    for (const retiredId of row.supersedes.evidenceIds || []) {
+      supersededByQualifyingReplacement.add(retiredId);
+    }
+  }
+
+  for (const e of doc.evidence || []) {
+    if (e.source?.access !== "blocked") continue;
+    if (rejected.has(e.id) || supersededByQualifyingReplacement.has(e.id)) continue;
+    problems.push(
+      `blocked evidence "${e.id}" remains current for "${e.claim.slice(0, 70)}" — blocked access is audit bookkeeping, not proof; fetch a qualifying replacement and supersede this record, or reject it explicitly`,
+    );
+  }
+  return problems;
+}
+
 /** Rule: high-risk transport owes the physical reality; routine transit stays simple. */
 export function transportProblems(doc) {
   const problems = [];
@@ -446,6 +511,7 @@ export function researchRuleProblems(doc) {
     ...objectiveFreshnessProblems(doc),
     ...reservationProblems(doc),
     ...sourceAccessProblems(doc),
+    ...blockedCurrentEvidenceProblems(doc),
     ...transportProblems(doc),
     ...depthScopeProblems(doc),
     ...passBSubstanceProblems(doc),

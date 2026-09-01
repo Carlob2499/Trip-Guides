@@ -81,3 +81,15 @@ jobs:
             --color FBCA04 \
             --description "The daily pre-trip tracking issue — guides entering their T-7 departure window with stale facts" \
             --force
+          gh label create stabilization \
+            --color 1D76DB \
+            --description "September feature-freeze exception: bounded stabilization work, not a new feature" \
+            --force
+          gh label create release-blocker \
+            --color B60205 \
+            --description "September code-freeze exception: correctness/security/data-integrity/release blocker" \
+            --force
+          gh label create freeze-waiver \
+            --color 5319E7 \
+            --description "Explicit owner waiver for an otherwise frozen September engineering change" \
+            --force

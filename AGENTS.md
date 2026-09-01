@@ -58,6 +58,16 @@ Ask only for genuine user/product forks. Do not ask for facts the repository can
 
 Research an unfamiliar failure class before changing architecture. Prefer a narrow reproducer or failing test first, then fix the owner, then simplify/delete the workaround that proof makes obsolete.
 
+### Release execution
+
+Current `main` contracts/tests and authority docs outrank PRs, issues, closed branches, and historical artifacts. History is evidence unless authority cites it.
+
+For September, `docs/pipeline v2/SEPTEMBER_TRACKER.md` is the queue. Re-audit after each safe task and continue the next unblocked deterministic milestone. No open PR is not a stop; stop only at a real owner, future, provider/model, or acceptance boundary.
+
+Before model acceptance, freeze the exact SHA; make deterministic/schema/provenance/retry-cap/build/a11y/security/exact-head CI green; audit control-plane drift; confirm no known deterministic blocker. Never use research/critic models to debug deterministic failure.
+
+Effort follows task: tooling first; low/medium for mechanical/docs; normal/high for implementation/debug; strongest only for irreducible architecture/security or pre-registered model/content acceptance. Failure never authorizes cap extension or green-chasing.
+
 ## Verification
 
 Use the smallest useful check during iteration, then the repository gates before merge:

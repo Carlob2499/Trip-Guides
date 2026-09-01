@@ -12,14 +12,14 @@
 //   · the adaptive-search stop record must EARN a stop: mostly duplicate/weaker novelty AND
 //     unresolved evidence answered "could not change the recommendation".
 
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, evidenceDocSchema, criticCorrectionDocSchema,
-  parseOrThrow, assertVersionCompatible, ContractError,
+  EVIDENCE_SCHEMA, CRITIC_CORRECTIONS_SCHEMA, GUIDE_FILE, evidenceDocSchema, criticCorrectionDocSchema,
+  parseOrThrow, assertVersionCompatible, parseSchemaVersion, supersededEvidenceIds, ContractError,
 } from "./contracts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -29,10 +29,12 @@ export function evidencePath(slug, intakeDir = INTAKE_DIR) {
   return path.join(intakeDir, slug, "evidence.v2.json");
 }
 
+/** One kebab rule for every derived id in this module (candidate ids, critic-record ids). */
+const kebab = (s) => String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
+  .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
 /** Stable, deterministic candidate id from identity — same candidate, same id, across runs. */
 export function candidateId(name, branch = null) {
-  const kebab = (s) => String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   const stablePart = (value) => {
     const ascii = kebab(value);
     if (ascii) return ascii;
@@ -130,31 +132,50 @@ export async function writeEvidence(slug, doc, { intakeDir = INTAKE_DIR } = {}) 
   return validated;
 }
 
-/** Reconcile a blind critic's facts.json edits into the existing evidence owner. The critic has
-    no evidence access; this trusted step proves every declared before/after value against the
-    two workspaces and refuses undeclared fact changes. */
-export async function reconcileCriticFactCorrections(slug, {
+/** Reconcile a blind critic's guide edits into the existing evidence owner.
+
+    R-A scar (Tottori, b153af3 → b7fadad): this step used to diff ONLY facts.json, while the
+    critic's authority covers every file in `src/content/guides/<slug>/`. That run rewrote six
+    ordinary guide files with substantive factual corrections, left facts.json byte-identical,
+    and the step reported "unchanged" — so evidence stayed stale while the guide moved.
+
+    The accounting is now exhaustive and structural: every changed LEAF is a declared correction,
+    proved at its exact location. There is deliberately no "editorial only" declaration — a
+    critic classifying its own rewrite as fact-free is an assertion, not proof, so that portion
+    fails closed. The critic still never reads evidence.v2.json. */
+export async function reconcileCriticCorrections(slug, {
   fromDir, intakeDir = INTAKE_DIR, guidesDir = path.join(ROOT, "src", "content", "guides"), runId,
+  baselineDocs = null, retainedRows = [],
 } = {}) {
-  const beforeFile = path.join(guidesDir, slug, "facts.json");
-  const afterFile = path.join(fromDir, "src", "content", "guides", slug, "facts.json");
-  const readJson = async (file) => existsSync(file) ? JSON.parse(await readFile(file, "utf8")) : {};
-  const before = await readJson(beforeFile);
-  const after = await readJson(afterFile);
-  const changed = [...new Set([...Object.keys(before), ...Object.keys(after)])]
-    .filter((id) => JSON.stringify(before[id] ?? null) !== JSON.stringify(after[id] ?? null));
+  // The "before" side is the PRE-CRITIC guide. Pinned by the caller (out of the commit the critic
+  // stage started from) so a failed attempt can retain the rejected guide edits without the next
+  // attempt comparing those edits against themselves.
+  const before = baselineDocs || await readGuideDocs(path.join(guidesDir, slug));
+  const after = await readGuideDocs(path.join(fromDir, "src", "content", "guides", slug));
+  // LOCATIONS, not files: "<file>#<pointer>" per changed leaf. That is what makes several
+  // independent facts inside one item addressable, and an undeclared change impossible to hide.
+  const changed = new Set([...new Set([...before.keys(), ...after.keys()])]
+    .flatMap((name) => changedPointers(before.get(name), after.get(name)).map((p) => `${name}#${p}`)));
   const rel = path.join("guides-intake", slug, "critic-corrections.v2.json");
   const sourceFile = path.join(fromDir, rel);
-  if (!changed.length) {
+
+  if (!changed.size) {
     if (existsSync(sourceFile)) {
       const raw = JSON.parse(await readFile(sourceFile, "utf8"));
-      const declared = raw.corrections || [];
-      if (declared.length) throw new ContractError("critic declared fact corrections but facts.json did not change");
+      if ((raw.corrections || []).length) throw new ContractError("critic declared guide corrections but no guide value changed");
     }
-    return { changed: false, factIds: [] };
+    return { changed: false, targets: [] };
   }
+  // Multi-location contract failures are per-location ISSUE LINES, never one joined line: the
+  // retry-feedback path caps each line at 400 chars, and the yamagata run proved a single line
+  // carrying 42 pointers reaches the blind retry amputated (attempts 3–4 could not comply).
   if (!existsSync(sourceFile)) {
-    throw new ContractError(`critic changed facts.json (${changed.join(", ")}) without ${rel} — stale evidence is refused`);
+    const issues = [...changed].sort().map((t) => `critic changed ${t} without ${rel}`);
+    throw new ContractError(
+      `critic changed ${changed.size} guide value(s) without ${rel} — stale evidence is refused\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
+    );
   }
   const raw = JSON.parse(await readFile(sourceFile, "utf8"));
   assertVersionCompatible(raw.schemaVersion, CRITIC_CORRECTIONS_SCHEMA, { file: sourceFile });
@@ -162,31 +183,191 @@ export async function reconcileCriticFactCorrections(slug, {
   if (correctionDoc.slug !== slug || correctionDoc.runId !== runId) {
     throw new ContractError(`critic correction identity does not match ${slug}/${runId}`);
   }
-  const byId = new Map(correctionDoc.corrections.map((correction) => [correction.factId, correction]));
-  if (byId.size !== correctionDoc.corrections.length || changed.some((id) => !byId.has(id)) || [...byId.keys()].some((id) => !changed.includes(id))) {
-    throw new ContractError(`critic correction handoff must name exactly the changed fact ids: ${changed.join(", ")}`);
-  }
-  const evidence = await requireEvidence(slug, { intakeDir, runId });
-  for (const id of changed) {
-    const correction = byId.get(id);
-    const prior = before[id] || null;
-    const next = after[id] || null;
-    if (!next || correction.previousValue !== (prior?.value ?? null) || correction.correctedValue !== next.value ||
-        correction.claim !== next.claim || correction.source.url !== next.source_url || correction.verifiedOn !== next.verified_on) {
-      throw new ContractError(`critic correction "${id}" does not match the actual facts.json before/after/source truth`);
+
+  // A blind repair attempt declares only ITS OWN edits — it cannot see the pinned baseline, so it
+  // cannot reconstruct declarations an earlier attempt already made over the retained tree
+  // (yamagata scar: attempt 2 clobbered attempt 1's complete 45-row handoff and attempt 3 could
+  // never satisfy whole-stage accounting again). Earlier retained rows therefore supplement the
+  // current doc: current attempt wins per target, a row-invalid retained row contributes nothing,
+  // and a retained row for a leaf no longer changed against the baseline is dropped, never
+  // phantom. The two-way accounting below then runs on the merged set at full strength.
+  const corrections = criticCorrectionDocSchema.shape.corrections;
+  const rowSchema = (corrections.removeDefault ? corrections.removeDefault() : corrections.unwrap()).element;
+  const declaredNow = new Set(correctionDoc.corrections.map((c) => c.target));
+  for (const raw_ of retainedRows) {
+    const parsed = rowSchema.safeParse(raw_);
+    if (!parsed.success) continue;
+    const { target } = parsed.data;
+    if (!declaredNow.has(target) && changed.has(target)) {
+      correctionDoc.corrections.push(parsed.data);
+      declaredNow.add(target);
     }
-    const record = {
-      id: `critic-correction-${id}`, candidateId: null, claim: `${next.claim}: ${next.value}`,
+  }
+
+  // Declared set === changed set, both directions. This is the whole R-A repair.
+  const targets = correctionDoc.corrections.map((c) => c.target);
+  const declared = new Set(targets);
+  if (declared.size !== targets.length) throw new ContractError(`critic correction handoff repeats a target: ${targets.join(", ")}`);
+  const undeclared = [...changed].filter((t) => !declared.has(t)).sort();
+  const phantom = targets.filter((t) => !changed.has(t)).sort();
+  if (undeclared.length) {
+    const issues = undeclared.map((t) => `critic changed ${t} without declaring the edit in ${rel}`);
+    throw new ContractError(
+      `critic changed ${undeclared.length} guide value(s) without declaring the edit in ${rel} — every changed guide ` +
+        `value is a factual correction carrying its own evidence, and there is no editorial-only escape; stale evidence is refused\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
+    );
+  }
+  if (phantom.length) {
+    const issues = phantom.map((t) => `critic handoff declares ${t}, which the critic did not change`);
+    throw new ContractError(
+      `critic handoff declares ${phantom.length} value(s) the critic did not change\n` +
+        issues.map((i) => `  · ${i}`).join("\n"),
+      { issues },
+    );
+  }
+
+  const evidence = await requireEvidence(slug, { intakeDir, runId });
+  const alreadyRetired = supersededEvidenceIds(evidence);
+  const ambiguous = [];
+  for (const correction of correctionDoc.corrections) {
+    assertCorrectionProven(correction, { before, after });
+    const recordId = `critic-correction-${kebab(correction.target)}`;
+    evidence.evidence = evidence.evidence.filter((item) => item.id !== recordId);
+    evidence.evidence.push({
+      id: recordId, candidateId: null, claim: `${correction.claim}: ${correction.correctedValue}`,
       kind: "objective", origin: "critic", source: correction.source,
       verifiedOn: correction.verifiedOn, firsthand: null, freshness: correction.freshness,
-    };
-    evidence.evidence = evidence.evidence.filter((item) => item.id !== record.id);
-    evidence.evidence.push(record);
+    });
+    // Re-sourcing an item off an origin evidence rests on is not guessed. Retiring the whole
+    // origin invents coverage gaps; "the only record from that URL" is cardinality, not
+    // proposition identity; reading claims is the similarity heuristic this repair avoids. The
+    // decision belongs to the evidence owner, and is COLLECTED rather than thrown so every proven
+    // correction still reaches evidence below and the owner has real ids to point at.
+    const dropped = droppedOrigin(correction.target, { before, after });
+    const unresolved = dropped
+      ? evidence.evidence.filter((item) => item.origin !== "critic" && item.source?.url === dropped && !alreadyRetired.has(item.id))
+      : [];
+    if (unresolved.length) {
+      // One decision per dropped ORIGIN, not per correction: every correction inside a re-sourced
+      // item shares its origin, and the owner writes one relation, not seven.
+      const seen = ambiguous.find((a) => a.origin === dropped);
+      if (!seen) ambiguous.push({ correction: correction.target, recordId, origin: dropped, records: unresolved.map((r) => r.id) });
+      else if (targetPointerEndsAtSource(correction.target)) Object.assign(seen, { correction: correction.target, recordId });
+    }
+    // A row the EVIDENCE OWNER already declared for this correction is authoritative and is left
+    // alone — overwriting it with a neutral `adopt` would erase the very relation the routed
+    // repair exists to obtain, and the class could never reach green.
+    if (!evidence.reconciliation.some((row) => row.findingId === recordId)) {
+      evidence.reconciliation.push({
+        findingId: recordId, disposition: "adopt",
+        note: `critic correction proved at ${correction.target}`,
+        corroborates: { kind: "none", evidenceIds: [] },
+      });
+    }
   }
+
+  // The corrections are proven, so they enter authoritative evidence BEFORE any refusal: that is
+  // the R-A requirement, and it is what gives the evidence owner real `critic-correction-…` ids
+  // to point a `replace` row at. Re-deriving them is deterministic, so a retry is idempotent.
   await writeEvidence(slug, evidence, { intakeDir });
-  await mkdir(path.dirname(path.join(intakeDir, slug, "critic-corrections.v2.json")), { recursive: true });
+  await mkdir(path.join(intakeDir, slug), { recursive: true });
   await writeFile(path.join(intakeDir, slug, "critic-corrections.v2.json"), JSON.stringify(correctionDoc, null, 2) + "\n");
-  return { changed: true, factIds: changed };
+  if (ambiguous.length) throw needsEvidenceReconciliation(slug, ambiguous);
+  return { changed: true, targets };
+}
+
+/** The one critic-truth failure the critic cannot fix: a correction re-sourced its guide item off
+    an origin that existing evidence still rests on, and nothing in the artifact says which
+    proposition was disproven. The critic never reads evidence.v2.json, so retrying it with
+    "declare the relation" is an impossible instruction — this failure is ROUTED to the evidence
+    owner (the reconcile stage) instead, and carries the exact rows it must write. */
+export function needsEvidenceReconciliation(slug, ambiguous) {
+  const err = new ContractError(
+    `critic corrections reached ${slug}'s evidence, but ${ambiguous.length} of them re-sourced a guide item off an ` +
+      `origin existing evidence still rests on. Which proposition each disproved is not derivable — evidence records ` +
+      `carry no proposition identity — and stale evidence must not stay eligible for coverage. The EVIDENCE OWNER ` +
+      `(reconcile) resolves this; the blind critic cannot. For each row below, add a reconciliation row on the ` +
+      `critic-correction finding with supersedes { kind: "evidence", evidenceIds: [...] } naming the records it ` +
+      `retires, or re-source the guide item back:\n` +
+      ambiguous.map((a) => `  · ${a.correction} left ${a.origin}; finding "${a.recordId}"; still resting: ${a.records.join(", ")}`).join("\n"),
+  );
+  err.needsEvidenceReconciliation = ambiguous;
+  return err;
+}
+
+/** The guide directory, parsed. Parsing here makes reserialization invisible to the diff and a
+    malformed guide file a blocking failure rather than a silent text comparison. */
+async function readGuideDocs(dir) {
+  const out = new Map();
+  if (!existsSync(dir)) return out;
+  for (const name of (await readdir(dir)).filter((n) => GUIDE_FILE.test(n))) {
+    const file = path.join(dir, name);
+    try { out.set(name, JSON.parse(await readFile(file, "utf8"))); }
+    catch (err) { throw new ContractError(`guide file ${file} is not valid JSON (${err.message})`, { file }); }
+  }
+  return out;
+}
+
+/** Every JSON-pointer location whose leaf value differs between two parsed guide documents. */
+function changedPointers(before, after, at = "") {
+  const branch = (v) => v !== null && typeof v === "object";
+  if (branch(before) && branch(after) && Array.isArray(before) === Array.isArray(after)) {
+    return [...new Set([...Object.keys(before), ...Object.keys(after)])]
+      .flatMap((key) => changedPointers(before[key], after[key], `${at}/${String(key).replace(/~/g, "~0").replace(/\//g, "~1")}`));
+  }
+  const encode = (v) => v === undefined ? "\u0000absent" : JSON.stringify(v);
+  return encode(before) === encode(after) ? [] : [at || "/"];
+}
+
+const targetPointerEndsAtSource = (target) => target.endsWith("/source_url");
+const splitTarget = (target) => [target.slice(0, target.indexOf("#")), target.slice(target.indexOf("#") + 1)];
+const pointerParts = (pointer) => pointer.split("/").slice(1).map((raw) => raw.replace(/~1/g, "/").replace(/~0/g, "~"));
+
+/** The node a pointer path addresses, or undefined when it addresses nothing. */
+function nodeAt(doc, parts) {
+  let node = doc;
+  for (const key of parts) {
+    if (node === null || typeof node !== "object" || !(key in node)) return undefined;
+    node = node[key];
+  }
+  return node;
+}
+
+/** The value at a JSON pointer as TEXT, or null when the pointer addresses nothing. */
+function textAt(doc, pointer) {
+  const node = nodeAt(doc, pointerParts(pointer));
+  if (node === undefined) return null;
+  return typeof node === "string" ? node : JSON.stringify(node);
+}
+
+/** The origin a proven correction DROPPED, if any: the `source_url` the corrected item cited
+    BEFORE the edit and no longer cites after it. That `source_url` is the artifact's only
+    machine-readable link between a guide location and the evidence behind it, so supersession
+    rides on the link being dropped — never on scanning claims for a value. #107 retired every
+    record whose claim CONTAINED previousValue: real Tottori evidence carries "¥800" on the Sand
+    Museum's admission and on Sanbutsu-ji's waraji rental, so one transit edit retired both. */
+function droppedOrigin(target, { before, after }) {
+  const [file, pointer] = splitTarget(target);
+  const parts = pointerParts(pointer);
+  for (let depth = parts.length; depth >= 0; depth--) {
+    const at = parts.slice(0, depth);
+    const url = nodeAt(before.get(file), at)?.source_url;
+    if (typeof url !== "string" || !url) continue;
+    return nodeAt(after.get(file), at)?.source_url === url ? null : url;
+  }
+  return null;
+}
+
+/** Prove a declared correction at the exact addressed node. #107 asked instead whether
+    previousValue/correctedValue appeared ANYWHERE in the raw file text — which a repeated string
+    or a JSON-escaped quote defeats in both directions. Here the value is read, not searched. */
+function assertCorrectionProven(correction, { before, after }) {
+  const [file, pointer] = splitTarget(correction.target);
+  const refuse = (what) => { throw new ContractError(`critic correction "${correction.target}" declares a ${what} that is not what ${file} holds there`); };
+  if (textAt(after.get(file), pointer) !== correction.correctedValue) refuse("correctedValue");
+  if (textAt(before.get(file), pointer) !== correction.previousValue) refuse("previousValue (before the edit)");
 }
 
 // ── structural validation (pure) ─────────────────────────────────────────────
@@ -217,8 +398,59 @@ export function candidateProblems(doc) {
   return problems;
 }
 
+/** True once the document is written against a schema that carries the 2.3 relations. Documents
+    written before them legitimately lack `corroborates`/`supersedes` and are not failed for it. */
+function carriesRelations(doc) {
+  const version = parseSchemaVersion(doc?.schemaVersion);
+  return Boolean(version && version.name === "wp-evidence" && (version.major > 2 || (version.major === 2 && version.minor >= 3)));
+}
+
+/** The 2.3 relation rules for ONE row. Both relations are typed discriminators, and the kinds
+    that name no evidence record must name none — an id is never invented to satisfy a shape. */
+function relationProblems(row, evidenceIds) {
+  const problems = [];
+  const check = (field, relation, namingKinds) => {
+    const ids = relation.evidenceIds || [];
+    if (namingKinds.includes(relation.kind)) {
+      if (!ids.length) problems.push(`"${row.findingId}" declares ${field} kind "${relation.kind}" but names no evidence record`);
+    } else if (ids.length) {
+      problems.push(`"${row.findingId}" declares ${field} kind "${relation.kind}", which names no record, yet lists ${ids.join(", ")}`);
+    }
+    for (const id of ids) {
+      if (id === row.findingId) problems.push(`"${row.findingId}" ${field} itself`);
+      else if (!evidenceIds.has(id)) problems.push(`"${row.findingId}" ${field} unknown evidence id "${id}"`);
+    }
+  };
+  // Silence is not "nothing to declare": the historical `adopt` row whose NOTE claimed it
+  // corroborated Pass A's ev-yohaijo-details had no relation at all, so nothing downstream could
+  // test it. At 2.3 the row must ANSWER, and the artifact is refused until it does.
+  if (!row.corroborates) {
+    problems.push(
+      `"${row.findingId}" does not declare what it corroborates — every 2.3 reconciliation row states a ` +
+        `corroborates kind ("factual" with the records it confirms, "recommendation", or "none"); a note is not a relation`,
+    );
+  } else check("corroborates", row.corroborates, ["factual"]);
+  if (row.disposition === "replace") {
+    if (!row.supersedes) {
+      problems.push(
+        `"${row.findingId}" replaces prior work without declaring what — a "replace" row states a supersedes kind ` +
+          `("evidence" with the records it retires, or "recommendation" when it replaces a conclusion that was never an evidence record)`,
+      );
+    } else check("supersedes", row.supersedes, ["evidence"]);
+  } else if (row.supersedes) {
+    problems.push(`"${row.findingId}" is dispositioned "${row.disposition}" but declares supersedes — only "replace" retires prior work`);
+  }
+  return problems;
+}
+
 /** Independent findings (Pass-B origin evidence) that lack a typed disposition, plus dispositions
-    pointing at findings that do not exist, plus double dispositions. */
+    pointing at findings that do not exist, plus double dispositions — plus (2.3) the relational
+    truth a reconciliation row asserts: what it corroborates and what it supersedes.
+
+    R-F scar (Tottori, b153af3): `ev-jumbo-taxi` was dispositioned `replace` with a note saying it
+    superseded "Pass A's weak taxi fallback". That fallback was a Pass-A CONCLUSION, never an
+    evidence record — so the honest repair is a relation that can say so, not a required id list
+    that would be satisfied by inventing one. */
 export function dispositionProblems(doc) {
   const problems = [];
   const independent = doc.evidence.filter((e) => e.origin === "passB");
@@ -233,10 +465,12 @@ export function dispositionProblems(doc) {
     }
   }
   const evidenceIds = new Set(doc.evidence.map((e) => e.id));
+  const relational = carriesRelations(doc);
   for (const r of doc.reconciliation) {
     if (!evidenceIds.has(r.findingId)) {
       problems.push(`disposition for "${r.findingId}" points at no evidence record — a verdict on nothing proves nothing`);
     }
+    if (relational) problems.push(...relationProblems(r, evidenceIds));
   }
   return problems;
 }

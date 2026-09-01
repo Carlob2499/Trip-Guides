@@ -44,6 +44,11 @@
   .sheet.open{transform:translateY(0)}
   .sheet-head{flex:none;font-family:var(--font-display);font-size:var(--text-h4);padding:.3rem 1.2rem .65rem;border-bottom:1px solid var(--rule)}
   .sheet-list{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.3rem 0 1rem}
+  .sheet-more-label{
+    margin:.8rem 1.2rem .2rem;padding-top:.65rem;border-top:1px solid var(--rule);
+    font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--muted)
+  }
   /* Sheet look & choreography live in mobile-nav.css (single owner) — R2 turned the
      bearing numbers into journey stations there. Only the plumbing lives here. */
   /* The count sits on the far right of the row, tabular so a column of them lines up. */

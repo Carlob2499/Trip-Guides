@@ -10,6 +10,12 @@ This file is the durable technical state of Pipeline V2. It records **what exist
 
 **Production cutover: NOT YET ACCEPTED.**
 
+**Final release-readiness acceptance canary: FAILED — MODEL / CONTENT (Fukuoka, 2026-08-29).**
+
+**Fresh post-remediation acceptance candidate: KUMAMOTO r3 — PRE-FLIGHT GREEN; MODEL RUN PENDING.**
+
+Current frozen candidate authority is `acceptance/v2-kumamoto-20260902-r3` at exact SHA `56e513000792bc71bf4e18c0a0909724fe5cebac`, rebuilt from repaired main `57e320535d1cb6e861a5001f8c26cc718dcfd93d` and proven exact-head green in closed-unmerged PR #167. Kumamoto r2 remains preserved historical preflight evidence only; merged PR #149 changed shared protected-main landing/control-plane semantics after r2's base and therefore invalidated r2 for future model dispatch.
+
 V2 exists beside V1. V1 remains the production default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. V2 is selected by the trusted `/new` path only when the selector is explicitly `v2`; manual V2 dispatch remains `landMode=pr` and cannot become production authority.
 
 The accepted live canary is **Uruguay / Canary #4**:
@@ -99,7 +105,7 @@ Automatic repair is decided from durable state, not a transient workflow flag. I
 - stage attempt budget remains;
 - automatic-repair budget remains.
 
-Current bounds remain five quality attempts and one automatic quality-repair reservation. A proven usage-limit interruption does not consume a quality attempt; it uses a separate durable allowance capped at two availability recoveries. Repeated usage limits therefore cannot loop forever. Cancellation, generic agent failures, unknown failures, missing findings, unreadable state, exhausted budgets, and already-published runs do not earn blind retries.
+Current bounds remain five quality attempts and one automatic quality-repair reservation. A proven usage-limit interruption does not consume a quality attempt, and the V2 run itself does not immediately auto-retry into the same exhausted usage window. During the temporary September completion program, PR #171's hourly watch may deliberately redispatch the same frozen acceptance control ref after availability has had time to reset, but only when durable state still records `usage-limit`; the existing runId, resume point, inputs and budgets remain authoritative. This remains true for repeated proven usage-limit interruptions: each refunded availability failure reuses the bounded quality budget rather than extending it. Autonomous control-plane routing, including critic-truth routing back to the evidence owner, may not raise the attempt cap. Only an explicitly human-triggered answer re-open uses the separately defined bounded reopen grant. Cancellation, generic agent failures, unknown failures, missing findings, unreadable state, exhausted budgets, and already-published runs do not earn blind retries.
 
 A stopped run has a visible escalation path rather than silently disappearing.
 
@@ -114,6 +120,8 @@ V2 records the gate verdict before landing. Publication is finalized only after 
 Auto-landing failures/conflicts re-quarantine the remote guide as draft content. A quarantine that cannot be pushed is a hard/loud failure, not a safe-draft claim.
 
 Manual V2 dispatch remains PR/draft mode. The production selector does not change that manual-dispatch invariant.
+
+The shared landing path is now protected-main compatible: PR #149 replaced the old assumption that required protection must be absent with an exact-head protected-landing transaction that integrates the current base, reruns required verification, and refuses stale head/base state. That control-plane change is why the older r2 preflight remains evidence but not current dispatch authority.
 
 ## Progress and owner controls
 
@@ -164,8 +172,13 @@ Current state:
 - **V04:** DONE deterministically;
 - **V06:** DONE from truthful available telemetry;
 - **V07:** FAIL / ACTION — the frozen method applied to both runs' durable telemetry found two W1 deterministic-waste patterns (the candidate-id contract mismatch repeated across both runs; the reconcile gate accepting a tree the critic's build gate then rejected, discarding a full critic attempt), each with a bounded control-plane-only correction; no research-behavior change is authorized. Evidence and the independent-review record: `V07_EFFICIENCY_EVIDENCE.md`.
+- **Final acceptance / Fukuoka:** FAIL — run `fukuoka-20260829-7cb4fa` exhausted its authorized 5/5 quality attempts at Reconcile with the final active finding that a Showa Bus objective claim cited an official origin only as `search-preview`, not a fetched/read source. The critic never ran, landing never ran, publication remained false, and main stayed on the accepted base. Exact Actions #59–#65 accounting and authority: `FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md`.
 
-A zero-credit readiness audit found no active `tokyo` or `tottori` V2 run/intake collision on current `main` and no missing deterministic evidence field that justifies changing the V2 schema before those trials. The frozen criteria remain unchanged.
+The Fukuoka failure is the current production-readiness fact. It does not erase the historical V01–V07 evidence, and it does not authorize continuing the failed branch past its cap. Two deterministic repository defects found in independent closeout review are fixed separately: the Claude↔Codex watcher missing-artifact YAML fallback and the autonomous evidence-owner +1 cap escape hatch.
+
+**Post-Fukuoka model-input remediation:** PR #117 is merged and defines a deliberately new, hash-pinned acceptance candidate rather than rewriting Fukuoka history. Same-stage validator findings are presented before broad research instructions; a retry is explicitly repair-first and preserves unaffected work; a `search-preview` provenance failure must be repaired by fetching/reading the true origin or honestly removing/flagging unsupported content rather than relabeling access; Reconcile is no longer instructed to execute node/npm/offline gates its sandbox cannot run; and map-placeholder retries use a narrow, no-guess targeted fetch path. The historical Fukuoka prompt blob SHAs remain pinned separately.
+
+**Kumamoto preflight:** the first fresh scaffold was built from corrected main `82d8d78a6411c2d8c944087df598ccf03afec940` and frozen on `acceptance/v2-kumamoto-20260902` at `99d758756a2f4a53fef5f3072d72388da4ebdb17`. Closed PR #120 proved that exact head green after PR #119 repaired the hostile-copy viewport defect, but PR #122 later changed deterministic blocked-evidence retirement and invalidated that candidate for dispatch. r2 was then rebuilt from corrected main `a171af0988a49e6f18f4c5e312c46b9a674ed189` and frozen at `621dd43238d18b2b918827a9dca2268cd6f28c56`; closed-unmerged PR #123 proved r2 exact-head green. Merged PR #149 subsequently changed the shared protected-main landing/control-plane contract, making r2 stale for future dispatch while preserving its evidence. Current r3 was rebuilt from repaired main `57e320535d1cb6e861a5001f8c26cc718dcfd93d` at exact SHA `56e513000792bc71bf4e18c0a0909724fe5cebac`, reusing the same pre-registered Kumamoto scenario/content. Closed-unmerged PR #167 proved r3 exact-head GREEN with Required Gate `33368339507`, freeze-policy, CodeQL, Analyze (actions), and Analyze (javascript-typescript) PASS. No model-backed Kumamoto workflow has been dispatched, so this remains **preflight proof, not release-readiness acceptance**.
 
 The important distinction is:
 
@@ -208,8 +221,9 @@ Read together:
 - `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` — targeted GitHub reliability proofs.
 - `V06_TELEMETRY_EVIDENCE.md` — truthful currently measurable telemetry.
 - `V07_EVALUATION_METHOD.md` — frozen post-validation efficiency rubric.
+- `FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md` — authoritative final acceptance run/accounting and terminal failure.
 - `SEPTEMBER_TRACKER.md` — delivery status/deadlines.
 - `../reference/pipeline.md` — durable lifecycle policy.
 - `../handoff.md` — current warm start.
 
-**Next engineering surface:** the model-backed validation program executed 2026-08-26 remains historical truth and concluded **NOT READY — REPAIR REQUIRED** (`V2_VALIDATION_SYNTHESIS.md`). The bounded deterministic repairs for gate parity, post-critic evidence ownership, corroboration accounting, candidate identity/name ownership, availability-vs-quality budgeting, and coverage honesty are implemented on the review branch cut from `4a37f0c`; they do not retroactively turn V01/V02/V03/V05/V07 green. Next is independent code review, then one fresh repaired-class model-backed validation run. V1 remains the production default and V2 cutover remains unauthorized until that new evidence succeeds.
+**Next engineering surface:** the deterministic preflight program is complete for frozen Kumamoto r3 `acceptance/v2-kumamoto-20260902-r3` at `56e513000792bc71bf4e18c0a0909724fe5cebac`, with accepted base `57e320535d1cb6e861a5001f8c26cc718dcfd93d` and exact-head proof in closed-unmerged PR #167. Preserve r3 unchanged. On September 2 only, first perform a fresh control-plane drift/model-burn firewall audit; if no relevant deterministic blocker exists, dispatch the pre-registered Kumamoto acceptance exactly once from r3. Do not dispatch r2 or the original candidate, mutate r3, continue Fukuoka, extend quality/auto-retry caps, hand-edit model-owned output, change the production selector, publish, or merge the canary. A deterministic implementation defect during the run invalidates the evidence and requires repair on main plus a newly rebuilt candidate; a genuine bounded model/content failure is recorded as such. V1 remains the production default and rollback path until a fresh acceptance passes and production cutover is explicitly approved.

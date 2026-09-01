@@ -1,14 +1,13 @@
 name: Accessibility
 
-# Browser safety gate — hub + both guides. Axe owns semantic accessibility; the companion
-# resilience spec owns 320px reflow and hostile-content geometry. Both use the same built site
-# and Chromium install so one workflow pays the setup cost once.
+# Post-merge/manual browser safety diagnostic. Pull-request enforcement lives in Required gate so
+# the same build + Playwright matrix is not paid twice on every code PR. Push-to-main remains as a
+# deployment-adjacent regression signal.
 on:
-  pull_request:
-    paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
   push:
     branches: [main]
     paths-ignore: [docs/**, learnings/**, guides-intake/**, "**.md"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,15 +20,15 @@ jobs:
   a11y:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run build
       - name: Cache Playwright browsers
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright

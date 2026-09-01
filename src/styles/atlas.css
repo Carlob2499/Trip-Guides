@@ -194,7 +194,7 @@
   .atlas-sheet-thumb { transition: transform .28s var(--ease, ease); }
   .atlas-sheet:hover .atlas-sheet-thumb { transform: scale(1.06); }
 }
-.atlas-sheet-body { flex: 1 1 auto; min-width: 0; }
+.atlas-sheet-body { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
 .atlas-sheet-title { font-family: var(--font-display); font-size: var(--text-lead); display: block; }
 .atlas-sheet-cities { font-size: var(--text-small); color: var(--muted); }
 .atlas-sheet-dates { font-size: var(--text-caption); color: var(--muted); margin-left: .5em; }
