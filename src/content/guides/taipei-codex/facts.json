@@ -1,0 +1,42 @@
+{
+  "metro-single-fare": {
+    "claim": "Taipei Metro single-journey fare range",
+    "value": "NT$20–65",
+    "source_url": "https://www.metro.taipei/cp.aspx?Create=1&n=CEF54168B23F73B4&s=AD70DC4F6A708EA7",
+    "verified_on": "2026-09-01",
+    "shelf_life": "transit",
+    "state": "clean"
+  },
+  "airport-mrt-a1-a12": {
+    "claim": "Airport MRT A1 Taipei Main–A12 Terminal 1 single fare",
+    "value": "NT$160",
+    "source_url": "https://www.tymetro.com.tw/tymetro-new/tw/_pages/service/FAQ.php?page=2&v=57",
+    "verified_on": "2026-09-01",
+    "shelf_life": "transit",
+    "state": "clean"
+  },
+  "taipei101-adult": {
+    "claim": "Taipei 101 Observatory regular adult admission",
+    "value": "NT$600",
+    "source_url": "https://www.taipei-101.com.tw/tw/observatory/ticket",
+    "verified_on": "2026-09-01",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
+  "npm-adult": {
+    "claim": "National Palace Museum Northern Branch regular admission",
+    "value": "NT$350",
+    "source_url": "https://www.npm.gov.tw/Articles.aspx?l=1&sno=02007004",
+    "verified_on": "2026-09-01",
+    "shelf_life": "venue",
+    "state": "clean"
+  },
+  "logy-menu": {
+    "claim": "logy tasting menu per person",
+    "value": "NT$4,750 + 10% service",
+    "source_url": "https://logy.tw/reservation.html",
+    "verified_on": "2026-09-01",
+    "shelf_life": "venue",
+    "state": "clean"
+  }
+}
