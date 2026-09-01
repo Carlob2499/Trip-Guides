@@ -42,8 +42,9 @@ The `waypoint-guide-author` skill is the single source of truth for how to resea
 - Run-state lives in `guides-intake/{{slug}}/`: `intake.md` is FROZEN — never edit it. The
   human trail (candidates tables, verification ledger, traveler questions) still goes to
   `ledger.md`; a research-forced change of plan is an entry under `## Amendments`.
-- **The machine contract is `guides-intake/{{slug}}/evidence.v2.json`** — create it (schema
-  `wp-evidence/2.0`; `slug`, `runId` from `guides-intake/{{slug}}/run.v2.json`, then):
+- **The machine contract is `guides-intake/{{slug}}/evidence.v2.json`** — create it using the
+  exact current schema/version and field vocabulary in the GENERATED Machine contract below;
+  set `slug` and `runId` from `guides-intake/{{slug}}/run.v2.json`, then:
   - `candidates[]` — every venue/experience you EVALUATE: `{ id (kebab, stable), name, branch
     (exact location when it matters, else null), priority, status
     (considered|shortlisted|shipped|rejected|detour), shortlisted (bool — shipped requires
