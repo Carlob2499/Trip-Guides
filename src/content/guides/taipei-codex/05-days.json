@@ -58,6 +58,18 @@
       },
       {
         "date": "Sun Nov 15",
+        "title": "Open Taipei + logy",
+        "pace": "Leave recovery room, then the splurge dinner",
+        "tldr": "An intentionally open day capped by the reservation-sensitive tasting menu.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Keep daytime flexible, then use an open logy dinner night for the trip's one splurge. Reservations open up to 30 days ahead; for Nov 15, start checking around Oct 16 and obey the restaurant's 3-day cancellation deadline.</p>",
+        "constraints": [
+          "logy is currently open Sundays for dinner; re-check the booking calendar when the 30-day window opens"
+        ]
+      },
+      {
+        "date": "Mon Nov 16",
         "title": "Shifen waterfall + lantern release",
         "pace": "Nature first, corrected anchor second",
         "tldr": "Waterfall before final entry, then an ordinary Shifen lantern release.",
@@ -66,18 +78,6 @@
         "body": "<p>Shifen Waterfall runs 09:00–17:00 in November with final entry 16:30. Afterward, use Shifen Old Street's ordinary sky-lantern shops for the corrected anchor experience. This is <b>not</b> the Pingxi Sky Lantern Festival, whose official 2026 dates were Feb 27 and Mar 3.</p>",
         "constraints": [
           "Recheck TRA/bus service close to travel; no future timetable was guessed"
-        ]
-      },
-      {
-        "date": "Mon Nov 16",
-        "title": "Open Taipei + logy",
-        "pace": "Leave recovery room, then the splurge dinner",
-        "tldr": "An intentionally open day capped by the reservation-sensitive tasting menu.",
-        "energy": "slow",
-        "env": "mixed",
-        "body": "<p>Keep daytime flexible. Book logy when its 30-day window opens and obey its 3-day cancellation deadline.</p>",
-        "constraints": [
-          "logy is closed Mondays on the currently posted schedule — move the splurge if these dates hold"
         ]
       },
       {
