@@ -1,19 +1,42 @@
 # Research Efficiency — model economy, judicious searching, social/video leads
 
 Binding operational rules for every research/recert pass. The backbone must be sustainable on a
-**Claude Pro** plan: research is executed by **Sonnet** (default) or **light Opus**
-(reconciliation / judgment-heavy passes only). Fable/heavy-Opus sessions are for *designing the
-pipeline*, never for running research. Follow these — they encode what past passes learned, so
-quality stays Korea-tier while tokens and searches stay Pro-sized.
+**Claude Pro** plan by routing work by role instead of buying maximum reasoning everywhere:
+**Sonnet 5 Medium gathers evidence; Opus 5 Medium judges it.** High/XHigh is an earned escalation,
+not the default. Fable/heavy-Opus sessions are for *designing or repairing the pipeline*, never
+routine destination research. Follow these — they encode what past passes learned, so quality
+stays Korea-tier while tokens and searches stay Pro-sized.
 
 ## Model economy
 
-| Work | Model |
-|---|---|
-| Research passes (Pass A + Pass B), recert re-verification | **Sonnet** |
-| Reconcile A+B conflicts; anchor-event verification on an event trip | Sonnet, or **light Opus** if genuinely contested |
-| Formatting, ledger cleanup, mechanical sweeps | Haiku (or stay in Sonnet) |
-| Pipeline/skill/workflow design | Fable/Opus — separate sessions, not research |
+| Work | Headless Claude V2 | Chat / OpenAI equivalent |
+|---|---|---|
+| Pass A + Pass B; recert re-verification | **Sonnet 5 · Medium** | **Terra · Medium** |
+| Reconcile A+B; recommendation-changing conflicts | **Opus 5 · Medium** | **Sol · Medium** |
+| Fresh-context critic | **Opus 5 · Medium** | **Sol · Medium** |
+| Formatting, ledger cleanup, mechanical sweeps | Haiku / Sonnet low-cost work | Instant / Terra low-cost work |
+| Pipeline/skill/workflow design or systemic repair | Fable / Opus High | Sol High |
+
+### V2 routing contract
+
+- In `research-pass-v2.yml`, `model` is the **research-worker model**: Pass A uses it and
+  Pass B remains mechanically locked to Sonnet. `critic_model` is the **judgment model**:
+  both Reconcile and Critic use it.
+- `effort` is the research effort and defaults to **Medium** on fresh runs.
+  `critic_effort` is an optional Reconcile/Critic override; blank means inherit `effort`.
+  This lets a contested judgment escalate to High without re-running ordinary evidence gathering
+  at High.
+- Durable runs never have their model/effort contract silently changed. Historical runs without
+  `criticEffort` retain the legacy behavior and inherit their recorded global effort.
+- Escalate the **stage that became difficult**, not the whole run:
+  - evidence gathering: Sonnet/Terra Medium → High only when source complexity itself warrants it;
+  - reconciliation/criticism: Opus/Sol Medium → High for recommendation-changing conflicts,
+    R3/R4 consequences, contradictory T0 evidence, fragile transport, scarce reservations, or
+    similarly consequential judgment;
+  - Fable is architecture/advisor work, not a destination-research tier.
+- A famous destination, many candidates, or a long guide is **not** by itself a High-effort
+  trigger. The deterministic contracts, evidence gate, critic, and Required Gate are supposed to
+  carry part of the intelligence burden.
 
 **Checkpoint often** — Pro sessions run shorter than Max ones, so a session should end at a
 committed checkpoint and resume without re-research. Each stage's own prompt in `prompts/` carries
@@ -192,13 +215,11 @@ blogs, local news, and roundup sites.
   URL). If a fetch fails oddly, retry the plain page once; judge by content, not status.
 - **Bot-blocked (403/429/Cloudflare) → don't burn retries.** Mark it blocked in the ledger and
   find a different primary. Two attempts max.
-- **Reader mirror as a SECOND attempt, not a first.** When a primary page returns bloated HTML or
-  blocks a plain fetch, `https://r.jina.ai/<url>` returns the same page as clean markdown —
-  keyless at 20 req/min (verified 2026-08-02). It counts inside the same two-attempt budget,
-  never on top of it. **The citation NEVER changes:** `source_url` is always the
-  venue's/operator's own URL — the mirror is how you READ the page, not where the fact came from
-  (a `r.jina.ai/...` URL in a guide is a defect). Mirror also down or blocked → that's the second
-  attempt spent: apply the stopping conditions and flag or omit.
+- **No reader/cache/translation mirrors in V2 research.** The repaired workflow explicitly
+  denies known proxy/mirror hosts (`r.jina.ai`, Google cache, 12ft, web.archive.org,
+  translation proxies). If the true origin fails oddly, retry the **origin itself** once; after
+  that record it `blocked`, seek another legitimate authority, and flag or omit if none exists.
+  A mirror can never convert a blocked origin into `source.access = "fetched"`.
 - **Aggregators die; officials persist** (the MangoPlate lesson — a dead-since-2020 aggregator
   shipped from training data). Aggregators are *leads only*; cite the official page, never what
   you didn't fetch.
