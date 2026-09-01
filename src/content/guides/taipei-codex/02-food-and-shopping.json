@@ -1,0 +1,40 @@
+[
+  {
+    "type": "venues",
+    "group": "Food & shopping",
+    "title": "Food-first picks",
+    "phase": "daily",
+    "rank": 1,
+    "intro": "Pass B deliberately looked past the default tourist-market list. Objective hours stay on Taipei City sources; the local-feeling judgment comes only from independent firsthand accounts.",
+    "items": [
+      {
+        "name": "Nanjichang Night Market",
+        "area": "南機場夜市 · Zhongzheng District",
+        "address": "Zhonghua Rd Sec. 2, lanes 307–315 area",
+        "hours": "18:00–00:00 per Taipei City's current food-tracer listing",
+        "how": "Bus or a longer walk from Ximen / CKS Memorial Hall; less MRT-convenient than the marquee markets.",
+        "price": "Street-food budget; choose stall by stall",
+        "crowd_tip": "Two independent recent firsthand source families describe it as more local-feeling and less tourist-heavy than the marquee markets.",
+        "why": "Best fit for the intake's explicit 'where locals actually eat' night-market test.",
+        "verified_on": "2026-09-01",
+        "shelf_life": "hours",
+        "source_url": "https://foodtracer.health.gov.taipei/UniPages/CustPageView?fid=8cd4e2c6-ee6a-486b-b827-27dad0f85b3e&market_id=TPB1&mid=ae7e0dd6-468a-4acd-83eb-9e708c9e6073"
+      },
+      {
+        "name": "logy",
+        "area": "Neihu",
+        "address": "1F, No. 39, Ln. 258, Ruiguang Rd., Neihu Dist., Taipei",
+        "hours": "Wed–Sun dinner 18:30–22:30 (last order 19:00); Fri–Sun lunch 12:00–15:00 (last order 12:30)",
+        "closed": "Mondays & Tuesdays",
+        "book": "url",
+        "book_url": "https://logy.tw/reservation.html",
+        "how": "MRT/taxi to Neihu depending base",
+        "price": "{{fact:logy-menu}}",
+        "why": "The one planned splurge: a tasting-menu restaurant whose current price, 30-day booking window and cancellation terms are published directly.",
+        "verified_on": "2026-09-01",
+        "shelf_life": "venue",
+        "source_url": "https://logy.tw/reservation.html"
+      }
+    ]
+  }
+]
