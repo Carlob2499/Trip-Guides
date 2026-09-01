@@ -84,7 +84,9 @@ async function makeCheckout(name) {
   await cp(path.join(REPO, "scripts"), path.join(dir, "scripts"), { recursive: true });
   await cp(path.join(REPO, "src", "lib"), path.join(dir, "src", "lib"), { recursive: true }); // the CLI imports it
   await cp(path.join(REPO, "package.json"), path.join(dir, "package.json"));
-  if (!existsSync(path.join(dir, "node_modules"))) await symlink(path.join(REPO, "node_modules"), path.join(dir, "node_modules"));
+  if (!existsSync(path.join(dir, "node_modules"))) {
+    await symlink(path.join(REPO, "node_modules"), path.join(dir, "node_modules"), process.platform === "win32" ? "junction" : "dir");
+  }
   return dir;
 }
 
@@ -202,7 +204,7 @@ describe("R-A — the routed evidence-owner repair survives a fresh checkout and
     const second = await makeCheckout("attempt2");
 
     // 1. the retained critic work crossed the boundary…
-    expect(await readFile(path.join(second, "src", "content", "guides", SLUG, TRANSIT), "utf8")).toBe(TOTTORI_TRANSIT_AFTER);
+    expect((await readFile(path.join(second, "src", "content", "guides", SLUG, TRANSIT), "utf8")).replace(/\r\n?/g, "\n")).toBe(TOTTORI_TRANSIT_AFTER);
     expect(existsSync(path.join(second, "guides-intake", SLUG, "critic-corrections.v2.json"))).toBe(true);
     expect(await readFile(path.join(second, "guides-intake", SLUG, "ledger.md"), "utf8")).toMatch(/the paid analysis/);
     // 2. …and so did the trusted evidence mutation the owner must relate to.

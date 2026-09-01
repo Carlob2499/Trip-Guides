@@ -1,11 +1,12 @@
 import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 
-const lander = readFileSync(new URL("../land-branch.sh", import.meta.url), "utf8");
-const changeWorkflow = readFileSync(new URL("../../.github/workflows/change.yml", import.meta.url), "utf8");
-const newGuideWorkflow = readFileSync(new URL("../../.github/workflows/new-guide.yml", import.meta.url), "utf8");
-const v1Workflow = readFileSync(new URL("../../.github/workflows/research-pass.yml", import.meta.url), "utf8");
-const v2Workflow = readFileSync(new URL("../../.github/workflows/research-pass-v2.yml", import.meta.url), "utf8");
+const readText = (url) => readFileSync(url, "utf8").replace(/\r\n?/g, "\n");
+const lander = readText(new URL("../land-branch.sh", import.meta.url));
+const changeWorkflow = readText(new URL("../../.github/workflows/change.yml", import.meta.url));
+const newGuideWorkflow = readText(new URL("../../.github/workflows/new-guide.yml", import.meta.url));
+const v1Workflow = readText(new URL("../../.github/workflows/research-pass.yml", import.meta.url));
+const v2Workflow = readText(new URL("../../.github/workflows/research-pass-v2.yml", import.meta.url));
 
 describe("protected automated landing contract", () => {
   test("passing research/change landing synchronizes base before final evidence", () => {

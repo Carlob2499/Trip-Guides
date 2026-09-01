@@ -61,12 +61,12 @@ describe("startOrResumeBranch — current control-plane on V2 resume", () => {
     const result = startOrResumeBranch("research-v2/yamagata", { cwd: work, syncCurrent: true });
 
     expect(result.resumed).toBe(true);
-    expect(readFileSync(path.join(work, "durable-run.txt"), "utf8")).toBe("keep-this-run-state\n");
-    expect(readFileSync(path.join(work, "control-plane.txt"), "utf8")).toBe("repaired-current-control-plane\n");
+    expect(readFileSync(path.join(work, "durable-run.txt"), "utf8").replace(/\r\n?/g, "\n")).toBe("keep-this-run-state\n");
+    expect(readFileSync(path.join(work, "control-plane.txt"), "utf8").replace(/\r\n?/g, "\n")).toBe("repaired-current-control-plane\n");
     expect(() => git(work, "merge-base", "--is-ancestor", dispatchHead, "HEAD")).not.toThrow();
 
     const localHead = git(work, "rev-parse", "HEAD");
     const remoteHead = git(work, "ls-remote", "origin", "refs/heads/research-v2/yamagata").split(/\s+/)[0];
     expect(remoteHead).toBe(localHead);
-  });
+  }, 15_000);
 });

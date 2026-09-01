@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 import { classifyChangedPaths } from "../classify-required-gate.mjs";
 
-const readWorkflow = (name) => readFileSync(new URL(`../../.github/workflows/${name}`, import.meta.url), "utf8");
+const readWorkflow = (name) => readFileSync(new URL(`../../.github/workflows/${name}`, import.meta.url), "utf8").replace(/\r\n?/g, "\n");
 const workflow = readWorkflow("required-gate.yml");
 
 describe("required gate path classification", () => {

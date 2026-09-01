@@ -10,7 +10,7 @@ import {
   FREEZE_WAIVER_LABEL,
 } from "../check-september-freeze.mjs";
 
-const workflow = readFileSync(new URL("../../.github/workflows/september-freeze.yml", import.meta.url), "utf8");
+const workflow = readFileSync(new URL("../../.github/workflows/september-freeze.yml", import.meta.url), "utf8").replace(/\r\n?/g, "\n");
 
 describe("September freeze policy", () => {
   it("uses America/New_York for release dates", () => {
