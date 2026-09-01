@@ -66,9 +66,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No change — committed baselines already match this runner's render."
           else
-            git commit -m "chore(baselines): regenerate gallery screenshots on CI's own Chromium build
-
-CI-generated to match the exact renderer required-gate checks against — a locally-authored
-baseline drifts from this runner's font metrics by tens of pixels over a full-page capture."
+            git commit -m "chore(baselines): regenerate gallery screenshots on CI's own Chromium build" \
+              -m "CI-generated to match the exact renderer required-gate checks against — a locally-authored baseline drifts from this runner's font metrics by tens of pixels over a full-page capture."
             git push origin HEAD:${{ github.ref_name }}
           fi
