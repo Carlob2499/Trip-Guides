@@ -163,7 +163,7 @@ export function stageAttemptStats(st) {
 }
 
 /** The canonical fresh-run shape (one writer — init and fresh-run archival both use it). */
-function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs: normalizedInputs, issue, landMode }) {
+function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }) {
   return {
     schemaVersion: RUN_SCHEMA,
     slug,
