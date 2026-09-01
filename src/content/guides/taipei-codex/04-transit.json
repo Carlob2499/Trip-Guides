@@ -1,0 +1,16 @@
+[
+  {
+    "type": "routes",
+    "group": "Transit",
+    "title": "Key routes",
+    "phase": "daily",
+    "steps": [
+      "<b>Taoyuan Airport → Taipei:</b> Airport MRT to Taipei Main; A1↔A12 single fare is {{fact:airport-mrt-a1-a12}}.",
+      "<b>Taipei city:</b> MRT single journeys are {{fact:metro-single-fare}}; use EasyCard for convenience rather than taxis for routine hops.",
+      "<b>Jiufen / Shifen day:</b> Build around Ruifang and the Pingxi/Deep Branch rail-bus network, but do <b>not</b> hard-code a November train/bus connection this far out. Check official TRA and local bus timetables shortly before travel. Shifen Waterfall closes at 17:00 in November (last entry 16:30), so the waterfall—not a guessed last train—sets the hard daytime constraint."
+    ],
+    "verified_on": "2026-09-01",
+    "shelf_life": "transit",
+    "source_url": "https://www.railway.gov.tw/"
+  }
+]
