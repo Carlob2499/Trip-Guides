@@ -88,8 +88,9 @@ unconfirmed one. Past budget, the stopping conditions apply (`verification-rules
   searches for resident phrases/slang. Duties starve when the main sights spend the whole budget
   first; the run report states how many searches each duty actually used.
 - **Discovery is ADAPTIVE, not quota-driven — the per-entity budget above is a VERIFICATION
-  cap, not a breadth cap. No fixed candidate, search, or find quotas exist at any
-  level.** Research scales to the destination: a small town may
+  cap, not a breadth cap. No fixed candidate count or general discovery-search/find quota sets
+  research breadth.** The narrow standing-duty minimums immediately above are task-completeness
+  obligations (phrases/footage), not candidate floors or a stopping rule. Research scales to the destination: a small town may
   hold three serious options, Tokyo may demand dozens. Stop discovering when BOTH hold: (1) new
   searches mostly produce duplicates or clearly weaker options, and (2) unresolved evidence is
   unlikely to change the final recommendation. **Record that stop** — the trend the last
