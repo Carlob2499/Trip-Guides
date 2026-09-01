@@ -1,0 +1,42 @@
+name: Update gallery baselines
+
+# One-off/manual utility, not a gate. D5's gallery screenshot baselines (tests/visual/
+# gallery-baselines.spec.ts) must be generated on the SAME renderer that later checks them —
+# font metrics differ enough between an author's machine and GitHub's ubuntu-latest runner to
+# shift a ~34,000px full-page capture's height by tens of pixels, which reads as "everything
+# changed" to a pixel-diff gate even though nothing did. Run this manually (workflow_dispatch)
+# whenever a design change intentionally updates the baselines, then download the
+# `gallery-baselines` artifact and commit its PNGs in place of the locally-generated ones —
+# never trust a locally-generated baseline as the golden copy.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  update-baselines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npx playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - run: npx playwright install-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - run: npm run baselines:update
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: gallery-baselines
+          path: tests/visual/gallery-baselines.spec.ts-snapshots/
+          retention-days: 7
