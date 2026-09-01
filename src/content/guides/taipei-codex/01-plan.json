@@ -1,0 +1,25 @@
+[
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "The anchor correction",
+    "body": "<p><b>Do not plan around a November Pingxi Sky Lantern Festival.</b> New Taipei City's official 2026 announcement puts the festival on Feb 27 and Mar 3. For Nov 10–17, the real lantern activity is an ordinary sky-lantern release at <b>Shifen Old Street</b>; Jiufen is a separate old-town and tea-house stop.</p>",
+    "verified_on": "2026-09-01",
+    "shelf_life": "venue",
+    "source_url": "https://www.ntpc.gov.tw/ch/home.jsp?dataserno=6544b460d4b669c5db91474406a04d12&id=2d113acd09f81b46"
+  },
+  {
+    "type": "panel",
+    "group": "Plan",
+    "title": "Entry & arrival",
+    "body": "<p>US ordinary-passport holders are visa-exempt for up to 90 days. From Taoyuan Airport, Airport MRT is the default: A1 Taipei Main ↔ A12 Terminal 1 is {{fact:airport-mrt-a1-a12}}. Once in Taipei, MRT single rides are {{fact:metro-single-fare}}.</p>",
+    "verified_on": "2026-09-01",
+    "shelf_life": "transit",
+    "source_url": "https://www.boca.gov.tw/fp-149-4486-7785a-2.html"
+  },
+  {
+    "type": "weather",
+    "group": "Plan",
+    "title": "Weather for your dates"
+  }
+]
