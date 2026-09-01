@@ -368,10 +368,15 @@ grep gate (`scripts/verify-guide.mjs`) fails on any of these in a `body`,
   "worth flagging", "worth noting that", "disproved claim"
 - **Quality claims**: "a generic guide couldn't", "a generic AI",
   "no generic guide", "only a local would know"
+- **Unmistakable formulaic travel/LLM phrases**: "rich tapestry",
+  "nestled in the heart of", "serves as a testament", "hustle and bustle",
+  "it is important to note", "in conclusion", "let's delve", "game changer"
 
-These phrases are the research log leaking into the product. The fix is
-always the same: delete the frame, keep the fact, let `⚠` / `verified_on`
-carry the provenance silently. Example:
+The process/quality phrases are the research log leaking into the product; the formulaic phrases
+are low-information generated-travel scaffolding. The fix is the same: keep the supported fact,
+delete the frame, and let `⚠` / `verified_on` carry provenance silently. Context-sensitive
+ordinary words remain judgment calls under the expression standard above, not lexical failures.
+Example:
 
   ✗ "Honest note: Ichiran is overpriced by local reckoning."
   ✓ "Ichiran is overpriced by local reckoning."
