@@ -1,0 +1,51 @@
+[
+  {
+    "type": "venues",
+    "group": "Culture & sights",
+    "title": "Core sights",
+    "phase": "daily",
+    "rank": 2,
+    "intro": "Canonical Pass A backbone plus the local/crowd refinements that survived Pass B.",
+    "items": [
+      {
+        "name": "National Palace Museum",
+        "area": "Shilin",
+        "address": "No. 221, Sec. 2, Zhishan Rd., Shilin Dist., Taipei",
+        "hours": "Tue–Sun 09:00–17:00 after the Sep 13 trial period; 2026 special Monday opening includes Nov 9",
+        "price": "{{fact:npm-adult}}",
+        "why": "The trip's primary museum stop.",
+        "verified_on": "2026-09-01",
+        "shelf_life": "hours",
+        "source_url": "https://www.npm.gov.tw/Articles.aspx?sno=02007001"
+      },
+      {
+        "name": "Chiang Kai-shek Memorial Hall",
+        "area": "Zhongzheng",
+        "hours": "Memorial Hall 09:00–18:00; park 05:00–00:00, subject to official closure exceptions",
+        "why": "Treat it as both monumental architecture and contested political history; the official museum contextualizes the authoritarian era and Taiwan's democratic transition.",
+        "verified_on": "2026-09-01",
+        "shelf_life": "hours",
+        "source_url": "https://www.cksmh.gov.tw/en/cp.aspx?n=6369"
+      },
+      {
+        "name": "Taipei 101 Observatory",
+        "area": "Xinyi",
+        "hours": "Daily 10:00–21:00",
+        "price": "{{fact:taipei101-adult}}",
+        "why": "Keep the first-trip must-see; Pass B improves the rest of the guide rather than deleting famous landmarks.",
+        "verified_on": "2026-09-01",
+        "shelf_life": "venue",
+        "source_url": "https://www.taipei-101.com.tw/tw/observatory/ticket"
+      },
+      {
+        "name": "Yu Zai Fan Shu Tea House",
+        "area": "芋仔蕃薯茶坊 · Jiufen",
+        "hours": "⚠ Confirm directly on the day — no current T0 hours were verified in this harness",
+        "crowd_tip": "Recent independent firsthand accounts describe it as calmer than the A-Mei queue next door; no menu price or operating-hour claim is borrowed from those posts.",
+        "why": "The quieter-teahouse lead the intake asked Pass B to find.",
+        "source_url": "https://www.reddit.com/r/Taipei/comments/1idwe3e",
+        "verified_on": "2026-09-01"
+      }
+    ]
+  }
+]
