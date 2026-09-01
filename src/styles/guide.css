@@ -226,7 +226,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    before: only the downgrade drew, so a verified section and an unverified one were visually
    identical and the Verified property had no surface of its own.
 
-   Zero new design. This is SPEC-COMPONENTS §2's Stamp row — Source Sans 3, .82rem
+   Zero new design. This is SPEC-COMPONENTS §2's Stamp row — the data face (--font-data), .82rem
    (--text-control renders that exact value), .08em, 640, "1px of its own ink, square" — which
    is the same declaration set .hl-stamp (health.css) and .atlas-stamp already make, and which
    the design-handoff prototype's own per-section stamp writes as
@@ -532,7 +532,7 @@ body{overflow-x:clip}
    data-face kicker. The modal's drop shadow went with them — it sits over its own backdrop
    scrim, which already separates it from the page, and this system's rule is edges rather
    than elevation. */
-.share-backdrop{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.45);display:none}
+.share-backdrop{position:fixed;inset:0;z-index:900;background:rgba(var(--shadow-rgb),.45);display:none}
 .share-backdrop.open{display:block}
 .share-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;width:min(360px,calc(100vw - 2rem));max-height:calc(100dvh - 1.5rem);overflow-y:auto;background:var(--card);border:1px solid var(--rule2);border-radius:0;padding:1.4rem 1.6rem}
 .share-head{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}

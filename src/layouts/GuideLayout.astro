@@ -32,7 +32,7 @@ import { slotLabel } from "../features/mobile-nav/index.js";
 // so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
-import "@fontsource-variable/source-sans-3";
+import "@fontsource-variable/atkinson-hyperlegible-next";
 import "../styles/base.css";
 import "../styles/guide.css";
 import "../styles/jetlag.css";
@@ -465,7 +465,7 @@ const tripSummary = buildSummary(guide);
         // computed --bg later, but "later" is after first paint: installed to the home
         // screen on a dark phone, the status bar flashed the light default first.
         const tc = document.querySelector('meta[name="theme-color"]');
-        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#0f1317" : "#e3e7dc");
+        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#17120e" : "#e3e7dc");
       })();
     </script>
   </head>

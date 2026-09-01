@@ -59,7 +59,7 @@
    already provides — sticky is a positioned box, so .nav-hint's `position:absolute;top:100%`
    still resolves against .grail exactly as before. Do not re-add it; give any future anchor
    its own class instead of a rule broad enough to collide with a positioned element. */
-.nav-hint{position:absolute;top:100%;left:0;right:0;display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.5rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:0;box-shadow:0 6px 16px rgba(0,0,0,.12);font-size:var(--text-small);color:var(--ink);transition:opacity .35s,transform .35s}
+.nav-hint{position:absolute;top:100%;left:0;right:0;display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.5rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:0;box-shadow:0 6px 16px rgba(var(--shadow-rgb),.12);font-size:var(--text-small);color:var(--ink);transition:opacity .35s,transform .35s}
 .nav-hint-txt{flex:1;line-height:1.5}
 .nav-hint-x{flex:none;width:30px;height:30px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer;font-size:var(--text-control-sm)}
 .nav-hint-x:hover{color:var(--ink);border-color:var(--ink)}

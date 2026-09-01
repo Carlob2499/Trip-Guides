@@ -48,7 +48,7 @@
 
 /* ── Lightbox ─────────────────────────────────────────────────────────────── */
 .sight--photo .cardimg{cursor:zoom-in}
-.lb-backdrop{position:fixed;inset:0;z-index:300;display:none;background:rgba(8,11,14,.92);align-items:center;justify-content:center;padding:1rem}
+.lb-backdrop{position:fixed;inset:0;z-index:300;display:none;background:rgba(var(--shadow-rgb),.92);align-items:center;justify-content:center;padding:1rem}
 .lb-backdrop.lb-on{display:flex}
 .lb-fig{position:relative;margin:0;max-width:min(1200px,96vw);max-height:92vh;display:flex;flex-direction:column}
 .lb-img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:0}
@@ -92,7 +92,7 @@
 .sos-btn{position:fixed;left:max(1rem,var(--safe-left));bottom:calc(5.2rem + var(--safe-bottom));z-index:75;width:48px;height:48px;border-radius:999px;background:var(--crit-fill);color:var(--on-crit);border:2px solid color-mix(in srgb,var(--on-crit) 35%,transparent);font-family:var(--font-data);font-size:var(--text-micro);font-weight:800;letter-spacing:.05em;cursor:pointer}
 @media(min-width:900px){.sos-btn{bottom:1.6rem;left:5rem}}
 .sos-btn:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
-.sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:flex-end;justify-content:center;background:rgba(8,11,14,.6)}
+.sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:flex-end;justify-content:center;background:rgba(var(--shadow-rgb),.6)}
 .sos-sheet[hidden]{display:none}
 /* overscroll-behavior:contain — a fling that runs off the end of the sheet must not
    scroll the page behind it. sheet-dragging kills the transition while the thumb owns
@@ -133,7 +133,7 @@
 .sos-sheet--fallback .sos-note::before{content:"⚠ "}
 
 /* ── Show-the-driver address card ─────────────────────────────────────────── */
-.addr-card{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;background:rgba(8,11,14,.75);padding:1rem}
+.addr-card{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;background:rgba(var(--shadow-rgb),.75);padding:1rem}
 .addr-card[hidden]{display:none}
 .addr-card-inner{width:100%;max-width:34rem;background:var(--card);border:1px solid var(--rule2);border-radius:0;padding:1.4rem;text-align:center}
 .addr-card-hint{margin:0 0 .8rem;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.06em;color:var(--muted)}

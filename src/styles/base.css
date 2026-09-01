@@ -85,7 +85,7 @@
      important number in the product. Nothing caught it because the SOS sheet is `hidden`
      until it is opened and axe does not scan hidden nodes (the gate now opens it).
      Light value is unchanged so light mode does not shift; the dark value is measured,
-     not picked: #ef8a83 on --card #242c34 = 5.81:1. */
+     not picked: #ef8a83 on --card #322921 = 5.85:1. */
   --crit:#b3261e;
   /* The emergency FILL (the SOS button's hover state), with white on it. Deliberately does
      NOT re-map with the theme — same reasoning as --on-aink above: a fill is an object, not
@@ -117,6 +117,20 @@
   --dark-ink-3:#c7ccc0;
   --dark-ink-4:#b9beb2;
   --dark-rule:rgba(255,255,255,.14);
+  /* D2 (2026-08-29) — CONSOLIDATED SHADOW/SCRIM TINT. Before this token, "near-black" for a
+     box-shadow or backdrop scrim was independently reinvented six times across 30 call
+     sites — rgba(0,0,0,·), (16,20,24,·), (10,14,18,·), (8,11,14,·), (12,15,18,·) and
+     (10,13,16,·) — the exact "authors reaching past the scale" shape --text-micro's own
+     comment describes, just for colour instead of size. Declared as an RGB TRIPLET (not a
+     hex) so every call site keeps its OWN alpha via rgba(var(--shadow-rgb),alpha) — the
+     alpha is a legitimate per-use elevation/opacity decision, only the base colour was
+     drifting. Deliberately NOT reusing --ink or its var() form: --ink re-maps per theme
+     (dark mode's --ink is near-WHITE, for text), while a shadow must stay near-black in
+     BOTH themes — an object, not page ink, so it is declared once in :root only, exactly
+     like --dark-ground/--crit-fill/--on-crit above, and never touched by the dark block.
+     Value is --ink's own light-mode hex (#0f141a) decomposed to a triplet — reused, not
+     invented, per the governance rule against hand-picking new colours. */
+  --shadow-rgb:15,20,26;
   /* --cta/--cta-ink are the one genuinely NEW pair, and the only ones here that are not
      aliases. docs/design-handoff/DESIGN.md specs the primary button as chart-room-slate on card-paper and gives no
      dark variant — but in dark mode chart-room-slate IS the page ground, so a fixed value
@@ -125,7 +139,7 @@
      decision, 2026-08-06). Both hexes are existing palette members, not new colours.
      Pinned by src/styles/atlas-tokens.test.ts: >=4.5:1 ink-on-ground AND >=3:1 ground-on-page
      (WCAG 1.4.11 — a button's own edge has to be findable), in both themes. */
-  --cta:#0f1317;--cta-ink:#f8faf3;
+  --cta:#17120e;--cta-ink:#f8faf3;
   /* Display-cutout insets, spelled once at the root so no component has to remember env() or
      its fallback. NOTHING consumes them in this phase — each fixed/sticky component wires
      max(<its own reserve>,var(--safe-*)) as it migrates. The 0px fallback is load-bearing, not
@@ -152,7 +166,7 @@
      display + body are BOTH Literata — one serif wearing both hats through its real
      optical-size axis (the `standard` fontsource variant carries wght+opsz, and
      font-optical-sizing:auto means big headings get the display cut, prose the text cut,
-     with zero per-rule settings). data = Source Sans 3, one quiet humanist sans for
+     with zero per-rule settings). data = Atkinson Hyperlegible Next, one hyperlegible humanist sans (chosen 2026-08-27, see docs/reference/design-system.md) for
      times/prices/coords/stamps/labels. Bricolage Grotesque and Spline Sans Mono retired
      here — grep for their names should find only this comment. */
   /* CJK fallback: Korea guide content renders real Hangul through all three roles (.addr-card-big
@@ -172,7 +186,7 @@
      rather than an invented font name. */
   --font-display:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
   --font-body:'Literata Variable',Georgia,'Times New Roman',AppleMyungjo,Batang,'Noto Serif CJK KR',serif;
-  --font-data:'Source Sans 3 Variable',-apple-system,system-ui,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',sans-serif;
+  --font-data:'Atkinson Hyperlegible Next Variable',-apple-system,system-ui,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans CJK KR',sans-serif;
   /* Type SCALE — semantic size steps. Anchored to two values that were ALREADY load-bearing
      before this scale existed, not invented fresh: --text-body matches body's own font-size
      (which now READS the token, below, so the anchor is stated once instead of duplicated),
@@ -355,8 +369,13 @@
    var(<a token this block already re-maps>), resolved against this same element, so they follow
    the swap automatically. Re-declaring them would create the second source of truth the alias
    exists to prevent. --cta/--cta-ink are not aliases and DO invert — see :root. */
+/* D5 (design-system.md §1): the dark ground is WARM charcoal, never blue-gray. Every value
+   below is the old cool token re-hued warm at EQUAL relative luminance (±0.002), so every
+   measured/derived contrast ratio in the repo — accent-ink-dark derivation, the palette
+   extractor's DARK_BG ground, the pinned --crit reading — stays valid to two decimal places.
+   Change a value here and its luminance changes with it; re-run the contrast gates. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1317;
+  --bg:#17120e;--bg2:#261f19;--ink:#f1eae0;--card:#322921;--rule:#483e35;--rule2:#60554b;--muted:#a89f93;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#17120e;
   /* --rw/--photo are re-declared here at the SAME values on purpose (R5 TOKENS.md §1 lists both
      in both theme tables). Unlike the aliases above, these are theme KNOBS: the whole reason
      they are tokens is that a theme could thicken every hairline or suppress photography in one
@@ -364,14 +383,14 @@
      carry their own declaration. If one moves, move the other deliberately — they are two
      decisions that currently agree, not one value written twice. */
   --rw:1px;--photo:1;
-  --cta:#e8ece3;--cta-ink:#0f1317;
+  --cta:#f1eae0;--cta-ink:#17120e;
   --accent-ink:var(--accent-ink-dark)}
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
-[data-theme="dark"]{--bg:#0f1317;--bg2:#1a2129;--ink:#e8ece3;--card:#242c34;--rule:#38414b;--rule2:#4e5865;--muted:#9aa392;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1317;
+[data-theme="dark"]{--bg:#17120e;--bg2:#261f19;--ink:#f1eae0;--card:#322921;--rule:#483e35;--rule2:#60554b;--muted:#a89f93;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#17120e;
   --rw:1px;--photo:1;   /* theme knobs — see the media-query block above for why both scopes declare them */
-  --cta:#e8ece3;--cta-ink:#0f1317;
+  --cta:#f1eae0;--cta-ink:#17120e;
   --accent-ink:var(--accent-ink-dark)}
 [data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 

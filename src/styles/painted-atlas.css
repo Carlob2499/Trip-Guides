@@ -60,7 +60,7 @@
    byte-identical to .mast-photo's scrim gradient, so the contrast math measured
    for photo heroes holds here without re-derivation. Hub minis skip it (the
    card's own .hubcard-cover-grad owns that job there). */
-.pa-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,15,18,.86) 0%,rgba(12,15,18,.42) 48%,rgba(12,15,18,.10) 100%)}
+.pa-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(var(--shadow-rgb),.86) 0%,rgba(var(--shadow-rgb),.42) 48%,rgba(var(--shadow-rgb),.10) 100%)}
 
 /* The heartbeat: terrain layers drift at three speeds, mist crosses slower than
    any of them. Transform/opacity only (compositor-friendly); the ±9px travel is

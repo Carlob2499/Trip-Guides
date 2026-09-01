@@ -1,6 +1,7 @@
 ---
 import PwaHead from "../components/PwaHead.astro";
 import { generateContourLayer } from "../lib/contours";
+import Contours from "../components/Contours.astro";
 import { SECTIONS } from "../features/hub/index";
 // Build-time only (Astro frontmatter runs in Node): the intake single source of truth supplies
 // the priority dropdowns' exact option strings and the derived fields' labels, so the no-JS
@@ -9,7 +10,7 @@ import { FIELDS } from "../../scripts/intake-schema.mjs";
 // Same self-hosted fonts + token base as the hub — one theme, every surface.
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
-import "@fontsource-variable/source-sans-3";
+import "@fontsource-variable/atkinson-hyperlegible-next";
 import "../styles/base.css";
 import "../styles/intake.css";
 
@@ -118,13 +119,7 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
   </head>
   <body data-base={base}>
     <a class="skip-link" href="#intakeMain">Skip to the form</a>
-    <div class="itk-contours" aria-hidden="true">
-      {contours.map((layer, i) => (
-        <svg data-itk-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
-          {layer.rings.map((points) => <polyline points={points} />)}
-        </svg>
-      ))}
-    </div>
+    <Contours layers={contours} />
     <header class="itk-bar">
       <a class="itk-wordmark" href={`${base}/`}>← Waypoint</a>
     </header>

@@ -1,0 +1,41 @@
+---
+/* The full-page survey-contour ground — ONE owner (D3, 2026-08-29). Before this component,
+   five pages carried their own copy of the same three-rule CSS block under five names
+   (.page-contours/.itk-contours/.pg-contours/.cp-contours ×2 pages) plus six repetitions of
+   the div+svg markup, and the stroke tint had already drifted (16% on two copies, 14% on the
+   other two) — nobody decided that split, it just accumulated. Consolidated at 14%, the
+   quieter of the two: strictly fainter than the 16% worst-case the a11y gate's contrast
+   measurements were taken at (tests/visual/a11y.spec.ts), so every measured bound still holds.
+   NOT this component: about.astro's .ab-contours — that is a genuinely different variant
+   (absolute, height-capped hero band with measured composite geometry), not a copy.
+   Layers come from generateContourLayer (src/lib/contours.ts) in the page's frontmatter;
+   pages keep their own seeds/config — the ground's DATA is per-page identity, only the
+   rendering is shared. Content siblings still need position:relative;z-index:1 to paint
+   above this fixed layer (positioned beats static at paint time); that stacking belongs to
+   each page's own layout CSS. */
+import type { ContourLayer } from "../lib/contours";
+
+interface Props {
+  layers: ContourLayer[];
+}
+const { layers } = Astro.props;
+---
+
+<div class="contours" aria-hidden="true">
+  {
+    layers.map((layer) => (
+      <svg viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
+        {layer.rings.map((points) => <polyline points={points} />)}
+      </svg>
+    ))
+  }
+</div>
+
+<style>
+  .contours{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .contours svg{position:absolute;inset:0;width:100%;height:100%}
+  .contours polyline{fill:none;stroke:color-mix(in srgb,var(--muted) 14%,transparent);stroke-width:1.1}
+  /* Decorative ground never prints — previously each page's own @media print list hid its
+     copy; scoped styles mean only this component can hide this markup now. */
+  @media print{.contours{display:none!important}}
+</style>

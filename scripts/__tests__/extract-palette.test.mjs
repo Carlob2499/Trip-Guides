@@ -132,7 +132,7 @@ describe("contrast grounds — the extractor measures what the product actually 
 
   it("the shared policy module names the current page grounds, not a retired palette", () => {
     expect(LIGHT_BG).toBe("#e3e7dc");
-    expect(DARK_BG).toBe("#0f1317");
+    expect(DARK_BG).toBe("#17120e");
     expect(MIN_ACCENT_CONTRAST).toBe(3.0);
   });
 

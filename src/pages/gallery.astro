@@ -1,0 +1,451 @@
+---
+/* D4 — THE COMPONENT GALLERY (design-system.md §6). Every approved component and content
+   block from docs/reference/component-registry.json rendered on one internal page, so the
+   whole composable vocabulary can be reviewed — and screenshot-baselined (D5) — in one place.
+
+   Coverage is machine-checked: src/gallery.test.ts asserts every registry entry appears
+   here, and the frontmatter below THROWS at build time if a block type has no real section
+   to render. Specimens use REAL guide content wherever a real section exists (all 16 block
+   types do today) — real data is the honest specimen; nothing is invented for the gallery.
+   Component-level specimens that need scalar props (a Fold lead, a Hint text) use copy that
+   describes itself as a specimen, never fabricated travel facts.
+
+   Themes × light/dark are RUNTIME toggles over one set of specimens — exactly the product's
+   own architecture (one token core; surfaces/themes remap it): the theme picker applies a
+   real guide's accentStyle() token set to <html>, and the dark button flips data-theme the
+   same way every page's own control does. The cross-product for regression purposes is
+   captured by D5's screenshot baselines driving these two controls, not by rendering
+   hundreds of static copies.
+
+   Internal surface: linked from nowhere in the product (like /progress/), and its copy may
+   name registers and specs — §3.5's "no inner workings" rule binds customer-facing surfaces.
+
+   The style-bundle import list below mirrors GuideLayout.astro, which stays the authority
+   for what a guide surface loads; the gallery needs the same bundle because it renders the
+   same components. touch.css stays last for the same source-order reason. */
+import { getCollection } from "astro:content";
+import PwaHead from "../components/PwaHead.astro";
+import Icon from "../components/Icon.astro";
+import Contours from "../components/Contours.astro";
+import Block from "../components/Block.astro";
+import Fold from "../components/Fold.astro";
+import GapBlock from "../components/GapBlock.astro";
+import Hint from "../components/Hint.astro";
+import JetLag from "../components/JetLag.astro";
+import Learnings from "../components/Learnings.astro";
+import PaintedAtlas from "../components/PaintedAtlas.astro";
+import Panel from "../components/Panel.astro";
+import ProvenancePopover from "../components/ProvenancePopover.astro";
+import ReminderRow from "../components/ReminderRow.astro";
+import Reminders from "../components/Reminders.astro";
+import ToolsScreen from "../components/ToolsScreen.astro";
+import TransitLinks from "../components/TransitLinks.astro";
+import TripKit from "../components/TripKit.astro";
+import TripSplit from "../components/TripSplit.astro";
+import { generateContourLayer } from "../lib/contours";
+import { COUNTRY_CODES, tzFor } from "../lib/themes";
+import { paletteFor, accentForGuide } from "../lib/palettes";
+import { accentTokens, accentStyle } from "../lib/accent-tokens";
+import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
+import { derivePins } from "../lib/map-pins";
+import { deriveToolsRecord } from "../features/trip-tools/index";
+import { collectWaypoints, collectDayEvents } from "../features/exports/index";
+import registry from "../../docs/reference/component-registry.json";
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/atkinson-hyperlegible-next";
+import "../styles/base.css";
+import "../styles/guide.css";
+import "../styles/jetlag.css";
+import "../styles/hint.css";
+import "../styles/print.css";
+import "../styles/trip-split.css";
+import "../styles/masthead.css";
+import "../styles/painted-atlas.css";
+import "../styles/anchors.css";
+import "../styles/sights.css";
+import "../styles/venues.css";
+import "../styles/divergences.css";
+import "../styles/provenance-dot.css";
+import "../styles/gap-block.css";
+import "../styles/fold.css";
+import "../styles/map.css";
+import "../styles/planner.css";
+import "../styles/overview.css";
+import "../styles/flight.css";
+import "../styles/field-tools.css";
+import "../styles/tools.css";
+import "../features/learnings/styles.css";
+import "../features/guide-rail/styles.css";
+import "../features/firebase/styles.css";
+import "../features/panel/styles.css";
+import "../styles/touch.css";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const holidayData = import.meta.glob("../data/holidays/*.json", { eager: true, import: "default" }) as Record<string, NonNullable<Parameters<typeof buildHolidayInfo>[0]>>;
+
+/* Loose section shape for walking guide data — the schema (content.config.ts) is the real
+   authority; the gallery only touches these few fields. */
+type Sec = Record<string, unknown> & {
+  type?: string; title?: string; name?: string; year?: number;
+  sections?: Sec[]; items?: (Record<string, unknown> & { date?: string })[];
+};
+const flatSections = (secs: Sec[]): Sec[] => secs.flatMap((s) => (s.sections ? flatSections(s.sections) : [s]));
+
+const guides = (await getCollection("guides")).sort((a, b) => a.id.localeCompare(b.id));
+type GuideData = (typeof guides)[number]["data"];
+
+/* One theme per guide — the SAME accent resolution GuideLayout runs (explicit theme →
+   extracted palette → country accent), serialized so the picker can apply any guide's
+   identity to this page at runtime. */
+const themeStyles: Record<string, string> = {};
+for (const g of guides) {
+  const extracted = paletteFor(g.id);
+  const accent = accentForGuide(g.id, g.data.theme, g.data.country);
+  const tokens = accentTokens(accent, extracted?.accent);
+  themeStyles[g.id] = accentStyle(tokens, {
+    "--theme-primary": g.data.theme?.primary ?? extracted?.primary ?? accent,
+    "--theme-secondary": g.data.theme?.secondary ?? extracted?.secondary ?? accent,
+    "--theme-accent": g.data.theme?.accent ?? extracted?.accent ?? accent,
+  });
+}
+const defaultTheme = guides.find((g) => g.id === "korea")?.id ?? guides[0].id;
+
+/* BLOCK SPECIMENS — one real section per registered block type. The literal type→block map
+   is what src/gallery.test.ts checks registry coverage against; the throw makes "a block
+   with nothing real to show" a build failure, not a silent gap in the gallery. */
+const TYPE_TO_BLOCK: Record<string, string> = {
+  panel: "PanelBlock", prose: "ProseBlock", list: "ListBlock", routes: "RoutesBlock",
+  map: "MapBlock", budget: "BudgetBlock", days: "DaysBlock", sights: "SightsBlock",
+  raids: "RaidBlock", habitats: "HabitatsBlock", infogrid: "InfoGridBlock",
+  tierlist: "TierListBlock", weather: "WeatherBlock", holidays: "HolidaysBlock",
+  venues: "VenueBlock", divergences: "DivergencesBlock",
+};
+type Specimen = { type: string; block: string; slug: string; sec: Sec; guide: GuideData; secTitle: string };
+const blockSpecimens: Specimen[] = [];
+for (const [type, block] of Object.entries(TYPE_TO_BLOCK)) {
+  let found: Specimen | null = null;
+  for (const g of guides) {
+    const sec = flatSections((g.data.sections ?? []) as Sec[]).find((s) => s.type === type);
+    if (sec) { found = { type, block, slug: g.id, sec, guide: g.data, secTitle: sec.title ?? sec.name ?? type }; break; }
+  }
+  if (!found) throw new Error(`gallery: no guide has a real "${type}" section for ${block} — add a specimen source`);
+  blockSpecimens.push(found);
+}
+const registryBlocks = Object.keys(registry.blocks);
+const mappedBlocks = Object.values(TYPE_TO_BLOCK);
+const unmapped = registryBlocks.filter((b) => !mappedBlocks.includes(b));
+if (unmapped.length) throw new Error(`gallery: registered block(s) with no specimen mapping: ${unmapped.join(", ")}`);
+
+/* Per-specimen inputs the blocks derive from their own guide, mirroring GuideLayout. */
+const holidaysFor = (sp: Specimen) => {
+  const cc = COUNTRY_CODES[sp.guide.country] || null;
+  const days = flatSections((sp.guide.sections ?? []) as Sec[]).find((s) => s.type === "days");
+  const first = (days?.items?.[0]?.date as string) ?? null;
+  const last = (days?.items?.[days.items.length - 1]?.date as string) ?? first;
+  const year = sp.sec.year || deriveTripYear(first, new Date());
+  const rows = cc ? holidayData[`../data/holidays/${cc}-${year}.json`] : null;
+  return buildHolidayInfo(rows ?? null, first, last, year);
+};
+const pinsFor = (sp: Specimen) => derivePins(sp.guide.sections).get(sp.sec as never) ?? null;
+
+/* The Tools station + trip-tools rows, derived from one real guide with the layout's own
+   derivation — the storeKey is gallery-namespaced so specimen interaction can never touch a
+   real trip's saved state. */
+const toolsGuide = guides.find((g) => g.id === defaultTheme)!;
+const toolsFlat = flatSections((toolsGuide.data.sections ?? []) as Sec[]);
+const toolsDays = toolsFlat.find((s) => s.type === "days");
+const toolsFirst = (toolsDays?.items?.[0]?.date as string) ?? null;
+const toolsLast = (toolsDays?.items?.[toolsDays.items.length - 1]?.date as string) ?? toolsFirst;
+const galleryStoreKey = "galleryspecimen";
+const toolsCC = COUNTRY_CODES[toolsGuide.data.country] ?? null;
+const toolsHolSec = toolsFlat.find((s) => s.type === "holidays");
+const toolsYear = toolsHolSec?.year || deriveTripYear(toolsFirst, new Date());
+const toolsTrip = {
+  record: deriveToolsRecord({
+    slug: toolsGuide.id,
+    title: toolsGuide.data.title,
+    country: toolsGuide.data.country,
+    tz: tzFor(toolsGuide.data.country),
+    storeKey: galleryStoreKey,
+    sections: toolsFlat as never,
+    firstDayDate: toolsFirst,
+    lastDayDate: toolsLast,
+  }),
+  href: `${base}/guides/${toolsGuide.id}/`,
+  holidays: toolsHolSec
+    ? buildHolidayInfo(toolsCC ? (holidayData[`../data/holidays/${toolsCC}-${toolsYear}.json`] ?? null) : null, toolsFirst, toolsLast, toolsYear)
+    : null,
+  cc: toolsCC,
+  exports: {
+    gpx: collectWaypoints(toolsGuide.data).length > 0,
+    ics: collectDayEvents(toolsGuide.data).length > 0,
+  },
+};
+const specimenReminder = toolsTrip.record.reminders[0] ?? null;
+const tripKitDays = toolsDays?.items ?? [];
+
+const ICONS = ["budget","vote","remind","learn","kit","home","top","chevron","moon","edit","clock","phone","image","check","shield","calendar","chat","plane","groups"] as const;
+
+const contourLayers = [
+  generateContourLayer({ seed: 977, rings: 10, cx: 240, cy: 300 }),
+  generateContourLayer({ seed: 431, rings: 7, cx: 820, cy: 780 }),
+];
+
+const componentRoles = registry.components as Record<string, { role: string }>;
+const patterns = registry.patterns as Record<string, { contract: string; gates: string[] }>;
+---
+<!doctype html>
+<html lang="en" style={themeStyles[defaultTheme]} data-default-theme={defaultTheme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Component gallery — Waypoint</title>
+    <meta name="robots" content="noindex" />
+    <PwaHead />
+    <script is:inline>
+      // Same pre-paint dark init every page runs: read the saved choice, fall back to the
+      // system preference, stamp data-theme before first paint.
+      (function () {
+        try {
+          const s = localStorage.getItem("tg-theme");
+          const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+          document.documentElement.setAttribute("data-theme", s === "dark" || (s === null && preferDark) ? "dark" : "light");
+        } catch (e) { /* private mode — light default stands */ }
+      })();
+    </script>
+  </head>
+  <body class="gallery-body">
+    <Contours layers={contourLayers} />
+    <main class="gal">
+      <header class="gal-head">
+        <p class="gal-eyebrow">Design system · internal</p>
+        <h1 class="gal-title">Component gallery</h1>
+        <p class="gal-sub">
+          Every approved component and block from the registry, rendered from real guide
+          content. Coverage is enforced by <code>src/gallery.test.ts</code>; themes and
+          light/dark are live toggles over the one token core.
+        </p>
+        <div class="gal-controls">
+          <label class="gal-ctl" for="galTheme">Guide theme
+            <select id="galTheme" class="gal-select">
+              {guides.map((g) => (
+                <option value={g.id} selected={g.id === defaultTheme}>{g.data.title ?? g.id}</option>
+              ))}
+            </select>
+          </label>
+          <button id="galDark" class="gal-dark" type="button" aria-label="Toggle dark mode">
+            <Icon name="moon" size={15} /> Light / dark
+          </button>
+        </div>
+      </header>
+
+      <section class="gal-section" id="components">
+        <h2 class="gal-h2">Shared components ({Object.keys(registry.components).length})</h2>
+
+        <article class="gal-card">
+          <h3 class="gal-name">Contours</h3>
+          <p class="gal-role">{componentRoles.Contours.role} — it is this page's own ground; scroll and it holds still.</p>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">PwaHead</h3>
+          <p class="gal-role">{componentRoles.PwaHead.role} — non-visual; mounted in this page's own &lt;head&gt;.</p>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">Icon</h3>
+          <p class="gal-role">{componentRoles.Icon.role} — the complete vocabulary, {ICONS.length} marks:</p>
+          <ul class="gal-icons">
+            {ICONS.map((n) => (
+              <li class="gal-icon-cell"><Icon name={n} size={20} /><span class="gal-icon-name">{n}</span></li>
+            ))}
+          </ul>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">Fold</h3>
+          <p class="gal-role">{componentRoles.Fold.role}</p>
+          <Fold lead="This specimen lead stays two lines and the type size does not change when it opens — the one rule the component exists to hold." id="gallery-fold">
+            <p>The folded body. Print force-opens every fold; on screen it opens on hover and click (desktop) or tap (touch).</p>
+          </Fold>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">Hint</h3>
+          <p class="gal-role">{componentRoles.Hint.role}</p>
+          <p>A label that earns a hint <Hint label="the specimen" text="This explanation stays behind the ? until hovered, focused, or tapped." /></p>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">GapBlock <span class="gal-state">state: unconfirmed</span></h3>
+          <p class="gal-role">{componentRoles.GapBlock.role}</p>
+          <GapBlock body="Specimen gap: research came up short on this item, and the gallery shows the loud form instead of guessed detail." instead="the substitute action a real gap would carry" />
+          <p class="gal-note">Bare form — a gap stated with nothing to substitute yet:</p>
+          <GapBlock />
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">ProvenancePopover <span class="gal-state">states: fresh · stale · photo</span></h3>
+          <p class="gal-role">{componentRoles.ProvenancePopover.role}</p>
+          <p class="gal-prov-row">
+            Fresh <ProvenancePopover claim="Specimen claim (fresh)" verifiedOn="2026-08-27" sourceUrl="https://example.com/" tier="primary" />
+            · Aging <ProvenancePopover claim="Specimen claim (old date)" verifiedOn="2025-11-02" shelfLife="hours" />
+            · Bare <ProvenancePopover claim="Specimen claim (no provenance recorded)" />
+          </p>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">Panel <span class="gal-state">states: open · collapsed</span></h3>
+          <p class="gal-role">{componentRoles.Panel.role}</p>
+          <div class="atlas-grid gal-panel-host">
+            <Panel id="gal-panel-open" kicker="Specimen" title="An open Panel"><p>Body content inside the Atlas container.</p></Panel>
+            <Panel id="gal-panel-closed" kicker="Specimen" title="A collapsed Panel" collapsed={true}><p>Hidden until expanded.</p></Panel>
+          </div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">PaintedAtlas <span class="gal-state">variants: full · mini</span></h3>
+          <p class="gal-role">{componentRoles.PaintedAtlas.role} — seeded by the {toolsGuide.id} guide's identity.</p>
+          <div class="gal-atlas"><PaintedAtlas seed={toolsGuide.id} tz={tzFor(toolsGuide.data.country)} /></div>
+          <div class="gal-atlas gal-atlas-mini"><PaintedAtlas seed={toolsGuide.id} tz={tzFor(toolsGuide.data.country)} mini={true} /></div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">TransitLinks</h3>
+          <p class="gal-role">{componentRoles.TransitLinks.role} — pointing at a real verified coordinate from {toolsGuide.id}.</p>
+          <TransitLinks lat={37.5796} lng={126.977} name="Gyeongbokgung Palace" country={toolsGuide.data.country} />
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">JetLag <span class="gal-state">state: open</span></h3>
+          <p class="gal-role">{componentRoles.JetLag.role}</p>
+          <JetLag destTz={tzFor(toolsGuide.data.country) ?? "Asia/Seoul"} open={true} />
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">ReminderRow</h3>
+          <p class="gal-role">{componentRoles.ReminderRow.role}</p>
+          {specimenReminder ? (
+            <ul class="tools-rem-list"><ReminderRow item={specimenReminder} /></ul>
+          ) : (
+            <p class="gal-note">No booking reminder derivable from {toolsGuide.id} — honest blank, not a fabricated row.</p>
+          )}
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">Reminders <span class="gal-state">state: pre-sync (Firebase unconfigured)</span></h3>
+          <p class="gal-role">{componentRoles.Reminders.role}</p>
+          <Reminders storeKey={galleryStoreKey} />
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">TripSplit</h3>
+          <p class="gal-role">{componentRoles.TripSplit.role}</p>
+          <TripSplit storeKey={galleryStoreKey} standalone={true} />
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">TripKit</h3>
+          <p class="gal-role">{componentRoles.TripKit.role} — derived from {toolsGuide.id}'s own days.</p>
+          <TripKit storeKey={galleryStoreKey} country={toolsGuide.data.country} days={tripKitDays} sections={toolsFlat} />
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">Learnings <span class="gal-state">state: inert until Firebase + feedback exist</span></h3>
+          <p class="gal-role">{componentRoles.Learnings.role}</p>
+          <Learnings storeKey={galleryStoreKey} slug={toolsGuide.id} title={toolsGuide.data.title} />
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">ToolsScreen</h3>
+          <p class="gal-role">{componentRoles.ToolsScreen.role} — the whole station, derived from {toolsGuide.id} with the layout's own derivation.</p>
+          <ToolsScreen active={toolsTrip} base={base}>
+            <Reminders storeKey={galleryStoreKey} />
+          </ToolsScreen>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">Block</h3>
+          <p class="gal-role">{componentRoles.Block.role} — every specimen in the next section renders through it.</p>
+        </article>
+      </section>
+
+      <section class="gal-section" id="blocks">
+        <h2 class="gal-h2">Content blocks ({registryBlocks.length})</h2>
+        {blockSpecimens.map((sp, i) => (
+          <article class="gal-card gal-card-block">
+            <h3 class="gal-name">{sp.block} <span class="gal-state">from {sp.slug} · “{sp.secTitle}”</span></h3>
+            <div class="gal-block-host">
+              <Block
+                sec={sp.sec}
+                sid={`gal-${i}`}
+                ci={0}
+                solo={false}
+                holidays={sp.type === "holidays" ? holidaysFor(sp) : null}
+                learnings={null}
+                mapPins={sp.type === "map" ? pinsFor(sp) : null}
+                country={sp.guide.country}
+              />
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <section class="gal-section" id="patterns">
+        <h2 class="gal-h2">Patterns (contracts, not components)</h2>
+        {Object.entries(patterns).map(([name, p]) => (
+          <article class="gal-card">
+            <h3 class="gal-name">{name}</h3>
+            <p class="gal-role">{p.contract}</p>
+            <p class="gal-note">Gates: {p.gates.join(" · ")}</p>
+          </article>
+        ))}
+      </section>
+    </main>
+
+    <script is:inline define:vars={{ themeStyles }}>
+      // Theme picker: apply the chosen guide's serialized accentStyle() to <html> — the same
+      // inline-style carrier GuideLayout emits, so base.css's --accent-ink-light hook and the
+      // dark-mode ink selection keep working unchanged.
+      const sel = document.getElementById("galTheme");
+      sel.addEventListener("change", function () {
+        document.documentElement.setAttribute("style", themeStyles[sel.value]);
+      });
+      // Dark toggle: same storage key and attribute as every page's own control.
+      document.getElementById("galDark").addEventListener("click", function () {
+        const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try { localStorage.setItem("tg-theme", next); } catch (e) {}
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .gallery-body { background: var(--bg); color: var(--ink); margin: 0; }
+  .gal { position: relative; z-index: 1; max-width: 62rem; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; font-family: var(--font-body); }
+  .gal-eyebrow { font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); margin: 0 0 0.4rem; }
+  .gal-title { font-family: var(--font-display); font-size: var(--text-h1); margin: 0 0 0.5rem; }
+  .gal-sub { color: var(--muted); max-width: 46rem; }
+  .gal-controls { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
+  .gal-ctl { font-family: var(--font-data); font-size: var(--text-small); color: var(--muted); display: flex; gap: 0.5rem; align-items: center; }
+  .gal-select { font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--rule); padding: 0.45rem 0.6rem; min-height: 44px; }
+  .gal-dark { display: inline-flex; gap: 0.45rem; align-items: center; font-family: var(--font-data); font-size: var(--text-small); color: var(--ink); background: var(--card); border: 1px solid var(--rule); border-radius: 999px; padding: 0.55rem 1rem; min-height: 44px; cursor: pointer; }
+  .gal-h2 { font-family: var(--font-display); font-size: var(--text-h2); border-bottom: 1px solid var(--rule); padding-bottom: 0.4rem; margin: 3rem 0 1.25rem; }
+  .gal-card { background: var(--card); border: 1px solid var(--rule); padding: 1.25rem 1.4rem 1.5rem; margin: 0 0 1.25rem; }
+  .gal-name { font-family: var(--font-data); font-size: var(--text-body); margin: 0 0 0.25rem; }
+  .gal-state { font-size: var(--text-micro); letter-spacing: var(--tracking-micro); text-transform: uppercase; color: var(--muted); font-weight: 400; margin-left: 0.5rem; }
+  .gal-role { color: var(--muted); font-size: var(--text-small); margin: 0 0 0.9rem; }
+  .gal-note { color: var(--muted); font-size: var(--text-small); margin: 0.9rem 0 0.5rem; }
+  .gal-icons { display: flex; flex-wrap: wrap; gap: 0.6rem; list-style: none; margin: 0; padding: 0; }
+  .gal-icon-cell { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; min-width: 3.5rem; padding: 0.5rem 0.25rem; border: 1px solid var(--rule); }
+  .gal-icon-name { font-family: var(--font-data); font-size: var(--text-micro); color: var(--muted); }
+  /* isolation: the atlas root is z-index:-3 (it lives behind a masthead normally); a new
+     stacking context keeps it from dropping behind this card's opaque ground. */
+  .gal-atlas { position: relative; isolation: isolate; height: 220px; overflow: hidden; border: 1px solid var(--rule); margin-bottom: 0.75rem; }
+  .gal-atlas-mini { height: 120px; max-width: 20rem; }
+  .gal-prov-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .gal-panel-host { display: grid; gap: 1rem; }
+  .gal-block-host { overflow-x: auto; }
+</style>

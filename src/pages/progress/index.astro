@@ -14,6 +14,7 @@ import { readFileSync } from "node:fs";
 import PwaHead from "../../components/PwaHead.astro";
 import { jsonEmbed } from "../../lib/json-embed";
 import { generateContourLayer } from "../../lib/contours";
+import Contours from "../../components/Contours.astro";
 import {
   ROUTE_VIEWBOX, OCEAN_RECT, ROUTE_PATH_D, graticulePath, projectLand, routeStations,
   type Topology,
@@ -23,7 +24,7 @@ import { STAGE_ORDER, STAGE_SHORT } from "../../features/pipeline-progress/index
 // so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
-import "@fontsource-variable/source-sans-3";
+import "@fontsource-variable/atkinson-hyperlegible-next";
 import "../../styles/base.css";
 import "../../styles/progress.css";
 
@@ -74,13 +75,7 @@ const contours = [
   <body data-base={base}>
     <a class="skip-link" href="#pgMain">Skip to the run</a>
 
-    <div class="pg-contours" aria-hidden="true">
-      {contours.map((layer, i) => (
-        <svg data-pg-contour={i} viewBox={`0 0 ${layer.viewBox} ${layer.viewBox}`} preserveAspectRatio="xMidYMid slice">
-          {layer.rings.map((points) => <polyline points={points} />)}
-        </svg>
-      ))}
-    </div>
+    <Contours layers={contours} />
 
     <header class="pg-bar">
       <a class="pg-wordmark" href={`${base}/`}>← Waypoint</a>
