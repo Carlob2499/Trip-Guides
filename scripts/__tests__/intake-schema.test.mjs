@@ -191,7 +191,7 @@ describe("intake doc surfaces every captured field", () => {
   const md = buildIntakeMd(answers);
   for (const val of ["Portugal", "Lisbon, Porto", "2026-07-08", "EWR (Newark)", "NOS Alive", "3",
     "the Korea group", "Returning travelers", "United States, United Kingdom", "balanced", "Off-the-beaten-path",
-    "My travel group", "Guide reading style: Balanced", "Food & dining", "Culture / history",
+    "My travel group", "Guide reading style:** Balanced", "Food & dining", "Culture / history",
     "Mid-range ($75–150/day)", "one vegetarian",
     "Dates (target)", "Anchor event (fixed)", "Per-day target (flexible, from form)"]) {
     it(`renders "${val}"`, () => expect(md).toContain(val));
