@@ -20,9 +20,47 @@ vi.mock("../audit/check-staleness.mjs", () => ({ checkStaleness: (...args) => ch
 vi.mock("../audit/check-links.mjs", () => ({ checkLinks: (...args) => checkLinksMock(...args) }));
 vi.mock("../audit/check-photos.mjs", () => ({ checkPhotos: (...args) => checkPhotosMock(...args) }));
 
-const { evaluateGuide, renderMarkdown, report, verify, checkCoverage, sourceCoverage, evaluateReadiness } = await import("../verify-guide.mjs");
+const { evaluateGuide, renderMarkdown, report, verify, checkCoverage, checkVoice, sourceCoverage, evaluateReadiness } = await import("../verify-guide.mjs");
 
 const CLEAN_STALENESS = { stale: [], sections: [], noDate: [], drafts: [] };
+
+describe("checkVoice (P6 traveler-facing voice)", () => {
+  const guideWith = (body) => ({
+    sections: [{ type: "prose", group: "Plan", title: "Plan", body }],
+  });
+
+  it.each([
+    "Nestled in the heart of Kumamoto, the market is easy to reach.",
+    "The district offers a rich tapestry of history.",
+    "The hall serves as a testament to the city's food culture.",
+    "It is important to note that the last bus leaves early.",
+    "In conclusion, Kurokawa is worth visiting.",
+    "Let's delve into the neighborhood.",
+    "This restaurant is a game changer.",
+  ])("blocks unmistakable formulaic travel copy: %s", (body) => {
+    const result = checkVoice(guideWith(body));
+    expect(result.status).toBe("fail");
+    expect(result.hits.length).toBeGreaterThan(0);
+  });
+
+  it("still blocks research-process leakage", () => {
+    expect(checkVoice(guideWith("Our research found that this is the best option.")).status).toBe("fail");
+  });
+
+  it("does not globally ban context-sensitive ordinary travel words", () => {
+    const result = checkVoice(guideWith(
+      "The volcanic landscape around Aso is visible from Kusasenri. The station area is bustling after the morning trains.",
+    ));
+    expect(result.status).toBe("pass");
+  });
+
+  it("passes direct, restrained traveler guidance", () => {
+    const result = checkVoice(guideWith(
+      "Take the morning bus to Kurokawa. It reaches town before lunch and leaves enough time for the baths.",
+    ));
+    expect(result.status).toBe("pass");
+  });
+});
 
 // sourceCoverage / evaluateReadiness — folded in from the former scripts/guide-readiness.mjs
 // (2026-08-15). No dedicated test file existed for that module; these pin the behavior verify-guide
