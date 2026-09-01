@@ -411,7 +411,7 @@ async function run(cmd, get, has) {
         inputs: {
           section: get("--section") || "",
           model: get("--model") || "claude-sonnet-5",
-          effort: get("--effort") || "high",
+          effort: get("--effort") || "medium",
           criticModel: get("--critic-model") || "claude-opus-5",
         },
         issue: issue || null,
