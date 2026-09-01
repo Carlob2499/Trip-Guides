@@ -5,12 +5,12 @@
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-09-01)
 Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
-Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
-Kumamoto r2 `acceptance/v2-kumamoto-20260902-r2` @ `621dd43238d18b2b918827a9dca2268cd6f28c56` and r3 `acceptance/v2-kumamoto-20260902-r3` @ `56e513000792bc71bf4e18c0a0909724fe5cebac` are preserved stale evidence only. r3 was preflight-green on accepted base `57e320535d1cb6e861a5001f8c26cc718dcfd93d`, but current `main` has 19 later commits including acceptance-sensitive V2 workflow/state/retry/landing/protected-main changes. Issue #177 records the fail-closed drift finding. There is currently no valid Kumamoto model-dispatch authority; a fresh exact candidate must be rebuilt from settled current main and re-proven before any Sep 2+ dispatch.
-#130 owner/tooling branch protection + live proof remain pending; no broad Actions bypass. The temporary September watcher may observe/prove protected-main only after protection is actually live; it must not dispatch stale Kumamoto r3.
-Frontend U01/U02 DONE; U03 deterministic engineering DONE / YELLOW via #162 exact head `1251d57083e735cc21ecc35b8521a44cd66f1f`, Required Gate `33352620168` PASS. Physical-device spot check remains manual; reopen only for a reproduced defect.
-NEXT: correct remaining stale authority surfaces, let acceptance-sensitive changes settle, rebuild the same pre-registered Kumamoto scenario on then-current main, run exact-head deterministic preflight, and only then consider Sep 2+ model dispatch. Preserve r2/r3 and Fukuoka evidence unchanged.
-No cap extension, artifact hand-edit, selector/cutover/publication changes, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
+Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL; preserve its branch/evidence.
+Kumamoto r2/r3 are stale evidence only. r3 was green on accepted base `57e3205`, but current `main` includes later acceptance-sensitive V2 control-plane changes; #177 records the drift finding. No Kumamoto model-dispatch authority exists until the same pre-registered scenario is rebuilt on settled current main, exact-head preflight passes, and a fresh drift audit remains clean.
+#130 protected-main owner settings + live proof remain pending; no broad Actions bypass. The September watcher may prove protection only after it is live and must not dispatch stale r3.
+U01/U02 DONE; U03 deterministic engineering DONE/YELLOW; physical-device spot check remains manual.
+NEXT: correct stale authority surfaces, let acceptance-sensitive changes settle, rebuild/re-prove Kumamoto, then consider Sep 2+ dispatch.
+No cap extension, artifact hand-edit, selector/cutover/publication changes, V1 retirement, or canary merge. V1 remains default/rollback; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
