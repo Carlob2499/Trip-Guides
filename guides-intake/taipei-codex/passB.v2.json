@@ -1,0 +1,242 @@
+{
+  "schemaVersion": "wp-evidence/2.3",
+  "slug": "taipei-codex",
+  "runId": "taipei-codex-20260901-e43444",
+  "candidates": [
+    {
+      "id": "c-nanjichang-night-market--zhongzheng-district",
+      "name": "Nanjichang Night Market",
+      "branch": "Zhongzheng District",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Two independent recent firsthand source families support it as a more local-feeling, less tourist-heavy food-first market; Taipei City independently confirms current operating details.",
+      "worth": null
+    },
+    {
+      "id": "c-jiufen-old-street-early-morning-visit--crowd-timing",
+      "name": "Jiufen Old Street early-morning visit",
+      "branch": "Crowd timing",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Two independent recent firsthand sources converge on early morning as materially quieter before peak/tour-bus crowds.",
+      "worth": null
+    },
+    {
+      "id": "c-yu-zai-fan-shu-tea-house--jiufen",
+      "name": "Yu Zai Fan Shu Tea House",
+      "branch": "Jiufen",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "A 2025 firsthand Reddit thread and an independent 2026 traveler-post platform describe it as calmer/less crowded than the A-Mei queue nearby. No unverified menu price or hours are carried.",
+      "worth": null
+    },
+    {
+      "id": "c-shilin-night-market",
+      "name": "Shilin Night Market",
+      "branch": null,
+      "priority": "food",
+      "status": "rejected",
+      "shortlisted": false,
+      "reason": "Recent resident/visitor discussions repeatedly frame it as tourist-heavy for a food-first traveler; this fixture explicitly asks for the local-food alternative rather than fame.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-nanjichang-local-reddit",
+      "candidateId": "c-nanjichang-night-market--zhongzheng-district",
+      "claim": "Recent visitors/residents describe Nanjichang as a more local-feeling night market with fewer tourists and strong food appeal.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.reddit.com/r/taiwan/comments/1i0rxsb/if_you_had_only_one_night_which_night_market/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2025-01-13",
+        "family": "reddit-community",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": true,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-nanjichang-local-blog",
+      "candidateId": "c-nanjichang-night-market--zhongzheng-district",
+      "claim": "An independent recent firsthand Taiwan travel account found Nanjichang relaxed, food-focused and less tourist-polished than Taipei's marquee markets.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.taiwan-memo.info/north/nan-jichang-night-market/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "ja",
+        "publishedAt": "2025-08-20",
+        "family": "taiwan-memo-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": true,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-nanjichang-hours-official",
+      "candidateId": "c-nanjichang-night-market--zhongzheng-district",
+      "claim": "Taipei City's current food-tracer listing gives Nanjichang Night Market operating hours as 18:00–00:00.",
+      "kind": "objective",
+      "origin": "passB",
+      "source": {
+        "url": "https://foodtracer.health.gov.taipei/UniPages/CustPageView?fid=8cd4e2c6-ee6a-486b-b827-27dad0f85b3e&market_id=TPB1&mid=ae7e0dd6-468a-4acd-83eb-9e708c9e6073",
+        "kind": "official",
+        "access": "fetched",
+        "language": "zh-Hant",
+        "publishedAt": "2026-08-26",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-jiufen-early-reddit",
+      "candidateId": "c-jiufen-old-street-early-morning-visit--crowd-timing",
+      "claim": "A May 2025 Taipei resident/community discussion recommends visiting Jiufen in the early morning to avoid peak crowds.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.reddit.com/r/Taipei/comments/1kd4w94",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2025-05-03",
+        "family": "reddit-community",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": true,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-jiufen-early-blog",
+      "candidateId": "c-jiufen-old-street-early-morning-visit--crowd-timing",
+      "claim": "A separate 2026 firsthand/local-style account recommends morning Jiufen because crowds are lower.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.roadtoxinxi.com/jiufen-shifen-day-trip-taipei/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-04-17",
+        "family": "roadtoxinxi-blog",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": true,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-yuzai-quiet-reddit",
+      "candidateId": "c-yu-zai-fan-shu-tea-house--jiufen",
+      "claim": "A 2025 firsthand Jiufen visitor found Yu Zai Fan Shu fairly empty while nearby A-Mei had a line.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://www.reddit.com/r/Taipei/comments/1idwe3e",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2025-01-30",
+        "family": "reddit-community",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": true,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-yuzai-quiet-tripmoments",
+      "candidateId": "c-yu-zai-fan-shu-tea-house--jiufen",
+      "claim": "A separate 2026 traveler post describes Yu Zai Fan Shu as a calmer alternative beside the crowded A-Mei area.",
+      "kind": "experiential",
+      "origin": "passB",
+      "source": {
+        "url": "https://sg.trip.com/moments/poi-yu-zai-fan-shu-tea-house-140839625/",
+        "kind": "firsthand",
+        "access": "fetched",
+        "language": "zh-Hant",
+        "publishedAt": "2026",
+        "family": "trip-moments-ugc",
+        "independent": true,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": true,
+      "freshness": {
+        "perishable": false,
+        "shelfLife": null,
+        "recheckOn": null
+      }
+    }
+  ],
+  "reservations": [],
+  "transport": [],
+  "disagreements": [],
+  "depth": null,
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "Native/resident searches converged on Nanjichang for the local-food niche, early Jiufen for crowd avoidance and Yu Zai Fan Shu for the quieter tea-house lead. Later searches mostly repeated the same options or weaker tourist-default alternatives."
+  },
+  "passB": {
+    "nativeLanguage": {
+      "used": true,
+      "why": "Traditional Chinese is the destination's primary local web layer; Japanese firsthand Taiwan travel writing also produced independent food-market evidence beyond English top-10 results.",
+      "searchClasses": [
+        "Traditional Chinese 南機場夜市 local-food/current-market searches",
+        "Traditional Chinese Jiufen tea-house/crowd searches",
+        "Japanese firsthand Nanjichang night-market searches",
+        "English resident/community searches used as independent firsthand corroboration"
+      ],
+      "yield": "Native/local searches surfaced Nanjichang as the food-first alternative, confirmed current Taipei City market hours, and added the Jiufen crowd/tea-house angle while keeping objective and experiential evidence lanes separate."
+    },
+    "noYieldReason": null
+  },
+  "reconciliation": []
+}
