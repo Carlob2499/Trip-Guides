@@ -1,0 +1,3 @@
+| 2026-09-01 | taipei-codex | [critic] | #6 anchor | Verify an assumed anchor against its current T0 event source before any destination expansion; if the event date/location fails, correct the experience rather than preserving the premise. | open |
+| 2026-09-01 | taipei-codex | [critic] | continuity | A reservation-valid recommendation can still fail at itinerary placement; critic must cross-check venue operating days against the exact scheduled day. | open |
+| 2026-09-01 | taipei-codex | [critic] | evidence contract | Historical V2 artifacts are shape examples, not schema authority; read the current contract version before writing a new harness artifact. | open |
