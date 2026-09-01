@@ -12,9 +12,9 @@ This file is the durable technical state of Pipeline V2. It records **what exist
 
 **Final release-readiness acceptance canary: FAILED — MODEL / CONTENT (Fukuoka, 2026-08-29).**
 
-**Fresh post-remediation acceptance candidate: KUMAMOTO r3 — PRE-FLIGHT GREEN; MODEL RUN PENDING.**
+**Fresh post-remediation acceptance candidate: NONE CURRENTLY AUTHORIZED — rebuild required from settled current main.**
 
-Current frozen candidate authority is `acceptance/v2-kumamoto-20260902-r3` at exact SHA `56e513000792bc71bf4e18c0a0909724fe5cebac`, rebuilt from repaired main `57e320535d1cb6e861a5001f8c26cc718dcfd93d` and proven exact-head green in closed-unmerged PR #167. Kumamoto r2 remains preserved historical preflight evidence only; merged PR #149 changed shared protected-main landing/control-plane semantics after r2's base and therefore invalidated r2 for future model dispatch.
+Kumamoto r2 and r3 are preserved historical preflight evidence only. r3 `acceptance/v2-kumamoto-20260902-r3` at `56e513000792bc71bf4e18c0a0909724fe5cebac` was exact-head preflight green on accepted base `57e320535d1cb6e861a5001f8c26cc718dcfd93d`, but later acceptance-sensitive orchestration, landing, required-gate, September-watch, and model-routing changes moved current authority beyond that base. No model run started on r3. The next acceptance must rebuild/replay the pre-registered Kumamoto scenario from settled current `main`, prove that exact head deterministically, then re-audit drift immediately before dispatch.
 
 V2 exists beside V1. V1 remains the production default and rollback path while `WAYPOINT_RESEARCH_ENGINE` is unset. V2 is selected by the trusted `/new` path only when the selector is explicitly `v2`; manual V2 dispatch remains `landMode=pr` and cannot become production authority.
 
@@ -57,6 +57,19 @@ Mandatory malformed artifacts fail closed. Missing facts are not inferred merely
 ### Frozen intake
 
 `intake.md` is the traveler requirement contract and is not rewritten by research stages.
+
+### Model and effort routing
+
+Fresh V2 runs route by **role**, not maximum capability everywhere:
+
+- Pass A: `model` — default Claude Sonnet 5, Medium effort.
+- Pass B: mechanically isolated and locked to Claude Sonnet 5, Medium effort by default.
+- Reconcile: `critic_model` — default Claude Opus 5, Medium effort.
+- Critic: `critic_model` — default Claude Opus 5, Medium effort.
+- `critic_effort` may independently escalate Reconcile/Critic; blank inherits the research `effort`.
+- Historical durable runs without `criticEffort` remain compatible and inherit their recorded global effort.
+
+The Chat/OpenAI role equivalents used for independent research are Terra Medium for evidence gathering and Sol Medium for reconciliation/criticism. High effort is an explicit escalation for genuinely consequential judgment, not a fresh-run default.
 
 ### Pass A / Pass B independence
 
