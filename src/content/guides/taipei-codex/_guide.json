@@ -1,0 +1,21 @@
+{
+  "kicker": "Taipei · Jiufen · Shifen — Nov 10–17, 2026",
+  "title": "Taipei, Jiufen & Shifen — V2 research harness",
+  "dek": "A synthetic seven-night first-Taiwan guide built to test Waypoint's repaired V2 research pipeline.",
+  "country": "Taiwan",
+  "tz": "Asia/Taipei",
+  "draft": true,
+  "verified": "Synthetic harness — checked 2026-09-01. The assumed Jiufen lantern-event anchor was rejected: New Taipei City's official 2026 Pingxi Sky Lantern Festival dates were Feb 27 and Mar 3. This November plan uses an ordinary Shifen sky-lantern release instead. Re-check entry rules, fares, venue hours, logy availability, and Jiufen/Shifen service details shortly before travel.",
+  "provenance": "strict",
+  "footer": "",
+  "entry": [
+    {
+      "homeCountry": "United States",
+      "visa": "Visa-exempt for tourism, up to 90 days",
+      "passportValidity": "Valid for the intended period of stay",
+      "note": "Carry confirmed return/onward travel; re-check BOCA before departure.",
+      "source_url": "https://www.boca.gov.tw/fp-149-4486-7785a-2.html",
+      "verified_on": "2026-09-01"
+    }
+  ]
+}
