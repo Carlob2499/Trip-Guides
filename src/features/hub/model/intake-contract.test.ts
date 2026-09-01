@@ -104,4 +104,13 @@ describe("intake field ids ↔ intake-schema FIELDS", () => {
       expect(EMITTED_KEYS).toContain(key);
     }
   });
+
+  it("collects the prose/presentation controls the finished guide now honors", () => {
+    for (const key of ["destination-familiarity", "guide-audience", "guide-style"]) {
+      expect(EMITTED_KEYS).toContain(key);
+    }
+    for (const id of ["ngDestinationFamiliarity", "ngGuideAudience", "ngGuideStyle"]) {
+      expect(COLLECTED_IDS).toContain(id);
+    }
+  });
 });
