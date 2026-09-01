@@ -122,8 +122,9 @@ jobs:
           if ! grep -F "Current dispatch authority is rebuilt r3" docs/handoff.md >/dev/null ||
              ! grep -F "$CANDIDATE_REF" docs/handoff.md >/dev/null ||
              ! grep -F "$CANDIDATE_SHA" docs/handoff.md >/dev/null; then
-            echo "::error::Current handoff no longer names frozen Kumamoto r3 as dispatch authority."
-            exit 1
+            echo "Current handoff has revoked frozen Kumamoto r3 dispatch authority; stale candidate is inert until a new exact candidate is registered."
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
           # Conservative model-burn firewall. These paths can alter the research contract,
