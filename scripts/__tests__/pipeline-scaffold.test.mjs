@@ -210,6 +210,7 @@ describe("scaffoldComment", () => {
     expect(body).toContain("guides-intake/andorra/intake.md");
     expect(body).toContain("https://x/progress/?slug=andorra");
     expect(body).toContain("Pass A → Pass B → Reconcile → Critic");
+    expect(body).toContain("product authority is still active at landing");
     expect(body).toContain("Research pass (V2)");
     expect(body).not.toContain("Sonnet by default");
     expect(body).not.toContain("prompts/research-passA.md");
