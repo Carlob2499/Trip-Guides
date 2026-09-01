@@ -201,7 +201,7 @@ export async function initRunV2(slug, {
   now = new Date().toISOString(),
   intakeDir = INTAKE_DIR,
   force = false,
-  inputs = { section: "", model: "claude-sonnet-5", effort: "medium", criticModel: "claude-opus-5" },
+  inputs = { section: "", model: "claude-sonnet-5", effort: "medium", criticModel: "claude-opus-5", criticEffort: null },
   issue = null,
   landMode = null,
   branchFresh = false,
@@ -238,7 +238,7 @@ export async function initRunV2(slug, {
     // already contains the prior run's evidence.
     if (JSON.stringify(existing.inputs) !== JSON.stringify(inputs)) {
       throw new ContractError(
-        `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel recorded in run.v2.json`,
+        `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel/criticEffort recorded in run.v2.json`,
       );
     }
     // Run context is durable and immutable. issue: a redispatch that omits it inherits; naming a
