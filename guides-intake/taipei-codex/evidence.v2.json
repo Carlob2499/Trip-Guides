@@ -1,0 +1,443 @@
+{
+  "schemaVersion": "wp-evidence/2.3",
+  "slug": "taipei-codex",
+  "runId": "taipei-codex-20260901-e43444",
+  "candidates": [
+    {
+      "id": "c-pingxi-sky-lantern-festival--2026-festival",
+      "name": "Pingxi Sky Lantern Festival",
+      "branch": "2026 festival",
+      "priority": "anchor",
+      "status": "rejected",
+      "shortlisted": true,
+      "reason": "Official New Taipei City Government dates are Feb 27 and Mar 3, 2026, outside Nov 10–17; the assumed Jiufen lantern-release evening is not this festival.",
+      "worth": null
+    },
+    {
+      "id": "c-shifen-sky-lantern-release--shifen-old-street",
+      "name": "Shifen sky-lantern release",
+      "branch": "Shifen Old Street",
+      "priority": "anchor",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Corrected November anchor experience: official New Taipei tourism confirms sky-lantern shops and releases at Shifen outside the festival dates.",
+      "worth": null
+    },
+    {
+      "id": "c-taipei-101-observatory",
+      "name": "Taipei 101 Observatory",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-chiang-kai-shek-memorial-hall",
+      "name": "Chiang Kai-shek Memorial Hall",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-national-palace-museum--northern-branch",
+      "name": "National Palace Museum",
+      "branch": "Northern Branch",
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-shifen-waterfall",
+      "name": "Shifen Waterfall",
+      "branch": null,
+      "priority": "nature",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-jiufen-old-street",
+      "name": "Jiufen Old Street",
+      "branch": null,
+      "priority": "culture",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": null,
+      "worth": null
+    },
+    {
+      "id": "c-logy--neihu-taipei",
+      "name": "logy",
+      "branch": "Neihu, Taipei",
+      "priority": "food",
+      "status": "shipped",
+      "shortlisted": true,
+      "reason": "Best-verified splurge finalist: current tasting-menu price, reservation window, hours and cancellation policy all publish on the restaurant's own booking page.",
+      "worth": null
+    },
+    {
+      "id": "c-mume--taipei",
+      "name": "MUME",
+      "branch": "Taipei",
+      "priority": "food",
+      "status": "shortlisted",
+      "shortlisted": true,
+      "reason": "Serious alternative, but primary-source booking depth was thinner than logy's; unresolved evidence was unlikely to overturn logy for this harness.",
+      "worth": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-anchor-2026-festival-dates",
+      "candidateId": "c-pingxi-sky-lantern-festival--2026-festival",
+      "claim": "The 2026 Pingxi Sky Lantern Festival is scheduled for Feb 27 and Mar 3, 2026, not during Nov 10–17.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.ntpc.gov.tw/ch/home.jsp?dataserno=6544b460d4b669c5db91474406a04d12&id=2d113acd09f81b46",
+        "kind": "official",
+        "access": "fetched",
+        "language": "zh-Hant",
+        "publishedAt": "2026-01-30",
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": null
+      }
+    },
+    {
+      "id": "ev-shifen-lantern-release",
+      "candidateId": "c-shifen-sky-lantern-release--shifen-old-street",
+      "claim": "Shifen Old Street has operating sky-lantern shops where visitors can purchase and release sky lanterns outside the festival period.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://newtaipei.travel/en/attractions/detail/111989",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-us-visa-exempt",
+      "candidateId": null,
+      "claim": "US ordinary-passport holders are eligible for visa-exempt entry to Taiwan for up to 90 days; passport validity covers the intended stay and confirmed return/onward travel is required.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.boca.gov.tw/fp-149-4486-7785a-2.html",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-07-17",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "default",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-taipei-metro-fares",
+      "candidateId": null,
+      "claim": "Taipei Metro single-journey fares range from NT$20 to NT$65.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.metro.taipei/cp.aspx?Create=1&n=CEF54168B23F73B4&s=AD70DC4F6A708EA7",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": "2026-05-07",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-airport-mrt-fare",
+      "candidateId": null,
+      "claim": "Taoyuan Airport MRT A1 Taipei Main Station to A12 Airport Terminal 1 single fare is NT$160.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.tymetro.com.tw/tymetro-new/tw/_pages/service/FAQ.php?page=2&v=57",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "zh-Hant",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "transit",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-taipei101-ticket-hours",
+      "candidateId": "c-taipei-101-observatory",
+      "claim": "Taipei 101 Observatory regular admission is NT$600 and operates daily 10:00–21:00.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.taipei-101.com.tw/tw/observatory/ticket",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "zh-Hant",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-cks-hours",
+      "candidateId": "c-chiang-kai-shek-memorial-hall",
+      "claim": "Chiang Kai-shek Memorial Hall is open 09:00–18:00 and the park 05:00–00:00, subject to official closure exceptions.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.cksmh.gov.tw/en/cp.aspx?n=6369",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-npm-admission",
+      "candidateId": "c-national-palace-museum--northern-branch",
+      "claim": "National Palace Museum Northern Branch Exhibition Hall I regular admission is NT$350.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.npm.gov.tw/Articles.aspx?l=1&sno=02007004",
+        "kind": "official",
+        "access": "fetched",
+        "language": "zh-Hant",
+        "publishedAt": "2026-08-07",
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-npm-hours",
+      "candidateId": "c-national-palace-museum--northern-branch",
+      "claim": "National Palace Museum Northern Branch normal schedule after the Sep 13 trial is Tue–Sun 09:00–17:00; Nov 9 is a 2026 special Monday opening.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://www.npm.gov.tw/Articles.aspx?sno=02007001",
+        "kind": "official",
+        "access": "fetched",
+        "language": "zh-Hant",
+        "publishedAt": "2026-08-07",
+        "family": null,
+        "independent": null,
+        "appliesToYears": [
+          2026
+        ]
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-shifen-waterfall-hours",
+      "candidateId": "c-shifen-waterfall",
+      "claim": "Shifen Waterfall's Oct–May hours are 09:00–17:00 with final entry at 16:30.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://newtaipei.travel/en/Attractions/Detail/111592",
+        "kind": "official",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-27"
+      }
+    },
+    {
+      "id": "ev-logy-menu-booking",
+      "candidateId": "c-logy--neihu-taipei",
+      "claim": "logy's tasting menu is NT$4,750 per person plus 10% service; reservations open up to 30 days ahead and cancellation/no-show inside 3 days can be charged the full menu price.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://logy.tw/reservation.html",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "venue",
+        "recheckOn": "2026-10-10"
+      }
+    },
+    {
+      "id": "ev-logy-hours",
+      "candidateId": "c-logy--neihu-taipei",
+      "claim": "logy serves dinner Wed–Sun 18:30–22:30 (last order 19:00) and lunch Fri–Sun 12:00–15:00 (last order 12:30); it is closed Mon–Tue.",
+      "kind": "objective",
+      "origin": "passA",
+      "source": {
+        "url": "https://logy.tw/reservation.html",
+        "kind": "operator",
+        "access": "fetched",
+        "language": "en",
+        "publishedAt": null,
+        "family": null,
+        "independent": null,
+        "appliesToYears": []
+      },
+      "verifiedOn": "2026-09-01",
+      "firsthand": null,
+      "freshness": {
+        "perishable": true,
+        "shelfLife": "hours",
+        "recheckOn": "2026-10-27"
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "candidateId": "c-logy--neihu-taipei",
+      "importance": "important",
+      "bookingUrl": "https://logy.tw/reservation.html",
+      "releaseWindow": "Up to 30 days before the reservation date",
+      "actionDate": "2026-10-16",
+      "partyRules": "Standard online reservation works for 2; special handling begins at 5+ guests.",
+      "deposit": "Credit-card guarantee; card is not charged at booking.",
+      "cancellation": "Cancel or modify at least 3 days ahead; later cancellation, late arrival or no-show can be charged the full NT$4,750 menu price per person.",
+      "foreignFriction": "International transaction fees may apply to a cancellation charge; no foreign-account restriction is stated.",
+      "lastSeating": "Dinner last order 19:00; lunch last order 12:30.",
+      "walkIn": "Do not rely on a walk-in for the trip's one splurge dinner.",
+      "leads": [],
+      "alternatives": "MUME retained as a serious alternative if logy is unavailable.",
+      "fallback": "Use another primary-source-verified tasting-menu finalist rather than an unverified set-menu lead."
+    }
+  ],
+  "transport": [],
+  "disagreements": [
+    {
+      "id": "d-anchor-jiufen-vs-shifen",
+      "topic": "Synthetic anchor says 'Jiufen lantern-release evening' but official 2026 festival dates/geography disagree.",
+      "impact": "recommendation-changing",
+      "evidenceIds": [
+        "ev-anchor-2026-festival-dates",
+        "ev-shifen-lantern-release"
+      ],
+      "investigation": "Checked the official 2026 festival announcement first, then official Shifen and Jiufen attraction pages. The festival is Feb/Mar; ordinary lantern releasing is tied to Shifen Old Street rather than a November Jiufen event.",
+      "resolution": "Reject the festival/Jiufen-event assumption; retain a Shifen sky-lantern release as the November anchor experience and treat Jiufen separately."
+    }
+  ],
+  "depth": {
+    "reservations": {
+      "requiredCandidateIds": [
+        "c-logy--neihu-taipei"
+      ],
+      "notApplicableReason": null
+    },
+    "transport": {
+      "requiredRouteIds": [],
+      "notApplicableReason": "Taipei city transit is forgiving and the synthetic Jiufen/Shifen day can be written without a fragile fixed connection; exact future-date train/bus timings are deliberately deferred to a close-to-trip recheck rather than invented now."
+    }
+  },
+  "saturation": {
+    "stopped": true,
+    "trend": "duplicates",
+    "unresolvedCouldChange": false,
+    "note": "After the corrected anchor, museum/culture backbone and two serious tasting-menu finalists surfaced, later searches mostly repeated the same options. Exact November regional timetables remain a recheck item, not a recommendation-changing discovery gap."
+  },
+  "passB": null,
+  "reconciliation": []
+}
