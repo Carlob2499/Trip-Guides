@@ -10,6 +10,8 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "baselines": "playwright test tests/visual/gallery-baselines.spec.ts",
+    "baselines:update": "playwright test tests/visual/gallery-baselines.spec.ts --update-snapshots && node scripts/optimize-baselines.mjs",
     "typecheck": "astro check",
     "lint": "eslint .",
     "check:invariants": "node scripts/check-project-invariants.mjs",

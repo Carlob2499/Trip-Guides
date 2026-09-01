@@ -198,6 +198,6 @@ Statuses: `NOT STARTED` · `IN PROGRESS` · `READY FOR REVIEW` · `DONE`
 | D2 | Token core consolidated; raw values outside core fail tests | Claude | Sep 9 | READY FOR REVIEW |
 | D3 | Approved-component registry + CI check (locked-down enforcement) | Claude | Sep 16 | READY FOR REVIEW |
 | D4 | Component gallery page: all components × themes × light/dark × data states | Claude | Sep 16 | READY FOR REVIEW |
-| D5 | Dark-mode core remap + gallery screenshot baselines (in before Sep 20) | Claude | Sep 19 | NOT STARTED |
+| D5 | Dark-mode core remap + gallery screenshot baselines (in before Sep 20) | Claude | Sep 19 | READY FOR REVIEW |
 | D6 | Holistic taste review of gallery; punch list | Claude | Sep 30 | NOT STARTED |
 | D7 | Punch list + field-tools/atlas migration + zero-custom-CSS scalability proof | Claude | Oct 7 | NOT STARTED |

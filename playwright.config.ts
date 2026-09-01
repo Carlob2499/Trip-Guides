@@ -1,5 +1,8 @@
 /* Playwright harness for the accessibility gate (tests/visual/a11y.spec.ts, CI-gated via
-   .github/workflows/a11y.yml). The screenshot-diff suite that used to live here was removed
+   .github/workflows/a11y.yml) and the D5 gallery screenshot baselines
+   (tests/visual/gallery-baselines.spec.ts — see its header for why pinning the GALLERY is the
+   right screenshot suite where pinning product pages was the wrong one). The page-shadowing
+   screenshot-diff suite that used to live here was removed
    (it failed on every intentional visual change — the wrong signal), and the 24 local-only
    behavioral specs were deleted in the 2026-08-14 cleanup (owner ruling: nothing ran them, so
    they proved nothing; recoverable from git if a design overhaul ever wants them back).

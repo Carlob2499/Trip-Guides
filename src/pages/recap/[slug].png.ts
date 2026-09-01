@@ -38,28 +38,28 @@ export async function GET({ props }: { props: { slug: string; data: any } }) {
     return `
     <rect x="${x}" y="420" width="${chipW - 16}" height="94" rx="10" fill="#ffffff" fill-opacity="0.06" stroke="${accent}" stroke-opacity="0.5"/>
     <text x="${x + (chipW - 16) / 2}" y="475" text-anchor="middle"
-          font-family="'Liberation Sans',Arial,sans-serif" font-size="27" fill="#e8ece3" font-weight="700">${c}</text>`;
+          font-family="'Liberation Sans',Arial,sans-serif" font-size="27" fill="#f1eae0" font-weight="700">${c}</text>`;
   }).join("");
 
   // Dark ground (distinct from the standard OG card) — reads as "after the trip",
   // not "come plan this trip". Font hints ordered for the CI Ubuntu build image
   // (librsvg) then browsers, same as the standard OG card.
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#0f1317"/>
+  <rect width="1200" height="630" fill="#17120e"/>
   <rect x="0" y="0" width="8" height="630" fill="${accent}"/>
   <text x="68" y="72"
         font-family="'Liberation Mono','Courier New',monospace"
-        font-size="13" fill="#9aa392" letter-spacing="4" font-weight="700">WAYPOINT · TRIP RECAP</text>
+        font-size="13" fill="#a89f93" letter-spacing="4" font-weight="700">WAYPOINT · TRIP RECAP</text>
   <rect x="68" y="90" width="48" height="2" fill="${accent}"/>
   <text x="68" y="166"
         font-family="'Liberation Mono','Courier New',monospace"
         font-size="17" fill="${accent}" letter-spacing="3" font-weight="700">${countrySafe}</text>
   <text x="68" y="290"
         font-family="'Liberation Sans',Arial,sans-serif"
-        font-size="${tfs}" fill="#e8ece3" font-weight="700" letter-spacing="-1.5">${titleSafe(28)}</text>
+        font-size="${tfs}" fill="#f1eae0" font-weight="700" letter-spacing="-1.5">${titleSafe(28)}</text>
   <text x="68" y="340"
         font-family="'Liberation Sans',Arial,sans-serif"
-        font-size="22" fill="#9aa392">How it actually went</text>
+        font-size="22" fill="#a89f93">How it actually went</text>
   ${chipsSvg}
 </svg>`;
 
