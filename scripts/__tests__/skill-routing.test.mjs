@@ -32,7 +32,7 @@ const CURRENT_VALIDATION_CANDIDATE_BLOBS = {
   // remains the canonical equivalent.
   ".agents/skills/waypoint-guide-author/SKILL.md": "774b749633012074c1cc9865ca2049fc1d9a9bb8",
   ".agents/skills/waypoint-guide-author/references/verification-rules.md": "e1e5eef874416e42439daf136f71c2912e066ffc",
-  ".agents/skills/waypoint-guide-author/references/research-efficiency.md": "7655c4f6cef847f784c72cde0ccf99b1bd03bf08",
+  ".agents/skills/waypoint-guide-author/references/research-efficiency.md": "3a8770287a114379165d9036c22e6862571ffc74",
   ".agents/skills/waypoint-guide-author/references/research-depth.md": "a9a8be126e68a198863b37663840ae09b1670fa2",
   ".agents/skills/waypoint-guide-author/references/block-types.md": "1f6012f4ee1bdf22885a333e5287938bfc137c17",
   ".agents/skills/waypoint-guide-author/references/image-sourcing.md": "519321be553e775faf29e7a56e5f6cf9d065f862",
