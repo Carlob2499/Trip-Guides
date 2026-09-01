@@ -120,6 +120,7 @@ Screens are designed screen-first, but nothing is deliberately excluded (Carlo,
     research, naming. Its output is advisory and enters the repo only after Claude vets it
     against this constitution. Prefer the local `ui-ux-pro-max` skill for generic pattern/
     palette research before spending external chat turns.
+    Core external UI/UX research packet: `docs/research/waypoint-design-reference-packet.md`.
 - Presentation work never alters factual content (per `waypoint-design` skill).
 
 ### Design skill library (pull-on-demand)
