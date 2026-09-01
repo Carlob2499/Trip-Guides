@@ -1,0 +1,95 @@
+[
+  {
+    "type": "days",
+    "group": "Days",
+    "title": "Day by day",
+    "items": [
+      {
+        "date": "Tue Nov 10",
+        "title": "Arrive Taipei",
+        "pace": "Transfer in and keep the first night light",
+        "tldr": "Airport MRT, hotel, easy neighborhood dinner.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Use Airport MRT into Taipei and avoid scheduling a ticketed anchor on arrival night.</p>",
+        "constraints": []
+      },
+      {
+        "date": "Wed Nov 11",
+        "title": "CKS Memorial + Nanjichang",
+        "pace": "History by day, food market at night",
+        "tldr": "CKS Memorial, unhurried central Taipei, then the Pass B night-market pick.",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Visit Chiang Kai-shek Memorial Hall with the museum's democratic-transition context in mind. In the evening, eat at Nanjichang rather than defaulting to Shilin: independent recent firsthand sources support the more local-feeling, food-first fit.</p>",
+        "constraints": []
+      },
+      {
+        "date": "Thu Nov 12",
+        "title": "National Palace Museum",
+        "pace": "One major museum, no museum marathon",
+        "tldr": "National Palace Museum, then a lighter afternoon.",
+        "energy": "balanced",
+        "env": "indoor",
+        "body": "<p>Give the National Palace Museum the morning and early afternoon. Regular admission is {{fact:npm-adult}}.</p>",
+        "constraints": []
+      },
+      {
+        "date": "Fri Nov 13",
+        "title": "Taipei 101 + Xinyi",
+        "pace": "First-trip skyline day",
+        "tldr": "Keep the iconic first-trip landmark without overpacking the district.",
+        "energy": "balanced",
+        "env": "mixed",
+        "body": "<p>Taipei 101 Observatory is open 10:00–21:00 and regular admission is {{fact:taipei101-adult}}.</p>",
+        "constraints": []
+      },
+      {
+        "date": "Sat Nov 14",
+        "title": "Jiufen early",
+        "pace": "Beat peak crowds, then linger over tea",
+        "tldr": "Go early for quieter streets; Yu Zai Fan Shu if current hours work.",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Make Jiufen an <b>early</b> day: two independent recent firsthand sources converge on morning as materially quieter before peak traffic. Use Yu Zai Fan Shu as the quieter-teahouse lead, but confirm its hours rather than inheriting a platform listing.</p>",
+        "constraints": [
+          "No claim that Jiufen hosts a November lantern-release event"
+        ]
+      },
+      {
+        "date": "Sun Nov 15",
+        "title": "Shifen waterfall + lantern release",
+        "pace": "Nature first, corrected anchor second",
+        "tldr": "Waterfall before final entry, then an ordinary Shifen lantern release.",
+        "energy": "balanced",
+        "env": "outdoor",
+        "body": "<p>Shifen Waterfall runs 09:00–17:00 in November with final entry 16:30. Afterward, use Shifen Old Street's ordinary sky-lantern shops for the corrected anchor experience. This is <b>not</b> the Pingxi Sky Lantern Festival, whose official 2026 dates were Feb 27 and Mar 3.</p>",
+        "constraints": [
+          "Recheck TRA/bus service close to travel; no future timetable was guessed"
+        ]
+      },
+      {
+        "date": "Mon Nov 16",
+        "title": "Open Taipei + logy",
+        "pace": "Leave recovery room, then the splurge dinner",
+        "tldr": "An intentionally open day capped by the reservation-sensitive tasting menu.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>Keep daytime flexible. Book logy when its 30-day window opens and obey its 3-day cancellation deadline.</p>",
+        "constraints": [
+          "logy is closed Mondays on the currently posted schedule — move the splurge if these dates hold"
+        ]
+      },
+      {
+        "date": "Tue Nov 17",
+        "title": "Departure",
+        "pace": "Buffer first",
+        "tldr": "Leave the last day flexible around the unconfirmed SFO itinerary.",
+        "energy": "slow",
+        "env": "mixed",
+        "body": "<p>SFO is still an intake assumption, so no flight-time-specific plan is invented.</p>",
+        "constraints": []
+      }
+    ]
+  }
+]
