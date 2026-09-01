@@ -37,7 +37,8 @@ authority or omit the unsupported finding. Never relabel a search preview merely
 - Read `guides-intake/{{slug}}/intake.md` (frozen traveler intent), `ledger.md` (scaffold-time
   state — a non-empty `## Discovery leads (Pass B — native-first)` table is your starting map),
   and `src/data/destinations/{{slug}}.json` if present (languages, T0 domains).
-- **Write ONE file: `guides-intake/{{slug}}/passB.v2.json`** — schema `wp-evidence/2.0`
+- **Write ONE file: `guides-intake/{{slug}}/passB.v2.json`** using the exact current
+  schema/version and field vocabulary in the GENERATED Machine contract below
   (`slug`; `runId: "{{run_id}}"` supplied by the workflow as non-research control metadata),
   carrying:
   - `candidates[]` — everything you evaluated, shipped-worthy AND rejected (`reason` required;
