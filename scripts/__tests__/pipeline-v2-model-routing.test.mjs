@@ -35,6 +35,14 @@ describe("Pipeline V2 role-based model/effort routing", () => {
     expect(WORKFLOW).toContain('default: medium');
     expect(WORKFLOW).not.toContain("inputs.effort || 'high'");
 
+    const manual = WORKFLOW.split("  workflow_dispatch:")[1].split("\npermissions:")[0];
+    const manualResearchModel = manual.split("\n      model:")[1].split("\n      effort:")[0];
+    const manualJudgeModel = manual.split("\n      critic_model:")[1].split("\n      critic_effort:")[0];
+    expect(manualResearchModel).toContain("- claude-sonnet-5");
+    expect(manualResearchModel).not.toContain("- claude-opus-5");
+    expect(manualJudgeModel).toContain("- claude-opus-5");
+    expect(manualJudgeModel).not.toContain("- claude-sonnet-5");
+
     expect(passA).toContain(`--model "\${{ inputs.model || 'claude-sonnet-5' }}"`);
     expect(passA).toContain(`WP_MODEL: \${{ inputs.model || 'claude-sonnet-5' }}`);
     expect(passA).toContain(`WP_EFFORT: \${{ inputs.effort || 'medium' }}`);
