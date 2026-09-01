@@ -57,8 +57,10 @@ preview merely to clear a gate.
   fetch available through WebFetch, and accept an ID only when the returned entity matches the
   point's name and existing coordinates. If identity is ambiguous, leave it unresolved rather than
   guessing. This is a narrow repair, not a reason to restart destination research.
-- STOP when the merge, dispositions, coverage, and your artifact-level self-check are done. The
-  workflow runs offline verify/build after you return. Do not attempt shell/node/npm, do not run the
+- STOP only after the merge, dispositions, coverage, **and the traveler-facing synthesis required
+  by SKILL.md** are done and your artifact-level self-check is complete. Evidence agreement without
+  a finished traveler product is not a completed Reconcile stage. The workflow runs offline
+  verify/build after you return. Do not attempt shell/node/npm, do not run the
   networked verify, do not commit, do not land.
 - Touch nothing outside `src/content/guides/{{slug}}/` and `guides-intake/{{slug}}/`.
 
