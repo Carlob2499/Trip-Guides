@@ -181,7 +181,7 @@ program at a time.
 | Aug 27 – Sep 2 | Independent review of R-A–R-F/W1 repair branch (Codex) | D1 Constitution approved; ChatGPT reference-gathering | Light |
 | Sep 3 – 9 | Fresh repaired-class Run-B validation (heavy model spend) | D2 Token core consolidation + tightened tests (deterministic only) | Light |
 | Sep 10 – 16 | Await/execute cutover decision work | D3 Component inventory, cull, registry + CI check; D4 gallery page | **Heavy** |
-| Sep 17 – 23 | Feature freeze Sep 20 | D5 dark-mode remap + gallery screenshot baselines land **before Sep 20**; then migration of guide reading pages (refactor-only) | Medium |
+| Sep 17 – 23 | Feature freeze Sep 20 | D5 dark-mode remap + gallery screenshot baselines land **before Sep 20**. Guide-reading-page token migration audited 2026-09-01: guide.css, GuideLayout, all 16 blocks, and every wired script already pass color-scale.test.ts/var-defined.test.ts with zero raw-value exceptions — D2/D3's gates already closed this, nothing to migrate. Remaining D2 holdout is atlas-map.js's hardcoded `'Source Sans 3'` canvas font (hub/atlas, not a guide page) — reassigned to D7 (atlas/home migration), see spawned task | Light |
 | Sep 24 – 30 | Code freeze Sep 27; backend complete Sep 30 | No new design code. D6 taste review of gallery (`better-interface`), punch list only | Light |
 | Oct 1 + | Post-cutover stabilization | D7 execute punch list; migrate field tools, then atlas/home; scalability proof: one new surface built zero-custom-CSS | Medium |
 
