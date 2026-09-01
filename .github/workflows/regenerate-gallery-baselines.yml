@@ -1,0 +1,74 @@
+name: Regenerate gallery baselines (branch-scoped)
+
+# D5's gallery screenshot baselines (tests/visual/gallery-baselines.spec.ts) must be generated
+# on the SAME Chromium build that later checks them — font metrics differ enough between an
+# author's machine and this repo's CI runner to shift a ~34,000px full-page capture's height by
+# tens of pixels, reading as "everything changed" to a pixel-diff gate even though nothing did.
+# Neither downloading a CI artifact nor installing a matching local Chromium is reachable from
+# every authoring environment (egress policy varies), so this workflow closes the loop from
+# inside CI itself: it regenerates the baselines here, on the real renderer, and commits them
+# back to this ONE branch only if they actually differ from what's committed. A second push
+# after that commit finds no diff and does nothing — self-terminating, no update loop.
+#
+# Scoped deliberately narrow: triggers only on this branch (never on a fork's branch of the
+# same name — GITHUB_TOKEN write access is same-repo only), touches only the binary snapshot
+# files under tests/visual/gallery-baselines.spec.ts-snapshots/, and only when a path that could
+# actually change rendered output changes. This is a stopgap for the D5 baseline rollout, not a
+# standing capability — safe to delete once every relevant environment can generate baselines
+# directly (see D5's commit history for the fuller story).
+on:
+  push:
+    branches: [claude/waypoint-design-system-mpfbl6]
+    paths:
+      - "tests/visual/gallery-baselines.spec.ts"
+      - "src/pages/gallery.astro"
+      - "src/styles/**"
+      - "src/components/**"
+      - "docs/reference/component-registry.json"
+      - ".github/workflows/regenerate-gallery-baselines.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regenerate-gallery-baselines-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npx playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - run: npx playwright install-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - name: Regenerate baselines on this runner
+        run: npm run baselines:update
+      - name: Commit if the CI-rendered baselines differ from what's committed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/visual/gallery-baselines.spec.ts-snapshots/
+          if git diff --cached --quiet; then
+            echo "No change — committed baselines already match this runner's render."
+          else
+            git commit -m "chore(baselines): regenerate gallery screenshots on CI's own Chromium build
+
+CI-generated to match the exact renderer required-gate checks against — a locally-authored
+baseline drifts from this runner's font metrics by tens of pixels over a full-page capture."
+            git push origin HEAD:${{ github.ref_name }}
+          fi

@@ -115,25 +115,6 @@ jobs:
           name: gallery-baseline-diffs
           path: test-results/
           retention-days: 7
-      # Locally-generated Playwright baselines are only valid on the machine that generated
-      # them: font-metric differences between an author's sandbox and this runner's Chromium
-      # build can shift a ~34,000px full-page capture's height by tens of pixels, which reads
-      # as "everything changed" even when nothing did (see PR discussion). On failure, also
-      # regenerate the baselines HERE — the actual CI renderer — and upload them so a human can
-      # download and commit them as the real golden copies, rather than trusting a local render.
-      - name: Regenerate baselines on this runner (diagnostic download only)
-        if: failure() && steps.scope.outputs.a11y == 'true'
-        run: npx playwright test tests/visual/gallery-baselines.spec.ts --update-snapshots || true
-      - name: Optimize regenerated baselines
-        if: failure() && steps.scope.outputs.a11y == 'true'
-        run: node scripts/optimize-baselines.mjs
-      - name: Upload CI-native baselines
-        if: failure() && steps.scope.outputs.a11y == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        with:
-          name: gallery-baselines-ci-native
-          path: tests/visual/gallery-baselines.spec.ts-snapshots/
-          retention-days: 7
 
       - name: Gate scope summary
         if: always()
