@@ -187,22 +187,40 @@ const VOICE_BANNED = [
   /\bgame[-\s]+changer\b/i,
 ];
 
+const VOICE_TEXT_KEYS = new Set([
+  "body", "intro", "why", "crowd_tip", "how", "tldr", "tip", "strategy", "summary", "pace", "moreLabel",
+]);
+
+function collectVoiceTexts(node, out = []) {
+  if (Array.isArray(node)) {
+    for (const value of node) collectVoiceTexts(value, out);
+    return out;
+  }
+  if (!node || typeof node !== "object") return out;
+  for (const [key, value] of Object.entries(node)) {
+    if (VOICE_TEXT_KEYS.has(key) && typeof value === "string") out.push(value);
+    else if (value && typeof value === "object") collectVoiceTexts(value, out);
+  }
+  return out;
+}
+
 export function checkVoice(guide) {
   const hits = [];
   const sections = Array.isArray(guide.sections) ? guide.sections : (guide.sections || []).flat();
   for (const sec of sections) {
-    const texts = [sec.body, sec.intro, sec.why, sec.crowd_tip].filter(Boolean);
-    if (Array.isArray(sec.items)) {
-      for (const it of sec.items) {
-        if (it.why) texts.push(it.why);
-        if (it.crowd_tip) texts.push(it.crowd_tip);
-      }
-    }
+    const texts = collectVoiceTexts(sec);
     for (const t of texts) {
       for (const rx of VOICE_BANNED) {
         const m = rx.exec(t);
         if (m) hits.push({ section: sec.title || sec.group || "(untitled)", match: m[0] });
       }
+    }
+  }
+  for (const descriptor of Object.values(guide.descriptors || {})) {
+    if (typeof descriptor !== "string") continue;
+    for (const rx of VOICE_BANNED) {
+      const m = rx.exec(descriptor);
+      if (m) hits.push({ section: "descriptor", match: m[0] });
     }
   }
   return { status: hits.length ? "fail" : "pass", hits };
