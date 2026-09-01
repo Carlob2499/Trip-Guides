@@ -17,6 +17,12 @@ stays Korea-tier while tokens and searches stay Pro-sized.
 | Formatting, ledger cleanup, mechanical sweeps | Haiku / Sonnet low-cost work | Instant / Terra low-cost work |
 | Pipeline/skill/workflow design or systemic repair | Fable / Opus High | Sol High |
 
+The **Headless Claude V2** column is executable production routing. The **Chat / OpenAI
+equivalent** column is a testing/consultation analogy only: GitHub Actions invokes Claude Code and
+must never receive `Terra`, `Sol` or `Instant` as model ids. In particular, an
+"Instant-like" Chat simulation is a stress-test envelope, not a fifth V2 role or a production
+model setting.
+
 ### V2 routing contract
 
 - In `research-pass-v2.yml`, `model` is the **research-worker model**: Pass A uses it and
