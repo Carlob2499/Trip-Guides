@@ -26,7 +26,7 @@ const FUKUOKA_HISTORICAL_PROMPT_BLOBS = {
 };
 
 const CURRENT_VALIDATION_CANDIDATE_BLOBS = {
-  ".claude/skills/waypoint-guide-author/SKILL.md": "c80ccb7b92f5a4a64af19f87d3cf798355ec1363",
+  ".claude/skills/waypoint-guide-author/SKILL.md": "afc146b7d02b15e32db40b426b503facd95e30f2",
   "prompts/research-passA-v2.md": "884aaf32d98def606bf3c244cb2a43b5a3e8106a",
   "prompts/research-passB-v2.md": "a3e25d2f91a823fc58eea6a92c8e155f359a9889",
   "prompts/research-reconcile-v2.md": "8325969871d60b4da1fa7a306ffa9864adb99bcd",
