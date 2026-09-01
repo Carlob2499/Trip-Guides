@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "wp-coverage/2.0",
+  "slug": "taipei-codex",
+  "runId": "taipei-codex-20260901-e43444",
+  "asks": [
+    {
+      "id": "dates",
+      "ask": "2026-11-10 – 2026-11-17",
+      "status": "covered",
+      "where": [
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [],
+      "reason": null
+    },
+    {
+      "id": "cities",
+      "ask": "Taipei, Jiufen, Shifen; 7 nights based in Taipei",
+      "status": "covered",
+      "where": [
+        "04-transit.json#key-routes",
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-shifen-lantern-release",
+        "ev-shifen-waterfall-hours"
+      ],
+      "reason": null
+    },
+    {
+      "id": "anchor",
+      "ask": "Assumed 'Jiufen lantern-release evening' must be verified rather than rubber-stamped",
+      "status": "covered",
+      "where": [
+        "01-plan.json#the-anchor-correction",
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-anchor-2026-festival-dates",
+        "ev-shifen-lantern-release"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-food",
+      "ask": "Food & dining, including one tasting-menu splurge",
+      "status": "covered",
+      "where": [
+        "02-food-and-shopping.json#food-first-picks",
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-logy-menu-booking",
+        "ev-logy-hours",
+        "ev-nanjichang-local-reddit",
+        "ev-nanjichang-local-blog"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-culture",
+      "ask": "Culture / history / museums",
+      "status": "covered",
+      "where": [
+        "03-sights.json#core-sights",
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-npm-admission",
+        "ev-npm-hours",
+        "ev-cks-hours"
+      ],
+      "reason": null
+    },
+    {
+      "id": "priority-nature",
+      "ask": "Nature / outdoors",
+      "status": "covered",
+      "where": [
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-shifen-waterfall-hours"
+      ],
+      "reason": null
+    },
+    {
+      "id": "night-markets",
+      "ask": "Which night market locals actually eat at vs tourist-clogged defaults",
+      "status": "covered",
+      "where": [
+        "02-food-and-shopping.json#food-first-picks",
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-nanjichang-local-reddit",
+        "ev-nanjichang-local-blog",
+        "ev-nanjichang-hours-official"
+      ],
+      "reason": null
+    },
+    {
+      "id": "off-default",
+      "ask": "A quieter Jiufen tea-house option",
+      "status": "covered",
+      "where": [
+        "03-sights.json#core-sights",
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-yuzai-quiet-reddit",
+        "ev-yuzai-quiet-tripmoments"
+      ],
+      "reason": null
+    },
+    {
+      "id": "budget",
+      "ask": "Mid-range daily spend; save on street food/transit",
+      "status": "covered",
+      "where": [
+        "01-plan.json#entry-arrival",
+        "02-food-and-shopping.json#food-first-picks",
+        "04-transit.json#key-routes"
+      ],
+      "evidenceIds": [
+        "ev-taipei-metro-fares",
+        "ev-airport-mrt-fare"
+      ],
+      "reason": null
+    },
+    {
+      "id": "departure-airport",
+      "ask": "SFO (unconfirmed)",
+      "status": "excluded",
+      "where": [],
+      "evidenceIds": [],
+      "reason": "The synthetic intake explicitly marks SFO unconfirmed; the guide preserves that uncertainty and does not invent flight-specific timing."
+    },
+    {
+      "id": "constraints",
+      "ask": "No dietary/mobility constraints; hard avoid touristy set-menu restaurants with no local following",
+      "status": "covered",
+      "where": [
+        "02-food-and-shopping.json#food-first-picks",
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-nanjichang-local-reddit",
+        "ev-nanjichang-local-blog"
+      ],
+      "reason": null
+    },
+    {
+      "id": "special-requirement",
+      "ask": "Synthetic end-to-end V2 fixture with one deliberately shaky anchor assumption",
+      "status": "covered",
+      "where": [
+        "01-plan.json#the-anchor-correction",
+        "05-days.json#day-by-day"
+      ],
+      "evidenceIds": [
+        "ev-anchor-2026-festival-dates",
+        "ev-shifen-lantern-release"
+      ],
+      "reason": null
+    }
+  ]
+}
