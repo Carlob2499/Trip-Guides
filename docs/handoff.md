@@ -5,13 +5,11 @@
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-09-01)
 Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
-Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
-Kumamoto r2/r3 are preserved stale evidence only. r3 `acceptance/v2-kumamoto-20260902-r3` @ `56e513000792bc71bf4e18c0a0909724fe5cebac` was preflight-green on accepted base `57e320535d1cb6e861a5001f8c26cc718dcfd93d`, but current authority has acceptance-sensitive drift including V2 orchestration/resume/protected-landing/required-gate/September-watch changes; role-based model/effort routing and the final traveler-facing prose contract are also acceptance-sensitive changes. No model run started; r3 has no dispatch authority.
-Fresh-run routing is now role-based: Sonnet 5 Medium for Pass A/B, Opus 5 Medium for Reconcile/Critic, with an optional independent judgment-effort override; historical runs retain their durable inputs. Reconcile owns the fact-locked final traveler-facing synthesis under Guide-Author; Critic audits/repairs it. No fifth editorial model stage exists.
-#130 PARTIAL: `main` protected (PR + no-FF, no bypass); required checks, fresh integration, deletion block, and live proof still pending.
-Frontend U01/U02 DONE; U03 deterministic engineering DONE / YELLOW via #162. Physical-device spot check remains manual; reopen only for a reproduced defect.
-NEXT: do not dispatch r2/r3. Rebuild/replay the exact Kumamoto candidate from settled current main, run exact-head deterministic preflight, then perform a fresh accepted-base drift audit before any Sep 2+ model dispatch.
-No cap extension, artifact hand-edit, selector/cutover/publication changes, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
+Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve it.
+Kumamoto r1/r2/r3 are stale historical preflight evidence; no model run started and none has dispatch authority. Rebuild/replay from settled current main after the routing + prose revision lands.
+Fresh V2: Pass A/B = Sonnet 5 Medium; Reconcile/Critic = Opus 5 Medium. Reconcile owns fact-locked traveler-facing synthesis; Critic audits/repairs it. No fifth editorial model stage.
+#130 PARTIAL: main has PR + no-FF protection/no bypass; required checks, fresh integration, deletion block and live proof remain.
+NEXT: exact-head preflight + fresh drift audit on rebuilt Kumamoto, then one bounded model-backed acceptance. No cap/artifact/selector/publication/V1-retirement changes. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
