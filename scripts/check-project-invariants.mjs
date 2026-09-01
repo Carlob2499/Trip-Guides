@@ -89,6 +89,10 @@ requirePath("scripts/pipeline.mjs", "Pipeline V1 orchestrator");
 requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
 requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
 requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
+requireText(".github/workflows/new-guide.yml", "model: claude-sonnet-5", "V2 product evidence model is pinned");
+requireText(".github/workflows/new-guide.yml", "effort: medium", "V2 product research effort is pinned");
+requireText(".github/workflows/new-guide.yml", "critic_model: claude-opus-5", "V2 product judgment model is pinned");
+requireText(".github/workflows/new-guide.yml", "critic_effort: medium", "V2 product judgment effort is pinned");
 
 // Release governance: mutation testing is diagnostic-only and `/new` must remain compatible with
 // protected main. Neither path may regain a direct-main push as an invisible convenience.
