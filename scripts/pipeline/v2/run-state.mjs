@@ -201,7 +201,7 @@ export async function initRunV2(slug, {
   now = new Date().toISOString(),
   intakeDir = INTAKE_DIR,
   force = false,
-  inputs = { section: "", model: "claude-sonnet-5", effort: "high", criticModel: "claude-opus-5" },
+  inputs = { section: "", model: "claude-sonnet-5", effort: "medium", criticModel: "claude-opus-5" },
   issue = null,
   landMode = null,
   branchFresh = false,
