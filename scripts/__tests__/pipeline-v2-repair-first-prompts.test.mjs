@@ -58,7 +58,7 @@ describe("post-Fukuoka repair-first model inputs", () => {
     const prompt = read("prompts/research-reconcile-v2.md");
     expect(prompt).toMatch(/no shell or git tool/i);
     expect(prompt.replace(/\s+/g, " ")).toMatch(/Do not spend time attempting node\/npm\/shell commands/i);
-    expect(prompt).toMatch(/workflow runs offline verify\/build after you return/i);
+    expect(prompt.replace(/\s+/g, " ")).toMatch(/workflow runs offline verify\/build after you return/i);
     expect(prompt).not.toMatch(/STOP when .*offline verify are done/i);
   });
 
