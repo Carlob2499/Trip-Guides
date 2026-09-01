@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Shared unattended protected-main gate for automation-created PRs.
 //
 // GITHUB_TOKEN-created PRs cannot rely on recursive pull_request workflow events. Callers capture

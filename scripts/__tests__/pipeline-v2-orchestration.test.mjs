@@ -31,6 +31,17 @@ import { writeEvidence } from "../pipeline/v2/evidence.mjs";
 import { writeCoverage } from "../pipeline/v2/coverage.mjs";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
+const BASH = (() => {
+  if (process.platform !== "win32") return "bash";
+  const candidates = [
+    process.env.GIT_BASH,
+    path.join(process.env.ProgramFiles || "C:\\Program Files", "Git", "bin", "bash.exe"),
+    process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Programs", "Git", "bin", "bash.exe"),
+  ].filter(Boolean);
+  const resolved = candidates.find((candidate) => existsSync(candidate));
+  if (!resolved) throw new Error("pipeline orchestration tests require Git Bash on Windows");
+  return resolved;
+})();
 const SLUG = "testland";
 
 // ── a real repo fixture: scaffold commit, then Pass-A commit ────────────────
@@ -534,7 +545,7 @@ describe("research-pass-v2.yml — a critic-truth failure retains the paid criti
 
     let status = 0;
     try {
-      execFileSync("bash", [path.join(root, "finish.sh")], {
+      execFileSync(BASH, [path.join(root, "finish.sh")], {
         cwd: collect,
         env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, SLUG: "tottori", BRANCH: "research-v2/tottori", GITHUB_WORKSPACE: ws, RUNNER_TEMP: temp },
       });

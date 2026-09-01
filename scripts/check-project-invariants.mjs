@@ -8,6 +8,7 @@ const failures = [];
 const passes = [];
 const file = (rel) => path.join(root, rel);
 const read = (rel) => fs.readFileSync(file(rel), "utf8");
+const normalizeText = (text) => text.replace(/\r\n?/g, "\n");
 const pass = (label) => passes.push(label);
 const fail = (message) => failures.push(message);
 
@@ -39,7 +40,7 @@ const agents = read("AGENTS.md");
 const claude = read("CLAUDE.md");
 const tsconfig = JSON.parse(read("tsconfig.json"));
 const sharedBody = (text) => {
-  const normalized = text.replace(/\r\n?/g, "\n");
+  const normalized = normalizeText(text);
   const marker = "\n---\n";
   const at = normalized.indexOf(marker);
   return at === -1 ? normalized : normalized.slice(at + marker.length);
@@ -58,7 +59,7 @@ if (normalizeAgentSpecificNames(sharedBody(agents)) !== normalizeAgentSpecificNa
 
 const maxAgentManualBytes = 6500;
 for (const [rel, text] of [["AGENTS.md", agents], ["CLAUDE.md", claude]]) {
-  const bytes = Buffer.byteLength(text, "utf8");
+  const bytes = Buffer.byteLength(normalizeText(text), "utf8");
   if (bytes > maxAgentManualBytes) fail(`Agent context budget: ${rel} is ${bytes} bytes; max is ${maxAgentManualBytes}`);
   else pass(`Agent context budget: ${rel}`);
 }
@@ -91,7 +92,7 @@ requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.ym
 
 // Release governance: mutation testing is diagnostic-only and `/new` must remain compatible with
 // protected main. Neither path may regain a direct-main push as an invisible convenience.
-const mutationWorkflow = read(".github/workflows/mutation.yml");
+const mutationWorkflow = normalizeText(read(".github/workflows/mutation.yml"));
 if (!mutationWorkflow.includes("permissions:\n  contents: read")) fail("Release governance: mutation workflow must remain contents: read");
 else if (/git\s+push[^\n]*\bmain\b/.test(mutationWorkflow)) fail("Release governance: mutation workflow must not push directly to main");
 else pass("Release governance: mutation workflow is read-only to repository contents");

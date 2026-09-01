@@ -42,7 +42,7 @@ describe("resolveScaffoldArgs — argv/env seam", () => {
   });
 
   it("the workflow provides protected-landing permissions, names, and quoted flags", () => {
-    const wf = readFileSync(path.join(ROOT, ".github", "workflows", "new-guide.yml"), "utf8");
+    const wf = readFileSync(path.join(ROOT, ".github", "workflows", "new-guide.yml"), "utf8").replace(/\r\n?/g, "\n");
     const step = wf.split("Land scaffold through protected checks")[1].split("- name:")[0];
     expect(wf).toMatch(/permissions:\n {2}checks: read\n {2}contents: write\n {2}pull-requests: write\n {2}issues: write\n {2}actions: write/);
     for (const needle of ["SLUG:", "COUNTRY:", "ISSUE:", '--slug "$SLUG"', '--country "$COUNTRY"', '--issue "$ISSUE"']) {

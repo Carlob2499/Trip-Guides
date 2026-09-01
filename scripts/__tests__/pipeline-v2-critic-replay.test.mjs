@@ -28,7 +28,18 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
-const WORKFLOW = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8");
+const WORKFLOW = readFileSync(path.join(ROOT, ".github", "workflows", "research-pass-v2.yml"), "utf8").replace(/\r\n?/g, "\n");
+const BASH = (() => {
+  if (process.platform !== "win32") return "bash";
+  const candidates = [
+    process.env.GIT_BASH,
+    path.join(process.env.ProgramFiles || "C:\\Program Files", "Git", "bin", "bash.exe"),
+    process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Programs", "Git", "bin", "bash.exe"),
+  ].filter(Boolean);
+  const resolved = candidates.find((candidate) => existsSync(candidate));
+  if (!resolved) throw new Error("critic replay tests require Git Bash on Windows");
+  return resolved;
+})();
 const SLUG = "tottori";
 const RETAINED_GUIDE = '[{"title":"Key transit routes","source_url":"https://hinomarubus.co.jp/timetable_route/3450/?tab=2"}]\n';
 const RETAINED_HANDOFF = '{"corrections":[{"target":"05-transit.json#/0/source_url"}]}\n';
@@ -179,7 +190,7 @@ async function runCriticJob({ replay }) {
     const cwd = /working-directory: collect/.test(step.body) ? collect : ws;
     let status = 0;
     try {
-      execFileSync("bash", [script], {
+      execFileSync(BASH, [script], {
         cwd: step.name.startsWith("Collect allowed output") || step.name.startsWith("Record agent failure") ? collect : cwd,
         env: {
           ...process.env, PATH: `${bin}:${process.env.PATH}`,
