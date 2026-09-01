@@ -5,8 +5,10 @@ name: September completion watch
 # This workflow does two bounded things that the external completion operator cannot safely
 # synthesize from a chat session alone:
 #   1. once main becomes protected, dispatch the existing zero-model protected-landing proof once;
-#   2. on/after Sep 2, dispatch the exact frozen Kumamoto r3 acceptance once, then re-dispatch
-#      ONLY a durably recorded usage-limit interruption at most once per hourly wake.
+#   2. retain the legacy Kumamoto r3 pin as a model-burn firewall. Current authority has revoked
+#      that candidate, so the job no-ops until a newly rebuilt exact candidate is registered and
+#      this watcher is deliberately repinned; after any future dispatch it may re-dispatch ONLY
+#      a durably recorded usage-limit interruption at most once per hourly wake.
 #
 # It never edits research artifacts, extends caps, retries quality failures, changes the selector,
 # publishes, cuts over V2, or repairs pipeline code. The durable V2 run state remains authoritative.
