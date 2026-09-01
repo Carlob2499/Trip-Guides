@@ -311,6 +311,12 @@ smuggle a new research rule into a prose rewrite.
   view is highly scannable; put genuinely useful context behind the existing `More detail` /
   collapsible mechanisms. Do not generate separate "short" and "long" factual versions that can
   drift. Both depths expose the same underlying verified content.
+- **Honor intake presentation controls without changing research.** `Destination familiarity`
+  changes how much orientation/context the prose explains; `Guide audience` changes how much
+  traveler context is stated explicitly; `Guide reading style` biases what stays in the
+  scannable layer versus `More detail`. If these are blank, use Waypoint's normal balanced,
+  scannable-first default. None of them may hide a material warning, weaken verification, invent
+  atmosphere, change a research recommendation, or create a second factual version of the guide.
 - **Keep the house prose shape.** The short-paragraph/lead-first rules above remain authoritative.
   Vary cadence naturally rather than forcing every paragraph into the same sentence count; do not
   manufacture long paragraphs just to appear less machine-generated.
