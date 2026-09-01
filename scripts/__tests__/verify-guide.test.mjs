@@ -60,6 +60,25 @@ describe("checkVoice (P6 traveler-facing voice)", () => {
     ));
     expect(result.status).toBe("pass");
   });
+  it("scans nested day-card prose rather than only section-level bodies", () => {
+    const result = checkVoice({
+      sections: [{
+        type: "days",
+        group: "Days",
+        title: "Day by day",
+        items: [{ date: "Mon Nov 9", title: "Kumamoto", body: "A rich tapestry of neighborhoods awaits." }],
+      }],
+    });
+    expect(result.status).toBe("fail");
+  });
+
+  it("scans guide descriptors because they are traveler-facing copy", () => {
+    const result = checkVoice({
+      descriptors: { "Trip anchor": "Nestled in the heart of the city." },
+      sections: [],
+    });
+    expect(result.status).toBe("fail");
+  });
 });
 
 // sourceCoverage / evaluateReadiness — folded in from the former scripts/guide-readiness.mjs
