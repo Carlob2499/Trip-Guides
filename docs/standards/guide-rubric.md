@@ -29,7 +29,7 @@ Korea-tier quality bar (all P0 + all P1 = publishable). **P2** is continuous pol
 | 9 | Party fit ("bar test") | Personal | "could a generic AI have written this without knowing this traveler?" must be **no** — the correct TRAVELER_PATTERNS party is applied | human | **P1** |
 | 10 | Honest gaps | Honest | every unknown is `⚠`-flagged or omitted, never invented; an admitted blank is a feature | readiness + human | **P1** |
 | 11 | Recency | Verified | every perishable fact is within its `shelf_life`; the `verified` stamp is current for the trip | check-staleness + human | **P1** |
-| 12 | Authenticity & crowd-awareness | Personal | marquee sights/food carry a **crowd reality + off-peak best-time** note; where the obvious pick is a tourist trap, a **novel local alternative** is offered; the guide reads like someone who has *been*, not a model summarizing — passes the "bar test". **Adaptive since Pipeline V2 (2026-08-17, supersedes the S4 ≥8/≥3/≥2 quotas):** a full Pass B must exist and be non-empty (`check-passb-coverage.mjs --full-pass`, CI-gated), every find gets a reconcile verdict, and the category counts print for the human row instead of gating | **CI (passB substance)** + human | **P1** |
+| 12 | Authenticity, crowd-awareness & voice | Personal | marquee sights/food carry a **crowd reality + off-peak best-time** note; where the obvious pick is a tourist trap, a **novel local alternative** is offered; traveler-facing copy is concrete, candid, selective and useful — not promotional prose, research-note narration, or a model performing personality. The Guide-Author voice standard governs expression without changing research decisions. **Adaptive since Pipeline V2 (2026-08-17, supersedes the S4 ≥8/≥3/≥2 quotas):** a full Pass B must exist and be non-empty (`check-passb-coverage.mjs --full-pass`, CI-gated), every find gets a reconcile verdict, and the category counts print for the human row instead of gating | **CI (passB substance) + verify voice gate** + human | **P1** |
 | 13 | Design doctrine | — | tab-budget gate + a11y (axe, moderate+) pass; open-not-crowded; clickable-looks-clickable | build + axe + human | **P2** |
 | 14 | Source mix (S5, 2026-08-02) | Verified | verify reports distinct citation domains, top-domain share, destination-ccTLD presence per guide; blocking only past **60% top-share** (a monoculture ratchet set above the measured worst real guide, 25%) — a healthy guide leaning on its destination's canon never trips it | **verify (sources row)** + human | **P1** |
 
@@ -61,9 +61,11 @@ made reachable by the dual-pass method rather than enforced by a brittle detecto
 
 ## Pipeline gaps — closed, and the one that remains
 - ~~**Intake form** has no first-class *anchor event* or *party* field.~~ **Closed** — the issue
-  form + `docs/standards/new-guide-intake.md` now carry first-class **Anchor event**, **Who's this for /
-  party**, and **Travel style** fields, threaded through `issue-to-scaffold.mjs` and
-  `scaffold-guide.mjs` into the generated `intake.md`.
+  form + traveler-facing `/new` surface now carry first-class **Anchor event**, **Who's this for /
+  party**, **Travel style**, **Destination familiarity**, **Guide audience**, and **Guide reading
+  style** fields, threaded through the shared intake schema into the frozen `intake.md`.
+  The three presentation controls tune final expression only; they do not create research-coverage
+  obligations or lower evidence standards.
 - ~~**No amendment log** for research-forced re-plans.~~ **Closed** — every scaffolded guide gets a
   `ledger.md` with an append-only **`## Amendments`** section (plus a **`## Research
   reconciliation`** table for the dual-pass corroboration trail), separate from the frozen intake.

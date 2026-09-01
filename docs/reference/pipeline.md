@@ -41,6 +41,18 @@ V1 retirement is not a cleanup decision. It happens only after explicit cutover 
 
 Pass A and Pass B are independent research passes, not two turns of one conversation. Reconcile is responsible for comparing them and recording dispositions. The critic receives fresh context and audits the resulting product rather than inheriting the research transcript.
 
+### V2 model execution and final writing
+
+The executable production runtime is Claude Code. The trusted `/new` caller pins the normal role
+map explicitly: Pass A uses Claude Sonnet 5 Medium, Pass B is hard-locked to Claude Sonnet 5
+Medium, and Reconcile + Critic use Claude Opus 5 Medium. The Terra/Sol names in
+`research-efficiency.md` are Chat/OpenAI testing analogues only and are never workflow model ids.
+
+There is no fifth editorial model stage. The Guide-Author skill owns the traveler-facing voice:
+Reconcile finishes the fact-locked traveler-facing synthesis after it settles evidence decisions,
+then the fresh-context Critic audits and repairs that product. Deterministic composition organizes
+the resulting content; it does not generate prose.
+
 ### V2 state and resume
 
 V2 uses durable run identity and per-stage state. A resume continues the same run and does not silently skip an owed stage. Completed expensive stages remain completed unless an explicit contract reopens them.

@@ -36,11 +36,12 @@ describe("September completion watch — bounded September operator contract", (
     expect(job).toMatch(/if: steps\.firewall\.outputs\.eligible == 'true'/);
   });
 
-  it("fails closed on selector/candidate/authority drift before model dispatch", () => {
+  it("fails closed on selector/candidate/sensitive drift, but safely no-ops a deliberately revoked authority", () => {
     const job = jobBlock("kumamoto-acceptance");
     expect(job).toContain("WAYPOINT_RESEARCH_ENGINE is set");
     expect(job).toContain("Frozen candidate moved");
-    expect(job).toContain("Current handoff no longer names frozen Kumamoto r3 as dispatch authority");
+    expect(job).toContain("Current handoff has revoked frozen Kumamoto r3 dispatch authority");
+    expect(job).toMatch(/eligible=false[\s\S]*exit 0/);
     expect(job).toContain("Acceptance-sensitive drift");
     expect(job).toMatch(/refusing dispatch/i);
   });

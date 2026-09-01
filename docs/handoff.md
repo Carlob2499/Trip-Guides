@@ -5,12 +5,11 @@
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-09-01)
 Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
-Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve `research-v2/fukuoka`.
-Kumamoto r2/r3 are preserved stale evidence only. r3 `acceptance/v2-kumamoto-20260902-r3` @ `56e513000792bc71bf4e18c0a0909724fe5cebac` was preflight-green on accepted base `57e320535d1cb6e861a5001f8c26cc718dcfd93d`, but current main has acceptance-sensitive drift including V2 orchestration/resume/protected-landing/required-gate/September-watch changes. No model run started; r3 has no dispatch authority.
-#130 owner/tooling branch protection + live proof remain pending; no broad Actions bypass. `main` remains unprotected and no rulesets are configured.
-Frontend U01/U02 DONE; U03 deterministic engineering DONE / YELLOW via #162. Physical-device spot check remains manual; reopen only for a reproduced defect.
-NEXT: do not dispatch r2/r3. Rebuild/replay the exact Kumamoto candidate from settled current main, run exact-head deterministic preflight, then perform a fresh accepted-base drift audit before any Sep 2+ model dispatch.
-No cap extension, artifact hand-edit, selector/cutover/publication changes, V1 retirement, or canary merge. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
+Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve it.
+Kumamoto r1/r2/r3 are stale historical preflight evidence; no model run started and none has dispatch authority. Rebuild/replay from settled current main after the routing + prose revision lands.
+Fresh V2: Pass A/B = Sonnet 5 Medium; Reconcile/Critic = Opus 5 Medium. Reconcile owns fact-locked traveler-facing synthesis; Critic audits/repairs it. No fifth editorial model stage.
+#130 PARTIAL: main has PR + no-FF protection/no bypass; required checks, fresh integration, deletion block and live proof remain.
+NEXT: exact-head preflight + fresh drift audit on rebuilt Kumamoto, then one bounded model-backed acceptance. No cap/artifact/selector/publication/V1-retirement changes. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
 <!-- WARM_START_END -->
 
 ## Shared-add contract
@@ -33,7 +32,7 @@ No cap extension, artifact hand-edit, selector/cutover/publication changes, V1 r
 - S03 offline/poor-network traveler path: DONE by PR #114's fresh-page offline service-worker read plus the existing durable sync/replay suite.
 - S04 accessibility: automated portion PASS after PR #114 exposed and repaired progress status contrast and undersized controls; one physical-device interaction spot check remains as a traveler/UI check, not as retroactive authority for the already-run Fukuoka acceptance canary.
 - R03 is fully accepted: targeted escalation and cancellation failure-only seams are closed/proven; Uruguay Canary #4 remains GREEN draft-only evidence, not production-cutover authority.
-- Release-governance repository prerequisites are complete through #150. `main` still reports unprotected with no required-status enforcement/ruleset, so issue #130 is now only the final owner/tooling settings mutation and post-settings verification. PR #171 adds temporary hourly observation/dispatch glue only: it cannot configure protection, and it removes no owner boundary.
+- Release-governance repository prerequisites are complete through #150. `main` now has active partial protection through `Main Protection`: PRs are required, non-fast-forward updates are blocked, and there are no bypass actors. Issue #130 remains open because the four required checks, up-to-date/merge-queue-equivalent integration enforcement, deletion protection, and zero-model protected-main live proof are not yet proven. PR #171 remains temporary observation/dispatch glue only and cannot configure the missing rules.
 - The failed Fukuoka evidence remains frozen. Post-Fukuoka remediation is merged. Kumamoto r2 remains stale historical evidence after PR #149. Rebuilt r3 `acceptance/v2-kumamoto-20260902-r3` at `56e513000792bc71bf4e18c0a0909724fe5cebac` is also stale for dispatch: current `main` is 20 commits beyond its accepted base and includes acceptance-sensitive V2 workflow/state/retry/landing/required-gate changes. A fresh rebuilt/replayed exact candidate is required before any new model-backed acceptance.
 - September engineering completion now includes frontend: U01/U02 target Sep 19, U03 Sep 26, and final engineering handoff Sep 30. PR #115 remains historical/deferred implementation evidence, not a branch to merge wholesale onto current main.
 - U01/U02 are DONE through PR #160. U03 deterministic engineering is DONE / YELLOW: PR #162 aligned the phone bottom-nav DOM/focus order with its visual order and exact-head Required Gate `33352620168` passed invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience. PR #164 closed the deterministic frontend authority; the physical-device spot check remains honestly pending and may reopen U03 only if it reproduces a real defect.

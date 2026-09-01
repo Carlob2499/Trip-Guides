@@ -34,6 +34,11 @@ For ordinary research, prefer native `WebSearch` / `WebFetch` and direct officia
 The embedded browser is not required merely because a normal fetch is inconvenient. Never turn a
 research task into an account-authentication task.
 
+Reader/cache/translation mirrors are not a sanctioned fallback in repaired V2. The headless
+workflow denies known mirror/proxy hosts; a failed origin stays `blocked` unless that true origin
+itself is later fetched successfully. Retry the origin once when warranted, then use another
+legitimate authority or flag/omit the claim.
+
 ## 3. Separate execution planes when diagnosing failures
 
 Always identify which plane failed:

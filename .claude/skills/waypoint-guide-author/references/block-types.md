@@ -270,6 +270,70 @@ bucket at a glance: `Plan · Essentials · Transit · Days · Sights · Food · 
 (plus trip-specific anchors like `Daejeon & MSI`). Never re-spend wayfinding on
 cleverness ("Pocket", "Receipts" were tried and withdrawn).
 
+### Traveler-facing expression standard
+
+This governs **how an already-researched decision is said**. It does not change what Pass A,
+Pass B, Reconcile, party-fit logic, pacing logic, or the Critic are allowed to recommend. Never
+smuggle a new research rule into a prose rewrite.
+
+- **Practical first; atmosphere earns its space.** The normal register is clear travel guidance
+  with enough texture to make the place intelligible. Signature moments may be more atmospheric
+  when the details are actually supported. Decorative scene-setting for its own sake is out.
+- **Direct, mostly neutral address.** Prefer clean imperatives and declarative sentences
+  ("Take the morning bus." / "The transfer is awkward."). Use `you` selectively when it makes
+  an instruction more natural; do not narrate the traveler back to themselves.
+- **Personalization is usually invisible.** Let the recommendation prove that the intake mattered.
+  Name a party constraint only when it materially explains the advice, warning or exception.
+- **Routine uncertainty stays in the product affordances.** `⚠`, `verified_on`, re-check
+  pills and source metadata carry ordinary freshness. Put uncertainty into prose when it changes
+  an action, booking, route, safety decision, or whether an experience is viable.
+- **Explain the decision enough to trust it.** Routine advice usually gets one short reason.
+  Routing, reservations, accessibility, expensive commitments, fragile transit and other
+  consequential choices may get the fuller rationale. Cut the research journey; keep the reason
+  the traveler needs.
+- **Context should improve the visit.** Give important cultural/historical context when it changes
+  what the traveler notices or understands; go deeper for a signature place when the story earns
+  it. Sensory detail follows the same rule and must come from supportable observation/firsthand
+  evidence — never invent smells, sounds, textures or atmosphere to sound human.
+- **Curate; do not scoreboard.** Most recommendations need no badge or ranking. Make priority
+  unmistakable only when the difference genuinely matters. Use hard "skip/don't go/not viable"
+  language for a real blocker, danger or effectively settled trade-off; otherwise prefer
+  straightforward comparative language ("harder to fit here", "better fit for this trip").
+- **One preferred path, one meaningful alternative.** Offer an alternative when it solves a real
+  contingency or trade-off, not to recreate search results. A clearly superior primary option may
+  stand alone.
+- **Restrained personality.** No house jokes, quips or performative cleverness. Personality comes
+  from judgment, specificity, rhythm and good observation.
+- **Sources are mostly invisible while reading.** Provenance belongs in the existing source and
+  verification UI. Surface it more strongly only when freshness/trust materially affects action.
+  Never turn traveler prose into a citation audit.
+- **One guide, two reading depths.** Write the first paragraph/structured fields so the default
+  view is highly scannable; put genuinely useful context behind the existing `More detail` /
+  collapsible mechanisms. Do not generate separate "short" and "long" factual versions that can
+  drift. Both depths expose the same underlying verified content.
+- **Honor intake presentation controls without changing research.** `Destination familiarity`
+  changes how much orientation/context the prose explains; `Guide audience` changes how much
+  traveler context is stated explicitly; `Guide reading style` biases what stays in the
+  scannable layer versus `More detail`. If these are blank, use Waypoint's normal balanced,
+  scannable-first default. None of them may hide a material warning, weaken verification, invent
+  atmosphere, change a research recommendation, or create a second factual version of the guide.
+- **Keep the house prose shape.** The short-paragraph/lead-first rules above remain authoritative.
+  Vary cadence naturally rather than forcing every paragraph into the same sentence count; do not
+  manufacture long paragraphs just to appear less machine-generated.
+
+**Anti-generative language.** Prefer simple `is/are/was` and direct action verbs when they say
+the fact cleanly. The following formulaic phrases are hard failures in traveler-facing fields:
+`rich tapestry`, `nestled in the heart of`, `serves as a testament`,
+`hustle and bustle`, `it is important to note`, `in conclusion`, `let's delve`,
+and ordinary travel-copy use of `game changer`. Context-sensitive words such as `landscape`,
+`vibrant`, `bustling`, `showcase`, `pivotal` or `crucial` are **not** globally banned;
+use them only when they are the plainest accurate word, not as low-information decoration.
+
+**Do not import a second presentation architecture from style research.** Waypoint does not owe
+every entry a generic "Reality Check" section, a Wi-Fi/walkability/safety metrics grid, a
+Michelin-style star scale, or a four-to-six-sentence paragraph quota. Put reality next to the
+decision it changes, and structure only the metrics this traveler actually needs.
+
 **Descriptors are RARE and informational-only (creator's ruling).** The first shipped
 set was rejected as AI-sounding: nearly every line shared one machine rhythm — a short
 list, an em-dash pivot, a quip tail ("cash, data, etiquette — and 112/119 one tap
@@ -310,10 +374,15 @@ grep gate (`scripts/verify-guide.mjs`) fails on any of these in a `body`,
   "worth flagging", "worth noting that", "disproved claim"
 - **Quality claims**: "a generic guide couldn't", "a generic AI",
   "no generic guide", "only a local would know"
+- **Unmistakable formulaic travel/LLM phrases**: "rich tapestry",
+  "nestled in the heart of", "serves as a testament", "hustle and bustle",
+  "it is important to note", "in conclusion", "let's delve", "game changer"
 
-These phrases are the research log leaking into the product. The fix is
-always the same: delete the frame, keep the fact, let `⚠` / `verified_on`
-carry the provenance silently. Example:
+The process/quality phrases are the research log leaking into the product; the formulaic phrases
+are low-information generated-travel scaffolding. The fix is the same: keep the supported fact,
+delete the frame, and let `⚠` / `verified_on` carry provenance silently. Context-sensitive
+ordinary words remain judgment calls under the expression standard above, not lexical failures.
+Example:
 
   ✗ "Honest note: Ichiran is overpriced by local reckoning."
   ✓ "Ichiran is overpriced by local reckoning."

@@ -133,7 +133,7 @@ describe("the meter", () => {
     const line = blanksLine({});
     expect(line).not.toMatch(/\$|\bmin\b|\bh\b|hour|est\./i);
     expect(line).toContain(String(blankCount({})));
-    expect(blankCount({})).toBe(15);
+    expect(blankCount({})).toBe(18); // + familiarity, guide audience, guide reading style
   });
 
   it("says nothing is blank only when nothing is", () => {

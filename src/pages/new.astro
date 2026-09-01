@@ -59,6 +59,16 @@ const CONTROLS: Record<string, Control> = {
   ngAnchorCertainty: { kind: "select", options: CERTAINTY("confirmed", "no anchor") },
   ngTravelers: { type: "number", min: "1", placeholder: "3" },
   ngParty: { placeholder: "the Korea group (3 mid-20s, heavy walkers)" },
+  ngDestinationFamiliarity: {
+    kind: "select",
+    options: [
+      { v: "", t: "undecided" },
+      { v: "First visit", t: "First visit" },
+      { v: "Mostly first-timers", t: "Mostly first-timers" },
+      { v: "Returning travelers", t: "Returning travelers" },
+      { v: "Mixed first-time / returning", t: "Mixed first-time / returning" },
+    ],
+  },
   ngPassports: { placeholder: "United States, United Kingdom" },
   ngNiche: { placeholder: "live music" },
   ngConstraints: { kind: "textarea", placeholder: "no stairs — elevator or ground floor only" },
@@ -76,6 +86,26 @@ const CONTROLS: Record<string, Control> = {
       { v: "Bucket-list must-sees", t: "Bucket-list must-sees" },
       { v: "Off-the-beaten-path", t: "Off-the-beaten-path" },
       { v: "Balanced", t: "Balanced" },
+    ],
+  },
+  ngGuideAudience: {
+    kind: "select",
+    options: [
+      { v: "", t: "undecided" },
+      { v: "Just me", t: "Just me" },
+      { v: "My travel group", t: "My travel group" },
+      { v: "Family / parents", t: "Family / parents" },
+      { v: "Shareable group guide", t: "Shareable group guide" },
+    ],
+  },
+  ngGuideStyle: {
+    kind: "select",
+    options: [
+      { v: "", t: "undecided" },
+      { v: "Concise & practical", t: "Concise & practical" },
+      { v: "Balanced", t: "Balanced" },
+      { v: "More narrative / contextual", t: "More narrative / contextual" },
+      { v: "Detailed / reference-heavy", t: "Detailed / reference-heavy" },
     ],
   },
   ngBudget: {

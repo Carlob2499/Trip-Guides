@@ -190,6 +190,18 @@ function freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs
   };
 }
 
+function normalizeRunInputs(inputs = {}) {
+  return {
+    section: inputs.section ?? "",
+    model: inputs.model ?? "claude-sonnet-5",
+    effort: inputs.effort ?? "medium",
+    criticModel: inputs.criticModel ?? "claude-opus-5",
+    // Historical 2.0/2.1 callers do not know this additive field. Canonicalize absence to null
+    // before comparison so a repaired V2 resume never mistakes "missing" for changed intent.
+    criticEffort: inputs.criticEffort ?? null,
+  };
+}
+
 /** Create a fresh V2 run. Refuses to clobber an existing one unless force. `branchFresh` is the
     fresh-run signal from the workflow's branch step: the research-v2 branch did NOT exist and
     was just created from the default branch, so any state found on disk is inherited history. */
@@ -201,11 +213,12 @@ export async function initRunV2(slug, {
   now = new Date().toISOString(),
   intakeDir = INTAKE_DIR,
   force = false,
-  inputs = { section: "", model: "claude-sonnet-5", effort: "high", criticModel: "claude-opus-5" },
+  inputs = { section: "", model: "claude-sonnet-5", effort: "medium", criticModel: "claude-opus-5", criticEffort: null },
   issue = null,
   landMode = null,
   branchFresh = false,
 } = {}) {
+  const normalizedInputs = normalizeRunInputs(inputs);
   const existing = await readRunStateV2(slug, { intakeDir });
   if (existing && !force && branchFresh) {
     // FRESH-RUN SEMANTICS (correction pass): the research-v2 branch was JUST created from the
@@ -221,7 +234,7 @@ export async function initRunV2(slug, {
         publishedAt: existing.publication.publishedAt || null,
         mergedPr: existing.landing?.pr ?? null,
       }];
-      const state = freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode });
+      const state = freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs: normalizedInputs, issue, landMode });
       state.previousRuns = archived;
       return save(state, intakeDir);
     }
@@ -236,9 +249,9 @@ export async function initRunV2(slug, {
     // Complete and stuck records are deliberately durable too. A redispatch may re-run landing
     // or surface the stuck state, but it must not silently mint a new run whose "baseline"
     // already contains the prior run's evidence.
-    if (JSON.stringify(existing.inputs) !== JSON.stringify(inputs)) {
+    if (JSON.stringify(existing.inputs) !== JSON.stringify(normalizedInputs)) {
       throw new ContractError(
-        `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel recorded in run.v2.json`,
+        `resume inputs differ from durable run ${existing.runId}; redispatch with section/model/effort/criticModel/criticEffort recorded in run.v2.json`,
       );
     }
     // Run context is durable and immutable. issue: a redispatch that omits it inherits; naming a
@@ -260,7 +273,7 @@ export async function initRunV2(slug, {
     }
     return existing;
   }
-  return save(freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs, issue, landMode }), intakeDir);
+  return save(freshRunState(slug, { lifecycle, stages, cap, autoRetryCap, now, inputs: normalizedInputs, issue, landMode }), intakeDir);
 }
 
 function requireRun(state, slug) {

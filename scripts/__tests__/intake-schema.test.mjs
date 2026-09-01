@@ -72,9 +72,12 @@ const FULL_BODY = [
   "### Anchor event certainty", "", "fixed", "",
   "### Number of travelers", "", "3", "",
   "### Who's this for / party", "", "the Korea group (3 mid-20s, heavy walkers)", "",
+  "### Destination familiarity", "", "Returning travelers", "",
   "### Traveler passport countries", "", "United States, United Kingdom", "",
   "### Pace", "", "balanced", "",
   "### Travel style", "", "Off-the-beaten-path", "",
+  "### Guide audience", "", "My travel group", "",
+  "### Guide reading style", "", "Balanced", "",
   "### Priority #1 (most important)", "", "Food & dining", "",
   "### Priority #2", "", "Culture / history", "",
   "### Priority #3", "", "— none —", "",
@@ -102,9 +105,12 @@ describe("parseIssueBody + answersFromForm", () => {
     expect(answers.cities).toBe("Lisbon, Porto");
     expect(answers.travelers).toBe("3");
     expect(answers.party).toBe("the Korea group (3 mid-20s, heavy walkers)");
+    expect(answers.destinationFamiliarity).toBe("Returning travelers");
     expect(answers.passportCountries).toBe("United States, United Kingdom");
     expect(answers.pace).toBe("balanced");
     expect(answers.travelStyle).toBe("Off-the-beaten-path"); // travel-style → travelStyle
+    expect(answers.guideAudience).toBe("My travel group");
+    expect(answers.guideStyle).toBe("Balanced");
     expect(answers.anchor).toContain("NOS Alive");
     expect(answers.departureAirport).toBe("EWR (Newark)");
     expect(answers.budget).toBe("Mid-range ($75–150/day)");
@@ -122,14 +128,24 @@ describe("parseIssueBody + answersFromForm", () => {
 
   it("treats _No response_ and null-ish dropdown defaults as unset", () => {
     expect(answers.niche).toBeUndefined(); // _No response_
-    const undecided = answersFromForm(parseIssueBody("### Country\n\nX\n\n### Pace\n\nundecided\n\n### Travel style\n\nundecided"));
+    const undecided = answersFromForm(parseIssueBody(
+      "### Country\n\nX\n\n### Pace\n\nundecided\n\n### Travel style\n\nundecided" +
+      "\n\n### Destination familiarity\n\nundecided\n\n### Guide audience\n\nundecided" +
+      "\n\n### Guide reading style\n\nundecided",
+    ));
     expect(undecided.pace).toBeUndefined();
     expect(undecided.travelStyle).toBeUndefined();
+    expect(undecided.destinationFamiliarity).toBeUndefined();
+    expect(undecided.guideAudience).toBeUndefined();
+    expect(undecided.guideStyle).toBeUndefined();
   });
 
   it("validates: country required, extras allowed", () => {
     expect(validateAnswers(answers).ok).toBe(true);
     expect(validateAnswers({ ...answers, coords: { lat: 1, lng: 2 } }).ok).toBe(true); // loose passthrough
+    expect(validateAnswers({ country: "X", destinationFamiliarity: "I went once maybe" }).ok).toBe(false);
+    expect(validateAnswers({ country: "X", guideAudience: "Everyone on Earth" }).ok).toBe(false);
+    expect(validateAnswers({ country: "X", guideStyle: "Purple prose" }).ok).toBe(false);
     expect(validateAnswers({ cities: "Rome" }).ok).toBe(false); // no country
   });
 });
@@ -174,8 +190,9 @@ describe("intake doc surfaces every captured field", () => {
   const answers = answersFromForm(parseIssueBody(FULL_BODY));
   const md = buildIntakeMd(answers);
   for (const val of ["Portugal", "Lisbon, Porto", "2026-07-08", "EWR (Newark)", "NOS Alive", "3",
-    "the Korea group", "United States, United Kingdom", "balanced", "Off-the-beaten-path",
-    "Food & dining", "Culture / history", "Mid-range ($75–150/day)", "one vegetarian",
+    "the Korea group", "Returning travelers", "United States, United Kingdom", "balanced", "Off-the-beaten-path",
+    "My travel group", "Guide reading style:** Balanced", "Food & dining", "Culture / history",
+    "Mid-range ($75–150/day)", "one vegetarian",
     "Dates (target)", "Anchor event (fixed)", "Per-day target (flexible, from form)"]) {
     it(`renders "${val}"`, () => expect(md).toContain(val));
   }

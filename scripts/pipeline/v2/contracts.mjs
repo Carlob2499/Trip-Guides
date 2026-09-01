@@ -21,7 +21,7 @@ import { z } from "zod";
 
 // ── versioning ───────────────────────────────────────────────────────────────
 
-export const RUN_SCHEMA = "wp-run/2.1"; // 2.1: per-attempt stage history (additive)
+export const RUN_SCHEMA = "wp-run/2.2"; // 2.2: optional independent judgment effort for reconcile/critic (additive)
 export const EVIDENCE_SCHEMA = "wp-evidence/2.3"; // 2.3: reconciliation rows name what they corroborate/supersede (additive)
 export const COVERAGE_SCHEMA = "wp-coverage/2.0";
 export const TELEMETRY_SCHEMA = "wp-telemetry/2.1"; // 2.1: cumulative/failed attempt durations (additive)
@@ -189,6 +189,9 @@ export const runStateSchema = z.looseObject({
     model: z.string().min(1),
     effort: z.string().min(1),
     criticModel: z.string().min(1),
+    // 2.2 additive: null preserves historical/global-effort runs; fresh policy may set this
+    // independently so judgment can escalate without making Pass A/B expensive too.
+    criticEffort: z.string().min(1).nullable().default(null),
   }),
   // Product-communication continuity (I01): the intake issue this run reports back to. Recorded
   // once at init from /new's dispatch and carried durably, so a resume/redispatch (which has no

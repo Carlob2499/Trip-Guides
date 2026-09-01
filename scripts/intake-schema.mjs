@@ -80,6 +80,10 @@ export const FIELDS = [
     description: "Who is actually going — the more concrete the better. This maps the guide onto how these specific travelers move (pace, walking tolerance, whether the group splits). Name a prior trip if the same people traveled before (\"the Korea group\"), or describe them.",
     placeholder: "e.g. the Korea group (3 mid-20s, gaming anchors, heavy walkers) / family of 5 with grandparents" },
 
+  { id: "destination-familiarity", label: "Destination familiarity", kind: "dropdown", required: false, answerKey: "destinationFamiliarity",
+    description: "How familiar is this group with the destination? This changes how much orientation/context the finished guide needs; it does not lower the research or verification standard.",
+    options: ["undecided", "First visit", "Mostly first-timers", "Returning travelers", "Mixed first-time / returning"], nullish: "undecided" },
+
   { id: "constraints", label: "Constraints", kind: "textarea", required: false, answerKey: "constraints",
     description: "Mobility, dietary, or sensory needs the guide must honor — a wheelchair or low-stairs requirement, a walking-distance ceiling, allergies or strict diets, sensory sensitivities. A stated constraint changes what the research OWES: related venue facts (step-free access, elevator, allergen handling) become mandatory, verified per venue — never assumed.",
     placeholder: "e.g. one traveler can't do stairs — elevator or ground floor only / severe peanut allergy / max ~3 km walking per day" },
@@ -95,6 +99,14 @@ export const FIELDS = [
   { id: "travel-style", label: "Travel style", kind: "dropdown", required: false, answerKey: "travelStyle",
     description: "How far off the tourist trail? Drives how hard the research leans on crowd-avoidance and non-obvious local picks versus the marquee must-sees.",
     options: ["undecided", "Bucket-list must-sees", "Off-the-beaten-path", "Balanced"], nullish: "undecided" },
+
+  { id: "guide-audience", label: "Guide audience", kind: "dropdown", required: false, answerKey: "guideAudience",
+    description: "Who is expected to read the finished guide? This changes how much traveler context is stated explicitly; personalization still stays mostly implicit.",
+    options: ["undecided", "Just me", "My travel group", "Family / parents", "Shareable group guide"], nullish: "undecided" },
+
+  { id: "guide-style", label: "Guide reading style", kind: "dropdown", required: false, answerKey: "guideStyle",
+    description: "How should the guide distribute detail? This controls the balance between the scannable default view and deeper context; it does not change facts, source standards, or Waypoint's house voice.",
+    options: ["undecided", "Concise & practical", "Balanced", "More narrative / contextual", "Detailed / reference-heavy"], nullish: "undecided" },
 
   { id: "priority1", label: "Priority #1 (most important)", kind: "dropdown", required: false, special: "priority", rank: 1,
     description: "Three separate rank fields, not a multi-select — so the order you actually mean is preserved.",
@@ -195,10 +207,13 @@ export const IntakeAnswers = z.object({
   anchorCertainty: z.enum(CERTAINTY_OPTIONS).optional(),
   travelers: z.string().optional(),
   party: z.string().optional(),
+  destinationFamiliarity: z.enum(["First visit", "Mostly first-timers", "Returning travelers", "Mixed first-time / returning"]).optional(),
   constraints: z.string().optional(),
   passportCountries: z.string().optional(),
   pace: z.string().optional(),
   travelStyle: z.string().optional(),
+  guideAudience: z.enum(["Just me", "My travel group", "Family / parents", "Shareable group guide"]).optional(),
+  guideStyle: z.enum(["Concise & practical", "Balanced", "More narrative / contextual", "Detailed / reference-heavy"]).optional(),
   priorities: z.array(z.string()).optional(),
   niche: z.string().optional(),
   budget: z.string().optional(),

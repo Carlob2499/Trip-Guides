@@ -38,11 +38,27 @@ describe("post-Fukuoka repair-first model inputs", () => {
     expect(prompt).toMatch(/Never relabel a search\s+preview merely to clear a gate/i);
   });
 
+
+  it("keeps evidence schema version authority in the generated machine capsule, not stale prompt prose", () => {
+    for (const file of ["prompts/research-passA-v2.md", "prompts/research-passB-v2.md"]) {
+      const prompt = read(file);
+      expect(prompt).toMatch(/GENERATED Machine contract/i);
+      expect(prompt).not.toMatch(/wp-evidence\/2\.0/);
+    }
+  });
+
+  it("does not let Reconcile stop at evidence agreement before traveler-facing synthesis", () => {
+    const prompt = read("prompts/research-reconcile-v2.md");
+    const stop = prompt.slice(prompt.lastIndexOf("- STOP"));
+    expect(stop).toMatch(/traveler-facing synthesis/i);
+    expect(stop).toMatch(/not a completed Reconcile stage/i);
+  });
+
   it("does not tell Reconcile to run gates its sandbox cannot execute", () => {
     const prompt = read("prompts/research-reconcile-v2.md");
     expect(prompt).toMatch(/no shell or git tool/i);
     expect(prompt.replace(/\s+/g, " ")).toMatch(/Do not spend time attempting node\/npm\/shell commands/i);
-    expect(prompt).toMatch(/workflow runs offline verify\/build after you return/i);
+    expect(prompt.replace(/\s+/g, " ")).toMatch(/workflow runs offline verify\/build after you return/i);
     expect(prompt).not.toMatch(/STOP when .*offline verify are done/i);
   });
 

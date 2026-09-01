@@ -36,12 +36,9 @@ export function scaffoldComment({ slug, repo, guideUrl, progressUrl, prNumber })
 
 **Watch it happen:** ${progressUrl} — a live timer + step checklist (scaffold → Pass A → Pass B → reconcile → verify → published). Nothing to do here; that page updates itself.
 
-**The research pass is starting automatically** (TWO independent passes → reconcile → critic, Sonnet by default). If it reaches a full verify PASS it **publishes itself**: \`draft: true\` comes off in the same run that merges to \`main\`, and it's live on the next Pages deploy. No approval step, no label, nothing further from you — an "🚀 Auto-published" issue is filed with a one-line rollback if you disagree. If it can't reach PASS (or the run gets cut off) it leaves a draft PR for a human instead, and re-running the workflow resumes from the last checkpoint.
+**The research pipeline is starting automatically** (Pass A → Pass B → Reconcile → Critic). The active engine owns its model routing; this issue comment does not duplicate that contract. If it reaches a full verify PASS **and product authority is still active at landing**, it **publishes itself**: \`draft: true\` comes off in the same run that merges to \`main\`, and it's live on the next Pages deploy. No approval step, no label, nothing further from you — an "🚀 Auto-published" issue is filed with a one-line rollback if you disagree. If product authority is absent/revoked, or the run can't reach PASS, it leaves a draft PR instead; a cut-off run resumes from the last durable checkpoint.
 
-*Didn't start, or want to re-run/target one section?* Actions → Research pass → Run workflow → slug \`${slug}\` (optionally a \`section\`). To drive it by hand instead, print the same prompt CI uses — no second copy to drift:
-\`\`\`
-WP_SLUG=${slug} WP_SECTION="full pass" node scripts/pipeline.mjs prompt prompts/research-passA.md
-\`\`\``;
+*Didn't start, or need a manual resume?* In Actions, use **Research pass (V2)** when this guide has \`guides-intake/${slug}/run.v2.json\`; otherwise use **Research pass**. Supply slug \`${slug}\` and only a section when you intentionally want a scoped pass.`;
 }
 
 export async function landScaffold(

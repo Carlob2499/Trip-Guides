@@ -455,6 +455,12 @@ describe("new-guide.yml — the /new dispatch", () => {
     expect(job).toContain("uses: ./.github/workflows/research-pass-v2.yml");
     expect(job).toContain("slug: ${{ needs.scaffold.outputs.slug }}");
     expect(job).toContain("issue: ${{ format('{0}', github.event.issue.number) }}");
+    // Product routing is pinned at the caller, not merely inherited from reusable-workflow
+    // defaults: evidence = Sonnet Medium; judgment = Opus Medium.
+    expect(job).toContain("model: claude-sonnet-5");
+    expect(job).toContain("effort: medium");
+    expect(job).toContain("critic_model: claude-opus-5");
+    expect(job).toContain("critic_effort: medium");
     expect(job).toContain("secrets: inherit");
     expect(job).not.toMatch(/^\s+land:/m); // authority is derived, never typed (side-door scar)
     expect(job).toContain("if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'");

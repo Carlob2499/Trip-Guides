@@ -229,7 +229,7 @@ export function buildIntakeMd(answers = {}) {
 - Number of travelers: ${answers.travelers || ""}
 - **Constraints (mobility · dietary · sensory) — BINDING:** ${answers.constraints || ""}  *(a stated constraint makes the related venue facts MANDATORY per venue — step-free access, elevator, allergen handling — verified, never assumed; empty means none were stated, not none exist)*
 - Group makeup / ages (from Comments): ${answers.comments || ""}
-- First time or returning:
+- **Destination familiarity:** ${answers.destinationFamiliarity || ""}
 - Languages spoken:
 - **Traveler passport countries (drives visa & entry research):** ${answers.passportCountries || ""}  *(a party can mix — each named country gets its own researched entry row, schema-required source+date; the Trip Kit shows a dropdown so each traveler picks their own)*
 
@@ -257,8 +257,9 @@ Top 3, in order:
 ## 5. Constraints & Dealbreakers
 - Dietary: / Physical limits: / Hard avoids: / Safety priorities:
 
-## 6. The Tone
-- Who will read this: / Voice: practical & terse / warm & narrative / detailed
+## 6. The Guide Experience
+- **Guide audience:** ${answers.guideAudience || ""}
+- **Guide reading style:** ${answers.guideStyle || ""}  *(controls scannable-default vs deeper-context balance; Waypoint's house voice, facts, and verification standard do not change)*
 
 ## 7. Special Requirements
 - Anything that makes this trip unlike a default version of the same destination:
@@ -378,6 +379,10 @@ export function buildCoverageMatrix(answers, slug) {
   add("niche", "Niche interest", answers.niche);
   add("pace", "Pace", answers.pace);
   add("travel-style", "Travel style", answers.travelStyle);
+  // Presentation controls (destinationFamiliarity / guideAudience / guideStyle) live in the
+  // frozen intake and guide-author contract, but are intentionally not research-coverage asks:
+  // verify should not demand a fake guide section merely to prove who is reading it or how much
+  // detail the default view should show.
   add("budget", "Budget target", answers.budget);
   add("party", "Party description", answers.party);
   add("travelers", "Number of travelers", answers.travelers);
@@ -452,7 +457,8 @@ export async function writeScaffold(answers, { guidesDir = GUIDES_DIR, intakeDir
 // node scripts/scaffold-guide.mjs --country "Brazil" --cities "Rio de Janeiro" \
 //   --start 2026-03-01 --end 2026-03-08 --travelers 2 --pace balanced \
 //   --priorities "Food,Nature" --niche "live music" --budget "Mid-range ($75-150/day)" \
-//   --comments "one vegetarian" [--title "..."] [--lat -22.9 --lng -43.2] [--slug rio]
+//   --comments "one vegetarian" [--destination-familiarity "Returning travelers"] \
+//   --guide-audience "My travel group" --guide-style "Balanced" [--title "..."] [--lat -22.9 --lng -43.2] [--slug rio]
 // R9: a flag immediately followed by ANOTHER flag (e.g. `--country --start X`, a missing
 // value rather than a deliberate valueless flag) used to swallow the next flag's name as
 // its own value — `country` would silently become the literal string "--start". Guarding
@@ -473,7 +479,7 @@ export function parseArgs(argv) {
 async function main() {
   const a = parseArgs(process.argv.slice(2));
   if (!a.country && !a.title) {
-    console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--departure-airport ..] [--travelers N] [--pace ..] [--priorities a,b,c] [--niche ..] [--budget ..] [--comments ..] [--passport-countries ..] [--lat ..] [--lng ..] [--slug ..]");
+    console.error("Usage: node scripts/scaffold-guide.mjs --country <name> [--cities ..] [--start YYYY-MM-DD --end YYYY-MM-DD] [--departure-airport ..] [--travelers N] [--destination-familiarity ..] [--pace ..] [--travel-style ..] [--guide-audience ..] [--guide-style ..] [--priorities a,b,c] [--niche ..] [--budget ..] [--comments ..] [--passport-countries ..] [--lat ..] [--lng ..] [--slug ..]");
     process.exit(1);
   }
   // Accept EITHER --start/--end OR the issue form's --dates "YYYY-MM-DD to YYYY-MM-DD",
@@ -484,8 +490,9 @@ async function main() {
     country: a.country, title: a.title, cities: a.cities,
     slug: a.slug, start, end,
     travelers: a.travelers, pace: a.pace, niche: a.niche, budget: a.budget, comments: a.comments,
-    anchor: a.anchor, party: a.party, travelStyle: a["travel-style"], passportCountries: a["passport-countries"],
-    departureAirport: a["departure-airport"],
+    anchor: a.anchor, party: a.party, destinationFamiliarity: a["destination-familiarity"],
+    travelStyle: a["travel-style"], guideAudience: a["guide-audience"], guideStyle: a["guide-style"],
+    passportCountries: a["passport-countries"], departureAirport: a["departure-airport"],
     priorities: a.priorities ? a.priorities.split(",").map((s) => s.trim()) : [],
     coords: (a.lat && a.lng) ? { lat: parseFloat(a.lat), lng: parseFloat(a.lng) } : null,
   };

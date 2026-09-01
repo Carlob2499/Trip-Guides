@@ -19,7 +19,7 @@
 //     publish, through the same `pipeline.mjs land` machinery V1 uses.
 //
 // Subcommands:
-//   init --slug <s> [--issue <n>] [--land pr|auto]   create/resume the V2 run (+ scaffold baseline)
+//   init --slug <s> [--issue <n>] [--land pr|auto] [--critic-effort e]  create/resume the V2 run (+ scaffold baseline)
 //   route --slug <s> [--json]                        emit next=<stage>, done, baseline, run_id
 //   budget --slug <s> [--branch <b>]                 bump the bounded attempt counter
 //   begin-stage --slug <s> --stage <st> [--model m] [--effort e] [--branch <b>]
@@ -411,8 +411,9 @@ async function run(cmd, get, has) {
         inputs: {
           section: get("--section") || "",
           model: get("--model") || "claude-sonnet-5",
-          effort: get("--effort") || "high",
+          effort: get("--effort") || "medium",
           criticModel: get("--critic-model") || "claude-opus-5",
+          criticEffort: get("--critic-effort") || null,
         },
         issue: issue || null,
         landMode: landInput || null,

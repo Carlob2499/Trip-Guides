@@ -66,11 +66,15 @@ on:
       effort:
         required: false
         type: string
-        default: high
+        default: medium
       critic_model:
         required: false
         type: string
         default: claude-opus-5
+      critic_effort:
+        required: false
+        type: string
+        default: ""
       issue:
         required: false
         type: string
@@ -91,30 +95,33 @@ on:
         type: string
         default: ""
       model:
-        description: "Model for Pass A + reconcile (Pass B is always Sonnet)."
+        description: "Research model for Pass A. Role-locked to Sonnet; escalate effort, not model. Pass B is also Sonnet."
         required: false
         type: choice
         options:
           - claude-sonnet-5
-          - claude-opus-5
         default: claude-sonnet-5
       effort:
-        description: "Reasoning effort for every agent."
+        description: "Default reasoning effort for all agent stages. Medium is the V2 baseline; use High/XHigh only for an explicit difficult-run escalation."
         required: false
         type: choice
         options:
           - high
           - xhigh
           - medium
-        default: high
+        default: medium
       critic_model:
-        description: "Model for the fresh-context critic."
+        description: "Judgment model for Reconcile + the fresh-context critic. Role-locked to Opus; escalate effort when needed."
         required: false
         type: choice
         options:
           - claude-opus-5
-          - claude-sonnet-5
         default: claude-opus-5
+      critic_effort:
+        description: "Optional effort override for Reconcile + Critic. Leave blank to inherit research effort; use high/xhigh only for an explicit judgment escalation."
+        required: false
+        type: string
+        default: ""
       issue:
         description: "Intake issue number for traveler-question continuity (set automatically by new-guide.yml). Blank on a resume: the run's durable record already carries it."
         required: false
@@ -236,8 +243,9 @@ jobs:
           FRESH=false
           if [ "$BRANCH_RESUMED" = "false" ]; then FRESH=true; fi
           node scripts/pipeline-v2.mjs init --slug "$SLUG" --section "$SECTION" --branch "$BRANCH" \
-            --model "${{ inputs.model || 'claude-sonnet-5' }}" --effort "${{ inputs.effort || 'high' }}" \
+            --model "${{ inputs.model || 'claude-sonnet-5' }}" --effort "${{ inputs.effort || 'medium' }}" \
             --critic-model "${{ inputs.critic_model || 'claude-opus-5' }}" \
+            --critic-effort "${{ inputs.critic_effort }}" \
             --issue "$ISSUE" --land "$LAND" --branch-fresh "$FRESH"
 
       - name: Attempt budget (bounded)
@@ -302,7 +310,7 @@ jobs:
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
           node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage passA \
             --model "${{ inputs.model || 'claude-sonnet-5' }}" \
-            --effort "${{ inputs.effort || 'high' }}" \
+            --effort "${{ inputs.effort || 'medium' }}" \
             --branch "$BRANCH"
 
       - name: Remove repository credentials before untrusted research input is read
@@ -342,7 +350,7 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
           WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
-          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_EFFORT: ${{ inputs.effort || 'medium' }}
           WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
@@ -436,7 +444,7 @@ jobs:
           gh workflow run research-pass-v2.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
-            -f void_retry=true
+            -f critic_effort="${{ inputs.critic_effort }}" -f void_retry=true
 
       # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
       # Actions error and, when the run knows its intake issue, one deduped issue comment naming
@@ -492,7 +500,7 @@ jobs:
           git config user.name  "waypoint-research-v2[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage passB \
-            --model claude-sonnet-5 --effort "${{ inputs.effort || 'high' }}" \
+            --model claude-sonnet-5 --effort "${{ inputs.effort || 'medium' }}" \
             --branch "$BRANCH"
       - name: Stage retry feedback (validator data, this stage only)
         id: feedback
@@ -543,7 +551,7 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
           WP_MODEL: claude-sonnet-5
-          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_EFFORT: ${{ inputs.effort || 'medium' }}
           WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:github.com),WebFetch(domain:api.github.com),WebFetch(domain:raw.githubusercontent.com),WebFetch(domain:githubusercontent.com),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
@@ -630,7 +638,7 @@ jobs:
           gh workflow run research-pass-v2.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
-            -f void_retry=true
+            -f critic_effort="${{ inputs.critic_effort }}" -f void_retry=true
 
       # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
       # Actions error and, when the run knows its intake issue, one deduped issue comment naming
@@ -689,8 +697,8 @@ jobs:
           AUTH=$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
           node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage reconcile \
-            --model "${{ inputs.model || 'claude-sonnet-5' }}" \
-            --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
+            --model "${{ inputs.critic_model || 'claude-opus-5' }}" \
+            --effort "${{ inputs.critic_effort || inputs.effort || 'medium' }}" --branch "$BRANCH"
 
       - name: Remove repository credentials before untrusted research input is read
         run: |
@@ -728,8 +736,8 @@ jobs:
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
-          WP_MODEL: ${{ inputs.model || 'claude-sonnet-5' }}
-          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_MODEL: ${{ inputs.critic_model || 'claude-opus-5' }}
+          WP_EFFORT: ${{ inputs.critic_effort || inputs.effort || 'medium' }}
           WP_TOOLS: Read(//workspace/**),Edit(//workspace/**),Glob,Grep,WebSearch,WebFetch
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**),WebFetch(domain:r.jina.ai),WebFetch(domain:webcache.googleusercontent.com),WebFetch(domain:cachedview.nl),WebFetch(domain:12ft.io),WebFetch(domain:web.archive.org),WebFetch(domain:translate.googleusercontent.com)
         # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
@@ -843,7 +851,7 @@ jobs:
           gh workflow run research-pass-v2.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
-            -f void_retry=true
+            -f critic_effort="${{ inputs.critic_effort }}" -f void_retry=true
 
       # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
       # Actions error and, when the run knows its intake issue, one deduped issue comment naming
@@ -958,7 +966,7 @@ jobs:
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
           node scripts/pipeline-v2.mjs begin-stage --slug "$SLUG" --stage critic \
             --model "${{ inputs.critic_model || 'claude-opus-5' }}" \
-            --effort "${{ inputs.effort || 'high' }}" --branch "$BRANCH"
+            --effort "${{ inputs.critic_effort || inputs.effort || 'medium' }}" --branch "$BRANCH"
 
       - name: Stage retry feedback (validator data, this stage only)
         id: feedback
@@ -1010,7 +1018,7 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           WP_PROMPT: ${{ steps.prompt.outputs.text }}
           WP_MODEL: ${{ inputs.critic_model || 'claude-opus-5' }}
-          WP_EFFORT: ${{ inputs.effort || 'high' }}
+          WP_EFFORT: ${{ inputs.critic_effort || inputs.effort || 'medium' }}
           WP_TOOLS: ${{ steps.fetch_policy.outputs.tools }}
           WP_DENY: Read(//proc/**),Read(//sys/**),Read(//dev/**),Edit(//proc/**),Edit(//sys/**),Edit(//dev/**)
         # EXIT INTEGRITY (Portugal scar, 2026-08-22): `docker run ... | tee` reports TEE's status,
@@ -1177,7 +1185,7 @@ jobs:
           gh workflow run research-pass-v2.yml --ref "${{ github.ref_name }}" -f slug="$SLUG" \
             -f section="$SECTION" -f model="${{ inputs.model }}" \
             -f effort="${{ inputs.effort }}" -f critic_model="${{ inputs.critic_model }}" \
-            -f void_retry=true
+            -f critic_effort="${{ inputs.critic_effort }}" -f void_retry=true
 
       # THE STOP IS VISIBLE (reliability pass). A run that will not repair itself files one
       # Actions error and, when the run knows its intake issue, one deduped issue comment naming

@@ -114,6 +114,22 @@ body:
       placeholder: e.g. the Korea group (3 mid-20s, gaming anchors, heavy walkers) / family of 5 with grandparents
     validations:
       required: false
+  - type: dropdown
+    id: destination-familiarity
+    attributes:
+      label: Destination familiarity
+      description: >-
+        How familiar is this group with the destination? This changes how much orientation/context
+        the finished guide needs; it does not lower the research or verification standard.
+      options:
+        - undecided
+        - First visit
+        - Mostly first-timers
+        - Returning travelers
+        - Mixed first-time / returning
+      default: 0
+    validations:
+      required: false
   - type: textarea
     id: constraints
     attributes:
@@ -163,6 +179,39 @@ body:
         - Bucket-list must-sees
         - Off-the-beaten-path
         - Balanced
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: guide-audience
+    attributes:
+      label: Guide audience
+      description: >-
+        Who is expected to read the finished guide? This changes how much traveler context is
+        stated explicitly; personalization still stays mostly implicit.
+      options:
+        - undecided
+        - Just me
+        - My travel group
+        - Family / parents
+        - Shareable group guide
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: guide-style
+    attributes:
+      label: Guide reading style
+      description: >-
+        How should the guide distribute detail? This controls the balance between the scannable
+        default view and deeper context; it does not change facts, source standards, or Waypoint's
+        house voice.
+      options:
+        - undecided
+        - Concise & practical
+        - Balanced
+        - More narrative / contextual
+        - Detailed / reference-heavy
       default: 0
     validations:
       required: false

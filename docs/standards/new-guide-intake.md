@@ -29,7 +29,7 @@
 - Who is going? (solo / couple / friends / family / mixed group)
 - Group size:
 - Ages / mobility needs / accessibility requirements:
-- First time to this destination, or returning?
+- **Destination familiarity:** first visit / mostly first-timers / returning travelers / mixed first-time + returning. *Drives how much orientation and context the finished guide explains; it does not change the research standard.*
 - Languages spoken:
 - **Traveler passport countries (drives visa & entry-requirement research)** — every passport
   held on this trip, comma-separated; a party can mix. Each named country gets its own
@@ -109,12 +109,16 @@ unverifiable venue under a stated constraint is not a pick, whatever its rating.
 - Safety priorities (solo female travel, LGBTQ+ considerations,
   current political/health situation):
 
-## 6. The Tone
-*Drives: writing voice across the whole guide.*
+## 6. The Guide Experience
+*Drives: how the verified guide is presented, not what the research is allowed to conclude.*
 
-- Who will READ this guide? (just me / share with the group / give to my
-  parents / hand to a guest)
-- Voice: practical & terse / warm & narrative / detailed & exhaustive
+- **Guide audience:** just me / my travel group / family or parents / shareable group guide.
+  *Controls how much traveler context is stated explicitly; personalization remains mostly
+  implicit in the recommendations.*
+- **Guide reading style:** concise & practical / balanced / more narrative + contextual /
+  detailed + reference-heavy. *Controls the balance between the scannable default view and
+  `More detail`; it does not change facts, source standards, or Waypoint's house voice.*
+- If left blank, Waypoint uses its normal **balanced, scannable-first** presentation.
 
 ## 7. Special Requirements
 *Drives: the things that make THIS guide different from a generic version

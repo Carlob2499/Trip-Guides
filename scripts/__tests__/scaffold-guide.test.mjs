@@ -363,6 +363,16 @@ describe("buildCoverageMatrix (P3/R15 — intake asks for verify coverage gate)"
     expect(withNiche.asks.some((a) => a.id === "niche")).toBe(true);
     expect(without.asks.some((a) => a.id === "niche")).toBe(false);
   });
+
+  it("keeps presentation controls out of the research coverage gate", () => {
+    const m = buildCoverageMatrix({
+      country: "Japan",
+      destinationFamiliarity: "Returning travelers",
+      guideAudience: "My travel group",
+      guideStyle: "Balanced",
+    }, "japan");
+    expect(m.asks).toEqual([]);
+  });
 });
 
 describe("parseArgs (R9 — a flag with no value doesn't swallow the next flag's name)", () => {
