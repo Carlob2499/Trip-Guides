@@ -166,8 +166,9 @@ export function checkCoverage(slug) {
   return { status: uncovered.length ? "fail" : "pass", uncovered };
 }
 
-// P6: voice gate — process language / self-referential framing must not leak into
-// traveler-facing prose. Scans body, why, crowd_tip, intro fields.
+// P6: voice gate — hard process leaks and unmistakable formulaic AI-travel phrases must not
+// enter traveler-facing prose. This is deliberately narrow: context-sensitive words such as
+// "landscape" or "vibrant" remain a Critic judgment, not a brittle lexical ban.
 const VOICE_BANNED = [
   /\bthis\s+pass\b/i, /\bthis\s+research\b/i, /\bthis\s+review\b/i,
   /\bour\s+research\b/i, /\bour\s+pass\b/i, /\bduring\s+research\b/i,
@@ -176,6 +177,14 @@ const VOICE_BANNED = [
   /\bdisproved\s+claim\b/i,
   /\ba\s+generic\s+guide\s+couldn/i, /\ba\s+generic\s+AI\b/i,
   /\bno\s+generic\s+guide\b/i, /\bonly\s+a\s+local\s+would\s+know\b/i,
+  /\brich\s+tapestry\b/i,
+  /\bnestled\s+in\s+the\s+heart\s+of\b/i,
+  /\bserves\s+as\s+a\s+testament\b/i,
+  /\bhustle\s+and\s+bustle\b/i,
+  /\bit\s+is\s+important\s+to\s+note\b/i,
+  /\bin\s+conclusion\b/i,
+  /\blet['’]?s\s+delve\b/i,
+  /\bgame[-\s]+changer\b/i,
 ];
 
 export function checkVoice(guide) {
@@ -205,7 +214,7 @@ const HUMAN_ROWS = [
   ["#6", "Anchor verified against a T0 source (dates + venue), trip built around it — anchor trips"],
   ["#8", "Top-2–3 ranked priorities got real depth; low-ranked ones are light or cut"],
   ["#9", "Party fit — a generic AI could NOT have written this (the bar test); right TRAVELER_PATTERNS party"],
-  ["#12", "Authenticity — marquee recs carry crowd/off-peak notes; novel local picks (the dual-pass angle)"],
+  ["#12", "Authenticity + voice — crowd/off-peak reality and local alternatives; traveler copy is concrete, candid, selective and not promotional/model/process narration"],
 ];
 
 // Roll the three sources up for one guide into a verdict + structured scorecard.
@@ -253,7 +262,7 @@ export function evaluateGuide(guide, slug, staleness, net, facts = null, unused 
   // P3/R15: coverage — every intake ask addressed or explicitly skipped.
   const coverage = checkCoverage(slug);
 
-  // P6: voice gate — process language must not leak into traveler-facing prose.
+  // P6: voice gate — hard process/formulaic voice patterns must not leak into traveler-facing prose.
   const voice = checkVoice(guide);
 
   // B3 (docs/archive/INDEX.md → PLAN_EVIDENCE_FIRST): facts.json hygiene — misattribution candidates, malformed
@@ -499,9 +508,9 @@ export function report(r) {
   // P6: voice gate
   if (r.voice) {
     if (r.voice.status === "pass") {
-      L.push(`  P6 voice      · PASS — no process language in traveler-facing prose`);
+      L.push(`  P6 voice      · PASS — no hard process/formulaic voice patterns in traveler-facing prose`);
     } else {
-      L.push(`  P6 voice      · FAIL — ${r.voice.hits.length} process-language leak(s):`);
+      L.push(`  P6 voice      · FAIL — ${r.voice.hits.length} hard voice-pattern leak(s):`);
       for (const h of r.voice.hits) L.push(`      ⚠ "${h.match}" in §"${h.section}"`);
     }
   }
