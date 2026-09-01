@@ -61,9 +61,11 @@ made reachable by the dual-pass method rather than enforced by a brittle detecto
 
 ## Pipeline gaps — closed, and the one that remains
 - ~~**Intake form** has no first-class *anchor event* or *party* field.~~ **Closed** — the issue
-  form + `docs/standards/new-guide-intake.md` now carry first-class **Anchor event**, **Who's this for /
-  party**, and **Travel style** fields, threaded through `issue-to-scaffold.mjs` and
-  `scaffold-guide.mjs` into the generated `intake.md`.
+  form + traveler-facing `/new` surface now carry first-class **Anchor event**, **Who's this for /
+  party**, **Travel style**, **Destination familiarity**, **Guide audience**, and **Guide reading
+  style** fields, threaded through the shared intake schema into the frozen `intake.md`.
+  The three presentation controls tune final expression only; they do not create research-coverage
+  obligations or lower evidence standards.
 - ~~**No amendment log** for research-forced re-plans.~~ **Closed** — every scaffolded guide gets a
   `ledger.md` with an append-only **`## Amendments`** section (plus a **`## Research
   reconciliation`** table for the dual-pass corroboration trail), separate from the frozen intake.
