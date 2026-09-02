@@ -438,6 +438,21 @@ shared trip feedback, but it is not the same thing as technical client-error rep
 Technical error reporting, where retained, is infrastructure only: it records app failures for
 maintenance and must never appear as trip feedback, traveler learnings, or itinerary content.
 
+**D6-18 — Every guide carries an always-present Trip Learnings notebook.**  
+Trip Learnings exists for every guide from birth, even when it has no entries. Its empty state is
+an invitation to submit feedback rather than an absent feature. The interaction should feel like a
+shared station notebook: lightweight, personal, chronological, and easy for any traveler using the
+trip to add to.
+
+Submissions may record gripes, issues, misses, surprises, things that worked, route or timing
+problems, and Plan-versus-Actual observations. The surface may tally recurring themes and summarize
+patterns as entries accumulate. Raw notebook entries and their tallies are shared trip state and may
+use Firebase.
+
+Trip Learnings is distinct from researched Guide truth. User submissions must never silently alter,
+override, or weaken canonical researched content. They can inform later review and guide revision,
+but any promotion into the researched Guide requires the normal verification/content pipeline.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
