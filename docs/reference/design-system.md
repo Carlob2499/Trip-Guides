@@ -701,6 +701,19 @@ durable lessons that may later be promoted into future guide knowledge with prov
 trip imagery, recap, Plan-vs-Actual, and Learnings should feel like one narrative flow rather than
 separate products.
 
+**D6-34 — Trip Learnings preserves structured feedback capture; freeform is only one step.**  
+Trip Learnings must retain the existing feedback-survey model rather than collapsing capture into a
+generic notebook. The current three-part structure remains the baseline: (1) ratings for overall,
+pace, and food; (2) Plan-vs-Actual stop confirmation using Went/Skipped plus an optional skip reason;
+and (3) a private freeform reflection channel.
+
+On trip completion, Waypoint should invite this survey with a prominent but non-blocking feedback
+prompt (for example, a completion card or bottom sheet) rather than forcing an interruptive modal
+the instant the trip ends. The same survey remains launchable later from the Learnings surface via
+an explicit `Add trip feedback` action. Structured answers feed objective aggregates and the
+post-trip learnings loop; private freeform remains private input for synthesis and is not rendered
+verbatim back into the public Learnings view.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
