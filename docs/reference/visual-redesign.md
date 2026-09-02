@@ -1,16 +1,13 @@
 # The Living Atlas — living covers, the Painted Atlas, section anchors, the Composer
 
-> **This is the SPEC for shipped behaviour, not a plan.** Live code cites it by section name:
-> `src/scripts/living-cover.js` and `src/content.config.ts` (Move A, A½), `PaintedAtlas.astro`,
-> `src/lib/terrain.ts`, `painted-atlas.css` (Move A½ №4), `src/lib/anchors.ts` (Move C),
-> `scripts/compose-guide.mjs` (Move D's label vocabulary, Move F). Change a rule here in the same
-> pass as the code, or the citation starts lying.
+> **LEGACY SHIPPED-IMPLEMENTATION REFERENCE — NOT DESIGN AUTHORITY.** Live code still cites
+> sections here for the Living/Painted Atlas, anchors, and Composer. Those citations are
+> migration debt: durable behavior should move to its proper code/reference owner during D6/D7,
+> after which obsolete portions of this file can be deleted.
 >
-> **The history moved out on 2026-08-14** — the drafting story, the R1–R6 phase table and its
-> ledgers, the status corrections and the superseded navigation and voice narratives are in
-> `docs/archive/visual-redesign-history.md`. This file extends `docs/reference/motion.md`'s
-> doctrine and does not replace it; the guide page's own design authority is
-> `docs/design-handoff/DESIGN.md`.
+> Current visual/interaction authority is `docs/reference/design-system.md`; motion authority is
+> `docs/reference/motion.md`. Historical drafting narrative remains in
+> `docs/archive/visual-redesign-history.md`.
 
 ## The two registers (decided by the creator, 2026-07-27)
 
