@@ -465,6 +465,28 @@ of the itinerary or a card dashboard of weather, budget, reminders, and tools. T
 provisional pending polished Korea mockups; if visual testing reveals a materially stronger model,
 D6 should be revised rather than preserving the prototype by inertia.
 
+**D6-20 — Itinerary is day-first on mobile and a temporal-spatial workbench on desktop.**  
+Mobile keeps a day-by-day, swipeable/snap-based itinerary rhythm: one day is the primary unit,
+with compact day navigation and direct access to stops, timing, route handoff, warnings, and
+Plan-versus-Actual. It must not become a shrunk desktop planner.
+
+Desktop treats itinerary as movement through space over time. The primary composition is a
+temporal-spatial workbench: a substantial interactive map synchronized with a schedule/timeline
+pane and a compact trip/day selector. Selecting a day draws that day's ordered stops and route;
+selecting a stop highlights its time, sequence, constraints, and place context in both map and
+timeline. The map may expand/contract with task focus rather than remaining a decorative fixed
+half-screen.
+
+The Itinerary map is intentionally different from the global Map destination:
+- Map answers “what is where?” and supports broad spatial exploration.
+- Itinerary answers “where am I going, in what order, and when?” and visualizes route/time
+  relationships.
+Both project the same canonical places and trip data; neither duplicates them.
+
+Desktop may support trip overview, focused-day, and selected-stop states within this one
+workbench, but these are views of the same itinerary rather than separate modes with divergent
+content.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
