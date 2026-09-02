@@ -23,8 +23,8 @@ user-invocable: true
 
 This skill owns **presentation**, not destination truth.
 
-- For **presentation-only** work, preserve supplied factual guide data exactly; do not invoke
-  factual research merely because UI renders travel content.
+- For **presentation-only** work: **Preserve every fact value verbatim.** Do not invoke factual
+  research merely because UI renders travel content.
 - **Creating, correcting, or verifying destination facts** — prices, hours, venues, transit,
   events, itineraries, or recommendations — belongs to `waypoint-guide-author`.
 - Presentation work never invents travel facts merely to fill a visual state.
