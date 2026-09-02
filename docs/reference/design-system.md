@@ -329,6 +329,14 @@ Desktop spectacle must demonstrate Waypoint's specificity rather than imitate ge
 aesthetics. Geographic continuity, real trip structure, verified information, destination
 identity, and evidence are the differentiators. Mobile field priority still wins any conflict.
 
+**D6-08 — Modern atlas globe: moderately dimensional, visually near-flat.**  
+The Atlas globe is not photorealistic Earth. It should read primarily as modern designed
+cartography: simplified geography, restrained relief/shading, clean coastlines, Night Navy +
+Amber radar/cartographic identity, and minimal atmospheric depth. Dimensionality exists to
+support rotation, orientation, and globe→region→city continuity, not to imitate satellite or
+game-engine rendering. The target sits between a flat illustrated atlas and a 3D globe, clearly
+closer to the illustrated side.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
