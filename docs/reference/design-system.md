@@ -689,6 +689,18 @@ pane. Route, planned stops, nearby Guide places, saved places, and Plan-versus-A
 lenses rather than permanent clutter. Selecting a place must expose useful compact information
 immediately, with full Guide detail one action away.
 
+**D6-33 — Post-trip Trip uses an editorial recap that hands off into the Learnings notebook.**  
+A completed trip opens with a strong destination hero and a short editorial recap of what actually
+happened, followed by a small number of large outcome atoms and the most important Plan-vs-Actual
+changes. This is not an analytics dashboard: outcome numbers and lessons are story anchors, not a
+grid of metrics.
+
+Trip Learnings then becomes the primary continuing surface inside Trip. It is distinct and
+deep-linkable, supports large field-safe note entry, preserves chronological notes, and surfaces
+durable lessons that may later be promoted into future guide knowledge with provenance. Completed
+trip imagery, recap, Plan-vs-Actual, and Learnings should feel like one narrative flow rather than
+separate products.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
