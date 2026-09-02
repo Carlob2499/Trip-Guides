@@ -610,6 +610,17 @@ as `View in itinerary`, `Navigate`, `Details`, or a deliberately framed replacem
 when the traveler is considering an alternative. `Add to itinerary` remains valid only for a real,
 currently-unscheduled candidate. Action labels must reflect the object's actual semantic state.
 
+**D6-30 — Pre-trip Trip view blends priority, checklist, and timeline cues without becoming a planning dashboard.**  
+Pre-trip Trip may combine a strong destination hero, a short priority stack, compact readiness/checklist
+status, and lightweight countdown/timeline cues. The intent is not to build a heavy pre-trip
+management system: only unresolved or time-sensitive actions receive strong emphasis, completed
+items collapse into concise readiness summaries, and full planning detail remains in the Guide or
+Itinerary where it belongs.
+
+Because Waypoint is currently primarily owner-used rather than a high-frequency multi-user planning
+product, the pre-trip surface should stay intentionally modest and easy to evolve. It must prove the
+lifecycle model without creating new permanent complexity that the traveler does not yet need.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
