@@ -401,6 +401,20 @@ view, but the landing itself preserves orientation and decision support. Avoid p
 stacked navigation bars, and requiring the user to interpret a dense map before meaningful
 choices are visible.
 
+**D6-14 — Guide clustering defaults to hybrid, with constrained alternate organization views.**  
+The Visual Composer may organize a Guide chapter using one of a constrained set of strategies:
+location, date/itinerary sequence, traveler interest, or a hybrid of those. Hybrid is the default
+because geography provides durable orientation while itinerary and traveler intent can refine the
+cluster label and ordering. Strong anchors may override the default when they are genuinely
+load-bearing.
+
+Desktop may expose alternate organization views such as By location, By date, or By interest
+when the content supports them. These are alternate projections of the same semantic objects, not
+duplicated content or separate taxonomies. Mobile should usually show the single best-composed
+projection at a time, with optional lightweight switching only when it clearly improves wayfinding.
+The Composer may choose the default per guide/chapter, but it may not invent arbitrary categories
+outside the sanctioned strategies.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
