@@ -453,6 +453,18 @@ Trip Learnings is distinct from researched Guide truth. User submissions must ne
 override, or weaken canonical researched content. They can inform later review and guide revision,
 but any promotion into the researched Guide requires the normal verification/content pipeline.
 
+**D6-19 — Prototype Trip as the lifecycle-aware “what matters now” surface.**  
+For the Korea prototype, Trip is the lifecycle-aware operational surface rather than a dashboard or
+duplicate itinerary. Before travel it surfaces only material upcoming actions and deadlines; during
+travel it prioritizes Now → Next → Leave by → Get there → material warning/problem → relevant
+fallback → remainder of the day; after travel it becomes a concise trip outcome/recap gateway into
+Plan-versus-Actual and Trip Learnings.
+
+Itinerary remains the complete schedule and inspection surface. Trip must not become a second copy
+of the itinerary or a card dashboard of weather, budget, reminders, and tools. This direction is
+provisional pending polished Korea mockups; if visual testing reveals a materially stronger model,
+D6 should be revised rather than preserving the prototype by inertia.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
