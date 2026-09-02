@@ -42,7 +42,8 @@ The product has exactly two lifecycles:
 | `worker/` | Owner/live endpoints that need a backend | Static Pages runtime |
 | `.github/workflows/` | CI, deploy, guide creation, research, change, recertification, and scheduled checks | Product business logic |
 | `docs/reference/` | Current technical/operational truth | Completed plans or review history |
-| `docs/design-handoff/` | Future Atlas design authority and enforcement | Current backend behavior |
+| `docs/reference/design-system.md` + `motion.md` + `component-registry.json` | Current design authority and machine-facing component contract | Historical prototypes/iteration history |
+| `docs/design-handoff/` | Legacy implementation/prototype reference pending D6 deletion/migration | Current design authority |
 
 ## Product center
 
