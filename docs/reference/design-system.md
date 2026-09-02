@@ -654,6 +654,19 @@ may be surfaced prominently, but raw traveler notes do not silently rewrite rese
 The composition should make the trip legible to someone who was not there, while preserving the
 notebook as the living record.
 
+**D6-34 — Mobile Itinerary uses a topographic day deck feeding a large-atom operational timeline.**  
+The accepted mobile Itinerary composition keeps Waypoint's existing topographic/cartographic visual
+identity and does not force a visually separate SCRL treatment. A compact horizontal day deck keeps
+the full trip in reach, while the selected day opens into a vertical operational timeline with
+large, scan-friendly stops, transit legs, useful imagery, times, costs, restrictions, and direct
+actions.
+
+The day-switching behavior may borrow the proven snap/scrub interaction from the existing SCRL-like
+implementation, but styling remains native Waypoint: survey-paper ground, contour texture, restrained
+oxide/sage accents, large information atoms, and map-like route semantics. Plan-versus-Actual stays
+directly reachable per day for completed trips. Do not generate alternate mobile itinerary visual
+directions unless implementation evidence exposes a real usability problem.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
