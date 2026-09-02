@@ -569,6 +569,17 @@ system should remain portable and should not depend on any one vendor's conversa
 feature as its source of truth. Waypoint's verified knowledge remains the authoritative substrate;
 AI memory/retrieval systems may consume it.
 
+**D6-27 — Trip Learnings is a dedicated notebook surface inside Trip.**  
+Trip Learnings does not become a sixth global destination. The global navigation remains
+Trip · Itinerary · Map · Guide · Split. Learnings lives inside Trip as a distinct notebook/reality
+surface that can be opened directly at any lifecycle stage. During travel it remains easy to add
+notes, gripes, issues, surprises, and Plan-versus-Actual observations; after travel it becomes more
+prominent as part of the trip outcome/recap experience.
+
+This placement keeps lived trip experience separate from researched Guide knowledge while avoiding
+permanent global-nav expansion. The notebook remains independently deep-linkable and visually
+distinct rather than being reduced to a collapsed subsection.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
