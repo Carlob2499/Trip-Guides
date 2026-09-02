@@ -9,7 +9,7 @@ Do not preload the documentation tree. Agent SessionStart already injects the bo
 - **Current state / next work:** use the SessionStart capsule; open full `handoff.md` only when deeper current evidence is needed.
 - **Code ownership / boundaries:** `reference/repo-map.md`, then the affected subsystem reference.
 - **Pipeline V2 / validation / cutover:** start from the SessionStart capsule, then read only the relevant file in `pipeline v2/`.
-- **Design/UI:** route through `waypoint-design`; load only the relevant design authority. Full `/design` work may use the broader handoff/prototypes.
+- **Design/UI:** route through `waypoint-design`; `reference/design-system.md` is the single design authority, with `reference/motion.md` and `reference/component-registry.json` subordinate. Historical handoffs/prototypes are consult-only.
 - **Historical rationale:** `../CONTEXT.md` only when current code/docs do not explain the decision.
 - **Product doctrine:** `../PRODUCT.md`.
 
