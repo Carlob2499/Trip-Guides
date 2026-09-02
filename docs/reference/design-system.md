@@ -621,6 +621,17 @@ Because Waypoint is currently primarily owner-used rather than a high-frequency 
 product, the pre-trip surface should stay intentionally modest and easy to evolve. It must prove the
 lifecycle model without creating new permanent complexity that the traveler does not yet need.
 
+**D6-31 — Arrival uses current-step autopilot with dense next-step context.**  
+Travel/arrival mode is an operational autopilot. The current action receives dominant visual
+priority, while the next two steps remain visible in compressed form so the traveler never loses
+orientation. Deeper arrival detail remains one action away.
+
+Information density is allowed when it is operationally useful. Dense does not mean undifferentiated:
+time, location, transit mode, cost, platform/exit, address, booking/ticket state, verified warning,
+and fallback should use compact structured rows, icons, map fragments, and hierarchy rather than
+long prose. The arrival surface should optimize for an exhausted traveler who still needs complete
+context, not for visual minimalism as an end in itself.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
