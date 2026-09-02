@@ -678,6 +678,17 @@ open concise contextual detail without forcing the traveler out of the itinerary
 detail still one action away. Route, stop, transit, time, cost, restriction, and Plan-versus-Actual
 information remain first-class. Do not add dashboard chrome merely to fill desktop space.
 
+**D6-36 — Map defaults adapt to trip lifecycle and current spatial context.**  
+Map uses lifecycle-adaptive framing rather than one fixed opening extent. Before a trip, it opens to
+the trip-wide spatial picture. During a trip, it opens around the current city/area and nearby
+context. After a trip, it returns to the completed trip-wide view for review and memory.
+
+Map remains geography-first. Mobile devotes nearly the full viewport to the map and uses a contextual
+bottom sheet for the selected place or cluster. Desktop uses a large map with a contextual detail
+pane. Route, planned stops, nearby Guide places, saved places, and Plan-versus-Actual are optional
+lenses rather than permanent clutter. Selecting a place must expose useful compact information
+immediately, with full Guide detail one action away.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
