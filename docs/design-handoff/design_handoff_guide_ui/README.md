@@ -1,18 +1,13 @@
 # design_handoff_guide_ui — the R5 guide-UI export
 
-**The port this bundle directed has shipped.** What remains here is reference, not a work order:
-the exact values a design decision was made against, and the kit the `waypoint-design` skill
-composes from. Nothing in this folder outranks the repo's live design authority.
+**The port this bundle directed has shipped.** What remains here is **legacy R5 implementation
+reference**, not a work order and not design authority. The current `waypoint-design` skill does
+not load this bundle by default.
 
-**Authority order**, highest first — apply it before quoting anything below:
-
-1. `docs/design-handoff/DESIGN.md` — the single written design authority. R5's seven overrides
-   were folded into its body on 2026-08-14 and `SUPERSEDES.md` deleted with them.
-2. `docs/design-handoff/enforcement/` — `SPEC-COMPONENTS.md`, `ANTIPATTERNS.md`,
-   `ACCEPTANCE.md`, and `check-drift.mjs`, the machine-checkable half.
-3. The prototypes and screenshots — `prototypes/` here, plus `docs/design-handoff/screenshots/`
-   and `enforcement/screenshots/`. Compare a running build against the pictures, not only the
-   prose.
+For current design decisions, read `docs/reference/design-system.md` first. Use this folder only
+when shipped implementation cites a specific historical measurement/behavior that has not yet
+been migrated. Prototypes and screenshots record what R5 looked like; they are not acceptance
+targets for evolved WayPoint.
 
 Token values are the one thing none of these own: `src/styles/base.css` is the place a token
 value is ever true, and its `ATLAS TOKEN CONTRACT` comments carry the contrast measurement
@@ -37,6 +32,6 @@ carried are doctrine in `CLAUDE.md` and DESIGN.md, and the gates are live tests.
 | `TOKENS.md` · `COMPONENTS.md` | exact values and per-component measurements — the reason to open this folder |
 | `SCREENS.md` · `BEHAVIOR.md` | screen composition per viewport; interaction, state, motion, keyboard, print |
 | `TESTS.md` · `ACCEPTANCE.md` | the tests the port was held to, and its ticked checklist |
-| `design-system/` (incl. `ui_kits/`) | the kit export — `styles.css`, components, guideline cards. The `waypoint-design` skill reads this |
+| `design-system/` (incl. `ui_kits/`) | historical kit export — `styles.css`, components, guideline cards; not loaded by the current design skill by default |
 | `prototypes/` | runnable design references. **Not production code**; they render in a design-tool runtime |
 | `shots/` | working captures kept for states the committed screenshot sets lack — see `shots/INDEX.md` |
