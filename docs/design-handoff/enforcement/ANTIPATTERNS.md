@@ -1,5 +1,9 @@
 # Rejected alternatives — the things already tried
 
+> **LEGACY R4/R5 IMPLEMENTATION REFERENCE — NOT CURRENT DESIGN AUTHORITY.**
+> These rules describe the design that shipped at that time. D6 may keep, revise, or retire them.
+> Current authority: `docs/reference/design-system.md`.
+
 Every entry below was built, looked at, and removed. They are listed because each one is a
 reasonable idea that a competent developer will independently arrive at, and re-arriving at it
 costs a day and lands back here. If you are about to do one of these, the decision is already
