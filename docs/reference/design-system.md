@@ -337,6 +337,15 @@ terrain cues, Night Navy + Amber radar/cartographic identity, and almost no atmo
 globe→region→city transitions spatially legible. Avoid satellite realism, glossy sphere shading,
 game-engine Earth, generic AI travel imagery, decorative gradients, and excessive card chrome.
 
+**D6-09 — Visual Composer changes presentation, never truth.**  
+After research and semantic structuring, a Visual Composer may split, shorten, reorder within
+approved information hierarchy, and rewrite narrative copy for clarity. It may select only
+sanctioned Waypoint composition families/components and emit layout intent rather than HTML/CSS.
+It may not invent, delete, reinterpret, weaken, or silently summarize away researched facts,
+warnings, uncertainty, provenance, or traveler constraints. Semantic fact IDs and provenance
+survive composition unchanged. Build/render gates reject unsupported composition intent rather
+than guessing.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
