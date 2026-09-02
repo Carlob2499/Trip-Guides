@@ -580,6 +580,22 @@ This placement keeps lived trip experience separate from researched Guide knowle
 permanent global-nav expansion. The notebook remains independently deep-linkable and visually
 distinct rather than being reduced to a collapsed subsection.
 
+**D6-28 — Atlas is restrained immersive, leaning minimal; mobile is stricter still.**  
+Atlas uses the restrained-immersive direction but deliberately leans toward the minimal end of the
+spectrum. The globe remains the dominant visual and interaction surface. Supporting navigation,
+search, trip previews, and actions float around it only when useful and must not compete for equal
+visual authority.
+
+Desktop may use sparse floating/translucent controls over the survey/topographic ground, but avoids
+a permanent conventional sidebar or dashboard framing. As the traveler zooms inward, nonessential
+UI progressively recedes so geography and pins become the interface.
+
+Mobile is more aggressive about space: the globe should consume most of the viewport, persistent
+supporting UI is minimized, and destination/detail surfaces appear contextually rather than stacking
+around the globe. The five global destinations remain reliably reachable, but Atlas-specific chrome
+must stay compact. Progressive pin disclosure remains country/trip at world scale, city at country
+scale, and place/anchor at deeper spatial scales.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
