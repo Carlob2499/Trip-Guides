@@ -371,6 +371,21 @@ On mobile, only one local Guide-navigation level is persistently visible at a ti
 navigation remains Trip · Itinerary · Map · Guide · Split; deeper clusters are exposed through
 content and direct links rather than stacked tab bars.
 
+**D6-12 — Retire decorative country commentary pills and Guide rail primacy.**  
+Guide surfaces must not use free-floating descriptive/commentary pills merely to add personality,
+mood, or AI-written characterization. Compact chips remain valid only when they encode actionable
+state, filters, categories, or other information that earns the space. Destination voice should
+come from imagery, typography, geography, researched prose, and composition—not decorative
+micro-commentary.
+
+The existing Guide spine/rail is no longer the canonical navigation metaphor. It assumes a
+largely linear journey through many stations, while the new Guide model is geography/time first
+with progressive disclosure, anchors, and direct deep links. Mobile must not carry a persistent
+multi-station rail. Desktop may use a more expressive thematic/spatial chapter index, but the
+exact replacement is a visual-design decision to validate in polished Korea mockups. Whatever
+replaces the rail must preserve orientation, direct access, keyboard/accessibility support, and
+deep linking without reintroducing tab/pill clutter.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
