@@ -596,6 +596,20 @@ around the globe. The five global destinations remain reliably reachable, but At
 must stay compact. Progressive pin disclosure remains country/trip at world scale, city at country
 scale, and place/anchor at deeper spatial scales.
 
+**D6-29 — Image-forward composition, compressed text density, and context-correct actions.**  
+Where a destination/place/event has useful verified photography, imagery should carry more visual
+authority than in the current shipped UI. Prefer a prominent hero or lead image, then compress
+supporting copy into concise, scannable facts and actions. Avoid dead whitespace and long prose
+blocks when a photograph, map fragment, icon, timeline marker, or other semantically useful visual
+can communicate orientation faster. Decorative imagery and icon clutter remain out of scope:
+visuals must identify a place/event, show geography/state, or improve action recognition.
+
+For finalized or in-progress trip plans, discovery surfaces must not offer generic `Add to plan`
+actions for items that already belong to the canonical itinerary. Use context-correct actions such
+as `View in itinerary`, `Navigate`, `Details`, or a deliberately framed replacement/swap action
+when the traveler is considering an alternative. `Add to itinerary` remains valid only for a real,
+currently-unscheduled candidate. Action labels must reflect the object's actual semantic state.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
