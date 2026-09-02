@@ -415,6 +415,27 @@ projection at a time, with optional lightweight switching only when it clearly i
 The Composer may choose the default per guide/chapter, but it may not invent arbitrary categories
 outside the sanctioned strategies.
 
+**D6-15 — Personalization is local-first; shared state is explicit.**  
+Presentation preferences such as Guide lens, map/list mode, last chapter, and pinned areas/places
+are stored locally per device and per guide. They require no account and do not enter Firebase.
+The canonical Guide structure remains Composer-owned; visitors personalize projections, not truth.
+
+**D6-16 — Split has guide-scoped and general scopes, using one engine.**  
+Split is a first-class Waypoint destination with two explicit scopes:
+1. **Trip Split** — attached to the current guide/trip and namespaced to that guide.
+2. **General Split** — a guide-independent budgeting/splitting workspace for ad-hoc expenses.
+
+Both scopes reuse the same split/settlement engine and UI grammar but must never share persistence
+keys or Firebase rooms accidentally. The General Split is clearly labeled as not attached to a
+Waypoint trip and is reachable from Split through an explicit “General Split” entry point.
+
+For an open-facing site without accounts, private on-device state is the default. Shared live
+Firebase rooms should be opt-in and identified by a high-entropy room token carried privately
+(e.g. a URL fragment/share link), rather than relying on a room identifier committed in a public
+guide as secrecy. Existing live guide rooms with historical data must be preserved/migrated
+deliberately; never rotate them silently. Firebase remains for genuinely shared trip state, not
+individual presentation preferences.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
