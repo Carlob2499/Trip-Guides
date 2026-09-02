@@ -508,6 +508,25 @@ Canonical place detail follows this rule: mobile opens a useful bottom sheet tha
 full detail; desktop opens a contextual side pane that preserves Map/Itinerary context and can
 promote into the full editorial detail surface when needed.
 
+**D6-23 — Evolve the existing Waypoint palette; do not replace it with a new mockup theme.**  
+The current repository design system remains the visual foundation. Light mode keeps its
+cream/sage-tinted cartographic paper character rather than moving toward generic white UI.
+Dark mode keeps its warm charcoal/chart-room base and may become more explicitly black-adjacent
+and cartographic in composition, but should not become glossy cyberpunk, neon, or generic
+AI-dashboard styling. The established oxide/orange accent remains the primary identity accent;
+future tuning should stay close to the current Waypoint pigment rather than adopting a louder
+synthetic orange from generated mockups.
+
+Typography remains the established Literata Variable + Atkinson Hyperlegible Next system unless a
+separate typography review proves a concrete problem. Generated mockup font substitutions are not
+design authority.
+
+Future visual work should give photography and primary actions substantially more authority:
+destination imagery may occupy larger, more deliberate regions; primary buttons should be easy to
+find and feel tactile without turning every action into a filled CTA. Secondary controls, chips,
+and metadata remain restrained. Light and dark modes are responsive siblings of one identity, not
+two unrelated themes.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
