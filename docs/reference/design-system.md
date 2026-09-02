@@ -308,6 +308,14 @@ and must remain space-efficient in ordinary mobile browsers. Operational facts m
 pushed behind decorative spectacle; the immersive treatment belongs to editorial identity,
 not every screen.
 
+**D6-05 — Hybrid mobile navigation with a non-failable five-tab base.**  
+`Trip · Itinerary · Map · Guide · Split` remains the stable, always-available navigation model.
+The default/fallback presentation is a conventional five-tab bottom bar. Approved immersive
+surfaces may present the same destinations as a compact/floating dock to free content space,
+but the dock is enhancement only: no gesture-only dependency, no changed order/meaning, and
+any accessibility, browser, viewport, reduced-motion, or implementation uncertainty falls
+back to the standard bottom bar.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
