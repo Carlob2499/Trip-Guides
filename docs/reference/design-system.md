@@ -1,204 +1,295 @@
-# Waypoint Design Constitution & September Design Program
+# Waypoint Design Constitution
 
-Status: **AUTHORITY (pending Carlo's approval of §1–§4) + LIVING TRACKER (§5–§6)**
-Owner: Carlo. Drafted 2026-08-27.
+Status: **CURRENT DESIGN AUTHORITY — D6 RECONCILIATION IN PROGRESS**  
+Owner: Carlo.  
+Last reconciled: 2026-09-01.
 
-This is the single owner of Waypoint's visual identity, design-system decisions, and the
-joint design/backend September schedule. Both Claude and Codex follow §5–§6. It does not
-redefine Pipeline V2; backend delivery truth stays in `docs/pipeline v2/SEPTEMBER_TRACKER.md`.
+This document is the **single human-readable authority for Waypoint visual and interaction
+design**. No file under `docs/design-handoff/`, no prototype, screenshot, archived redesign,
+research packet, or historical decision log may override it.
+
+Authority order:
+
+1. `PRODUCT.md` — user, product purpose, field-use priorities, capabilities, truth.
+2. **This document** — brand identity, responsive composition, visual/interaction grammar.
+3. `docs/reference/motion.md` — subordinate motion implementation doctrine.
+4. `docs/reference/component-registry.json` — machine-facing approved component/pattern surface.
+5. `src/styles/base.css`, `src/lib/breakpoints.ts`, tests/gates — executable token and safety truth.
+
+`docs/research/waypoint-design-reference-packet.md` is advisory evidence for D6/D7. It is
+never authority by itself.
 
 ---
 
-## 1. Identity — what Waypoint looks and feels like
+## 1. Identity
 
-One sentence: **a modern boutique travel app with airline-grade precision and field-journal warmth.**
+Waypoint is **a modern boutique travel app with airline-grade precision and field-journal
+warmth**.
 
-The blend, as testable rules:
+Three registers make that concrete:
 
-- **Modern boutique (the ground).** Airy layouts, soft cards, generous whitespace,
-  polish that disappears. Default posture for every surface.
-- **Airline precision (the data).** Perishable facts, prices, hours, transit render as
-  dense, ordered, engineered information — tables and rows, never decorative prose.
-  Precision earns trust; it is applied to *data regions only*.
-- **Field-journal warmth (the accent).** Paper-tinted neutrals and painterly touches
-  (Painted Atlas energy) appear only in **designated accent slots** — mastheads, atlas
-  art, section marks. Warmth never carries data. Reference standard (Carlo, 2026-08-28):
-  Monocle's travel guides — calm editorial ground, rigorously tabular listings, warm
-  illustrated accents that never touch the data. When real photography is not used,
-  per-country imagery is Monocle-style editorial illustration, not stock art or
-  AI-generic gradients.
+- **Modern boutique — the ground.** Calm, intentional composition; generous but useful space;
+  restrained depth; polish that disappears into the task.
+- **Airline precision — operational truth.** Hours, prices, transit, timing, reservations,
+  warnings, state, and verification are aligned, scan-first, and predictable.
+- **Field-journal warmth — identity and editorial context.** Photography, illustration,
+  destination character, cartography, and narrative warmth live in controlled editorial
+  regions. They never distort operational facts.
 
-Test for any new surface: could you point at each region and name which of the three
-registers it is in? A region serving two registers at once is drift.
+A screen may contain multiple registers, but each region must have a clear job. Decorative
+language never carries safety, uncertainty, price, time, route, or verification meaning.
 
-**Typography (decided 2026-08-27, from the type-pairing canvas):** display and body stay
-**Literata Variable** (journal voice; keeps the existing CJK fallback stack in
-`--font-display`/`--font-body`). The data register moves to **Atkinson Hyperlegible
-Next** (field-grade glare/low-vision legibility, tabular numerals) replacing Source Sans 3
-in `--font-data` — implemented in D2, self-hosted like the current faces, preserving the
-existing CJK fallbacks in the stack. Data tables set `font-variant-numeric: tabular-nums`.
+### Typography
 
-**Palette direction (Carlo, 2026-08-28): Night Navy & Amber on warm paper.** Deep navy
-(~#1d3557) carries structure and identity; amber (~#f0a24b) is the highlight/action
-color; the ground shifts from sage to warm cream paper (~#ede9e1 / card #faf7f0). Dark
-mode keeps a warm charcoal ground (never blue-gray); the navy masthead is a fixed object
-and does not re-map; amber becomes the action fill with near-black ink on it. These are
-direction values from the approved specimen canvas — final tokens (including derived
-accent-ink/contrast values) land in D2 via `accentTokens()` derivation, not hand-picked
-hex. Type pairing still undecided.
+- **Literata Variable** — display and reading voice.
+- **Atkinson Hyperlegible Next** — operational/data/control voice, with tabular numerals where
+  alignment matters.
+- Existing CJK/system fallbacks remain.
+- No third type family without an explicit constitution change.
 
-This extends, and must not contradict, the field-instrument contract in
-`.claude/skills/waypoint-design/SKILL.md` (quiet paper, loud marks; truth stays visible).
+### Palette
 
-## 2. Architecture — one brand, themed modes
+Direction: **Night Navy & Amber on warm paper**.
 
-- **One token core** in `src/styles/base.css` + `palette.css`: color roles, `--text-*`
-  type scale, spacing, fonts, safe-areas, contrast doctrine (`--accent` / `--accent-ink` /
-  `--on-accent` rules). This core is the only place raw values (hex, px sizes) may live.
-- **Surfaces are themes of that core.** Guide reading, field tools/PWA, Painted Atlas, and
-  print each remap core tokens; they do not introduce new raw values.
-- Existing machine gates are the enforcement floor and only ratchet tighter:
-  `type-scale.test.ts`, `var-defined.test.ts`, `on-fill.test.ts`, `breakpoints.test.ts`,
-  `atlas-tokens.test.ts`, the accessibility gate, and the design drift checker.
+- deep navy = Waypoint structure/identity;
+- amber = selected action/emphasis;
+- warm paper/cream = daylight ground;
+- warm charcoal = dark-mode ground; never blue-gray;
+- semantic success/caution/critical states retain their own meaning and are not repurposed as
+  destination decoration.
 
-## 3. Non-negotiable contexts
+Destination-specific color may appear in approved identity regions when it preserves contrast
+and semantic clarity. Final values come from the token system, never one-off call-site literals.
 
-Every component must define, from creation:
+---
 
-1. **Dark mode** — via the core dark tokens (`--dark-*` remap), never per-component colors.
-2. **Offline / degraded honesty** — explicit states for missing data, stale content
-   (`--ochre` register), and no-network; blanks stay honest, no decorative shells.
-3. **One-handed phone use** — ≥44px touch targets; primary actions bottom-reachable on
-   field screens; glare-readable contrast (the existing contrast doctrine).
+## 2. Responsive web design — a constitutional principle
 
-4. **Motion is fluid, fast, and immersive — never rigid** (Carlo, 2026-08-28,
-   non-negotiable). Scrolling, perusing, and navigating must feel like Airbnb,
-   not an enterprise site. Testable rules:
-   - Transitions are *a little less than instant*: ~150–350ms, ease-out or
-     spring curves; nothing snaps, nothing lumbers past ~400ms.
-   - **Continuity over cuts**: parent→child navigation uses shared-element
-     transitions (a card's image grows into the detail view) so context is
-     never lost. Prefer the View Transitions API; Astro supports it natively.
-   - Animations are **interruptible** — a mid-transition tap responds
-     immediately; motion never blocks input.
-   - Scroll is **never hijacked**: reveal-on-scroll and parallax accents yes,
-     scroll-jacking no. Native momentum stays native.
-   - The signature Waypoint move is the **geographic fly-to** (Google
-     Earth-style map/globe travel between places) — reserved for atlas and
-     navigation moments, never decorating data regions.
-   - `prefers-reduced-motion` is honored everywhere; motion degrades to
-     opacity fades, never to broken layout.
-   - **Desktop and mobile share one scroll grammar** (same reveals, same
-     continuity model), but **mobile goes all-in on fluid navigation** —
-     gesture-driven, airy movement, bottom-reachable transitions; desktop is
-     the calmer rendition of the same motion language, never a different one.
-   - Motion has existing owners: `scroll-motion.css` and `transitions.css`.
-     New motion extends them; no per-component one-off timing values.
-5. **Customer-facing surfaces show no inner workings** — no process commentary,
-   pipeline/agent vocabulary, register names, or spec annotations ever renders in the
-   product. The one deliberate exception is the traveler-facing verification line
-   ("Verified <date>"), which is product doctrine, not process. Internal rationale
-   lives in docs and code comments only.
+Waypoint is one product with **responsive sibling compositions**.
 
-Print remains a supported context: `print.css` is maintained and guides stay printable.
-Screens are designed screen-first, but nothing is deliberately excluded (Carlo,
-2026-08-28 — supersedes the earlier print demotion).
+Responsive does **not** mean:
+- desktop with pieces hidden;
+- mobile stretched larger;
+- device-name branching;
+- a handful of screenshots at canonical breakpoints.
 
-## 4. Governance — locked down
+The information and capability remain coherent while layout, disclosure, navigation, and
+simultaneous context recompose according to available space, input method, and traveler state.
 
-- Agents compose **only** from approved components and core tokens. New colors, spacing
-  values, fonts, or components require Carlo's approval and land in the core/registry
-  first. The registry is `docs/reference/component-registry.json` and
-  `src/component-registry.test.ts` enforces it (bidirectional file↔entry existence,
-  feature-index import discipline) — an unregistered component fails the build.
-- **Division of labor:**
-  - **Claude** authors all binding design authority: this document, tokens, registry,
-    enforcement tests, migrations, major design specs.
-  - **Codex** stays in the backend/pipeline lane; it reviews design PRs under the
-    revision-4 trust boundary but does not author design authority.
-  - **ChatGPT (external)** is divergent research only — inspiration, comparative pattern
-    research, naming. Its output is advisory and enters the repo only after Claude vets it
-    against this constitution. Prefer the local `ui-ux-pro-max` skill for generic pattern/
-    palette research before spending external chat turns.
-    Core external UI/UX research packet: `docs/research/waypoint-design-reference-packet.md`.
-- Presentation work never alters factual content (per `waypoint-design` skill).
+### Rules
 
-### Design skill library (pull-on-demand)
+1. **Mobile is designed, not derived.** Active-trip context comes first. Primary actions remain
+   thumb reachable. Simultaneous regions reduce; disclosure becomes sequential where helpful.
+2. **Desktop earns its space.** Use width to reveal relationships, compare options, and show
+   spatial + operational context together. Do not merely enlarge phone cards.
+3. **Prefer intrinsic/container-driven layout for content.** Components respond to the space
+   they actually receive. Viewport queries are primarily for viewport-owned chrome and
+   genuinely viewport-bound behavior.
+4. **Intermediate widths are first-class.** A design is not accepted only because 375px and
+   1440px look good.
+5. **Notation relocates; it does not shrink into illegibility.** Dense tables, timelines,
+   maps, and diagrams recompose, scroll locally, or disclose progressively.
+6. **No capability loss by width alone.** Narrow screens may reprioritize or sequence a
+   capability; they do not silently remove it.
+7. **Safe areas are part of layout.** Fixed/sticky controls reserve notches, home indicators,
+   and browser chrome correctly.
+8. **320px reflow is the safety floor.** Long names, CJK/multilingual strings, text zoom,
+   split-screen, landscape phones, tablets, and hostile unbroken content must not create
+   page-level clipping or inaccessible actions.
 
-Carlo's Google Drive folder `skills` (Drive folder ID `1dtN8N2MIjI-uswbCmdUCmVoauZ3HRvtA`,
-~200+ skills) is the reference library. Do **not** enable these wholesale; fetch a skill's
-`SKILL.md` via the Google Drive connector only when the task at hand matches it.
-Highest-value entries per phase:
+Acceptance must cover phone, intermediate/tablet, desktop, touch, mouse, keyboard, dark mode,
+text enlargement, reduced motion, offline/degraded state, missing data, and realistic long
+content.
 
-- **D2 tokens:** `design-token`, `design-token-audit`, `spacing-system`, `color-system`,
-  `theming-system`, `typography-scale`, `readable-measure`
-- **D3 registry/governance:** `design-system-governance`, `design-system-adoption`,
-  `component-spec`, `pattern-library`, `naming-convention`, `documentation-template`
-- **D4/D5 states & themes:** `dark-mode-design`, `loading-states`, `error-handling-ux`,
-  `responsive-design`, `motion-system`, `micro-interaction-spec`
-- **D6 review:** `interface-review`, the `critique-*` suite, `heuristic-evaluation`,
-  `design-qa-checklist`, `visual-hierarchy`, plus UX-law references (`fitts-law`,
-  `hicks-law`, gestalt series)
-- **Style inspiration (advisory only):** `light-mode-paper-technical`,
-  `clean-minimal-beige-light-mode`, `editorial-tech`
+---
 
-Game/3D/WebGL/social-posting skills in the library are out of scope for Waypoint.
+## 3. Hierarchy before features
 
-External gap skills, adopted 2026-08-27 and copied into the Drive library (byte-exact,
-with their `references/` docs): the `addyosmani/web-quality-skills` set (`accessibility`
-WCAG 2.2 rules auditor, `web-quality-audit`, `core-web-vitals`, `performance`,
-`best-practices`, `seo`), `visual-regression-tester` (from `patricio0312rev/skills`, for
-D5 baselines), and `design-review` (OneRedOak 7-phase multi-viewport methodology, for
-D6). Use `accessibility` + `design-review` in D6 alongside the critique suite; `seo` and
-`core-web-vitals` are secondary for a field PWA.
+Waypoint does not give every capability equal visual weight merely because it exists.
 
-### `/design` canvas — where visual decisions get made
+During active travel, the default hierarchy is:
 
-The `/design` skill (Claude Design artboard canvas) is the standard vehicle for showing
-Carlo visual options before they become code, because he can inspect and hand-tweak
-elements instead of approving prose:
+1. **Now**
+2. **Next**
+3. **Leave by**
+4. **Get there**
+5. **Material problem / uncertainty**
+6. **Relevant fallback**
+7. everything else
 
-- **D1/D2:** a token-specimen artboard set (palette, type scale, spacing, the three
-  registers side by side, light/dark) so identity decisions are approved visually.
-- **D3/D4:** component mockups on canvas *before* implementation for any new or
-  significantly reworked component; the approved artboard becomes the spec the Astro
-  implementation is checked against.
-- **D6:** candidate fixes from the taste review are mocked on canvas first when the
-  change is visual-directional rather than mechanical.
+Before and after a trip the hierarchy may change, but it must remain deterministic and based on
+information Waypoint actually has.
 
-Canvas output is a draft/spec, never a source of truth: the committed tokens, components,
-and gallery remain the authority, and factual guide content never gets invented for
-mockups (use placeholder data marked as such).
+A traveler should be able to identify the next useful action within a few seconds.
 
-## 5. Joint September schedule — design interleaved with Pipeline V2
+---
 
-Backend hard dates (owned by `SEPTEMBER_TRACKER.md`): **feature freeze Sep 20 · code
-freeze Sep 27 · backend complete Sep 30.** Design work is scheduled so expensive
-model/validation weeks are never double-booked; weekly usage is spent on one heavy
-program at a time.
+## 4. Composition grammar
 
-| Week | Backend focus (authority: SEPTEMBER_TRACKER) | Design focus | Design spend |
-|---|---|---|---|
-| Aug 27 – Sep 2 | Independent review of R-A–R-F/W1 repair branch (Codex) | D1 Constitution approved; ChatGPT reference-gathering | Light |
-| Sep 3 – 9 | Fresh repaired-class Run-B validation (heavy model spend) | D2 Token core consolidation + tightened tests (deterministic only) | Light |
-| Sep 10 – 16 | Await/execute cutover decision work | D3 Component inventory, cull, registry + CI check; D4 gallery page | **Heavy** |
-| Sep 17 – 23 | Feature freeze Sep 20 | D5 dark-mode remap + gallery screenshot baselines land **before Sep 20**. Guide-reading-page token migration audited 2026-09-01: guide.css, GuideLayout, all 16 blocks, and every wired script already pass color-scale.test.ts/var-defined.test.ts with zero raw-value exceptions — D2/D3's gates already closed this, nothing to migrate. Remaining D2 holdout is atlas-map.js's hardcoded `'Source Sans 3'` canvas font (hub/atlas, not a guide page) — reassigned to D7 (atlas/home migration), see spawned task | Light |
-| Sep 24 – 30 | Code freeze Sep 27; backend complete Sep 30 | No new design code. D6 taste review of gallery (`better-interface`), punch list only | Light |
-| Oct 1 + | Post-cutover stabilization | D7 execute punch list; migrate field tools, then atlas/home; scalability proof: one new surface built zero-custom-CSS | Medium |
+The design system standardizes vocabulary without forcing every page into the same grid.
 
-If a backend week slips, its design counterpart slips with it; design never preempts a
-validation or cutover run in the same week.
+Use four composition families as defaults:
 
-## 6. Design work items
+### Editorial
+Destination identity, culture, context, imagery, explanatory prose. May use freer composition
+and controlled visual drama.
 
-Statuses: `NOT STARTED` · `IN PROGRESS` · `READY FOR REVIEW` · `DONE`
+### Operational
+Schedules, hours, prices, transit, reservations, state, checklist, settlement. Compact,
+aligned, predictable, scan-first.
 
-| ID | Item | Owner | Target | Status |
-|---|---|---|---|---|
-| D1 | This constitution approved by Carlo | Claude → Carlo | Sep 2 | READY FOR REVIEW |
-| D2 | Token core consolidated; raw values outside core fail tests | Claude | Sep 9 | READY FOR REVIEW |
-| D3 | Approved-component registry + CI check (locked-down enforcement) | Claude | Sep 16 | READY FOR REVIEW |
-| D4 | Component gallery page: all components × themes × light/dark × data states | Claude | Sep 16 | READY FOR REVIEW |
-| D5 | Dark-mode core remap + gallery screenshot baselines (in before Sep 20) | Claude | Sep 19 | READY FOR REVIEW |
-| D6 | Holistic taste review of gallery; punch list | Claude | Sep 30 | NOT STARTED |
-| D7 | Punch list + field-tools/atlas migration + zero-custom-CSS scalability proof | Claude | Oct 7 | NOT STARTED |
+### Spatial
+Map + place relationships, route context, neighborhood/area orientation. Map and textual/list
+representations should share selection and state rather than behaving as separate products.
+
+### Focused action
+One immediate task with minimal competition: route, SOS, save/change, add expense, resolve a
+specific warning.
+
+Cards/panels are tools inside these grammars, **not the universal page canvas**.
+
+---
+
+## 5. Progressive disclosure and truth
+
+Dense verified information should feel calm without becoming vague.
+
+Default sequence:
+- immediate field answer;
+- operational facts;
+- deeper explanation/provenance on demand.
+
+Never hide:
+- a safety-critical warning;
+- material uncertainty;
+- stale/conflicting state that changes a decision;
+- the only information needed to understand an action.
+
+Routine verified state may be quieter than adverse state. Verification remains traceable to
+claim/source/date; visual treatment may evolve during D6.
+
+Customer-facing UI never exposes pipeline, agent, register, gate, or implementation vocabulary.
+
+---
+
+## 6. Destination identity
+
+Different destinations should feel distinct without becoming different products.
+
+Destination personality belongs in controlled regions such as:
+- mastheads/hero media;
+- selected editorial illustration or photography;
+- atlas/spatial moments;
+- section identity accents.
+
+Operational structure remains stable across destinations. Never theme warnings, prices, hours,
+transit, evidence, or interaction semantics into decorative local motifs.
+
+Generic AI-looking gradients, invented local symbolism, and interchangeable "travel aesthetic"
+art are rejected.
+
+---
+
+## 7. Motion
+
+Motion explains **where something went, what changed, or how states relate**.
+
+- Routine interaction is fast, interruptible, and subordinate to the task.
+- Native scrolling is never hijacked.
+- Shared/spatial continuity is preferred when it preserves orientation.
+- A small number of geographic/spatial moments may be memorable; spectacle without orientation
+  value is rejected.
+- Continuous motion must encode live meaning or earn an explicit exception.
+- Reduced motion supplies a complete usable state, not a broken or second-class version.
+
+Implementation vocabulary and current owners live in `docs/reference/motion.md`.
+
+---
+
+## 8. Accessibility, resilience, and field conditions
+
+WCAG 2.2 AA is the binding floor, plus Waypoint's stricter field-use requirements.
+
+- Important field controls target at least approximately 44×44 CSS px where practical.
+- Contrast and type are judged for outdoor/glare use, not only desktop viewing.
+- Focus, keyboard, touch, and assistive semantics remain complete.
+- Critical state never relies on color alone.
+- Offline/degraded behavior remains honest.
+- Low-bandwidth and conservative-media paths remain useful.
+- Reduced-motion is complete.
+- Print remains supported, but screens are designed screen-first.
+
+A visually impressive state that fails the traveler under poor signal, glare, long text, or one
+hand is not an approved Waypoint design.
+
+---
+
+## 9. Simplification and convergence
+
+**Merge before adding. Retire before replacing.**
+
+When a new pattern supersedes an old one, the old implementation and its active authority are
+removed in the same program unless a documented compatibility reason prevents it.
+
+Before introducing a component, navigation model, overlay, control family, layout grammar,
+motion pattern, or visual treatment:
+
+1. Can an existing one do the job?
+2. Can two existing variants be consolidated?
+3. Can an obsolete behavior be deleted instead?
+4. Is this solving a traveler problem or preserving an old iteration?
+
+No zombie patterns: two generations of navigation, cards, sheets, verification marks, or
+responsive models do not coexist indefinitely.
+
+Historical prototypes and experiments are evidence in Git history, not production authority.
+
+---
+
+## 10. Governance
+
+- Agents use this constitution plus approved tokens/components; they do not infer authority from
+  historical handoffs or prototypes.
+- New global tokens/components require Carlo's approval and registry-first landing.
+- New feature-specific composition may start locally when it uses approved primitives; it should
+  graduate into the global system only after demonstrated reuse.
+- Presentation work never alters factual travel content.
+- Research is advisory until explicitly adopted here.
+- Machine gates enforce safety floors and should ratchet toward this constitution, never preserve
+  a superseded aesthetic by accident.
+
+### Active design files
+
+Keep active:
+- `PRODUCT.md`
+- `docs/reference/design-system.md`
+- `docs/reference/motion.md`
+- `docs/reference/component-registry.json`
+- executable token/breakpoint/accessibility/resilience gates
+
+Everything else is reference, research, implementation documentation, or history and must not
+claim design authority.
+
+---
+
+## 11. D6 reconciliation — unresolved decisions
+
+These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
+at a time after evidence/recommendation review:
+
+- final persistent navigation architecture;
+- whether Split is top-level or contextual (generic Tools/More is **not** assumed);
+- adaptive/promoted mobile navigation retirement;
+- panel drag/reorder;
+- story-mode itinerary;
+- global swipe navigation;
+- yielding/scroll-reactive chrome;
+- final geometry/radius system;
+- provenance/verification visual treatment;
+- role of Painted Atlas/living covers and ambient motion;
+- cartographic ornament versus functional geography;
+- command palette versus traveler-facing global Search;
+- component/pattern cull and migration order.
+
+Until a decision is recorded, current behavior may remain shipped but is **not automatically
+future design law**.
