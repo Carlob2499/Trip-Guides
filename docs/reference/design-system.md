@@ -346,6 +346,17 @@ warnings, uncertainty, provenance, or traveler constraints. Semantic fact IDs an
 survive composition unchanged. Build/render gates reject unsupported composition intent rather
 than guessing.
 
+**D6-10 — Guide organization is location/time first, with anchor-aware exceptions.**  
+Waypoint Guides should default to organizing major chapters by geography and travel sequence,
+because place and time are the most stable wayfinding frame across destinations. Strong traveler
+anchors (events, non-negotiable interests, or unusually deep priorities) may earn their own
+featured chapter or cross-location collection when their semantic weight warrants it. Korea is
+the prototype for this hybrid: Seoul, Daejeon, and Busan provide the geographic spine while MSI,
+Pokémon GO, food/shopping, and other high-value interests are composed within or across those
+places rather than forcing the whole Guide into interest-first categories. The Visual Composer
+must preserve cohesion and avoid duplicating content that belongs canonically in Trip, Itinerary,
+Map, or Split.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
