@@ -527,6 +527,17 @@ find and feel tactile without turning every action into a filled CTA. Secondary 
 and metadata remain restrained. Light and dark modes are responsive siblings of one identity, not
 two unrelated themes.
 
+**D6-24 — Search is context-first and universal.**  
+Waypoint has one global Search experience rather than separate per-guide and site-wide search
+systems. When invoked from an active/current trip, results from that trip are ranked first:
+places, itinerary entries, Guide content, neighborhoods/clusters, and other trip-specific
+objects. Broader Waypoint results may follow as secondary results. From Atlas/Home or without a
+clear active trip, Search is global by default.
+
+Search should feel like ordinary travel search, not a developer command palette. Results are
+grouped by traveler-facing object type such as Places, Itinerary, Guide, and Other trips, and
+deep-link to the same canonical semantic objects used by Map, Guide, Trip, and Itinerary.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
