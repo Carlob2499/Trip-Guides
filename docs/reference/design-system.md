@@ -538,6 +538,19 @@ Search should feel like ordinary travel search, not a developer command palette.
 grouped by traveler-facing object type such as Places, Itinerary, Guide, and Other trips, and
 deep-link to the same canonical semantic objects used by Map, Guide, Trip, and Itinerary.
 
+**D6-25 — SOS is a layered emergency sheet with immediate actions first.**  
+SOS remains a global action, not a destination tab. Its first layer presents only immediate
+emergency actions with large, unmistakable controls: call police, call ambulance/fire, and show
+the traveler’s current/base address or location context when available. A second, clearly
+separated urgent-help layer may expose nearest hospital/urgent care, embassy or consulate,
+lost-passport guidance, trip base/hotel address, insurance/contact details when explicitly
+provided, and critical local phrases.
+
+SOS must not become a generic help dashboard or Tools drawer. Core emergency data and actions must
+remain available offline wherever the guide can reasonably provide them. Mobile should use a
+dominant full-height sheet with large targets; desktop may use a modal/side sheet but must preserve
+the same hierarchy and urgency.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
