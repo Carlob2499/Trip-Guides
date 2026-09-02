@@ -667,6 +667,17 @@ oxide/sage accents, large information atoms, and map-like route semantics. Plan-
 directly reachable per day for completed trips. Do not generate alternate mobile itinerary visual
 directions unless implementation evidence exposes a real usability problem.
 
+**D6-35 — Desktop Itinerary is a resizable temporal-spatial workbench with timeline left and map right.**  
+The accepted desktop Itinerary composition uses the same Maps-like operational language as mobile,
+but exploits desktop width as a two-pane workbench. The default arrangement is the itinerary/day
+timeline on the **left** and the interactive map on the **right**. Both panes are resizable and either
+may expand or collapse when the traveler needs more temporal or spatial focus.
+
+Individual sites remain directly inspectable from inside the day-to-day view: selecting a stop may
+open concise contextual detail without forcing the traveler out of the itinerary, with full Guide
+detail still one action away. Route, stop, transit, time, cost, restriction, and Plan-versus-Actual
+information remain first-class. Do not add dashboard chrome merely to fill desktop space.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
