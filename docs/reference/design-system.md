@@ -290,13 +290,24 @@ not the destination model. Remembering a user's last location inside a destinati
 rewriting the navigation itself is not. D7 must remove the adaptive/promoted mobile-nav logic
 and its supporting UX debt once the final destination model is approved.
 
+**D6-02 — Trip is the stable lifecycle destination.**  
+The first primary destination is `Trip`, not a permanent `Today` tab. Its composition adapts
+to the trip lifecycle while its identity stays fixed: pre-trip emphasizes readiness/bookings/
+deadlines; active-trip emphasizes Now → Next → Leave by → Get there → material problem →
+fallback → remainder of today; post-trip emphasizes recap, planned-vs-actual, and learnings.
+
+**D6-03 — Stable five-destination product architecture.**  
+The primary traveler destinations are `Trip · Itinerary · Map · Guide · Split` in that stable
+order. Search and SOS are global actions, not tabs. Each destination must continue to earn its
+place during D6/D7; generic Tools/More remains rejected.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
 at a time after evidence/recommendation review:
 
-- final persistent navigation architecture and labels;
-- whether Split is top-level or contextual;
+- persistent mobile chrome behavior (including yielding/scroll-reactive chrome);
+- whether Split remains top-level after its dedicated utility review;
 - panel drag/reorder;
 - story-mode itinerary;
 - global swipe navigation;
