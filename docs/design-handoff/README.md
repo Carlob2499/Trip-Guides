@@ -517,11 +517,11 @@ colour only.
 
 | File | What it is |
 | --- | --- |
-| `DESIGN.md` | **The design system, revision R4 — the repo's single visual authority.** It no longer "supersedes" anything: the pre-Atlas root `DESIGN.md` was retired 2026-08-10 |
-| `enforcement/` | The machine-checkable half — `tokens.css`, `SPEC-COMPONENTS.md`, `ANTIPATTERNS.md`, `ACCEPTANCE.md`, reference screenshots. Duplicate copies of the four docs sat beside this README until 2026-08-10; `enforcement/` is the only home |
-| `prototype/Waypoint Overdrive v2.dc.html` | The full prototype — every screen, all logic |
-| `prototype/Waypoint Mobile.dc.html` | Mobile review canvas: the real build in phone frames |
-| `prototype/atlas-map.js` | `<atlas-map>` custom element — **usable as-is** |
+| `DESIGN.md` | historical R4/R5 design contract; consult only for shipped implementation rationale not yet migrated |
+| `enforcement/` | historical measurements, rejected alternatives, acceptance notes, tokens, and screenshots; not current gates |
+| `prototype/Waypoint Overdrive v2.dc.html` | historical full prototype — not production code or a current acceptance target |
+| `prototype/Waypoint Mobile.dc.html` | historical mobile review canvas |
+| `prototype/atlas-map.js` | historical prototype source; the production atlas implementation has already been ported |
 | `prototype/trip-split.js` | JS port of your own settle/summary model — **reference only, do not port back** |
 | `prototype/guides.json` | Manifest the prototype builds from |
 | `prototype/holidays.json` | Your holiday data, bundled |
