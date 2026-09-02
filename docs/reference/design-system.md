@@ -301,6 +301,13 @@ The primary traveler destinations are `Trip · Itinerary · Map · Guide · Spli
 order. Search and SOS are global actions, not tabs. Each destination must continue to earn its
 place during D6/D7; generic Tools/More remains rejected.
 
+**D6-04 — Immersive destination cover is required.**  
+The Guide/editorial destination must support an immersive, edge-to-edge destination cover on
+mobile. The cover may extend beneath safe-area-aware app chrome in installed/standalone mode
+and must remain space-efficient in ordinary mobile browsers. Operational facts must not be
+pushed behind decorative spectacle; the immersive treatment belongs to editorial identity,
+not every screen.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
