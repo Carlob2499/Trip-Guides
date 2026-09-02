@@ -642,6 +642,18 @@ Dense screens may still carry substantial information, but the density must come
 large atoms rather than miniature dashboard typography. Especially on mobile and arrival/active-trip
 surfaces, glanceability and touchability outrank decorative completeness.
 
+**D6-33 — Post-trip Trip is an editorial recap that leads into the Learnings notebook.**  
+The completed-trip Trip view should be easy to understand and share with other travelers. It leads
+with strong destination imagery and a concise narrative recap, followed by a small number of large,
+meaningful outcome atoms and major Plan-versus-Actual changes. It must not become an analytics
+dashboard.
+
+Trip Learnings then becomes the primary continuing surface: a distinct, chronological notebook for
+gripes, surprises, misses, things that worked, and Plan-versus-Actual observations. Durable lessons
+may be surfaced prominently, but raw traveler notes do not silently rewrite researched Guide truth.
+The composition should make the trip legible to someone who was not there, while preserving the
+notebook as the living record.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
