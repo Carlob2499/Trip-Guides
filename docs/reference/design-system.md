@@ -551,6 +551,24 @@ remain available offline wherever the guide can reasonably provide them. Mobile 
 dominant full-height sheet with large targets; desktop may use a modal/side sheet but must preserve
 the same hierarchy and urgency.
 
+**D6-26 — Ship semantic travel objects now; keep them knowledge-graph-ready.**  
+The pre-October implementation uses pragmatic semantic travel objects rather than a full
+knowledge graph. Research emits typed objects and verified facts; the Visual Composer organizes
+those objects; renderers project them into Trip, Itinerary, Map, Guide, Search, Split-adjacent
+context, and other approved surfaces.
+
+This semantic layer must nevertheless be designed for future graph evolution: stable object and
+fact IDs, explicit object type, normalized geography, canonical relationships/references instead
+of copied facts, preserved provenance/freshness, and machine-readable exports. Avoid coupling the
+data model to current page sections or presentation components when the same concept can be named
+semantically.
+
+A post-October knowledge-base/graph phase may add richer relationships, cross-trip entities,
+entity resolution, semantic retrieval, and agent-facing query/export interfaces. That future
+system should remain portable and should not depend on any one vendor's conversational-memory
+feature as its source of truth. Waypoint's verified knowledge remains the authoritative substrate;
+AI memory/retrieval systems may consume it.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
