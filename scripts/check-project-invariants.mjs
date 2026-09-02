@@ -141,9 +141,9 @@ requirePath("public/sw.js", "Offline service worker");
 
 requireText("AGENTS.md", "Sights and Food are REPOSITORIES", "Sights/Food breadth doctrine");
 requireText("AGENTS.md", "pipeline critic findings", "Traveler/process learnings separation");
-requirePath("docs/design-handoff/DESIGN.md", "Atlas written design authority");
-requirePath("docs/design-handoff/enforcement/ACCEPTANCE.md", "Atlas acceptance contract");
-requirePath("docs/design-handoff/enforcement/check-drift.mjs", "Atlas drift checker");
+requirePath("docs/reference/design-system.md", "Waypoint design authority");
+requirePath("docs/reference/motion.md", "Waypoint motion doctrine");
+requirePath("docs/reference/component-registry.json", "Waypoint component registry");
 
 const uruguayMetaPath = "src/content/guides/uruguay/_guide.json";
 if (requirePath(uruguayMetaPath, "Uruguay Canary #4 guide")) {

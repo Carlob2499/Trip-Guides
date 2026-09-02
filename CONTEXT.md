@@ -183,11 +183,16 @@ Do not “deduplicate” them by moving required runtime instructions into a fil
 
 ## Design authority
 
-The future Atlas redesign authority lives in `docs/design-handoff/` until that redesign is implemented and formally retired.
+As of 2026-09-01, the single human-readable design authority is
+`docs/reference/design-system.md`, with `docs/reference/motion.md` subordinate for motion and
+`docs/reference/component-registry.json` as the machine-facing approved surface.
 
-Current cleanup/backend work must not reinterpret those design assets as dead documentation solely because the corresponding UI has not yet been built.
+`docs/design-handoff/` is legacy implementation/prototype history during D6 reconciliation. It
+must not override current authority. Useful load-bearing implementation rules may be migrated to
+their proper current owner before the legacy files are deleted; obsolete visual doctrine should
+not survive merely because old production code comments cite it.
 
-Design authority and current backend architecture are separate concerns: stabilize data/contracts first; broad visual redesign follows on stable interfaces.
+Design authority and backend architecture remain separate concerns.
 
 ## Documentation authority
 
@@ -198,7 +203,8 @@ The active reading path is intentionally small:
 - `docs/handoff.md` — current operational state;
 - `docs/reference/` — current architecture/operations;
 - `docs/pipeline v2/` — locked/current V2 decision, proof, validation, tracker files;
-- `docs/design-handoff/` — future design authority;
+- `docs/reference/design-system.md` + `motion.md` + `component-registry.json` — current design authority;
+- `docs/design-handoff/` — legacy implementation/prototype reference pending D6 migration/deletion;
 - `CONTEXT.md` — durable decisions in this file.
 
 Completed plans, cleanup ledgers, superseded handoffs, and review transcripts belong in Git history. Do not create another parallel “current state” document when an existing authority owns the subject.

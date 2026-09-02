@@ -1,5 +1,9 @@
 # Component contract — exact values
 
+> **LEGACY R4/R5 IMPLEMENTATION REFERENCE — NOT CURRENT DESIGN AUTHORITY.**
+> These rules describe the design that shipped at that time. D6 may keep, revise, or retire them.
+> Current authority: `docs/reference/design-system.md`.
+
 Companion to README.md. README says what each screen *is*; this file says what each part
 *measures*. Where a number appears here and in the prototype, this file wins for intent and
 the prototype wins for tie-breaks. Nothing here is approximate — no value below is a

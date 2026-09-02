@@ -120,9 +120,10 @@ circle, and what would change if it did. Nothing in the current design assumes i
 
 The visual system exists in code (tokens, base and per-surface stylesheets, self-hosted
 variable typography, per-country accent resolution shared across hub, guide, masthead, OG,
-and print) **and** in writing: `docs/design-handoff/DESIGN.md` (revision R4, codified from
-the shipped Atlas build) is its single authority, with the mechanical gates beside it in
-`docs/design-handoff/enforcement/`.
+and print). The single human-readable visual/interaction authority is
+`docs/reference/design-system.md`; motion is subordinate in `docs/reference/motion.md`;
+approved components/patterns are machine-facing in `docs/reference/component-registry.json`.
+Historical design handoffs and prototypes are not authority.
 
 ## Evidence on Hand
 
@@ -159,8 +160,9 @@ failure the product exists to refute.
 
 ## Accessibility & Inclusion
 
-**WCAG 2.1 AA is the binding floor** (enforced in CI via axe-core + Playwright), **plus
-in-field conditions** as an explicit additional requirement, confirmed 2026-08-04:
+**WCAG 2.2 AA is the binding floor**, plus **in-field conditions** as an explicit additional
+requirement. Automated checks are necessary but not sufficient; responsive/reflow and field
+acceptance are defined in `docs/reference/design-system.md`:
 
 - Sunlight legibility — contrast and type size judged for outdoor phone use, not a dim desk.
 - One-handed reach and generous touch targets; gloves and wet hands are realistic.

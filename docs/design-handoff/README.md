@@ -1,5 +1,11 @@
 # Handoff: Waypoint — Atlas hub, guide sheets, and trip tools
 
+> **LEGACY R4/R5 IMPLEMENTATION REFERENCE — NOT CURRENT DESIGN AUTHORITY.**
+> Current authority is `docs/reference/design-system.md`, with `docs/reference/motion.md` and
+> `docs/reference/component-registry.json` subordinate. This folder remains temporarily because
+> shipped code still cites some exact implementation rationale. D6/D7 will migrate useful
+> references and then delete obsolete handoff material.
+
 ## Overview
 
 This is a full redesign of **Waypoint**, a static site of verified, personalized travel
@@ -39,8 +45,10 @@ Two files are the exception and can be used almost as-is:
 
 ## Fidelity
 
-**High-fidelity.** Colours, typography, spacing, motion timings, and interaction states are
-final and are specified exactly below and in `DESIGN.md`. Recreate them precisely.
+**Historical fidelity.** These files record the R4/R5 implementation target that was treated
+as final at the time. They are useful for understanding shipped code, but their colours,
+typography, spacing, geometry, motion, and interaction rules do **not** override the current
+constitution or D6 decisions.
 
 Two caveats:
 
@@ -51,11 +59,10 @@ Two caveats:
 
 ## The design system
 
-**`DESIGN.md` in this bundle is the authority** and supersedes the previous revision in the
-repo. It carries the full token set as frontmatter (machine-readable), the CSS-variable
-contract, the type scale, a motion table, and every Named Rule with the reason it exists.
-Read it before writing any code. The sections below cover what DESIGN.md does not: exact
-screen composition, state, and behaviour.
+`DESIGN.md` records the historical R4/R5 design contract that produced the shipped Atlas/guide
+implementation. It is **not current authority**. For new work, begin with
+`docs/reference/design-system.md`; consult this bundle only for a specific implementation
+question that current code and current authority do not answer.
 
 ---
 
@@ -510,11 +517,11 @@ colour only.
 
 | File | What it is |
 | --- | --- |
-| `DESIGN.md` | **The design system, revision R4 — the repo's single visual authority.** It no longer "supersedes" anything: the pre-Atlas root `DESIGN.md` was retired 2026-08-10 |
-| `enforcement/` | The machine-checkable half — `tokens.css`, `SPEC-COMPONENTS.md`, `ANTIPATTERNS.md`, `ACCEPTANCE.md`, `check-drift.mjs`, reference screenshots. Duplicate copies of the four docs sat beside this README until 2026-08-10; `enforcement/` is the only home |
-| `prototype/Waypoint Overdrive v2.dc.html` | The full prototype — every screen, all logic |
-| `prototype/Waypoint Mobile.dc.html` | Mobile review canvas: the real build in phone frames |
-| `prototype/atlas-map.js` | `<atlas-map>` custom element — **usable as-is** |
+| `DESIGN.md` | historical R4/R5 design contract; consult only for shipped implementation rationale not yet migrated |
+| `enforcement/` | historical measurements, rejected alternatives, acceptance notes, tokens, and screenshots; not current gates |
+| `prototype/Waypoint Overdrive v2.dc.html` | historical full prototype — not production code or a current acceptance target |
+| `prototype/Waypoint Mobile.dc.html` | historical mobile review canvas |
+| `prototype/atlas-map.js` | historical prototype source; the production atlas implementation has already been ported |
 | `prototype/trip-split.js` | JS port of your own settle/summary model — **reference only, do not port back** |
 | `prototype/guides.json` | Manifest the prototype builds from |
 | `prototype/holidays.json` | Your holiday data, bundled |

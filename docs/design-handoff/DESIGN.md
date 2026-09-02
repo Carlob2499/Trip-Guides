@@ -644,8 +644,9 @@ What this revision codifies that the previous document did not.
   the present as the Red Ink Rule's one additional moment. It arrived as the guide-UI bundle's
   `SUPERSEDES.md`, whose seven numbered sections are still cited from code comments — §1
   navigation · §2 palette · §3 masthead · §4 trip split · §5 tools · §6 prose · §7 red ink. That
-  file was deleted on 2026-08-14 once this one carried its content, so **this document is the
-  single written design authority** and no bundle overrides it.
+  file was deleted on 2026-08-14 once this one carried its content. **Historical note:** this
+  document was the R4/R5 written authority at that time. As of 2026-09-01 it is legacy
+  implementation reference; current authority is `docs/reference/design-system.md`.
 - **R4 (this document's body).** The Change Ledger above records what it changed from R3.
 
 Token values are the one exception to that authority: `src/styles/base.css` is the place a token

@@ -9,9 +9,9 @@
    specified hairline, decorative framing rather than the thing you have to see. */
 .prov-dot {
   display: inline-flex; align-items: center; justify-content: center;
-  /* 999px, not 50%: radius is binary in this system (SPEC rule 1) and check-drift.mjs only
-     reads px/rem literals, so a `%` radius is both off-token and invisible to the checker.
-     Identical rendering on a 1em square — this is a token-consistency change, not a visual one. */
+  /* 999px is the current shipped circle treatment. D6 has reopened the final geometry system;
+     keep this explicit until that decision is implemented rather than treating R5's binary-radius
+     rule as permanent authority. */
   width: 1em; height: 1em; border-radius: 999px; cursor: pointer; padding: 0;
   background: transparent; color: var(--muted); border: 1px solid var(--rule2);
   font-size: var(--text-micro); vertical-align: middle; margin-inline-start: 0.25em;

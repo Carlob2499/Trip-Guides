@@ -323,7 +323,8 @@
      would leave the old language reachable, and every stylesheet that still read them (nine
      files, twenty-six sites outside the twelve features) has been swept. (The one former
      exception, src/styles/progress-preview/, was deleted with the design studies in the
-     2026-08-14 cleanup.) */
+     2026-08-14 cleanup.) This paragraph describes the CURRENT shipped geometry only; D6 has
+     reopened final geometry and no legacy drift checker makes it future law. */
   /* M3: z-index scale — was 20+ ad-hoc values (0 to an outlier 9000) with no documented tiers,
      and one real bug: .skip-link (999) painted UNDER story-mode's overlay (1000), so a keyboard
      user tabbing while story mode was open focused an invisible link. Named here as the single

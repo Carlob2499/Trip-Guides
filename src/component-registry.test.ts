@@ -1,4 +1,4 @@
-/* The approved-component registry's enforcement (D3, design-system.md §4 "locked down").
+/* The approved-component registry's enforcement (design-system.md §10 governance).
 
    The governance rule — agents compose only from approved components — is only real if a
    component that skips the registry fails the build. Three checks make it mechanical:
@@ -45,7 +45,7 @@ describe("component registry", () => {
     const registered = new Set(Object.keys(registry.components));
     expect(
       [...onDisk].filter((n) => !registered.has(n)),
-      "src/components has .astro files with no registry entry — a new component lands WITH its line in docs/reference/component-registry.json (Carlo approves additions; design-system.md §4)",
+      "src/components has .astro files with no registry entry — a new component lands WITH its line in docs/reference/component-registry.json (Carlo approves global additions; design-system.md §10)",
     ).toEqual([]);
     expect(
       [...registered].filter((n) => !onDisk.has(n)),

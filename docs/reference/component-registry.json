@@ -1,87 +1,272 @@
 {
-  "$comment": "APPROVED-COMPONENT REGISTRY (D3, docs/reference/design-system.md §4). The machine surface of the locked-down governance rule: agents compose ONLY from what is listed here plus the core tokens. Adding a component, block, or feature requires adding it here in the same change — src/component-registry.test.ts enforces both directions (a file with no entry fails, an entry with no file fails) and the import discipline. Roles are one-line orientation, not documentation; each file's own header comment is the authority on what it does. The `patterns` section names the shared CSS vocabularies that are PATTERNS with many per-instance classes rather than single components, and points at the machine gate that owns each one's contract — a new visual vocabulary (a third radius, a new overlay kind, a new control shape) is a registry event, not a stylesheet edit.",
+  "$comment": "CURRENT SHIPPED-COMPONENT REGISTRY. This file records what composable components, blocks, features, and shared patterns exist today; src/component-registry.test.ts enforces bidirectional existence and feature import discipline. Roles/contracts below describe the CURRENT shipped implementation and may be revised or retired by D6/D7 under docs/reference/design-system.md; a registry entry does not make an R4/R5 composition permanent. New global primitives remain registry-first.",
   "components": {
-    "Block": { "file": "src/components/Block.astro", "role": "Section dispatcher — routes one guide section to its blocks/ renderer" },
-    "Contours": { "file": "src/components/Contours.astro", "role": "Full-page survey-contour ground (fixed, decorative); layer data stays per-page" },
-    "Fold": { "file": "src/components/Fold.astro", "role": "The one collapsible long-explanation pattern (R5 COMPONENTS.md §5)" },
-    "GapBlock": { "file": "src/components/GapBlock.astro", "role": "Honest-absence marker — renders a known gap loud, never filler" },
-    "Hint": { "file": "src/components/Hint.astro", "role": "'?' affordance holding an explanation until asked" },
-    "Icon": { "file": "src/components/Icon.astro", "role": "The one icon language (M4)" },
-    "JetLag": { "file": "src/components/JetLag.astro", "role": "Jet-lag calculator markup half" },
-    "Learnings": { "file": "src/components/Learnings.astro", "role": "Trip learnings capture + reality layer" },
-    "PaintedAtlas": { "file": "src/components/PaintedAtlas.astro", "role": "The living painted cover" },
-    "Panel": { "file": "src/components/Panel.astro", "role": "The Atlas container: kicker, title, drag handle, collapse, body" },
-    "ProvenancePopover": { "file": "src/components/ProvenancePopover.astro", "role": "Provenance dot + evidence popover (the notation layer)" },
-    "PwaHead": { "file": "src/components/PwaHead.astro", "role": "Shared head bits: offline/installable + app icons" },
-    "ReminderRow": { "file": "src/components/ReminderRow.astro", "role": "One reminder line (print duplicates it outside the panel)" },
-    "Reminders": { "file": "src/components/Reminders.astro", "role": "Reminders / notable-items scratchpad markup" },
-    "ToolsScreen": { "file": "src/components/ToolsScreen.astro", "role": "The Tools station — last stop on every guide rail" },
-    "TransitLinks": { "file": "src/components/TransitLinks.astro", "role": "'Get me there' — one-tap deep links to a verified coordinate" },
-    "TripKit": { "file": "src/components/TripKit.astro", "role": "Trip kit checklist" },
-    "TripSplit": { "file": "src/components/TripSplit.astro", "role": "Trip cost-split markup" }
+    "Block": {
+      "file": "src/components/Block.astro",
+      "role": "Section dispatcher — routes one guide section to its blocks/ renderer"
+    },
+    "Contours": {
+      "file": "src/components/Contours.astro",
+      "role": "Full-page survey-contour ground (fixed, decorative); layer data stays per-page"
+    },
+    "Fold": {
+      "file": "src/components/Fold.astro",
+      "role": "The one collapsible long-explanation pattern (R5 COMPONENTS.md §5)"
+    },
+    "GapBlock": {
+      "file": "src/components/GapBlock.astro",
+      "role": "Honest-absence marker — renders a known gap loud, never filler"
+    },
+    "Hint": {
+      "file": "src/components/Hint.astro",
+      "role": "'?' affordance holding an explanation until asked"
+    },
+    "Icon": {
+      "file": "src/components/Icon.astro",
+      "role": "The one icon language (M4)"
+    },
+    "JetLag": {
+      "file": "src/components/JetLag.astro",
+      "role": "Jet-lag calculator markup half"
+    },
+    "Learnings": {
+      "file": "src/components/Learnings.astro",
+      "role": "Trip learnings capture + reality layer"
+    },
+    "PaintedAtlas": {
+      "file": "src/components/PaintedAtlas.astro",
+      "role": "The living painted cover"
+    },
+    "Panel": {
+      "file": "src/components/Panel.astro",
+      "role": "The Atlas container: kicker, title, drag handle, collapse, body"
+    },
+    "ProvenancePopover": {
+      "file": "src/components/ProvenancePopover.astro",
+      "role": "Provenance dot + evidence popover (the notation layer)"
+    },
+    "PwaHead": {
+      "file": "src/components/PwaHead.astro",
+      "role": "Shared head bits: offline/installable + app icons"
+    },
+    "ReminderRow": {
+      "file": "src/components/ReminderRow.astro",
+      "role": "One reminder line (print duplicates it outside the panel)"
+    },
+    "Reminders": {
+      "file": "src/components/Reminders.astro",
+      "role": "Reminders / notable-items scratchpad markup"
+    },
+    "ToolsScreen": {
+      "file": "src/components/ToolsScreen.astro",
+      "role": "The Tools station — last stop on every guide rail"
+    },
+    "TransitLinks": {
+      "file": "src/components/TransitLinks.astro",
+      "role": "'Get me there' — one-tap deep links to a verified coordinate"
+    },
+    "TripKit": {
+      "file": "src/components/TripKit.astro",
+      "role": "Trip kit checklist"
+    },
+    "TripSplit": {
+      "file": "src/components/TripSplit.astro",
+      "role": "Trip cost-split markup"
+    }
   },
   "blocks": {
-    "BudgetBlock": { "file": "src/components/blocks/BudgetBlock.astro", "role": "Budget section" },
-    "DaysBlock": { "file": "src/components/blocks/DaysBlock.astro", "role": "Day-by-day itinerary section" },
-    "DivergencesBlock": { "file": "src/components/blocks/DivergencesBlock.astro", "role": "Divergences section" },
-    "HabitatsBlock": { "file": "src/components/blocks/HabitatsBlock.astro", "role": "Habitats rotation card grid" },
-    "HolidaysBlock": { "file": "src/components/blocks/HolidaysBlock.astro", "role": "Public-holiday section (build-time data)" },
-    "InfoGridBlock": { "file": "src/components/blocks/InfoGridBlock.astro", "role": "Icon-labeled fact-card grid" },
-    "ListBlock": { "file": "src/components/blocks/ListBlock.astro", "role": "Generic list section" },
-    "MapBlock": { "file": "src/components/blocks/MapBlock.astro", "role": "Area map (OSM embed default)" },
-    "PanelBlock": { "file": "src/components/blocks/PanelBlock.astro", "role": "Lead + fold panel section" },
-    "ProseBlock": { "file": "src/components/blocks/ProseBlock.astro", "role": "Prose section with lead split" },
-    "RaidBlock": { "file": "src/components/blocks/RaidBlock.astro", "role": "Collapsible per-boss counter tables" },
-    "RoutesBlock": { "file": "src/components/blocks/RoutesBlock.astro", "role": "Transit legs as a journey line" },
-    "SightsBlock": { "file": "src/components/blocks/SightsBlock.astro", "role": "Sights repository section" },
-    "TierListBlock": { "file": "src/components/blocks/TierListBlock.astro", "role": "Ranked chip groups" },
-    "VenueBlock": { "file": "src/components/blocks/VenueBlock.astro", "role": "Food/venue repository section" },
-    "WeatherBlock": { "file": "src/components/blocks/WeatherBlock.astro", "role": "Weather strip mount shell" }
+    "BudgetBlock": {
+      "file": "src/components/blocks/BudgetBlock.astro",
+      "role": "Budget section"
+    },
+    "DaysBlock": {
+      "file": "src/components/blocks/DaysBlock.astro",
+      "role": "Day-by-day itinerary section"
+    },
+    "DivergencesBlock": {
+      "file": "src/components/blocks/DivergencesBlock.astro",
+      "role": "Divergences section"
+    },
+    "HabitatsBlock": {
+      "file": "src/components/blocks/HabitatsBlock.astro",
+      "role": "Habitats rotation card grid"
+    },
+    "HolidaysBlock": {
+      "file": "src/components/blocks/HolidaysBlock.astro",
+      "role": "Public-holiday section (build-time data)"
+    },
+    "InfoGridBlock": {
+      "file": "src/components/blocks/InfoGridBlock.astro",
+      "role": "Icon-labeled fact-card grid"
+    },
+    "ListBlock": {
+      "file": "src/components/blocks/ListBlock.astro",
+      "role": "Generic list section"
+    },
+    "MapBlock": {
+      "file": "src/components/blocks/MapBlock.astro",
+      "role": "Area map (OSM embed default)"
+    },
+    "PanelBlock": {
+      "file": "src/components/blocks/PanelBlock.astro",
+      "role": "Lead + fold panel section"
+    },
+    "ProseBlock": {
+      "file": "src/components/blocks/ProseBlock.astro",
+      "role": "Prose section with lead split"
+    },
+    "RaidBlock": {
+      "file": "src/components/blocks/RaidBlock.astro",
+      "role": "Collapsible per-boss counter tables"
+    },
+    "RoutesBlock": {
+      "file": "src/components/blocks/RoutesBlock.astro",
+      "role": "Transit legs as a journey line"
+    },
+    "SightsBlock": {
+      "file": "src/components/blocks/SightsBlock.astro",
+      "role": "Sights repository section"
+    },
+    "TierListBlock": {
+      "file": "src/components/blocks/TierListBlock.astro",
+      "role": "Ranked chip groups"
+    },
+    "VenueBlock": {
+      "file": "src/components/blocks/VenueBlock.astro",
+      "role": "Food/venue repository section"
+    },
+    "WeatherBlock": {
+      "file": "src/components/blocks/WeatherBlock.astro",
+      "role": "Weather strip mount shell"
+    }
   },
   "features": {
-    "atlas": { "dir": "src/features/atlas", "role": "Hub atlas surface" },
-    "budget-pact": { "dir": "src/features/budget-pact", "role": "Budget pact" },
-    "change-request": { "dir": "src/features/change-request", "role": "Guide change-request flow" },
-    "exports": { "dir": "src/features/exports", "role": "Section flattening / export model" },
-    "field-tools": { "dir": "src/features/field-tools", "role": "In-field tools (SOS, address card, focus today)" },
-    "firebase": { "dir": "src/features/firebase", "role": "Config-gated sync backend" },
-    "guide-rail": { "dir": "src/features/guide-rail", "role": "The R5 station rail navigation" },
-    "hub": { "dir": "src/features/hub", "role": "Hub sections model" },
-    "intake-questions": { "dir": "src/features/intake-questions", "role": "New-guide intake question model" },
-    "itinerary": { "dir": "src/features/itinerary", "role": "Itinerary interactions incl. story mode" },
-    "learnings": { "dir": "src/features/learnings", "role": "Learnings capture behaviour" },
-    "live-data": { "dir": "src/features/live-data", "role": "Live data (weather etc.) client" },
-    "maps": { "dir": "src/features/maps", "role": "Map embeds and pins" },
-    "mobile-nav": { "dir": "src/features/mobile-nav", "role": "Bottom mobile nav + sheet" },
-    "palette": { "dir": "src/features/palette", "role": "Command palette (Ctrl/Cmd+K)" },
-    "panel": { "dir": "src/features/panel", "role": "Panel collapse/reorder behaviour" },
-    "pipeline-progress": { "dir": "src/features/pipeline-progress", "role": "Research pipeline progress surface" },
-    "reminders": { "dir": "src/features/reminders", "role": "Reminders behaviour + gateway" },
-    "route-opt": { "dir": "src/features/route-opt", "role": "Day route optimizer sheet" },
-    "share": { "dir": "src/features/share", "role": "Share sheet" },
-    "sos": { "dir": "src/features/sos", "role": "Emergency SOS sheet" },
-    "trip-kit": { "dir": "src/features/trip-kit", "role": "Trip kit behaviour" },
-    "trip-split": { "dir": "src/features/trip-split", "role": "Cost split behaviour" },
-    "trip-tools": { "dir": "src/features/trip-tools", "role": "Tools station model" }
+    "atlas": {
+      "dir": "src/features/atlas",
+      "role": "Hub atlas surface"
+    },
+    "budget-pact": {
+      "dir": "src/features/budget-pact",
+      "role": "Budget pact"
+    },
+    "change-request": {
+      "dir": "src/features/change-request",
+      "role": "Guide change-request flow"
+    },
+    "exports": {
+      "dir": "src/features/exports",
+      "role": "Section flattening / export model"
+    },
+    "field-tools": {
+      "dir": "src/features/field-tools",
+      "role": "In-field tools (SOS, address card, focus today)"
+    },
+    "firebase": {
+      "dir": "src/features/firebase",
+      "role": "Config-gated sync backend"
+    },
+    "guide-rail": {
+      "dir": "src/features/guide-rail",
+      "role": "The R5 station rail navigation"
+    },
+    "hub": {
+      "dir": "src/features/hub",
+      "role": "Hub sections model"
+    },
+    "intake-questions": {
+      "dir": "src/features/intake-questions",
+      "role": "New-guide intake question model"
+    },
+    "itinerary": {
+      "dir": "src/features/itinerary",
+      "role": "Itinerary interactions incl. story mode"
+    },
+    "learnings": {
+      "dir": "src/features/learnings",
+      "role": "Learnings capture behaviour"
+    },
+    "live-data": {
+      "dir": "src/features/live-data",
+      "role": "Live data (weather etc.) client"
+    },
+    "maps": {
+      "dir": "src/features/maps",
+      "role": "Map embeds and pins"
+    },
+    "mobile-nav": {
+      "dir": "src/features/mobile-nav",
+      "role": "Bottom mobile nav + sheet"
+    },
+    "palette": {
+      "dir": "src/features/palette",
+      "role": "Command palette (Ctrl/Cmd+K)"
+    },
+    "panel": {
+      "dir": "src/features/panel",
+      "role": "Panel collapse/reorder behaviour"
+    },
+    "pipeline-progress": {
+      "dir": "src/features/pipeline-progress",
+      "role": "Research pipeline progress surface"
+    },
+    "reminders": {
+      "dir": "src/features/reminders",
+      "role": "Reminders behaviour + gateway"
+    },
+    "route-opt": {
+      "dir": "src/features/route-opt",
+      "role": "Day route optimizer sheet"
+    },
+    "share": {
+      "dir": "src/features/share",
+      "role": "Share sheet"
+    },
+    "sos": {
+      "dir": "src/features/sos",
+      "role": "Emergency SOS sheet"
+    },
+    "trip-kit": {
+      "dir": "src/features/trip-kit",
+      "role": "Trip kit behaviour"
+    },
+    "trip-split": {
+      "dir": "src/features/trip-split",
+      "role": "Cost split behaviour"
+    },
+    "trip-tools": {
+      "dir": "src/features/trip-tools",
+      "role": "Tools station model"
+    }
   },
   "patterns": {
     "pill": {
       "contract": "Pressable controls: border-radius 999px, >=44px target, token colours only",
-      "gates": ["scripts/check-drift.mjs (binary radius)", "tests/visual/a11y.spec.ts (44px floor)", "src/styles/color-scale.test.ts"],
+      "gates": [
+        "scripts/check-drift.mjs (binary radius)",
+        "tests/visual/a11y.spec.ts (44px floor)",
+        "src/styles/color-scale.test.ts"
+      ],
       "note": "~130 per-instance classes; instances are governed by the gates, not enumerated here. Class-level convergence is D7 migration work, not a registry requirement."
     },
     "card": {
       "contract": "Content/evidence containers: radius 0, var(--card) ground, var(--rule) hairline",
-      "gates": ["scripts/check-drift.mjs (binary radius)", "src/styles/color-scale.test.ts"]
+      "gates": [
+        "scripts/check-drift.mjs (binary radius)",
+        "src/styles/color-scale.test.ts"
+      ]
     },
     "overlay": {
       "contract": "Full-screen scrims/sheets: rgba(var(--shadow-rgb),alpha) ground; roles today: modal backdrop (~.45), bottom sheet (.6-.75), photo lightbox (.92)",
-      "gates": ["src/styles/color-scale.test.ts"],
+      "gates": [
+        "src/styles/color-scale.test.ts"
+      ],
       "note": "z-index values predate the --z-* scale; retrofit is tracked in base.css's M3 note. Scrim-alpha role tokens are a D6 punch-list candidate."
     },
     "micro-label": {
       "contract": "Uppercase tracked labels: --text-micro/--tracking-micro, --font-data",
-      "gates": ["src/styles/type-scale.test.ts"]
+      "gates": [
+        "src/styles/type-scale.test.ts"
+      ]
     }
   }
 }

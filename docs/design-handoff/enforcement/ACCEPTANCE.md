@@ -1,5 +1,9 @@
 # Acceptance checks
 
+> **LEGACY R4/R5 IMPLEMENTATION REFERENCE — NOT CURRENT DESIGN AUTHORITY.**
+> These rules describe the design that shipped at that time. D6 may keep, revise, or retire them.
+> Current authority: `docs/reference/design-system.md`.
+
 **Standing rule: the prototype is the floor.** These gates verify a faithful port of
 `Waypoint Overdrive v2` and `Waypoint Mobile` as they stand — not an interpretation of
 them. Any intentional deviation must be listed, with its reason, in the phase report;
