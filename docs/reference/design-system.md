@@ -632,6 +632,16 @@ and fallback should use compact structured rows, icons, map fragments, and hiera
 long prose. The arrival surface should optimize for an exhausted traveler who still needs complete
 context, not for visual minimalism as an end in itself.
 
+**D6-32 — Increase the size of information atoms before increasing information count.**  
+Waypoint should not solve unused space by adding more cards, labels, or secondary widgets. When a
+screen has room, increase the physical prominence of the information already judged important:
+larger type, larger semantic icons, larger status markers, more legible map snippets, stronger
+spacing between operational rows, and larger field-safe targets.
+
+Dense screens may still carry substantial information, but the density must come from well-structured
+large atoms rather than miniature dashboard typography. Especially on mobile and arrival/active-trip
+surfaces, glanceability and touchability outrank decorative completeness.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
