@@ -2,7 +2,7 @@
 
 Status: **CURRENT DESIGN AUTHORITY — D6 RECONCILIATION IN PROGRESS**  
 Owner: Carlo.  
-Last reconciled: 2026-09-01.
+Last reconciled: 2026-09-02.
 
 This document is the **single human-readable authority for Waypoint visual and interaction
 design**. No file under `docs/design-handoff/`, no prototype, screenshot, archived redesign,
@@ -272,14 +272,31 @@ claim design authority.
 
 ---
 
-## 11. D6 reconciliation — unresolved decisions
+## 11. D6 reconciliation — decision ledger
+
+### Resolved
+
+**D6-00 — No generic Tools/More destination.**  
+Waypoint will not reserve permanent navigation space for a generic utility bucket. SOS remains
+global; routing belongs with itinerary/spatial context; reminders/readiness utilities surface
+where relevant. Split remains under separate review because it has demonstrated direct trip
+utility.
+
+**D6-01 — Stable primary navigation; retire adaptive promotion.**  
+Primary destinations keep a stable identity and stable relative order. Waypoint will not
+automatically promote/reorder content groups or tools based on device-local usage. Responsive
+layouts may change the navigation *presentation* (for example bottom bar vs rail/sidebar), but
+not the destination model. Remembering a user's last location inside a destination is allowed;
+rewriting the navigation itself is not. D7 must remove the adaptive/promoted mobile-nav logic
+and its supporting UX debt once the final destination model is approved.
+
+### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
 at a time after evidence/recommendation review:
 
-- final persistent navigation architecture;
-- whether Split is top-level or contextual (generic Tools/More is **not** assumed);
-- adaptive/promoted mobile navigation retirement;
+- final persistent navigation architecture and labels;
+- whether Split is top-level or contextual;
 - panel drag/reorder;
 - story-mode itinerary;
 - global swipe navigation;
