@@ -487,6 +487,27 @@ Desktop may support trip overview, focused-day, and selected-stop states within 
 workbench, but these are views of the same itinerary rather than separate modes with divergent
 content.
 
+**D6-21 — Desktop spatial workspaces use responsive, user-adjustable panes.**  
+Desktop Map and Itinerary compositions must not hard-code a permanent 50/50 split. Where a map
+shares the canvas with itinerary, Guide, cluster, or place detail, the panes should behave like a
+modern application workspace: responsive to available width, user-resizable where practical, and
+able to collapse/expand without losing the underlying state. The system should preserve sensible
+minimum widths, keyboard/accessibility behavior, and a recoverable default layout rather than
+allowing unusable pane sizes. Intermediate widths may automatically rebalance or stack when a
+split composition no longer serves the task.
+
+**D6-22 — Responsive hybrid is the default interaction model, not the exception.**  
+When one semantic object is reached from different device classes or contexts, Waypoint should
+prefer responsive sibling treatments over separate product concepts. Mobile may use sheets,
+focused pages, and progressive disclosure; desktop may use side panes, persistent spatial context,
+and richer simultaneous views. The underlying object, actions, facts, and identity remain the
+same. A fixed single-mode treatment should be chosen only when responsive adaptation would make
+the interaction less clear, less accessible, or materially less reliable.
+
+Canonical place detail follows this rule: mobile opens a useful bottom sheet that can expand into
+full detail; desktop opens a contextual side pane that preserves Map/Itinerary context and can
+promote into the full editorial detail surface when needed.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
