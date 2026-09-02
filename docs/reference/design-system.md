@@ -386,6 +386,21 @@ exact replacement is a visual-design decision to validate in polished Korea mock
 replaces the rail must preserve orientation, direct access, keyboard/accessibility support, and
 deep linking without reintroducing tab/pill clutter.
 
+**D6-13 — City chapters are map-forward on desktop and map-assisted on mobile.**  
+For geography-rich Guide chapters, desktop opens into a synchronized split composition: a
+persistent spatial map occupies roughly half the canvas while the adjacent content pane presents
+the city's itinerary context, semantic clusters, and selected-place detail. Map pins, clusters,
+filters, itinerary references, and content selection are one shared state; selecting either side
+updates the other. This is inspired by proven map+itinerary planning patterns but remains
+Waypoint-specific through semantic clustering, verified context, and destination identity.
+
+Mobile does not shrink the desktop split view. It uses a concise city landing (the approved
+location-landing model) with a compact map hero showing pinned geography plus clear cluster/activity
+entry points below. The traveler can expand into a full-screen Map or switch to a list/cluster
+view, but the landing itself preserves orientation and decision support. Avoid pin-only overload,
+stacked navigation bars, and requiring the user to interpret a dense map before meaningful
+choices are visible.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
