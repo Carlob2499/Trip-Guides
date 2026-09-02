@@ -316,6 +316,19 @@ but the dock is enhancement only: no gesture-only dependency, no changed order/m
 any accessibility, browser, viewport, reduced-motion, or implementation uncertainty falls
 back to the standard bottom bar.
 
+**D6-06 — Responsive hero siblings; desktop is the showcase surface.**  
+Waypoint uses one Atlas/cover concept with different responsive compositions. Mobile and tablet
+prioritize field operation: focused Atlas, immediate trip context, pinned-area shortcuts, and
+minimal chrome. Desktop may be substantially more expressive because it is primarily a planning,
+sharing, and newcomer-facing surface: a large stylized globe/Atlas, richer spatial transitions,
+destination imagery, pinned places, and simultaneous trip context may coexist when they remain
+fast, legible, and navigable. This is not a separate product and never changes factual content
+or destination meaning by width.
+
+Desktop spectacle must demonstrate Waypoint's specificity rather than imitate generic AI
+aesthetics. Geographic continuity, real trip structure, verified information, destination
+identity, and evidence are the differentiators. Mobile field priority still wins any conflict.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
