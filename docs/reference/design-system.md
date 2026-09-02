@@ -357,6 +357,20 @@ places rather than forcing the whole Guide into interest-first categories. The V
 must preserve cohesion and avoid duplicating content that belongs canonically in Trip, Itinerary,
 Map, or Split.
 
+**D6-11 — Guide opens to overview by default; active trips may resume relevant place.**  
+The Guide destination defaults to the destination overview (for Korea: the Korea overview with
+Seoul, Daejeon, Busan, and Essentials entry points). During an active trip, Guide may instead
+resume the traveler’s relevant/current chapter when strong trip context exists, such as the
+active itinerary day, current trip segment, or the traveler’s last Guide location. This is a
+contextual convenience, not a different information architecture. The overview remains one tap
+away and is the canonical default before travel, after travel, on first entry, or when context is
+ambiguous. Do not require GPS/location permission for this behavior; itinerary/trip state and
+explicit user navigation are sufficient.
+
+On mobile, only one local Guide-navigation level is persistently visible at a time. Global
+navigation remains Trip · Itinerary · Map · Guide · Split; deeper clusters are exposed through
+content and direct links rather than stacked tab bars.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
