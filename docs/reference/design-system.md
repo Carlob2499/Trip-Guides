@@ -426,6 +426,18 @@ Firebase is reserved for state the travel party intentionally shares for a speci
 Individual presentation preferences remain local to the device/browser. Existing guide room
 identity and historical shared data must never be rotated or migrated silently.
 
+**D6-17 — Retire voting, Trip Kit, and shared-readiness concepts; keep Trip Learnings distinct.**  
+Waypoint does not carry a group-voting feature, a generic Trip Kit surface, or a shared-readiness
+system. Do not resurrect these concepts under new labels during implementation.
+
+Trip Learnings remains a distinct traveler-facing surface/tab for the trip's reality layer. It
+collects and tallies actual issues, gripes, misses, friction, and Plan-versus-Actual observations
+from the trip, then presents them as a coherent post-trip record. Learnings may use Firebase for
+shared trip feedback, but it is not the same thing as technical client-error reporting.
+
+Technical error reporting, where retained, is infrastructure only: it records app failures for
+maintenance and must never appear as trip feedback, traveler learnings, or itinerary content.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
