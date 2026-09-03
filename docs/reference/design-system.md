@@ -803,7 +803,6 @@ Only the following still require product/design judgment. Everything else is eit
 above or is implementation detail unless a prototype exposes a real usability problem:
 
 - persistent/yielding mobile chrome behavior outside the already-locked five-destination fallback;
-- provenance/verification visual treatment;
 - whether any global swipe gesture should exist outside the Itinerary day deck;
 - whether legacy story mode survives as a secondary Itinerary presentation;
 - final geometry/radius system if implementation reveals inconsistency;
