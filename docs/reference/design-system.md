@@ -737,23 +737,33 @@ opens the selected day's itinerary objects in the Map workspace. A dominant oper
 valuable. If no day-level shortcut materially helps the traveler, leave the slot empty rather than
 adding decorative chrome.
 
+**D6-38 — Itinerary motion is a first-class product behavior, not decorative polish.**  
+Mobile Itinerary should feel like progression through a journey rather than a static card list. Day
+swipes, active-stop focus, route/timeline movement, map/photo expansion, and collapse of secondary
+chrome should preserve spatial and temporal continuity. The current stop may become visually dominant
+while completed/upcoming stops compress, and the Now state behaves as a temporal cursor rather than
+a detached ornament.
+
+Desktop motion should reinforce the temporal-spatial workbench: timeline selection, map focus,
+resizable panes, route highlighting, and contextual inspectors transition as one synchronized system.
+Aim for reliably smooth 60 fps behavior and take advantage of higher-refresh displays where available,
+without promising a literal frame rate. Reduced-motion and constrained-device modes must retain all
+state changes with substantially reduced animation. Avoid cinematic flourishes that delay action.
+
 ### Unresolved
 
-These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
-at a time after evidence/recommendation review:
+Only the following still require product/design judgment. Everything else is either already locked
+above or is implementation detail unless a prototype exposes a real usability problem:
 
-- persistent mobile chrome behavior (including yielding/scroll-reactive chrome);
-- whether Split remains top-level after its dedicated utility review;
-- panel drag/reorder;
-- story-mode itinerary;
-- global swipe navigation;
-- yielding/scroll-reactive chrome;
-- final geometry/radius system;
+- persistent/yielding mobile chrome behavior outside the already-locked five-destination fallback;
 - provenance/verification visual treatment;
-- role of Painted Atlas/living covers and ambient motion;
-- cartographic ornament versus functional geography;
-- command palette versus traveler-facing global Search;
+- whether any global swipe gesture should exist outside the Itinerary day deck;
+- whether legacy story mode survives as a secondary Itinerary presentation;
+- final geometry/radius system if implementation reveals inconsistency;
 - component/pattern cull and migration order.
 
-Until a decision is recorded, current behavior may remain shipped but is **not automatically
-future design law**.
+The following are no longer unresolved and must not be re-litigated without new evidence:
+Split remains a top-level destination; Search is traveler-facing context-first search rather than a
+developer command palette; Atlas uses flat-first cartographic/topographic treatment with restrained
+ambient motion; and cartographic ornament is subordinate to functional geography.
+
