@@ -854,6 +854,16 @@ route data does not support them.
 This Denmark check does not reopen the locked Korea decisions; it clarifies the implementation
 contract needed for those decisions to generalize.
 
+**D6-47 — Atlas does not use synthetic trip-health/progress statuses.**  
+Atlas should not label trips or destinations with generic states such as `On Track`, `Off Track`,
+or similar health/progress judgments unless Waypoint has a real, explicit domain signal that justifies
+them. Dates, lifecycle state (upcoming/active/completed), alerts, and concrete readiness/action items
+may appear when they are true; synthetic trip-health scoring does not.
+
+The final Atlas sanity pass also reaffirms the already-locked composition: the globe/map is the primary
+mobile and desktop surface. Destination cards/lists are secondary browse/accessibility surfaces and
+must not replace the globe with a conventional trip dashboard.
+
 ### Remaining implementation decisions
 
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
