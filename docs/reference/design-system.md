@@ -906,6 +906,36 @@ manifest is excluded from the mockup unless it is first called out as a proposed
 explicitly approved. If the image generator introduces an unapproved control or feature anyway, the
 render is non-authoritative and must be discarded rather than interpreted as a product decision.
 
+**D6-51 — Google Maps is Waypoint's preferred connected map substrate; live navigation is delegated to the Maps app.**  
+When online and configured, map-bearing Waypoint surfaces should use the repository's Google Maps
+JavaScript integration rather than a decorative/faux map. OpenStreetMap remains the no-key fallback
+and must remain usable whenever Google Maps is unavailable, unconfigured, over quota, or fails to
+initialize. Mockups should depict Google Maps whenever they are representing the normal connected
+state; OSM should appear only when deliberately demonstrating fallback/degraded behavior.
+
+Waypoint does not ask the research pipeline to predict minute-perfect live travel times. Research may
+store a verified or reasoned coarse estimate such as `≈30 min`, clearly marked approximate and
+subject to traffic/transit conditions. The traveler-facing action for the live answer is Google Maps:
+tap a stop, route, or Navigate action to open a universal Google Maps URL using verified coordinates
+(and a verified Google Place ID when available). On mobile this should hand off to the Google Maps app
+when installed, so current routing, traffic, transit, and turn-by-turn behavior come from the system
+built to provide them rather than from Waypoint's static research output.
+
+A future on-demand Routes API enhancement may update only the current/next leg inside Waypoint when
+that adds enough value to justify billing and complexity; it is not required for the September
+implementation. Until then, the in-app estimate should say, in effect, `≈30 min · check live` rather
+than impersonating a live ETA.
+
+Provider capability remains country-aware. Where Google Maps navigation is incomplete, Waypoint may
+offer a verified native-provider deep link alongside Google rather than pretending Google has parity.
+The existing South Korea Naver Map integration remains valid as a fallback until Google's full
+turn-by-turn rollout is actually available.
+
+Implementation reliability requirement: do not remove the OSM fallback until the Google map has
+successfully initialized. A failed Google SDK load must leave a usable map rather than a blank mount.
+Interactive third-party tiles remain online-only; cached written route steps, addresses, and verified
+place facts remain the offline safety net.
+
 ### Remaining implementation decisions
 
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
