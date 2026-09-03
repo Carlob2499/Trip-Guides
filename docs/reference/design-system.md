@@ -945,6 +945,30 @@ Each render remains subject to D6-50 feature-fidelity gating and the locked Wayp
 Do not spend time polishing presentation chrome or explaining every button. The goal is fast visual
 verification before implementation, not a second design project.
 
+**D6-53 — Guide supports reusable contextual knowledge modules linked deterministically to itinerary context.**  
+The Guide may contain compact, editorial reference modules such as `How to use the subway`,
+`Palace etiquette`, `How Korean BBQ works`, `T-money basics`, or other trip-specific how-to,
+transit, etiquette, culture, and practical-reference material. These are not generic SEO articles
+and must not become a parallel encyclopedia. Each module exists because the researched trip has a
+real use for it.
+
+The Composer is responsible for contextual placement. Research emits each knowledge module once,
+with stable identity plus explicit relevance metadata (for example trip phase, location scope,
+theme, and direct relationships to itinerary/place/event objects). Deterministic composition then
+projects the same canonical module into the Guide browse surface and, when useful, as a small
+contextual link from the relevant day, stop, arrival step, or Trip state. No runtime model should
+guess when an article is relevant.
+
+Contextual surfacing must stay sparse: normally no more than one or two high-value knowledge links
+per day/step, prioritized by immediate utility. Critical operational guidance may surface more
+prominently; ordinary background material remains in Guide/Search. The itinerary must not become an
+article feed.
+
+This model is intentionally compatible with the existing Composer facets (`theme`, `phase`,
+`rank`) but requires an additive relation layer during implementation so a module can point to
+canonical day/place/event IDs rather than relying on prose matching. One module, one canonical home,
+many contextual projections.
+
 ### Remaining implementation decisions
 
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
