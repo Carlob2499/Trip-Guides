@@ -785,6 +785,18 @@ Desktop may expose more of the ledger and settlement state simultaneously, but p
 balance-first hierarchy and quick-entry path. Post-trip, settlement remains the dominant state until
 all transfers are recorded; once settled, the hero state becomes `All settled`.
 
+**D6-42 — Provenance is quiet by default, with layered trust cues when risk or freshness matters.**  
+Waypoint should keep ordinary verified facts visually clean. Full source metadata is normally hidden
+behind a lightweight provenance affordance rather than repeated inline across every place, stop, or
+fact.
+
+Layered trust cues appear only when they materially help the traveler: freshness-sensitive facts may
+show a subtle checked/verified date; stale or uncertain facts receive a visible warning state; critical
+restrictions, closures, safety information, or other high-consequence changes receive stronger
+treatment. Tapping/clicking the provenance affordance reveals source, verified date, freshness/shelf
+life, uncertainty, and any relevant verification notes. The interface should preserve Waypoint's
+verification advantage without reading like an academic citation system.
+
 ### Unresolved
 
 Only the following still require product/design judgment. Everything else is either already locked
