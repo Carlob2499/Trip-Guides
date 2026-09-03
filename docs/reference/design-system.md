@@ -726,6 +726,17 @@ such as what worked, what surprised the traveler, and what they would change; it
 blank textarea as the only affordance. The survey may be launched from a prominent dismissible
 post-trip completion sheet and reopened later from Trip Learnings.
 
+**D6-37 — Mobile Itinerary header actions are contextual; no generic day-level Done control.**  
+The selected-day header must not carry a generic `Done` action simply to occupy the trailing slot.
+Completion state belongs to individual stops and Plan-vs-Actual. The trailing header slot is optional
+and should appear only for a genuinely useful day-level action.
+
+For ordinary multi-stop days, the preferred day-level action is a compact route/map control that
+opens the selected day's itinerary objects in the Map workspace. A dominant operational shortcut
+(such as a ticket/booking for a major timed event) may temporarily take that slot when it is more
+valuable. If no day-level shortcut materially helps the traveler, leave the slot empty rather than
+adding decorative chrome.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
