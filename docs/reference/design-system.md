@@ -936,6 +936,15 @@ successfully initialized. A failed Google SDK load must leave a usable map rathe
 Interactive third-party tiles remain online-only; cached written route steps, addresses, and verified
 place facts remain the offline safety net.
 
+**D6-52 — Final visual sanity pass uses one narrow mockup per review topic.**  
+The remaining review pass should batch several small, fast, surface-specific mockups rather than one
+large presentation board. Each mockup addresses one topic only, shows only the controls necessary to
+evaluate that topic, and omits explanatory callouts unless they are essential to the decision.
+
+Each render remains subject to D6-50 feature-fidelity gating and the locked Waypoint visual system.
+Do not spend time polishing presentation chrome or explaining every button. The goal is fast visual
+verification before implementation, not a second design project.
+
 ### Remaining implementation decisions
 
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
