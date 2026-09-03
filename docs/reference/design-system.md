@@ -750,6 +750,12 @@ Aim for reliably smooth 60 fps behavior and take advantage of higher-refresh dis
 without promising a literal frame rate. Reduced-motion and constrained-device modes must retain all
 state changes with substantially reduced animation. Avoid cinematic flourishes that delay action.
 
+**D6-39 — Mockups are review aids, not a serial design process.**  
+During the remaining reconciliation pass, decisions should be made from the product model, existing
+content, and design rules first. High-fidelity mockups are deferred until the major surfaces are
+locked. When a visual check is useful earlier, use a quick, narrow mockup only as a directional
+nudge rather than spending time polishing a full presentation board.
+
 ### Unresolved
 
 Only the following still require product/design judgment. Everything else is either already locked
