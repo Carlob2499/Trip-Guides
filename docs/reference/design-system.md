@@ -864,6 +864,21 @@ The final Atlas sanity pass also reaffirms the already-locked composition: the g
 mobile and desktop surface. Destination cards/lists are secondary browse/accessibility surfaces and
 must not replace the globe with a conventional trip dashboard.
 
+**D6-48 — Active Trip is a mission-control surface, not a generic travel dashboard.**  
+The final Trip sanity pass rejects generic dashboard drift. During an active trip, Trip should center
+the traveler's immediate operational state: what is happening now, what is next, critical vitals,
+nearby/proximity context, and only alerts or actions that are materially relevant.
+
+Do not reserve active-trip space for a persistent Travel Party card, generic Quick Actions, Saved
+items, generic readiness widgets, or an Add button merely because there is room. Shared-party state
+may surface contextually when it changes the next action, but it is not a default Trip module.
+
+Mobile should feel like mission control: strong trip/current-place imagery, one dominant next-step
+object, large structured vitals, proximity/route context, and state-correct actions such as Navigate,
+View in itinerary, Details, or Swap. Desktop may show more simultaneously, but must preserve the same
+hierarchy rather than turning the page into a grid of equally weighted cards. Generic labels such as
+View details, Add, or More actions are acceptable only when no more specific traveler action exists.
+
 ### Remaining implementation decisions
 
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
