@@ -894,6 +894,18 @@ Top-of-screen day controls may remain as secondary status/context, not as the pr
 mechanism. Desktop may keep explicit date controls near the header because pointer reach is not a
 constraint, but the mobile interaction should be optimized for one-handed use and fast switching.
 
+**D6-50 — Mockups are feature-fidelity gated against the repository.**  
+Every remaining mockup must be assembled from capabilities that actually exist in the repository or
+from behavior already explicitly approved in this D6 authority. A mockup may reorganize, resize,
+restyle, or progressively reveal those capabilities, but it must not invent buttons, modules,
+statuses, data, integrations, or actions merely to make the composition look complete.
+
+Before rendering a surface, build a small feature manifest from the shipped component/feature
+registry plus the relevant implementation files and content fixture. Any capability not on that
+manifest is excluded from the mockup unless it is first called out as a proposed new feature and
+explicitly approved. If the image generator introduces an unapproved control or feature anyway, the
+render is non-authoritative and must be discarded rather than interpreted as a product decision.
+
 ### Remaining implementation decisions
 
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
