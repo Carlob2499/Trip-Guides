@@ -714,6 +714,18 @@ an explicit `Add trip feedback` action. Structured answers feed objective aggreg
 post-trip learnings loop; private freeform remains private input for synthesis and is not rendered
 verbatim back into the public Learnings view.
 
+**D6-35 — Trip Feedback must be fast, prefilled, and one-task-at-a-time.**  
+The structured Trip Feedback survey remains three steps: ratings, Plan-vs-Actual, and private
+reflection. Completion should feel lightweight rather than administrative. Use large field-safe
+controls, preserve answers between steps, and prefill Plan-vs-Actual from itinerary check-off state.
+
+For the Plan-vs-Actual step, default to the smallest useful review set (for example skipped,
+uncertain, or changed stops) with an explicit way to review all planned stops. Only reveal a skip
+reason field when a stop is marked skipped. The reflection step should provide short optional prompts
+such as what worked, what surprised the traveler, and what they would change; it must not present a
+blank textarea as the only affordance. The survey may be launched from a prominent dismissible
+post-trip completion sheet and reopened later from Trip Learnings.
+
 ### Unresolved
 
 These are deliberately **not** inferred from previous iterations. Carlo will resolve them one
