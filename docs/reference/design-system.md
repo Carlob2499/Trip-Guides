@@ -819,17 +819,22 @@ Do not use horizontal swipes to move among Trip, Itinerary, Map, Guide, and Spli
 navigation remains explicit and tap-driven to avoid conflicts with maps, carousels, sheets, browser
 edge gestures, and other spatial interactions.
 
-**D6-45 — Retire Story Mode as a separate product surface; preserve its strongest interaction DNA in Itinerary.**  
-The legacy full-screen `Play the trip` / Story Mode is no longer a separate Waypoint destination or
-secondary itinerary mode. Its useful interaction ideas belong in the primary Itinerary: one-day-at-a-
-time focus on mobile, adjacent-day swipe/scrub, strong current-day/current-stop emphasis, spatially
-continuous motion, and reduced-motion-safe transitions.
+**D6-45 — Remove Story Mode entirely; do not preserve it as a design lineage.**  
+The legacy full-screen `Play the trip` / Story Mode is a retired feature, not a source of future
+product requirements. Waypoint does not need to preserve Story Mode's visual treatment, segmented
+rail, overlay model, swipe-to-play framing, or cinematic identity merely because they already exist.
 
-Retirement must be dependency-safe rather than a blind deletion. First move any non-Story consumers
-of Story-specific data onto neutral canonical itinerary data. Then remove the Story trigger, overlay,
-Story-only stylesheet/import, and Story-only JavaScript. Shared gesture/math utilities survive where
-the primary Itinerary still uses them. No replacement `cinematic playback` mode is in September
-scope.
+Any interaction that survives elsewhere must earn its place independently from the requirements of
+that surface. For example, Itinerary may still use adjacent-day swipe, current-day emphasis, or
+reduced-motion-safe transitions because those interactions are useful for Itinerary itself—not
+because they came from Story Mode.
+
+Retirement must still be dependency-safe. The current `#storyDays` payload has a non-Story consumer
+in `guide-ui.js` for timed-stop behavior, so that consumer must move to neutral canonical itinerary
+data before the Story payload disappears. After that, remove the `Play the trip` trigger, Story
+overlay/dialog code, Story-only stylesheet/import, Story-only JavaScript, Story-specific chrome
+blocking hooks, and obsolete tests/docs. Shared utilities remain only if another live feature uses
+them. No replacement Story/cinematic playback mode is planned.
 
 ### Unresolved
 
