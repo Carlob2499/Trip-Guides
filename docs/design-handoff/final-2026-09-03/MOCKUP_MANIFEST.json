@@ -1,7 +1,8 @@
 {
   "status": "frozen_reference_manifest",
   "date": "2026-09-03",
-  "authority_rule": "Images are subordinate to PRODUCT.md, docs/reference/design-system.md, docs/reference/motion.md, component registry, executable tokens/tests, and final surface notes.",
+  "authority_rule": "Visual references are subordinate to PRODUCT.md, docs/reference/design-system.md, docs/reference/motion.md, component registry, executable tokens/tests, and final surface notes.",
+  "reference_policy": "The included SVGs are sanitized redraws of the accepted composition ideas, not screenshots to clone. Earlier generated raster mockups remain excluded because they contain known drift.",
   "only_open_listed_images": true,
   "excluded_topics": {
     "atlas": "No image is included because available generated Atlas renders over-indexed on photoreal globes, fake destinations, sidebars, and palette drift. Implement D6-28 + motion doctrine + executable tokens directly.",
@@ -10,27 +11,28 @@
   },
   "images": [
     {
-      "path": "visual-references/itinerary-mobile-composition.jpg",
+      "path": "visual-references/itinerary-mobile-composition.svg",
       "topic": "Itinerary mobile",
       "authority": "composition_only",
       "allowed_signals": [
         "one day is the dominant mobile unit",
         "large readable timeline atoms",
-        "recognizable place imagery used as identity, not decoration",
+        "recognizable place imagery may identify a stop without overtaking the timeline",
         "expanded stop detail and map handoff",
-        "Plan-vs-Actual remains directly reachable"
+        "Plan-vs-Actual remains directly reachable",
+        "day switching lives in the thumb-zone rail/scrubber"
       ],
       "forbidden_signals": [
-        "blue/purple palette",
-        "top day deck/arrows as the primary switcher; final control belongs in thumb zone",
+        "treating the schematic art as production photography",
+        "top day deck/arrows as the primary switcher",
         "NOW floating button",
-        "invented Daejeon stops/times/hotels/transit",
+        "invented stops/times/hotels/transit",
         "generic DONE chips as design authority",
         "any fact not present in canonical content"
       ]
     },
     {
-      "path": "visual-references/map-responsive-composition.jpg",
+      "path": "visual-references/map-responsive-composition.svg",
       "topic": "Map",
       "authority": "composition_only",
       "allowed_signals": [
@@ -41,34 +43,36 @@
         "large readable selected-place atoms"
       ],
       "forbidden_signals": [
+        "shipping the schematic SVG map instead of Google Maps",
         "fake exact route or date data",
-        "Traffic Normal or other live traffic claims unless backed by live service",
+        "live traffic claims unless backed by a live service",
         "invented Notes/At-a-glance modules",
         "map layer controls not actually implemented/approved",
-        "fake pins/places",
-        "visual map imitation instead of the real Google Maps integration"
+        "fake pins/places"
       ]
     },
     {
-      "path": "visual-references/guide-place-detail-composition.jpg",
+      "path": "visual-references/guide-place-detail-composition.svg",
       "topic": "Guide place detail",
       "authority": "composition_only",
       "allowed_signals": [
         "large recognizable place image",
         "mobile and desktop are sibling compositions, not scaled copies",
         "high-value operational facts are visible before deeper prose",
-        "deeper detail remains progressively accessible"
+        "deeper detail remains progressively accessible",
+        "quiet provenance cue and direct map/itinerary continuity"
       ],
       "forbidden_signals": [
+        "treating the schematic palace drawing as a production asset",
         "ratings/review counts",
         "live open-now state unless WayPoint actually has a live source",
-        "Save/Share actions merely because drawn",
+        "Save/Share actions merely because another generated mockup drew them",
         "tab names or information architecture that conflicts with D6 Guide structure",
         "small hero treatment on Guide landing; final landing hero should be larger"
       ]
     },
     {
-      "path": "visual-references/split-responsive-composition.jpg",
+      "path": "visual-references/split-responsive-composition.svg",
       "topic": "Split",
       "authority": "composition_only",
       "allowed_signals": [
@@ -80,6 +84,7 @@
         "mobile remains simple and ledger-focused"
       ],
       "forbidden_signals": [
+        "treating decorative schematic scenery as a required asset",
         "Invite/travel-party UI",
         "fake travelers, dates, balances, amounts",
         "How it works panel",
@@ -89,14 +94,15 @@
       ]
     },
     {
-      "path": "visual-references/search-responsive-final.jpg",
+      "path": "visual-references/search-responsive-final.svg",
       "topic": "Search",
       "authority": "approved_layout_reference",
       "allowed_signals": [
         "desktop global search field is prominent in utility chrome",
         "mobile has expanded top search, compact scrolled access, and a focused overlay",
         "search remains available from any surface without becoming a destination",
-        "results are grouped by real WayPoint object type and current-trip context is prioritized"
+        "results are grouped by real WayPoint object type and current-trip context is prioritized",
+        "dismissal returns the traveler to the exact prior page/context"
       ],
       "forbidden_signals": [
         "Recent searches unless explicitly implemented",
