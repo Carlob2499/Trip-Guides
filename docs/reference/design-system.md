@@ -969,6 +969,35 @@ This model is intentionally compatible with the existing Composer facets (`theme
 canonical day/place/event IDs rather than relying on prose matching. One module, one canonical home,
 many contextual projections.
 
+**D6-54 — Guide differentiation: editorial discovery + structured utility + contextual projection.**  
+Current guide products point to a useful synthesis rather than a single model to copy. Waypoint
+should combine: neighborhood/location framing and strong editorial photography; official-style
+first-timer/practical guidance separated from perishable live data; map/list continuity; concise
+structured decision metadata (hours, price, restrictions, suitability/services where verified);
+curated discovery that can surface distinctive/less-obvious places; and one-tap continuity from
+Guide → Map/Itinerary/navigation.
+
+Waypoint's differentiation is the layer those products generally do not combine: verified provenance
+and shelf life, trip-specific prioritization, one canonical semantic object reused across surfaces,
+deterministic Composer links from knowledge modules to the exact days/places/events where they matter,
+offline-safe core guidance, and post-trip Learnings/Plan-vs-Actual evidence that can improve later
+research.
+
+Guide content architecture should therefore favor five durable families:
+1. **Location chapters** — geography/time spine (country → city → neighborhood/cluster).
+2. **Place/event references** — image-forward identity plus compact high-value facts, then dense detail.
+3. **Context modules** — how-to, transit, etiquette, food/culture, arrival, and other practical knowledge
+   written once and projected contextually through Composer relationships.
+4. **Curated discoveries** — distinctive optional places/experiences that fit the traveler, not generic
+   popularity rankings.
+5. **Live/perishable overlays** — weather, current closures/advisories/events, or other fast-changing
+   information kept visually/semantically separate from durable editorial knowledge.
+
+Avoid importing competitor failure modes: generic SEO listicles, anonymous popularity scores, huge
+review feeds, affiliate-driven hierarchy, broad article libraries unrelated to the current trip, or
+AI-written "local flavor" with no source. Guide should feel richer because relationships and utility
+increase, not because more prose is poured onto the page.
+
 ### Remaining implementation decisions
 
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
