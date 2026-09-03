@@ -836,16 +836,37 @@ overlay/dialog code, Story-only stylesheet/import, Story-only JavaScript, Story-
 blocking hooks, and obsolete tests/docs. Shared utilities remain only if another live feature uses
 them. No replacement Story/cinematic playback mode is planned.
 
-### Unresolved
+**D6-46 — Denmark adversarial check: the system must support flexible time and branched days.**  
+The Denmark completed-trip fixture is the required generalization check against the Korea-led design.
+It differs materially: nine days, five family travelers, Copenhagen/Malmö/Oslo, multiple days where
+the party splits into separate groups, and many itinerary times expressed as flexible windows
+(`morning`, `evening`, `from 11:30`) rather than a fully clocked schedule. Its post-trip evidence
+also shows mobility and step-free access can invalidate apparently short map distances.
 
-Only the following still require product/design judgment. Everything else is either already locked
-above or is implementation detail unless a prototype exposes a real usability problem:
+The accepted Itinerary model therefore must not require every stop to have an exact clock time or
+force a branched day into one fake linear route. Flexible windows and fixed anchors coexist, and a
+day may contain clearly labeled parallel group branches that reconverge at a shared anchor. Mobile
+keeps one day primary and renders branches as large, comprehensible sections rather than miniature
+lanes; desktop may show parallel temporal tracks when useful. Map/route UI must not equate geometric
+proximity with practical accessibility and must never invent step-free claims when the underlying
+route data does not support them.
 
-- final geometry/radius system if implementation reveals inconsistency;
-- component/pattern cull and migration order.
+This Denmark check does not reopen the locked Korea decisions; it clarifies the implementation
+contract needed for those decisions to generalize.
 
-The following are no longer unresolved and must not be re-litigated without new evidence:
-Split remains a top-level destination; Search is traveler-facing context-first search rather than a
-developer command palette; Atlas uses flat-first cartographic/topographic treatment with restrained
-ambient motion; and cartographic ornament is subordinate to functional geography.
+### Remaining implementation decisions
+
+There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
+a concrete usability or correctness failure.
+
+The remaining choices are implementation responsibilities:
+- normalize final geometry/radius tokens where the shipped component set is inconsistent;
+- cull/migrate duplicate or obsolete components and patterns without changing the locked behavior;
+- remove Story Mode dependency-safely;
+- preserve Denmark's flexible-time and branched-day behavior while implementing the new Itinerary.
+
+The following must not be re-litigated without new evidence: Split remains a top-level destination;
+Search is traveler-facing context-first search rather than a developer command palette; Atlas uses
+flat-first cartographic/topographic treatment with restrained ambient motion; and cartographic
+ornament is subordinate to functional geography.
 
