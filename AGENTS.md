@@ -4,6 +4,14 @@ Stacks on the global `~/.Codex/AGENTS.md`. Load repository detail only when the 
 
 ---
 
+## D6 frontend implementation freeze — September 2026
+
+For any WayPoint visual/frontend implementation, **before editing** read `docs/design-handoff/final-2026-09-03/FABLE5_IMPLEMENTATION_PROMPT.md` and follow its authority order. The D6 product/design decisions are frozen for implementation.
+
+Mockups are never feature truth. Open visual references only through `docs/design-handoff/final-2026-09-03/MOCKUP_MANIFEST.json`; the listed SVGs are sanitized composition references with explicit allowed/forbidden signals. Historical handoffs, prototypes, screenshots, and unlisted generated mockups must not override `PRODUCT.md`, `docs/reference/design-system.md`, the executable token system, or the final D6 handoff.
+
+---
+
 ## Core contract
 
 Waypoint is a field-first travel command center backed by a verification pipeline. Preserve four product properties: **Verified, Personal, Actionable, Honest**. Perishable facts need primary-source evidence + verification date; unknowns stay blank rather than guessed.
@@ -19,7 +27,7 @@ Optimize for **minimum context-to-correct-change**:
 ## Route by task
 
 - **New guide / factual research / recertification:** use `waypoint-guide-author`. New-guide and headless research keep the full frozen research stack; narrow factual edits load only affected guide/state + verification/continuity context.
-- **Astro / CSS / UI / layout:** use `waypoint-design` + affected source. Facts never change. `docs/reference/design-system.md` is authority; motion/registry are subordinate; handoffs/prototypes are history.
+- **Astro / CSS / UI / layout:** use `waypoint-design` + affected source. Facts never change. `docs/reference/design-system.md` is authority; motion/registry are subordinate; handoffs/prototypes are history except the explicitly frozen 2026-09-03 implementation package above, which is subordinate to those authorities.
 - **Pipeline V2 / validation / cutover:** SessionStart already injects the bounded `scripts/handoff-head.mjs` capsule. Use that first; open full `docs/handoff.md` only for deeper current evidence, then only the relevant `docs/pipeline v2/` authority. Do not load pipeline evidence for unrelated frontend work.
 - **Ownership/architecture ambiguity:** read `docs/reference/repo-map.md` and then the specific subsystem reference.
 - **Historical rationale:** use `CONTEXT.md` only when current code/docs do not explain the decision.
