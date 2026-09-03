@@ -756,6 +756,19 @@ content, and design rules first. High-fidelity mockups are deferred until the ma
 locked. When a visual check is useful earlier, use a quick, narrow mockup only as a directional
 nudge rather than spending time polishing a full presentation board.
 
+**D6-40 — Guide uses layered editorial reference composition.**  
+Guide should be beautiful enough to browse and precise enough to trust. The entry layer is strongly
+editorial and image-forward: destination hero, location-first chapters, map-assisted clusters, and
+recognizable place/event imagery. Dense operational detail is progressively revealed rather than
+front-loaded into long prose.
+
+Guide overview leads with destination identity and visual chapter navigation. City/location chapters
+use imagery, map context, and clusters to orient the traveler. Place cards carry a recognizable image
+when useful plus a small set of high-value facts or warnings. Canonical place detail holds the dense
+reference layer: hours, cost, restrictions, transit, booking, provenance/freshness, and deeper prose.
+On mobile, prioritize one large object at a time with large readable facts; on desktop, exploit width
+for richer editorial composition and contextual map/detail without turning Guide into a dashboard.
+
 ### Unresolved
 
 Only the following still require product/design judgment. Everything else is either already locked
