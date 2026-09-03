@@ -819,12 +819,23 @@ Do not use horizontal swipes to move among Trip, Itinerary, Map, Guide, and Spli
 navigation remains explicit and tap-driven to avoid conflicts with maps, carousels, sheets, browser
 edge gestures, and other spatial interactions.
 
+**D6-45 — Retire Story Mode as a separate product surface; preserve its strongest interaction DNA in Itinerary.**  
+The legacy full-screen `Play the trip` / Story Mode is no longer a separate Waypoint destination or
+secondary itinerary mode. Its useful interaction ideas belong in the primary Itinerary: one-day-at-a-
+time focus on mobile, adjacent-day swipe/scrub, strong current-day/current-stop emphasis, spatially
+continuous motion, and reduced-motion-safe transitions.
+
+Retirement must be dependency-safe rather than a blind deletion. First move any non-Story consumers
+of Story-specific data onto neutral canonical itinerary data. Then remove the Story trigger, overlay,
+Story-only stylesheet/import, and Story-only JavaScript. Shared gesture/math utilities survive where
+the primary Itinerary still uses them. No replacement `cinematic playback` mode is in September
+scope.
+
 ### Unresolved
 
 Only the following still require product/design judgment. Everything else is either already locked
 above or is implementation detail unless a prototype exposes a real usability problem:
 
-- whether legacy story mode survives as a secondary Itinerary presentation;
 - final geometry/radius system if implementation reveals inconsistency;
 - component/pattern cull and migration order.
 
