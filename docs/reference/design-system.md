@@ -809,12 +809,21 @@ Immersion may lean toward near-hidden behavior, but navigation must never become
 require the traveler to remember an invisible gesture. Reduced-motion mode preserves the same state
 changes without animated choreography.
 
+**D6-44 — Swipe gestures stay contextual; top-level destinations remain tap-driven.**  
+Waypoint should use swipe and drag gestures where they manipulate the object currently in view, not
+as a global transport mechanism between unrelated destinations. Itinerary may swipe between adjacent
+days; galleries may swipe between images; sheets may drag; Atlas and Map retain natural spatial
+gestures.
+
+Do not use horizontal swipes to move among Trip, Itinerary, Map, Guide, and Split. Top-level
+navigation remains explicit and tap-driven to avoid conflicts with maps, carousels, sheets, browser
+edge gestures, and other spatial interactions.
+
 ### Unresolved
 
 Only the following still require product/design judgment. Everything else is either already locked
 above or is implementation detail unless a prototype exposes a real usability problem:
 
-- whether any global swipe gesture should exist outside the Itinerary day deck;
 - whether legacy story mode survives as a secondary Itinerary presentation;
 - final geometry/radius system if implementation reveals inconsistency;
 - component/pattern cull and migration order.
