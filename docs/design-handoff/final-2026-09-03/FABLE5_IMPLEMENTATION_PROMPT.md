@@ -10,21 +10,22 @@ You are the implementation owner, not the product decision-maker.
 
 Before editing:
 1. `PRODUCT.md`
-2. `docs/reference/design-system.md`
-3. `docs/reference/motion.md`
-4. `docs/reference/component-registry.json`
-5. `src/styles/base.css`
-6. `src/lib/breakpoints.ts`
-7. `docs/reference/search-ui-final.md`
-8. `docs/reference/sos-ui-final.md`
-9. `docs/design-handoff/final-2026-09-03/README.md`
-10. `docs/design-handoff/final-2026-09-03/DRIFT_GUARD.md`
-11. `docs/design-handoff/final-2026-09-03/ACCEPTANCE_MATRIX.md`
-12. `docs/design-handoff/final-2026-09-03/MOCKUP_MANIFEST.json`
+2. `docs/design-handoff/final-2026-09-03/FINAL_DECISIONS.md` — binding late-review delta; it supersedes only the older clauses it explicitly names
+3. `docs/reference/design-system.md`
+4. `docs/reference/motion.md`
+5. `docs/reference/component-registry.json`
+6. `src/styles/base.css`
+7. `src/lib/breakpoints.ts`
+8. `docs/reference/search-ui-final.md`
+9. `docs/reference/sos-ui-final.md`
+10. `docs/design-handoff/final-2026-09-03/README.md`
+11. `docs/design-handoff/final-2026-09-03/DRIFT_GUARD.md`
+12. `docs/design-handoff/final-2026-09-03/ACCEPTANCE_MATRIX.md`
+13. `docs/design-handoff/final-2026-09-03/MOCKUP_MANIFEST.json`
 
-Only after those may you inspect the images in `docs/design-handoff/final-2026-09-03/visual-references/`.
+Only after those may you inspect the listed SVGs in `docs/design-handoff/final-2026-09-03/visual-references/`.
 
-Do not treat historical prototypes, old design handoffs, archived screenshots, generated boards, or any image not listed in the manifest as authority.
+Do not treat historical prototypes, old design handoffs, archived screenshots, raw generated boards, or any image not listed in the manifest as authority.
 
 ## 1. Operating rule
 
@@ -49,7 +50,7 @@ You do not have discretion to:
 - weaken offline, provenance, accessibility, or reduced-motion requirements;
 - resurrect retired Story/voting/Trip Kit/shared-readiness/Tools concepts.
 
-When a mockup conflicts with code/content/design authority, ignore the mockup.
+When a visual reference conflicts with code/content/design authority, ignore the visual reference. `FINAL_DECISIONS.md` resolves the known late-review contradictions so you do not need to ask the user about them again.
 
 ## 2. Core product architecture to implement
 
@@ -75,8 +76,8 @@ Work in dependency-safe vertical slices. Keep the site buildable after each slic
 
 ### A. Shared foundation
 - reconcile shell/navigation to frozen architecture;
-- use existing token/type system; no new palette;
-- establish responsive working-surface/immersive-background pattern;
+- use the existing sage/oxide token/type system; do not reinterpret older “Night Navy & Amber” prose as a re-theme;
+- establish responsive working-surface/immersive-background pattern from `FINAL_DECISIONS.md`;
 - consolidate duplicate/zombie primitives as they are touched;
 - preserve intermediate widths, keyboard, touch, safe areas, reduced motion.
 
@@ -124,7 +125,7 @@ Work in dependency-safe vertical slices. Keep the site buildable after each slic
 
 ### H. Split
 - do not rewrite the financial engine unnecessarily;
-- Recent Expenses + Add Expense are primary;
+- **Recent Expenses + Add Expense are primary**; older balance-first D6-41 wording is superseded;
 - four-question add flow: payer / purpose / amount / participants;
 - make split method visible on every row: Even / Exact / Shares / %;
 - preserve per-expense participant sets, validation, currency, payments, undo/search/filter behavior;
@@ -144,7 +145,7 @@ Work in dependency-safe vertical slices. Keep the site buildable after each slic
 - quiet always-available control;
 - open a compact sheet with verified emergency numbers and useful links;
 - preserve offline baked-in numbers, advisory behavior, and accessible focus handling;
-- no proactive triage workflow.
+- no proactive triage, responder orchestration, or help-center workflow.
 
 ### K. Provenance + degraded states
 - quiet provenance dot; detail on demand;
@@ -162,7 +163,9 @@ Work in dependency-safe vertical slices. Keep the site buildable after each slic
 
 Open `MOCKUP_MANIFEST.json` before any visual reference.
 
-Each image contains known generated drift. It is permitted only as a composition/interaction cue. Never copy:
+The raw generated mockup boards are deliberately not part of the implementation package because they contain known hallucinated content. The included SVGs are sanitized redraws that carry only approved composition signals.
+
+Never infer or add:
 - fake data;
 - fake buttons;
 - fake people;
@@ -196,7 +199,7 @@ Use South Korea as the primary visual/functional fixture and Denmark as the adve
 Do the work, do not stop to ask the user to restate decisions already recorded.
 
 Stop only for:
-- an actual contradiction between binding authorities that cannot be resolved from repository evidence;
+- an actual contradiction between binding authorities that remains unresolved after applying `FINAL_DECISIONS.md`;
 - a destructive migration with no safe compatibility path;
 - a genuinely new product decision not already covered.
 
