@@ -797,12 +797,23 @@ treatment. Tapping/clicking the provenance affordance reveals source, verified d
 life, uncertainty, and any relevant verification notes. The interface should preserve Waypoint's
 verification advantage without reading like an academic citation system.
 
+**D6-43 — Mobile chrome yields aggressively but remains instantly recoverable.**  
+Waypoint keeps the five-destination mobile navigation as the reliable fallback, but it should not
+permanently consume full-height screen space while the traveler is actively scrolling, zooming, or
+working inside an immersive surface.
+
+At rest, the full navigation is visible. During active interaction it may compress into a minimal
+strip/handle or substantially recede, especially in Atlas, Map, and Itinerary. A short upward scroll,
+edge interaction, or other obvious recovery gesture restores the full navigation immediately.
+Immersion may lean toward near-hidden behavior, but navigation must never become mysterious or
+require the traveler to remember an invisible gesture. Reduced-motion mode preserves the same state
+changes without animated choreography.
+
 ### Unresolved
 
 Only the following still require product/design judgment. Everything else is either already locked
 above or is implementation detail unless a prototype exposes a real usability problem:
 
-- persistent/yielding mobile chrome behavior outside the already-locked five-destination fallback;
 - whether any global swipe gesture should exist outside the Itinerary day deck;
 - whether legacy story mode survives as a secondary Itinerary presentation;
 - final geometry/radius system if implementation reveals inconsistency;
