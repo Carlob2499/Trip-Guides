@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900">
+  <rect width="1500" height="900" fill="#e3e7dc"/>
+  <defs><style>
+    .serif{font-family:Georgia,serif;fill:#0f141a}.sans{font-family:Arial,sans-serif;fill:#0f141a}.muted{fill:#3c4534}.accent{fill:#9c4421}.card{fill:#fbfcf6;stroke:#a9b39b;stroke-width:2}.label{font-size:18px;font-weight:700;letter-spacing:1px}.body{font-size:22px}.small{font-size:18px}
+  </style></defs>
+  <text x="42" y="55" class="serif" font-size="42" font-weight="700">Guide · place detail composition</text>
+  <text x="42" y="88" class="sans muted small">Large identity image → high-value verified facts → deeper reference. Guide landing uses an even larger destination hero.</text>
+
+  <rect x="40" y="120" width="930" height="720" rx="28" class="card"/>
+  <text x="70" y="165" class="sans label accent">DESKTOP · SELECTED PLACE</text>
+  <rect x="70" y="195" width="545" height="360" rx="18" fill="#b8c4ad"/>
+  <path d="M125 455h435M170 455v-118h340v118M130 337l210-95 210 95" fill="none" stroke="#3c4534" stroke-width="7"/>
+  <text x="342" y="525" class="sans muted small" text-anchor="middle">Repository image: Gyeonghoeru at Gyeongbokgung</text>
+  <text x="650" y="215" class="sans label accent">THE GRAND PALACE</text>
+  <text x="650" y="265" class="serif" font-size="42" font-weight="700">Gyeongbokgung</text>
+  <text x="650" y="308" class="sans body">₩3,000 adult</text>
+  <text x="650" y="346" class="sans body">09:00–18:30 · last entry 17:30</text>
+  <text x="650" y="384" class="sans body" fill="#7f4a07">Closed Tuesdays</text>
+  <text x="650" y="422" class="sans body">Hanbok: free entry</text>
+  <circle cx="910" cy="260" r="9" fill="#9c4421"/>
+  <text x="650" y="485" class="sans small muted">Quiet source cue opens verification detail.</text>
+
+  <line x1="70" y1="595" x2="940" y2="595" stroke="#a9b39b"/>
+  <text x="70" y="640" class="serif" font-size="30" font-weight="700">Why go</text>
+  <text x="70" y="681" class="sans body">The largest Joseon palace, with the changing-of-the-guard ceremony</text>
+  <text x="70" y="714" class="sans body">and Gyeonghoeru banquet hall over a lotus pond.</text>
+  <text x="70" y="775" class="sans body accent">Google Maps ↗</text>
+  <text x="250" y="775" class="sans body accent">Naver Map ↗</text>
+  <text x="430" y="775" class="sans body accent">View in itinerary</text>
+
+  <rect x="1030" y="120" width="405" height="720" rx="52" fill="#17120e"/>
+  <rect x="1046" y="138" width="373" height="684" rx="40" fill="#fbfcf6"/>
+  <text x="1075" y="180" class="sans label accent">MOBILE</text>
+  <rect x="1075" y="205" width="315" height="255" rx="20" fill="#b8c4ad"/>
+  <path d="M1110 395h245M1135 395v-90h195v90M1110 306l122-65 123 65" fill="none" stroke="#3c4534" stroke-width="5"/>
+  <text x="1075" y="508" class="serif" font-size="34" font-weight="700">Gyeongbokgung</text>
+  <text x="1075" y="548" class="sans body">₩3,000 · 09:00–18:30</text>
+  <text x="1075" y="582" class="sans body" fill="#7f4a07">Closed Tuesdays</text>
+  <rect x="1075" y="620" width="315" height="74" rx="18" fill="#ced5c4"/>
+  <text x="1095" y="652" class="sans small muted">Operational detail stays large</text>
+  <text x="1095" y="679" class="sans small muted">and readable one object at a time.</text>
+  <rect x="1075" y="725" width="150" height="56" rx="16" fill="#9c4421"/>
+  <text x="1150" y="760" class="sans small" fill="#fbfcf6" text-anchor="middle">Maps ↗</text>
+  <text x="1255" y="760" class="sans small accent">More detail ›</text>
+  <text x="750" y="875" class="sans muted small" text-anchor="middle">No ratings feed, no generic blog layout, no duplicated truth.</text>
+</svg>
