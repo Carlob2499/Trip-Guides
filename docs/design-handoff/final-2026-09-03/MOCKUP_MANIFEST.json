@@ -1,0 +1,112 @@
+{
+  "status": "frozen_reference_manifest",
+  "date": "2026-09-03",
+  "authority_rule": "Images are subordinate to PRODUCT.md, docs/reference/design-system.md, docs/reference/motion.md, component registry, executable tokens/tests, and final surface notes.",
+  "only_open_listed_images": true,
+  "excluded_topics": {
+    "atlas": "No image is included because available generated Atlas renders over-indexed on photoreal globes, fake destinations, sidebars, and palette drift. Implement D6-28 + motion doctrine + executable tokens directly.",
+    "trip": "No general Trip image is included because generated dashboards repeatedly introduced travel-party/readiness/progress widgets. Implement D6 lifecycle decisions directly.",
+    "sos": "No image is included because generated SOS boards repeatedly became proactive help-center/triage products. Implement docs/reference/sos-ui-final.md directly."
+  },
+  "images": [
+    {
+      "path": "visual-references/itinerary-mobile-composition.jpg",
+      "topic": "Itinerary mobile",
+      "authority": "composition_only",
+      "allowed_signals": [
+        "one day is the dominant mobile unit",
+        "large readable timeline atoms",
+        "recognizable place imagery used as identity, not decoration",
+        "expanded stop detail and map handoff",
+        "Plan-vs-Actual remains directly reachable"
+      ],
+      "forbidden_signals": [
+        "blue/purple palette",
+        "top day deck/arrows as the primary switcher; final control belongs in thumb zone",
+        "NOW floating button",
+        "invented Daejeon stops/times/hotels/transit",
+        "generic DONE chips as design authority",
+        "any fact not present in canonical content"
+      ]
+    },
+    {
+      "path": "visual-references/map-responsive-composition.jpg",
+      "topic": "Map",
+      "authority": "composition_only",
+      "allowed_signals": [
+        "real Google Maps dominates connected state",
+        "mobile map owns nearly the viewport with a contextual selection sheet",
+        "desktop map owns the workspace with contextual information beside it",
+        "Directions/navigation handoff is prominent",
+        "large readable selected-place atoms"
+      ],
+      "forbidden_signals": [
+        "fake exact route or date data",
+        "Traffic Normal or other live traffic claims unless backed by live service",
+        "invented Notes/At-a-glance modules",
+        "map layer controls not actually implemented/approved",
+        "fake pins/places",
+        "visual map imitation instead of the real Google Maps integration"
+      ]
+    },
+    {
+      "path": "visual-references/guide-place-detail-composition.jpg",
+      "topic": "Guide place detail",
+      "authority": "composition_only",
+      "allowed_signals": [
+        "large recognizable place image",
+        "mobile and desktop are sibling compositions, not scaled copies",
+        "high-value operational facts are visible before deeper prose",
+        "deeper detail remains progressively accessible"
+      ],
+      "forbidden_signals": [
+        "ratings/review counts",
+        "live open-now state unless WayPoint actually has a live source",
+        "Save/Share actions merely because drawn",
+        "tab names or information architecture that conflicts with D6 Guide structure",
+        "small hero treatment on Guide landing; final landing hero should be larger"
+      ]
+    },
+    {
+      "path": "visual-references/split-responsive-composition.jpg",
+      "topic": "Split",
+      "authority": "composition_only",
+      "allowed_signals": [
+        "immersive desktop outer background with distinct readable working surface",
+        "Recent Expenses is prominent",
+        "Add expense is immediately reachable",
+        "expense rows use reusable semantic icons",
+        "split method is visible at a glance",
+        "mobile remains simple and ledger-focused"
+      ],
+      "forbidden_signals": [
+        "Invite/travel-party UI",
+        "fake travelers, dates, balances, amounts",
+        "How it works panel",
+        "settlement/balance dominating over Recent Expenses + Add Expense",
+        "photo thumbnails for arbitrary expenses",
+        "new Decisions/budget analytics/collaboration features"
+      ]
+    },
+    {
+      "path": "visual-references/search-responsive-final.jpg",
+      "topic": "Search",
+      "authority": "approved_layout_reference",
+      "allowed_signals": [
+        "desktop global search field is prominent in utility chrome",
+        "mobile has expanded top search, compact scrolled access, and a focused overlay",
+        "search remains available from any surface without becoming a destination",
+        "results are grouped by real WayPoint object type and current-trip context is prioritized"
+      ],
+      "forbidden_signals": [
+        "Recent searches unless explicitly implemented",
+        "Popular this trip recommendations",
+        "Scan/Add",
+        "voice search",
+        "Notes/Food/Transit categories unless supported by semantic index",
+        "Search tips",
+        "fake result counts, dates, distance, people, ratings, or content"
+      ]
+    }
+  ]
+}
