@@ -7,34 +7,52 @@ This note clarifies the final reviewed presentation of the already-approved glob
 
 ## Core rule
 
-SOS is **not a page, destination, or tab**. It is a low-key but always-available global emergency action.
+SOS is **not a page, destination, tab, triage flow, help center, or proactive assistance system**. It is a low-key but always-available global emergency utility.
 
-The generated broad SOS dashboard/category mockup is non-authoritative and must not be implemented.
+The generated broad SOS dashboard/category mockups are non-authoritative and must not be implemented.
 
 ## Desktop
 
 - Keep SOS as a small persistent global utility control in top or side chrome.
 - It should be visually quieter than primary navigation and Search, while remaining unmistakable and reachable from every surface.
 - Activating it opens a compact modal or side sheet over the current context; it does not navigate to a standalone SOS page.
-- Do not show category dashboards, travel-party cards, generic help-center navigation, request-sent flows, or other invented emergency-service workflows.
 
 ## Mobile
 
 - Keep SOS always reachable from a compact top-header/global-chrome control or an equally reliable nav-adjacent emergency control.
 - It must not consume a sixth permanent destination slot in the five-item `Trip · Itinerary · Map · Guide · Split` navigation.
 - The resting affordance should be low-key enough not to dominate ordinary travel use, but use an unmistakable emergency icon/label and a field-safe touch target.
-- Activating SOS opens a dominant full-height emergency sheet with large controls.
+- Activating SOS opens a focused full-height sheet.
 
 ## Sheet hierarchy
 
-First layer, immediately visible:
-1. Police
-2. Fire / ambulance
-3. Current/base location or address context when WayPoint actually has it
+Keep the sheet deliberately simple:
 
-Then a clearly separated secondary urgent-help layer may expose only data WayPoint explicitly has and D6-25 already permits: hospital/urgent care, embassy/consulate, lost-passport guidance, base/hotel address, insurance/contact details, and critical phrases.
+1. verified local emergency numbers as large tap-to-call rows;
+2. concise labels for what each number is for;
+3. useful direct links already supported by the researched guide, when present;
+4. elevated official travel advisory only when the existing advisory logic says it is relevant;
+5. a short current/base-address line only when WayPoint already has reliable context and it materially helps.
 
-The sheet is a focused emergency action surface, not a generic help dashboard.
+For South Korea, preserve the repo-backed numbers:
+- 112 — Police
+- 119 — Fire / Ambulance
+- 1330 — Korea Travel Hotline
+- 1339 — medical line / nearest ER help
+
+## Explicitly reject
+
+Do not add unless separately approved and implemented:
+
+- medical/safety/travel-issue category dashboards;
+- symptom or triage questions;
+- built-in emergency-service dispatch;
+- group help requests;
+- automatic responder sharing;
+- contact-tree workflows;
+- request-sent confirmation flows;
+- generic safety/help-center content;
+- a dedicated SOS page/tab.
 
 ## Existing repository behavior to preserve
 
@@ -47,4 +65,4 @@ The sheet is a focused emergency action surface, not a generic help dashboard.
 
 ## Visual intent
 
-SOS should feel like emergency infrastructure: quiet until invoked, extremely clear once opened. Avoid immersive photography, decorative cards, broad category menus, or marketing-style reassurance content. Operational contrast and large readable targets take priority.
+SOS should feel like emergency infrastructure: quiet until invoked, extremely clear once opened. The purpose is essentially **numbers and useful links immediately available when needed**. Avoid immersive photography, decorative cards, broad category menus, or marketing-style reassurance content.
