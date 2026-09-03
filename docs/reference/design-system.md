@@ -879,6 +879,21 @@ View in itinerary, Details, or Swap. Desktop may show more simultaneously, but m
 hierarchy rather than turning the page into a grid of equally weighted cards. Generic labels such as
 View details, Add, or More actions are acceptable only when no more specific traveler action exists.
 
+**D6-49 — Mobile day switching is thumb-reachable, expressive, and not arrow-led.**  
+The mobile Itinerary must not rely on small top-of-screen previous/next arrow buttons as the primary
+way to change days. Day switching belongs in the thumb zone and should feel like moving through the
+trip, not paging a document.
+
+The preferred interaction is a persistent or scroll-yielding day scrubber/rail near the bottom of the
+content area, above the global navigation, with clear day labels and the selected day visually
+dominant. Horizontal drag/scrub and contextual swipe move between adjacent days; tapping a day jumps
+directly to it. The rail may compress while scrolling and expand when the traveler reaches for it,
+but the current day and nearby days remain obvious.
+
+Top-of-screen day controls may remain as secondary status/context, not as the primary navigation
+mechanism. Desktop may keep explicit date controls near the header because pointer reach is not a
+constraint, but the mobile interaction should be optimized for one-handed use and fast switching.
+
 ### Remaining implementation decisions
 
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
