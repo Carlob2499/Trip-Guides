@@ -11,13 +11,14 @@ This package exists to let Claude Fable 5 implement the approved WayPoint redesi
 Read and obey in this exact order:
 
 1. `PRODUCT.md` — product purpose, field-use priorities, factual/capability truth.
-2. `docs/reference/design-system.md` — binding visual, responsive, interaction, and D6 decision authority.
-3. `docs/reference/motion.md` — binding subordinate motion doctrine.
-4. `docs/reference/component-registry.json` — current shipped component/feature inventory; it is not a promise that obsolete R4/R5 compositions survive.
-5. `src/styles/base.css`, `src/lib/breakpoints.ts`, tests/gates — executable token, breakpoint, accessibility, and resilience truth.
-6. `docs/reference/search-ui-final.md` and `docs/reference/sos-ui-final.md` — final reviewed clarifications for those global utilities.
-7. This handoff package — implementation sequencing, drift controls, acceptance matrix.
-8. `visual-references/` — **reference only**, interpreted strictly through `MOCKUP_MANIFEST.json`.
+2. `docs/design-handoff/final-2026-09-03/FINAL_DECISIONS.md` — **binding late-review delta**. It supersedes only the specific older D6 clauses it names (notably palette interpretation, Split hierarchy, and SOS scope).
+3. `docs/reference/design-system.md` — binding visual, responsive, interaction, and D6 decision authority everywhere not narrowly superseded by `FINAL_DECISIONS.md`.
+4. `docs/reference/motion.md` — binding subordinate motion doctrine.
+5. `docs/reference/component-registry.json` — current shipped component/feature inventory; it is not a promise that obsolete R4/R5 compositions survive.
+6. `src/styles/base.css`, `src/lib/breakpoints.ts`, tests/gates — executable token, breakpoint, accessibility, and resilience truth. For palette literals, `FINAL_DECISIONS.md` + `base.css` resolve any older prose ambiguity.
+7. `docs/reference/search-ui-final.md` and `docs/reference/sos-ui-final.md` — final reviewed clarifications for those global utilities.
+8. This handoff package — implementation sequencing, drift controls, acceptance matrix.
+9. `visual-references/` — **reference only**, interpreted strictly through `MOCKUP_MANIFEST.json`.
 
 Historical redesign files, old handoffs, archived prototypes, generated boards, and screenshots not listed in `MOCKUP_MANIFEST.json` are **not implementation authority**.
 
@@ -63,11 +64,13 @@ Desktop may use destination imagery or cartographic atmosphere as an immersive o
 
 Mockups are **visual evidence, never feature truth**.
 
-For every included image:
+The package deliberately does **not** carry the raw generated mockup boards. They contained known hallucinated controls/data. Instead, `visual-references/` contains sanitized SVG redraws of only the approved composition signals.
+
+For every included reference:
 - copy only the qualities explicitly listed under `allowed_signals`;
 - ignore everything listed under `forbidden_signals`;
-- if an image conflicts with `PRODUCT.md`, `design-system.md`, executable tokens, or actual repository capability, the image loses;
-- do not “complete” a mockup by implementing decorative controls or invented data.
+- if a visual conflicts with `PRODUCT.md`, `FINAL_DECISIONS.md`, `design-system.md`, executable tokens, or actual repository capability, the visual loses;
+- do not “complete” a reference by implementing decorative controls or invented data.
 
 See `MOCKUP_MANIFEST.json` and `DRIFT_GUARD.md`.
 
