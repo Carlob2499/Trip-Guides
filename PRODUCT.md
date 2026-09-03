@@ -88,9 +88,13 @@ Technical constraints that bind future work:
 
 - **Static site.** Astro, prebuilt, served by GitHub Pages under a base path — every internal
   `/`-href must go through `import.meta.env.BASE_URL`.
-- **$0 API cost.** Paid travel APIs are rejected outright. Free, official sources only.
-  Google Places' `place_id` is the one field cacheable indefinitely; nothing else Places
-  returns is stored.
+- **$0 expected API spend at current personal-use scale; no paid API is required for core function.**
+  Google Maps Platform may be enabled as a config-gated connected-map enhancement under its current
+  free usage allowance, with API restrictions, hard quota limits, and an OSM/no-key fallback so
+  Waypoint remains usable without incurring spend. Google Maps URLs are preferred for live navigation
+  handoff and require no API key. Any future billed routing API must be optional, on-demand, and
+  non-authoritative for research truth. Google Places' `place_id` is the one Places field cacheable
+  indefinitely; nothing else Places returns is stored.
 - **Third-party SDKs stay behind a config gate + lazy import**, so an unconfigured build is
   inert and the heavy SDK never lands in the main bundle.
 - **Enforced attention budget.** Each guide declares a `tabBudget` (default 10) capping
