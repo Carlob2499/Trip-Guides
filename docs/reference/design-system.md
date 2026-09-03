@@ -769,6 +769,22 @@ reference layer: hours, cost, restrictions, transit, booking, provenance/freshne
 On mobile, prioritize one large object at a time with large readable facts; on desktop, exploit width
 for richer editorial composition and contextual map/detail without turning Guide into a dashboard.
 
+**D6-41 — Split is balance-first on mobile with a persistent fast-entry path.**  
+Mobile Split should open with the settlement question first: who owes whom, expressed as a small
+number of large, legible transfer rows. The expense ledger remains available below but does not own
+the initial viewport.
+
+`Add expense` must be immediately reachable near the top and may also use a persistent/floating
+mobile action when that materially reduces friction. Opening it should go directly to a lightweight
+entry flow rather than a dashboard or wizard. The required mental model is deliberately simple:
+(1) who paid, (2) what was paid for, (3) how much, and (4) who shares it. Optional details such as
+category, note, currency/rate, receipt, or itinerary context stay secondary and should be prefilled
+when Waypoint already knows them.
+
+Desktop may expose more of the ledger and settlement state simultaneously, but preserves the same
+balance-first hierarchy and quick-entry path. Post-trip, settlement remains the dominant state until
+all transfers are recorded; once settled, the hero state becomes `All settled`.
+
 ### Unresolved
 
 Only the following still require product/design judgment. Everything else is either already locked
