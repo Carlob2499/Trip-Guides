@@ -32,3 +32,7 @@ body.srch-lock{overflow:hidden}
 .srch-row-act{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;color:var(--accent-ink);white-space:nowrap}
 .srch-empty{margin:1.4rem max(.9rem,var(--safe-right));color:var(--muted)}
 @media print{.srch{display:none}}
+/* Geometry (§31): a sheet from the top edge on a phone, a floating pane on desktop. */
+.srch-panel{border-radius:0 0 var(--r-pane) var(--r-pane)}
+@media(min-width:900px){.srch-panel{border-radius:var(--r-pane);box-shadow:var(--shadow-float)}}
+.srch-input{border-radius:var(--r-inset)}

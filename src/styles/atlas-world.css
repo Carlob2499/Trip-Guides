@@ -73,7 +73,7 @@
   /* Elevated, because it is a card lying ON the globe and not a panel printed into the page.
      Flat, it read as part of the map. Same elevation idiom the mobile ping/menu sheets
      already use (atlas-mobile.css) — the one place this system does spend a shadow. */
-  box-shadow: 0 10px 30px rgba(var(--shadow-rgb),.28);
+  box-shadow: var(--shadow-float);
   pointer-events: auto; will-change: transform; opacity: 0;
   /* The card GLIDES to its new seat. The solver only re-seats on 90px of globe drift, so
      without this the cards teleport in 90px steps while the globe turns smoothly under them —
@@ -213,8 +213,8 @@
 .atlas-ov-key .swatch { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
 .atlas-ov-key .swatch--surveyed { background: var(--accent); }
 .atlas-ov-key .swatch--filed { background: var(--muted); }
-.atlas-ov-key .swatch--route { width: 12px; height: 0; border-top: 1px dashed var(--accent); border-radius: 0; }
-.atlas-ov-key .swatch--night { width: 9px; height: 9px; border-radius: 0; background: var(--rule2); }
+.atlas-ov-key .swatch--route { width: 12px; height: 0; border-top: 1px dashed var(--accent); border-radius:var(--r-inset); }
+.atlas-ov-key .swatch--night { width: 9px; height: 9px; border-radius:var(--r-inset); background: var(--rule2); }
 
 /* Top-anchored under the compass, not centred on the viewport. Centred, it grew both ways
    from the middle and on a 900px-tall screen its last row sat 29px inside the north-star card
@@ -290,3 +290,7 @@
   .atlas-ov-key, .atlas-ov-record, .atlas-ov-index { display: none; }
   .atlas-pincard { display: none; }
 }
+/* Geometry (§31). */
+.atlas-toggle-btn{border-radius:var(--r-pill)}
+.atlas-pincard{border-radius:var(--r-card);overflow:hidden}
+.atlas-ov{border-radius:var(--r-compact)}

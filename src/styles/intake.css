@@ -23,13 +23,13 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
    The query box every checklist breakpoint below reads. Container, not viewport: the
    form is the thing whose width decides whether a note fits beside its control, and it
    is nested inside a max-width sheet that the viewport number cannot see. */
-.ng-form{container-type:inline-size;container-name:itk;display:flex;flex-direction:column;gap:1rem;background:var(--card);border:1px solid var(--rule);border-radius:0;padding:0 0 1.4rem}
+.ng-form{container-type:inline-size;container-name:itk;display:flex;flex-direction:column;gap:1rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:0 0 1.4rem}
 .ng-field{display:flex;flex-direction:column;gap:.35rem;border:none;padding:0;min-width:0}
 .ng-field-split{flex-direction:row;gap:.6rem}
 .itk-in{display:flex;flex-direction:column;gap:.2rem;flex:1;min-width:0}
 .itk-sub-lab{font-family:var(--font-data);font-size:var(--text-label);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 /* 44px control height (16px+ font already iOS-zoom-safe); textarea grows from the same base. */
-.ng-field input,.ng-field select,.ng-field textarea{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:0;padding:.55rem .75rem;width:100%;min-height:44px;transition:border-color .14s,background .14s}
+.ng-field input,.ng-field select,.ng-field textarea{font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--ink);border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.55rem .75rem;width:100%;min-height:44px;transition:border-color .14s,background .14s}
 .ng-field textarea{min-height:66px}
 .ng-field input:hover,.ng-field select:hover,.ng-field textarea:hover{border-color:var(--muted)}
 .ng-field input:focus,.ng-field select:focus,.ng-field textarea:focus{outline:2px solid var(--accent-ink);outline-offset:0;border-color:transparent}
@@ -68,7 +68,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 
 /* The 22px status square: number while there is something to do, ✓ once the section is
    answered, ! once it is deliberately skipped. */
-.itk-mark{flex:none;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:0;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;line-height:1;transition:background .16s,border-color .16s,color .16s}
+.itk-mark{flex:none;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-inset);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;line-height:1;transition:background .16s,border-color .16s,color .16s}
 .itk-mark-todo{border:1px solid var(--rule2);background:transparent;color:var(--muted)}
 .itk-mark-done{border:1px solid var(--green);background:var(--green);color:var(--on-green)}
 /* Outlined, not filled: --warn has no --on-warn partner, and in dark mode it is a light
@@ -77,7 +77,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-mark-assumed{border:2px solid var(--warn);background:transparent;color:var(--warn)}
 
 /* The stamp — the WORD is the accessible carrier; the colour only repeats it (§6). */
-.itk-stamp{flex:none;border-radius:0;padding:.25rem .5rem;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;white-space:nowrap}
+.itk-stamp{flex:none;border-radius:var(--r-inset);padding:.25rem .5rem;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;white-space:nowrap}
 .itk-stamp-done{border:1px solid var(--green);color:var(--green)}
 .itk-stamp-part{border:1px solid var(--rule2);color:var(--muted)}
 .itk-stamp-todo{border:1px solid var(--rule);color:var(--muted)}
@@ -104,7 +104,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-note{border-left:2px solid var(--rule);padding-left:.8rem;margin:.1rem 0 0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.5}
 
 /* ── A · drop zone ────────────────────────────────────────────────────────── */
-.itk-dz{display:block;padding:1.6rem 1rem;border:2px dashed var(--rule2);border-radius:0;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.itk-dz{display:block;padding:1.6rem 1rem;border:2px dashed var(--rule2);border-radius:var(--r-card);text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
 .itk-dz:hover,.itk-dz-hot{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
 .itk-dz-big{display:block;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);letter-spacing:-.01em}
 .itk-dz-sub{display:block;margin-top:.3rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted)}
@@ -114,13 +114,13 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 
 /* ── B · head-to-head priorities ──────────────────────────────────────────── */
 .itk-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:.6rem;align-items:stretch;margin:.3rem 0 .2rem}
-.itk-vs-btn{min-height:60px;border-radius:0;border:1px solid var(--rule2);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:640;font-size:var(--text-control);padding:.7rem .9rem;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.itk-vs-btn{min-height:60px;border-radius:var(--r-inset);border:1px solid var(--rule2);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:640;font-size:var(--text-control);padding:.7rem .9rem;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
 .itk-vs-btn:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
 .itk-vs-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .itk-vs-mid{align-self:center;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted)}
 .itk-vs-count{margin:.1rem 0 0;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .itk-podium{list-style:none;margin:.5rem 0 .2rem;padding:0;display:flex;flex-wrap:wrap;gap:.45rem}
-.itk-podium-item{display:flex;align-items:center;gap:.4rem;border:1px solid var(--rule2);border-radius:0;padding:.35rem .7rem;min-height:38px;font-family:var(--font-display);font-weight:600;font-size:var(--text-control)}
+.itk-podium-item{display:flex;align-items:center;gap:.4rem;border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.35rem .7rem;min-height:38px;font-family:var(--font-display);font-weight:600;font-size:var(--text-control)}
 .itk-podium-first{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .itk-podium-n{font-family:var(--font-data);font-size:var(--text-label);letter-spacing:var(--tracking-micro);opacity:.8}
 .itk-podium-lab{min-width:0}
@@ -134,7 +134,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 /* ── C · the fork gate ────────────────────────────────────────────────────────
    The last thing before dispatch, and the only warn-coloured panel on the page: two
    questions the answers themselves raised, each writing a real field. */
-.itk-gate{margin:0 1.4rem;border:2px solid var(--warn);border-radius:0;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.9rem}
+.itk-gate{margin:0 1.4rem;border:2px solid var(--warn);border-radius:var(--r-card);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.9rem}
 .itk-gate-head{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);letter-spacing:-.01em;color:var(--warn)}
 .itk-gate-body{display:flex;flex-direction:column;gap:1rem}
 .itk-fork{display:flex;flex-direction:column;gap:.4rem}

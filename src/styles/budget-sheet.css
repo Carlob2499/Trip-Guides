@@ -24,7 +24,7 @@
    pattern (fixed backdrop + centred panel, border/no-shadow edges) rather than
    inventing a second modal language. ──────────────────────────────────────── */
 .bsp-backdrop{position:fixed;inset:0;z-index:900;background:rgba(var(--shadow-rgb),.5)}
-.bsp-modal{position:fixed;inset:2.5vh 2.5vw;z-index:910;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--rule2);border-radius:0;overflow:hidden}
+.bsp-modal{position:fixed;inset:2.5vh 2.5vw;z-index:910;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--rule2);border-radius:var(--r-pane);overflow:hidden}
 .bsp-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1.1rem;background:var(--card);border-bottom:1px solid var(--rule)}
 .bsp-bar-label{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:640;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .bsp-bar-actions{display:flex;gap:.6rem}
@@ -53,21 +53,21 @@
 .bs-brand{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:6pt;border-bottom:1.5pt solid var(--bs-ink)}
 .bs-mark{font-family:var(--font-display);font-weight:640;font-size:11pt;letter-spacing:-.01em}
 .bs-kind{font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--bs-mute)}
-.bs-cover-img{display:block;width:100%;height:52mm;object-fit:cover;margin:10pt 0 0;border-radius:0}
+.bs-cover-img{display:block;width:100%;height:52mm;object-fit:cover;margin:10pt 0 0;border-radius:var(--r-inset)}
 .bs-title{font-family:var(--font-display);font-weight:640;font-size:30pt;line-height:1.05;letter-spacing:-.02em;margin:14pt 0 0}
 .bs-sub{font-size:9.5pt;color:var(--bs-mute);margin:3pt 0 0}
 .bs-total-lbl{font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--bs-mute);margin:20pt 0 0}
 .bs-total{font-family:var(--font-display);font-weight:640;font-size:44pt;line-height:1;letter-spacing:-.025em;margin:4pt 0 0}
 .bs-total-alt{font-size:11pt;color:var(--bs-mute);margin:4pt 0 0}
 .bs-tiles{display:flex;gap:6pt;margin:16pt 0 0}
-.bs-tile{flex:1;background:var(--bs-tint);border-radius:0;padding:8pt 10pt}
+.bs-tile{flex:1;background:var(--bs-tint);border-radius:var(--r-inset);padding:8pt 10pt}
 .bs-tile-lbl{display:block;font-size:8pt;letter-spacing:.1em;text-transform:uppercase;color:var(--bs-mute)}
 .bs-tile-val{display:block;font-family:var(--font-display);font-weight:640;font-size:17pt;line-height:1.2;margin-top:2pt}
 .bs-tile-note{display:block;font-size:8pt;color:var(--bs-mute)}
 
 .bs-h{font-family:var(--font-display);font-weight:640;font-size:11pt;letter-spacing:-.01em;margin:20pt 0 6pt;padding-bottom:3pt;border-bottom:.75pt solid var(--bs-rule)}
 .bs-settle{list-style:none;margin:0;padding:0}
-.bs-settle-row{display:flex;justify-content:space-between;align-items:baseline;gap:8pt;padding:6pt 10pt;margin-bottom:4pt;background:var(--bs-tint);border-left:2.5pt solid var(--bs-accent);border-radius:0;break-inside:avoid}
+.bs-settle-row{display:flex;justify-content:space-between;align-items:baseline;gap:8pt;padding:6pt 10pt;margin-bottom:4pt;background:var(--bs-tint);border-left:2.5pt solid var(--bs-accent);border-radius:var(--r-inset);break-inside:avoid}
 .bs-settle-who{font-size:11pt}
 .bs-arrow{color:var(--bs-accent)}
 .bs-settle-amt{font-family:var(--font-display);font-weight:640;font-size:13pt;white-space:nowrap}
@@ -90,7 +90,7 @@
 .bs-total-row td{font-family:var(--font-display);font-weight:640;border-bottom:none;border-top:1.25pt solid var(--bs-ink);padding-top:5pt}
 
 .bs-people{display:flex;flex-wrap:wrap;gap:8pt}
-.bs-person{flex:1 1 46%;min-width:46%;background:var(--bs-tint);border-radius:0;padding:8pt 10pt;break-inside:avoid}
+.bs-person{flex:1 1 46%;min-width:46%;background:var(--bs-tint);border-radius:var(--r-inset);padding:8pt 10pt;break-inside:avoid}
 .bs-person-head{display:flex;justify-content:space-between;align-items:baseline;gap:6pt;padding-bottom:4pt;margin-bottom:4pt;border-bottom:.5pt solid var(--bs-rule2)}
 .bs-person-name{font-family:var(--font-display);font-weight:640;font-size:10.5pt}
 .bs-person-total{font-weight:600;white-space:nowrap}
@@ -119,7 +119,7 @@
 /* === BUDGET CALCULATOR ======================================================= */
 .budget{margin:.2rem 0}
 .budget-intro{color:var(--muted);margin-bottom:.7rem}
-.budget-grid{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:0;overflow:hidden}
+.budget-grid{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:var(--r-card);overflow:hidden}
 .brow{display:grid;grid-template-columns:1fr 6.4rem 5rem;gap:.5rem;align-items:center;padding:.55rem .7rem;border-top:1px solid var(--rule);min-width:0}
 .brow:first-child{border-top:0}
 .bhead{background:var(--bg2);font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
@@ -128,7 +128,7 @@
 .bnote{font-style:normal;font-size:var(--text-caption);color:var(--muted);line-height:1.35}
 .best{font-variant-numeric:tabular-nums;white-space:nowrap}
 .best small{display:block;font-size:var(--text-micro);color:var(--muted)}
-.bactual{width:100%;border:1px solid var(--rule2);border-radius:0;padding:.32rem .35rem;font:inherit;font-size:var(--text-body);text-align:right;background:var(--card);color:var(--ink);-moz-appearance:textfield}
+.bactual{width:100%;border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.32rem .35rem;font:inherit;font-size:var(--text-body);text-align:right;background:var(--card);color:var(--ink);-moz-appearance:textfield}
 .bactual::-webkit-outer-spin-button,.bactual::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .bactual:focus{outline:2px solid var(--accent-ink);outline-offset:0;border-color:var(--accent-ink)}
 .btotal{background:var(--bg2);font-weight:600}
@@ -143,7 +143,7 @@
    chip actually sits on, so there is nothing left to keep in sync. The tint is 8%, not the
    12% first written: 12 measured 4.28:1 for dark "within", still short. At 8 the four pairs
    are 5.85 / 6.14 light and 4.57 / 4.85 dark. */
-.budget-verdict{margin:.6rem 0 0;padding:.45rem .7rem;border-radius:0;font-size:var(--text-small);font-weight:600;line-height:1.3}
+.budget-verdict{margin:.6rem 0 0;padding:.45rem .7rem;border-radius:var(--r-inset);font-size:var(--text-small);font-weight:600;line-height:1.3}
 .budget-verdict.within{background:color-mix(in srgb,var(--green) 8%,var(--card));color:var(--green)}
 .budget-verdict.over{background:color-mix(in srgb,var(--warn) 8%,var(--card));color:var(--warn)}
 .budget-foot{margin-top:.55rem;font-size:var(--text-caption);color:var(--muted);line-height:1.4}

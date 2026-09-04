@@ -117,3 +117,6 @@
 }
 @media(prefers-reduced-motion:reduce){.gd-card,.gd-back{transition:none}.gd-card:hover{transform:none}}
 @media print{.gd-index,.gd-back,.gd-overview{display:none}.gd-chapter{display:block!important}}
+/* Geometry (§31). */
+.gd-card{border-radius:var(--r-card)}
+.gd-card-media,.gd-card-glyph{border-radius:var(--r-inset)}

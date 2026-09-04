@@ -201,3 +201,7 @@
 /* Contextual utilities (design-system.md §27): Split is a card on Trip, not a slot. */
 .trip-goto--split{margin-top:.6rem}
 .trip-goto-title [data-split-summary]:not(:empty)::before{content:" · "}
+/* Geometry (design-system.md §31): operational cards on the card role; the hero is a full-bleed
+   photograph on a phone and a framed pane inset from the workspace edge on desktop. */
+.tn-atom,.trip-block,.trip-goto{border-radius:var(--r-card)}
+@media(min-width:900px){.trip-hero-media{border-radius:var(--r-pane)}.trip-hero-media--painted{border-radius:var(--r-pane)}}

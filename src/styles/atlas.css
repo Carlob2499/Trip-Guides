@@ -55,7 +55,7 @@
 /* ── Quick card ───────────────────────────────────────────────────────────────────────── */
 .atlas-quick {
   display: block; margin-top: 20px; padding: 16px 20px 18px;
-  background: var(--card); border: 2px solid var(--accent); border-radius: 0;
+  background: var(--card); border: 2px solid var(--accent); border-radius:var(--r-card);
   text-decoration: none; color: var(--ink);
 }
 .atlas-quick-kicker {
@@ -145,7 +145,7 @@
 .atlas-sheet-dates { font-size: var(--text-caption); color: var(--muted); margin-left: .5em; }
 .atlas-stamp {
   flex: 0 0 auto; font-family: var(--font-data); font-weight: 640; font-size: var(--text-control);
-  letter-spacing: .08em; text-transform: uppercase; padding: .3em .7em; border-radius: 0;
+  letter-spacing: .08em; text-transform: uppercase; padding: .3em .7em; border-radius:var(--r-inset);
   border: 1px solid currentColor; white-space: nowrap;
 }
 .atlas-stamp--complete { color: var(--green); }
