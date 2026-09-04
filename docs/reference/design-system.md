@@ -2,7 +2,7 @@
 
 Status: **SOLE DESIGN AUTHORITY — FROZEN FOR SEPTEMBER IMPLEMENTATION**  
 Owner: Carlo  
-Last reconciled: 2026-09-04
+Last reconciled: 2026-09-04 (SOS, provenance and offline treatments locked by the creator the same day)
 
 This file is the one and only human-readable authority for Waypoint visual design, interaction design, responsive composition, motion, surface hierarchy, and visual acceptance. It consolidates the completed D1–D6 work, the final late-review decisions, the useful lessons from prior handoffs/mockups/research, and the correction made after the first D7 implementation drifted visually.
 
@@ -387,7 +387,17 @@ Responsive container:
 
 Do not build symptom triage, proactive emergency assistance, category dashboards, responder orchestration, “help request sent,” automatic group sharing, or a generic help center.
 
-The product hierarchy is locked, but the final stress-state visual is still open. The unresolved sanity test is whether Police and Fire/Ambulance are immediately obvious and one-tap under stress with every secondary action visibly subordinate.
+**Locked stress-state visual (creator decision, 2026-09-04):**
+
+- a near-black emergency surface (the fixed `--dark-*` register) in both themes — a takeover, not a page;
+- mobile is a dominant full-height sheet; desktop is a centred modal preserving the same hierarchy;
+- `Police` and `Fire / Ambulance` are the two enormous first-screen actions, each one tap to dial;
+- emergency red is painted only on those two direct-call actions, never across the interface;
+- the traveler's known location/base appears directly below them only when Waypoint actually possesses it;
+- travel hotline, medical line, embassy, passport, insurance, phrases and every other verified line sit in a visibly subordinate second layer;
+- offline availability is stated once, quietly; no dashboard, category grid, triage or decorative imagery.
+
+Production owner: `src/features/sos/ui/sos.js` + the SOS block in `src/styles/field-tools.css`. The classification of a verified line into the first layer is by what it is (police / fire / ambulance / all-emergencies), never by its position in the data.
 
 ---
 
@@ -405,12 +415,23 @@ No citation wall and no synthetic trust score.
 
 Offline/degraded state must keep written routes/addresses/emergency/core Guide facts usable. Missing media/map/live service must not leave a dishonest blank or fake “live” state.
 
-The behavior above is locked. Final visual treatment remains open for only:
+**Locked provenance / trust / freshness treatment (creator decision, 2026-09-04):**
 
-1. provenance / trust / freshness disclosure;
-2. offline, stale-cache, partial-service, loading, map-provider failure and reconnect states.
+- a small persistent verification cue (the provenance dot) beside factual objects; ordinary content stays uncluttered;
+- selecting it opens a compact popover on desktop and a bottom sheet on a phone, showing the claim, checked date, source, freshness/uncertainty and evidence tier;
+- stale or uncertain facts change the cue and the section pill visibly; verified current facts stay quiet;
+- no citation walls, synthetic trust scores or repeated source paragraphs.
 
-Together with the SOS stress-state visual, these are the only unresolved visual-sanity items. Approved/locked surfaces elsewhere in this document are frozen unless a real implementation blocker proves them technically impossible or materially harmful.
+**Locked offline / degraded / loading treatment (creator decision, 2026-09-04): quiet capability.**
+
+- offline caching and PWA installation are capabilities the product simply has; the interface never brags about them. They surface only when a state changes (a small `Offline · saved copy` pill) or when the traveler asks (the colophon's saved-on-this-device line, the install note in Share);
+- cached content stays in place; nothing is replaced by a blocking screen when a service fails;
+- each affected module carries its own precise state — a map mount that cannot draw says so on the map and keeps the written route and handoff links; the live rate pill marks a seed rate as such;
+- critical Trip and SOS information is always available offline;
+- loading uses structural placeholders only where content is genuinely pending; existing content never disappears during a refresh;
+- nothing ever implies live, current or synchronized when it is not.
+
+With these three decisions locked there are no open visual-sanity items. Every approved/locked surface in this document is frozen unless a real implementation blocker proves it technically impossible or materially harmful.
 
 ---
 
@@ -510,9 +531,9 @@ Use `Add to itinerary` only for a genuine unscheduled candidate. Do not show `Ad
 
 ## 20. Approved visual targets and pending sanity candidates recovered from D6 review
 
-The package contains both creator-approved visual/compositional targets and explicitly non-final sanity candidates. The implementation must converge toward approved targets only. Entries marked `visual_sanity_pending` exist solely to test the still-open SOS, provenance and degraded-state treatments; they must not be treated as approved finals or copied wholesale. The original ChatGPT raster bytes were initially missing from the repository, then recovered from the creator-supplied 81-image WayPoint conversation archive on 2026-09-04. The selected decision boards are now committed beside the sanitized D6 redraws so that the storage failure cannot become permission to invent another aesthetic.
+The package contains creator-approved visual/compositional targets. The former `visual_sanity_pending` candidates (SOS, provenance) were promoted to narrow locked references on 2026-09-04 when the creator locked those treatments; their allowlists remain topic-limited and their sample facts remain illustrative. The original ChatGPT raster bytes were initially missing from the repository, then recovered from the creator-supplied 81-image WayPoint conversation archive on 2026-09-04. The selected decision boards are now committed beside the sanitized D6 redraws so that the storage failure cannot become permission to invent another aesthetic.
 
-The active visual package is governed by [`design-system-assets/mockup-manifest.json`](design-system-assets/mockup-manifest.json). It contains the recovered D6 SVGs, a deliberately small set of topic-limited raster decision boards and pending sanity candidates from that archive, and [`canonical-mockups.svg`](design-system-assets/canonical-mockups.svg) for gap coverage only. Generated boards often contain correct composition beside hallucinated copy, controls, data, or color; therefore only each manifest entry's `allowed_signals` may be used, and pending entries remain excluded from convergence.
+The active visual package is governed by [`design-system-assets/mockup-manifest.json`](design-system-assets/mockup-manifest.json). It contains the recovered D6 SVGs, a deliberately small set of topic-limited raster decision boards and pending sanity candidates from that archive, and [`canonical-mockups.svg`](design-system-assets/canonical-mockups.svg) for gap coverage only. Generated boards often contain correct composition beside hallucinated copy, controls, data, or color; therefore only each manifest entry's `allowed_signals` may be used.
 
 Recovered D6 references take precedence over the reconstructed board for the same topic. The board and recovered SVGs are **supporting figures governed by this section**, not separate design authorities. Binding visual signals are hierarchy, relative scale, panel relationships, responsive composition, hero prominence, density limits, map/sheet behavior, typography wrapping, and key-state/action placement. Exact photographs, sample text/data, prices, times, route geometry, pin names, and decorative micro-details are illustrative unless this Markdown separately specifies them.
 
@@ -615,7 +636,7 @@ This exists specifically to prevent another multi-hour model run from spending u
 
 ### V2 — full convergence
 
-Only after the canary is accepted, converge Atlas, Trip lifecycle siblings, Itinerary mobile, Map, Guide, Split, Search/SOS states and shell while preserving the working D7 engineering.
+Converge Atlas, Trip lifecycle siblings, Itinerary mobile, Map, Guide, Split, Search/SOS states and shell while preserving the working D7 engineering. Per the creator's 2026-09-04 instruction the canaries are Checkpoint 1 of one continuous migration, not a stop point: every surface is audited and either converged or certified as already conforming. `docs/reference/d7-visual-convergence.md` carries the surface-by-surface completion matrix.
 
 ### V3 — paired review
 

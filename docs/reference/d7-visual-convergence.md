@@ -1,107 +1,67 @@
-# Fable 5.1 work order — D7 visual convergence V1
+# D7 visual convergence — full-site completion matrix
 
-Repository: `Carlob2499/Trip-Guides`  
-Working branch / PR: `claude/waypoint-design-routing-rex0vr` / PR #186  
-Role: **creation + production integration**, not product redesign or repo-governance cleanup.
+Repository: `Carlob2499/Trip-Guides`
+Branch: `claude/waypoint-design-overhaul-9m1fro` (continues PR #186's engineering foundation)
+Role: production implementation and visual convergence against the sole authority. This file is
+an execution record, **not design authority** — `docs/reference/design-system.md` is.
 
-This is an execution work order only. It is **not design authority**.
+## What changed on 2026-09-04
 
-## Read first
+The creator replaced the two-canary stop point with one continuous migration: the two canaries
+remain Checkpoint 1, and every other surface is audited and either converged or certified as
+already conforming. The three formerly open visual-sanity items were locked the same day
+(design-system.md §13, §14): SOS stress state, provenance/freshness disclosure, and offline as
+quiet capability.
 
-1. `docs/reference/design-system.md` — sole design authority.
-2. `docs/reference/design-system-assets/mockup-manifest.json`.
-3. `v1_canary_routes` in that manifest — exact visual routing for this pass.
-4. Only the visual files listed by that manifest.
-5. The production components/styles for the two V1 surfaces.
+## Reading order (unchanged)
 
-Do not consult superseded design handoffs, old gallery screenshots, historical prototypes, deleted branches, or PR-era design prose as visual authority.
+1. `docs/reference/design-system.md`
+2. `docs/reference/design-system-assets/mockup-manifest.json` (its `v1_canary_routes` for the two checkpoint surfaces)
+3. only the visual assets the manifest lists
+4. the production components/styles for the surface in hand
 
-For V1, use the exact primary/supporting/rejected ordering in `mockup-manifest.json#v1_canary_routes`. Do **not** use `canonical-mockups.svg#WAY-01` or `#WAY-03` as the primary judging reference.
+Raster boards contribute only their `allowed_signals`; canonical repository data and the
+Markdown authority override every sample fact, control, person, price, route and colour.
 
-## Preserve
+## Surface-by-surface matrix
 
-Do not rewrite or replace the working D7 engineering unless a concrete bug blocks the approved presentation:
+| Surface | State | Owner(s) | Convergence notes |
+| --- | --- | --- | --- |
+| Global shell (desktop) | converged | `AppChrome.astro`, `chrome.css` | Integrated floating destination cluster inside the utility row (every destination control clears 44px, icon-only between 900 and 1099px); wide persistent Search; SOS/share/theme cluster; compacts on deep scroll without reordering. Not a sidebar. |
+| Global shell (mobile) | converged | same | Compact topbar, expanded→compact Search, five-slot bottom bar with a mark (not colour alone) on the current destination; yielding chrome preserved. The first-visit “what is Waypoint” strip was retired: it competed with the operational fold on every surface. |
+| Atlas | converged | `pages/index.astro`, `atlas-*.css`, `features/atlas` | The globe is the front door: the session splash cover was retired; the motto card and the mobile dock (a duplicate readout) were retired; the quick card carries identity + clock only (emergency numbers belong to SOS); the wordmark is the page's level-one heading. |
+| Trip — active (V1 checkpoint, phone) | converged | `TripDestination.astro`, `features/trip/ui/trip.js`, `trip.css` | Compact identity band → Now (dominant, with the place’s own repository photo) → Next (compressed) → Get there → material problem → fallback → remainder of day. No dossier, no dashboard grid, no `Add to plan`. |
+| Trip — active (desktop) | converged | same | Photo strip + day context, Now large left, Next beneath, remainder/fallback right. |
+| Trip — pre / post | converged | same | Restrained hero, countdown, first six unresolved readiness items with the rest folded and still counted; editorial recap + outcome atoms post-trip. |
+| Itinerary — desktop workbench (V1 checkpoint) | converged | `ItineraryDestination.astro`, `DaysBlock.astro`, `itinerary.css`, `features/itinerary` | One continuous timeline rail, time column, the stop’s own photo, large names, handoff; selected stop ↔ map pin synchronized (rail dot + row); framed map pane; 30–70% resize and collapse preserved. |
+| Itinerary — mobile | converged | same | Day-first, compact day head, know-before links as one scrolling row, thumb-zone day rail. |
+| Map | converged | `MapDestination.astro`, `map.css`, `features/maps/ui/map-dest.js`, `features/maps/ui/fullscreen.js` | Map fills its pane (the 300px iframe override was the bug); on desktop the map and the selected atom hold the viewport while the place list flows with the page, so no row is ever clipped by a second scroller (and every row is now contrast-rated by the a11y gate); selected place is a large atom with the place’s repository photo; degraded line stays on the map. |
+| Guide — cover | converged | `GuideDestination.astro`, `masthead.css` | Full-width editorial cover (~58vh desktop, ~42vh phone) with the identity plate on its own surface; emergency chips removed from the hero (SOS owns them); currency moved to the plate line. |
+| Guide — chapters | converged | `GuideDestination.astro`, `Block.astro`, `guide-dest.css` | Knowledge modules name their kind in the Panel kicker; the empty-wrapper grid rows that left phantom space under chapter heads are gone. |
+| Split | converged | `TripSplit.astro`, `SplitDestination.astro`, `features/trip-split/ui/trip-split.js`, `trip-split.css` | Recent Expenses → Add Expense (primary, filled) → per-row `Who paid · Method · N people` with a semantic category icon → balances secondary. People card leads only while the ledger has nobody. Desktop: dimmed destination scene behind an opaque ledger. Engine, validation, currency, payments, undo, filter untouched. |
+| Search | certified conforming | `features/search` | Desktop persistent field + overlay; mobile expanded/compact + full-height overlay; current-trip-first groups. No change needed beyond the shell. |
+| SOS | converged (locked) | `features/sos/ui/sos.js`, `field-tools.css`, `base.css` (`--dark-warn`) | Near-black full-height sheet (modal on desktop); Police + Fire/Ambulance as two enormous one-tap calls in emergency red; verified second layer subordinate; offline stated once, quietly. Advisory ink uses a fixed dark-ground warn token (7.5:1) because the surface is dark in both themes. First-layer classification is by what a line is, never its position. |
+| Provenance | converged (locked) | `provenance-dot.css`, `scripts/provenance-dot.js` | Quiet dot; popover on desktop, bottom sheet on phones; a lifted card can no longer trap the sheet. Failed-photo overlays no longer block the dot. |
+| Offline / degraded | converged (locked) | `scripts/offline-pill.js`, `chrome.css`, map fallbacks | `Offline · saved copy` pill only while offline; per-module degraded states; PWA install/caching never advertised in chrome. |
 
-- five-destination router and canonical destination state;
-- Trip lifecycle/data derivation;
-- Itinerary day state and resizable workbench behavior;
-- Google/OSM map fallback architecture;
-- global Search/SOS;
-- Split engine/state;
-- semantic content relations;
-- offline/accessibility/resilience infrastructure;
-- retired-feature removals.
+## Honest deviations
 
-Do not change Pipeline V1/V2, September release governance, research content, factual trip data, source/provenance data, or unrelated tests/workflows.
+- **Leave by** renders nowhere. The itinerary schema carries no travel-time or leave-by field,
+  and inventing one from coordinates would be a fake live ETA (§9, §18). The atom appears the
+  day Guide Author research produces a verified value; the Now → Next → Get there → problem →
+  fallback → remainder order is otherwise complete.
+- **Known location/base** in SOS renders nowhere: Waypoint does not possess it (§13).
+- Local screenshots in the implementation sandbox could not reach Wikimedia or OpenStreetMap
+  (egress policy); layouts were verified with local stand-in images. The Design canary workflow
+  in CI captures the real-network renders.
 
-## V0 — preflight
+## Verification
 
-Before editing, inspect the two target surfaces against the sole authority and manifest. Report only genuine implementation blockers involving truth, accessibility, or technical feasibility. Do **not** reopen recorded creator decisions or propose alternative design directions.
+- `npm run check:fast` (invariants, lint, typecheck, unit tests including drift, colour-scale,
+  breakpoints and design-fidelity contracts)
+- `npx playwright test tests/visual/a11y.spec.ts tests/visual/resilience.spec.ts`
+- `npm run canary:visual` — V1 checkpoint pair plus V2 captures of every surface, phone +
+  desktop, dark + light (review evidence, never baselines)
+- `npm run build`
 
-## V1 — implement only these two surfaces
-
-### 1. South Korea active Trip — mobile
-
-Judge composition against `v1_canary_routes.active_trip_mobile`. Only that route's manifest allowlist is reusable; canonical repository content and the Markdown authority override every sample detail.
-
-Target review state:
-
-- 390 × 844 viewport;
-- dark theme;
-- trip-local time fixed by the canary to `2026-07-10T11:20:00+09:00`;
-- use the actual South Korea guide content and repository-owned/approved media;
-- composition must follow the active-Trip authority: **Now → Next → Leave by → Get there → material warning/problem → fallback → remainder of day**;
-- one dominant operational object, strong useful imagery, large structured atoms, aggressive phone-space discipline;
-- no dossier/prose-wall composition, generic dashboard grid, fake actions, or `Add to plan` for already-planned/completed objects.
-
-### 2. South Korea Itinerary — desktop workbench
-
-Judge composition against `v1_canary_routes.itinerary_desktop`. Only that route's manifest allowlist is reusable; canonical repository content and the Markdown authority override every sample detail.
-
-Target review state:
-
-- 1440 × 1000 viewport;
-- dark theme;
-- actual South Korea itinerary data;
-- timeline/day plan left, real operational map right;
-- preserve the working resizable 30–70% pane behavior and synchronized selection;
-- make temporal ↔ spatial continuity visually obvious;
-- integrated/floating Waypoint shell, not conventional admin chrome/sidebar;
-- no decorative/faux map and no document-dashboard composition.
-
-## Visual rules
-
-Treat the authority/manifest visual signals as binding for hierarchy, relative scale, density, panel relationships, imagery prominence, navigation character, typography wrapping, and responsive composition.
-
-Exact sample text, route geometry, mockup prices/times, and decorative micro-detail are not facts. Use canonical repository content.
-
-Do not invent a new Waypoint aesthetic. Do not average the approved references with the current D7 gallery rendering.
-
-## Verification before handoff
-
-Run the ordinary deterministic checks needed for touched code. The branch already provides:
-
-```sh
-npm run canary:visual
-```
-
-and `.github/workflows/design-canary.yml` automatically captures the two creator-review screenshots on relevant PR changes.
-
-The canary screenshots are **review evidence, not baselines**. Do not call `baselines:update`, regenerate gallery baselines, or modify expected screenshots to make visual CI green.
-
-Known mechanical regressions already handled outside this work order and pinned by tests:
-
-- Korean/Hangul system font fallback;
-- Guide headings may not break inside ordinary words;
-- creator canary remains separate from regression baselines.
-
-## Stop point
-
-After both V1 surfaces are implemented and the automatic canary artifacts exist, **stop the visual sweep** and report:
-
-- commit range;
-- files changed;
-- any genuine blocker/deviation from authority;
-- the Design canary workflow run/artifact.
-
-Do not continue to Atlas, Guide, Map destination, Split, Search, SOS, or the rest of Trip/Itinerary until creator review accepts the V1 direction. This stop point is intentional and protects model usage.
+Gallery baselines were **not** regenerated: baselines follow creator acceptance (§21).
