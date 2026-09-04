@@ -10,7 +10,10 @@
 .trip-hero-media{position:relative;min-height:clamp(150px,34vw,260px);background:var(--sunken);overflow:hidden}
 .trip-hero-media--painted{background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--bg2)),var(--bg2))}
 .trip-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
+/* A photo that failed to load (offline, blocked) is not an empty plate: the painted ground
+   stands in, at the height a caption band needs, never a grey void. */
 .trip-hero-media.media-fail .trip-hero-img{display:none}
+.trip-hero-media.media-fail{min-height:96px;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--bg2)),var(--bg2))}
 .trip-hero-text{min-width:0;padding:1rem max(1.1rem,var(--safe-right)) 1.1rem max(1.1rem,var(--safe-left))}
 .trip-kicker,.trip-dates,.trip-cities,.trip-stats,.trip-sub{overflow-wrap:anywhere;min-width:0}
 .trip-kicker{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .8rem;margin:0 0 .35rem}

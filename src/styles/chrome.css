@@ -8,7 +8,8 @@
      ≤ 899px   compact topbar + expanded/compact Search + bottom tab bar
      ≥ 900px   topbar carries the destination row and a wide persistent Search field */
 
-.chrome{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+/* Opaque grounds, no glass: content scrolling under the chrome must never show through it. */
+.chrome{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--rule)}
 
 .topbar{display:flex;align-items:center;gap:.6rem;padding:calc(.42rem + var(--safe-top)) max(1rem,var(--safe-right)) .42rem max(1rem,var(--safe-left))}
 .topbar-home{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;color:var(--muted);text-decoration:none;min-height:44px;min-width:44px;padding:.2rem 0;transition:color .15s;flex:none}
@@ -61,7 +62,7 @@ body.chrome-scrolled .topbar-title{display:block}
 @media(prefers-reduced-motion:reduce){.searchbar{transition:none}}
 
 /* --- Phone bottom bar ------------------------------------------------------------------- */
-.botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;align-items:stretch;gap:.15rem;padding:.35rem max(.4rem,var(--safe-right)) max(.35rem,var(--safe-bottom)) max(.4rem,var(--safe-left));background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule2);transition:transform .34s var(--ease-out-expo)}
+.botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;align-items:stretch;gap:.15rem;padding:.35rem max(.4rem,var(--safe-right)) max(.35rem,var(--safe-bottom)) max(.4rem,var(--safe-left));background:var(--card);border-top:1px solid var(--rule2);transition:transform .34s var(--ease-out-expo)}
 .botslot{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;padding:.3rem .1rem;background:transparent;border:0;border-radius:0;color:var(--muted);cursor:pointer;font-family:var(--font-data)}
 .bslot-ico{flex:none;transition:transform .2s var(--ease-spring)}
 .bslot-txt{max-width:100%;font-size:var(--text-nano);font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

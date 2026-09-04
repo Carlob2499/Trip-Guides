@@ -107,4 +107,5 @@
   .gd-chapter--spatial .gd-chapter-body{grid-column:1;grid-row:2}
   .gd-chapter--spatial .gd-chapter-body>.block,.gd-chapter--spatial .gd-chapter-body>.gd-module>.block{max-width:100%}
 }
+@media(prefers-reduced-motion:reduce){.gd-card,.gd-back{transition:none}.gd-card:hover{transform:none}}
 @media print{.gd-index,.gd-back,.gd-overview{display:none}.gd-chapter{display:block!important}}
