@@ -1,0 +1,51 @@
+{
+  "status": "current_subordinate_visual_manifest",
+  "date": "2026-09-04",
+  "authority_rule": "docs/reference/design-system.md is the sole design authority. These visual references are subordinate composition evidence only.",
+  "source": "Recovered from the creator-reviewed 2026-09-03 D6 final handoff on design/d6-product-reconciliation-20260902.",
+  "reference_policy": "Use the recovered D6 SVGs where available. canonical-mockups.svg supplies sanitized composition coverage for feature/state targets that the D6 handoff intentionally left without a visual. Never average these references with superseded component-gallery screenshots, old prototypes, or historical generated boards.",
+  "references": [
+    {
+      "path": "d6-itinerary-mobile-composition.svg",
+      "topic": "Itinerary mobile",
+      "authority": "recovered_d6_composition",
+      "allowed_signals": ["one day is dominant", "large readable timeline atoms", "recognizable place imagery supports rather than overtakes timeline", "Plan-vs-Actual directly reachable", "thumb-zone day rail/scrubber"],
+      "forbidden_signals": ["schematic art as production photography", "top arrows as primary switcher", "NOW floating button", "invented stops/times/transit", "generic DONE controls", "facts absent from canonical content"]
+    },
+    {
+      "path": "d6-map-responsive-composition.svg",
+      "topic": "Map mobile + desktop",
+      "authority": "recovered_d6_composition",
+      "allowed_signals": ["real Google Maps dominates connected state", "mobile map owns nearly viewport with contextual sheet", "desktop map owns workspace with contextual information beside it", "Directions/navigation handoff prominent", "large readable selected-place atoms"],
+      "forbidden_signals": ["shipping schematic map instead of provider map", "fake route/date data", "unsupported live traffic claims", "invented modules/layers", "fake pins/places"]
+    },
+    {
+      "path": "d6-guide-place-detail-composition.svg",
+      "topic": "Guide place detail",
+      "authority": "recovered_d6_composition",
+      "allowed_signals": ["large recognizable place image", "mobile and desktop sibling compositions", "high-value operational facts before deeper prose", "deeper detail progressively accessible", "quiet provenance plus map/itinerary continuity"],
+      "forbidden_signals": ["schematic drawing as production asset", "ratings/review counts", "unsupported live open-now state", "unapproved Save/Share actions", "IA conflicting with Guide authority", "shrinking Guide landing hero"]
+    },
+    {
+      "path": "d6-split-responsive-composition.svg",
+      "topic": "Split",
+      "authority": "recovered_d6_composition",
+      "allowed_signals": ["immersive outer desktop layer with readable working surface", "Recent Expenses prominent", "Add expense immediately reachable", "semantic expense icons", "split method visible", "simple ledger-focused mobile"],
+      "forbidden_signals": ["decorative scenery as required asset", "invite/travel-party UI", "fake people/dates/balances/amounts", "How it works panel", "balance-first hierarchy", "arbitrary expense photos", "collaboration/budget analytics creep"]
+    },
+    {
+      "path": "d6-search-responsive-final.svg",
+      "topic": "Search",
+      "authority": "recovered_d6_approved_layout",
+      "allowed_signals": ["prominent desktop global search", "mobile expanded top search + compact scrolled access + focused overlay", "search remains global infrastructure", "results grouped by real WayPoint object type with current trip first", "dismiss restores exact context"],
+      "forbidden_signals": ["invented recent searches", "popular recommendations", "scan/add", "voice search", "unsupported categories", "search tips", "fake result counts/distance/ratings/content", "the old sidebar drawn in this schematic as authority for desktop chrome"]
+    },
+    {
+      "path": "canonical-mockups.svg",
+      "topic": "Atlas, Trip, Itinerary desktop, Guide landing, SOS and complete cross-feature coverage",
+      "authority": "sanitized_reconstruction_from_approved_decisions",
+      "allowed_signals": ["hierarchy", "relative scale", "responsive composition", "panel relationships", "hero prominence", "density limits", "map/sheet behavior", "typography wrapping", "key-state/action placement"],
+      "forbidden_signals": ["sample copy/data as facts", "decorative details as requirements", "overriding a recovered D6 reference", "overriding docs/reference/design-system.md"]
+    }
+  ]
+}
