@@ -30,8 +30,6 @@
      Desktop is untouched: there the label renders and the CTA can say what it is. */
   /* --tools is gone entirely now (R5 retired the standalone screen); the selector went with it
      rather than lingering as a rule for an element that cannot exist. */
-  .atlas-header-btn--cta { display: none; }
-  .atlas-header-btn-label { display: none; }
 
   /* D5 asked for "a permanent WORLD | TABLE segmented switch" and this took that as full-bleed:
      `width:100%` pushed it onto a row of its own, so the phone header spent THREE rows before
@@ -52,16 +50,12 @@
      the same complaint as before with a worse consequence. One row now: mark, wordmark, the
      switch, the theme button. The strapline goes — "VERIFIED FIELD GUIDES" is the cover's
      line and the cover has just said it. */
-  .atlas-brand { flex: 0 1 auto; min-width: 0; }
-  .atlas-brand-sub { display: none; }
-  .atlas-toggle { flex: 0 0 auto; margin-left: auto; }
   /* Only the horizontal run narrows here — the 44px height moved to the base rule in
      atlas-world.css once the sweep showed the desktop half of the range was still at 40px.
      (The reasoning it carried is unchanged and now applies at every width: 44px, not the kit's
      4px-padded segments, because this repo's a11y gate holds every hit target to 44px and a
      gate outranks a screenshot.) */
   .atlas-toggle-btn { padding: 0 12px; }
-  .atlas-header-actions { flex: 0 0 auto; margin-left: 0; gap: 6px; }
 
   /* No spatial budget for the desktop rails, floating pincards, or motto. */
   .atlas-ov-index, .atlas-ov-key, .atlas-ov-record, .atlas-ov-controls,
@@ -135,8 +129,8 @@
 @media (min-width: 760px) { .atlas-pinchip { display: none; } }
 
 .atlas-menufab {
-  position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(12px + var(--safe-bottom));
-  z-index: 5; width: 52px; height: 52px; border-radius: 50%;
+  position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(12px + var(--safe-bottom) + var(--botbar-h, 0px));
+  z-index: 5; width: 52px; height: 52px; border-radius: var(--r-round);
   align-items: center; justify-content: center;
   background: var(--cta); color: var(--cta-ink); border: 0; cursor: pointer;
   font-family: var(--font-data); font-weight: 700; font-size: var(--text-body);
@@ -277,7 +271,7 @@
 
   /* The caption says what the globe does; it belongs to the hero, not the viewport. */
   .atlas-globe-caption {
-    position: absolute; left: max(16px, var(--safe-left)); bottom: 40px; z-index: 6;
+    position: absolute; left: max(16px, var(--safe-left)); bottom: calc(56px + var(--botbar-h, 0px)); z-index: 6;
     margin: 0; max-width: 70%;
     font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted);
   }

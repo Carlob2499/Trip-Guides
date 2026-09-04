@@ -409,3 +409,9 @@ select.split-in{cursor:pointer}
   .splitdest-scene .paint-atlas{position:absolute;inset:0;z-index:0}
   .splitdest .split-wrap{position:relative;z-index:1;max-width:840px;padding:1.6rem 1.8rem 2rem;background:var(--bg);border:1px solid var(--rule2)}
 }
+
+/* The contextual region's own head: the way back to Trip and its name for the anchor (§27). */
+.splitdest-head{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:.6rem max(1rem,var(--safe-right)) 0 max(1rem,var(--safe-left))}
+.splitdest-back{display:inline-flex;align-items:center;min-height:44px;padding:0 .9rem;border:var(--rw) solid var(--line-strong);border-radius:var(--r-pill);background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.splitdest-back:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.splitdest-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}

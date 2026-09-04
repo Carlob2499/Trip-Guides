@@ -8,7 +8,7 @@
    · .mast-painted — guides with no photo open on the Painted Atlas (painted-atlas.css +
      src/components/PaintedAtlas.astro): seeded terrain in the guide's accent under a
      destination-local sky, so every guide is born with a living cover.
-   Motion: hero-parallax.js drifts the photo on scroll; gsap-hero.js runs the text arrival.
+   Motion: hero-parallax.js drifts the photo on scroll; scripts/arrival.js runs the entry.
    Both select by class name (.mast-frame/.mast-img/.mast-eyebrow/.mast-title/.mast-dek/
    .mast-credit), all kept here. Fully short-circuited under prefers-reduced-motion. */
 

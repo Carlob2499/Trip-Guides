@@ -8,7 +8,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
-import Icon from "../components/Icon.astro";
+import AppChrome from "../components/AppChrome.astro";
 import { generateContourLayer } from "../lib/contours";
 import Contours from "../components/Contours.astro";
 import {
@@ -27,6 +27,7 @@ import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
 import "@fontsource-variable/atkinson-hyperlegible-next";
 import "../styles/base.css";
+import "../styles/chrome.css";
 import "../styles/atlas.css";
 import "../styles/atlas-world.css";
 import "../styles/atlas-cover.css";
@@ -259,16 +260,12 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         oversized/mobile-only-styled at desktop widths. Under 760px it stays in this same header
         row, compact and right-aligned (atlas-mobile.css's `max-width:759px` block), with only
         the " view" suffix dropped; it is NOT re-widened to a full-bleed bar there either. */}
-    <header class="atlas-header">
-      <a class="atlas-brand" href={`${base}/`} aria-label="Waypoint — the atlas">
-        <span class="atlas-brand-mark" aria-hidden="true"></span>
-        {/* The wordmark is the Atlas's level-one heading: the page's one identity line, present
-            in both views (the session cover that once carried it is gone). */}
-        <h1 class="atlas-brand-word">
-          <span class="atlas-brand-name" data-ref-headword>WAYPOINT</span>
-          <span class="atlas-brand-sub">VERIFIED FIELD GUIDES</span>
-        </h1>
-      </a>
+    {/* The one shell (AppChrome, §6): Atlas is current; the four trip entries link into the
+        current trip's page when there is one. The wordmark is the page's level-one heading. */}
+    <AppChrome mode="atlas" base={base} title="Waypoint"
+               guideHref={quick ? `${base}/guides/${quick.g.id}/` : null}
+               destinations={[{ key: "trip", label: "Trip" }, { key: "itinerary", label: "Itinerary" }, { key: "map", label: "Map" }, { key: "guide", label: "Guide" }]} />
+    <header class="atlas-header rail-offset">
       <div class="atlas-toggle" role="group" aria-label="Switch view">
         {/* "World view" on desktop, "World" on a phone — one button, and the suffix is a span
             CSS drops under 760px rather than two labels that could disagree. */}
@@ -294,18 +291,15 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           });
         })();
       </script>
-      <div class="atlas-header-actions">
-        <a class="atlas-header-btn atlas-header-btn--cta" href={`${base}/new/`}>＋<span class="atlas-header-btn-label"> New guide</span></a>
-        <button type="button" id="btnDark" class="atlas-header-btn atlas-header-icon" aria-label="Switch to dark mode" title="Switch to dark mode">
-          <Icon name="moon" size={16} />
-        </button>
-      </div>
     </header>
 
     {/* A named region: the globe is a second top-level view alongside <main>'s table, so its
         canvas/overlays need a landmark of their own. The globe IS the front door (§6) — no
         splash cover stands between the visitor and geography. */}
-    <section class="atlas-globe-wrap" aria-label="World view — the guide map">
+    {/* One main landmark holds BOTH views: the globe is the page's main content in World view
+        and the table in Table view, and whichever is hidden must not take the landmark with it. */}
+    <main class="atlas-main" id="content">
+    <section class="atlas-globe-wrap rail-offset" aria-label="World view — the guide map">
       <div id="atlasGlobe" data-atlas-globe>
         <div data-atlas-map-slot></div>
         <div class="atlas-pins" data-atlas-pins></div>
@@ -403,8 +397,8 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
 
     <script type="application/json" is:inline data-atlas-guides-json set:html={JSON.stringify(guidesJson)} />
 
-    <div class="atlas-table-wrap">
-    <main class="atlas-table" id="atlasTable">
+    <div class="atlas-table-wrap rail-offset">
+    <div class="atlas-table" id="atlasTable" tabindex="-1">
       {/* The one Search (design-system.md D6-24, search-ui-final): this field hands over to
           the global overlay (features/search) on focus, exactly as a guide's own field does.
           Every guide's records are in the build-time index it fetches, so a place, a price
@@ -603,9 +597,10 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           so a row here could only ever mean ONE trip's tools — the featured one — while
           reading like a door to tools in general. The way to a trip's tools is the way to
           everything else about that trip: open its guide. */}
-    </main>
+    </div>
     <footer class="atlas-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/about/`}>How it's made →</a></footer>
     </div>
+    </main>
 
     <script src="../scripts/atlas-hub.js"></script>
   </body>

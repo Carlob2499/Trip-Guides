@@ -5,62 +5,13 @@
 
 .atlas-header {
   position: relative; z-index: 5;
-  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px;
   padding: max(14px, var(--safe-top)) max(clamp(18px, 4vw, 54px), var(--safe-right)) 12px
     max(clamp(18px, 4vw, 54px), var(--safe-left));
   border-bottom: 1px solid var(--rule2);
 }
-/* The wordmark is a LINK home, so it is a control the reader aims at and takes the 44px floor
-   (CONTEXT.md 2026-08-11: the floor applies to anything meant to be aimed at). It measured
-   123x24 on a phone (the strapline is hidden there) and 167x41 on desktop — under the line at
-   every one of the nine widths the sweep visits. Free to grow in both models: the header row is
-   `align-items:center` and its tallest child is already a 44px .atlas-toggle-btn on a phone, so
-   the row's height does not move there at all; on desktop it gains 3px (41→44). */
-.atlas-brand { display: flex; align-items: center; min-height: 44px; gap: 10px; color: var(--ink); text-decoration: none; }
-.atlas-brand-mark { position: relative; width: 20px; height: 18px; display: inline-block; flex: none; }
-.atlas-brand-mark::before {
-  content: ""; position: absolute; inset: 0;
-  border-left: 10px solid transparent; border-right: 10px solid transparent;
-  border-bottom: 17px solid var(--accent); width: 0;
-}
-.atlas-brand-mark::after {
-  content: ""; position: absolute; left: 7.5px; top: 10px;
-  width: 5px; height: 5px; border-radius: 50%; background: var(--bg);
-}
-.atlas-brand-word { display: grid; margin: 0; font: inherit; }
-.atlas-brand-name { font-family: var(--font-data); font-weight: 700; font-size: var(--text-small); letter-spacing: .24em; }
-.atlas-brand-sub {
-  font-family: var(--font-data); font-weight: 600; font-size: var(--text-nano); letter-spacing: .2em;
-  color: var(--muted); white-space: nowrap;
-}
-
-.atlas-header-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
-.atlas-header-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm); letter-spacing: .1em;
-  color: var(--muted); background: none; border: 1px solid var(--rule2);
-  /* 44px, not the kit's 38px — the same trade atlas-mobile.css already recorded for
-     .atlas-toggle-btn ("a gate outranks a screenshot"). This one min-height carries BOTH header
-     buttons over the line: --cta measured 130x38 and the icon button 38x38, and the icon's
-     square is closed by the width below. The header grows 3px; nothing else shares these
-     buttons' row that is taller than they now are. */
-  padding: 0 14px; min-height: 44px; border-radius: 0;
-  text-decoration: none; cursor: pointer; white-space: nowrap;
-}
-.atlas-header-btn:hover { border-color: var(--ink); color: var(--ink); }
-.atlas-header-btn--cta {
-  font-size: var(--text-small); letter-spacing: .04em; color: var(--cta-ink);
-  background: var(--cta); border-color: var(--cta); border-radius: 999px; padding: 0 18px;
-}
-.atlas-header-btn--cta:hover { border-color: var(--cta); color: var(--cta-ink); opacity: .88; }
-/* Square, and the square is the target: the icon button has no label to widen it, so its width
-   is the smaller of its two dimensions and has to clear 44px on its own. (atlas-world.css's
-   `min-width:760px` rule wants `width:auto; padding:0 14px` here for a labelled variant — it has
-   never won the cascade against this line, and its 16px icon + 28px padding would land on 44px
-   too, so the button is 44px wide whichever of the two applies.) */
-.atlas-header-icon { padding: 0; width: 44px; justify-content: center; }
-.atlas-header-icon svg { width: 16px; height: 16px; flex: none; display: block; }
-
+/* The wordmark, ＋ New guide and theme control moved into the shared shell (AppChrome, 2026-09-04
+   §6): the header keeps only the World|Table view toggle. */
 .atlas-foot {
   max-width: 1000px; margin: 0 auto; padding: 30px clamp(18px, 4vw, 54px) 60px;
   font-family: var(--font-data); font-size: var(--text-control-sm); color: var(--muted);

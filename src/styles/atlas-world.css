@@ -37,11 +37,7 @@
    Absolute inside the header's own positioning context puts it where the design has it, and
    the flanks keep the flow row to themselves. */
 @media (min-width: 760px) {
-  .atlas-toggle { position: absolute; left: 50%; transform: translateX(-50%); }
-  .atlas-header-actions { margin-left: auto; }
   /* The theme button is labelled up here, where there is room for the word. */
-  .atlas-header .theme-btn-label { display: inline; margin-left: .45rem; }
-  .atlas-header-icon { width: auto; padding: 0 14px; }
 }
 /* Everywhere else the button is its icon — guides included, which is why this default lives
    with the button and not in the hub's own media query. */

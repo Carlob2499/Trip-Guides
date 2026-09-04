@@ -14,7 +14,8 @@ async function view(slug: string) {
 describe("deriveGuideView", () => {
   it("names the five destinations in the fixed order and keys storage on the slug", async () => {
     const v = await view("korea");
-    expect(v.destinations.map((d) => d.key)).toEqual(["trip", "itinerary", "map", "guide", "split"]);
+    expect(v.destinations.map((d) => d.key)).toEqual(["trip", "itinerary", "map", "guide"]);
+    expect(v.contextual.map((d) => d.key)).toEqual(["split"]);
     expect(v.storeKey).toBe("korea");
     expect(v.slug).toBe("korea");
   });

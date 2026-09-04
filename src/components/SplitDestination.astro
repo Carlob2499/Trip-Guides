@@ -12,5 +12,10 @@ const { storeKey, slug = storeKey, tz = null } = Astro.props;
 ---
 <div class="splitdest">
   <div class="splitdest-scene" aria-hidden="true"><PaintedAtlas seed={slug} tz={tz ?? undefined} mini={true} /></div>
+  {/* A contextual region names its way back (§27): Trip is where it was opened from. */}
+  <div class="splitdest-head">
+    <button class="splitdest-back" type="button" data-dest-go="trip">← Trip</button>
+    <span class="splitdest-kicker" data-dest-title>Split</span>
+  </div>
   <TripSplit storeKey={storeKey} standalone />
 </div>

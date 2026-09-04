@@ -167,6 +167,7 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
     )}
   </section>
 
+
   {/* ═══ ACTIVE ═══ trip.js paints the cockpit here from #tripData against the destination clock. */}
   <section class="trip-phase trip-active" data-trip-phase="active" aria-label="Right now" hidden>
     <div class="trip-now" data-trip-now aria-live="polite"></div>
@@ -202,6 +203,14 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
       <p class="trip-recap-none">The trip is over. What worked and what didn't goes in the notebook below.</p>
     )}
   </section>
+
+  {/* Split is a contextual utility (design-system.md §27): reached from here at every phase,
+      never a permanent slot. The count is the ledger's own, painted by trip-split.js. */}
+  <button class="trip-goto trip-goto--split" type="button" data-dest-go="split">
+    <span class="trip-goto-label">Split</span>
+    <span class="trip-goto-title">Expenses, balances and settling up<span data-split-summary></span></span>
+    <span class="trip-goto-arrow" aria-hidden="true">→</span>
+  </button>
 
   {/* ═══ LEARNINGS — every phase ═══ */}
   <section class="trip-learnings" id="learnings" aria-label="Trip learnings">

@@ -1,92 +1,107 @@
 ---
-/* The global shell (design-system.md D6-03/D6-05/D6-43, FINAL_DECISIONS F5/F4).
+/* The global shell (design-system.md 2026-09-04 §6, §19; motion.md §5).
 
-   ONE navigation model at every width: the five stable traveler destinations
-   `Trip · Itinerary · Map · Guide · Split`, in that order, never reordered by usage.
-   Presentation recomposes — a bottom tab bar under the phone ceiling, a horizontal
-   destination row in the top chrome above it — but the DOM is the same five buttons.
+   ONE navigation model at every width: the primary destinations
+   `Atlas · Trip · Itinerary · Map · Guide`, in that order. Presentation recomposes —
+   a floating vertical rail beside the workspace on desktop, a compact five-slot bottom bar
+   on a phone — but the model is the same five entries. Atlas is a link to the front door;
+   the other four are regions of this page switched by the router (guide-ui.js).
 
-   Global utilities live in the top chrome on every surface: the way back to Atlas, the one
-   Search field (expanded at the top of a mobile page, a compact control once scrolled, a
-   wide persistent field on desktop) and the quiet SOS control, which features/sos mounts
-   into [data-sos-mount] only when the guide carries verified numbers. Search and SOS are
-   actions, not tabs; there is no sixth slot and no Tools/More bucket. */
+   Split is a CONTEXTUAL trip utility (§27): a routable region reached from Trip, expense
+   actions and Search, never a permanent slot. Search and SOS are global actions, never
+   tabs (§21, §28). The quiet orientation anchor in the top strip names the trip and the
+   current destination — no breadcrumb furniture (§6 "Orientation"). */
 import Icon from "./Icon.astro";
-interface Dest { key: "trip" | "itinerary" | "map" | "guide" | "split"; label: string }
+interface Dest { key: "trip" | "itinerary" | "map" | "guide"; label: string }
 interface Props {
   base: string;
   destinations: Dest[];
-  /** Guide title for the compact scrolled strip — never the wordmark's job. */
+  /** The trip's title — the orientation anchor's first word (the wordmark on Atlas). */
   title: string;
-  searchPlaceholder?: string;
+  /** "guide": the four regions are on this page. "atlas": Atlas is current and the four
+      entries link into the current trip's page (guideHref), or are absent with no trip. */
+  mode?: "guide" | "atlas";
+  guideHref?: string | null;
 }
-const { base, destinations, title, searchPlaceholder = "Search this trip, places, guides…" } = Astro.props;
-const ICON: Record<Dest["key"], string> = {
+const { base, destinations, title, mode = "guide", guideHref = null } = Astro.props;
+const atlas = mode === "atlas";
+const linked = atlas ? (guideHref ? destinations : []) : destinations;
+const ICON: Record<Dest["key"] | "atlas" | "search" | "create", string> = {
+  atlas: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
   trip: '<path d="M3 11.5 12 4l9 7.5"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/>',
   itinerary: '<rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/><path d="M8 14h3M13 14h3M8 18h3"/>',
   map: '<path d="M3 6.5 9 4l6 2.5 6-2.5v13L15 19.5 9 17l-6 2.5z"/><path d="M9 4v13M15 6.5v13"/>',
   guide: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 7h7M9 11h5"/>',
-  split: '<circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/>',
+  create: '<path d="M12 5v14M5 12h14"/>',
 };
 ---
+{/* Top strip: orientation left, global actions right. Sticky, opaque, never glass (§4). */}
 <div class="chrome" id="chrome">
-  <nav class="topbar" aria-label="Site navigation">
-    <a href={`${base}/`} class="topbar-home" aria-label="Waypoint — back to the atlas">
-      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
-        <path d="M1 5h12M1 5l4-4M1 5l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span class="topbar-wordmark">Waypoint</span>
-      <span class="topbar-atlas">Atlas</span>
-    </a>
-    {/* The compact scrolled strip trades the wordmark for the trip's name (D6-43): the
-        chrome condenses, it never disappears, and Search + SOS stay reachable. */}
-    <span class="topbar-title" aria-hidden="true">{title}</span>
-    {/* Desktop destination row — the same five keys the bottom bar carries. Plain buttons
-        with aria-current inside a nav, not a tablist: every destination is a region of one
-        page, and the router (guide-ui.js) is the single switch. */}
-    <div class="destnav" role="group" aria-label="Trip destinations">
-      {destinations.map((d, i) => (
-        <button class="destnav-btn" type="button" data-dest={d.key} data-dest-nav
-                aria-controls={`dest-${d.key}`} aria-current={i === 0 ? "true" : undefined}>
-          <svg class="wp-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON[d.key]} />
-          <span>{d.label}</span>
-        </button>
-      ))}
+  <nav class="topbar" aria-label="Trip">
+    <div class="orient">
+      <span class="orient-dot" aria-hidden="true"></span>
+      {atlas ? <h1 class="orient-title orient-h1">{title}</h1> : <span class="orient-title">{title}</span>}
+      <span class="orient-sep" aria-hidden="true">·</span>
+      <span class="orient-dest" data-orient-dest>{atlas ? "Atlas" : destinations[0]?.label}</span>
     </div>
     <div class="topbar-right">
-      {/* Compact Search control — the scrolled-state affordance on mobile, and the desktop
-          field's icon twin. Both open the one search overlay (features/search). */}
-      <button class="topbar-btn topbar-search-btn" type="button" data-search-open aria-label="Search" aria-haspopup="dialog">
-        <svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <button class="topbar-btn topbar-search-btn" type="button" data-search-open aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="Meta+K Control+K">
+        <svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" set:html={ICON.search} />
         <span class="tb-label">Search</span>
       </button>
-      <span class="topbar-sos-mount" data-sos-mount></span>
-      <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide"><svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg> <span class="tb-label">Share</span></button>
+      {!atlas && <span class="topbar-sos-mount" data-sos-mount></span>}
+      {!atlas && <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide"><svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>}
       <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
     </div>
   </nav>
-  {/* The expanded Search field. Part of the global utility layer, not the content body:
-      at the natural top of the page it is a real, large, discoverable field; as the reader
-      scrolls it folds away and the compact control above stands in (search-ui-final §3–4).
-      On desktop it is the persistent wide field in the utility chrome (§2). A real input,
-      so keyboard focus is the activation — the overlay takes over on focus/enter. */}
-  <div class="searchbar" role="search">
-    <label class="searchbar-field">
-      <svg class="searchbar-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
-      <input class="searchbar-input" type="search" placeholder={searchPlaceholder} aria-label="Search this trip and every guide" autocomplete="off" data-search-field />
-    </label>
-  </div>
 </div>
 
-{/* The phone's primary navigation: five fixed, always-available slots (D6-05). Yields
-    while reading (features/mobile-nav) but never becomes gesture-only. */}
-<nav class="botbar" aria-label="Trip destinations">
-  {destinations.map((d, i) => (
+{/* Desktop: the adaptive floating rail. Compact and quiet, every entry named, keyboard
+    reachable; it holds its place while panes reorganise (motion.md §5). Never a flat sidebar. */}
+<nav class="rail" aria-label="Destinations">
+  <a class="rail-item rail-atlas" href={`${base}/`} data-dest="atlas" data-dest-link aria-current={atlas ? "page" : undefined}>
+    <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON.atlas} />
+    <span class="rail-txt">Atlas</span>
+  </a>
+  {linked.map((d, i) => atlas ? (
+    <a class="rail-item" href={`${guideHref}#dest-${d.key}`} data-dest={d.key} data-dest-link>
+      <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON[d.key]} />
+      <span class="rail-txt">{d.label}</span>
+    </a>
+  ) : (
+    <button class="rail-item" type="button" data-dest={d.key} data-dest-nav
+            aria-controls={`dest-${d.key}`} aria-current={i === 0 ? "true" : undefined}>
+      <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON[d.key]} />
+      <span class="rail-txt">{d.label}</span>
+    </button>
+  ))}
+  <span class="rail-rule" aria-hidden="true"></span>
+  <button class="rail-item rail-action" type="button" data-search-open aria-label="Search" aria-haspopup="dialog">
+    <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" set:html={ICON.search} />
+    <span class="rail-txt">Search</span>
+  </button>
+  <a class="rail-item rail-action" href={`${base}/new/`}>
+    <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" set:html={ICON.create} />
+    <span class="rail-txt">Create</span>
+  </a>
+</nav>
+
+{/* Phone: five fixed slots. Yields while reading (features/mobile-nav), never gesture-only. */}
+<nav class="botbar" aria-label="Destinations">
+  <a class="botslot" href={`${base}/`} data-dest="atlas" data-dest-link aria-current={atlas ? "page" : undefined}>
+    <svg class="wp-ico bslot-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON.atlas} />
+    <span class="bslot-txt">Atlas</span>
+  </a>
+  {linked.map((d, i) => atlas ? (
+    <a class="botslot" href={`${guideHref}#dest-${d.key}`} data-dest={d.key} data-dest-link>
+      <svg class="wp-ico bslot-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON[d.key]} />
+      <span class="bslot-txt">{d.label}</span>
+    </a>
+  ) : (
     <button class="botslot" type="button" data-dest={d.key} data-dest-nav
             aria-controls={`dest-${d.key}`} aria-current={i === 0 ? "true" : undefined}>
-      <svg class="wp-ico bslot-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON[d.key]} />
+      <svg class="wp-ico bslot-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON[d.key]} />
       <span class="bslot-txt">{d.label}</span>
     </button>
   ))}

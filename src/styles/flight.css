@@ -1,6 +1,6 @@
 /* === CHAPTER OPENERS + GUIDED CHAIN ==========================================
    The one orchestrated motion moment lives in the masthead arrival
-   (gsap-hero.js). Everything else is calm: a section change is a quick opacity
+   (scripts/arrival.js). Everything else is calm: a section change is a quick opacity
    fade, and the chapter opener (ghost numeral + title + contents line) and
    next-section cards are static. */
 

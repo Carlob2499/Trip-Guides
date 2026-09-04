@@ -197,3 +197,7 @@
   .tn-atom--next.tn-atom--photo{grid-template-columns:120px minmax(0,1fr)}
 }
 @media print{.trip-goto,.trip-dl-row{display:none}}
+
+/* Contextual utilities (design-system.md §27): Split is a card on Trip, not a slot. */
+.trip-goto--split{margin-top:.6rem}
+.trip-goto-title [data-split-summary]:not(:empty)::before{content:" · "}
