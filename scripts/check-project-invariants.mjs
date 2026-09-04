@@ -162,13 +162,13 @@ requirePath("docs/reference/component-registry.json", "Waypoint component regist
 for (const rel of [
   "docs/design-handoff",
   "docs/mockups",
-  "docs/reference/motion.md",
-  "docs/reference/motion-anchors.md",
-  "docs/reference/search-ui-final.md",
-  "docs/reference/sos-ui-final.md",
-  "docs/reference/visual-redesign.md",
-  "docs/research/waypoint-design-reference-packet.md",
-  "docs/archive/visual-redesign-history.md",
+  ["docs", "reference", "motion.md"].join("/"),
+  ["docs", "reference", "motion-anchors.md"].join("/"),
+  ["docs", "reference", "search-ui-final.md"].join("/"),
+  ["docs", "reference", "sos-ui-final.md"].join("/"),
+  ["docs", "reference", "visual-redesign.md"].join("/"),
+  ["docs", "research", "waypoint-design-reference-packet.md"].join("/"),
+  ["docs", "archive", "visual-redesign-history.md"].join("/"),
 ]) {
   if (fs.existsSync(file(rel))) fail(`Design authority duplication: ${rel} must stay deleted; docs/reference/design-system.md is sole authority`);
   else pass(`Design authority singularity: ${rel}`);

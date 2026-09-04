@@ -14,10 +14,10 @@ Do not search for or resurrect historical design handoffs, prototypes, screensho
 
 ## Scope boundary
 
-This skill owns presentation, not destination truth.
+This skill owns presentation-only work, not destination truth.
 
-- Preserve factual guide values verbatim during presentation work.
-- Creating/correcting/verifying prices, hours, venues, transit, events, itineraries or recommendations belongs to `waypoint-guide-author`.
+- Preserve every fact value verbatim during presentation-only work.
+- Creating, correcting, or verifying destination facts—including prices, hours, venues, transit, events, itineraries, or recommendations—belongs to `waypoint-guide-author`.
 - Never invent data, people, statuses, actions, ratings, live state or controls to make a layout look complete.
 
 ## Non-negotiable contract

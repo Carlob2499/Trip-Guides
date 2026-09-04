@@ -1,6 +1,6 @@
 /* Which of check-drift's complaints are real.
  *
- * `docs/design-handoff/enforcement/check-drift.mjs` is a vendored kit tool. It emits ~1377 lines
+ * `scripts/check-design-drift.mjs` is the preserved machine-facing drift checker. It emits ~1377 lines
  * against this repo and roughly nine in ten are known false positives — which is not a
  * criticism of it, it is a tool written against the kit's own export, not against what shipped.
  * The cost is real though: two genuine MOTION violations sat in that noise through an entire
@@ -18,7 +18,7 @@ import { closeSync, openSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const CHECKER = "docs/design-handoff/enforcement/check-drift.mjs";
+const CHECKER = "scripts/check-design-drift.mjs";
 const ROOTS = ["src/styles", "src/features", "src/components", "src/layouts", "src/pages", "src/scripts", "src/lib"];
 
 /* check-drift prints "  file:line  [rule]" then the source line — but truncated to 100 chars.
@@ -166,7 +166,7 @@ export const EXEMPTIONS = [
   },
   {
     id: "painted-atlas-is-generative-art-not-chrome",
-    why: "painted-atlas.css (component: PaintedAtlas.astro) is a generative painter's-sky illustration — 'the living cover every guide is born with', per its own header comment and docs/reference/motion.md's 'the overture, then the heartbeat' doctrine — not flat UI chrome, and the binary-radius/no-elevation/token-only rules this gate otherwise enforces are written for chrome. Two categories, both load-bearing to the art itself, not driftable to the flat system without breaking it: COLOUR — the four mood palettes (day/night/dawn/dusk sky1/sky2/ground) and the sun/moon orb's own colour are FIXED PAINTERLY BASES the component's own comment says are 'pulled ~12-16% toward the guide's accent' at render time via color-mix() — they are the un-mixed input to that blend, the same 'this literal IS the definition' role hex-is-the-source-of-truth already grants base.css, just for one component's private palette instead of the shared one (base.css's shared tokens are the wrong home for an illustration-specific palette nothing else reads). ELEVATION — the orb's box-shadow is a light-glow (0 blur-radius on the shape itself, all in the shadow's spread+blur) simulating a sun/moon's luminance halo, not a drop shadow implying page depth; removing it turns a glowing celestial body into a flat dead sticker, which is a different visual claim than 'no elevation' was ever about. RADIUS (`.paint-atlas--mini{border-radius:inherit}`) is excluded from this exemption on purpose — that one is a plain false positive (inherit defers to whatever shape the containing card already resolved, transitively 0 or 999px, not a new literal) and is covered by its own entry below instead, because the reasoning is generic, not specific to this file being art.",
+    why: "painted-atlas.css (component: PaintedAtlas.astro) is a generative painter's-sky illustration — 'the living cover every guide is born with', per its own header comment and docs/reference/design-system.md's 'the overture, then the heartbeat' doctrine — not flat UI chrome, and the binary-radius/no-elevation/token-only rules this gate otherwise enforces are written for chrome. Two categories, both load-bearing to the art itself, not driftable to the flat system without breaking it: COLOUR — the four mood palettes (day/night/dawn/dusk sky1/sky2/ground) and the sun/moon orb's own colour are FIXED PAINTERLY BASES the component's own comment says are 'pulled ~12-16% toward the guide's accent' at render time via color-mix() — they are the un-mixed input to that blend, the same 'this literal IS the definition' role hex-is-the-source-of-truth already grants base.css, just for one component's private palette instead of the shared one (base.css's shared tokens are the wrong home for an illustration-specific palette nothing else reads). ELEVATION — the orb's box-shadow is a light-glow (0 blur-radius on the shape itself, all in the shadow's spread+blur) simulating a sun/moon's luminance halo, not a drop shadow implying page depth; removing it turns a glowing celestial body into a flat dead sticker, which is a different visual claim than 'no elevation' was ever about. RADIUS (`.paint-atlas--mini{border-radius:inherit}`) is excluded from this exemption on purpose — that one is a plain false positive (inherit defers to whatever shape the containing card already resolved, transitively 0 or 999px, not a new literal) and is covered by its own entry below instead, because the reasoning is generic, not specific to this file being art.",
     test: (v) => v.file.endsWith("painted-atlas.css") && (v.category === "COLOUR" || v.category === "ELEVATION"),
   },
   {

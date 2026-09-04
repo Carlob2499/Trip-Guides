@@ -66,7 +66,7 @@ describe("composeSections — determinism & identity", () => {
     // The compatibility canary: untagged, well-fed guides must cost zero changes. (us is
     // deliberately NOT here — it carries two genuine one-card tabs, so the Composer's
     // standing proposal for it is the system WORKING; see the R6 ledger in
-    // docs/archive/visual-redesign-history.md.)
+    // docs/reference/design-system.md.)
     const guides = await readGuides();
     for (const slug of ["korea", "denmark"]) {
       const g = guides.find((x) => x.slug === slug);
