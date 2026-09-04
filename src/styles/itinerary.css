@@ -214,3 +214,43 @@ body.chrome-yield .day-rail{transform:translateY(calc(60px + var(--safe-bottom) 
 /* Geometry (§31). */
 .day-know-link{border-radius:var(--r-compact)}
 .stop-media{border-radius:var(--r-inset)}
+
+/* --- Compact completed states (§25): stops behind the clock fold into one line. --------- */
+.stops-behind{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;margin:.2rem 0 0;padding:0 .9rem;border:1px solid var(--rule2);border-radius:var(--r-pill);background:var(--card);color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;cursor:pointer}
+.stops-behind::before{content:"✓";color:var(--green)}
+.stops-behind:hover{color:var(--ink);border-color:var(--ink)}
+.stops-behind:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+/* bp:DESKTOP_MIN−1 — the desktop workbench keeps the whole chronology in view (dimmed), so the
+   fold and its button exist only where one day owns a phone screen. */
+@media(max-width:1179px){.stops[data-behind="folded"] .stop-past{display:none}}
+@media(min-width:1180px){.stops-behind{display:none}}
+
+/* --- Pin to compare (§16): desktop only, at most two, a tray above the map. ------------- */
+.stop-pin{display:none}
+.itin-compare{display:none}
+@media(min-width:1180px){
+  .stop{grid-template-columns:1.1rem minmax(3.6rem,5rem) minmax(0,1fr) 44px;grid-template-areas:"rail when main pin"}
+  .stop--photo{grid-template-columns:1.1rem minmax(3.6rem,5rem) 88px minmax(0,1fr) 44px;grid-template-areas:"rail when media main pin"}
+  .stop-pin{grid-area:pin;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin-top:-.2rem;border:1px solid transparent;border-radius:var(--r-round);background:transparent;color:var(--muted);cursor:pointer;opacity:0;transition:opacity var(--dur-immediate) var(--ease-standard),color var(--dur-immediate) var(--ease-standard)}
+  .stop-pin svg{width:18px;height:18px}
+  .stop:hover .stop-pin,.stop:focus-within .stop-pin,.stop-pin[aria-pressed="true"]{opacity:1}
+  .stop-pin:hover{color:var(--ink);border-color:var(--rule2)}
+  .stop-pin[aria-pressed="true"]{color:var(--cta-ink);background:var(--cta)}
+  .stop-pin:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px;opacity:1}
+  .itin-compare{display:block;flex:none;margin:0 0 .6rem;padding:.6rem .7rem .5rem;border:1px solid var(--rule);border-radius:var(--r-card);background:var(--card)}
+  .itin-compare[hidden]{display:none}
+  .itin-compare-k{margin:0 0 .45rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+  .itin-compare-n{color:var(--muted);font-weight:600}
+  .itin-compare-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:.5rem}
+  .itin-compare-tile{position:relative;display:flex;flex-direction:column;gap:.15rem;min-width:0;padding:.6rem .75rem 2.6rem;border:1px solid var(--rule2);border-radius:var(--r-compact);background:var(--bg)}
+  .itin-compare-day{margin:0;font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .itin-compare-time{color:var(--ink);letter-spacing:0;text-transform:none;font-variant-numeric:tabular-nums}
+  .itin-compare-name{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);line-height:1.2;overflow-wrap:anywhere}
+  .itin-compare-note{margin:0;font-size:var(--text-caption);color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .itin-compare-focus,.itin-compare-unpin{position:absolute;bottom:.4rem;min-height:32px;padding:0 .7rem;border:1px solid var(--rule2);border-radius:var(--r-pill);background:var(--card);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;cursor:pointer}
+  .itin-compare-focus{left:.6rem;color:var(--accent-ink)}
+  .itin-compare-unpin{right:.6rem;color:var(--muted)}
+  .itin-compare-focus:hover,.itin-compare-unpin:hover{border-color:var(--ink);color:var(--ink)}
+  .itin-compare-focus:focus-visible,.itin-compare-unpin:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+  .itin-compare-gap{margin:.5rem 0 0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
+}

@@ -11,7 +11,7 @@
    Every minute it re-reads the clock; every check-off in the Itinerary re-focuses it. It
    never invents a time: a stop with no clock time is placed by the day's own order. */
 
-import { tripPhase, todayIndex, focusFor, daysToGo } from "../model/lifecycle";
+import { tripPhase, todayIndex, focusFor, daysToGo, minutesUntil, untilLabel } from "../model/lifecycle";
 import { tripWindow } from "../../../lib/trip-dates";
 import { todayInTz, esc, readStoredRecord } from "../../../scripts/util.js";
 import { universalTransitLinks, nativeTransitLinks } from "../../../lib/transit-links";
@@ -45,7 +45,18 @@ function imageHtml(images, stop, sizes) {
     ' sizes="' + sizes + '" alt="" loading="eager" decoding="async" onerror="var a=this.closest(\'.tn-atom\');this.closest(\'.tn-media\').hidden=true;if(a)a.classList.remove(\'tn-atom--photo\')"></span>';
 }
 
-function stopAtom(stop, role, country, origin, index, images) {
+/* "Leave by" (design-system.md §24, third in the hierarchy) is shown only from data the guide
+   holds: an authored leave-by on the current stop, or the next stop's own clock time with a
+   countdown against the destination clock. Never a travel-time estimate. */
+function leaveHtml(stop, next, nowMinutes) {
+  if (stop.leaveBy) return '<p class="tn-leave"><span class="tn-leave-k">Leave by</span><span class="tn-leave-t">' + esc(stop.leaveBy) + "</span></p>";
+  if (!next) return "";
+  var until = minutesUntil(next.time, nowMinutes);
+  if (until === null) return "";
+  return '<p class="tn-leave"><span class="tn-leave-k">Next at</span><span class="tn-leave-t">' + esc(next.time) + '</span><span class="tn-leave-in">' + esc(untilLabel(until)) + "</span></p>";
+}
+
+function stopAtom(stop, role, country, origin, index, images, leave) {
   var branch = stop.branch ? '<span class="tn-branch">' + esc(stop.branch) + "</span>" : "";
   var time = stop.time ? '<span class="tn-time">' + esc(stop.time) + "</span>" : "";
   var note = stop.note ? '<p class="tn-note">' + esc(stop.note) + "</p>" : "";
@@ -56,7 +67,7 @@ function stopAtom(stop, role, country, origin, index, images) {
     media +
     '<div class="tn-body">' +
       '<p class="tn-role"><span class="tn-role-k">' + (role === "now" ? "Now" : "Next") + "</span>" + time + branch + num + "</p>" +
-      '<h3 class="tn-name">' + esc(stop.name) + "</h3>" + note +
+      '<h3 class="tn-name">' + esc(stop.name) + "</h3>" + note + (leave || "") +
       (links ? '<div class="tn-go"><span class="tn-go-label">Get there</span>' + links + "</div>" : "") +
     "</div></article>";
 }
@@ -138,7 +149,8 @@ export function initTrip() {
     if (idx < 0) { nowEl.innerHTML = ""; return; }
     var day = days[idx];
     var arrival = idx === 0;
-    var f = focusFor(day.stops, destNowMinutes(tz), doneSet(idx));
+    var nowMin = destNowMinutes(tz);
+    var f = focusFor(day.stops, nowMin, doneSet(idx));
     // 1 — where today sits: the day's own name and the way to its full plan.
     var h = '<div class="tn-day">' +
       '<p class="tn-kicker"><span>' + (arrival ? "Arrival" : "Today") + " · " + esc(day.date) + '</span><a href="#' + esc(day.anchor) + '" data-dest-go="itinerary" class="tn-daylink">Day ' + (idx + 1) + " of " + days.length + " in the itinerary →</a></p>" +
@@ -150,7 +162,7 @@ export function initTrip() {
       h += '<p class="tn-none">No timed stops today — the day\'s plan is in the itinerary.</p>';
     } else {
       h += '<div class="tn-stack">';
-      if (f.now) h += stopAtom(f.now, "now", country, origin, day.stops.indexOf(f.now), images);
+      if (f.now) h += stopAtom(f.now, "now", country, origin, day.stops.indexOf(f.now), images, leaveHtml(f.now, f.next, nowMin));
       if (f.next) h += stopAtom(f.next, "next", country, origin, day.stops.indexOf(f.next), images);
       if (!f.now && !f.next) h += '<p class="tn-none">Every stop today is checked off.</p>';
       h += "</div>";
@@ -171,8 +183,13 @@ export function initTrip() {
     }
     if (f.done.length) side += '<p class="tn-done">' + f.done.length + " stop" + (f.done.length === 1 ? "" : "s") + " behind you</p>";
     if (side) h += '<div class="tn-side">' + side + "</div>";
+    // The minute tick repaints only when something changed: a polite live region is not
+    // re-announced, and the objects keep their identity (§8 reflow) between ticks.
+    if (h === lastPaint) return;
+    lastPaint = h;
     nowEl.innerHTML = h;
   }
+  var lastPaint = null;
 
   function paintReadiness() {
     root.querySelectorAll("[data-readiness]").forEach(function (block) {

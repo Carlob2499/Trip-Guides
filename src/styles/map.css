@@ -51,6 +51,12 @@
   .map-chip{flex:none}
 }
 
+/* Google-primary mounts (§15): the dormant embed is invisible and a quiet line says the map
+   is on its way; the line leaves the moment either provider is the map. */
+.map-loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;padding:.4rem .9rem;border-radius:var(--r-pill);background:var(--card);border:1px solid var(--rule);font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);white-space:nowrap;pointer-events:none}
+.itin-map:not([data-map-primary="google"]) .map-loading,.itin-map[data-map-provider] .map-loading{display:none}
+.itin-map[data-map-primary="google"]:not([data-map-provider]) .osmmap{visibility:hidden}
+
 /* === EMBEDDED MAP ============================================================
    A bare .osmmap in prose keeps its own 300px band. Inside a map MOUNT the frame fills the
    mount — the workbench and the Map destination size the mount, never the iframe. */

@@ -26,6 +26,83 @@ export function initWorkbench(root) {
   try { collapsed = localStorage.getItem(KEY + "-map") === "0"; } catch (_) {}
   var selectedPinId = null;
 
+  /* Pin-to-compare (design-system.md §16 "Multi-panel policy"): single focus is the default;
+     the traveler may deliberately pin up to two stops, which sit as compact tiles above the
+     map — the same objects, lifted out of the chronology, never a third pane. A third pin
+     replaces the oldest. Everything shown is read from the pinned row itself. */
+  var pinned = [];
+  var tray = document.createElement("div");
+  tray.className = "itin-compare";
+  tray.setAttribute("aria-label", "Pinned to compare");
+  tray.hidden = true;
+  var head = mapPane ? mapPane.querySelector(".itin-mappane-head") : null;
+  if (head && head.parentNode) head.parentNode.insertBefore(tray, head.nextSibling);
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function readStop(id) {
+    var btn = bench.querySelector('[data-pin-compare="' + id + '"]');
+    var row = btn && btn.closest(".stop");
+    if (!row) return null;
+    var q = function (sel) { var el = row.querySelector(sel); return el ? el.textContent.trim() : ""; };
+    var lat = parseFloat(row.getAttribute("data-lat")), lng = parseFloat(row.getAttribute("data-lng"));
+    return { id: id, name: q(".stop-name"), time: q(".stop-time"), note: q(".stop-note"), day: btn.getAttribute("data-pin-day") || "", date: btn.getAttribute("data-pin-date") || "",
+      lat: isFinite(lat) ? lat : null, lng: isFinite(lng) ? lng : null, mapId: row.getAttribute("data-map-stop") };
+  }
+  function kmBetween(a, b) {
+    if (a.lat == null || b.lat == null) return null;
+    var R = 6371, toRad = function (d) { return d * Math.PI / 180; };
+    var dLat = toRad(b.lat - a.lat), dLng = toRad(b.lng - a.lng);
+    var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
+  function paintTray() {
+    var stops = pinned.map(readStop).filter(Boolean);
+    bench.querySelectorAll("[data-pin-compare]").forEach(function (b) {
+      b.setAttribute("aria-pressed", pinned.indexOf(b.getAttribute("data-pin-compare")) >= 0 ? "true" : "false");
+    });
+    tray.hidden = !stops.length;
+    if (!stops.length) { tray.innerHTML = ""; return; }
+    var h = '<p class="itin-compare-k">Pinned to compare <span class="itin-compare-n">' + stops.length + " of 2</span></p><div class=\"itin-compare-row\">";
+    stops.forEach(function (s) {
+      h += '<article class="itin-compare-tile" data-compare-id="' + esc(s.id) + '">' +
+        '<p class="itin-compare-day">Day ' + esc(s.day) + (s.date ? " · " + esc(s.date) : "") + (s.time ? ' <span class="itin-compare-time">' + esc(s.time) + "</span>" : "") + "</p>" +
+        '<h4 class="itin-compare-name">' + esc(s.name) + "</h4>" +
+        (s.note ? '<p class="itin-compare-note">' + esc(s.note) + "</p>" : "") +
+        (s.mapId ? '<button class="itin-compare-focus" type="button" data-compare-focus="' + esc(s.mapId) + '">Show on the map</button>' : "") +
+        '<button class="itin-compare-unpin" type="button" data-compare-unpin="' + esc(s.id) + '" aria-label="Unpin ' + esc(s.name) + '">Unpin</button>' +
+        "</article>";
+    });
+    h += "</div>";
+    if (stops.length === 2) {
+      var km = kmBetween(stops[0], stops[1]);
+      h += '<p class="itin-compare-gap">' + (km != null ? "≈" + (km < 10 ? km.toFixed(1) : Math.round(km)) + " km apart, straight-line" : "Distance unknown — one stop has no verified coordinates") + "</p>";
+    }
+    tray.innerHTML = h;
+  }
+  bench.addEventListener("click", function (e) {
+    var pin = e.target.closest && e.target.closest("[data-pin-compare]");
+    if (pin) {
+      var id = pin.getAttribute("data-pin-compare");
+      var at = pinned.indexOf(id);
+      if (at >= 0) pinned.splice(at, 1);
+      else { pinned.push(id); if (pinned.length > 2) pinned.shift(); }
+      paintTray();
+      if (collapsed && pinned.length) { collapsed = false; apply(); }
+      return;
+    }
+    var un = e.target.closest && e.target.closest("[data-compare-unpin]");
+    if (un) { pinned = pinned.filter(function (x) { return x !== un.getAttribute("data-compare-unpin"); }); paintTray(); return; }
+    var fo = e.target.closest && e.target.closest("[data-compare-focus]");
+    if (fo) {
+      var mid = fo.getAttribute("data-compare-focus");
+      var row = bench.querySelector('[data-map-stop="' + mid + '"]');
+      var day = row && row.closest(".day[data-day]");
+      if (day && day.hidden) { var jump = doc.querySelector('.itin-daynav [data-day-jump="' + day.getAttribute("data-day") + '"]'); if (jump) jump.click(); }
+      selectStop(mid, { reveal: true });
+      if (mapMount && mapMount.getAttribute("data-map-provider") === "google" && typeof mapMount.__focusPin === "function") mapMount.__focusPin(mid);
+      else focusOsmPin(mid);
+    }
+  });
+
   function selectStop(id, opts) {
     opts = opts || {};
     selectedPinId = id;
@@ -92,6 +169,7 @@ export function initWorkbench(root) {
     mapFrame.hidden = !url;
     if (!url) return;
     if (mapFrame.hasAttribute("src")) mapFrame.setAttribute("src", url);
+    else if (mapFrame.hasAttribute("data-fallback-src")) mapFrame.setAttribute("data-fallback-src", url);
     else mapFrame.setAttribute("data-src", url);
   }
   function focusOsmPin(id) {

@@ -81,10 +81,11 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
     </div>
   </header>
 
-  {/* ═══ PRE-TRIP ═══ */}
+  {/* ═══ PRE-TRIP ═══ readiness leads as the one feature object (§24 "may emphasize readiness");
+      entry, closures, forecast and files support it as compact tiles — never equal cards. */}
   <section class="trip-phase trip-pre" data-trip-phase="pre" aria-label="Before you go">
     {readiness.bookAhead.length > 0 && (
-      <div class="trip-block trip-priorities" data-readiness={storeKey}>
+      <div class="trip-block trip-priorities trip-pre-lead" data-readiness={storeKey}>
         <h3 class="trip-h">Still to settle</h3>
         <p class="trip-sub" data-readiness-open></p>
         {/* A short stack (§7 pre-trip): the first items lead, the rest fold but stay counted. */}
@@ -108,14 +109,15 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
       </div>
     )}
     {readiness.bookAhead.length === 0 && readiness.other.length > 0 && (
-      <div class="trip-block trip-priorities" data-readiness={storeKey}>
+      <div class="trip-block trip-priorities trip-pre-lead" data-readiness={storeKey}>
         <h3 class="trip-h">Before you go</h3>
         <p class="trip-sub" data-readiness-open></p>
         <ul class="trip-rem" data-readiness-list>{readiness.other.map((item) => <ReminderRow item={item} />)}</ul>
       </div>
     )}
+    <div class="trip-pre-side">
     {entry && entry.length > 0 && (
-      <div class="trip-block trip-entry">
+      <div class="trip-block trip-block--tile trip-entry">
         <h3 class="trip-h"><Icon name="shield" size={16} /> Entry</h3>
         {entry.map((e: any) => (
           <p class="trip-entry-row"><b>{e.homeCountry}</b> — {e.visa}{e.passportValidity ? ` · passport ${e.passportValidity}` : ""} <span class="trip-src">checked {e.verified_on}</span></p>
@@ -123,7 +125,7 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
       </div>
     )}
     {(during.length > 0 || closures.length > 0) && (
-      <div class="trip-block trip-closures">
+      <div class="trip-block trip-block--tile trip-closures">
         <h3 class="trip-h"><Icon name="calendar" size={16} /> Closed during your dates</h3>
         {during.length > 0 && (
           <ul class="trip-list">
@@ -140,7 +142,7 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
       </div>
     )}
     {hasWeather && (
-      <div class="trip-block trip-weather">
+      <div class="trip-block trip-block--tile trip-weather">
         <div id="wxWrap" class="wx-wrap" hidden><div id="wxMount"></div></div>
         <div id="tkPackingCard" class="trip-packing" hidden>
           <p class="trip-sub">Pack for the forecast</p>
@@ -149,7 +151,7 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
       </div>
     )}
     {(exports.gpx || exports.ics) && (
-      <div class="trip-block trip-files">
+      <div class="trip-block trip-block--tile trip-files">
         <h3 class="trip-h">Take it with you</h3>
         <div class="trip-dl-row">
           {exports.gpx && <a class="trip-dl" href={`${base}/guides/${slug}.gpx`} download={`${slug}.gpx`}><Icon name="map" size={15} /> Map points <span class="trip-dl-ext">.gpx</span></a>}
@@ -158,6 +160,7 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
         <p class="trip-dim">Files, not links — they keep working with no signal.</p>
       </div>
     )}
+    </div>
     {days.length > 0 && (
       <button class="trip-goto" type="button" data-dest-go="itinerary">
         <span class="trip-goto-label">The plan</span>

@@ -11,7 +11,7 @@
 
 import type { TripDay, TripStop } from "./lifecycle";
 
-interface WaypointLike { name?: string; time?: string; note?: string; lat?: number; lng?: number; branch?: string }
+interface WaypointLike { name?: string; time?: string; note?: string; lat?: number; lng?: number; branch?: string; leave_by?: string }
 interface BranchLike { label: string; body?: string; waypoints?: WaypointLike[] }
 interface DayLike {
   date?: string; title?: string; tldr?: string; fit?: string; pace?: string; env?: string;
@@ -27,6 +27,7 @@ function toStop(w: WaypointLike, branch: string | null): TripStop {
     lat: Number.isFinite(w.lat) ? (w.lat as number) : null,
     lng: Number.isFinite(w.lng) ? (w.lng as number) : null,
     branch: branch ?? (w.branch ? String(w.branch) : null),
+    leaveBy: w.leave_by ? String(w.leave_by) : null,
   };
 }
 

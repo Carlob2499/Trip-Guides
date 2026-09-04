@@ -1,13 +1,14 @@
-/* Waypoint Google Maps provider — the connected-state map (design-system.md D6-51, F7).
+/* Waypoint Google Maps provider — the live map (design-system.md §15, §26).
    Self-boots ONLY when PUBLIC_GMAPS_KEY is present at build (via tgConfig); with no key the
    OpenStreetMap embed in each mount IS the map and this never runs.
 
    Reliability contract, in order:
-     · the OSM iframe stays exactly where it is until Google's map has actually fired its
-       first `idle` (initialised and painted). Only then is the iframe removed. A failed SDK
-       load, a bad key, a quota error or a network drop leaves the OSM map standing — never a
-       blank mount. If Google fails AFTER init, the mount is marked degraded rather than
-       emptied.
+     · a mount built with a key is Google-primary (data-map-primary="google"): its OSM iframe
+       is DORMANT (the embed URL waits on data-fallback-src) and the mount says "Loading the
+       map…" until Google's map fires its first `idle`. A failed SDK load, a bad key, a quota
+       error, a network drop or 15 s without a first paint wakes the OSM embed as the honest
+       fallback — never a blank mount. If Google fails AFTER init, the mount is marked
+       degraded rather than emptied.
      · every mount declares a LENS in its data: "all" (the Map destination — every pin,
        category chips, day chips), "days" (the Itinerary workbench — the selected day's stops
        and their route, following `tg:day`), "chapter" (a Guide chapter's own places).
@@ -153,6 +154,7 @@ export function boot(cfg) {
       var stale = mount.querySelector(".map-fs-btn");
       if (stale) stale.remove();
       mount.setAttribute("data-map-provider", "google");
+      try { mount.dispatchEvent(new CustomEvent("tg:map-ready")); } catch (_) {}
       draw();
       var initial = visible();
       if (initial.length > 1) fitTo(initial);
@@ -214,19 +216,32 @@ export function boot(cfg) {
     mount.insertBefore(bar, mount.firstChild);
   }
 
+  /* Google did not become the map: wake the dormant OSM embed (Google-primary mounts) and say
+     so on the mount for CSS and the canary. Idempotent — the watchdog and a load error can
+     both arrive. */
+  function fallBack(mount, why) {
+    if (mount.getAttribute("data-map-provider") === "google") return;
+    var frame = mount.querySelector(".osmmap");
+    if (frame && frame.hasAttribute("data-fallback-src")) {
+      frame.setAttribute("src", frame.getAttribute("data-fallback-src"));
+      frame.removeAttribute("data-fallback-src");
+    }
+    mount.setAttribute("data-map-provider", "osm");
+    mount.setAttribute("data-map-google-failed", "");
+    console.warn("[gmaps] fell back to the OpenStreetMap embed:", why);
+  }
+
   function init(mount) {
     var dataEl = mount.querySelector("script[data-map-data]");
     if (!dataEl) return;
     var data;
     try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
     if (!data.center || typeof data.center.lat !== "number") return;
+    var watchdog = setTimeout(function () { fallBack(mount, "no first paint within 15 s"); }, 15000);
+    var stop = function () { clearTimeout(watchdog); };
+    mount.addEventListener("tg:map-ready", stop, { once: true });
     loadApi().then(function (api) { initMap(api, mount, data); })
-      .catch(function (err) {
-        // The OSM iframe is still in place — nothing to undo. Say so on the mount for CSS/tests.
-        mount.setAttribute("data-map-provider", "osm");
-        mount.setAttribute("data-map-google-failed", "");
-        console.warn("[gmaps] failed to load:", err && err.message);
-      });
+      .catch(function (err) { stop(); fallBack(mount, err && err.message); });
   }
 
   var inited = new WeakSet();

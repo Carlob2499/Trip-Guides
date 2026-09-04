@@ -17,6 +17,8 @@ export interface TripStop {
   lng: number | null;
   /** Parallel-party label when a day branches (Denmark, D6-46). Null on a shared stop. */
   branch: string | null;
+  /** Authored "leave by" clock time for reaching this stop's successor; null unless verified. */
+  leaveBy: string | null;
 }
 
 export interface TripDay {
@@ -104,6 +106,25 @@ export function focusFor(stops: readonly TripStop[], nowMinutes: number | null, 
   }
   const [now = null, next = null, ...later] = remaining;
   return { now, next, later, done: past, timed };
+}
+
+/** Minutes from `nowMinutes` until a stop's clock start — null with no clock time, and null
+    once the start has passed (a countdown never runs negative or gets invented for "morning"). */
+export function minutesUntil(time: string | null | undefined, nowMinutes: number | null): number | null {
+  const t = parseStartMinutes(time);
+  if (t === null || nowMinutes === null) return null;
+  const d = t - nowMinutes;
+  return d >= 0 ? d : null;
+}
+
+/** "in 12 min" / "in 1 h 20 min" — coarse past twenty minutes so a live region is not
+    re-announced every minute for a stop that is hours away. */
+export function untilLabel(minutes: number): string {
+  if (minutes < 1) return "now";
+  const m = minutes > 20 ? Math.round(minutes / 5) * 5 : minutes;
+  const h = Math.floor(m / 60), r = m % 60;
+  if (h === 0) return `in ${r} min`;
+  return r === 0 ? `in ${h} h` : `in ${h} h ${r} min`;
 }
 
 /** Whole days until the first day, from the shared window — null when undated. */

@@ -71,7 +71,7 @@ export function initMapDestination(root) {
       else {
         // No live map: recentre the OSM embed on the row's own coordinates, honestly.
         var row = rowFor(id), frame = mount && mount.querySelector(".osmmap");
-        if (row && frame) {
+        if (row && frame && !frame.hasAttribute("data-fallback-src")) {
           var lat = parseFloat(row.getAttribute("data-lat")), lng = parseFloat(row.getAttribute("data-lng"));
           if (isFinite(lat) && isFinite(lng)) {
             var s = 0.012;

@@ -270,6 +270,9 @@ const waypoints = z.array(z.object({
   lng: z.number().optional(),
   time: z.string().optional(),
   note: z.string().optional(),
+  // "Leave by" for the NEXT stop, as the author verified it ("13:20"); Trip shows it only
+  // when present. Travel time is never derived from straight-line distance.
+  leave_by: z.string().optional(),
 }));
 
 const section = z.discriminatedUnion("type", [

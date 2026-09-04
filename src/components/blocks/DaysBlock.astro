@@ -139,6 +139,12 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
                       <TransitLinks lat={w.lat} lng={w.lng} name={w.name} country={country} />
                     )}
                   </span>
+                  {/* Pin to compare (§16): the desktop workbench holds at most two pinned stops
+                      beside the map; a phone never shows the control. */}
+                  <button class="stop-pin" type="button" data-pin-compare={`d${di}-s${wi}`} data-pin-day={String(di + 1)} data-pin-date={d.date}
+                          aria-pressed="false" aria-label={`Pin ${w.name} to compare`} title="Pin to compare">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5M8 3h8l-1 7 3 3H6l3-3z"/></svg>
+                  </button>
                 </li>
                 );
               })}
