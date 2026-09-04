@@ -10,7 +10,7 @@ No other design document, handoff, prototype, screenshot, mockup, research packe
 
 `PRODUCT.md` remains product-purpose and factual capability doctrine. `src/styles/base.css`, breakpoints, production components, tests, and `docs/reference/component-registry.json` are executable implementation/conformance artifacts, not separate design authorities. When implementation disagrees with this file, the implementation is debt unless a genuine feasibility, accessibility, truth, or field-use blocker is demonstrated.
 
-The sole canonical visual companion is [`docs/reference/design-system-assets/canonical-mockups.svg`](design-system-assets/canonical-mockups.svg). It is a **supporting figure inside this authority packet, not a second authority**. It exists so Fable 5.1, Claude, Codex, and human reviewers can see the approved compositions instead of attempting to reconstruct them from prose. If the SVG and this Markdown ever conflict, **this Markdown wins**. No agent may average the canonical board with superseded mockups, component-gallery screenshots, or earlier D1–D7 experiments.
+The sole visual companion set lives under `docs/reference/design-system-assets/`. `mockup-manifest.json` identifies the recovered creator-reviewed D6 composition redraws and the sanitized canonical coverage board. These files are **supporting figures inside this authority packet, not separate authorities**. If any visual reference conflicts with this Markdown, **this Markdown wins**. No agent may average the approved references with superseded mockups, component-gallery screenshots, historical design handoffs, or earlier D1–D7 experiments.
 
 Git history is the archive. Do not preserve superseded design prose in the live tree merely for archaeology.
 
@@ -147,7 +147,7 @@ Desktop:
 - chrome can become quieter with context/scroll but must not become mysterious or reorder itself;
 - dense operational content sits on an opaque/readable working surface. Glass is not required and must not reduce readability.
 
-The exact desktop shell compaction behavior is the principal remaining visual choice to pin in creator review; see §24.
+Desktop compaction is an implementation detail, not a creator fork. Default to a stable full treatment at rest that may subtly reduce visual weight during deep scroll/map/workbench interaction, while remaining immediately recoverable and never changing destination order or identity.
 
 ---
 
@@ -491,13 +491,11 @@ Use `Add to itinerary` only for a genuine unscheduled candidate. Do not show `Ad
 
 These are the visual/compositional targets the implementation must converge toward. The original ChatGPT raster bytes were not durably committed; that storage failure must not turn the D7 implementation into permission to invent another aesthetic.
 
-The canonical visual board is embedded below and committed at `docs/reference/design-system-assets/canonical-mockups.svg`:
+The active visual package is governed by [`design-system-assets/mockup-manifest.json`](design-system-assets/mockup-manifest.json). It includes five creator-reviewed sanitized D6 redraws recovered from the Sept. 3 final handoff plus [`canonical-mockups.svg`](design-system-assets/canonical-mockups.svg), which supplies sanitized composition coverage for surfaces the D6 handoff intentionally left without a visual because the generated originals contained hallucinated controls/data.
 
-![Waypoint canonical feature mockups](design-system-assets/canonical-mockups.svg)
+Recovered D6 references take precedence over the reconstructed board for the same topic. The board and recovered SVGs are **supporting figures governed by this section**, not separate design authorities. Binding visual signals are hierarchy, relative scale, panel relationships, responsive composition, hero prominence, density limits, map/sheet behavior, typography wrapping, and key-state/action placement. Exact photographs, sample text/data, prices, times, route geometry, pin names, and decorative micro-details are illustrative unless this Markdown separately specifies them.
 
-The board is a **supporting figure governed by this section**, not a separate design authority. The following are binding from the visual board: hierarchy, relative scale, navigation form, panel relationships, responsive composition, hero prominence, density limits, map/sheet behavior, typography wrapping, and key-state/action placement. Exact photographs, sample text/data, prices, times, route geometry, pin names, and decorative micro-details are illustrative unless this Markdown separately specifies them.
-
-For Fable 5.1 / Claude / Codex: read this Markdown first, then use **only this canonical board** as the visual composition reference. Do not average or reconcile it with old screenshots, the D7 component gallery, superseded D1–D7 mockups, or historical design prose.
+For Fable 5.1 / Claude / Codex: read this Markdown first, then `mockup-manifest.json`, then only the listed visual assets. Do not average or reconcile them with old screenshots, the D7 component gallery, superseded D1–D7 mockups, or historical design prose.
 
 Canonical board IDs:
 
@@ -577,7 +575,7 @@ Before the next broad implementation run:
 
 ### V0 — reference preflight
 
-Map the relevant production surfaces to this authority and `WAY-00`–`WAY-09`. Identify any code/content constraint that materially prevents the target. Do not invent an alternative silently.
+Map the relevant production surfaces to this authority, `mockup-manifest.json`, and `WAY-00`–`WAY-09`. Identify any code/content constraint that materially prevents the target. Do not invent an alternative silently.
 
 ### V1 — two-surface canary
 
@@ -586,7 +584,7 @@ Implement/rework **only**:
 1. Active Trip mobile (South Korea fixture)
 2. Itinerary desktop workbench (South Korea fixture)
 
-Render representative production screenshots. Compare hierarchy, proportions, density, imagery prominence, navigation character and overall composition against §20 and the canonical visual board. If materially off-target, correct those two before touching the remaining visual sweep.
+Render representative production screenshots. Compare hierarchy, proportions, density, imagery prominence, navigation character and overall composition against §20 and the visual package. If materially off-target, correct those two before touching the remaining visual sweep.
 
 This exists specifically to prevent another multi-hour model run from spending usage on the wrong visual interpretation.
 
@@ -632,47 +630,34 @@ The next implementation pass is **visual fidelity/convergence**, not D8 ideation
 
 ## 23. September implementation path to Main
 
-1. Consolidation/authority cleanup — this file plus its subordinate canonical visual board are the single design packet; superseded design documents/assets stay out of the live tree.
-2. Resolve only the genuinely open visual choices in §24.
-3. V0 preflight.
-4. V1 two-surface canary.
-5. Creator review; correct canary until accepted.
-6. V2 full visual convergence on top of PR #186 engineering.
-7. V3 paired responsive review + field/degraded cases.
-8. Explicit creator visual acceptance.
-9. Regenerate final CI-native gallery baselines.
-10. Exact-head Required Gate green.
-11. Merge PR #186 to `main`.
-12. GitHub Pages production smoke: Trip → Itinerary → Map → Guide → Split, Search, SOS, workbench resize, mobile nav, map fallback, imagery.
-13. Physical-device spot check; reopen frontend only for reproduced defects.
+1. Consolidation/authority cleanup — this file plus its subordinate visual asset set are the single design packet; superseded design documents stay out of the live tree.
+2. V0 preflight; do not reopen recorded creator decisions.
+3. V1 two-surface canary.
+4. Creator review of rendered output; correct canary until accepted.
+5. V2 full visual convergence on top of PR #186 engineering.
+6. V3 paired responsive review + field/degraded cases.
+7. Explicit creator visual acceptance.
+8. Regenerate final CI-native gallery baselines.
+9. Exact-head Required Gate green.
+10. Merge PR #186 to `main`.
+11. GitHub Pages production smoke: Trip → Itinerary → Map → Guide → Split, Search, SOS, workbench resize, mobile nav, map fallback, imagery.
+12. Physical-device spot check; reopen frontend only for reproduced defects.
 
-Do not start a new broad design-research round. Research is complete enough for this implementation unless a specific unresolved question below requires evidence.
+Do not start a new broad design-research round. Research is complete enough for implementation unless a specific correctness/accessibility/feasibility blocker requires evidence.
 
 ---
 
-## 24. Decision status / creator grilling queue
+## 24. Settled implementation defaults — no creator grilling queue
 
-All major D6 product/design decisions are settled. The following are the only remaining creator-level visual forks identified during consolidation; ask them **one at a time** before the V1/full-convergence run. Everything else is an implementation or acceptance task, not a reason to reopen design.
+The D6 handoff explicitly instructed the implementer not to ask the creator to restate recorded decisions and granted engineering discretion over responsive implementation details. The prior three-question queue was a consolidation error and is retired.
 
-### Q1 — Desktop shell compaction behavior
+Use these defaults unless testing exposes a real accessibility, truth, or feasibility blocker:
 
-Direction is already settled: integrated/floating inline shell; no conventional flat sidebar; stable destinations; prominent Search; globally reachable SOS.
+- **Desktop shell:** integrated/floating inline chrome; no conventional flat sidebar. It may subtly yield/compact during deep work, but never reorder, become mysterious, or lose immediate recoverability.
+- **Hero/image prominence:** use useful destination/place imagery more aggressively where it improves identity/orientation, especially Atlas and Guide openings. Do not shrink heroes merely to force more modules above the fold; do not let imagery bury time-critical operational content.
+- **Mobile chrome:** remain aggressively space-prudent. Map/Itinerary chrome may yield during active interaction if the stable five destinations remain immediately recoverable, accessible, and unchanged in identity/order.
 
-Need one final choice:
-
-- **A — Floating rail that compacts on scroll/context (recommended).** Full rail at rest; reduces height/visual weight while working; immediately restores on upward intent/focus.
-- **B — Floating rail that stays full-height/full-label.** Simpler and more stable; costs more vertical space.
-- **C — Fixed inline page header.** Least dynamic and easiest to implement, but gives up some of the immersive desktop character already preferred.
-
-### Q2 — Hero/image aggressiveness
-
-Direction is settled: more useful imagery, less dead space, no brochure excess. Need to pin whether desktop Guide/Atlas should be allowed to devote roughly half-or-more of the opening viewport to imagery/spatial identity when useful, or keep imagery closer to one-third so operational content appears earlier.
-
-### Q3 — Mobile chrome yield strength
-
-Direction is settled: five destinations always recoverable; compact/yielding is allowed. Need to pin whether Map/Itinerary may reduce the bottom bar to a minimal recoverable strip during active map/scroll interaction, or whether labels/icons should remain fully visible at all times.
-
-These choices do not authorize new features. If a later implementation exposes a genuine accessibility/truth/feasibility conflict, surface that conflict with evidence rather than inventing a fourth option.
+These are implementation defaults, not authorization for new features or a fresh design phase. Only a genuine unresolved product contradiction should come back to Carlo as a new decision.
 
 ---
 
