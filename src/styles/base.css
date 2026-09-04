@@ -113,6 +113,10 @@
   --dark-ink-3:#c7ccc0;
   --dark-ink-4:#b9beb2;
   --dark-rule:rgba(255,255,255,.14);
+  /* Advisory ink on the fixed --dark-ground (the SOS surface is dark in both themes, §13).
+     Light --warn (#7f4a07) is 2.1:1 there; this is the dark theme's OWN --warn value, reused
+     rather than invented, 7.5:1 against --dark-ground. */
+  --dark-warn:#d9923f;
   /* D2 (2026-08-29) — CONSOLIDATED SHADOW/SCRIM TINT. Before this token, "near-black" for a
      box-shadow or backdrop scrim was independently reinvented six times across 30 call
      sites — rgba(0,0,0,·), (16,20,24,·), (10,14,18,·), (8,11,14,·), (12,15,18,·) and
@@ -471,7 +475,6 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
    own TARGET_BASELINE with that reasoning, where the number can only shrink. */
 .topbar-btn,.mast-print,.day-print-btn,.copy-addr,.map-fs-btn{min-height:44px}
 .topbar-btn{min-width:44px}
-.cold-open-x{width:44px;height:44px}
 /* Icon-only buttons: the box grows, the glyph does not — a bigger target, same drawing. */
 .day-flip-btn,.tk-speak,.hint-btn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 /* The rail's own stops sat at 40px — the control the whole R5 navigation rests on. */
@@ -486,6 +489,3 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 /* The day scrubber's compact chips sized to 28px wide so a long trip fits the row; a day is
    still something the reader aims at, so the box grows and the row scrolls instead. */
 .dchip{min-width:44px}
-/* The emergency numbers. If any target in this product deserves the floor it is the one
-   someone reaches for one-handed in a situation they did not plan. */
-.mast-chip--sos{min-height:44px}

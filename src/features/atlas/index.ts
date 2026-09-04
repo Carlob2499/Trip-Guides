@@ -29,4 +29,3 @@ export type { BuildingGuide, BuildingGuideInput, RunStateLike, RunStateV2Like } 
 export { localClockLabel } from "./model/local-time";
 export { initAtlasWorld } from "./ui/world-view.js";
 export { startLocalClocks } from "./ui/local-clock.js";
-export { initCover } from "./ui/cover.js";

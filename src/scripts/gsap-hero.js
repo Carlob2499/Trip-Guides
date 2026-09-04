@@ -21,7 +21,7 @@ import { reducedMotion } from "./util.js";
         .from(".mast-title",   { y: 34, autoAlpha: 0, duration: 0.75 }, 0.16)
         .from(".mast-dek",     { y: 24, autoAlpha: 0, duration: 0.7 }, 0.3)
         .from(".mast-credit",  { autoAlpha: 0, duration: 0.8 }, 0.9)
-        .from(".mast-plate-row, .mast-chips", { y: 14, autoAlpha: 0, duration: 0.5, stagger: 0.06 }, 0.42);
+        .from(".mast-plate-row, .mast-plateline", { y: 14, autoAlpha: 0, duration: 0.5, stagger: 0.06 }, 0.42);
     }).catch(function () { /* motion is decoration — the page never depends on it */ });
   }
   if (document.body.getAttribute("data-dest") === "guide") play();

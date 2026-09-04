@@ -18,8 +18,10 @@ interface Props {
   dayPins: { id: string; name: string; lat: number; lng: number; dayIdx: number; time: string | null; local: string | null; kind: string; cat: string | null; placeId: string | null }[];
   center: { lat: number; lng: number } | null;
   span: number | null;
+  /** Repository photo lookup by place name (guide-view.ts) — stops show their own picture. */
+  imageFor?: ((name: string) => { src: string; srcset: string; alt: string } | null) | null;
 }
-const { daysSection, learnings, country, keyPrefix, modulesByDate, dayPins, center, span } = Astro.props;
+const { daysSection, learnings, country, keyPrefix, modulesByDate, dayPins, center, span, imageFor = null } = Astro.props;
 const days: any[] = daysSection?.items ?? [];
 const short = (date: string) => {
   const parts = String(date).split(/\s+/);
@@ -48,18 +50,19 @@ const bbox = (c: { lat: number; lng: number }, s: number | null) => {
             {days.map((d: any, di: number) => (
               <button class="itin-daybtn" type="button" data-day-jump={di} aria-current={di === 0 ? "true" : undefined}
                       aria-label={`Day ${di + 1}, ${d.date}`}>
-                <span class="itin-daybtn-n">{String(di + 1).padStart(2, "0")}</span>
+                <span class="itin-daybtn-n">{dow(d.date)} · {String(di + 1).padStart(2, "0")}</span>
                 <span class="itin-daybtn-d">{short(d.date)}</span>
               </button>
             ))}
           </nav>
         </header>
-        <DaysBlock sec={daysSection} keyPrefix={keyPrefix} learnings={learnings} country={country} modulesByDate={modulesByDate} />
+        <DaysBlock sec={daysSection} keyPrefix={keyPrefix} learnings={learnings} country={country} modulesByDate={modulesByDate} imageFor={imageFor} />
       </section>
       <div class="itin-divider" role="separator" aria-orientation="vertical" aria-label="Resize timeline and map" tabindex="0" data-pane-divider aria-valuemin="30" aria-valuemax="70" aria-valuenow="50"></div>
       <section class="itin-pane itin-mappane" data-pane="map" aria-label="Map of the selected day">
         <div class="itin-mappane-head">
           <span class="itin-mappane-title" data-itin-map-title>{short(days[0].date)} on the map</span>
+          <span class="itin-mappane-note">Tap a stop to focus it · live routing hands off to the map app</span>
           <button class="itin-pane-toggle" type="button" data-pane-collapse="map" aria-expanded="true" aria-label="Collapse the map">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
           </button>
@@ -69,7 +72,7 @@ const bbox = (c: { lat: number; lng: number }, s: number | null) => {
             <script type="application/json" is:inline data-map-data set:html={mapPayload} />
             <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of this day's stops"
               data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}`}></iframe>
-            <div class="itin-map-fallback" data-itin-map-fallback aria-label="Selected day route">
+            <div class="itin-map-fallback" data-itin-map-fallback role="group" aria-label="Selected day route">
               {pinsByDay.map((pins, dayIdx) => (
                 <section data-map-fallback-day={dayIdx} hidden={dayIdx !== 0}>
                   <p class="itin-map-fallback-head">Day {dayIdx + 1} · {pins.length} verified {pins.length === 1 ? "stop" : "stops"}</p>

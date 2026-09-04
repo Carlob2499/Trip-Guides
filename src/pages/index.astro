@@ -262,10 +262,12 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
     <header class="atlas-header">
       <a class="atlas-brand" href={`${base}/`} aria-label="Waypoint — the atlas">
         <span class="atlas-brand-mark" aria-hidden="true"></span>
-        <span class="atlas-brand-word">
+        {/* The wordmark is the Atlas's level-one heading: the page's one identity line, present
+            in both views (the session cover that once carried it is gone). */}
+        <h1 class="atlas-brand-word">
           <span class="atlas-brand-name" data-ref-headword>WAYPOINT</span>
           <span class="atlas-brand-sub">VERIFIED FIELD GUIDES</span>
-        </span>
+        </h1>
       </a>
       <div class="atlas-toggle" role="group" aria-label="Switch view">
         {/* "World view" on desktop, "World" on a phone — one button, and the suffix is a span
@@ -300,30 +302,9 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
       </div>
     </header>
 
-    {/* Cover (README §1, D21) — shown once per session. CSS hides it (`display:none`)
-        until cover.js explicitly opts it in with `data-open`, so a no-JS visitor (D4's
-        no-JS/SEO door) never sees it at all rather than seeing it stuck open with no way
-        to dismiss it; a returning visitor within the same session never sees it flash
-        before cover.js removes it. */}
-    {/* A NAMED <section> (i.e. a region landmark), not a bare div: axe's `region` rule
-        requires all page content to live inside a landmark, and the cover sits outside
-        <main> by necessity — it's an overlay above the whole hub. A `section` only counts
-        as a landmark once it has an accessible name, hence aria-label. */}
-    <section class="atlas-cover" aria-label="Waypoint — verified field guides" data-atlas-cover data-fly-slug={quick?.g.id}>
-      <div class="atlas-cover-col">
-        <span class="atlas-cover-mark" data-cover-fade aria-hidden="true"></span>
-        <span class="atlas-cover-word" data-ref-coverword>WAYPOINT</span>
-        <span class="atlas-cover-sub" data-cover-fade>VERIFIED FIELD GUIDES</span>
-        <button type="button" class="atlas-cover-cta" data-cover-fade data-cover-cta>Enter the atlas</button>
-        <span class="atlas-cover-scroll" data-cover-fade aria-hidden="true">
-          <span class="atlas-cover-scroll-line"></span>
-          <span class="atlas-cover-scroll-dot"></span>
-        </span>
-      </div>
-    </section>
-
-    {/* Named region for the same reason as the cover above — the globe is a second top-level
-        view alongside <main>'s table, so its canvas/overlays need a landmark of their own. */}
+    {/* A named region: the globe is a second top-level view alongside <main>'s table, so its
+        canvas/overlays need a landmark of their own. The globe IS the front door (§6) — no
+        splash cover stands between the visitor and geography. */}
     <section class="atlas-globe-wrap" aria-label="World view — the guide map">
       <div id="atlasGlobe" data-atlas-globe>
         <div data-atlas-map-slot></div>
@@ -357,16 +338,6 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           <button type="button" data-atlas-spin>Pause</button>
         </div>
 
-        <div class="atlas-ov atlas-ov-motto" data-ref-fadezoom data-atlas-motto>
-          <button type="button" class="atlas-ov-motto-close" data-atlas-motto-close aria-label="Dismiss">✕</button>
-          {/* No kicker here — the prototype's north-star card leads with the line itself, at
-              display size, and a caption above it would only say the same thing smaller. The
-              accent falls on the punctuation and on `verified`, which is the word the whole
-              product turns on. */}
-          <p class="atlas-ov-lead">The North Star to any country<span class="atlas-ov-mark">,</span><br /><em>verified</em><span class="atlas-ov-mark">.</span></p>
-          <p class="atlas-ov-sub">Drag and scroll to travel the map. Tap a pin to open its sheet — anywhere else starts a new guide.</p>
-        </div>
-
         <div class="atlas-toast" data-atlas-toast></div>
 
         {/* Globe caption (bundle §1 "Globe hero"). Mobile-only, and it describes what this
@@ -390,45 +361,6 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
             of the desktop pincard. Hidden by CSS above 759px; inert without JS either way
             (world.js gates its own mobile branch, so a no-JS phone visitor still gets the
             table view, D4's door). */}
-        {/* ── The dock (creator, 2026-08-08: "the globe page needs more useful information
-             or buttons, preferably hideable") ─────────────────────────────────────────────
-             A phone looking at the globe used to have NOTHING but dots and a ☰. This is the
-             table view's quick card relocated: the same emergency numbers, currency, live
-             local clock and status the table already shows for the trip the hub is
-             featuring — no new data, no parallel registry (CONTENT IS KING).
-
-             Hideable, and it remembers: collapsed it is a single pill (trip · clock ·
-             status dot); expanded it adds the numbers you would want at 2am in that country.
-             Server-rendered, so it is there before any script runs; the clock ticks through
-             the same [data-tick] hook the table's card uses. */}
-        {quick && (
-          <div class="atlas-dock" data-atlas-dock hidden>
-            <button class="atlas-dock-head" type="button" data-atlas-dock-toggle
-                    aria-expanded="false" aria-controls="atlasDockBody">
-              <span class={`atlas-dock-dot atlas-dock-dot--${quick.record.status}`} aria-hidden="true"></span>
-              <span class="atlas-dock-name">{quick.g.data.title}</span>
-              {quick.record.tz && (
-                <span class="atlas-dock-clock" data-tick data-tz={quick.record.tz}>—</span>
-              )}
-              <svg class="atlas-dock-chev" width="14" height="14" viewBox="0 0 16 16" fill="none"
-                   stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6.2 8 10.2l4-4"/></svg>
-            </button>
-            <div class="atlas-dock-body" id="atlasDockBody">
-              {quickKicker && <span class="atlas-dock-kicker">{quickKicker}</span>}
-              <div class="atlas-dock-facts">
-                {quick.emergency?.lines.map((line: { label: string; num: string }) => (
-                  <a class="atlas-dock-tel" href={`tel:${line.num}`}>{line.label} · {line.num}</a>
-                ))}
-                {quick.currency && <span class="atlas-dock-meta">{quick.currency.code} {quick.currency.symbol}</span>}
-                {quick.advisory && <span class="atlas-dock-meta atlas-dock-warn">⚠ Level {quick.advisory.level}</span>}
-              </div>
-              <div class="atlas-dock-actions">
-                <a class="atlas-dock-cta" href={`${base}/guides/${quick.g.id}/`}>Open the sheet →</a>
-              </div>
-            </div>
-          </div>
-        )}
-
         <button type="button" class="atlas-menufab" data-atlas-menufab aria-label="Map menu" aria-expanded="false">☰</button>
         <div class="atlas-menuscrim" data-atlas-menuscrim hidden></div>
         <div class="atlas-menusheet" data-atlas-menusheet hidden>
@@ -511,10 +443,6 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           <span class="atlas-quick-kicker">{quickKicker}</span>
           <span class="atlas-quick-title">{quick.g.data.title}</span>
           <span class="atlas-quick-chips">
-            {quick.emergency?.lines.map((line: { label: string; num: string }) => (
-              <a class="atlas-quick-tel" href={`tel:${line.num}`}>{line.label} · {line.num}</a>
-            ))}
-            {quick.currency && <span class="atlas-quick-meta">{quick.currency.code} {quick.currency.symbol}</span>}
             {quick.record.tz && (
               <span class="atlas-quick-meta atlas-quick-clock" data-tick data-tz={quick.record.tz}>—</span>
             )}

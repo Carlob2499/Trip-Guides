@@ -30,7 +30,7 @@
      would set 34 lines of raw coordinate string on korea alone. The itinerary already prints
      one whole-day URL per day (.day-route, deliberately kept), so the station's copy would be
      the same URL a second time. The legs themselves — names and straight-line distance — print. */
-  .cold-open, .whats-next, .draft-progress, .next-cta, .lnw-cta,
+  .whats-next, .draft-progress, .next-cta, .lnw-cta,
   /* The provenance dot's popover only ever opens via a JS click handler (data-open),
      which paper can't trigger — leaving the dot renders a dead "●" glyph with no way
      to reach the CHECKED date/source it names. */

@@ -205,17 +205,6 @@ export function initAtlasWorld(root = document) {
     spinBtn.textContent = spinning ? "PAUSE" : "SPIN ON";
   });
 
-  // ── Motto dismiss (persisted) ────────────────────────────────────────────────────────
-  const motto = root.querySelector("[data-atlas-motto]");
-  const MOTTO_KEY = "tg-atlas-motto-dismissed";
-  if (motto) {
-    try { if (localStorage.getItem(MOTTO_KEY)) motto.hidden = true; } catch { /* storage unavailable */ }
-    motto.querySelector("[data-atlas-motto-close]")?.addEventListener("click", () => {
-      motto.hidden = true;
-      try { localStorage.setItem(MOTTO_KEY, "1"); } catch { /* storage unavailable */ }
-    });
-  }
-
   // ── Mobile FAB map menu (README "Mobile", D5) — the same actions the desktop rail
   // exposes (fly to a sheet, fit world, pause spin, tools, ＋ new guide), relocated into a
   // ☰ button since there's no room for a side rail on a phone. Built unconditionally (cheap,
@@ -232,41 +221,10 @@ export function initAtlasWorld(root = document) {
       btn.addEventListener("click", () => { map.flyTo(btn.dataset.fly, reduced ? 0 : 1100); closeMenu(); });
     });
   }
-  /* ── The dock (creator, 2026-08-08) ─────────────────────────────────────────────────
-     The globe's own readout: the featured trip's status, live local time, emergency
-     numbers, currency and two actions — all server-rendered from the same `quick` row the
-     table view uses, so nothing here is a second source of truth.
-
-     It ships `hidden` and is unhidden here rather than by CSS, because without JS there is
-     no globe to dock to: a no-JS phone gets the table view, where this data already lives.
-
-     Collapsed/expanded persists per device. It stands DOWN whenever the menu or the ping
-     sheet is up — three surfaces stacked on one thumb's worth of screen is the crowding
-     the design doctrine names, not the information it asks for. */
-  const dock = root.querySelector("[data-atlas-dock]");
-  const dockToggle = root.querySelector("[data-atlas-dock-toggle]");
-  const DOCK_KEY = "tg-atlas-dock";
-  if (dock) {
-    dock.hidden = false;
-    let open = false;
-    try { open = localStorage.getItem(DOCK_KEY) === "open"; } catch { /* private mode */ }
-    const setDock = (isOpen) => {
-      dock.toggleAttribute("data-open", isOpen);
-      dockToggle?.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      try { localStorage.setItem(DOCK_KEY, isOpen ? "open" : "shut"); } catch { /* private mode */ }
-    };
-    setDock(open);
-    dockToggle?.addEventListener("click", () => setDock(!dock.hasAttribute("data-open")));
-  }
-  /* Fold the dock away while another bottom surface owns the screen. Two independent owners
-     (the menu and the ping sheet) share this, so it counts them rather than holding a boolean:
-     with a boolean, closing the ping sheet while the menu was still open put the dock back
-     underneath the menu. */
-  const dockOwners = new Set();
-  function standDownDock(down, owner) {
-    if (down) dockOwners.add(owner); else dockOwners.delete(owner);
-    dock?.toggleAttribute("data-stood-down", dockOwners.size > 0);
-  }
+  /* The dock (a floating readout under the globe) was retired in the D7 convergence: the
+     quick card and the ping sheet already carry the featured trip. Kept as a no-op so the
+     menu/ping owners below need no restructuring. */
+  function standDownDock() { /* the dock was retired with the D7 convergence; the ping sheet and menu own the bottom edge */ }
 
   function setMenu(open) {
     if (!fab || !menuScrim || !menuSheet) return;

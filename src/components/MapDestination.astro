@@ -50,6 +50,9 @@ const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shop
       <aside class="mapdest-sheet" data-map-sheet aria-label="Places on this map">
         <div class="mapdest-sheet-grip" aria-hidden="true"></div>
         <div class="mapdest-selected" data-map-selected hidden>
+          {/* The place's own repository image, when its guide card carries one (map-dest.js reads
+              the card); never a fetched or generated picture. */}
+          <img class="mapdest-sel-thumb" data-map-sel-thumb alt="" hidden loading="lazy" decoding="async" onerror="this.hidden=true" />
           <p class="mapdest-sel-kind" data-map-sel-kind></p>
           <h3 class="mapdest-sel-name" data-map-sel-name></h3>
           <p class="mapdest-sel-local" data-map-sel-local hidden lang={country === "South Korea" ? "ko" : undefined}></p>
@@ -58,6 +61,7 @@ const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shop
           <a class="mapdest-sel-details" data-map-sel-details href="#" hidden>Details in the guide</a>
           <button class="mapdest-sel-close" type="button" data-map-sel-close aria-label="Clear selection">✕</button>
         </div>
+        <p class="mapdest-peek"><span><span class="mapdest-peek-n">{pins.filter((p) => p.kind !== "center").length}</span> verified places</span><span>Pull up for the list</span></p>
         <div class="mapdest-list" data-map-list>
           {[...groups.entries()].map(([label, rows]) => (
             <section class="mapdest-group">

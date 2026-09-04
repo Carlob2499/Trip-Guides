@@ -47,6 +47,11 @@ export const FULL_WIDTH_PANEL_TYPES = new Set([
     just restate the title. Rendered in var(--aink), never raw var(--accent): docs/design-handoff/DESIGN.md
     flagged "the 10px oxide panel kicker on --card" as an unverified pairing, and --aink
     is the >=4.5:1-by-construction answer to it (src/lib/accent-tokens.ts). */
+/* A knowledge module's kind, as the Panel kicker names it (design-system.md §10): the module's
+   own kind outranks its section type on the label, so "How to" reads as How to, not FIELD NOTE. */
+export const MODULE_KIND_LABELS: Record<string, string> = {
+  howto: "HOW TO", transit: "TRANSIT", etiquette: "ETIQUETTE", arrival: "ARRIVAL", culture: "CULTURE", food: "FOOD", practical: "PRACTICAL",
+};
 export const KICKER_LABELS: Record<string, string> = {
   panel: "FIELD NOTE",
   prose: "FIELD NOTE",

@@ -79,9 +79,32 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
     tz: destTzIana,
     painted: !heroSrc,
   };
-  const thumbSrc = (im: { file?: string; src?: string }) =>
-    im.src ? im.src.replace("{w}", "320")
-    : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(im.file!)}?width=320`;
+  const imgAt = (im: { file?: string; src?: string }, w: number) =>
+    im.src ? im.src.replace("{w}", String(w))
+    : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(im.file!)}?width=${w}`;
+  const thumbSrc = (im: { file?: string; src?: string }) => imgAt(im, 320);
+
+  /* ── Place imagery, canonical (§4 Imagery): the repository photo a sight/venue already owns,
+     keyed by its name so an itinerary stop or a Trip atom naming the same place can show it.
+     Exact name match only — a stop that names no repository place gets no picture. ── */
+  const placeKey = (name: string) => String(name || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9\u3131-\uD79D]+/g, " ").trim();
+  const placeImages: Record<string, { src: string; srcset: string; alt: string }> = {};
+  for (const s of flat) {
+    if (s.type !== "sights" && s.type !== "venues") continue;
+    for (const it of s.items || []) {
+      const im = it?.img;
+      if (!im || !(im.file || im.src) || !it.name) continue;
+      const key = placeKey(it.name);
+      if (!key || placeImages[key]) continue;
+      const responsive = !!(im.file || im.src?.includes("{w}"));
+      placeImages[key] = {
+        src: imgAt(im, 640),
+        srcset: responsive ? `${imgAt(im, 320)} 320w, ${imgAt(im, 640)} 640w, ${imgAt(im, 960)} 960w` : "",
+        alt: String(im.alt || it.name),
+      };
+    }
+  }
+  const imageFor = (name: string) => placeImages[placeKey(name)] ?? null;
 
   /* ── The itinerary, canonical (features/trip) ── */
   const daysSec = flat.find((s) => s.type === "days" && s.items?.length) ?? null;
@@ -205,7 +228,7 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
 
   return {
     slug, base, storeKey, legacyStoreKey, flat, localCur, destTzIana,
-    hero, daysSec, rawDays, tripDays, firstDayDate, lastDayDate, daysForBanner,
+    hero, placeImages, imageFor, daysSec, rawDays, tripDays, firstDayDate, lastDayDate, daysForBanner,
     mapCenter, pinMap, planner, allPins, globalCenter, globalSpan, itinCenter, itinSpan,
     chapters, sources, modulesByDate,
     readiness, recap, holidayInfo, exports, hasWeatherSection, tripSummary: buildSummary(guide),

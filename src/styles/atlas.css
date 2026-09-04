@@ -59,7 +59,7 @@
   text-decoration: none; color: var(--ink);
 }
 .atlas-quick-kicker {
-  font-family: var(--font-data); font-weight: 640; font-size: var(--text-panel-kicker);
+  display: block; font-family: var(--font-data); font-weight: 640; font-size: var(--text-panel-kicker);
   letter-spacing: .22em; text-transform: uppercase; color: var(--aink);
 }
 .atlas-quick-title { font-family: var(--font-display); font-size: var(--text-h2); margin: 4px 0 10px; }

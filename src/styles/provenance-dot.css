@@ -143,3 +143,21 @@
   margin-inline-start: 0.3em;
   background: var(--accent); color: var(--on-accent);
 }
+
+/* On a phone the disclosure is a bottom sheet, not a popover pinned to a dot (design-system.md
+   §14, locked 2026-09-04): provenance-dot.js positions the popover in page coordinates for the
+   desktop case, so the fixed sheet placement below has to outrank those inline values. */
+/* A card lifted on hover (guide.css) carries a transform, which would make it the fixed
+   sheet's containing block; while its disclosure is open the card sits flat. */
+.card:has(.prov-popover[data-open]) { transform: none; }
+/* bp:MOBILE_MAX — src/lib/breakpoints.ts */
+@media (max-width: 899px) {
+  .prov-popover[data-open] {
+    position: fixed !important; left: 0 !important; right: 0; top: auto !important; bottom: 0;
+    z-index: var(--z-sticky); width: 100%; max-width: none;
+    padding: 1rem max(1.1rem, var(--safe-right)) max(1.3rem, var(--safe-bottom)) max(1.1rem, var(--safe-left));
+    border-left: 0; border-right: 0; border-bottom: 0; border-top: 2px solid var(--accent);
+    box-shadow: none; font-size: var(--text-small);
+  }
+  .prov-popover[data-open] dd.prov-claim { font-size: var(--text-body); }
+}

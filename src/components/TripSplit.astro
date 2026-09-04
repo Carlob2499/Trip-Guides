@@ -53,7 +53,7 @@ const { storeKey, standalone = false } = Astro.props;
        The old trip-wide ÷Even/Custom toggle is gone: how an expense splits is a property of
        THAT expense now (open a row's Details), because one flag for the whole trip could not
        express dinner-split-evenly alongside a hotel split 70/30. -->
-  <div class="split-card">
+  <div class="split-card split-card--expenses">
     <div class="sc-head">
       <span class="sc-label">Recent expenses</span>
     </div>
@@ -114,12 +114,12 @@ const { storeKey, standalone = false } = Astro.props;
       <span class="se-h-amt">Amount</span>
     </div>
     <div class="sc-body" id="sExpenseList">
-      <p class="split-empty">Add people first, then record who paid what.</p>
+      <p class="split-empty">Add the people first — the ledger opens the moment there is someone to pay.</p>
     </div>
   </div>
 
   <!-- 2 · People — who is on the ledger. -->
-  <div class="split-card">
+  <div class="split-card split-card--people">
     <div class="sc-head">
       <span class="sc-label">People on this trip</span>
       <button class="sc-add-btn" id="sAddPerson" type="button">+ Add person</button>

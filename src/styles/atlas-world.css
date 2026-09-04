@@ -14,7 +14,7 @@
    screenshots: the pressed one takes the accent fill, the other stays an outline. */
 .atlas-toggle { display: inline-flex; gap: 8px; }
 .atlas-toggle-btn {
-  display: inline-flex; align-items: center; justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center; gap: .28em;
   /* 44px, not the kit's 40px. atlas-mobile.css already made exactly this trade for the phone
      ("a gate outranks a screenshot") and the base rule was left at 40 — so the switch cleared
      the floor under 760px and failed it at 834px and 1024px, which is the half of the range
@@ -276,36 +276,10 @@
 }
 .atlas-ov-controls button:hover, .atlas-ov-controls button:focus-visible { border-color: var(--accent); color: var(--aink); }
 
-/* The right padding is a GUTTER the close button lives in, not decoration. At caption size
-   the old ✕ cleared the copy by luck; at display size the headline ran under it, and axe
-   stopped resolving the contrast of a line partly behind a button. The text column now ends
-   before the button starts, so nothing overlaps at any string length. */
-.atlas-ov-motto { right: 12px; bottom: 12px; max-width: 320px; padding: 16px 44px 18px 18px; }
-.atlas-ov-motto[hidden] { display: none; }
 /* The one place on this page that carries a display-face line at size. It is the product's
    claim, so it is set as a statement rather than as another caption. */
-.atlas-ov-lead {
-  margin: 0; font-family: var(--font-display); font-weight: 620;
-  font-size: var(--text-h3); line-height: 1.15; letter-spacing: -.015em; color: var(--ink);
-}
 /* `verified` is underlined in the accent rather than coloured in it: the word has to stay at
    full body contrast (it is the claim), and the rule beneath carries the emphasis instead. */
-.atlas-ov-lead em {
-  font-style: italic; text-decoration: underline; text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px; text-underline-offset: 4px;
-}
-.atlas-ov-mark { color: var(--accent-ink); }
-.atlas-ov-sub {
-  margin: 8px 0 0; font-family: var(--font-body); font-size: var(--text-small);
-  line-height: 1.55; color: var(--muted); text-wrap: pretty;
-}
-.atlas-ov-motto-close {
-  display: inline-flex; align-items: center; justify-content: center;
-  /* Centred in the gutter the card reserves for it, and 44px so it is a real tap target. */
-  position: absolute; top: 50%; right: 0; transform: translateY(-50%);
-  width: 44px; height: 44px; background: none; border: none;
-  color: var(--muted); cursor: pointer; font-size: var(--text-control-sm);
-}
 
 .atlas-toast {
   position: absolute; left: 50%; bottom: 70px; transform: translateX(-50%);

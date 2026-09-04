@@ -358,3 +358,54 @@ select.split-in{cursor:pointer}
 .s-rescue-go:hover{filter:brightness(1.06)}
 .s-rescue-go:disabled{opacity:.6;cursor:default}
 .s-rescue-go:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+/* === D7 CONVERGENCE (design-system.md §11, locked hierarchy) ================================
+   Recent Expenses → Add Expense → per-row split method → balances as secondary state. The
+   ledger is a working surface: numbers read at a glance, every row says who paid and how it
+   splits without opening, and the composer is the first control on the page. */
+.split-wrap{display:flex;flex-direction:column}
+.split-toolbar{order:-2}
+.split-live,.split-privacy,.s-rescue,.split-lock-note{order:-1}
+/* Until someone is on the ledger the people card leads — there is nobody to pay yet. */
+#tripSplit[data-members="0"] .split-card--people{order:0}
+#tripSplit[data-members="0"] .split-card--expenses{order:1}
+.split-title{font-size:clamp(2rem,6vw,2.6rem)}
+.split-card{padding:1.2rem 1.25rem 1.1rem}
+.sc-label{font-size:var(--text-micro)}
+/* The composer: the page's primary action, filled so it is found without hunting. */
+.sc-add-expense-btn{min-height:44px;padding:.5rem 1.1rem;font-size:var(--text-control);font-weight:700;color:var(--cta-ink);background:var(--cta);border-color:var(--cta)}
+.sc-add-expense-btn:hover{background:var(--cta);border-color:var(--cta);color:var(--cta-ink);opacity:.9}
+.sc-add-btn{min-height:44px;padding:.5rem 1rem}
+.se-new-head .sc-label{font-size:var(--text-control);letter-spacing:.04em;color:var(--ink)}
+/* Committed rows: the description and the amount are the row's two loud facts. The inputs
+   remain inputs (the engine is untouched) but read as text until touched. */
+.se-row{padding:.5rem 0 .6rem}
+.se-main .split-in{background:transparent;border-color:transparent;padding-inline:.3rem}
+.se-main .split-in:hover{border-color:var(--rule2)}
+.se-main .split-in:focus{background:var(--bg)}
+.se-main .se-desc{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead)}
+.se-main .se-payer{font-family:var(--font-data);font-size:var(--text-small);color:var(--muted)}
+.se-main .se-amt{font-family:var(--font-data);font-weight:700;font-size:var(--text-body);font-variant-numeric:tabular-nums}
+@media(min-width:600px){.se-main{grid-template-columns:1fr 6.5rem 10.5rem 2.2rem}}
+.se-sub{gap:.45rem .6rem;margin-top:.15rem;padding-left:.3rem}
+.se-ico{width:18px;height:18px;flex:none;color:var(--accent-ink)}
+.se-meta{font-size:var(--text-control);color:var(--muted);flex:1 1 auto;min-width:0}
+.se-meta-payer{color:var(--ink);font-weight:600}
+.se-meta-method{display:inline-block;padding:.05rem .5rem;border:1px solid var(--rule2);border-radius:999px;color:var(--accent-ink);font-weight:700;letter-spacing:.02em}
+.se-toggle{min-height:36px;margin-left:auto}
+.se-header{display:none}
+/* Balances and settlement read as the secondary summary: larger figures, calmer chrome. */
+.sr-total-val{font-size:clamp(2rem,7vw,2.8rem)}
+.sb-name,.sb-amt{font-size:var(--text-body)}
+.st-usd{font-size:var(--text-lead)}
+/* Desktop: a destination-derived scene stands behind the ledger (§11 allows it), dimmed, and
+   the ledger keeps its own opaque working surface — usability outranks scenery. */
+.splitdest{position:relative}
+.splitdest-scene{display:none}
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media(min-width:900px){
+  .splitdest{padding:1.6rem clamp(1rem,3vw,1.5rem) 2.5rem}
+  .splitdest-scene{display:block;position:absolute;inset:0;overflow:hidden;opacity:.28;pointer-events:none}
+  .splitdest-scene .paint-atlas{position:absolute;inset:0;z-index:0}
+  .splitdest .split-wrap{position:relative;z-index:1;max-width:840px;padding:1.6rem 1.8rem 2rem;background:var(--bg);border:1px solid var(--rule2)}
+}

@@ -45,12 +45,6 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
   .sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
 }
 
-/* Cold-visitor framing strip (cold-open.js — first visit only, dismissible). */
-.cold-open{display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.5rem 1rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border-bottom:1px solid var(--rule)}
-.cold-open-txt{font-family:var(--font-data);font-size:var(--text-caption);color:var(--ink);letter-spacing:.01em}
-.cold-open-x{flex-shrink:0;width:30px;height:30px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--muted);cursor:pointer;font-size:var(--text-control-sm)}
-.cold-open-x:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
-
 /* === CONTENT ================================================================= */
 .content{min-width:0;padding:0 0 3rem}
 /* M3: was its own bespoke clamp(1.5rem,4vw,2.2rem) — --text-h1 is that exact missing step,

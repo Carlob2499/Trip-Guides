@@ -25,6 +25,7 @@ export function initMapDestination(root) {
   var metaEl = selected.querySelector("[data-map-sel-meta]");
   var actionsEl = selected.querySelector("[data-map-sel-actions]");
   var detailsEl = selected.querySelector("[data-map-sel-details]");
+  var thumbEl = selected.querySelector("[data-map-sel-thumb]");
   var rows = Array.prototype.slice.call(dest.querySelectorAll("[data-map-row]"));
 
   function rowFor(id) { return rows.find(function (r) { return r.getAttribute("data-map-row") === id; }) || null; }
@@ -46,8 +47,15 @@ export function initMapDestination(root) {
     // A place with a guide card gets a way to its dense detail; a day stop goes to its day.
     var anchorId = id.indexOf("d") === 0 && /^d\d+-/.test(id) ? "day-" + id.split("-")[0].slice(1) : null;
     var card = anchorId ? doc.getElementById(anchorId) : (doc.getElementById("sight-" + id) || doc.getElementById("venue-" + id));
-    if (card) { detailsEl.hidden = false; detailsEl.setAttribute("href", "#" + card.id); detailsEl.textContent = anchorId ? "Open this day" : "Details in the guide"; }
+    if (card) { detailsEl.hidden = false; detailsEl.setAttribute("href", "#" + card.id); detailsEl.textContent = anchorId ? "View in itinerary" : "Details in the guide"; }
     else detailsEl.hidden = true;
+    // The card's own photo — the same repository image the Guide renders — identifies the place.
+    if (thumbEl) {
+      var img = card && !anchorId ? card.querySelector(".sight-media.media-ok .cardimg, .venue-img") : null;
+      var src = img && img.naturalWidth > 0 ? (img.currentSrc || img.getAttribute("src")) : null;
+      if (src) { thumbEl.src = src; thumbEl.hidden = false; }
+      else { thumbEl.removeAttribute("src"); thumbEl.hidden = true; }
+    }
     selected.hidden = false;
     sheet.setAttribute("data-sheet", "half");
     if (btn) btn.setAttribute("aria-current", "true");

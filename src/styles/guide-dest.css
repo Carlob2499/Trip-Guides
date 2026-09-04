@@ -4,6 +4,8 @@
    chapter's map column, the reference objects and the knowledge-module kicker. */
 
 .gd{max-width:1400px;margin:0 auto}
+/* The cover's foot is the Guide's opening rhythm: the overview follows it closely (§10). */
+.gd-hero{margin-bottom:.4rem}
 .gd-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0 0 .6rem}
 .gd-body{display:block;padding:0 max(1.1rem,var(--safe-right)) 2rem max(1.1rem,var(--safe-left))}
 .gd-index{display:none}
@@ -12,12 +14,12 @@
 /* --- Overview: chapter cards, image-forward where the chapter carries photos ----------- */
 .gd-overview{padding-top:1.4rem}
 .gd-cards{display:grid;grid-template-columns:1fr;gap:.6rem}
-.gd-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.9rem;width:100%;min-height:72px;padding:.6rem .9rem .6rem .6rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color .16s,transform .2s var(--ease-spring)}
+.gd-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.9rem;width:100%;min-height:80px;padding:.6rem .9rem .6rem .6rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color .16s,transform .2s var(--ease-spring)}
 .gd-card:hover{border-color:var(--accent);transform:translateY(-1px)}
 .gd-card:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
-.gd-card-media{display:block;width:84px;height:64px;overflow:hidden;background:var(--sunken)}
+.gd-card-media{display:block;width:96px;height:72px;overflow:hidden;background:var(--sunken)}
 .gd-card-media img{width:100%;height:100%;object-fit:cover;display:block;opacity:var(--photo)}
-.gd-card-glyph{display:flex;align-items:center;justify-content:center;width:84px;height:64px;background:var(--sunken);font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);color:var(--accent-ink)}
+.gd-card-glyph{display:flex;align-items:center;justify-content:center;width:96px;height:72px;background:var(--sunken);font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);color:var(--accent-ink)}
 .gd-card--quiet .gd-card-glyph{color:var(--muted)}
 .gd-card--photo .gd-card-glyph{display:none}
 .gd-card:not(.gd-card--photo) .gd-card-media{display:none}
@@ -31,7 +33,7 @@
 @media(min-width:600px){
   .gd-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
   .gd-card--photo{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;padding:0 0 .8rem}
-  .gd-card--photo .gd-card-media{grid-column:1/-1;width:100%;height:150px}
+  .gd-card--photo .gd-card-media{grid-column:1/-1;width:100%;height:180px}
   .gd-card--photo .gd-card-text{padding:.7rem 0 0 .9rem}
   .gd-card--photo .gd-card-glyph{display:none}
   .gd-card--photo .gd-card-arrow{padding:.7rem .9rem 0 0;align-self:start}
@@ -58,6 +60,7 @@
 .gd-module{position:relative}
 .gd-module-kicker{display:flex;align-items:center;gap:.35rem;max-width:var(--read);margin:0 auto .2rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
 .pnl-grid .gd-module{display:contents}
+.pnl-grid .gd-module-kicker{display:none}
 
 /* Spatial chapters: the map is a compact hero on a phone, a sticky column on desktop. */
 .gd-chapter-map{margin:0 0 1.2rem}

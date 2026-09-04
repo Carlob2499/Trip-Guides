@@ -9,7 +9,8 @@
   var pill = document.createElement("div");
   pill.className = "offline-pill";
   pill.setAttribute("role", "status");
-  pill.textContent = "Offline — using your saved copy · live data paused, maps & photos need a connection";
+  pill.textContent = "Offline · saved copy";
+  pill.title = "Live data is paused; maps and photos need a connection. Everything written here still works.";
   pill.hidden = true;
   document.body.appendChild(pill);
 

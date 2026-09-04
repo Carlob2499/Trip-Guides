@@ -333,7 +333,7 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
           <div class="gal-dest-host">
             <TripDestination guide={toolsGuide.data} slug={toolsGuide.id} base={base} storeKey={galleryStoreKey} days={view.tripDays}
               readiness={view.readiness} recap={view.recap} holidays={view.holidayInfo} dates={view.plate.dates} cities={view.plate.cities}
-              exports={view.exports} hasWeather={false} entry={toolsGuide.data.entry ?? null} hero={view.hero} />
+              exports={view.exports} hasWeather={false} entry={toolsGuide.data.entry ?? null} hero={view.hero} placeImages={view.placeImages} />
           </div>
         </article>
 
@@ -342,7 +342,7 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
           <p class="gal-role">{componentRoles.ItineraryDestination.role}</p>
           <div class="gal-dest-host">
             <ItineraryDestination daysSection={view.daysSec} learnings={toolsGuide.data.learnings ?? null} country={toolsGuide.data.country}
-              keyPrefix="galdy" modulesByDate={view.modulesByDate} dayPins={view.planner.pins} center={view.itinCenter} span={view.itinSpan} />
+              keyPrefix="galdy" modulesByDate={view.modulesByDate} dayPins={view.planner.pins} center={view.itinCenter} span={view.itinSpan} imageFor={view.imageFor} />
           </div>
         </article>
 

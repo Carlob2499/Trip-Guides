@@ -35,12 +35,17 @@ const EXPECTED: Record<string, string[]> = {
   // shell's sheets each carry the one breakpoint they recompose on.
   "features/search/styles.css": ["MOBILE_MAX+1"],
   "styles/chrome.css": ["MOBILE_MAX+1"],
+  // D7 convergence (2026-09-04): SOS becomes a centred modal above the phone ceiling.
+  "styles/field-tools.css": ["MOBILE_MAX+1"],
   "styles/guide-dest.css": ["TABLET_MIN", "DESKTOP_MIN"],
   // guide.css keeps one marker: the phone retune of --chrome-h.
   "styles/guide.css": ["MOBILE_MAX"],
   "styles/itinerary.css": ["DESKTOP_MIN"],
   "styles/map.css": ["DESKTOP_MIN"],
-  "styles/trip-split.css": ["MOBILE_MAX"],
+  // D7 convergence: the provenance popover is a bottom sheet on phones (design-system.md §14).
+  "styles/provenance-dot.css": ["MOBILE_MAX"],
+  // D7 convergence: the ledger gains its desktop scene above the phone ceiling.
+  "styles/trip-split.css": ["MOBILE_MAX", "MOBILE_MAX+1"],
   "styles/trip.css": ["MOBILE_MAX+1"],
 };
 

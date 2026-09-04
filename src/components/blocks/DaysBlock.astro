@@ -19,7 +19,11 @@ import { dayLegSummary } from "../../lib/anchors";
 import { pinSlug } from "../../lib/map-pins";
 
 interface ModuleLink { id: string; title: string; kind: string; critical: boolean; anchor: string }
-const { sec, keyPrefix = "dy", learnings = null, country, modulesByDate = {} as Record<string, ModuleLink[]> } = Astro.props;
+const { sec, keyPrefix = "dy", learnings = null, country, modulesByDate = {} as Record<string, ModuleLink[]>, imageFor = null } = Astro.props;
+/* The stop's own repository photo (guide-view.ts imageFor): identity, never decoration — a stop
+   naming no sight/venue the guide photographed gets no picture (§4 Imagery). */
+type PlaceImage = { src: string; srcset: string; alt: string } | null;
+const imageOf = (name: string): PlaceImage => (typeof imageFor === "function" ? imageFor(name) : null);
 const days: any[] = sec.items || [];
 const two = (n: number) => String(n + 1).padStart(2, "0");
 const actualFor = (date: string) => (learnings?.days ?? []).find((d: any) => d.date === date) ?? null;
@@ -112,9 +116,20 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
             <ol class="stops" aria-label="Stops this day">
               {shared.map((w: any, wi: number) => {
                 const mapPinId = Number.isFinite(w.lat) && Number.isFinite(w.lng) ? `d${di}-${pinSlug(w.name)}-${wi}` : null;
+                const im = imageOf(w.name);
                 return (
-                <li class="stop" data-map-stop={mapPinId ?? undefined} data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
-                  <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
+                <li class={`stop${im ? " stop--photo" : ""}`} data-map-stop={mapPinId ?? undefined} data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
+                  <span class="stop-rail" aria-hidden="true"></span>
+                  <span class="stop-when">
+                    {w.time && <span class="stop-time">{w.time}</span>}
+                    <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
+                  </span>
+                  {im && (
+                    <span class="stop-media" aria-hidden="true">
+                      <img class="stop-img" src={im.src} srcset={im.srcset || undefined} sizes="88px" alt="" loading="lazy" decoding="async"
+                           onerror="this.closest('.stop').classList.remove('stop--photo');this.closest('.stop-media').hidden=true" />
+                    </span>
+                  )}
                   <span class="stop-main">
                     {mapPinId ? (
                       <button class="stop-name stop-map-focus" type="button" data-map-pin-id={mapPinId} aria-label={`Show ${w.name} on the map`}>{w.name}</button>
@@ -124,7 +139,6 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
                       <TransitLinks lat={w.lat} lng={w.lng} name={w.name} country={country} />
                     )}
                   </span>
-                  {w.time && <span class="stop-time">{w.time}</span>}
                 </li>
                 );
               })}
@@ -138,9 +152,21 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
                   {b.body && <div class="day-branch-body"><Fragment set:html={b.body} /></div>}
                   {(b.waypoints ?? []).length > 0 && (
                     <ol class="stops" aria-label={`Stops for ${b.label}`}>
-                      {b.waypoints.map((w: any, wi: number) => (
-                        <li class="stop" data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
-                          <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
+                      {b.waypoints.map((w: any, wi: number) => {
+                        const im = imageOf(w.name);
+                        return (
+                        <li class={`stop${im ? " stop--photo" : ""}`} data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
+                          <span class="stop-rail" aria-hidden="true"></span>
+                          <span class="stop-when">
+                            {w.time && <span class="stop-time">{w.time}</span>}
+                            <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
+                          </span>
+                          {im && (
+                            <span class="stop-media" aria-hidden="true">
+                              <img class="stop-img" src={im.src} srcset={im.srcset || undefined} sizes="88px" alt="" loading="lazy" decoding="async"
+                                   onerror="this.closest('.stop').classList.remove('stop--photo');this.closest('.stop-media').hidden=true" />
+                            </span>
+                          )}
                           <span class="stop-main">
                             <span class="stop-name">{w.name}</span>
                             {w.note && <span class="stop-note">{w.note}</span>}
@@ -148,9 +174,9 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
                               <TransitLinks lat={w.lat} lng={w.lng} name={w.name} country={country} />
                             )}
                           </span>
-                          {w.time && <span class="stop-time">{w.time}</span>}
                         </li>
-                      ))}
+                        );
+                      })}
                     </ol>
                   )}
                 </section>

@@ -33,17 +33,32 @@ function linksHtml(stop, country, origin) {
   }).join("") + "</span>";
 }
 
-function stopAtom(stop, role, country, origin, index) {
+/* The same name key guide-view.ts builds #tripImages with: a stop shows the repository photo
+   of the place it names, or nothing — never a guessed picture. */
+function placeKey(name) {
+  return String(name || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9\u3131-\uD79D]+/g, " ").trim();
+}
+function imageHtml(images, stop, sizes) {
+  var im = images && images[placeKey(stop.name)];
+  if (!im) return "";
+  return '<span class="tn-media"><img class="tn-img" src="' + esc(im.src) + '"' + (im.srcset ? ' srcset="' + esc(im.srcset) + '"' : "") +
+    ' sizes="' + sizes + '" alt="" loading="eager" decoding="async" onerror="var a=this.closest(\'.tn-atom\');this.closest(\'.tn-media\').hidden=true;if(a)a.classList.remove(\'tn-atom--photo\')"></span>';
+}
+
+function stopAtom(stop, role, country, origin, index, images) {
   var branch = stop.branch ? '<span class="tn-branch">' + esc(stop.branch) + "</span>" : "";
   var time = stop.time ? '<span class="tn-time">' + esc(stop.time) + "</span>" : "";
   var note = stop.note ? '<p class="tn-note">' + esc(stop.note) + "</p>" : "";
-  var links = role === "later" ? "" : linksHtml(stop, country, origin);
-  var num = index != null ? '<span class="tn-num">' + String(index + 1).padStart(2, "0") + "</span>" : "";
-  return '<div class="tn-atom tn-atom--' + role + '" data-tn-role="' + role + '">' +
-    '<p class="tn-role">' + (role === "now" ? "Now" : role === "next" ? "Next" : "") + time + branch + "</p>" +
-    num + '<h3 class="tn-name">' + esc(stop.name) + "</h3>" + note +
-    (links ? '<p class="tn-go"><span class="tn-go-label">Get there</span>' + links + "</p>" : "") +
-    "</div>";
+  var links = linksHtml(stop, country, origin);
+  var num = index != null ? '<span class="tn-num">Stop ' + String(index + 1).padStart(2, "0") + "</span>" : "";
+  var media = imageHtml(images, stop, role === "now" ? "(min-width:900px) 40vw, 100vw" : "96px");
+  return '<article class="tn-atom tn-atom--' + role + (media ? " tn-atom--photo" : "") + '" data-tn-role="' + role + '">' +
+    media +
+    '<div class="tn-body">' +
+      '<p class="tn-role"><span class="tn-role-k">' + (role === "now" ? "Now" : "Next") + "</span>" + time + branch + num + "</p>" +
+      '<h3 class="tn-name">' + esc(stop.name) + "</h3>" + note +
+      (links ? '<div class="tn-go"><span class="tn-go-label">Get there</span>' + links + "</div>" : "") +
+    "</div></article>";
 }
 
 export function initTrip() {
@@ -52,6 +67,8 @@ export function initTrip() {
   if (!root || !dataEl) return;
   var days;
   try { days = JSON.parse(dataEl.textContent || "[]"); } catch (e) { return; }
+  var images = {};
+  try { var imEl = document.getElementById("tripImages"); images = imEl ? JSON.parse(imEl.textContent || "{}") : {}; } catch (e) { images = {}; }
   var cfgEl = document.getElementById("tgConfig");
   var cfg = cfgEl ? JSON.parse(cfgEl.textContent || "{}") : {};
   var tz = cfg.destTzIana || null;
@@ -122,30 +139,38 @@ export function initTrip() {
     var day = days[idx];
     var arrival = idx === 0;
     var f = focusFor(day.stops, destNowMinutes(tz), doneSet(idx));
+    // 1 — where today sits: the day's own name and the way to its full plan.
     var h = '<div class="tn-day">' +
-      '<p class="tn-kicker">' + (arrival ? "Arrival · " : "Today · ") + esc(day.date) + ' · <a href="#' + esc(day.anchor) + '" data-dest-go="itinerary" class="tn-daylink">Day ' + (idx + 1) + " of " + days.length + " →</a></p>" +
+      '<p class="tn-kicker"><span>' + (arrival ? "Arrival" : "Today") + " · " + esc(day.date) + '</span><a href="#' + esc(day.anchor) + '" data-dest-go="itinerary" class="tn-daylink">Day ' + (idx + 1) + " of " + days.length + " in the itinerary →</a></p>" +
       '<h2 class="tn-title">' + esc(day.title) + "</h2>" +
       (day.tldr ? '<p class="tn-tldr">' + esc(day.tldr) + "</p>" : "") +
       "</div>";
+    // 2 — Now, then Next: one dominant object, one compressed one. Get there rides inside each.
     if (!day.stops.length) {
       h += '<p class="tn-none">No timed stops today — the day\'s plan is in the itinerary.</p>';
     } else {
-      if (f.now) h += stopAtom(f.now, "now", country, origin, day.stops.indexOf(f.now));
-      if (f.next) h += stopAtom(f.next, "next", country, origin, day.stops.indexOf(f.next));
+      h += '<div class="tn-stack">';
+      if (f.now) h += stopAtom(f.now, "now", country, origin, day.stops.indexOf(f.now), images);
+      if (f.next) h += stopAtom(f.next, "next", country, origin, day.stops.indexOf(f.next), images);
       if (!f.now && !f.next) h += '<p class="tn-none">Every stop today is checked off.</p>';
+      h += "</div>";
     }
-    // Material warning: the official advisory when elevated; the day's fit note when present.
+    // 3 — material problem: the official advisory when elevated. 4 — the fallback the guide
+    // already carries. 5 — the day's fit note, quiet. Nothing here is invented.
+    var side = "";
     var adv = cfg.advisory && cfg.advisory.level >= 2 ? cfg.advisory : null;
-    if (adv) h += '<a class="tn-warn" href="' + esc(adv.source_url) + '" target="_blank" rel="noopener"><span class="tn-warn-k">Advisory · Level ' + adv.level + "</span>" + esc(adv.title) + "</a>";
-    if (day.fit) h += '<p class="tn-fit"><span class="tn-warn-k">Fit</span>' + esc(day.fit) + "</p>";
-    if (day.planB) h += '<div class="tn-planb planb-' + day.planB.trigger + '"><span class="tn-warn-k">' + (day.planB.trigger === "rain" ? "Rain plan" : "If it's closed") + "</span><span>" + day.planB.body + "</span></div>";
+    if (adv) side += '<a class="tn-warn" href="' + esc(adv.source_url) + '" target="_blank" rel="noopener"><span class="tn-warn-k">Advisory · Level ' + adv.level + "</span><span>" + esc(adv.title) + "</span></a>";
+    if (day.planB) side += '<div class="tn-planb planb-' + day.planB.trigger + '"><span class="tn-warn-k">' + (day.planB.trigger === "rain" ? "Rain plan" : "If it's closed") + "</span><span>" + day.planB.body + "</span></div>";
+    if (day.fit) side += '<p class="tn-fit"><span class="tn-warn-k">Fit</span><span>' + esc(day.fit) + "</span></p>";
+    // 6 — the remainder of the day, in the itinerary's own order, with its own times.
     var rest = arrival ? f.later.slice(0, 1) : f.later;
     if (rest.length) {
-      h += '<div class="tn-rest"><p class="tn-rest-k">' + (arrival ? "Then" : "Rest of the day") + "</p><ol class=\"tn-rest-list\">" +
-        rest.map(function (s) { return "<li>" + (s.time ? '<span class="tn-rest-time">' + esc(s.time) + "</span>" : "") + '<span class="tn-rest-name">' + esc(s.name) + (s.branch ? ' <span class="tn-branch">' + esc(s.branch) + "</span>" : "") + "</span></li>"; }).join("") +
+      side += '<div class="tn-rest"><p class="tn-rest-k">' + (arrival ? "Then" : "Rest of the day") + "</p><ol class=\"tn-rest-list\">" +
+        rest.map(function (s) { return "<li>" + (s.time ? '<span class="tn-rest-time">' + esc(s.time) + "</span>" : '<span class="tn-rest-time tn-rest-time--none" aria-hidden="true">—</span>') + '<span class="tn-rest-name">' + esc(s.name) + (s.branch ? ' <span class="tn-branch">' + esc(s.branch) + "</span>" : "") + "</span></li>"; }).join("") +
         "</ol></div>";
     }
-    if (f.done.length) h += '<p class="tn-done">' + f.done.length + " stop" + (f.done.length === 1 ? "" : "s") + " behind you</p>";
+    if (f.done.length) side += '<p class="tn-done">' + f.done.length + " stop" + (f.done.length === 1 ? "" : "s") + " behind you</p>";
+    if (side) h += '<div class="tn-side">' + side + "</div>";
     nowEl.innerHTML = h;
   }
 
