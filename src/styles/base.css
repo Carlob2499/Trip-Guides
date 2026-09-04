@@ -317,14 +317,32 @@
      for a future session to make visually, not something to slip in unreviewed here. */
   --text-h1:clamp(1.5rem,4vw,2.2rem);
   --text-display:clamp(2.8rem,8vw,4.8rem); /* MATCHES .masthead h1's clamp in guide.css, not new */
-  /* The --r-sm/--r-md/--r-lg ladder was DELETED in the Atlas migration's Stage G closeout, not
-     deprecated. This system has two radii — 0 on anything holding content or evidence, 999px on
-     anything you press — and check-drift.mjs fails any third value. Leaving the tokens declared
-     would leave the old language reachable, and every stylesheet that still read them (nine
-     files, twenty-six sites outside the twelve features) has been swept. (The one former
-     exception, src/styles/progress-preview/, was deleted with the design studies in the
-     2026-08-14 cleanup.) This paragraph describes the CURRENT shipped geometry only; D6 has
-     reopened final geometry and no legacy drift checker makes it future law. */
+  /* D7 GEOMETRY (design-system.md §31) — one related radius family, by ROLE, not one radius
+     everywhere and not the retired zero-radius law. A surface picks the role its object plays;
+     nothing types a px value. --r-pill is the one press shape; --r-round is for dots/avatars. */
+  --r-inset:12px;    /* control insets: inputs, chips' inner fields, small tiles          10–14 */
+  --r-compact:16px;  /* compact tile: saved place, result row, utility object            14–18 */
+  --r-card:20px;     /* standard operational / editorial card                            18–24 */
+  --r-pane:28px;     /* large hero, pane, sheet, floating rail                            24–32 */
+  --r-pill:999px;--r-round:50%;
+  /* Surface roles (§4, §31). Hairline structure by default; ONE low broad shadow only for actual
+     depth or focus (a floating rail, an open sheet, the picked-up card). Solid by default; glass
+     only for floating navigation, transient overlays and map controls (--glass-*). */
+  --line:var(--rule);--line-strong:var(--rule2);
+  --shadow-float:0 12px 36px rgba(var(--shadow-rgb),.12);
+  --shadow-lift:0 6px 20px rgba(var(--shadow-rgb),.10);
+  --glass-bg:color-mix(in srgb,var(--card) 88%,transparent);
+  --glass-blur:14px;
+  /* Semantic colour roles (§3) — aliases over the existing palette, no new hues. */
+  --ok:var(--green);--ok-fill:var(--green);--on-ok:var(--on-green);
+  --caution:var(--warn);
+  --critical:var(--crit);--critical-fill:var(--crit-fill);--on-critical:var(--on-crit);
+  --info:var(--muted);
+  --selected:var(--accent);--selected-ink:var(--accent-ink);--on-selected:var(--on-accent);
+  /* Operational numerals align (§2). Applied by .num-tabular and the operational card role. */
+  --numeric:tabular-nums;
+  /* (The 2026-08 two-radius law and its --r-sm/md/lg ladder are history: §31 of the 2026-09-04
+     constitution replaced them with the role family above.) */
   /* M3: z-index scale — was 20+ ad-hoc values (0 to an outlier 9000) with no documented tiers,
      and one real bug: .skip-link (999) painted UNDER a full-screen overlay (1000), so a keyboard
      user tabbing while it was open focused an invisible link. Named here as the single
@@ -345,8 +363,23 @@
      move collapses to an opacity fade. */
   --ease-spring:cubic-bezier(.34,1.56,.64,1); /* gentle overshoot — press-release + hover-lift */
   --ease-out-expo:cubic-bezier(.16,1,.3,1);   /* entries, reveals, panel/tab transitions */
-  --dur-tap:120ms;--dur-ui:200ms;--dur-reveal:350ms;--dur-hero:600ms; /* duration scale: touch → control → scroll-reveal → hero */
+  /* D7 timing roles (motion.md §1). The four old names stay as ALIASES so every consumer keeps
+     working until it migrates; new work reads the roles. */
+  --dur-immediate:110ms; /* press/focus/selection acknowledgement           80–140   */
+  --dur-routine:190ms;   /* filters, tabs, day change, small sheet change    140–240  */
+  --dur-object:320ms;    /* card expand, stack→layout, pane reorganisation   240–420  */
+  --dur-scene:640ms;     /* Atlas→destination, major recomposition           520–900  */
+  --dur-arrival:1100ms;  /* first-entry choreography only                    800–1500 */
+  --ease-standard:cubic-bezier(.2,.7,.2,1); /* quick acquisition, soft deceleration, no overshoot (motion.md §2) */
+  --dur-tap:var(--dur-immediate);--dur-ui:var(--dur-routine);--dur-reveal:var(--dur-object);--dur-hero:var(--dur-scene);
 }
+/* D7 card roles (design-system.md §8) — one geometry family, four jobs. Surfaces add their own
+   content classes beside these; they do not redeclare radius, border or shadow. */
+.card-op{background:var(--card);border:var(--rw) solid var(--line);border-radius:var(--r-card);font-variant-numeric:var(--numeric)}
+.card-ed{background:var(--card);border:var(--rw) solid var(--line);border-radius:var(--r-card);overflow:hidden}
+.card-tile{background:var(--card);border:var(--rw) solid var(--line);border-radius:var(--r-compact)}
+.card-feature{background:var(--card);border:var(--rw) solid var(--line);border-radius:var(--r-pane);box-shadow:var(--shadow-lift)}
+.num-tabular{font-variant-numeric:var(--numeric)}
 /* CARRIER RE-RESOLUTION (#38). A custom property substitutes its var()s on the element
    that DECLARES it, and descendants inherit the resolved value — so :root's
    --accent-ink:var(--accent-ink-light) resolves once against :root's own candidates,
