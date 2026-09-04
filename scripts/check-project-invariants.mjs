@@ -143,6 +143,9 @@ requireText("AGENTS.md", "Sights and Food are REPOSITORIES", "Sights/Food breadt
 requireText("AGENTS.md", "pipeline critic findings", "Traveler/process learnings separation");
 requirePath("docs/reference/design-system.md", "Waypoint design authority");
 requireText("docs/reference/design-system.md", "## 16. Motion", "Waypoint motion doctrine");
+requirePath("docs/reference/design-system-assets/canonical-mockups.svg", "Waypoint canonical visual board");
+requireText("docs/reference/design-system.md", "design-system-assets/canonical-mockups.svg", "Waypoint authority binds canonical visual board");
+requireText("docs/reference/design-system-assets/canonical-mockups.svg", "SUPPORTING FIGURE ONLY", "Waypoint visual board is subordinate to sole authority");
 requirePath("docs/reference/component-registry.json", "Waypoint component registry");
 
 // Design authority is intentionally singular. Historical design bodies live in Git history,
