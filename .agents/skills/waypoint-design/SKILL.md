@@ -1,58 +1,48 @@
 ---
 name: waypoint-design
-description: Design or implement Waypoint UI, visual assets, and prototypes while preserving its field-use, truth, responsive, and design-system contracts.
+description: Design or implement Waypoint UI while preserving the sole design authority, factual truth, responsive siblings, and field-use constraints.
 user-invocable: true
 ---
 
-## Read only what the task needs
+## Read first
 
-- **Narrow production UI/CSS fix:** read this skill, `docs/reference/design-system.md`, and the
-  affected production component/style files.
-- **Motion change:** additionally read `docs/reference/motion.md`.
-- **New/reworked component or pattern:** additionally read
-  `docs/reference/component-registry.json` and the affected machine gates.
-- **Whole-surface or design reconciliation:** read `PRODUCT.md`,
-  `docs/reference/design-system.md`, `docs/reference/motion.md`,
-  `docs/reference/component-registry.json`, and—when external evidence is useful—
-  `docs/research/waypoint-design-reference-packet.md`.
-- Historical `docs/design-handoff/`, prototypes, screenshots, and archived redesigns are
-  consult-only implementation history. Do not load them unless current authority/code leaves a
-  specific historical implementation question unanswered.
+For every visual/frontend task, read `docs/reference/design-system.md` first. It is the **only human-readable design authority**.
+
+Then read only the affected production component/style/model files and the tests that gate the change. `PRODUCT.md` owns product purpose/capabilities. `docs/reference/component-registry.json` is a machine-facing shipped-component inventory, not design authority.
+
+Do not search for or resurrect historical design handoffs, prototypes, screenshots, archived redesigns, old motion specs, research packets, or PR prose as alternate authority. Those live in Git history only.
 
 ## Scope boundary
 
-This skill owns **presentation**, not destination truth.
+This skill owns presentation, not destination truth.
 
-- For **presentation-only** work: **Preserve every fact value verbatim.** Do not invoke factual
-  research merely because UI renders travel content.
-- **Creating, correcting, or verifying destination facts** — prices, hours, venues, transit,
-  events, itineraries, or recommendations — belongs to `waypoint-guide-author`.
-- Presentation work never invents travel facts merely to fill a visual state.
+- Preserve factual guide values verbatim during presentation work.
+- Creating/correcting/verifying prices, hours, venues, transit, events, itineraries or recommendations belongs to `waypoint-guide-author`.
+- Never invent data, people, statuses, actions, ratings, live state or controls to make a layout look complete.
 
-## Non-negotiable design contract
+## Non-negotiable contract
 
-`docs/reference/design-system.md` is the single design authority.
+1. Field-first: the traveler on the street wins tradeoffs.
+2. Stable destinations: `Trip · Itinerary · Map · Guide · Split`; Atlas one obvious action away; Search and SOS global.
+3. Responsive sibling compositions; mobile is not compressed desktop.
+4. Hierarchy before features; composition before card count.
+5. Useful imagery may be prominent, but operational truth stays on readable Waypoint working surfaces.
+6. Truth remains visible: missing/stale/uncertain/conflicting/offline states are honest.
+7. Preserve approved tokens/type and robust CJK/system fallbacks.
+8. Motion explains state/orientation; no scroll hijack, Story Mode, or top-level swipe navigation.
+9. 320px reflow, ~44px key targets, text zoom, long/CJK text, keyboard/touch, reduced motion, safe areas, dark mode and degraded/offline states are acceptance requirements.
+10. Merge before adding; retire before replacing; do not restore obsolete Tools/More, adaptive nav, Story, Trip Kit, voting/shared-readiness, command-palette or dashboard lineage.
 
-1. **Field-first.** The traveler on the street wins tradeoffs.
-2. **Truth stays visible.** Missing, stale, uncertain, conflicting, and offline states remain honest.
-3. **Responsive sibling compositions.** Mobile is not compressed desktop; desktop is not enlarged
-   mobile. Content prefers intrinsic/container-driven recomposition.
-4. **Hierarchy before features.** Do not give a feature visual prominence merely because it exists.
-5. **Composition, not card soup.** Use editorial, operational, spatial, and focused-action grammar.
-6. **Merge before adding; retire before replacing.** Never preserve two generations of a pattern
-   indefinitely.
-7. **Use approved tokens/components.** New global primitives require registry-first approval.
-8. **Motion explains change.** Follow `docs/reference/motion.md`; no scroll hijacking or ornamental
-   spectacle that delays the task.
-9. **Field resilience.** 320px reflow floor, safe areas, long/CJK content, dark mode, offline,
-   reduced motion, keyboard/touch, and important ~44px field controls are part of acceptance.
-10. **Historical handoffs are not authority.** Never resurrect R4/R5 rules because a prototype or
-    old spec calls itself final.
+## Visual acceptance
 
-## D6 / D7 rule
+Functional green does not equal visual green. Follow the visual-fidelity program in `docs/reference/design-system.md`:
 
-During D6, unresolved items in the constitution remain unresolved until Carlo decides them.
-Do not infer approval from current shipped behavior or older creator decisions.
+- first implement/rework only the South Korea **active Trip mobile** and **Itinerary desktop workbench** canary;
+- compare production renders against the creator-approved target descriptions;
+- do not expand the visual sweep while the canary is materially off-target;
+- require explicit creator visual acceptance before regenerating final screenshot baselines;
+- baselines are regression locks, never design approval.
 
-During D7, implement only decisions that survived D6, then remove superseded implementation and
-documentation in the same convergence program where safe.
+## Execution rule
+
+Do not reopen settled design questions. Ask only for a genuine creator fork explicitly listed as open in the sole design authority, or for a newly demonstrated accessibility/truth/feasibility conflict. Otherwise choose the safest implementation consistent with the authority, test it, and continue.
