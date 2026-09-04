@@ -17,7 +17,7 @@
        pin hands off with a Directions URL built from its verified coordinates. */
 
 import { clusterPins } from "../model/cluster";
-import { esc as escapeHtml } from "../../../scripts/util.js";
+import { esc as escapeHtml, safeHttpUrl } from "../../../scripts/util.js";
 
 /* global google */
 export function boot(cfg) {
@@ -223,7 +223,10 @@ export function boot(cfg) {
     if (mount.getAttribute("data-map-provider") === "google") return;
     var frame = mount.querySelector(".osmmap");
     if (frame && frame.hasAttribute("data-fallback-src")) {
-      frame.setAttribute("src", frame.getAttribute("data-fallback-src"));
+      // The embed URL was rendered at build time, but it is read back out of the DOM here, so
+      // it goes through the same credited http(s) step every page-read URL does.
+      var url = safeHttpUrl(frame.getAttribute("data-fallback-src"));
+      if (url) frame.setAttribute("src", url);
       frame.removeAttribute("data-fallback-src");
     }
     mount.setAttribute("data-map-provider", "osm");
