@@ -102,15 +102,11 @@
      own near-black instead, 6.84:1. */
   --on-green:#ffffff;
   /* ATLAS TOKEN CONTRACT — the --dark-* ground (Stage F feature 3; named --sm-* until feature 7
-     took the lightbox onto it too). Story mode is a takeover,
+     took the lightbox onto it too). The photo lightbox is a takeover,
      not a page: it is dark in BOTH themes, so it cannot read --ink/--bg without inverting
      itself for every light-theme reader. Like --on-aink and --crit-fill above, these are
      deliberately NOT re-mapped per theme — a fixed ground is an object, not ink on the page.
-     They live here rather than in story-mode.css so the product's hex literals stay in one
-     file. Measured against --dark-ground: ink 17.61:1, ink-2 14.86:1, ink-3 11.81:1, ink-4 10.20:1. The
-     real painted ground is a radial gradient that mixes 26% of the guide's accent into that
-     value near the top, so story-mode.spec.ts samples the composited pixels rather than
-     trusting these four. */
+     Measured against --dark-ground: ink 17.61:1, ink-2 14.86:1, ink-3 11.81:1, ink-4 10.20:1. */
   --dark-ground:#0b0e12;
   --dark-ink:#f3f5ef;
   --dark-ink-2:#dfe3da;
@@ -326,8 +322,8 @@
      2026-08-14 cleanup.) This paragraph describes the CURRENT shipped geometry only; D6 has
      reopened final geometry and no legacy drift checker makes it future law. */
   /* M3: z-index scale — was 20+ ad-hoc values (0 to an outlier 9000) with no documented tiers,
-     and one real bug: .skip-link (999) painted UNDER story-mode's overlay (1000), so a keyboard
-     user tabbing while story mode was open focused an invisible link. Named here as the single
+     and one real bug: .skip-link (999) painted UNDER a full-screen overlay (1000), so a keyboard
+     user tabbing while it was open focused an invisible link. Named here as the single
      source of truth for NEW stacking decisions; existing declarations are not retrofitted in
      this pass (40+ call sites across 15 files — a full sweep is real work, tracked separately),
      but every value below reflects where those existing declarations already cluster, so a
@@ -336,8 +332,7 @@
   --z-sticky:310;   /* full-screen sheets/panels: Focus Today, SOS sheet, address card */
   --z-toast:940;    /* toasts/pills: save confirmations, offline badge */
   --z-modal:960;    /* backdrop+dialog modals: share, new-guide, survey — all sit in one tier */
-  --z-story:1000;   /* the story-mode full-screen overlay — the highest CONTENT layer */
-  --z-skip-link:1100; /* ABOVE story-mode, always — a skip link that can be hidden by other UI defeats its purpose */
+  --z-skip-link:1100; /* ABOVE every overlay, always — a skip link that can be hidden by other UI defeats its purpose */
   /* Motion tokens — the single timing vocabulary for CSS + GSAP alike (adopted from
      the WayPoint-V2 design manifesto). Rules of use: entries/reveals ride
      --ease-out-expo (fast start, long settle); touch feedback rides --ease-spring;
@@ -448,9 +443,9 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 /* Skip link — visually hidden until focused, then a clear chip at top-left. Shared by
    EVERY page (U3): it used to live only in guide.css, so the hub had no skip link at all
    despite its own V2 spec promising one. */
-/* M3: was z-index:999 — painted UNDER story-mode's z-index:1000 overlay, so a keyboard user
-   tabbing while story mode played focused an invisible skip link. --z-skip-link is defined
-   above story-mode specifically so this can never regress silently again. */
+/* M3: was z-index:999 — painted UNDER a z-index:1000 overlay, so a keyboard user tabbing
+   while it was open focused an invisible skip link. --z-skip-link sits above every overlay
+   specifically so this can never regress silently again. */
 .skip-link{position:fixed;left:.7rem;top:.7rem;z-index:var(--z-skip-link);padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:var(--text-caption);text-decoration:none;transform:translateY(-300%);transition:transform .15s}
 .skip-link:focus-visible{transform:none;outline:3px solid var(--accent-ink);outline-offset:2px}
 
@@ -474,7 +469,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
    the line, both repeat hundreds of times per guide, and raising either changes the density of
    every day card in every guide — a design decision, not a fix. They are recorded in the gate's
    own TARGET_BASELINE with that reasoning, where the number can only shrink. */
-.topbar-btn,.mast-print,.cat-collapse-all,.day-print-btn,.copy-addr,.map-fs-btn{min-height:44px}
+.topbar-btn,.mast-print,.day-print-btn,.copy-addr,.map-fs-btn{min-height:44px}
 .topbar-btn{min-width:44px}
 .cold-open-x{width:44px;height:44px}
 /* Icon-only buttons: the box grows, the glyph does not — a bigger target, same drawing. */

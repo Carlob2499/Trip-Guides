@@ -29,7 +29,7 @@
       var node = day.parentElement;
       while (node && node !== document.body) {
         node.classList.add("print-keep");
-        if (node.classList.contains("catblock")) break;
+        if (node.classList.contains("dest")) break;
         node = node.parentElement;
       }
       document.body.setAttribute("data-print-day", day.getAttribute("data-day"));
@@ -58,7 +58,7 @@
         node = day.parentElement;
         while (node && node !== document.body) {
           node.classList.add("print-keep");
-          if (node.classList.contains("catblock")) break;
+          if (node.classList.contains("dest")) break;
           node = node.parentElement;
         }
       });

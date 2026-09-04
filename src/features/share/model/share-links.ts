@@ -13,13 +13,14 @@
  * section happened to be open on first load.
  *
  * `baseHref` should already have any existing hash stripped. `activeTabDataAttr` is the
- * `data-tab` attribute of the currently-active `.gtab` element, or null/undefined if
+ * key of the destination the reader is on (body[data-dest]), or null/undefined if
  * none is active (a special panel like Budget, or nothing selected yet) — only a
  * NUMBERED content tab gets a `#grp-N` deep link; special panels share the base URL.
  */
-export function buildPageUrl(baseHref: string, activeTabDataAttr: string | null | undefined): string {
-  const t = activeTabDataAttr;
-  return t && /^\d+$/.test(t) ? baseHref + "#grp-" + t : baseHref;
+/** The five destinations are hash routes (#dest-<key>); Trip is the launch default, so a
+    Trip link is the bare guide URL. */
+export function buildPageUrl(baseHref: string, dest: string | null | undefined): string {
+  return dest && /^(itinerary|map|guide|split)$/.test(dest) ? baseHref + "#dest-" + dest : baseHref;
 }
 
 export function buildWhatsAppShareUrl(pageUrl: string): string {

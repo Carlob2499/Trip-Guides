@@ -13,7 +13,18 @@
     ],
     "verified_on": "2026-07-30",
     "shelf_life": "transit",
-    "source_url": "https://www.seoulmetro.co.kr/en/"
+    "source_url": "https://www.seoulmetro.co.kr/en/",
+    "module": {
+      "id": "key-transit-routes",
+      "kind": "transit",
+      "scope": "Seoul · Daejeon",
+      "relates": {
+        "days": [
+          "Thu Jul 9",
+          "Sat Jul 11"
+        ]
+      }
+    }
   },
   {
     "type": "prose",
@@ -22,7 +33,18 @@
     "body": "<p>Your Jongno base sits on <b>subway Line 1 (Jonggak)</b> and near two <b>6002</b> limousine-bus stops (Gwanghwamun, Jongno 3-ga) — central and well-connected to the airport. <b>Your plan is the Limousine Bus 6002 both ways</b> — comfortable coach seats, luggage stowed under the bus, no subway stairs. Fares/times per <a href='https://airportlimousine.co.kr/en'>Airport Limousine Co.</a> (⚠ verify before travel).</p><ul><li><b>Limousine Bus 6002 (your pick)</b> — ICN T1 ⇄ Gwanghwamun / Jongno 3-ga: <b>≈75 min, {{fact:getting-to-from-17-000}}/person</b> (first bus from ICN 05:35, last 23:30). Coach seats, under-bus luggage; a ~7-min walk from the base. Buy at the bus counter in T1 arrivals (card). <b>⚠ In the 17:00–20:00 rush it can take up to 2 hr</b> — on departure day, board by ~14:30–15:00 to keep a 3+ hr airport buffer.</li><li><b>AREX (subway train)</b> — ICN T1 → Seoul Station, then Line 1 one stop to <b>Jonggak</b>: <b>≈50–55 min total, {{fact:getting-to-from-4-050}} (All-Stop) or {{fact:getting-to-from-11-000}} (Express)</b>. No traffic risk — the safer choice if you leave later than ~15:00. Jonggak exits right by the base; you carry bags through the subway.</li><li><b>Taxi (Kakao T)</b> — ICN ⇄ the base: <b>≈45–55 min, {{fact:getting-to-from-55-000}}–65,000 total</b> ({{fact:getting-to-from-18-000}}–22,000/person split 3). Fastest door-to-door, no bag handling; Incheon Bridge toll {{fact:getting-to-from-2-000}} included. Book 'Large Taxi' in the Kakao T app for 3 people + luggage.</li><li><b>Luggage delivery</b> — a same-day airport luggage courier can move bags Airbnb ⇄ ICN so you travel hands-free on arrival or departure day. Book a day ahead; ⚠ confirm operator, cutoff, and price.</li></ul><p><b>Bottom line:</b> Limousine Bus 6002 both ways — board early on the Jul 15 departure to beat the evening rush, or take AREX via Seoul Station if you leave after ~15:00.</p>",
     "verified_on": "2026-07-07",
     "shelf_life": "transit",
-    "source_url": "https://www.airport.kr/ap/en/index.do"
+    "source_url": "https://www.airport.kr/ap/en/index.do",
+    "module": {
+      "id": "incheon-airport-transfer",
+      "kind": "arrival",
+      "scope": "Seoul",
+      "critical": true,
+      "relates": {
+        "days": [
+          "Thu Jul 9"
+        ]
+      }
+    }
   },
   {
     "type": "map",
@@ -76,6 +98,16 @@
     "group": "Transit",
     "title": "Tips & tricks — Seoul and Daejeon",
     "moreLabel": "Subway, taxis, paying & the call button",
-    "body": "<p><b>Maps:</b> Use <b>Naver Map</b> or <b>KakaoMap</b> — both show exact exit numbers (e.g. Exit 5) which are essential in Seoul's deep multi-exit stations. <b>Google Maps cannot legally access Korean road data</b> at full resolution — it works for landmarks but gives actively wrong transit routing. Delete it from your muscle memory for this trip.</p><p><b>Subway:</b> tap T-money in and out. If you forget to tap out, the system charges you the maximum fare — tap out every time. Announcements are in Korean, English, Chinese, and Japanese. The colored line number and station name on the platform are always in English. When in doubt, count stops.</p><p><b>Taxis:</b> Kakao T shows the estimated fare and driver details before you get in — always use it at night or in unfamiliar areas. Flagging a taxi is fine in the city. <b>In Daejeon</b>, English is much less common; show the driver the destination in Korean on your phone (type the address in Naver Map and hand them the phone). Kakao T works exactly the same in Daejeon.</p><p><b>Paying for food:</b> in most Korean restaurants you pay at the counter when you leave, not at the table. There's no waiting for a check. Some places have a QR code at the table to scan and pay — it still goes to the counter. <b>Kiosks</b> at chain restaurants are touchscreen-only; tap the English flag at the top-right corner.</p><p><b>Call button:</b> every sit-down restaurant table has a call button to summon a server. Press it when you're ready to order — don't wave or make eye contact trying to flag someone down. Some are physical buttons, some are embedded in a screen.</p><p><b>Convenience stores as infrastructure:</b> GS25 and CU are your ATMs, rest stops, phone chargers (some have USB outlets), umbrellas, and late-night kitchens. You will visit them multiple times per day. The hot-food section (fried chicken pieces, tteokbokki cups, steamed buns) is genuinely good and cheap.</p><p><b>Power and charging:</b> Korea uses <b>Type C/F plugs, 220V</b>. Most modern USB-C chargers handle 110–240V automatically — check your brick. iPhones need a plug adapter; no voltage converter required. Many cafés and PC bangs have power outlets at every seat.</p><p><b>Luggage:</b> if you check out but have hours left in Seoul, most convenience stores and <b>Seoul Station's left-luggage counter</b> (level B1, Platform area) store bags by the hour. Your Jongno host may also allow a late bag drop.</p><p><b>Daejeon specifically:</b> it's a smaller city. English signage exists around DCC II and the EXPO district but disappears quickly. Use Naver Map even for short walks — the street layout around Yuseong-gu is less grid-like than central Seoul. The Dunsan-dong entertainment district (~15 min taxi from I-Hotel) is where the restaurants and bars are on Sunday evening.</p>"
+    "body": "<p><b>Maps:</b> Use <b>Naver Map</b> or <b>KakaoMap</b> — both show exact exit numbers (e.g. Exit 5) which are essential in Seoul's deep multi-exit stations. <b>Google Maps cannot legally access Korean road data</b> at full resolution — it works for landmarks but gives actively wrong transit routing. Delete it from your muscle memory for this trip.</p><p><b>Subway:</b> tap T-money in and out. If you forget to tap out, the system charges you the maximum fare — tap out every time. Announcements are in Korean, English, Chinese, and Japanese. The colored line number and station name on the platform are always in English. When in doubt, count stops.</p><p><b>Taxis:</b> Kakao T shows the estimated fare and driver details before you get in — always use it at night or in unfamiliar areas. Flagging a taxi is fine in the city. <b>In Daejeon</b>, English is much less common; show the driver the destination in Korean on your phone (type the address in Naver Map and hand them the phone). Kakao T works exactly the same in Daejeon.</p><p><b>Paying for food:</b> in most Korean restaurants you pay at the counter when you leave, not at the table. There's no waiting for a check. Some places have a QR code at the table to scan and pay — it still goes to the counter. <b>Kiosks</b> at chain restaurants are touchscreen-only; tap the English flag at the top-right corner.</p><p><b>Call button:</b> every sit-down restaurant table has a call button to summon a server. Press it when you're ready to order — don't wave or make eye contact trying to flag someone down. Some are physical buttons, some are embedded in a screen.</p><p><b>Convenience stores as infrastructure:</b> GS25 and CU are your ATMs, rest stops, phone chargers (some have USB outlets), umbrellas, and late-night kitchens. You will visit them multiple times per day. The hot-food section (fried chicken pieces, tteokbokki cups, steamed buns) is genuinely good and cheap.</p><p><b>Power and charging:</b> Korea uses <b>Type C/F plugs, 220V</b>. Most modern USB-C chargers handle 110–240V automatically — check your brick. iPhones need a plug adapter; no voltage converter required. Many cafés and PC bangs have power outlets at every seat.</p><p><b>Luggage:</b> if you check out but have hours left in Seoul, most convenience stores and <b>Seoul Station's left-luggage counter</b> (level B1, Platform area) store bags by the hour. Your Jongno host may also allow a late bag drop.</p><p><b>Daejeon specifically:</b> it's a smaller city. English signage exists around DCC II and the EXPO district but disappears quickly. Use Naver Map even for short walks — the street layout around Yuseong-gu is less grid-like than central Seoul. The Dunsan-dong entertainment district (~15 min taxi from I-Hotel) is where the restaurants and bars are on Sunday evening.</p>",
+    "module": {
+      "id": "getting-around-tips",
+      "kind": "howto",
+      "scope": "Seoul · Daejeon",
+      "relates": {
+        "days": [
+          "Fri Jul 10"
+        ]
+      }
+    }
   }
 ]

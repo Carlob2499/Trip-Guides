@@ -18,7 +18,7 @@ name: Regenerate gallery baselines (branch-scoped)
 # directly (see D5's commit history for the fuller story).
 on:
   push:
-    branches: [claude/waypoint-design-system-mpfbl6]
+    branches: [claude/waypoint-design-routing-rex0vr]
     paths:
       - "tests/visual/gallery-baselines.spec.ts"
       - "src/pages/gallery.astro"

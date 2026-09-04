@@ -35,9 +35,9 @@ const EXPECTED: Record<string, string[]> = {
   // shell's sheets each carry the one breakpoint they recompose on.
   "features/search/styles.css": ["MOBILE_MAX+1"],
   "styles/chrome.css": ["MOBILE_MAX+1"],
-  "styles/flight.css": ["MOBILE_MAX"],
   "styles/guide-dest.css": ["TABLET_MIN", "DESKTOP_MIN"],
-  "styles/guide.css": ["MOBILE_MAX+1", "TABLET_MIN", "DESKTOP_MIN", "MOBILE_MAX"],
+  // guide.css keeps one marker: the phone retune of --chrome-h.
+  "styles/guide.css": ["MOBILE_MAX"],
   "styles/itinerary.css": ["DESKTOP_MIN"],
   "styles/map.css": ["DESKTOP_MIN"],
   "styles/trip-split.css": ["MOBILE_MAX"],

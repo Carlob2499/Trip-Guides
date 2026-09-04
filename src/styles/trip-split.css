@@ -133,8 +133,14 @@ select.split-in{cursor:pointer}
 /* Add-expense button lives in a header row at the TOP of the entry box (mirrors the
    People card's "+ Add person"), so it's the first, always-in-place control — not
    hunted for below the inputs when tallying many expenses in a row. */
+/* The four questions (F3): each field carries its own label, so the composer reads as
+   who · what · how much · who shares — not a bare grid the reader has to decode. */
+.se-q{display:flex;flex-direction:column;gap:.25rem;min-width:0}
+.se-q-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
+.se-new-row{display:grid;grid-template-columns:7rem minmax(0,1fr) 9rem;gap:.45rem;align-items:end}
+.se-parts--new{margin-top:.6rem}
+.se-parts--new[hidden]{display:none}
 .se-new-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.6rem}
-.se-new-row{display:grid;grid-template-columns:1fr 6.5rem 8rem 2.2rem;gap:.45rem;align-items:center}
 
 .se-row{padding:.15rem 0 .3rem}
 .se-row+.se-row{border-top:1px solid var(--rule)}
@@ -253,7 +259,9 @@ select.split-in{cursor:pointer}
   /* Column labels describe a grid that no longer exists once rows restack. */
   .se-header{display:none}
 
-  .se-main,.se-new-row{
+  .se-new-row{grid-template-columns:1fr 1fr;grid-template-areas:"what what" "payer amt"}
+  .se-q--what{grid-area:what}
+  .se-main{
     /* The amount cell holds a currency picker as well as the figure on a guide with a
        local currency, and that picker must stay at 16px or iOS zoom-traps on focus. */
     grid-template-columns:1fr 9rem 2.2rem;
@@ -264,8 +272,6 @@ select.split-in{cursor:pointer}
   .se-payer{grid-area:payer}
   .se-amt-wrap{grid-area:amt;justify-content:flex-end}
   .se-main .split-del{grid-area:del;justify-self:end}
-  /* The entry box has no delete button, so its two rows are 2-up rather than 3-up. */
-  .se-new-row{grid-template-columns:1fr 9rem;grid-template-areas:"desc desc" "payer amt"}
 
   .se-row+.se-row{margin-top:.5rem;padding-top:.55rem}
 

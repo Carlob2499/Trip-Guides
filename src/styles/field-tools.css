@@ -39,13 +39,6 @@
 .cur-in{width:100%;padding:.45rem .6rem;font:inherit;font-size:var(--text-body);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:0}
 .cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:var(--text-control);line-height:1.7;color:var(--ink)}
 
-/* ── Jump-to-today chip ───────────────────────────────────────────────────── */
-.today-chip{position:fixed;left:50%;bottom:calc(5.2rem + var(--safe-bottom));transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
-@media(min-width:900px){.today-chip{bottom:1.7rem;left:auto;right:6rem;transform:none}}
-@media(prefers-reduced-motion:no-preference){.today-chip{animation:chipIn .5s cubic-bezier(.2,1.2,.3,1) .8s both}}
-@keyframes chipIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1}}
-@media(min-width:900px){@keyframes chipIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}}
-
 /* ── Lightbox ─────────────────────────────────────────────────────────────── */
 .sight--photo .cardimg{cursor:zoom-in}
 .lb-backdrop{position:fixed;inset:0;z-index:300;display:none;background:rgba(var(--shadow-rgb),.92);align-items:center;justify-content:center;padding:1rem}
@@ -60,7 +53,7 @@
 .lb-x:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 
 /* The swipe edge glow (`html[data-swipe-hint]`) retired 2026-07-30 with the rewrite to a
-   finger-tracked swipe (src/features/mobile-nav/ui/swipe-tabs.js). It existed to answer a
+   finger-tracked swipe (retired with the R5 rail, D7). It existed to answer a
    gesture that was otherwise invisible until it completed; the content now moves under
    the thumb, which says the same thing continuously and in the right direction. */
 
@@ -70,21 +63,7 @@
 }
 @keyframes kitPop{0%{transform:scale(1)}45%{transform:scale(1.18)}100%{transform:scale(1)}}
 
-/* ── Reading spine (desktop ≥1100px) ─────────────────────────────────────── */
-.spine{display:none}
-@media(min-width:1100px){
-  .spine{display:flex;flex-direction:column;gap:.45rem;position:fixed;left:max(.9rem,var(--safe-left));top:50%;transform:translateY(-50%);z-index:55}
-  .spine-tick{position:relative;width:5px;height:30px;padding:0;background:color-mix(in srgb,var(--rule) 70%,transparent);border:none;border-radius:999px;cursor:pointer;overflow:visible}
-  /* The fill used to animate `height` — on a scroll handler, i.e. a per-frame layout path, which
-     this system does not do (transform and opacity only). Same look, driven by --spine-fill
-     (0..1, written by itinerary/ui/spine.js) through a scale instead. */
-  .spine-fill{position:absolute;left:0;right:0;top:0;height:100%;transform-origin:top;transform:scaleY(var(--spine-fill,0));background:var(--accent);border-radius:999px;transition:transform .25s ease}
-  .spine-seen .spine-fill{background:color-mix(in srgb,var(--accent) 55%,var(--rule))}
-  .spine-active{width:7px}
-  .spine-tip{position:absolute;left:14px;top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:.25rem .6rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-micro);border-radius:0;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
-  .spine-tick:hover .spine-tip,.spine-tick:focus-visible .spine-tip{opacity:1;transform:translateY(-50%) translateX(0)}
-  .spine-tick:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
-}
+
 /* ── SOS button + sheet ───────────────────────────────────────────────────── */
 /* The SOS button now reads the same --crit-fill/--on-crit pair the sheet and the topbar
    button do; it was the last place the emergency red was a hex literal. Its glow went with the
@@ -114,8 +93,8 @@
 /* The notation layer: a data-face kicker, the way every Atlas container announces what it
    is before it says anything else. */
 .sos-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 .6rem;font-family:var(--font-data);font-weight:640;font-size:var(--text-control);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.sos-x{width:36px;height:36px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer}
-.sos-row{display:flex;align-items:center;gap:.9rem;padding:.7rem .2rem;border-top:1px solid var(--rule);text-decoration:none;color:var(--ink)}
+.sos-x{width:44px;height:44px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer}
+.sos-row{display:flex;align-items:center;gap:.9rem;min-height:56px;padding:.7rem .2rem;border-top:1px solid var(--rule);text-decoration:none;color:var(--ink)}
 .sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:640;font-size:1.7rem;letter-spacing:-.012em;color:var(--crit)}
 .sos-label{font-size:var(--text-small);line-height:1.4;color:var(--ink)}
 .sos-note{margin:.7rem 0 0;font-size:var(--text-caption);color:var(--muted)}
@@ -173,9 +152,6 @@
 .focus-planb{margin-top:.7rem;font-size:var(--text-body)}
 .focus-sun{margin:.5rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
 
-/* ── Budget burn pill ─────────────────────────────────────────────────────── */
-.gstat-burn{cursor:pointer;border-color:var(--accent);color:var(--accent-ink)}
-.gstat-burn:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
 
 /* ── Section position ("3/13") ───────────────────────────────────────────── */
 /* No visual styling left to give: since the bottom bar became a five-slot tab bar
@@ -185,5 +161,4 @@
    the inverted .botSections button) died with that button; a rule styling clipped text
    would only be a trap for the next reader. */
 
-@media(prefers-reduced-motion:reduce){.spine-fill,.spine-tip{transition:none}.day-kitcount.done{animation:none}.today-chip{animation:none}}
-@media print{.spine,.today-chip,.ft-toast,.cur-pop,.lb-backdrop,.sos-btn,.sos-sheet,.addr-card,.focus-today{display:none!important}}
+@media(prefers-reduced-motion:reduce){.day-kitcount.done{animation:none}}

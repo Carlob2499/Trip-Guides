@@ -27,7 +27,6 @@ export type { RelevanceInput } from "./model/relevance";
 export { isGuideBuilding, deriveBuildingGuides } from "./model/building";
 export type { BuildingGuide, BuildingGuideInput, RunStateLike, RunStateV2Like } from "./model/building";
 export { localClockLabel } from "./model/local-time";
-export { initAtlasSearch } from "./ui/search.js";
 export { initAtlasWorld } from "./ui/world-view.js";
 export { startLocalClocks } from "./ui/local-clock.js";
 export { initCover } from "./ui/cover.js";

@@ -266,6 +266,7 @@ Keep active:
 - `docs/reference/motion.md`
 - `docs/reference/component-registry.json`
 - executable token/breakpoint/accessibility/resilience gates
+- `docs/design-handoff/final-2026-09-03/` — the frozen D6 handoff (subordinate to the files above)
 
 Everything else is reference, research, implementation documentation, or history and must not
 claim design authority.
@@ -1003,7 +1004,7 @@ increase, not because more prose is poured onto the page.
 There are no remaining user-facing D6 approval gates. The design is frozen unless a prototype exposes
 a concrete usability or correctness failure.
 
-The remaining choices are implementation responsibilities:
+The remaining choices were implementation responsibilities, discharged by D7 (§12):
 - normalize final geometry/radius tokens where the shipped component set is inconsistent;
 - cull/migrate duplicate or obsolete components and patterns without changing the locked behavior;
 - remove Story Mode dependency-safely;
@@ -1014,3 +1015,26 @@ Search is traveler-facing context-first search rather than a developer command p
 flat-first cartographic/topographic treatment with restrained ambient motion; and cartographic
 ornament is subordinate to functional geography.
 
+---
+
+## 12. D7 implementation record (September 2026)
+
+What shipped, where it lives, and which gate keeps it. Facts and research doctrine were not
+touched; every change below is presentation, structure or retirement.
+
+| Decision | Owner in the tree | Gate |
+|---|---|---|
+| Five stable destinations `Trip · Itinerary · Map · Guide · Split` as regions of one guide page; Atlas one action away; Search + SOS in the chrome, never tabs (D6-03/05/43, F4/F5) | `src/components/AppChrome.astro`, `src/scripts/guide-ui.js` (router), `src/styles/chrome.css` | `tests/visual/resilience.spec.ts` (five destinations, every one fits at 320px), `tests/visual/a11y.spec.ts` (44px, search overlay focus trap) |
+| One derivation feeds the destinations (GuideLayout and the gallery) | `src/lib/guide-view.ts` | `src/lib/guide-view.test.ts`, `src/gallery.test.ts` |
+| Trip = pre / active (arrival) / post compositions, Now/Next atoms, readiness, recap, Learnings (D6-02/19/30–35/48) | `src/components/TripDestination.astro`, `src/features/trip/` | trip model tests, a11y Now-atom legibility |
+| Itinerary = day-first with the thumb-zone day rail on a phone; timeline + map workbench with a resizable divider on desktop (D6-20/21/49); branched days are authored `branches` (D6-46) | `src/components/ItineraryDestination.astro`, `src/components/blocks/DaysBlock.astro`, `src/features/itinerary/` (day-rail, workbench), schema `branches` | `src/content.config.ts` superRefine, breakpoints test |
+| Map = one real map; OSM until Google has initialised and forever if it never does; contextual sheet / inspector; every pin a canonical coordinate (D6-36/51, F7) | `src/components/MapDestination.astro`, `src/features/maps/` (gmaps-render, map-dest) | resilience (map sheet at 320px), drift (no elevation) |
+| Guide = cover, chapter overview, one visible chapter level, spatial chapters map-forward, reference objects, knowledge modules announced in place and linked from days (D6-10–13/40/53/54, F6) | `src/components/GuideDestination.astro`, `src/styles/guide-dest.css`, schema `module` | superRefine (module ids/relations), guide-view test (projection) |
+| Split = Recent expenses + Add expense lead; four-question add flow (who paid · what · how much · who shares); every row states its split in words (F3) | `src/components/TripSplit.astro`, `src/features/trip-split/ui/trip-split.js` | trip-split model tests, resilience (split at 320px) |
+| Search = one global overlay from the top field, the compact control and the desktop persistent field; deterministic token-aware ranking; Atlas uses the same field (D6-24) | `src/features/search/` | rank/index tests, a11y focus trap, resilience overlay fit |
+| Map embeds load only when their destination is shown | `iframe[data-src]` + `showDest` in `guide-ui.js` | a11y frame-tested baseline |
+| Retired: Story Mode, the R5 rail, the promoted/adaptive nav, Trip Kit, the Tools station, Reminders, the command palette, panel reorder, swipe-tabs/day-scrub/onboard hint (D6-17/41/45) | deleted from `src/features/` and `src/styles/`; registry updated | `src/component-registry.test.ts`, no-orphan-stylesheets, no-device-checks, breakpoints, accent-ink |
+
+Gallery screenshot baselines regenerate on the real renderer through
+`.github/workflows/regenerate-gallery-baselines.yml` (branch-scoped); a local capture is not a
+baseline.

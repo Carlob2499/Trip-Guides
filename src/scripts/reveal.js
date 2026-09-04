@@ -15,7 +15,7 @@ import { reducedMotion } from "./util.js";
   if (!("IntersectionObserver" in window)) return;
 
   var targets = Array.prototype.slice.call(
-    document.querySelectorAll(".catblock .card, .catblock .day")
+    document.querySelectorAll(".dest .card, .dest .sight")
   );
   if (!targets.length) return;
 

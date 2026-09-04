@@ -10,10 +10,7 @@
   var KEY = "tg-whatis";
   try { if (localStorage.getItem(KEY)) return; } catch (e) { return; }
   // M4 item 4 — ONE onboarding device per view (MOTION.md: "spend the boldness in one place").
-  // This strip claims visit 1; onboard.js's nav-hint defers to it via __onboardShown below.
   strip.hidden = false;
-  // Claim this view so onboard.js's nav-hint defers to the next one.
-  window.__onboardShown = true;
   var btn = strip.querySelector(".cold-open-x");
   function dismiss() {
     strip.hidden = true;

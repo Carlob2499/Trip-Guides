@@ -464,14 +464,42 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     }).join("");
   }
   var METHOD_LABEL = { EQUAL: "Split evenly", EXACT: "Exact amounts", SHARES: "Shares", PERCENTAGE: "Percentages" };
+  var METHOD_SHORT = { EQUAL: "Even", EXACT: "Exact", SHARES: "Shares", PERCENTAGE: "%" };
   function methodOptions(sel) {
     return Object.keys(METHOD_LABEL).map(function (key) {
       return "<option value='" + key + "'" + (key === sel ? " selected" : "") + ">" + METHOD_LABEL[key] + "</option>";
     }).join("");
   }
+  /* Question four of the add flow: who shares it. Everyone in by default (the snapshot
+     rule); a tap takes a name out for THIS expense only. Reset after every add. */
+  var newParts = null;
+  function newPartIds() {
+    return newParts === null ? allIds() : newParts.filter(function (id) { return memberPos(id) !== -1; });
+  }
+  function renderNewParts() {
+    var host = document.getElementById("sNewParts");
+    if (!host) return;
+    var on = newPartIds();
+    host.hidden = state.members.length < 2;
+    host.innerHTML = "<span class='se-parts-lbl'>Split between</span>" + state.members.map(function (member, mi) {
+      var isOn = on.indexOf(member.id) !== -1;
+      return "<button type='button' class='se-part" + (isOn ? " se-part-on" : "") + "' data-newpart='" + esc(member.id) +
+        "' aria-pressed='" + (isOn ? "true" : "false") + "'>" + esc(member.name || ("P" + (mi + 1))) + "</button>";
+    }).join("");
+    host.querySelectorAll("[data-newpart]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = this.dataset.newpart, cur = newPartIds();
+        var next = cur.indexOf(id) !== -1 ? cur.filter(function (x) { return x !== id; }) : cur.concat([id]);
+        if (!next.length) return; // an expense nobody shares is not an expense
+        newParts = next;
+        renderNewParts();
+      });
+    });
+  }
   function renderNewRowOptions() {
     var sel = document.getElementById("sNewPayer");
     if (sel) sel.innerHTML = memberOptions(sel.value);
+    renderNewParts();
     var cur = document.getElementById("sNewCur");
     if (cur) {
       if (!LOCAL_CUR) { cur.hidden = true; }
@@ -575,13 +603,12 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       var shareIds = sharersOf(exp);
       var cur = exp.currency || BASE_CURRENCY;
       var isOpen = !!open[exp.id];
-      var subsetted = shareIds.length < state.members.length;
 
-      // Collapsed summary line: the supporting controls only cost height when asked for.
+      // Collapsed summary line: the split method is always stated in words (F3 — "Even ·
+      // 4 people", "Exact · 2 people"), then whatever else is non-default.
       var meta = [];
+      meta.push((METHOD_SHORT[exp.method] || exp.method) + " · " + shareIds.length + (shareIds.length === 1 ? " person" : " people"));
       if (exp.category) meta.push(esc(exp.category));
-      if (exp.method !== "EQUAL") meta.push(METHOD_LABEL[exp.method] || exp.method);
-      if (subsetted) meta.push("÷ " + shareIds.length);
       if (cur !== BASE_CURRENCY && exp.baseMinor != null) meta.push("≈ " + fmtBase(exp.baseMinor));
       if (cur !== BASE_CURRENCY && exp.baseMinor == null) meta.push("rate unavailable");
 
@@ -1030,12 +1057,12 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
         desc: newDescEl.value || "",
         method: "EQUAL",
         weights: null,
-        // SNAPSHOT. The whole group as it stands right now — not "whoever the group turns
+        // SNAPSHOT. The sharers as chosen right now — not "whoever the group turns
         // out to be later", which is what silently re-split day-1 dinners.
-        participants: allIds(),
+        participants: newPartIds(),
         category: "",
       }, money));
-      newDescEl.value = ""; newAmtEl.value = ""; newDescEl.focus();
+      newDescEl.value = ""; newAmtEl.value = ""; newParts = null; renderNewParts(); newDescEl.focus();
     });
     [newPayerEl, newDescEl, newAmtEl].forEach(function (el) {
       if (el) el.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addExpense.click(); } });

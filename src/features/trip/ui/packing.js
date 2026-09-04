@@ -1,7 +1,7 @@
 /* Weather-aware packing strip — DOM half (decisions in ../../live-data/model/packing.ts).
    Same honesty pattern as the weather day-swap advisory: stays hidden until a real
    forecast resolves into a genuine packing signal, never renders a guess. The card's
-   container is server-rendered (TripKit.astro) but hidden — only a guide with a `weather`
+   container is server-rendered (TripDestination.astro) but hidden — only a guide with a `weather`
    section gets one at all, since only those guides ever fetch a forecast. */
 
 import { getLastWx, weatherWindow, solarTimesFor, derivePackingList } from "../../live-data/index.js";

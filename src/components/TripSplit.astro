@@ -14,17 +14,16 @@ const { storeKey, standalone = false } = Astro.props;
      bundle via its index.ts) — the id-keyed calculator + settlement + minor-unit split
      engine, plus (when Firebase is configured) the shared live room. Markup only.
 
-     ORDER IS THE DESIGN (2026-08-02): people → what you spent → what it means. The panel
-     used to read People → Total → Results → Expenses, which put the entry form at the very
-     bottom and the answer ~500px above it: you typed an expense and the number it changed
-     was off-screen behind you. Cause now precedes effect, so the results card is always the
-     thing below the row you just filled in. -->
+     ORDER IS THE DESIGN (FINAL_DECISIONS F3, D7): Recent expenses + Add expense lead —
+     the two things a traveler does at the table — then the people, then what it means.
+     Adding asks four questions in one row (who paid · what · how much · who shares) and
+     every committed row states its own split method in words. -->
 <div class="split-wrap" id="tripSplit" role={standalone ? undefined : "region"}
      aria-labelledby={standalone ? undefined : "gtab-split"} hidden={!standalone} data-sk={storeKey}>
 
   <div class="split-toolbar">
-    <h2 class="split-title">Budget split</h2>
-    <p class="split-desc">Add who paid what. See who owes who, with the fewest transfers.</p>
+    <h2 class="split-title">Split</h2>
+    <p class="split-desc">Who paid what, and who owes who — with the fewest transfers.</p>
     <!-- Revealed by trip-split.js only once there is spending to summarise — an empty
          budget has no summary, and a button that prints a blank sheet is a broken promise. -->
     <div class="split-save-actions">
@@ -50,24 +49,13 @@ const { storeKey, standalone = false } = Astro.props;
     Anyone with this guide’s link can see the names and payment handles you add here — don’t add anything you wouldn’t share with the group.
   </p>
 
-  <!-- 1 · People -->
-  <div class="split-card">
-    <div class="sc-head">
-      <span class="sc-label">People on this trip</span>
-      <button class="sc-add-btn" id="sAddPerson" type="button">+ Add person</button>
-    </div>
-    <div class="sc-body" id="sMemberList">
-      <p class="split-empty">Add the people splitting costs.</p>
-    </div>
-  </div>
-
-  <!-- 2 · Expenses.
+  <!-- 1 · Expenses.
        The old trip-wide ÷Even/Custom toggle is gone: how an expense splits is a property of
        THAT expense now (open a row's Details), because one flag for the whole trip could not
        express dinner-split-evenly alongside a hotel split 70/30. -->
   <div class="split-card">
     <div class="sc-head">
-      <span class="sc-label">Expenses</span>
+      <span class="sc-label">Recent expenses</span>
     </div>
     <!-- Add-expense box — boxed off so it never reads as a blank/broken row. -->
     <div class="se-new-card" id="sNewCard">
@@ -76,14 +64,22 @@ const { storeKey, standalone = false } = Astro.props;
         <button class="sc-add-expense-btn" id="sAddExpense" type="button">+ Add expense</button>
       </div>
       <div class="se-new-row">
-        <input class="split-in se-desc" type="text" placeholder="What for?" id="sNewDesc" aria-label="What the expense was for" />
-        <select class="split-in se-payer" id="sNewPayer" aria-label="Who paid"></select>
-        <div class="se-amt-wrap">
-          <!-- Populated by trip-split.js with [local currency, USD] on a guide that has one;
-               it stays hidden on a dollar destination, where the choice is not a choice. -->
-          <select class="se-cur-sel" id="sNewCur" aria-label="Currency" hidden></select>
-          <input class="split-in se-amt" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" id="sNewAmt" aria-label="Amount" />
-        </div>
+        <label class="se-q"><span class="se-q-lbl">Who paid</span>
+          <select class="split-in se-payer" id="sNewPayer" aria-label="Who paid"></select></label>
+        <label class="se-q se-q--what"><span class="se-q-lbl">What for</span>
+          <input class="split-in se-desc" type="text" placeholder="Dinner, taxi, tickets…" id="sNewDesc" aria-label="What the expense was for" /></label>
+        <label class="se-q"><span class="se-q-lbl">How much</span>
+          <div class="se-amt-wrap">
+            <!-- Populated by trip-split.js with [local currency, USD] on a guide that has one;
+                 it stays hidden on a dollar destination, where the choice is not a choice. -->
+            <select class="se-cur-sel" id="sNewCur" aria-label="Currency" hidden></select>
+            <input class="split-in se-amt" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" id="sNewAmt" aria-label="Amount" />
+          </div></label>
+      </div>
+      <!-- Question four: who shares it. Every person is in by default (the snapshot rule);
+           tap a name out. trip-split.js renders the chips from the member list. -->
+      <div class="se-parts se-parts--new" id="sNewParts" role="group" aria-label="Who shares this expense">
+        <span class="se-parts-lbl">Split between</span>
       </div>
     </div>
 
@@ -119,6 +115,17 @@ const { storeKey, standalone = false } = Astro.props;
     </div>
     <div class="sc-body" id="sExpenseList">
       <p class="split-empty">Add people first, then record who paid what.</p>
+    </div>
+  </div>
+
+  <!-- 2 · People — who is on the ledger. -->
+  <div class="split-card">
+    <div class="sc-head">
+      <span class="sc-label">People on this trip</span>
+      <button class="sc-add-btn" id="sAddPerson" type="button">+ Add person</button>
+    </div>
+    <div class="sc-body" id="sMemberList">
+      <p class="split-empty">Add the people splitting costs.</p>
     </div>
   </div>
 

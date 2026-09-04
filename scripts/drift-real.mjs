@@ -105,11 +105,6 @@ function isRingShadow(value) {
  * markup; none of them is "this was noisy". */
 export const EXEMPTIONS = [
   {
-    id: "progress-line-is-a-sanctioned-motion-exception",
-    why: "R5 BEHAVIOR.md §2 names exactly two departures from transform/opacity and this is one: the phone progress line's left+width. It is not a per-frame path — it is ONE 280ms transition fired on a discrete station change, and the fill has to be positioned in the flow rather than transformed because its width is (100/stationCount)% of a container whose width the container query changes. A transform-based fill would need that percentage recomputed in JS on every resize, which is more moving parts for the same pixels.",
-    test: (v) => v.category === "MOTION" && /(^|\/)guide-rail\/styles\.css$/.test(v.file) && /grail-fill/.test(blockOf(v)),
-  },
-  {
     id: "ring-shadow-is-not-elevation",
     why: "The kit reads every box-shadow as elevation. A box-shadow with zero offset AND zero blur on every comma-separated layer is geometry, not a drop shadow — there is no depth illusion to read, only a flat-spread ring drawn outside the border box, and box-shadow is the only way to draw one there. First named for the guide rail's station dot (the 2px ring in the page ground that makes the spine line appear to pass BEHIND the dot, and the active dot's halo — both a flat spread per COMPONENTS.md §2); generalized 2026-08-13 after finding the identical shape and identical purpose (an accent halo marking an active/current state) unexempted in `guide.css`'s `.day-today` and `mobile-nav.css`'s `.bslot-mark`/`.sheet-cat.active::before` — same reasoning, same shape, different files, so the test is now structural rather than file-scoped. A real elevation shadow (offset and/or blur, e.g. `.card`'s resting `0 1px 3px` or its hover `0 6px 24px`) still fails this and stays real. Fixed again same day: the extraction regex didn't stop at `}`, so a `@keyframes` step's `box-shadow` — packed onto one compressed line as `0%,100%{box-shadow:…}50%{box-shadow:…}` — captured past its own rule's close brace into the NEXT step's selector-like text as garbage, failing the ring test on a value that was actually a clean ring (`planner.css`'s `nowPulse`). Now stops at `}` like check-drift's own radius extraction already does.",
     test: (v) => {

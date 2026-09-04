@@ -35,7 +35,7 @@ describe("no stylesheet is orphaned from the build", () => {
      The first version compared basenames, and 11 of this repo's 52 sheets share one — nine
      `styles.css` in feature silos, two `preview-chrome.css`. Any single import of a
      `styles.css` therefore vouched for all nine, so the gate could not fail for roughly a
-     fifth of the corpus: mutation-tested, deleting trip-kit's import still reported zero
+     fifth of the corpus: mutation-tested, deleting one feature's import still reported zero
      orphans. Resolving the specifier is what makes the answer about a FILE rather than a name. */
   const imported = new Set();
   for (const f of carriers) {

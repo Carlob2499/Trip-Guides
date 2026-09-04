@@ -8,8 +8,7 @@
 /* NO box-shadow, deliberately. SPEC-COMPONENTS.md §1 and P3's own Panel both draw this
    container with its 1px rule and nothing else: in this system an edge does the separating
    that elevation does elsewhere (the share modal's note in guide.css records the same call).
-   The only shadow the Panel ever wears is .pnl--drag's, below — a Panel in flight is the one
-   moment it IS lifted off the page. */
+   No shadow anywhere on it. */
 .pnl {
   background: var(--card);
   border: 1px solid var(--rule);
@@ -37,54 +36,6 @@
   gap: .5rem;
   padding: .5rem .6rem .5rem .3rem;
 }
-
-/* Hidden until src/features/panel/ (ui/reorder.js) has wired it — same rule as the
-   collapse toggle: a handle that cannot move anything is worse than no handle, and
-   with JS off the Panel order is simply the markup order. */
-.pnl-grip { display: none; }
-
-/* A grid with one Panel has nothing to reorder against — the grip would be a dead
-   control (same rule as above: an affordance that does nothing is worse than none).
-   Keyed on :only-child, so a group growing a second section revives it untouched. */
-[data-panel-reorder] .pnl:only-child .pnl-grip { display: none; }
-
-[data-panel-reorder] .pnl-grip {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  /* 44px at every viewport: the Panel header's two controls are the smallest things
-     on it, and a thumb does not get smaller on a phone. */
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0;
-  background: none;
-  border: 0;
-  border-radius: 999px;
-  color: var(--muted);
-  cursor: grab;
-  /* The handle IS the drag surface — without this, a touch drag scrolls the page
-     instead of moving the Panel. Scroll is untouched everywhere else on the Panel. */
-  touch-action: none;
-}
-
-[data-panel-reorder] .pnl-grip:hover { background: var(--sunken); }
-[data-panel-reorder] .pnl-grip:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 2px; }
-
-/* The Panel in flight: still visible (the reader is steering it), but transparent to
-   hit-testing so elementFromPoint sees the Panel underneath the pointer. */
-.pnl--drag {
-  opacity: .65;
-  pointer-events: none;
-  box-shadow: 0 6px 18px rgba(var(--shadow-rgb),.18);
-}
-[data-panel-dragging] { cursor: grabbing; }
-[data-panel-dragging] .pnl-grip { cursor: grabbing; }
-
-/* Any reset-order control (wherever a page puts one) follows the same rule as the
-   grip: not drawn until the reorder wiring exists — a reset that resets nothing is
-   worse than none. */
-html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 
 .pnl-headings { flex: 1 1 auto; min-width: 0; }
 
@@ -187,7 +138,7 @@ html:not([data-panel-reorder]) [data-panel-order-reset] { display: none; }
 }
 
 /* The clip is conditional, not permanent: an always-on `overflow: hidden` here kills
-   `position: sticky` on anything inside (e.g. DaysBlock's .day-scrub) even in the
+   `position: sticky` on anything inside even in the
    ordinary open, unanimated steady state, where nothing needs clipping at all. It is
    only needed (a) whenever the Panel is actually collapsed — CSS handles that for free
    via the attribute, covering both the collapsing transition and the collapsed rest

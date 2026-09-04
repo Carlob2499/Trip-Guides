@@ -71,13 +71,17 @@ Traveler-critical surfaces include:
 
 Owns the actual shared-money system: deterministic split math, normalization, settlements, summary model, and calculator UI. One authoritative ledger per guide.
 
-### `src/features/trip-tools/`
+### `src/features/trip/`
 
-Owns the cross-trip Tools screen. It derives views/actions from existing systems such as Trip Split, closures, reminders, jet lag, and routing. It must not clone their underlying state machines.
+Owns the trip lifecycle model — canonical days (`#tripData`), phase (pre/active/post), Now/Next
+focus, readiness (bookings, closures), recap, and the on-the-ground utilities that used to sit in
+trip-tools/trip-kit (arrival planning, booking timing, phrase/speak, entry selection, packing).
+It derives from Trip Split, closures and holidays; it never clones their state machines.
 
-### `src/features/trip-kit/`
+### `src/features/search/`
 
-Owns focused on-the-ground utilities such as arrival planning, booking timing, phrase/speak behavior, entry selection, and packing.
+Owns the one global search: the index builder (also used by `scripts/build-search-index.ts`),
+deterministic token-aware ranking, and the overlay UI every surface opens.
 
 These folders share vocabulary, not ownership. Similar names are not evidence that they should be merged.
 

@@ -114,9 +114,5 @@ export function initLearningsTab() {
     dismissed = true;
     try { sessionStorage.setItem(DISMISS_KEY, "1"); } catch (e) {}
     reveal(false);
-    if (gtab && gtab.classList.contains("gtab-active")) {
-      var first = document.querySelector('.gtab[data-tab="0"]');
-      if (first) first.click();
-    }
   });
 }
