@@ -10,6 +10,8 @@ No other design document, handoff, prototype, screenshot, mockup, research packe
 
 `PRODUCT.md` remains product-purpose and factual capability doctrine. `src/styles/base.css`, breakpoints, production components, tests, and `docs/reference/component-registry.json` are executable implementation/conformance artifacts, not separate design authorities. When implementation disagrees with this file, the implementation is debt unless a genuine feasibility, accessibility, truth, or field-use blocker is demonstrated.
 
+The sole canonical visual companion is [`docs/reference/design-system-assets/canonical-mockups.svg`](design-system-assets/canonical-mockups.svg). It is a **supporting figure inside this authority packet, not a second authority**. It exists so Fable 5.1, Claude, Codex, and human reviewers can see the approved compositions instead of attempting to reconstruct them from prose. If the SVG and this Markdown ever conflict, **this Markdown wins**. No agent may average the canonical board with superseded mockups, component-gallery screenshots, or earlier D1–D7 experiments.
+
 Git history is the archive. Do not preserve superseded design prose in the live tree merely for archaeology.
 
 ---
@@ -487,7 +489,28 @@ Use `Add to itinerary` only for a genuine unscheduled candidate. Do not show `Ad
 
 ## 20. Creator-approved visual target set recovered from D6 review
 
-These are the visual/compositional targets the implementation must converge toward. The original ChatGPT raster bytes were not durably committed; that storage failure must not turn the D7 implementation into permission to invent another aesthetic. The written composition below is binding. Future raster/reference captures are review evidence, not a second authority.
+These are the visual/compositional targets the implementation must converge toward. The original ChatGPT raster bytes were not durably committed; that storage failure must not turn the D7 implementation into permission to invent another aesthetic.
+
+The canonical visual board is embedded below and committed at `docs/reference/design-system-assets/canonical-mockups.svg`:
+
+![Waypoint canonical feature mockups](design-system-assets/canonical-mockups.svg)
+
+The board is a **supporting figure governed by this section**, not a separate design authority. The following are binding from the visual board: hierarchy, relative scale, navigation form, panel relationships, responsive composition, hero prominence, density limits, map/sheet behavior, typography wrapping, and key-state/action placement. Exact photographs, sample text/data, prices, times, route geometry, pin names, and decorative micro-details are illustrative unless this Markdown separately specifies them.
+
+For Fable 5.1 / Claude / Codex: read this Markdown first, then use **only this canonical board** as the visual composition reference. Do not average or reconcile it with old screenshots, the D7 component gallery, superseded D1–D7 mockups, or historical design prose.
+
+Canonical board IDs:
+
+- `WAY-00` — desktop shell + Atlas;
+- `WAY-01` — Trip active-now/lifecycle;
+- `WAY-02` — Itinerary mobile;
+- `WAY-03` — Itinerary desktop workbench;
+- `WAY-04` — Map mobile;
+- `WAY-05` — Map desktop;
+- `WAY-06` — Guide editorial landing;
+- `WAY-07` — Split;
+- `WAY-08` — Search overlay;
+- `WAY-09` — SOS emergency sheet.
 
 ### Active Trip — mobile
 
@@ -554,7 +577,7 @@ Before the next broad implementation run:
 
 ### V0 — reference preflight
 
-Map the relevant production surfaces to this authority. Identify any code/content constraint that materially prevents the target. Do not invent an alternative silently.
+Map the relevant production surfaces to this authority and `WAY-00`–`WAY-09`. Identify any code/content constraint that materially prevents the target. Do not invent an alternative silently.
 
 ### V1 — two-surface canary
 
@@ -563,7 +586,7 @@ Implement/rework **only**:
 1. Active Trip mobile (South Korea fixture)
 2. Itinerary desktop workbench (South Korea fixture)
 
-Render representative production screenshots. Compare hierarchy, proportions, density, imagery prominence, navigation character and overall composition against §20. If materially off-target, correct those two before touching the remaining visual sweep.
+Render representative production screenshots. Compare hierarchy, proportions, density, imagery prominence, navigation character and overall composition against §20 and the canonical visual board. If materially off-target, correct those two before touching the remaining visual sweep.
 
 This exists specifically to prevent another multi-hour model run from spending usage on the wrong visual interpretation.
 
@@ -609,7 +632,7 @@ The next implementation pass is **visual fidelity/convergence**, not D8 ideation
 
 ## 23. September implementation path to Main
 
-1. Consolidation/authority cleanup — this file becomes the only design packet; delete superseded design documents/assets from the live tree.
+1. Consolidation/authority cleanup — this file plus its subordinate canonical visual board are the single design packet; superseded design documents/assets stay out of the live tree.
 2. Resolve only the genuinely open visual choices in §24.
 3. V0 preflight.
 4. V1 two-surface canary.
