@@ -42,6 +42,8 @@ Markdown authority override every sample fact, control, person, price, route and
 | Search | certified conforming | `features/search` | Desktop persistent field + overlay; mobile expanded/compact + full-height overlay; current-trip-first groups. No change needed beyond the shell. |
 | SOS | converged (locked) | `features/sos/ui/sos.js`, `field-tools.css`, `base.css` (`--dark-warn`) | Near-black full-height sheet (modal on desktop); Police + Fire/Ambulance as two enormous one-tap calls in emergency red; verified second layer subordinate; offline stated once, quietly. Advisory ink uses a fixed dark-ground warn token (7.5:1) because the surface is dark in both themes. First-layer classification is by what a line is, never its position. |
 | Provenance | converged (locked) | `provenance-dot.css`, `scripts/provenance-dot.js` | Quiet dot; popover on desktop, bottom sheet on phones; a lifted card can no longer trap the sheet. Failed-photo overlays no longer block the dot. |
+| Utility pages (intake, progress, triage, change, about, health) | converged | `UtilityBar.astro`, `utility-bar.css`, each page | One shared strip (wordmark, way back to the Atlas, theme control) replaced four page-specific bars; health gained its way back. Page bodies were already on tokens and type. |
+| 404 | converged | `pages/404.astro`, `not-found.css` | Astro's branded default replaced by a Waypoint page: the strip, one honest line, the Atlas and About as the ways on. |
 | Offline / degraded | converged (locked) | `scripts/offline-pill.js`, `chrome.css`, map fallbacks | `Offline · saved copy` pill only while offline; per-module degraded states; PWA install/caching never advertised in chrome. |
 
 ## Honest deviations
@@ -54,6 +56,16 @@ Markdown authority override every sample fact, control, person, price, route and
 - Local screenshots in the implementation sandbox could not reach Wikimedia or OpenStreetMap
   (egress policy); layouts were verified with local stand-in images. The Design canary workflow
   in CI captures the real-network renders.
+
+## Wiring audit (2026-09-04)
+
+Every visible control on Atlas, all five guide destinations, intake, progress, change, about and
+health was clicked at 390×844 and 1440×1000 by a scripted pass: no internal link 404s; every
+destination switch, day switch, map focus, Split action and theme control changes the page;
+the only images that fail locally are on hosts the sandbox cannot reach (Wikimedia, OSM, the
+GitHub badge service). The Atlas pin chip reads as “unstable” to automation because the globe
+turns; a touch holds the globe (atlas-map.js `_hold`), reduced motion stops it, and the spin
+control pauses it, so it is a real tap target.
 
 ## Verification
 
