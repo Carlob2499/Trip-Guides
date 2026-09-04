@@ -82,7 +82,7 @@ test("V1 — South Korea Itinerary desktop workbench, dark", async ({ page }, te
   await chooseDestination(page, "itinerary");
 
   await expect(page.locator("#dest-itinerary")).toBeVisible();
-  await expect(page.locator(".itin-workbench")).toBeVisible();
+  await expect(page.locator("[data-workbench]")).toBeVisible();
 
   await capture(page, testInfo, "v1-itinerary-desktop-dark.png");
 });
