@@ -10,7 +10,7 @@ h1{font-family:var(--font-display);font-weight:620;letter-spacing:-.012em;line-h
    used to also declare font-weight:400 here, which the later, equal-specificity rule always
    overrode (640 is what has ever rendered). Removing the dead declaration, not changing output. */
 h2,h3,h4{font-family:var(--font-display);line-height:1.15;text-wrap:balance}
-a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
+a{color:var(--accent-ink);text-underline-offset:2px;transition:color var(--dur-immediate)}
 
 /* === MASTHEAD ================================================================ */
 /* Deliberately wider than --tracking-micro (.32em vs .06em) — the masthead's signature signage
@@ -30,7 +30,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 /* === TOAST ==================================================================== */
 /* Transient feedback (save/copy confirmations) — destination for flash().
    Fixed, centred at the bottom; never participates in layout or page width. */
-.toast{position:fixed;left:50%;bottom:calc(1.1rem + var(--safe-bottom));transform:translateX(-50%);z-index:920;max-width:calc(100vw - 2rem);background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.04em;padding:.5rem .85rem;border-radius:999px;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .18s}
+.toast{position:fixed;left:50%;bottom:calc(1.1rem + var(--safe-bottom));transform:translateX(-50%);z-index:920;max-width:calc(100vw - 2rem);background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.04em;padding:.5rem .85rem;border-radius:999px;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity var(--dur-routine)}
 .toast:not(:empty){opacity:.96}
 
 /* Jet-lag calculator styles moved to src/styles/jetlag.css (Stage E) — the Tools
@@ -113,9 +113,9 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .card-more-preview{order:1;position:relative;margin:.2rem 0 0;padding:0;font-size:var(--text-small);color:var(--muted);line-height:1.5;overflow:hidden;white-space:nowrap;text-overflow:clip;
   -webkit-mask-image:linear-gradient(to right,black 55%,transparent 100%);mask-image:linear-gradient(to right,black 55%,transparent 100%)}
 .card-more[open] ~ .card-more-preview{display:none}
-.card-more-sum{display:inline-flex;align-items:center;gap:.4rem;margin-top:.4rem;padding:.4rem .8rem;min-height:36px;background:var(--bg2);border:1px solid var(--rule2);border-radius:999px;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.02em;color:var(--accent-ink);cursor:pointer;list-style:none;transition:background .15s,border-color .15s,color .15s}
+.card-more-sum{display:inline-flex;align-items:center;gap:.4rem;margin-top:.4rem;padding:.4rem .8rem;min-height:36px;background:var(--bg2);border:1px solid var(--rule2);border-radius:999px;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.02em;color:var(--accent-ink);cursor:pointer;list-style:none;transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
 .card-more-sum::-webkit-details-marker{display:none}
-.card-more-sum::before{content:"▶";flex:none;font-size:var(--text-nano);transition:transform .2s}
+.card-more-sum::before{content:"▶";flex:none;font-size:var(--text-nano);transition:transform var(--dur-routine)}
 .card-more-sum:hover{background:var(--card);border-color:var(--accent-ink)}
 .card-more-sum:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .card-more[open] .card-more-sum::before{transform:rotate(90deg)}
@@ -128,7 +128,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    ::details-content support keep today's instant native toggle, nothing breaks. */
 @supports (interpolate-size: allow-keywords) {
   .card-more{interpolate-size:allow-keywords}
-  .card-more::details-content{height:0;overflow:hidden;transition:height .3s var(--ease-out-expo),content-visibility .3s allow-discrete}
+  .card-more::details-content{height:0;overflow:hidden;transition:height var(--dur-object) var(--ease-out-expo),content-visibility var(--dur-object) allow-discrete}
   .card-more[open]::details-content{height:auto}
   @media(prefers-reduced-motion:reduce){.card-more::details-content{transition:none}}
 }
@@ -162,7 +162,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .card b,.card strong{font-weight:600}
 
 /* === CARDS =================================================================== */
-.card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1.25rem 1.4rem;margin-bottom:1rem;transition:transform .16s ease,border-color .16s ease}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1.25rem 1.4rem;margin-bottom:1rem;transition:transform var(--dur-routine) ease,border-color var(--dur-routine) ease}
 /* Mobile measure fix, .card half — see the .shell/line-height rule earlier in this file. Must
    stay AFTER this base rule: same selector, same specificity, so source order decides the tie. */
 @media(max-width:599px){.card{padding:1.25rem 1rem}}
@@ -187,7 +187,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    only the height was under — a padding-block increase alone reaches the floor with no width
    growth, so `.transit-links{gap:.35rem}` and the row's wrap point are both unaffected. Measured
    with real getBoundingClientRect(): .68rem .55rem -> 44.375px (was 30.3px at .24rem .55rem). */
-.transit-link{display:inline-flex;align-items:center;gap:.2rem;padding:.68rem .55rem;min-height:44px;border-radius:999px;background:var(--card);border:1px solid var(--rule);color:var(--ink);font-family:var(--font-data);font-size:var(--text-micro);font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s}
+.transit-link{display:inline-flex;align-items:center;gap:.2rem;padding:.68rem .55rem;min-height:44px;border-radius:999px;background:var(--card);border:1px solid var(--rule);color:var(--ink);font-family:var(--font-data);font-size:var(--text-micro);font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:border-color var(--dur-routine),color var(--dur-routine)}
 .transit-link:hover{border-color:var(--accent);color:var(--accent-ink)}
 .transit-link:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 
@@ -219,7 +219,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .sight-name{font-size:var(--text-h4);margin:.05rem 0 .4rem}
 
 /* === CHECKLISTS ============================================================== */
-.check{display:flex;gap:.6rem;align-items:flex-start;font-size:var(--text-body);padding:.32rem 0;cursor:pointer;transition:color .12s}
+.check{display:flex;gap:.6rem;align-items:flex-start;font-size:var(--text-body);padding:.32rem 0;cursor:pointer;transition:color var(--dur-immediate)}
 .check:hover{color:var(--accent-ink)}
 .check input{margin-top:.28rem;width:1.05rem;height:1.05rem;accent-color:var(--accent);flex:none;cursor:pointer}
 /* The label text (which may carry inline <b>/<a>) must be ONE flex item so it
@@ -250,7 +250,7 @@ body{overflow-x:clip}
 /* === WEATHER STRIP (Open-Meteo) ============================================= */
 .wx-wrap{margin:.9rem auto 0;max-width:38rem;width:100%}
 .wx-strip{display:flex;gap:0;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-card);overflow-x:auto;-webkit-overflow-scrolling:touch}
-.wx-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem .15rem;min-width:0;transition:background .13s}
+.wx-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem .15rem;min-width:0;transition:background var(--dur-immediate)}
 .wx-day:not(:last-child){border-right:1px solid var(--rule)}
 .wx-day:hover{background:color-mix(in srgb,var(--accent) 5%,var(--bg2))}
 .wx-today{background:color-mix(in srgb,var(--accent) 8%,var(--bg2))}
@@ -307,7 +307,7 @@ body{overflow-x:clip}
 .block:has(> .hol-wrap[hidden]){margin-bottom:0}
 
 /* === MAP FULLSCREEN BUTTON ================================================== */
-.map-fs-btn{position:absolute;top:.42rem;right:.42rem;z-index:2;background:var(--card);border:1px solid var(--rule2);border-radius:999px;padding:.25rem .4rem;cursor:pointer;font-size:var(--text-small);color:var(--muted);line-height:1;transition:color .13s,border-color .13s;font-family:inherit}
+.map-fs-btn{position:absolute;top:.42rem;right:.42rem;z-index:2;background:var(--card);border:1px solid var(--rule2);border-radius:999px;padding:.25rem .4rem;cursor:pointer;font-size:var(--text-small);color:var(--muted);line-height:1;transition:color var(--dur-immediate),border-color var(--dur-immediate);font-family:inherit}
 .map-fs-btn:hover{color:var(--ink);border-color:var(--ink)}
 /* Full-bleed when the container is promoted to fullscreen element */
 .osmmap:fullscreen,.osmmap:-webkit-full-screen{width:100%;height:100%;border-radius:var(--r-pane)}
@@ -323,16 +323,16 @@ body{overflow-x:clip}
 .share-backdrop.open{display:block}
 .share-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;width:min(360px,calc(100vw - 2rem));max-height:calc(100dvh - 1.5rem);overflow-y:auto;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-pane);padding:1.4rem 1.6rem}
 .share-head{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-.share-close{background:none;border:none;cursor:pointer;font-size:var(--text-lead);color:var(--muted);padding:.1rem .3rem;line-height:1;border-radius:999px;transition:color .14s}
+.share-close{background:none;border:none;cursor:pointer;font-size:var(--text-lead);color:var(--muted);padding:.1rem .3rem;line-height:1;border-radius:999px;transition:color var(--dur-immediate)}
 .share-close:hover{color:var(--ink)}
 .share-qr-wrap{display:flex;justify-content:center;background:var(--sunken);border:1px solid var(--rule);border-radius:var(--r-inset);padding:.85rem;margin-bottom:1rem}
 .share-qr-wrap canvas,.share-qr-wrap img{display:block;border-radius:var(--r-inset)}
 .share-url-row{display:flex;gap:.45rem;align-items:center;margin-bottom:.85rem}
 .share-url-txt{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.36rem .52rem;font:inherit;font-size:var(--text-body);background:var(--bg2);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text;user-select:all}
-.share-copy-btn{white-space:nowrap;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:var(--ink);color:var(--bg);border:none;border-radius:999px;padding:.36rem .8rem;cursor:pointer;transition:background .14s;flex-shrink:0}
+.share-copy-btn{white-space:nowrap;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:var(--ink);color:var(--bg);border:none;border-radius:999px;padding:.36rem .8rem;cursor:pointer;transition:background var(--dur-immediate);flex-shrink:0}
 .share-copy-btn:hover{background:var(--accent)}
 .share-socials{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.share-soc{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color .14s,border-color .14s}
+.share-soc{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.45rem .4rem;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;font-size:var(--text-small);color:var(--muted);transition:color var(--dur-immediate),border-color var(--dur-immediate)}
 .share-soc:hover{color:var(--ink);border-color:var(--ink)}
 /* Downloads row — build-time GPX/iCal exports; each link shown only when its file exists */
 /* The .gpx/.ics downloads moved to the Tools screen (GuideLayout's own note explains why).
@@ -341,7 +341,7 @@ body{overflow-x:clip}
 .share-elsewhere{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--rule2);font-size:var(--text-small);color:var(--muted)}
 .share-elsewhere a{color:var(--accent-ink)}
 /* Share-summary button — full-width action under the URL row */
-.share-summary-btn{width:100%;margin-bottom:.85rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--rule2);border-radius:999px;padding:.5rem .6rem;cursor:pointer;transition:color .14s,border-color .14s}
+.share-summary-btn{width:100%;margin-bottom:.85rem;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--rule2);border-radius:999px;padding:.5rem .6rem;cursor:pointer;transition:color var(--dur-immediate),border-color var(--dur-immediate)}
 .share-summary-btn:hover{color:var(--ink);border-color:var(--ink)}
 /* QR colours are read live from the tokens in JS (util.js qrColors) — no CSS inversion needed */
 
@@ -351,14 +351,14 @@ body{overflow-x:clip}
 .block-title-row{display:flex;align-items:baseline;gap:.45rem}
 .block-title-row .block-title{flex:1;min-width:0}
 /* 999px, not 3px: SPEC-COMPONENTS.md rule 1 — radius is binary, and this is a button you press. */
-.anchor-btn{flex:none;background:none;border:none;padding:.1rem .3rem;cursor:pointer;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);opacity:0;border-radius:999px;transition:opacity .15s,color .15s,background .15s;line-height:1;align-self:center}
+.anchor-btn{flex:none;background:none;border:none;padding:.1rem .3rem;cursor:pointer;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);opacity:0;border-radius:999px;transition:opacity var(--dur-routine),color var(--dur-routine),background var(--dur-routine);line-height:1;align-self:center}
 .anchor-btn:focus-visible{opacity:1;outline:2px solid var(--accent-ink);outline-offset:2px}
 .card:hover .anchor-btn,.block:hover .anchor-btn{opacity:.45}
 .card:hover .anchor-btn:hover,.block:hover .anchor-btn:hover{opacity:1;color:var(--accent-ink)}
 @media(hover:none){.anchor-btn{opacity:.3}}
 /* 999px, not 4px: SPEC-COMPONENTS.md rule 1 — the copy-address chip is a button (guide-ui.js
    builds it as one), and a pressed thing is a pill. */
-.copy-addr{display:inline-flex;align-items:center;gap:.25em;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.04em;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:999px;padding:.1rem .4rem;cursor:pointer;vertical-align:middle;margin-left:.35em;line-height:1.4;transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
+.copy-addr{display:inline-flex;align-items:center;gap:.25em;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.04em;color:var(--muted);background:var(--bg);border:1px solid var(--rule);border-radius:999px;padding:.1rem .4rem;cursor:pointer;vertical-align:middle;margin-left:.35em;line-height:1.4;transition:color var(--dur-routine),border-color var(--dur-routine),background var(--dur-routine);white-space:nowrap}
 .copy-addr:hover{color:var(--accent-ink);border-color:var(--accent)}
 .copy-addr.copied{color:var(--green);border-color:var(--green)}
 
@@ -404,7 +404,7 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 
 /* U11: a real, obviously-tappable pill (banned bare-text tap targets) — was an underlined
    text link mid-masthead; now lives in the footer instead. */
-.foot-modify-pill{display:inline-flex;align-items:center;gap:.3rem;margin-top:.7rem;padding:.4rem .85rem;min-height:34px;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.02em;color:var(--muted);background:var(--card);border:1px solid var(--rule2);border-radius:999px;text-decoration:none;transition:color .15s,border-color .15s}
+.foot-modify-pill{display:inline-flex;align-items:center;gap:.3rem;margin-top:.7rem;padding:.4rem .85rem;min-height:34px;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.02em;color:var(--muted);background:var(--card);border:1px solid var(--rule2);border-radius:999px;text-decoration:none;transition:color var(--dur-routine),border-color var(--dur-routine)}
 .foot-modify-pill:hover{color:var(--ink);border-color:var(--ink)}
 .foot-modify-pill:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
@@ -441,7 +441,7 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 details{margin:.3rem 0;border:1px solid var(--rule);border-radius:var(--r-card);overflow:hidden}
 details summary{cursor:pointer;padding:.55rem .8rem;font-weight:600;font-size:var(--text-small);list-style:none;display:flex;align-items:center;gap:.5rem;user-select:none;background:var(--bg2)}
 details summary::-webkit-details-marker{display:none}
-details summary::before{content:"▶";font-size:.65rem;color:var(--accent-ink);transition:transform .18s;flex:none}
+details summary::before{content:"▶";font-size:.65rem;color:var(--accent-ink);transition:transform var(--dur-routine);flex:none}
 details[open] summary::before{transform:rotate(90deg)}
 details[open] summary{border-bottom:1px solid var(--rule);color:var(--accent-ink)}
 details > *:not(summary){padding:.55rem .8rem}

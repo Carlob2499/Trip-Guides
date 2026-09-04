@@ -14,7 +14,7 @@
 /* --- Overview: chapter cards, image-forward where the chapter carries photos ----------- */
 .gd-overview{padding-top:1.4rem}
 .gd-cards{display:grid;grid-template-columns:1fr;gap:.6rem}
-.gd-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.9rem;width:100%;min-height:80px;padding:.6rem .9rem .6rem .6rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color .16s,transform .2s var(--ease-spring)}
+.gd-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.9rem;width:100%;min-height:80px;padding:.6rem .9rem .6rem .6rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color var(--dur-routine),transform var(--dur-routine) var(--ease-spring)}
 .gd-card:hover{border-color:var(--accent);transform:translateY(-1px)}
 .gd-card:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .gd-card-media{display:block;width:96px;height:72px;overflow:hidden;background:var(--sunken)}

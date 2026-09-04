@@ -13,11 +13,11 @@
    that gate only tested korea + hub, and korea's trip is in the past relative to the gate's
    fixed clock, which correctly hides the calculator (guide-ui.js:163-176) — japan is in the
    gate's page list now so an upcoming-trip guide actually renders this control. */
-.jl-toggle{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.8rem 1rem;min-height:44px;cursor:pointer;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .15s,border-color .15s}
+.jl-toggle{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.8rem 1rem;min-height:44px;cursor:pointer;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color var(--dur-routine),border-color var(--dur-routine)}
 .jl-toggle:hover{color:var(--ink);border-color:var(--ink)}
 .jl-toggle[aria-expanded="true"]{border-color:var(--rule2);color:var(--ink)}
 .jl-icon{flex:none;font-style:normal}
-.jl-chev{margin-left:auto;font-size:var(--text-control-sm);transition:transform .2s;display:inline-block}
+.jl-chev{margin-left:auto;font-size:var(--text-control-sm);transition:transform var(--dur-routine);display:inline-block}
 .jl-toggle[aria-expanded="true"] .jl-chev{transform:rotate(180deg)}
 .jl-inner{padding:.75rem .05rem .3rem}
 .jl-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.55rem}

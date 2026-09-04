@@ -2,7 +2,7 @@
 
 import { readFileSync, readdirSync } from "node:fs";
 import { describe, it, expect } from "vitest";
-import { accentTokens, accentStyle, TINT_MAX } from "./accent-tokens";
+import { accentTokens, accentStyle, TINT_MAX, DARK_SURFACES as BASE_DARK_SURFACES, DARK_QUIET_INK } from "./accent-tokens";
 import { contrastRatio, mix } from "./contrast";
 
 /* Every accent that actually ships, from src/data/palettes/*.json and the country defaults. */
@@ -112,6 +112,10 @@ describe("accentTokens", () => {
     // --on-accent must NOT be re-mapped in the dark block: its ground is --accent, which isn't.
     const darkBlocks = css.slice(css.indexOf("prefers-color-scheme:dark"));
     expect(darkBlocks).not.toContain("--on-accent:");
+    // The dark surfaces and quiet ink the derivations measure against are base.css's own.
+    expect(darkBlocks).toContain(`--bg:${BASE_DARK_SURFACES[2]};`);
+    expect(darkBlocks).toContain(`--card:${BASE_DARK_SURFACES[0]};`);
+    expect(darkBlocks).toContain(`--muted:${DARK_QUIET_INK};`);
   });
 
   it("keeps the identity colour untouched — only the text shade is adjusted", () => {

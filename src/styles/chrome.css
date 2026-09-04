@@ -33,6 +33,16 @@
 /* SOS: quiet at rest, the critical colour, filled on hover/press (§28). */
 .topbar-sos{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 55%,var(--line-strong));font-weight:700}
 .topbar-sos:hover{color:var(--on-critical);background:var(--critical-fill);border-color:var(--critical-fill)}
+/* theme.js writes icon + word into the theme control; phones keep the icon alone. */
+.topbar-btn .theme-btn-label{display:none}
+@media(min-width:900px){.topbar-btn .theme-btn-label{display:inline}}
+/* The anchor is a link on the utility pages (the way back to the Atlas), text on a guide. */
+.orient-link{text-decoration:none;color:var(--muted);border-radius:var(--r-pill);min-height:44px}
+.orient-link:hover .orient-title{color:var(--accent-ink)}
+.orient-link:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+/* Utility pages carry no rail: the strip keeps the plain inset at every width. */
+.chrome--plain .topbar{padding-left:max(.9rem,var(--safe-left))}
+@media(min-width:900px){.chrome--plain .topbar{padding-left:max(1.4rem,var(--safe-left))}}
 /* Phones: icon-only controls; the anchor keeps the row's width. */
 @media(max-width:899px){.topbar-btn .tb-label{display:none}.topbar-btn{width:44px;height:44px;padding:0;border-radius:var(--r-round)}.tb-ico{width:19px;height:19px}}
 @media(max-width:399px){.topbar{gap:.3rem;padding-left:max(.6rem,var(--safe-left));padding-right:max(.6rem,var(--safe-right))}.topbar-right{gap:.15rem}.orient-sep,.orient-dest{display:none}}

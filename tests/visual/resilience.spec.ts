@@ -25,7 +25,6 @@ async function prep(page: Page, path: string, width: number, height = 800) {
     ? route.continue() : route.abort());
   const res = await page.goto(path, { waitUntil: "networkidle" });
   expect(res?.status(), `${path}: resilience gate reached an error page`).toBeLessThan(400);
-  await page.addStyleTag({ content: ".reveal-pending{opacity:1!important;transform:none!important}" });
 }
 
 async function settle(page: Page) {
@@ -271,7 +270,6 @@ test("⌁ a primed finished guide remains readable after the browser goes offlin
 
   const first = await page.goto(GUIDES[1][1], { waitUntil: "networkidle" });
   expect(first?.status(), "online prime reached an error page").toBeLessThan(400);
-  await page.addStyleTag({ content: ".reveal-pending{opacity:1!important;transform:none!important}" });
   await expect(page.locator(DEST_NAV).first()).toBeVisible();
   await page.evaluate(async () => {
     if (!("serviceWorker" in navigator)) throw new Error("service worker unsupported");
@@ -283,7 +281,6 @@ test("⌁ a primed finished guide remains readable after the browser goes offlin
   await offlinePage.setViewportSize({ width: 375, height: 812 });
   const offline = await offlinePage.goto(GUIDES[1][1], { waitUntil: "domcontentloaded" });
   expect(offline?.status(), "service worker did not serve the cached guide navigation").toBeLessThan(400);
-  await offlinePage.addStyleTag({ content: ".reveal-pending{opacity:1!important;transform:none!important}" });
   await expect(offlinePage.locator("main")).toBeVisible();
   await expect(offlinePage.locator(DEST_NAV).first()).toBeVisible();
   await expect(offlinePage.locator(".trip-title, h1").first()).toBeVisible();

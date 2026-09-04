@@ -14,7 +14,7 @@
    palette instead of the live theme tokens. */
 
 /* ── The trigger, on screen ─────────────────────────────────────────────────── */
-.split-pdf-btn{display:inline-flex;align-items:center;gap:.4rem;min-height:38px;padding:.45rem 1rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--bg);background:var(--ink);border:1px solid var(--ink);border-radius:999px;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+.split-pdf-btn{display:inline-flex;align-items:center;gap:.4rem;min-height:38px;padding:.45rem 1rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--bg);background:var(--ink);border:1px solid var(--ink);border-radius:999px;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
 .split-pdf-btn:hover{background:var(--accent);border-color:var(--accent)}
 .split-pdf-btn:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .split-pdf-ico{font-size:1.05em;line-height:1}
@@ -28,10 +28,10 @@
 .bsp-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1.1rem;background:var(--card);border-bottom:1px solid var(--rule)}
 .bsp-bar-label{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:640;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .bsp-bar-actions{display:flex;gap:.6rem}
-.bsp-cancel{font-family:var(--font-data);font-size:var(--text-control-sm);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.4rem .9rem;min-height:36px;cursor:pointer;color:var(--muted);transition:color .15s,border-color .15s}
+.bsp-cancel{font-family:var(--font-data);font-size:var(--text-control-sm);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.4rem .9rem;min-height:36px;cursor:pointer;color:var(--muted);transition:color var(--dur-routine),border-color var(--dur-routine)}
 .bsp-cancel:hover{color:var(--ink);border-color:var(--ink)}
 .bsp-cancel:focus-visible,.bsp-print:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.bsp-print{font-family:var(--font-display);font-weight:640;font-size:var(--text-control-sm);background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:999px;padding:.4rem 1.1rem;min-height:36px;cursor:pointer;transition:background .18s,border-color .18s}
+.bsp-print{font-family:var(--font-display);font-weight:640;font-size:var(--text-control-sm);background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:999px;padding:.4rem 1.1rem;min-height:36px;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine)}
 .bsp-print:hover{background:var(--accent);border-color:var(--accent)}
 .bsp-scroll{flex:1;overflow:auto;background:var(--rule2);padding:2rem;display:flex;justify-content:center}
 
@@ -159,7 +159,7 @@
 
 /* Budget: category headers, ranges, per-person toggle, group pill */
 .budget-toggle{display:flex;gap:.35rem;margin-bottom:.6rem}
-.btog-btn{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.32rem .7rem;cursor:pointer;color:var(--muted);transition:background .14s,color .14s,border-color .14s;line-height:1.4}
+.btog-btn{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.32rem .7rem;cursor:pointer;color:var(--muted);transition:background var(--dur-immediate),color var(--dur-immediate),border-color var(--dur-immediate);line-height:1.4}
 .btog-btn:hover{color:var(--ink);border-color:var(--ink)}
 .btog-active{background:var(--ink) !important;color:var(--bg) !important;border-color:var(--ink) !important}
 /* No opacity: it composited var(--muted) down to 3.18:1 (light) / 3.57:1 (dark) on the toggle's

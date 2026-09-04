@@ -86,13 +86,10 @@ async function prep(page: Page, path: string, scheme: "light" | "dark", vp: View
     }
     return route.abort();
   });
-  // REDUCED MOTION IS LOAD-BEARING, not a nicety. reveal.js marks content .reveal-pending
-  // (opacity:0) and only un-hides it via a 4s setTimeout safety rail — and the fixed clock below
-  // means that timer NEVER fires. Without this line the whole page sits at opacity 0 while axe
-  // scans, axe skips invisible elements, and the gate reports zero violations on a page it never
-  // actually saw. It passed that way for months. Reduced motion short-circuits the reveal in both
-  // reveal.js (`if (reducedMotion()) return`) and overview.css (`.reveal-pending{opacity:1}`), so
-  // the content is up immediately and the audit no longer depends on animation timing at all.
+  // REDUCED MOTION IS LOAD-BEARING, not a nicety. Every entry choreography (arrival.js, the
+  // anchors' draw-in, the native scroll reveal) short-circuits under reduced motion, so the
+  // content is up immediately and the audit never depends on animation timing: a page held at
+  // opacity 0 would be skipped by axe and pass vacuously — it did, for months, before this line.
   await page.emulateMedia({ reducedMotion: "reduce", colorScheme: scheme });
   await page.clock.setFixedTime(FIXED_TIME);
   const res = await page.goto(path, { waitUntil: "networkidle" });
@@ -142,14 +139,14 @@ async function assertContentVisible(page: Page, name: string) {
     return {
       sampled: sample.length,
       invisible: sample.filter((el) => cumulativeOpacity(el) === 0).length,
-      stillPending: document.querySelectorAll(".reveal-pending").length,
+      stillPending: document.querySelectorAll(".anch-pending").length,
     };
   });
   expect(seen.sampled, `${name}: found no content to audit`).toBeGreaterThan(0);
   expect(
     seen.invisible,
     `${name}: ${seen.invisible}/${seen.sampled} sampled elements are at opacity 0 ` +
-      `(${seen.stillPending} still .reveal-pending) — axe would skip them and pass vacuously`,
+      `(${seen.stillPending} still .anch-pending) — axe would skip them and pass vacuously`,
   ).toBe(0);
 }
 

@@ -24,7 +24,7 @@
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
   letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
   white-space: nowrap;   /* "WORLD VIEW" is one label, not two lines */
-  transition: color .14s, border-color .14s;
+  transition: color var(--dur-immediate), border-color var(--dur-immediate);
 }
 .atlas-toggle-btn:hover { color: var(--ink); border-color: var(--ink); }
 .atlas-toggle-btn[aria-pressed="true"] {
@@ -79,12 +79,12 @@
      without this the cards teleport in 90px steps while the globe turns smoothly under them —
      the jaggedness is the sampling rate, not the frame rate, and animating the gap is what
      hides it. Transform and opacity only, which is the one pair that never costs layout. */
-  transition: opacity .2s ease, transform .5s cubic-bezier(.22, .61, .36, 1);
+  transition: opacity var(--dur-routine) ease, transform var(--dur-scene) cubic-bezier(.22, .61, .36, 1);
 }
 @media (prefers-reduced-motion: reduce) {
   /* Reduced motion takes the jump over the glide: a card sliding across the globe is exactly
      the large-area movement the preference is asking us not to make. */
-  .atlas-pincard { transition: opacity .2s ease; }
+  .atlas-pincard { transition: opacity var(--dur-routine) ease; }
 }
 /* The sheet being read takes an accent rule and the surveyor's corner ticks — the prototype's
    way of saying "this one" without moving or resizing anything.
@@ -172,7 +172,7 @@
 
 /* Fade-zoom law (SPEC-COMPONENTS §8): every overlay scales/fades together as the globe
    zooms in, going pointer-events:none below 0.15 opacity. */
-[data-ref-fadezoom] { transform-origin: top left; transition: opacity .1s linear; }
+[data-ref-fadezoom] { transform-origin: top left; transition: opacity var(--dur-immediate) linear; }
 [data-ref-fadezoom][data-faded] { pointer-events: none; }
 
 .atlas-ov {
@@ -280,7 +280,7 @@
 .atlas-toast {
   position: absolute; left: 50%; bottom: 70px; transform: translateX(-50%);
   background: var(--ink); color: var(--bg); padding: 10px 16px; z-index: 20;
-  opacity: 0; pointer-events: none; transition: opacity .2s ease;
+  opacity: 0; pointer-events: none; transition: opacity var(--dur-routine) ease;
   display: flex; align-items: center; gap: 10px; font-family: var(--font-data); font-size: var(--text-control);
 }
 .atlas-toast[data-open] { opacity: 1; pointer-events: auto; }

@@ -3,9 +3,9 @@
 // already COMPLETE in the server-rendered markup:
 //
 //   1. The overture: figures get .anch-pending (held at zero) only when motion is
-//      welcome, then .anch-in exactly once as each scrolls into view — reveal.js's
-//      safety pattern (JS adds the hiding class, never the markup, so nothing can be
-//      left hidden if this module never runs).
+//      welcome, then .anch-in exactly once as each scrolls into view — the safety
+//      pattern: JS adds the hiding class, never the markup, so nothing can be left
+//      hidden if this module never runs.
 //   2. Today on the Days timeline: ring the stop whose data-tl-date matches the
 //      visitor's local "Www Mmm D" — the same matching the journey bar's Today uses.
 //   3. Progress rings: count each ring's own card checkboxes (state restored by
@@ -56,7 +56,7 @@ import { reducedMotion } from "./util.js";
   var figs = Array.prototype.slice.call(document.querySelectorAll("[data-anch]"));
   if (!figs.length) return;
   figs.forEach(function (f) { f.classList.add("anch-pending"); });
-  // Hard safety rail (reveal.js's): if the observer never delivers, finish every frame.
+  // Hard safety rail: if the observer never delivers, finish every frame.
   var rail = setTimeout(function () { figs.forEach(show); }, 4000);
   function show(f) {
     f.classList.add("anch-in");

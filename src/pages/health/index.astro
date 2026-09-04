@@ -127,7 +127,7 @@ const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not pro
     <!-- Was a bare <div>. Every other page on the site puts its content in a landmark; this one
          did not, so a screen-reader user had no way to skip the chrome and the a11y gate's own
          vacuity guard (which samples `main a, main h2, …`) found nothing here to audit at all. -->
-    <UtilityBar base={base} maxWidth="var(--hl-max, 58rem)" />
+    <UtilityBar base={base} page="Pipeline health" />
     <main class="hl-wrap">
       <p class="hl-kicker">Behind the scenes</p>
       <h1 class="hl-head">Pipeline health</h1>

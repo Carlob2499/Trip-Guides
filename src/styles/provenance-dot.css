@@ -15,7 +15,7 @@
   width: 1em; height: 1em; border-radius: 999px; cursor: pointer; padding: 0;
   background: transparent; color: var(--muted); border: 1px solid var(--rule2);
   font-size: var(--text-micro); vertical-align: middle; margin-inline-start: 0.25em;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color var(--dur-routine) ease, border-color var(--dur-routine) ease;
 }
 .prov-dot:hover, .prov-dot:focus-visible { color: var(--accent-ink); border-color: var(--accent); }
 .prov-dot:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
@@ -100,7 +100,7 @@
   gap: .35rem;
   border: 1px solid currentColor; border-radius: 999px;
   cursor: pointer; text-decoration: none; vertical-align: middle;
-  transition: background .15s ease;
+  transition: background var(--dur-routine) ease;
 }
 .flag-chip::before { content: ""; position: absolute; inset: -6px 0; }
 .flag-chip:hover { background: color-mix(in srgb, currentColor 10%, transparent); }

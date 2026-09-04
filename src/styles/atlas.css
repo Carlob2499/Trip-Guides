@@ -136,7 +136,7 @@
   font-size: var(--text-control); color: var(--muted); font-variant-numeric: tabular-nums;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .atlas-sheet-thumb { transition: transform .28s var(--ease, ease); }
+  .atlas-sheet-thumb { transition: transform var(--dur-object) var(--ease, ease); }
   .atlas-sheet:hover .atlas-sheet-thumb { transform: scale(1.06); }
 }
 .atlas-sheet-body { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }

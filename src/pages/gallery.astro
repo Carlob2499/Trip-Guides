@@ -327,7 +327,7 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
           <p class="gal-role">{componentRoles.AppChrome.role} — rendered static here (position relaxed by the gallery host).</p>
           <div class="gal-chrome-host"><AppChrome base={base} destinations={view.destinations} title={toolsGuide.data.title} /></div>
           <p class="gal-note">UtilityBar — the same strip every non-guide page wears (intake, progress, change, about, health, 404).</p>
-          <div class="gal-chrome-host"><UtilityBar base={base} toggleId="galUtilityDark" /></div>
+          <div class="gal-chrome-host"><UtilityBar base={base} toggleId="galUtilityDark" page="Gallery" /></div>
         </article>
 
         <article class="gal-card">

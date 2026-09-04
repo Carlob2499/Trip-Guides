@@ -90,7 +90,7 @@
 .trip-dl-ext{color:var(--muted);font-weight:400}
 .trip-packing{margin-top:.8rem}
 
-.trip-goto{display:flex;align-items:center;gap:1rem;width:100%;min-height:64px;padding:1rem 1.2rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);cursor:pointer;text-align:left;font:inherit;transition:border-color .16s,transform .2s var(--ease-spring)}
+.trip-goto{display:flex;align-items:center;gap:1rem;width:100%;min-height:64px;padding:1rem 1.2rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);cursor:pointer;text-align:left;font:inherit;transition:border-color var(--dur-routine),transform var(--dur-routine) var(--ease-spring)}
 .trip-goto:hover{border-color:var(--accent);transform:translateY(-1px)}
 .trip-goto:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .trip-goto-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}

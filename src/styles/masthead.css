@@ -8,7 +8,7 @@
    · .mast-painted — guides with no photo open on the Painted Atlas (painted-atlas.css +
      src/components/PaintedAtlas.astro): seeded terrain in the guide's accent under a
      destination-local sky, so every guide is born with a living cover.
-   Motion: hero-parallax.js drifts the photo on scroll; scripts/arrival.js runs the entry.
+   Motion: scripts/arrival.js runs the entry; the photo holds still while the page scrolls.
    Both select by class name (.mast-frame/.mast-img/.mast-eyebrow/.mast-title/.mast-dek/
    .mast-credit), all kept here. Fully short-circuited under prefers-reduced-motion. */
 
@@ -23,7 +23,7 @@
 
 /* The footage layer — transparent until it actually PLAYS (living-cover.js adds
    .mast-video-live on the `playing` event). */
-.mast-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0;transition:opacity .9s ease}
+.mast-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0;transition:opacity var(--dur-scene) ease}
 .mast-video-live .mast-video{opacity:1}
 @media(prefers-reduced-motion:reduce){.mast-video{display:none}}
 

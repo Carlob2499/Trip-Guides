@@ -45,7 +45,7 @@
 @media (prefers-reduced-motion: no-preference) {
   /* Opacity only — the bubble is absolutely positioned and must not slide, or it would
      move out from under a pointer that is already on its way to it. */
-  .hint-bubble { transition: opacity .16s linear; }
+  .hint-bubble { transition: opacity var(--dur-routine) linear; }
 }
 
 /* A hint in a Panel header must not stretch the header or steal the title's baseline. The

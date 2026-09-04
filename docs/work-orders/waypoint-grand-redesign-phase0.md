@@ -100,3 +100,28 @@ as the mental model (§21).
 4. Painted Atlas idle drift keyframes (owner: PaintedAtlas) — Phase 3/13.
 5. Stale "Source Sans 3" allowance in the drift TYPE rule (owner: gates) — Phase 1.
 6. Per-surface card geometry classes once the four card roles exist (owner: each surface) — Phases 4–10.
+
+## Closing status (Phase 14–15, 2026-09-04)
+
+Executed against this map, in branch order (Phase 0–1 → 2–3 → 1 cont. → 4–5 → 6–9 → 10–15):
+
+| Deletion task | Status |
+| --- | --- |
+| 1. OSM embed retirement | **Google-primary contract shipped**: every mount built with `PUBLIC_GMAPS_KEY` is Google Maps Platform first; the embed is dormant (`data-fallback-src`) and woken only on Google failure. The embed stays as the honest fallback and as the map when no key is configured — a named compatibility boundary, not a hidden legacy path. |
+| 2. Split slot | done (Phase 2). |
+| 3. Zero-radius / no-elevation rules | done (Phase 1); every `border-radius:0` and typed `box-shadow` call site migrated (Phase 1 cont.). |
+| 4. Painted Atlas idle drift | **deleted** (`paDrift`/`paMist`); the scene is still, arrival choreography owns identity motion. |
+| 5. "Source Sans 3" allowance | done (Phase 1). |
+| 6. Per-surface card geometry | every surface on the `--r-*` role family; the four card roles exist in `base.css`. |
+
+Also retired in Phase 14: `hero-parallax.js` (continuous scroll parallax), `reveal.js` (JS scroll
+loop; the native `scroll-motion.css` reveal stands alone), the `.reveal-*` classes, the
+`UtilityBar` parallel strip (`utility-bar.css` — utility pages now wear the shell strip from
+`chrome.css`), the one-layer SOS grid. Every literal transition/animation duration in shipped CSS
+moved onto the motion.md timing roles (`--dur-immediate/routine/object/scene`); state loops
+(`nowPulse`, `tnPulse`, progress rings) keep their own beat.
+
+Known deviations carried into the completion report: the bespoke Waypoint travel pictogram
+family (§20) is not drawn — the utility glyph set stands; place/detail (§10) shares one visual
+language across Search, Map and the Itinerary compare tray but not a shared-object morph between
+surfaces; the pre-paint Trip skeleton is not needed (the cockpit paints synchronously on load).

@@ -51,15 +51,6 @@
 .whats-next .wn-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
 .whats-next .wn-text{font-size:var(--text-small);font-weight:600;color:var(--ink);overflow-wrap:anywhere}
 
-/* ── Reveal-on-scroll (opacity/transform only; short-circuited under
-      reduced-motion; reveal.js guarantees content is never left hidden) ───── */
-.reveal-pending{opacity:0;transform:translateY(14px)}
-.reveal-in{opacity:1;transform:none;transition:opacity .5s ease,transform .5s ease}
-@media(prefers-reduced-motion:reduce){
-  .reveal-pending{opacity:1;transform:none}
-  .reveal-in{transition:none}
-}
-
 /* ── Glass on floating controls ONLY (sticky chrome + mobile bottom bar);
       cards stay paper ───────────────────────────────────────────────────── */
 .sticky-chrome{background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}

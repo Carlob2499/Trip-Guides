@@ -483,7 +483,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 /* M3: was z-index:999 — painted UNDER a z-index:1000 overlay, so a keyboard user tabbing
    while it was open focused an invisible skip link. --z-skip-link sits above every overlay
    specifically so this can never regress silently again. */
-.skip-link{position:fixed;left:.7rem;top:.7rem;z-index:var(--z-skip-link);padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:var(--text-caption);text-decoration:none;transform:translateY(-300%);transition:transform .15s}
+.skip-link{position:fixed;left:.7rem;top:.7rem;z-index:var(--z-skip-link);padding:.55rem 1rem;background:var(--ink);color:var(--bg);border-radius:999px;font-family:var(--font-data);font-size:var(--text-caption);text-decoration:none;transform:translateY(-300%);transition:transform var(--dur-routine)}
 .skip-link:focus-visible{transform:none;outline:3px solid var(--accent-ink);outline-offset:2px}
 
 /* Visually hidden, still announced. CLIPPED rather than display:none or visibility:hidden —
@@ -522,3 +522,9 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 /* The day scrubber's compact chips sized to 28px wide so a long trip fits the row; a day is
    still something the reader aims at, so the box grows and the row scrolls instead. */
 .dchip{min-width:44px}
+
+/* Destination-aware dark atmosphere (design-system.md §13; src/lib/destination-theme.ts): the
+   page ground alone takes the guide's tint. Cards, rules and inks keep their tokens, so every
+   contrast pair measured above holds; a guide with no safe tint gets the neutral ground. */
+[data-theme="dark"] body{background:var(--atmo-ground,var(--bg))}
+@media(prefers-color-scheme:dark){html:not([data-theme="light"]) body{background:var(--atmo-ground,var(--bg))}}

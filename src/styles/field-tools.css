@@ -17,7 +17,7 @@
 .addr-copy:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* ── Mini toast ───────────────────────────────────────────────────────────── */
-.ft-toast{position:fixed;left:50%;bottom:calc(5.4rem + var(--safe-bottom));transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.ft-toast{position:fixed;left:50%;bottom:calc(5.4rem + var(--safe-bottom));transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;opacity:0;pointer-events:none;transition:opacity var(--dur-routine),transform var(--dur-routine)}
 .ft-toast-on{opacity:1;transform:translate(-50%,0)}
 @media(min-width:900px){.ft-toast{bottom:1.6rem}}
 
@@ -59,7 +59,7 @@
 
 /* ── Day-kit completion pop ───────────────────────────────────────────────── */
 @media(prefers-reduced-motion:no-preference){
-  .day-kitcount.done{animation:kitPop .45s cubic-bezier(.2,1.4,.3,1)}
+  .day-kitcount.done{animation:kitPop var(--dur-scene) cubic-bezier(.2,1.4,.3,1)}
 }
 @keyframes kitPop{0%{transform:scale(1)}45%{transform:scale(1.18)}100%{transform:scale(1)}}
 
@@ -78,7 +78,7 @@
    visibly subordinate second layer. Stress usability outranks sophistication. */
 .sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:stretch;justify-content:center;background:rgba(var(--shadow-rgb),.72)}
 .sos-sheet[hidden]{display:none}
-.sos-inner{width:100%;display:flex;flex-direction:column;gap:1rem;background:var(--dark-ground);color:var(--dark-ink);border:0;padding:calc(.8rem + var(--safe-top)) max(1.1rem,var(--safe-right)) max(1.4rem,var(--safe-bottom)) max(1.1rem,var(--safe-left));overflow-y:auto;overscroll-behavior:contain;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+.sos-inner{width:100%;display:flex;flex-direction:column;gap:1rem;background:var(--dark-ground);color:var(--dark-ink);border:0;padding:calc(.8rem + var(--safe-top)) max(1.1rem,var(--safe-right)) max(1.4rem,var(--safe-bottom)) max(1.1rem,var(--safe-left));overflow-y:auto;overscroll-behavior:contain;transition:transform var(--dur-object) cubic-bezier(.2,.8,.2,1)}
 /* This element IS the drag surface (sheet-drag.js): it owns the whole gesture. */
 .sos-inner{touch-action:pan-y}
 .sos-inner.sheet-dragging{transition:none;will-change:transform}
@@ -86,8 +86,7 @@
 .sos-head-where{color:var(--dark-ink-3);letter-spacing:.06em;text-transform:none;font-weight:600;font-size:var(--text-control)}
 .sos-x{margin-left:auto;width:44px;height:44px;flex:none;background:transparent;border:1px solid var(--dark-rule);border-radius:999px;color:var(--dark-ink);cursor:pointer}
 .sos-x:focus-visible{outline:3px solid var(--dark-ink);outline-offset:2px}
-/* First layer: two enormous calls. */
-.sos-primary{display:grid;grid-template-columns:1fr;gap:.7rem}
+/* The confirm call (layer 3). */
 .sos-call{display:grid;grid-template-columns:minmax(0,1fr);gap:.1rem;min-height:120px;padding:1rem 1.2rem;background:var(--crit-fill);color:var(--on-crit);border:2px solid var(--crit-fill);border-radius:var(--r-card);text-decoration:none}
 .sos-call:hover{filter:brightness(1.06)}
 .sos-call:focus-visible{outline:3px solid var(--dark-ink);outline-offset:3px}
@@ -158,7 +157,6 @@
 .sos-sheet--fallback .sos-inner{border-top:3px solid var(--dark-warn)}
 .sos-sheet--fallback .sos-note{color:var(--dark-warn)}
 .sos-sheet--fallback .sos-note::before{content:"⚠ "}
-@media(min-width:600px){.sos-primary{grid-template-columns:1fr 1fr}}
 /* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
 @media(min-width:900px){
   .sos-sheet{align-items:center;padding:2rem}

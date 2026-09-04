@@ -8,7 +8,7 @@
 @media(max-width:599px){.itin-map{height:300px}}
 
 /* Card flash when arriving from a jump (search / info-window "Details ↓"). */
-.pin-flash{outline:2px solid var(--accent);outline-offset:3px;transition:outline-color .3s}
+.pin-flash{outline:2px solid var(--accent);outline-offset:3px;transition:outline-color var(--dur-object)}
 @media(prefers-reduced-motion:reduce){.pin-flash{transition:none}}
 
 /* Google info-window content (rendered only when the Google renderer is active). */
@@ -30,7 +30,7 @@
   color:var(--muted);background:var(--card);
   border:1px solid var(--rule2);border-radius:999px;cursor:pointer;
   box-shadow:var(--shadow-lift);
-  transition:color .14s,border-color .14s,background .14s
+  transition:color var(--dur-immediate),border-color var(--dur-immediate),background var(--dur-immediate)
 }
 .map-chip:hover{color:var(--ink);border-color:var(--ink)}
 .map-chip-on{color:var(--on-accent);background:var(--accent);border-color:var(--accent)}
@@ -82,7 +82,7 @@ html[data-conn="offline"] .map-degraded{display:block}
 .map-chip--day{border-style:dashed}
 
 /* The sheet (phone): peek / half / full, dragged or tapped, never gesture-only. */
-.mapdest-sheet{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;display:flex;flex-direction:column;max-height:calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom) - 1rem);background:var(--bg);border-top:1px solid var(--rule2);transition:transform .28s var(--ease-out-expo);touch-action:none}
+.mapdest-sheet{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;display:flex;flex-direction:column;max-height:calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom) - 1rem);background:var(--bg);border-top:1px solid var(--rule2);transition:transform var(--dur-object) var(--ease-out-expo);touch-action:none}
 body:not([data-dest="map"]) .mapdest-sheet{display:none}
 /* Peek: the grip and a one-line index summary; the selected place, when there is one. */
 .mapdest-peek{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin:0;padding:0 max(1.1rem,var(--safe-right)) .6rem max(1.1rem,var(--safe-left));font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}

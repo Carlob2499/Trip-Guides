@@ -87,7 +87,7 @@
     },
     "UtilityBar": {
       "file": "src/components/UtilityBar.astro",
-      "role": "The shared top strip of every non-guide page (intake, progress, triage, change, about, health, 404): wordmark, way back to the Atlas, theme control (§5)"
+      "role": "The shell strip (chrome.css .chrome/.topbar) on every non-guide page (intake, progress, triage, change, about, health, 404): the orientation anchor is the way back to the Atlas, same theme control, no rail (§6)"
     }
   },
   "blocks": {
