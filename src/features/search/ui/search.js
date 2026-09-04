@@ -141,11 +141,18 @@ export function initSearch(root) {
     });
   }
 
+  // Index fields are data from a JSON payload; a route is only ever built from the shapes
+  // the index builder emits (a kebab slug, an id-safe anchor) — anything else is dropped.
+  const SLUG = /^[a-z0-9][a-z0-9-]*$/;
+  const ANCHOR = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
   function go(r) {
-    if (!r) return;
+    if (!r || !ANCHOR.test(String(r.anchor || ""))) return;
     const hash = "#" + r.anchor;
     if (r.slug !== currentSlug) {
-      location.href = `${base}/guides/${encodeURIComponent(r.slug)}/${hash}`;
+      if (!SLUG.test(String(r.slug || ""))) return;
+      const url = new URL(`${base}/guides/${r.slug}/`, location.origin);
+      url.hash = hash;
+      location.assign(url.href);
       return;
     }
     close({ keepFocus: true });
