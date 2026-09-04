@@ -10,7 +10,7 @@ No other design document, handoff, prototype, screenshot, mockup, research packe
 
 `PRODUCT.md` remains product-purpose and factual capability doctrine. `src/styles/base.css`, breakpoints, production components, tests, and `docs/reference/component-registry.json` are executable implementation/conformance artifacts, not separate design authorities. When implementation disagrees with this file, the implementation is debt unless a genuine feasibility, accessibility, truth, or field-use blocker is demonstrated.
 
-The sole visual companion set lives under `docs/reference/design-system-assets/`. `mockup-manifest.json` identifies the recovered creator-reviewed D6 composition redraws and the sanitized canonical coverage board. These files are **supporting figures inside this authority packet, not separate authorities**. If any visual reference conflicts with this Markdown, **this Markdown wins**. No agent may average the approved references with superseded mockups, component-gallery screenshots, historical design handoffs, or earlier D1–D7 experiments.
+The sole visual companion set lives under `docs/reference/design-system-assets/`. `mockup-manifest.json` identifies the recovered creator-reviewed D6 composition redraws, the selected topic-limited raster decision boards recovered from the creator's conversation archive, and the sanitized canonical gap-coverage board. These files are **supporting figures inside this authority packet, not separate authorities**. If any visual reference conflicts with this Markdown, **this Markdown wins**. No agent may average the selected references with unselected/superseded mockups, component-gallery screenshots, historical design handoffs, or earlier D1–D7 experiments.
 
 Git history is the archive. Do not preserve superseded design prose in the live tree merely for archaeology.
 
@@ -279,7 +279,7 @@ A static/gallery test environment that cannot render the external map must still
 
 Guide is editorial discovery + structured utility, organized primarily by **location and time**.
 
-- large destination cover/hero, especially on desktop; do not shrink it merely to squeeze modules above the fold;
+- large destination cover/hero, especially on desktop; as a directional composition target it occupies roughly 55–60% of the main content region on desktop where the layout permits and roughly 40–45% of the mobile viewport; do not shrink it merely to squeeze modules above the fold;
 - geography/travel sequence is the durable spine;
 - strong traveler anchors (event, non-negotiable interest) may earn featured treatment without forcing the whole Guide interest-first;
 - overview is canonical default; active-trip context may resume a relevant chapter, but overview remains one action away;
@@ -347,12 +347,13 @@ One global traveler-facing Search implementation.
 Desktop:
 
 - prominent persistent global field in utility chrome.
+- activation opens an overlay/panel over the current surface; Search is not a standalone page.
 
 Mobile:
 
 - expanded field at the top;
 - compact recoverable sticky access while scrolled;
-- focused overlay/sheet on activation.
+- activation opens one focused full-height overlay/sheet with appropriate keyboard focus.
 
 Behavior:
 
@@ -367,13 +368,26 @@ Behavior:
 
 ## 13. SOS
 
-SOS is deliberately simple global infrastructure.
+SOS is deliberately simple global infrastructure. It is a global action, never a destination.
 
-When opened, prioritize verified emergency phone numbers with direct `tel:` links, useful verified emergency/travel-help links already supported by the guide, and concise location/base/address context only when Waypoint already has it and it materially helps.
+First urgent layer:
+
+- Police;
+- Fire / Ambulance;
+- the traveler’s known location/base only when Waypoint actually possesses it and it materially helps.
+
+Second urgent-help layer may include only verified/supported information: nearest-hospital or urgent-medical guidance, embassy/consulate, lost-passport guidance, hotel/base address, traveler-provided insurance/contact details and critical emergency phrases.
 
 Core emergency numbers remain baked in/offline. Controls are large and unambiguous.
 
+Responsive container:
+
+- mobile uses a dominant full-height emergency sheet;
+- desktop uses a modal or side sheet preserving the same urgent-first hierarchy.
+
 Do not build symptom triage, proactive emergency assistance, category dashboards, responder orchestration, “help request sent,” automatic group sharing, or a generic help center.
+
+The product hierarchy is locked, but the final stress-state visual is still open. The unresolved sanity test is whether Police and Fire/Ambulance are immediately obvious and one-tap under stress with every secondary action visibly subordinate.
 
 ---
 
@@ -390,6 +404,13 @@ Escalate when decision risk changes:
 No citation wall and no synthetic trust score.
 
 Offline/degraded state must keep written routes/addresses/emergency/core Guide facts usable. Missing media/map/live service must not leave a dishonest blank or fake “live” state.
+
+The behavior above is locked. Final visual treatment remains open for only:
+
+1. provenance / trust / freshness disclosure;
+2. offline, stale-cache, partial-service, loading, map-provider failure and reconnect states.
+
+Together with the SOS stress-state visual, these are the only unresolved visual-sanity items. Approved/locked surfaces elsewhere in this document are frozen unless a real implementation blocker proves them technically impossible or materially harmful.
 
 ---
 
@@ -487,15 +508,19 @@ Use `Add to itinerary` only for a genuine unscheduled candidate. Do not show `Ad
 
 ---
 
-## 20. Creator-approved visual target set recovered from D6 review
+## 20. Approved visual targets and pending sanity candidates recovered from D6 review
 
-These are the visual/compositional targets the implementation must converge toward. The original ChatGPT raster bytes were not durably committed; that storage failure must not turn the D7 implementation into permission to invent another aesthetic.
+The package contains both creator-approved visual/compositional targets and explicitly non-final sanity candidates. The implementation must converge toward approved targets only. Entries marked `visual_sanity_pending` exist solely to test the still-open SOS, provenance and degraded-state treatments; they must not be treated as approved finals or copied wholesale. The original ChatGPT raster bytes were initially missing from the repository, then recovered from the creator-supplied 81-image WayPoint conversation archive on 2026-09-04. The selected decision boards are now committed beside the sanitized D6 redraws so that the storage failure cannot become permission to invent another aesthetic.
 
-The active visual package is governed by [`design-system-assets/mockup-manifest.json`](design-system-assets/mockup-manifest.json). It includes five creator-reviewed sanitized D6 redraws recovered from the Sept. 3 final handoff plus [`canonical-mockups.svg`](design-system-assets/canonical-mockups.svg), which supplies sanitized composition coverage for surfaces the D6 handoff intentionally left without a visual because the generated originals contained hallucinated controls/data.
+The active visual package is governed by [`design-system-assets/mockup-manifest.json`](design-system-assets/mockup-manifest.json). It contains the recovered D6 SVGs, a deliberately small set of topic-limited raster decision boards and pending sanity candidates from that archive, and [`canonical-mockups.svg`](design-system-assets/canonical-mockups.svg) for gap coverage only. Generated boards often contain correct composition beside hallucinated copy, controls, data, or color; therefore only each manifest entry's `allowed_signals` may be used, and pending entries remain excluded from convergence.
 
 Recovered D6 references take precedence over the reconstructed board for the same topic. The board and recovered SVGs are **supporting figures governed by this section**, not separate design authorities. Binding visual signals are hierarchy, relative scale, panel relationships, responsive composition, hero prominence, density limits, map/sheet behavior, typography wrapping, and key-state/action placement. Exact photographs, sample text/data, prices, times, route geometry, pin names, and decorative micro-details are illustrative unless this Markdown separately specifies them.
 
-For Fable 5.1 / Claude / Codex: read this Markdown first, then `mockup-manifest.json`, then only the listed visual assets. Do not average or reconcile them with old screenshots, the D7 component gallery, superseded D1–D7 mockups, or historical design prose.
+For Fable 5.1 / Claude / Codex: read this Markdown first, then `mockup-manifest.json`, then only the listed visual assets. Follow `v1_canary_routes` exactly for the first two surfaces. Do not average or reconcile the selected evidence with old screenshots, the D7 component gallery, unselected archive images, superseded D1–D7 mockups, or historical design prose.
+
+### V1 exact visual route
+
+`mockup-manifest.json#v1_canary_routes` owns the exact asset order, per-image allowlist and rejected signals for the two V1 screens. It routes Active Trip to the recovered Right Now/lifecycle decision boards and desktop Itinerary to the recovered temporal-spatial workbench. `canonical-mockups.svg#WAY-01` and `#WAY-03` remain fallback gap coverage, not primary judging references. The theme, truth and behavior rules in this Markdown always override sample styling or content inside a raster board.
 
 Canonical board IDs:
 

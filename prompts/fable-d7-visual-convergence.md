@@ -10,10 +10,13 @@ This is an execution work order only. It is **not design authority**.
 
 1. `docs/reference/design-system.md` — sole design authority.
 2. `docs/reference/design-system-assets/mockup-manifest.json`.
-3. Only the visual files listed by that manifest.
-4. The production components/styles for the two V1 surfaces.
+3. `v1_canary_routes` in that manifest — exact visual routing for this pass.
+4. Only the visual files listed by that manifest.
+5. The production components/styles for the two V1 surfaces.
 
 Do not consult superseded design handoffs, old gallery screenshots, historical prototypes, deleted branches, or PR-era design prose as visual authority.
+
+For V1, use the exact primary/supporting/rejected ordering in `mockup-manifest.json#v1_canary_routes`. Do **not** use `canonical-mockups.svg#WAY-01` or `#WAY-03` as the primary judging reference.
 
 ## Preserve
 
@@ -39,6 +42,8 @@ Before editing, inspect the two target surfaces against the sole authority and m
 
 ### 1. South Korea active Trip — mobile
 
+Judge composition against `v1_canary_routes.active_trip_mobile`. Only that route's manifest allowlist is reusable; canonical repository content and the Markdown authority override every sample detail.
+
 Target review state:
 
 - 390 × 844 viewport;
@@ -50,6 +55,8 @@ Target review state:
 - no dossier/prose-wall composition, generic dashboard grid, fake actions, or `Add to plan` for already-planned/completed objects.
 
 ### 2. South Korea Itinerary — desktop workbench
+
+Judge composition against `v1_canary_routes.itinerary_desktop`. Only that route's manifest allowlist is reusable; canonical repository content and the Markdown authority override every sample detail.
 
 Target review state:
 
