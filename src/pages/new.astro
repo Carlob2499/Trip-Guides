@@ -1,5 +1,6 @@
 ---
 import PwaHead from "../components/PwaHead.astro";
+import UtilityBar from "../components/UtilityBar.astro";
 import { generateContourLayer } from "../lib/contours";
 import Contours from "../components/Contours.astro";
 import { SECTIONS } from "../features/hub/index";
@@ -150,9 +151,7 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
   <body data-base={base}>
     <a class="skip-link" href="#intakeMain">Skip to the form</a>
     <Contours layers={contours} />
-    <header class="itk-bar">
-      <a class="itk-wordmark" href={`${base}/`}>← Waypoint</a>
-    </header>
+    <UtilityBar base={base} maxWidth="52rem" />
 
     <main class="intake" id="intakeMain">
       <header class="itk-hero">
@@ -260,6 +259,10 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
     <script>
       import { initIntakeChecklist } from "../features/hub/index";
       initIntakeChecklist();
+    </script>
+    <script>
+      import { initDarkToggle } from "../scripts/theme.js";
+      initDarkToggle("btnDark");
     </script>
   </body>
 </html>

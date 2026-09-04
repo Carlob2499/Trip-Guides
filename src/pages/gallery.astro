@@ -40,6 +40,7 @@ import ReminderRow from "../components/ReminderRow.astro";
 import TransitLinks from "../components/TransitLinks.astro";
 import TripSplit from "../components/TripSplit.astro";
 import AppChrome from "../components/AppChrome.astro";
+import UtilityBar from "../components/UtilityBar.astro";
 import TripDestination from "../components/TripDestination.astro";
 import ItineraryDestination from "../components/ItineraryDestination.astro";
 import MapDestination from "../components/MapDestination.astro";
@@ -325,6 +326,8 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
           <h3 class="gal-name">AppChrome</h3>
           <p class="gal-role">{componentRoles.AppChrome.role} — rendered static here (position relaxed by the gallery host).</p>
           <div class="gal-chrome-host"><AppChrome base={base} destinations={view.destinations} title={toolsGuide.data.title} /></div>
+          <p class="gal-note">UtilityBar — the same strip every non-guide page wears (intake, progress, change, about, health, 404).</p>
+          <div class="gal-chrome-host"><UtilityBar base={base} toggleId="galUtilityDark" /></div>
         </article>
 
         <article class="gal-card">

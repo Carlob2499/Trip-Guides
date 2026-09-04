@@ -55,7 +55,7 @@ describe("design drift", () => {
     // The echo is cut at 100 characters. This repo writes one-line CSS blocks, so the token that
     // proves a hit harmless usually sits past that cut — reading the echo scored ~60 known-good
     // rules as real drift.
-    const v = parseOutput("  src/styles/about.css:86  [TYPE — only Literata (--fd) exists]\n    .ab-cta-btn{display")[0];
+    const v = parseOutput("  src/styles/about.css:82  [TYPE — only Literata (--fd) exists]\n    .ab-cta-btn{display")[0];
     expect(v.text.length).toBeGreaterThan(100);
     expect(classify([v]).exempt.map((x) => x.exemption)).toEqual(["type-token-naming"]);
   });

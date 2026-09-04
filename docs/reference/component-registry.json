@@ -84,6 +84,10 @@
     "TripSplit": {
       "file": "src/components/TripSplit.astro",
       "role": "Trip cost-split markup"
+    },
+    "UtilityBar": {
+      "file": "src/components/UtilityBar.astro",
+      "role": "The shared top strip of every non-guide page (intake, progress, triage, change, about, health, 404): wordmark, way back to the Atlas, theme control (§5)"
     }
   },
   "blocks": {

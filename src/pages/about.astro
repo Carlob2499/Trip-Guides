@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import PwaHead from "../components/PwaHead.astro";
+import UtilityBar from "../components/UtilityBar.astro";
 import { computeGuideStats } from "../lib/guide-stats";
 import { generateContourLayer } from "../lib/contours";
 // Same self-hosted fonts + token base as the hub — one theme, every surface.
@@ -46,9 +47,7 @@ const contours = [
   </head>
   <body>
     <a class="skip-link" href="#aboutMain">Skip to content</a>
-    <header class="ab-bar">
-      <a class="ab-wordmark" href={`${base}/`}>← Waypoint</a>
-    </header>
+    <UtilityBar base={base} maxWidth="1080px" />
 
     <main class="about" id="aboutMain">
       <div class="ab-contours" aria-hidden="true">
@@ -186,5 +185,9 @@ const contours = [
     </main>
 
     <footer class="ab-foot">Waypoint — every fact checked, every route tested.</footer>
+    <script>
+      import { initDarkToggle } from "../scripts/theme.js";
+      initDarkToggle("btnDark");
+    </script>
   </body>
 </html>

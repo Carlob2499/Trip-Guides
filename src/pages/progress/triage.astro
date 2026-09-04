@@ -18,6 +18,7 @@
 // about what is waiting.
 import { getCollection } from "astro:content";
 import PwaHead from "../../components/PwaHead.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
 import { jsonEmbed } from "../../lib/json-embed";
 import { generateContourLayer } from "../../lib/contours";
 import Contours from "../../components/Contours.astro";
@@ -91,10 +92,7 @@ const contours = [
 
     <Contours layers={contours} />
 
-    <header class="cp-bar">
-      <a class="cp-wordmark" href={`${base}/`}>← Waypoint</a>
-      <button type="button" class="cp-theme-btn" id="cpDark" aria-label="Switch to dark mode"></button>
-    </header>
+    <UtilityBar base={base} toggleId="cpDark" maxWidth="74rem" />
 
     <main class="cp" id="cpTriageRoot">
       {/* Both halves render here. Hiding the tab the reader is standing on would be a control

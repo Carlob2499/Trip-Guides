@@ -16,26 +16,8 @@
       /change/ are visibly one site rather than three. ───────────────────────────────────────── */
 
 
-.cp-bar, .cp, .cp-foot { position: relative; z-index: 1; }
+.cp, .cp-foot { position: relative; z-index: 1; }
 
-.cp-bar {
-  max-width: 74rem; margin: 0 auto; width: 100%; padding: 1.1rem 1.2rem 0;
-  display: flex; align-items: center; justify-content: space-between; gap: .8rem;
-}
-.cp-wordmark {
-  font-family: var(--font-display); font-weight: 640; font-size: var(--text-lead);
-  color: var(--ink); text-decoration: none; letter-spacing: -.01em;
-}
-.cp-wordmark:hover { color: var(--accent-ink); }
-.cp-wordmark:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
-.cp-theme-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 38px; min-height: 38px; padding: 0 .6rem; border-radius: 999px;
-  border: 1px solid var(--rule); background: var(--card); color: var(--ink); cursor: pointer;
-  transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease;
-}
-.cp-theme-btn:hover { border-color: var(--ink); }
-.cp-theme-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 
 .cp {
   max-width: 74rem; margin: 0 auto; width: 100%;
@@ -424,7 +406,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cp-card, .cp-starter, .cp-send, .cp-seg-btn, .cp-theme-btn, .cp-aff-x, .cp-outline, .cp-pin,
+  .cp-card, .cp-starter, .cp-send, .cp-seg-btn, .cp-aff-x, .cp-outline, .cp-pin,
   .cp-sec-bar::after, .cp-tri, .cp-tri-btn { transition: none; animation: none; }
   /* It CUTS. The lift is motion, not state — press/focus states stay, this goes. */
   .cp-tri:hover { transform: none; }
@@ -451,5 +433,5 @@
 }
 
 @media print {
-  .cp-bar, .cp-foot, .cp-seg, .cp-send, .cp-tri-btn { display: none !important; }
+  .cp-foot, .cp-seg, .cp-send, .cp-tri-btn { display: none !important; }
 }

@@ -9,11 +9,7 @@
 body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-width:100%}
 /* The survey ground is the shared <Contours/> component; these siblings sit above its
    fixed layer (the terrain holds still while the sheet scrolls over it). */
-.itk-bar,.intake,.itk-foot{position:relative;z-index:1}
-.itk-bar{max-width:52rem;margin:0 auto;width:100%;padding:1.1rem 1.2rem 0}
-.itk-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
-.itk-wordmark:hover{color:var(--accent-ink)}
-.itk-wordmark:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
+.intake,.itk-foot{position:relative;z-index:1}
 
 .intake{max-width:52rem;margin:0 auto;width:100%;padding:1.8rem 1.2rem 3rem;flex:1}
 .itk-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
@@ -189,7 +185,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 
 /* Print: the checklist is an interactive surface — print the flat truth, not the chrome. */
 @media print{
-  .itk-bar,.itk-foot,.itk-meter,.itk-sec-foot,.itk-dz{display:none!important}
+  .itk-foot,.itk-meter,.itk-sec-foot,.itk-dz{display:none!important}
   html,body{background:#fff!important;color:#111!important}
   body::before{display:none!important}
   .itk-sec-body{display:block!important}

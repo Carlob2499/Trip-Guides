@@ -1,0 +1,46 @@
+---
+/* The page for an address that is not there. Astro's default 404 wore Astro's own brand; this
+   one is Waypoint's — same strip, same type, and the two honest ways on: the Atlas, or the guides. */
+import PwaHead from "../components/PwaHead.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import "@fontsource-variable/literata/standard.css";
+import "@fontsource-variable/literata/standard-italic.css";
+import "@fontsource-variable/atkinson-hyperlegible-next";
+import "../styles/base.css";
+import "../styles/not-found.css";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Not found — Waypoint</title>
+    <meta name="robots" content="noindex" />
+    <script is:inline>
+      (function () {
+        const s = localStorage.getItem("tg-theme");
+        const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) document.documentElement.setAttribute("data-theme", "dark");
+        else if (s === "light") document.documentElement.setAttribute("data-theme", "light");
+      })();
+    </script>
+    <PwaHead />
+  </head>
+  <body data-base={base}>
+    <UtilityBar base={base} maxWidth="52rem" />
+    <main class="nf" id="content">
+      <p class="nf-kicker">Nothing at this address</p>
+      <h1 class="nf-title">This page isn’t in the atlas.</h1>
+      <p class="nf-dek">The link may be old, or the guide it pointed at was never published. Nothing here is guessed, so there is nothing to show.</p>
+      <p class="nf-actions">
+        <a class="nf-cta" href={`${base}/`}>Open the Atlas</a>
+        <a class="nf-link" href={`${base}/about/`}>How Waypoint works</a>
+      </p>
+    </main>
+    <script>
+      import { initDarkToggle } from "../scripts/theme.js";
+      initDarkToggle("btnDark");
+    </script>
+  </body>
+</html>
