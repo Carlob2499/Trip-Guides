@@ -1,8 +1,8 @@
-# One-shot implementation prompt — Claude Fable 5
+# Implementation prompt — Claude Fable 5 / D7 convergence
 
 Repository: `Carlob2499/Trip-Guides`
-Approved design source branch: `design/d6-product-reconciliation-20260902`
-Goal: implement the frozen WayPoint D6 redesign and have the engineering program complete by 2026-09-30.
+Active implementation branch: `claude/waypoint-design-routing-rex0vr`
+Goal: preserve the working D7 engineering in PR #186, converge the rendered product to the creator-approved D6 design, and have the engineering program complete by 2026-09-30.
 
 You are the implementation owner, not the product decision-maker.
 
@@ -10,26 +10,30 @@ You are the implementation owner, not the product decision-maker.
 
 Before editing:
 1. `PRODUCT.md`
-2. `docs/design-handoff/final-2026-09-03/FINAL_DECISIONS.md` — binding late-review delta; it supersedes only the older clauses it explicitly names
-3. `docs/reference/design-system.md`
-4. `docs/reference/motion.md`
-5. `docs/reference/component-registry.json`
-6. `src/styles/base.css`
-7. `src/lib/breakpoints.ts`
-8. `docs/reference/search-ui-final.md`
-9. `docs/reference/sos-ui-final.md`
-10. `docs/design-handoff/final-2026-09-03/README.md`
-11. `docs/design-handoff/final-2026-09-03/DRIFT_GUARD.md`
-12. `docs/design-handoff/final-2026-09-03/ACCEPTANCE_MATRIX.md`
-13. `docs/design-handoff/final-2026-09-03/MOCKUP_MANIFEST.json`
+2. `docs/design-handoff/final-2026-09-03/FINAL_DECISIONS.md`
+3. `docs/design-handoff/final-2026-09-03/VISUAL_FIDELITY_GATE.md`
+4. `docs/design-handoff/final-2026-09-03/MOCKUP_MANIFEST.json`
+5. `docs/reference/design-system.md`
+6. `docs/reference/motion.md`
+7. `docs/reference/component-registry.json`
+8. `src/styles/base.css`
+9. `src/lib/breakpoints.ts`
+10. `docs/reference/search-ui-final.md`
+11. `docs/reference/sos-ui-final.md`
+12. `docs/design-handoff/final-2026-09-03/README.md`
+13. `docs/design-handoff/final-2026-09-03/DRIFT_GUARD.md`
+14. `docs/design-handoff/final-2026-09-03/ACCEPTANCE_MATRIX.md`
+15. `docs/design-handoff/final-2026-09-03/D7_PROGRESS.md`
 
-Only after those may you inspect the listed SVGs in `docs/design-handoff/final-2026-09-03/visual-references/`.
+The creator-approved D6 raster mockups are binding **visual composition** references for the surfaces they depict. They are not factual-content authority. If those required raster references are not available in the current session/environment, do not infer a replacement design from prose or sanitized SVGs. Record `VISUAL_REFERENCE_MISSING` and stop visual convergence before spending a long implementation run.
 
-Do not treat historical prototypes, old design handoffs, archived screenshots, raw generated boards, or any image not listed in the manifest as authority.
+Historical non-approved prototypes remain non-authoritative. Superseded alternatives must not be averaged together.
 
 ## 1. Operating rule
 
-Implement the approved behavior decisively. Do not reopen settled design questions unless repository evidence exposes a real correctness/accessibility/feasibility blocker.
+PR #186 already contains substantial working D7 architecture. **Do not rebuild it.** Preserve correct routing, data projection, Search, SOS, map fallback, Split state/math, schema work, accessibility, offline behavior, and retirement work unless the fidelity correction exposes a real defect.
+
+Implement approved behavior decisively. Do not reopen settled product questions unless repository evidence exposes a real correctness/accessibility/feasibility blocker.
 
 You have broad engineering discretion over:
 - component boundaries;
@@ -39,7 +43,7 @@ You have broad engineering discretion over:
 - safe performance improvements;
 - test structure;
 - responsive implementation details;
-- exact spacing/geometry tuning within the existing token system.
+- exact spacing/geometry tuning needed to realize the approved composition within accessibility and token constraints.
 
 You do not have discretion to:
 - invent traveler-facing features;
@@ -48,11 +52,13 @@ You do not have discretion to:
 - change the five primary destinations;
 - promote Search/SOS/Learnings/Atlas into extra primary tabs;
 - weaken offline, provenance, accessibility, or reduced-motion requirements;
-- resurrect retired Story/voting/Trip Kit/shared-readiness/Tools concepts.
+- resurrect retired Story/voting/Trip Kit/shared-readiness/Tools concepts;
+- replace an approved visual composition with a new generic app layout merely because both satisfy the same feature list;
+- self-declare visual acceptance from functional tests or regenerated screenshots.
 
-When a visual reference conflicts with code/content/design authority, ignore the visual reference. `FINAL_DECISIONS.md` resolves the known late-review contradictions so you do not need to ask the user about them again.
+When an approved mockup contains unsupported content/control detail, keep the visual composition and substitute only canonical WayPoint data/capability. Do not discard the entire mockup because one element is hallucinated.
 
-## 2. Core product architecture to implement
+## 2. Frozen product architecture
 
 Stable primary traveler destinations:
 `Trip · Itinerary · Map · Guide · Split`
@@ -70,20 +76,62 @@ Launch:
 - materially active mid-trip → Trip
 - Atlas remains one obvious action away
 
-## 3. Implementation program
+## 3. Visual-convergence program — usage controlled
 
-Work in dependency-safe vertical slices. Keep the site buildable after each slice.
+### V0 — reference preflight, before any styling work
+
+Load the final creator-approved raster mockups and map each one to the production surface it governs. Record explicit written overrides, if any.
+
+Required coverage is defined in `VISUAL_FIDELITY_GATE.md`.
+
+If a required reference is missing: stop with `VISUAL_REFERENCE_MISSING`. Do not spend hours producing a guessed visual replacement.
+
+### V1 — two-surface visual canary
+
+Before a full-site visual sweep, repair only these two representative surfaces:
+
+1. **Active Trip — mobile**
+2. **Itinerary temporal-spatial workbench — desktop**
+
+Use real South Korea content. Produce production screenshots and compare them against the creator-approved references across:
+- hierarchy;
+- major proportions;
+- density/dead space;
+- imagery prominence and crop role;
+- navigation/chrome character;
+- typography scale relationships;
+- card/panel frequency versus editorial/spatial composition;
+- mobile thumb-zone economy;
+- desktop use of width and simultaneous context;
+- overall WayPoint identity.
+
+If either canary is materially off-target, continue correcting those two surfaces. **Do not proceed to V2 merely because tests are green.**
+
+### V2 — full surface convergence
+
+Only after V1 is visually credible, extend the same approved language to remaining Trip states, Itinerary mobile, Map, Guide, Split, Search/chrome and responsive siblings.
+
+Do not turn this into another product redesign or architecture pass.
+
+### V3 — creator review
+
+Produce a compact paired review artifact: approved reference beside current production render for the required phone/desktop surfaces.
+
+Visual PASS requires Carlo's explicit acceptance unless Carlo explicitly delegates acceptance authority.
+
+Only after V3 acceptance may final gallery baselines be regenerated/approved.
+
+## 4. Existing functional architecture to preserve
 
 ### A. Shared foundation
-- reconcile shell/navigation to frozen architecture;
-- use the existing sage/oxide token/type system; do not reinterpret older “Night Navy & Amber” prose as a re-theme;
-- establish responsive working-surface/immersive-background pattern from `FINAL_DECISIONS.md`;
-- consolidate duplicate/zombie primitives as they are touched;
-- preserve intermediate widths, keyboard, touch, safe areas, reduced motion.
+- five stable destinations and global Search/SOS;
+- use the existing sage/oxide token/type system;
+- responsive working-surface/immersive-background pattern;
+- intermediate widths, keyboard, touch, safe areas, reduced motion.
 
 ### B. Canonical semantic projection
-- retain researched facts/provenance as truth;
-- add only the relation metadata needed for canonical Guide knowledge modules to point to day/place/event IDs;
+- researched facts/provenance remain truth;
+- relation metadata links canonical Guide knowledge modules to day/place/event IDs;
 - one canonical object/fact, many projections;
 - no runtime-model guessing for relevance.
 
@@ -125,7 +173,7 @@ Work in dependency-safe vertical slices. Keep the site buildable after each slic
 
 ### H. Split
 - do not rewrite the financial engine unnecessarily;
-- **Recent Expenses + Add Expense are primary**; older balance-first D6-41 wording is superseded;
+- **Recent Expenses + Add Expense are primary**;
 - four-question add flow: payer / purpose / amount / participants;
 - make split method visible on every row: Even / Exact / Shares / %;
 - preserve per-expense participant sets, validation, currency, payments, undo/search/filter behavior;
@@ -143,7 +191,7 @@ Work in dependency-safe vertical slices. Keep the site buildable after each slic
 ### J. SOS
 - keep intentionally simple;
 - quiet always-available control;
-- open a compact sheet with verified emergency numbers and useful links;
+- compact sheet with verified emergency numbers and useful links;
 - preserve offline baked-in numbers, advisory behavior, and accessible focus handling;
 - no proactive triage, responder orchestration, or help-center workflow.
 
@@ -154,33 +202,39 @@ Work in dependency-safe vertical slices. Keep the site buildable after each slic
 - no blank map, no dishonest live status.
 
 ### L. Retirement/convergence
-- remove Story Mode dependency-safely after moving any neutral consumers off Story payload;
-- retire obsolete navigation/Tools/Trip Kit/voting/shared-readiness lineage;
-- update component registry and tests as components genuinely change;
-- do not keep two generations alive indefinitely.
+- keep already-retired Story Mode/navigation/Tools/Trip Kit/voting/shared-readiness lineage retired;
+- do not resurrect obsolete components just to imitate a mockup;
+- update registry/tests only as components genuinely change.
 
-## 4. Mockup discipline
+## 5. Mockup discipline — composition versus truth
 
-Open `MOCKUP_MANIFEST.json` before any visual reference.
+The approved raster mockups are not literal data fixtures. Use them as visual composition targets.
 
-The raw generated mockup boards are deliberately not part of the implementation package because they contain known hallucinated content. The included SVGs are sanitized redraws that carry only approved composition signals.
+Preserve where approved:
+- hero/media prominence;
+- spatial organization;
+- hierarchy;
+- density;
+- navigation treatment;
+- typography relationships;
+- desktop/mobile sibling character;
+- meaningful imagery/icon roles.
 
-Never infer or add:
+Never copy unsupported:
 - fake data;
-- fake buttons;
 - fake people;
-- unapproved tabs/categories;
+- invented tabs/categories;
 - ratings/reviews;
-- live traffic/ETA;
+- live traffic/ETA/open-now state;
 - invented collaboration;
-- colors/fonts that conflict with real tokens.
+- controls/features not in product authority.
 
-If uncertain whether a visual element is real, search the repository. If no implementation/approved D6 contract exists, omit it.
+If an unsupported detail occupies a visually important place, replace it with the correct canonical WayPoint object or leave the region structurally honest; do not redesign the entire screen around its absence without evidence that the composition cannot work.
 
-## 5. Verification
+## 6. Verification
 
-For each vertical slice:
-- test phone + intermediate/tablet + desktop;
+Functional verification remains mandatory:
+- phone + intermediate/tablet + desktop;
 - light + dark;
 - keyboard + touch/mouse;
 - text enlargement;
@@ -190,24 +244,36 @@ For each vertical slice:
 - no console errors;
 - no factual-content mutation.
 
-Final acceptance is `ACCEPTANCE_MATRIX.md`.
+But functional green is not visual green.
+
+Final acceptance is `ACCEPTANCE_MATRIX.md` + `VISUAL_FIDELITY_GATE.md`.
 
 Use South Korea as the primary visual/functional fixture and Denmark as the adversarial generalization fixture.
 
-## 6. Delivery behavior
+## 7. Baseline rule
 
-Do the work, do not stop to ask the user to restate decisions already recorded.
+Screenshot baselines are regression locks, not approval.
 
-Stop only for:
-- an actual contradiction between binding authorities that remains unresolved after applying `FINAL_DECISIONS.md`;
+Do **not** regenerate/approve final gallery baselines while visual acceptance is blocked or failed. A stable screenshot of the wrong composition is still wrong.
+
+## 8. Delivery behavior
+
+Do not ask the user to restate settled product decisions.
+
+Stop for:
+- `VISUAL_REFERENCE_MISSING` before visual work;
+- an actual contradiction between binding authorities that remains unresolved after `FINAL_DECISIONS.md`;
 - a destructive migration with no safe compatibility path;
 - a genuinely new product decision not already covered.
 
-Otherwise choose the safest implementation consistent with authority, document the choice briefly, test it, and continue.
+Otherwise make the smallest correction consistent with the approved design, test it, and continue within the current checkpoint.
 
-At completion, provide:
-- PR(s) / commit range;
-- concise migration summary;
-- removed obsolete features/components;
-- acceptance-matrix result;
+At completion of V1, report the two canary screenshots and fidelity findings before expanding scope.
+
+At completion of the full program, provide:
+- PR/commit range;
+- retained D7 engineering versus changed visual composition;
+- acceptance-matrix functional result;
+- visual-fidelity result;
+- removed obsolete features/components only if changed;
 - any remaining known risks before the October trip.
