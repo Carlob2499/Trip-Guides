@@ -70,15 +70,21 @@ export function initWorkbench(root) {
     try { mapData = dataEl ? JSON.parse(dataEl.textContent || "{}") : null; } catch (_) { mapData = null; }
   }
   function osmUrl(pins) {
-    if (!pins.length) return null;
-    var lats = pins.map(function (pin) { return pin.lat; });
-    var lngs = pins.map(function (pin) { return pin.lng; });
+    // Coordinates are numbers or nothing, and the embed URL is built from those numbers
+    // through encoded parts — never from a string read back out of the page's JSON block.
+    var pts = pins
+      .map(function (pin) { return { lat: Number(pin.lat), lng: Number(pin.lng) }; })
+      .filter(function (p) { return isFinite(p.lat) && isFinite(p.lng); });
+    if (!pts.length) return null;
+    var lats = pts.map(function (p) { return p.lat; });
+    var lngs = pts.map(function (p) { return p.lng; });
     var minLat = Math.min.apply(Math, lats), maxLat = Math.max.apply(Math, lats);
     var minLng = Math.min.apply(Math, lngs), maxLng = Math.max.apply(Math, lngs);
     var latPad = Math.max(.006, (maxLat - minLat) * .18);
     var lngPad = Math.max(.008, (maxLng - minLng) * .18);
-    var bbox = [minLng - lngPad, minLat - latPad, maxLng + lngPad, maxLat + latPad].join("%2C");
-    return "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox + "&layer=mapnik&marker=" + pins[0].lat + "%2C" + pins[0].lng;
+    var part = function (n) { return encodeURIComponent(String(n)); };
+    var bbox = [minLng - lngPad, minLat - latPad, maxLng + lngPad, maxLat + latPad].map(part).join("%2C");
+    return "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox + "&layer=mapnik&marker=" + part(pts[0].lat) + "%2C" + part(pts[0].lng);
   }
   function setOsmPins(pins) {
     if (!mapFrame) return;

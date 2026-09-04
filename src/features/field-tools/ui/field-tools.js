@@ -13,7 +13,7 @@
 // converter needs the rate live-data already applied, since this module loads after it.
 import { getLastRate } from "../../live-data/index.js";
 import { convertRate, decodeStops, encodeStops } from "../model/field-math";
-import { trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts/util.js";
+import { esc, trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts/util.js";
 
 (function () {
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
@@ -161,8 +161,8 @@ import { trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts
       if (res.state === "empty") { out.textContent = "Type an amount"; return; }
       // tg:rate is USD → local (1 USD = rate local), matching the pill.
       out.innerHTML =
-        "<b>$" + amount.toLocaleString() + "</b> ≈ " + res.usdToLocal.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " " + code +
-        "<br><b>" + amount.toLocaleString() + " " + code + "</b> ≈ $" + res.localToUsd.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        "<b>$" + amount.toLocaleString() + "</b> ≈ " + res.usdToLocal.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " " + esc(code) +
+        "<br><b>" + amount.toLocaleString() + " " + esc(code) + "</b> ≈ $" + res.localToUsd.toLocaleString(undefined, { maximumFractionDigits: 2 });
     }
     inp.addEventListener("input", render);
     // Registered here, not above, for two reasons: `render` is block-scoped to this `if`

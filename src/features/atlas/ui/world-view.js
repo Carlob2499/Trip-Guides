@@ -50,6 +50,13 @@ export function initAtlasWorld(root = document) {
   if (!guides.length) return;
 
   const base = (document.body.dataset.base || "").replace(/\/$/, "");
+  /* Everything read back out of the page — the guides JSON block included — is treated as
+     text a stranger could have written (CodeQL js/xss-through-dom), so nothing from it reaches
+     an href, src or innerHTML as a raw string. A guide's page IS base/guides/<slug>/, so the
+     link is rebuilt from the encoded slug rather than trusted; an image URL is re-encoded
+     as a whole (decode then encode, so an already-encoded Commons path is not encoded twice). */
+  const guideHref = (guide) => `${base}/guides/${encodeURIComponent(String(guide.slug || ""))}/`;
+  const safeImageUrl = (url) => { try { return url ? encodeURI(decodeURI(String(url))) : null; } catch { return null; } };
   const map = document.createElement("atlas-map");
   host.querySelector("[data-atlas-map-slot]")?.appendChild(map);
   map.guides = guides.map((guide) => ({
@@ -162,8 +169,8 @@ export function initAtlasWorld(root = document) {
         const stamp = guide.stamp ? escapeHtml(guide.stamp) + (guide.status === "past" ? " ✓" : "") : "—";
         // Sheet 01 leads the register and takes the accent — the prototype marks the top of
         // the index, not the trip's status; status is the RECORD rail's job on the right.
-        return `<li><button type="button" data-fly="${guide.slug}"${guide.ordinal === 1 ? " data-lead" : ""}>` +
-          `<span class="ix-n">${num}</span><span class="ix-name">${escapeHtml(guide.name)}</span>` +
+        return `<li><button type="button" data-fly="${escapeHtml(guide.slug)}"${guide.ordinal === 1 ? " data-lead" : ""}>` +
+          `<span class="ix-n">${escapeHtml(num)}</span><span class="ix-name">${escapeHtml(guide.name)}</span>` +
           `<span class="ix-stamp">${stamp}</span></button></li>`;
       })
       .join("");
@@ -179,10 +186,10 @@ export function initAtlasWorld(root = document) {
       .map((guide) => {
         const label = recordLabel(guide);
         const tone = guide.isNext ? "next" : guide.status;
-        return `<li><button type="button" data-fly="${guide.slug}" data-open="${guide.href}" data-tone="${tone}">` +
+        return `<li><button type="button" data-fly="${escapeHtml(guide.slug)}" data-open="${escapeHtml(guideHref(guide))}" data-tone="${escapeHtml(tone)}">` +
           `<span class="rec-dot"></span>` +
           `<span class="rec-lines"><span class="rec-when">${guide.dates ? escapeHtml(guide.dates) : "Dates not set"}</span>` +
-          `<span class="rec-what">${escapeHtml(guide.name)}${label ? ` · ${label}` : ""}</span></span>` +
+          `<span class="rec-what">${escapeHtml(guide.name)}${label ? ` · ${escapeHtml(label)}` : ""}</span></span>` +
           `</button></li>`;
       })
       .join("");
@@ -215,7 +222,7 @@ export function initAtlasWorld(root = document) {
   const flySlot = root.querySelector("[data-atlas-menusheet-fly]");
   if (flySlot) {
     flySlot.innerHTML = guides
-      .map((guide) => `<button type="button" data-fly="${guide.slug}">${guide.ordinal != null ? String(guide.ordinal).padStart(2, "0") : "—"} · ${escapeHtml(guide.name)}</button>`)
+      .map((guide) => `<button type="button" data-fly="${escapeHtml(guide.slug)}">${guide.ordinal != null ? escapeHtml(String(guide.ordinal).padStart(2, "0")) : "—"} · ${escapeHtml(guide.name)}</button>`)
       .join("");
     flySlot.querySelectorAll("[data-fly]").forEach((btn) => {
       btn.addEventListener("click", () => { map.flyTo(btn.dataset.fly, reduced ? 0 : 1100); closeMenu(); });
@@ -254,17 +261,17 @@ export function initAtlasWorld(root = document) {
   const pingThumb = root.querySelector("[data-atlas-pingsheet-thumb]");
   const STATUS_LABEL_PING = { past: "SURVEYED", ongoing: "ON THIS TRIP NOW", upcoming: "FILED", undated: "" };
   function showPingSheet(guide) {
-    if (!pingSheet) { window.location.href = guide.href; return; }
+    if (!pingSheet) { window.location.href = guideHref(guide); return; }
     if (pingKicker) pingKicker.textContent = `${guide.cc || ""} · ${guide.ordinal != null ? String(guide.ordinal).padStart(2, "0") : "—"}`;
     if (pingTitle) pingTitle.textContent = guide.name;
     if (pingMeta) pingMeta.textContent = [STATUS_LABEL_PING[guide.status], guide.tz ? localClockLabel(guide.tz, new Date()) : null].filter(Boolean).join(" · ");
-    if (pingOpen) pingOpen.href = guide.href;
+    if (pingOpen) pingOpen.href = guideHref(guide);
     /* The cover, at the size it is actually drawn. atWidth/srcsetFor are the same helpers the
        table rows use, so a Commons file is requested resized rather than pulled full-size — a
        64px thumbnail must not fetch a 258 KB original. No cover means no frame at all: an
        honest blank beats a grey placeholder pretending to be a photo. */
     if (pingThumb) {
-      const src = atWidth(guide.coverImg, 64);
+      const src = safeImageUrl(atWidth(guide.coverImg, 64));
       pingThumb.hidden = !src;
       if (src) {
         pingThumb.src = src;
@@ -316,7 +323,7 @@ export function initAtlasWorld(root = document) {
       // Desktop opens the guide directly (README "Clicking a pin"), so the selection it
       // records is the one Back will restore.
       markSelected(slug);
-      window.location.href = guide.href;
+      window.location.href = guideHref(guide);
       return;
     }
     markSelected(null);
@@ -359,7 +366,7 @@ export function initAtlasWorld(root = document) {
        same cover and the only one that never did. */
     const el = document.createElement("a");
     el.className = "atlas-pincard";
-    el.href = guide.href;
+    el.href = guideHref(guide);
     el.style.width = `${CARD_W}px`;
     // The credit chip sits on the bottom edge of the photo, so it needs the photo's height —
     // published from here, where the width it derives from actually lives. Hard-coding the
