@@ -1,109 +1,296 @@
 # Waypoint Motion Doctrine
 
-Status: **CURRENT SUBORDINATE DESIGN SPEC**  
-Authority: `docs/reference/design-system.md`.
+Status: **CURRENT SUBORDINATE DESIGN SPEC — D7**  
+Authority: `docs/reference/design-system.md`.  
+Last reconciled: 2026-09-04.
 
-This document owns motion implementation doctrine. It does not own product information
-architecture, visual identity, or historical redesign decisions.
+Motion makes Waypoint feel like one connected spatial system.
 
-## 1. Purpose
+> **Everything should feel physically connected, but nothing should make the traveler wait for the animation.**
 
-Motion must communicate at least one of:
+Motion is allowed only when it communicates:
 - spatial continuity;
 - hierarchy/parent-child continuity;
-- direct manipulation/gesture feedback;
-- a true change of state;
-- live state whose movement itself carries meaning.
+- direct manipulation;
+- true state change;
+- geographic arrival/context;
+- live state where movement itself carries meaning.
 
-If removing an animation does not reduce understanding, orientation, or useful feedback, it is
-probably decorative and should be removed.
+If removing an animation does not reduce understanding, orientation, useful feedback, or an
+explicitly approved identity moment, remove it.
 
-## 2. Routine motion
+---
 
-Routine UI should feel responsive rather than theatrical.
+## 1. Timing roles
 
-- input response is immediate;
-- common transitions are generally ~150–350ms;
-- motion is interruptible;
-- transform/opacity are preferred on animated paths;
-- scrolling remains native;
-- overlays and navigation never block urgent field actions;
-- no component invents private timing/easing values when a shared role exists.
+Use shared roles. Components do not invent private timing values.
 
-Current primary owners include `scroll-motion.css` and `transitions.css`; feature-specific
-gesture owners may exist where direct manipulation requires them.
+### Immediate feedback
+**80–140ms**
+- press/focus acknowledgement;
+- icon fill/morph acknowledgement;
+- selection highlight;
+- tiny opacity/state feedback.
 
-## 3. Flagship spatial motion
+The application state should update immediately; this role confirms it.
 
-Waypoint may use a small number of memorable transitions where geography or object continuity is
-the product idea—for example atlas/map/destination continuity or a place card becoming its
-detail view.
+### Routine transition
+**140–240ms**
+- filters;
+- tabs;
+- search category changes;
+- save/unsave;
+- small menu/sheet changes;
+- day selector changes;
+- simple control reveal.
 
-Flagship motion must:
-- explain orientation;
-- avoid delaying access to operational information;
-- be cancellable/interruptible;
-- respect performance/battery constraints;
-- have a complete reduced-motion state.
+These should feel nearly instantaneous.
 
-No effect earns flagship status merely because it looks premium.
+### Spatial/object transition
+**240–420ms**
+- card expansion;
+- card stack → laid-out reflow;
+- pane reorganization;
+- place card → detail;
+- itinerary item → map selection;
+- search result → contextual detail;
+- sheet → focused state.
 
-## 4. Gestures
+Use enough time to preserve object continuity, never enough to feel ceremonial.
 
-Gesture-driven motion is direct manipulation, not ambient animation.
+### Scene transition
+**520–900ms**
+- Atlas → destination;
+- major Guide/Trip scene recomposition;
+- large map camera/pane choreography;
+- post-trip/editorial scene shift.
 
-- content follows the finger/pointer while the gesture owns it;
-- vertical scrolling wins when intent is vertical;
-- gesture thresholds prevent accidental navigation;
-- edge/rubber-band behavior never traps the traveler;
-- every gesture-only convenience has an obvious non-gesture path;
-- reduced-motion may remove tracking animation while preserving the action.
+Operational controls remain available as soon as practical.
 
-Existing swipe, sheet-drag, scrubber, or yielding-chrome implementations are **shipped
-behavior, not constitutional law**. D6 may retain, simplify, scope, or retire them.
+### First-entry arrival
+**800–1500ms total choreography**
+Only for first entry to a destination/Guide or an equivalent flagship geographic moment.
+The content may begin appearing before the final flourish finishes.
 
-## 5. Continuous motion
+Repeat entry uses a shorter scene transition, not the full arrival.
 
-Continuous motion is allowed only when movement conveys live meaning or an explicitly approved
-identity moment.
+---
 
-Examples that may qualify:
-- a genuinely live progress indicator;
-- time/state visualization where motion is the information.
+## 2. Easing
 
-Ambient looping merely to make a surface feel alive does not qualify by default. Living covers,
-Painted Atlas drift, idle globe movement, and similar existing behaviors are D6 review items.
+Default motion should feel smooth and deliberate, not bouncy.
 
-## 6. Reduced motion
+Preferred shape:
+- quick acquisition;
+- soft deceleration;
+- no overshoot unless direct manipulation physically warrants it.
 
-`prefers-reduced-motion` must produce a complete, immediately understandable state.
+Use shared CSS/GSAP easing tokens.
+Avoid playful spring bounce on operational UI.
+
+---
+
+## 3. Shared-object continuity
+
+When the same object exists before and after a transition, animate the object rather than replacing
+it with an unrelated fade whenever practical.
+
+Examples:
+- a place card becomes a detail pane;
+- an itinerary card becomes the selected map object;
+- a stacked recommendation card moves into a planned day;
+- a Search result opens into Guide/place context;
+- a destination card becomes the arrival/Guide hero.
+
+Rules:
+- preserve source/destination identity;
+- do not randomize order during reflow;
+- keep labels/images stable long enough to track;
+- avoid simultaneous unrelated motion that competes with the main object.
+
+---
+
+## 4. Card choreography
+
+Card movement is a Waypoint signature.
+
+Allowed:
+- stack;
+- fan;
+- offset;
+- compress;
+- unfold;
+- spread;
+- merge into chronology;
+- move between spatial and list states.
+
+Card transitions must:
+- maintain readable final geometry;
+- preserve keyboard/focus state;
+- avoid layout thrash;
+- use transform/opacity where practical;
+- keep the selected card visually trackable;
+- not require animation completion for state correctness.
+
+On mobile, vertical scroll owns the gesture unless a clearly horizontal deck/day scrubber owns it.
+
+---
+
+## 5. Fluid workspace transitions
+
+Desktop pane movement may be richer, but it must remain predictable.
+
+When active focus changes:
+- the selected object moves/expands;
+- surrounding panes yield/reflow;
+- persistent orientation remains anchored;
+- pinned comparison objects remain stable;
+- the map camera and detail pane should not fight each other.
+
+Single-focus is the default. Do not animate a dozen panels at once.
+
+---
+
+## 6. Scroll
+
+Native scrolling is never hijacked.
+
+Allowed:
+- sticky/pinned sections where the content relationship benefits;
+- native horizontal card scrollers;
+- scroll-linked reveal where the next composition logically follows;
+- restrained map/hero choreography for flagship sequences.
+
+Rejected:
+- wheel remapping used only for spectacle;
+- scroll traps;
+- long mandatory parallax;
+- continuous expensive layout updates;
+- motion that makes the page feel slower than native scrolling.
+
+---
+
+## 7. Map motion
+
+Map camera motion must follow user expectation.
+
+Routine:
+- selected marker focus;
+- route fit;
+- nearby area adjustment.
+
+Keep it short and interruptible.
+
+Flagship:
+- Atlas/globe → country/city continuity;
+- destination arrival;
+- major itinerary overview.
+
+Map motion never hides urgent operational information.
+
+---
+
+## 8. Microinteractions
+
+Default is refined with selective expressive moments.
+
+Use:
+- subtle scale/elevation;
+- route-line draw;
+- icon morph/fill;
+- selection continuity;
+- mobile haptic feedback where platform-appropriate;
+- clear save/move/confirm feedback.
+
+Expressive reactions are allowed only when they reinforce meaning.
+Waypoint must not feel toy-like.
+
+---
+
+## 9. Empty/loading/error motion
+
+Loading skeletons preserve final geometry.
+Do not animate layout into place from unrelated shapes.
+
+Empty states may use a short destination-aware reveal.
+
+Error/offline states prioritize comprehension over motion.
+
+SOS uses minimal motion:
+- immediate sheet/action response;
+- no cinematic transitions;
+- no decorative loops.
+
+---
+
+## 10. Continuous/ambient motion
+
+Continuous motion is exceptional.
+
+Allowed only when:
+- it represents live progress/state;
+- it is an explicitly approved destination/Atlas identity moment;
+- battery/performance impact is bounded.
+
+Idle globe drift, living-cover motion, animated backgrounds, and similar effects are not default.
+If retained, they must stop when offscreen/backgrounded and have a reduced-motion/static equivalent.
+
+---
+
+## 11. Reduced motion
+
+`prefers-reduced-motion` is a complete product state.
 
 - no information is animation-only;
-- no layout depends on an animation finishing;
-- important state appears in its final form;
-- direct actions remain available;
-- reduced motion is tested, not assumed.
+- no layout depends on animation finishing;
+- shared-object transitions become immediate/short fades or direct state swaps;
+- arrival sequences resolve to the final destination state quickly;
+- parallax/continuous motion stops;
+- all actions remain available;
+- reduced motion is visually intentional, not broken.
 
-## 7. Performance and ownership
+---
 
-- Prefer native platform capabilities and CSS/View Transitions where they meet the need.
-- GSAP remains the existing orchestration dependency; adding another motion library requires a
-  constitution-level reason.
-- Never animate expensive layout properties continuously on scroll/pointer paths.
-- One owner per animated property per element.
-- Hidden/background tabs must recover to the correct current state.
-- Motion must not compromise offline use or first useful paint.
+## 12. Performance
 
-## 8. Verification
+Prefer:
+- CSS transform/opacity;
+- View Transitions where appropriate;
+- existing GSAP only when orchestration materially requires it;
+- one owner per animated property per element.
 
-For any meaningful motion change, verify:
-- phone and desktop/intermediate compositions;
-- light/dark;
+Avoid:
+- continuous layout-property animation;
+- JS-driven scroll loops when CSS/native behavior works;
+- new motion dependencies without a constitution-level reason.
+
+Hidden/background tabs must recover to the correct current state.
+
+Motion may never compromise:
+- first useful paint;
+- low-bandwidth mode;
+- battery;
+- offline state;
+- urgent field actions.
+
+---
+
+## 13. Verification
+
+For every meaningful motion change verify:
+- mobile;
+- intermediate/tablet;
+- desktop;
+- touch;
+- mouse;
+- keyboard;
+- light;
+- destination-aware dark;
 - reduced motion;
 - interruption mid-transition;
-- keyboard/touch paths;
+- rapid repeated input;
+- back/forward navigation;
+- no content left hidden when motion JS fails;
 - no console errors;
-- no content left hidden if JS/motion initialization fails.
-
-Historical phase narratives, retired intros, old Lighthouse notes, previous timing experiments,
-and visual-overhaul ledgers belong in Git history or archive material, not in this live doctrine.
+- no scroll trap;
+- no material layout shift after the final state.
