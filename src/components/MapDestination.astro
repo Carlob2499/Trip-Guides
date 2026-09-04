@@ -1,0 +1,88 @@
+---
+/* Map — "what is where?" (design-system.md D6-36, D6-51, FINAL_DECISIONS F7).
+
+   One real map owning nearly the whole viewport on a phone, a large map with a contextual
+   inspector beside it on desktop. Google Maps when configured and online; the OpenStreetMap
+   embed is the map until Google has actually initialised, and stays if it never does. Every
+   pin is a canonical place the guide already carries coordinates for — sights, venues, the
+   orientation map's own points and each day's stops — nothing is added to fill space.
+
+   The inspector/sheet lists the same pins as large rows grouped by what the guide calls
+   them; selecting a row focuses the map and selecting a pin highlights the row. Live routing
+   and traffic are the map app's: every row hands off with the traveler's own Get-there links. */
+import TransitLinks from "./TransitLinks.astro";
+import Icon from "./Icon.astro";
+import { jsonEmbed } from "../lib/json-embed";
+interface Pin { id: string; name: string; lat: number; lng: number; local: string | null; kind: string; cat: string | null; placeId: string | null; dayIdx?: number; time?: string | null }
+interface Props {
+  center: { lat: number; lng: number } | null;
+  span: number | null;
+  pins: Pin[];
+  country: string;
+  dayDates: string[];
+}
+const { center, span, pins, country, dayDates } = Astro.props;
+const bbox = (c: { lat: number; lng: number }, s: number | null) => {
+  const sp = s || 0.05;
+  return [c.lng - sp, c.lat - sp * 0.6, c.lng + sp, c.lat + sp * 0.6].join("%2C");
+};
+/* Group rows by the guide's own category (a day stop's category is its day). */
+const groups = new Map<string, Pin[]>();
+for (const p of pins) {
+  if (p.kind === "center") continue;
+  const key = p.dayIdx != null ? `Day ${p.dayIdx + 1} · ${dayDates[p.dayIdx] ?? ""}` : (p.cat || "Places");
+  groups.set(key, [...(groups.get(key) ?? []), p]);
+}
+const payload = center ? jsonEmbed({ center, span, pins, lens: "all", dayDates }) : null;
+const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shopping", point: "Place" };
+---
+<div class="mapdest" data-mapdest>
+  {center ? (
+    <div class="mapdest-bench">
+      <div class="mapdest-map itin-map" data-itin-map data-map-lens="all">
+        <script type="application/json" is:inline data-map-data set:html={payload} />
+        <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of every place in this guide"
+          data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center, span)}&layer=mapnik&marker=${center.lat}%2C${center.lng}`}></iframe>
+        <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the written places below still work.</p>
+      </div>
+      {/* Mobile: a contextual bottom sheet with the selected place; collapsed it is a handle
+          listing everything. Desktop: the inspector pane beside the map. Same DOM. */}
+      <aside class="mapdest-sheet" data-map-sheet aria-label="Places on this map">
+        <div class="mapdest-sheet-grip" aria-hidden="true"></div>
+        <div class="mapdest-selected" data-map-selected hidden>
+          {/* The place's own repository image, when its guide card carries one (map-dest.js reads
+              the card); never a fetched or generated picture. */}
+          <img class="mapdest-sel-thumb" data-map-sel-thumb alt="" hidden loading="lazy" decoding="async" onerror="this.hidden=true" />
+          <p class="mapdest-sel-kind" data-map-sel-kind></p>
+          <h3 class="mapdest-sel-name" data-map-sel-name></h3>
+          <p class="mapdest-sel-local" data-map-sel-local hidden lang={country === "South Korea" ? "ko" : undefined}></p>
+          <p class="mapdest-sel-meta" data-map-sel-meta hidden></p>
+          <div class="mapdest-sel-actions" data-map-sel-actions></div>
+          <a class="mapdest-sel-details" data-map-sel-details href="#" hidden>Details in the guide</a>
+          <button class="mapdest-sel-close" type="button" data-map-sel-close aria-label="Clear selection">✕</button>
+        </div>
+        <p class="mapdest-peek"><span><span class="mapdest-peek-n">{pins.filter((p) => p.kind !== "center").length}</span> verified places</span><span>Pull up for the list</span></p>
+        <div class="mapdest-list" data-map-list>
+          {[...groups.entries()].map(([label, rows]) => (
+            <section class="mapdest-group">
+              <h3 class="mapdest-group-title">{label} <span class="mapdest-group-n">{rows.length}</span></h3>
+              <ul class="mapdest-rows">
+                {rows.map((p) => (
+                  <li class="mapdest-row" data-map-row={p.id} data-lat={p.lat} data-lng={p.lng}>
+                    <button class="mapdest-row-btn" type="button" data-map-focus={p.id}>
+                      <span class="mapdest-row-name">{p.name}</span>
+                      <span class="mapdest-row-meta">{p.time ? `${p.time} · ` : ""}{KIND_LABEL[p.kind] ?? p.kind}{p.local ? ` · ${p.local}` : ""}</span>
+                    </button>
+                    <span class="mapdest-row-links"><TransitLinks lat={p.lat} lng={p.lng} name={p.name} country={country} placeId={p.placeId} /></span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </aside>
+    </div>
+  ) : (
+    <p class="mapdest-none"><Icon name="shield" size={16} /> No place in this guide carries verified coordinates yet, so there is no map to draw. Written directions live in the Guide.</p>
+  )}
+</div>

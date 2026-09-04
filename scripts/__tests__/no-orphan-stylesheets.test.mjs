@@ -35,7 +35,7 @@ describe("no stylesheet is orphaned from the build", () => {
      The first version compared basenames, and 11 of this repo's 52 sheets share one — nine
      `styles.css` in feature silos, two `preview-chrome.css`. Any single import of a
      `styles.css` therefore vouched for all nine, so the gate could not fail for roughly a
-     fifth of the corpus: mutation-tested, deleting trip-kit's import still reported zero
+     fifth of the corpus: mutation-tested, deleting one feature's import still reported zero
      orphans. Resolving the specifier is what makes the answer about a FILE rather than a name. */
   const imported = new Set();
   for (const f of carriers) {
@@ -81,10 +81,12 @@ describe("no stylesheet is orphaned from the build", () => {
     expect(unaccounted, "a sheet sharing a basename is not individually imported").toEqual([]);
   });
 
-  it("⌁ the Tools station's own stylesheet is imported by the guide layout", () => {
-    // The station lives inside the guide, so the layout is the only carrier it can have.
+  it("⌁ the destinations' own stylesheets are imported by the guide layout", () => {
+    // The five destinations live inside the guide, so the layout is the only carrier.
     const layout = strip(readFileSync("src/layouts/GuideLayout.astro", "utf8"));
-    expect(layout).toMatch(/import\s+["']\.\.\/styles\/tools\.css["']/);
+    for (const sheet of ["chrome", "trip", "itinerary", "guide-dest"]) {
+      expect(layout).toMatch(new RegExp(`import\\s+["']\\.\\./styles/${sheet}\\.css["']`));
+    }
   });
 
   it("⌁ every allowance still names a file that exists", () => {

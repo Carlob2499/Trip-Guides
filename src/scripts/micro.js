@@ -13,7 +13,7 @@
 import { reducedMotion, tapHaptic } from "./util.js";
 
 (function () {
-  var HAPTIC = ".gtab,.dchip,.topbar-btn,.next-cta,.sos-btn,.sc-add-btn,.sc-add-expense-btn,.share-copy-btn";
+  var HAPTIC = ".botslot,.destnav-btn,.dchip,.topbar-btn,.next-cta,.sos-btn,.sc-add-btn,.sc-add-expense-btn,.share-copy-btn";
   document.addEventListener("pointerdown", function (e) {
     if (e.pointerType !== "touch") return;
     var t = e.target;

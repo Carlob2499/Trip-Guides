@@ -133,7 +133,16 @@
     "body": "<p>More accessible than it looks from the street. The mechanics that make it easy:</p><ul><li><b>Kiosks</b> — most chain restaurants and many AYCE BBQ spots have self-ordering touchscreens. Tap the flag icon for English, then browse photo menus and add items. No conversation. At AYCE BBQ kiosks also handle your meat refill orders during the meal.</li><li><b>Picture menus</b> — most mid-range sit-down restaurants have laminated picture menus or a QR code that opens photos. Point at what you want, hold up fingers for quantity.</li><li><b>Papago camera</b> — for text-only menus, open Papago, tap the camera icon, and point at the page. It overlays live Korean-to-English translation without you typing anything.</li><li><b>Walk in and sit</b> — if a table is open, take it. A server will come. Most casual Korean restaurants don't seat you formally. Hold up fingers to show group size if asked.</li><li><b>Banchan is automatic and free</b> — you'll receive a set of small side dishes (kimchi, egg rolls, salads) without ordering them. Always free, always refillable, always included. Don't order them or pay for them separately.</li><li><b>Call button</b> — most Korean restaurants have a button on the table to summon a server. Press it to order more or ask for the bill. If there isn't one, <i>yeogi-yo!</i> (여기요) gets attention — completely normal, not rude.</li><li><b>Paying</b> — walk up to the register when you're done. Bills are rarely brought to the table. Card is accepted almost everywhere; some market stalls are cash-only.</li><li><b>The phrase that handles most orders:</b> point at the menu and say <i>igeo juseyo</i> (이거 주세요 — this one, please).</li></ul><p><b>What to order beyond BBQ — the overlooked ones:</b></p><ul><li><b>Jjigae</b> (stew) — doenjang jjigae (fermented soybean), kimchi jjigae, or sundubu jjigae (silken tofu). Served boiling in a stone pot, {{fact:beyond-bbq-8-000-sundubu}}–12,000 (⚠ varies by venue), usually comes with rice and banchan. Available everywhere; good breakfast or recovery food after a long day.</li><li><b>Dolsot bibimbap</b> — rice and vegetables in a hot stone bowl with a raw egg that cooks on contact; crispy rice forms at the bottom. Mix everything together before eating. Safe, filling, {{fact:ordering-in-korean-12-000}}–15,000 (⚠ varies by venue).</li><li><b>Somaek</b> — the default way to drink in Korea: pour a shot of soju into a glass of beer and drink together. Every table at every chicken or pork spot does it. No special ordering needed — just ask for soju and beer.</li></ul>",
     "verified_on": "2026-06-28",
     "shelf_life": "default",
-    "source_url": "https://map.naver.com"
+    "source_url": "https://map.naver.com",
+    "module": {
+      "id": "ordering-in-restaurants",
+      "kind": "food",
+      "relates": {
+        "days": [
+          "Thu Jul 9"
+        ]
+      }
+    }
   },
   {
     "type": "prose",
@@ -143,7 +152,16 @@
     "body": "<p>Korea's restaurant booking landscape is divided: popular spots require reservations; most neighbourhood BBQ joints and street food stalls are walk-in only. Here's how to book, in order of convenience for foreign visitors.</p><p><b>Catch Table Global — the primary tool for foreigners</b><br/>Korea's dominant reservation platform now has an international version at <a href='https://www.catchtable.net' target='_blank' rel='noopener noreferrer'>catchtable.net</a> (search 'Catchtable' on the App Store). No Korean phone number required, accepts Visa/Mastercard/Amex, available in English, 8,000+ restaurants listed. Deposits are standard (typically {{fact:how-to-book-10-000}}–30,000 per person, deducted from the bill or refunded after your visit). In-demand KBBQ restaurants, omakase spots, and Michelin-listed venues use Catch Table almost exclusively. <b>Download before you leave.</b></p><p><b>Naver Map reservations — directly from the map</b><br/>When you search a restaurant on Naver Map and see a blue 예약 (reservation) button on the listing, you can book directly in the app. As of June 2026, Naver now accepts passport-based identity verification for foreign visitors — no Korean phone number needed. Most popular mid-range spots use it; confirmation can be instant or take up to a day.</p><p><b>Phone — for smaller neighbourhood places</b><br/>Some local restaurants take calls only. Most won't answer in English — ask your Airbnb host to call, or message through the restaurant's Naver/Kakao Map listing (many respond faster to a chat message than a call).</p><p><b>Walk-in reality check for this trip:</b> Neighbourhood BBQ joints, ramen counters, and market stalls are walk-in only. For the specific restaurants in this guide: <b>Ungteori Meats</b> now recommends booking via Catch Table — weekday lunch is the most reliable walk-in window; weekend evenings queue. <b>MUSSO</b> and <b>Chicken Baengi</b> are reliably walk-in. <b>Gobang Sikdang</b> in Daejeon should be called on weekends (042-863-2104). If you're set on a specific spot for a meaningful night, book it before you land.</p>",
     "verified_on": "2026-07-07",
     "shelf_life": "default",
-    "source_url": "https://www.catchtable.net"
+    "source_url": "https://www.catchtable.net",
+    "module": {
+      "id": "booking-restaurants",
+      "kind": "food",
+      "relates": {
+        "days": [
+          "Tue Jul 14"
+        ]
+      }
+    }
   },
   {
     "type": "venues",
@@ -562,7 +580,17 @@
     "body": "<p><b>The idea:</b> most of the load is gifts for other people (K-beauty, K-pop). So buy the heavy for-others stuff <b>last and nearest the airport</b>, keep everything else central and hands-free, and let tax refunds + bag storage do the carrying. Three rules:</p><ol><li><b>Bulk K-beauty on departure morning</b> — Olive Young Jonggak, across from the base → straight into checked bags or the <b>airport luggage courier</b> → VAT refund at ICN. You never carry a skincare haul through the July heat.</li><li><b>Use in-store tax refund + bag storage.</b> Olive Young Myeongdong Town knocks the ~10% VAT off at the register (passport out) and holds your bags so you shop hands-free.</li><li><b>Stay central and covered.</b> The Jongno–Insadong–Myeongdong core is walkable and underground-connected — good in a downpour or mid-30s heat. Only Stüssy needs a river crossing, folded into Tuesday.</li></ol><p><b>By day:</b></p><ul><li><b>Fri Jul 10 — esports, no detour.</b> <b>LoL Park</b> Riot store is at your base (Jonggak Exit 1); <b>T1 Base Camp</b> shop (Hongdae, 10:30–22:00) folds into that evening's raid night. Both merch stops happen where you already are.</li><li><b>Tue Jul 14 — the main run.</b> After the 10:30 Secret Garden, a <b>noon Apgujeong dash</b> (Line 3 Anguk→Apgujeong) for <b>Stüssy</b> + <b>Gentle Monster</b> + Kasina cafe lunch; buy and drop the bag, back central by ~15:00. Then <b>Myeongdong</b>: Olive Young flagship (K-beauty gifts, tax refund + bag storage), <b>Line Friends Square</b> and the <b>K-pop street</b>. Ends a short hop from <b>A Flower Blossom on the Rice</b> — your booked send-off dinner.</li><li><b>Wed Jul 15 — the bulk haul, then go.</b> Slow morning at Olive Young Jonggak for the big gift load → courier / checked bags → 6002 → VAT at ICN.</li></ul><p><b>K-pop stores — corrected:</b> <b>HYBE Insight</b> (the Yongsan museum) has <b>closed</b> — HYBE merch is pop-ups now, check the <a href='https://weverse.io'>Weverse Shop</a> the week before. <b>SMTOWN COEX Artium closed in 2020</b>; SM's store is now <b>KWANGYA@Seoul</b> in Seongsu (Ttukseom, Line 2; ~10:30–20:00) — a separate trip, or skip it for the central Myeongdong K-pop options.</p><p><b>VAT refund:</b> spend ≥{{fact:shopping-game-plan-15-000}} at a tax-free shop and show your passport for the instant discount, or claim the stamped receipts at the ICN departures kiosk before check-in.</p>",
     "verified_on": "2026-07-30",
     "shelf_life": "default",
-    "source_url": "https://english.visitseoul.net/taxrefund"
+    "source_url": "https://english.visitseoul.net/taxrefund",
+    "module": {
+      "id": "shopping-game-plan",
+      "kind": "howto",
+      "scope": "Seoul",
+      "relates": {
+        "days": [
+          "Tue Jul 14"
+        ]
+      }
+    }
   },
   {
     "type": "venues",
@@ -782,6 +810,15 @@
       "Olive Young: split purchases across 3–4 transactions in ₩100,000 increments — each qualifies independently for the refund counter",
       "Lotte Mart / large supermarkets (e.g. the Seoul Station branch): free boxes + tape at the exit — staff will pack snacks and groceries for the flight at no cost",
       "ICN Terminal 1: tax-refund kiosk in the departures level before security — bring all stamped receipts; refund issued as cash or card credit on the spot"
-    ]
+    ],
+    "module": {
+      "id": "tax-refund",
+      "kind": "practical",
+      "relates": {
+        "days": [
+          "Wed Jul 15"
+        ]
+      }
+    }
   }
 ]

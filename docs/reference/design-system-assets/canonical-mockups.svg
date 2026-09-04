@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2800" height="4100" viewBox="0 0 2800 4100" role="img" aria-labelledby="title desc">
+  <title id="title">Waypoint canonical feature mockups</title>
+  <desc id="desc">Supporting visual contract for the sole Waypoint Design Authority. It shows canonical composition for Atlas, Trip, Itinerary mobile and desktop, Map mobile and desktop, Guide, Split, Search, and SOS. It is not an independent design authority.</desc>
+  <metadata>
+    WAYPOINT CANONICAL FEATURE MOCKUPS — SUPPORTING FIGURE ONLY.
+    Governing authority: docs/reference/design-system.md.
+    If this figure conflicts with the Markdown authority, the Markdown authority wins.
+    Binding traits: hierarchy, relative scale, navigation form, panel relationships, responsive composition, hero prominence, density limits, map/sheet behavior, typography wrapping, and placement of key states/actions.
+    Illustrative only: exact photographs, copy, monetary amounts, times, map geometry, pin names, route labels, and decorative micro-detail.
+    Fable/Claude/Codex must not average this board with superseded D1–D7 experiments or component-gallery screenshots.
+  </metadata>
+  <defs>
+    <linearGradient id="photoSeoul" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2b3a31"/><stop offset=".5" stop-color="#8d5c42"/><stop offset="1" stop-color="#d8a870"/></linearGradient>
+    <linearGradient id="photoCity" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#304b4f"/><stop offset=".55" stop-color="#758f80"/><stop offset="1" stop-color="#d5b47f"/></linearGradient>
+    <linearGradient id="mapLight" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#cfd7c3"/><stop offset="1" stop-color="#eef0e5"/></linearGradient>
+    <linearGradient id="mapDark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#26312d"/><stop offset="1" stop-color="#171c1b"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="14" stdDeviation="22" flood-opacity=".16"/></filter>
+    <style>
+      .bg{fill:#d7ddd0}.paper{fill:#fbfcf6}.sunken{fill:#ced5c4}.ink{fill:#0f141a}.muted{fill:#58615d}.oxide{fill:#9c4421}.dark{fill:#171a19}.dark2{fill:#222826}.dark3{fill:#303833}.cream{fill:#f3f1e7}.amber{fill:#d49a55}.line{stroke:#aab2a4;stroke-width:2}.lineDark{stroke:#46514b;stroke-width:2}.route{fill:none;stroke:#9c4421;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}.route2{fill:none;stroke:#d49a55;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}.serif{font-family:Literata,Georgia,'Times New Roman',serif}.sans{font-family:'Atkinson Hyperlegible Next','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif}.h1{font-size:54px;font-weight:700}.h2{font-size:36px;font-weight:700}.h3{font-size:25px;font-weight:700}.body{font-size:21px}.small{font-size:17px}.micro{font-size:14px;letter-spacing:.08em}.white{fill:#fbfcf6}.label{font-size:18px;font-weight:700;letter-spacing:.08em}.frame{rx:38;filter:url(#shadow)}.phone{rx:58;stroke:#111614;stroke-width:14}.chip{rx:24}.card{rx:25}.round{rx:999}.pin{fill:#9c4421;stroke:#fbfcf6;stroke-width:5}.pinDark{fill:#d49a55;stroke:#171a19;stroke-width:5}.navText{font-size:17px;font-weight:700}.caption{font-size:16px}.rule{stroke:#9aa398;stroke-width:2}.faint{opacity:.55}
+    </style>
+  </defs>
+
+  <rect class="bg" width="2800" height="4100"/>
+  <text x="110" y="92" class="sans ink label">WAYPOINT · CANONICAL FEATURE MOCKUPS · SUPPORTING FIGURE</text>
+  <text x="110" y="148" class="serif ink h1">One visual contract for Fable 5.1 implementation</text>
+  <text x="110" y="195" class="sans muted body">Governed by docs/reference/design-system.md · hierarchy and composition are binding · exact sample content is illustrative.</text>
+
+  <!-- WAY-00 Atlas + desktop shell -->
+  <g id="WAY-00" transform="translate(90 255)">
+    <rect width="1280" height="690" class="dark frame"/>
+    <text x="45" y="62" class="sans amber label">WAY-00 · DESKTOP SHELL + ATLAS</text>
+    <rect x="45" y="90" width="1190" height="550" rx="30" fill="url(#mapDark)"/>
+    <path d="M120 420 C310 255 440 310 560 205 S835 210 1010 135" class="route2" opacity=".62"/>
+    <path d="M235 170 C340 225 390 330 510 360 S740 335 870 470 1110 500 1190 420" fill="none" stroke="#41544a" stroke-width="52" opacity=".7"/>
+    <circle cx="460" cy="300" r="13" class="pinDark"/><circle cx="765" cy="340" r="13" class="pinDark"/><circle cx="1040" cy="230" r="13" class="pinDark"/>
+    <g transform="translate(78 112)"><rect width="1110" height="66" class="dark2 card" opacity=".96"/><text x="24" y="42" class="serif white h3">Waypoint</text><text x="170" y="42" class="sans white navText">Atlas</text><text x="250" y="42" class="sans white navText">Trip</text><text x="320" y="42" class="sans white navText">Itinerary</text><text x="420" y="42" class="sans white navText">Map</text><text x="478" y="42" class="sans white navText">Guide</text><text x="548" y="42" class="sans white navText">Split</text><rect x="680" y="13" width="310" height="40" class="dark3 round"/><text x="700" y="39" class="sans white small">Search this trip or Atlas…</text><rect x="1010" y="13" width="74" height="40" class="oxide round"/><text x="1030" y="39" class="sans white navText">SOS</text></g>
+    <g transform="translate(92 465)"><rect width="390" height="142" class="dark2 card"/><text x="24" y="36" class="sans amber micro">NEXT TRIP</text><text x="24" y="77" class="serif white h2">South Korea</text><text x="24" y="109" class="sans white small">Seoul → Daejeon → Busan · Jul 8–15</text></g>
+    <text x="690" y="595" class="sans white body">Atlas is geography-first. Controls float; no flat admin sidebar.</text>
+  </g>
+
+  <!-- WAY-01 Trip lifecycle -->
+  <g id="WAY-01" transform="translate(1430 255)">
+    <rect width="1280" height="690" class="dark frame"/>
+    <text x="45" y="62" class="sans amber label">WAY-01 · TRIP · ACTIVE NOW + LIFECYCLE</text>
+    <rect x="45" y="92" width="1190" height="235" rx="28" fill="url(#photoSeoul)"/>
+    <rect x="45" y="92" width="1190" height="235" rx="28" fill="#111" opacity=".22"/>
+    <text x="78" y="148" class="sans amber micro">ACTIVE · SEOUL · DAY 3</text><text x="78" y="207" class="serif white h1">South Korea</text><text x="78" y="252" class="sans white body">What matters now, not the whole trip dossier.</text>
+    <g transform="translate(45 354)"><rect width="570" height="250" class="dark2 card"/><text x="24" y="38" class="sans amber micro">NOW</text><text x="24" y="82" class="serif white h2">Gyeongbokgung Palace</text><text x="24" y="116" class="sans white body">11:20 · inside palace grounds</text><line x1="24" y1="140" x2="540" y2="140" class="lineDark"/><text x="24" y="176" class="sans amber micro">NEXT</text><text x="24" y="210" class="sans white h3">Gwangjang Market</text><text x="24" y="238" class="sans white small">Leave by 12:05 · subway ≈18 min</text></g>
+    <g transform="translate(640 354)"><rect width="595" height="250" class="dark2 card"/><text x="24" y="38" class="sans amber micro">READINESS · CRITICAL ONLY</text><text x="24" y="82" class="sans white body">✓ T-money loaded</text><text x="24" y="118" class="sans white body">! Palace ticket closes 16:00</text><text x="24" y="154" class="sans white body">! Rain after 17:00</text><text x="24" y="199" class="sans amber small">7 more items →</text><text x="365" y="224" class="sans white small">No “Add to plan” on a finished trip.</text></g>
+    <g transform="translate(45 620)"><rect width="175" height="40" class="dark3 round"/><text x="72" y="27" class="sans white small">Pre-trip</text><rect x="235" width="175" height="40" class="oxide round"/><text x="282" y="27" class="sans white small">Active</text><rect x="425" width="175" height="40" class="dark3 round"/><text x="470" y="27" class="sans white small">Post-trip</text></g>
+  </g>
+
+  <!-- WAY-02 Itinerary mobile -->
+  <g id="WAY-02" transform="translate(90 1000)">
+    <rect width="1280" height="690" class="paper frame"/>
+    <text x="45" y="62" class="sans oxide label">WAY-02 · ITINERARY · MOBILE LIGHT</text>
+    <g transform="translate(55 88)"><rect width="410" height="560" class="paper phone"/><text x="30" y="55" class="sans muted micro">WED · JUL 10 · SEOUL</text><text x="30" y="98" class="serif ink h2">Palaces → market → Hongdae</text><line x1="54" y1="138" x2="54" y2="425" class="rule"/><circle cx="54" cy="164" r="10" class="oxide"/><text x="84" y="170" class="sans ink h3">09:30 · Gyeongbokgung</text><text x="84" y="202" class="sans muted small">Tickets · gate notes · route</text><circle cx="54" cy="262" r="10" class="oxide"/><text x="84" y="268" class="sans ink h3">12:30 · Gwangjang</text><text x="84" y="300" class="sans muted small">Flexible lunch window</text><circle cx="54" cy="360" r="10" class="oxide"/><text x="84" y="366" class="sans ink h3">16:00 · Hongdae</text><text x="84" y="398" class="sans muted small">≈32 min · live route ↗</text><rect x="20" y="445" width="370" height="55" class="sunken card"/><text x="42" y="480" class="sans ink small">8  9  <tspan font-weight="700">10</tspan>  11  12  13  14  15</text><rect x="20" y="510" width="370" height="38" class="ink round"/><text x="46" y="535" class="sans white caption">Trip   Itinerary   Map   Guide   Split</text></g>
+    <g transform="translate(515 110)"><text class="serif ink h1" x="0" y="44">Day-first, thumb-first.</text><text class="sans muted body" x="0" y="90">The timeline remains dominant; imagery and route context support it.</text><rect x="0" y="125" width="670" height="140" rx="25" fill="url(#photoCity)"/><text x="28" y="174" class="sans white micro">CONTEXT IMAGE</text><text x="28" y="221" class="serif white h2">Recognizable place, not decoration</text><rect x="0" y="290" width="670" height="120" class="sunken card"/><text x="24" y="329" class="sans ink h3">Branch day</text><text x="24" y="365" class="sans muted body">Parallel party branches become readable sections and reconverge at a shared anchor.</text><text x="0" y="467" class="sans oxide h3">No generic “Done” button.</text><text x="0" y="505" class="sans muted body">Use the real route/ticket action or leave the slot empty.</text></g>
+  </g>
+
+  <!-- WAY-03 Itinerary desktop -->
+  <g id="WAY-03" transform="translate(1430 1000)">
+    <rect width="1280" height="690" class="dark frame"/>
+    <text x="45" y="62" class="sans amber label">WAY-03 · ITINERARY · DESKTOP WORKBENCH</text>
+    <g transform="translate(45 92)"><rect width="1190" height="545" class="dark2 card"/><rect width="650" height="545" rx="25" class="dark2"/><rect x="660" width="530" height="545" rx="25" fill="url(#mapDark)"/><rect x="646" y="18" width="8" height="509" class="amber round" opacity=".5"/><text x="28" y="42" class="sans amber micro">DAY 3 · SEOUL</text><text x="28" y="87" class="serif white h2">Wednesday · Jul 10</text><line x1="62" y1="125" x2="62" y2="445" class="lineDark"/><circle cx="62" cy="155" r="11" class="amber"/><text x="94" y="162" class="sans white h3">09:30 · Gyeongbokgung</text><text x="94" y="195" class="sans white small">Selected · route and map synchronized</text><circle cx="62" cy="268" r="11" class="amber"/><text x="94" y="275" class="sans white h3">12:30 · Gwangjang Market</text><circle cx="62" cy="380" r="11" class="amber"/><text x="94" y="387" class="sans white h3">16:00 · Hongdae</text><path d="M705 370 C780 330 820 220 910 255 S1030 360 1118 205" class="route2"/><circle cx="790" cy="315" r="13" class="pinDark"/><circle cx="930" cy="265" r="13" class="pinDark"/><circle cx="1090" cy="225" r="13" class="pinDark"/><text x="720" y="48" class="sans white small">Map · selected stop</text><rect x="720" y="410" width="405" height="95" class="dark3 card"/><text x="742" y="446" class="sans amber micro">GYEONGBOKGUNG · 경복궁</text><text x="742" y="480" class="sans white small">Exit 5 · ≈18 min to next stop</text></g>
+    <text x="45" y="669" class="sans white small">Default ≈55/45; user-resizable 30–70. Temporal ↔ spatial continuity is the point.</text>
+  </g>
+
+  <!-- WAY-04 Map mobile -->
+  <g id="WAY-04" transform="translate(90 1745)">
+    <rect width="1280" height="690" class="dark frame"/>
+    <text x="45" y="62" class="sans amber label">WAY-04 · MAP · MOBILE DARK</text>
+    <g transform="translate(60 86)"><rect width="410" height="570" class="dark phone"/><rect x="7" y="7" width="396" height="556" rx="49" fill="url(#mapDark)"/><path d="M60 260 C120 210 175 215 215 160 S305 130 350 85" class="route2"/><path d="M35 165 C130 180 135 320 260 345 S330 455 390 435" fill="none" stroke="#3b4d45" stroke-width="35" opacity=".8"/><circle cx="145" cy="220" r="11" class="pinDark"/><circle cx="260" cy="175" r="11" class="pinDark"/><circle cx="335" cy="105" r="11" class="pinDark"/><rect x="30" y="28" width="350" height="45" class="dark2 round"/><text x="52" y="57" class="sans white small">Search nearby places…</text><rect x="22" y="380" width="366" height="162" class="dark2 card"/><rect x="170" y="392" width="70" height="5" class="amber round"/><text x="42" y="430" class="sans amber micro">NEARBY · SEOUL</text><text x="42" y="467" class="serif white h3">Gwangjang Market</text><text x="42" y="500" class="sans white small">12 min · open until 23:00</text><text x="42" y="529" class="sans white small">peek ↕ half ↕ full sheet</text></g>
+    <g transform="translate(520 120)"><text x="0" y="40" class="serif white h1">The map owns the viewport.</text><text x="0" y="89" class="sans white body">Context rises from a bottom sheet; the map never becomes a dead backdrop.</text><rect x="0" y="132" width="650" height="120" class="dark2 card"/><text x="24" y="169" class="sans amber micro">DEGRADED / OFFLINE</text><text x="24" y="205" class="sans white body">Render intentional cartography, canonical pins and cached context—not a blank pale plane.</text><text x="0" y="315" class="sans amber h3">Only verified coordinates become pins.</text><text x="0" y="358" class="sans white body">Live turn-by-turn hands off to the native provider.</text><text x="0" y="430" class="sans white h3">서울 · 경복궁 · 광장시장</text><text x="0" y="469" class="sans white body">Hangul is an acceptance test. Tofu squares are a hard failure.</text></g>
+  </g>
+
+  <!-- WAY-05 Map desktop -->
+  <g id="WAY-05" transform="translate(1430 1745)">
+    <rect width="1280" height="690" class="paper frame"/>
+    <text x="45" y="62" class="sans oxide label">WAY-05 · MAP · DESKTOP SPATIAL WORKSPACE</text>
+    <g transform="translate(45 92)"><rect width="800" height="545" rx="25" fill="url(#mapLight)"/><path d="M90 410 C220 355 255 225 410 260 S590 310 715 130" class="route"/><path d="M55 175 C220 200 205 390 390 415 S590 435 770 360" fill="none" stroke="#b5c4b3" stroke-width="48"/><circle cx="230" cy="335" r="14" class="pin"/><circle cx="420" cy="260" r="14" class="pin"/><circle cx="675" cy="165" r="14" class="pin"/><rect x="30" y="25" width="360" height="46" class="paper round"/><text x="52" y="55" class="sans ink small">Search this area…</text><rect x="820" width="370" height="545" class="paper card"/><text x="850" y="42" class="sans oxide micro">SEOUL · NEARBY</text><text x="850" y="84" class="serif ink h2">Spatial context</text><line x1="850" y1="110" x2="1160" y2="110" class="line"/><text x="850" y="153" class="sans ink h3">Gyeongbokgung</text><text x="850" y="181" class="sans muted small">Palace · 경복궁</text><text x="850" y="229" class="sans ink h3">Gwangjang Market</text><text x="850" y="257" class="sans muted small">Food · 광장시장</text><text x="850" y="305" class="sans ink h3">Hongdae</text><text x="850" y="333" class="sans muted small">Nightlife · 홍대</text><rect x="850" y="380" width="300" height="110" class="sunken card"/><text x="872" y="417" class="sans oxide micro">SELECTED</text><text x="872" y="454" class="sans ink h3">18 min from you</text></g>
+  </g>
+
+  <!-- WAY-06 Guide -->
+  <g id="WAY-06" transform="translate(90 2490)">
+    <rect width="1280" height="690" class="paper frame"/>
+    <text x="45" y="62" class="sans oxide label">WAY-06 · GUIDE · EDITORIAL LIGHT</text>
+    <rect x="45" y="92" width="1190" height="235" rx="28" fill="url(#photoSeoul)"/><rect x="45" y="92" width="1190" height="235" rx="28" fill="#111" opacity=".18"/><text x="78" y="150" class="sans white micro">VERIFIED · SOUTH KOREA</text><text x="78" y="216" class="serif white h1">Seoul, Daejeon &amp; Busan</text><text x="78" y="266" class="sans white body">An editorial front door to practical, traceable travel knowledge.</text>
+    <g transform="translate(45 352)"><rect width="372" height="245" class="sunken card"/><rect width="372" height="92" rx="25" fill="url(#photoCity)"/><text x="20" y="132" class="serif ink h3">Essentials</text><text x="20" y="165" class="sans muted small">Entry, money, connectivity</text><text x="20" y="205" class="sans oxide small">Open chapter →</text></g>
+    <g transform="translate(432 352)"><rect width="372" height="245" class="sunken card"/><rect width="372" height="92" rx="25" fill="url(#mapLight)"/><text x="20" y="132" class="serif ink h3">Seoul</text><text x="20" y="165" class="sans muted small">Neighborhoods, transit, places</text><text x="20" y="205" class="sans oxide small">Map-forward chapter →</text></g>
+    <g transform="translate(819 352)"><rect width="416" height="245" class="sunken card"/><rect width="416" height="92" rx="25" fill="url(#photoSeoul)"/><text x="20" y="132" class="serif ink h3">Gaming &amp; anime</text><text x="20" y="165" class="sans muted small">Traveler anchor, not the whole IA</text><text x="20" y="205" class="sans oxide small">Featured interest →</text></g>
+    <text x="45" y="645" class="sans ink small">Normal word wrapping is binding. Never force “Ess ent ials” / per-character headings.</text>
+  </g>
+
+  <!-- WAY-07 Split -->
+  <g id="WAY-07" transform="translate(1430 2490)">
+    <rect width="1280" height="690" class="paper frame"/>
+    <text x="45" y="62" class="sans oxide label">WAY-07 · SPLIT · FAST, TRIP-SPECIFIC</text>
+    <g transform="translate(45 94)"><text x="0" y="42" class="serif ink h1">Split</text><text x="0" y="82" class="sans muted body">Recent expenses first; settlement is secondary.</text><rect x="0" y="112" width="560" height="410" class="sunken card"/><text x="24" y="151" class="sans oxide micro">RECENT EXPENSES</text><text x="24" y="200" class="sans ink h3">KBBQ · ₩126,000</text><text x="24" y="230" class="sans muted small">Carlo paid · Even · 4 people</text><line x1="24" y1="254" x2="530" y2="254" class="line"/><text x="24" y="300" class="sans ink h3">Subway · ₩18,400</text><text x="24" y="330" class="sans muted small">Mina paid · Exact · 3 people</text><rect x="24" y="365" width="512" height="54" class="oxide round"/><text x="205" y="400" class="sans white h3">+ Add expense</text><text x="24" y="462" class="sans muted small">Every row states the split method in words.</text></g>
+    <g transform="translate(640 118)"><rect width="555" height="390" class="paper card" stroke="#b4bcaf" stroke-width="2"/><text x="24" y="42" class="sans oxide micro">FAST ADD · FOUR QUESTIONS</text><text x="24" y="88" class="sans ink h3">1 · Who paid?</text><rect x="265" y="60" width="245" height="42" class="sunken round"/><text x="288" y="87" class="sans ink small">Carlo</text><text x="24" y="145" class="sans ink h3">2 · What for?</text><rect x="265" y="117" width="245" height="42" class="sunken round"/><text x="288" y="144" class="sans ink small">Dinner</text><text x="24" y="202" class="sans ink h3">3 · How much?</text><rect x="265" y="174" width="245" height="42" class="sunken round"/><text x="288" y="201" class="sans ink small">₩126,000</text><text x="24" y="259" class="sans ink h3">4 · Who shares?</text><rect x="265" y="231" width="245" height="42" class="sunken round"/><text x="288" y="258" class="sans ink small">Everyone</text><text x="24" y="322" class="sans muted small">Optional notes/rates/receipts stay secondary.</text></g>
+  </g>
+
+  <!-- WAY-08 Search -->
+  <g id="WAY-08" transform="translate(90 3235)">
+    <rect width="1280" height="690" class="dark frame"/>
+    <text x="45" y="62" class="sans amber label">WAY-08 · SEARCH · CONTEXT-FIRST OVERLAY</text>
+    <g transform="translate(115 105)"><rect width="1050" height="500" class="dark2 card"/><rect x="35" y="30" width="980" height="62" class="dark3 round"/><text x="62" y="69" class="sans white body">gyeong…</text><text x="35" y="137" class="sans amber micro">CURRENT TRIP · PLACES</text><text x="35" y="178" class="serif white h3">Gyeongbokgung Palace</text><text x="35" y="208" class="sans white small">Seoul · Guide + Map + Day 3</text><line x1="35" y1="236" x2="1015" y2="236" class="lineDark"/><text x="35" y="282" class="sans amber micro">ITINERARY</text><text x="35" y="321" class="sans white h3">Day 3 · Palaces → market → Hongdae</text><line x1="35" y1="347" x2="1015" y2="347" class="lineDark"/><text x="35" y="393" class="sans amber micro">GUIDE</text><text x="35" y="432" class="sans white h3">Seoul · Palaces and historic core</text><text x="35" y="470" class="sans white small">Dismiss returns to the exact prior surface and scroll position.</text></g>
+    <text x="115" y="648" class="sans white small">Search is traveler-facing infrastructure, not a developer command palette or AI-chat answer engine.</text>
+  </g>
+
+  <!-- WAY-09 SOS -->
+  <g id="WAY-09" transform="translate(1430 3235)">
+    <rect width="1280" height="690" class="paper frame"/>
+    <text x="45" y="62" class="sans oxide label">WAY-09 · SOS · LAYERED EMERGENCY SHEET</text>
+    <g transform="translate(260 105)"><rect width="760" height="500" class="paper card" stroke="#b7bfb2" stroke-width="2"/><text x="35" y="58" class="serif ink h1">Emergency help</text><text x="35" y="98" class="sans muted body">Verified essentials first. Core numbers work offline.</text><rect x="35" y="130" width="690" height="82" class="oxide card"/><text x="60" y="166" class="sans white micro">KOREA · EMERGENCY</text><text x="60" y="198" class="sans white h2">112 Police · 119 Fire / Ambulance</text><rect x="35" y="230" width="690" height="70" class="sunken card"/><text x="60" y="273" class="sans ink h3">Embassy / consulate contact →</text><rect x="35" y="315" width="690" height="70" class="sunken card"/><text x="60" y="358" class="sans ink h3">Medical + insurance information →</text><rect x="35" y="400" width="690" height="70" class="sunken card"/><text x="60" y="443" class="sans ink h3">Stored trip contacts + base address →</text></g>
+    <text x="260" y="648" class="sans muted small">No symptom triage, fake responder orchestration, or “help request sent” theater.</text>
+  </g>
+
+  <!-- Contract footer -->
+  <g transform="translate(90 3970)">
+    <text x="0" y="0" class="sans ink h3">Binding visual contract:</text><text x="255" y="0" class="sans muted body">hierarchy · relative scale · responsive composition · panel relationships · hero prominence · density · map/sheet behavior · typography wrapping · key-state placement.</text>
+    <text x="0" y="48" class="sans ink h3">Illustrative:</text><text x="145" y="48" class="sans muted body">exact photo subject · sample copy/data · prices · times · route geometry · pin labels · decorative micro-detail.</text>
+    <text x="0" y="96" class="sans oxide h3">Do not average this board with superseded mockups or the D7 component-gallery screenshots.</text>
+  </g>
+</svg>

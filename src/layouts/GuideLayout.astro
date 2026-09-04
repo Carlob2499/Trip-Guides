@@ -1,40 +1,30 @@
-﻿---
-import Block from "../components/Block.astro";
+---
+/* The guide page — one product, five stable traveler destinations (design-system.md D6-03):
+   Trip · Itinerary · Map · Guide · Split, plus the global utilities (Atlas link, Search, SOS)
+   in the chrome. Every destination is a region of this one page; guide-ui.js is the single
+   router (hash deep links, remembered route, the bottom bar and the desktop row all go
+   through it). This file DERIVES everything the destinations need from the guide's own data
+   and passes it down — nothing here authors content. */
+import AppChrome from "../components/AppChrome.astro";
+import TripDestination from "../components/TripDestination.astro";
+import ItineraryDestination from "../components/ItineraryDestination.astro";
+import MapDestination from "../components/MapDestination.astro";
+import GuideDestination from "../components/GuideDestination.astro";
+import SplitDestination from "../components/SplitDestination.astro";
 import Icon from "../components/Icon.astro";
 import PwaHead from "../components/PwaHead.astro";
 import { jsonEmbed } from "../lib/json-embed";
-import Learnings from "../components/Learnings.astro";
-import Reminders from "../components/Reminders.astro";
-import TripKit from "../components/TripKit.astro";
-import JetLag from "../components/JetLag.astro";
-import {
-  buildTravelerStations,
-  legacyRouteAnchors,
-  projectTravelerDestinations,
-} from "../features/guide-rail/index";
-import "../features/guide-rail/styles.css";
-import { emergencyFor, FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
-import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
+import { FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
-import PaintedAtlas from "../components/PaintedAtlas.astro";
-import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
-import ToolsScreen from "../components/ToolsScreen.astro";
-import { deriveToolsRecord } from "../features/trip-tools/index";
-import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
-import { cityLine, dateLine } from "../lib/plate-line";
-import { collectWaypoints, collectDayEvents, buildSummary } from "../features/exports/index";
-// slotLabel only — the silo's DOM boot is guarded by `typeof document`, so importing its
-// public surface at build time is inert (the sealed-silo contract: index is the only door).
-import { slotLabel } from "../features/mobile-nav/index.js";
+import { deriveGuideView } from "../lib/guide-view";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
-// Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
-// so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
 import "@fontsource-variable/atkinson-hyperlegible-next";
 import "../styles/base.css";
 import "../styles/guide.css";
+import "../styles/chrome.css";
 import "../styles/jetlag.css";
 import "../styles/hint.css";
 import "../styles/print.css";
@@ -49,393 +39,51 @@ import "../styles/provenance-dot.css";
 import "../styles/gap-block.css";
 import "../styles/fold.css";
 import "../styles/map.css";
-import "../styles/planner.css";
+import "../styles/itinerary.css";
+import "../styles/trip.css";
+import "../styles/guide-dest.css";
 import "../styles/overview.css";
 import "../styles/flight.css";
-import "../styles/mobile-nav.css";
 import "../styles/field-tools.css";
-/* The TOOLS STATION's own styles. This layout is their ONLY importer now: they used to ride
-   in on the standalone /tools/ page, and when R5 retired that page the stylesheet lost its
-   last import while every panel kept rendering — unstyled, and green across 225 browser
-   tests, because none of them assert appearance. Deleting a page means checking what it was
-   the last importer of. */
-import "../styles/tools.css";
-import "../styles/palette.css";
 import "../styles/print-day.css";
 import "../styles/budget-sheet.css";
 import "../styles/transitions.css";
-import "../styles/story-mode.css";
 import "../styles/scroll-motion.css";
 import "../features/firebase/styles.css";
 import "../features/route-opt/styles.css";
 import "../features/budget-pact/styles.css";
 import "../features/panel/styles.css";
-// touch.css LAST: its @media(hover:none) block overrides hover rules from every
-// stylesheet above, and equal-specificity rules are decided by source order.
+import "../features/search/styles.css";
+// touch.css LAST: its @media(hover:none) block overrides hover rules from every stylesheet above.
 import "../styles/touch.css";
-import { derivePins } from "../lib/map-pins";
 
-// Build-time public-holiday data (Nager.Date), written by scripts/fetch-holidays.mjs
-// into src/data/holidays/{CC}-{year}.json and refreshed by CI before each build.
-// Eagerly imported so it's inlined at build with no client fetch. Empty object if
-// no files exist yet — the holiday block then simply hides.
 const holidayData = import.meta.glob("../data/holidays/*.json", { eager: true, import: "default" }) as Record<string, any[]>;
 
-// The repo identifier this layout used to hold is gone with the change-request modal: the
-// footer pill now links to /change/, and that page owns the prefilled-issue URL for every
-// guide. Nothing else on a guide page addresses GitHub.
-
 const { guide } = Astro.props;
-const travelerProjection = projectTravelerDestinations(guide.sections);
-const order = travelerProjection.destinations.map((destination) => destination.name);
-const byG = Object.fromEntries(travelerProjection.destinations.map((destination) => [
-  destination.name,
-  destination.sections.map((entry) => ({ s: entry.section, i: entry.index, rawGroup: entry.rawGroup })),
-]));
-
-/* U01 — the authored raw groups remain intact in guide data, but the runtime navigation is
-   projected into four traveler-facing destinations. Sources, recap and utilities remain
-   routable secondary destinations and never participate in primary progress geometry. */
-const stations = buildTravelerStations({
-  groups: order,
-  hasSources: travelerProjection.sources.length > 0,
-  hasLearnings: !!(guide as any).learnings,
-});
-const primaryStations = stations.filter((station) => station.primary);
-const secondaryStations = stations.filter((station) => !station.primary);
-const legacyAnchors = legacyRouteAnchors(guide.sections, { hasLearnings: !!(guide as any).learnings });
-const legacyAnchorsFor = (route: string) => legacyAnchors.filter((anchor) => anchor.route === route);
-
-/* Creator-authored descriptors are only reused when their key already matches the canonical
-   traveler destination. A synthetic descriptor would claim meaning the guide never authored. */
-const stationDesc = (s?: { kind: string; full: string }) =>
-  s?.kind === "group" ? ((guide as any).descriptors?.[s.full] ?? null) : null;
-
-// The jet-lag calculator is an ARRIVAL tool, and it used to sit above EVERY tab of every
-// guide (creator, 2026-07-30: "quite useless and doesn't need to be there on every screen,
-// especially on the Days tab"). It now shows on ONE group — the one whose own content
-// already covers jet lag or arrival — and guide-ui hides it entirely once the trip is over.
-// Derived from the guide's own section titles; no new field, and a guide with no such
-// section keeps it on the first group, where planning lives.
-let jlGroup: number | null = null;
-order.forEach((g: string, ci: number) => (byG[g] || []).forEach((o: any) => {
-  const t = String(o.s.title ?? o.s.name ?? "");
-  if (jlGroup === null && /jet[\s-]?lag|arriv|when you land/i.test(t)) jlGroup = ci;
-}));
-const essentialsIndex = order.indexOf("Essentials");
-const jlGroupIdx = jlGroup ?? (essentialsIndex >= 0 ? essentialsIndex : 0);
-
-// R5 deleted shortLabel(). The tab strip it existed for is gone: a spine-rail station label
-// wraps to two lines and a pill row scrolls, so neither surface needs an abbreviation. The one
-// place a name genuinely will not fit is the thumb bar's four fixed slots, and that shortening
-// lives in mobile-nav's slotLabel(), where the "only if the stub stays readable" rule is
-// already written and tested. Two shorteners would have meant two answers for one name.
-
-// Chapter-opener photo fans: a group whose sections already carry verified
-// Commons images (sights) gets up to three of its OWN photos fanned beside
-// the opener numeral. Pure derivation — no new sourcing, no invented files.
-const groupImgs: Record<string, { file?: string; src?: string; alt: string }[]> = {};
-for (const g of order) {
-  const imgs = byG[g]
-    .filter((o: any) => o.s.type === "sights")
-    .flatMap((o: any) => o.s.items || [])
-    .filter((it: any) => it?.img?.file || it?.img?.src)
-    .slice(0, 3)
-    .map((it: any) => ({ file: it.img.file, src: it.img.src, alt: it.img.alt || it.name || "" }));
-  if (imgs.length) groupImgs[g] = imgs;
-}
-const thumbSrc = (im: { file?: string; src?: string }) =>
-  im.src ? im.src.replace("{w}", "320")
-  : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(im.file!)}?width=320`;
-// Accent precedence (src/lib/palettes.ts — the SAME resolution the hub + OG use):
-// explicit `theme` (zod-gated) → palette extracted from this guide's own cover photo
-// (`npm run extract-palette`, gated at generation) → country accent. The V4 identity
-// engine: a guide's colours come from its own imagery, and a guide with neither an
-// explicit theme nor an extracted palette keeps the country colour, unchanged.
 const guideSlug = Astro.url.pathname.split("/").filter(Boolean).pop() ?? "";
-const extracted = paletteFor(guideSlug);
-const accent  = accentForGuide(guideSlug, guide.theme, guide.country);
-// Text shade comes from accentTokens (src/lib/accent-tokens.ts) — the SAME derivation the hub
-// card uses. It used to be `darken(accent, 0.14)` here and the palette's `secondary` there, which
-// is how one token name ended up meaning two colours and shipping 3.32:1 link text.
-const tokens = accentTokens(accent, extracted?.accent);
-const themePrimary   = guide.theme?.primary   ?? extracted?.primary   ?? accent;
-const themeSecondary = guide.theme?.secondary ?? extracted?.secondary ?? accent;
-const themeAccent    = guide.theme?.accent    ?? extracted?.accent    ?? accent;
-// R8: storeKey namespaces every per-device localStorage/sessionStorage key (checklists,
-// budget, saved tab, scroll memory, field-tools stop check-off) — it MUST be unique per
-// guide. Deriving it from the TITLE let two similarly-titled guides collide and share all
-// of that storage. The slug is the guide's actual unique identity (it's the URL path
-// segment), so it's what this derives from now. `legacyStoreKey` is kept only so
-// guide-ui.js/scroll-memory.js/field-tools.js can migrate a returning visitor's existing
-// data ONCE from the old title-derived key — never read for anything else.
-const storeKey = (guideSlug || "guide").replace(/\W+/g, "").toLowerCase();
-const legacyStoreKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
-const navLabel = (s: any, g: string) => s.title || s.name || g;
-function collapseSubPrefixes(parts: string[]): string[] {
-  if (parts.length < 2) return parts;
-  const sep = / — | – /;
-  const splits = parts.map(p => p.split(sep, 2));
-  if (!splits.every(s => s.length === 2)) return parts;
-  const prefix = splits[0][0];
-  if (!splits.every(s => s[0] === prefix)) return parts;
-  return [prefix + " — " + splits.map(s => s[1]).join(", ")];
-}
-const localCur = currencyFor(guide.country);
-
-// Destination IANA time zone (e.g. "Asia/Seoul"). A guide-level `tz` (resolved from the
-// destination's actual verified coordinates via scripts/lookup-tz.mjs) wins when present;
-// the country table is a fallback default only, and is wrong whenever a destination's
-// local time differs from its country's typical zone (Hawaii, Arizona — see content.config.ts).
-// The client uses Intl with this, so the local-time pill + jet-lag calc are DST-correct.
-const destTzIana = guide.tz || tzFor(guide.country);
-
-// Base path for the deploy (e.g. "/Trip-Guides" on GitHub Pages). Astro does not
-// auto-prepend the base to string/template hrefs, so home links build it explicitly.
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const ogImage = `${Astro.url.origin}${base}/og/${guideSlug}.png`;
 
-// OG/Twitter image lives at {base}/og/{slug}.png (generated by pages/og/[slug].png.ts).
-// Build it from the base + the last path segment so it works under the subpath —
-// the old code stripped "^/guides/" which never matched "/Trip-Guides/guides/...",
-// producing a double-slash, wrong-path URL.
-const ogSlug  = guideSlug;
-const ogImage = `${Astro.url.origin}${base}/og/${ogSlug}.png`;
+/* ── Accent (src/lib/palettes.ts — the SAME resolution the hub + OG use) ───────────────── */
+const extracted = paletteFor(guideSlug);
+const accent = accentForGuide(guideSlug, guide.theme, guide.country);
+const tokens = accentTokens(accent, extracted?.accent);
+const themePrimary = guide.theme?.primary ?? extracted?.primary ?? accent;
+const themeSecondary = guide.theme?.secondary ?? extracted?.secondary ?? accent;
+const themeAccent = guide.theme?.accent ?? extracted?.accent ?? accent;
 
-// Compute at-a-glance stats for the masthead stat bar
-function flatSections(secs: any[]): any[] {
-  return secs.flatMap((s: any) => s.sections ? flatSections(s.sections) : [s]);
-}
-const _flat = flatSections(guide.sections || []);
-
-// Masthead hero image = the guide's own COVER art when set, else its first sights photo
-// (docs/reference/motion.md). This is the SAME image the hub card shows — the shared element
-// that morphs between them. Present → full-bleed photo hero; absent (scaffolds) → the
-// Painted Atlas (R4), living from birth. Same Commons Special:FilePath thumbnailing as SightsBlock.
-const heroSight = _flat
-  .filter((s: any) => s.type === "sights")
-  .flatMap((s: any) => s.items || [])
-  .find((it: any) => it?.img?.file || it?.img?.src);
-const cover = (guide as any).cover;
-// R4: a still cover may now be a direct royalty-free CDN URL (`cover.src`, credit+license
-// zod-required) as well as a Commons `file`. `src` wins when set (the schema rejects both
-// together); a cover with only `video` still takes the first sight photo as its poster base.
-// The sight-photo fallback carries whichever source THAT photo uses — a guide whose sights
-// are all direct-CDN would otherwise fall through to the Painted Atlas despite having art.
-const coverStill = (cover?.src || cover?.file)
-  ? { file: cover.file ?? null, src: cover.src ?? null, credit: cover.credit, creditUrl: cover.creditUrl }
-  : { file: heroSight?.img?.file ?? null, src: heroSight?.img?.src ?? null, credit: heroSight?.img?.credit, creditUrl: heroSight?.img?.creditUrl };
-const coverDirect = (coverStill.src as string | undefined) ?? null;
-const coverFile  = (coverStill.file as string | undefined) ?? null;
-const coverAlt   = cover?.alt   ?? heroSight?.img?.alt  ?? heroSight?.name ?? "";
-const coverFocal = cover?.focal ?? null;
-const mastCommonsSrc = (w: number) =>
-  coverFile ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=${w}` : null;
-// One width-parameterized source fn for both paths: Commons thumbnails via Special:FilePath,
-// direct CDNs via their own `{w}` token (absent token → the URL is single-size, srcset off).
-const mastSrcAt = (w: number) =>
-  coverDirect ? coverDirect.replace("{w}", String(w)) : mastCommonsSrc(w);
-const heroSrc = mastSrcAt(1600);
-// M2: a 375px phone was downloading the full 1600px masthead hero — same responsive
-// treatment SightsBlock already gives every sight photo.
-const heroSrcset = (coverFile || coverDirect?.includes("{w}"))
-  ? `${mastSrcAt(480)} 480w, ${mastSrcAt(800)} 800w, ${mastSrcAt(1200)} 1200w, ${mastSrcAt(1600)} 1600w`
-  : null;
-// Credit chip: Commons files link their File page (Commons IS the credit); direct-URL
-// covers carry their own zod-required credit, linking creditUrl when given. The living
-// video swaps this chip to the footage credit while it plays (living-cover.js).
-const heroCredit = coverFile
-  ? { href: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`, label: "Photo: Wikimedia Commons" }
-  : coverDirect && coverStill.credit
-  ? { href: (coverStill.creditUrl as string | undefined) ?? null, label: `Photo: ${coverStill.credit}` }
-  : null;
-// R4 living cover — the footage upgrade (schema-gated: credit+license required).
-const coverVideo = cover?.video ?? null;
-
-// For weather widget — pull lat/lng from first map section
-const mapSec    = _flat.find((s: any) => s.type === "map" && s.center?.lat);
-const mapCenter = mapSec ? { lat: mapSec.center.lat as number, lng: mapSec.center.lng as number } : null;
-/* DESIGN.md R5 §3 replaced BOTH of the plate line's own rows.
-
-   The coordinate readout is gone: a decimal pair at display scale is not information a
-   traveller standing in Seoul uses. Coordinates survive where they ARE the map — the atlas
-   hub's live sheet-centre readout, compass and scale bar are untouched.
-
-   Guide numbering is gone from this surface too ("PLATE 02 — KR"), and `sheet-order.ts` is
-   deliberately NOT deleted with it: the hub still indexes by number, and an index is a
-   legitimate use of one. What was wrong was numbering the guide AT the guide, where it
-   carried nothing a reader uses.
-
-   What replaces them is derived in src/lib/plate-line.ts from data the guides already carry —
-   no new content field, so no guide had to be edited to gain a plate line. */
-const platelineCities = cityLine(guide.kicker as string | null);
-const platelineDates  = dateLine(guide.kicker as string | null);
-// Per-guide masthead chips (emergency, currency) — both already computed elsewhere on
-// this page (tgConfig, the budget/split tools); reused here rather than re-derived.
-const platelineEmergency = emergencyFor(guide.country);
-
-// When a guide has its own `weather` section, that section provides the #wxWrap
-// mount in-flow, so the masthead strip is suppressed (no double render). The flag
-// is also passed to the client so the service can log a breadcrumb if a weather
-// section exists but there's no map section to source coordinates from.
-const hasWeatherSection = _flat.some((s: any) => s.type === "weather");
-
-// Map-section pins (build-time; first map gets all sights). Consumed only by
-// the opt-in Google renderer (gmaps-render.js) when a key is set; the default
-// OSM iframe ignores them.
-const pinMap = derivePins(guide.sections);
-
-// For trip countdown — pull first date string from first days section (e.g. "Wed Jul 8")
-const daysSec      = _flat.find((s: any) => s.type === "days" && s.items?.length);
-const firstDayDate = (daysSec?.items?.[0]?.date as string) ?? null;
-const lastDayDate  = (daysSec?.items?.[daysSec.items.length - 1]?.date as string) ?? firstDayDate;
-
-// What's-Next banner: compact per-day slice for the client to match against
-// today's device-local date. No coordinates/time-of-day in the schema — day
-// granularity only, same as the trip-countdown pill's own date parsing.
-/* R5 — the guide's OWN tools, derived here so the Tools station is per-guide rather than a
-   generic cross-trip screen (creator ruling 2026-08-11). The record is built from the same
-   inputs and the same storeKey the guide already uses, which is what makes the station's split
-   calculator land on the SAME ledger as the guide's own — one ledger per trip, never two.
-   This IS the README's `ensureGuide(slug)` guard, made a build-time fact: the station is
-   rendered inside the guide's own page, so there is no entry point that can arrive without
-   the trip's data. One guard, one place, and nothing to forget at a call site. */
-const _toolsCC = COUNTRY_CODES[guide.country] ?? null;
-const _holSec = _flat.find((s: any) => s.type === "holidays") as any;
-const _toolsYear = _holSec?.year || deriveTripYear(firstDayDate, new Date());
-const _toolsHolRows = _toolsCC ? holidayData[`../data/holidays/${_toolsCC}-${_toolsYear}.json`] : null;
-const toolsTrip = {
-  record: deriveToolsRecord({
-    slug: guideSlug,
-    title: guide.title,
-    country: guide.country,
-    tz: destTzIana,
-    storeKey,
-    sections: _flat as never,
-    firstDayDate,
-    lastDayDate,
-  }),
-  href: `${base}/guides/${guideSlug}/`,
-  // A holiday reading only when the guide DECLARED a holidays section — never a guessed one.
-  // Retired R5 FALLBACKS §1 (git path in design_handoff_guide_ui/README.md): with no record for
-  // a country-year the tool says so rather than guessing.
-  holidays: _holSec ? buildHolidayInfo(_toolsHolRows, firstDayDate, lastDayDate, _toolsYear) : null,
-  cc: _toolsCC,
-  // Computed with the SAME collectors the .gpx/.ics endpoints use, so a download is never
-  // offered for a file that does not exist.
-  exports: { gpx: collectWaypoints(guide).length > 0, ics: collectDayEvents(guide).length > 0 },
-};
-/* The live-state column's third row — `37 stops · 4 to book` — counted from this guide's own
-   data at build time, not typed. Stops are the day cards' waypoints (the same collection the
-   day station and the whole-day maps link walk); the booking count is the reminders record's
-   own `book` flag, so it can never disagree with the checklist in the Tools station.
-
-   Each half is independently conditional and the whole row is absent when both are zero. A
-   guide with no dated days and nothing to book renders no progress line rather than "0 stops",
-   which would read as a researched answer of zero. */
-const _stopCount = (daysSec?.items ?? []).reduce((n: number, d: any) => n + (d.waypoints?.length ?? 0), 0);
-const _bookCount = toolsTrip.record.reminders.filter((r: { book: boolean }) => r.book).length;
-const liveProgress = [
-  _stopCount > 0 ? `${_stopCount} stop${_stopCount === 1 ? "" : "s"}` : null,
-  _bookCount > 0 ? `${_bookCount} to book` : null,
-].filter(Boolean).join(" · ") || null;
-
-const toolsStationIndex = stations.find((s) => s.kind === "tools")!.index;
-const sourcesStationIndex = stations.find((s) => s.kind === "sources")?.index ?? null;
-const recapStationIndex = stations.find((s) => s.kind === "recap")?.index ?? null;
-
-const daysForBanner = (daysSec?.items ?? []).map((d: any) => ({
-  date: d.date as string, title: d.title as string, fit: (d.fit as string) ?? null,
-  env: (d.env as string) ?? null, // outdoor|indoor|mixed — powers the weather day-swap advisory
-}));
-
-// Story-mode deck data — one tight card per day (date · title · tl;dr · pace · stops),
-// consumed by the full-screen swipeable day viewer (features/itinerary/ui/story-mode.js).
-// Structured JSON, not scraped DOM: the viewer composes a clean one-per-view panel.
-const storyDays = (daysSec?.items ?? []).map((d: any) => ({
-  date: d.date as string,
-  title: (d.title as string) ?? "",
-  tldr: (d.tldr as string) ?? "",
-  pace: (d.pace as string) ?? "",
-  stops: (d.waypoints ?? []).map((w: any) => ({
-    name: w.name as string, note: (w.note as string) ?? "", time: (w.time as string) ?? "",
-  })),
-}));
-
-// `verified` is source metadata (freshness tracking for the maker/AI), not shown to
-// travelers — EXCEPT genuine ⚠ warnings (e.g. an unconfirmed draft), which stay visible.
-const verifiedWarning = guide.verified?.trimStart().startsWith("⚠") ? guide.verified : null;
-// Freshness date for the masthead chip — the ISO date inside the verified
-// stamp when present (surfaced, never invented; no date → no chip).
-const verifiedDate = guide.verified?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? null;
-
-// M4 item 5 — the colophon's numbers, counted from THIS guide's own data by the same walker the
-// hub's Overture uses (src/lib/guide-stats.ts: a "verified fact" is any node carrying a
-// source_url; sources are distinct hostnames). Counted, never typed — a footer that claims
-// "47 verified facts" has to mean exactly that on every rebuild. Zero counts render nothing:
-// an unresearched scaffold gets an honest blank, not a row of zeroes.
-const colophon = computeGuideStats([guide]);
-// The guide-level `verified` field is free prose ("Checked 28 Jun 2026 for the 8–15 Jul
-// trip; …"), so `verifiedDate` above is null on every real guide — the per-FACT provenance
-// dates are the machine-readable ones. Their maximum is a true, checkable statement, and
-// falls back to the guide-level ISO date if a guide ever carries one.
-const colophonChecked = verifiedDate ?? latestVerifiedOn([guide]);
-
-// P7/R14: earliest upcoming recheck date across all ⚠-flagged facts with an `expected` field.
-const nextRecheck = (() => {
-  const dates: string[] = [];
-  const walk = (obj: any) => {
-    if (!obj || typeof obj !== "object") return;
-    if (obj.expected && typeof obj.expected === "string") dates.push(obj.expected);
-    if (Array.isArray(obj)) obj.forEach(walk);
-    else Object.values(obj).forEach(walk);
-  };
-  walk(guide.sections);
-  return dates.sort()[0] ?? null;
-})();
-
-// Public holidays — if the guide has a `holidays` section, look up the build-time
-// data for this country + trip year and slice it around the trip dates. All
-// server-side; the block hides when there's no country mapping or no data file.
-const holSec = _flat.find((s: any) => s.type === "holidays");
-let holidayInfo = null;
-if (holSec) {
-  const cc = COUNTRY_CODES[guide.country] || null;
-  const holYear = holSec.year || deriveTripYear(firstDayDate);
-  const all = cc ? holidayData[`../data/holidays/${cc}-${holYear}.json`] : null;
-  holidayInfo = buildHolidayInfo(all ?? null, firstDayDate, lastDayDate, holYear);
-}
-
-// Build-time export availability. A guide gets a .gpx only if it has at least one
-// map/sights coordinate, and a .ics only if it has at least one parseable day card —
-// the same filters the endpoints use. Each download link is shown only when its
-// file exists, so a guide missing that data simply doesn't offer it (Principle 5).
-const hasWaypoints = collectWaypoints(guide).length > 0;
-const hasDayEvents = collectDayEvents(guide).length > 0;
-
-
-// Plain-text trip digest for the "Share summary" button (theme + planned days +
-// key spots). Embedded in a hidden element; the client reads its textContent and
-// appends the page URL at share time.
-const tripSummary = buildSummary(guide);
+/* ── Everything the destinations need, derived once (src/lib/guide-view.ts) ───────────── */
+const v = deriveGuideView(guide, guideSlug, base, holidayData);
 ---
 <!doctype html>
-<html lang="en" style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent })}>
+<html lang="en" data-country={guide.country} style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent })}>
   <head>
     <meta charset="utf-8" />
-    {/* viewport-fit=cover is REQUIRED for env(safe-area-inset-*) to report anything but 0
-        (design-handoff README "Display cutouts"). Without it the --safe-* tokens base.css
-        declares are all zero and every notch/home-indicator guard in this stylesheet is
-        silently inert — which is exactly the state this page shipped in until Stage D. */}
+    {/* viewport-fit=cover is REQUIRED for env(safe-area-inset-*) to report anything but 0. */}
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>{guide.title} — Waypoint</title>
     <meta name="description" content={guide.dek || guide.title} />
-    {/* Drafts stay fully viewable/linkable (the homepage's Guides-to-be tier links
-        directly to them) — only search indexing is suppressed in production, since
-        the content isn't verified yet. Never applied in dev, so drafts are
-        inspectable exactly like any other guide while working on them. */}
-    {guide.draft && import.meta.env.PROD && (
-      <meta name="robots" content="noindex, nofollow" />
-    )}
+    {guide.draft && import.meta.env.PROD && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:type"        content="article" />
     <meta property="og:title"       content={`${guide.title} — Waypoint`} />
     <meta property="og:description" content={guide.dek || guide.title} />
@@ -447,89 +95,35 @@ const tripSummary = buildSummary(guide);
     <meta name="twitter:image"      content={ogImage} />
     <link rel="canonical"           href={Astro.url.href} />
     <PwaHead />
-    <!--
-      Inline dark-mode init: runs synchronously before first paint so there's
-      no flash of the wrong theme. Reads localStorage then falls back to the
-      OS prefers-color-scheme preference.
-    -->
     <script is:inline>
       (function () {
         const s = localStorage.getItem("tg-theme");
         const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
-        if (s === "dark" || (s === null && preferDark)) {
-          document.documentElement.setAttribute("data-theme", "dark");
-        } else if (s === "light") {
-          document.documentElement.setAttribute("data-theme", "light");
-        }
-        // Tint the browser/PWA chrome in the SAME breath. theme.js re-syncs this from the
-        // computed --bg later, but "later" is after first paint: installed to the home
-        // screen on a dark phone, the status bar flashed the light default first.
+        if (s === "dark" || (s === null && preferDark)) document.documentElement.setAttribute("data-theme", "dark");
+        else if (s === "light") document.documentElement.setAttribute("data-theme", "light");
         const tc = document.querySelector('meta[name="theme-color"]');
         if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#17120e" : "#e3e7dc");
       })();
     </script>
   </head>
 
-  <body data-storekey={storeKey} data-legacy-storekey={legacyStoreKey}>
-
-    <!-- Skip link — first focusable element; jumps keyboard/AT users past the
-         chrome straight to the content. -->
+  <body data-storekey={v.storeKey} data-legacy-storekey={v.legacyStoreKey} data-slug={guideSlug} data-base={base}>
     <a class="skip-link" href="#content">Skip to content</a>
-
-    <!-- Reading progress bar — fixed 3px line at top, fills as user scrolls -->
-    <div id="readProg" class="read-prog" aria-hidden="true"></div>
-
-    <!-- Transient toast — destination for flash() (save/copy confirmations).
-         Was previously inline in the checklist progress bar; relocated here as a
-         standalone toast so feedback survives that bar's removal. -->
     <div id="savedNote" class="toast" role="status" aria-live="polite"></div>
 
-    <!-- Sticky chrome: topbar + guide tab bar stick together as a unit -->
-    <div class="sticky-chrome">
+    <AppChrome base={base} destinations={v.destinations} title={guide.title} />
 
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         TOP NAVIGATION BAR
-         ═══════════════════════════════════════════════════════════════════ -->
-    <nav class="topbar" aria-label="Site navigation">
-      <a href={`${base}/`} class="topbar-home" aria-label="Waypoint — all guides">
-        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
-          <path d="M1 5h12M1 5l4-4M1 5l4 4" stroke="currentColor" stroke-width="1.6"
-                stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="topbar-wordmark">Waypoint</span>
-      </a>
-      <div class="topbar-right">
-        <!-- Search + SOS buttons are injected into this cluster by palette.js /
-             sos.js so they share the chrome-button styling. -->
-        <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide"><svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg> <span class="tb-label">Share</span></button>
-        <!--
-          Dark-mode toggle — icon and aria-label are swapped by theme.js on load (moon =
-          currently light, click for dark; sun = currently dark, click for light). The moon
-          below is the SERVER-RENDERED first-paint state and must match theme.js's own MOON_SVG:
-          it used to be a bare text glyph, which flashed for one frame before JS replaced it
-          with the real icon (M4 item 1 — one icon language, no glyph fallbacks).
-        -->
-        <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
-      </div>
-    </nav>
-
-    <!-- Share modal — hidden until btnShare is clicked; skipped by Web Share API on mobile -->
+    {/* Share modal — hidden until btnShare is clicked; skipped by Web Share API on mobile. */}
     <div class="share-backdrop" id="shareBackdrop" aria-hidden="true"></div>
     <div class="share-modal" id="shareModal" role="dialog" aria-modal="true" aria-label="Share this guide" hidden>
-      <p class="share-head">
-        Share this guide
-        <button class="share-close" id="shareClose" type="button" aria-label="Close">✕</button>
-      </p>
+      <p class="share-head">Share this guide<button class="share-close" id="shareClose" type="button" aria-label="Close">✕</button></p>
       <div class="share-qr-wrap"><div id="shareQr"></div></div>
       <div class="share-url-row">
         <span class="share-url-txt" id="shareUrlTxt" title="Guide URL"></span>
         <button class="share-copy-btn" id="shareCopyBtn" type="button">Copy link</button>
       </div>
-      {(hasDayEvents || hasWaypoints) && (
-        <button class="share-summary-btn" id="btnShareSummary" type="button">↗ Share trip summary</button>
-      )}
-      <!-- Plain-text trip digest; read by the Share-summary handler via textContent -->
-      <div id="tripSummary" hidden>{tripSummary}</div>
+      {(v.exports.ics || v.exports.gpx) && <button class="share-summary-btn" id="btnShareSummary" type="button">↗ Share trip summary</button>}
+      <div id="tripSummary" hidden>{v.tripSummary}</div>
       <div class="share-socials">
         <a class="share-soc" id="shareWA" href="#" target="_blank" rel="noopener noreferrer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96s-.47-.15-.66.15-.76.96-.93 1.16-.34.22-.64.07a8.06 8.06 0 0 1-2.37-1.46 8.9 8.9 0 0 1-1.64-2.04c-.17-.3 0-.46.13-.6s.3-.35.44-.52a2 2 0 0 0 .3-.5.55.55 0 0 0-.03-.52c-.07-.15-.66-1.6-.91-2.19-.24-.57-.48-.49-.66-.5h-.57a1.1 1.1 0 0 0-.8.37 3.36 3.36 0 0 0-1.05 2.5 5.84 5.84 0 0 0 1.22 3.1c.15.2 2.1 3.2 5.08 4.49a17.1 17.1 0 0 0 1.7.63 4.1 4.1 0 0 0 1.87.12 3.08 3.08 0 0 0 2.02-1.43 2.5 2.5 0 0 0 .17-1.43c-.07-.13-.26-.2-.56-.35M12 2a10 10 0 0 0-8.67 14.97L2 22l5.18-1.36A10 10 0 1 0 12 2"/></svg>
@@ -541,429 +135,43 @@ const tripSummary = buildSummary(guide);
         </a>
       </div>
       <p class="share-install"><Icon name="phone" size={15} /> <b>Save this guide to your phone:</b> open your browser menu and choose <i>Add to Home Screen</i> — it then works offline for the whole trip (maps and photos still need a connection).</p>
-      {/* The .gpx / .ics downloads USED to sit here and have moved to the trip's Tools screen
-          (creator, 2026-08-09: "the Share button has too many irrelevant buttons like map and
-          trip calendar"). Sharing is giving the guide to someone else; a map file for a
-          handheld and a calendar file for your own calendar are the opposite errand — you,
-          later, offline. They were in this modal because it was the one drawer the guide had,
-          and they pushed the two things people actually open it for down the panel.
-          Nothing was removed from the product: ToolsScreen.astro's "Take it with you" panel
-          carries both, and the endpoints are untouched. */}
-      {(hasWaypoints || hasDayEvents) && (
-        <p class="share-elsewhere">
-          Offline files for this trip — map points and calendar —
-          <button class="share-elsewhere-link" type="button" data-tab={toolsStationIndex}>live on its Tools station</button>.
-        </p>
-      )}
     </div>
 
+    {v.verifiedWarning && <p class="guide-warning"><span class="gstat gstat-warning">{v.verifiedWarning}</span></p>}
+    {guide.draft && (
+      <p class="draft-progress">
+        <a class="draft-progress-link" href={`${base}/progress/?slug=${encodeURIComponent(guideSlug)}`}><Icon name="clock" size={14} /> Track live progress</a>
+      </p>
+    )}
 
-    </div>{/* end .sticky-chrome */}
+    <main class="content" id="content" tabindex="-1">
+      <noscript><p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds the destination switcher, saved checklists, live maps and the trip split.</p></noscript>
 
-    <!-- Cold-visitor framing — shown once per browser to shared-link recipients
-         (cold-open.js reveals it; dismiss persists). -->
-    <div class="cold-open" id="coldOpen" role="region" aria-label="About this guide" hidden>
-      <span class="cold-open-txt"><b>Waypoint</b> — personal, fact-checked travel guides. This one was researched and verified for a specific trip.</span>
-      <button class="cold-open-x" type="button" aria-label="Dismiss">✕</button>
-    </div>
+      <section class="dest" id="dest-trip" data-dest="trip" role="region" aria-label="Trip">
+        <TripDestination guide={guide} slug={guideSlug} base={base} storeKey={v.storeKey} days={v.tripDays} readiness={v.readiness} recap={v.recap}
+          holidays={v.holidayInfo} dates={v.plate.dates} cities={v.plate.cities} exports={v.exports}
+          hasWeather={!!v.mapCenter} entry={guide.entry ?? null} hero={v.hero} placeImages={v.placeImages} />
+      </section>
 
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         MASTHEAD
-         ═══════════════════════════════════════════════════════════════════ -->
-    <header class={`masthead mast-hero ${heroSrc ? "mast-photo" : "mast-painted"}`} id="top" data-hero>
-      <div class="mast-plate-row">
-        <div class="mast-frame">
-          {/* D13 (Stage A.5): the 16px inner mat — a bordered bed the photo/painted scene sits
-              inside, inset from the frame's own edge, per the design-handoff prototype's exact
-              markup (docs/design-handoff/prototype: inset:16px, 1px var(--rule2) border,
-              overflow:hidden). The corner ticks (masthead.css's .mast-frame::after) are inset
-              to match, so they mark the MAT's corners, not the frame's. hero-parallax.js and
-              gsap-hero.js select `.mast-img`/`.mast-frame` by class, not by direct-child
-              relationship, so this wrapper doesn't touch their wiring. */}
-          <div class="mast-mat">
-            {/* R4 — the Painted Atlas (src/components/PaintedAtlas.astro): rendered under EVERY
-                hero. Coverless guides open on it (living from birth, replacing the old flat
-                accent field); photo guides keep it hidden UNDERNEATH as the fallback that shows
-                when the Commons photo fails to load (.mast-media-fail) — a painted scene instead
-                of a dead grey field. CSS owns the switching (painted-atlas.css / masthead.css). */}
-            <PaintedAtlas seed={guideSlug} tz={destTzIana} />
-            {heroSrc && (
-              <img class="mast-img" src={heroSrc} srcset={heroSrcset} sizes="(min-width:900px) 560px, 100vw" alt={coverAlt}
-                   loading="eager" fetchpriority="high"
-                   onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
-                   style={`view-transition-name:cover-${ogSlug}${coverFocal ? `;object-position:${coverFocal}` : ""}`} />
-            )}
-            {/* R4 living cover — the footage upgrade over the still. Poster-first delivery:
-                no `src` at all until living-cover.js decides the visitor gets motion (reduced-
-                motion, Save-Data, and autoplay-refusal all leave the still standing, which is a
-                complete cover, not a degraded one). DOM-after the img with the same z-index, so
-                it paints above the photo only once it actually plays (.mast-video-live fades it
-                in). muted+playsinline as attributes AND re-asserted in JS — the attribute alone
-                is what mobile autoplay policies inspect. */}
-            {coverVideo && (
-              <video class="mast-video" muted playsinline loop preload="none"
-                     data-src={coverVideo.src}
-                     poster={coverVideo.poster ?? undefined}
-                     aria-hidden="true" tabindex="-1"
-                     style={coverFocal ? `object-position:${coverFocal}` : undefined}></video>
-            )}
-          </div>
-          {heroCredit && (heroCredit.href ? (
-            <a class="mast-credit" id="mastCredit" href={heroCredit.href} target="_blank" rel="noopener"
-               aria-label={`${heroCredit.label} — view source`}
-               data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}
-               data-video-credit-url={coverVideo?.creditUrl ?? undefined}>{heroCredit.label} ↗</a>
-          ) : (
-            <span class="mast-credit" id="mastCredit"
-                  data-video-credit={coverVideo ? `Video: ${coverVideo.credit}` : undefined}>{heroCredit.label}</span>
-          ))}
-          {/* Visible pause for the living cover (doctrine: obvious clickability; WCAG 2.2.2).
-              NOT aria-hidden — it's a real control — but hidden until the video actually
-              plays, so a visitor who never gets motion never sees a dead button. */}
-          {coverVideo && (
-            <button class="mast-pause" id="mastPause" type="button" hidden
-                    aria-label="Pause background video" aria-pressed="false">
-              <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
-                <g class="mp-pause"><rect x="3.2" y="2.6" width="3.4" height="10.8" rx="1"/><rect x="9.4" y="2.6" width="3.4" height="10.8" rx="1"/></g>
-                <path class="mp-play" d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l8.2-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9z"/>
-              </svg>
-            </button>
-          )}
-        </div>
-        <div class="mast-inner">
-          {/* Dedup guard: never render the eyebrow if it would repeat the
-              title verbatim (e.g. title "South Korea", country "South Korea").
-              A kicker always wins; otherwise `region` (a state, for a US-scoped guide)
-              shows in place of `country` when set — country stays the real nation for
-              every functional lookup, region is what a reader actually sees here. */}
-          {/* SCREENS §1 gives the kicker's two halves separate homes — the DATES here, the
-              cities on the plate line below. Rendering the whole kicker in both would be the
-              same datum shown twice as if it were two different things, which is the one thing
-              the uniform-surfaces rule forbids outright. `dateLine` is the inverse of the split
-              `cityLine` makes, so the two can never disagree about where the seam is; a kicker
-              with no city half stays whole and stays here. */}
-          {(platelineDates || (guide.region || guide.country) !== guide.title) && (
-            <p class="eyebrow mast-eyebrow">{platelineDates || guide.region || guide.country}</p>
-          )}
-          <h1 class="mast-title">{guide.title}</h1>
-          {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
-          {/* Per-guide chips (design-handoff README.md §4): emergency numbers as tel: links,
-              currency. "base" (home city/accommodation) has no schema field on any guide —
-              omitted rather than invented, per the honesty doctrine. */}
-          {(platelineEmergency || localCur) && (
-            <div class="mast-chips">
-              {platelineEmergency && platelineEmergency.lines.map((l: any) => (
-                <a class="mast-chip mast-chip--sos" href={`tel:${l.num.replace(/[^0-9+]/g, "")}`}>{l.label}: {l.num}</a>
-              ))}
-              {localCur && <span class="mast-chip">{localCur.code} · {localCur.symbol}</span>}
-            </div>
-          )}
-        </div>
+      <section class="dest" id="dest-itinerary" data-dest="itinerary" role="region" aria-label="Itinerary" hidden>
+        <ItineraryDestination daysSection={v.daysSec} learnings={guide.learnings ?? null} country={guide.country} keyPrefix="dy"
+          modulesByDate={v.modulesByDate} dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan} imageFor={v.imageFor} />
+      </section>
 
-        {/* THE LIVE-STATE COLUMN (DESIGN.md R5 §3). R4's masthead ended after the chips and
-            left this space empty at desktop width; the state of the trip is the most useful
-            thing to put in it.
+      <section class="dest" id="dest-map" data-dest="map" role="region" aria-label="Map" hidden>
+        <MapDestination center={v.globalCenter} span={v.globalSpan} pins={v.allPins} country={guide.country} dayDates={v.rawDays.map((d: any) => d.date)} />
+      </section>
 
-            Two of its three rows depend on WHEN the page is read — the stamp and the day/clock
-            — so they ship empty and hidden and guide-ui.js fills them, the same arrangement the
-            next leg uses. The third is counted from this guide's own data at build time, and a
-            guide with nothing to count renders nothing rather than "0 of 0". */}
-        {(liveProgress || firstDayDate) && (
-          <div class="mast-live">
-            <span class="mast-live-stamp" id="mastState" hidden></span>
-            <span class="mast-live-when" id="mastWhen" hidden></span>
-            {liveProgress && <span class="mast-live-prog">{liveProgress}</span>}
-          </div>
-        )}
-      </div>
+      <section class="dest" id="dest-guide" data-dest="guide" role="region" aria-label="Guide" hidden>
+        <GuideDestination guide={guide} slug={guideSlug} storeKey={v.storeKey} country={guide.country} chapters={v.chapters} sources={v.sources}
+          hero={v.hero} plate={v.plate} holidays={v.holidayInfo} pinMap={v.pinMap} destTz={v.destTzIana} phrases={guide.phrases ?? null} entry={guide.entry ?? null} />
+      </section>
 
-      {/* The plate line (R5 SCREENS §1): the trip's cities, its next leg, the CHECKED stamp,
-          this guide's own fact/source counts (colophon — the same counts the page-footer
-          colophon signs with, not re-derived) and a print control. Any row with nothing to
-          show renders nothing — an unresearched guide's plate line is shorter, never padded. */}
-      {(platelineCities || colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
-        <div class="mast-plateline">
-          {platelineCities && <span class="mast-cities">{platelineCities}</span>}
-          {/* The next leg is the one row here that depends on WHEN the page is read, so it is
-              filled by guide-ui.js against the destination's calendar rather than baked at
-              build time — a static "next" would be wrong the day after any deploy. Ships empty
-              and hidden, and stays that way outside the trip window. */}
-          <span class="mast-nextleg" id="mastNextLeg" hidden></span>
-          {colophonChecked && <span class="mast-stamp">CHECKED {colophonChecked}</span>}
-          {colophon.verifiedFactCount > 0 && (
-            <span class="mast-plcount">{colophon.verifiedFactCount} verified facts</span>
-          )}
-          {colophon.sourceCount > 0 && (
-            <span class="mast-plcount">{colophon.sourceCount} primary sources</span>
-          )}
-          <button class="mast-print" type="button" data-print-sheet>Print sheet</button>
-        </div>
-      )}
+      <section class="dest" id="dest-split" data-dest="split" role="region" aria-label="Split" hidden>
+        <SplitDestination storeKey={v.storeKey} slug={guideSlug} tz={v.destTzIana} />
+      </section>
+    </main>
 
-      {/* This rule used to share a view-transition-name with the old hub card's `.hubcard-bar`,
-          so the accent morphed from card to masthead on arrival. The Atlas hub retired that
-          card, and nothing on the new hub — static or runtime — claims `accent-<slug>` any
-          more, which leaves the name unpaired: the browser then treats this element as its own
-          transition group and animates it alone. Removed with its partner (Stage G sweep).
-          `cover-<slug>` is the pairing that survives; world-view.js sets it on the pin card's
-          plate at runtime, which is why it does not appear in the hub's static HTML. */}
-      <div class="masthead-rule" aria-hidden="true"></div>
-
-      <!-- What's-Next banner — populated client-side against the device clock;
-           FIRST in the masthead flow because it's the most actionable element
-           during the trip ("what am I doing today"). Hidden outside the trip's
-           own date range. -->
-      <div class="whats-next" id="whatsNext" hidden>
-        <span class="wn-label" id="wnLabel">Today</span>
-        <span class="wn-text" id="wnText"></span>
-      </div>
-
-      <!-- Weather strip — populated by JS via Open-Meteo if guide has a map section.
-           Suppressed when the guide has its own `weather` section (which mounts
-           #wxWrap in-flow instead), so weather never renders twice. -->
-      {!hasWeatherSection && (
-        <div id="wxWrap" class="wx-wrap" hidden><div id="wxMount"></div></div>
-      )}
-
-      <!-- Stats bar — always rendered so JS can inject dynamic pills -->
-      {/* M2: nowrap+overflow-x (CLS fix, see overview.css) makes this a scrollable region —
-          tabindex so keyboard users can actually scroll it (axe scrollable-region-focusable).
-          No aria-label: a plain div's implicit role is "generic", which ARIA prohibits naming
-          (axe's aria-prohibited-attr correctly caught this on the first attempt). */}
-      {/* LIVE FACTS ONLY (2026-07-30). A JSX comment, not an HTML one — Astro ships
-          `<!-- -->` to every guide page, and this note is for readers of the source.
-
-          The row used to carry six pills and scrolled sideways on a phone, so half of it
-          was information the reader never saw. Three were cut for saying nothing this
-          guide doesn't already say better:
-            · "{n} days"       — the eyebrow above reads "Jul 8–15, 2026" and the dek
-                                 opens "Eight days based in Seoul". A third telling.
-            · "{n} sights"     — an inventory count; nothing a traveller can act on.
-            · "Works offline"  — identical on every guide and a promise about the site,
-                                 not a fact about this page. Its honest per-page form
-                                 ("Saved on this device") now sits in the colophon,
-                                 beside the instruction that earns it.
-          What's left all changes on its own and differs per guide: the countdown (daily),
-          the exchange rate (live), and the destination clock (per minute). Both remaining
-          pills are injected by guide-ui.js. */}
-      <div class="guide-stats" id="guideStats" tabindex="0">
-        {verifiedWarning && <span class="gstat gstat-warning">{verifiedWarning}</span>}
-        <!-- Live currency rate injected by JS when fetch succeeds -->
-        <span class="gstat gstat-rate" id="liveRatePill" hidden></span>
-      </div>
-
-      {guide.draft && (
-        <>
-          <!-- research-pass.yml publishes a guide itself the moment its own verify PASS lands
-               — so a guide still showing draft:true here is either mid-pipeline right now, or a
-               run that couldn't reach PASS and is sitting in a draft PR for a human to fix.
-               Either way, the live tracker is the honest first stop: it shows which of those two
-               is actually true.
-
-               There is no "nominate this for publication" link any more, and its issue template
-               is gone with it. Publication is decided by evidence (npm run build + a networked
-               verify), never by a human clicking a label, so a button asking to be published had
-               nothing to ask. The one manual override is local and runs the identical gate:
-               `node scripts/pipeline.mjs publish --slug <slug>`. -->
-          <p class="draft-progress">
-            <a class="draft-progress-link" href={`${base}/progress/?slug=${encodeURIComponent(ogSlug)}`}>
-              <Icon name="clock" size={14} /> Track live progress
-            </a>
-          </p>
-        </>
-      )}
-
-      <!-- U11: "Request a change" moved to the page footer — it was a bare underlined text
-           link mid-masthead (banned bare-text tap target; maker plumbing shown to every
-           traveler in the guide's most prominent spot). See <footer> below for the pill. -->
-
-      <!--
-        JET-LAG CALCULATOR
-        Collapsible — shown only when the guide's country has a known UTC offset.
-        User picks their origin timezone; output shows the time gap, recovery
-        estimate, and direction-specific tips. The markup moved to JetLag.astro when
-        the Tools screen needed the same calculator (Stage E); R5 retired that screen and
-        the panel with it, so this is the one host again — the component stays split
-        because the origin list is worth keeping out of this file either way.
-      -->
-      {destTzIana !== null && <JetLag destTz={destTzIana} groupIdx={jlGroupIdx} />}
-    </header>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         MAIN LAYOUT — tab-switched content panels (nav is the sticky tab bar above)
-         ═══════════════════════════════════════════════════════════════════ -->
-    {/* .shell-q exists only to BE the query container (guide.css). The container-name has to
-        live on .shell's parent, because a size query is answered by the nearest ancestor
-        container and never by the element that declares one on itself — with both on .shell,
-        `@container guide (…){.shell{…}}` matched nothing and the tablet two-column model never
-        rendered at any width. .shell-q carries the cap/gutters so the query box is the same
-        width it always was; .shell is the grid. */}
-    <div class="shell-q">
-    <div class="shell">
-      {/* ═══════════════════════════════════════════════════════════════════════
-          THE SPINE RAIL — one stop per station, derived from this guide.
-          One DOM for all three models; @container in guide-rail/styles.css decides which
-          paints. Deliberately NOT a tablist: R5 stations are plain buttons carrying
-          aria-current in a nav (BEHAVIOR.md §4), because a tablist promises arrow-key
-          traversal of a set the reader can see, and thirteen stops on a scrolling phone row
-          are not that set. The arrow-key ring is kept by hand in guide-ui.js.
-          ═══════════════════════════════════════════════════════════════════ */}
-      <nav class="grail" aria-label="Guide sections" data-hint-anchor>
-        <div class="grail-track" id="guideTabs">
-          {primaryStations.map((s) => (
-            <button class="gtab grail-stop" type="button" id={`gtab-${s.key}`}
-                    data-tab={s.index} data-route={s.key} data-full={s.full} data-kind={s.kind}
-                    data-primary="true" aria-controls={`dest-${s.key}`}
-                    aria-current={s.index === 0 ? "true" : undefined}>
-              <span class="grail-dot" aria-hidden="true"></span>
-              <span class="grail-label">{s.full}</span>
-            </button>
-          ))}
-          {/* Secondary routes remain real router stations but do not paint in the primary
-              traveler rail. Stable route keys keep every other entry point on one code path. */}
-          {secondaryStations.map((s) => (
-            <button class="gtab" type="button" id={`gtab-${s.key}`}
-                    data-tab={s.index} data-route={s.key} data-full={s.full} data-kind={s.kind}
-                    data-primary="false" aria-controls={`dest-${s.key}`} hidden>
-              {s.full}
-            </button>
-          ))}
-        </div>
-        <div class="grail-prog" aria-hidden="true"><span class="grail-fill"></span></div>
-        <div class="grail-ctx">
-          <p class="grail-kicker" data-rail-kicker>{primaryStations[0]?.full}</p>
-          {stationDesc(primaryStations[0]) && <p class="grail-desc" data-rail-desc>{stationDesc(primaryStations[0])}</p>}
-        </div>
-        <div class="grail-secondary" role="group" aria-label="More guide sections">
-          {secondaryStations.map((station) => (
-            <button type="button" class="grail-secondary-link"
-                    data-action="guide-route" data-route={station.key}>
-              {station.full}
-            </button>
-          ))}
-        </div>
-      </nav>
-
-      {/* tabindex=-1 is intentionally programmatic-only: the first Skip link must move keyboard
-          and assistive-technology focus into the reading region, without adding the main landmark
-          to the ordinary Tab order. */}
-      <main class="content" id="content" tabindex="-1">
-        <noscript>
-          <p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds section tabs, saved checklists, and the jet-lag calculator.</p>
-        </noscript>
-        {order.map((g, ci) => {
-          const solo = byG[g].length === 1;
-          const descriptor = (guide as any).descriptors?.[g] ?? null;
-          const subParts = solo || descriptor ? [] : byG[g].map((o: any) => navLabel(o.s, g)).filter((t: string) => t && t !== g);
-          const sub = collapseSubPrefixes(subParts.slice(0, 4)).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
-          const panelGroups = (guide as any).panelGroups ?? [];
-          /* A canonical destination may combine several authored groups. Keep Panel behavior
-             only when every contributing authored group opted into it; mixed destinations
-             render as ordinary blocks rather than pretending one grid owns another group's order. */
-          const isPanelGroup = byG[g].every((entry: any) => panelGroups.includes(entry.rawGroup));
-          return (
-            <div class="catblock" id={`dest-${primaryStations[ci].key}`} data-ci={ci}
-                 data-route={primaryStations[ci].key} data-desc={descriptor ?? undefined}
-                 role="region" aria-labelledby={`gtab-${primaryStations[ci].key}`} hidden={ci > 0}>
-              {legacyAnchorsFor(primaryStations[ci].key).map((anchor) => <span id={anchor.id} aria-hidden="true"></span>)}
-              <header class="cat-opener">
-                <span class="cat-num" aria-hidden="true">{String(ci + 1).padStart(2, "0")}</span>
-                {groupImgs[g] && (
-                  <span class="cat-fan" aria-hidden="true">
-                    {groupImgs[g].map((im, fi) => (
-                      <img class={`cat-fan-img cat-fan-${fi}`} src={thumbSrc(im)} alt="" loading="lazy" decoding="async" />
-                    ))}
-                  </span>
-                )}
-                <h2 class="cat-title">{g}</h2>
-                {descriptor && <p class="cat-desc">{descriptor}</p>}
-                {sub && <p class="cat-sub">{sub}</p>}
-                {isPanelGroup && (
-                  <button class="cat-collapse-all" type="button" data-panel-collapse-all hidden>Collapse all</button>
-                )}
-              </header>
-              {isPanelGroup ? (
-                <>
-                  <div class="pnl-grid" data-panel-grid data-panel-scope={`${storeKey}:${g}`}>
-                    {byG[g].map((o: any) => (
-                      <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo}
-                             holidays={holidayInfo} learnings={guide.learnings ?? null}
-                             mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null}
-                             country={guide.country} panelHost={true} />
-                    ))}
-                  </div>
-                  <p class="pnl-reset-row">
-                    <button class="pnl-reset" type="button" data-panel-order-reset hidden>Reset panel order</button>
-                  </p>
-                </>
-              ) : (
-                byG[g].map((o: any) => (
-                  <Block sec={o.s} sid={`sec-${o.i}`} ci={ci} solo={solo}
-                         holidays={holidayInfo} learnings={guide.learnings ?? null}
-                         mapPins={o.s.type === "map" ? (pinMap.get(o.s) ?? null) : null}
-                         country={guide.country} />
-                ))
-              )}
-              {ci === jlGroupIdx && (
-                <TripKit storeKey={storeKey} country={guide.country} days={daysSec?.items ?? []}
-                         sections={_flat} phrases={guide.phrases ?? null} entry={guide.entry ?? null} inGroup />
-              )}
-              {byG[g].some((o: any) => o.s.type === "days") && (
-                <div class="lnw-cta">
-                  <button class="lnw-open" type="button" data-lnw-open hidden>
-                    <Icon name="edit" size={14} class="lnw-open-ico" />Trip Feedback
-                  </button>
-                  <span class="lnw-cta-note">Traveled this? Log what worked and what you’d change.</span>
-                </div>
-              )}
-              {ci < order.length - 1 && (
-                <button class="next-cta" type="button" data-next-tab={ci + 1}>
-                  <span class="next-cta-label">Next section</span>
-                  <span class="next-cta-title">{order[ci + 1]}</span>
-                  <span class="next-cta-arrow" aria-hidden="true">→</span>
-                </button>
-              )}
-            </div>
-          );
-        })}
-        {sourcesStationIndex !== null && (
-          <div class="catblock" id="dest-sources" data-ci={sourcesStationIndex} data-route="sources"
-               role="region" aria-labelledby="gtab-sources" hidden>
-            {legacyAnchorsFor("sources").map((anchor) => <span id={anchor.id} aria-hidden="true"></span>)}
-            <header class="cat-opener">
-              <h2 class="cat-title">Sources & verification</h2>
-            </header>
-            {travelerProjection.sources.map((entry) => (
-              <Block sec={entry.section} sid={`sec-${entry.index}`} ci={sourcesStationIndex}
-                     solo={travelerProjection.sources.length === 1} holidays={holidayInfo}
-                     learnings={guide.learnings ?? null} country={guide.country} />
-            ))}
-          </div>
-        )}
-        {recapStationIndex !== null && (
-          <div class="catblock catblock--fieldlog" id="dest-recap" data-ci={recapStationIndex}
-               data-route="recap" role="region" aria-labelledby="gtab-recap" hidden>
-            {legacyAnchorsFor("recap").map((anchor) => <span id={anchor.id} aria-hidden="true"></span>)}
-            <Learnings storeKey={storeKey} learnings={guide.learnings ?? null} slug={guideSlug} title={guide.title} />
-          </div>
-        )}
-        <div class="catblock catblock--tools" id="dest-tools" data-ci={toolsStationIndex}
-             data-route="tools" role="region" aria-labelledby="gtab-tools" hidden>
-          {legacyAnchorsFor("tools").map((anchor) => <span id={anchor.id} aria-hidden="true"></span>)}
-          <ToolsScreen active={toolsTrip} base={base}>
-            <Reminders storeKey={storeKey} />
-          </ToolsScreen>
-        </div>
-      </main>
-    </div>{/* end .shell */}
-    </div>{/* end .shell-q */}
-
-    <!-- M4 item 5 — COLOPHON. This was the weakest surface on an otherwise composed page:
-         `{guide.footer}` plus three <br>-separated muted spans. It is also the natural home for
-         the product's one real differentiator — that every perishable fact here was checked
-         against a primary source on a date — so it now signs the page instead of trailing off.
-         Every number is counted from this guide's own data at build time (see `colophon` above);
-         a stat with nothing to report renders nothing at all, per the honest-blank rule. -->
     <footer class="colophon">
       <div class="colo-sig">
         <span class="colo-mark" aria-hidden="true"><Icon name="shield" size={18} /></span>
@@ -972,227 +180,57 @@ const tripSummary = buildSummary(guide);
           {guide.footer && <p class="colo-footer-note">{guide.footer}</p>}
         </div>
       </div>
-
-      {(colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
+      {(v.colophonChecked || v.colophon.verifiedFactCount > 0 || v.colophon.sourceCount > 0) && (
         <dl class="colo-stats">
-          {colophonChecked && (
-            <div class="colo-stat"><dt>Last checked</dt><dd>{colophonChecked}</dd></div>
-          )}
-          {colophon.verifiedFactCount > 0 && (
-            <div class="colo-stat"><dt>Verified facts</dt><dd>{colophon.verifiedFactCount}</dd></div>
-          )}
-          {colophon.sourceCount > 0 && (
-            <div class="colo-stat"><dt>Primary sources</dt><dd>{colophon.sourceCount}</dd></div>
-          )}
-          {nextRecheck && (
-            <div class="colo-stat"><dt>Next self-check</dt><dd>{nextRecheck}</dd></div>
-          )}
+          {v.colophonChecked && <div class="colo-stat"><dt>Last checked</dt><dd>{v.colophonChecked}</dd></div>}
+          {v.colophon.verifiedFactCount > 0 && <div class="colo-stat"><dt>Verified facts</dt><dd>{v.colophon.verifiedFactCount}</dd></div>}
+          {v.colophon.sourceCount > 0 && <div class="colo-stat"><dt>Primary sources</dt><dd>{v.colophon.sourceCount}</dd></div>}
+          {v.nextRecheck && <div class="colo-stat"><dt>Next self-check</dt><dd>{v.nextRecheck}</dd></div>}
         </dl>
       )}
-
       <div class="colo-foot">
         <p class="colo-notes">
-          {/* offline-pill.js writes the ✓ ONLY once this page is genuinely in the service
-              worker's cache — a state, not a promise. No cache entry, no line. */}
           <span class="offline-saved" id="offlineSaved"></span>
           <span class="offline-note">Add this to your home screen and it works offline once opened — only the embedded maps need a connection.</span>
         </p>
-        <!-- U11: renders on EVERY guide, draft or published — a wrong fact doesn't stop being
-             wrong once a guide is published. The request is filed as a "modify-request" issue,
-             and change.yml AUTO-RUNS on that label — there is no second human step. What gates
-             it is WHO filed it: the workflow runs only for an OWNER/MEMBER/COLLABORATOR author,
-             so a traveler's prefilled issue lands as a report the owner still triages, while the
-             site's ✎ wizard (owner key → backend Worker) files one that runs on its own. Batch 3
-             is what moved that decision off GitHub: the approval LABEL is gone, and the owner
-             key the Worker checks is the approval. -->
-        <!-- A REAL link with the slug already in it, so it works before hydration and with JS
-             off. The 3-step modal this used to open is gone: the request surface is a page now
-             (src/pages/change.astro), which is the only place the guide picker, the live "what
-             we'd update" advisory and the whole-guide section map fit. features/change-request's
-             initChangeLink adds `&tab=` as the reader scrolls, so arriving there pre-fills the
-             tab they were actually looking at — a refinement of this href, never a replacement. -->
-        <a
-          class="foot-modify-pill"
-          id="btnChangeRequest"
-          href={`${base}/change/?slug=${encodeURIComponent(ogSlug)}`}
-        ><Icon name="edit" size={14} /> Request a change</a>
+        <a class="foot-modify-pill" id="btnChangeRequest" href={`${base}/change/?slug=${encodeURIComponent(guideSlug)}`}><Icon name="edit" size={14} /> Request a change</a>
       </div>
     </footer>
 
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         MOBILE BOTTOM TAB BAR (hidden on desktop)
-         [ group ] [ group ] [ ☰ Groups ] [ tool ]
-         Under 900px the top chip strip is hidden, so THIS is the guide's primary
-         navigation — hence real content groups in the bar, not tools alone (the old
-         Journey · Today · Map · Kit bar could never say where you were in the guide).
-         The design-handoff README's four slots, chosen by the creator on 2026-08-08 over
-         the five-slot variant Stage D shipped alongside it (the `?bar=` A/B is deleted).
-         · group slots — the current group plus the one this DEVICE opens most
-           (src/features/mobile-nav — labels and data-tab are rewritten client-side;
-           what's rendered here is the first-paint default, the guide's own order).
-         · Groups      — opens the journey sheet: ALL groups + every tool, so the
-           promoted pair is a shortcut and never a ceiling.
-         · tool        — whichever tool this device opens most (2026-07-30 ruling).
-         Today the map sits in the sheet's tool row — a reference surface, not a wayfinding
-         one. Home lives in the topbar; SOS keeps its post. (Trip Kit shared that row until
-         R5 folded its content into Plan and Vote was removed outright.)
-         ═══════════════════════════════════════════════════════════════════ -->
-    <!-- A <nav>, not a <div>: these are the only controls on the page at phone widths, and as a
-         plain div they sat OUTSIDE every landmark — so a screen-reader user navigating by
-         landmark skipped the entire mobile navigation. Invisible to the a11y gate until it
-         started auditing a narrow viewport, because .botbar is display:none on wide ones.
-         Deliberately NOT role="tablist": it seats two of N groups, and a tablist claiming
-         to be the tab set while showing a fifth of it misreports the guide to a screen
-         reader. Plain buttons + aria-current say exactly what is true; the full tab
-         semantics stay on the real strip, and the sheet is the complete list. -->
-    <nav class="botbar" aria-label="Guide navigation">
-      {/* The active-group underline. Positioned over the live slot by mobile-nav, and
-          in Phase B it tracks a swiping finger — one element that moves, rather than a
-          per-slot state that pops. */}
-      <span class="botbar-ind" aria-hidden="true"></span>
-      {/* Slot 1 — the current content group (mobile-nav rewrites the label). */}
-      <button class="botslot" type="button" data-slot="0" data-tab="0" aria-label={order[0]}>
-        <span class="bslot-mark" aria-hidden="true"></span>
-        <span class="bslot-txt">{slotLabel(order[0])}</span>
-      </button>
-      {/* Slot 1b — the SECOND content group the design-handoff README specs ("Four slots:
-          two content groups, then ALL, then TOOLS"). Stage D shipped it behind an A/B
-          against a five-slot bar; the creator compared both on a phone (2026-08-08) and
-          chose this one, so it is now unconditional. botbar.js still hides it on a guide
-          with only one group — two slots can't seat two groups that don't exist. */}
-      <button class="botslot botslot-alt" type="button" data-slot="1" data-tab="1"
-              aria-label={order[1] ?? order[0]}>
-        <span class="bslot-mark" aria-hidden="true"></span>
-        <span class="bslot-txt">{slotLabel(order[1] ?? order[0])}</span>
-      </button>
-      {/* Slot 2 — the TOOLS slot (creator, 2026-07-30: "the tools should be their own tab
-          ... the Trip Split calculator is by far the most useful to have handy"). It was a
-          second content group, which the Groups sheet already reaches in one tap; a tool
-          panel was three. It shows whichever tool THIS device opens most, defaulting to the
-          budget split, and every icon ships so the swap is a class toggle, not a fetch. */}
-      {/* R5: ONE Tools slot pointing at the Tools STATION (COMPONENTS.md §10 — two ranked
-          content groups, then JOURNEY, then TOOLS). R4's version guessed which of five tool
-          panels this device wanted and swapped its own icon to match; with four tools behind
-          one station there is nothing left to guess, and a button whose icon changes under you
-          is a button you cannot build a habit around. */}
-      <button class="botslot botslot-tool" type="button" data-slot="tool" data-tab={toolsStationIndex}
-              aria-label="Trip tools">
-        <Icon name="budget" size={17} class="bslot-ico bsi-split" />
-        <span class="bslot-txt">Tools</span>
-      </button>
-      <button class="botmini botmini-groups" id="sheetOpen" type="button"
-              aria-haspopup="dialog" aria-expanded="false">
-        <Icon name="groups" size={17} />
-        <span>Groups</span>
-        {/* The current group and its "3/13" position (field-tools.js appends .bs-pos
-            after this) are now part of the button's ACCESSIBLE NAME rather than a
-            visible label — the active group slot already says where you are visually,
-            and five slots have no room to say it twice. The sheet head shows the
-            position in full for everyone. */}
-        <span class="bs-cur mn-sr" id="curCat"></span>
-      </button>
-    </nav>
-
-    <!-- Slide-up section sheet (mobile) -->
-    <div class="sheet-backdrop"></div>
-    {/* Ships INERT because it ships closed. The transform that slides it away cannot remove
-        its ~90 links from the tab order, and a reader whose script never ran would otherwise
-        tab through every one of them before reaching the page. guide-ui.js clears it on open
-        and restores it on close. */}
-    <div class="sheet" role="dialog" aria-label="Sections" aria-modal="true" inert>
-      {/* The "3 of 13" position moved here from the bottom bar when that bar became a
-          five-slot tab bar (no room for a second label). field-tools.js writes it. */}
-      <div class="sheet-head">The journey <span class="sheet-pos" id="sheetPos"></span></div>
-      <div class="sheet-list">
-        {order.map((g, ci) => (
-          <>
-            <a class="sheet-cat" data-cat={ci} data-tab={ci} data-action="guide-route"
-               data-route={primaryStations[ci].key} href={`#dest-${primaryStations[ci].key}`}>
-              <span class="sheet-cat-name">{g}</span>
-              <span class="sheet-count" aria-hidden="true">{byG[g].length}</span>
-              <span class="mn-sr">{byG[g].length === 1 ? " — 1 section" : ` — ${byG[g].length} sections`}</span>
-            </a>
-            {byG[g].length > 1 && byG[g].map((o: any) => (
-              <a class="sheet-link" data-tab={ci} href={`#sec-${o.i}`}>{navLabel(o.s, g)}</a>
-            ))}
-          </>
-        ))}
-        <a class="sheet-cat sheet-tool sheet-today-link" id="botToday" data-today-action href="#"
-           aria-label="Jump to today in the itinerary">
-          <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="sheet-ico"><circle cx="8" cy="8" r="3"/><path d="M8 1.2v2M8 12.8v2M1.2 8h2M12.8 8h2M3.3 3.3l1.4 1.4M11.3 11.3l1.4 1.4M12.7 3.3l-1.4 1.4M4.7 11.3l-1.4 1.4"/></svg>Today
-        </a>
-        <p class="sheet-more-label">More for this trip</p>
-        {sourcesStationIndex !== null && (
-          <a class="sheet-cat sheet-tool" data-action="guide-route" data-route="sources"
-             href="#dest-sources">Sources & verification</a>
-        )}
-        {recapStationIndex !== null && (
-          <a class="sheet-cat sheet-tool" data-action="guide-route" data-route="recap"
-             href="#dest-recap">Recap</a>
-        )}
-        <a class="sheet-cat sheet-tool sheet-tools-link" data-action="guide-route"
-           data-route="tools" href="#dest-tools"><Icon name="budget" class="sheet-ico" />Trip utilities</a>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         CLIENT SCRIPT
-         All interactive enhancements in one bundle:
-           1. Dark-mode toggle
-           2. Mobile sheet (open/close, Escape, focus-trap)
-           3. Scroll-spy (highlights current section in nav)
-           4. Checklists (save to localStorage, export/import/clear)
-           5. Budget calculators (live total, persisted per-device)
-           6. Jet-lag calculator
-         ═══════════════════════════════════════════════════════════════════ -->
-    <!-- Config for the extracted guide UI module (formerly Astro define:vars). -->
-    <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({ order, storeKey, legacyStoreKey, roomId: guide.roomId ?? null, mapCenter, firstDayDate, lastDayDate, hasWeatherSection, destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, curFallbackAsOf: FALLBACK_RATES_AS_OF, navSections: order.map((g: string) => ({ group: g, titles: (byG[g] || []).map((o: any) => navLabel(o.s, g)) })), daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null, emergency: emergencyFor(guide.country), advisory: (guide as any).advisory ?? null, verifiedDate, budgetLock: (guide as any).budgetLock ?? false })}></script>
-    <script type="application/json" is:inline id="storyDays" set:html={jsonEmbed(storyDays)}></script>
-    <!-- Interactive UI — bundled + hashed by Astro into one module shared across guides. -->
+    <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({
+      storeKey: v.storeKey, legacyStoreKey: v.legacyStoreKey, roomId: guide.roomId ?? null, mapCenter: v.mapCenter, firstDayDate: v.firstDayDate, lastDayDate: v.lastDayDate, hasWeatherSection: v.hasWeatherSection,
+      destTzIana: v.destTzIana, curCode: v.localCur?.code ?? null, curFallbackRate: v.localCur?.approxRate ?? null, curFallbackAsOf: FALLBACK_RATES_AS_OF,
+      daysForBanner: v.daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null,
+      emergency: v.plate.emergency, advisory: (guide as any).advisory ?? null, verifiedDate: v.verifiedDate, budgetLock: (guide as any).budgetLock ?? false,
+      slug: guideSlug, title: guide.title,
+    })}></script>
+    <script type="application/json" is:inline id="searchIndex" set:html={jsonEmbed(v.searchIndex)}></script>
     <script>
       import "../scripts/guide-ui.js";
       import "../features/maps/index.js";
-      // itinerary silo (day-rail, now-line, spine, print-day, story-mode) —
-      // imported at day-rail's original slot; its index preserves their exec
-      // order. guide-ui above stays first (the one load-bearing invariant).
       import "../features/itinerary/index.js";
-      // mobile-nav reads the tab strip's active state and drives the bottom bar; it must
-      // load AFTER guide-ui (which sets the initial active tab) so its first render sees
-      // the real starting group instead of counting the restore as a chosen open.
+      import "../features/trip/index";
       import "../features/mobile-nav/index.js";
       import "../scripts/reveal.js";
-      import "../scripts/section-flight.js";
       import "../scripts/micro.js";
       import "../scripts/provenance-dot.js";
-      // M4 item 4 — ORDER IS LOAD-BEARING for the onboarding choreography. ES modules evaluate
-      // in import order: cold-open claims the first eligible view; onboard's nav-hint defers
-      // to it via window.__onboardShown. (The masthead's day-segmented title-card intro that
-      // used to own visit 1 — story-open.js — was retired with the plate masthead rebuild:
-      // its full-bleed treatment assumed title text sat absolutely over the photo, which the
-      // plate layout no longer does. The Phase 3 hub→masthead FLIP transition in the redesign
-      // spec supersedes it rather than needing a rebuild here.)
-      import "../scripts/cold-open.js";
-      import "../scripts/onboard.js";
       import "../scripts/scroll-memory.js";
-      import "../scripts/tools-reminders.js";
+      import "../scripts/readiness-ticks.js";
       import "../scripts/offline-pill.js";
       import "../features/field-tools/index.js";
       import "../features/route-opt/index.js";
       import "../features/sos/index.js";
+      import "../features/search/index";
       import "../scripts/lightbox.js";
       import "../scripts/hero-parallax.js";
       import "../scripts/gsap-hero.js";
       import "../scripts/living-cover.js";
       import "../scripts/anchors.js";
       import "../scripts/hint.js";
-      import "../features/palette/index.js";
       import "../features/trip-split/index.ts";
       import "../scripts/staleness-ui.js";
-      // Atlas Phase 2 — boots any Panel grid a group declared (data-panel-scope).
-      // After guide-ui so tabs exist; a guide with no panelGroups wires nothing.
       import { initDeclaredPanelGrids } from "../features/panel/index.js";
       initDeclaredPanelGrids();
     </script>
-
   </body>
 </html>

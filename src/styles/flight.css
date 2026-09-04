@@ -27,7 +27,7 @@
 .cat-desc{position:relative;z-index:1;margin:.35rem 0 0;font-family:var(--font-body);font-style:italic;font-size:var(--text-body);color:var(--muted);max-width:52ch}
 
 /* COLLAPSE ALL / EXPAND ALL (README:281, A9) — same pill-utility-button treatment as the
-   panel grid's own .pnl-reset (guide.css), so a reader recognises it as the same KIND of
+   panel grid's collapse toggle, so a reader recognises it as the same KIND of
    control. Hidden until src/features/panel/ui/collapse.js confirms the group's grid has
    at least one wired Panel (no-JS-safe, matching the Panel toggle's own contract). */
 .cat-collapse-all{position:relative;z-index:1;display:inline-block;margin-top:.6rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:.4rem .85rem;cursor:pointer;transition:color .15s,border-color .15s}
@@ -44,30 +44,6 @@
 @media(max-width:640px){.cat-fan{width:96px;height:66px}.cat-fan-img{width:64px;height:46px}.cat-fan-1{left:18px}.cat-fan-2{left:36px}}
 
 /* ── First-visit navigation hint ─────────────────────────────────────────── */
-/* M2/CLS: [data-hint-anchor] (the tab nav) is the positioning context — nav-hint OVERLAYS
-   just below the tab bar instead of inserting into flow, so it can never push page content
-   down after paint. It has its own background + shadow so it reads as a floating strip, not
-   a layout row.
-
-   There is no `[data-hint-anchor]{position:relative}` rule here any more, and its absence is
-   load-bearing. The only element carrying that attribute is .grail, which declares
-   `position:sticky;top:var(--hdr-h)` — and both selectors are (0,1,0), so the later file won
-   the tie and the rail was position:RELATIVE at every width, desktop included. It therefore
-   never stuck to anything: `top` on a relative box is a displacement, so the rail simply sat
-   --hdr-h lower and painted over that much of the page's first screen. Nothing is lost by
-   deleting it, because the containing block this comment asks for is what a sticky element
-   already provides — sticky is a positioned box, so .nav-hint's `position:absolute;top:100%`
-   still resolves against .grail exactly as before. Do not re-add it; give any future anchor
-   its own class instead of a rule broad enough to collide with a positioned element. */
-.nav-hint{position:absolute;top:100%;left:0;right:0;display:flex;align-items:center;gap:.7rem;max-width:var(--read);margin:.5rem auto 0;padding:.55rem .9rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:0;box-shadow:0 6px 16px rgba(var(--shadow-rgb),.12);font-size:var(--text-small);color:var(--ink);transition:opacity .35s,transform .35s}
-.nav-hint-txt{flex:1;line-height:1.5}
-.nav-hint-x{flex:none;width:30px;height:30px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer;font-size:var(--text-control-sm)}
-.nav-hint-x:hover{color:var(--ink);border-color:var(--ink)}
-.nav-hint-out{opacity:0;transform:translateY(-8px)}
-/* bp:MOBILE_MAX — src/lib/breakpoints.ts */
-@media(max-width:899px){.nav-hint{margin-left:1rem;margin-right:1rem}}
-
-/* ── Next-section CTA — the guided reading chain ─────────────────────────── */
 .next-cta{display:flex;align-items:center;gap:1rem;width:100%;max-width:var(--read);margin:2.2rem auto .4rem;padding:1.15rem 1.4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:0;cursor:pointer;text-align:left;transition:background .22s,color .22s,border-color .22s,transform .2s var(--ease-spring)}
 .next-cta-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .22s}
 .next-cta-title{flex:1;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);letter-spacing:-.012em;line-height:1.1}

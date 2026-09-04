@@ -5,6 +5,7 @@
 // GitHub's own workflow status badges (public SVGs, no backend, no secrets); the honest role +
 // caveat text beside each one is authored here so a green badge is never mistaken for "did its job".
 import PwaHead from "../../components/PwaHead.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
 // Quiet Edition (R1): ONE serif — Literata with its optical-size axis (standard = wght+opsz,
 // so browsers cut display vs text automatically) — and ONE quiet humanist sans for data/labels.
 import "@fontsource-variable/literata/standard.css";
@@ -126,6 +127,7 @@ const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not pro
     <!-- Was a bare <div>. Every other page on the site puts its content in a landmark; this one
          did not, so a screen-reader user had no way to skip the chrome and the a11y gate's own
          vacuity guard (which samples `main a, main h2, …`) found nothing here to audit at all. -->
+    <UtilityBar base={base} maxWidth="var(--hl-max, 58rem)" />
     <main class="hl-wrap">
       <p class="hl-kicker">Behind the scenes</p>
       <h1 class="hl-head">Pipeline health</h1>
@@ -196,5 +198,9 @@ const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not pro
       <br />
       <a class="hl-home-link" href={`${base}/`}>← Back to all guides</a>
     </main>
+    <script>
+      import { initDarkToggle } from "../../scripts/theme.js";
+      initDarkToggle("btnDark");
+    </script>
   </body>
 </html>

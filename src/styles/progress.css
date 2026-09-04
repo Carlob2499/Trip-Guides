@@ -14,13 +14,8 @@
 
 /* ── Page ground ───────────────────────────────────────────────────────────── */
 body{min-height:100vh;display:flex;flex-direction:column}
-.pg-bar,.pg,.pg-foot{position:relative;z-index:1}
+.pg,.pg-foot{position:relative;z-index:1}
 
-.pg-bar{max-width:74rem;margin:0 auto;width:100%;padding:1.1rem 1.2rem 0;display:flex;align-items:center;justify-content:space-between;gap:.8rem}
-.pg-wordmark{display:inline-flex;align-items:center;min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
-.pg-wordmark:hover{color:var(--accent-ink)}
-.pg-wordmark:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
-.pg-bar-right{display:flex;align-items:center;gap:.6rem}
 
 /* Every status pigment on this page resolves through one custom property, so a state
    change is one attribute rather than four class swaps. */
@@ -33,11 +28,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.32rem .8rem;border-radius:999px;border:1px solid var(--pg-tone,var(--rule));background:color-mix(in srgb,var(--pg-tone,var(--rule)) 12%,var(--card));color:var(--pg-tone,var(--muted));font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;white-space:nowrap}
 .pg-pill[data-tone="muted"]{color:var(--ink)}
 
-.pg-theme-btn{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 .6rem;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;transition:background var(--dur-tap) ease,border-color var(--dur-tap) ease}
-.pg-theme-btn:hover{border-color:var(--ink)}
-.pg-theme-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .tb-ico{width:17px;height:17px;flex:none;display:block}
-.theme-btn-label{display:none}
 
 .pg-foot{border-top:1px solid var(--rule2);text-align:center;padding:1.6rem 1.2rem calc(1.6rem + var(--safe-bottom));color:var(--muted);font-size:var(--text-control);font-family:var(--font-data);letter-spacing:.04em}
 .pg-foot a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
@@ -260,11 +251,11 @@ body{min-height:100vh;display:flex;flex-direction:column}
 /* ── Reduced motion — it cuts, it does not soften ──────────────────────────── */
 @media (prefers-reduced-motion: reduce){
   .pg-route-todo,.pg-station-ring,.pg-dot{animation:none}
-  .pg-phase-fill,.pg-btn,.pg-q-opt,.pg-theme-btn{transition:none}
+  .pg-phase-fill,.pg-btn,.pg-q-opt{transition:none}
   .pg-dot{opacity:1;transform:none}
 }
 
 @media print{
-  .pg-bar,.pg-foot,.pg-key,.pg-notify{display:none!important}
+  .pg-foot,.pg-key,.pg-notify{display:none!important}
   .pg-note{position:static;box-shadow:none}
 }

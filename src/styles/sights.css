@@ -31,7 +31,8 @@
 /* Failed image → static "loads online" plate (no infinite shimmer). */
 .sight-media.media-fail{animation:none;background:var(--bg2)}
 .sight-media.media-fail .cardimg{display:none}
-.sight-media.media-fail::after{content:"Photo loads online";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.04em;color:var(--muted)}
+.sight-media.media-fail::after{content:"Photo loads online";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.04em;color:var(--muted);pointer-events:none}
+.sight-media-cap{z-index:1}
 .sight-media.media-fail .imgcredit{display:none}
 
 .sight-media-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(var(--shadow-rgb),.82) 0%,rgba(var(--shadow-rgb),.30) 42%,rgba(var(--shadow-rgb),0) 68%)}

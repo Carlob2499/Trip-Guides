@@ -39,13 +39,6 @@
 .cur-in{width:100%;padding:.45rem .6rem;font:inherit;font-size:var(--text-body);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:0}
 .cur-out{margin-top:.5rem;font-family:var(--font-data);font-size:var(--text-control);line-height:1.7;color:var(--ink)}
 
-/* ── Jump-to-today chip ───────────────────────────────────────────────────── */
-.today-chip{position:fixed;left:50%;bottom:calc(5.2rem + var(--safe-bottom));transform:translateX(-50%);z-index:70;padding:.6rem 1.1rem;background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
-@media(min-width:900px){.today-chip{bottom:1.7rem;left:auto;right:6rem;transform:none}}
-@media(prefers-reduced-motion:no-preference){.today-chip{animation:chipIn .5s cubic-bezier(.2,1.2,.3,1) .8s both}}
-@keyframes chipIn{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1}}
-@media(min-width:900px){@keyframes chipIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}}
-
 /* ── Lightbox ─────────────────────────────────────────────────────────────── */
 .sight--photo .cardimg{cursor:zoom-in}
 .lb-backdrop{position:fixed;inset:0;z-index:300;display:none;background:rgba(var(--shadow-rgb),.92);align-items:center;justify-content:center;padding:1rem}
@@ -60,7 +53,7 @@
 .lb-x:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 
 /* The swipe edge glow (`html[data-swipe-hint]`) retired 2026-07-30 with the rewrite to a
-   finger-tracked swipe (src/features/mobile-nav/ui/swipe-tabs.js). It existed to answer a
+   finger-tracked swipe (retired with the R5 rail, D7). It existed to answer a
    gesture that was otherwise invisible until it completed; the content now moves under
    the thumb, which says the same thing continuously and in the right direction. */
 
@@ -70,21 +63,7 @@
 }
 @keyframes kitPop{0%{transform:scale(1)}45%{transform:scale(1.18)}100%{transform:scale(1)}}
 
-/* ── Reading spine (desktop ≥1100px) ─────────────────────────────────────── */
-.spine{display:none}
-@media(min-width:1100px){
-  .spine{display:flex;flex-direction:column;gap:.45rem;position:fixed;left:max(.9rem,var(--safe-left));top:50%;transform:translateY(-50%);z-index:55}
-  .spine-tick{position:relative;width:5px;height:30px;padding:0;background:color-mix(in srgb,var(--rule) 70%,transparent);border:none;border-radius:999px;cursor:pointer;overflow:visible}
-  /* The fill used to animate `height` — on a scroll handler, i.e. a per-frame layout path, which
-     this system does not do (transform and opacity only). Same look, driven by --spine-fill
-     (0..1, written by itinerary/ui/spine.js) through a scale instead. */
-  .spine-fill{position:absolute;left:0;right:0;top:0;height:100%;transform-origin:top;transform:scaleY(var(--spine-fill,0));background:var(--accent);border-radius:999px;transition:transform .25s ease}
-  .spine-seen .spine-fill{background:color-mix(in srgb,var(--accent) 55%,var(--rule))}
-  .spine-active{width:7px}
-  .spine-tip{position:absolute;left:14px;top:50%;transform:translateY(-50%) translateX(-4px);white-space:nowrap;padding:.25rem .6rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-micro);border-radius:0;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
-  .spine-tick:hover .spine-tip,.spine-tick:focus-visible .spine-tip{opacity:1;transform:translateY(-50%) translateX(0)}
-  .spine-tick:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
-}
+
 /* ── SOS button + sheet ───────────────────────────────────────────────────── */
 /* The SOS button now reads the same --crit-fill/--on-crit pair the sheet and the topbar
    button do; it was the last place the emergency red was a hex literal. Its glow went with the
@@ -92,45 +71,62 @@
 .sos-btn{position:fixed;left:max(1rem,var(--safe-left));bottom:calc(5.2rem + var(--safe-bottom));z-index:75;width:48px;height:48px;border-radius:999px;background:var(--crit-fill);color:var(--on-crit);border:2px solid color-mix(in srgb,var(--on-crit) 35%,transparent);font-family:var(--font-data);font-size:var(--text-micro);font-weight:800;letter-spacing:.05em;cursor:pointer}
 @media(min-width:900px){.sos-btn{bottom:1.6rem;left:5rem}}
 .sos-btn:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
-.sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:flex-end;justify-content:center;background:rgba(var(--shadow-rgb),.6)}
+/* THE SOS SHEET (design-system.md §13, locked 2026-09-04): a near-black emergency surface in
+   both themes (the fixed --dark-* register — a takeover, not a page), a dominant full-height
+   sheet on a phone and a centred modal on desktop. Police and Fire/Ambulance are the two huge
+   first-screen actions and the only place emergency red is painted; everything else is a
+   visibly subordinate second layer. Stress usability outranks sophistication. */
+.sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:stretch;justify-content:center;background:rgba(var(--shadow-rgb),.72)}
 .sos-sheet[hidden]{display:none}
-/* overscroll-behavior:contain — a fling that runs off the end of the sheet must not
-   scroll the page behind it. sheet-dragging kills the transition while the thumb owns
-   the transform (src/scripts/sheet-drag.js). */
-/* Atlas re-expression (Stage F, feature 1): square corners — this system has only 0 and
-   999px — and a 1px rule for the edge instead of a radius doing the separating. Behaviour,
-   markup and data flow are untouched; this is the same sheet in the system's own hand. */
-.sos-inner{width:100%;max-width:30rem;background:var(--card);border-radius:0;border-top:1px solid var(--rule2);padding:1rem 1.2rem max(1.2rem,var(--safe-bottom));overscroll-behavior:contain;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
-/* Same gesture split as the groups sheet (mobile-nav.css): this element IS the drag surface,
-   so it must own the swipe outright. Left at `auto` the browser read the same downward thumb
-   as a page scroll and armed pull-to-refresh under an emergency sheet. It has no scrolling
-   content of its own, so nothing is given up by claiming the whole gesture here. */
-.sos-inner{touch-action:none}
+.sos-inner{width:100%;display:flex;flex-direction:column;gap:1rem;background:var(--dark-ground);color:var(--dark-ink);border:0;padding:calc(.8rem + var(--safe-top)) max(1.1rem,var(--safe-right)) max(1.4rem,var(--safe-bottom)) max(1.1rem,var(--safe-left));overflow-y:auto;overscroll-behavior:contain;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+/* This element IS the drag surface (sheet-drag.js): it owns the whole gesture. */
+.sos-inner{touch-action:pan-y}
 .sos-inner.sheet-dragging{transition:none;will-change:transform}
-/* A sheet you can pull down should say so. */
-.sos-inner::before{content:"";display:block;width:38px;height:4px;border-radius:999px;background:var(--rule2);margin:-.35rem auto .6rem}
-@media(min-width:900px){.sos-inner::before{display:none}}
-@media(min-width:900px){.sos-sheet{align-items:center}.sos-inner{border-radius:0;border:1px solid var(--rule2)}}
-/* The notation layer: a data-face kicker, the way every Atlas container announces what it
-   is before it says anything else. */
-.sos-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 .6rem;font-family:var(--font-data);font-weight:640;font-size:var(--text-control);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.sos-x{width:36px;height:36px;background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--muted);cursor:pointer}
-.sos-row{display:flex;align-items:center;gap:.9rem;padding:.7rem .2rem;border-top:1px solid var(--rule);text-decoration:none;color:var(--ink)}
-.sos-num{flex:none;min-width:4.2rem;font-family:var(--font-display);font-weight:640;font-size:1.7rem;letter-spacing:-.012em;color:var(--crit)}
-.sos-label{font-size:var(--text-small);line-height:1.4;color:var(--ink)}
-.sos-note{margin:.7rem 0 0;font-size:var(--text-caption);color:var(--muted)}
-/* Official travel-advisory notice (docs/archive/INDEX.md → FEATURES #9) — only present when elevated;
-   sits above the emergency numbers since "know the current advisory" outranks
-   "have the number ready" the moment a traveler opens this sheet. */
-.sos-advisory{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .8rem;margin-bottom:.4rem;border:1px solid var(--warn);border-radius:0;text-decoration:none;background:color-mix(in srgb,var(--warn) 8%,transparent)}
-.sos-advisory-level{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--warn)}
-.sos-advisory-title{font-weight:700;color:var(--ink);font-size:var(--text-body)}
-.sos-advisory-summary{font-size:var(--text-control);color:var(--muted);line-height:1.4}
+.sos-head{display:flex;align-items:center;gap:.6rem;margin:0;font-family:var(--font-data);font-weight:700;font-size:var(--text-control);letter-spacing:.16em;text-transform:uppercase;color:var(--dark-ink)}
+.sos-head-where{color:var(--dark-ink-3);letter-spacing:.06em;text-transform:none;font-weight:600;font-size:var(--text-control)}
+.sos-x{margin-left:auto;width:44px;height:44px;flex:none;background:transparent;border:1px solid var(--dark-rule);border-radius:999px;color:var(--dark-ink);cursor:pointer}
+.sos-x:focus-visible{outline:3px solid var(--dark-ink);outline-offset:2px}
+/* First layer: two enormous calls. */
+.sos-primary{display:grid;grid-template-columns:1fr;gap:.7rem}
+.sos-call{display:grid;grid-template-columns:minmax(0,1fr);gap:.1rem;min-height:120px;padding:1rem 1.2rem;background:var(--crit-fill);color:var(--on-crit);border:2px solid var(--crit-fill);border-radius:0;text-decoration:none}
+.sos-call:hover{filter:brightness(1.06)}
+.sos-call:focus-visible{outline:3px solid var(--dark-ink);outline-offset:3px}
+.sos-call-num{font-family:var(--font-display);font-weight:640;font-size:clamp(2.6rem,11vw,3.6rem);line-height:1;letter-spacing:-.02em;color:var(--on-crit)}
+.sos-call-label{font-family:var(--font-data);font-weight:700;font-size:var(--text-h4);color:var(--on-crit);overflow-wrap:anywhere}
+.sos-call-hint{font-family:var(--font-data);font-size:var(--text-control);color:var(--on-crit);opacity:.9;overflow-wrap:anywhere}
+/* Second layer: verified help, quieter and clearly beneath. */
+.sos-more{display:flex;flex-direction:column;border-top:1px solid var(--dark-rule)}
+.sos-more-k{margin:.8rem 0 .1rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--dark-ink-3)}
+.sos-row{display:flex;align-items:center;gap:1rem;min-height:64px;padding:.6rem .2rem;border-top:1px solid var(--dark-rule);text-decoration:none;color:var(--dark-ink)}
+.sos-row:first-of-type{border-top:0}
+.sos-row:focus-visible{outline:2px solid var(--dark-ink);outline-offset:2px}
+.sos-num{flex:none;min-width:4.4rem;font-family:var(--font-display);font-weight:640;font-size:1.7rem;letter-spacing:-.012em;color:var(--dark-ink)}
+.sos-label{display:flex;flex-direction:column;gap:.1rem;min-width:0;font-size:var(--text-small);line-height:1.35;color:var(--dark-ink-2)}
+.sos-label-main{font-family:var(--font-data);font-weight:700;color:var(--dark-ink)}
+.sos-label-hint{font-family:var(--font-data);font-size:var(--text-caption);color:var(--dark-ink-3);overflow-wrap:anywhere}
+.sos-note{margin:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--dark-ink-3)}
+/* Offline core, said once and quietly (§14): a fact about the numbers, not a badge. */
+.sos-offline{margin:auto 0 0;padding-top:.6rem;font-family:var(--font-data);font-size:var(--text-caption);color:var(--dark-ink-4)}
+/* Official travel-advisory notice — only present when elevated; it sits above the numbers
+   because "know the current advisory" outranks "have the number ready" here. */
+.sos-advisory{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .8rem;border:1px solid var(--dark-warn);border-radius:0;text-decoration:none;background:transparent}
+.sos-advisory-level{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--dark-warn)}
+.sos-advisory-title{font-weight:700;color:var(--dark-ink);font-size:var(--text-body)}
+.sos-advisory-summary{font-size:var(--text-control);color:var(--dark-ink-3);line-height:1.4}
 /* Fallback sheet (EU-wide 112 only, no researched local numbers): warn-toned so
    it reads as "the universal number, not the researched sheet" at a glance. */
-.sos-sheet--fallback .sos-inner{border-top:3px solid var(--warn)}
-.sos-sheet--fallback .sos-note{color:var(--warn)}
+.sos-sheet--fallback .sos-inner{border-top:3px solid var(--dark-warn)}
+.sos-sheet--fallback .sos-note{color:var(--dark-warn)}
 .sos-sheet--fallback .sos-note::before{content:"⚠ "}
+@media(min-width:600px){.sos-primary{grid-template-columns:1fr 1fr}}
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media(min-width:900px){
+  .sos-sheet{align-items:center;padding:2rem}
+  .sos-inner{max-width:40rem;max-height:min(90dvh,44rem);border:1px solid var(--dark-rule);padding:1.2rem 1.6rem 1.4rem}
+  .sos-call{min-height:150px}
+  .sos-offline{margin-top:.4rem}
+}
+@media(prefers-reduced-motion:reduce){.sos-inner{transition:none}}
 
 /* ── Show-the-driver address card ─────────────────────────────────────────── */
 .addr-card{position:fixed;inset:0;z-index:320;display:flex;align-items:center;justify-content:center;background:rgba(var(--shadow-rgb),.75);padding:1rem}
@@ -173,9 +169,6 @@
 .focus-planb{margin-top:.7rem;font-size:var(--text-body)}
 .focus-sun{margin:.5rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
 
-/* ── Budget burn pill ─────────────────────────────────────────────────────── */
-.gstat-burn{cursor:pointer;border-color:var(--accent);color:var(--accent-ink)}
-.gstat-burn:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
 
 /* ── Section position ("3/13") ───────────────────────────────────────────── */
 /* No visual styling left to give: since the bottom bar became a five-slot tab bar
@@ -185,5 +178,4 @@
    the inverted .botSections button) died with that button; a rule styling clipped text
    would only be a trap for the next reader. */
 
-@media(prefers-reduced-motion:reduce){.spine-fill,.spine-tip{transition:none}.day-kitcount.done{animation:none}.today-chip{animation:none}}
-@media print{.spine,.today-chip,.ft-toast,.cur-pop,.lb-backdrop,.sos-btn,.sos-sheet,.addr-card,.focus-today{display:none!important}}
+@media(prefers-reduced-motion:reduce){.day-kitcount.done{animation:none}}

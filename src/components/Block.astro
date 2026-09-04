@@ -22,7 +22,7 @@ import HolidaysBlock from "./blocks/HolidaysBlock.astro";
 import VenueBlock from "./blocks/VenueBlock.astro";
 import DivergencesBlock from "./blocks/DivergencesBlock.astro";
 import Panel from "./Panel.astro";
-import { CARDED_TYPES, PANEL_HOSTABLE_TYPES, FULL_WIDTH_PANEL_TYPES, KICKER_LABELS } from "../lib/section-types";
+import { CARDED_TYPES, PANEL_HOSTABLE_TYPES, FULL_WIDTH_PANEL_TYPES, KICKER_LABELS, MODULE_KIND_LABELS } from "../lib/section-types";
 
 // `holidays` is the server-computed holiday info (or null), threaded down from
 // GuideLayout; only the `holidays` section type uses it. `learnings` is the guide's
@@ -79,7 +79,7 @@ const TitleTag = isCollapsible ? "summary" : "div";
   <Panel
     id={sec.title}
     title={sec.title}
-    kicker={KICKER_LABELS[sec.type]}
+    kicker={sec.module ? `${MODULE_KIND_LABELS[sec.module.kind] ?? String(sec.module.kind).toUpperCase()}${sec.module.scope ? ` · ${sec.module.scope}` : ""}` : KICKER_LABELS[sec.type]}
     anchorId={sid}
     cat={ci}
     level={3}

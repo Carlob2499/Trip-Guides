@@ -78,6 +78,8 @@
    the card background but below the DOM-later grad + the (position:relative)
    initial letter. */
 .paint-atlas--mini{border-radius:inherit;z-index:0}
+/* The mist drifts ±6%; inside a small frame it stays inside the frame. */
+.paint-atlas--mini .pa-mist{left:6%;right:6%}
 .paint-atlas--mini .pa-orb{width:16px;box-shadow:0 0 18px 6px rgba(246,235,200,.4)}
 
 @media print{.paint-atlas{display:none}}

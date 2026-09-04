@@ -13,7 +13,10 @@ var mounts = [];
 document.querySelectorAll(".osmmap").forEach(function (frame) {
   var wrap = frame.parentElement;
   if (!wrap || !document.fullscreenEnabled) return;
-  wrap.style.position = "relative";
+  // The button is absolutely positioned inside the wrap, so the wrap needs a positioning
+  // context — but only a static one is missing it. Overwriting a positioned wrap would
+  // undo a stylesheet's own choice (the desktop Map bench keeps its map sticky).
+  if (getComputedStyle(wrap).position === "static") wrap.style.position = "relative";
   var btn = document.createElement("button");
   btn.className = "map-fs-btn";
   btn.setAttribute("aria-label", "View map fullscreen");

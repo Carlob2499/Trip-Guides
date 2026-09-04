@@ -1,5 +1,5 @@
 ---
-/* Panel — the Atlas container. Kicker, title, drag handle, collapse toggle, body.
+/* Panel — the Atlas container. Kicker, title, collapse toggle, body.
    A Panel is a CONTAINER, never a content type: from Phase 2 a Panel *section*
    (content.config.ts's "type":"panel") renders INSIDE one of these. See CONTEXT.md
    for why the two share the word.
@@ -9,9 +9,7 @@
    with JS off — every Panel renders open and the toggle is not drawn, so a Panel that
    ships collapsed is still readable and no control is offered that cannot work.
 
-   The drag handle is a real control, wired by src/features/panel/ (ui/reorder.js):
-   drag to reorder, or arrow keys on the focused handle. Like the collapse toggle it
-   is only DRAWN once that wiring exists ([data-panel-reorder]) — no JS, no handle. */
+   Reader reordering was retired in D7: the maker's composition is the order. */
 import Hint from "./Hint.astro";
 interface Props {
   /** Stable id — the key this Panel's collapsed state is stored under. */
@@ -83,13 +81,6 @@ const titleId = `pnl-title-${slug}`;
   role="group"
 >
   <header class="pnl-head">
-    <button class="pnl-grip" type="button" data-panel-grip aria-label={`Move ${title}. Use arrow keys to reorder.`}>
-      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><g fill="currentColor">
-        <circle cx="6" cy="3.5" r="1.35" /><circle cx="10" cy="3.5" r="1.35" />
-        <circle cx="6" cy="8" r="1.35" /><circle cx="10" cy="8" r="1.35" />
-        <circle cx="6" cy="12.5" r="1.35" /><circle cx="10" cy="12.5" r="1.35" />
-      </g></svg>
-    </button>
     <div class="pnl-headings">
       {kicker && <p class="pnl-kicker">{kicker}</p>}
       {/* The hint sits BESIDE the heading, never inside it. The section is

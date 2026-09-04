@@ -1,75 +1,47 @@
-/* Yielding chrome — the page gives its edges back to the content while you read.
+/* Yielding chrome — the page gives its edges back to the content while you read (D6-43).
 
-   Scrolling DOWN past a short grace drops the bottom bar off-screen and condenses the
-   top bar to a slim strip; scrolling UP, or simply stopping, brings both back. Reading
-   is the one thing a guide is for, and on a 667px phone the two bars are a fifth of it.
+   Two states, one model (../model/yield):
+     · `chrome-scrolled`  the expanded Search field folds into the compact control as soon as
+                          the reader is past the top of the page — cheap vertical space back,
+                          Search still one tap away in the topbar.
+     · `chrome-yield`     the bottom bar slides off while the reader is actively scrolling
+                          DOWN; scrolling up, stopping, or focusing anything in the chrome
+                          brings it back immediately. Never gesture-only: the bar returns on
+                          its own the moment the finger lifts.
 
-   The strip is not empty chrome: it trades the wordmark (which says nothing you don't
-   know) for the two facts that go out of reach as you scroll — which group you are in,
-   and what time it is where you're going. The topbar's buttons never leave; SOS and
-   search have to be reachable at every scroll position.
+   It stands down entirely while a sheet, the search overlay or another modal owns the
+   screen — chrome sliding under an overlay reads as a glitch. */
 
-   It stands down entirely while a sheet, the story intro, Focus Today or the command
-   palette is open — an overlay owns the screen, and chrome sliding underneath it reads
-   as a glitch. */
-
-import { nextYield, initialYield } from "../model/yield";
+import { nextYield, initialYield, TOP_ZONE } from "../model/yield";
 
 var RETURN_MS = 600; // a pause this long counts as "done scrolling — give it back"
 
 export function initYieldChrome(ctx) {
   var body = document.body;
-  var bar = ctx.bar;
-  var chrome = document.querySelector(".sticky-chrome");
-  if (!chrome) return;
-
-  // The context line — created here rather than in the layout because it only ever
-  // exists in this state, and an empty element in the markup is one more thing to
-  // keep in sync with a feature that may be removed.
-  var ctxEl = document.createElement("span");
-  ctxEl.className = "topbar-ctx";
-  ctxEl.setAttribute("aria-hidden", "true"); // #curCat already names the group to AT
-  var grpEl = document.createElement("b");
-  ctxEl.appendChild(grpEl);
-  var timeEl = document.createElement("span");
-  timeEl.className = "topbar-ctx-time";
-  ctxEl.appendChild(timeEl);
-  var home = chrome.querySelector(".topbar-home");
-  if (home) home.insertAdjacentElement("afterend", ctxEl);
-
-  var fmt = null;
-  if (ctx.destTz) {
-    try {
-      fmt = new Intl.DateTimeFormat("en-GB", { timeZone: ctx.destTz, hour: "2-digit", minute: "2-digit", hour12: false });
-      fmt.format(new Date()); // probe: an invalid zone throws here, not on every tick
-    } catch (e) { fmt = null; }
-  }
-  function paintCtx() {
-    var cur = document.getElementById("curCat");
-    grpEl.textContent = cur ? (cur.textContent || "") : "";
-    if (fmt) timeEl.textContent = fmt.format(new Date());
-  }
+  var bar = ctx && ctx.bar;
 
   function blocked() {
     return body.classList.contains("sheet-lock") ||
-      body.classList.contains("story-full") ||
-      body.classList.contains("story-playing") ||
-      body.classList.contains("story-pan") ||
-      !!document.querySelector(".pal-backdrop.pal-open") ||
-      !!document.querySelector(".focus-today:not([hidden])") ||
-      !!document.querySelector(".sos-sheet.open");
+      body.classList.contains("srch-lock") ||
+      !!document.querySelector(".sos-sheet:not([hidden])") ||
+      !!document.querySelector(".lnw-modal:not([hidden])");
   }
 
   var lastY = window.scrollY, state = initialYield(), idle = 0, ticking = false;
 
-  /** Push the model's verdict onto the page. */
   function apply() {
-    if (body.classList.contains("chrome-yield") === state.yielded) return;
-    body.classList.toggle("chrome-yield", state.yielded);
-    if (state.yielded) paintCtx();
-    // Nothing here removes the bar from the accessibility tree: it is navigation, and a
-    // hidden-but-focusable control is a trap. It stays reachable, and focusing it (below)
-    // brings it back into view.
+    if (body.classList.contains("chrome-yield") !== state.yielded) body.classList.toggle("chrome-yield", state.yielded);
+  }
+  /* Hysteresis, not a single threshold. Folding the Search field shortens the sticky chrome
+     by ~57px, which moves the page under the reader; a single threshold near that height
+     re-crossed itself on the next scroll event and the field flickered open and shut (found
+     by the 320px gate: a chapter card that never stopped moving). It folds once the reader is
+     clearly past the top and unfolds only when they are back at the very top. */
+  var FOLD_AT = TOP_ZONE / 2, UNFOLD_AT = Math.min(8, TOP_ZONE / 8);
+  function applyScrolled(y) {
+    var folded = body.classList.contains("chrome-scrolled");
+    var next = folded ? y > UNFOLD_AT : y > FOLD_AT;
+    if (next !== folded) body.classList.toggle("chrome-scrolled", next);
   }
   function restore() { state = initialYield(); apply(); }
 
@@ -82,17 +54,20 @@ export function initYieldChrome(ctx) {
       var dy = y - lastY;
       lastY = y;
       clearTimeout(idle);
-      // Stopping is intent too — a reader who has settled wants their controls back.
       idle = setTimeout(restore, RETURN_MS);
       state = nextYield(state, dy, y, blocked());
       apply();
-      if (state.yielded) paintCtx();
+      applyScrolled(y);
     });
   }
 
   window.addEventListener("scroll", onScroll, { passive: true });
-  // Focus must never land on something that has slid off the screen.
+  applyScrolled(window.scrollY);
+  // A destination change resets the page to its top state: the chrome comes back whole.
+  document.addEventListener("tg:dest", function () { restore(); applyScrolled(window.scrollY); });
   document.addEventListener("focusin", function (e) {
-    if (state.yielded && (chrome.contains(e.target) || (bar && bar.contains(e.target)))) restore();
+    var chrome = document.getElementById("chrome");
+    if (state.yielded && ((chrome && chrome.contains(e.target)) || (bar && bar.contains(e.target)))) restore();
+    if (chrome && chrome.contains(e.target) && e.target.matches("[data-search-field]")) body.classList.remove("chrome-scrolled");
   });
 }

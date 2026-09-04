@@ -1,0 +1,51 @@
+name: Design canary screenshots
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/components/**"
+      - "src/features/**"
+      - "src/layouts/**"
+      - "src/scripts/**"
+      - "src/styles/**"
+      - "tests/visual/design-canary.spec.ts"
+      - "docs/reference/design-system.md"
+      - "docs/reference/design-system-assets/**"
+      - "package.json"
+      - ".github/workflows/design-canary.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: design-canary-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    name: Capture creator-review screens
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run canary:visual
+
+      - name: Upload creator-review screenshots (V1 checkpoint + V2 surfaces)
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: design-canary-${{ github.sha }}
+          path: |
+            test-results/**/v1-*.png
+            test-results/**/v2-*.png
+          if-no-files-found: warn
+          retention-days: 14

@@ -17,8 +17,11 @@ name: Regenerate gallery baselines (branch-scoped)
 # standing capability — safe to delete once every relevant environment can generate baselines
 # directly (see D5's commit history for the fuller story).
 on:
+  # Manual re-run for the case below: a regeneration that lost the push race needs no code
+  # change to try again.
+  workflow_dispatch:
   push:
-    branches: [claude/waypoint-design-system-mpfbl6]
+    branches: [claude/waypoint-design-routing-rex0vr]
     paths:
       - "tests/visual/gallery-baselines.spec.ts"
       - "src/pages/gallery.astro"
@@ -68,5 +71,8 @@ jobs:
           else
             git commit -m "chore(baselines): regenerate gallery screenshots on CI's own Chromium build" \
               -m "CI-generated to match the exact renderer required-gate checks against — a locally-authored baseline drifts from this runner's font metrics by tens of pixels over a full-page capture."
+            # The branch may have moved during the 4-minute render (an author's push landed);
+            # the snapshots are binary files nobody else edits, so replaying on top is safe.
+            git pull --rebase origin ${{ github.ref_name }}
             git push origin HEAD:${{ github.ref_name }}
           fi

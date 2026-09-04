@@ -10,6 +10,7 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "canary:visual": "playwright test tests/visual/design-canary.spec.ts",
     "baselines": "playwright test tests/visual/gallery-baselines.spec.ts",
     "baselines:update": "playwright test tests/visual/gallery-baselines.spec.ts --update-snapshots && node scripts/optimize-baselines.mjs",
     "typecheck": "astro check",

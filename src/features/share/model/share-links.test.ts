@@ -3,37 +3,22 @@
 import { describe, it, expect } from "vitest";
 import { buildPageUrl, buildWhatsAppShareUrl, buildMailtoUrl, buildSummaryShareText } from "./share-links";
 
+const BASE = "https://example.test/Trip-Guides/guides/korea/";
+
 describe("buildPageUrl", () => {
-  const BASE = "https://carlob2499.github.io/Trip-Guides/guides/korea/";
-
-  it("adds a #grp-N deep link for a numbered active tab", () => {
-    expect(buildPageUrl(BASE, "3")).toBe(BASE + "#grp-3");
+  it("deep-links a non-default destination as its hash route", () => {
+    expect(buildPageUrl(BASE, "map")).toBe(BASE + "#dest-map");
+    expect(buildPageUrl(BASE, "split")).toBe(BASE + "#dest-split");
   });
-
-  it("returns the bare base URL when no tab is active", () => {
+  it("shares the bare guide URL for Trip (the launch default) and for nothing", () => {
+    expect(buildPageUrl(BASE, "trip")).toBe(BASE);
     expect(buildPageUrl(BASE, null)).toBe(BASE);
     expect(buildPageUrl(BASE, undefined)).toBe(BASE);
-  });
-
-  it("returns the bare base URL for a SPECIAL panel (budget/vote/remind/learn) — not numeric", () => {
-    // Special panels use string ids like "split"/"vote"/"learn"/"remind" for data-tab,
-    // not a digit — those must not produce a nonsense "#grp-split" link.
-    expect(buildPageUrl(BASE, "split")).toBe(BASE);
-    expect(buildPageUrl(BASE, "learn")).toBe(BASE);
-  });
-
-  it("returns the bare base URL for an empty string tab id", () => {
     expect(buildPageUrl(BASE, "")).toBe(BASE);
   });
-
-  it("accepts tab index 0 — falsy but a real, valid tab", () => {
-    // A naive `if (t)` check would drop tab 0 (the first tab) silently; this must not.
-    expect(buildPageUrl(BASE, "0")).toBe(BASE + "#grp-0");
-  });
-
-  it("rejects a non-purely-numeric tab id (defensive against unexpected markup)", () => {
-    expect(buildPageUrl(BASE, "3abc")).toBe(BASE);
-    expect(buildPageUrl(BASE, "-1")).toBe(BASE); // no leading sign allowed
+  it("never produces a nonsense route for an unknown key", () => {
+    expect(buildPageUrl(BASE, "3")).toBe(BASE);
+    expect(buildPageUrl(BASE, "learn")).toBe(BASE);
   });
 });
 

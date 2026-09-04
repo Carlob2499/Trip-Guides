@@ -16,7 +16,7 @@
      framing strip, jump to today, track this draft's progress, log your trip feedback) have
      no purpose on paper and printed as clutter/dead links. */
   .topbar, nav.topbar, .sticky-chrome,
-  .botbar, .sheet, .sheet-backdrop,
+  .botbar, .srch,
   .split-wrap,
   .jl-wrap,
   .osmmap,
@@ -30,8 +30,7 @@
      would set 34 lines of raw coordinate string on korea alone. The itinerary already prints
      one whole-day URL per day (.day-route, deliberately kept), so the station's copy would be
      the same URL a second time. The legs themselves — names and straight-line distance — print. */
-  .tools-route-map, .tools-route-all,
-  .cold-open, .whats-next, .draft-progress, .next-cta, .lnw-cta,
+  .whats-next, .draft-progress, .next-cta, .lnw-cta,
   /* The provenance dot's popover only ever opens via a JS click handler (data-open),
      which paper can't trigger — leaving the dot renders a dead "●" glyph with no way
      to reach the CHECKED date/source it names. */
@@ -74,13 +73,13 @@
      saved collapse state, and drop the interactive chrome (a grip and a chevron
      print as mystery glyphs). Single column: paper has no reflowing grid. */
   .pnl[data-collapsed] .pnl-body { grid-template-rows: 1fr !important; opacity: 1 !important; visibility: visible !important; }
-  .pnl-grip, .pnl-toggle, .pnl-reset-row, .cat-collapse-all { display: none !important; }
+  .pnl-toggle { display: none !important; }
   .pnl-grid { display: block !important; }
   .pnl-grid > .pnl { margin-bottom: .6rem; break-inside: avoid; }
 
   /* Print external link URLs inline */
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #555; word-break: break-all; }
-  a.topbar-home::after, a.sheet-link::after, a.sheet-cat::after { content: none !important; }
+  a.topbar-home::after { content: none !important; }
 
   /* Masthead */
   .masthead { padding: 0 0 .7rem; border-bottom: 1.5pt solid #111; text-align: left; }
@@ -111,8 +110,7 @@
    Material minimum, causing mis-taps on real phones. An invisible ::after halo grows
    the hit region without changing layout width/height. */
 @media(max-width:599px){
-  .anchor-btn,.map-fs-btn,.copy-addr{position:relative}
-  .anchor-btn::after,.map-fs-btn::after,.copy-addr::after{content:"";position:absolute;inset:-11px}
-  .gtab{position:relative}
-  .gtab::after{content:"";position:absolute;top:-9px;bottom:-9px;left:0;right:0}
+  /* .map-fs-btn is absolutely placed on its map and already 44px (base.css) — no halo. */
+  .anchor-btn,.copy-addr{position:relative}
+  .anchor-btn::after,.copy-addr::after{content:"";position:absolute;inset:-11px}
 }

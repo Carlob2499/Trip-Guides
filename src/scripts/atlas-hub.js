@@ -1,7 +1,8 @@
 /* Atlas hub page chrome (extracted from index.astro's inline script, 2026-08-14 —
    page behavior belongs in src/scripts/, not the layout/page markup):
    header height var, WORLD|TABLE mode toggle, sheet-row weather boot, skip-link fix. */
-import { initAtlasSearch, startLocalClocks, initCover, initAtlasWorld } from "../features/atlas/index";
+import { startLocalClocks, initAtlasWorld } from "../features/atlas/index";
+import { initSearch } from "../features/search/index";
 import { initDarkToggle } from "./theme.js";
 import { initHomeWeather } from "../features/live-data/index.js";
 
@@ -16,10 +17,9 @@ if (header) {
   if ("ResizeObserver" in window) new ResizeObserver(setHdrH).observe(header);
 }
 
-initAtlasSearch(document);
+initSearch(document);
 startLocalClocks(document);
 initAtlasWorld(document);
-initCover(document);
 initDarkToggle("btnDark");
 
 // WORLD|TABLE toggle (README §"State" mode atlas/ledger) — table is the markup

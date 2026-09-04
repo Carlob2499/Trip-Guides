@@ -1,0 +1,127 @@
+/* === THE GLOBAL CHROME =======================================================
+   Top utility bar (Atlas · destinations · Search · SOS · share · theme), the expanded Search
+   field, and the phone's five-slot bottom bar. AppChrome.astro is the markup; this is the
+   one owner of its appearance at every width (design-system.md §5, §12).
+
+   Two presentations of one navigation model, switched on the viewport (chrome is the one
+   thing that may ask about the viewport — src/lib/breakpoints.ts):
+     ≤ 899px   compact topbar + expanded/compact Search + bottom tab bar
+     ≥ 900px   an integrated floating destination cluster inside the utility row, plus the
+               wide persistent Search field — never a flat admin sidebar (§5, §24). */
+
+/* Opaque grounds, no glass: content scrolling under the chrome must never show through it. */
+.chrome{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--rule)}
+
+.topbar{display:flex;align-items:center;gap:.5rem;padding:calc(.4rem + var(--safe-top)) max(.9rem,var(--safe-right)) .4rem max(.9rem,var(--safe-left))}
+.topbar-home{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;color:var(--muted);text-decoration:none;min-height:44px;min-width:44px;padding:.2rem 0;transition:color .15s;flex:none}
+.topbar-home:hover{color:var(--ink)}
+.topbar-home svg{flex:none;transition:transform .15s}
+.topbar-home:hover svg{transform:translateX(-3px)}
+.topbar-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-body);letter-spacing:-.008em;line-height:1;color:var(--ink)}
+/* "Atlas" names where the arrow goes; on the smallest phones the wordmark alone says it. */
+.topbar-atlas{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-left:.4rem;border-left:1px solid var(--rule2)}
+/* 320px floor: four 44px controls, the wordmark and the padding must fit one row. */
+@media(max-width:399px){.topbar-atlas{display:none}.topbar{gap:.3rem;padding-left:max(.6rem,var(--safe-left));padding-right:max(.6rem,var(--safe-right))}.topbar-right{gap:.15rem}}
+.topbar-title{display:none;flex:1;min-width:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-right{display:flex;align-items:center;gap:.3rem;margin-left:auto;flex:none}
+.topbar-sos-mount{display:contents}
+
+.topbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34rem;background:none;border:1px solid transparent;border-radius:999px;padding:.34rem .72rem;min-height:44px;min-width:44px;cursor:pointer;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;line-height:1;transition:color .15s,border-color .15s,background .15s,transform .2s var(--ease-spring)}
+.topbar-btn:hover{color:var(--ink);border-color:var(--rule2);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.topbar-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.topbar-btn:active{transform:scale(.94)}
+.tb-ico{width:18px;height:18px;flex:none;display:block}
+/* The compact Search control is the mobile scrolled-state affordance: it stays framed so the
+   way into Search never reads as decoration (§12 "never disappears"). */
+.topbar-search-btn{border-color:var(--rule2)}
+/* SOS: quiet at rest (§13) — the same chrome-button vocabulary in the critical colour,
+   filled only on hover/press. --crit clears every ground the product paints. */
+.topbar-sos{color:var(--crit);border-color:color-mix(in srgb,var(--crit) 55%,var(--rule2));font-weight:700}
+.topbar-sos:hover{color:var(--on-crit);background:var(--crit-fill);border-color:var(--crit-fill)}
+/* Phones: icon-only controls so the cluster never crowds the title. */
+@media(max-width:899px){.topbar-btn .tb-label{display:none}.topbar-btn{width:44px;height:44px;padding:0;border-radius:50%}.tb-ico{width:19px;height:19px}}
+
+/* --- Destination cluster (desktop) ------------------------------------------------------ */
+.destnav{display:none;align-items:center;gap:.1rem;padding:.2rem;background:var(--card);border:1px solid var(--rule2);border-radius:999px}
+.destnav-btn{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;padding:0 .95rem;background:transparent;border:0;border-radius:999px;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.01em;cursor:pointer;transition:color .15s,background .15s}
+.destnav-btn:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.destnav-btn[aria-current="true"]{color:var(--cta-ink);background:var(--cta)}
+.destnav-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+/* --- The expanded Search field ---------------------------------------------------------- */
+.searchbar{display:grid;grid-template-rows:1fr;transition:grid-template-rows .28s var(--ease-out-expo),opacity .2s ease;padding:0 max(.9rem,var(--safe-right)) 0 max(.9rem,var(--safe-left))}
+.searchbar-field{display:flex;align-items:center;gap:.6rem;min-height:46px;margin:0 0 .55rem;padding:0 .9rem;background:var(--card);border:1px solid var(--rule2);border-radius:999px;color:var(--muted);overflow:hidden;cursor:text}
+.searchbar-field:focus-within{border-color:var(--accent);color:var(--ink)}
+.searchbar-ico{width:18px;height:18px;flex:none}
+.searchbar-input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;font-family:var(--font-data);font-size:var(--text-body);padding:.6rem 0;outline:none}
+.searchbar-input::placeholder{color:var(--muted);opacity:.85}
+.searchbar-input::-webkit-search-decoration,.searchbar-input::-webkit-search-cancel-button{-webkit-appearance:none}
+/* Scrolled: the field folds away (grid rows to 0, opacity out — no height animation) and the
+   compact control in the topbar is the way in. A short scroll back up re-expands it. */
+body.chrome-scrolled .searchbar{grid-template-rows:0fr;opacity:0;pointer-events:none}
+body.chrome-scrolled .searchbar-field{margin-bottom:0}
+.searchbar>*{min-height:0}
+body.chrome-scrolled .topbar-wordmark,body.chrome-scrolled .topbar-atlas{display:none}
+body.chrome-scrolled .topbar-title{display:block}
+@media(prefers-reduced-motion:reduce){.searchbar{transition:none}}
+
+/* --- Phone bottom bar ------------------------------------------------------------------- */
+.botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;align-items:stretch;gap:.15rem;padding:.3rem max(.4rem,var(--safe-right)) max(.3rem,var(--safe-bottom)) max(.4rem,var(--safe-left));background:var(--card);border-top:1px solid var(--rule2);transition:transform .34s var(--ease-out-expo)}
+.botslot{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;padding:.3rem .1rem;background:transparent;border:0;border-radius:0;color:var(--muted);cursor:pointer;font-family:var(--font-data)}
+.bslot-ico{flex:none;transition:transform .2s var(--ease-spring)}
+.bslot-txt{max-width:100%;font-size:var(--text-nano);font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.botslot[aria-current="true"]{color:var(--accent-ink)}
+/* The current destination is marked by ink AND a mark — never by colour alone (§17). */
+.botslot[aria-current="true"]::before{content:"";position:absolute;top:0;left:50%;width:22px;height:2px;transform:translateX(-50%);background:var(--accent)}
+.botslot[aria-current="true"] .bslot-ico{transform:translateY(-1px)}
+.botslot:active .bslot-ico{transform:scale(.92)}
+.botslot:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-3px}
+/* Yielding chrome (§5): reading down slides the bar away; any upward intent, or stopping,
+   brings it straight back. Transform only. Focus into the bar restores it (yield-chrome.js). */
+body.chrome-yield .botbar{transform:translateY(130%)}
+@media(prefers-reduced-motion:reduce){.botbar,.bslot-ico{transition:none}.botslot:active .bslot-ico{transform:none}}
+@media(max-height:460px) and (orientation:landscape){.botslot{min-height:44px}}
+
+/* --- Desktop (≥ 900px): one row, the destination cluster floats in the chrome ---------- */
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media(min-width:900px){
+  .botbar{display:none}
+  .destnav{display:inline-flex}
+  /* The utility row is ONE flex line: Atlas · the destination cluster · the wide persistent
+     Search field · SOS/share/theme. .topbar dissolves into the row (display:contents) so the
+     Search field, a sibling in the DOM, can sit between the destinations and the utility
+     cluster (§12) without a second markup tree for desktop. */
+  .chrome{display:flex;align-items:center;gap:1rem;padding:calc(.45rem + var(--safe-top)) max(1.4rem,var(--safe-right)) .45rem max(1.4rem,var(--safe-left))}
+  /* Deep work compacts the row a little (§5, §24): quieter, never mysterious, same order. */
+  body.chrome-scrolled .chrome{padding-top:calc(.25rem + var(--safe-top));padding-bottom:.25rem}
+  .topbar{display:contents}
+  .topbar-home{order:1}
+  .destnav{order:2;margin-left:.2rem}
+  .searchbar{order:3;display:block;flex:1 1 220px;max-width:440px;margin-left:auto;padding:0;transition:none;opacity:1;pointer-events:auto}
+  .searchbar-field{min-height:40px;margin:0;padding:0 .8rem}
+  .searchbar-input{font-size:var(--text-small);padding:.45rem 0}
+  .topbar-right{order:4;margin-left:0;gap:.35rem}
+  .topbar-btn{border-color:var(--rule2)}
+  body.chrome-scrolled .searchbar{grid-template-rows:1fr;opacity:1;pointer-events:auto}
+  body.chrome-scrolled .topbar-wordmark,body.chrome-scrolled .topbar-atlas{display:inline}
+  body.chrome-scrolled .topbar-title{display:none}
+  /* The compact control is redundant beside the always-present field. */
+  .topbar-search-btn{display:none}
+}
+/* Between the phone ceiling and a comfortable desktop the cluster drops its labels so the
+   Search field keeps real width; icons remain named for assistive tech (§3: intermediate widths
+   are first-class, not accidents). */
+@media(min-width:900px) and (max-width:1099px){
+  .destnav-btn{padding:0;min-width:44px;justify-content:center}
+  .destnav-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .destnav-btn{position:relative}
+  .topbar-btn .tb-label{display:none}
+  .topbar-btn{padding:0;width:44px}
+}
+
+/* Offline state (§14): a quiet pill under the chrome, present only while the browser is
+   offline. It reports a state; it never brags about the capability. */
+.offline-pill{position:fixed;top:calc(var(--hdr-h) + .5rem);left:50%;transform:translateX(-50%);z-index:var(--z-toast);padding:.35rem .8rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;border-radius:999px;white-space:nowrap;pointer-events:none}
+.offline-pill[hidden]{display:none}
+
+@media print{.chrome,.botbar,.offline-pill{display:none}}

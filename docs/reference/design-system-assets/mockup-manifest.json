@@ -1,0 +1,426 @@
+{
+  "status": "current_subordinate_visual_manifest",
+  "date": "2026-09-04",
+  "authority_rule": "docs/reference/design-system.md is the sole design authority. These visual references are subordinate composition evidence only.",
+  "allowlist_rule": "For every raster decision board, only allowed_signals are usable. Everything else is illustrative or rejected, including exact copy, facts, people, dates, prices, routes, controls, chrome, colors, and generated imagery unless this manifest and the Markdown authority explicitly preserve it.",
+  "source": "The recovered D6 SVGs came from the creator-reviewed 2026-09-03 final handoff. The selected raster decision boards were recovered from the creator-supplied 81-image WayPoint conversation archive on 2026-09-04 and correlated against the sole design authority.",
+  "hash_policy": "original_source_sha256 identifies the original archive image; asset_sha256 identifies the committed WebP at path.",
+  "decision_transcript": "Creator-supplied WayPoint FINAL MOCKUP GRILL DECISIONS dated 2026-09-04; its approved and locked decisions are absorbed into docs/reference/design-system.md, including the remaining open visual-sanity boundary.",
+  "reference_policy": "Use the exact V1 canary routes below for the two first-review surfaces (Checkpoint 1 of the full migration). Use recovered D6 SVGs where available for later surfaces. canonical-mockups.svg is gap coverage only and is not the primary V1 Trip or Itinerary reference. Never average any reference with superseded gallery screenshots, old prototypes, exploratory boards, or historical generated designs.",
+  "pending_policy": "No entry is pending. The SOS and provenance boards were promoted from visual_sanity_pending to narrow locked references on 2026-09-04 when the creator locked those treatments; they remain topic-limited and their sample facts illustrative.",
+  "open_visual_sanity": [],
+  "v1_canary_routes": {
+    "active_trip_mobile": {
+      "viewport": "390x844",
+      "primary": [
+        "d6-decision-active-trip-right-now.webp",
+        "d6-decision-stable-navigation-trip-lifecycle.webp"
+      ],
+      "supporting": [
+        "d6-decision-five-destination-lifecycle.webp",
+        "d6-five-destination-screen-family.webp"
+      ],
+      "binding_use": "Use the Right Now information order, one-glance hierarchy, stable five-destination navigation, and before/during/after Trip lifecycle. Apply the Markdown dark warm-charcoal/oxide palette and canonical repository content. Do not copy the source boards' sample cities, times, actions, people, data, or light theme.",
+      "do_not_use_as_primary": [
+        "canonical-mockups.svg#WAY-01",
+        "current D7 gallery screenshots"
+      ]
+    },
+    "itinerary_desktop": {
+      "viewport": "1440x1000",
+      "primary": [
+        "d6-itinerary-temporal-spatial-workbench.webp"
+      ],
+      "supporting": [
+        "canonical-mockups.svg#WAY-03"
+      ],
+      "binding_use": "Use the temporal-spatial pane relationship, one-day focus, large readable timeline atoms, synchronized selected stop and route, and resizable map/timeline emphasis. Replace the source board's cool violet/cyber styling with the Markdown warm-charcoal/oxide language and use only canonical South Korea content and the real provider map.",
+      "do_not_use_as_primary": [
+        "canonical-mockups.svg#WAY-03",
+        "light dashboard-style itinerary boards",
+        "current D7 gallery screenshots"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "d6-decision-active-trip-right-now.webp",
+      "source_index": 11,
+      "original_source_sha256": "ce8ad4c502f1a8685ab1d822232ce7fa3e167685227cf55ae2b72df1f2403aae",
+      "asset_sha256": "f56875ec5ae4bffd525e95581b45a7a9a613c94c92e6dd8d2b9a8a461d74c29c",
+      "topic": "Trip active Right Now information architecture",
+      "authority": "creator_archive_decision_board_topic_limited",
+      "allowed_signals": [
+        "Now then Next then Leave by then Get there then material warning then fallback then remainder of day",
+        "active Trip becomes the operational cockpit",
+        "one-glance hierarchy",
+        "large action-first atoms",
+        "stable five-destination navigation remains present"
+      ],
+      "forbidden_signals": [
+        "sample Copenhagen facts",
+        "sample times or travel estimates",
+        "Add to plans on a planned object",
+        "swipe as global navigation",
+        "card-drill controls not supported by production",
+        "the board's individual accent colors as product palette"
+      ]
+    },
+    {
+      "path": "d6-decision-stable-navigation-trip-lifecycle.webp",
+      "source_index": 26,
+      "original_source_sha256": "792700c5f9af4ace34a10f2e2f05ccd923eb2aaa6c11a8d5952d5bb1f8b6afea",
+      "asset_sha256": "68038264dd72e98ef7062ffd012b0a1e55092777e7ada10d8abde129b38219ae",
+      "topic": "Stable navigation and Trip lifecycle",
+      "authority": "creator_archive_recommendation_board_topic_limited",
+      "allowed_signals": [
+        "stable Trip Itinerary Map Guide Split order",
+        "Search and SOS are global actions rather than tabs",
+        "Trip adapts before during and after travel",
+        "active Trip uses the complete Right Now stack",
+        "responsive sibling compositions"
+      ],
+      "forbidden_signals": [
+        "sample Copenhagen facts",
+        "sample counts or warnings",
+        "conventional flat desktop sidebar as shell authority",
+        "light theme as the active-Trip V1 theme"
+      ]
+    },
+    {
+      "path": "d6-decision-five-destination-lifecycle.webp",
+      "source_index": 81,
+      "original_source_sha256": "639e32c8c2f5dd3d4842357983430242293d328a6bc1ebc692f9a1d0e4a12c3b",
+      "asset_sha256": "59f9435c7d45d984da832a475051371cf39b48bc6fbf085cddc1a1f7399b1e70",
+      "topic": "Five-destination architecture and Trip lifecycle",
+      "authority": "creator_archive_decision_board_topic_limited",
+      "allowed_signals": [
+        "five permanent destinations in stable order",
+        "Split remains top-level",
+        "no Tools or More destination",
+        "Trip before during and after states",
+        "active order includes Now Next Leave by Get there warning fallback and remainder",
+        "mobile scale and scan discipline"
+      ],
+      "forbidden_signals": [
+        "sample Copenhagen facts",
+        "sample Guide or Split data",
+        "exact theme",
+        "Map or Guide micro-interactions",
+        "any extra top-level Atlas tab"
+      ]
+    },
+    {
+      "path": "d6-five-destination-screen-family.webp",
+      "source_index": 71,
+      "original_source_sha256": "decdd8154d77d2368aa250d51021b62debd51c1c65a4773bfe494520d1ef38a7",
+      "asset_sha256": "bd3fd894ce71ddd38ca51ca04e90a4af8976b9c4559a364c7a101ef72968426e",
+      "topic": "Five-destination mobile screen family",
+      "authority": "creator_archive_recommendation_board_supporting_only",
+      "allowed_signals": [
+        "stable five-destination bottom navigation",
+        "active Trip stack readability",
+        "day-first Itinerary",
+        "map with contextual sheet",
+        "image-forward Guide",
+        "compact Split ledger"
+      ],
+      "forbidden_signals": [
+        "sample people dates amounts ratings or routes",
+        "balance-first Split hierarchy",
+        "review counts",
+        "unsupported live data",
+        "using the board as a product-wide palette authority"
+      ]
+    },
+    {
+      "path": "d6-itinerary-temporal-spatial-workbench.webp",
+      "source_index": 51,
+      "original_source_sha256": "f5e3f128ffe9bd926320ecbce3331bcc63aa264474125158b2867570e0802b60",
+      "asset_sha256": "15eae8d4d0a6dbe1019de6d7689c937058ee6bf133d4a219dc68dab1acb06ac5",
+      "topic": "Itinerary mobile day stack and desktop temporal-spatial workbench",
+      "authority": "creator_archive_visual_reference_topic_limited",
+      "allowed_signals": [
+        "one day dominates",
+        "large readable stop atoms",
+        "timeline left and large map right",
+        "selected stop and map synchronize",
+        "panes may resize",
+        "context remains adjacent to the selected stop",
+        "dense but not miniature operational composition"
+      ],
+      "forbidden_signals": [
+        "cool violet or cyberpunk palette",
+        "sample event weather transit ticket or route facts",
+        "Atlas as a permanent destination",
+        "generic admin sidebar",
+        "dashboard summary strip as required",
+        "faux map in production"
+      ]
+    },
+    {
+      "path": "d6-itinerary-mobile-composition.svg",
+      "topic": "Itinerary mobile",
+      "authority": "recovered_d6_composition",
+      "allowed_signals": [
+        "one day is dominant",
+        "large readable timeline atoms",
+        "recognizable place imagery supports rather than overtakes timeline",
+        "Plan-vs-Actual directly reachable",
+        "thumb-zone day rail/scrubber"
+      ],
+      "forbidden_signals": [
+        "schematic art as production photography",
+        "top arrows as primary switcher",
+        "NOW floating button",
+        "invented stops/times/transit",
+        "generic DONE controls",
+        "facts absent from canonical content"
+      ]
+    },
+    {
+      "path": "d6-atlas-spatial-front-door.webp",
+      "source_index": 62,
+      "original_source_sha256": "551d72a136aa84d513812316966bf641d1d291a06231d80cc5f61da18a5a0fb4",
+      "asset_sha256": "6a8834ed2ea5a27aa78366d34794dc52bedaf86931bc338dca8f8e9f0bac2702",
+      "topic": "Atlas spatial front door",
+      "authority": "creator_archive_visual_reference_topic_limited",
+      "allowed_signals": [
+        "globe or map dominates",
+        "flat-first illustrated cartography",
+        "restrained controls",
+        "pinned places remain secondary to geography",
+        "responsive desktop and mobile sibling composition"
+      ],
+      "forbidden_signals": [
+        "palette hex values",
+        "glossy or satellite-real globe",
+        "invented destinations",
+        "synthetic travel statistics",
+        "desktop sidebar as shell authority",
+        "replacing Map with Atlas in the stable five destinations"
+      ]
+    },
+    {
+      "path": "d6-map-responsive-composition.svg",
+      "topic": "Map mobile + desktop",
+      "authority": "recovered_d6_composition",
+      "allowed_signals": [
+        "real Google Maps dominates connected state",
+        "mobile map owns nearly viewport with contextual sheet",
+        "desktop map owns workspace with contextual information beside it",
+        "Directions/navigation handoff prominent",
+        "large readable selected-place atoms"
+      ],
+      "forbidden_signals": [
+        "shipping schematic map instead of provider map",
+        "fake route/date data",
+        "unsupported live traffic claims",
+        "invented modules/layers",
+        "fake pins/places"
+      ]
+    },
+    {
+      "path": "d6-map-spatial-workspace.webp",
+      "source_index": 78,
+      "original_source_sha256": "dc3c5bf4bb274832743e059193272d28b0b237890767bff3f14aaef53da6c4bb",
+      "asset_sha256": "4bd2e5559b5ec8c69c0797a529eb03f08792adbb048afa8a3980853e4f295c55",
+      "topic": "Map spatial workspace",
+      "authority": "creator_archive_visual_reference_topic_limited",
+      "allowed_signals": [
+        "map dominates",
+        "desktop inspector and mobile bottom sheet are sibling compositions",
+        "selected-place facts remain readable",
+        "minimal chrome",
+        "spatial context stays primary"
+      ],
+      "forbidden_signals": [
+        "generated map geometry as factual",
+        "fake routes layers pins or counts",
+        "unsupported live hours traffic or proximity",
+        "dark navy palette as binding",
+        "arbitrary place actions"
+      ]
+    },
+    {
+      "path": "d6-guide-editorial-landing.webp",
+      "source_index": 49,
+      "original_source_sha256": "0fa17d00200f5f27e06e2183817ef17d6f799338d9cb43aba8ea6b3d97bc6323",
+      "asset_sha256": "f5cd8ddbe0ced4e4f6ae53556d3044fcbe0d9b7b5dd2106ffdc553dcd53d2899",
+      "topic": "Guide editorial landing",
+      "authority": "creator_archive_visual_reference_topic_limited",
+      "allowed_signals": [
+        "large recognizable destination hero",
+        "desktop hero direction roughly 55–60% of the main content region where composition permits",
+        "mobile hero direction roughly 40–45% of viewport",
+        "editorial typography",
+        "mobile and desktop sibling compositions",
+        "useful imagery",
+        "readable chapter or collection rhythm"
+      ],
+      "forbidden_signals": [
+        "topic-first IA overriding location and time",
+        "popular guides",
+        "recently viewed as required",
+        "guide counts",
+        "suggest an edit",
+        "ratings reviews or unsupported user content",
+        "flat desktop sidebar as shell authority"
+      ]
+    },
+    {
+      "path": "d6-guide-place-detail-composition.svg",
+      "topic": "Guide place detail",
+      "authority": "recovered_d6_composition",
+      "allowed_signals": [
+        "large recognizable place image",
+        "mobile and desktop sibling compositions",
+        "high-value operational facts before deeper prose",
+        "deeper detail progressively accessible",
+        "quiet provenance plus map/itinerary continuity"
+      ],
+      "forbidden_signals": [
+        "schematic drawing as production asset",
+        "ratings/review counts",
+        "unsupported live open-now state",
+        "unapproved Save/Share actions",
+        "IA conflicting with Guide authority",
+        "shrinking Guide landing hero"
+      ]
+    },
+    {
+      "path": "d6-provenance-progressive-disclosure.webp",
+      "source_index": 66,
+      "original_source_sha256": "0710319a41e4e355f522677cfe2ac2d651713b747c516381c31461099a28bb28",
+      "asset_sha256": "ed06f2423319c41a0bc76c741709701577f2e68bb94b6f3c3579dd1fdf8f1f22",
+      "topic": "Provenance and freshness progressive disclosure",
+      "authority": "creator_archive_narrow_locked_reference",
+      "allowed_signals": [
+        "quiet persistent trust cue",
+        "source checked date and freshness on demand",
+        "ordinary content remains uncluttered"
+      ],
+      "forbidden_signals": [
+        "sample venue facts as current",
+        "source domain as canonical",
+        "citation wall",
+        "synthetic trust score"
+      ],
+      "locked_on": "2026-09-04"
+    },
+    {
+      "path": "d6-split-responsive-composition.svg",
+      "topic": "Split",
+      "authority": "recovered_d6_composition",
+      "allowed_signals": [
+        "immersive outer desktop layer with readable working surface",
+        "Recent Expenses prominent",
+        "Add expense immediately reachable",
+        "semantic expense icons",
+        "split method visible",
+        "simple ledger-focused mobile"
+      ],
+      "forbidden_signals": [
+        "decorative scenery as required asset",
+        "invite/travel-party UI",
+        "fake people/dates/balances/amounts",
+        "How it works panel",
+        "balance-first hierarchy",
+        "arbitrary expense photos",
+        "collaboration/budget analytics creep"
+      ]
+    },
+    {
+      "path": "d6-search-responsive-final.svg",
+      "topic": "Search",
+      "authority": "recovered_d6_approved_layout",
+      "allowed_signals": [
+        "prominent desktop global search",
+        "mobile expanded top search + compact scrolled access + focused overlay",
+        "search remains global infrastructure",
+        "results grouped by real WayPoint object type with current trip first",
+        "dismiss restores exact context"
+      ],
+      "forbidden_signals": [
+        "invented recent searches",
+        "popular recommendations",
+        "scan/add",
+        "voice search",
+        "unsupported categories",
+        "search tips",
+        "fake result counts/distance/ratings/content",
+        "the old sidebar drawn in this schematic as authority for desktop chrome"
+      ]
+    },
+    {
+      "path": "d6-search-current-trip-first.webp",
+      "source_index": 67,
+      "original_source_sha256": "104046064813bf85dda12f642b4fe01dd4b0a7121e2e619304e1728403807dd8",
+      "asset_sha256": "4c7b5b28dc6d14775814bef8ece2162574ae5c7f8bfce3796c72be944abfeaa9",
+      "topic": "Search current-trip-first grouping",
+      "authority": "creator_archive_narrow_sanity_reference",
+      "allowed_signals": [
+        "current-trip results first",
+        "grouped canonical object types",
+        "result opens an existing section day place or guide object"
+      ],
+      "forbidden_signals": [
+        "sample Friday date or Bukchon text as current",
+        "bottom navigation selection",
+        "unsupported result types",
+        "invented result metadata"
+      ]
+    },
+    {
+      "path": "d6-sos-offline-core.webp",
+      "source_index": 68,
+      "original_source_sha256": "52c833b7e410ee1c892802cb10c6b7e2bee0998e803b61884c06ac3c02863d10",
+      "asset_sha256": "ae7c0f23a7901ebd7891992c9912545551f9ef2748efc002efeb10e6b7f5e5c8",
+      "topic": "SOS verified offline core",
+      "authority": "creator_archive_narrow_locked_reference",
+      "allowed_signals": [
+        "verified emergency numbers first",
+        "large direct call controls",
+        "offline core is explicit",
+        "simple focused emergency presentation"
+      ],
+      "forbidden_signals": [
+        "auto-detected location claim unless implemented and verified",
+        "nearest ER orchestration",
+        "symptom triage",
+        "fake help request state"
+      ],
+      "locked_on": "2026-09-04"
+    },
+    {
+      "path": "canonical-mockups.svg",
+      "topic": "Gap coverage for Atlas, Trip, Itinerary desktop, Guide landing, SOS and cross-feature composition",
+      "authority": "sanitized_reconstruction_gap_coverage_only",
+      "allowed_signals": [
+        "hierarchy",
+        "relative scale",
+        "responsive composition",
+        "panel relationships",
+        "hero prominence",
+        "density limits",
+        "map/sheet behavior",
+        "typography wrapping",
+        "key-state/action placement"
+      ],
+      "forbidden_signals": [
+        "using WAY-01 or WAY-03 as the primary V1 reference",
+        "treating WAY-09 as a creator-approved final SOS visual",
+        "sample copy/data as facts",
+        "decorative details as requirements",
+        "overriding a recovered D6 reference",
+        "overriding a selected raster decision board on its allowed topic",
+        "overriding docs/reference/design-system.md"
+      ]
+    }
+  ],
+  "locked_2026_09_04": {
+    "sos": "near-black full-height sheet (modal on desktop); Police + Fire/Ambulance dominant one-tap calls in emergency red; verified second layer subordinate; offline stated once quietly",
+    "provenance": "quiet persistent dot; popover on desktop, bottom sheet on phone; source, checked date, freshness, uncertainty on demand; stale escalates visibly",
+    "offline": "quiet capability — caching and PWA install never bragged about; a small state pill when offline; per-module honest degraded states; cached content stays in place"
+  }
+}

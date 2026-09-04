@@ -4,12 +4,9 @@
     `order` reordering, so keyboard tab order and screen-reader reading order always
     match what is on screen.
 
-    The tie-break inside the sort's bands is the READER'S saved order where one exists
-    (per device, per scope — ../model/order.ts reconciles it against the page), and the
-    scope's declared markup order otherwise. ui/reorder.js changes it through the
-    controller this returns; the band rules re-assert on top of every change. */
+    The tie-break inside the sort's bands is the scope's declared markup order — the
+    maker's composition. Reader reordering is retired (D7). */
 import { sortPanels } from "../model/sort";
-import { parseOrder, serializeOrder, effectiveOrder, movePanel, orderKey } from "../model/order";
 
 function parseSeconds(s) {
   var n = parseFloat(s);
@@ -38,8 +35,7 @@ function bodyTransitionMs(panel) {
 /**
  * Wire one grid: sort its Panels now (after collapse restore) and re-sort on every
  * toggle, once the collapse transition has finished — so the closing animation plays
- * where the reader clicked, and no stale gap survives it. Returns the controller
- * ui/reorder.js drives, or null when there is nothing to wire.
+ * where the reader clicked, and no stale gap survives it. Returns true when a grid was wired.
  *
  * ONE grid per root, by design: the page this ships for has a single Panel region.
  * A page with several would pass each grid's element as `root` — the wiring is
@@ -53,19 +49,10 @@ export function initGrid(ctx) {
   var panels = Array.prototype.slice.call(grid.querySelectorAll("[data-panel]"));
   if (!panels.length) return null;
 
-  var store = (ctx && ctx.store) || null;
-  var key = orderKey(ctx && ctx.scope);
-
   function idOf(el) { return el.getAttribute("data-panel") || ""; }
 
-  // The scope's declared order is the markup order, captured once before any move.
-  var declared = panels.map(idOf);
-  var saved = store ? parseOrder(store.read(key)) : [];
-  var orderIds = effectiveOrder(declared, saved);
-
-  function persist() {
-    if (store) store.write(key, serializeOrder(orderIds));
-  }
+  // The scope's declared order is the markup order, captured once.
+  var orderIds = panels.map(idOf);
 
   function collect() {
     return panels.map(function (el) {
@@ -206,64 +193,5 @@ export function initGrid(ctx) {
   // into place with no motion, exactly like the collapse restore itself.
   resort();
 
-  function domIds() {
-    return Array.prototype.map.call(grid.children, idOf);
-  }
-
-  /* The controller ui/reorder.js drives. Every mutation goes back through the sort,
-     so the band rules always re-assert — a reader can DROP a collapsed Panel above an
-     open one, but it lands where the rules put it, and the announcement says where. */
-  return {
-    element: grid,
-
-    /** 1-based visual position of a Panel and the count, for announcements. */
-    positionOf: function (panel) {
-      return {
-        pos: Array.prototype.indexOf.call(grid.children, panel) + 1,
-        count: grid.children.length,
-      };
-    },
-
-    /** Move `id` to visual position `toIndex` (0-based, clamped). The reader's order
-        becomes the resulting visual sequence, persisted; bands re-assert via resort.
-        Returns whether anything changed — the no-op is the caller's announcement. */
-    moveTo: function (id, toIndex) {
-      var ids = domIds();
-      var next = movePanel(ids, id, toIndex);
-      if (next === ids) return false;
-      orderIds = next;
-      persist();
-      resort();
-      return true;
-    },
-
-    /** Adopt the CURRENT DOM sequence as the reader's order (after a live drag).
-        A drag that went nowhere writes nothing — same contract as movePanel's no-op. */
-    commitDomOrder: function () {
-      var ids = domIds();
-      if (ids.join("\u0000") !== orderIds.join("\u0000")) {
-        orderIds = ids;
-        persist();
-      }
-      resort();
-    },
-
-    /** Throw the reader's order away; the scope's declared order is the tie-break again. */
-    reset: function () {
-      orderIds = declared.slice();
-      if (store) store.write(key, serializeOrder([]));
-      resort();
-    },
-
-    /** Re-run the sort from current state (drag cancel: discard live DOM moves). */
-    restore: function () { resort(); },
-
-    /** Whether the reader has a persisted custom order for this scope — surfaces use
-        it to show a reset control only when there is something to reset. */
-    hasCustomOrder: function () {
-      return !!store && parseOrder(store.read(key)).length > 0;
-    },
-
-    fillLastRow: fillLastRow,
-  };
+  return true;
 }

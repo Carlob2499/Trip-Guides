@@ -1,0 +1,213 @@
+/* === ITINERARY — day-first mobile, temporal-spatial workbench on desktop =================
+   design-system.md §8. One day visible at a time at every width. Below the desktop threshold
+   the timeline owns the screen, the map pane stacks under it, and the thumb rail above the
+   bottom bar is the primary switch. From 1180px the bench is two resizable panes: timeline
+   left, real map right, one continuous timeline rail running down the day. */
+
+.itin{position:relative;padding-bottom:5.2rem}
+.itin-empty,.itin-map-none{padding:1.2rem max(1.1rem,var(--safe-right));color:var(--muted)}
+
+/* --- Header: kicker + the header date row (status on a phone, controls on desktop) ------ */
+.itin-head{padding:.9rem max(1.1rem,var(--safe-right)) .3rem max(1.1rem,var(--safe-left))}
+.itin-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0 0 .4rem}
+.itin-daynav{display:none;flex-wrap:wrap;gap:.3rem}
+.itin-daybtn{display:inline-flex;flex-direction:column;align-items:flex-start;gap:.1rem;min-height:48px;padding:.4rem .7rem;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;font-family:var(--font-data);transition:color .15s,border-color .15s,background .15s}
+.itin-daybtn-n{font-size:var(--text-nano);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.itin-daybtn-d{font-family:var(--font-display);font-weight:640;font-size:var(--text-body)}
+.itin-daybtn:hover{color:var(--ink);border-color:var(--rule2)}
+.itin-daybtn[aria-current="true"]{color:var(--accent-ink);background:var(--card);border-color:var(--accent)}
+.itin-daybtn[data-state="now"] .itin-daybtn-n::after{content:" · now";color:var(--accent-ink)}
+.itin-daybtn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+/* --- The day card — one large operational object ---------------------------------------- */
+.planner{min-width:0}
+.planner-days{display:block;padding:0 max(1.1rem,var(--safe-right)) 0 max(1.1rem,var(--safe-left))}
+.day{display:block;padding:0 0 1.5rem;margin:0;background:transparent;border:0}
+.day[hidden]{display:none}
+@media(prefers-reduced-motion:no-preference){
+  .day.day-in-r{animation:dayInR .26s var(--ease-out-expo)}
+  .day.day-in-l{animation:dayInL .26s var(--ease-out-expo)}
+}
+@keyframes dayInR{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes dayInL{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+.day-head{padding:.4rem 0 .8rem;border-bottom:2px solid var(--ink);margin-bottom:.6rem}
+.day .d{display:flex;align-items:baseline;flex-wrap:wrap;gap:.35rem .5rem;margin:0;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+.day-num{font-family:var(--font-display);font-weight:640;font-size:2rem;line-height:.95;letter-spacing:0;color:var(--accent-ink);text-transform:none}
+.day-of{font-weight:600;color:var(--muted)}
+.day-date{color:var(--ink);font-weight:700;font-size:var(--text-control)}
+.day-state{font-weight:700;margin-left:auto}
+.day-state[data-state="now"]{color:var(--aink)}
+.day-state[data-state="done"]{color:var(--green)}
+.day-state[data-state="next"],.day-state[data-state="planned"]{color:var(--muted)}
+.day-title{font-family:var(--font-display);font-weight:640;font-size:clamp(1.5rem,5.2vw,2.1rem);line-height:1.08;letter-spacing:-.012em;margin:.4rem 0 0;overflow-wrap:anywhere}
+.cal-badge{display:inline-flex;vertical-align:middle;margin-left:.4rem;color:var(--muted)}
+.day-tldr{margin:.35rem 0 0;font-family:var(--font-display);font-size:var(--text-body);line-height:1.4;color:var(--muted)}
+.day-meta{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin-top:.5rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted)}
+.day-pace{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.day-pace{line-height:1.4}
+.day-pace svg{vertical-align:-2px;margin-right:.25rem}
+.day-sun{display:inline-flex;align-items:center;gap:.3rem}
+.day-sun .sun-ico,.day-sun .sun-golden{color:var(--accent-ink)}
+.day-sun .sun-sep{opacity:.5}
+.day-leg{display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem .5rem;margin:.6rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--ink)}
+.day-leg-arrow,.day-leg-km{color:var(--muted)}
+.day-map-btn{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;margin-top:.7rem;padding:.4rem 1rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card);color:var(--accent-ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:600;cursor:pointer}
+.day-map-btn:hover{border-color:var(--accent)}
+.day-map-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.day-flip{display:inline-flex;margin:.8rem 0 0 .4rem;border:1px solid var(--rule2);border-radius:999px;overflow:hidden;vertical-align:bottom}
+.day-flip-btn{min-height:40px;padding:.3rem .9rem;background:transparent;border:0;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.day-flip-btn.on{background:var(--accent);color:var(--on-accent)}
+.day-flip-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
+
+/* Know-before links (§10 knowledge modules) — at most two, quiet, above the stops. */
+.day-know{display:flex;flex-wrap:nowrap;gap:.45rem;margin:0 -1.1rem .7rem;padding:0 1.1rem .2rem;overflow-x:auto;scrollbar-width:none}
+.day-know::-webkit-scrollbar{display:none}
+.day-know-link{flex:none;max-width:min(100%,20rem)}
+.day-know-link{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:.2rem .45rem;min-width:0;min-height:44px;padding:.45rem .8rem;border:1px solid var(--rule2);background:var(--card);color:var(--ink);text-decoration:none;font-family:var(--font-data);font-size:var(--text-control)}
+.day-know-link:hover{border-color:var(--accent)}
+.day-know-link--critical{border-left:4px solid var(--warn)}
+.day-know-kind{font-size:var(--text-nano);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+.day-know-title{font-weight:640;min-width:0;overflow-wrap:anywhere}
+
+/* --- Stops: the timeline. One continuous rail, a time column, the place's own photo, a
+   large name, its note and its handoff. Big tappable atoms, never a table. ---------------- */
+.stops{list-style:none;margin:.4rem 0 .6rem;padding:0;display:flex;flex-direction:column}
+.stop{position:relative;display:grid;grid-template-columns:1rem minmax(2.9rem,3.6rem) minmax(0,1fr);grid-template-areas:"rail when main";column-gap:.55rem;align-items:start;padding:.8rem 0;min-width:0}
+.stop--photo{grid-template-columns:1rem minmax(2.9rem,3.6rem) 64px minmax(0,1fr);grid-template-areas:"rail when media main"}
+/* The rail: a line through every stop, a dot at each; the dot carries state (§17: never colour alone —
+   the check-off writes ✓, the now-line pulses). */
+.stop-rail{grid-area:rail;position:relative;align-self:stretch;min-height:100%}
+.stop-rail::before{content:"";position:absolute;left:calc(50% - 1px);top:-.8rem;bottom:-.8rem;width:2px;background:var(--rule)}
+.stop:first-child .stop-rail::before{top:.9rem}
+.stop:last-child .stop-rail::before{bottom:auto;height:.9rem}
+.stop-rail::after{content:"";position:absolute;left:calc(50% - 6px);top:.55rem;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--rule2)}
+.stop-when{grid-area:when;display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.stop-time{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.25;overflow-wrap:anywhere}
+.stop-num{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;color:var(--muted);letter-spacing:.06em;width:fit-content}
+.stop-media{grid-area:media;display:block;width:64px;height:64px;overflow:hidden;background:var(--sunken);border:1px solid var(--rule2)}
+.stop-img{display:block;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
+.stop-main{grid-area:main;min-width:0;display:flex;flex-direction:column;gap:.15rem}
+.stop-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);letter-spacing:-.01em;line-height:1.2;overflow-wrap:anywhere}
+.stop-map-focus{display:flex;align-items:center;width:fit-content;max-width:100%;min-height:44px;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.stop-map-focus:hover,.stop-map-focus[aria-current="location"]{color:var(--accent-ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
+.stop-map-focus:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
+.stop-note{font-size:var(--text-small);color:var(--muted);line-height:1.45}
+.stop-main .transit-links{margin-top:.4rem}
+/* Selection: the stop and its pin are one object (§8); the rail dot and the row say so together. */
+.stop-map-selected{background:color-mix(in srgb,var(--accent) 9%,transparent);margin-inline:-.6rem;padding-inline:.6rem}
+.stop-map-selected .stop-rail::after{background:var(--accent);border-color:var(--accent)}
+/* Now-line: live stop states on today's card. */
+.stop-past{opacity:.55}
+.stop-next .stop-rail::after{background:var(--accent);border-color:var(--accent)}
+@media(prefers-reduced-motion:no-preference){.stop-next .stop-rail::after{animation:nowPulse 2s ease-in-out infinite}}
+@keyframes nowPulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent)}50%{box-shadow:0 0 0 6px transparent}}
+.stop-done .stop-rail::after{background:var(--green);border-color:var(--green)}
+
+/* Branches (§8): the party splits into labelled sections, never one fake route. */
+.day-branches{display:flex;flex-direction:column;gap:.8rem;margin:.4rem 0 .8rem}
+.day-branch{border:1px solid var(--rule);border-left:4px solid var(--accent);background:var(--card);padding:.8rem 1rem}
+.day-branch-label{margin:0 0 .3rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink)}
+.day-branch-body{font-size:var(--text-body);line-height:1.6}
+.day-branch-body p{margin:.5rem 0}
+.day-branch .stop-rail::after{background:var(--card)}
+@media(min-width:720px){.day-branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))}}
+
+.day-route{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem .8rem;margin:.7rem 0 .2rem}
+.day-route-link{display:inline-flex;align-items:center;min-height:44px;padding:0 1rem;border:var(--rw) solid var(--rule2);border-radius:999px;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--aink);text-decoration:none}
+.day-route-link:hover{border-color:var(--accent)}
+.day-route-note{font-family:var(--font-data);font-size:var(--text-nano);color:var(--muted)}
+.day-planb{display:flex;flex-wrap:wrap;gap:.3rem .7rem;margin:.7rem 0 .2rem;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 6%,transparent);border-left:3px solid var(--accent);font-size:var(--text-small);line-height:1.55}
+.planb-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+.lsnote{display:block;margin:.6rem 0 0;font-size:var(--text-small);color:var(--muted);line-height:1.5}
+.day-body{margin-top:.6rem;line-height:1.65}
+.fit{margin:.6rem 0 0;font-size:var(--text-small);color:var(--muted)}
+.daykit{margin-top:.8rem;padding-top:.6rem;border-top:1px dashed var(--rule)}
+.kit-label{display:block;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.day-kitcount{font-weight:600;color:var(--muted)}
+.day-kitcount.done{color:var(--green)}
+.day-actual{margin:0 0 .8rem}
+
+/* --- The thumb rail ------------------------------------------------------------------- */
+.day-rail{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;padding:.35rem max(.5rem,var(--safe-right)) .35rem max(.5rem,var(--safe-left));background:var(--bg);border-top:1px solid var(--rule)}
+body:not([data-dest="itinerary"]) .day-rail{display:none}
+body.chrome-yield .day-rail{transform:translateY(calc(60px + var(--safe-bottom) + 130%))}
+.day-rail{transition:transform .34s var(--ease-out-expo)}
+.day-rail-track{display:flex;gap:.25rem;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;touch-action:pan-x;position:relative}
+.day-rail-track::-webkit-scrollbar{display:none}
+.dchip{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:.05rem;min-width:58px;min-height:54px;padding:.3rem .5rem;background:transparent;color:var(--muted);border:1px solid transparent;border-radius:0;cursor:pointer;font-family:var(--font-data);scroll-snap-align:center}
+.dchip-dow{font-size:var(--text-nano);letter-spacing:.06em;text-transform:uppercase}
+.dchip-num{font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);line-height:1;color:var(--ink)}
+.dchip-date{font-size:var(--text-nano);white-space:nowrap}
+.dchip[aria-current="true"]{background:var(--card);border-color:var(--accent);color:var(--accent-ink)}
+.dchip[aria-current="true"] .dchip-num{color:var(--accent-ink)}
+.dchip[data-state="now"] .dchip-dow{color:var(--accent-ink);font-weight:700}
+.dchip[data-state="done"] .dchip-num{color:var(--muted)}
+.dchip:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
+.day-rail.scrubbing{cursor:grabbing;user-select:none}
+.scrub-bubble{position:absolute;left:var(--scrub-x,50%);bottom:calc(100% + .3rem);transform:translateX(-50%) translateY(4px);padding:.3rem .65rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .14s ease,transform .14s ease;z-index:2}
+.day-rail.scrubbing .scrub-bubble{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(prefers-reduced-motion:reduce){.day-rail,.scrub-bubble{transition:none}.day.day-in-r,.day.day-in-l{animation:none}}
+
+/* --- The workbench: stacked below the desktop floor, two panes above it --------------- */
+.itin-bench{display:flex;flex-direction:column}
+.itin-divider{display:none}
+.itin-mappane-head{display:flex;align-items:center;flex-wrap:wrap;gap:.2rem .8rem;padding:.6rem max(1.1rem,var(--safe-right)) .4rem max(1.1rem,var(--safe-left))}
+.itin-mappane-title{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+.itin-mappane-note{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);flex:1 1 auto;min-width:0}
+.itin-pane-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;margin-left:auto;border:1px solid var(--rule2);border-radius:999px;background:var(--card);color:var(--muted);cursor:pointer}
+.itin-pane-toggle:hover{color:var(--ink);border-color:var(--ink)}
+.itin-pane-toggle:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.itin-map--bench{height:320px;margin:0 max(1.1rem,var(--safe-right)) 1rem max(1.1rem,var(--safe-left));width:auto}
+/* The written route rides the map: the day's stops in order with their handoff, visible
+   whenever the provider map cannot draw the route itself (§9 degraded honesty). */
+.itin-map-fallback{position:absolute;left:.5rem;right:.5rem;bottom:.5rem;z-index:1;max-height:min(34%,7.5rem);overflow:auto;padding:.55rem .7rem;background:color-mix(in srgb,var(--card) 94%,transparent);border:1px solid var(--rule2)}
+.itin-map[data-map-provider="google"]:not([data-map-empty-day]) .itin-map-fallback{display:none}
+.itin-map-fallback-head,.itin-map-fallback-empty{margin:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
+.itin-map-fallback-stops{list-style:none;margin:.35rem 0 0;padding:0;display:flex;flex-direction:column;gap:.25rem}
+.itin-map-fallback-stops li{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;min-width:0;font-family:var(--font-data);font-size:var(--text-caption)}
+.itin-map-fallback-stops li span{min-width:0;overflow-wrap:anywhere}
+.itin-map-fallback-stops a{flex:none;color:var(--accent-ink);font-size:var(--text-micro)}
+
+/* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
+@media(min-width:1180px){
+  .itin{padding-bottom:0}
+  .day-rail{display:none}
+  .itin-daynav{display:flex}
+  .itin-bench{--bench-timeline:52%;display:grid;grid-template-columns:var(--bench-timeline) 10px minmax(0,1fr);align-items:start;height:calc(100dvh - var(--hdr-h));min-height:520px;padding:0 1rem 0 0}
+  .itin-pane{min-width:0;height:100%;overflow-y:auto;overscroll-behavior:contain}
+  .itin-timeline{padding-right:.4rem}
+  .planner-days{padding-inline:clamp(1rem,2vw,1.6rem)}
+  .itin-head{padding-inline:clamp(1rem,2vw,1.6rem);padding-top:1rem}
+  .day-head{padding-top:.6rem}
+  .day-num{font-size:var(--text-h1)}
+  .day-tldr{font-size:var(--text-lead)}
+  .day-know{flex-wrap:wrap;margin-inline:0;padding-inline:0;overflow:visible}
+  .stop{padding:.9rem 0}
+  .stop{grid-template-columns:1.1rem minmax(3.6rem,5rem) minmax(0,1fr)}
+  .stop--photo{grid-template-columns:1.1rem minmax(3.6rem,5rem) 88px minmax(0,1fr)}
+  .stop-media{width:88px;height:88px}
+  .stop-time{font-size:var(--text-control)}
+  .stop-name{font-size:var(--text-lead)}
+  .itin-divider{display:block;height:100%;cursor:col-resize;background:linear-gradient(to right,transparent 4px,var(--rule2) 4px,var(--rule2) 6px,transparent 6px);touch-action:none}
+  .itin-divider:hover,.itin-divider:focus-visible{background:linear-gradient(to right,transparent 3px,var(--accent) 3px,var(--accent) 7px,transparent 7px);outline:none}
+  .itin-bench--dragging{user-select:none;cursor:col-resize}
+  /* The map pane is a framed working surface: it floats beside the timeline rather than
+     butting a bare iframe against a bare column. */
+  .itin-mappane{position:sticky;top:0;display:flex;flex-direction:column;overflow:hidden;height:100%;padding:.9rem 0 1rem}
+  .itin-mappane-head{padding:0 .2rem .5rem .6rem}
+  .itin-pane-toggle{display:inline-flex}
+  .itin-map--bench{flex:1;height:auto;min-height:0;margin:0}
+  .itin-bench--map-collapsed{grid-template-columns:minmax(0,1fr) 0 3.2rem}
+  .itin-bench--map-collapsed .itin-divider{display:none}
+  .itin-bench--map-collapsed .itin-mappane{cursor:pointer;border-left:1px solid var(--rule)}
+  .itin-bench--map-collapsed .itin-mappane-head{flex-direction:column;padding:.6rem .3rem}
+  .itin-bench--map-collapsed .itin-mappane-note{display:none}
+  .itin-bench--map-collapsed .itin-mappane-title{writing-mode:vertical-rl;transform:rotate(180deg)}
+  .itin-bench--map-collapsed .itin-map--bench,.itin-bench--map-collapsed .itin-map-none{display:none}
+  .itin-bench--map-collapsed .itin-pane-toggle svg{transform:rotate(180deg)}
+}
+@media print{.day-rail,.itin-divider,.itin-mappane{display:none}.day{display:block!important}}
+/* The check-off numeral draws small (a numeral, not a button) and is hit at 44px through an
+   invisible zone — the same effective-target technique the flag chip uses. */
+.stop-num{position:relative;min-height:24px;display:inline-flex;align-items:center}
+.stop-num::before{content:"";position:absolute;inset:-10px -8px}

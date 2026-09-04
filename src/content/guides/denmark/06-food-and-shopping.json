@@ -6,13 +6,31 @@
     "body": "<p>Copenhagen has one of the world's best food cultures at every price point, from two-euro bakery buns to multi-course tasting menus. Here's what to prioritise on this particular trip.</p><p><b>Danish classics to try at least once:</b></p><ul><li><b>Smørrebrød</b> — Denmark's national lunch: an open-faced sandwich on dense dark rye bread (rugbrød). Classic toppings include pickled herring, roast beef, egg and remoulade, or fresh shrimp. This is a midday meal, not dinner. ≈80–{{fact:what-to-eat-160-dkk}} at a proper smørrebrød restaurant (⚠ varies by venue).</li><li><b>Wienerbrød</b> — Danish pastry. Flaky, laminated, and far better here than any 'Danish' you've had anywhere else. ≈20–{{fact:what-to-eat-45-dkk}} at a decent bakery.</li><li><b>Kanelsnegl or Kardemommesnurrer</b> — cinnamon or cardamom bun. The current must-order pastry in the city. ≈25–{{fact:what-to-eat-40-dkk}}.</li><li><b>Pølse</b> — Danish hot dog from a red pølsevogn cart. Red sausage in a soft bun, topped with remoulade, crispy onions, and pickles. ≈30–{{fact:what-to-eat-50-dkk}}. One of the most authentic things you can eat on the street here.</li><li><b>Stegt flæsk med persillesovs</b> — crispy pork belly strips with parsley sauce, considered Denmark's national dish. Found at traditional lunch restaurants.</li></ul><p><b>Seafood:</b> Cold Nordic shrimp (rejer) piled on buttered rugbrød with mayonnaise and lemon is exceptional and uniquely Danish. Fresh smoked fish is worth seeking at Torvehallerne's fish counters.</p><p><b>New Nordic:</b> Copenhagen essentially invented this global restaurant movement — seasonal, foraged, and fermented. At the budget end, Folkehuset Absalon does a communal long-table dinner for 75–{{fact:what-to-eat-100-dkk}} (see restaurant picks). At the high end, Alchemist runs 50+ micro-courses for ≈3,000–{{fact:what-to-eat-5-000-dkk}} per person and books months ahead.</p><p><b>Street food:</b> Reffen (Tue Jun 9) — 60+ stalls open from 11:30 daily, perfect after Kastellet.</p>",
     "verified_on": "2026-06-08",
     "shelf_life": "venue",
-    "source_url": "https://www.visitcopenhagen.com"
+    "source_url": "https://www.visitcopenhagen.com",
+    "module": {
+      "id": "what-to-eat-copenhagen",
+      "kind": "food",
+      "relates": {
+        "days": [
+          "Tue Jun 9"
+        ]
+      }
+    }
   },
   {
     "type": "prose",
     "group": "Food & shopping",
     "title": "How to book and where to find restaurants — Copenhagen",
-    "body": "<p><b>Booking restaurants in Copenhagen</b></p><p>Most mid-range and higher-end restaurants take reservations, and popular spots fill weeks in advance.</p><ul><li><b>TheFork (fork.dk)</b> — the dominant reservation platform in Scandinavia. Search by neighbourhood, filter by cuisine, book without a phone call. Real-time availability, instant confirmation. First stop for anything in this guide.</li><li><b>OpenTable</b> — some higher-end restaurants use this alongside or instead of TheFork. Check if TheFork shows no availability.</li><li><b>Resy</b> — increasingly used by chef-driven and New Nordic spots. Worth checking for same-day cancellations; they surface quickly.</li><li><b>Direct booking</b> — Vækst (already confirmed: +45 38 41 27 27 / vaekst@cofoco.dk), Absalon, KOBA, and most restaurants in this guide accept direct web booking. When in doubt, go directly — it's what the restaurant prefers.</li></ul><p><b>Finding restaurants while you're there</b></p><ul><li><b>Google Maps</b> — primary platform for Copenhagen; ratings are reliable here. Filter to 4.5+ stars, 200+ reviews.</li><li><b>Spotted by Locals</b> — editorial curation by Copenhagen locals, no sponsored listings. Good for neighbourhood spots that don't surface on mainstream guides.</li></ul><p><b>Backup options if first-choice restaurants are full:</b> Absalon's communal dinner rarely turns away walk-ins (door from 17:00 on the day). Torvehallerne stalls don't take reservations. Reffen is always walk-in (food stalls 11:30–20:30). For KOBA and Seoul Koreansk BBQ, try lunch slots on weekdays — both take walk-ins then. For Vækst: reservation confirmed for Jun 13 at 17:30; if anything changes contact +45 38 41 27 27 or vaekst@cofoco.dk.</p>"
+    "body": "<p><b>Booking restaurants in Copenhagen</b></p><p>Most mid-range and higher-end restaurants take reservations, and popular spots fill weeks in advance.</p><ul><li><b>TheFork (fork.dk)</b> — the dominant reservation platform in Scandinavia. Search by neighbourhood, filter by cuisine, book without a phone call. Real-time availability, instant confirmation. First stop for anything in this guide.</li><li><b>OpenTable</b> — some higher-end restaurants use this alongside or instead of TheFork. Check if TheFork shows no availability.</li><li><b>Resy</b> — increasingly used by chef-driven and New Nordic spots. Worth checking for same-day cancellations; they surface quickly.</li><li><b>Direct booking</b> — Vækst (already confirmed: +45 38 41 27 27 / vaekst@cofoco.dk), Absalon, KOBA, and most restaurants in this guide accept direct web booking. When in doubt, go directly — it's what the restaurant prefers.</li></ul><p><b>Finding restaurants while you're there</b></p><ul><li><b>Google Maps</b> — primary platform for Copenhagen; ratings are reliable here. Filter to 4.5+ stars, 200+ reviews.</li><li><b>Spotted by Locals</b> — editorial curation by Copenhagen locals, no sponsored listings. Good for neighbourhood spots that don't surface on mainstream guides.</li></ul><p><b>Backup options if first-choice restaurants are full:</b> Absalon's communal dinner rarely turns away walk-ins (door from 17:00 on the day). Torvehallerne stalls don't take reservations. Reffen is always walk-in (food stalls 11:30–20:30). For KOBA and Seoul Koreansk BBQ, try lunch slots on weekdays — both take walk-ins then. For Vækst: reservation confirmed for Jun 13 at 17:30; if anything changes contact +45 38 41 27 27 or vaekst@cofoco.dk.</p>",
+    "module": {
+      "id": "booking-restaurants-copenhagen",
+      "kind": "food",
+      "relates": {
+        "days": [
+          "Sat Jun 13"
+        ]
+      }
+    }
   },
   {
     "type": "venues",

@@ -1,0 +1,9 @@
+/* 404 — one column, the strip above, two ways on. Tokens only; no decoration implying a page. */
+.nf{max-width:52rem;margin:0 auto;padding:clamp(3rem,12vh,7rem) max(1.2rem,var(--safe-right)) 4rem max(1.2rem,var(--safe-left))}
+.nf-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0 0 .6rem}
+.nf-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-h1);line-height:1.05;letter-spacing:-.015em;margin:0 0 .8rem;max-width:18ch}
+.nf-dek{font-size:var(--text-lead);color:var(--muted);line-height:1.45;margin:0 0 1.6rem;max-width:52ch}
+.nf-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem 1.2rem;margin:0}
+.nf-cta{display:inline-flex;align-items:center;min-height:44px;padding:0 1.2rem;border-radius:999px;background:var(--cta);color:var(--cta-ink);font-family:var(--font-data);font-weight:700;font-size:var(--text-control);text-decoration:none}
+.nf-cta:focus-visible,.nf-link:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
+.nf-link{display:inline-flex;align-items:center;min-height:44px;color:var(--accent-ink);font-family:var(--font-data);font-size:var(--text-control);text-decoration:underline;text-underline-offset:3px}

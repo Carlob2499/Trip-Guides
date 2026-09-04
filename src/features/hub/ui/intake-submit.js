@@ -15,6 +15,7 @@
 
 import { WAYPOINT_BACKEND } from "../../../lib/backend-config.js";
 import { postToWorker } from "../../../lib/worker-client.js";
+import { encodePath } from "../../../scripts/util.js";
 
 // Best-effort slug guess, mirroring scaffold-guide.mjs's slugify (a collision gets "-2"
 // server-side; the bot's issue comment carries the authoritative link either way).
@@ -61,8 +62,9 @@ function collectRaw(country) {
 
 /** Wire the /new page's form. `repo` comes from the form's data-repo attribute. */
 export function initIntakeSubmit(form, errEl) {
-  const base = document.body.getAttribute("data-base") || "";
-  const repo = form.getAttribute("data-repo");
+  // Both end up inside hrefs: the credited encoding step happens once, here (util.js).
+  const base = encodePath(document.body.getAttribute("data-base") || "");
+  const repo = encodePath(form.getAttribute("data-repo") || "");
 
   function toProgress(country, slug) {
     location.href = base + "/progress/?slug=" + encodeURIComponent(slug || guessSlug(country)) +

@@ -846,9 +846,15 @@ for (const guide of ["denmark", "korea"] as const) {
       await page.goto(`/Trip-Guides/guides/${guide}/`, { waitUntil: "networkidle" });
 
       const pairs = await page.evaluate(() => {
-        const banner = document.getElementById("whatsNext");
-        if (!banner) return null;
-        banner.removeAttribute("hidden");
+        // D7: the "what's next" banner became the Trip destination's Now atom (trip.js paints
+        // it in the active phase). The gate builds one from the same classes so the CSS
+        // contract — role label and stop name legible on the atom's ground — is measured
+        // whatever phase the fixed clock lands in.
+        const host = document.querySelector("[data-trip-now]");
+        if (!host) return null;
+        host.closest("[data-trip-phase]")?.removeAttribute("hidden");
+        host.innerHTML = '<div class="tn-atom tn-atom--now" id="whatsNext"><p class="tn-role wn-label">Now</p><h3 class="tn-name" id="wnText"></h3></div>';
+        const banner = document.getElementById("whatsNext")!;
         const text = document.getElementById("wnText")!;
         text.textContent = "Gyeongbokgung Palace, 14:00";
         const srgb = (v: string) => {
@@ -867,7 +873,7 @@ for (const guide of ["denmark", "korea"] as const) {
         return { text: ratio(text), label: ratio(banner.querySelector(".wn-label")!) };
       });
 
-      expect(pairs, "no #whatsNext banner in this guide's markup").not.toBeNull();
+      expect(pairs, "no Trip Now-atom host in this guide's markup").not.toBeNull();
       expect(pairs!.text, "wn-text on the banner ground").toBeGreaterThanOrEqual(4.5);
       expect(pairs!.label, "wn-label on the banner ground").toBeGreaterThanOrEqual(4.5);
     });
@@ -903,7 +909,7 @@ test("⌁ with every sheet closed, nothing inside one is focusable", async ({ pa
   const leaked = await page.evaluate(() => {
     const F = 'a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])';
     // Every dismissable surface on a guide, whichever mechanism it uses to hide.
-    return [".sheet", ".sos-sheet", "#shareModal", ".share-modal"].flatMap((sel) => {
+    return [".srch", ".sos-sheet", "#shareModal", ".share-modal", "[data-map-sheet]"].flatMap((sel) => {
       const el = document.querySelector(sel);
       if (!el) return [];
       const cs = getComputedStyle(el);
@@ -918,26 +924,26 @@ test("⌁ with every sheet closed, nothing inside one is focusable", async ({ pa
 
 test("⌁ an open sheet traps focus, Escape closes it, and focus comes back to the opener", async ({ page }) => {
   // ACCEPTANCE 6.2 + 6.3 in one walk, because they are one gesture: a dialog that traps focus
-  // and then strands it on close is not better than one that never trapped it.
+  // and then strands it on close is not better than one that never trapped it. D7: the one
+  // modal surface every guide carries is the Search overlay (features/search).
   await prep(page, "/Trip-Guides/guides/korea/", "light", VIEWPORTS[1]);
   await closeAnyOpenSheet(page);
-  const opener = page.locator("#sheetOpen");
+  const opener = page.locator("[data-search-open]").first();
   await opener.click();
-  const sheet = page.locator(".sheet");
-  await expect(sheet).toHaveClass(/\bopen\b/);
+  const sheet = page.locator(".srch");
+  await expect(sheet).toBeVisible();
   await expect(sheet).not.toHaveAttribute("inert", /.*/);
 
   // Focus is inside, and tabbing past the last control wraps rather than escaping to the page.
-  expect(await page.evaluate(() => document.querySelector(".sheet")!.contains(document.activeElement))).toBe(true);
+  expect(await page.evaluate(() => document.querySelector(".srch")!.contains(document.activeElement))).toBe(true);
   for (let i = 0; i < 40; i++) await page.keyboard.press("Tab");
   expect(
-    await page.evaluate(() => document.querySelector(".sheet")!.contains(document.activeElement)),
-    "40 tabs escaped the open sheet — the trap is not holding",
+    await page.evaluate(() => document.querySelector(".srch")!.contains(document.activeElement)),
+    "40 tabs escaped the open search overlay — the trap is not holding",
   ).toBe(true);
 
   await page.keyboard.press("Escape");
-  await expect(sheet).not.toHaveClass(/\bopen\b/);
-  await expect(sheet).toHaveAttribute("inert", "");
+  await expect(sheet).toBeHidden();
   await expect(opener).toBeFocused();
 });
 

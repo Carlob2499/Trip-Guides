@@ -6,14 +6,14 @@
       phone to a taxi driver.
    2. Stop check-off: tap a stop's number to tick it done (persists per guide).
    3. Currency quick-converter: tap the live rate pill for an inline converter.
-   4. Jump-to-today chip: during the trip, one floating tap to today's card.
-   5. Haptic ticks on check-off (quiet, guarded). */
+   4. Haptic ticks on check-off (quiet, guarded).
+   Every check-off announces itself (tg:stops) so the Trip destination's Now/Next follows. */
 
 // Cross-feature, but through the silo's public surface (never a deep import) — the
 // converter needs the rate live-data already applied, since this module loads after it.
-import { getLastRate, solarTimesFor, daylightLeftLabel, fmtClock } from "../../live-data/index.js";
-import { burnTotal, convertRate, decodeStops, encodeStops } from "../model/field-math";
-import { trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts/util.js";
+import { getLastRate } from "../../live-data/index.js";
+import { convertRate, decodeStops, encodeStops } from "../model/field-math";
+import { esc, trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts/util.js";
 
 (function () {
   var storeKey = document.body.getAttribute("data-storekey") || "guide";
@@ -120,6 +120,7 @@ import { trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts
         num.setAttribute("aria-checked", on ? "true" : "false");
         if (on) { stopState[key] = 1; buzz(12); } else delete stopState[key];
         try { localStorage.setItem(STOPS_KEY, JSON.stringify(stopState)); } catch (e) {}
+        try { document.dispatchEvent(new CustomEvent("tg:stops")); } catch (e) {}
       }
       num.addEventListener("click", toggle);
       num.addEventListener("keydown", function (e) {
@@ -160,8 +161,8 @@ import { trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts
       if (res.state === "empty") { out.textContent = "Type an amount"; return; }
       // tg:rate is USD → local (1 USD = rate local), matching the pill.
       out.innerHTML =
-        "<b>$" + amount.toLocaleString() + "</b> ≈ " + res.usdToLocal.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " " + code +
-        "<br><b>" + amount.toLocaleString() + " " + code + "</b> ≈ $" + res.localToUsd.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        "<b>$" + amount.toLocaleString() + "</b> ≈ " + res.usdToLocal.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " " + esc(code) +
+        "<br><b>" + amount.toLocaleString() + " " + esc(code) + "</b> ≈ $" + res.localToUsd.toLocaleString(undefined, { maximumFractionDigits: 2 });
     }
     inp.addEventListener("input", render);
     // Registered here, not above, for two reasons: `render` is block-scoped to this `if`
@@ -201,173 +202,9 @@ import { trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts
     });
   }
 
-  /* ── 4. Focus Today — the on-the-street view ───────────────────────────────
-     During the trip, the floating Today chip opens a stripped full-screen
-     view of TODAY only: huge type, the stop ladder with times, tap-to-check
-     (perfectly synced — checking here clicks the real stop's checkbox), and
-     a link into the full plan. Built from the day-today card the page
-     already rendered; no second source of truth. */
-  var todayCard = document.querySelector(".day-today");
-  if (todayCard) {
-    var cfgElFT = document.getElementById("tgConfig");
-    var cfgFT = cfgElFT ? JSON.parse(cfgElFT.textContent || "{}") : {};
-    var focusEl = null;
-    var focusSunEl = null;
-    function updateFocusSun() {
-      if (!focusSunEl || !cfgFT.mapCenter) return;
-      var times = solarTimesFor(cfgFT.mapCenter.lat, cfgFT.mapCenter.lng, new Date());
-      var left = daylightLeftLabel(new Date(), times);
-      if (left) {
-        focusSunEl.textContent = "☀︎ " + left + " of daylight left · sunset " + fmtClock(times.sunset, cfgFT.destTzIana);
-        focusSunEl.hidden = false;
-      } else {
-        focusSunEl.hidden = true;
-      }
-    }
-    function openFocus() {
-      if (!focusEl) {
-        focusEl = document.createElement("div");
-        focusEl.className = "focus-today";
-        focusEl.setAttribute("role", "dialog");
-        focusEl.setAttribute("aria-modal", "true");
-        focusEl.setAttribute("aria-label", "Today at a glance");
-        var dateTxt = ((todayCard.querySelector(".d") || {}).textContent || "Today").replace(/^\s*\d+\s*/, "").trim();
-        var title = (todayCard.querySelector(".b strong") || {}).textContent || "";
-        var head = document.createElement("div");
-        head.className = "focus-head";
-        head.innerHTML = '<p class="focus-date"></p><h2 class="focus-title"></h2>' +
-          '<p class="focus-tldr"></p>' +
-          '<p class="focus-sun" hidden></p>' +
-          '<button class="focus-x" type="button" aria-label="Close today view">✕</button>';
-        head.querySelector(".focus-date").textContent = dateTxt;
-        head.querySelector(".focus-title").textContent = title;
-        var tldrSrc = todayCard.querySelector(".day-tldr");
-        var tldrEl = head.querySelector(".focus-tldr");
-        if (tldrSrc) tldrEl.textContent = tldrSrc.textContent;
-        else tldrEl.remove();
-        /* Plan B rides along when today carries one — cloned from the card, same
-           single-source rule as everything else in this view. On a monsoon day the
-           refuge answer belongs on the street screen, not two taps back. */
-        var planbSrc = todayCard.querySelector(".day-planb");
-        if (planbSrc) {
-          var pb = planbSrc.cloneNode(true);
-          pb.classList.add("focus-planb");
-          head.appendChild(pb);
-        }
-        focusSunEl = head.querySelector(".focus-sun");
-        focusEl.appendChild(head);
-        var list = document.createElement("ol");
-        list.className = "focus-stops";
-        var srcStops = todayCard.querySelectorAll(".stop");
-        srcStops.forEach(function (src) {
-          var li = document.createElement("li");
-          li.className = "focus-stop" + (src.classList.contains("stop-done") ? " focus-done" : "");
-          li.setAttribute("role", "checkbox");
-          li.setAttribute("tabindex", "0");
-          li.setAttribute("aria-checked", src.classList.contains("stop-done") ? "true" : "false");
-          li.innerHTML = '<span class="focus-time"></span><span class="focus-name"></span><span class="focus-note"></span>';
-          li.querySelector(".focus-time").textContent = (src.querySelector(".stop-time") || {}).textContent || "·";
-          li.querySelector(".focus-name").textContent = (src.querySelector(".stop-name") || {}).textContent || "";
-          li.querySelector(".focus-note").textContent = (src.querySelector(".stop-note") || {}).textContent || "";
-          function tick() {
-            var num = src.querySelector(".stop-num");
-            if (num) num.click(); // single source of truth — real stop toggles + persists
-            var on = src.classList.contains("stop-done");
-            li.classList.toggle("focus-done", on);
-            li.setAttribute("aria-checked", on ? "true" : "false");
-          }
-          li.addEventListener("click", tick);
-          li.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tick(); }
-          });
-          list.appendChild(li);
-        });
-        focusEl.appendChild(list);
-        var foot = document.createElement("button");
-        foot.type = "button";
-        foot.className = "focus-full";
-        foot.textContent = "Open the full plan →";
-        foot.addEventListener("click", function () {
-          closeFocus();
-          var cat = todayCard.closest(".catblock");
-          if (cat) {
-            var tab = document.querySelector('.gtab[data-tab="' + cat.getAttribute("data-ci") + '"]');
-            if (tab) tab.click();
-          }
-          setTimeout(function () {
-            window.scrollTo(0, todayCard.getBoundingClientRect().top + window.scrollY - 120);
-          }, 120);
-        });
-        focusEl.appendChild(foot);
-        document.body.appendChild(focusEl);
-        head.querySelector(".focus-x").addEventListener("click", closeFocus);
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape" && focusEl.classList.contains("focus-on")) closeFocus();
-        });
-      }
-      updateFocusSun(); // recomputed on every open — daylight-left is a moving target, unlike the rest of the header
-      focusEl.classList.add("focus-on");
-      document.body.classList.add("sheet-lock");
-      focusEl.querySelector(".focus-x").focus();
-    }
-    function closeFocus() {
-      if (focusEl) focusEl.classList.remove("focus-on");
-      document.body.classList.remove("sheet-lock");
-      if (chipEl && document.body.contains(chipEl)) chipEl.focus();
-    }
-
-    var chipEl = document.createElement("button");
-    chipEl.type = "button";
-    chipEl.className = "today-chip";
-    var chipDate = ((todayCard.querySelector(".d") || {}).textContent || "Today").replace(/^\s*\d+\s*/, "").trim();
-    chipEl.textContent = "◉ Today · " + chipDate;
-    document.body.appendChild(chipEl);
-    chipEl.addEventListener("click", openFocus);
-  }
-
-  /* ── 4a-ii. Data-freshness chip + budget burn tile in the masthead ─────── */
-  (function () {
-    var stats = document.getElementById("guideStats");
-    if (!stats) return;
-    var cfgEl2 = document.getElementById("tgConfig");
-    var cfg2 = cfgEl2 ? JSON.parse(cfgEl2.textContent || "{}") : {};
-    // Freshness: surface the guide's own verification date (already in data).
-    if (cfg2.verifiedDate) {
-      var vf = document.createElement("span");
-      vf.className = "gstat";
-      vf.textContent = "✓ data checked " + cfg2.verifiedDate;
-      stats.appendChild(vf);
-    }
-    // Burn tile: total logged in the Budget calculator, tap to open it.
-    function renderBurn() {
-      try {
-        var splitState = JSON.parse(localStorage.getItem("tg-split-" + storeKey) || "null");
-        var total = burnTotal(splitState);
-        var el = document.getElementById("burnPill");
-        if (!total) { if (el) el.remove(); return; }
-        if (!el) {
-          el = document.createElement("button");
-          el.id = "burnPill";
-          el.type = "button";
-          el.className = "gstat gstat-burn";
-          el.addEventListener("click", function () {
-            // The Budget calculator lives on the Tools station now, and R5 numbers every
-            // `.gtab` by its rail position — that number differs per guide, so this looks the
-            // station up by kind. The old `[data-tab="split"]` matched nothing, which made the
-            // burn pill a dead control: it showed a total and went nowhere when tapped.
-            var toolsTab = document.querySelector('.gtab[data-kind="tools"]');
-            if (toolsTab) toolsTab.click();
-          });
-          stats.appendChild(el);
-        }
-        el.textContent = "$" + total.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " logged →";
-      } catch (e) {}
-    }
-    renderBurn();
-    document.addEventListener("visibilitychange", renderBurn);
-    var tabsForBurn = document.getElementById("guideTabs");
-    if (tabsForBurn) tabsForBurn.addEventListener("click", function () { setTimeout(renderBurn, 300); });
-  })();
+  /* Focus Today (the floating chip + full-screen today view) retired with D7: the Trip
+     destination IS the on-the-street view (design-system.md D6-19/48), painted from the same
+     canonical days and the same check-off state this file persists. */
 
   /* ── 2b. Progress share: checked stops travel in a link ────────────────── */
   (function () {
@@ -409,33 +246,4 @@ import { trapFocus, migrateStorageKey, readStoredRecord } from "../../../scripts
     }
   })();
 
-  /* ── 4b. Primary destination position ──────────────────────────────────── */
-  /* Position is measured only across traveler-primary destinations. Secondary routes remain
-     reachable but must not inflate the journey count or pretend to be progress stops. */
-  var bsCur = document.getElementById("curCat");
-  var tabsEl = document.getElementById("guideTabs");
-  if (bsCur && tabsEl) {
-    var primaryTabs = Array.prototype.slice.call(
-      tabsEl.querySelectorAll('.gtab[data-primary="true"]:not([hidden])')
-    );
-    var totalSections = primaryTabs.length;
-    var posEl = document.createElement("span");
-    posEl.className = "bs-pos mn-sr";
-    bsCur.insertAdjacentElement("afterend", posEl);
-    var sheetPos = document.getElementById("sheetPos");
-    function syncPos() {
-      var active = tabsEl.querySelector(".gtab-active");
-      var num = primaryTabs.indexOf(active);
-      var secondary = active && active.getAttribute("data-primary") !== "true"
-        ? (active.getAttribute("data-full") || "More")
-        : "";
-      posEl.textContent = num < 0 ? (secondary ? " · " + secondary : "") : (num + 1) + "/" + totalSections;
-      if (sheetPos) sheetPos.textContent = num < 0 ? secondary : (num + 1) + " of " + totalSections;
-      if (active) bsCur.textContent = active.getAttribute("data-full") || "";
-    }
-    new MutationObserver(syncPos).observe(tabsEl, {
-      subtree: true, attributes: true, attributeFilter: ["class"],
-    });
-    syncPos();
-  }
 })();

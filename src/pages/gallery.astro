@@ -37,25 +37,29 @@ import PaintedAtlas from "../components/PaintedAtlas.astro";
 import Panel from "../components/Panel.astro";
 import ProvenancePopover from "../components/ProvenancePopover.astro";
 import ReminderRow from "../components/ReminderRow.astro";
-import Reminders from "../components/Reminders.astro";
-import ToolsScreen from "../components/ToolsScreen.astro";
 import TransitLinks from "../components/TransitLinks.astro";
-import TripKit from "../components/TripKit.astro";
 import TripSplit from "../components/TripSplit.astro";
+import AppChrome from "../components/AppChrome.astro";
+import UtilityBar from "../components/UtilityBar.astro";
+import TripDestination from "../components/TripDestination.astro";
+import ItineraryDestination from "../components/ItineraryDestination.astro";
+import MapDestination from "../components/MapDestination.astro";
+import GuideDestination from "../components/GuideDestination.astro";
+import SplitDestination from "../components/SplitDestination.astro";
 import { generateContourLayer } from "../lib/contours";
 import { COUNTRY_CODES, tzFor } from "../lib/themes";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
 import { derivePins } from "../lib/map-pins";
-import { deriveToolsRecord } from "../features/trip-tools/index";
-import { collectWaypoints, collectDayEvents } from "../features/exports/index";
+import { deriveGuideView } from "../lib/guide-view";
 import registry from "../../docs/reference/component-registry.json";
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
 import "@fontsource-variable/atkinson-hyperlegible-next";
 import "../styles/base.css";
 import "../styles/guide.css";
+import "../styles/chrome.css";
 import "../styles/jetlag.css";
 import "../styles/hint.css";
 import "../styles/print.css";
@@ -70,15 +74,16 @@ import "../styles/provenance-dot.css";
 import "../styles/gap-block.css";
 import "../styles/fold.css";
 import "../styles/map.css";
-import "../styles/planner.css";
+import "../styles/itinerary.css";
+import "../styles/trip.css";
+import "../styles/guide-dest.css";
 import "../styles/overview.css";
 import "../styles/flight.css";
 import "../styles/field-tools.css";
-import "../styles/tools.css";
 import "../features/learnings/styles.css";
-import "../features/guide-rail/styles.css";
 import "../features/firebase/styles.css";
 import "../features/panel/styles.css";
+import "../features/search/styles.css";
 import "../styles/touch.css";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -149,43 +154,15 @@ const holidaysFor = (sp: Specimen) => {
 };
 const pinsFor = (sp: Specimen) => derivePins(sp.guide.sections).get(sp.sec as never) ?? null;
 
-/* The Tools station + trip-tools rows, derived from one real guide with the layout's own
-   derivation — the storeKey is gallery-namespaced so specimen interaction can never touch a
-   real trip's saved state. */
+/* The five destinations, derived from one real guide with the layout's own derivation
+   (src/lib/guide-view.ts) — the storeKey is gallery-namespaced so specimen interaction can
+   never touch a real trip's saved state. */
 const toolsGuide = guides.find((g) => g.id === defaultTheme)!;
-const toolsFlat = flatSections((toolsGuide.data.sections ?? []) as Sec[]);
-const toolsDays = toolsFlat.find((s) => s.type === "days");
-const toolsFirst = (toolsDays?.items?.[0]?.date as string) ?? null;
-const toolsLast = (toolsDays?.items?.[toolsDays.items.length - 1]?.date as string) ?? toolsFirst;
 const galleryStoreKey = "galleryspecimen";
-const toolsCC = COUNTRY_CODES[toolsGuide.data.country] ?? null;
-const toolsHolSec = toolsFlat.find((s) => s.type === "holidays");
-const toolsYear = toolsHolSec?.year || deriveTripYear(toolsFirst, new Date());
-const toolsTrip = {
-  record: deriveToolsRecord({
-    slug: toolsGuide.id,
-    title: toolsGuide.data.title,
-    country: toolsGuide.data.country,
-    tz: tzFor(toolsGuide.data.country),
-    storeKey: galleryStoreKey,
-    sections: toolsFlat as never,
-    firstDayDate: toolsFirst,
-    lastDayDate: toolsLast,
-  }),
-  href: `${base}/guides/${toolsGuide.id}/`,
-  holidays: toolsHolSec
-    ? buildHolidayInfo(toolsCC ? (holidayData[`../data/holidays/${toolsCC}-${toolsYear}.json`] ?? null) : null, toolsFirst, toolsLast, toolsYear)
-    : null,
-  cc: toolsCC,
-  exports: {
-    gpx: collectWaypoints(toolsGuide.data).length > 0,
-    ics: collectDayEvents(toolsGuide.data).length > 0,
-  },
-};
-const specimenReminder = toolsTrip.record.reminders[0] ?? null;
-const tripKitDays = toolsDays?.items ?? [];
+const view = deriveGuideView(toolsGuide.data, toolsGuide.id, base, holidayData as never);
+const specimenReminder = view.readiness.reminders[0] ?? null;
 
-const ICONS = ["budget","vote","remind","learn","kit","home","top","chevron","moon","edit","clock","phone","image","check","shield","calendar","chat","plane","groups"] as const;
+const ICONS = ["budget","vote","remind","learn","kit","home","top","chevron","moon","edit","clock","phone","image","check","shield","calendar","chat","plane","groups","map","search"] as const;
 
 const contourLayers = [
   generateContourLayer({ seed: 977, rings: 10, cx: 240, cy: 300 }),
@@ -327,16 +304,10 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
           <h3 class="gal-name">ReminderRow</h3>
           <p class="gal-role">{componentRoles.ReminderRow.role}</p>
           {specimenReminder ? (
-            <ul class="tools-rem-list"><ReminderRow item={specimenReminder} /></ul>
+            <ul class="trip-rem"><ReminderRow item={specimenReminder} /></ul>
           ) : (
             <p class="gal-note">No booking reminder derivable from {toolsGuide.id} — honest blank, not a fabricated row.</p>
           )}
-        </article>
-
-        <article class="gal-card">
-          <h3 class="gal-name">Reminders <span class="gal-state">state: pre-sync (Firebase unconfigured)</span></h3>
-          <p class="gal-role">{componentRoles.Reminders.role}</p>
-          <Reminders storeKey={galleryStoreKey} />
         </article>
 
         <article class="gal-card">
@@ -346,23 +317,61 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
         </article>
 
         <article class="gal-card">
-          <h3 class="gal-name">TripKit</h3>
-          <p class="gal-role">{componentRoles.TripKit.role} — derived from {toolsGuide.id}'s own days.</p>
-          <TripKit storeKey={galleryStoreKey} country={toolsGuide.data.country} days={tripKitDays} sections={toolsFlat} />
-        </article>
-
-        <article class="gal-card">
           <h3 class="gal-name">Learnings <span class="gal-state">state: inert until Firebase + feedback exist</span></h3>
           <p class="gal-role">{componentRoles.Learnings.role}</p>
           <Learnings storeKey={galleryStoreKey} slug={toolsGuide.id} title={toolsGuide.data.title} />
         </article>
 
         <article class="gal-card">
-          <h3 class="gal-name">ToolsScreen</h3>
-          <p class="gal-role">{componentRoles.ToolsScreen.role} — the whole station, derived from {toolsGuide.id} with the layout's own derivation.</p>
-          <ToolsScreen active={toolsTrip} base={base}>
-            <Reminders storeKey={galleryStoreKey} />
-          </ToolsScreen>
+          <h3 class="gal-name">AppChrome</h3>
+          <p class="gal-role">{componentRoles.AppChrome.role} — rendered static here (position relaxed by the gallery host).</p>
+          <div class="gal-chrome-host"><AppChrome base={base} destinations={view.destinations} title={toolsGuide.data.title} /></div>
+          <p class="gal-note">UtilityBar — the same strip every non-guide page wears (intake, progress, change, about, health, 404).</p>
+          <div class="gal-chrome-host"><UtilityBar base={base} toggleId="galUtilityDark" /></div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">TripDestination <span class="gal-state">phases: pre · active · post (one shown by trip.js)</span></h3>
+          <p class="gal-role">{componentRoles.TripDestination.role} — derived from {toolsGuide.id}.</p>
+          <div class="gal-dest-host">
+            <TripDestination guide={toolsGuide.data} slug={toolsGuide.id} base={base} storeKey={galleryStoreKey} days={view.tripDays}
+              readiness={view.readiness} recap={view.recap} holidays={view.holidayInfo} dates={view.plate.dates} cities={view.plate.cities}
+              exports={view.exports} hasWeather={false} entry={toolsGuide.data.entry ?? null} hero={view.hero} placeImages={view.placeImages} />
+          </div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">ItineraryDestination</h3>
+          <p class="gal-role">{componentRoles.ItineraryDestination.role}</p>
+          <div class="gal-dest-host">
+            <ItineraryDestination daysSection={view.daysSec} learnings={toolsGuide.data.learnings ?? null} country={toolsGuide.data.country}
+              keyPrefix="galdy" modulesByDate={view.modulesByDate} dayPins={view.planner.pins} center={view.itinCenter} span={view.itinSpan} imageFor={view.imageFor} />
+          </div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">MapDestination</h3>
+          <p class="gal-role">{componentRoles.MapDestination.role}</p>
+          <div class="gal-dest-host">
+            <MapDestination center={view.globalCenter} span={view.globalSpan} pins={view.allPins} country={toolsGuide.data.country}
+              dayDates={view.rawDays.map((d) => d.date as string)} />
+          </div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">GuideDestination</h3>
+          <p class="gal-role">{componentRoles.GuideDestination.role}</p>
+          <div class="gal-dest-host">
+            <GuideDestination guide={toolsGuide.data} slug={toolsGuide.id} storeKey={galleryStoreKey} country={toolsGuide.data.country}
+              chapters={view.chapters} sources={view.sources} hero={view.hero} plate={view.plate} holidays={view.holidayInfo}
+              pinMap={view.pinMap} destTz={view.destTzIana} phrases={toolsGuide.data.phrases ?? null} entry={toolsGuide.data.entry ?? null} />
+          </div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">SplitDestination</h3>
+          <p class="gal-role">{componentRoles.SplitDestination.role}</p>
+          <div class="gal-dest-host"><SplitDestination storeKey={galleryStoreKey} /></div>
         </article>
 
         <article class="gal-card">
@@ -412,6 +421,9 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
       sel.addEventListener("change", function () {
         document.documentElement.setAttribute("style", themeStyles[sel.value]);
       });
+      // Map embeds are lazy behind the guide router (guide-ui.js); the gallery has no router,
+      // so every specimen frame loads here.
+      document.querySelectorAll("iframe[data-src]").forEach((f) => { f.src = f.getAttribute("data-src"); f.removeAttribute("data-src"); });
       // Dark toggle: same storage key and attribute as every page's own control.
       document.getElementById("galDark").addEventListener("click", function () {
         const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
@@ -448,4 +460,9 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
   .gal-prov-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
   .gal-panel-host { display: grid; gap: 1rem; }
   .gal-block-host { overflow-x: auto; }
+  /* The chrome and destinations are fixed/sticky page furniture in the product; the gallery
+     hosts them in flow so every specimen stacks on one page. */
+  .gal-chrome-host .chrome, .gal-chrome-host .botbar, .gal-chrome-host .searchbar { position: static; }
+  .gal-dest-host { overflow-x: auto; }
+  .gal-dest-host .dest-hero, .gal-dest-host .gd-index, .gal-dest-host .gd-chapter-map { position: static; }
 </style>

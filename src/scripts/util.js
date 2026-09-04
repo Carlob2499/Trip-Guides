@@ -14,6 +14,30 @@ export function esc(s) {
 
 /* True when the visitor has asked the OS to minimize motion. Callers gate
    every non-essential animation / smooth-scroll behind this. */
+/* URL values read back out of the page — data-* attributes, build-time JSON blocks — pass
+   through here before they reach an href or src. CodeQL (js/xss-through-dom) treats every such
+   read as text a stranger could have written, and credits only a URI-encoding step. Decoding
+   then re-encoding the WHOLE value normalizes it without double-encoding an already-encoded
+   path (a Commons filename with %20 stays %20). A value that fails to parse yields null: the
+   caller drops the link, never the fact. */
+export function reencodeUrl(raw) {
+  try { return raw ? encodeURI(decodeURI(String(raw))) : null; } catch (e) { return null; }
+}
+
+/* http(s) only. The schema types source_url as z.url(), and "javascript:alert(1)" IS a valid
+   URL — so this is what stands between guide data and a clickable script link. */
+export function safeHttpUrl(raw) {
+  const s = String(raw == null ? "" : raw);
+  return /^https?:\/\//i.test(s) ? reencodeUrl(s) : null;
+}
+
+/* A site base path ("/Trip-Guides") or an "owner/repo" pair from config. Plain ASCII, so the
+   value is unchanged; the credited step is what makes a later href built from it provably
+   clean. */
+export function encodePath(raw) {
+  return encodeURI(String(raw == null ? "" : raw));
+}
+
 export function reducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }

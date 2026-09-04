@@ -7,7 +7,7 @@ import "./atlas-map.js";
 import { solvePlacement } from "../model/solver";
 import { localClockLabel } from "../model/local-time";
 import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
-import { esc as escapeHtml, reducedMotion } from "../../../scripts/util.js";
+import { esc as escapeHtml, reducedMotion, reencodeUrl } from "../../../scripts/util.js";
 import { atWidth, srcsetFor, imgCredit } from "../../../lib/img-width";
 
 /* 260, not 220: the surveyed card's CTA is the long one ("✓ Verified — open the sheet →")
@@ -50,6 +50,12 @@ export function initAtlasWorld(root = document) {
   if (!guides.length) return;
 
   const base = (document.body.dataset.base || "").replace(/\/$/, "");
+  /* Everything read back out of the page — the guides JSON block included — is treated as
+     text a stranger could have written (CodeQL js/xss-through-dom), so nothing from it reaches
+     an href, src or innerHTML as a raw string. A guide's page IS base/guides/<slug>/, so the
+     link is rebuilt from the encoded slug rather than trusted; an image URL goes through
+     util.js's reencodeUrl. */
+  const guideHref = (guide) => `${base}/guides/${encodeURIComponent(String(guide.slug || ""))}/`;
   const map = document.createElement("atlas-map");
   host.querySelector("[data-atlas-map-slot]")?.appendChild(map);
   map.guides = guides.map((guide) => ({
@@ -162,8 +168,8 @@ export function initAtlasWorld(root = document) {
         const stamp = guide.stamp ? escapeHtml(guide.stamp) + (guide.status === "past" ? " ✓" : "") : "—";
         // Sheet 01 leads the register and takes the accent — the prototype marks the top of
         // the index, not the trip's status; status is the RECORD rail's job on the right.
-        return `<li><button type="button" data-fly="${guide.slug}"${guide.ordinal === 1 ? " data-lead" : ""}>` +
-          `<span class="ix-n">${num}</span><span class="ix-name">${escapeHtml(guide.name)}</span>` +
+        return `<li><button type="button" data-fly="${escapeHtml(guide.slug)}"${guide.ordinal === 1 ? " data-lead" : ""}>` +
+          `<span class="ix-n">${escapeHtml(num)}</span><span class="ix-name">${escapeHtml(guide.name)}</span>` +
           `<span class="ix-stamp">${stamp}</span></button></li>`;
       })
       .join("");
@@ -179,10 +185,10 @@ export function initAtlasWorld(root = document) {
       .map((guide) => {
         const label = recordLabel(guide);
         const tone = guide.isNext ? "next" : guide.status;
-        return `<li><button type="button" data-fly="${guide.slug}" data-open="${guide.href}" data-tone="${tone}">` +
+        return `<li><button type="button" data-fly="${escapeHtml(guide.slug)}" data-open="${escapeHtml(guideHref(guide))}" data-tone="${escapeHtml(tone)}">` +
           `<span class="rec-dot"></span>` +
           `<span class="rec-lines"><span class="rec-when">${guide.dates ? escapeHtml(guide.dates) : "Dates not set"}</span>` +
-          `<span class="rec-what">${escapeHtml(guide.name)}${label ? ` · ${label}` : ""}</span></span>` +
+          `<span class="rec-what">${escapeHtml(guide.name)}${label ? ` · ${escapeHtml(label)}` : ""}</span></span>` +
           `</button></li>`;
       })
       .join("");
@@ -205,17 +211,6 @@ export function initAtlasWorld(root = document) {
     spinBtn.textContent = spinning ? "PAUSE" : "SPIN ON";
   });
 
-  // ── Motto dismiss (persisted) ────────────────────────────────────────────────────────
-  const motto = root.querySelector("[data-atlas-motto]");
-  const MOTTO_KEY = "tg-atlas-motto-dismissed";
-  if (motto) {
-    try { if (localStorage.getItem(MOTTO_KEY)) motto.hidden = true; } catch { /* storage unavailable */ }
-    motto.querySelector("[data-atlas-motto-close]")?.addEventListener("click", () => {
-      motto.hidden = true;
-      try { localStorage.setItem(MOTTO_KEY, "1"); } catch { /* storage unavailable */ }
-    });
-  }
-
   // ── Mobile FAB map menu (README "Mobile", D5) — the same actions the desktop rail
   // exposes (fly to a sheet, fit world, pause spin, tools, ＋ new guide), relocated into a
   // ☰ button since there's no room for a side rail on a phone. Built unconditionally (cheap,
@@ -226,47 +221,16 @@ export function initAtlasWorld(root = document) {
   const flySlot = root.querySelector("[data-atlas-menusheet-fly]");
   if (flySlot) {
     flySlot.innerHTML = guides
-      .map((guide) => `<button type="button" data-fly="${guide.slug}">${guide.ordinal != null ? String(guide.ordinal).padStart(2, "0") : "—"} · ${escapeHtml(guide.name)}</button>`)
+      .map((guide) => `<button type="button" data-fly="${escapeHtml(guide.slug)}">${guide.ordinal != null ? escapeHtml(String(guide.ordinal).padStart(2, "0")) : "—"} · ${escapeHtml(guide.name)}</button>`)
       .join("");
     flySlot.querySelectorAll("[data-fly]").forEach((btn) => {
       btn.addEventListener("click", () => { map.flyTo(btn.dataset.fly, reduced ? 0 : 1100); closeMenu(); });
     });
   }
-  /* ── The dock (creator, 2026-08-08) ─────────────────────────────────────────────────
-     The globe's own readout: the featured trip's status, live local time, emergency
-     numbers, currency and two actions — all server-rendered from the same `quick` row the
-     table view uses, so nothing here is a second source of truth.
-
-     It ships `hidden` and is unhidden here rather than by CSS, because without JS there is
-     no globe to dock to: a no-JS phone gets the table view, where this data already lives.
-
-     Collapsed/expanded persists per device. It stands DOWN whenever the menu or the ping
-     sheet is up — three surfaces stacked on one thumb's worth of screen is the crowding
-     the design doctrine names, not the information it asks for. */
-  const dock = root.querySelector("[data-atlas-dock]");
-  const dockToggle = root.querySelector("[data-atlas-dock-toggle]");
-  const DOCK_KEY = "tg-atlas-dock";
-  if (dock) {
-    dock.hidden = false;
-    let open = false;
-    try { open = localStorage.getItem(DOCK_KEY) === "open"; } catch { /* private mode */ }
-    const setDock = (isOpen) => {
-      dock.toggleAttribute("data-open", isOpen);
-      dockToggle?.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      try { localStorage.setItem(DOCK_KEY, isOpen ? "open" : "shut"); } catch { /* private mode */ }
-    };
-    setDock(open);
-    dockToggle?.addEventListener("click", () => setDock(!dock.hasAttribute("data-open")));
-  }
-  /* Fold the dock away while another bottom surface owns the screen. Two independent owners
-     (the menu and the ping sheet) share this, so it counts them rather than holding a boolean:
-     with a boolean, closing the ping sheet while the menu was still open put the dock back
-     underneath the menu. */
-  const dockOwners = new Set();
-  function standDownDock(down, owner) {
-    if (down) dockOwners.add(owner); else dockOwners.delete(owner);
-    dock?.toggleAttribute("data-stood-down", dockOwners.size > 0);
-  }
+  /* The dock (a floating readout under the globe) was retired in the D7 convergence: the
+     quick card and the ping sheet already carry the featured trip. Kept as a no-op so the
+     menu/ping owners below need no restructuring. */
+  function standDownDock() { /* the dock was retired with the D7 convergence; the ping sheet and menu own the bottom edge */ }
 
   function setMenu(open) {
     if (!fab || !menuScrim || !menuSheet) return;
@@ -296,17 +260,17 @@ export function initAtlasWorld(root = document) {
   const pingThumb = root.querySelector("[data-atlas-pingsheet-thumb]");
   const STATUS_LABEL_PING = { past: "SURVEYED", ongoing: "ON THIS TRIP NOW", upcoming: "FILED", undated: "" };
   function showPingSheet(guide) {
-    if (!pingSheet) { window.location.href = guide.href; return; }
+    if (!pingSheet) { window.location.href = guideHref(guide); return; }
     if (pingKicker) pingKicker.textContent = `${guide.cc || ""} · ${guide.ordinal != null ? String(guide.ordinal).padStart(2, "0") : "—"}`;
     if (pingTitle) pingTitle.textContent = guide.name;
     if (pingMeta) pingMeta.textContent = [STATUS_LABEL_PING[guide.status], guide.tz ? localClockLabel(guide.tz, new Date()) : null].filter(Boolean).join(" · ");
-    if (pingOpen) pingOpen.href = guide.href;
+    if (pingOpen) pingOpen.href = guideHref(guide);
     /* The cover, at the size it is actually drawn. atWidth/srcsetFor are the same helpers the
        table rows use, so a Commons file is requested resized rather than pulled full-size — a
        64px thumbnail must not fetch a 258 KB original. No cover means no frame at all: an
        honest blank beats a grey placeholder pretending to be a photo. */
     if (pingThumb) {
-      const src = atWidth(guide.coverImg, 64);
+      const src = reencodeUrl(atWidth(guide.coverImg, 64));
       pingThumb.hidden = !src;
       if (src) {
         pingThumb.src = src;
@@ -358,7 +322,7 @@ export function initAtlasWorld(root = document) {
       // Desktop opens the guide directly (README "Clicking a pin"), so the selection it
       // records is the one Back will restore.
       markSelected(slug);
-      window.location.href = guide.href;
+      window.location.href = guideHref(guide);
       return;
     }
     markSelected(null);
@@ -401,7 +365,7 @@ export function initAtlasWorld(root = document) {
        same cover and the only one that never did. */
     const el = document.createElement("a");
     el.className = "atlas-pincard";
-    el.href = guide.href;
+    el.href = guideHref(guide);
     el.style.width = `${CARD_W}px`;
     // The credit chip sits on the bottom edge of the photo, so it needs the photo's height —
     // published from here, where the width it derives from actually lives. Hard-coding the

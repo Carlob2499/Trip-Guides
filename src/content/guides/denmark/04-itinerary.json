@@ -97,7 +97,17 @@
         "title": "Two crews, two cities — a rooftop ski slope, the world's most famous brick store & a guided cruise",
         "pace": "Full day · two separate plans · meet up for dinner · see 'Day routes' for step-by-step paths",
         "note": "The LEGO Stamp Rally doesn't open until Friday — Thursday is a pure city day for the GO Fest group. ⚠️ Grundtvig's Church closes at 15:45; plan to arrive by 15:15 at the latest.",
-        "body": "<p><i>The group splits for the day. The Pokémon crew plots a vertical loop across Copenhagen. The mums float through the canals, then see the city from the top of a double-decker.</i></p><p><b>🎮 GO Fest group (you + +1):</b> Start at the <b>LEGO flagship on Strøget</b> (Vimmelskaftet 37) — browse and pick up anything you want; come back for Stamp Rally tomorrow. Then <b>CopenHill</b> (Amager Bakke) for rooftop skyline-and-sea views — free to visit, accessible by lift. Next, the striped <b>Superkilen plaza</b> in Nørrebro, and finally the extraordinary <b>Grundtvig's Church</b> in Bispebjerg — a cathedral of yellow brick that looks like a giant pipe organ inside. Close attention to timing: <b>it closes at 15:45.</b> Full step-by-step route in 'Day routes' above.</p><p><b>👵 Mom's group (3 people):</b> Two tours booked ahead on <a href='https://www.getyourguide.com/copenhagen-l12/cruises-boat-tours-tc48/' target='_blank' rel='noopener noreferrer'>GetYourGuide</a>: (1) a <b>1-hour canal/harbour boat tour</b> from Gammel Strand or Nyhavn — narrated cruise past Christianshavn, the opera house and the coloured canal houses (Stromma classic tour ≈129 DKK; budget option: Netto-Bådene ≈60 DKK); (2) a <a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'><b>RED Sightseeing hop-on-hop-off bus</b></a> (24h, ≈199–299 DKK — check before booking) covering Nyhavn, Amalienborg, Rosenborg, and Frederiksberg at their own pace. Mostly seated; low walking demand all day.</p>",
+        "body": "<p><i>The group splits for the day. The Pokémon crew plots a vertical loop across Copenhagen. The mums float through the canals, then see the city from the top of a double-decker.</i></p>",
+        "branches": [
+          {
+            "label": "🎮 GO Fest group (you + +1)",
+            "body": "<p>Start at the <b>LEGO flagship on Strøget</b> (Vimmelskaftet 37) — browse and pick up anything you want; come back for Stamp Rally tomorrow. Then <b>CopenHill</b> (Amager Bakke) for rooftop skyline-and-sea views — free to visit, accessible by lift. Next, the striped <b>Superkilen plaza</b> in Nørrebro, and finally the extraordinary <b>Grundtvig's Church</b> in Bispebjerg — a cathedral of yellow brick that looks like a giant pipe organ inside. Close attention to timing: <b>it closes at 15:45.</b> Full step-by-step route in 'Day routes' above.</p>"
+          },
+          {
+            "label": "👵 Mom's group (3 people)",
+            "body": "<p>Two tours booked ahead on <a href='https://www.getyourguide.com/copenhagen-l12/cruises-boat-tours-tc48/' target='_blank' rel='noopener noreferrer'>GetYourGuide</a>: (1) a <b>1-hour canal/harbour boat tour</b> from Gammel Strand or Nyhavn — narrated cruise past Christianshavn, the opera house and the coloured canal houses (Stromma classic tour ≈129 DKK; budget option: Netto-Bådene ≈60 DKK); (2) a <a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'><b>RED Sightseeing hop-on-hop-off bus</b></a> (24h, ≈199–299 DKK — check before booking) covering Nyhavn, Amalienborg, Rosenborg, and Frederiksberg at their own pace. Mostly seated; low walking demand all day.</p>"
+          }
+        ],
         "fit": "GO Fest group: comfortable shoes and a layer for CopenHill's rooftop wind. Mom's group: light shoes — mostly seated.",
         "checklist": [
           "GO Fest group: leave LEGO by ~10:30 to have time for all four stops before Grundtvig's closes",
@@ -113,7 +123,17 @@
         "title": "The gates open — GO Fest park morning, the Stamp Rally begins",
         "pace": "Split groups all day · GO Fest group: park 9:00–13:00 then Stamp Rally · Mom's group: hop-on-hop-off bus day",
         "note": "The LEGO Stamp Rally opens today. LEGO Store Vimmelskaftet closes at 18:00 — go this afternoon, don't leave Stamp Rally entirely to Saturday.",
-        "body": "<p><i>The biggest morning of the trip. Into the park at sunrise-adjacent. Out into the city, stamps in hand, by afternoon.</i></p><p><b>🎮 GO Fest group (you + +1):</b> Morning park session at <b>Fælledparken</b> (9:00–13:00, park ticket required). Walk from CABINN (~20–25 min) or Metro M2 to Østerport then 10 min south — full directions in 'Day routes' above. Arrive by 8:45 to beat the entry queue. After the session, lunch at <a href='https://torvehallernekbh.dk' target='_blank' rel='noopener noreferrer'><b>Torvehallerne</b></a> on the walk back (directly at Nørreport). Afternoon: straight to <b>LEGO Store Vimmelskaftet</b> (open until 18:00) to start the <b>Stamp Rally</b>. Evening: <b>LEGO Store Tivoli Gardens</b> (open until 22:00) for additional stamps if needed.</p><p><b>👵 Mom's group (3 people):</b> Their full hop-on-hop-off bus day on <a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'>RED Sightseeing</a>. Board at Kongens Nytorv or Rådhuspladsen; ride the full loop once to orient, then hop off at <b>Nyhavn</b> for waterfront time, <b>Rosenborg Castle</b> and the King's Garden, and <b>Frederiksberg</b> palace park. Flexible and low-demand throughout. Meet for dinner as agreed.</p>",
+        "body": "<p><i>The biggest morning of the trip. Into the park at sunrise-adjacent. Out into the city, stamps in hand, by afternoon.</i></p>",
+        "branches": [
+          {
+            "label": "🎮 GO Fest group (you + +1)",
+            "body": "<p>Morning park session at <b>Fælledparken</b> (9:00–13:00, park ticket required). Walk from CABINN (~20–25 min) or Metro M2 to Østerport then 10 min south — full directions in 'Day routes' above. Arrive by 8:45 to beat the entry queue. After the session, lunch at <a href='https://torvehallernekbh.dk' target='_blank' rel='noopener noreferrer'><b>Torvehallerne</b></a> on the walk back (directly at Nørreport). Afternoon: straight to <b>LEGO Store Vimmelskaftet</b> (open until 18:00) to start the <b>Stamp Rally</b>. Evening: <b>LEGO Store Tivoli Gardens</b> (open until 22:00) for additional stamps if needed.</p>"
+          },
+          {
+            "label": "👵 Mom's group (3 people)",
+            "body": "<p>Their full hop-on-hop-off bus day on <a href='https://www.redsightseeing.com/copenhagen/' target='_blank' rel='noopener noreferrer'>RED Sightseeing</a>. Board at Kongens Nytorv or Rådhuspladsen; ride the full loop once to orient, then hop off at <b>Nyhavn</b> for waterfront time, <b>Rosenborg Castle</b> and the King's Garden, and <b>Frederiksberg</b> palace park. Flexible and low-demand throughout. Meet for dinner as agreed.</p>"
+          }
+        ],
         "fit": "GO Fest group: hat, sunscreen, water bottle, battery pack — it will be warm in the park. Mom's group: comfortable shoes for on/off the bus.",
         "checklist": [
           "GO Fest group: park ticket matches Morning session (9:00–13:00)",
@@ -131,7 +151,17 @@
         "title": "Last stamps, full city — then the best dinner of the trip",
         "pace": "Split groups AM/PM · GO Fest group: hard stop 16:30 · all five at Vækst 17:30",
         "note": "Stamp Rally wraps up today — you need 5 total across both LEGO stores; you started yesterday, so you may only need a few more. Everyone at Vækst at 17:30 no matter what.",
-        "body": "<p><i>One last day to hunt the city before all five meet at the table.</i></p><p><b>🎮 GO Fest group (you + +1):</b> Citywide GO Fest gameplay all day. Best PokéStop clusters: <b>Strøget/Vimmelskaftet</b> (LEGO Store, Royal Copenhagen, central stops) and the <b>Nyhavn–Kongens Nytorv loop</b>. Stamp Rally: <b>LEGO Vimmelskaftet</b> (10:00–18:00) and <b>LEGO Tivoli Gardens</b> (10:00–22:00). Collect 5 stamps total → Pikachu with Special Background encounter. <b>Hard stop at 16:30 — leave wherever you are.</b></p><p><b>👵 Mom's group (3 people):</b> <a href='https://shop.tivoli.dk/en/billetter-og-tivolikort/entre' target='_blank' rel='noopener noreferrer'><b>Tivoli Gardens</b></a> (Vesterbrogade 3, 10-min walk from CABINN). Buy tickets at tivoli.dk in advance to skip the queue — entry from ≈150 DKK in summer (dynamic pricing; verify before going). Alternatively, Rosenborg Castle if they missed it Friday (~160 DKK entry, or free with Copenhagen Card). <b>Leave by 17:00</b> for a taxi to Vækst (~10–15 min). All five meet at Vækst at 17:30.</p>",
+        "body": "<p><i>One last day to hunt the city before all five meet at the table.</i></p>",
+        "branches": [
+          {
+            "label": "🎮 GO Fest group (you + +1)",
+            "body": "<p>Citywide GO Fest gameplay all day. Best PokéStop clusters: <b>Strøget/Vimmelskaftet</b> (LEGO Store, Royal Copenhagen, central stops) and the <b>Nyhavn–Kongens Nytorv loop</b>. Stamp Rally: <b>LEGO Vimmelskaftet</b> (10:00–18:00) and <b>LEGO Tivoli Gardens</b> (10:00–22:00). Collect 5 stamps total → Pikachu with Special Background encounter. <b>Hard stop at 16:30 — leave wherever you are.</b></p>"
+          },
+          {
+            "label": "👵 Mom's group (3 people)",
+            "body": "<p><a href='https://shop.tivoli.dk/en/billetter-og-tivolikort/entre' target='_blank' rel='noopener noreferrer'><b>Tivoli Gardens</b></a> (Vesterbrogade 3, 10-min walk from CABINN). Buy tickets at tivoli.dk in advance to skip the queue — entry from ≈150 DKK in summer (dynamic pricing; verify before going). Alternatively, Rosenborg Castle if they missed it Friday (~160 DKK entry, or free with Copenhagen Card). <b>Leave by 17:00</b> for a taxi to Vækst (~10–15 min). All five meet at Vækst at 17:30.</p>"
+          }
+        ],
         "fit": "GO Fest group: walking shoes for a full pavement day. Mom's group: comfortable shoes for Tivoli. Everyone: something a step up from trainers for Vækst dinner.",
         "checklist": [
           "Vækst reservation confirmed — 17:30, all 5 people",

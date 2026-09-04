@@ -6,7 +6,17 @@
     "body": "<p>The university district around Hongik is Seoul's youth-and-nightlife core — street buskers, arcade halls, themed cafés, late-night eats, and anime goods. It's the natural evening base for nights you're not at the arena. Completely foreigner-accessible: no Korean contacts needed, no documented door discrimination (unlike parts of Gangnam), and most restaurants stay open until 04:00.</p><p><b>Two bars worth knowing — both walkable from Hongik Univ. Station:</b></p><ul><li><b>Mike's Cabin</b> — 94-13 Eoulmadang-ro, Mapo-gu (~5-min walk from Exit 8). Open Mon–Thu &amp; Sun 18:00–02:00, Fri–Sat 18:00–05:00 (+82-2-326-1921). The go-to foreigner bar in Hongdae: reggaeton, pop, hip-hop, mixed local and international crowd. Cover {{fact:hongdae-after-dark-10-000}} on weekends (⚠ confirm at door — covers move). Arrive before 22:30 to beat the queue.</li><li><b>Dokkaebi Party House</b> — 22 Wausan-ro 17-gil, Seogyo-dong, Mapo-gu (~7-min walk from Hongik Univ. Station). One of Hongdae's biggest foreigner-friendly clubs: EDM to hip-hop, large mixed crowd. Fast-track entry + 1 free drink available via <a href='https://www.klook.com/en-US/activity/77939-hongdae-dokkaebi-pub-and-club/' target='_blank' rel='noopener noreferrer'>Klook</a> in advance (⚠ verify cover on Klook before the trip).</li></ul><p>Clubs fill at midnight and peak 01:00–03:00. <b>Tuesday Jul 14</b> is the best night of this trip to stay late — no early alarm on Wednesday, and the flight home isn't until 21:30.</p>",
     "verified_on": "2026-06-28",
     "shelf_life": "venue",
-    "source_url": "https://www.klook.com/en-US/activity/77939-hongdae-dokkaebi-pub-and-club/"
+    "source_url": "https://www.klook.com/en-US/activity/77939-hongdae-dokkaebi-pub-and-club/",
+    "module": {
+      "id": "hongdae-after-dark",
+      "kind": "culture",
+      "scope": "Seoul",
+      "relates": {
+        "days": [
+          "Fri Jul 10"
+        ]
+      }
+    }
   },
   {
     "type": "prose",

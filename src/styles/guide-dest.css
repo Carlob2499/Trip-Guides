@@ -1,0 +1,119 @@
+/* === GUIDE — layered editorial reference =================================================
+   design-system.md D6-10/11/12/13/40/53/54, F2/F6. The cover keeps masthead.css; this file
+   owns the overview cards, the chapter compositions, the desktop chapter index, the spatial
+   chapter's map column, the reference objects and the knowledge-module kicker. */
+
+.gd{max-width:1400px;margin:0 auto}
+/* The cover's foot is the Guide's opening rhythm: the overview follows it closely (§10). */
+.gd-hero{margin-bottom:.4rem}
+.gd-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0 0 .6rem}
+.gd-body{display:block;padding:0 max(1.1rem,var(--safe-right)) 2rem max(1.1rem,var(--safe-left))}
+.gd-index{display:none}
+.gd-main{min-width:0}
+
+/* --- Overview: chapter cards, image-forward where the chapter carries photos ----------- */
+.gd-overview{padding-top:1.4rem}
+.gd-cards{display:grid;grid-template-columns:1fr;gap:.6rem}
+.gd-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.9rem;width:100%;min-height:80px;padding:.6rem .9rem .6rem .6rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color .16s,transform .2s var(--ease-spring)}
+.gd-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.gd-card:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
+.gd-card-media{display:block;width:96px;height:72px;overflow:hidden;background:var(--sunken)}
+.gd-card-media img{width:100%;height:100%;object-fit:cover;display:block;opacity:var(--photo)}
+.gd-card-glyph{display:flex;align-items:center;justify-content:center;width:96px;height:72px;background:var(--sunken);font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);color:var(--accent-ink)}
+.gd-card--quiet .gd-card-glyph{color:var(--muted)}
+.gd-card--photo .gd-card-glyph{display:none}
+.gd-card:not(.gd-card--photo) .gd-card-media{display:none}
+.gd-card-text{display:flex;flex-direction:column;gap:.1rem;min-width:0}
+.gd-card-n{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.1em;color:var(--muted)}
+/* Natural word wrapping is a hard visual contract. `anywhere` caused desktop titles such as
+   "Essentials" to render as letter/syllable fragments in the D7 gallery. */
+.gd-card-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);line-height:1.15;overflow-wrap:normal;word-break:normal;hyphens:none}
+.gd-card-sub{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gd-card-arrow{font-size:var(--text-h4);color:var(--accent-ink)}
+@media(min-width:600px){
+  .gd-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gd-card--photo{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;padding:0 0 .8rem}
+  .gd-card--photo .gd-card-media{grid-column:1/-1;width:100%;height:180px}
+  .gd-card--photo .gd-card-text{padding:.7rem 0 0 .9rem}
+  .gd-card--photo .gd-card-glyph{display:none}
+  .gd-card--photo .gd-card-arrow{padding:.7rem .9rem 0 0;align-self:start}
+}
+
+/* --- Chapters ----------------------------------------------------------------------------- */
+.gd-chapter{padding-top:1rem}
+.gd-chapter[hidden]{display:none}
+.gd-chapter-head{position:relative;margin:0 0 1.2rem;padding-bottom:.8rem;border-bottom:2px solid var(--ink)}
+.gd-back{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;padding:0 .8rem 0 .4rem;margin:0 0 .5rem -.4rem;background:transparent;border:0;border-radius:999px;color:var(--accent-ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.gd-back:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.gd-back:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.gd-chapter-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-h1);line-height:1.05;letter-spacing:-.014em;margin:0;overflow-wrap:normal;word-break:normal;hyphens:none}
+.gd-chapter-title:focus{outline:none}
+.gd-chapter-desc{margin:.5rem 0 0;font-family:var(--font-body);font-style:italic;font-size:var(--text-lead);color:var(--muted);max-width:52ch}
+.gd-chapter-sub{margin:.4rem 0 0;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
+.gd-chapter-head .cat-fan{top:auto;bottom:.8rem}
+.gd-chapter-body{min-width:0}
+.gd-chapter-body>.block,.gd-chapter-body>.gd-module>.block,.gd-chapter-body>.next-cta,.gd-chapter-body>.gd-ref,.gd-chapter-body>.jl-wrap{max-width:var(--read);margin-inline:auto}
+.gd-chapter-body>.block:has(.sight),.gd-chapter-body>.gd-module>.block:has(.sight),.gd-chapter-body>.pnl-grid{max-width:100%}
+.gd-chapter-body>.jl-wrap{margin-block:1rem}
+
+/* Knowledge modules — announced, not restyled (D6-53). */
+.gd-module{position:relative}
+.gd-module-kicker{display:flex;align-items:center;gap:.35rem;max-width:var(--read);margin:0 auto .2rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+.pnl-grid .gd-module{display:contents}
+.pnl-grid .gd-module-kicker{display:none}
+
+/* Spatial chapters: the map is a compact hero on a phone, a sticky column on desktop. */
+.gd-chapter-map{margin:0 0 1.2rem}
+.gd-chapter-map .block{margin-bottom:.6rem}
+.gd-chapter-map .itin-map{height:240px}
+.gd-pinlist{list-style:none;margin:.4rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem}
+.gd-pin{display:inline-flex;align-items:center;min-height:40px;padding:.3rem .8rem;border:1px solid var(--rule2);border-radius:999px;color:var(--ink);text-decoration:none;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600}
+.gd-pin:hover{border-color:var(--accent);color:var(--accent-ink)}
+.gd-pin-more{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);align-self:center}
+
+/* Reference objects (entry rules, phrase cards) */
+.gd-ref{margin-bottom:1rem}
+.gd-ref-kicker{display:flex;align-items:center;gap:.35rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0 0 .3rem}
+.gd-ref-lead{color:var(--muted);margin:0 0 .8rem}
+.gd-entry-picker{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.8rem}
+.gd-entry-select{font:inherit;min-height:44px;border:1px solid var(--rule2);background:var(--bg);color:var(--ink);padding:.4rem .6rem}
+.gd-entry-country{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .2rem}
+.gd-entry-visa{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0 0 .3rem}
+.gd-entry-passport,.gd-entry-note{margin:.2rem 0;line-height:1.5}
+.gd-entry-source{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.4rem 0 0}
+.gd-phrases{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,17rem),1fr));gap:.6rem}
+.gd-phrase{border:1px solid var(--rule);background:var(--bg);padding:.9rem 1rem}
+.gd-phrase-situation{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0 0 .4rem}
+.gd-phrase-native{font-size:clamp(1.5rem,5vw,2rem);line-height:1.25;font-weight:640;margin:0}
+.gd-phrase-roman{font-family:var(--font-data);color:var(--muted);margin:.3rem 0 0}
+.gd-phrase-note{font-size:var(--text-small);color:var(--muted);margin:.4rem 0 0}
+.gd-speak{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;margin-top:.6rem;padding:.3rem .9rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:600;cursor:pointer}
+.gd-speak:hover{border-color:var(--accent);color:var(--accent-ink)}
+.gd-speak:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+/* --- Desktop: chapter index beside the reading column, spatial chapters map-forward ---- */
+/* bp:TABLET_MIN — src/lib/breakpoints.ts */
+@media(min-width:720px){
+  .gd-body{display:grid;grid-template-columns:minmax(180px,220px) minmax(0,1fr);gap:1.6rem;align-items:start;padding-inline:clamp(1rem,3vw,1.5rem)}
+  .gd-index{display:flex;flex-direction:column;gap:.1rem;position:sticky;top:calc(var(--hdr-h) + .8rem);padding:1.2rem 0}
+  .gd-index-btn{display:flex;align-items:baseline;gap:.5rem;min-height:44px;padding:.35rem .6rem;background:transparent;border:0;border-left:2px solid transparent;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-align:left;cursor:pointer;line-height:1.25}
+  .gd-index-btn:hover{color:var(--ink)}
+  .gd-index-btn[aria-current="true"]{color:var(--accent-ink);border-left-color:var(--accent);font-weight:700}
+  .gd-index-btn--quiet{margin-top:.6rem;color:var(--muted)}
+  .gd-index-n{font-size:var(--text-nano);font-weight:700;letter-spacing:.08em;color:var(--muted);min-width:1.4rem}
+  .gd-index-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
+  .gd-back{display:none}
+  .gd-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
+@media(min-width:1180px){
+  .gd-cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gd-chapter--spatial{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,44%);grid-template-rows:auto 1fr;column-gap:1.6rem}
+  .gd-chapter--spatial .gd-chapter-head{grid-column:1/-1}
+  .gd-chapter--spatial .gd-chapter-map{grid-column:2;grid-row:2;position:sticky;top:calc(var(--hdr-h) + .8rem);align-self:start;margin:0}
+  .gd-chapter--spatial .gd-chapter-map .itin-map{height:min(60vh,520px)}
+  .gd-chapter--spatial .gd-chapter-body{grid-column:1;grid-row:2}
+  .gd-chapter--spatial .gd-chapter-body>.block,.gd-chapter--spatial .gd-chapter-body>.gd-module>.block{max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){.gd-card,.gd-back{transition:none}.gd-card:hover{transform:none}}
+@media print{.gd-index,.gd-back,.gd-overview{display:none}.gd-chapter{display:block!important}}

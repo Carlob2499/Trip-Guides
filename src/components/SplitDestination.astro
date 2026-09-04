@@ -1,0 +1,16 @@
+---
+/* Split — the trip's budgeting and bill-splitting tool (design-system.md §11). One ledger per
+   guide, on the guide's own storeKey; the destination is a thin frame around the calculator
+   so the engine, its validation, currency handling, payments and undo stay exactly where they
+   are (features/trip-split). Recent Expenses + Add Expense lead; balances follow. On desktop a
+   destination-derived scene (the same Painted Atlas the covers use) stands dimmed behind the
+   opaque working surface — scenery never outranks the numbers. */
+import TripSplit from "./TripSplit.astro";
+import PaintedAtlas from "./PaintedAtlas.astro";
+interface Props { storeKey: string; slug?: string; tz?: string | null }
+const { storeKey, slug = storeKey, tz = null } = Astro.props;
+---
+<div class="splitdest">
+  <div class="splitdest-scene" aria-hidden="true"><PaintedAtlas seed={slug} tz={tz ?? undefined} mini={true} /></div>
+  <TripSplit storeKey={storeKey} standalone />
+</div>

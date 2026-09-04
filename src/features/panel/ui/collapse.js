@@ -110,10 +110,10 @@ export function initPanels(ctx) {
   // README:281 — "Each section group also gets a COLLAPSE ALL / EXPAND ALL control in its
   // header." `root` here is the GRID (initDeclaredPanelGrids wires one scope per grid), and
   // the control lives in the group's header, a sibling of the grid — so it's found via the
-  // nearest .catblock ancestor, not inside `root` itself. One button, label toggles with the
+  // nearest chapter panel ancestor, not inside `root` itself. One button, label toggles with the
   // group's own aggregate state (ANY panel open -> "Collapse all"; every panel already
   // collapsed -> "Expand all"), same as any other disclosure-all control.
-  var headerRoot = (root.closest && root.closest(".catblock")) || root;
+  var headerRoot = (root.closest && root.closest("[data-chapter-panel]")) || root;
   var allBtn = headerRoot.querySelector("[data-panel-collapse-all]");
   if (allBtn) {
     // Same inclusion rule as the wiring loop above (has a toggle, first-of-id only) — kept as

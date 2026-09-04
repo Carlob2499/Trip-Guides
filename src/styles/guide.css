@@ -1,7 +1,8 @@
 /* === GUIDE BASE (tokens, reset, noise texture live in base.css) ============= */
 /* scroll-padding keeps hash-linked sections clear of the sticky chrome. */
 html{scroll-behavior:smooth;scroll-padding-top:var(--chrome-h)}
-.topbar,header,.shell-q,.shell,footer{position:relative;z-index:1}
+header,footer{position:relative;z-index:1}
+:root{--read:42rem}
 /* Quiet Edition (R1): display and body are BOTH Literata — headings are simply more of
    the reading face, cut for display by the optical-size axis. */
 h1{font-family:var(--font-display);font-weight:620;letter-spacing:-.012em;line-height:1.02;text-wrap:balance}
@@ -11,65 +12,11 @@ h1{font-family:var(--font-display);font-weight:620;letter-spacing:-.012em;line-h
 h2,h3,h4{font-family:var(--font-display);line-height:1.15;text-wrap:balance}
 a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 
-/* === TOP NAVIGATION BAR ===================================================== */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(.42rem + var(--safe-top)) max(1.1rem,var(--safe-right)) .42rem max(1.1rem,var(--safe-left));border-bottom:1px solid var(--rule);background:var(--bg)}
-.topbar-home{display:inline-flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;padding:.2rem 0;transition:color .15s}
-.topbar-home:hover{color:var(--ink)}
-.topbar-home svg{flex:none;transition:transform .15s}
-.topbar-home:hover svg{transform:translateX(-3px)}
-/* Wordmark — display face for brand identity */
-.topbar-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-body);letter-spacing:-.008em;line-height:1}
-.topbar-right{display:flex;align-items:center;gap:.4rem}
-/* Dark-mode toggle — labelled via aria-label + title; icon swaps in JS */
-/* Consistent chrome buttons: data face, uniform sizing so SOS/Share/dark
-   align as one control cluster (was mixed body-font + icon sizes). */
-.topbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.34rem .72rem;min-height:36px;cursor:pointer;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;line-height:1;transition:color .15s,border-color .15s,background .15s,transform .2s var(--ease-spring)}
-.topbar-btn:hover{color:var(--ink);border-color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent)}
-.tb-ico{width:17px;height:17px;flex:none;display:block}
-/* Emergency red now has ONE definition (--crit, base.css), not two. This button carried its
-   own dark-mode remap to #ef5350 while the SOS sheet's number carried a raw #b3261e that had
-   never been audited at all — the same semantic colour, solved twice, with only one of the
-   two solved correctly. #ef5350 also only worked on THIS ground: it is 5.35:1 on --bg but
-   4.06:1 on --card, so it could not have been reused by the sheet even deliberately.
-   --crit's dark value clears every dark ground the product has (--bg 7.67, --card 5.81,
-   --bg2 6.67), which is why one token can now serve both. The hover FILL keeps its own
-   non-remapping token; see --crit-fill. */
-.topbar-sos{color:var(--crit);border-color:color-mix(in srgb,var(--crit) 55%,var(--rule2));font-weight:700}
-.topbar-sos:hover{color:var(--on-crit);background:var(--crit-fill);border-color:var(--crit-fill)}
-/* Text role, not decoration — the raw per-guide accent is only contrast-gated to 3:1
-   (src/lib/contrast.ts's MIN_ACCENT_CONTRAST, sized for large/decorative UI), which isn't
-   enough for small body text at WCAG's 4.5:1. Blending 30% toward --ink pulls any
-   3:1-gated accent comfortably past 4.5:1 in both themes (verified against Korea's and
-   Denmark's actual extracted accents — this exact case is what axe caught on Denmark). */
-/* R2 (2026-08-04): was `color-mix(in srgb,var(--accent) 70%,var(--ink) 30%)` — an accent text shade
-   improvised at the call site, which is precisely what --accent-ink exists to prevent
-   (src/lib/accent-tokens.ts spells out why: a hand-blended shade carries no contrast contract).
-   It scraped 4.63:1 on the old lighter ground and fell to 4.45:1 when --bg dropped, which the axe
-   gate caught on the Denmark guide. --accent-ink is derived per accent to clear 4.5:1 on every
-   surface this site paints, flat or accent-tinted, so it cannot drift out of contract again. */
-.topbar-search{color:var(--accent-ink);border-color:color-mix(in srgb,var(--accent) 45%,var(--rule2))}
-/* Mobile: collapse chrome buttons to icons so the cluster never crowds. */
-@media(max-width:560px){.topbar-right{gap:.3rem}.topbar-btn .tb-label{display:none}.topbar-btn{width:38px;height:38px;min-height:38px;padding:0;border-radius:50%}.tb-ico{width:19px;height:19px}}
-
 /* === MASTHEAD ================================================================ */
-.masthead{padding:3.2rem 1.1rem 2rem;border-bottom:1px solid var(--ink);text-align:center}
-/* Thin accent rule above the eyebrow — the editorial "this page starts here" signal */
-.masthead-rule{width:2.8rem;height:2px;background:var(--accent);margin:0 auto 1.3rem}
 /* Deliberately wider than --tracking-micro (.32em vs .06em) — the masthead's signature signage
    tracking, not a generic UI label. Only the size migrates (11px was already ~= --text-micro). */
 .eyebrow{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:.32em;text-transform:uppercase;color:var(--accent-ink)}
-/* Display face at masthead scale — publication, not dashboard */
-/* R1 reverses the old “opsz isn't worth it” call, deliberately: with ONE serif carrying both
-   display and body, the optical axis is what differentiates the roles, so the standard.css
-   entrypoint (wght+opsz) is now imported at every font import site and font-optical-sizing's
-   default `auto` does the cutting per size — no per-rule settings. The old Bricolage-era
-   tracking is relaxed accordingly. */
-.masthead h1{font-size:var(--text-display);margin:.4rem 0 0;letter-spacing:-.008em}
 .dek{color:var(--muted);max-width:58ch;margin:.8rem auto 0;font-size:var(--text-body);line-height:1.65}
-/* Stats bar: days · sights · live rate — at-a-glance guide summary. A guide may also
-   carry a ⚠ warning pill (e.g. an unconfirmed draft); routine "verified" stamps are
-   source-only metadata and not shown here. */
-.guide-stats{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:1.1rem auto 0}
 .gstat{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);border:1px solid var(--rule2);border-radius:99px;padding:.22rem .75rem;line-height:1.5;white-space:nowrap}
 .gstat-warning{color:var(--warn);border-color:var(--warn)}
 
@@ -80,13 +27,6 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 .draft-progress-link{color:var(--green);text-decoration:underline;text-underline-offset:2px}
 .draft-progress-link:hover{color:var(--accent-ink)}
 
-/* === WHAT'S NEXT BANNER ======================================================= */
-/* The What's-Next banner lives entirely in overview.css. It used to be declared HERE too —
-   an accent FILL with `color:var(--bg)` ink — and overview.css, imported after this file,
-   replaced the fill with a 12% tint but had no .wn-text rule of its own. So the ink stayed
-   near-white on a near-white ground: 1.09:1 light, 1.53:1 dark, measured on the built site.
-   The banner only unhides inside the trip's own date range, which is why nobody saw it. */
-
 /* === TOAST ==================================================================== */
 /* Transient feedback (save/copy confirmations) — destination for flash().
    Fixed, centred at the bottom; never participates in layout or page width. */
@@ -96,116 +36,22 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 /* Jet-lag calculator styles moved to src/styles/jetlag.css (Stage E) — the Tools
    screen renders the same component, so the rules had to be importable by both. */
 
-
-/* === STICKY CHROME (topbar + guide tab bar) ================================= */
-.sticky-chrome{position:sticky;top:0;z-index:50;background:var(--bg)}
-
-/* === GUIDE TAB BAR ========================================================== */
-/* R5 — THE PILL STRIP AND THE R4 HORIZON ARE GONE. Both are superseded by the spine rail
-   (src/features/guide-rail/styles.css), which is the same idea carried further: R4's ≥900px
-   "desktop wears the horizon" already turned the tabs into stations on a line, but it did so
-   through a viewport media query and only above 900px, so the phone and the tablet kept a pill
-   strip that said "these are categories". R5 makes the spine the whole rail at every width, via
-   container queries, and moves it out of the sticky chrome to sit under the masthead.
-   Deliberately kept from R4 and ported into the rail: --st-fill, the reading progress painted
-   INTO each station dot. Nothing in R5 specifies it and nothing in R5 forbids it; guide-ui.js
-   still writes the value, and a station that fills as you read it is the one part of the old
-   horizon that told the reader something the new one otherwise would not. */
-
-/* The fixed reading-progress bar is the PHONE's percentage readout and retires above 900px,
-   where the rail's own station fill carries the same number — one object, one meaning, per
-   viewport. The media query is load-bearing and was briefly lost when the R4 block around it
-   was deleted: without it .read-prog is display:none at EVERY width and the phone loses its
-   progress bar entirely. A viewport query rather than a container one on purpose — .read-prog
-   is fixed page chrome, positioned against the viewport, which is the one thing chrome may
-   legitimately ask about. */
-/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts. The phone ceiling's complement: this is "above the
-   phone model", so it has to move with MOBILE_MAX or a 1px band gets both the bar and the rail. */
-@media(min-width:900px){.read-prog{display:none}}
 /* Tactile press feedback — guide action buttons compress on :active and spring
    back on release (var(--ease-spring) overshoot on the transform channel) for a
    physical, app-like "pressed" feel. Interactive controls only — not cards or
    inputs, and suppressed for users who ask to reduce motion. */
-.gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:scale(.94)}
+.sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:scale(.94)}
 @media(prefers-reduced-motion:reduce){
-  .gtab:active,.sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
+  .sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
 }
-
-/* === LAYOUT SHELL ============================================================ */
-/* Widened so desktop uses the screen. Text sections sit in a centered reading
-   column (--read) for legibility; sights (image grid) and maps break out to fill
-   the shell — see READING COLUMN below. */
-:root{--read:42rem}
-/* R5 — the guide body is THE query container, and it is deliberately the shell rather than the
-   content column (TOKENS.md §7 calls it "the guide body"; here that body is a rail plus a reading
-   column, and both have to agree on which model they are in).
-   Naming .content instead was tried and is wrong: on a tablet the rail takes a 200-240px
-   column, so .content measures ~544px — the rail would render its tablet model while the body
-   beside it rendered its phone model, at the same instant, on the same screen. One container
-   above both makes that state unrepresentable.
-   inline-size, never `size`: `size` contains the block axis too, and this element's height is
-   content-driven — it would collapse.
-
-   .shell-q, NOT .shell, carries the container — and that split is the whole point of this
-   element existing. An element can never match a size query against its own named container:
-   the query is answered by the nearest ANCESTOR container, so `container-name:guide` on .shell
-   plus `@container guide (…){.shell{…}}` matched nothing and the tablet two-column grid never
-   applied at any width (proven by probe: a CHILD of .shell received the query's value, .shell
-   did not). .shell-q takes the box — the cap, the centring, the gutters, the containment — and
-   .shell becomes a plain child of it, so the queries below can finally reach it. The query box's
-   inline size is unchanged by the move: .shell-q's content box is exactly what .shell's used
-   to be, so every threshold still means what it measured before. */
-.shell-q{max-width:1400px;margin:0 auto;padding:0 1.1rem;container-type:inline-size;container-name:guide}
-
-/* The rail sits BESIDE the reading column only on the tablet model; above it on the other two.
-   One grid, three shapes, no repositioning in JS. */
-/* bp:TABLET_MIN — src/lib/breakpoints.ts */
-@container guide (min-width: 720px){
-  .shell{--gutter:18px;display:grid;grid-template-columns:minmax(200px,240px) minmax(0,1fr);gap:var(--gutter);align-items:start}
-}
-/* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
-@container guide (min-width: 1180px){
-  /* Horizontal spine again — the rail spans the full width above the reading column. */
-  .shell{--gutter:20px;grid-template-columns:minmax(0,1fr);gap:0}
-}
-
-/* Cold-visitor framing strip (cold-open.js — first visit only, dismissible). */
-.cold-open{display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.5rem 1rem;background:color-mix(in srgb,var(--accent) 10%,var(--card));border-bottom:1px solid var(--rule)}
-.cold-open-txt{font-family:var(--font-data);font-size:var(--text-caption);color:var(--ink);letter-spacing:.01em}
-.cold-open-x{flex-shrink:0;width:30px;height:30px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--muted);cursor:pointer;font-size:var(--text-control-sm)}
-.cold-open-x:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 
 /* === CONTENT ================================================================= */
-/* R5 CONTAINER SCAFFOLD (design_handoff_guide_ui/TOKENS.md §7). The guide body is a QUERY
-   CONTAINER, and every responsive decision inside it switches on the container's own inline
-   size — never on the viewport, never on a device check, never on window.innerWidth. Three
-   models, two thresholds, both from src/lib/breakpoints.ts: <720 phone · 720-1179 tablet ·
-   >=1180 desktop. The tablet floor was 744 until 2026-08-12 and measured nothing: the query box
-   is the viewport less .shell-q's own 1.1rem gutters, so a 768px iPad reported 732.8px and took
-   the phone model — the commonest tablet on earth, under the threshold written for it.
-   Why this and not media queries: one build has to serve phone, tablet and desktop with no
-   user-agent branch, and a folding phone that measures 673px unfolded gets the phone model in
-   portrait and the tablet model in landscape with ZERO code — it falls straight out of the
-   query. A media query cannot do that, because the viewport is the same object in both.
-   container-type:inline-size establishes an inline-axis containment context. That is deliberate
-   and not `size`: `size` would also contain the BLOCK axis, which means the element stops
-   sizing to its own content and collapses — the guide body's height is content-driven, so
-   inline-size is the only correct value here.
-   Viewport media queries stay for PAGE CHROME only (the sticky header, print). Chrome is
-   positioned against the viewport, so it is the one thing that legitimately asks about it. */
-.content{min-width:0;padding:1.2rem 0 3rem}
-/* Retired R5 FALLBACKS §2 (git path in design_handoff_guide_ui/README.md) — where container
-   queries are unsupported, no @container rule matches and every model-specific declaration
-   simply never applies, so the base (phone) styles stand.
-   That is the intended degradation: the phone model is the narrowest and loses nothing
-   structural. Nothing here needs a @supports guard; the absence of a match IS the fallback. */
-.catblock{scroll-margin-top:var(--chrome-h)}
+.content{min-width:0;padding:0 0 3rem}
 /* M3: was its own bespoke clamp(1.5rem,4vw,2.2rem) — --text-h1 is that exact missing step,
    named in base.css so the type scale's "no undeclared roles" claim is true again. */
 /* R5 cartographic DNA: the group title's rule becomes a map NEATLINE — the classic
    double border of a chart plate (one strong line, one faint echo beneath). */
 .cat-title{font-family:var(--font-display);font-size:var(--text-h1);margin:2.4rem 0 1rem;padding-bottom:.45rem;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;gap:.6rem}
-.catblock:first-child .cat-title{margin-top:.3rem}
 .cat-title::before{content:"";flex:none;width:.5rem;height:.5rem;background:var(--accent)}
 .block{scroll-margin-top:var(--chrome-h);margin-bottom:1rem}
 .block-title{font-family:var(--font-display);font-size:var(--text-h4);margin:.1rem 0 .5rem}
@@ -249,46 +95,13 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
 /* bp:MOBILE_MAX — src/lib/breakpoints.ts */
 @media(max-width:899px){html{--chrome-h:82px}}
 
-/* === READING COLUMN (wide desktop) ========================================= */
-/* Prose/panel/list/day/budget sections sit in a centered column at a comfortable
-   line length; sights become an image grid and maps stretch, both filling the
-   widened shell (the "edge-to-edge media" side of the widen). The reading cap only
-   bites once the shell is wider than --read, so tablet/mobile are untouched. */
-.catblock>.cat-title,.catblock>.block{max-width:var(--read);margin-inline:auto}
-/* Section-switch motion lives in flight.css (directional "waypoint flight"
-   system — banking transitions, numeral sweeps, content settle). */
-
-/* === DESKTOP MASONRY (≥1100px) ==============================================
-   The reading column alone left wide screens as a centered mobile strip; a
-   2-col GRID then left ragged rows (paired cards of wildly different height =
-   dead space). CSS multi-column masonry packs cards with NO vertical gaps —
-   the Pinterest/Wanderlog pattern. Reading flows down column 1, then column 2.
-   Openers, CTAs and data-heavy blocks span all columns; the itinerary opts
-   out (its planner owns the full shell). */
-@media(min-width:1100px){
-  .catblock{display:block;columns:2;column-gap:1.5rem;max-width:min(78rem,100%);margin-inline:auto}
-  .catblock>.block{break-inside:avoid;max-width:100%;margin:0 0 1.4rem;min-width:0}
-  .catblock>.cat-opener,.catblock>.cat-title,.catblock>.next-cta{column-span:all;max-width:100%}
-  /* Full-width blocks: grids/tables/maps/sights break the column flow. */
-  .catblock>.block:has(.ig-grid),
-  .catblock>.block:has(.hab-grid),
-  .catblock>.block:has(.tl-list),
-  .catblock>.block:has(.raid-tier-label),
-  .catblock>.block:has(.itin-map),
-  .catblock>.block:has(.osmmap),
-  .catblock>.block:has(.wx-strip),
-  .catblock>.block:has(.sight){column-span:all}
-  /* Itinerary: single column; the planner grid owns the full shell width. */
-  .catblock:has(.planner){columns:1;max-width:100%}
-}
-
 /* Progressive disclosure — the density pass. The lead paragraph reads like a
    summary card; "More detail" opens the full researched depth in place. */
 /* The lead IS the answer — give it a touch more size + air so the eye lands on it
    first and can move on without opening the fold (retention; less scrolling). V3d. */
-.catblock .card-lead{font-size:1.05em;line-height:1.5;color:var(--ink)}
-.catblock .card-lead>:first-child{margin-top:0}
-.catblock .card-lead>:last-child{margin-bottom:.35rem}
+.card-lead{font-size:1.05em;line-height:1.5;color:var(--ink)}
+.card-lead>:first-child{margin-top:0}
+.card-lead>:last-child{margin-bottom:.35rem}
 /* M4 "More detail" v2 (creator priority) — a real chip control instead of a bare-text caption
    over a dashed rule, matching the site's existing details/summary chevron vocabulary (guide.css
    "details summary" below) so "this expands" reads identically everywhere. .card-more-wrap holds
@@ -341,7 +154,7 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color .13s}
    rule below (same selector, same specificity — placed before it here, the base rule would win
    on source order and silently cancel this half of the fix, which is exactly what happened on
    first pass: verified live, only the --shell half took effect). */
-@media(max-width:599px){.shell-q{padding:0 .8rem}.card p{line-height:1.5}}
+@media(max-width:599px){.card p{line-height:1.5}}
 .card p+p{margin-top:.85rem}
 .card ul,.card ol{padding-left:1.3rem;margin:.45rem 0}
 .card li{margin-bottom:.3rem;line-height:1.65}
@@ -427,38 +240,12 @@ ol.steps li:not(:last-child)::after{content:"";position:absolute;left:calc(.725r
 footer{border-top:1px solid var(--rule2);text-align:center;padding:1.7rem 1.1rem;color:var(--muted);font-size:var(--text-control);margin-top:1rem}
 
 /* === TYPOGRAPHY POLISH ======================================================= */
-h2,h3,h4,.block-title,.cat-title,.sight-name,.item .name,.sheet-head{font-family:var(--font-display);font-weight:640;letter-spacing:-0.015em}
+h2,h3,h4,.block-title,.cat-title,.sight-name,.item .name{font-family:var(--font-display);font-weight:640;letter-spacing:-0.015em}
 img{max-width:100%}
 iframe{max-width:100%}
-.content,.block,.card,.catblock,.day,.day .b{min-width:0}
-p,li,.check,.block-title,.sight-name,.cat-title,.lsnote,.fit,.tag,.day .d,.item .name,.sheet-link,.sheet-cat{overflow-wrap:break-word}
+.content,.block,.card,.day,.day .b{min-width:0}
+p,li,.check,.block-title,.sight-name,.cat-title,.lsnote,.fit,.tag,.day .d,.item .name{overflow-wrap:break-word}
 body{overflow-x:clip}
-
-/* === READING PROGRESS BAR =================================================== */
-/* 3px accent line fixed at the very top — fills as user scrolls through content */
-/* MOTION.md rule 7: per-frame paths move with transform/opacity only. This bar wrote
-   `style.width` from the scroll listener, so every scroll frame on every guide ran layout for a
-   3px strip — the same violation the reading spine and /progress/ had, found and fixed in
-   Stage F, and missed here because nothing was measuring guide.css. Third instance of one
-   mistake.
-   Full width, scaled from the left by --read-prog (0–1). The transition still smooths the same
-   .08s, it just smooths a composited property now. */
-.read-prog{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:left center;transform:scaleX(var(--read-prog,0));background:var(--accent);z-index:300;pointer-events:none;transition:transform .08s linear}
-
-/* === STATS BAR PILL VARIANTS ================================================ */
-/* countdown — accent-coloured, draws the eye */
-.gstat-countdown{color:var(--accent-ink);border-color:var(--accent);font-weight:600}
-/* active (trip happening now / today) — bolder accent */
-.gstat-active{color:var(--accent-ink);border-color:var(--accent);font-weight:700}
-/* past trip — muted, unobtrusive */
-.gstat-past{color:var(--muted);border-color:var(--rule)}
-/* offline ready — green = good-to-go */
-/* .gstat-offline retired 2026-07-30 with the "✓ Works offline" pill — the colophon's
-   .offline-saved line (touch.css) is its honest, per-page replacement. */
-/* local time — muted, always visible */
-.gstat-time{color:var(--muted)}
-/* live currency rate — muted, fades in on fetch */
-.gstat-rate{color:var(--muted)}
 
 /* === WEATHER STRIP (Open-Meteo) ============================================= */
 .wx-wrap{margin:.9rem auto 0;max-width:38rem;width:100%}
@@ -720,19 +507,8 @@ details table{margin:.3rem 0 .4rem}
    at a glance without needing to parse the label text first. */
 .tl-tier:first-child{border-left-color:var(--accent)}
 
-/* === PANEL GROUPS (Atlas Phase 2 — a group whose sections live on the Panel grid) == */
-/* The masonry columns above would split a .pnl-grid across columns like any other
-   child; a Panel group's catblock therefore opts out exactly as the planner does —
-   the GRID owns this group's multi-column story, not CSS columns. */
-@media(min-width:1100px){
-  .catblock:has(.pnl-grid){columns:1;max-width:min(78rem,100%)}
-}
-/* The grid spans the widened shell; the reading-measure cap stays on prose INSIDE
-   each Panel (the .pnl-body), not on the grid, or the whole grid narrows to one
-   column of --read. */
-.catblock>.pnl-grid{max-width:min(78rem,100%);margin-inline:auto}
-/* .block's own stack margin doubles the grid's gap; scroll-margin survives for
-   deep links under the sticky chrome. */
+/* === PANEL GROUPS (a chapter whose sections live on the Panel grid) ============ */
+.pnl-grid{max-width:min(78rem,100%);margin-inline:auto}
 .pnl-grid>.block{margin-bottom:0}
 /* The # copy-link chip rides the Panel header between title and toggle; same
    reveal-on-hover behavior as everywhere else (rules above), it only needs to not
@@ -740,10 +516,3 @@ details table{margin:.3rem 0 .4rem}
 .pnl-head .anchor-btn{align-self:center}
 .pnl:hover .anchor-btn{opacity:.45}
 .pnl:hover .anchor-btn:hover{opacity:1;color:var(--accent-ink)}
-/* The group's reset control — drawn only once reorder wiring exists (panel
-   styles.css hides it before that) AND a custom order is saved (reorder.js). A
-   visible pill per the clickability doctrine, quiet because it's rare. */
-.pnl-reset-row{margin:.6rem 0 0;text-align:right}
-.pnl-reset{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:.4rem .85rem;cursor:pointer;transition:color .15s,border-color .15s}
-.pnl-reset:hover{color:var(--accent-ink);border-color:var(--rule2)}
-.pnl-reset:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}

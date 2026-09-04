@@ -12,6 +12,7 @@
 // that follows it, for ~34KB of inline path data that gzips hard.
 import { readFileSync } from "node:fs";
 import PwaHead from "../../components/PwaHead.astro";
+import UtilityBar from "../../components/UtilityBar.astro";
 import { jsonEmbed } from "../../lib/json-embed";
 import { generateContourLayer } from "../../lib/contours";
 import Contours from "../../components/Contours.astro";
@@ -77,13 +78,9 @@ const contours = [
 
     <Contours layers={contours} />
 
-    <header class="pg-bar">
-      <a class="pg-wordmark" href={`${base}/`}>← Waypoint</a>
-      <div class="pg-bar-right">
-        <span class="pg-pill" id="pgStatusPill" data-tone="muted" role="status" aria-live="polite">No run yet</span>
-        <button type="button" class="pg-theme-btn" id="pgDark" aria-label="Switch to dark mode"></button>
-      </div>
-    </header>
+    <UtilityBar base={base} toggleId="pgDark">
+      <span class="pg-pill" id="pgStatusPill" data-tone="muted" role="status" aria-live="polite">No run yet</span>
+    </UtilityBar>
 
     <main class="pg" id="pgMain" data-state="empty">
       <div id="pgRoot">

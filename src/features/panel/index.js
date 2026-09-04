@@ -10,13 +10,11 @@
 
 import { initPanels } from "./ui/collapse.js";
 import { initGrid } from "./ui/grid.js";
-import { initReorder } from "./ui/reorder.js";
 
 export {
   parseCollapsed, serializeCollapsed, setCollapsed, toggleCollapsed, isCollapsed, scopeKey,
   MAX_ID_LEN, MAX_PANELS,
 } from "./model/collapse";
-export { orderKey } from "./model/order";
 
 /** The default gateway — plain localStorage, every access already fail-safe. */
 export const localStore = {
@@ -37,18 +35,11 @@ export function initPanelCollapse(cfg, store) {
   });
 }
 
-/** Wire the Panel grid AND the reader's reorder under `root` — call AFTER
-    initPanelCollapse, so the initial sort sees the restored collapse state.
-    `cfg` = { scope: string, root?: ParentNode }; the scope keys the persisted order
-    exactly as it keys collapse — one guide's layout never leaks into another's. */
-export function initPanelGrid(cfg, store) {
-  var root = (cfg && cfg.root) || document;
-  var ctl = initGrid({
-    scope: (cfg && cfg.scope) || "",
-    root: root,
-    store: store || localStore,
-  });
-  if (ctl) initReorder(ctl, { root: root });
+/** Wire the Panel grid under `root` — call AFTER initPanelCollapse, so the initial sort
+    sees the restored collapse state. Reader reordering is retired (D7, design-system.md
+    D6-41): the maker's order is the order; only collapse state is the reader's. */
+export function initPanelGrid(cfg) {
+  initGrid({ root: (cfg && cfg.root) || document });
 }
 
 /** Boot every self-describing grid on the page: any `[data-panel-grid]` carrying a
@@ -60,8 +51,8 @@ export function initDeclaredPanelGrids(root, store) {
   var grids = ((root || document).querySelectorAll("[data-panel-grid][data-panel-scope]"));
   Array.prototype.forEach.call(grids, function (grid) {
     var scope = grid.getAttribute("data-panel-scope") || "";
-    var scopeRoot = (grid.closest && grid.closest(".catblock")) || grid.parentNode || document;
+    var scopeRoot = (grid.closest && grid.closest("[data-chapter-panel]")) || grid.parentNode || document;
     initPanelCollapse({ scope: scope, root: grid }, store);
-    initPanelGrid({ scope: scope, root: scopeRoot }, store);
+    initPanelGrid({ root: scopeRoot });
   });
 }

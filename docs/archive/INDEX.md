@@ -1,14 +1,14 @@
 # docs/archive/ — the index
 
-Finished plans and reports whose **bodies live in Git, not in the working tree**. Each heading is a stable lookup anchor used by current code/docs comments. To recover a body, run its `git show` command; use `git log -- <path>` for earlier versions.
+Finished plans and reports whose **bodies live in Git, not in the working tree**. Each heading is a stable lookup anchor used by current code/docs comments. To recover a body, use its `git show` command; use `git log -- <path>` for earlier versions.
 
-`visual-redesign-history.md` is the only full historical body intentionally kept here because current reference/test comments still cite its R6 ledger by name.
+Historical design plans are archaeology only. They never override the sole current design authority at `docs/reference/design-system.md`.
 
 ---
 
 ### HANDOFF_ARCHIVE.md — superseded operational snapshots
 
-Historical handoff snapshots moved out of `docs/handoff.md` to keep current operational context bounded. The append ritual is retired; SessionStart now injects the bounded handoff capsule and superseded snapshots stay in Git history. Final working-tree body contained the Aug 20 release-candidate/integration-hardening snapshots and the Aug 22 PR #75 reliability-repair snapshot.
+Historical handoff snapshots moved out of `docs/handoff.md` to keep current operational context bounded. The append ritual is retired; SessionStart now injects the bounded handoff capsule and superseded snapshots stay in Git history.
 `git show 011c22fd58c7bb4c871336c6656600b455dbbd0f:docs/archive/HANDOFF_ARCHIVE.md`
 
 ### FABLE_IMPLEMENTATION_PROMPT.md — Pipeline V2 build prompt (M0–M8)
@@ -29,12 +29,12 @@ Executed and retired 2026-08-16. Shipped Progress, intake preflight, requester c
 
 ### revise-guide.md — MAJOR-revision pipeline (V1–V6)
 
-Retired 2026-08-15 after its useful contracts were absorbed into the change lifecycle: bounded groups, DATA channel, exact guide concurrency, fork gate and fresh-context critic.
+Retired 2026-08-15 after its useful contracts were absorbed into the change lifecycle.
 `git show c507b91:docs/reference/revise-guide.md`
 
-### PLAN_DESIGN_RECONCILIATION.md — design projects vs shipped site
+### PLAN_DESIGN_RECONCILIATION.md — historical design reconciliation
 
-Closed 2026-08-13 after fidelity/drift reconciliation, touch-target correction and design-project token sync.
+Closed 2026-08-13. Retained only as a Git-history lookup; its design decisions do not override the current sole design authority.
 `git show 59352c2:docs/archive/PLAN_DESIGN_RECONCILIATION.md`
 
 ### pipeline-history.md — path to the current pipeline architecture
@@ -47,9 +47,9 @@ Historical P-series/W-series/critic-merge narrative split from live pipeline pol
 Frozen structural history from static HTML through Astro, authoring, design identity, Firebase, sealed feature ownership and Learnings. Later durable decisions live in `CONTEXT.md`.
 `git show 8ecdfdd:docs/archive/CHANGELOG.md`
 
-### PLAN_ATLAS_MIGRATION.md — Atlas hub migration
+### PLAN_ATLAS_MIGRATION.md — historical Atlas hub migration
 
-Executed 2026-08-07–09. Shipped the Atlas data/hub migration, mobile/tools work and unspecced-feature redesigns; stage/decision names remain historical anchors in code comments.
+Executed 2026-08-07–09. Useful engineering history only; visual decisions are superseded by `docs/reference/design-system.md`.
 `git show 8b5a690:docs/archive/PLAN_ATLAS_MIGRATION.md`
 
 ### PLAN_FACTORY_V2.md — pipeline contract hardening
@@ -57,9 +57,9 @@ Executed 2026-08-07–09. Shipped the Atlas data/hub migration, mobile/tools wor
 Executed 2026-07-29 from the first unattended Japan-run QA. Shipped run-integrity, A-blind Pass B, intake coverage, fresh-context critic, Progress/question channel, venues and voice gates.
 `git show 8b5a690:docs/archive/PLAN_FACTORY_V2.md`
 
-### PLAN_MOBILE_NAV.md — “feels like an app” navigation
+### PLAN_MOBILE_NAV.md — historical mobile navigation plan
 
-Executed 2026-07-30. Shipped mobile bottom navigation, groups sheet, tab swipes, yielding chrome, day scrubber and sheet physics; current behavior is implementation + tests.
+Executed 2026-07-30. Its old visual/navigation choices are superseded where the sole current design authority differs.
 `git show 26560e2:docs/archive/PLAN_MOBILE_NAV.md`
 
 ### QA_RESEARCH_TRIAL_JAPAN.md — first unattended-run QA
@@ -67,9 +67,9 @@ Executed 2026-07-30. Shipped mobile bottom navigation, groups sheet, tab swipes,
 Adversarial review of Japan PR #26. Its findings drove `PLAN_FACTORY_V2.md`; retained only as historical evidence of the defects that motivated those contracts.
 `git show 8b5a690:docs/archive/QA_RESEARCH_TRIAL_JAPAN.md`
 
-### PLAN_VISUAL_OVERHAUL.md — “The Overture & the Atlas”
+### PLAN_VISUAL_OVERHAUL.md — historical “Overture & Atlas” plan
 
-Executed 2026-07-20–23. Shipped the original animated hub/masthead/palette work before Atlas superseded the hub; surviving motion doctrine lives in `docs/reference/motion.md`.
+Executed 2026-07-20–23. Its visual/motion decisions are historical only; current visual and motion doctrine lives entirely in `docs/reference/design-system.md`.
 `git show 2c59768:docs/archive/PLAN_VISUAL_OVERHAUL.md`
 
 ### PLAN_FIELD_REPORT_FIXES.md — field-report execution queue
@@ -79,12 +79,12 @@ Executed July 2026 except the intentionally deferred real-trip E2 run. Shipped n
 
 ### PLAN_TRAVELER_FEATURES.md — traveler feature plan
 
-July 2026 benefit/cost plan. Shipped booking deadlines, budget pact, packing strip, offline confidence and pre-trip recert; remaining items were absorbed by later plans or evidence gates.
+July 2026 benefit/cost plan. Shipped wave/history only; current product/design authority wins any conflict.
 `git show 2c59768:docs/archive/PLAN_TRAVELER_FEATURES.md`
 
 ### FEATURES.md — researched feature backlog
 
-2026-07-18 researched/approved feature set. The approved wave shipped; historical numbering remains cited by some code comments.
+2026-07-18 researched/approved feature set. Historical numbering may remain cited by code comments, but it is not current design authority.
 `git show 8b5a690:docs/archive/FEATURES.md`
 
 ### DENMARK_UPLIFT.md — concluded Denmark-trip lessons

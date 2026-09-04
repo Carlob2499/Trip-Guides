@@ -1,6 +1,10 @@
 {
   "$comment": "CURRENT SHIPPED-COMPONENT REGISTRY. This file records what composable components, blocks, features, and shared patterns exist today; src/component-registry.test.ts enforces bidirectional existence and feature import discipline. Roles/contracts below describe the CURRENT shipped implementation and may be revised or retired by D6/D7 under docs/reference/design-system.md; a registry entry does not make an R4/R5 composition permanent. New global primitives remain registry-first.",
   "components": {
+    "AppChrome": {
+      "file": "src/components/AppChrome.astro",
+      "role": "The global shell: five stable destinations (Trip · Itinerary · Map · Guide · Split), Atlas link, Search field, SOS mount — one DOM at every width (D6-03/05/43)"
+    },
     "Block": {
       "file": "src/components/Block.astro",
       "role": "Section dispatcher — routes one guide section to its blocks/ renderer"
@@ -17,6 +21,10 @@
       "file": "src/components/GapBlock.astro",
       "role": "Honest-absence marker — renders a known gap loud, never filler"
     },
+    "GuideDestination": {
+      "file": "src/components/GuideDestination.astro",
+      "role": "Guide — cover, chapter overview, one visible chapter level, spatial chapters map-forward, reference objects, knowledge modules (D6-10–13/40/53/54, F6)"
+    },
     "Hint": {
       "file": "src/components/Hint.astro",
       "role": "'?' affordance holding an explanation until asked"
@@ -25,6 +33,10 @@
       "file": "src/components/Icon.astro",
       "role": "The one icon language (M4)"
     },
+    "ItineraryDestination": {
+      "file": "src/components/ItineraryDestination.astro",
+      "role": "Itinerary — day-first on mobile with the thumb-zone day rail; timeline + map workbench on desktop (D6-20/21/49)"
+    },
     "JetLag": {
       "file": "src/components/JetLag.astro",
       "role": "Jet-lag calculator markup half"
@@ -32,6 +44,10 @@
     "Learnings": {
       "file": "src/components/Learnings.astro",
       "role": "Trip learnings capture + reality layer"
+    },
+    "MapDestination": {
+      "file": "src/components/MapDestination.astro",
+      "role": "Map — one real map with the canonical pin sheet/inspector; Google when configured, OSM until then (D6-36/51, F7)"
     },
     "PaintedAtlas": {
       "file": "src/components/PaintedAtlas.astro",
@@ -53,25 +69,25 @@
       "file": "src/components/ReminderRow.astro",
       "role": "One reminder line (print duplicates it outside the panel)"
     },
-    "Reminders": {
-      "file": "src/components/Reminders.astro",
-      "role": "Reminders / notable-items scratchpad markup"
-    },
-    "ToolsScreen": {
-      "file": "src/components/ToolsScreen.astro",
-      "role": "The Tools station — last stop on every guide rail"
+    "SplitDestination": {
+      "file": "src/components/SplitDestination.astro",
+      "role": "Split — the trip ledger frame around TripSplit (F3)"
     },
     "TransitLinks": {
       "file": "src/components/TransitLinks.astro",
       "role": "'Get me there' — one-tap deep links to a verified coordinate"
     },
-    "TripKit": {
-      "file": "src/components/TripKit.astro",
-      "role": "Trip kit checklist"
+    "TripDestination": {
+      "file": "src/components/TripDestination.astro",
+      "role": "Trip — pre/active/post lifecycle compositions of what matters now, readiness, recap and the Learnings notebook (D6-02/19/30–35/48)"
     },
     "TripSplit": {
       "file": "src/components/TripSplit.astro",
       "role": "Trip cost-split markup"
+    },
+    "UtilityBar": {
+      "file": "src/components/UtilityBar.astro",
+      "role": "The shared top strip of every non-guide page (intake, progress, triage, change, about, health, 404): wordmark, way back to the Atlas, theme control (§5)"
     }
   },
   "blocks": {
@@ -159,15 +175,11 @@
     },
     "field-tools": {
       "dir": "src/features/field-tools",
-      "role": "In-field tools (SOS, address card, focus today)"
+      "role": "In-field tools (address card, check-off, day route)"
     },
     "firebase": {
       "dir": "src/features/firebase",
       "role": "Config-gated sync backend"
-    },
-    "guide-rail": {
-      "dir": "src/features/guide-rail",
-      "role": "The R5 station rail navigation"
     },
     "hub": {
       "dir": "src/features/hub",
@@ -179,7 +191,7 @@
     },
     "itinerary": {
       "dir": "src/features/itinerary",
-      "role": "Itinerary interactions incl. story mode"
+      "role": "Itinerary interactions: day rail, desktop workbench divider"
     },
     "learnings": {
       "dir": "src/features/learnings",
@@ -195,11 +207,7 @@
     },
     "mobile-nav": {
       "dir": "src/features/mobile-nav",
-      "role": "Bottom mobile nav + sheet"
-    },
-    "palette": {
-      "dir": "src/features/palette",
-      "role": "Command palette (Ctrl/Cmd+K)"
+      "role": "Chrome yield on scroll (the five-destination bar itself is AppChrome)"
     },
     "panel": {
       "dir": "src/features/panel",
@@ -209,13 +217,13 @@
       "dir": "src/features/pipeline-progress",
       "role": "Research pipeline progress surface"
     },
-    "reminders": {
-      "dir": "src/features/reminders",
-      "role": "Reminders behaviour + gateway"
-    },
     "route-opt": {
       "dir": "src/features/route-opt",
       "role": "Day route optimizer sheet"
+    },
+    "search": {
+      "dir": "src/features/search",
+      "role": "The one global search: index builder, deterministic ranking, overlay UI"
     },
     "share": {
       "dir": "src/features/share",
@@ -225,17 +233,13 @@
       "dir": "src/features/sos",
       "role": "Emergency SOS sheet"
     },
-    "trip-kit": {
-      "dir": "src/features/trip-kit",
-      "role": "Trip kit behaviour"
+    "trip": {
+      "dir": "src/features/trip",
+      "role": "Trip lifecycle model (phase, focus, readiness, recap, canonical days) + trip.js"
     },
     "trip-split": {
       "dir": "src/features/trip-split",
       "role": "Cost split behaviour"
-    },
-    "trip-tools": {
-      "dir": "src/features/trip-tools",
-      "role": "Tools station model"
     }
   },
   "patterns": {

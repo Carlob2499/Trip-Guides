@@ -17,8 +17,8 @@ const payload = jsonEmbed({
 ---
 <div class="itin-map" data-itin-map>
   <script type="application/json" is:inline data-map-data set:html={payload} />
-  <iframe class="osmmap" loading="lazy" title={sec.title || "Area map"} allowfullscreen
-    src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}`}>
+  <iframe class="osmmap" loading="lazy" data-lazy-frame title={sec.title || "Area map"} allowfullscreen
+    data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}`}>
   </iframe>
 </div>
 <p class="note">⚠ The map needs an internet connection — the written transit steps in this section work offline.</p>

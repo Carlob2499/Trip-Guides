@@ -7,7 +7,16 @@
     "body": "<p>Korea uses the <b>won (₩)</b>. The won still favours your spending power, though it has strengthened since this guide was first costed — roughly (approximate, <a href=\"https://www.google.com/search?q=KRW+USD+exchange+rate\" target=\"_blank\" rel=\"noopener noreferrer\">check before you go</a>): <b>{{fact:money-currency-1-000}} ≈ $0.68</b> and <b>{{fact:money-currency-10-000}} ≈ $6.85</b>, at about <b>{{fact:money-currency-1-461}} to the dollar</b> (24 Jul 2026, re-checked 30 Jul 2026 — it was {{fact:money-currency-1-535}} in Jun 2026). A spot rate moves daily, so treat every $ figure in this guide as ≈.</p><p>Cards and contactless work almost everywhere. For cash, the most reliable option is an <b>ATM inside a GS25 or CU convenience store</b> — both accept most foreign cards and charge modest fees. <b>Global ATM Alliance banks</b> (KEB Hana is the Korean partner) have lower or zero foreign withdrawal fees if your home bank is in the network — check before you leave. Avoid airport exchange booths; the rates are poor. Keep {{fact:money-currency-30-000}}–50,000 cash for markets and small eateries. A <b>T-money</b> card covers all subway and buses. Tipping isn't expected anywhere.</p>",
     "verified_on": "2026-07-30",
     "shelf_life": "fx",
-    "source_url": "https://www.federalreserve.gov/releases/h10/current/"
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "module": {
+      "id": "money-currency",
+      "kind": "practical",
+      "relates": {
+        "days": [
+          "Thu Jul 9"
+        ]
+      }
+    }
   },
   {
     "type": "budget",
@@ -223,13 +232,26 @@
       "Buy travel insurance — without it you pay 100% upfront",
       "Pack medicines in original packaging, plus a note of their generic names",
       "Learn the sign: <b>약</b> = pharmacy; convenience stores cover basics after hours"
-    ]
+    ],
+    "module": {
+      "id": "health-pharmacy",
+      "kind": "practical"
+    }
   },
   {
     "type": "panel",
     "group": "Essentials",
     "title": "Etiquette & language",
-    "body": "<p>Korean is the language; signs, the subway, and major sights are bilingual. For translation, use <b>Papago</b> — it's far more accurate than Google Translate for menus and signs. <b>Google Maps barely works for directions in Korea</b> — use <b>KakaoMap</b> or <b>Naver Map</b>.</p><ul><li><b>Bowing:</b> a slight nod works as hello, thank you, or goodbye — don't overthink it.</li><li><b>Two-handed exchange:</b> give and receive cards, cash, or items with both hands (or right hand with the left touching your forearm) — it signals respect.</li><li><b>No tipping, anywhere.</b> Genuinely none — attempting it can create awkwardness. The price on the menu is what you pay.</li><li><b>Chopstick etiquette:</b> don't stand them upright in rice (funeral association); rest them on the holder when you're not using them.</li><li><b>Pouring drinks:</b> pour for others at the table; let them pour for you. Don't self-pour at a shared meal.</li><li><b>Shoes off:</b> watch for a raised floor at traditional floor-seating restaurants — it's obvious when you see it.</li><li><b>Volume:</b> keep it quiet indoors, especially on transit.</li><li><b>Subway rules:</b> no eating or drinking on the metro — even water bottles, technically. <b>Pink seats at the end of every car are priority seats</b> for elderly, disabled, and pregnant passengers — don't sit in them even if the car is empty. You'll notice even young Koreans avoid them. Phones on silent; keep conversations brief and quiet.</li><li><b>Papago offline:</b> before you leave home, open Papago → Languages → Korean → download the offline pack. Camera translation still needs a data signal, but text input works offline — useful in rural Daejeon areas.</li></ul><p><b>Key phrases</b> (Hangul + romanisation):</p><ul><li>안녕하세요 — <i>annyeonghaseyo</i> — hello</li><li>감사합니다 — <i>gamsahamnida</i> — thank you (formal)</li><li>얼마예요? — <i>eolmayeyo?</i> — how much?</li><li>이거 주세요 — <i>igeo juseyo</i> — this one, please</li><li>화장실 어디예요? — <i>hwajangsil eodiyeyo?</i> — where is the bathroom?</li><li>괜찮아요 — <i>gwaenchanayo</i> — it's okay / no problem</li></ul>"
+    "body": "<p>Korean is the language; signs, the subway, and major sights are bilingual. For translation, use <b>Papago</b> — it's far more accurate than Google Translate for menus and signs. <b>Google Maps barely works for directions in Korea</b> — use <b>KakaoMap</b> or <b>Naver Map</b>.</p><ul><li><b>Bowing:</b> a slight nod works as hello, thank you, or goodbye — don't overthink it.</li><li><b>Two-handed exchange:</b> give and receive cards, cash, or items with both hands (or right hand with the left touching your forearm) — it signals respect.</li><li><b>No tipping, anywhere.</b> Genuinely none — attempting it can create awkwardness. The price on the menu is what you pay.</li><li><b>Chopstick etiquette:</b> don't stand them upright in rice (funeral association); rest them on the holder when you're not using them.</li><li><b>Pouring drinks:</b> pour for others at the table; let them pour for you. Don't self-pour at a shared meal.</li><li><b>Shoes off:</b> watch for a raised floor at traditional floor-seating restaurants — it's obvious when you see it.</li><li><b>Volume:</b> keep it quiet indoors, especially on transit.</li><li><b>Subway rules:</b> no eating or drinking on the metro — even water bottles, technically. <b>Pink seats at the end of every car are priority seats</b> for elderly, disabled, and pregnant passengers — don't sit in them even if the car is empty. You'll notice even young Koreans avoid them. Phones on silent; keep conversations brief and quiet.</li><li><b>Papago offline:</b> before you leave home, open Papago → Languages → Korean → download the offline pack. Camera translation still needs a data signal, but text input works offline — useful in rural Daejeon areas.</li></ul><p><b>Key phrases</b> (Hangul + romanisation):</p><ul><li>안녕하세요 — <i>annyeonghaseyo</i> — hello</li><li>감사합니다 — <i>gamsahamnida</i> — thank you (formal)</li><li>얼마예요? — <i>eolmayeyo?</i> — how much?</li><li>이거 주세요 — <i>igeo juseyo</i> — this one, please</li><li>화장실 어디예요? — <i>hwajangsil eodiyeyo?</i> — where is the bathroom?</li><li>괜찮아요 — <i>gwaenchanayo</i> — it's okay / no problem</li></ul>",
+    "module": {
+      "id": "etiquette-language",
+      "kind": "etiquette",
+      "relates": {
+        "days": [
+          "Fri Jul 10"
+        ]
+      }
+    }
   },
   {
     "type": "prose",
@@ -253,7 +275,16 @@
     "type": "prose",
     "group": "Essentials",
     "title": "What staff will say to you",
-    "body": "<p>When you walk into a restaurant, shop, or hotel, you'll hear these immediately. Knowing them removes the guesswork.</p><p><b>In restaurants:</b></p><ul><li><b>어서 오세요!</b> — <i>eoseo oseyo!</i> — welcome! (said by every server; a nod is fine, no response needed)</li><li><b>몇 분이세요?</b> — <i>myeot buniseyo?</i> — how many people? (hold up fingers)</li><li><b>주문하시겠어요?</b> — <i>jumunhashigeseoyo?</i> — are you ready to order? (wave gently + say <i>jamkkanmanyo</i> if not)</li><li><b>기다려 주세요</b> — <i>gidaryeo juseyo</i> — please wait a moment</li><li><b>카드요, 현금이요?</b> — <i>kadeunyo, hyeongeumiyo?</i> — card or cash? (point to your card or pocket)</li><li><b>영수증 드릴까요?</b> — <i>yeongsujeung deurilkkayo?</i> — would you like a receipt? Say <i>ne</i> (yes) — keep it for VAT refund</li><li><b>맛있게 드세요!</b> — <i>masikke deuseyo!</i> — enjoy your meal! (nod is fine)</li></ul><p><b>In shops:</b></p><ul><li><b>어떤 거 찾으세요?</b> — <i>eotteon geo chaeuseyo?</i> — what are you looking for? (open Papago or point)</li><li><b>품절이에요</b> — <i>pumjeoliheyo</i> — out of stock / sold out</li><li><b>세금 환급 되세요?</b> — <i>segeum hwangeup doeseyo?</i> — would you like a tax refund? Say <i>ne</i> and show your passport to get the VAT refund in-store.</li></ul>"
+    "body": "<p>When you walk into a restaurant, shop, or hotel, you'll hear these immediately. Knowing them removes the guesswork.</p><p><b>In restaurants:</b></p><ul><li><b>어서 오세요!</b> — <i>eoseo oseyo!</i> — welcome! (said by every server; a nod is fine, no response needed)</li><li><b>몇 분이세요?</b> — <i>myeot buniseyo?</i> — how many people? (hold up fingers)</li><li><b>주문하시겠어요?</b> — <i>jumunhashigeseoyo?</i> — are you ready to order? (wave gently + say <i>jamkkanmanyo</i> if not)</li><li><b>기다려 주세요</b> — <i>gidaryeo juseyo</i> — please wait a moment</li><li><b>카드요, 현금이요?</b> — <i>kadeunyo, hyeongeumiyo?</i> — card or cash? (point to your card or pocket)</li><li><b>영수증 드릴까요?</b> — <i>yeongsujeung deurilkkayo?</i> — would you like a receipt? Say <i>ne</i> (yes) — keep it for VAT refund</li><li><b>맛있게 드세요!</b> — <i>masikke deuseyo!</i> — enjoy your meal! (nod is fine)</li></ul><p><b>In shops:</b></p><ul><li><b>어떤 거 찾으세요?</b> — <i>eotteon geo chaeuseyo?</i> — what are you looking for? (open Papago or point)</li><li><b>품절이에요</b> — <i>pumjeoliheyo</i> — out of stock / sold out</li><li><b>세금 환급 되세요?</b> — <i>segeum hwangeup doeseyo?</i> — would you like a tax refund? Say <i>ne</i> and show your passport to get the VAT refund in-store.</li></ul>",
+    "module": {
+      "id": "what-staff-say",
+      "kind": "culture",
+      "relates": {
+        "days": [
+          "Thu Jul 9"
+        ]
+      }
+    }
   },
   {
     "type": "list",

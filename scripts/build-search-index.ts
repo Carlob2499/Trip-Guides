@@ -16,7 +16,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { readGuides, flatten, isMain } from "./audit/lib.mjs";
-import { buildGuideSearchIndex } from "../src/features/atlas/index";
+import { buildGuideSearchIndex } from "../src/features/search/index";
 
 const DIST_DATA = path.resolve("dist", "data");
 const OUT_FILE = path.join(DIST_DATA, "search-index.json");

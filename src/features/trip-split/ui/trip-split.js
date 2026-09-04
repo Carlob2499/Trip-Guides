@@ -429,6 +429,7 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
   function renderMembers() {
     var list = document.getElementById("sMemberList");
     if (!list) return;
+    wrap.setAttribute("data-members", state.members.length ? "1" : "0");
     if (!state.members.length) { list.innerHTML = "<p class='split-empty'>Add the people splitting costs.</p>"; return; }
     list.innerHTML = state.members.map(function (member, i) {
       // esc() the record id too, not just display strings: ids are Firebase keys, and a
@@ -464,14 +465,59 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
     }).join("");
   }
   var METHOD_LABEL = { EQUAL: "Split evenly", EXACT: "Exact amounts", SHARES: "Shares", PERCENTAGE: "Percentages" };
+  var METHOD_SHORT = { EQUAL: "Even", EXACT: "Exact", SHARES: "Shares", PERCENTAGE: "%" };
+  /* Semantic icons per category (design-system.md §11): a glyph that says what the money was
+     for, never a photo of it. Unknown categories get the receipt. */
+  var CATEGORY_ICON = {
+    food: '<path d="M4 3v7a3 3 0 0 0 3 3h1v8M8 3v6M20 3c-3 0-4 3-4 6v3h2v9"/>',
+    transport: '<rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l1-4M16 21l-1-4"/><circle cx="8.5" cy="14" r="1"/><circle cx="15.5" cy="14" r="1"/>',
+    lodging: '<path d="M3 18V8M3 12h18v6M3 12V9a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v3M21 18v-4a2 2 0 0 0-2-2"/>',
+    activities: '<path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M13 6v12"/>',
+    shopping: '<path d="M6 8h12l1 13H5zM9 8V6a3 3 0 0 1 6 0v2"/>',
+    drinks: '<path d="M7 4h10l-1 8a4 4 0 0 1-8 0zM12 16v4M8 20h8"/>',
+    fees: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/>',
+    receipt: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h4"/>',
+  };
+  function categoryIcon(cat) {
+    var key = String(cat || "").trim().toLowerCase();
+    var d = CATEGORY_ICON[key] || CATEGORY_ICON.receipt;
+    return "<svg class='se-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'>" + d + "</svg>";
+  }
   function methodOptions(sel) {
     return Object.keys(METHOD_LABEL).map(function (key) {
       return "<option value='" + key + "'" + (key === sel ? " selected" : "") + ">" + METHOD_LABEL[key] + "</option>";
     }).join("");
   }
+  /* Question four of the add flow: who shares it. Everyone in by default (the snapshot
+     rule); a tap takes a name out for THIS expense only. Reset after every add. */
+  var newParts = null;
+  function newPartIds() {
+    return newParts === null ? allIds() : newParts.filter(function (id) { return memberPos(id) !== -1; });
+  }
+  function renderNewParts() {
+    var host = document.getElementById("sNewParts");
+    if (!host) return;
+    var on = newPartIds();
+    host.hidden = state.members.length < 2;
+    host.innerHTML = "<span class='se-parts-lbl'>Split between</span>" + state.members.map(function (member, mi) {
+      var isOn = on.indexOf(member.id) !== -1;
+      return "<button type='button' class='se-part" + (isOn ? " se-part-on" : "") + "' data-newpart='" + esc(member.id) +
+        "' aria-pressed='" + (isOn ? "true" : "false") + "'>" + esc(member.name || ("P" + (mi + 1))) + "</button>";
+    }).join("");
+    host.querySelectorAll("[data-newpart]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = this.dataset.newpart, cur = newPartIds();
+        var next = cur.indexOf(id) !== -1 ? cur.filter(function (x) { return x !== id; }) : cur.concat([id]);
+        if (!next.length) return; // an expense nobody shares is not an expense
+        newParts = next;
+        renderNewParts();
+      });
+    });
+  }
   function renderNewRowOptions() {
     var sel = document.getElementById("sNewPayer");
     if (sel) sel.innerHTML = memberOptions(sel.value);
+    renderNewParts();
     var cur = document.getElementById("sNewCur");
     if (cur) {
       if (!LOCAL_CUR) { cur.hidden = true; }
@@ -575,13 +621,15 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
       var shareIds = sharersOf(exp);
       var cur = exp.currency || BASE_CURRENCY;
       var isOpen = !!open[exp.id];
-      var subsetted = shareIds.length < state.members.length;
 
-      // Collapsed summary line: the supporting controls only cost height when asked for.
+      // Collapsed summary line (design-system.md §11): who paid, then the split method in words
+      // ("Carlos paid · Even · 4 people"), then whatever else is non-default. The method is the
+      // one token every row must expose without opening it.
       var meta = [];
+      meta.push("<span class='se-meta-payer'>" + esc(memberName(exp.paidBy)) + " paid</span>");
+      meta.push("<span class='se-meta-method'>" + esc(METHOD_SHORT[exp.method] || exp.method) + "</span>");
+      meta.push(shareIds.length + (shareIds.length === 1 ? " person" : " people"));
       if (exp.category) meta.push(esc(exp.category));
-      if (exp.method !== "EQUAL") meta.push(METHOD_LABEL[exp.method] || exp.method);
-      if (subsetted) meta.push("÷ " + shareIds.length);
       if (cur !== BASE_CURRENCY && exp.baseMinor != null) meta.push("≈ " + fmtBase(exp.baseMinor));
       if (cur !== BASE_CURRENCY && exp.baseMinor == null) meta.push("rate unavailable");
 
@@ -639,9 +687,10 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
         "<button class='split-del' type='button' data-del-e='" + eid + "' aria-label='Remove expense'>×</button>" +
         "</div>" +
         "<div class='se-sub'>" +
+          categoryIcon(exp.category) +
+          (meta.length ? "<span class='se-meta'>" + meta.join(" · ") + "</span>" : "") +
           "<button class='se-toggle' type='button' data-open='" + eid + "' aria-expanded='" + (isOpen ? "true" : "false") + "'>" +
-            (isOpen ? "Hide details" : "Details") + "</button>" +
-          (meta.length ? "<span class='se-meta'>" + meta.map(esc).join(" · ") + "</span>" : "") +
+            (isOpen ? "Hide split" : "Edit split") + "</button>" +
         "</div>" + details + "</div>";
     }).join("");
 
@@ -795,6 +844,7 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
 
   function render() {
     renderMembers(); renderNewRowOptions(); renderExpenses(); renderResults();
+    wrap.setAttribute("data-members", state.members.length ? "1" : "0");
     applyLock();
   }
 
@@ -1030,12 +1080,12 @@ import { esc, migrateStorageKey } from "../../../scripts/util.js";
         desc: newDescEl.value || "",
         method: "EQUAL",
         weights: null,
-        // SNAPSHOT. The whole group as it stands right now — not "whoever the group turns
+        // SNAPSHOT. The sharers as chosen right now — not "whoever the group turns
         // out to be later", which is what silently re-split day-1 dinners.
-        participants: allIds(),
+        participants: newPartIds(),
         category: "",
       }, money));
-      newDescEl.value = ""; newAmtEl.value = ""; newDescEl.focus();
+      newDescEl.value = ""; newAmtEl.value = ""; newParts = null; renderNewParts(); newDescEl.focus();
     });
     [newPayerEl, newDescEl, newAmtEl].forEach(function (el) {
       if (el) el.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addExpense.click(); } });

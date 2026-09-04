@@ -20,8 +20,6 @@ export type {
   SectionLike,
   FactLike,
 } from "./model/guide-record";
-export { buildSectionRecord, buildGuideSearchIndex } from "./model/search-index";
-export type { SearchableSection, SearchRecord } from "./model/search-index";
 export { solvePlacement } from "./model/solver";
 export type { SolverCard, SeatPlacement, SolveResult, Obstacle } from "./model/solver";
 export { relevanceOrder, quickCardKicker } from "./model/relevance";
@@ -29,7 +27,5 @@ export type { RelevanceInput } from "./model/relevance";
 export { isGuideBuilding, deriveBuildingGuides } from "./model/building";
 export type { BuildingGuide, BuildingGuideInput, RunStateLike, RunStateV2Like } from "./model/building";
 export { localClockLabel } from "./model/local-time";
-export { initAtlasSearch } from "./ui/search.js";
 export { initAtlasWorld } from "./ui/world-view.js";
 export { startLocalClocks } from "./ui/local-clock.js";
-export { initCover } from "./ui/cover.js";

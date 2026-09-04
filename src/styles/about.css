@@ -4,10 +4,6 @@
    Tokens only — every colour, size, radius and easing resolves through base.css,
    so theme (incl. dark) and any future token change carry through for free. */
 
-.ab-bar{display:flex;align-items:center;justify-content:space-between;max-width:1080px;margin:0 auto;padding:1.1rem 1.2rem}
-.ab-wordmark{font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card)}
-.ab-wordmark:hover{border-color:var(--accent-ink)}
-.ab-wordmark:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 .about{position:relative;max-width:1080px;margin:0 auto;padding:0 1.2rem 4rem}
 

@@ -64,7 +64,7 @@
   .atlas-header-actions { flex: 0 0 auto; margin-left: 0; gap: 6px; }
 
   /* No spatial budget for the desktop rails, floating pincards, or motto. */
-  .atlas-ov-index, .atlas-ov-key, .atlas-ov-record, .atlas-ov-controls, .atlas-ov-motto,
+  .atlas-ov-index, .atlas-ov-key, .atlas-ov-record, .atlas-ov-controls,
   .atlas-pincard {
     display: none !important;
   }
@@ -218,84 +218,6 @@
 }
 .atlas-pingsheet-actions button[data-atlas-pingsheet-close] { width: 46px; padding: 0; font-size: var(--text-small); }
 
-/* ── The globe dock (creator, 2026-08-08) ──────────────────────────────────────────────
-   Mobile-only. Collapsed it is one pill; expanded it carries the featured trip's emergency
-   numbers, currency and advisory — the table view's quick-card data, on the face of the hub
-   that had none of it. It ships `hidden` and world-view.js unhides it, for the same reason
-   the pin chips exist only there: with no JS a phone gets the table view, where this data
-   already lives, so a second copy of it on a globe that never spins would be noise. */
-@media (max-width: 759px) {
-  .atlas-dock {
-    position: absolute; z-index: 5;
-    left: max(12px, var(--safe-left)); right: max(12px, var(--safe-right));
-    /* The dock used to clear the FAB SIDEWAYS (`margin-right: 64px`), which left a
-       full-width-looking card with a 64px bite taken out of one corner and a circle floating in
-       the gap — read as broken symmetry rather than as two controls (creator, 2026-08-09: "the
-       header for the guide is right next to a teensy round menu button ... that looks worse
-       symmetrically. The header should encompass the entire width of the screen").
-
-       Stacking instead of abutting gives both of them what they want: the dock spans the screen
-       edge to edge, and the FAB keeps the bottom-right corner, which is the best place on a
-       phone for a thumb and not worth trading away for symmetry. The dock simply sits above it.
-       Kept as one expression so the two cannot drift apart — the FAB is 52px and owns the 12px
-       gutter below it. */
-    bottom: calc(12px + var(--safe-bottom) + 52px + 10px);
-    background: var(--card); border: 1px solid var(--rule2);
-  }
-  .atlas-dock[hidden] { display: none; }
-  /* The ping sheet and the menu both own the bottom of the screen when open; two stacked
-     surfaces there would fight for the same thumb. */
-  .atlas-dock[data-stood-down] { display: none; }
-
-  .atlas-dock-head {
-    display: flex; align-items: center; gap: 8px; width: 100%;
-    min-height: 44px; padding: 8px 10px;
-    background: none; border: 0; cursor: pointer; text-align: left;
-    font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: .06em;
-    text-transform: uppercase; color: var(--ink);
-  }
-  .atlas-dock-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rule2); flex: 0 0 auto; }
-  /* One rule per TripStatus. The class is composed as `atlas-dock-dot--${status}` in
-     index.astro, so these look unreferenced to a literal-string sweep — they are not.
-     `undated` deliberately has none and keeps the base dot colour. */
-  .atlas-dock-dot--ongoing { background: var(--accent); }
-  .atlas-dock-dot--upcoming { background: var(--aink); }
-  .atlas-dock-dot--past { background: var(--green); }
-  .atlas-dock-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .atlas-dock-clock { color: var(--muted); font-variant-numeric: tabular-nums; flex: 0 0 auto; }
-  .atlas-dock-chev { flex: 0 0 auto; color: var(--muted); }
-
-  .atlas-dock-body { display: none; padding: 0 10px 10px; }
-  .atlas-dock[data-open] .atlas-dock-body { display: grid; gap: 8px; }
-  .atlas-dock-kicker {
-    font-family: var(--font-data); font-weight: 640; font-size: var(--text-nano);
-    letter-spacing: .18em; color: var(--muted); text-transform: uppercase;
-  }
-  .atlas-dock-facts { display: flex; flex-wrap: wrap; gap: 6px; }
-  .atlas-dock-tel, .atlas-dock-meta {
-    font-family: var(--font-data); font-size: var(--text-nano); letter-spacing: .06em;
-    padding: 4px 8px; border: 1px solid var(--rule2); border-radius: 999px;
-    color: var(--ink); text-decoration: none; white-space: nowrap;
-  }
-  .atlas-dock-tel { border-color: var(--accent); color: var(--accent-ink); }
-  .atlas-dock-warn { color: var(--ochre); border-color: var(--ochre); }
-  .atlas-dock-actions { display: flex; gap: 8px; }
-  .atlas-dock-cta {
-    flex: 1 1 auto; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
-    font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: .06em;
-    text-transform: uppercase; text-decoration: none; border-radius: 999px;
-    background: var(--cta); color: var(--cta-ink); border: 0;
-  }
-  .atlas-dock-cta:focus-visible, .atlas-dock-head:focus-visible {
-    outline: 2px solid var(--accent-ink); outline-offset: 2px;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .atlas-dock-chev { transition: transform .22s ease; }
-    .atlas-dock[data-open] .atlas-dock-chev { transform: rotate(180deg); }
-  }
-}
-@media (min-width: 760px) { .atlas-dock { display: none; } }
 
 /* ══ The globe front door (docs/design-handoff/prototype/atlas-mobile-home, option 4a) ═════
    Desktop treats WORLD and TABLE as two faces of the hub and shows exactly one. A phone
@@ -336,7 +258,7 @@
      scrolls away. Fixed to the viewport instead, so the same controls stay in thumb reach for
      the whole scroll. The sheets are fixed for the same reason: a bottom sheet anchored to
      the bottom of a scrolled-away hero opens off-screen. */
-  .atlas-menufab, .atlas-menusheet, .atlas-menuscrim, .atlas-pingsheet, .atlas-dock {
+  .atlas-menufab, .atlas-menusheet, .atlas-menuscrim, .atlas-pingsheet {
     position: fixed;
   }
   /* …and z-index alone is NOT enough to lift them, which cost four e2e failures before the
@@ -352,11 +274,10 @@
   .atlas-header { z-index: var(--z-sticky); }
   .atlas-menufab, .atlas-menusheet, .atlas-pingsheet { z-index: 8; }
   .atlas-menuscrim { z-index: 7; }
-  .atlas-dock { z-index: 6; }
 
   /* The caption says what the globe does; it belongs to the hero, not the viewport. */
   .atlas-globe-caption {
-    position: absolute; left: max(16px, var(--safe-left)); bottom: 12px; z-index: 6;
+    position: absolute; left: max(16px, var(--safe-left)); bottom: 40px; z-index: 6;
     margin: 0; max-width: 70%;
     font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted);
   }
@@ -477,7 +398,6 @@
   /* Everything that assumed a 400px hero has nowhere to go in 88px. */
   :root[data-atlas-mode="table"] .atlas-globe-caption,
   :root[data-atlas-mode="table"] .atlas-menufab,
-  :root[data-atlas-mode="table"] .atlas-dock,
   :root[data-atlas-mode="table"] .atlas-pinchip { display: none; }
   /* The strip fades into the page rather than ending on a hard crop line. */
   .atlas-horizon {

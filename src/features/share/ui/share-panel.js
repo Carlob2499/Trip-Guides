@@ -37,14 +37,11 @@ export function initSharePanel(lockScroll, unlockScroll) {
 
   var pageTitle = document.title;
 
-  // The URL to share must point at the SECTION the reader is on — tabs switch without
-  // changing the URL, so this is built fresh from the active tab every time it's
-  // needed, never cached across calls.
+  // The URL to share points at the DESTINATION the reader is on — destinations switch
+  // without changing the URL, so this is built fresh every time, never cached.
   function currentPageUrl() {
     var base = window.location.href.split("#")[0];
-    var active = document.querySelector(".gtab.gtab-active");
-    var t = active && active.getAttribute("data-tab");
-    return buildPageUrl(base, t);
+    return buildPageUrl(base, document.body.getAttribute("data-dest"));
   }
 
   function qrUnavailable() {

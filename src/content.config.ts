@@ -238,7 +238,39 @@ const facets = {
   theme: z.string().optional(),
   phase: z.enum(["before", "arrival", "daily", "leaving"]).optional(),
   rank: z.number().int().positive().optional(),
+  /* D6-53 — the additive relation layer for contextual knowledge modules. A section carrying
+     `module` is a canonical Guide knowledge object (a how-to, transit, etiquette, arrival or
+     culture module) that the Composer projects into the exact days/places it names. It is
+     emitted ONCE by research, with its own stable id; the Guide renders it in its chapter as
+     before, and Itinerary/Trip render a small deterministic link wherever a day/stop matches.
+     No runtime model guesses relevance: `relates.days` names itinerary `date` labels, and
+     `relates.places` names stop/place names, both validated below against the guide's own
+     itinerary so a typo cannot silently un-link a module. `critical` promotes the link to the
+     top of a day (operational guidance a traveler must not miss), otherwise modules stay
+     sparse — the renderer caps ordinary links at two per day. */
+  module: z.object({
+    id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "module.id is a stable kebab-case handle"),
+    kind: z.enum(["howto", "transit", "etiquette", "arrival", "culture", "food", "practical"]),
+    scope: z.string().optional(),   // geography the module applies to ("Seoul", "Copenhagen")
+    critical: z.boolean().optional(),
+    relates: z.object({
+      days: z.array(z.string()).optional(),    // itinerary `date` labels ("Thu Jul 9")
+      places: z.array(z.string()).optional(),  // stop/place names as authored
+      events: z.array(z.string()).optional(),  // event names as authored (an MSI final, GO Fest)
+    }).optional(),
+  }).optional(),
 };
+
+/* One stop on a day — shared by a day's own stops and by each branch's (D6-46). Coords must
+   come from a verified source (scripts/lookup-place.mjs), never guessed; `time` is a display
+   label ("08:00", "≈14:30", "morning") and stays honest when absent. */
+const waypoints = z.array(z.object({
+  name: z.string(),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
+  time: z.string().optional(),
+  note: z.string().optional(),
+}));
 
 const section = z.discriminatedUnion("type", [
   z.strictObject({ type: z.literal("panel"),  group: z.string(), ...facets, title: z.string().optional(), body: z.string().optional(), checklist: z.array(checklistItem).optional(), ...collapse, ...moreDetail, ...provenance }),
@@ -299,12 +331,15 @@ const section = z.discriminatedUnion("type", [
     // All optional — guides adopt incrementally; coords must come from a verified
     // source (scripts/lookup-place.mjs), never guessed. `time` is a display label
     // ("08:00", "≈14:30"); day granularity stays honest when it's absent.
-    waypoints: z.array(z.object({
-      name: z.string(),
-      lat: z.number().optional(),
-      lng: z.number().optional(),
-      time: z.string().optional(),
-      note: z.string().optional(),
+    waypoints: waypoints.optional(),
+    // ADDITIVE (D6-46): a day whose party SPLITS. Each branch is one group's own stops and
+    // its own prose, labelled with the group's name as the guide wrote it. The day's shared
+    // `waypoints`/`body` stay the parts everyone does; a branch is never flattened into one
+    // fake linear route, and a day with no branches renders exactly as before.
+    branches: z.array(z.object({
+      label: z.string().min(1),
+      body: z.string().optional(),
+      waypoints: waypoints.optional(),
     })).optional(),
     ...provenance,
   })) }),
@@ -891,6 +926,33 @@ const guides = defineCollection({
           }
         }
       }
+    }
+
+    // 1c. D6-53 — a knowledge module's relations must resolve. `relates.days` names itinerary
+    // dates and `relates.places` names authored stop names; a link that resolves to nothing
+    // would silently render nowhere, which is the same under-reporting failure as 1b.
+    {
+      const itinerary = (g.sections as any[]).filter((s) => s.type === "days").flatMap((s) => s.items ?? []);
+      const dates = new Set(itinerary.map((d: any) => d.date));
+      const stopNames = new Set(itinerary.flatMap((d: any) => [
+        ...(d.waypoints ?? []).map((w: any) => w.name),
+        ...(d.branches ?? []).flatMap((b: any) => (b.waypoints ?? []).map((w: any) => w.name)),
+      ]));
+      const seenIds = new Set<string>();
+      (g.sections as any[]).forEach((s, i) => {
+        const mod = s.module;
+        if (!mod) return;
+        if (seenIds.has(mod.id)) {
+          ctx.addIssue({ code: "custom", path: ["sections", i, "module", "id"], message: `module id "${mod.id}" is used twice — one canonical module, many projections.` });
+        }
+        seenIds.add(mod.id);
+        for (const d of mod.relates?.days ?? []) {
+          if (!dates.has(d)) ctx.addIssue({ code: "custom", path: ["sections", i, "module", "relates", "days"], message: `module "${mod.id}" relates to day "${d}", which is not an itinerary date. Dates: ${[...dates].join(", ") || "(none)"}` });
+        }
+        for (const p of mod.relates?.places ?? []) {
+          if (!stopNames.has(p)) ctx.addIssue({ code: "custom", path: ["sections", i, "module", "relates", "places"], message: `module "${mod.id}" relates to place "${p}", which no itinerary stop is named.` });
+        }
+      });
     }
 
     // 2. Tab budget — distinct content groups become nav tabs, so this is the density
