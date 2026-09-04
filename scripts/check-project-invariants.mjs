@@ -146,6 +146,15 @@ requireText("docs/reference/design-system.md", "## 16. Motion", "Waypoint motion
 requirePath("docs/reference/design-system-assets/canonical-mockups.svg", "Waypoint canonical visual board");
 requireText("docs/reference/design-system.md", "design-system-assets/canonical-mockups.svg", "Waypoint authority binds canonical visual board");
 requireText("docs/reference/design-system-assets/canonical-mockups.svg", "SUPPORTING FIGURE ONLY", "Waypoint visual board is subordinate to sole authority");
+requirePath("docs/reference/design-system-assets/mockup-manifest.json", "Waypoint visual reference manifest");
+requireText("docs/reference/design-system-assets/mockup-manifest.json", "recovered_d6_composition", "Waypoint recovered D6 visuals retain authority class");
+for (const rel of [
+  "docs/reference/design-system-assets/d6-itinerary-mobile-composition.svg",
+  "docs/reference/design-system-assets/d6-map-responsive-composition.svg",
+  "docs/reference/design-system-assets/d6-guide-place-detail-composition.svg",
+  "docs/reference/design-system-assets/d6-split-responsive-composition.svg",
+  "docs/reference/design-system-assets/d6-search-responsive-final.svg",
+]) requirePath(rel, `Recovered D6 visual: ${rel}`);
 requirePath("docs/reference/component-registry.json", "Waypoint component registry");
 
 // Design authority is intentionally singular. Historical design bodies live in Git history,
