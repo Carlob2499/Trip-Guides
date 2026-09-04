@@ -30,8 +30,6 @@
      Desktop is untouched: there the label renders and the CTA can say what it is. */
   /* --tools is gone entirely now (R5 retired the standalone screen); the selector went with it
      rather than lingering as a rule for an element that cannot exist. */
-  .atlas-header-btn--cta { display: none; }
-  .atlas-header-btn-label { display: none; }
 
   /* D5 asked for "a permanent WORLD | TABLE segmented switch" and this took that as full-bleed:
      `width:100%` pushed it onto a row of its own, so the phone header spent THREE rows before
@@ -52,16 +50,12 @@
      the same complaint as before with a worse consequence. One row now: mark, wordmark, the
      switch, the theme button. The strapline goes — "VERIFIED FIELD GUIDES" is the cover's
      line and the cover has just said it. */
-  .atlas-brand { flex: 0 1 auto; min-width: 0; }
-  .atlas-brand-sub { display: none; }
-  .atlas-toggle { flex: 0 0 auto; margin-left: auto; }
   /* Only the horizontal run narrows here — the 44px height moved to the base rule in
      atlas-world.css once the sweep showed the desktop half of the range was still at 40px.
      (The reasoning it carried is unchanged and now applies at every width: 44px, not the kit's
      4px-padded segments, because this repo's a11y gate holds every hit target to 44px and a
      gate outranks a screenshot.) */
   .atlas-toggle-btn { padding: 0 12px; }
-  .atlas-header-actions { flex: 0 0 auto; margin-left: 0; gap: 6px; }
 
   /* No spatial budget for the desktop rails, floating pincards, or motto. */
   .atlas-ov-index, .atlas-ov-key, .atlas-ov-record, .atlas-ov-controls,
@@ -125,7 +119,7 @@
   @media (prefers-reduced-motion: no-preference) {
     /* Opacity only — the transform is the live position and must never be transitioned,
        or every chip would lag its own pin by the transition's duration. */
-    .atlas-pinchip { transition: opacity .22s linear; }
+    .atlas-pinchip { transition: opacity var(--dur-routine) linear; }
     .atlas-pinchip[data-status="ongoing"] .atlas-pinchip-dot { animation: atlas-chip-pulse 2.4s ease-in-out infinite; }
     @keyframes atlas-chip-pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
   }
@@ -135,12 +129,12 @@
 @media (min-width: 760px) { .atlas-pinchip { display: none; } }
 
 .atlas-menufab {
-  position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(12px + var(--safe-bottom));
-  z-index: 5; width: 52px; height: 52px; border-radius: 50%;
+  position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(12px + var(--safe-bottom) + var(--botbar-h, 0px));
+  z-index: 5; width: 52px; height: 52px; border-radius: var(--r-round);
   align-items: center; justify-content: center;
   background: var(--cta); color: var(--cta-ink); border: 0; cursor: pointer;
   font-family: var(--font-data); font-weight: 700; font-size: var(--text-body);
-  box-shadow: 0 8px 24px rgba(var(--shadow-rgb),.28);
+  box-shadow: var(--shadow-float);
 }
 
 .atlas-menuscrim {
@@ -152,7 +146,7 @@
   position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(74px + var(--safe-bottom));
   z-index: 5; width: min(240px, 72vw);
   background: var(--card); border: 1px solid var(--rule2);
-  box-shadow: 0 14px 40px rgba(var(--shadow-rgb),.3);
+  box-shadow: var(--shadow-float);
 }
 .atlas-menusheet-kicker {
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-nano); letter-spacing: .18em;
@@ -172,7 +166,7 @@
   background: var(--card); border-top: 2px solid var(--accent);
   padding: 14px max(16px, var(--safe-right)) calc(14px + var(--safe-bottom)) max(16px, var(--safe-left));
   gap: 9px;
-  box-shadow: 0 -12px 34px rgba(var(--shadow-rgb),.24);
+  box-shadow: var(--shadow-float);
 }
 /* The sheet was a country code, a title and a clock on a plain ground — accurate and
    completely anonymous (creator, 2026-08-09: "the globe boxes are quite sterile ... where is
@@ -277,7 +271,7 @@
 
   /* The caption says what the globe does; it belongs to the hero, not the viewport. */
   .atlas-globe-caption {
-    position: absolute; left: max(16px, var(--safe-left)); bottom: 40px; z-index: 6;
+    position: absolute; left: max(16px, var(--safe-left)); bottom: calc(56px + var(--botbar-h, 0px)); z-index: 6;
     margin: 0; max-width: 70%;
     font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted);
   }
@@ -325,7 +319,7 @@
      look like a card.) */
   .atlas-sheet:not(.atlas-sheet--next) .atlas-stamp,
   .atlas-sheet:not(.atlas-sheet--next) .atlas-quick-meta {
-    border: 0; padding: 0; min-height: 0; border-radius: 0;
+    border: 0; padding: 0; min-height: 0; border-radius:var(--r-inset);
   }
   /* One line for the sub-title, ellipsis past it. "Copenhagen · Malmö · 12 days" wrapping to
      a second line was most of what made these rows tall. */
@@ -478,7 +472,7 @@
    Transform and opacity only, per ANTIPATTERNS.md. */
 @media (max-width: 759px) and (prefers-reduced-motion: no-preference) {
   .atlas-menusheet, .atlas-pingsheet, .atlas-menuscrim {
-    transition: opacity .2s ease, transform .24s cubic-bezier(.22,.61,.36,1), overlay .24s allow-discrete, display .24s allow-discrete;
+    transition: opacity var(--dur-routine) ease, transform var(--dur-routine) cubic-bezier(.22,.61,.36,1), overlay var(--dur-routine) allow-discrete, display var(--dur-routine) allow-discrete;
     opacity: 1;
   }
   .atlas-menusheet { transform: translateY(0) scale(1); transform-origin: 100% 100%; }
@@ -497,3 +491,5 @@
   .atlas-pingsheet[hidden] { opacity: 0; transform: translateY(100%); }
   .atlas-menuscrim[hidden] { opacity: 0; }
 }
+/* Geometry (§31). */
+.atlas-newcard{border-radius:var(--r-card)}

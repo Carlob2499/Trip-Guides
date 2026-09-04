@@ -27,19 +27,45 @@
     return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
   }
 
+  // Completed stops compress into one line ("N stops behind you") that unfolds on demand
+  // (design-system.md §25 "compressed completed states"); the traveler's choice sticks
+  // across the minute ticks. Two or more, never a fold hiding a single row.
+  var behindOpen = false;
+  function foldPast(list, count) {
+    var btn = list.previousElementSibling && list.previousElementSibling.classList.contains("stops-behind") ? list.previousElementSibling : null;
+    if (count < 2) {
+      if (btn) btn.remove();
+      list.removeAttribute("data-behind");
+      return;
+    }
+    if (!btn) {
+      btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "stops-behind";
+      btn.addEventListener("click", function () { behindOpen = !behindOpen; refresh(); });
+      list.parentNode.insertBefore(btn, list);
+    }
+    btn.setAttribute("aria-expanded", behindOpen ? "true" : "false");
+    btn.textContent = count + " stops behind you" + (behindOpen ? " — hide" : " — show");
+    list.setAttribute("data-behind", behindOpen ? "open" : "folded");
+  }
+
   function refresh() {
     var today = document.querySelector(".day-today");
     if (!today) return;
     var now = destNowMinutes();
     if (now == null) return;
-    var stops = Array.prototype.slice.call(today.querySelectorAll(".stop"));
     var nextMarked = false;
-    stops.forEach(function (stop) {
-      var t = parseStart((stop.querySelector(".stop-time") || {}).textContent);
-      stop.classList.remove("stop-past", "stop-next");
-      if (t == null) return;
-      if (t < now) stop.classList.add("stop-past");
-      else if (!nextMarked) { stop.classList.add("stop-next"); nextMarked = true; }
+    Array.prototype.slice.call(today.querySelectorAll(".stops")).forEach(function (list) {
+      var past = 0;
+      Array.prototype.slice.call(list.querySelectorAll(".stop")).forEach(function (stop) {
+        var t = parseStart((stop.querySelector(".stop-time") || {}).textContent);
+        stop.classList.remove("stop-past", "stop-next");
+        if (t == null) return;
+        if (t < now) { stop.classList.add("stop-past"); past++; }
+        else if (!nextMarked) { stop.classList.add("stop-next"); nextMarked = true; }
+      });
+      foldPast(list, past);
     });
   }
 

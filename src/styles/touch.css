@@ -40,7 +40,7 @@
   min-height:48px;padding:.55rem .95rem;text-align:left;
   background:color-mix(in srgb,var(--accent) 12%,var(--card));
   border:1px solid var(--accent);border-radius:999px;cursor:pointer;
-  transition:transform .16s var(--ease-out-expo),background .16s ease;
+  transition:transform var(--dur-routine) var(--ease-out-expo),background var(--dur-routine) ease;
 }
 .resume-chip:active{transform:scale(.98)}
 .resume-chip:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}

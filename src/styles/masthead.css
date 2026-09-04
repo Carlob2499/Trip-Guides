@@ -8,7 +8,7 @@
    · .mast-painted — guides with no photo open on the Painted Atlas (painted-atlas.css +
      src/components/PaintedAtlas.astro): seeded terrain in the guide's accent under a
      destination-local sky, so every guide is born with a living cover.
-   Motion: hero-parallax.js drifts the photo on scroll; gsap-hero.js runs the text arrival.
+   Motion: scripts/arrival.js runs the entry; the photo holds still while the page scrolls.
    Both select by class name (.mast-frame/.mast-img/.mast-eyebrow/.mast-title/.mast-dek/
    .mast-credit), all kept here. Fully short-circuited under prefers-reduced-motion. */
 
@@ -23,7 +23,7 @@
 
 /* The footage layer — transparent until it actually PLAYS (living-cover.js adds
    .mast-video-live on the `playing` event). */
-.mast-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0;transition:opacity .9s ease}
+.mast-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0;transition:opacity var(--dur-scene) ease}
 .mast-video-live .mast-video{opacity:1}
 @media(prefers-reduced-motion:reduce){.mast-video{display:none}}
 
@@ -63,7 +63,7 @@
 .mast-plateline{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.1rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem max(1.1rem,var(--safe-right)) .8rem max(1.1rem,var(--safe-left));border-top:2px solid var(--accent);border-bottom:1px solid var(--rule2)}
 .mast-cities{font-family:var(--font-data);font-weight:640;font-size:var(--text-lead);color:var(--accent-ink)}
 .mast-nextleg{font-family:var(--font-data);font-weight:700;font-size:var(--text-control-sm);letter-spacing:.14em;text-transform:uppercase;color:var(--aink)}
-.mast-stamp{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid currentColor;border-radius:0;padding:.15rem .5rem}
+.mast-stamp{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid currentColor;border-radius:var(--r-inset);padding:.15rem .5rem}
 .mast-plcount{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
 .mast-print{margin-left:auto;min-height:44px;padding:.3rem .9rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:var(--card);border:1px solid var(--rule2);border-radius:999px;cursor:pointer}
 .mast-print:hover{border-color:var(--accent);color:var(--accent-ink)}
@@ -76,7 +76,7 @@
   .mast-hero{max-width:1400px;margin:0 auto;padding:1rem clamp(1rem,3vw,1.5rem) 0}
   .mast-frame{min-height:clamp(440px,58vh,640px);border:1px solid var(--rule2)}
   .mast-plate-row{margin:-4.6rem 0 0;padding:0 clamp(1.2rem,3vw,2.4rem)}
-  .mast-inner{max-width:46rem;padding:1.4rem 1.8rem 1.5rem;background:var(--card);border:1px solid var(--rule2)}
+  .mast-inner{max-width:46rem;padding:1.4rem 1.8rem 1.5rem;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-card);box-shadow:var(--shadow-lift)}
   .mast-title{font-size:clamp(3rem,5.2vw,4.8rem)}
   .mast-plateline{margin-top:1rem;padding-inline:0}
 }
@@ -91,3 +91,5 @@
   .mast-plate-row{margin:0}
   .mast-inner{border:0;background:none;padding:0}
 }
+/* Geometry (§31): the cover is full-bleed on a phone, a framed pane on desktop. */
+@media(min-width:900px){.mast-hero{padding:.9rem clamp(1rem,3vw,1.5rem) 0}.mast-frame{border-radius:var(--r-pane);border:1px solid var(--rule2)}}

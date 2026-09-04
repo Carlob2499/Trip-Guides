@@ -23,8 +23,8 @@
 @media(prefers-reduced-motion:reduce){.sight-media{animation:none}}
 @keyframes sightShimmer{from{background-position:200% 0}to{background-position:-200% 0}}
 
-.sight-media .cardimg{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;border-radius:0;margin:0;
-  transform:scale(1.001);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.sight-media .cardimg{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;border-radius:var(--r-card);margin:0;
+  transform:scale(1.001);transition:transform var(--dur-scene) cubic-bezier(.2,.7,.2,1)}
 .card.sight--photo:hover .cardimg{transform:scale(1.06)}
 @media(prefers-reduced-motion:reduce){.sight--photo:hover .cardimg{transform:none}}
 

@@ -11,7 +11,7 @@
 .hl-intro a{color:var(--accent-ink)}
 
 /* Legend + "what green means" caveat */
-.hl-note{background:var(--bg2);border:1px solid var(--rule);border-radius:0;padding:.85rem 1rem;font-size:var(--text-small);line-height:1.5;color:var(--muted);margin:0 0 2rem}
+.hl-note{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-card);padding:.85rem 1rem;font-size:var(--text-small);line-height:1.5;color:var(--muted);margin:0 0 2rem}
 .hl-note b{color:var(--ink)}
 
 /* Atlas re-expression (Stage F, feature 5). Status used to be a 4px coloured stripe down the
@@ -22,7 +22,7 @@
    square, 1px of its own ink, Source Sans 640 at .08em. The verdict paragraph lost its bold
    lead-in with them: the stamp says "PROVEN" once, and a sentence repeating it underneath is
    the same datum rendered twice as if it were two things. */
-.hl-hero{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.2rem 1.3rem;margin:0 0 2rem}
+.hl-hero{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1.2rem 1.3rem;margin:0 0 2rem}
 .hl-hero-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem}
 .hl-hero-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0}
 .hl-hero p{margin:.2rem 0 0;color:var(--muted);font-size:var(--text-small);line-height:1.55}
@@ -36,14 +36,14 @@
 
 /* Each automation row */
 .hl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
-.hl-item{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1rem 1.1rem}
+.hl-item{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1rem 1.1rem}
 
 /* The stamp (SPEC-COMPONENTS §6 typography: the data face (--font-data), .82rem, .08em, 640, 1px of its
    own ink, square). The spec writes the size as .82rem; --text-control renders that exact value,
    so the token carries it rather than a literal the type-scale gate would have to except.
    --green and --warn are already contrast-tested on --card; support has no
    colour of its own because "support" is not a health verdict, it is a category. */
-.hl-stamp{flex:none;font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.08em;font-weight:640;text-transform:uppercase;padding:.2rem .5rem;border:1px solid currentColor;border-radius:0;white-space:nowrap}
+.hl-stamp{flex:none;font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.08em;font-weight:640;text-transform:uppercase;padding:.2rem .5rem;border:1px solid currentColor;border-radius:var(--r-inset);white-space:nowrap}
 .hl-stamp.s-proven{color:var(--green)}
 .hl-stamp.s-unproven{color:var(--warn)}
 .hl-stamp.s-support{color:var(--muted)}

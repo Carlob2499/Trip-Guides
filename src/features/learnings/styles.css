@@ -64,7 +64,7 @@
   background: var(--card);
   color: var(--ink);
   border: 1px solid var(--rule);
-  border-radius: 0;
+  border-radius: var(--r-pane);
   padding: 22px 20px 20px;
 }
 .lnw-dialog:focus { outline: none; }
@@ -154,7 +154,7 @@
   width: 100%;
   padding: 8px 10px;
   border: 1px solid var(--rule2);
-  border-radius: 0;
+  border-radius: var(--r-inset);
   background: var(--bg);
   color: var(--ink);
   font: inherit;
@@ -166,7 +166,7 @@
   width: 100%;
   padding: 12px;
   border: 1px solid var(--rule2);
-  border-radius: 0;
+  border-radius: var(--r-inset);
   background: var(--bg);
   color: var(--ink);
   font: inherit;
@@ -235,7 +235,7 @@
 .learn-agg {
   padding: 16px 18px;
   border: 1px solid var(--rule);
-  border-radius: 0;
+  border-radius:var(--r-card);
   background: var(--card);
 }
 .learn-empty { margin: 0; color: var(--muted); }
@@ -275,7 +275,7 @@
   padding: 14px 16px;
   margin-top: 12px;
   border: 1px solid var(--rule);
-  border-radius: 0;
+  border-radius:var(--r-card);
   background: var(--card);
 }
 .learn-day-date {
@@ -335,7 +335,7 @@
      was invalid at computed-value time and the border fell back to currentColor, drawing each
      row's frame in its own text colour. --rule is the hairline every other row here uses. */
   border: 1px solid var(--rule);
-  border-radius: 0;
+  border-radius: var(--r-compact);
   background: var(--card);
 }
 .learn-tally-group { font-size:var(--text-small); font-weight: 600; }

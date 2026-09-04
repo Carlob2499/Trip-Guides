@@ -68,10 +68,18 @@ function showDest(key, opts) {
   // Map embeds load when their destination is first shown, never for a region the reader
   // has not opened (offline and data honesty: no hidden frames failing behind the page).
   destPanels[key].querySelectorAll("iframe[data-src]").forEach(function (f) { f.src = f.getAttribute("data-src"); f.removeAttribute("data-src"); });
+  var label = null;
   document.querySelectorAll("[data-dest-nav]").forEach(function (btn) {
-    if (btn.dataset.dest === key) btn.setAttribute("aria-current", "true");
+    if (btn.dataset.dest === key) { btn.setAttribute("aria-current", "true"); if (!label) label = btn.textContent.trim(); }
     else btn.removeAttribute("aria-current");
   });
+  // The orientation anchor names the current destination; a contextual region (Split) names
+  // itself from its own heading since no nav entry carries it.
+  var orient = document.querySelector("[data-orient-dest]");
+  if (orient) {
+    if (!label) { var h = destPanels[key].querySelector("[data-dest-title], h2, h1"); label = h ? h.textContent.trim() : key; }
+    orient.textContent = label;
+  }
   document.body.setAttribute("data-dest", key);
   try { sessionStorage.setItem(ROUTE_KEY, key); } catch (_) {}
   if (changed) {
@@ -127,14 +135,14 @@ document.addEventListener("click", function (e) {
 window.addEventListener("hashchange", function () { goToHash(location.hash); });
 
 // Keyboard: arrow keys move along the destination row/bar without leaving the group.
-document.querySelectorAll(".destnav, .botbar").forEach(function (group) {
+document.querySelectorAll(".rail, .botbar").forEach(function (group) {
   group.addEventListener("keydown", function (e) {
-    var btns = Array.prototype.slice.call(group.querySelectorAll("[data-dest-nav]"));
+    var btns = Array.prototype.slice.call(group.querySelectorAll("[data-dest-nav], [data-dest-link]"));
     var idx = btns.indexOf(document.activeElement);
     if (idx === -1) return;
     var next;
-    if (e.key === "ArrowRight") next = (idx + 1) % btns.length;
-    else if (e.key === "ArrowLeft") next = (idx - 1 + btns.length) % btns.length;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = (idx + 1) % btns.length;
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = (idx - 1 + btns.length) % btns.length;
     else if (e.key === "Home") next = 0;
     else if (e.key === "End") next = btns.length - 1;
     if (next === undefined) return;

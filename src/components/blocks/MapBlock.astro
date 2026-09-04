@@ -14,11 +14,16 @@ const payload = jsonEmbed({
   span: sec.span ?? null,
   pins: pins ?? [],
 });
+/* Google Maps Platform is the live map when built with PUBLIC_GMAPS_KEY (§15); the OSM embed
+   stays dormant on data-fallback-src and gmaps-render.js wakes it only if Google fails. */
+const googlePrimary = Boolean(import.meta.env.PUBLIC_GMAPS_KEY);
+const frameSrcAttr = googlePrimary ? "data-fallback-src" : "data-src";
 ---
-<div class="itin-map" data-itin-map>
+<div class="itin-map" data-itin-map data-map-primary={googlePrimary ? "google" : "osm"}>
   <script type="application/json" is:inline data-map-data set:html={payload} />
   <iframe class="osmmap" loading="lazy" data-lazy-frame title={sec.title || "Area map"} allowfullscreen
-    data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}`}>
+    {...{ [frameSrcAttr]: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox(sec.center, sec.span)}&layer=mapnik&marker=${sec.center.lat}%2C${sec.center.lng}` }}>
   </iframe>
+  <p class="map-loading" data-map-loading aria-live="polite">Loading the map…</p>
 </div>
 <p class="note">⚠ The map needs an internet connection — the written transit steps in this section work offline.</p>

@@ -10,7 +10,7 @@
    Absorbed here: trip-tools' reminders/closures derivations and trip-kit's arrival/book-by
    models. Their surfaces (the Tools station, the Trip Kit tab) were retired by D6-00/D6-17;
    the derivations survive because Trip is where they were always pointing. */
-export { tripPhase, todayIndex, parseStartMinutes, focusFor, daysToGo } from "./model/lifecycle";
+export { tripPhase, todayIndex, parseStartMinutes, focusFor, daysToGo, minutesUntil, untilLabel } from "./model/lifecycle";
 export type { TripPhase, TripDay, TripStop, Focus } from "./model/lifecycle";
 export { deriveTripDays, dayStops } from "./model/trip-data";
 export { deriveReadiness, openCount } from "./model/readiness";

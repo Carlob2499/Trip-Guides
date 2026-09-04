@@ -31,6 +31,11 @@ const dow = (date: string) => String(date).split(/\s+/)[0] || "";
 const mapPayload = center ? jsonEmbed({ center, span, pins: dayPins, lens: "days" }) : null;
 const pinsByDay = days.map((_: any, dayIdx: number) => dayPins.filter((pin) => pin.dayIdx === dayIdx));
 const directionsUrl = (pin: Props["dayPins"][number]) => `https://www.google.com/maps/dir/?api=1&destination=${pin.lat},${pin.lng}${pin.placeId ? `&destination_place_id=${encodeURIComponent(pin.placeId)}` : ""}`;
+/* Google Maps Platform is the live map when the site is built with PUBLIC_GMAPS_KEY
+   (design-system.md §15); the OpenStreetMap embed then stays dormant on data-fallback-src and
+   is activated by gmaps-render.js only if Google fails. Without a key it is the map. */
+const googlePrimary = Boolean(import.meta.env.PUBLIC_GMAPS_KEY);
+const frameSrcAttr = googlePrimary ? "data-fallback-src" : "data-src";
 const bbox = (c: { lat: number; lng: number }, s: number | null) => {
   const sp = s || 0.05;
   return [c.lng - sp, c.lat - sp * 0.6, c.lng + sp, c.lat + sp * 0.6].join("%2C");
@@ -68,10 +73,11 @@ const bbox = (c: { lat: number; lng: number }, s: number | null) => {
           </button>
         </div>
         {mapPayload ? (
-          <div class="itin-map itin-map--bench" data-itin-map data-map-lens="days">
+          <div class="itin-map itin-map--bench" data-itin-map data-map-lens="days" data-map-primary={googlePrimary ? "google" : "osm"}>
             <script type="application/json" is:inline data-map-data set:html={mapPayload} />
             <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of this day's stops"
-              data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}`}></iframe>
+              {...{ [frameSrcAttr]: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}` }}></iframe>
+            <p class="map-loading" data-map-loading aria-live="polite">Loading the map…</p>
             <div class="itin-map-fallback" data-itin-map-fallback role="group" aria-label="Selected day route">
               {pinsByDay.map((pins, dayIdx) => (
                 <section data-map-fallback-day={dayIdx} hidden={dayIdx !== 0}>

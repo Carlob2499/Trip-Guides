@@ -25,14 +25,15 @@ for (const f of files) {
   const lines = readFileSync(f, 'utf8').split('\n');
   lines.forEach((ln, i) => {
     const n = i + 1;
-    // 1. radius is binary: 0 or 999px (99px pill shorthand tolerated)
+    // 1. radius is a ROLE (design-system.md §31): var(--r-*) tokens, 0 (a flush edge), 50% (a
+    //    dot) or the pill. A typed px radius is drift — the family is the only source of shape.
     // `}` ends the value as surely as `;` does: minified CSS drops the last declaration's
     // semicolon, so `…;border-radius:0}` used to capture "0}" and report a correctly-zeroed
     // rule as drift (src/styles/guide.css's .hol-clear, .lb-img).
     const rad = ln.match(/border-radius:\s*([^;"'}]+)/g);
     if (rad) for (const r of rad) {
       const v = r.split(':')[1].trim();
-      if (!v.split(/\s+/).every((t) => /^(0|999px|99px|50%)$/.test(t))) V(f, n, 'RADIUS — only 0 or 999px exist in this system', ln);
+      if (!v.split(/\s+/).every((t) => /^(0|999px|50%|inherit|var\(--r-(inset|compact|card|pane|pill|round)\))$/.test(t))) V(f, n, 'RADIUS — use the --r-* role family (design-system.md §31)', ln);
     }
     // 2. no hex outside the approved set, and none at all outside tokens.css
     for (const m of ln.matchAll(/#[0-9a-fA-F]{6}\b/g)) {
@@ -44,15 +45,15 @@ for (const f of files) {
     if (/[^(]env\(safe-area/.test(ln) && !/max\([^)]*env\(/.test(ln) && !isTokens)
       V(f, n, 'SAFE-AREA — wrap env() in max(reserved, …)', ln);
     // 4. third font family
-    if (/font-family/.test(ln) && !/var\(--f[ds]\)|Literata|Source Sans/.test(ln))
-      V(f, n, 'TYPE — only Literata (--fd) and Source Sans 3 (--fs) exist', ln);
+    if (/font-family/.test(ln) && !/var\(--font-(display|data|body)\)|var\(--f[ds]\)|Literata|Atkinson/.test(ln))
+      V(f, n, 'TYPE — only Literata and Atkinson Hyperlegible Next exist (design-system.md §2)', ln);
     if (/\b(monospace|Menlo|Consolas|Courier|Inter|Roboto)\b/.test(ln) && /font/.test(ln))
       V(f, n, 'TYPE — forbidden family', ln);
     // 5. animating layout properties
     if (/transition:[^;]*\b(left|top|width|height)\b/.test(ln) && !/max-height/.test(ln))
       V(f, n, 'MOTION — transform/opacity only; never left/top/width/height', ln);
-    // 6. box-shadow (the system has no elevation)
-    if (/box-shadow:\s*(?!none)/.test(ln)) V(f, n, 'ELEVATION — no shadows; edges are 1px rules', ln);
+    // 6. elevation is a ROLE (§31): var(--shadow-float|lift) or none. A typed shadow is drift.
+    if (/box-shadow:\s*(?!none|var\(--shadow-(float|lift)\))/.test(ln)) V(f, n, 'ELEVATION — use --shadow-float / --shadow-lift or none (design-system.md §31)', ln);
   });
 }
 

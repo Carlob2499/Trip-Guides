@@ -104,9 +104,11 @@ export function readStoredRecord(provideStore, key) {
 export function trapFocus(container, isOpen) {
   function handler(e) {
     if (e.key !== "Tab" || !isOpen()) return;
-    var focusables = container.querySelectorAll(
+    // Only what can actually take focus: a control inside a [hidden] drawer or an unrendered
+    // pane has no boxes, and treating it as "last" would let a Tab walk out of the sheet.
+    var focusables = Array.prototype.filter.call(container.querySelectorAll(
       'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    );
+    ), function (el) { return el.getClientRects().length > 0; });
     if (!focusables.length) return;
     var first = focusables[0], last = focusables[focusables.length - 1];
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }

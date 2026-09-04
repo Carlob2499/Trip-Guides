@@ -145,6 +145,8 @@ export function initIntakeChecklist() {
     body.appendChild(foot);
 
     node.addEventListener("toggle", function () {
+      // The question deck (intake-deck.js) keeps every section open and shows one row at a time.
+      if (form.hasAttribute("data-deck")) return;
       if (!node.open) { if (openId === sec.id) openId = null; save(); return; }
       openId = sec.id;
       secs.forEach(function (other) { if (other.id !== sec.id) other.node.open = false; });

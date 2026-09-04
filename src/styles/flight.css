@@ -1,12 +1,12 @@
 /* === CHAPTER OPENERS + GUIDED CHAIN ==========================================
    The one orchestrated motion moment lives in the masthead arrival
-   (gsap-hero.js). Everything else is calm: a section change is a quick opacity
+   (scripts/arrival.js). Everything else is calm: a section change is a quick opacity
    fade, and the chapter opener (ghost numeral + title + contents line) and
    next-section cards are static. */
 
 /* Quiet fade on section reveal — opacity only, no banking/settle. */
 @media(prefers-reduced-motion:no-preference){
-  .catblock{animation:sectionIn .28s ease}
+  .catblock{animation:sectionIn var(--dur-object) ease}
 }
 @keyframes sectionIn{from{opacity:0}to{opacity:1}}
 
@@ -30,24 +30,24 @@
    panel grid's collapse toggle, so a reader recognises it as the same KIND of
    control. Hidden until src/features/panel/ui/collapse.js confirms the group's grid has
    at least one wired Panel (no-JS-safe, matching the Panel toggle's own contract). */
-.cat-collapse-all{position:relative;z-index:1;display:inline-block;margin-top:.6rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:.4rem .85rem;cursor:pointer;transition:color .15s,border-color .15s}
+.cat-collapse-all{position:relative;z-index:1;display:inline-block;margin-top:.6rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:.4rem .85rem;cursor:pointer;transition:color var(--dur-routine),border-color var(--dur-routine)}
 .cat-collapse-all:hover{color:var(--accent-ink);border-color:var(--rule2)}
 .cat-collapse-all:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* ── Opener photo fan — a group's own verified photos, fanned like a hand of
       postcards beside the numeral (static). ────────────────────────────────── */
 .cat-fan{position:absolute;right:clamp(.5rem,4vw,3rem);top:.4rem;z-index:1;width:130px;height:88px;pointer-events:none}
-.cat-fan-img{position:absolute;width:86px;height:62px;object-fit:cover;border-radius:0;border:2px solid var(--card)}
+.cat-fan-img{position:absolute;width:86px;height:62px;object-fit:cover;border-radius:var(--r-inset);border:2px solid var(--card)}
 .cat-fan-0{left:0;top:12px;transform:rotate(-7deg)}
 .cat-fan-1{left:26px;top:4px;transform:rotate(2deg)}
 .cat-fan-2{left:52px;top:14px;transform:rotate(9deg)}
 @media(max-width:640px){.cat-fan{width:96px;height:66px}.cat-fan-img{width:64px;height:46px}.cat-fan-1{left:18px}.cat-fan-2{left:36px}}
 
 /* ── First-visit navigation hint ─────────────────────────────────────────── */
-.next-cta{display:flex;align-items:center;gap:1rem;width:100%;max-width:var(--read);margin:2.2rem auto .4rem;padding:1.15rem 1.4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:0;cursor:pointer;text-align:left;transition:background .22s,color .22s,border-color .22s,transform .2s var(--ease-spring)}
-.next-cta-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .22s}
+.next-cta{display:flex;align-items:center;gap:1rem;width:100%;max-width:var(--read);margin:2.2rem auto .4rem;padding:1.15rem 1.4rem;background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:var(--r-inset);cursor:pointer;text-align:left;transition:background var(--dur-routine),color var(--dur-routine),border-color var(--dur-routine),transform var(--dur-routine) var(--ease-spring)}
+.next-cta-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color var(--dur-routine)}
 .next-cta-title{flex:1;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);letter-spacing:-.012em;line-height:1.1}
-.next-cta-arrow{font-size:var(--text-h3);line-height:1;transition:transform .22s cubic-bezier(.2,.7,.2,1)}
+.next-cta-arrow{font-size:var(--text-h3);line-height:1;transition:transform var(--dur-routine) cubic-bezier(.2,.7,.2,1)}
 .next-cta:hover{background:var(--ink);color:var(--bg);border-color:var(--ink);transform:translateY(-2px)}
 .next-cta:hover .next-cta-label{color:color-mix(in srgb,var(--bg) 72%,transparent)}
 .next-cta:hover .next-cta-arrow{transform:translateX(8px)}

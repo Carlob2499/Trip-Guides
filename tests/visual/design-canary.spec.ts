@@ -56,7 +56,11 @@ const POST_TRIP_TIME = new Date("2026-07-30T11:20:00+09:00");
 async function chooseDestination(page: Page, destination: "trip" | "itinerary" | "map" | "guide" | "split") {
   /* Desktop and phone controls share the same data contract. Prefer whichever instance is visible
      rather than encoding a second navigation model into the test. */
-  const controls = page.locator(`[data-dest-nav][data-dest="${destination}"]`);
+  // Split is contextual (design-system.md §27): no nav slot, so its opener is the card on Trip.
+  if (destination === "split") await chooseDestination(page, "trip");
+  const controls = destination === "split"
+    ? page.locator(`[data-dest-go="split"]`)
+    : page.locator(`[data-dest-nav][data-dest="${destination}"]`);
   const count = await controls.count();
   let clicked = false;
   for (let i = 0; i < count; i += 1) {

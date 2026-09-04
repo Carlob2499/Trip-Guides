@@ -234,13 +234,16 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
     readiness, recap, holidayInfo, exports, hasWeatherSection, tripSummary: buildSummary(guide),
     verifiedWarning, verifiedDate, colophon, colophonChecked, nextRecheck, plate,
     searchIndex: buildGuideSearchIndex(slug, guide.title, guide.sections),
+    // The primary destinations this page switches between (design-system.md §6). Atlas is a
+    // link the shell adds itself; Split is a contextual utility (§27) — a routable region
+    // reached from Trip, expense actions and Search, never a permanent slot.
     destinations: [
       { key: "trip" as const, label: "Trip" },
       { key: "itinerary" as const, label: "Itinerary" },
       { key: "map" as const, label: "Map" },
       { key: "guide" as const, label: "Guide" },
-      { key: "split" as const, label: "Split" },
     ],
+    contextual: [{ key: "split" as const, label: "Split" }],
   };
 }
 export type GuideView = ReturnType<typeof deriveGuideView>;

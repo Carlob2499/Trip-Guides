@@ -13,18 +13,18 @@
    that gate only tested korea + hub, and korea's trip is in the past relative to the gate's
    fixed clock, which correctly hides the calculator (guide-ui.js:163-176) — japan is in the
    gate's page list now so an upcoming-trip guide actually renders this control. */
-.jl-toggle{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.8rem 1rem;min-height:44px;cursor:pointer;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color .15s,border-color .15s}
+.jl-toggle{width:100%;display:flex;align-items:center;gap:.5rem;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.8rem 1rem;min-height:44px;cursor:pointer;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);transition:color var(--dur-routine),border-color var(--dur-routine)}
 .jl-toggle:hover{color:var(--ink);border-color:var(--ink)}
 .jl-toggle[aria-expanded="true"]{border-color:var(--rule2);color:var(--ink)}
 .jl-icon{flex:none;font-style:normal}
-.jl-chev{margin-left:auto;font-size:var(--text-control-sm);transition:transform .2s;display:inline-block}
+.jl-chev{margin-left:auto;font-size:var(--text-control-sm);transition:transform var(--dur-routine);display:inline-block}
 .jl-toggle[aria-expanded="true"] .jl-chev{transform:rotate(180deg)}
 .jl-inner{padding:.75rem .05rem .3rem}
 .jl-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.55rem}
 .jl-label{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);flex:0 0 7.5rem;line-height:1.4}
-.jl-select{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:0;padding:.35rem .5rem;font:inherit;font-size:var(--text-body);background:var(--card);color:var(--ink)}
+.jl-select{flex:1;min-width:0;border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.35rem .5rem;font:inherit;font-size:var(--text-body);background:var(--card);color:var(--ink)}
 .jl-select:focus{outline:2px solid var(--accent-ink);outline-offset:0;border-color:transparent}
-.jl-output{margin-top:.55rem;padding:.7rem .9rem;background:var(--bg2);border-radius:0;border-left:3px solid var(--accent);font-size:var(--text-small)}
+.jl-output{margin-top:.55rem;padding:.7rem .9rem;background:var(--bg2);border-radius:var(--r-card);border-left:3px solid var(--accent);font-size:var(--text-small)}
 .jl-result{font-weight:600;margin-bottom:.4rem;line-height:1.4}
 .jl-tips{padding-left:1.1rem;color:var(--muted);font-size:var(--text-small);line-height:1.65;margin-top:.3rem}
 .jl-tips li{margin-bottom:.2rem}

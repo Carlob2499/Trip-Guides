@@ -33,7 +33,7 @@
 .split-save-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
 
 /* ── cards ─────────────────────────────────────────────────────────────────── */
-.split-card{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.15rem 1.25rem;margin-bottom:.9rem}
+.split-card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1.15rem 1.25rem;margin-bottom:.9rem}
 .sc-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.85rem}
 .sc-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);color:var(--muted);text-transform:uppercase}
 .sc-body{display:flex;flex-direction:column;gap:.5rem}
@@ -41,7 +41,7 @@
 /* ── actions ───────────────────────────────────────────────────────────────
    Pills with a visible fill. These were bare 26px outlines in micro-caps: legible
    as labels, not as things you press (the site's own clickability doctrine). */
-.sc-add-btn,.sc-add-expense-btn{display:inline-flex;align-items:center;gap:.3rem;min-height:34px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;letter-spacing:.01em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;cursor:pointer;white-space:nowrap;flex:none;transition:background .16s,border-color .16s,color .16s}
+.sc-add-btn,.sc-add-expense-btn{display:inline-flex;align-items:center;gap:.3rem;min-height:34px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;letter-spacing:.01em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;cursor:pointer;white-space:nowrap;flex:none;transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
 .sc-add-btn:hover,.sc-add-expense-btn:hover{background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
 .sc-add-btn:focus-visible,.sc-add-expense-btn:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .sc-add-expense-btn{align-self:flex-start}
@@ -54,7 +54,7 @@
    40px desktop / 44px touch, square. The height is the point — the old 36px field was the
    single strongest "this is from an older site" signal here. The radius is no longer a
    judgement call at all: Stage G deleted the --r-* ladder, so a container is 0. */
-.split-in{font:inherit;font-size:var(--text-body);min-height:40px;border:1px solid var(--rule2);border-radius:0;padding:.4rem .6rem;background:var(--bg);color:var(--ink);width:100%;min-width:0;transition:border-color .16s,background .16s}
+.split-in{font:inherit;font-size:var(--text-body);min-height:40px;border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.4rem .6rem;background:var(--bg);color:var(--ink);width:100%;min-width:0;transition:border-color var(--dur-routine),background var(--dur-routine)}
 .split-in:hover{border-color:var(--muted)}
 /* Was a 3px box-shadow standing in for a focus ring. An outline IS the focus ring, it follows
    the element's own shape, and it is not elevation. */
@@ -67,7 +67,7 @@ select.split-in{cursor:pointer}
 
 /* ── delete ────────────────────────────────────────────────────────────────
    A real (if quiet) button: circular, hoverable, and big enough to hit. */
-.split-del{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:transparent;border:1px solid transparent;cursor:pointer;font-size:var(--text-lead);line-height:1;color:var(--muted);border-radius:999px;transition:color .14s,background .14s,border-color .14s;flex:none;padding:0}
+.split-del{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:transparent;border:1px solid transparent;cursor:pointer;font-size:var(--text-lead);line-height:1;color:var(--muted);border-radius:999px;transition:color var(--dur-immediate),background var(--dur-immediate),border-color var(--dur-immediate);flex:none;padding:0}
 .split-del:hover{color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 10%,transparent);border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
 .split-del:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 
@@ -77,7 +77,7 @@ select.split-in{cursor:pointer}
    10.4 phone screens — and the supporting controls are wanted on a minority of rows.
    The summary line carries whatever is non-default so nothing hides silently. */
 .se-sub{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
-.se-toggle{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.18rem .6rem;min-height:28px;cursor:pointer;transition:color .14s,border-color .14s,background .14s}
+.se-toggle{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.18rem .6rem;min-height:28px;cursor:pointer;transition:color var(--dur-immediate),border-color var(--dur-immediate),background var(--dur-immediate)}
 .se-toggle:hover{color:var(--ink);border-color:var(--ink)}
 .se-toggle:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .se-meta{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);overflow-wrap:anywhere}
@@ -90,7 +90,7 @@ select.split-in{cursor:pointer}
    font-size stays at --text-body: this is a text-entry control, and anything under 16px
    makes iOS Safari zoom the page in on focus and never zoom back out (the a11y gate caught
    it at 11.52px). The amount columns below are sized to fit it. */
-.se-cur-sel{font-family:var(--font-data);font-size:var(--text-body);font-weight:700;letter-spacing:.02em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:0;padding:.2rem .1rem;cursor:pointer;flex:none;min-height:38px}
+.se-cur-sel{font-family:var(--font-data);font-size:var(--text-body);font-weight:700;letter-spacing:.02em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.2rem .1rem;cursor:pointer;flex:none;min-height:38px}
 .se-cur-sel:focus-visible{outline:2px solid var(--accent-ink);outline-offset:1px}
 
 /* ── find one expense among many ───────────────────────────────────────────
@@ -100,7 +100,7 @@ select.split-in{cursor:pointer}
 .se-filter{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin-bottom:.8rem}
 .se-filter-q{flex:2 1 11rem;min-width:0}
 .se-filter-sel{flex:1 1 7.5rem;min-width:0}
-.se-filter-clear{flex:none;min-height:40px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;cursor:pointer;transition:color .14s,border-color .14s}
+.se-filter-clear{flex:none;min-height:40px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;cursor:pointer;transition:color var(--dur-immediate),border-color var(--dur-immediate)}
 .se-filter-clear:hover{color:var(--ink);border-color:var(--ink)}
 .se-filter-clear:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 /* The honesty line: a filtered list sits beside an UNfiltered total, and that has exactly
@@ -120,7 +120,7 @@ select.split-in{cursor:pointer}
 
 /* Standalone form — Group Vote uses `.split-card.se-new-card` as a top-level card of its
    own, so the base style has to stay a self-contained box. */
-.se-new-card{background:var(--bg2);border:1px solid var(--rule);border-radius:0;padding:.85rem .9rem;margin-bottom:1rem}
+.se-new-card{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-card);padding:.85rem .9rem;margin-bottom:1rem}
 
 /* NESTED inside the Expenses card it becomes a full-bleed composer band instead. As an
    inset box its own padding pushed the entry fields 15px in from the committed rows below,
@@ -128,7 +128,7 @@ select.split-in{cursor:pointer}
    sit on the same grid as the rows they become. Bleeding it to the card edges makes both
    grids identical by construction rather than by coincidence. Scoped with `>` so Voting's
    standalone card (which carries BOTH classes on one element) never matches. */
-.split-card > .se-new-card{background:var(--bg2);border:none;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);border-radius:0;margin:0 -1.25rem 1rem;padding:.85rem 1.25rem}
+.split-card > .se-new-card{background:var(--bg2);border:none;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);border-radius:var(--r-card);margin:0 -1.25rem 1rem;padding:.85rem 1.25rem}
 .se-new-card .sc-label{display:block}
 /* Add-expense button lives in a header row at the TOP of the entry box (mirrors the
    People card's "+ Add person"), so it's the first, always-in-place control — not
@@ -156,9 +156,9 @@ select.split-in{cursor:pointer}
 /* ── who shared it / custom amounts ────────────────────────────────────────
    Chips, not checkboxes — tap targets have to look tappable, and an excluded
    person must read as clearly OFF rather than merely unstyled. */
-.se-parts{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .4rem;margin-top:.45rem;padding:.45rem .65rem;background:var(--bg2);border-radius:0;border-left:3px solid var(--rule2)}
+.se-parts{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .4rem;margin-top:.45rem;padding:.45rem .65rem;background:var(--bg2);border-radius:var(--r-card);border-left:3px solid var(--rule2)}
 .se-parts-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-right:.15rem}
-.se-part{min-height:30px;padding:.25rem .7rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:var(--text-caption);font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2);transition:background .14s,border-color .14s,color .14s}
+.se-part{min-height:30px;padding:.25rem .7rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:var(--text-caption);font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2);transition:background var(--dur-immediate),border-color var(--dur-immediate),color var(--dur-immediate)}
 .se-part:hover{border-color:var(--muted);color:var(--ink)}
 /* --on-accent, not #fff. accent-tokens.ts derives --on-accent as readableOn(accent, 4.5), so
    it clears the floor for whatever palette a guide extracts; a literal white only clears it for
@@ -168,7 +168,7 @@ select.split-in{cursor:pointer}
 .se-part-on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);text-decoration:none}
 .se-part-on:hover{color:var(--on-accent)}
 .se-part:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.se-custom{display:flex;flex-wrap:wrap;gap:.45rem .6rem;margin-top:.45rem;padding:.6rem .65rem;background:var(--bg2);border-radius:0;border-left:3px solid var(--rule2)}
+.se-custom{display:flex;flex-wrap:wrap;gap:.45rem .6rem;margin-top:.45rem;padding:.6rem .65rem;background:var(--bg2);border-radius:var(--r-card);border-left:3px solid var(--rule2)}
 .se-custom--warn{border-left-color:var(--accent)}
 .se-cl{display:flex;flex-direction:column;gap:.2rem;min-width:5.5rem;flex:1 1 5.5rem}
 .se-cl-name{font-family:var(--font-data);font-size:var(--text-nano);font-weight:600;letter-spacing:.04em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -202,7 +202,7 @@ select.split-in{cursor:pointer}
 /* settlement rows — one line, not three. "Sam → Carlo $18.63" is a sentence; it
    was costing 109px of vertical space per payment, so three payments filled a
    phone screen. The payment handle keeps its own line only when there is one. */
-.st-row{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:.15rem .8rem;background:var(--bg2);border:1px solid var(--rule);border-radius:0;padding:.6rem .85rem;margin-bottom:.4rem}
+.st-row{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:.15rem .8rem;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-card);padding:.6rem .85rem;margin-bottom:.4rem}
 .st-parties{display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;min-width:0}
 .st-from,.st-to{font-weight:600;font-size:var(--text-small)}
 .st-arrow{color:var(--accent-ink);line-height:1}
@@ -212,7 +212,7 @@ select.split-in{cursor:pointer}
 .split-settle-ok{color:var(--green);font-size:var(--text-small);font-style:italic;padding:.3rem 0;margin:0}
 
 /* "Mark paid" — the control that turns a perpetual suggestion into a settled record. */
-.st-done{grid-column:1/-1;justify-self:start;margin-top:.35rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;padding:.28rem .8rem;min-height:32px;cursor:pointer;transition:background .16s,border-color .16s}
+.st-done{grid-column:1/-1;justify-self:start;margin-top:.35rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;padding:.28rem .8rem;min-height:32px;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine)}
 .st-done:hover{background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
 .st-done:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
@@ -223,7 +223,7 @@ select.split-in{cursor:pointer}
 .sp-who{font-size:var(--text-small);font-weight:600}
 .sp-amt{font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--green);white-space:nowrap}
 .sp-on{grid-column:1;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted)}
-.sp-undo{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.15rem .6rem;min-height:28px;cursor:pointer;transition:color .14s,border-color .14s}
+.sp-undo{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.15rem .6rem;min-height:28px;cursor:pointer;transition:color var(--dur-immediate),border-color var(--dur-immediate)}
 .sp-undo:hover{color:var(--ink);border-color:var(--ink)}
 .sp-undo:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
@@ -248,7 +248,7 @@ select.split-in{cursor:pointer}
    seeded budget). The description now owns its own full-width line and the
    supporting fields sit beneath it. */
 @media(max-width:599px){
-  .split-card{padding:1rem 1rem;border-radius:0}
+  .split-card{padding:1rem 1rem;border-radius:var(--r-card)}
   .split-card > .se-new-card{margin:0 -1rem 1rem;padding:.85rem 1rem}
   .split-in{min-height:44px}
   .sc-add-btn,.sc-add-expense-btn{min-height:38px}
@@ -285,7 +285,7 @@ select.split-in{cursor:pointer}
 /* M5 — post-trip read-only lock (see features/trip-split/ui/trip-split.js). The record stays
    fully legible; only the write affordances go quiet, so a settled trip reads as finished
    rather than broken. */
-.split-lock-note{margin:0 0 .9rem;padding:.6rem .85rem;background:var(--bg2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:0;font-size:var(--text-small);color:var(--muted);line-height:1.5}
+.split-lock-note{margin:0 0 .9rem;padding:.6rem .85rem;background:var(--bg2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:var(--r-card);font-size:var(--text-small);color:var(--muted);line-height:1.5}
 #tripSplit[data-locked] .split-in:disabled,#tripSplit[data-locked] button:disabled{opacity:.72;cursor:default}
 #tripSplit[data-locked] .sc-add-btn,#tripSplit[data-locked] .sc-add-expense-btn,
 #tripSplit[data-locked] .se-new-card,#tripSplit[data-locked] .split-del{display:none}
@@ -327,7 +327,7 @@ select.split-in{cursor:pointer}
 .su-btn,.su-x{position:relative}
 .su-btn::after,.su-x::after{content:"";position:absolute;inset:-7px}
 @media(prefers-reduced-motion:no-preference){
-  .split-undo{animation:su-rise .18s var(--ease-out-expo,ease-out)}
+  .split-undo{animation:su-rise var(--dur-routine) var(--ease-out-expo,ease-out)}
   @keyframes su-rise{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
 }
 /* On phones the bottom tab bar owns the bottom edge — sit above it, matching the offset the
@@ -342,12 +342,12 @@ select.split-in{cursor:pointer}
    that room is still empty. It is an offer, not a notice, so it is built like a control: the
    accent marks it as actionable without the alarm colouring a warning would carry — nothing
    has gone wrong here, there is simply data the panel cannot reach on its own.
-   Square because it holds content; the button inside is a pill because it is pressed. */
+   A compact card because it holds content; the button inside is a pill because it is pressed. */
 .s-rescue{
   display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .9rem;
   margin:.6rem 0 0;padding:.7rem .85rem;
   background:var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));
-  border-radius:0;
+  border-radius:var(--r-compact);
 }
 .s-rescue-msg{margin:0;flex:1 1 16rem;min-width:0;font-size:var(--text-small);color:var(--ink);overflow-wrap:anywhere}
 .s-rescue-go{
@@ -409,3 +409,9 @@ select.split-in{cursor:pointer}
   .splitdest-scene .paint-atlas{position:absolute;inset:0;z-index:0}
   .splitdest .split-wrap{position:relative;z-index:1;max-width:840px;padding:1.6rem 1.8rem 2rem;background:var(--bg);border:1px solid var(--rule2)}
 }
+
+/* The contextual region's own head: the way back to Trip and its name for the anchor (§27). */
+.splitdest-head{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:.6rem max(1rem,var(--safe-right)) 0 max(1rem,var(--safe-left))}
+.splitdest-back{display:inline-flex;align-items:center;min-height:44px;padding:0 .9rem;border:var(--rw) solid var(--line-strong);border-radius:var(--r-pill);background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.splitdest-back:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.splitdest-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}

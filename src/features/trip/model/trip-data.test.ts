@@ -11,8 +11,9 @@ describe("deriveTripDays", () => {
     ]);
     expect(days).toHaveLength(2);
     expect(days[0].anchor).toBe("day-0");
-    expect(days[0].stops[0]).toMatchObject({ name: "EWR", time: "≈01:00 EDT", lat: 40.69, lng: -74.17, branch: null });
+    expect(days[0].stops[0]).toMatchObject({ name: "EWR", time: "≈01:00 EDT", lat: 40.69, lng: -74.17, branch: null, leaveBy: null });
     expect(days[0].stops[1]).toMatchObject({ name: "Nap", time: null, lat: null, lng: null });
+    expect(dayStops({ waypoints: [{ name: "Bus", leave_by: "13:20" }] })[0].leaveBy).toBe("13:20");
     expect(days[1].planB).toEqual({ trigger: "rain", body: "Jjimjilbang" });
     expect(days[1].stops).toEqual([]);
     expect(days[0].tldr).toBeNull();

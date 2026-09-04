@@ -1,9 +1,11 @@
-/* The ONE search overlay (design-system.md D6-24, docs/reference/search-ui-final.md).
-
-   Opened from every entry point in the chrome — the expanded top field, the compact
-   scrolled control, the desktop persistent field — and from "/" or Ctrl/Cmd+K. It is a
-   dialog over the current surface, never a page: the page underneath keeps its destination,
-   its chapter and its scroll, and dismissing restores focus to the control that opened it.
+/* The ONE search overlay — context-aware universal Search with category drawers
+   (design-system.md §21). Opened from the top strip and the rail, and from "/" or
+   Ctrl/Cmd+K. It is a dialog over the current surface, never a page or a tab: the page
+   underneath keeps its destination, its chapter and its scroll, and dismissing restores focus
+   to the control that opened it. Not a command palette: rows are traveler objects, the
+   drawers are the guide's own categories, and the context line says what is being searched.
+   Desktop adds a fluid result/detail workspace beside the list; a phone keeps the compact
+   sheet with the same drawers and a clear Close.
 
    Two indexes, one list: the current guide's own records ship inline (#searchIndex, so
    search works offline) and lead every result; the cross-guide index (dist/data/
@@ -17,6 +19,9 @@ import { trapFocus } from "../../../scripts/util.js";
 function el0(tag, cls, text) { const n = document.createElement(tag); n.className = cls; n.textContent = text; return n; }
 
 const ACTION = { place: "Open place", venue: "Open place", day: "Open day", stop: "Open day", section: "Open in guide", module: "Open in guide" };
+/* The drawers (§21): the traveler-facing categories the ranker already groups by. */
+const DRAWERS = [["all", "All"], ["places", "Places"], ["itinerary", "Itinerary"], ["guide", "Guide"], ["other", "Other trips"]];
+const DEST_LABEL = { trip: "Trip", itinerary: "Itinerary", map: "Map", guide: "Guide", split: "Split" };
 
 export function initSearch(root) {
   const doc = root || document;
@@ -33,6 +38,20 @@ export function initSearch(root) {
     .catch(() => []));
 
   let overlay = null, input = null, list = null, status = null, lastFocus = null, sel = -1, flat = [], remote = [];
+  let drawers = null, ctxEl = null, detail = null, drawer = "all";
+
+  /* What is being searched, from the page's own state — never composed from guesses. */
+  function contextLine() {
+    let title = null;
+    try { title = JSON.parse((doc.getElementById("tgConfig") || {}).textContent || "{}").title || null; } catch (_) { /* no config on Atlas */ }
+    if (!currentSlug || !title) return "Searching every guide";
+    const parts = [title];
+    const dest = DEST_LABEL[doc.body.getAttribute("data-dest") || ""];
+    if (dest) parts.push(dest);
+    const day = doc.querySelector("[data-planner-days] .day[data-day]:not([hidden])");
+    if (day && dest === "Itinerary") parts.push("Day " + (parseInt(day.getAttribute("data-day"), 10) + 1) + (day.getAttribute("data-date") ? " · " + day.getAttribute("data-date") : ""));
+    return "Searching " + parts.join(" · ") + " — and every other guide";
+  }
 
   function build() {
     if (overlay) return;
@@ -49,13 +68,39 @@ export function initSearch(root) {
           '<input class="srch-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search this trip, places, guides…" aria-label="Search" role="combobox" aria-expanded="false" aria-controls="srchList" aria-autocomplete="list" />' +
           '<button class="srch-close" type="button" aria-label="Close search">Close</button>' +
         '</div>' +
+        '<p class="srch-ctx"></p>' +
+        '<div class="srch-drawers" role="group" aria-label="Show"></div>' +
         '<p class="srch-status" role="status" aria-live="polite"></p>' +
-        '<div class="srch-list" id="srchList" role="listbox"></div>' +
+        '<div class="srch-body">' +
+          '<div class="srch-list" id="srchList" role="listbox"></div>' +
+          '<aside class="srch-detail" aria-label="Selected result" hidden></aside>' +
+        '</div>' +
       '</div>';
     doc.body.appendChild(overlay);
     input = overlay.querySelector(".srch-input");
     list = overlay.querySelector(".srch-list");
     status = overlay.querySelector(".srch-status");
+    ctxEl = overlay.querySelector(".srch-ctx");
+    detail = overlay.querySelector(".srch-detail");
+    drawers = overlay.querySelector(".srch-drawers");
+    DRAWERS.forEach(([key, label]) => {
+      const b = el0("button", "srch-drawer", label);
+      b.type = "button";
+      b.setAttribute("data-drawer", key);
+      b.setAttribute("aria-pressed", key === drawer ? "true" : "false");
+      const n = el0("span", "srch-drawer-n", "");
+      b.appendChild(n);
+      b.addEventListener("click", () => { drawer = key; render(); });
+      drawers.appendChild(b);
+    });
+    list.addEventListener("mouseover", (e) => {
+      const row = e.target.closest && e.target.closest("[data-srch-i]");
+      if (row) showDetail(flat[parseInt(row.getAttribute("data-srch-i"), 10)]);
+    });
+    list.addEventListener("focusin", (e) => {
+      const row = e.target.closest && e.target.closest("[data-srch-i]");
+      if (row) showDetail(flat[parseInt(row.getAttribute("data-srch-i"), 10)]);
+    });
     overlay.querySelector(".srch-close").addEventListener("click", close);
     overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
     input.addEventListener("input", render);
@@ -72,17 +117,57 @@ export function initSearch(root) {
     trapFocus(overlay, () => !overlay.hidden);
   }
 
+  /* The desktop detail pane (§21 "fluid results/detail workspace"): the highlighted result's
+     own facts and its one action, beside the list. Hidden on a phone by CSS. */
+  function showDetail(r) {
+    if (!detail) return;
+    if (!r) { detail.hidden = true; detail.replaceChildren(); return; }
+    const other = r.slug !== currentSlug;
+    const kind = other ? r.crumb : String(r.group || "").toUpperCase();
+    const act = other ? "Open guide" : (Object.prototype.hasOwnProperty.call(ACTION, r.kind) ? ACTION[r.kind] : "Open");
+    const wrap = doc.createElement("div");
+    wrap.appendChild(el0("p", "srch-detail-k", kind));
+    wrap.appendChild(el0("h3", "srch-detail-title", r.title));
+    if (r.snippet) wrap.appendChild(el0("p", "srch-detail-snip", r.snippet));
+    const go_ = el0("button", "srch-detail-go", act + " →");
+    go_.type = "button";
+    go_.addEventListener("click", () => go(r));
+    wrap.appendChild(go_);
+    detail.replaceChildren(wrap);
+    detail.hidden = false;
+  }
+
+  function paintDrawers(groups) {
+    if (!drawers) return;
+    const counts = {};
+    let total = 0;
+    groups.forEach((g) => { counts[g.key] = g.items.length; total += g.items.length; });
+    drawers.querySelectorAll("[data-drawer]").forEach((b) => {
+      const key = b.getAttribute("data-drawer");
+      const n = key === "all" ? total : (counts[key] || 0);
+      b.querySelector(".srch-drawer-n").textContent = n ? String(n) : "";
+      b.setAttribute("aria-pressed", key === drawer ? "true" : "false");
+      b.disabled = key !== "all" && n === 0;
+    });
+  }
+
   function render() {
     const q = input.value;
-    const groups = rankSearch(local.concat(remote), q, currentSlug);
+    const all = rankSearch(local.concat(remote), q, currentSlug);
+    if (drawer !== "all" && !all.some((g) => g.key === drawer)) drawer = "all";
+    paintDrawers(all);
+    const groups = drawer === "all" ? all : all.filter((g) => g.key === drawer);
     flat = [];
     sel = -1;
+    showDetail(null);
     if (q.trim().length < MIN_CHARS) {
       list.replaceChildren();
       status.textContent = "";
       input.setAttribute("aria-expanded", "false");
+      drawers.hidden = true;
       return;
     }
+    drawers.hidden = false;
     if (!groups.length) {
       list.replaceChildren(el0("p", "srch-empty", "Nothing in this trip or the other guides matches that."));
       status.textContent = "No matches";
@@ -139,6 +224,7 @@ export function initSearch(root) {
       el.setAttribute("aria-selected", on ? "true" : "false");
       if (on) { el.scrollIntoView({ block: "nearest" }); input.setAttribute("aria-activedescendant", el.id); }
     });
+    showDetail(flat[sel]);
   }
 
   // Index fields are data from a JSON payload; a route is only ever built from the shapes
@@ -171,6 +257,8 @@ export function initSearch(root) {
     scrollY = window.scrollY;
     overlay.hidden = false;
     doc.body.classList.add("srch-lock");
+    if (ctxEl) ctxEl.textContent = contextLine();
+    if (drawers) drawers.hidden = true;
     if (typeof seed === "string" && seed) input.value = seed;
     input.focus();
     if (input.value) render();

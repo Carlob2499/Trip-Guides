@@ -51,6 +51,14 @@
 /* --- Blocks: large calm sections, one job each ------------------------------------------ */
 .trip-phase{display:flex;flex-direction:column;gap:1rem;padding:0 max(1.1rem,var(--safe-right)) 0 max(1.1rem,var(--safe-left))}
 .trip-block{background:var(--card);border:1px solid var(--rule);padding:1.1rem 1.2rem}
+/* PRE: the readiness stack is the feature object (§8 role 4), the tiles support it. */
+.trip-pre-lead{border-radius:var(--r-pane);box-shadow:var(--shadow-lift);padding:1.3rem 1.3rem 1.1rem}
+.trip-pre-side{display:flex;flex-direction:column;gap:.7rem}
+.trip-pre-side:empty{display:none}
+.trip-block--tile{border-radius:var(--r-compact);padding:.9rem 1rem}
+.trip-block--tile .trip-h{font-size:var(--text-lead);margin-bottom:.35rem}
+/* A tile with nothing to show (forecast not yet fetched, packing list empty) is not a shell. */
+.trip-weather:not(:has(> :not([hidden]))){display:none}
 .trip-h{display:flex;align-items:center;gap:.45rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);margin:0 0 .5rem}
 .trip-sub{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0 0 .6rem}
 .trip-dim{color:var(--muted);font-family:var(--font-data);font-size:var(--text-caption)}
@@ -82,7 +90,7 @@
 .trip-dl-ext{color:var(--muted);font-weight:400}
 .trip-packing{margin-top:.8rem}
 
-.trip-goto{display:flex;align-items:center;gap:1rem;width:100%;min-height:64px;padding:1rem 1.2rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);cursor:pointer;text-align:left;font:inherit;transition:border-color .16s,transform .2s var(--ease-spring)}
+.trip-goto{display:flex;align-items:center;gap:1rem;width:100%;min-height:64px;padding:1rem 1.2rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);cursor:pointer;text-align:left;font:inherit;transition:border-color var(--dur-routine),transform var(--dur-routine) var(--ease-spring)}
 .trip-goto:hover{border-color:var(--accent);transform:translateY(-1px)}
 .trip-goto:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .trip-goto-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
@@ -100,10 +108,18 @@
 .tn-stack{display:flex;flex-direction:column;gap:.7rem}
 
 /* The atoms. NOW is the dominant object: its own photo when the repository has one, the
-   largest name on the page, its note, its handoff. NEXT is the same object compressed. */
+   largest name on the page, its note, its handoff. NEXT is the same object compressed and
+   tucked under it — a stack (§8), one object in front, the next visibly behind. */
+.tn-stack{gap:0}
 .tn-atom{position:relative;display:grid;grid-template-columns:minmax(0,1fr);background:var(--card);border:1px solid var(--rule);overflow:hidden}
-.tn-atom--now{border-color:var(--accent);border-left:5px solid var(--accent)}
-.tn-atom--next{border-left:5px solid var(--rule2)}
+.tn-atom--now{z-index:2;border-color:var(--accent);border-left:5px solid var(--accent);box-shadow:var(--shadow-lift)}
+.tn-atom--next{z-index:1;margin:-14px .7rem 0;padding-top:14px;border-left:5px solid var(--rule2);background:color-mix(in srgb,var(--card) 92%,var(--bg))}
+.tn-stack>.tn-atom--next+*{margin-top:.8rem}
+/* Leave by / Next at: the third line of the hierarchy (§24), only from data the guide holds. */
+.tn-leave{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .55rem;margin:.6rem 0 0;padding:.5rem .8rem;border-radius:var(--r-inset);background:color-mix(in srgb,var(--accent) 9%,transparent);font-family:var(--font-data);font-size:var(--text-control)}
+.tn-leave-k{font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+.tn-leave-t{font-weight:700;font-size:var(--text-h4);color:var(--ink);font-variant-numeric:tabular-nums}
+.tn-leave-in{color:var(--muted)}
 .tn-media{display:block;position:relative;min-width:0;background:var(--sunken)}
 .tn-media[hidden]{display:none}
 .tn-img{display:block;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
@@ -158,7 +174,7 @@
 .trip-recap-lead{font-family:var(--font-display);font-size:var(--text-lead);line-height:1.5;margin:0;max-width:60ch}
 .trip-recap-none{color:var(--muted)}
 .trip-atoms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:.6rem;margin:0}
-.trip-atom{background:var(--card);border:1px solid var(--rule);padding:.9rem 1rem}
+.trip-atom{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-compact);padding:.9rem 1rem}
 .trip-atom dt{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .trip-atom dd{margin:.2rem 0 0;font-family:var(--font-display);font-weight:640;font-size:clamp(1.9rem,6vw,2.6rem);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .trip-atom-of{font-size:var(--text-body);color:var(--muted);letter-spacing:0}
@@ -181,8 +197,11 @@
   .trip[data-phase="active"] .trip-hero{display:block;padding:.9rem clamp(1rem,3vw,1.5rem) 0;border-bottom:0;margin-bottom:1rem}
   .trip[data-phase="active"] .trip-hero-media{min-height:200px;max-height:240px;border:1px solid var(--rule2)}
   .trip[data-phase="active"] .trip-hero-text{padding:0 1.4rem 1.1rem}
-  .trip-pre{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}
-  .trip-pre>.trip-priorities,.trip-pre>.trip-goto{grid-column:1/-1}
+  .trip-pre{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:1.2rem 1.6rem;align-items:start}
+  .trip-pre>.trip-pre-lead{grid-column:1;grid-row:1}
+  .trip-pre>.trip-pre-side{grid-column:2;grid-row:1}
+  .trip-pre>.trip-goto{grid-column:1/-1}
+  .trip-pre:not(:has(.trip-pre-lead))>.trip-pre-side{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
   .trip-now{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:"day day" "stack side";gap:1rem 1.4rem;align-items:start}
   .trip-now>.tn-day{grid-area:day}
   .trip-now>.tn-stack{grid-area:stack}
@@ -197,3 +216,11 @@
   .tn-atom--next.tn-atom--photo{grid-template-columns:120px minmax(0,1fr)}
 }
 @media print{.trip-goto,.trip-dl-row{display:none}}
+
+/* Contextual utilities (design-system.md §27): Split is a card on Trip, not a slot. */
+.trip-goto--split{margin-top:.6rem}
+.trip-goto-title [data-split-summary]:not(:empty)::before{content:" · "}
+/* Geometry (design-system.md §31): operational cards on the card role; the hero is a full-bleed
+   photograph on a phone and a framed pane inset from the workspace edge on desktop. */
+.tn-atom,.trip-block,.trip-goto{border-radius:var(--r-card)}
+@media(min-width:900px){.trip-hero-media{border-radius:var(--r-pane)}.trip-hero-media--painted{border-radius:var(--r-pane)}}

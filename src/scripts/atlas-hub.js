@@ -11,10 +11,11 @@ import { initHomeWeather } from "../features/live-data/index.js";
 // already consume it. Item 9 (Chrome) will grow this same header with more rows
 // (theme toggle, ＋ New guide, TOOLS); this observer keeps working unchanged either way.
 const header = document.querySelector(".atlas-header");
+const chrome = document.getElementById("chrome");
 if (header) {
-  const setHdrH = () => document.documentElement.style.setProperty("--hdr-h", `${header.offsetHeight}px`);
+  const setHdrH = () => document.documentElement.style.setProperty("--hdr-h", `${header.offsetHeight + (chrome ? chrome.offsetHeight : 0)}px`);
   setHdrH();
-  if ("ResizeObserver" in window) new ResizeObserver(setHdrH).observe(header);
+  if ("ResizeObserver" in window) { const ro = new ResizeObserver(setHdrH); ro.observe(header); if (chrome) ro.observe(chrome); }
 }
 
 initSearch(document);

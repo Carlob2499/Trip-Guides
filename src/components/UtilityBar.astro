@@ -1,26 +1,32 @@
 ---
-/* The one top strip for every page that is not the Atlas or a guide: intake, progress, triage,
-   change request, about, health, 404. Same wordmark, same way back, same theme control — so the
-   product reads as one product off its main surfaces too (design-system.md §5). The guide shell
-   (AppChrome) is not reused here on purpose: these pages have no destinations to navigate. */
-import "../styles/utility-bar.css";
+/* The top strip of every page that is not the Atlas or a guide: intake, progress, triage,
+   change request, about, health, 404. It is the SAME shell strip the guides wear (chrome.css
+   .chrome/.topbar — design-system.md §6): the quiet orientation anchor names the product and
+   the page, the way back to the Atlas is the anchor itself, the theme control is the same
+   pill. No rail and no bottom bar here on purpose: these pages have no destinations. */
+import "../styles/chrome.css";
 interface Props {
   base: string;
   /** id of the theme button — pages that already wire one keep their id. */
   toggleId?: string;
-  /** measure of the page's own column, so the strip lines up with the content below it. */
+  /** what this page is, for the orientation anchor ("New guide", "Progress"). */
+  page?: string | null;
+  /** kept for call sites that still pass it; the strip is full-width like the guide's. */
   maxWidth?: string;
 }
-const { base, toggleId = "btnDark", maxWidth = "74rem" } = Astro.props;
+const { base, toggleId = "btnDark", page = null } = Astro.props;
 ---
-<header class="ubar" style={`--ubar-max:${maxWidth}`}>
-  <a class="ubar-home" href={`${base}/`}>
-    <svg class="ubar-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-    <span class="ubar-wordmark">Waypoint</span>
-    <span class="ubar-atlas">Atlas</span>
-  </a>
-  <div class="ubar-right">
-    <slot />
-    <button type="button" class="ubar-btn" id={toggleId} aria-label="Switch to dark mode" title="Switch to dark mode"></button>
-  </div>
-</header>
+<div class="chrome chrome--plain">
+  <nav class="topbar" aria-label="Waypoint">
+    <a class="orient orient-link" href={`${base}/`} aria-label="Back to the Atlas">
+      <span class="orient-dot" aria-hidden="true"></span>
+      <span class="orient-title">Waypoint</span>
+      {page && <span class="orient-sep" aria-hidden="true">·</span>}
+      {page && <span class="orient-dest">{page}</span>}
+    </a>
+    <div class="topbar-right">
+      <slot />
+      <button type="button" class="topbar-btn" id={toggleId} aria-label="Switch to dark mode" title="Switch to dark mode"></button>
+    </div>
+  </nav>
+</div>

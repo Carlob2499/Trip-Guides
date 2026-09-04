@@ -14,7 +14,7 @@
 /* --- Overview: chapter cards, image-forward where the chapter carries photos ----------- */
 .gd-overview{padding-top:1.4rem}
 .gd-cards{display:grid;grid-template-columns:1fr;gap:.6rem}
-.gd-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.9rem;width:100%;min-height:80px;padding:.6rem .9rem .6rem .6rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color .16s,transform .2s var(--ease-spring)}
+.gd-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.9rem;width:100%;min-height:80px;padding:.6rem .9rem .6rem .6rem;background:var(--card);border:1px solid var(--rule);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color var(--dur-routine),transform var(--dur-routine) var(--ease-spring)}
 .gd-card:hover{border-color:var(--accent);transform:translateY(-1px)}
 .gd-card:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .gd-card-media{display:block;width:96px;height:72px;overflow:hidden;background:var(--sunken)}
@@ -117,3 +117,20 @@
 }
 @media(prefers-reduced-motion:reduce){.gd-card,.gd-back{transition:none}.gd-card:hover{transform:none}}
 @media print{.gd-index,.gd-back,.gd-overview{display:none}.gd-chapter{display:block!important}}
+/* Geometry (§31). */
+.gd-card{border-radius:var(--r-card)}
+.gd-card-media,.gd-card-glyph{border-radius:var(--r-inset)}
+/* Card-based exploration (§23): the overview is not an equal grid — the opening chapter is the
+   editorial feature card (image-led, wider, taller), the rest follow as tiles. */
+@media(min-width:600px){
+  .gd-card--feature{grid-column:1/-1;border-radius:var(--r-pane);box-shadow:var(--shadow-lift)}
+  .gd-card--feature .gd-card-media{height:260px;border-radius:var(--r-pane) var(--r-pane) 0 0}
+  .gd-card--feature .gd-card-name{font-size:var(--text-h3)}
+  .gd-card--feature .gd-card-text{padding-left:1.2rem}
+}
+@media(min-width:1180px){
+  .gd-card--feature{grid-column:span 2}
+  .gd-card--feature .gd-card-media{height:300px}
+}
+.gd-card--photo .gd-card-media{border-radius:var(--r-card) var(--r-card) 0 0}
+@media(max-width:599px){.gd-card--photo .gd-card-media{border-radius:var(--r-inset)}}

@@ -17,7 +17,10 @@ describe("design drift", () => {
     // Floor lowered 700→600 on 2026-08-14: the panel/progress-preview design-study
     // stylesheets (and their exemption class) were deleted in the cleanup, taking
     // ~100 always-exempt hits with them. Still far above an empty-run score.
-    expect(real.length + exempt.length).toBeGreaterThan(600);
+    // Floor lowered 600→200 on 2026-09-04 (D7 Phase 1): the TYPE rule finally recognises the
+    // system's own var(--font-*) tokens, so ~500 always-exempt font-family hits stopped being
+    // hits at all. 296 remain; an empty run still scores 0.
+    expect(real.length + exempt.length).toBeGreaterThan(200);
     expect(Object.keys(baseline).length).toBeGreaterThan(0);
   });
 

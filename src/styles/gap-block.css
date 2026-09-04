@@ -6,7 +6,7 @@
 
 .gap-block {
   border: 2px solid var(--ochre);
-  border-radius: 0;
+  border-radius:var(--r-card);
   padding: 1rem 1.2rem 1.1rem;
   background: var(--card);
 }
@@ -48,7 +48,7 @@
   letter-spacing: .04em;
   color: var(--ink);
   border: 1px solid var(--ink);
-  border-radius: 0;
+  border-radius: var(--r-pill);
 }
 .gap-instead-label {
   text-transform: uppercase;

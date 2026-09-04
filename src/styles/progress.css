@@ -56,8 +56,8 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1.1rem;align-items:start}
 .pg-col{display:flex;flex-direction:column;gap:1.1rem;min-width:0}
 
-.pg-card{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:1.1rem 1.2rem;min-width:0}
-.pg-diagnostics{border:1px solid var(--rule);border-radius:0;background:var(--card)}
+.pg-card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1.1rem 1.2rem;min-width:0}
+.pg-diagnostics{border:1px solid var(--rule);border-radius:var(--r-card);background:var(--card)}
 .pg-diagnostics>summary{
   min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:.8rem;
   padding:.8rem 1.2rem;cursor:pointer;list-style:none;font-family:var(--font-data);
@@ -176,7 +176,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 
 /* ── Correction ────────────────────────────────────────────────────────────── */
 .pg-correction-form{display:flex;gap:.5rem;flex-wrap:wrap}
-.pg-correction-form input{flex:1;min-width:10rem;min-height:44px;padding:.6rem .8rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.pg-correction-form input{flex:1;min-width:10rem;min-height:44px;padding:.6rem .8rem;border-radius:var(--r-inset);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
 .pg-correction-form code{font-family:var(--font-data);background:var(--sunken);padding:0 .25rem}
 
 /* ── The owner-key affordance — the quietest thing here: maintenance furniture. ── */
@@ -187,14 +187,14 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-key-form{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.7rem}
 .pg-key-form[hidden]{display:none}
 .pg-key-label{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
-.pg-key-form input{flex:1;min-width:12rem;min-height:44px;padding:.55rem .75rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.pg-key-form input{flex:1;min-width:12rem;min-height:44px;padding:.55rem .75rem;border-radius:var(--r-inset);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
 .pg-key-form button{min-height:44px;padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
 .pg-key-form button:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .pg-key-form button[hidden]{display:none}
 .pg-key-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.6rem 0 0;line-height:1.45}
 
 /* ── The note panel ────────────────────────────────────────────────────────── */
-.pg-note{margin-top:1.1rem;background:color-mix(in srgb,var(--pg-tone,var(--rule)) 5%,var(--card));border:1px solid var(--pg-tone,var(--rule));border-radius:0;padding:1.1rem 1.2rem}
+.pg-note{margin-top:1.1rem;background:color-mix(in srgb,var(--pg-tone,var(--rule)) 5%,var(--card));border:1px solid var(--pg-tone,var(--rule));border-radius:var(--r-card);padding:1.1rem 1.2rem}
 .pg-note-head{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--pg-tone,var(--ink));margin:0 0 .5rem}
 .pg-note-placeholder{font-size:var(--text-small);color:var(--muted);line-height:1.5;margin:0;max-width:64ch}
 .pg-note-placeholder[hidden]{display:none}
@@ -207,7 +207,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-note[data-tone="warn"]{border-width:2px}
 
 /* ── Question cards ────────────────────────────────────────────────────────── */
-.pg-q-card{background:var(--card);border:1px solid var(--rule);border-radius:0;padding:.9rem 1rem;margin-bottom:.6rem}
+.pg-q-card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:.9rem 1rem;margin-bottom:.6rem}
 .pg-q-card.is-blocking{border-left:3px solid var(--ochre)}
 .pg-q-badge{font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.06em;text-transform:uppercase;color:var(--ochre);margin:0 0 .35rem}
 .pg-q-text{font-family:var(--font-display);font-weight:560;font-size:var(--text-body);margin:0 0 .4rem;line-height:1.4}
@@ -215,7 +215,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-q-assumed-label{font-weight:600;color:var(--ink)}
 .pg-q-context{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0}
 .pg-q-answer{margin-top:.6rem}
-.pg-q-input{width:100%;min-height:44px;padding:.55rem .75rem;border-radius:0;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
+.pg-q-input{width:100%;min-height:44px;padding:.55rem .75rem;border-radius:var(--r-inset);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
 .pg-q-options{display:flex;flex-wrap:wrap;gap:.4rem}
 .pg-q-opt{min-height:44px;padding:.45rem .95rem;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-display);font-weight:560;font-size:var(--text-small);cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
 .pg-q-opt:hover{border-color:var(--ink)}
@@ -240,7 +240,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
      space back at the end of the document. The shadow is the overlay treatment the approved
      prototype specifies for exactly this class of element (CLAUDE.md's known
      check-drift false positive #2) — a floating panel needs a real edge against moving content. */
-  .pg-note{position:sticky;bottom:0;margin-left:-1.2rem;margin-right:-1.2rem;padding-bottom:calc(1.1rem + var(--safe-bottom));box-shadow:0 -10px 28px color-mix(in srgb,var(--ink) 14%,transparent)}
+  .pg-note{position:sticky;bottom:0;margin-left:-1.2rem;margin-right:-1.2rem;padding-bottom:calc(1.1rem + var(--safe-bottom));box-shadow:var(--shadow-float)}
   .pg-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @container pg (min-width: 1000px){

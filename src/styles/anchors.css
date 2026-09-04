@@ -10,7 +10,7 @@
      reader's device state, counted client-side by scripts/anchors.js).
 
    Motion (docs/reference/motion.md): ONE draw-in per figure on first view (~600 ms), then
-   stillness. The safety rail is reveal.js's: figures render COMPLETE by default;
+   stillness. The safety rail: figures render COMPLETE by default;
    scripts/anchors.js adds .anch-pending only when motion is welcome, and the
    .anch-in transition finishes the frame. Reduced-motion never sees a pending
    state at all. */
@@ -65,7 +65,7 @@
 .anch-ring{display:flex;align-items:center;gap:.9rem;margin:.2rem 0 .9rem}
 .anch-ring svg{width:64px;height:64px;flex:none;transform:rotate(-90deg)}
 .anch-ring .ring-bg{fill:none;stroke:var(--rule2);stroke-width:7}
-.anch-ring .ring-fill{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;stroke-dasharray:213.6;stroke-dashoffset:calc(213.6 * (1 - var(--ring-frac,0)));transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
+.anch-ring .ring-fill{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;stroke-dasharray:213.6;stroke-dashoffset:calc(213.6 * (1 - var(--ring-frac,0)));transition:stroke-dashoffset var(--dur-scene) cubic-bezier(.2,.7,.2,1)}
 .anch-ring .ring-txt b{display:block;font-family:var(--font-data);font-weight:700;font-size:var(--text-lead);color:var(--ink);font-variant-numeric:tabular-nums}
 .anch-ring .ring-txt b span{color:var(--muted);font-weight:600;font-size:var(--text-small)}
 .anch-ring .ring-txt i{font-family:var(--font-data);font-style:normal;font-size:var(--text-nano);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -75,9 +75,9 @@
 .anch-pending .jl-track{transform:scaleX(0)}
 .anch-pending .jl-dot{opacity:0;transform:scale(.4)}
 .anch-pending .jl-word,.anch-pending .jl-date,.anch-pending .jl-label{opacity:0}
-.anch-in .jl-track{transition:transform .55s cubic-bezier(.2,.7,.2,1)}
-.anch-in .jl-dot{transition:opacity .3s ease,transform .3s cubic-bezier(.2,.7,.2,1);transition-delay:.3s}
-.anch-in .jl-word,.anch-in .jl-date,.anch-in .jl-label{transition:opacity .35s ease .45s}
+.anch-in .jl-track{transition:transform var(--dur-scene) cubic-bezier(.2,.7,.2,1)}
+.anch-in .jl-dot{transition:opacity var(--dur-object) ease,transform var(--dur-object) cubic-bezier(.2,.7,.2,1);transition-delay:.3s}
+.anch-in .jl-word,.anch-in .jl-date,.anch-in .jl-label{transition:opacity var(--dur-object) ease var(--dur-scene)}
 
 /* ── Phones: the journey line stops fighting the viewport ──────────────────
    `min-width:min(100%,520px)` plus a 56px floor per stop meant an 8-day timeline was

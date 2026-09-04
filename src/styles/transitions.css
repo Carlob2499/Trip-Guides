@@ -31,3 +31,39 @@
     animation: none !important;
   }
 }
+
+/* ── Destination arrival (design-system.md §12; motion.md §1) ──────────────────
+   scripts/arrival.js stamps <body data-arrival="first|repeat|none"> once per page load and
+   <section data-scene="in"> on each destination switch. Transforms and opacity only; every
+   element is interactive from the first frame; fill-mode backwards holds the from-state
+   during a delay and nothing is hidden once the stamp is gone. */
+@keyframes wp-arrive-media{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}
+@keyframes wp-arrive-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes wp-assemble-left{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+@keyframes wp-assemble-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes wp-assemble-down{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes wp-scene{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* First entry: media (0–520ms) → identity (200–760ms) → interface assembly (480–1000ms). */
+/* The media's CHILDREN scale, inside their overflow-hidden frame: the frame stays the size of
+   the viewport at every instant, so nothing escapes horizontally mid-choreography (320px floor). */
+body[data-arrival="first"] .dest:not([hidden]) .trip-hero-media > *,
+body[data-arrival="first"] .dest:not([hidden]) .mast-frame > *{animation:wp-arrive-media var(--dur-scene) var(--ease-standard) both}
+body[data-arrival="first"] .dest:not([hidden]) .trip-hero-text,
+body[data-arrival="first"] .dest:not([hidden]) .mast-inner,
+body[data-arrival="first"] .dest:not([hidden]) .itin-head,
+body[data-arrival="first"] .dest:not([hidden]) .mapdest-selected{animation:wp-arrive-rise var(--dur-scene) var(--ease-standard) 200ms both}
+body[data-arrival="first"] .rail{animation:wp-assemble-left var(--dur-object) var(--ease-standard) 480ms both}
+body[data-arrival="first"] .chrome{animation:wp-assemble-down var(--dur-object) var(--ease-standard) 520ms both}
+body[data-arrival="first"] .botbar{animation:wp-assemble-up var(--dur-object) var(--ease-standard) 560ms both}
+body[data-arrival="first"] .dest:not([hidden]) > :not(.trip-hero):not(.gd-hero):not(.itin-head){animation:wp-arrive-rise var(--dur-object) var(--ease-standard) 640ms both}
+
+/* Repeat entry: one lift, the identity kept, half the time (§12 "shorter cinematic reveal"). */
+body[data-arrival="repeat"] .dest:not([hidden]){animation:wp-scene var(--dur-scene) var(--ease-standard) both}
+
+/* Every destination switch: the routine scene lift on the incoming region. */
+.dest[data-scene="in"]{animation:wp-scene var(--dur-object) var(--ease-standard) both}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-arrival] *, .dest[data-scene]{animation:none !important}
+}

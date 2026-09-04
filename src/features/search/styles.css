@@ -32,3 +32,37 @@ body.srch-lock{overflow:hidden}
 .srch-row-act{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;color:var(--accent-ink);white-space:nowrap}
 .srch-empty{margin:1.4rem max(.9rem,var(--safe-right));color:var(--muted)}
 @media print{.srch{display:none}}
+/* Context line and category drawers (§21). */
+.srch-bar,.srch-ctx,.srch-drawers,.srch-status{flex:none}
+.srch-ctx{margin:0;padding:.4rem max(.9rem,var(--safe-right)) 0 max(.9rem,var(--safe-left));font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srch-drawers{display:flex;gap:.35rem;padding:.5rem max(.9rem,var(--safe-right)) .2rem max(.9rem,var(--safe-left));overflow-x:auto;scrollbar-width:none}
+.srch-drawers::-webkit-scrollbar{display:none}
+.srch-drawers[hidden]{display:none}
+.srch-drawer{flex:none;display:inline-flex;align-items:center;gap:.35rem;min-height:36px;padding:0 .8rem;border:1px solid var(--rule2);border-radius:var(--r-pill);background:var(--card);color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;cursor:pointer}
+.srch-drawer[aria-pressed="true"]{background:var(--cta);border-color:var(--cta);color:var(--cta-ink)}
+.srch-drawer:disabled{opacity:.45;cursor:default}
+.srch-drawer:not(:disabled):hover{border-color:var(--ink);color:var(--ink)}
+.srch-drawer[aria-pressed="true"]:hover{color:var(--cta-ink)}
+.srch-drawer:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.srch-drawer-n{font-weight:600;opacity:.8}
+.srch-drawer-n:empty{display:none}
+/* Desktop: the fluid result/detail workspace — list beside the highlighted object. */
+.srch-body{display:flex;flex-direction:column;min-height:0;flex:1}
+.srch-detail{display:none}
+@media(min-width:900px){
+  .srch-panel{max-width:60rem}
+  .srch-body{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(16rem,1fr);align-items:stretch}
+  .srch-body .srch-list{min-height:0}
+  .srch-detail{display:block;position:sticky;top:0;align-self:start;margin:.6rem .9rem .9rem .3rem;padding:1rem 1.1rem;border:1px solid var(--rule);border-radius:var(--r-card);background:var(--card)}
+  .srch-detail[hidden]{display:none}
+  .srch-detail-k{margin:0 0 .3rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+  .srch-detail-title{margin:0 0 .4rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);line-height:1.12;overflow-wrap:anywhere}
+  .srch-detail-snip{margin:0 0 .8rem;font-size:var(--text-body);line-height:1.5;color:var(--ink)}
+  .srch-detail-go{min-height:44px;padding:0 1.1rem;border:1px solid var(--cta);border-radius:var(--r-pill);background:var(--cta);color:var(--cta-ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+  .srch-detail-go:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+}
+
+/* Geometry (§31): a sheet from the top edge on a phone, a floating pane on desktop. */
+.srch-panel{border-radius:0 0 var(--r-pane) var(--r-pane)}
+@media(min-width:900px){.srch-panel{border-radius:var(--r-pane);box-shadow:var(--shadow-float)}}
+.srch-input{border-radius:var(--r-inset)}

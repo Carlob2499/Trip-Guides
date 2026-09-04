@@ -15,19 +15,17 @@
   width: 1em; height: 1em; border-radius: 999px; cursor: pointer; padding: 0;
   background: transparent; color: var(--muted); border: 1px solid var(--rule2);
   font-size: var(--text-micro); vertical-align: middle; margin-inline-start: 0.25em;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color var(--dur-routine) ease, border-color var(--dur-routine) ease;
 }
 .prov-dot:hover, .prov-dot:focus-visible { color: var(--accent-ink); border-color: var(--accent); }
 .prov-dot:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 
-/* D13/Stage A.6: square (radius 0), oxide 1px border — matches the design-handoff
-   prototype's popover exactly (border:1px solid #9c4421, no border-radius declared).
-   The border-radius:0 is explicit, not just an omission, since --r-md was here before. */
+/* Compact popover on the compact-card radius (design-system.md §31), oxide 1px border. */
 .prov-popover {
   display: none; position: absolute; z-index: 100;
   background: var(--card); border: 1px solid var(--accent);
-  border-radius: 0; padding: 0.75em 1em; min-width: 200px; max-width: 300px;
-  box-shadow: 0 4px 16px rgba(var(--shadow-rgb),0.12); font-size: var(--text-control); line-height: 1.4;
+  border-radius:var(--r-compact); padding: 0.75em 1em; min-width: 200px; max-width: 300px;
+  box-shadow: var(--shadow-lift); font-size: var(--text-control); line-height: 1.4;
   color: var(--ink);
 }
 .prov-popover[data-open] { display: block; }
@@ -43,7 +41,7 @@
   display: inline-block; margin: 0 0 0.3em;
   font-family: var(--font-data); font-size: var(--text-control); font-weight: 640;
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
-  border: 1px solid currentColor; border-radius: 0; padding: 0.15rem 0.5rem;
+  border: 1px solid currentColor; border-radius:var(--r-inset); padding: 0.15rem 0.5rem;
 }
 .prov-popover dd { margin: 0 0 0.5em; }
 .prov-popover dd:last-child { margin-block-end: 0; }
@@ -102,7 +100,7 @@
   gap: .35rem;
   border: 1px solid currentColor; border-radius: 999px;
   cursor: pointer; text-decoration: none; vertical-align: middle;
-  transition: background .15s ease;
+  transition: background var(--dur-routine) ease;
 }
 .flag-chip::before { content: ""; position: absolute; inset: -6px 0; }
 .flag-chip:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
@@ -139,7 +137,7 @@
    tinted ground would need its own re-derived ink; full strength needs neither. */
 .cal-badge {
   display: inline-block; font-size: var(--text-micro); font-weight: 600;
-  padding: 0.1em 0.4em; border-radius: 0; vertical-align: middle;
+  padding: 0.1em 0.4em; border-radius: var(--r-inset); vertical-align: middle;
   margin-inline-start: 0.3em;
   background: var(--accent); color: var(--on-accent);
 }

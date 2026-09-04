@@ -2,8 +2,8 @@
 /* Map — "what is where?" (design-system.md D6-36, D6-51, FINAL_DECISIONS F7).
 
    One real map owning nearly the whole viewport on a phone, a large map with a contextual
-   inspector beside it on desktop. Google Maps when configured and online; the OpenStreetMap
-   embed is the map until Google has actually initialised, and stays if it never does. Every
+   inspector beside it on desktop. Google Maps Platform is the live map (§15); the OpenStreetMap
+   embed is the honest fallback — the map when no key is configured, woken if Google fails. Every
    pin is a canonical place the guide already carries coordinates for — sights, venues, the
    orientation map's own points and each day's stops — nothing is added to fill space.
 
@@ -22,6 +22,11 @@ interface Props {
   dayDates: string[];
 }
 const { center, span, pins, country, dayDates } = Astro.props;
+/* Google Maps Platform is the live map when the site is built with PUBLIC_GMAPS_KEY
+   (design-system.md §15); the OpenStreetMap embed then stays dormant on data-fallback-src and
+   is activated by gmaps-render.js only if Google fails. Without a key it is the map. */
+const googlePrimary = Boolean(import.meta.env.PUBLIC_GMAPS_KEY);
+const frameSrcAttr = googlePrimary ? "data-fallback-src" : "data-src";
 const bbox = (c: { lat: number; lng: number }, s: number | null) => {
   const sp = s || 0.05;
   return [c.lng - sp, c.lat - sp * 0.6, c.lng + sp, c.lat + sp * 0.6].join("%2C");
@@ -39,10 +44,11 @@ const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shop
 <div class="mapdest" data-mapdest>
   {center ? (
     <div class="mapdest-bench">
-      <div class="mapdest-map itin-map" data-itin-map data-map-lens="all">
+      <div class="mapdest-map itin-map" data-itin-map data-map-lens="all" data-map-primary={googlePrimary ? "google" : "osm"}>
         <script type="application/json" is:inline data-map-data set:html={payload} />
         <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of every place in this guide"
-          data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center, span)}&layer=mapnik&marker=${center.lat}%2C${center.lng}`}></iframe>
+          {...{ [frameSrcAttr]: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center, span)}&layer=mapnik&marker=${center.lat}%2C${center.lng}` }}></iframe>
+        <p class="map-loading" data-map-loading aria-live="polite">Loading the map…</p>
         <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the written places below still work.</p>
       </div>
       {/* Mobile: a contextual bottom sheet with the selected place; collapsed it is a handle

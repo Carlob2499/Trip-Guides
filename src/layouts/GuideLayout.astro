@@ -17,6 +17,7 @@ import { jsonEmbed } from "../lib/json-embed";
 import { FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
+import { destinationTheme, destinationThemeStyle } from "../lib/destination-theme";
 import { deriveGuideView } from "../lib/guide-view";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/literata/standard.css";
@@ -71,12 +72,14 @@ const tokens = accentTokens(accent, extracted?.accent);
 const themePrimary = guide.theme?.primary ?? extracted?.primary ?? accent;
 const themeSecondary = guide.theme?.secondary ?? extracted?.secondary ?? accent;
 const themeAccent = guide.theme?.accent ?? extracted?.accent ?? accent;
+// The destination composer's theme step (§11, §13): dark atmosphere from the accent, nothing invented.
+const atmosphere = destinationThemeStyle(destinationTheme(guideSlug, accent));
 
 /* ── Everything the destinations need, derived once (src/lib/guide-view.ts) ───────────── */
 const v = deriveGuideView(guide, guideSlug, base, holidayData);
 ---
 <!doctype html>
-<html lang="en" data-country={guide.country} style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent })}>
+<html lang="en" data-country={guide.country} style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent, ...atmosphere })}>
   <head>
     <meta charset="utf-8" />
     {/* viewport-fit=cover is REQUIRED for env(safe-area-inset-*) to report anything but 0. */}
@@ -211,7 +214,6 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       import "../features/itinerary/index.js";
       import "../features/trip/index";
       import "../features/mobile-nav/index.js";
-      import "../scripts/reveal.js";
       import "../scripts/micro.js";
       import "../scripts/provenance-dot.js";
       import "../scripts/scroll-memory.js";
@@ -222,8 +224,7 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       import "../features/sos/index.js";
       import "../features/search/index";
       import "../scripts/lightbox.js";
-      import "../scripts/hero-parallax.js";
-      import "../scripts/gsap-hero.js";
+      import "../scripts/arrival.js";
       import "../scripts/living-cover.js";
       import "../scripts/anchors.js";
       import "../scripts/hint.js";

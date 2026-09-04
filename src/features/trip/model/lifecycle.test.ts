@@ -1,10 +1,26 @@
 // @protects-file Trip says "now" only when the clock actually puts the traveler inside the trip.
 
 import { describe, it, expect } from "vitest";
-import { tripPhase, todayIndex, parseStartMinutes, focusFor, daysToGo, type TripStop } from "./lifecycle";
+import { tripPhase, todayIndex, parseStartMinutes, focusFor, daysToGo, minutesUntil, untilLabel, type TripStop } from "./lifecycle";
 
 const stop = (name: string, time: string | null = null, branch: string | null = null): TripStop =>
-  ({ name, time, note: null, lat: null, lng: null, branch });
+  ({ name, time, note: null, lat: null, lng: null, branch, leaveBy: null });
+
+describe("minutesUntil / untilLabel", () => {
+  it("counts down only to a real clock time that is still ahead", () => {
+    expect(minutesUntil("~14:00", 12 * 60 + 40)).toBe(80);
+    expect(minutesUntil("14:00", 14 * 60)).toBe(0);
+    expect(minutesUntil("14:00", 15 * 60)).toBeNull();
+    expect(minutesUntil("morning", 9 * 60)).toBeNull();
+    expect(minutesUntil("14:00", null)).toBeNull();
+  });
+  it("labels exactly under twenty minutes and coarsely beyond", () => {
+    expect(untilLabel(0)).toBe("now");
+    expect(untilLabel(12)).toBe("in 12 min");
+    expect(untilLabel(83)).toBe("in 1 h 25 min");
+    expect(untilLabel(120)).toBe("in 2 h");
+  });
+});
 
 describe("tripPhase", () => {
   it("is undated for relative day labels — no present moment is invented", () => {

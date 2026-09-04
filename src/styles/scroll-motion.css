@@ -1,9 +1,8 @@
 /* Pervasive scroll motion — content rises into view as you scroll, using NATIVE CSS
    scroll-driven animations (`animation-timeline: view()`): off the main thread, no JS,
-   silky on mobile. This is progressive enhancement — `reveal.js` provides the
-   IntersectionObserver fallback on browsers without `animation-timeline` (it bails when
-   this is supported, so the two never both run). Fully disabled under reduced-motion.
-   docs/reference/motion.md (V3b). */
+   silky on mobile. Progressive enhancement with no JS fallback: a browser without
+   `animation-timeline` shows the content already in place (motion.md — never a JS scroll
+   loop where native behaviour works). Fully disabled under reduced-motion. */
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {

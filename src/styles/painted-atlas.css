@@ -62,18 +62,8 @@
    card's own .hubcard-cover-grad owns that job there). */
 .pa-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(var(--shadow-rgb),.86) 0%,rgba(var(--shadow-rgb),.42) 48%,rgba(var(--shadow-rgb),.10) 100%)}
 
-/* The heartbeat: terrain layers drift at three speeds, mist crosses slower than
-   any of them. Transform/opacity only (compositor-friendly); the ±9px travel is
-   covered by the ridges' ±6% viewBox overshoot (src/lib/terrain.ts). */
-@media(prefers-reduced-motion:no-preference){
-  .pa-terrain [data-pa-layer="0"]{animation:paDrift 46s ease-in-out infinite alternate}
-  .pa-terrain [data-pa-layer="1"]{animation:paDrift 34s ease-in-out infinite alternate-reverse}
-  .pa-terrain [data-pa-layer="2"]{animation:paDrift 26s ease-in-out infinite alternate}
-  .pa-mist{animation:paMist 22s ease-in-out infinite alternate}
-}
-@keyframes paDrift{from{transform:translateX(-9px)}to{transform:translateX(9px)}}
-@keyframes paMist{from{transform:translateX(-6%);opacity:.75}to{transform:translateX(6%);opacity:1}}
-
+/* No idle drift: the scene is a still painting. Living identity is the arrival choreography
+   (scripts/arrival.js), never a decorative loop (design-system.md §12, §33; motion.md). */
 /* Hub-card mini: same scene at card scale. Positioned (z:0) so it paints above
    the card background but below the DOM-later grad + the (position:relative)
    initial letter. */
