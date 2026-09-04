@@ -44,8 +44,10 @@ The product has exactly two lifecycles:
 | `docs/reference/` | Current technical/operational truth | Completed plans or review history |
 | `docs/reference/design-system.md` | **Sole human-readable design authority** | Historical design material or shipped legacy behavior |
 | `docs/reference/component-registry.json` | Machine-facing current component/feature inventory used by tests | A second design authority |
+| `docs/reference/integrations.md` | Every config-gated external service: where its key lives, what it upgrades, how it degrades | Secret values |
+| `docs/mockups/` | The locked visual-lineage contract and the final mockup package it binds (`final-package/`) | A design authority — the constitution overrides a board only on an actual conflict |
 
-Old design handoffs, prototypes, screenshots, motion dossiers and design-research packets are intentionally absent from the live tree. Git history is their archive.
+Old design handoffs, prototypes, motion dossiers and superseded design-research packets are intentionally absent from the live tree; the one visual reference that stays is the approved mockup package under `docs/mockups/`. Git history is the archive for everything else.
 
 ## Product center
 

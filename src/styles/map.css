@@ -66,7 +66,7 @@
 /* === THE MAP DESTINATION ====================================================
    design-system.md §9. The map owns nearly the viewport on a phone with a contextual bottom
    sheet; a large map with an inspector column beside it on desktop. Same DOM. */
-.mapdest{position:relative}
+.mapdest{position:relative;background:var(--bg);min-height:calc(100dvh - var(--hdr-h))}
 .mapdest-none{display:flex;gap:.5rem;align-items:flex-start;padding:1.2rem max(1.1rem,var(--safe-right));color:var(--muted)}
 .mapdest-bench{position:relative}
 .mapdest-map{height:calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom));min-height:360px;margin:0;border:0;border-bottom:1px solid var(--rule2)}
@@ -117,6 +117,11 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 .mapdest-row--sel{background:var(--card)}
 .mapdest-row-btn{display:flex;flex-direction:column;gap:.1rem;width:100%;min-height:56px;padding:.6rem max(1.1rem,var(--safe-right)) .5rem max(1.1rem,var(--safe-left));background:transparent;border:0;color:var(--ink);text-align:left;cursor:pointer;font:inherit}
 .mapdest-row-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
+/* The place's own photograph leads its row (lineage). */
+.mapdest-row--photo .mapdest-row-btn{flex-direction:row;align-items:center;gap:.8rem}
+.mapdest-row-thumb{flex:none;width:64px;height:48px;overflow:hidden;border-radius:var(--r-inset);background:var(--sunken)}
+.mapdest-row-thumb img{display:block;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
+.mapdest-row-text{display:flex;flex-direction:column;gap:.1rem;min-width:0}
 .mapdest-row-btn[aria-current="true"] .mapdest-row-name{color:var(--accent-ink)}
 .mapdest-row-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);line-height:1.2;overflow-wrap:anywhere}
 .mapdest-row-meta{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}

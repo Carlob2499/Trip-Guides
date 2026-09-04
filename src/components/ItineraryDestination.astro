@@ -64,7 +64,7 @@ const bbox = (c: { lat: number; lng: number }, s: number | null) => {
         <DaysBlock sec={daysSection} keyPrefix={keyPrefix} learnings={learnings} country={country} modulesByDate={modulesByDate} imageFor={imageFor} />
       </section>
       <div class="itin-divider" role="separator" aria-orientation="vertical" aria-label="Resize timeline and map" tabindex="0" data-pane-divider aria-valuemin="30" aria-valuemax="70" aria-valuenow="50"></div>
-      <section class="itin-pane itin-mappane" data-pane="map" aria-label="Map of the selected day">
+      <section class="itin-pane itin-mappane spatial" data-pane="map" aria-label="Map of the selected day">
         <div class="itin-mappane-head">
           <span class="itin-mappane-title" data-itin-map-title>{short(days[0].date)} on the map</span>
           <span class="itin-mappane-note">Tap a stop to focus it · live routing hands off to the map app</span>

@@ -11,7 +11,8 @@
        degraded rather than emptied.
      · every mount declares a LENS in its data: "all" (the Map destination — every pin,
        category chips, day chips), "days" (the Itinerary workbench — the selected day's stops
-       and their route, following `tg:day`), "chapter" (a Guide chapter's own places).
+       and their route, following `tg:day`), "today" (the Trip cockpit — today's stops, following
+       `tg:trip-day`), "chapter" (a Guide chapter's own places).
      · selection is a shared state: clicking a pin dispatches `tg:map-select`; a row in the
        inspector focuses the pin through `focusPin`. Live routing is the map app's — every
        pin hands off with a Directions URL built from its verified coordinates. */
@@ -75,7 +76,7 @@ export function boot(cfg) {
     function visible() {
       return all.filter(function (p) {
         if (p.kind === "center") return false;
-        if (lens === "days") return p.dayIdx === dayFilter;
+        if (lens === "days" || lens === "today") return p.dayIdx === dayFilter;
         if (dayFilter != null && p.dayIdx != null) return p.dayIdx === dayFilter;
         if (dayFilter != null && p.dayIdx == null) return false;
         return !p.cat || !off[p.cat];
@@ -164,6 +165,15 @@ export function boot(cfg) {
       off[cat] = !on; dayFilter = null; draw();
     }, function (dayIdx) { dayFilter = dayIdx; draw(); fitTo(visible()); });
 
+    if (lens === "today") {
+      dayFilter = parseInt(mount.getAttribute("data-map-day") || "0", 10) || 0;
+      document.addEventListener("tg:trip-day", function (e) {
+        dayFilter = e.detail.index;
+        if (!ready) return;
+        draw();
+        fitTo(visible());
+      });
+    }
     if (lens === "days") {
       var selectedDay = document.querySelector("[data-planner-days] .day[data-day]:not([hidden])");
       dayFilter = selectedDay ? parseInt(selectedDay.getAttribute("data-day"), 10) : 0;

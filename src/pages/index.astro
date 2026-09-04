@@ -299,7 +299,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
     {/* One main landmark holds BOTH views: the globe is the page's main content in World view
         and the table in Table view, and whichever is hidden must not take the landmark with it. */}
     <main class="atlas-main" id="content">
-    <section class="atlas-globe-wrap rail-offset" aria-label="World view — the guide map">
+    <section class="atlas-globe-wrap rail-offset spatial" aria-label="World view — the guide map">
       <div id="atlasGlobe" data-atlas-globe>
         <div data-atlas-map-slot></div>
         <div class="atlas-pins" data-atlas-pins></div>

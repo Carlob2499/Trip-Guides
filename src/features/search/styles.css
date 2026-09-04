@@ -25,6 +25,11 @@ body.srch-lock{overflow:hidden}
 .srch-row:hover,.srch-row--sel{background:var(--card)}
 .srch-row:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
 .srch-row-main{display:flex;flex-direction:column;gap:.15rem;min-width:0;flex:1}
+/* The place's own photograph leads its row (lineage: photographic hierarchy, never filler). */
+.srch-thumb{flex:none;width:64px;height:48px;overflow:hidden;border-radius:var(--r-inset);background:var(--sunken)}
+.srch-thumb img{display:block;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
+.srch-detail-photo{display:block;width:100%;aspect-ratio:16/10;overflow:hidden;border-radius:var(--r-compact);background:var(--sunken);margin:0 0 .7rem}
+.srch-detail-photo img{display:block;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
 .srch-row-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);line-height:1.2;overflow-wrap:anywhere}
 .srch-row-snip{font-family:var(--font-data);font-size:var(--text-small);color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .srch-row-side{display:flex;flex-direction:column;align-items:flex-end;gap:.2rem;flex:none;max-width:40%}

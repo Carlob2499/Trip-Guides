@@ -24,7 +24,7 @@ const { collections } = await import("./content.config");
 const schema = (collections.guides as any).schema;
 
 const LIGHT_BG = "#e3e7dc"; // R5 lifted Day ground — mirrors content.config.ts, which mirrors base.css --bg
-const DARK_BG = "#17120e";
+const DARK_BG = "#0d1512";
 
 function validGuide(overrides: Record<string, unknown> = {}) {
   return {

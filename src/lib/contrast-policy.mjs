@@ -19,9 +19,9 @@ export const LIGHT_BG = "#e3e7dc";
 // Dark page background (base.css dark-mode `--bg`). The accent is NOT re-mapped in dark mode, so
 // an accent must stay legible on BOTH grounds — a light-only gate shipped a 2.33:1 dark-mode bug
 // in WayPoint-V2; gate both, always.
-// D5 warm-charcoal remap: #0f1317 → #17120e at EQUAL relative luminance (0.0063 vs 0.0065), so
+// D5 warm-charcoal remap: #0f1317 → #0d1512 at EQUAL relative luminance (0.0063 vs 0.0065), so
 // every previously blessed palette measures the same ratio to two decimals against this ground.
-export const DARK_BG = "#17120e";
+export const DARK_BG = "#0d1512";
 
 // 3.0:1 is WCAG's minimum for large-text / UI-component contrast, and is the empirically-
 // calibrated floor of the project's own country accent palette (the tightest, #a6721b, sits at

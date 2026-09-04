@@ -46,7 +46,7 @@
 @media (min-width: 760px) { .atlas-toggle-word { display: inline; } }
 
 .atlas-globe-wrap { display: none; }
-:root[data-atlas-mode="world"] .atlas-globe-wrap { display: block; }
+:root[data-atlas-mode="world"] .atlas-globe-wrap { display: block; background: var(--bg); }
 :root[data-atlas-mode="world"] .atlas-table-wrap { display: none; }
 
 #atlasGlobe {

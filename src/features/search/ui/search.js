@@ -14,7 +14,15 @@
    choice to the object's own anchor through the page router. */
 
 import { rankSearch, MIN_CHARS } from "../model/rank";
-import { trapFocus } from "../../../scripts/util.js";
+import { trapFocus, reencodeUrl } from "../../../scripts/util.js";
+
+/* A record's photograph is a repository rendition path (or an http URL for another guide's
+   record); anything else is dropped rather than painted. */
+function photoUrl(r) {
+  const raw = r && r.img ? String(r.img) : "";
+  if (!raw || !/^(https?:\/\/|\/)/i.test(raw)) return null;
+  return reencodeUrl(raw);
+}
 
 function el0(tag, cls, text) { const n = document.createElement(tag); n.className = cls; n.textContent = text; return n; }
 
@@ -126,6 +134,15 @@ export function initSearch(root) {
     const kind = other ? r.crumb : String(r.group || "").toUpperCase();
     const act = other ? "Open guide" : (Object.prototype.hasOwnProperty.call(ACTION, r.kind) ? ACTION[r.kind] : "Open");
     const wrap = doc.createElement("div");
+    const pic = photoUrl(r);
+    if (pic) {
+      const fig = el0("span", "srch-detail-photo", "");
+      const im = doc.createElement("img");
+      im.src = pic; im.alt = ""; im.loading = "lazy"; im.decoding = "async";
+      im.addEventListener("error", () => fig.remove());
+      fig.appendChild(im);
+      wrap.appendChild(fig);
+    }
     wrap.appendChild(el0("p", "srch-detail-k", kind));
     wrap.appendChild(el0("h3", "srch-detail-title", r.title));
     if (r.snippet) wrap.appendChild(el0("p", "srch-detail-snip", r.snippet));
@@ -197,6 +214,15 @@ export function initSearch(root) {
         row.setAttribute("aria-selected", "false");
         row.setAttribute("data-srch-i", String(i));
         row.id = "srch-opt-" + i;
+        const pic = photoUrl(r);
+        if (pic) {
+          const th = el("span", "srch-thumb");
+          const im = doc.createElement("img");
+          im.src = pic; im.alt = ""; im.loading = "lazy"; im.decoding = "async";
+          im.addEventListener("error", () => th.remove());
+          th.appendChild(im);
+          row.appendChild(th);
+        }
         const main = el("span", "srch-row-main");
         main.appendChild(el("span", "srch-row-title", r.title));
         if (r.snippet) main.appendChild(el("span", "srch-row-snip", r.snippet));

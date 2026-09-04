@@ -8,7 +8,7 @@ import { contrastRatio, mix } from "./contrast";
 /* Every accent that actually ships, from src/data/palettes/*.json and the country defaults. */
 const SHIPPED = ["#a77e3e", "#646b2e", "#9b592b", "#9c4421", "#c7a269", "#73572b", "#63391b"];
 const LIGHT_SURFACES = ["#fbfcf6", "#ced5c4", "#e3e7dc"];
-const DARK_SURFACES = ["#322921", "#261f19", "#17120e"];
+const DARK_SURFACES = ["#1e2e28", "#16231e", "#0d1512"];
 
 /* Accent text is rarely painted on a FLAT surface — chips and pills tint their ground toward the
    accent, which is the one direction that eats contrast. Every surface below therefore appears

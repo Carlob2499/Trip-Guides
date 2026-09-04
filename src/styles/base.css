@@ -85,7 +85,7 @@
      important number in the product. Nothing caught it because the SOS sheet is `hidden`
      until it is opened and axe does not scan hidden nodes (the gate now opens it).
      Light value is unchanged so light mode does not shift; the dark value is measured,
-     not picked: #ef8a83 on --card #322921 = 5.85:1. */
+     not picked: #ef8a83 on --card #1e2e28 = 5.85:1. */
   --crit:#b3261e;
   /* The emergency FILL (the SOS button's hover state), with white on it. Deliberately does
      NOT re-map with the theme — same reasoning as --on-aink above: a fill is an object, not
@@ -107,7 +107,7 @@
      itself for every light-theme reader. Like --on-aink and --crit-fill above, these are
      deliberately NOT re-mapped per theme — a fixed ground is an object, not ink on the page.
      Measured against --dark-ground: ink 17.61:1, ink-2 14.86:1, ink-3 11.81:1, ink-4 10.20:1. */
-  --dark-ground:#0b0e12;
+  --dark-ground:#0a0f0d;
   --dark-ink:#f3f5ef;
   --dark-ink-2:#dfe3da;
   --dark-ink-3:#c7ccc0;
@@ -139,7 +139,7 @@
      decision, 2026-08-06). Both hexes are existing palette members, not new colours.
      Pinned by src/styles/atlas-tokens.test.ts: >=4.5:1 ink-on-ground AND >=3:1 ground-on-page
      (WCAG 1.4.11 — a button's own edge has to be findable), in both themes. */
-  --cta:#17120e;--cta-ink:#f8faf3;
+  --cta:#0d1512;--cta-ink:#f8faf3;
   /* Display-cutout insets, spelled once at the root so no component has to remember env() or
      its fallback. NOTHING consumes them in this phase — each fixed/sticky component wires
      max(<its own reserve>,var(--safe-*)) as it migrates. The 0px fallback is load-bearing, not
@@ -402,13 +402,15 @@
    var(<a token this block already re-maps>), resolved against this same element, so they follow
    the swap automatically. Re-declaring them would create the second source of truth the alias
    exists to prevent. --cta/--cta-ink are not aliases and DO invert — see :root. */
-/* D5 (design-system.md §1): the dark ground is WARM charcoal, never blue-gray. Every value
-   below is the old cool token re-hued warm at EQUAL relative luminance (±0.002), so every
-   measured/derived contrast ratio in the repo — accent-ink-dark derivation, the palette
-   extractor's DARK_BG ground, the pinned --crit reading — stays valid to two decimal places.
-   Change a value here and its luminance changes with it; re-run the contrast gates. */
+/* D7 lineage (docs/mockups/VISUAL_LINEAGE.md; design-system.md §1, §13): the dark ground is
+   DEEP FOREST — the mockup library's spatial register — never blue-gray and no longer the D5
+   warm charcoal. Every value below is the previous token re-hued to the forest family at EQUAL
+   relative luminance (±0.001), so every measured/derived contrast ratio in the repo —
+   accent-ink-dark derivation, the palette extractor's DARK_BG ground, the pinned --crit
+   reading — stays valid to two decimal places. Change a value here and its luminance changes
+   with it; re-run the contrast gates. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#17120e;--bg2:#261f19;--ink:#f1eae0;--card:#322921;--rule:#483e35;--rule2:#60554b;--muted:#a89f93;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#17120e;
+  --bg:#0d1512;--bg2:#16231e;--ink:#f1eae0;--card:#1e2e28;--rule:#2d443c;--rule2:#415d53;--muted:#91a59b;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0d1512;
   /* --rw/--photo are re-declared here at the SAME values on purpose (R5 TOKENS.md §1 lists both
      in both theme tables). Unlike the aliases above, these are theme KNOBS: the whole reason
      they are tokens is that a theme could thicken every hairline or suppress photography in one
@@ -416,14 +418,14 @@
      carry their own declaration. If one moves, move the other deliberately — they are two
      decisions that currently agree, not one value written twice. */
   --rw:1px;--photo:1;
-  --cta:#f1eae0;--cta-ink:#17120e;
+  --cta:#f1eae0;--cta-ink:#0d1512;
   --accent-ink:var(--accent-ink-dark)}
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
-[data-theme="dark"]{--bg:#17120e;--bg2:#261f19;--ink:#f1eae0;--card:#322921;--rule:#483e35;--rule2:#60554b;--muted:#a89f93;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#17120e;
+[data-theme="dark"]{--bg:#0d1512;--bg2:#16231e;--ink:#f1eae0;--card:#1e2e28;--rule:#2d443c;--rule2:#415d53;--muted:#91a59b;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0d1512;
   --rw:1px;--photo:1;   /* theme knobs — see the media-query block above for why both scopes declare them */
-  --cta:#f1eae0;--cta-ink:#17120e;
+  --cta:#f1eae0;--cta-ink:#0d1512;
   --accent-ink:var(--accent-ink-dark)}
 [data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 
@@ -528,3 +530,14 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
    contrast pair measured above holds; a guide with no safe tint gets the neutral ground. */
 [data-theme="dark"] body{background:var(--atmo-ground,var(--bg))}
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]) body{background:var(--atmo-ground,var(--bg))}}
+
+/* THE SPATIAL REGISTER (design-system.md §7 "Spatial", §13; docs/mockups/VISUAL_LINEAGE.md): the
+   deep-forest frame the mockup library puts around the globe and the map, in BOTH themes. One
+   class re-maps the surface tokens to the dark register's own values — the same measured pairs
+   the dark block declares above — so anything composed inside follows without a second style. */
+.spatial{--bg:#0d1512;--bg2:#16231e;--card:#1e2e28;--rule:#2d443c;--rule2:#415d53;--muted:#91a59b;--ink:#f1eae0;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0d1512;--cta:#f1eae0;--cta-ink:#0d1512;--accent-ink:var(--accent-ink-dark);
+  /* A custom property resolves where it is DECLARED, so :root's aliases would keep pointing at the
+     light values from up the tree. Every alias that names a remapped token is re-declared here. */
+  --aink:var(--accent-ink);--selected-ink:var(--accent-ink);--sunken:var(--bg2);--line:var(--rule);--line-strong:var(--rule2);--info:var(--muted);--ochre:var(--warn);--caution:var(--warn);--critical:var(--crit);--ok:var(--green);--ok-fill:var(--green);--on-ok:var(--on-green);
+  color:var(--ink);color-scheme:dark}
+.spatial [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark);--aink:var(--accent-ink);--selected-ink:var(--accent-ink)}

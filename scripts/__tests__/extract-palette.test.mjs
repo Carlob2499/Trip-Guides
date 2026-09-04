@@ -132,7 +132,7 @@ describe("contrast grounds — the extractor measures what the product actually 
 
   it("the shared policy module names the current page grounds, not a retired palette", () => {
     expect(LIGHT_BG).toBe("#e3e7dc");
-    expect(DARK_BG).toBe("#17120e");
+    expect(DARK_BG).toBe("#0d1512");
     expect(MIN_ACCENT_CONTRAST).toBe(3.0);
   });
 
@@ -164,8 +164,9 @@ describe("contrast grounds — the extractor measures what the product actually 
   });
 
   it("rejects the canary's #9c2f2a on the dark ground, at the ratio the schema gate reported", () => {
-    // The live verdict was 2.53:1 against #0f1317 — the ground the drifted extractor never used.
-    expect(contrastRatio("#9c2f2a", DARK_BG)).toBeCloseTo(2.53, 2);
+    // The live verdict was 2.53:1 against the old #0f1317 ground; the forest ground (#0d1512,
+    // equal luminance) reads 2.52:1 — the same failure, on the ground the product paints.
+    expect(contrastRatio("#9c2f2a", DARK_BG)).toBeCloseTo(2.52, 2);
     expect(contrastRatio("#9c2f2a", DARK_BG)).toBeLessThan(MIN_ACCENT_CONTRAST);
   });
 });

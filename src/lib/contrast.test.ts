@@ -64,7 +64,7 @@ describe("readableOn", () => {
     // The dark-mode card and page grounds, measured from the built site. Accent text sat at
     // 2.87:1 here — darkening it (the old fixed-shade approach) pushes it TOWARD the background
     // and makes it worse, so direction has to come from the surface.
-    for (const bg of ["#322921", "#17120e"]) {
+    for (const bg of ["#1e2e28", "#0d1512"]) {
       for (const fg of ["#a77e3e", "#646b2e", "#9b592b", "#9c4421"]) {
         const out = readableOn(fg, bg);
         expect(contrastRatio(out, bg)).toBeGreaterThanOrEqual(4.5);
@@ -74,8 +74,8 @@ describe("readableOn", () => {
     }
     // The specific measured failure: this pair rendered at 2.87:1 on the dark card, so it must
     // move, and strictly upward.
-    const rescued = readableOn("#9b592b", "#322921");
-    expect(contrastRatio("#9b592b", "#322921")).toBeLessThan(4.5);
+    const rescued = readableOn("#9b592b", "#1e2e28");
+    expect(contrastRatio("#9b592b", "#1e2e28")).toBeLessThan(4.5);
     expect(relativeLuminance(rescued)).toBeGreaterThan(relativeLuminance("#9b592b"));
   });
 

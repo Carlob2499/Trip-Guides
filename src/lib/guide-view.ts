@@ -88,7 +88,7 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
      keyed by its name so an itinerary stop or a Trip atom naming the same place can show it.
      Exact name match only — a stop that names no repository place gets no picture. ── */
   const placeKey = (name: string) => String(name || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9\u3131-\uD79D]+/g, " ").trim();
-  const placeImages: Record<string, { src: string; srcset: string; alt: string }> = {};
+  const placeImages: Record<string, { thumb: string; src: string; srcset: string; alt: string }> = {};
   for (const s of flat) {
     if (s.type !== "sights" && s.type !== "venues") continue;
     for (const it of s.items || []) {
@@ -98,6 +98,7 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
       if (!key || placeImages[key]) continue;
       const responsive = !!(im.file || im.src?.includes("{w}"));
       placeImages[key] = {
+        thumb: imgAt(im, 320),
         src: imgAt(im, 640),
         srcset: responsive ? `${imgAt(im, 320)} 320w, ${imgAt(im, 640)} 640w, ${imgAt(im, 960)} 960w` : "",
         alt: String(im.alt || it.name),
@@ -233,7 +234,7 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
     chapters, sources, modulesByDate,
     readiness, recap, holidayInfo, exports, hasWeatherSection, tripSummary: buildSummary(guide),
     verifiedWarning, verifiedDate, colophon, colophonChecked, nextRecheck, plate,
-    searchIndex: buildGuideSearchIndex(slug, guide.title, guide.sections),
+    searchIndex: buildGuideSearchIndex(slug, guide.title, guide.sections, (name) => { const im = imageFor(name); return im ? { src: im.thumb } : null; }),
     // The primary destinations this page switches between (design-system.md §6). Atlas is a
     // link the shell adds itself; Split is a contextual utility (§27) — a routable region
     // reached from Trip, expense actions and Search, never a permanent slot.
