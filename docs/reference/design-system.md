@@ -1,729 +1,939 @@
-# Waypoint Design Authority
+# Waypoint Design Constitution
 
-Status: **SOLE DESIGN AUTHORITY — FROZEN FOR SEPTEMBER IMPLEMENTATION**  
-Owner: Carlo  
-Last reconciled: 2026-09-04 (SOS, provenance and offline treatments locked by the creator the same day)
+Status: **CURRENT DESIGN AUTHORITY — D6 COMPLETE / D7 GRAND REDESIGN AUTHORIZED**  
+Owner: Carlo.  
+Last reconciled: 2026-09-04.
 
-This file is the one and only human-readable authority for Waypoint visual design, interaction design, responsive composition, motion, surface hierarchy, and visual acceptance. It consolidates the completed D1–D6 work, the final late-review decisions, the useful lessons from prior handoffs/mockups/research, and the correction made after the first D7 implementation drifted visually.
+This document is the **single human-readable authority for Waypoint visual and interaction design**.
+It supersedes every previous visual direction, R4/R5 handoff, shipped visual convention, prototype,
+screenshot, design experiment, or historical decision log where they conflict.
 
-No other design document, handoff, prototype, screenshot, mockup, research packet, archived plan, PR description, issue comment, component registry entry, or shipped legacy behavior may override this file.
+Authority order:
 
-`PRODUCT.md` remains product-purpose and factual capability doctrine. `src/styles/base.css`, breakpoints, production components, tests, and `docs/reference/component-registry.json` are executable implementation/conformance artifacts, not separate design authorities. When implementation disagrees with this file, the implementation is debt unless a genuine feasibility, accessibility, truth, or field-use blocker is demonstrated.
+1. `PRODUCT.md` — product purpose, traveler priorities, capabilities, factual truth.
+2. **This document** — brand identity, responsive composition, visual/interaction grammar.
+3. `docs/reference/motion.md` — subordinate motion implementation doctrine.
+4. `docs/reference/component-registry.json` — machine-facing component/pattern surface.
+5. `src/styles/base.css`, `src/lib/breakpoints.ts`, executable a11y/resilience/design gates.
 
-The sole visual companion set lives under `docs/reference/design-system-assets/`. `mockup-manifest.json` identifies the recovered creator-reviewed D6 composition redraws, the selected topic-limited raster decision boards recovered from the creator's conversation archive, and the sanitized canonical gap-coverage board. These files are **supporting figures inside this authority packet, not separate authorities**. If any visual reference conflicts with this Markdown, **this Markdown wins**. No agent may average the selected references with unselected/superseded mockups, component-gallery screenshots, historical design handoffs, or earlier D1–D7 experiments.
+`docs/research/waypoint-design-reference-packet.md`, `docs/mockups/`, and uploaded mockup libraries are
+**reference evidence only**. They help preserve visual continuity, but they never override this file.
 
-Git history is the archive. Do not preserve superseded design prose in the live tree merely for archaeology.
+The D7 implementation mandate is simple:
 
----
-
-## 1. North star
-
-Waypoint is a **field-first travel command center** backed by verified travel knowledge. It should feel like a modern boutique travel product with airline-grade operational precision and field-journal warmth.
-
-The traveler on the street wins every tie: one hand, bright light, poor signal, fatigue, time pressure, unfamiliar geography. Desktop can be richer and more expressive, but it cannot create a different product or weaken the mobile field experience.
-
-Four design properties are non-negotiable:
-
-- **Verified:** important facts remain traceable to evidence/date.
-- **Personal:** the trip and traveler context determine priority.
-- **Actionable:** the next useful action is obvious.
-- **Honest:** missing, stale, uncertain, offline, and degraded states never pretend to be complete/live.
-
-The UI must not expose pipeline, agent, gate, register, or implementation vocabulary to travelers.
+> **Replace the old visual system; do not layer the new one on top of it.**
+>
+> Merge before adding. Retire before replacing. No zombie navigation, card, sheet, map, search,
+> typography, radius, or motion systems may survive indefinitely.
 
 ---
 
-## 2. Information architecture and launch behavior
+## 1. Product identity
 
-The stable primary traveler destinations are, in this order:
+Waypoint is **a modern boutique travel operating system with airline-grade precision, digital
+cartography, and field-journal warmth**.
 
-**Trip · Itinerary · Map · Guide · Split**
+It should feel:
 
-This order and identity do not adapt, reorder, or promote themselves based on usage.
+- **calm and premium** without becoming sparse for its own sake;
+- **editorial and place-specific** without becoming a travel magazine that hides operational truth;
+- **precise in the field** without looking like enterprise software;
+- **visually ambitious on desktop** without behaving like an Awwwards demo reel;
+- **compact and obvious on mobile** without becoming a shrunken desktop;
+- **intelligent** without looking like an AI chat product.
 
-Global infrastructure:
+Three registers coexist:
 
-- **Atlas** — world/trip entry surface; always one obvious action away.
-- **Search** — context-first universal search; never a destination tab.
-- **SOS** — quiet global emergency utility; never a destination tab.
-- **Learnings** — a distinct, deep-linkable notebook/reality surface inside Trip; never a sixth global destination.
+### Modern boutique — the ground
+Calm composition, useful whitespace, tactile-but-digital surfaces, refined typography, restrained
+depth, confident imagery, and intentional asymmetry.
 
-Launch defaults:
+### Airline precision — operational truth
+Hours, prices, transit, timing, reservations, warnings, state, verification, directions, balances,
+and emergency information are aligned, scan-first, predictable, and never subordinated to
+decoration.
 
-- no materially active trip → **Atlas**;
-- materially active mid-trip → **Trip**;
-- Atlas remains one obvious action away in either case.
+### Digital cartography — the Waypoint signature
+Maps, contour/route motifs, geographic hierarchy, subtle map-like materiality, and spatial
+continuity connect Atlas, Trip, Itinerary, Map, Guide, Search, and destination identity.
 
-Explicitly retired: generic Tools/More, adaptive/promoted nav, Story Mode, top-level swipe navigation, panel drag/reorder as a user feature, Trip Kit, voting/collaboration creep, shared-readiness dashboards, command-palette framing, and a sixth Search/SOS/Learnings tab.
-
----
-
-## 3. Responsive model
-
-Waypoint uses **responsive sibling compositions**. Mobile is not compressed desktop; desktop is not enlarged mobile.
-
-Rules:
-
-1. Mobile is designed first for field operation and thumb reach.
-2. Desktop earns width by revealing relationships, spatial context, comparison, and editorial identity.
-3. Intermediate/tablet widths are first-class, not interpolation accidents.
-4. Components respond to the space they receive; avoid brittle device-name branches.
-5. Dense information relocates, scrolls locally, or progressively discloses rather than shrinking into illegibility.
-6. Width alone must not silently remove a capability.
-7. Safe areas are part of layout.
-8. 320px reflow is the safety floor.
-9. Long names, CJK/multilingual strings, 200% text enlargement, landscape phones, split-screen, keyboard, touch, reduced motion, dark mode, offline state, and missing data are acceptance cases.
-10. Important field controls should be approximately 44×44 CSS px where practical.
-
-Mobile may use focused pages and sheets; desktop may use contextual side panes and simultaneous map/content. They project the same canonical object/state.
+Decorative language never carries safety, uncertainty, price, time, route, or verification meaning.
 
 ---
 
-## 4. Visual identity
+## 2. Typography
 
-### Ground and palette
+The type system is locked.
 
-Use the executable Waypoint palette; do not resurrect the superseded “Night Navy & Amber” phrase as permission to re-theme the product.
+- **Literata Variable** — display, editorial, destination, and reading voice.
+- **Atkinson Hyperlegible Next** — UI, controls, operational data, navigation, dense information.
+- CJK/system fallbacks remain appropriate to the locale.
+- No third global type family without an explicit constitution change.
 
-Current core direction:
+### Typography personality
+Default personality is **editorial contrast**: serif display + hyperlegible sans UI.
 
-- light ground: `#e3e7dc`;
-- sunken ground: `#ced5c4`;
-- card/working surface: `#fbfcf6`;
-- ink: `#0f141a`;
-- oxide accent: `#9c4421`;
-- dark mode: existing warm charcoal/chart-room family, black-adjacent where useful, never cool blue-gray/cyberpunk.
+Selective expressive moments are allowed on desktop and destination-entry surfaces:
+- oversized destination/country names;
+- image-integrated display type;
+- unusual but legible alignment;
+- type that participates in a geographic/arrival composition.
 
-Exact production values come from the token system. Do not create one-off call-site colors.
+Those moments must remain exceptional. Routine UI never becomes typographic theater.
 
-### Typography
-
-- **Literata Variable** — editorial/display/reading voice.
-- **Atkinson Hyperlegible Next** — operational/data/control voice; tabular numerals where useful.
-- Preserve robust system/CJK fallbacks. Korean/Hangul must never render as tofu because the Latin house font lacks glyphs.
-- No third house family without an explicit design change.
-
-### Composition
-
-Use four default composition grammars:
-
-- **Editorial:** destination identity, culture, photography, narrative context.
-- **Operational:** schedules, transit, prices, warnings, state, settlement.
-- **Spatial:** map/place/route relationships with synchronized textual context.
-- **Focused action:** one immediate task with minimal competition.
-
-Cards/panels are tools inside these grammars, not the universal page canvas. Avoid “card soup.”
-
-### Imagery
-
-Useful verified imagery should carry substantially more visual authority than the old shipped UI. Prefer recognizable destination/place/event photography, map fragments, semantic icons, and timeline/route graphics that improve orientation.
-
-Do not use decorative stock-like travel imagery, generic AI gradients, invented local symbolism, or icon clutter. A visual must identify, orient, encode state, or improve action recognition.
-
-Strong destination imagery belongs mainly in Atlas, Guide openings, Trip heroes, and selected place/event moments. Operational facts remain on readable Waypoint working surfaces rather than busy photos.
-
-### Density
-
-Do not fill unused space by adding widgets. Increase the size/prominence of information already judged important before adding more information. Avoid both dead space and miniature dashboard typography.
+Operational numerals should use tabular alignment where useful.
 
 ---
 
-## 5. Global shell and navigation
+## 3. Core palette and semantic color
 
-The shell must feel integrated with the product, not like a generic administration dashboard.
+The old purple/dashboard palette is retired.
 
-Mobile:
+Waypoint's base palette is:
 
-- stable five-destination bottom bar is the non-failable baseline;
-- immersive surfaces may use the same destinations in a compact/floating treatment if accessibility/browser/reduced-motion conditions remain safe;
-- chrome may yield while scrolling/zooming but must remain immediately recoverable;
-- no gesture-only navigation and no hidden changed ordering.
+- **warm paper / cream** — daylight ground;
+- **sage / olive family** — calm secondary structure and selected supportive states;
+- **warm charcoal** — dark-mode ground;
+- **restrained oxide / rust orange** — Waypoint action/selection emphasis;
+- **deep neutral ink** — primary text and structural contrast.
 
-Desktop:
+Exact values belong in tokens, not one-off literals.
 
-- do **not** use a permanent flat conventional sidebar as the default shell;
-- use an integrated/floating inline destination treatment around the readable working surface;
-- Atlas stays obvious; Search is prominent; SOS stays globally reachable;
-- chrome can become quieter with context/scroll but must not become mysterious or reorder itself;
-- dense operational content sits on an opaque/readable working surface. Glass is not required and must not reduce readability.
+### Semantic color
+Color is controlled, not decorative.
 
-Desktop compaction is an implementation detail, not a creator fork. Default to a stable full treatment at rest that may subtly reduce visual weight during deep scroll/map/workbench interaction, while remaining immediately recoverable and never changing destination order or identity.
+Use semantic color when it saves time or prevents a mistake:
+- success / confirmed;
+- caution / timing risk;
+- critical / emergency / closed;
+- informational change;
+- selection / current position;
+- externally meaningful systems such as transit lines.
 
----
+Real-world system colors may remain recognizable where that improves field use. Do not repaint a
+known transit line into Waypoint rust merely for branding.
 
-## 6. Atlas
+Category rainbow is rejected. Food, culture, shopping, nightlife, etc. are distinguished first by
+iconography, copy, shape, and grouping.
 
-Atlas is the spatial front door, not a trip dashboard.
-
-- restrained immersive direction, leaning minimal;
-- globe/map is dominant;
-- flat-first illustrated cartography with simplified geography, crisp coastlines, restrained terrain/topographic cues, almost no faux 3D atmosphere;
-- enough dimensionality for rotation/orientation and globe→region→city continuity, not satellite realism or a glossy game-engine Earth;
-- progressive disclosure: trip/country at world scale → city → place/anchor deeper in;
-- controls recede as geography becomes the task;
-- no synthetic “On Track/Off Track” trip-health scores.
-
-Desktop can be the showcase: large spatial field, sparse floating controls, real trip structure/pins. Mobile is stricter: geography should consume most of the viewport and supporting UI appears contextually.
+Color is never the only cue. Pair meaningful color with text, icon, shape, or state label.
 
 ---
 
-## 7. Trip — “what matters now”
+## 4. Material language — digital cartography
 
-Trip is the stable lifecycle destination. It is **not** a second itinerary and not a generic dashboard.
+Surfaces are **mostly solid**.
 
-### Pre-trip
+Glass/translucency is selective and functional:
+- floating navigation;
+- temporary overlays;
+- map controls;
+- transient contextual panes.
 
-Use a strong but restrained destination hero plus a short stack of real unresolved/time-sensitive priorities, compact readiness/checklist summary, and lightweight countdown/timeline cues. Completed items collapse. Do not build a heavy planning dashboard or synthetic readiness score.
+Dense reading, itinerary facts, prices, critical status, and SOS never sit on low-contrast glass.
 
-### Active trip
+Waypoint may use subtle:
+- topographic/contour motifs;
+- map-paper softness;
+- route-line texture;
+- coordinate/grid hints;
+- tonal layering;
+- restrained photographic grain.
 
-The deterministic priority order is:
-
-1. **Now**
-2. **Next**
-3. **Leave by**
-4. **Get there**
-5. material problem / uncertainty
-6. relevant fallback
-7. remainder of the day
-
-This should read like mission control: one dominant next-step object, large structured operational atoms, route/proximity context, useful imagery, and state-correct actions. Do not reserve space for Travel Party, generic Quick Actions, Saved, generic readiness widgets, or “Add” merely because space exists.
-
-### Arrival/transit
-
-Current-step autopilot dominates, with the next two steps compressed but visible. Dense is allowed when useful, but use structured time/location/transit/platform/exit/cost/address/ticket/warning/fallback atoms rather than prose walls.
-
-### Post-trip
-
-Lead with destination imagery and a concise editorial recap, then a few meaningful outcome atoms and major Plan-vs-Actual changes. No analytics dashboard. Flow naturally into Learnings.
-
-### Learnings / feedback
-
-Learnings is always present inside Trip and remains distinct from verified Guide truth. User notes never silently rewrite researched facts.
-
-Trip Feedback remains a fast three-step flow:
-
-1. Overall / Pace / Food ratings;
-2. Plan-vs-Actual stop review (prefilled when safe, focus on changed/skipped/uncertain first, Went/Skipped, optional skip reason);
-3. private reflection with lightweight prompts.
-
-Save progress; use large controls; invite after completion without a blocking forced modal; allow later reopening from Learnings.
+Reject:
+- parchment cosplay;
+- vintage-map theming;
+- heavy film grain over text;
+- decorative texture that reduces contrast.
 
 ---
 
-## 8. Itinerary
+## 5. Responsive system
 
-Itinerary is the complete schedule/inspection surface.
+Waypoint is one product with **responsive sibling compositions**.
+
+Responsive does **not** mean desktop with pieces hidden or mobile stretched larger.
 
 ### Mobile
-
-Preserve the approved SCRL-like day-by-day behavior:
-
-- one day is the dominant unit;
-- large, scan-friendly timeline atoms;
-- contextual recognizable imagery without displacing the timeline;
-- transit legs, times/windows, cost, warnings/restrictions, route handoff, and Plan-vs-Actual remain directly accessible;
-- day switching belongs in the thumb zone via a rail/scrubber; tap and contextual adjacent-day swipe are valid;
-- top arrows may be secondary, never the primary switcher;
-- no generic day-level `Done` button; use a real contextual route/ticket action or leave the slot empty.
-
-Flexible time windows are first-class; do not force every stop into an exact clock time.
-
-Branched-party days are first-class. Mobile renders parallel branches as comprehensible sections, not miniature lanes, and allows reconvergence at shared anchors.
+Mobile is designed for one-hand, in-field use:
+- current trip context first;
+- primary actions thumb reachable;
+- sequential disclosure when simultaneous panels would crowd;
+- 320px reflow is the safety floor;
+- important controls approximately 44×44 CSS px where practical;
+- day-by-day itinerary is a focused chronological card experience;
+- map/detail/search use sheets or focused swaps when necessary;
+- no feature is silently removed solely because width is narrow.
 
 ### Desktop
+Desktop is the showpiece surface.
 
-Use a temporal-spatial workbench:
+It should use width to:
+- reveal relationships;
+- compare options;
+- keep spatial + operational context visible together;
+- produce editorial and map-driven compositions impossible on a phone;
+- use fluid contextual panes, card choreography, and richer transitions.
 
-- timeline/day plan on the **left**;
-- real interactive map on the **right**;
-- user-resizable panes with sensible minimums and a recoverable default;
-- expected working range approximately 30–70%, not a hard 50/50 lock;
-- selection synchronizes timeline, route, stop and map context;
-- contextual place detail should not force the traveler out of the day view;
-- panes may expand/collapse as temporal vs spatial focus changes;
-- intermediate widths may rebalance/stack.
+Desktop should feel influenced by the best Awwwards/Dribbble editorial/product craft while obeying
+travel-product usability.
 
-The desktop workbench should feel spatial/kinetic, not wallpaper-heavy or like a spreadsheet dashboard.
-
-Motion is part of the behavior: day/stop changes, map focus, route highlighting and pane changes preserve spatial-temporal continuity. Reduced motion keeps all state changes without choreography.
-
----
-
-## 9. Map
-
-Map answers **“what is where?”** and is a spatial workspace, distinct from Itinerary’s **“where am I going, in what order, and when?”**.
-
-- normal configured connected state uses the real Google Maps integration;
-- OSM remains visible/usable until Google has actually initialized and remains the fallback if Google is absent/fails;
-- never blank the map mount because an SDK failed;
-- only canonical verified coordinates create pins;
-- live routing/traffic/turn-by-turn belongs to Google/native provider handoff; Waypoint may show coarse researched timing such as `≈30 min · check live`;
-- retain a verified native-provider fallback where materially needed (e.g. Naver where Google lacks parity).
-
-Lifecycle framing:
-
-- pre-trip → trip-wide spatial view;
-- active → current city/area + nearby context;
-- post-trip → completed trip-wide review.
-
-Mobile: map owns nearly the viewport with a contextual bottom sheet that can grow.  
-Desktop: large map with contextual inspector/side pane.  
-Layers/lenses are contextual rather than permanent clutter.
-
-A static/gallery test environment that cannot render the external map must still show a meaningful intentional degraded/map fallback state, not a giant unexplained blank rectangle.
+### Intermediate/tablet
+Intermediate widths are first-class. Components recompose intrinsically/container-first.
+No design is accepted merely because 375px and 1440px look good.
 
 ---
 
-## 10. Guide
+## 6. Navigation and orientation
 
-Guide is editorial discovery + structured utility, organized primarily by **location and time**.
+### Default lifecycle
+- **No active trip:** Atlas is the default home.
+- **Active trip:** Trip is the default home.
+- Atlas remains one action away at all times.
 
-- large destination cover/hero, especially on desktop; as a directional composition target it occupies roughly 55–60% of the main content region on desktop where the layout permits and roughly 40–45% of the mobile viewport; do not shrink it merely to squeeze modules above the fold;
-- geography/travel sequence is the durable spine;
-- strong traveler anchors (event, non-negotiable interest) may earn featured treatment without forcing the whole Guide interest-first;
-- overview is canonical default; active-trip context may resume a relevant chapter, but overview remains one action away;
-- on mobile only one local Guide-navigation level is persistently visible at a time;
-- retire the legacy multi-station Guide rail/spine as the main navigation metaphor;
-- no decorative country-commentary pills.
+### Desktop navigation
+Use an **adaptive hybrid floating navigation system**:
+- compact and quiet by default;
+- expands contextually on interaction;
+- may yield visually when the workspace needs focus;
+- remains predictable and keyboard reachable;
+- never becomes the old permanent flat sidebar.
 
-City/location chapters:
+Primary destinations:
+- Atlas
+- Trip
+- Itinerary
+- Map
+- Guide
 
-- desktop is map-forward with synchronized map + content/selection;
-- mobile is map-assisted, not a shrunk desktop split;
-- use imagery and semantic clusters to orient before dense reference detail.
+**Split is a contextual trip utility**, not a permanent primary destination. It may be surfaced
+prominently from Trip, group/expense contexts, Search, or expanded navigation when relevant.
 
-Place/event reference:
+Search is not a destination tab. It is a globally available contextual action.
 
-- recognizable useful image;
-- high-value operational facts/warnings before deeper prose;
-- dense reference layer (hours, cost, restrictions, transit, booking, provenance/freshness) available progressively;
-- direct continuity to Map/Itinerary/navigation.
+SOS is not a destination tab. It is a globally available emergency tool.
 
-Knowledge modules:
+### Mobile navigation
+Keep the persistent bar compact and prudent with phone space:
+- Atlas
+- Trip
+- Itinerary
+- Map
+- Guide
 
-- canonical practical How-To/transit/etiquette/culture modules are authored once;
-- explicit deterministic metadata links them to relevant day/place/event objects;
-- contextual surfacing is sparse, normally no more than one or two high-value links per day/step;
-- no runtime model guessing relevance;
-- do not turn Guide or Itinerary into an SEO/article feed.
+Split is contextual.
+Search is globally available without occupying a permanent destination slot.
+SOS remains one-action accessible and visually distinct.
 
-Avoid generic wiki/blog feeds, ratings/review clutter, anonymous popularity scores, affiliate hierarchy, and AI “local flavor” unsupported by evidence.
+### Orientation
+Use a **quiet contextual north star**, not loud breadcrumbs:
+- current trip;
+- current day;
+- current area/region when useful.
 
-Desktop chapter cards/titles must retain normal readable word wrapping; letter-by-letter wrapping is a hard visual failure, not an acceptable baseline.
-
----
-
-## 11. Split
-
-Split remains the trip-specific budgeting/bill-splitting tool and a top-level destination.
-
-Final hierarchy (this supersedes the older balance-first experiment):
-
-1. **Recent Expenses**
-2. **Add Expense** — immediately visible/reachable
-3. per-expense split method and participant state
-4. balances / who-owes-who / settlement as secondary state
-
-Fast add asks only:
-
-1. who paid;
-2. what it was for;
-3. how much;
-4. who shares it.
-
-Every expense row exposes its split method without opening it: `Even`, `Exact`, `Shares`, or `%`.
-
-Preserve the existing math/state, currencies, recorded payments, undo, search/filter and trip-specific sync. Optional category/note/rate/receipt/context stays secondary. Use semantic icons; do not fetch/generate expense photos unless linked to a canonical place that already owns a verified image.
-
-No Decisions tab, voting, invite/travel-party dashboard, broad budget analytics, or collaboration creep.
+Deeper hierarchy appears on demand. Avoid bulky breadcrumb bars or persistent page furniture.
 
 ---
 
-## 12. Search
+## 7. Composition grammar
 
-One global traveler-facing Search implementation.
+Use four composition families:
 
-Desktop:
+### Editorial
+Destination identity, culture, narrative, Guide content, photography, post-trip recap.
 
-- prominent persistent global field in utility chrome.
-- activation opens an overlay/panel over the current surface; Search is not a standalone page.
+### Operational
+Schedules, hours, prices, transit, reservations, balances, warnings, checklist, settlement.
 
-Mobile:
+### Spatial
+Map + place relationships, routes, neighborhoods, itinerary/map synchronization.
 
-- expanded field at the top;
-- compact recoverable sticky access while scrolled;
-- activation opens one focused full-height overlay/sheet with appropriate keyboard focus.
+### Focused action
+One immediate task with minimal competition: route, SOS, save/change, add expense, resolve issue.
 
-Behavior:
+Screens may blend families, but each region has a clear job.
 
-- current trip first, then broader Waypoint;
-- grouped by real canonical object type (e.g. Places, Itinerary, Guide, Other trips);
-- deep-link to the exact canonical destination/day/place/Guide object;
-- dismissal restores exact prior page/context/scroll;
-- `/` and Cmd/Ctrl-K may be shortcuts, but the experience must not look/feel like a developer command palette;
-- no AI-chat answer engine, fake recent-search content, popularity modules, voice/scan controls, or unsupported categories.
-
----
-
-## 13. SOS
-
-SOS is deliberately simple global infrastructure. It is a global action, never a destination.
-
-First urgent layer:
-
-- Police;
-- Fire / Ambulance;
-- the traveler’s known location/base only when Waypoint actually possesses it and it materially helps.
-
-Second urgent-help layer may include only verified/supported information: nearest-hospital or urgent-medical guidance, embassy/consulate, lost-passport guidance, hotel/base address, traveler-provided insurance/contact details and critical emergency phrases.
-
-Core emergency numbers remain baked in/offline. Controls are large and unambiguous.
-
-Responsive container:
-
-- mobile uses a dominant full-height emergency sheet;
-- desktop uses a modal or side sheet preserving the same urgent-first hierarchy.
-
-Do not build symptom triage, proactive emergency assistance, category dashboards, responder orchestration, “help request sent,” automatic group sharing, or a generic help center.
-
-**Locked stress-state visual (creator decision, 2026-09-04):**
-
-- a near-black emergency surface (the fixed `--dark-*` register) in both themes — a takeover, not a page;
-- mobile is a dominant full-height sheet; desktop is a centred modal preserving the same hierarchy;
-- `Police` and `Fire / Ambulance` are the two enormous first-screen actions, each one tap to dial;
-- emergency red is painted only on those two direct-call actions, never across the interface;
-- the traveler's known location/base appears directly below them only when Waypoint actually possesses it;
-- travel hotline, medical line, embassy, passport, insurance, phrases and every other verified line sit in a visibly subordinate second layer;
-- offline availability is stated once, quietly; no dashboard, category grid, triage or decorative imagery.
-
-Production owner: `src/features/sos/ui/sos.js` + the SOS block in `src/styles/field-tools.css`. The classification of a verified line into the first layer is by what it is (police / fire / ambulance / all-emergencies), never by its position in the data.
+### Desktop layout philosophy
+Use a **hybrid spatial/editorial composition**:
+- core information follows a disciplined grid;
+- important moments may break the grid;
+- selected objects can reorganize nearby panes;
+- map, cards, and imagery can compose as one workspace;
+- structure first, spectacle selectively.
 
 ---
 
-## 14. Provenance, freshness and degraded states
+## 8. Card system
 
-Ordinary verified facts stay visually calm. Use a quiet provenance affordance with deeper source/date/freshness/uncertainty detail on demand.
+Cards are not a universal page canvas. When used, they behave like designed objects.
 
-Escalate when decision risk changes:
+### Card families
+Use one related geometric family with four roles:
 
-- stale/uncertain → visible warning;
-- conflicting/high-consequence → stronger treatment;
-- safety/closure/restriction → never hidden behind decorative disclosure.
+1. **Operational card** — scan-first, compact, stable.
+2. **Editorial card** — larger proportion, image-led, freer internal composition.
+3. **Compact tile** — dense saved place/result/utility object.
+4. **Feature object** — rare desktop object with more distinctive silhouette or layering.
 
-No citation wall and no synthetic trust score.
+No fantasy-card theming, decorative borders, game UI chrome, or literal playing-card styling.
 
-Offline/degraded state must keep written routes/addresses/emergency/core Guide facts usable. Missing media/map/live service must not leave a dishonest blank or fake “live” state.
+### Card composition
+Default is expressive:
+- stack;
+- offset;
+- partially overlap;
+- fan subtly;
+- vary scale;
+- form chronological or thematic sequences;
+- break the grid selectively.
 
-**Locked provenance / trust / freshness treatment (creator decision, 2026-09-04):**
+The inspiration from card/deck-building games is **physicality and hierarchy**, not game theming.
 
-- a small persistent verification cue (the provenance dot) beside factual objects; ordinary content stays uncluttered;
-- selecting it opens a compact popover on desktop and a bottom sheet on a phone, showing the claim, checked date, source, freshness/uncertainty and evidence tier;
-- stale or uncertain facts change the cue and the section pill visibly; verified current facts stay quiet;
-- no citation walls, synthetic trust scores or repeated source paragraphs.
+### Card reflow
+When cards move from stacked/grouped states into final layout:
+- preserve object identity;
+- animate from source position to destination position;
+- avoid abrupt snapping/reordering;
+- minimize layout shift;
+- keep the user able to track each object.
 
-**Locked offline / degraded / loading treatment (creator decision, 2026-09-04): quiet capability.**
-
-- offline caching and PWA installation are capabilities the product simply has; the interface never brags about them. They surface only when a state changes (a small `Offline · saved copy` pill) or when the traveler asks (the colophon's saved-on-this-device line, the install note in Share);
-- cached content stays in place; nothing is replaced by a blocking screen when a service fails;
-- each affected module carries its own precise state — a map mount that cannot draw says so on the map and keeps the written route and handoff links; the live rate pill marks a seed rate as such;
-- critical Trip and SOS information is always available offline;
-- loading uses structural placeholders only where content is genuinely pending; existing content never disappears during a refresh;
-- nothing ever implies live, current or synchronized when it is not.
-
-With these three decisions locked there are no open visual-sanity items. Every approved/locked surface in this document is frozen unless a real implementation blocker proves it technically impossible or materially harmful.
-
----
-
-## 15. Semantic content and Visual Composer
-
-Ship semantic travel objects now; remain knowledge-graph-ready later.
-
-Use stable object/fact IDs, explicit types, normalized geography, canonical relationships instead of copied facts, and preserved provenance/freshness.
-
-A Visual Composer may change **presentation** only: split, shorten, order within approved hierarchy, choose sanctioned composition grammar, and rewrite narrative copy for clarity. It may not invent/delete/reinterpret/weaken a researched fact, warning, uncertainty, provenance, or traveler constraint. One fact/object can project to many surfaces; truth is not duplicated for visual convenience.
-
-No runtime model is needed to decide routine relevance that Composer metadata can determine.
+Desktop may use rare table/canvas-like card arrangements.
+Mobile uses the same language with tighter chronology and less simultaneous overlap.
 
 ---
 
-## 16. Motion
+## 9. Spacing and density
 
-Motion explains where something went, what changed, or how states relate.
+Use **adaptive density**.
 
-- routine transitions are fast, interruptible, and subordinate to task (roughly 150–350ms where a timed transition is appropriate);
-- prefer shared/spatial continuity when it preserves orientation;
-- no scroll hijacking;
-- top-level destinations remain tap-driven;
-- swipe/drag is contextual: itinerary days, sheets, galleries, maps/globe;
-- geographic fly/focus is a signature only when it adds orientation;
-- continuous motion must encode live meaning or have an explicit exception;
-- motion should normally use transform/opacity rather than layout-thrashing animation;
-- reduced motion supplies a complete usable state.
+Density follows the task, not the device:
+- arrival/editorial/inspiration → spacious;
+- planning/comparison → moderately dense;
+- itinerary execution/map manipulation → dense;
+- SOS/critical state → extremely clear, not aesthetically sparse.
 
-No cinematic Story Mode replacement.
+Avoid dead space that exists only to signal luxury.
+Avoid crowding every screen because desktop has room.
 
 ---
 
-## 17. Accessibility and field resilience
+## 10. Imagery and photography
 
-WCAG 2.2 AA is the binding floor plus Waypoint’s stricter field-use bar.
+Imagery is **contextual**.
 
-Acceptance covers:
+Use prominent imagery when it supports:
+- destination identity;
+- recognition;
+- orientation;
+- emotional arrival;
+- editorial storytelling.
 
-- outdoor/glare legibility;
-- important ~44px targets;
-- keyboard/focus semantics;
-- touch/coarse pointer;
-- critical state not conveyed by color alone;
+Keep functional surfaces denser where imagery would slow scanning.
+
+Default treatment is editorial with substantial selective art direction:
+- intentional crops;
+- occasional full bleed;
+- image/text interplay;
+- controlled overlays;
+- layered collage;
+- dramatic masks/crops;
+- animated reveals;
+- destination-aware grading.
+
+Place-detail imagery must still represent the actual place clearly.
+Do not stylize factual imagery until it becomes misleading.
+
+---
+
+## 11. Destination identity and visual composer
+
+Destination identity is strong.
+
+The user should feel that opening a country/Guide is **like flying there**.
+
+A Japan Guide, Korea Guide, Italy Guide, etc. may differ materially in:
+- imagery;
+- destination accent palette;
+- cartographic texture;
+- local visual motifs;
+- icon nuances;
+- transition style;
+- dark-mode atmosphere;
+- editorial rhythm;
+- hero composition.
+
+The Waypoint interaction grammar remains constant.
+
+### Deterministic visual composer
+Destination theming is driven by a deterministic composer/token layer, not unconstrained per-screen
+AI styling.
+
+Conceptual order:
+
+**SPINE → ANCHOR → MERGE → ORDER → BUDGET → THEME → RENDER**
+
+The composer decides:
+- hierarchy;
+- grouping;
+- density;
+- card order;
+- emphasis;
+- imagery allocation;
+- allowed destination theme tokens.
+
+The renderer decides pixels from approved tokens/components.
+
+AI may help generate structured choices, but no LLM is allowed to freestyle global UI values or
+invent destination symbolism at render time.
+
+---
+
+## 12. Destination entry / Atlas arrival
+
+The approved globe/arrival concept is retained and elevated.
+
+### First entry
+Use a **full destination arrival**:
+- globe or geographic continuity;
+- route/path movement;
+- country/city focus;
+- destination typography;
+- local imagery/motifs;
+- interface assembly.
+
+It may be cinematic, but operational access must not be delayed excessively.
+
+### Repeat entry
+Use a shorter cinematic reveal that preserves destination identity without replaying the full
+sequence.
+
+### Painted Atlas / living covers
+Living Atlas identity may remain only where movement communicates geographic identity and respects
+performance/reduced motion. Idle decorative drift is not required.
+
+---
+
+## 13. Dark mode
+
+Dark mode is destination-aware atmosphere built on a robust neutral baseline.
+
+Base:
+- warm charcoal, never generic blue-gray;
+- strong operational contrast;
+- restrained luminous accents.
+
+Destination layer may alter:
+- imagery selection/treatment;
+- cartographic lighting;
+- local accent balance;
+- texture;
+- cinematic moments.
+
+Tokyo at night may feel different from Kyoto, Seoul, or Rome, but operational UI remains Waypoint.
+
+The interface must still work beautifully if all contextual/dynamic theming is unavailable.
+
+---
+
+## 14. Context adaptation
+
+Context awareness is an enhancement layer, not a dependency.
+
+Waypoint may subtly react to:
+- day/night;
+- current trip day;
+- current neighborhood;
+- weather;
+- upcoming reservation;
+- active transit;
+- meaningful disruption.
+
+The static baseline must be excellent in any condition.
+If live context is absent, stale, offline, or denied, the UI degrades gracefully.
+
+---
+
+## 15. Maps
+
+**Production maps use Google Maps Platform.**
+
+Do not ship a separate bespoke basemap as the live primary map.
+
+Waypoint owns the experience around Google Maps:
+- cloud styling;
+- Advanced Markers or equivalent;
+- route overlays;
+- itinerary/day state;
+- selected/saved/current-place states;
+- category filtering;
+- neighborhood/area overlays where appropriate;
+- synchronized card/list/detail state;
+- camera choreography;
+- destination-aware map styling.
+
+Maps remain highly readable and preserve real-world/transit semantic color where useful.
+
+Offline/degraded states must remain honest. A static/local fallback may exist for cached context, but
+the live mapping engine is Google Maps.
+
+---
+
+## 16. Fluid desktop workspace
+
+Desktop uses a **fully fluid workspace**.
+
+Selecting an object from Map, Itinerary, Guide, or Search may cause nearby cards/panes to reorganize
+around the active object rather than always opening a fixed side panel.
+
+Rules:
+- no teleportation;
+- preserve shared-object continuity;
+- important controls remain anchored;
+- object movement communicates parent/child relationship;
+- layout remains predictable after the transition;
+- never recompose so aggressively that orientation is lost.
+
+### Multi-panel policy
+Single-focus is the default.
+
+Users may deliberately **pin up to two comparison objects**. Larger multi-window arrangements are
+not the default interaction model.
+
+---
+
+## 17. Scrolling
+
+Native vertical scrolling remains the backbone.
+
+Selected sections may use:
+- horizontal card journeys;
+- stacked-card reveals;
+- pinned map-linked sequences;
+- card unfolding/reflow;
+- geographic/arrival choreography.
+
+Use choreographed scroll only when it improves the mental model.
+Never hijack scrolling merely to look premium.
+
+Desktop may use selective high-expression sequences.
+Mobile prioritizes predictable vertical chronology.
+
+---
+
+## 18. Motion
+
+Motion must feel **buttery, fast, cohesive, and expected**.
+
+Everything should feel physically connected, but nothing should make the user wait for animation.
+
+Timing and implementation rules live in `docs/reference/motion.md`.
+
+Core principles:
+- routine actions resolve almost immediately;
+- object expansion/reflow gets enough time to explain continuity;
+- cinematic pacing is reserved for genuine scene changes;
+- no gratuitous bounce or showy delay;
+- shared-object transitions are preferred;
+- animation is interruptible;
+- reduced motion is complete;
+- scrolling/clicking should feel like moving through one coherent spatial system.
+
+---
+
+## 19. Controls and progressive disclosure
+
+Use **contextual floating controls + progressive reveal**.
+
+Persist only high-value/frequent controls.
+Reveal secondary actions near the object/task they affect.
+
+Important actions must remain discoverable through the main interface; do not bury the only path in
+hover, long-press, or context menu.
+
+Avoid heavy persistent chrome.
+
+---
+
+## 20. Iconography
+
+Use three levels.
+
+### Utility glyphs
+Familiar first:
+search, back, close, share, edit, delete, filter, calendar, more, etc.
+
+### Waypoint semantic symbols
+A bespoke cartographic/travel pictogram family for:
+food, café, nightlife, shrine/temple, museum, shopping, hotel, train, metro, bus, ferry, taxi,
+walking, airport, luggage, reservation, timed entry, ticket, viewpoint, neighborhood, saved,
+visited, planned, skipped, weather disruption, language help, ATM/cash, restroom, accessibility,
+emergency, and other repeated travel semantics.
+
+### Expressive pictograms/illustration
+Use for content-level moments:
+Guide-question cards, destination categories, milestones, onboarding, empty states.
+
+The Waypoint icon hand should feel:
+- cartographic;
+- geometric but not sterile;
+- consistent stroke/terminal behavior;
+- occasionally waypoint/node inspired;
+- recognizable at mobile sizes.
+
+Do not put a pin motif into every icon.
+
+Mobile icons prioritize silhouette and touch target over detail.
+Ambiguous travel actions use icon + short label.
+
+---
+
+## 21. Search
+
+Search is locked as **context-aware universal Search with category drawers**.
+
+It understands:
+- current trip;
+- current day;
+- current area/location when available;
+- current itinerary/map/Guide state.
+
+It can surface:
+- Places;
+- Itinerary;
+- Guide;
+- Notes;
+- Transit;
+- Food;
+- other approved categories through More Filters.
+
+Search is not a chatbot and not a developer command palette.
+
+Desktop may show a fluid results/detail workspace.
+Mobile uses a compact overlay/sheet with category drawers and clear escape.
+
+Natural-language interpretation may exist invisibly, but the interface remains structured.
+
+---
+
+## 22. AI presence
+
+AI is **mostly invisible**.
+
+Users should experience:
+- better recommendations;
+- itinerary repair;
+- conflict resolution;
+- smarter Search;
+- adaptive Guide questions;
+- useful fallback suggestions;
+- context-aware ranking.
+
+They should not experience a persistent assistant persona following them through the product.
+
+“Ask Waypoint” may exist as a secondary escape hatch.
+
+---
+
+## 23. Guide
+
+Guide is a destination-understanding surface, not a generic article index.
+
+Guide should combine:
+- destination hero/identity;
+- editorial topic areas;
+- category drawers;
+- card-based exploration;
+- searchable knowledge;
+- place-linked context;
+- practical/operational facts.
+
+Guide may be one of the most visually expressive surfaces.
+
+### Create Guide
+Replace long configuration forms with an **adaptive visual question deck**.
+
+Rules:
+- ask one clear decision at a time;
+- answers determine later questions;
+- previous answers remain visible as a quiet history/stack;
+- cards deal/unfold/reflow smoothly;
+- visual options are preferred where they improve comprehension;
+- natural-language “just tell Waypoint” remains an escape hatch;
+- final answers compile into structured intake, not prose soup.
+
+This interaction language may be reused for other multi-step decisions where appropriate.
+
+---
+
+## 24. Trip
+
+Trip is **what matters now** during an active trip.
+
+The hierarchy is:
+
+1. Now
+2. Next
+3. Leave by
+4. Get there
+5. Material problem / uncertainty
+6. Relevant fallback
+7. everything else
+
+Trip should not revert into a generic dashboard of equal cards.
+
+Before travel it may emphasize readiness.
+After travel it becomes an editorial recap + Trip Learnings entry point.
+
+---
+
+## 25. Itinerary
+
+### Mobile
+Mobile Itinerary is day-by-day chronology.
+
+Use:
+- focused day header;
+- strong current/upcoming hierarchy;
+- chronological cards;
+- compressed completed/later states where useful;
+- card expansion into details/map;
+- day scrubber or equivalent efficient day switching;
+- smooth reflow preserving where objects came from.
+
+Do not shrink a desktop timeline into a phone.
+
+### Desktop
+Desktop Itinerary is a resizable **temporal-spatial workbench**:
+- timeline/day chronology;
+- Google Map;
+- synchronized selection;
+- day/route state;
+- contextual detail;
+- optional pin-to-compare;
+- card stack/unfold modes where useful.
+
+The map and itinerary are one synchronized model, not separate products.
+
+---
+
+## 26. Map
+
+Map is a spatial workspace, not merely an embed.
+
+Use:
+- Google Maps Platform;
+- Waypoint markers/overlays;
+- synchronized cards/detail;
+- current day/selected places;
+- category filters;
+- route context;
+- quiet orientation;
+- fluid desktop workspace;
+- focused mobile sheet behavior.
+
+The approved globe belongs to Atlas/arrival, not as a replacement for a functional city map.
+
+---
+
+## 27. Split
+
+Split is operational and dense.
+
+It may use destination imagery in header/identity regions, but balances, expenses, settlement, and
+group decisions remain stable, scan-first, and semantically clear.
+
+Split is contextual, not a primary navigation destination.
+It is reachable from Trip, relevant group/expense actions, Search, and expanded navigation.
+
+---
+
+## 28. SOS
+
+SOS is a **layered emergency tool**, not a destination.
+
+It is always one action away.
+
+Use three focused layers:
+1. category / what help is needed;
+2. quick details + location/context;
+3. connect/confirm.
+
+Essential local numbers and critical trip information must remain available offline where feasible.
+
+SOS is visually conservative:
+- extremely high contrast;
+- large targets;
+- no decorative motion;
+- no ambiguous icons;
+- no hidden critical action;
+- semantic color + icon + text.
+
+---
+
+## 29. Empty, loading, error, offline
+
+Use expressive designed states with a practical core.
+
+### Loading
+Preserve the final geometry so content does not jump.
+Skeletons match eventual card/panel structure.
+
+### Empty
+Use a destination-aware pictogram/illustration when useful, but always provide the clear next action.
+
+### Error/offline
+Truth first.
+Never disguise missing data as a decorative empty state.
+Offer the best available cached/local action.
+
+Expressive treatment never obscures recovery.
+
+---
+
+## 30. Accessibility and resilience
+
+WCAG 2.2 AA is the binding floor plus Waypoint field-use requirements.
+
+- outdoor/glare readability;
+- text enlargement;
+- keyboard;
+- touch;
+- assistive semantics;
 - 320px reflow;
-- long/CJK/multilingual strings;
-- 200% text enlargement;
-- tablet/intermediate widths;
 - safe areas;
-- dark/light themes;
+- long/CJK strings;
+- dark mode;
 - reduced motion;
-- offline/degraded behavior;
-- conservative media/low bandwidth;
-- print support without making screens print-first.
+- offline/degraded;
+- missing/partial data;
+- important field targets ~44×44 CSS px where practical;
+- no critical state by color alone.
 
-A beautiful screen that fails these conditions is rejected.
-
----
-
-## 18. Explicit anti-patterns / retired lineage
-
-Do not reintroduce these without a new explicit creator decision backed by evidence:
-
-- generic Tools/More destination;
-- adaptive/reordered primary navigation;
-- global swipe between top-level destinations;
-- Story Mode / Play-the-trip cinematic overlay;
-- persistent Guide rail/spine;
-- Trip Kit;
-- voting/shared-readiness/travel-party dashboards;
-- generic Quick Actions/Saved widgets on active Trip;
-- command palette as Search identity;
-- panel drag/reorder as a product feature;
-- generic Add/Add-to-plan actions for objects already in the canonical itinerary;
-- synthetic trip-health scores;
-- card soup / equal-weight dashboards;
-- decorative commentary chips;
-- faux maps or fake live ETA/traffic;
-- unverified ratings/review counts;
-- fake people, amounts, dates, statuses, places, controls, or integrations added to make a mockup look complete;
-- generic AI travel aesthetics.
+A beautiful state that fails a tired traveler outdoors is not an approved design.
 
 ---
 
-## 19. Context-correct action language
+## 31. Geometry and surfaces
 
-For objects already in the plan, prefer actions such as:
+The old zero-radius card law is superseded.
 
-- `View in itinerary`
-- `Navigate`
-- `Details`
-- `Swap` / deliberately framed alternative action
+Use a **related radius family**, not one radius everywhere.
 
-Use `Add to itinerary` only for a genuine unscheduled candidate. Do not show `Add to plan` merely because a discovery template once had it.
+Recommended role scale:
+- small/control inset: 10–14px;
+- compact card: 14–18px;
+- standard operational/editorial card: 18–24px;
+- large hero/pane: 24–32px;
+- pills: full radius.
 
----
+Exact token values should be finalized in D7 and registered before widespread call-site use.
 
-## 20. Approved visual targets and pending sanity candidates recovered from D6 review
-
-The package contains creator-approved visual/compositional targets. The former `visual_sanity_pending` candidates (SOS, provenance) were promoted to narrow locked references on 2026-09-04 when the creator locked those treatments; their allowlists remain topic-limited and their sample facts remain illustrative. The original ChatGPT raster bytes were initially missing from the repository, then recovered from the creator-supplied 81-image WayPoint conversation archive on 2026-09-04. The selected decision boards are now committed beside the sanitized D6 redraws so that the storage failure cannot become permission to invent another aesthetic.
-
-The active visual package is governed by [`design-system-assets/mockup-manifest.json`](design-system-assets/mockup-manifest.json). It contains the recovered D6 SVGs, a deliberately small set of topic-limited raster decision boards and pending sanity candidates from that archive, and [`canonical-mockups.svg`](design-system-assets/canonical-mockups.svg) for gap coverage only. Generated boards often contain correct composition beside hallucinated copy, controls, data, or color; therefore only each manifest entry's `allowed_signals` may be used.
-
-Recovered D6 references take precedence over the reconstructed board for the same topic. The board and recovered SVGs are **supporting figures governed by this section**, not separate design authorities. Binding visual signals are hierarchy, relative scale, panel relationships, responsive composition, hero prominence, density limits, map/sheet behavior, typography wrapping, and key-state/action placement. Exact photographs, sample text/data, prices, times, route geometry, pin names, and decorative micro-details are illustrative unless this Markdown separately specifies them.
-
-For Fable 5.1 / Claude / Codex: read this Markdown first, then `mockup-manifest.json`, then only the listed visual assets. Follow `v1_canary_routes` exactly for the first two surfaces. Do not average or reconcile the selected evidence with old screenshots, the D7 component gallery, unselected archive images, superseded D1–D7 mockups, or historical design prose.
-
-### V1 exact visual route
-
-`mockup-manifest.json#v1_canary_routes` owns the exact asset order, per-image allowlist and rejected signals for the two V1 screens. It routes Active Trip to the recovered Right Now/lifecycle decision boards and desktop Itinerary to the recovered temporal-spatial workbench. `canonical-mockups.svg#WAY-01` and `#WAY-03` remain fallback gap coverage, not primary judging references. The theme, truth and behavior rules in this Markdown always override sample styling or content inside a raster board.
-
-Canonical board IDs:
-
-- `WAY-00` — desktop shell + Atlas;
-- `WAY-01` — Trip active-now/lifecycle;
-- `WAY-02` — Itinerary mobile;
-- `WAY-03` — Itinerary desktop workbench;
-- `WAY-04` — Map mobile;
-- `WAY-05` — Map desktop;
-- `WAY-06` — Guide editorial landing;
-- `WAY-07` — Split;
-- `WAY-08` — Search overlay;
-- `WAY-09` — SOS emergency sheet.
-
-### Active Trip — mobile
-
-- South Korea fixture;
-- dark/warm-charcoal active-now command-center treatment;
-- current-place/destination imagery has real authority;
-- one dominant Now/Next object with large operational atoms;
-- compact, thumb-prudent shell; no dashboard widget grid.
-
-### Itinerary — mobile
-
-- light cream/sage Waypoint treatment;
-- SCRL-like one-day-primary behavior;
-- large timeline atoms, useful stop imagery, clear route semantics;
-- thumb-zone day rail/scrub; Plan-vs-Actual reachable;
-- no tiny-arrow-led paging.
-
-### Itinerary — desktop
-
-- dark/warm-charcoal temporal-spatial workbench reference;
-- timeline left, large real map right;
-- resizable synchronized panes;
-- no hard 50/50 and no generic dashboard chrome.
-
-### Map — mobile
-
-- dark spatial-workspace reference;
-- map owns nearly the viewport;
-- contextual bottom sheet/selected-place atom;
-- minimal competing chrome.
-
-### Guide — desktop/landing
-
-- light editorial South Korea landing;
-- hero substantially more prominent than the current D7 gallery render;
-- recognizable imagery + location/time-first chapter navigation;
-- less dead space and less prose density;
-- chapter typography remains readable and natural.
-
-### Desktop shell
-
-- integrated/floating inline navigation around the working surface;
-- not a conventional flat sidebar;
-- Atlas, stable five destinations, Search and SOS remain obvious;
-- richer desktop composition without sacrificing readable operational grounds.
-
-### Split
-
-- comparatively compact/direct;
-- ledger + fast entry dominate;
-- visual polish serves scan speed rather than adding decoration.
-
-These targets are examples in light/dark states, **not** a rule that Waypoint automatically switches theme by destination. Theme remains a coherent product-level user/system state.
+Border/shadow treatment should be restrained:
+- hairline structure;
+- low, broad shadows only for actual depth/focus;
+- no floating-everything dashboard look.
 
 ---
 
-## 21. Visual fidelity gate
+## 32. Verification/provenance presentation
 
-Functional correctness and visual acceptance are separate.
+Verification remains traceable without dominating every surface.
 
-A surface can be functionally green and still be visually rejected.
+Default:
+- verified routine state is quiet;
+- stale/conflicting/uncertain state is materially visible;
+- claim/source/date detail appears on demand;
+- no customer-facing pipeline jargon.
 
-Before the next broad implementation run:
-
-### V0 — reference preflight
-
-Map the relevant production surfaces to this authority, `mockup-manifest.json`, and `WAY-00`–`WAY-09`. Identify any code/content constraint that materially prevents the target. Do not invent an alternative silently.
-
-### V1 — two-surface canary
-
-Implement/rework **only**:
-
-1. Active Trip mobile (South Korea fixture)
-2. Itinerary desktop workbench (South Korea fixture)
-
-Render representative production screenshots. Compare hierarchy, proportions, density, imagery prominence, navigation character and overall composition against §20 and the visual package. If materially off-target, correct those two before touching the remaining visual sweep.
-
-This exists specifically to prevent another multi-hour model run from spending usage on the wrong visual interpretation.
-
-### V2 — full convergence
-
-Converge Atlas, Trip lifecycle siblings, Itinerary mobile, Map, Guide, Split, Search/SOS states and shell while preserving the working D7 engineering. Per the creator's 2026-09-04 instruction the canaries are Checkpoint 1 of one continuous migration, not a stop point: every surface is audited and either converged or certified as already conforming. `docs/reference/d7-visual-convergence.md` carries the surface-by-surface completion matrix.
-
-### V3 — paired review
-
-Review production renders at representative phone + intermediate + desktop widths, light/dark where relevant, plus long/CJK/200%-text and degraded-map/image cases.
-
-### Acceptance rule
-
-- creator visual acceptance is required before declaring D7 design-complete;
-- screenshot baselines are regression locks, **not design approval**;
-- do not regenerate/approve final gallery baselines merely to make CI green;
-- baseline only after accepted visuals, then rerun exact-head Required Gate.
-
-Hard visual failures include: letter-by-letter heading wrapping, missing-glyph tofu, unexplained giant blank map regions, weak hero treatment that contradicts the hierarchy, excessive document/prose density on Trip, flat generic shell/sidebar drift, and any reappearance of retired dashboard patterns.
+Provenance affordances must not become a field of tiny unexplained dots.
 
 ---
 
-## 22. D7 engineering foundation to preserve
+## 33. Old-system retirement
 
-The current PR #186 engineering is not throwaway work. Preserve unless a concrete defect requires change:
+The D7 redesign is not additive.
 
-- five stable destination routing;
-- Atlas one action away;
-- global Search + SOS;
-- one canonical guide-view derivation;
-- Trip lifecycle/Now-Next projection;
-- mobile day-first Itinerary and desktop resizable workbench behavior;
-- Google/OSM fallback architecture;
-- deterministic Search ranking/deep-linking;
-- Split math/state + fast entry;
-- semantic module relations and branched days;
-- accessibility/resilience/offline work;
-- retirement of Story/Tools/Trip Kit/adaptive-nav/command-palette lineage.
+The implementation program must identify and retire:
+- old flat sidebar navigation;
+- superseded mobile nav variants;
+- purple-era palette and one-off call-site colors;
+- zero-radius card law;
+- old generic dashboard card grids;
+- obsolete command-palette-first Search behavior where it conflicts with traveler-facing Search;
+- old OSM-first map path where live Maps should use Google Maps Platform;
+- duplicate panel/sheet/navigation systems;
+- legacy story/swipe/yielding behaviors that do not survive this constitution;
+- obsolete Painted Atlas/living-cover motion that exists only decoratively;
+- old prototypes/handoffs that still claim implementation authority;
+- redundant CSS/token overrides left behind by prior visual generations.
 
-The next implementation pass is **visual fidelity/convergence**, not D8 ideation and not an architecture rewrite.
-
----
-
-## 23. September implementation path to Main
-
-1. Consolidation/authority cleanup — this file plus its subordinate visual asset set are the single design packet; superseded design documents stay out of the live tree.
-2. V0 preflight; do not reopen recorded creator decisions.
-3. V1 two-surface canary.
-4. Creator review of rendered output; correct canary until accepted.
-5. V2 full visual convergence on top of PR #186 engineering.
-6. V3 paired responsive review + field/degraded cases.
-7. Explicit creator visual acceptance.
-8. Regenerate final CI-native gallery baselines.
-9. Exact-head Required Gate green.
-10. Merge PR #186 to `main`.
-11. GitHub Pages production smoke: Trip → Itinerary → Map → Guide → Split, Search, SOS, workbench resize, mobile nav, map fallback, imagery.
-12. Physical-device spot check; reopen frontend only for reproduced defects.
-
-Do not start a new broad design-research round. Research is complete enough for implementation unless a specific correctness/accessibility/feasibility blocker requires evidence.
+Do not leave hidden “legacy” variants active for convenience unless there is a documented temporary
+compatibility boundary with a deletion task.
 
 ---
 
-## 24. Settled implementation defaults — no creator grilling queue
+## 34. Canonical visual continuity
 
-The D6 handoff explicitly instructed the implementer not to ask the creator to restate recorded decisions and granted engineering discretion over responsive implementation details. The prior three-question queue was a consolidation error and is retired.
+The September 2026 South Korea mockup library remains useful reference evidence.
 
-Use these defaults unless testing exposes a real accessibility, truth, or feasibility blocker:
+Preserve from the strongest mockups:
+- cream/sage/rust travel palette;
+- Literata-like editorial display + hyperlegible UI contrast;
+- Seoul/Korea destination imagery and cartographic warmth;
+- Itinerary timeline + map workbench;
+- mobile day view chronology;
+- Guide hero + topic exploration;
+- contextual Search categories;
+- SOS layered flow;
+- Split operational clarity;
+- globe/arrival identity;
+- Google-style city-map legibility.
 
-- **Desktop shell:** integrated/floating inline chrome; no conventional flat sidebar. It may subtly yield/compact during deep work, but never reorder, become mysterious, or lose immediate recoverability.
-- **Hero/image prominence:** use useful destination/place imagery more aggressively where it improves identity/orientation, especially Atlas and Guide openings. Do not shrink heroes merely to force more modules above the fold; do not let imagery bury time-critical operational content.
-- **Mobile chrome:** remain aggressively space-prudent. Map/Itinerary chrome may yield during active interaction if the stable five destinations remain immediately recoverable, accessible, and unchanged in identity/order.
+Explicitly reject when they appear in older mockups:
+- purple as the global Waypoint accent;
+- permanent flat desktop sidebar as the final chrome;
+- dashboard grids of equal rounded cards;
+- six-plus equally weighted mobile destinations;
+- Search as a conventional page/tab;
+- SOS as a normal destination;
+- generic AI gradients;
+- identical destination theming;
+- static page-to-page transitions with no object continuity.
 
-These are implementation defaults, not authorization for new features or a fresh design phase. Only a genuine unresolved product contradiction should come back to Carlo as a new decision.
+The mockups are a visual library, not a voting system. Do not average incompatible generations.
 
 ---
 
-## 25. No further design research is currently required
+## 35. Governance and D7 acceptance
 
-Existing research and D6 review already support the architecture and visual direction. Additional general Webby/Dribbble/Awwwards/competitor research now has diminishing value and risks reopening settled decisions.
+D6 design reconciliation is **complete**.
 
-Research only if a concrete implementation question cannot be resolved from this authority, production evidence, accessibility/field evidence, or the actual content fixtures.
+D7 is authorized to implement the entire new visual system.
 
----
+A redesign is not accepted until:
 
-## 26. Definition of design-complete
+1. all major surfaces use the new system:
+   - Atlas
+   - Trip
+   - Itinerary
+   - Map
+   - Guide
+   - Search
+   - Split
+   - SOS
+   - place/detail
+   - new Guide intake
+   - post-trip/Learnings
+   - loading/error/offline states
+2. desktop, tablet/intermediate, and mobile compositions are intentionally designed;
+3. old conflicting patterns are removed;
+4. Google Maps Platform is the live map foundation;
+5. motion matches `docs/reference/motion.md`;
+6. reduced motion is complete;
+7. visual regression baselines are regenerated from the new system;
+8. accessibility/resilience gates pass;
+9. no factual destination content was changed by presentation work;
+10. the final site looks like one coherent Waypoint product rather than a collage of mockup eras.
 
-Waypoint’s design work is complete for the September program when:
-
-1. production reflects this authority rather than merely satisfying functional selectors/tests;
-2. the creator accepts the rendered D6 visual direction;
-3. phone/intermediate/desktop, light/dark, CJK/long text, text zoom, reduced motion and degraded/offline states pass;
-4. exact-head CI is green after accepted baseline regeneration;
-5. PR #186 is merged and production smoke-tested;
-6. remaining work is content/reverification or genuine field bugs, not unresolved frontend architecture or another redesign.
-
-Until then, PR #186 is an engineering foundation, not the final accepted redesign.
+Implementation sequencing is owned by the temporary D7 work order, not by creating another design
+authority.

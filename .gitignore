@@ -23,6 +23,7 @@ forks.json
 validate-errors.txt
 docs/mockups/living-atlas.html
 docs/mockups/.cache/
+docs/mockups/.generated/
 
 reports/
 .stryker-tmp/
