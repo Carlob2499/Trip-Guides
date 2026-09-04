@@ -35,10 +35,12 @@ Read, in order:
 4. `docs/reference/component-registry.json`
 5. `.claude/skills/waypoint-design/SKILL.md`
 6. `docs/mockups/GRAND_REFERENCE_README.md`
-7. `docs/mockups/grand-reference.html`
-8. affected source/components/styles
-9. `docs/reference/repo-map.md` only when ownership is unclear
-10. `docs/research/waypoint-design-reference-packet.md` only when external benchmark evidence is
+7. **`docs/mockups/CANONICAL_MOCKUP_LINEAGE.md`**
+8. the named source mockup(s) for the surface, when the mockup library is available
+9. `docs/mockups/grand-reference.html` **for D7 evolution deltas only — never as a standalone visual target**
+10. affected source/components/styles
+11. `docs/reference/repo-map.md` only when ownership is unclear
+12. `docs/research/waypoint-design-reference-packet.md` only when external benchmark evidence is
     needed for a concrete unresolved implementation choice
 
 Do **not** load historical design handoffs by default.
@@ -93,6 +95,26 @@ Reject:
 - decorative motion without spatial/meaning value.
 
 When mockups disagree, the constitution wins.
+
+### Visual ancestry gate — required before each major surface
+
+Before implementing Atlas, Trip, Itinerary, Map, Guide, Search, place detail, Split, SOS, or New Guide intake, identify the exact visual ancestor in `docs/mockups/CANONICAL_MOCKUP_LINEAGE.md`.
+
+Record in working notes / PR description:
+
+1. ancestor mockup filename(s);
+2. visual/compositional traits being preserved;
+3. final D7 decisions that intentionally change it;
+4. superseded traits being deleted;
+5. desktop + mobile/intermediate screenshot proof after implementation.
+
+**Do not implement a surface from `grand-reference.html` alone.** The HTML study exists to resolve late D7 deltas; it may not downgrade the richer photography, hierarchy, spatial rhythm, or composition of the named approved mockups.
+
+If the named source mockup is not available in the current execution environment, use the detailed lineage description and current Korea guide assets/data, and flag the missing image-reference availability in the completion report rather than inventing a new aesthetic.
+
+### Reference-image truth
+
+For South Korea reference states, use the current guide's real place names, current itinerary data, current Learnings/Actually/Skipped history, and existing licensed image/video references. Presentation work must not invent travel facts or substitute arbitrary stock content merely to fill a design.
 
 ---
 
