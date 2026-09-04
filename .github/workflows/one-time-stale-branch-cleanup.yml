@@ -1,0 +1,65 @@
+name: One-time stale branch cleanup
+
+on:
+  push:
+    branches:
+      - claude/waypoint-design-routing-rex0vr
+    paths:
+      - .github/workflows/one-time-stale-branch-cleanup.yml
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  prune:
+    if: github.repository == 'Carlob2499/Trip-Guides'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete exact superseded branch refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          branches=(
+            'claude/waypoint-design-system-mpfbl6|efe7e853fca9d944f10b4cd1ec138c7a28de6e2c'
+            'codex/engineering-freeze-terminology|53f907f3b5c48b2e85fb6bb7d7c5b67a3357f008'
+            'codex/pipeline-v3-reconciled|2bcd8738d83dc4801b22544428204816209e0ae6'
+            'codex/r6-traveler-first-cleanup|90d2d3d98262c18b166b3b8a7b6fb1bc321549c5'
+            'codex/scaffold-base-movement-guard|44d032856399c9170796fe2d26a6dbabbeda047c'
+            'codex/u01-traveler-runtime-switch|45a983606ca79b52c711bdd668dafd78b33aecfb'
+            'design/d6-product-reconciliation-20260902|b37fe92a12e56a01e795d5bb84c5f38c99aa439e'
+            'operator/revoke-stale-kumamoto-r3|f19732eac4f68670c67c404028879b7fef2919ed'
+            'operator/september-authority-drift-20260901|d4ff7812c51b1742ccb6c7dfc46416a8ebcf7d27'
+            'research-chat/taipei-v2-harness-20260901|298debcea07b038b77aaaf5f5450ebfe4432c361'
+          )
+
+          for item in "${branches[@]}"; do
+            branch="${item%%|*}"
+            expected="${item##*|}"
+
+            open_prs="$(gh pr list --repo "$REPO" --head "$branch" --state open --json number --jq 'length')"
+            if [[ "$open_prs" != "0" ]]; then
+              echo "Refusing to delete $branch: it has $open_prs open PR(s)." >&2
+              exit 1
+            fi
+
+            actual="$(git ls-remote "https://github.com/${REPO}.git" "refs/heads/${branch}" | awk '{print $1}')"
+            if [[ -z "$actual" ]]; then
+              echo "$branch already absent; continuing."
+              continue
+            fi
+            if [[ "$actual" != "$expected" ]]; then
+              echo "Refusing to delete $branch: expected $expected but found $actual." >&2
+              exit 1
+            fi
+
+            echo "Deleting superseded ref $branch @ $actual"
+            gh api --method DELETE "repos/${REPO}/git/refs/heads/${branch}"
+          done
+
+          echo 'Remaining branches:'
+          gh api --paginate "repos/${REPO}/branches?per_page=100" --jq '.[].name'
