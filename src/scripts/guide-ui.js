@@ -55,6 +55,9 @@ function showDest(key, opts) {
   var changed = currentDest !== key;
   currentDest = key;
   Object.keys(destPanels).forEach(function (k) { destPanels[k].hidden = k !== key; });
+  // Map embeds load when their destination is first shown, never for a region the reader
+  // has not opened (offline and data honesty: no hidden frames failing behind the page).
+  destPanels[key].querySelectorAll("iframe[data-src]").forEach(function (f) { f.src = f.getAttribute("data-src"); f.removeAttribute("data-src"); });
   document.querySelectorAll("[data-dest-nav]").forEach(function (btn) {
     if (btn.dataset.dest === key) btn.setAttribute("aria-current", "true");
     else btn.removeAttribute("aria-current");

@@ -418,6 +418,9 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
       sel.addEventListener("change", function () {
         document.documentElement.setAttribute("style", themeStyles[sel.value]);
       });
+      // Map embeds are lazy behind the guide router (guide-ui.js); the gallery has no router,
+      // so every specimen frame loads here.
+      document.querySelectorAll("iframe[data-src]").forEach((f) => { f.src = f.getAttribute("data-src"); f.removeAttribute("data-src"); });
       // Dark toggle: same storage key and attribute as every page's own control.
       document.getElementById("galDark").addEventListener("click", function () {
         const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";

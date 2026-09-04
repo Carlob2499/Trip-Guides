@@ -41,8 +41,8 @@ const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shop
     <div class="mapdest-bench">
       <div class="mapdest-map itin-map" data-itin-map data-map-lens="all">
         <script type="application/json" is:inline data-map-data set:html={payload} />
-        <iframe class="osmmap" loading="lazy" title="Map of every place in this guide"
-          src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center, span)}&layer=mapnik&marker=${center.lat}%2C${center.lng}`}></iframe>
+        <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of every place in this guide"
+          data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center, span)}&layer=mapnik&marker=${center.lat}%2C${center.lng}`}></iframe>
         <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the written places below still work.</p>
       </div>
       {/* Mobile: a contextual bottom sheet with the selected place; collapsed it is a handle

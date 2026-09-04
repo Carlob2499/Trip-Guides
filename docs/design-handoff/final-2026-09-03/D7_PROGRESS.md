@@ -29,17 +29,26 @@ what is finished and what is mid-flight.
   resume/botbar/day-scrub, story-mode, spine, panel reorder, Reminders + reminders feature,
   mobile-nav.css, story-mode.css, tools.css, palette.css, planner.css.
 
-## Status
+- `src/lib/guide-view.ts` = the ONE derivation of everything the destinations receive;
+  GuideLayout and the gallery both call `deriveGuideView`.
+- Map embeds are lazy: `iframe[data-src]` inside a destination is promoted by `showDest`
+  (guide-ui.js) when that destination first shows; the gallery promotes all of them itself.
+- Search ranking is token-aware (`queryTokens`), strict-then-relaxed, deterministic.
 
-- [x] Models: trip lifecycle/trip-data/readiness/recap (+tests), search index/rank (+tests).
-- [x] Components written: AppChrome, TripDestination, ItineraryDestination, MapDestination,
-      GuideDestination, SplitDestination, DaysBlock (timeline), GuideLayout.
-- [x] Scripts: guide-ui.js (router), trip/ui/trip.js, readiness-ticks.js.
-- [ ] itinerary feature rewrite (day-rail + workbench), maps lens/selection + OSM-until-init,
-      search overlay + styles.css, mobile-nav simplification, sos mount, CSS (trip.css,
-      itinerary.css, guide-dest.css, map dest), guide.css cleanup.
-- [ ] Split rehierarchy (TripSplit.astro + trip-split.js: rows show method, add flow participants).
-- [ ] Retirement + registry + gallery + tests (a11y/resilience/breakpoints/no-device-checks/
-      color-scale/drift baseline) + CLAUDE.md/AGENTS.md ≤ 6500 bytes (invariant currently red).
-- [ ] Atlas reconcile, Denmark branches data, Korea module metadata.
-- [ ] Gates: check:fast, playwright, check, check:offline, check:perf, ship:check, drift. PR.
+## Status (2026-09-04)
+
+- [x] Models, components, router, chrome, trip/search features, CSS layer.
+- [x] Build green; `check:fast` green (invariants, lint, typecheck, 3135 unit tests);
+      Playwright a11y + resilience green (85/85); `check:offline`, `check:perf` green.
+- [x] Registry JSON, gallery (renders the five destinations), gate tests (breakpoints,
+      no-device-checks, no-orphan, accent-ink, a11y + resilience specs) updated.
+- [x] CLAUDE.md/AGENTS.md trimmed to 6478 bytes (parity kept).
+- [x] Retired: guide-rail, palette, reminders feature, mobile-nav rank/swipe/resume/botbar/
+      day-scrub, story-mode, spine, ToolsScreen/TripKit/Reminders, dead stylesheets.
+- [ ] Still to do, in order: panel reorder retirement; guide.css/flight.css/field-tools.css
+      stale rule sweep (rail/catblock/nav-hint/today-chip/spine); Split rehierarchy
+      (TripSplit.astro + trip-split.js: per-row method, participants in add flow); Atlas
+      reconcile (index.astro: global search hook, controls recede); Denmark `branches` data;
+      Korea `module` metadata; gallery screenshot baselines review (never update blindly);
+      docs (design-system.md D7 notes, repo-map, component registry notes); ACCEPTANCE_MATRIX
+      evidence; `npm run check` + `ship:check`; PR.

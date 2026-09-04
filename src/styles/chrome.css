@@ -18,7 +18,8 @@
 .topbar-wordmark{font-family:var(--font-display);font-weight:640;font-size:var(--text-body);letter-spacing:-.008em;line-height:1}
 /* "Atlas" names where the arrow goes; on the smallest phones the wordmark alone says it. */
 .topbar-atlas{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding-left:.35rem;border-left:1px solid var(--rule2)}
-@media(max-width:399px){.topbar-atlas{display:none}}
+/* 320px floor: four 44px controls, the wordmark and the padding must fit one row. */
+@media(max-width:399px){.topbar-atlas{display:none}.topbar{gap:.4rem;padding-left:max(.7rem,var(--safe-left));padding-right:max(.7rem,var(--safe-right))}.topbar-right{gap:.25rem}}
 .topbar-title{display:none;flex:1;min-width:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topbar-right{display:flex;align-items:center;gap:.4rem;margin-left:auto;flex:none}
 .topbar-sos-mount{display:contents}

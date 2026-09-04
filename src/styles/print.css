@@ -111,8 +111,7 @@
    Material minimum, causing mis-taps on real phones. An invisible ::after halo grows
    the hit region without changing layout width/height. */
 @media(max-width:599px){
-  .anchor-btn,.map-fs-btn,.copy-addr{position:relative}
-  .anchor-btn::after,.map-fs-btn::after,.copy-addr::after{content:"";position:absolute;inset:-11px}
-  .gtab{position:relative}
-  .gtab::after{content:"";position:absolute;top:-9px;bottom:-9px;left:0;right:0}
+  /* .map-fs-btn is absolutely placed on its map and already 44px (base.css) — no halo. */
+  .anchor-btn,.copy-addr{position:relative}
+  .anchor-btn::after,.copy-addr::after{content:"";position:absolute;inset:-11px}
 }

@@ -201,8 +201,8 @@ const countOf = (ch: Chapter) => ch.entries.length;
                 {chapterMapPayload && (
                   <div class="itin-map gd-map" data-itin-map data-map-lens="chapter">
                     <script type="application/json" is:inline data-map-data set:html={chapterMapPayload} />
-                    <iframe class="osmmap" loading="lazy" title={`${ch.name} — map`}
-                      src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(ch.center!, ch.span)}&layer=mapnik&marker=${ch.center!.lat}%2C${ch.center!.lng}`}></iframe>
+                    <iframe class="osmmap" loading="lazy" data-lazy-frame title={`${ch.name} — map`}
+                      data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(ch.center!, ch.span)}&layer=mapnik&marker=${ch.center!.lat}%2C${ch.center!.lng}`}></iframe>
                     <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the places below still work.</p>
                   </div>
                 )}

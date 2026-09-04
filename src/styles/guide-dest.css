@@ -88,7 +88,7 @@
 @media(min-width:720px){
   .gd-body{display:grid;grid-template-columns:minmax(180px,220px) minmax(0,1fr);gap:1.6rem;align-items:start;padding-inline:clamp(1rem,3vw,1.5rem)}
   .gd-index{display:flex;flex-direction:column;gap:.1rem;position:sticky;top:calc(var(--hdr-h) + .8rem);padding:1.2rem 0}
-  .gd-index-btn{display:flex;align-items:baseline;gap:.5rem;min-height:40px;padding:.35rem .6rem;background:transparent;border:0;border-left:2px solid transparent;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-align:left;cursor:pointer;line-height:1.25}
+  .gd-index-btn{display:flex;align-items:baseline;gap:.5rem;min-height:44px;padding:.35rem .6rem;background:transparent;border:0;border-left:2px solid transparent;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-align:left;cursor:pointer;line-height:1.25}
   .gd-index-btn:hover{color:var(--ink)}
   .gd-index-btn[aria-current="true"]{color:var(--accent-ink);border-left-color:var(--accent);font-weight:700}
   .gd-index-btn--quiet{margin-top:.6rem;color:var(--muted)}

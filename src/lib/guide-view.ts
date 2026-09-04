@@ -108,14 +108,17 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
 
   /* ── Guide chapters: the authored groups, in the guide's own order ── */
   const sections = guide.sections as any[];
+  // The itinerary's own group is not a chapter: its non-days sections join the first chapter
+  // below (daysOnlyExtras), so they render exactly once.
+  const daysGroup = daysSec?.group ?? "Days";
   const groupOrder: string[] = [];
   for (const s of sections) {
-    if (s.type === "days" || isSources(s)) continue;
+    if (s.type === "days" || s.group === daysGroup || isSources(s)) continue;
     if (!groupOrder.includes(s.group)) groupOrder.push(s.group);
   }
   const entriesOf = (g: string) => sections.map((s, i) => ({ s, i })).filter(({ s }) => s.group === g && s.type !== "days" && !isSources(s));
   const sources = sections.map((s, i) => ({ s, i })).filter(({ s }) => isSources(s));
-  const daysOnlyExtras = sections.map((s, i) => ({ s, i })).filter(({ s }) => s.group === (daysSec?.group ?? "Days") && s.type !== "days");
+  const daysOnlyExtras = sections.map((s, i) => ({ s, i })).filter(({ s }) => s.group === daysGroup && s.type !== "days");
   const panelGroups: string[] = guide.panelGroups ?? [];
   const descriptors: Record<string, string> = guide.descriptors ?? {};
   const referenceGroup = groupOrder.find((g) => /essential|plan|basics|before/i.test(g)) ?? groupOrder[0];

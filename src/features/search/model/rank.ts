@@ -41,12 +41,31 @@ export function normalizeQuery(raw: string): string {
   return String(raw || "").trim().toLowerCase().replace(/\s+/g, " ");
 }
 
-function score(r: SearchRecord, q: string): number {
+/** Query words: split on anything that is not a letter, digit or CJK character, so a pasted
+    "Gyeongbokgung-Palace-Reservation-2026" still finds Gyeongbokgung Palace. */
+export function queryTokens(q: string): string[] {
+  return q.split(/[^\p{L}\p{N}]+/u).filter((t) => t.length >= 1);
+}
+
+/* Score a record against the phrase and its tokens. -1 = no hit. Higher is better:
+   exact/prefix/substring phrase hits on the title outrank token hits, and a token hit in
+   the title outranks the same token in the body. `strict` requires every token to appear
+   somewhere in the record; the caller relaxes it when nothing satisfies the whole query. */
+function score(r: SearchRecord, q: string, tokens: string[], strict: boolean): number {
   const title = r.title.toLowerCase();
-  if (title === q) return 3;
-  if (title.startsWith(q)) return 2;
-  if (title.includes(q)) return 1;
-  return r.hay.includes(q) ? 0 : -1;
+  if (title === q) return 100;
+  if (title.startsWith(q)) return 90;
+  if (title.includes(q)) return 80;
+  if (r.hay.includes(q)) return 70;
+  if (!tokens.length) return -1;
+  let inTitle = 0, inHay = 0;
+  for (const t of tokens) {
+    if (title.includes(t)) inTitle++;
+    else if (r.hay.includes(t)) inHay++;
+  }
+  const found = inTitle + inHay;
+  if (found === 0 || (strict && found < tokens.length)) return -1;
+  return inTitle * 4 + inHay;
 }
 
 /**
@@ -57,9 +76,10 @@ function score(r: SearchRecord, q: string): number {
 export function rankSearch(records: readonly SearchRecord[], rawQuery: string, currentSlug: string | null): SearchGroup[] {
   const q = normalizeQuery(rawQuery);
   if (q.length < MIN_CHARS) return [];
-  const hits = records
-    .map((r, i) => ({ r, i, s: score(r, q) }))
-    .filter((h) => h.s >= 0)
+  const tokens = queryTokens(q);
+  let scored = records.map((r, i) => ({ r, i, s: score(r, q, tokens, true) })).filter((h) => h.s >= 0);
+  if (!scored.length && tokens.length > 1) scored = records.map((r, i) => ({ r, i, s: score(r, q, tokens, false) })).filter((h) => h.s >= 0);
+  const hits = scored
     .sort((a, b) => {
       const aCur = a.r.slug === currentSlug ? 0 : 1;
       const bCur = b.r.slug === currentSlug ? 0 : 1;

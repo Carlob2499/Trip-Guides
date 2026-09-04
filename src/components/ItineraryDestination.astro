@@ -65,8 +65,8 @@ const bbox = (c: { lat: number; lng: number }, s: number | null) => {
         {mapPayload ? (
           <div class="itin-map itin-map--bench" data-itin-map data-map-lens="days">
             <script type="application/json" is:inline data-map-data set:html={mapPayload} />
-            <iframe class="osmmap" loading="lazy" title="Map of this day's stops"
-              src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}`}></iframe>
+            <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of this day's stops"
+              data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}`}></iframe>
             <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the written stops and their Get-there links still work.</p>
           </div>
         ) : (

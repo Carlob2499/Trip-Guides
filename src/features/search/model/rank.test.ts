@@ -38,3 +38,22 @@ describe("rankSearch", () => {
     expect(groups[0].key).toBe("places");
   });
 });
+
+describe("token matching (D7: pasted references still find the place)", () => {
+  const recs = [
+    { slug: "korea", guideTitle: "Korea", kind: "place", title: "Gyeongbokgung Palace", section: "Sights", anchor: "a", hay: "gyeongbokgung palace royal seoul" },
+    { slug: "korea", guideTitle: "Korea", kind: "section", title: "Booking ahead", section: "Plan", anchor: "b", hay: "booking ahead reservation needed for the palace tour" },
+    { slug: "korea", guideTitle: "Korea", kind: "venue", title: "Tosokchon", section: "Food", anchor: "c", hay: "tosokchon samgyetang" },
+  ] as never[];
+  it("splits a hyphenated query into words and requires each of them when it can", () => {
+    const g = rankSearch(recs, "palace-reservation", "korea");
+    expect(g.flatMap((x) => x.items.map((i) => i.title))).toEqual(["Booking ahead"]);
+  });
+  it("relaxes to any word when no record carries the whole query", () => {
+    const g = rankSearch(recs, "Gyeongbokgung-Palace-Reservation-ABCDEFG-2026", "korea");
+    const titles = g.flatMap((x) => x.items.map((i) => i.title));
+    expect(titles[0]).toBe("Gyeongbokgung Palace");
+    expect(titles).toContain("Booking ahead");
+    expect(titles).not.toContain("Tosokchon");
+  });
+});

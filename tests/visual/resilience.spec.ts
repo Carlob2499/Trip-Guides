@@ -81,8 +81,10 @@ async function appendStress(page: Page, selector: string) {
   }, { selector, stress: [...STRESS] });
 }
 
-async function openStation(page: Page, id: string) {
-  const tab = page.locator(`#guideTabs .gtab[data-tab="${id}"]`).first();
+/* The five destinations (design-system.md D6-03): the bottom bar's slots on a phone. */
+const DEST_NAV = ".botbar [data-dest-nav]";
+async function openDestination(page: Page, key: string) {
+  const tab = page.locator(`${DEST_NAV}[data-dest="${key}"]`).first();
   await tab.click();
   await expect(tab).toHaveAttribute("aria-current", "true");
   await settle(page);
@@ -96,25 +98,38 @@ for (const [name, path] of PAGES) {
 }
 
 for (const [name, path] of GUIDES) {
-  test(`⌁ ${name} every station fits at 320px`, async ({ page }) => {
+  test(`⌁ ${name} every destination fits at 320px`, async ({ page }) => {
     await prep(page, path, 320);
-    const ids = await page.locator("#guideTabs .gtab:not([hidden])").evaluateAll((els) =>
-      els.map((el) => (el as HTMLElement).dataset.tab).filter((id): id is string => Boolean(id)));
-    expect(ids.length, `${name}: no guide stations`).toBeGreaterThan(1);
+    const ids = await page.locator(DEST_NAV).evaluateAll((els) =>
+      els.map((el) => (el as HTMLElement).dataset.dest).filter((id): id is string => Boolean(id)));
+    expect(ids, `${name}: the five destinations`).toEqual(["trip", "itinerary", "map", "guide", "split"]);
     for (const id of ids) {
-      await openStation(page, id);
+      await openDestination(page, id);
       await expectFits(page, `${name}/${id} @ 320px`);
+      // The Guide destination's chapters are one more level: every chapter must fit too.
+      if (id === "guide") {
+        const chapters = page.locator("[data-chapter-go]:visible");
+        for (let i = 0; i < await chapters.count(); i++) {
+          await page.locator("[data-chapter-go]:visible").nth(i).click();
+          await settle(page);
+          await expectFits(page, `${name}/guide chapter ${i} @ 320px`);
+          await page.locator('[data-chapter-go="overview"]:visible').first().click();
+          await settle(page);
+        }
+      }
     }
   });
 }
 
 const HUB_COPY = ".atlas-sheet-title,.atlas-sheet-cities,.atlas-sheet-dates,.atlas-dock-name";
-const GUIDE_COPY = [
-  ".mast-eyebrow,.mast-title,.mast-dek,.block-title,.pnl-title",
-  ".day .b>strong,.day-tldr,.day-leg span:not(.day-leg-arrow):not(.day-leg-km),.stop-name,.stop-note",
-  ".lsnote,.fit,.check-txt,.sight-name,.sight-body p",
-  ".venue-name,.venue-area,.venue-pill,.venue-why,.venue-crowd,.venue-details dd",
-].join(",");
+/* Variable copy per destination — every string a guide author can lengthen. */
+const GUIDE_COPY: Record<string, string> = {
+  trip: ".trip-title,.trip-sub,.trip-cities,.trip-dates,.trip-goto-title,.trip-rem li,.trip-entry-row,.trip-list li,.tn-name,.tn-note",
+  itinerary: ".day-title,.day-tldr,.day .b>strong,.day-leg span:not(.day-leg-arrow):not(.day-leg-km),.check-txt,.fit,.day-branch-label,.day-know-title,.itin-daybtn-n",
+  map: ".mapdest-row-name,.mapdest-row-meta,.mapdest-group-title,.mapdest-sel-name",
+  guide: ".mast-eyebrow,.mast-title,.mast-dek,.gd-card-name,.gd-card-sub,.block-title,.pnl-title,.lsnote,.sight-name,.sight-body p,.venue-name,.venue-area,.venue-pill,.venue-why,.venue-crowd,.venue-details dd",
+  split: ".split-title,.split-desc,.split-empty,.se-h-desc,.sr-total-lbl",
+};
 
 test("⌁ hub variable data survives hostile copy", async ({ page }) => {
   await prep(page, HUB[1], 390, 844);
@@ -127,22 +142,23 @@ test("⌁ hub variable data survives hostile copy", async ({ page }) => {
 for (const [name, path] of GUIDES) {
   test(`⌁ ${name} variable data survives hostile copy`, async ({ page }) => {
     await prep(page, path, 390, 844);
-    expect(await appendStress(page, GUIDE_COPY)).toBeGreaterThan(10);
-    await expectFits(page, `${name} hostile copy @ 390px`);
+    let total = 0;
+    for (const [key, selector] of Object.entries(GUIDE_COPY)) {
+      await openDestination(page, key);
+      if (key === "guide") {
+        // Chapters hold the repositories; open the first one that carries places.
+        const first = page.locator("[data-chapter-go]:visible").first();
+        if (await first.count()) { await first.click(); await settle(page); }
+      }
+      total += await appendStress(page, selector);
+      await expectFits(page, `${name}/${key} hostile copy @ 390px`);
+    }
+    expect(total).toBeGreaterThan(10);
   });
 
   test(`⌁ ${name} opened surfaces fit at 320px`, async ({ page }) => {
     await prep(page, path, 320);
     let exercised = 0;
-
-    const groups = page.locator("#sheetOpen");
-    if (await groups.isVisible()) {
-      await groups.click();
-      await expect(page.locator(".sheet.open")).toBeVisible();
-      await expectFits(page, `${name} groups`);
-      await page.keyboard.press("Escape");
-      exercised++;
-    }
 
     const share = page.locator("#btnShare");
     if (await share.isVisible()) {
@@ -162,8 +178,24 @@ for (const [name, path] of GUIDES) {
       exercised++;
     }
 
-    const tabs = page.locator("#guideTabs .gtab:not([hidden])");
-    for (let i = 0; i < await tabs.count(); i++) {
+    // The Map destination's pin sheet, opened to its full state.
+    await openDestination(page, "map");
+    const grip = page.locator("[data-map-sheet] .mapdest-sheet-grip").first();
+    if (await grip.isVisible()) {
+      await grip.click();
+      await grip.click();
+      await expect(page.locator("[data-map-sheet]")).toHaveAttribute("data-sheet", "full");
+      await expectFits(page, `${name} map sheet`);
+      exercised++;
+    }
+
+    // A provenance popover, wherever the first visible dot lives.
+    for (const key of ["guide", "itinerary", "trip"]) {
+      await openDestination(page, key);
+      if (key === "guide") {
+        const first = page.locator("[data-chapter-go]:visible").first();
+        if (await first.count()) { await first.click(); await settle(page); }
+      }
       const dot = page.locator(".prov-dot:visible").first();
       if (await dot.count()) {
         await dot.click();
@@ -173,23 +205,22 @@ for (const [name, path] of GUIDES) {
         exercised++;
         break;
       }
-      await tabs.nth(i).click();
-      await settle(page);
     }
 
+    await openDestination(page, "itinerary");
     const indexed = await page.evaluate((stress) => {
-      const els = Array.from(document.querySelectorAll<HTMLElement>(".planner-days .day[data-day] .d,.sight .sight-name"));
+      const els = Array.from(document.querySelectorAll<HTMLElement>(".day[data-day] .d,.day-title"));
       els.forEach((el) => el.append(document.createTextNode(` ${stress}`)));
       return els.length;
     }, STRESS[1]);
     expect(indexed).toBeGreaterThan(0);
-    const search = page.locator(".topbar-search");
-    if (await search.isVisible()) await search.click(); else await page.keyboard.press("/");
-    const input = page.locator(".pal-input");
+    const search = page.locator("[data-search-open]:visible").first();
+    if (await search.count()) await search.click(); else await page.keyboard.press("/");
+    const input = page.locator(".srch-input");
     await expect(input).toBeVisible();
     await input.fill("Gyeongbokgung-Palace-Reservation");
-    await expect(page.locator(".pal-item").first()).toBeVisible();
-    await expectFits(page, `${name} command palette`);
+    await expect(page.locator("[data-srch-i]").first()).toBeVisible();
+    await expectFits(page, `${name} search overlay`);
     exercised++;
 
     expect(exercised, `${name}: too few real opened surfaces exercised`).toBeGreaterThanOrEqual(4);
@@ -212,7 +243,7 @@ test("⌁ mobile traveler critical path exposes usable primary surfaces", async 
   await expectFits(page, "progress critical path @ 375px");
 
   await prep(page, GUIDES[1][1], 375, 812);
-  await expect(page.locator("#guideTabs .gtab:not([hidden])").first()).toBeVisible();
+  await expect(page.locator(DEST_NAV).first()).toBeVisible();
   await expect(page.locator("main")).toBeVisible();
   await expectFits(page, "finished guide critical path @ 375px");
 });
@@ -229,7 +260,7 @@ test("⌁ a primed finished guide remains readable after the browser goes offlin
   const first = await page.goto(GUIDES[1][1], { waitUntil: "networkidle" });
   expect(first?.status(), "online prime reached an error page").toBeLessThan(400);
   await page.addStyleTag({ content: ".reveal-pending{opacity:1!important;transform:none!important}" });
-  await expect(page.locator("#guideTabs .gtab:not([hidden])").first()).toBeVisible();
+  await expect(page.locator(DEST_NAV).first()).toBeVisible();
   await page.evaluate(async () => {
     if (!("serviceWorker" in navigator)) throw new Error("service worker unsupported");
     await navigator.serviceWorker.ready;
@@ -242,8 +273,8 @@ test("⌁ a primed finished guide remains readable after the browser goes offlin
   expect(offline?.status(), "service worker did not serve the cached guide navigation").toBeLessThan(400);
   await offlinePage.addStyleTag({ content: ".reveal-pending{opacity:1!important;transform:none!important}" });
   await expect(offlinePage.locator("main")).toBeVisible();
-  await expect(offlinePage.locator("#guideTabs .gtab:not([hidden])").first()).toBeVisible();
-  await expect(offlinePage.locator(".mast-title, h1").first()).toBeVisible();
+  await expect(offlinePage.locator(DEST_NAV).first()).toBeVisible();
+  await expect(offlinePage.locator(".trip-title, h1").first()).toBeVisible();
   await expectFits(offlinePage, "finished guide offline @ 375px");
 
   await context.close();
