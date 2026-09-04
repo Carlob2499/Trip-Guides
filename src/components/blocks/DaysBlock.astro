@@ -1,109 +1,92 @@
 ---
+/* The itinerary timeline — one day card per authored day (design-system.md D6-20/34/35/46/49).
+
+   Mobile: ONE day is the primary unit. Every card renders (the data is the same at every
+   width), but itinerary.css shows only the selected day and the thumb-zone day rail (rendered
+   by ItineraryDestination) moves between them. Desktop: the same cards stack as the timeline
+   pane of the temporal-spatial workbench, beside the real map.
+
+   Large atoms, not paragraphs: a stop is a numbered row with a big name, its time in the data
+   face, a note, and the Get-there links. A day whose party splits renders each branch as its
+   own labelled section rather than one fake linear route (D6-46). Plan ⇄ Actual stays per day
+   for trips the maker has reflected on. Nothing here invents a time, a coordinate or a stop. */
 import Icon from "../Icon.astro";
-// Day-by-day itinerary — the heart of the Plan view. Renders:
-//   1. A numbered day-scrubber (color-block chips) — sticky, scroll-synced +
-//      click-to-jump via day-rail.js.
-//   2. The day cards, full width (single column).
-//   3. Per-day numbered stop lists from the additive `waypoints` field — the
-//      on-the-go itinerary ladder (time in data face, name, note).
 import TransitLinks from "../TransitLinks.astro";
 import Fold from "../Fold.astro";
 import { checklistText } from "../../lib/checklist";
 import { dayRouteLink } from "../../lib/transit-links";
-// R5 section anchor: the trip's shape as a journey line, derived from the day
-// entries themselves (dates + the first/last days' own titles — anchors.ts).
-// Per-day route-leg headers derive from each day's verified waypoints.
-import { dayTimelineStops, dayLegSummary } from "../../lib/anchors";
-const { sec, keyPrefix = "dy", learnings = null, country } = Astro.props;
+import { dayLegSummary } from "../../lib/anchors";
+
+interface ModuleLink { id: string; title: string; kind: string; critical: boolean; anchor: string }
+const { sec, keyPrefix = "dy", learnings = null, country, modulesByDate = {} as Record<string, ModuleLink[]> } = Astro.props;
 const days: any[] = sec.items || [];
-const timeline = dayTimelineStops(days);
 const two = (n: number) => String(n + 1).padStart(2, "0");
-// Curated post-mortem for THIS day, matched by date. Only days the maker actually
-// reflected on get a Plan ⇄ Actual toggle — the rest render exactly as before.
-const actualFor = (date: string) =>
-  (learnings?.days ?? []).find((d: any) => d.date === date) ?? null;
-
-/* R5 SCREENS.md §3 — the day card's kicker: DAY 4 OF 8 · SAT 11 JUL · <state>.
-   "of N" is DERIVED from the day list, never written down: TESTS.md §5 exists because a
-   hand-maintained count contradicted the thing rendered beneath it. The state itself is
-   resolved client-side (guide-ui.js) against the reader's own clock, because a build-time
-   "now" is whatever time the site was deployed — this markup carries only the parts that are
-   true regardless of when it is read. */
+const actualFor = (date: string) => (learnings?.days ?? []).find((d: any) => d.date === date) ?? null;
 const dayCount = days.length;
+/* Knowledge modules deterministically related to a day (D6-53): at most two ordinary links,
+   critical ones first and never capped — the itinerary is not an article feed. */
+const linksFor = (date: string) => {
+  const all: ModuleLink[] = modulesByDate[date] ?? [];
+  const critical = all.filter((m) => m.critical);
+  const rest = all.filter((m) => !m.critical).slice(0, Math.max(0, 2 - critical.length));
+  return [...critical, ...rest];
+};
+const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit", etiquette: "Etiquette", arrival: "Arrival", culture: "Culture", food: "Food", practical: "Practical" };
 ---
-{timeline.length > 0 && (
-  <div class="anch-fig" data-anch aria-hidden="true">
-    <span class="af-t">The shape of the trip — {timeline.length} days</span>
-    <div class="anch-scroll">
-      <div class="jline" data-n={timeline.length}>
-        <span class="jl-track"></span>
-        {timeline.map((s, si) => (
-          <span class={`jl-stop${si === 0 ? " jl-first" : si === timeline.length - 1 ? " jl-last" : ""}`} data-tl-date={s.date}>
-            {s.word && <i class="jl-word">{s.word}</i>}
-            <b class="jl-dot"></b>
-            <i class="jl-date">{s.dateShort}</i>
-          </span>
-        ))}
-      </div>
-    </div>
-  </div>
-)}
-{days.length > 0 && (
-  <button class="story-play" type="button" data-story-open aria-haspopup="dialog">
-    <span class="story-play-ico" aria-hidden="true">▶</span>
-    <span class="story-play-txt">Play the trip</span>
-    <span class="story-play-sub">{days.length} days · swipe through</span>
-  </button>
-)}
-<nav class="day-scrub" id="dayScrub" aria-label="Jump to a day">
-  {days.map((d: any, di: number) => (
-    <button class="dchip" type="button" data-day-jump={di} aria-label={`Jump to ${d.date}`}>
-      <span class="dchip-num">{two(di)}</span>
-      <span class="dchip-date">{d.date}</span>
-    </button>
-  ))}
-</nav>
-
 <div class="planner">
-  <div class="planner-days">
-    {days.map((d: any, di: number) => (
-      <div class="day" data-day={di} data-date={d.date} id={`day-${di}`}>
-        {/* R5 SCREENS.md §3 — the day kicker: DAY 04 OF 08 · <date> · <state>.
-            "OF N" is DERIVED from the day list and never written down (TESTS.md §5). The state
-            chip is left EMPTY and hidden here, and filled by guide-ui.js against the reader's
-            own clock: a build-time "now" is whatever time the site was last deployed, so a
-            server-rendered "NOW" would be a claim about a moment that has already passed.
-            .day-num keeps its exact size — planner.css documents it as contrast-graded. */}
-        <div class="d">
-          <span class="day-num">{two(di)}</span>
-          <span class="day-of">of {String(dayCount).padStart(2, "0")}</span>
-          {d.date}
-          <span class="day-state" data-day-state hidden></span>
-        </div>
-        <div class="b">
-          <strong>{d.title}{d.constraints && d.constraints.length > 0 && <span class="cal-badge" title={d.constraints.join("; ")}>📅</span>}</strong>
-          {/* R5 route-leg header — first stop → last stop, straight-line km summed only
-              when every consecutive pair carries verified coords (anchors.ts). */}
-          {(() => { const leg = dayLegSummary(d.waypoints); return leg && (
+  <div class="planner-days" data-planner-days>
+    {days.map((d: any, di: number) => {
+      const shared = d.waypoints ?? [];
+      const branches = d.branches ?? [];
+      const routePoints = [...shared, ...branches.flatMap((b: any) => b.waypoints ?? [])];
+      const leg = dayLegSummary(shared.length >= 2 ? shared : undefined);
+      const route = branches.length ? null : dayRouteLink(shared);
+      const actual = actualFor(d.date);
+      const links = linksFor(d.date);
+      return (
+      <article class="day" data-day={di} data-date={d.date} id={`day-${di}`} hidden={di > 0} aria-labelledby={`day-${di}-title`}>
+        <header class="day-head">
+          <p class="d">
+            <span class="day-num">{two(di)}</span>
+            <span class="day-of">of {String(dayCount).padStart(2, "0")}</span>
+            <span class="day-date">{d.date}</span>
+            <span class="day-state" data-day-state hidden></span>
+          </p>
+          <h3 class="day-title" id={`day-${di}-title`}>{d.title}{d.constraints && d.constraints.length > 0 && <span class="cal-badge" title={d.constraints.join("; ")}><Icon name="calendar" size={14} /></span>}</h3>
+          {d.tldr && <p class="day-tldr">{d.tldr}</p>}
+          <div class="day-meta">
+            {d.pace && <span class="day-pace"><Icon name="clock" size={14} /> {d.pace}</span>}
+            <span class="day-sun" role="group" hidden></span>
+          </div>
+          {leg && (
             <p class="day-leg">
               <span>{leg.from}</span><span class="day-leg-arrow" aria-hidden="true">→</span><span>{leg.to}</span>
-              {leg.km !== null && leg.km > 0 && <span class="day-leg-km" title="Straight-line distance between stops">· ≈{leg.km} km</span>}
+              {leg.km !== null && leg.km > 0 && <span class="day-leg-km" title="Straight-line distance between stops">· ≈{leg.km} km straight-line</span>}
             </p>
-          ); })()}
-          {actualFor(d.date) && (
+          )}
+          {/* The day-level action slot (D6-37): a route/map control when the day has a mappable
+              route, otherwise nothing — never a decorative Done. */}
+          {routePoints.filter((w: any) => Number.isFinite(w.lat) && Number.isFinite(w.lng)).length >= 2 && (
+            <button class="day-map-btn" type="button" data-open-map-day={di} aria-label={`Show ${d.date} on the map`}>
+              <Icon name="map" size={15} /> This day on the map
+            </button>
+          )}
+          {actual && (
             <div class="day-flip" role="group" aria-label="Plan or what actually happened">
               <button class="day-flip-btn on" type="button" data-flip="plan" aria-pressed="true">Plan</button>
               <button class="day-flip-btn" type="button" data-flip="actual" aria-pressed="false">Actually</button>
             </div>
           )}
-          {actualFor(d.date) && (
+        </header>
+        <div class="b">
+          {actual && (
             <div class="day-actual" hidden>
-              {actualFor(d.date).actually && <p class="learn-actually"><Fragment set:html={actualFor(d.date).actually} /></p>}
-              {(actualFor(d.date).skipped ?? []).length > 0 && (
+              {actual.actually && <p class="learn-actually"><Fragment set:html={actual.actually} /></p>}
+              {(actual.skipped ?? []).length > 0 && (
                 <>
                   <p class="learn-sub">Skipped</p>
                   <ul class="learn-skips">
-                    {actualFor(d.date).skipped.map((s: any) => (
+                    {actual.skipped.map((s: any) => (
                       <li>
                         <span class="learn-skip-stop">✗ {s.stop}</span>
                         {s.reason && <span class="learn-skip-why">{s.reason}</span>}
@@ -114,19 +97,19 @@ const dayCount = days.length;
               )}
             </div>
           )}
-          {/* The tldr is the day's LEAD, and it renders exactly once. When there is a body to
-              fold, the lead IS the fold's always-visible two lines (below); rendering it here
-              as well would put the same sentence on screen twice as if it were two different
-              things. With no body, there is nothing to fold to and it stands on its own. */}
-          {d.tldr && !d.body && <p class="day-tldr">{d.tldr}</p>}
-          {d.checklist && d.checklist.length > 0 && (
-            <span class="day-kitcount" hidden aria-live="polite"></span>
+          {links.length > 0 && (
+            <p class="day-know" aria-label="Know before you go">
+              {links.map((m) => (
+                <a class={`day-know-link${m.critical ? " day-know-link--critical" : ""}`} href={`#${m.anchor}`} data-guide-anchor={m.anchor}>
+                  <span class="day-know-kind">{KIND_LABEL[m.kind] ?? m.kind}</span>
+                  <span class="day-know-title">{m.title}</span>
+                </a>
+              ))}
+            </p>
           )}
-          <span class="day-sun" role="group" hidden></span>
-          {d.pace && <div class="pace"><Icon name="clock" size={13} /> {d.pace}</div>}
-          {d.waypoints && d.waypoints.length > 0 && (
+          {shared.length > 0 && (
             <ol class="stops" aria-label="Stops this day">
-              {d.waypoints.map((w: any, wi: number) => (
+              {shared.map((w: any, wi: number) => (
                 <li class="stop" data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
                   <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
                   <span class="stop-main">
@@ -141,46 +124,62 @@ const dayCount = days.length;
               ))}
             </ol>
           )}
-          {(() => { const route = dayRouteLink(d.waypoints); return route && (
-            /* The WHOLE-DAY link, on top of the per-stop ones (COMPONENTS.md §12). Rendered
-               only when at least two stops carry real coordinates — dayRouteLink returns null
-               otherwise, and an absent link is the honest answer to a route the guide cannot
-               actually draw. A plain <a>: it needs no JS and survives Maps being unreachable. */
-            <p class="day-route">
-              <a class="day-route-link" href={route} target="_blank" rel="noopener">Open the whole day in Maps ↗</a>
-              <span class="day-route-note">Straight-line order as listed — not a transit time</span>
-            </p>
-          ); })()}
-          {d.note && <span class="lsnote">🌿 <Fragment set:html={d.note} /></span>}
-          {/* R5 COMPONENTS.md §5 — a day's long body folds like every other long explanation:
-              two lines visible, the rest in place, at unchanged type size. A day with a tldr
-              already has its lead above, so the body's own first lines become the fold's; a day
-              with no tldr has nothing to fold TO and renders whole. */}
-          {d.body && (d.tldr
-            ? <Fold id={`day-${di}`} lead={d.tldr} label={`More about ${d.title}`}><Fragment set:html={d.body} /></Fold>
-            : <div><Fragment set:html={d.body} /></div>
+          {branches.length > 0 && (
+            <div class="day-branches" role="group" aria-label="The party splits">
+              {branches.map((b: any, bi: number) => (
+                <section class="day-branch" aria-labelledby={`day-${di}-branch-${bi}`}>
+                  <h4 class="day-branch-label" id={`day-${di}-branch-${bi}`}>{b.label}</h4>
+                  {b.body && <div class="day-branch-body"><Fragment set:html={b.body} /></div>}
+                  {(b.waypoints ?? []).length > 0 && (
+                    <ol class="stops" aria-label={`Stops for ${b.label}`}>
+                      {b.waypoints.map((w: any, wi: number) => (
+                        <li class="stop" data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
+                          <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
+                          <span class="stop-main">
+                            <span class="stop-name">{w.name}</span>
+                            {w.note && <span class="stop-note">{w.note}</span>}
+                            {Number.isFinite(w.lat) && Number.isFinite(w.lng) && (
+                              <TransitLinks lat={w.lat} lng={w.lng} name={w.name} country={country} />
+                            )}
+                          </span>
+                          {w.time && <span class="stop-time">{w.time}</span>}
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                </section>
+              ))}
+            </div>
           )}
-          {/* Plan B — the researched inclement-day alternate (schema: days[].items[].plan_b).
-              Rendered in the card so Focus Today can clone it (single source of truth,
-              same pattern as tldr/stops). Provenance is schema-required; the date renders
-              as the standard checked stamp so the alternate reads as verified, not vibes. */}
+          {route && (
+            <p class="day-route">
+              <a class="day-route-link" href={route} target="_blank" rel="noopener">Open the whole day in Google Maps ↗</a>
+              <span class="day-route-note">Stops in listed order — timing and traffic come from the map app, not this guide</span>
+            </p>
+          )}
           {d.plan_b && (
             <div class={`day-planb planb-${d.plan_b.trigger}`}>
-              <span class="planb-label">{d.plan_b.trigger === "rain" ? "☂ Rain plan" : "⚑ If it's closed"}</span>
+              <span class="planb-label">{d.plan_b.trigger === "rain" ? "Rain plan" : "If it's closed"}</span>
               <span class="planb-body"><Fragment set:html={d.plan_b.body} /></span>
             </div>
           )}
-          {d.fit  && <div class="fit">Fit: <Fragment set:html={d.fit} /></div>}
+          {d.note && <p class="lsnote"><Fragment set:html={d.note} /></p>}
+          {d.body && (d.tldr
+            ? <Fold id={`day-${di}`} lead={d.tldr} label={`More about ${d.title}`}><Fragment set:html={d.body} /></Fold>
+            : <div class="day-body"><Fragment set:html={d.body} /></div>
+          )}
+          {d.fit && <p class="fit">Fit: <Fragment set:html={d.fit} /></p>}
           {d.checklist && d.checklist.length > 0 && (
             <div class="daykit">
-              <span class="kit-label">Day kit</span>
+              <span class="kit-label">Day kit <span class="day-kitcount" hidden aria-live="polite"></span></span>
               {d.checklist.map((i: any, j: number) => (
                 <label class="check"><input type="checkbox" data-pkey={`${keyPrefix}-d${di}-${j}`} /><span class="check-txt"><Fragment set:html={checklistText(i)} /></span></label>
               ))}
             </div>
           )}
         </div>
-      </div>
-    ))}
+      </article>
+      );
+    })}
   </div>
 </div>

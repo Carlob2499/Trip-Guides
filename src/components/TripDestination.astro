@@ -1,0 +1,189 @@
+---
+/* Trip — "what matters now" (design-system.md D6-02/19/30/31/33/34/35/48).
+
+   Three lifecycle compositions of ONE destination, all rendered, one shown — trip.js picks
+   the phase against the reader's clock (a build-time "now" is whatever moment the site was
+   deployed). Every piece is derived from the guide's own record:
+
+     PRE     restrained hero · countdown · only the UNRESOLVED readiness items (bookings with
+             a closing door lead; the rest fold away) · entry rules · holidays/closures in the
+             window · the live forecast · offline files.
+     ACTIVE  mission control: today's dominant next step, painted by trip.js from the canonical
+             days (Now → Next → Get there → warning → fallback → rest of day). The arrival day
+             gets the same renderer in autopilot mode. Nothing here is a second itinerary.
+     POST    an editorial recap from the curated post-mortem, a few large outcome atoms, the
+             major Plan-vs-Actual changes, then the Learnings notebook.
+
+   Trip Learnings lives here at every phase (D6-18/27): the notebook is always present and
+   deep-linkable (#learnings); the feedback survey stays its three approved steps. */
+import Icon from "./Icon.astro";
+import Learnings from "./Learnings.astro";
+import ReminderRow from "./ReminderRow.astro";
+import { jsonEmbed } from "../lib/json-embed";
+import type { TripDay, ReadinessStack, RecapAtoms } from "../features/trip/index";
+import type { HolidayInfo } from "../lib/holidays";
+
+interface Props {
+  guide: any;
+  slug: string;
+  base: string;
+  storeKey: string;
+  days: TripDay[];
+  readiness: ReadinessStack;
+  recap: RecapAtoms | null;
+  holidays: HolidayInfo | null;
+  hero: { src: string | null; srcset: string | null; alt: string; focal: string | null; painted: boolean };
+  dates: string | null;
+  cities: string | null;
+  exports: { gpx: boolean; ics: boolean };
+  hasWeather: boolean;
+  entry: any[] | null;
+}
+const { guide, slug, base, storeKey, days, readiness, recap, holidays, hero, dates, cities, exports, hasWeather, entry } = Astro.props;
+const during = holidays?.during ?? [];
+const closures = readiness.closures;
+const learnings = guide.learnings ?? null;
+const tripData = jsonEmbed(days);
+const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
+---
+<div class="trip" data-trip data-phase="pre">
+  <script type="application/json" is:inline id="tripData" set:html={tripData}></script>
+
+  {/* Restrained hero: identity and lifecycle state, not the Guide's full editorial cover. */}
+  <header class="trip-hero" data-trip-hero>
+    <div class={`trip-hero-media${hero.painted ? " trip-hero-media--painted" : ""}`} aria-hidden="true">
+      {hero.src && (
+        <img class="trip-hero-img" src={hero.src} srcset={hero.srcset ?? undefined} sizes="100vw" alt="" loading="eager" fetchpriority="high"
+             style={hero.focal ? `object-position:${hero.focal}` : undefined}
+             onerror="this.closest('.trip-hero-media').classList.add('media-fail')" />
+      )}
+    </div>
+    <div class="trip-hero-text">
+      <p class="trip-kicker">
+        <span class="trip-stamp" data-trip-stamp>Trip</span>
+        {dates && <span class="trip-dates">{dates}</span>}
+      </p>
+      <h2 class="trip-title">{guide.title}</h2>
+      {cities && <p class="trip-cities">{cities}</p>}
+      <div class="trip-stats" id="tripStats" data-trip-stats></div>
+    </div>
+  </header>
+
+  {/* ═══ PRE-TRIP ═══ */}
+  <section class="trip-phase trip-pre" data-trip-phase="pre" aria-label="Before you go">
+    {readiness.bookAhead.length > 0 && (
+      <div class="trip-block trip-priorities" data-readiness={storeKey}>
+        <h3 class="trip-h">Still to settle</h3>
+        <p class="trip-sub" data-readiness-open></p>
+        <ul class="trip-rem" data-readiness-list>
+          {readiness.bookAhead.map((item) => <ReminderRow item={item} />)}
+        </ul>
+        {readiness.other.length > 0 && (
+          <details class="trip-more">
+            <summary>Everything else the guide asks for — {readiness.other.length} items</summary>
+            <ul class="trip-rem">{readiness.other.map((item) => <ReminderRow item={item} />)}</ul>
+          </details>
+        )}
+      </div>
+    )}
+    {readiness.bookAhead.length === 0 && readiness.other.length > 0 && (
+      <div class="trip-block trip-priorities" data-readiness={storeKey}>
+        <h3 class="trip-h">Before you go</h3>
+        <p class="trip-sub" data-readiness-open></p>
+        <ul class="trip-rem" data-readiness-list>{readiness.other.map((item) => <ReminderRow item={item} />)}</ul>
+      </div>
+    )}
+    {entry && entry.length > 0 && (
+      <div class="trip-block trip-entry">
+        <h3 class="trip-h"><Icon name="shield" size={16} /> Entry</h3>
+        {entry.map((e: any) => (
+          <p class="trip-entry-row"><b>{e.homeCountry}</b> — {e.visa}{e.passportValidity ? ` · passport ${e.passportValidity}` : ""} <span class="trip-src">checked {e.verified_on}</span></p>
+        ))}
+      </div>
+    )}
+    {(during.length > 0 || closures.length > 0) && (
+      <div class="trip-block trip-closures">
+        <h3 class="trip-h"><Icon name="calendar" size={16} /> Closed during your dates</h3>
+        {during.length > 0 && (
+          <ul class="trip-list">
+            {during.map((h) => <li><b>{h.label}</b> — {h.name} <span class="trip-dim">public holiday</span></li>)}
+          </ul>
+        )}
+        {closures.length > 0 && (
+          <ul class="trip-list">
+            {closures.map((d) => (
+              <li><b>{d.label}</b> — {d.places.map((p, i) => <>{i > 0 && ", "}{p.name}</>)}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    )}
+    {hasWeather && (
+      <div class="trip-block trip-weather">
+        <div id="wxWrap" class="wx-wrap" hidden><div id="wxMount"></div></div>
+        <div id="tkPackingCard" class="trip-packing" hidden>
+          <p class="trip-sub">Pack for the forecast</p>
+          <ul class="trip-list" id="tkPackingList"></ul>
+        </div>
+      </div>
+    )}
+    {(exports.gpx || exports.ics) && (
+      <div class="trip-block trip-files">
+        <h3 class="trip-h">Take it with you</h3>
+        <div class="trip-dl-row">
+          {exports.gpx && <a class="trip-dl" href={`${base}/guides/${slug}.gpx`} download={`${slug}.gpx`}><Icon name="map" size={15} /> Map points <span class="trip-dl-ext">.gpx</span></a>}
+          {exports.ics && <a class="trip-dl" href={`${base}/guides/${slug}.ics`} download={`${slug}.ics`}><Icon name="calendar" size={15} /> Trip calendar <span class="trip-dl-ext">.ics</span></a>}
+        </div>
+        <p class="trip-dim">Files, not links — they keep working with no signal.</p>
+      </div>
+    )}
+    {days.length > 0 && (
+      <button class="trip-goto" type="button" data-dest-go="itinerary">
+        <span class="trip-goto-label">The plan</span>
+        <span class="trip-goto-title">{days.length} days · {stopCount} stops</span>
+        <span class="trip-goto-arrow" aria-hidden="true">→</span>
+      </button>
+    )}
+  </section>
+
+  {/* ═══ ACTIVE ═══ trip.js paints Now/Next here from #tripData against the destination clock. */}
+  <section class="trip-phase trip-active" data-trip-phase="active" aria-label="Right now" hidden>
+    <div class="trip-now" data-trip-now aria-live="polite"></div>
+    {hasWeather && <div class="trip-block trip-weather trip-weather--active" data-wx-active></div>}
+  </section>
+
+  {/* ═══ POST-TRIP ═══ */}
+  <section class="trip-phase trip-post" data-trip-phase="post" aria-label="How it went" hidden>
+    {recap ? (
+      <div class="trip-recap">
+        {learnings?.summary && <p class="trip-recap-lead"><Fragment set:html={learnings.summary} /></p>}
+        <dl class="trip-atoms">
+          {recap.hitStops !== null && <div class="trip-atom"><dt>Stops made</dt><dd>{recap.hitStops}<span class="trip-atom-of"> of {recap.plannedStops}</span></dd></div>}
+          <div class="trip-atom"><dt>Days</dt><dd>{recap.dayCount}</dd></div>
+          {recap.skippedStops > 0 && <div class="trip-atom"><dt>Skipped</dt><dd>{recap.skippedStops}</dd></div>}
+        </dl>
+        {recap.changedDays.length > 0 && (
+          <div class="trip-block trip-pva">
+            <h3 class="trip-h">Plan vs. actual</h3>
+            {recap.changedDays.map((d) => (
+              <div class="trip-pva-day">
+                <p class="trip-pva-date">{d.date} <a class="trip-pva-link" href={`#${days.find((x) => x.date === d.date)?.anchor ?? "dest-itinerary"}`} data-dest-go="itinerary">Plan →</a></p>
+                {d.actually && <p class="trip-pva-actually"><Fragment set:html={d.actually} /></p>}
+                {d.skipped.length > 0 && (
+                  <ul class="learn-skips">{d.skipped.map((s) => <li><span class="learn-skip-stop">✗ {s.stop}</span>{s.reason && <span class="learn-skip-why">{s.reason}</span>}</li>)}</ul>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    ) : (
+      <p class="trip-recap-none">The trip is over. What worked and what didn't goes in the notebook below.</p>
+    )}
+  </section>
+
+  {/* ═══ LEARNINGS — every phase ═══ */}
+  <section class="trip-learnings" id="learnings" aria-label="Trip learnings">
+    <Learnings storeKey={storeKey} learnings={learnings} slug={slug} title={guide.title} />
+  </section>
+</div>

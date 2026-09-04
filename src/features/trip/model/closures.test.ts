@@ -1,7 +1,7 @@
 // @protects-file What is shut on a given day is read from real holiday and opening-hours data.
 
 import { describe, it, expect } from "vitest";
-import { buildClosures, closureCount, weekdayOf } from "../model/closures";
+import { buildClosures, closureCount, weekdayOf } from "./closures";
 
 describe("weekdayOf", () => {
   it("maps a JS Sunday-first date onto the schema's Monday-first vocabulary", () => {

@@ -1,0 +1,317 @@
+---
+/* Guide — the layered editorial reference (design-system.md D6-10/11/12/13/40/53/54, F6).
+
+   Entry layer: the large destination cover (the masthead plate) and an OVERVIEW of chapters
+   as image-forward cards. Chapters are the guide's own authored groups in the guide's own
+   order — geography and travel sequence as the maker composed them — and only ONE local
+   navigation level is ever visible on a phone: the overview, or one chapter with its way
+   back. Desktop adds a persistent chapter index beside the reading column.
+
+   A chapter that carries geography (an orientation map, or places with verified coordinates)
+   is SPATIAL: on desktop its map takes the right column and stays put while the content
+   scrolls; on a phone the same map is a compact hero above the chapter's entry points.
+
+   Reference objects that used to live on the retired Trip Kit tab — entry rules and the
+   verified phrase cards — render in the chapter that already covers essentials; the jet-lag
+   calculator keeps its arrival chapter. Knowledge modules (sections carrying `module`) render
+   in place with their kind announced, and the days that relate to them link back here. */
+import Block from "./Block.astro";
+import Icon from "./Icon.astro";
+import JetLag from "./JetLag.astro";
+import PaintedAtlas from "./PaintedAtlas.astro";
+import { jsonEmbed } from "../lib/json-embed";
+
+interface ChapterPin { id: string; name: string; lat: number; lng: number; local: string | null; kind: string; cat: string | null; placeId: string | null }
+interface Chapter {
+  key: string;
+  name: string;
+  descriptor: string | null;
+  sub: string;
+  entries: { s: any; i: number }[];
+  imgs: { src: string; alt: string }[];
+  isPanelGroup: boolean;
+  pins: ChapterPin[];
+  center: { lat: number; lng: number } | null;
+  span: number | null;
+  reference: boolean;
+  arrival: boolean;
+}
+interface Props {
+  guide: any;
+  slug: string;
+  storeKey: string;
+  country: string;
+  chapters: Chapter[];
+  sources: { s: any; i: number }[];
+  hero: {
+    src: string | null; srcset: string | null; alt: string; focal: string | null;
+    credit: { href: string | null; label: string } | null;
+    video: any | null; tz: string | null;
+  };
+  plate: { dates: string | null; cities: string | null; eyebrow: string | null; checked: string | null; facts: number; sources: number; emergency: any | null; currency: any | null };
+  holidays: any;
+  pinMap: Map<any, any>;
+  destTz: string | null;
+  phrases: { lang?: string; items: any[] } | null;
+  entry: any[] | null;
+}
+const { guide, slug, storeKey, country, chapters, sources, hero, plate, holidays, pinMap, destTz, phrases, entry } = Astro.props;
+const bbox = (c: { lat: number; lng: number }, s: number | null) => {
+  const sp = s || 0.05;
+  return [c.lng - sp, c.lat - sp * 0.6, c.lng + sp, c.lat + sp * 0.6].join("%2C");
+};
+const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit", etiquette: "Etiquette", arrival: "Arrival", culture: "Culture", food: "Food", practical: "Practical" };
+const countOf = (ch: Chapter) => ch.entries.length;
+---
+<div class="gd" data-guide-dest data-chapter="overview">
+  {/* ═══ THE COVER — the destination's editorial hero, large on every width (F6/D6-04) ═══ */}
+  <header class={`mast-hero gd-hero ${hero.src ? "mast-photo" : "mast-painted"}`} id="top" data-hero>
+    <div class="mast-plate-row">
+      <div class="mast-frame">
+        <div class="mast-mat">
+          <PaintedAtlas seed={slug} tz={hero.tz ?? undefined} />
+          {hero.src && (
+            <img class="mast-img" src={hero.src} srcset={hero.srcset ?? undefined} sizes="(min-width:900px) 60vw, 100vw" alt={hero.alt}
+                 loading="eager" fetchpriority="high"
+                 onerror="this.closest('.mast-frame').classList.add('mast-media-fail')"
+                 style={`view-transition-name:cover-${slug}${hero.focal ? `;object-position:${hero.focal}` : ""}`} />
+          )}
+          {hero.video && (
+            <video class="mast-video" muted playsinline loop preload="none"
+                   data-src={hero.video.src} poster={hero.video.poster ?? undefined}
+                   aria-hidden="true" tabindex="-1" style={hero.focal ? `object-position:${hero.focal}` : undefined}></video>
+          )}
+        </div>
+        {hero.credit && (hero.credit.href ? (
+          <a class="mast-credit" id="mastCredit" href={hero.credit.href} target="_blank" rel="noopener"
+             aria-label={`${hero.credit.label} — view source`}
+             data-video-credit={hero.video ? `Video: ${hero.video.credit}` : undefined}
+             data-video-credit-url={hero.video?.creditUrl ?? undefined}>{hero.credit.label} ↗</a>
+        ) : (
+          <span class="mast-credit" id="mastCredit" data-video-credit={hero.video ? `Video: ${hero.video.credit}` : undefined}>{hero.credit.label}</span>
+        ))}
+        {hero.video && (
+          <button class="mast-pause" id="mastPause" type="button" hidden aria-label="Pause background video" aria-pressed="false">
+            <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+              <g class="mp-pause"><rect x="3.2" y="2.6" width="3.4" height="10.8" rx="1"/><rect x="9.4" y="2.6" width="3.4" height="10.8" rx="1"/></g>
+              <path class="mp-play" d="M4.5 2.8v10.4c0 .8.9 1.3 1.6.9l8.2-5.2c.6-.4.6-1.4 0-1.8L6.1 1.9c-.7-.4-1.6.1-1.6.9z"/>
+            </svg>
+          </button>
+        )}
+      </div>
+      <div class="mast-inner">
+        {plate.eyebrow && <p class="eyebrow mast-eyebrow">{plate.eyebrow}</p>}
+        <h2 class="mast-title">{guide.title}</h2>
+        {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
+        {(plate.emergency || plate.currency) && (
+          <div class="mast-chips">
+            {plate.emergency && plate.emergency.lines.map((l: any) => (
+              <a class="mast-chip mast-chip--sos" href={`tel:${l.num.replace(/[^0-9+]/g, "")}`}>{l.label}: {l.num}</a>
+            ))}
+            {plate.currency && <span class="mast-chip">{plate.currency.code} · {plate.currency.symbol}</span>}
+          </div>
+        )}
+      </div>
+    </div>
+    {(plate.cities || plate.checked || plate.facts > 0 || plate.sources > 0) && (
+      <div class="mast-plateline">
+        {plate.cities && <span class="mast-cities">{plate.cities}</span>}
+        {plate.checked && <span class="mast-stamp">CHECKED {plate.checked}</span>}
+        {plate.facts > 0 && <span class="mast-plcount">{plate.facts} verified facts</span>}
+        {plate.sources > 0 && <span class="mast-plcount">{plate.sources} primary sources</span>}
+        <button class="mast-print" type="button" data-print-sheet>Print sheet</button>
+      </div>
+    )}
+  </header>
+
+  <div class="gd-body">
+    {/* Desktop chapter index — the expressive replacement for the rail (D6-12): one list,
+        overview first, every chapter, sources last. Hidden on a phone, where the overview
+        cards and each chapter's back link are the one visible navigation level. */}
+    <nav class="gd-index" aria-label="Guide chapters">
+      <button class="gd-index-btn" type="button" data-chapter-go="overview" aria-current="true">Overview</button>
+      {chapters.map((ch, n) => (
+        <button class="gd-index-btn" type="button" data-chapter-go={ch.key}>
+          <span class="gd-index-n">{String(n + 1).padStart(2, "0")}</span> {ch.name}
+        </button>
+      ))}
+      {sources.length > 0 && <button class="gd-index-btn gd-index-btn--quiet" type="button" data-chapter-go="sources">Sources & verification</button>}
+    </nav>
+
+    <div class="gd-main">
+      {/* ═══ OVERVIEW ═══ */}
+      <section class="gd-overview" data-chapter-panel="overview" aria-label="Guide overview">
+        <p class="gd-kicker">Guide · {chapters.length} chapters</p>
+        <div class="gd-cards">
+          {chapters.map((ch, n) => (
+            <button class={`gd-card${ch.imgs.length ? " gd-card--photo" : ""}`} type="button" data-chapter-go={ch.key}>
+              {ch.imgs.length > 0 ? (
+                <span class="gd-card-media" aria-hidden="true">
+                  <img src={ch.imgs[0].src} alt="" loading="lazy" decoding="async" onerror="this.closest('.gd-card').classList.remove('gd-card--photo')" />
+                </span>
+              ) : (
+                <span class="gd-card-glyph" aria-hidden="true">{String(n + 1).padStart(2, "0")}</span>
+              )}
+              <span class="gd-card-text">
+                <span class="gd-card-n">{String(n + 1).padStart(2, "0")}</span>
+                <span class="gd-card-name">{ch.name}</span>
+                <span class="gd-card-sub">{ch.descriptor ?? ch.sub ?? `${countOf(ch)} sections`}</span>
+              </span>
+              <span class="gd-card-arrow" aria-hidden="true">→</span>
+            </button>
+          ))}
+          {sources.length > 0 && (
+            <button class="gd-card gd-card--quiet" type="button" data-chapter-go="sources">
+              <span class="gd-card-glyph" aria-hidden="true"><Icon name="shield" size={18} /></span>
+              <span class="gd-card-text"><span class="gd-card-name">Sources & verification</span><span class="gd-card-sub">Where every fact came from</span></span>
+              <span class="gd-card-arrow" aria-hidden="true">→</span>
+            </button>
+          )}
+        </div>
+      </section>
+
+      {/* ═══ CHAPTERS ═══ */}
+      {chapters.map((ch, n) => {
+        const spatial = ch.center !== null;
+        const mapSections = ch.entries.filter((e) => e.s.type === "map");
+        const rest = ch.entries.filter((e) => e.s.type !== "map");
+        const chapterMapPayload = spatial && mapSections.length === 0
+          ? jsonEmbed({ center: ch.center, span: ch.span, pins: ch.pins, lens: "chapter" })
+          : null;
+        return (
+          <section class={`gd-chapter${spatial ? " gd-chapter--spatial" : ""}`} id={`chapter-${ch.key}`}
+                   data-chapter-panel={ch.key} data-chapter-name={ch.name} hidden aria-labelledby={`chapter-${ch.key}-title`}>
+            <header class="gd-chapter-head">
+              <button class="gd-back" type="button" data-chapter-go="overview"><span aria-hidden="true">←</span> Overview</button>
+              <p class="gd-kicker">Chapter {String(n + 1).padStart(2, "0")} of {String(chapters.length).padStart(2, "0")}</p>
+              <h2 class="gd-chapter-title" id={`chapter-${ch.key}-title`}>{ch.name}</h2>
+              {ch.descriptor ? <p class="gd-chapter-desc">{ch.descriptor}</p> : (ch.sub && <p class="gd-chapter-sub">{ch.sub}</p>)}
+              {ch.imgs.length > 0 && (
+                <span class="cat-fan" aria-hidden="true">
+                  {ch.imgs.map((im, fi) => <img class={`cat-fan-img cat-fan-${fi}`} src={im.src} alt="" loading="lazy" decoding="async" />)}
+                </span>
+              )}
+            </header>
+            {spatial && (
+              <aside class="gd-chapter-map" aria-label={`${ch.name} on the map`}>
+                {mapSections.map((e) => (
+                  <Block sec={e.s} sid={`sec-${e.i}`} ci={n} solo={false} holidays={holidays} learnings={guide.learnings ?? null}
+                         mapPins={pinMap.get(e.s) ?? null} country={country} />
+                ))}
+                {chapterMapPayload && (
+                  <div class="itin-map gd-map" data-itin-map data-map-lens="chapter">
+                    <script type="application/json" is:inline data-map-data set:html={chapterMapPayload} />
+                    <iframe class="osmmap" loading="lazy" title={`${ch.name} — map`}
+                      src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(ch.center!, ch.span)}&layer=mapnik&marker=${ch.center!.lat}%2C${ch.center!.lng}`}></iframe>
+                    <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the places below still work.</p>
+                  </div>
+                )}
+                {ch.pins.length > 0 && (
+                  <ul class="gd-pinlist" aria-label="Places in this chapter">
+                    {ch.pins.slice(0, 8).map((p) => (
+                      <li><a class="gd-pin" href={`#${p.kind === "venue" ? "venue" : "sight"}-${p.id}`} data-map-jump={p.id}>{p.name}</a></li>
+                    ))}
+                    {ch.pins.length > 8 && <li class="gd-pin-more">+{ch.pins.length - 8} more below</li>}
+                  </ul>
+                )}
+              </aside>
+            )}
+            <div class="gd-chapter-body">
+              {ch.isPanelGroup ? (
+                <>
+                  <div class="pnl-grid" data-panel-grid data-panel-scope={`${storeKey}:${ch.name}`}>
+                    {rest.map((e) => (
+                      <div class={e.s.module ? "gd-module" : undefined} id={e.s.module ? `mod-${e.s.module.id}` : undefined} data-module-kind={e.s.module?.kind}>
+                        {e.s.module && <p class="gd-module-kicker"><Icon name="learn" size={13} /> {KIND_LABEL[e.s.module.kind] ?? e.s.module.kind}{e.s.module.scope ? ` · ${e.s.module.scope}` : ""}</p>}
+                        <Block sec={e.s} sid={`sec-${e.i}`} ci={n} solo={rest.length === 1} holidays={holidays}
+                               learnings={guide.learnings ?? null} mapPins={null} country={country} panelHost={true} />
+                      </div>
+                    ))}
+                  </div>
+                  <p class="pnl-reset-row"><button class="pnl-reset" type="button" data-panel-order-reset hidden>Reset panel order</button></p>
+                </>
+              ) : (
+                rest.map((e) => (
+                  <div class={e.s.module ? "gd-module" : undefined} id={e.s.module ? `mod-${e.s.module.id}` : undefined} data-module-kind={e.s.module?.kind}>
+                    {e.s.module && <p class="gd-module-kicker"><Icon name="learn" size={13} /> {KIND_LABEL[e.s.module.kind] ?? e.s.module.kind}{e.s.module.scope ? ` · ${e.s.module.scope}` : ""}</p>}
+                    <Block sec={e.s} sid={`sec-${e.i}`} ci={n} solo={rest.length === 1} holidays={holidays}
+                           learnings={guide.learnings ?? null} mapPins={null} country={country} />
+                  </div>
+                ))
+              )}
+              {ch.arrival && destTz && <JetLag destTz={destTz} groupIdx={n} />}
+              {ch.reference && entry && entry.length > 0 && (
+                <section class="card gd-ref" aria-labelledby="gd-entry-h">
+                  <p class="gd-ref-kicker"><Icon name="shield" size={14} /> Entry requirements</p>
+                  <h3 class="block-title" id="gd-entry-h">Before you book</h3>
+                  {entry.length > 1 && (
+                    <label class="gd-entry-picker">
+                      <span class="gd-ref-kicker">Your passport</span>
+                      <select class="gd-entry-select" id="tkEntrySelect">
+                        {entry.map((e: any, i: number) => <option value={String(i)}>{e.homeCountry}</option>)}
+                      </select>
+                    </label>
+                  )}
+                  {entry.map((e: any, i: number) => (
+                    <div class="gd-entry-row" data-entry-idx={String(i)} hidden={entry.length > 1 && i !== 0}>
+                      <p class="gd-entry-country">{e.homeCountry}</p>
+                      <p class="gd-entry-visa">{e.visa}</p>
+                      {e.passportValidity && <p class="gd-entry-passport">Passport: {e.passportValidity}</p>}
+                      {e.note && <p class="gd-entry-note">{e.note}</p>}
+                      <p class="gd-entry-source">Checked {e.verified_on} · <a href={e.source_url} target="_blank" rel="noopener">official source ↗</a></p>
+                    </div>
+                  ))}
+                </section>
+              )}
+              {ch.reference && phrases && phrases.items?.length > 0 && (
+                <section class="card gd-ref" aria-labelledby="gd-phrases-h">
+                  <p class="gd-ref-kicker"><Icon name="chat" size={14} /> Phrase cards</p>
+                  <h3 class="block-title" id="gd-phrases-h">Show this to someone</h3>
+                  <p class="gd-ref-lead">Verified phrases in big native-script type — point and show the screen, or tap to hear it.</p>
+                  <div class="gd-phrases">
+                    {phrases.items.map((p: any) => (
+                      <article class="gd-phrase">
+                        <p class="gd-phrase-situation">{p.situation}</p>
+                        <p class="gd-phrase-native" lang={phrases.lang || undefined}>{p.native}</p>
+                        {p.romanization && <p class="gd-phrase-roman">{p.romanization}</p>}
+                        {p.note && <p class="gd-phrase-note">{p.note}</p>}
+                        {phrases.lang && (
+                          <button class="gd-speak" type="button" data-speak-text={p.native} data-speak-lang={phrases.lang} aria-label={`Speak: ${p.situation}`}>
+                            <Icon name="chat" size={14} /> <span>Speak</span>
+                          </button>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
+              {n < chapters.length - 1 && (
+                <button class="next-cta" type="button" data-chapter-go={chapters[n + 1].key}>
+                  <span class="next-cta-label">Next chapter</span>
+                  <span class="next-cta-title">{chapters[n + 1].name}</span>
+                  <span class="next-cta-arrow" aria-hidden="true">→</span>
+                </button>
+              )}
+            </div>
+          </section>
+        );
+      })}
+
+      {/* ═══ SOURCES ═══ */}
+      {sources.length > 0 && (
+        <section class="gd-chapter" id="chapter-sources" data-chapter-panel="sources" data-chapter-name="Sources & verification" hidden aria-labelledby="chapter-sources-title">
+          <header class="gd-chapter-head">
+            <button class="gd-back" type="button" data-chapter-go="overview"><span aria-hidden="true">←</span> Overview</button>
+            <h2 class="gd-chapter-title" id="chapter-sources-title">Sources & verification</h2>
+          </header>
+          <div class="gd-chapter-body">
+            {sources.map((e) => (
+              <Block sec={e.s} sid={`sec-${e.i}`} ci={chapters.length} solo={sources.length === 1} holidays={holidays}
+                     learnings={guide.learnings ?? null} mapPins={null} country={country} />
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  </div>
+</div>

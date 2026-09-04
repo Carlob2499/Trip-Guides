@@ -1,9 +1,9 @@
 ---
-/* One reminder line on the Tools screen. Its own component because the panel prints the
+/* One reminder line in the Trip readiness stack. Its own component because Trip prints the
    same row twice — once for the items with a closing door, once inside the disclosure that
    holds the rest — and two copies of this markup would be two places for the provenance
    line to drift. */
-import type { ReminderItem } from "../features/trip-tools/index";
+import type { ReminderItem } from "../features/trip/index";
 const { item } = Astro.props as { item: ReminderItem };
 ---
 <li class="tools-rem-row">

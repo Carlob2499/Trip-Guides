@@ -1,0 +1,96 @@
+---
+/* Itinerary — day-first on mobile, a temporal-spatial workbench on desktop (D6-20/21/34/35/49).
+
+   Mobile: the selected day owns the screen; a thumb-zone day rail above the global bar
+   scrubs/taps between days (no top arrows as the primary switch). Desktop: timeline LEFT,
+   real map RIGHT, a draggable/keyboard divider between them, either pane collapsible.
+   The map is the maps feature's mount (Google when configured, OSM fallback otherwise) fed
+   only this guide's own day stops — the same canonical days the Trip destination reads. */
+import DaysBlock from "./blocks/DaysBlock.astro";
+import { jsonEmbed } from "../lib/json-embed";
+interface Props {
+  daysSection: any;
+  learnings: any;
+  country: string;
+  keyPrefix: string;
+  modulesByDate: Record<string, { id: string; title: string; kind: string; critical: boolean; anchor: string }[]>;
+  /** Pin set for the workbench map: every stop with verified coordinates, day-indexed. */
+  dayPins: { id: string; name: string; lat: number; lng: number; dayIdx: number; time: string | null; local: string | null; kind: string; cat: string | null; placeId: string | null }[];
+  center: { lat: number; lng: number } | null;
+  span: number | null;
+}
+const { daysSection, learnings, country, keyPrefix, modulesByDate, dayPins, center, span } = Astro.props;
+const days: any[] = daysSection?.items ?? [];
+const short = (date: string) => {
+  const parts = String(date).split(/\s+/);
+  return parts.length >= 3 ? `${parts[1]} ${parts[2]}` : date;
+};
+const dow = (date: string) => String(date).split(/\s+/)[0] || "";
+const mapPayload = center ? jsonEmbed({ center, span, pins: dayPins, lens: "days" }) : null;
+const bbox = (c: { lat: number; lng: number }, s: number | null) => {
+  const sp = s || 0.05;
+  return [c.lng - sp, c.lat - sp * 0.6, c.lng + sp, c.lat + sp * 0.6].join("%2C");
+};
+---
+<div class="itin" data-itinerary>
+  {days.length === 0 ? (
+    <p class="itin-empty">This guide has no day-by-day itinerary yet — nothing here is guessed.</p>
+  ) : (
+    <div class="itin-bench" data-workbench>
+      <section class="itin-pane itin-timeline" data-pane="timeline" aria-label="Timeline">
+        <header class="itin-head">
+          <p class="itin-kicker">Itinerary · {days.length} days</p>
+          {/* Desktop keeps explicit date controls near the header; on a phone the rail below is
+              the primary switch and this row is status only (D6-49). */}
+          <nav class="itin-daynav" aria-label="Days">
+            {days.map((d: any, di: number) => (
+              <button class="itin-daybtn" type="button" data-day-jump={di} aria-current={di === 0 ? "true" : undefined}
+                      aria-label={`Day ${di + 1}, ${d.date}`}>
+                <span class="itin-daybtn-n">{String(di + 1).padStart(2, "0")}</span>
+                <span class="itin-daybtn-d">{short(d.date)}</span>
+              </button>
+            ))}
+          </nav>
+        </header>
+        <DaysBlock sec={daysSection} keyPrefix={keyPrefix} learnings={learnings} country={country} modulesByDate={modulesByDate} />
+      </section>
+      <div class="itin-divider" role="separator" aria-orientation="vertical" aria-label="Resize timeline and map" tabindex="0" data-pane-divider aria-valuemin="30" aria-valuemax="70" aria-valuenow="50"></div>
+      <section class="itin-pane itin-mappane" data-pane="map" aria-label="Map of the selected day">
+        <div class="itin-mappane-head">
+          <span class="itin-mappane-title" data-itin-map-title>{short(days[0].date)} on the map</span>
+          <button class="itin-pane-toggle" type="button" data-pane-collapse="map" aria-expanded="true" aria-label="Collapse the map">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+          </button>
+        </div>
+        {mapPayload ? (
+          <div class="itin-map itin-map--bench" data-itin-map data-map-lens="days">
+            <script type="application/json" is:inline data-map-data set:html={mapPayload} />
+            <iframe class="osmmap" loading="lazy" title="Map of this day's stops"
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}`}></iframe>
+            <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the written stops and their Get-there links still work.</p>
+          </div>
+        ) : (
+          <p class="itin-map-none">No stop in this itinerary carries verified coordinates yet, so there is no map to draw — the written stops are the route.</p>
+        )}
+      </section>
+    </div>
+  )}
+  {days.length > 0 && (
+    /* The thumb-zone day rail (D6-49): sticky above the bottom bar on a phone, hidden on
+       desktop where the header row does the same job within pointer reach. Tap jumps; a
+       horizontal drag scrubs (itinerary/ui/day-rail.js); arrow keys move a day. */
+    <nav class="day-rail" id="dayRail" aria-label="Choose a day">
+      <div class="day-rail-track" data-day-rail>
+        {days.map((d: any, di: number) => (
+          <button class="dchip" type="button" data-day-jump={di} aria-current={di === 0 ? "true" : undefined}
+                  aria-label={`Day ${di + 1}, ${d.date}`}>
+            <span class="dchip-dow">{dow(d.date)}</span>
+            <span class="dchip-num">{String(di + 1).padStart(2, "0")}</span>
+            <span class="dchip-date">{short(d.date)}</span>
+          </button>
+        ))}
+      </div>
+      <span class="scrub-bubble" aria-hidden="true"></span>
+    </nav>
+  )}
+</div>

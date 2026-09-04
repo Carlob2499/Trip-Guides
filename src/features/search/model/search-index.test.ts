@@ -10,6 +10,8 @@ describe("buildSectionRecord", () => {
     });
     expect(rec).toEqual({
       slug: "korea",
+      kind: "section",
+      anchor: "sec-0",
       group: "Plan",
       crumb: "SOUTH KOREA · PLAN",
       title: "Local essentials",
@@ -99,6 +101,33 @@ describe("buildGuideSearchIndex", () => {
     ]);
     expect(idx.map((r) => r.title)).toEqual(["A", "B"]);
     expect(idx.every((r) => r.slug === "korea")).toBe(true);
+  });
+
+  it("emits canonical object records — places, venues, days and stops — with their own anchors", () => {
+    const idx = buildGuideSearchIndex("korea", "South Korea", [
+      { type: "sights", group: "Sights", title: "Top sights", items: [
+        { name: "Gyeongbokgung", kicker: "The grand palace", map: { lat: 1, lng: 2 } },
+        { name: "Unmapped Spot", body: "no coordinates" },
+      ] },
+      { type: "venues", group: "Food", title: "Where to eat", items: [{ name: "Tosokchon", area: "Jongno", map: { lat: 1, lng: 2 } }] },
+      { type: "days", group: "Days", title: "Day by day", items: [
+        { date: "Thu Jul 9", title: "Arrive", tldr: "Shower, bus", waypoints: [{ name: "ICN T1", time: "~06:30" }],
+          branches: [{ label: "Mom", waypoints: [{ name: "Canal tour" }] }] },
+      ] },
+    ]);
+    const by = (kind: string) => idx.filter((r) => r.kind === kind);
+    expect(by("place").map((r) => [r.title, r.anchor])).toEqual([["Gyeongbokgung", "sight-gyeongbokgung"], ["Unmapped Spot", "sec-0"]]);
+    expect(by("venue").map((r) => r.anchor)).toEqual(["venue-tosokchon"]);
+    expect(by("day").map((r) => [r.title, r.anchor])).toEqual([["Arrive", "day-0"]]);
+    expect(by("stop").map((r) => r.title)).toEqual(["ICN T1", "Canal tour"]);
+    expect(by("place")[0].hay).toContain("grand palace");
+  });
+
+  it("marks a section carrying module metadata as a knowledge module", () => {
+    const idx = buildGuideSearchIndex("korea", "South Korea", [
+      { group: "Transit", title: "How to use the subway", body: "T-money.", module: { id: "subway", kind: "transit" } },
+    ]);
+    expect(idx[0].kind).toBe("module");
   });
 
   it("index tracks each record's ORIGINAL position, not its position after skipped sections are dropped", () => {

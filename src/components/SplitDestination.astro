@@ -1,0 +1,12 @@
+---
+/* Split — the trip's budgeting and bill-splitting tool (FINAL_DECISIONS F3). One ledger per
+   guide, on the guide's own storeKey; the destination is a thin frame around the calculator
+   so the engine, its validation, currency handling, payments and undo stay exactly where they
+   are (features/trip-split). Recent Expenses + Add Expense lead; balances follow. */
+import TripSplit from "./TripSplit.astro";
+interface Props { storeKey: string }
+const { storeKey } = Astro.props;
+---
+<div class="splitdest">
+  <TripSplit storeKey={storeKey} standalone />
+</div>
