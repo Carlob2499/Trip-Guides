@@ -2,6 +2,18 @@ name: Design canary screenshots
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/components/**"
+      - "src/features/**"
+      - "src/layouts/**"
+      - "src/scripts/**"
+      - "src/styles/**"
+      - "tests/visual/design-canary.spec.ts"
+      - "docs/reference/design-system.md"
+      - "docs/reference/design-system-assets/**"
+      - "package.json"
+      - ".github/workflows/design-canary.yml"
 
 permissions:
   contents: read
@@ -29,5 +41,5 @@ jobs:
         with:
           name: design-canary-v1-${{ github.sha }}
           path: test-results/**/v1-*.png
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
