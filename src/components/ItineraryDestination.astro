@@ -27,6 +27,8 @@ const short = (date: string) => {
 };
 const dow = (date: string) => String(date).split(/\s+/)[0] || "";
 const mapPayload = center ? jsonEmbed({ center, span, pins: dayPins, lens: "days" }) : null;
+const pinsByDay = days.map((_: any, dayIdx: number) => dayPins.filter((pin) => pin.dayIdx === dayIdx));
+const directionsUrl = (pin: Props["dayPins"][number]) => `https://www.google.com/maps/dir/?api=1&destination=${pin.lat},${pin.lng}${pin.placeId ? `&destination_place_id=${encodeURIComponent(pin.placeId)}` : ""}`;
 const bbox = (c: { lat: number; lng: number }, s: number | null) => {
   const sp = s || 0.05;
   return [c.lng - sp, c.lat - sp * 0.6, c.lng + sp, c.lat + sp * 0.6].join("%2C");
@@ -67,6 +69,20 @@ const bbox = (c: { lat: number; lng: number }, s: number | null) => {
             <script type="application/json" is:inline data-map-data set:html={mapPayload} />
             <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of this day's stops"
               data-src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}`}></iframe>
+            <div class="itin-map-fallback" data-itin-map-fallback aria-label="Selected day route">
+              {pinsByDay.map((pins, dayIdx) => (
+                <section data-map-fallback-day={dayIdx} hidden={dayIdx !== 0}>
+                  <p class="itin-map-fallback-head">Day {dayIdx + 1} · {pins.length} verified {pins.length === 1 ? "stop" : "stops"}</p>
+                  {pins.length > 0 ? (
+                    <ol class="itin-map-fallback-stops">
+                      {pins.map((pin, pinIdx) => (
+                        <li><span>{pinIdx + 1}. {pin.name}</span><a href={directionsUrl(pin)} target="_blank" rel="noopener">Directions ↗</a></li>
+                      ))}
+                    </ol>
+                  ) : <p class="itin-map-fallback-empty">No verified coordinates for this day — use the written stop order.</p>}
+                </section>
+              ))}
+            </div>
             <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the written stops and their Get-there links still work.</p>
           </div>
         ) : (

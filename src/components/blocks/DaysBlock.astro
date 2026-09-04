@@ -16,6 +16,7 @@ import Fold from "../Fold.astro";
 import { checklistText } from "../../lib/checklist";
 import { dayRouteLink } from "../../lib/transit-links";
 import { dayLegSummary } from "../../lib/anchors";
+import { pinSlug } from "../../lib/map-pins";
 
 interface ModuleLink { id: string; title: string; kind: string; critical: boolean; anchor: string }
 const { sec, keyPrefix = "dy", learnings = null, country, modulesByDate = {} as Record<string, ModuleLink[]> } = Astro.props;
@@ -109,11 +110,15 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
           )}
           {shared.length > 0 && (
             <ol class="stops" aria-label="Stops this day">
-              {shared.map((w: any, wi: number) => (
-                <li class="stop" data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
+              {shared.map((w: any, wi: number) => {
+                const mapPinId = Number.isFinite(w.lat) && Number.isFinite(w.lng) ? `d${di}-${pinSlug(w.name)}-${wi}` : null;
+                return (
+                <li class="stop" data-map-stop={mapPinId ?? undefined} data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
                   <span class="stop-num">{String(wi + 1).padStart(2, "0")}</span>
                   <span class="stop-main">
-                    <span class="stop-name">{w.name}</span>
+                    {mapPinId ? (
+                      <button class="stop-name stop-map-focus" type="button" data-map-pin-id={mapPinId} aria-label={`Show ${w.name} on the map`}>{w.name}</button>
+                    ) : <span class="stop-name">{w.name}</span>}
                     {w.note && <span class="stop-note">{w.note}</span>}
                     {Number.isFinite(w.lat) && Number.isFinite(w.lng) && (
                       <TransitLinks lat={w.lat} lng={w.lng} name={w.name} country={country} />
@@ -121,7 +126,8 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
                   </span>
                   {w.time && <span class="stop-time">{w.time}</span>}
                 </li>
-              ))}
+                );
+              })}
             </ol>
           )}
           {branches.length > 0 && (

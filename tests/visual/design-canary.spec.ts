@@ -56,7 +56,42 @@ async function chooseDestination(page: Page, destination: "trip" | "itinerary") 
   expect(clicked, `No visible ${destination} navigation control`).toBe(true);
   await expect(page.locator(`#dest-${destination}`)).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(250);
+}
+
+async function waitForTripMedia(page: Page) {
+  const media = page.locator("#dest-trip .trip-hero-media").first();
+  await expect(media).toBeVisible();
+  const image = page.locator("#dest-trip .trip-hero-img").first();
+  if (await image.count()) {
+    await image.evaluate(async (img: HTMLImageElement) => {
+      if (!img.complete) await new Promise<void>((resolve) => {
+        img.addEventListener("load", () => resolve(), { once: true });
+        img.addEventListener("error", () => resolve(), { once: true });
+      });
+      if (typeof img.decode === "function") await img.decode().catch(() => undefined);
+    });
+    await expect.poll(async () => {
+      const naturalWidth = await image.evaluate((img: HTMLImageElement) => img.naturalWidth);
+      const intentionalFallback = await media.evaluate((el) => el.classList.contains("media-fail") || el.classList.contains("trip-hero-media--painted"));
+      return naturalWidth > 0 || intentionalFallback;
+    }, { message: "Trip hero reached neither decoded media nor its intentional painted fallback" }).toBe(true);
+  } else {
+    await expect(media).toHaveClass(/trip-hero-media--painted/);
+  }
+}
+
+async function waitForItineraryMap(page: Page) {
+  const map = page.locator("#dest-itinerary [data-workbench] [data-itin-map]");
+  await expect(map).toBeVisible();
+  const googleConfigured = await page.locator("#tgConfig").evaluate((el) => {
+    try { return Boolean(JSON.parse(el.textContent || "{}").gmapsKey); } catch { return false; }
+  });
+  await expect.poll(async () => {
+    const provider = await map.getAttribute("data-map-provider");
+    if (provider === "google") return provider;
+    if (provider === "osm" && (!googleConfigured || await map.getAttribute("data-map-google-failed") !== null)) return provider;
+    return (await map.locator("[data-map-degraded]").isVisible()) ? "degraded" : "pending";
+  }, { message: "Itinerary map never reached Google, terminal OSM, or intentional degraded readiness", timeout: 15_000 }).toMatch(/^(google|osm|degraded)$/);
 }
 
 async function capture(page: Page, testInfo: TestInfo, filename: string) {
@@ -73,6 +108,7 @@ test("V1 — South Korea active Trip mobile, dark", async ({ page }, testInfo) =
 
   await expect(page.locator("#dest-trip")).toBeVisible();
   await expect(page.locator('[data-dest-nav][data-dest="trip"][aria-current="true"]').first()).toBeAttached();
+  await waitForTripMedia(page);
 
   await capture(page, testInfo, "v1-trip-active-mobile-dark.png");
 });
@@ -83,6 +119,28 @@ test("V1 — South Korea Itinerary desktop workbench, dark", async ({ page }, te
 
   await expect(page.locator("#dest-itinerary")).toBeVisible();
   await expect(page.locator("[data-workbench]")).toBeVisible();
+  await waitForItineraryMap(page);
+  const selectedDay = await page.locator("[data-planner-days] .day[data-day]:not([hidden])").getAttribute("data-day");
+  expect(selectedDay, "No selected itinerary day").not.toBeNull();
+  const selectedFallback = page.locator(`[data-map-fallback-day="${selectedDay}"]`);
+  await expect(selectedFallback).toBeAttached();
+  if ((await page.locator("#dest-itinerary [data-workbench] [data-itin-map]").getAttribute("data-map-provider")) === "osm") {
+    await expect(selectedFallback).toBeVisible();
+  }
 
   await capture(page, testInfo, "v1-itinerary-desktop-dark.png");
+
+  /* Exercise the shared selection contract after capture so the review artifact remains the
+     default workbench state while the canary still proves the timeline can focus the map. */
+  const stopFocus = page.locator("#dest-itinerary .day[data-day]:not([hidden]) [data-map-pin-id]").first();
+  await expect(stopFocus).toBeVisible();
+  const workbenchMap = page.locator("#dest-itinerary [data-workbench] [data-itin-map]");
+  const provider = await workbenchMap.getAttribute("data-map-provider");
+  const osmFrame = page.locator("#dest-itinerary [data-workbench] .osmmap");
+  const osmBefore = provider === "osm" ? await osmFrame.getAttribute("src") : null;
+  await stopFocus.click();
+  await expect(stopFocus).toHaveAttribute("aria-current", "location");
+  if (provider === "osm") {
+    await expect.poll(() => osmFrame.getAttribute("src")).not.toBe(osmBefore);
+  }
 });

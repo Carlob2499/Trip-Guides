@@ -72,6 +72,10 @@
 .stop-num{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;color:var(--accent-ink);letter-spacing:.04em}
 .stop-main{min-width:0;display:flex;flex-direction:column;gap:.15rem}
 .stop-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);letter-spacing:-.01em;line-height:1.25;overflow-wrap:anywhere}
+.stop-map-focus{display:flex;align-items:center;width:fit-content;max-width:100%;min-height:44px;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.stop-map-focus:hover,.stop-map-focus[aria-current="location"]{color:var(--accent-ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
+.stop-map-focus:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
+.stop-map-selected{background:color-mix(in srgb,var(--accent) 8%,transparent);margin-inline:-.6rem;padding-inline:.6rem}
 .stop-note{font-size:var(--text-small);color:var(--muted);line-height:1.45}
 .stop-time{font-family:var(--font-data);font-size:var(--text-control);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 .stop-main .transit-links{margin-top:.35rem}
@@ -135,6 +139,13 @@ body.chrome-yield .day-rail{transform:translateY(calc(60px + var(--safe-bottom) 
 .itin-pane-toggle:hover{color:var(--ink);border-color:var(--ink)}
 .itin-pane-toggle:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .itin-map--bench{height:300px;margin:0 max(1.1rem,var(--safe-right)) 1rem max(1.1rem,var(--safe-left));width:auto}
+.itin-map-fallback{position:absolute;left:.5rem;right:.5rem;bottom:.5rem;z-index:1;max-height:min(30%,6.5rem);overflow:auto;padding:.55rem .7rem;background:color-mix(in srgb,var(--card) 94%,transparent);border:1px solid var(--rule2);box-shadow:0 2px 10px rgba(var(--shadow-rgb),.16)}
+.itin-map[data-map-provider="google"]:not([data-map-empty-day]) .itin-map-fallback{display:none}
+.itin-map-fallback-head,.itin-map-fallback-empty{margin:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
+.itin-map-fallback-stops{list-style:none;margin:.35rem 0 0;padding:0;display:flex;flex-direction:column;gap:.25rem}
+.itin-map-fallback-stops li{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;min-width:0;font-family:var(--font-data);font-size:var(--text-caption)}
+.itin-map-fallback-stops li span{min-width:0;overflow-wrap:anywhere}
+.itin-map-fallback-stops a{flex:none;color:var(--accent-ink);font-size:var(--text-micro)}
 
 /* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
 @media(min-width:1180px){

@@ -27,6 +27,16 @@ const curFallbackRate   = _cfg.curFallbackRate || null;
 const daysForBanner     = _cfg.daysForBanner || [];
 const legacyStoreKey    = _cfg.legacyStoreKey || null;
 
+/* --hdr-h is shared geometry, not a guessed compensation. The fallback token keeps the
+   no-JS layout usable; the guide chrome writes its actual responsive height for workbench
+   and sticky consumers once JavaScript is available. */
+const _chrome = document.querySelector(".chrome");
+if (_chrome) {
+  const setHeaderHeight = () => document.documentElement.style.setProperty("--hdr-h", `${_chrome.offsetHeight}px`);
+  setHeaderHeight();
+  if ("ResizeObserver" in window) new ResizeObserver(setHeaderHeight).observe(_chrome);
+}
+
 function fail(name, err) {
   console.error("[guide-ui] " + name + " failed:", err);
   try { reportError({ guide: storeKey, feature: name, message: (err && err.message) || String(err) }); } catch (_) {}
