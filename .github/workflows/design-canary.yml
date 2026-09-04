@@ -1,0 +1,33 @@
+name: Design canary screenshots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    name: Capture V1 creator-review screens
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run canary:visual
+
+      - name: Upload creator-review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-canary-v1-${{ github.sha }}
+          path: test-results/**/v1-*.png
+          if-no-files-found: error
+          retention-days: 14
