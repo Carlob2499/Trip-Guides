@@ -10,7 +10,18 @@
       "<b>To the Oslo ferry (Jun 14):</b> Taxi or shuttle to <b>Go Nordic Cruiseline terminal, Dampfærgevej 30</b> (Østerbro). Check in by 16:15; sailing departs 16:30.",
       "<b>Oslo ashore (Jun 15):</b> Dock at Vippetangen ~10:00. Walk 10–15 min to the Oslo Opera House roof, Aker Brygge, and Akershus Fortress loop. Reboard by 15:30.",
       "<b>Dock → airport (Jun 16):</b> Back in Copenhagen ~10:00. Take a taxi directly to CPH (~20 min) — safest option for the 14:20 flight."
-    ]
+    ],
+    "module": {
+      "id": "getting-everywhere",
+      "kind": "transit",
+      "relates": {
+        "days": [
+          "Mon Jun 8",
+          "Wed Jun 10",
+          "Sun Jun 14"
+        ]
+      }
+    }
   },
   {
     "type": "panel",
@@ -25,7 +36,17 @@
     ],
     "verified_on": "2026-07-23",
     "shelf_life": "transit",
-    "source_url": "https://www.publictransport.dk/tickets/citypass"
+    "source_url": "https://www.publictransport.dk/tickets/citypass",
+    "module": {
+      "id": "transit-passes",
+      "kind": "transit",
+      "critical": true,
+      "relates": {
+        "days": [
+          "Mon Jun 8"
+        ]
+      }
+    }
   },
   {
     "type": "routes",
@@ -42,7 +63,19 @@
     ],
     "verified_on": "2026-06-08",
     "shelf_life": "transit",
-    "source_url": "https://www.rejseplanen.dk"
+    "source_url": "https://www.rejseplanen.dk",
+    "module": {
+      "id": "split-day-routes",
+      "kind": "transit",
+      "critical": true,
+      "relates": {
+        "days": [
+          "Thu Jun 11",
+          "Fri Jun 12",
+          "Sat Jun 13"
+        ]
+      }
+    }
   },
   {
     "type": "map",

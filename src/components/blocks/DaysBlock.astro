@@ -98,14 +98,14 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
             </div>
           )}
           {links.length > 0 && (
-            <p class="day-know" aria-label="Know before you go">
+            <nav class="day-know" aria-label="Know before you go">
               {links.map((m) => (
                 <a class={`day-know-link${m.critical ? " day-know-link--critical" : ""}`} href={`#${m.anchor}`} data-guide-anchor={m.anchor}>
                   <span class="day-know-kind">{KIND_LABEL[m.kind] ?? m.kind}</span>
                   <span class="day-know-title">{m.title}</span>
                 </a>
               ))}
-            </p>
+            </nav>
           )}
           {shared.length > 0 && (
             <ol class="stops" aria-label="Stops this day">

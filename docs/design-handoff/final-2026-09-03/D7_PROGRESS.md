@@ -72,3 +72,18 @@ above; 5 reduced motion emulated in every Playwright run; 6 320/375/390/402/412/
 rules; 7 SOS numbers static + offline suite; 8 grep for Story/voting/Trip Kit/Tools/On Track in
 `src` returns comments only (recorded in retirement sweep); 9 Search/SOS are `[data-search-open]`
 / `[data-sos-mount]` controls, never `[data-dest-nav]`; 10 no mockup fact entered content.
+
+## Polish pass (2026-09-04, after the screenshot review)
+
+- Chrome and bottom bar are opaque grounds (no glass); the Search field folds with hysteresis
+  (`yield-chrome.js` FOLD_AT/UNFOLD_AT) — a single threshold near the folded height made the
+  field flicker and a chapter card never settle under the 320px gate.
+- Trip hero carries the living painted cover under the photo; a failed photo shows the cover.
+- Chapter cards keep their numbered glyph under the photo; a failed thumbnail reveals it.
+- `.day-know` is a `<nav>` (aria-label permitted); know-before links wrap at 320px.
+- Module relations authored for 32 more sections (Denmark 13, Korea 19) from titles and day
+  plans — presentation metadata, no fact touched; a guide author should review the pairings.
+- Blocked from here, left for a normal machine: Denmark branch coordinates via
+  `scripts/lookup-place.mjs` (Nominatim answers 403 through this sandbox's proxy).
+- Not fixable: an iframe whose host is unreachable still fires `load`, so the map panes cannot
+  tell a blocked embed from a loaded one; the degraded note stays tied to the offline flag.

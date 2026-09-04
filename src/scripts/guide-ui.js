@@ -358,16 +358,6 @@ try {
   if (gd) {
     var CH_KEY = "tg-d7-chapter-" + storeKey;
     var panels = Array.prototype.slice.call(gd.querySelectorAll("[data-chapter-panel]"));
-    // A chapter card whose thumbnail fails (offline, blocked host) drops the media and reads
-    // as the plain card — never a broken-image glyph on the overview.
-    document.addEventListener("error", function (e) {
-      var img = e.target;
-      if (!img || !img.closest || !img.closest(".gd-card-media")) return;
-      var card = img.closest(".gd-card");
-      var media = img.closest(".gd-card-media");
-      if (media) media.remove();
-      if (card) card.classList.remove("gd-card--photo");
-    }, true);
     function showChapter(key, scroll) {
       var found = false;
       panels.forEach(function (p) { var on = p.dataset.chapterPanel === key; p.hidden = !on; if (on) found = true; });

@@ -7,7 +7,16 @@
     "body": "<p>Korea uses the <b>won (₩)</b>. The won still favours your spending power, though it has strengthened since this guide was first costed — roughly (approximate, <a href=\"https://www.google.com/search?q=KRW+USD+exchange+rate\" target=\"_blank\" rel=\"noopener noreferrer\">check before you go</a>): <b>{{fact:money-currency-1-000}} ≈ $0.68</b> and <b>{{fact:money-currency-10-000}} ≈ $6.85</b>, at about <b>{{fact:money-currency-1-461}} to the dollar</b> (24 Jul 2026, re-checked 30 Jul 2026 — it was {{fact:money-currency-1-535}} in Jun 2026). A spot rate moves daily, so treat every $ figure in this guide as ≈.</p><p>Cards and contactless work almost everywhere. For cash, the most reliable option is an <b>ATM inside a GS25 or CU convenience store</b> — both accept most foreign cards and charge modest fees. <b>Global ATM Alliance banks</b> (KEB Hana is the Korean partner) have lower or zero foreign withdrawal fees if your home bank is in the network — check before you leave. Avoid airport exchange booths; the rates are poor. Keep {{fact:money-currency-30-000}}–50,000 cash for markets and small eateries. A <b>T-money</b> card covers all subway and buses. Tipping isn't expected anywhere.</p>",
     "verified_on": "2026-07-30",
     "shelf_life": "fx",
-    "source_url": "https://www.federalreserve.gov/releases/h10/current/"
+    "source_url": "https://www.federalreserve.gov/releases/h10/current/",
+    "module": {
+      "id": "money-currency",
+      "kind": "practical",
+      "relates": {
+        "days": [
+          "Thu Jul 9"
+        ]
+      }
+    }
   },
   {
     "type": "budget",
@@ -223,7 +232,11 @@
       "Buy travel insurance — without it you pay 100% upfront",
       "Pack medicines in original packaging, plus a note of their generic names",
       "Learn the sign: <b>약</b> = pharmacy; convenience stores cover basics after hours"
-    ]
+    ],
+    "module": {
+      "id": "health-pharmacy",
+      "kind": "practical"
+    }
   },
   {
     "type": "panel",

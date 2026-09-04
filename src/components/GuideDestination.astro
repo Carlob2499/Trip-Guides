@@ -145,12 +145,13 @@ const countOf = (ch: Chapter) => ch.entries.length;
         <div class="gd-cards">
           {chapters.map((ch, n) => (
             <button class={`gd-card${ch.imgs.length ? " gd-card--photo" : ""}`} type="button" data-chapter-go={ch.key}>
-              {ch.imgs.length > 0 ? (
+              {/* The numbered glyph is always present; a photo covers it, and a photo that fails
+                  to load (offline, blocked host) hands the card back to the glyph. */}
+              <span class="gd-card-glyph" aria-hidden="true">{String(n + 1).padStart(2, "0")}</span>
+              {ch.imgs.length > 0 && (
                 <span class="gd-card-media" aria-hidden="true">
                   <img src={ch.imgs[0].src} alt="" loading="lazy" decoding="async" onerror="this.closest('.gd-card').classList.remove('gd-card--photo')" />
                 </span>
-              ) : (
-                <span class="gd-card-glyph" aria-hidden="true">{String(n + 1).padStart(2, "0")}</span>
               )}
               <span class="gd-card-text">
                 <span class="gd-card-n">{String(n + 1).padStart(2, "0")}</span>

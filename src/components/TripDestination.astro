@@ -19,6 +19,7 @@
 import Icon from "./Icon.astro";
 import Learnings from "./Learnings.astro";
 import ReminderRow from "./ReminderRow.astro";
+import PaintedAtlas from "./PaintedAtlas.astro";
 import { jsonEmbed } from "../lib/json-embed";
 import type { TripDay, ReadinessStack, RecapAtoms } from "../features/trip/index";
 import type { HolidayInfo } from "../lib/holidays";
@@ -32,7 +33,7 @@ interface Props {
   readiness: ReadinessStack;
   recap: RecapAtoms | null;
   holidays: HolidayInfo | null;
-  hero: { src: string | null; srcset: string | null; alt: string; focal: string | null; painted: boolean };
+  hero: { src: string | null; srcset: string | null; alt: string; focal: string | null; painted: boolean; tz?: string | null };
   dates: string | null;
   cities: string | null;
   exports: { gpx: boolean; ics: boolean };
@@ -52,6 +53,9 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
   {/* Restrained hero: identity and lifecycle state, not the Guide's full editorial cover. */}
   <header class="trip-hero" data-trip-hero>
     <div class={`trip-hero-media${hero.painted ? " trip-hero-media--painted" : ""}`} aria-hidden="true">
+      {/* The living painted cover sits under the photo: it IS the cover when the guide has no
+          photo, and it stands in when the photo cannot load — never an empty plate. */}
+      <PaintedAtlas seed={slug} tz={hero.tz ?? undefined} mini={true} />
       {hero.src && (
         <img class="trip-hero-img" src={hero.src} srcset={hero.srcset ?? undefined} sizes="100vw" alt="" loading="eager" fetchpriority="high"
              style={hero.focal ? `object-position:${hero.focal}` : undefined}

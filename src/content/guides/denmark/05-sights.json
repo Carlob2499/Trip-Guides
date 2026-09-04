@@ -100,7 +100,16 @@
     "type": "prose",
     "group": "Sights",
     "title": "GO Fest 2026 — tickets, add-ons & your exact bonuses",
-    "body": "<p>Pokémon GO Fest Copenhagen runs at <b>Fælledparken, Jun 12–14, 2026</b>, in partnership with the LEGO Group — Europe's largest live Pokémon GO event of 2026. Gameplay window: Jun 11 12:00 a.m. – Jun 14 11:59 p.m. CEST.</p><p><b>Your tickets:</b></p><ul><li><b>Park Experience ticket</b> (200 kr/session) — Morning 9:00–13:00 or Afternoon 14:00–18:00. Includes that park session plus full citywide gameplay all day. Source: <a href='https://pokemongo.com/en/gofest/copenhagen/tickets' target='_blank' rel='noopener noreferrer'>pokemongo.com/en/gofest/copenhagen/tickets</a></li><li><b>City Explorer Pass</b> (135 kr) — citywide gameplay only, no park entry; available Jun 11–14</li></ul><p><b>Your three add-ons — exact confirmed bonuses:</b></p><ul><li><b>Premier Access (640 kr)</b>: Physical collectible + access to the <b>Premier Access Lounge</b> (first European location ever — Copenhagen only) with upgraded restrooms, portable chargers, and lockers. Voucher codes (expire Dec 31, 2026): 100 Poké Balls · 100 Great Balls · 100 Ultra Balls · 50 Silver Pinap Berries · 100 Super Incubators · 10 Lucky Eggs · 10 Incense · 10 Star Pieces · 10 Lure Modules · specialty Lures ×5 types · 100 Premium Battle Passes · 20 Max Particle Packs · 5 Max Mushrooms.</li><li><b>Raid Lover (112 kr)</b>: Up to <b>18 daily Raid Passes</b> from Gym spins (vs. 9 base). +5,000 XP per completed raid. +6 Candy and +3 Candy XL (Level 31+) per catch in 5-star and Mega raids.</li><li><b>Egg-thusiast (112 kr)</b>: <b>¼ Egg Hatch Distance</b> (full 75% reduction vs. the base 50%). <b>3× Hatch XP · 3× Hatch Candy · 3× Hatch Stardust.</b> Increased chance at receiving 10 km Eggs.</li></ul><p><b>Base ticket bonuses — all ticket holders, all day:</b></p><ul><li>Up to 9 daily Raid Passes (18 with Raid Lover) · Up to 6 Special Trades/day · ½ Stardust cost for trades</li><li>½ Egg Hatch Distance (¼ with Egg-thusiast) · 1.5× Hatch Candy and Stardust (3× with Egg-thusiast)</li><li>Open up to 50 Gifts/day · Increased catch rate with Premier Ball</li></ul><p><b>Citywide gameplay hours (9:00–18:00 CEST each day):</b></p><ul><li>2-hour Lure and Incense duration · 2× Catch Candy · Hourly event Field Research at PokéStops</li><li>Increased Shiny encounter rate (ticket holders only) · Event-themed stickers from Gifts and spins · Increased Party Play session time</li></ul>"
+    "body": "<p>Pokémon GO Fest Copenhagen runs at <b>Fælledparken, Jun 12–14, 2026</b>, in partnership with the LEGO Group — Europe's largest live Pokémon GO event of 2026. Gameplay window: Jun 11 12:00 a.m. – Jun 14 11:59 p.m. CEST.</p><p><b>Your tickets:</b></p><ul><li><b>Park Experience ticket</b> (200 kr/session) — Morning 9:00–13:00 or Afternoon 14:00–18:00. Includes that park session plus full citywide gameplay all day. Source: <a href='https://pokemongo.com/en/gofest/copenhagen/tickets' target='_blank' rel='noopener noreferrer'>pokemongo.com/en/gofest/copenhagen/tickets</a></li><li><b>City Explorer Pass</b> (135 kr) — citywide gameplay only, no park entry; available Jun 11–14</li></ul><p><b>Your three add-ons — exact confirmed bonuses:</b></p><ul><li><b>Premier Access (640 kr)</b>: Physical collectible + access to the <b>Premier Access Lounge</b> (first European location ever — Copenhagen only) with upgraded restrooms, portable chargers, and lockers. Voucher codes (expire Dec 31, 2026): 100 Poké Balls · 100 Great Balls · 100 Ultra Balls · 50 Silver Pinap Berries · 100 Super Incubators · 10 Lucky Eggs · 10 Incense · 10 Star Pieces · 10 Lure Modules · specialty Lures ×5 types · 100 Premium Battle Passes · 20 Max Particle Packs · 5 Max Mushrooms.</li><li><b>Raid Lover (112 kr)</b>: Up to <b>18 daily Raid Passes</b> from Gym spins (vs. 9 base). +5,000 XP per completed raid. +6 Candy and +3 Candy XL (Level 31+) per catch in 5-star and Mega raids.</li><li><b>Egg-thusiast (112 kr)</b>: <b>¼ Egg Hatch Distance</b> (full 75% reduction vs. the base 50%). <b>3× Hatch XP · 3× Hatch Candy · 3× Hatch Stardust.</b> Increased chance at receiving 10 km Eggs.</li></ul><p><b>Base ticket bonuses — all ticket holders, all day:</b></p><ul><li>Up to 9 daily Raid Passes (18 with Raid Lover) · Up to 6 Special Trades/day · ½ Stardust cost for trades</li><li>½ Egg Hatch Distance (¼ with Egg-thusiast) · 1.5× Hatch Candy and Stardust (3× with Egg-thusiast)</li><li>Open up to 50 Gifts/day · Increased catch rate with Premier Ball</li></ul><p><b>Citywide gameplay hours (9:00–18:00 CEST each day):</b></p><ul><li>2-hour Lure and Incense duration · 2× Catch Candy · Hourly event Field Research at PokéStops</li><li>Increased Shiny encounter rate (ticket holders only) · Event-themed stickers from Gifts and spins · Increased Party Play session time</li></ul>",
+    "module": {
+      "id": "go-fest-tickets",
+      "kind": "practical",
+      "relates": {
+        "days": [
+          "Fri Jun 12"
+        ]
+      }
+    }
   },
   {
     "type": "prose",
@@ -132,7 +141,17 @@
       "Offline maps for Fælledparken downloaded — data speeds crawl inside packed GO Fest crowds",
       "LEGO Stamp Rally reminder: opens Jun 12. Visit LEGO Vimmelskaftet (closes 18:00 Fri/Sat) right after the park session",
       "Phone alarm set for 20 min before hard stop: morning session ends 13:00, afternoon session ends 18:00"
-    ]
+    ],
+    "module": {
+      "id": "park-pre-day-checklist",
+      "kind": "howto",
+      "critical": true,
+      "relates": {
+        "days": [
+          "Fri Jun 12"
+        ]
+      }
+    }
   },
   {
     "type": "prose",

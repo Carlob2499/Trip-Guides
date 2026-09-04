@@ -515,7 +515,17 @@
       "Teams pre-built for Mega Mewtwo X (Flying/Fairy/Ghost counters) and Y (Ghost/Dark/Bug counters)"
     ],
     "collapsible": true,
-    "defaultOpen": true
+    "defaultOpen": true,
+    "module": {
+      "id": "pre-go-fest-checklist",
+      "kind": "howto",
+      "critical": true,
+      "relates": {
+        "days": [
+          "Sat Jul 11"
+        ]
+      }
+    }
   },
   {
     "type": "tierlist",

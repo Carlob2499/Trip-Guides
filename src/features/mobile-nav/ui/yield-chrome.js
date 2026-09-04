@@ -32,9 +32,16 @@ export function initYieldChrome(ctx) {
   function apply() {
     if (body.classList.contains("chrome-yield") !== state.yielded) body.classList.toggle("chrome-yield", state.yielded);
   }
+  /* Hysteresis, not a single threshold. Folding the Search field shortens the sticky chrome
+     by ~57px, which moves the page under the reader; a single threshold near that height
+     re-crossed itself on the next scroll event and the field flickered open and shut (found
+     by the 320px gate: a chapter card that never stopped moving). It folds once the reader is
+     clearly past the top and unfolds only when they are back at the very top. */
+  var FOLD_AT = TOP_ZONE / 2, UNFOLD_AT = Math.min(8, TOP_ZONE / 8);
   function applyScrolled(y) {
-    var scrolled = y > TOP_ZONE / 2;
-    if (body.classList.contains("chrome-scrolled") !== scrolled) body.classList.toggle("chrome-scrolled", scrolled);
+    var folded = body.classList.contains("chrome-scrolled");
+    var next = folded ? y > UNFOLD_AT : y > FOLD_AT;
+    if (next !== folded) body.classList.toggle("chrome-scrolled", next);
   }
   function restore() { state = initialYield(); apply(); }
 

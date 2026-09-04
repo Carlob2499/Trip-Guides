@@ -19,6 +19,8 @@
 .gd-card-media img{width:100%;height:100%;object-fit:cover;display:block;opacity:var(--photo)}
 .gd-card-glyph{display:flex;align-items:center;justify-content:center;width:84px;height:64px;background:var(--sunken);font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);color:var(--accent-ink)}
 .gd-card--quiet .gd-card-glyph{color:var(--muted)}
+.gd-card--photo .gd-card-glyph{display:none}
+.gd-card:not(.gd-card--photo) .gd-card-media{display:none}
 .gd-card-text{display:flex;flex-direction:column;gap:.1rem;min-width:0}
 .gd-card-n{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.1em;color:var(--muted)}
 .gd-card-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);line-height:1.15;overflow-wrap:anywhere}
@@ -29,6 +31,7 @@
   .gd-card--photo{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;padding:0 0 .8rem}
   .gd-card--photo .gd-card-media{grid-column:1/-1;width:100%;height:150px}
   .gd-card--photo .gd-card-text{padding:.7rem 0 0 .9rem}
+  .gd-card--photo .gd-card-glyph{display:none}
   .gd-card--photo .gd-card-arrow{padding:.7rem .9rem 0 0;align-self:start}
 }
 

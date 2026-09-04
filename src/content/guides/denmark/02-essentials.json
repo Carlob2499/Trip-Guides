@@ -6,7 +6,17 @@
     "body": "<p>Denmark uses the <b>krone (DKK)</b> — not the euro. Rate as of this check: <b>{{fact:currency-how-to-100-dkk}} ≈ $15.25 USD</b> (⚠ exchange rates move daily — verify again before you go). Your day trips use different currencies: <b>{{fact:currency-how-to-100-sek}} ≈ $10.30</b> (Sweden) and <b>{{fact:currency-how-to-100-nok}} ≈ $10.40</b> (Norway).</p><p>Cards and contactless payments work essentially everywhere in Denmark — you may never need to touch cash. Tipping is not part of Danish culture; rounding up at a restaurant for genuinely good service is plenty, and no one expects it.</p>",
     "verified_on": "2026-07-23",
     "shelf_life": "fx",
-    "source_url": "https://wise.com/us/currency-converter/dkk-to-usd-rate"
+    "source_url": "https://wise.com/us/currency-converter/dkk-to-usd-rate",
+    "module": {
+      "id": "currency-and-paying",
+      "kind": "practical",
+      "scope": "Denmark",
+      "relates": {
+        "days": [
+          "Mon Jun 8"
+        ]
+      }
+    }
   },
   {
     "type": "budget",
@@ -100,13 +110,27 @@
       "Pack all medicines in original packaging with a copy of any prescriptions",
       "Confirm travel insurance covers overseas medical care",
       "24-hour pharmacy: <a href='https://stenoapotek.dk/welcome---english' target='_blank' rel='noopener noreferrer'>Steno Apotek, Vesterbrogade 6C</a>"
-    ]
+    ],
+    "module": {
+      "id": "medical-help",
+      "kind": "practical",
+      "scope": "Copenhagen"
+    }
   },
   {
     "type": "panel",
     "group": "Essentials",
     "title": "How to fit in — Danish etiquette for visitors",
     "moreLabel": "The bike lane, cashless payment & tipping",
-    "body": "<p>Danish is the official language, but <b>virtually everyone under 60 speaks fluent English</b> — you will not struggle. A few local habits worth knowing before you arrive:</p><p><b>The bike lane is sacred.</b> Copenhagen runs on cycling. The painted lane between the pavement and the road belongs exclusively to cyclists — do not step into it, stop in it for photos, or cut across it without looking. Cyclists move fast and expect the lane clear. Look both ways before crossing.</p><p><b>Cards, not cash.</b> Denmark is one of the world's most cashless societies. Contactless payments work in taxis, market stalls, museums, and corner shops. You can carry virtually no cash and be fine.</p><p><b>Tipping is not expected.</b> Service charges are included in all restaurant bills by law. Rounding up for exceptional service is perfectly fine; no one will be offended if you don't. '<i>Tak</i>' (thanks) and '<i>hej</i>' (hi or bye) go a long way.</p>"
+    "body": "<p>Danish is the official language, but <b>virtually everyone under 60 speaks fluent English</b> — you will not struggle. A few local habits worth knowing before you arrive:</p><p><b>The bike lane is sacred.</b> Copenhagen runs on cycling. The painted lane between the pavement and the road belongs exclusively to cyclists — do not step into it, stop in it for photos, or cut across it without looking. Cyclists move fast and expect the lane clear. Look both ways before crossing.</p><p><b>Cards, not cash.</b> Denmark is one of the world's most cashless societies. Contactless payments work in taxis, market stalls, museums, and corner shops. You can carry virtually no cash and be fine.</p><p><b>Tipping is not expected.</b> Service charges are included in all restaurant bills by law. Rounding up for exceptional service is perfectly fine; no one will be offended if you don't. '<i>Tak</i>' (thanks) and '<i>hej</i>' (hi or bye) go a long way.</p>",
+    "module": {
+      "id": "danish-etiquette",
+      "kind": "etiquette",
+      "relates": {
+        "days": [
+          "Tue Jun 9"
+        ]
+      }
+    }
   }
 ]
