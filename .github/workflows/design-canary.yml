@@ -18,6 +18,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: design-canary-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   capture:
     name: Capture V1 creator-review screens
