@@ -14,7 +14,7 @@ user-invocable: true
 - **Whole-surface redesign / D7 grand redesign:** read `PRODUCT.md`,
   `docs/reference/design-system.md`, `docs/reference/motion.md`,
   `docs/reference/component-registry.json`, `docs/work-orders/waypoint-grand-redesign.md`,
-  `docs/mockups/GRAND_REFERENCE_README.md`, `docs/mockups/grand-reference.html`, then affected code.
+  `docs/mockups/GRAND_REFERENCE_README.md`, **`docs/mockups/CANONICAL_MOCKUP_LINEAGE.md`**, the named source mockup(s) when available, then `docs/mockups/grand-reference.html` for D7 deltas and affected code.
 - Read `docs/research/waypoint-design-reference-packet.md` only when external benchmark evidence is
   useful for a concrete implementation question.
 - Historical `docs/design-handoff/`, prototypes, screenshots, and archived redesigns are
@@ -58,6 +58,8 @@ For the authorized whole-site redesign:
 - execute `docs/work-orders/waypoint-grand-redesign.md`;
 - do not ask Carlo to re-decide settled visual direction;
 - do not average incompatible mockup generations;
+- identify the named mockup ancestor for each major surface before editing;
+- never implement a surface from `grand-reference.html` alone or let it downgrade a richer approved mockup;
 - remove superseded visual/navigation/motion/map implementations as the new system lands;
 - update registry/tokens/gates with the implementation rather than preserving old laws;
 - do not call the redesign complete until all canonical surfaces are migrated and old conflicting
