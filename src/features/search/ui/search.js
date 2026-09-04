@@ -12,7 +12,9 @@
    choice to the object's own anchor through the page router. */
 
 import { rankSearch, MIN_CHARS } from "../model/rank";
-import { esc, trapFocus } from "../../../scripts/util.js";
+import { trapFocus } from "../../../scripts/util.js";
+
+function el0(tag, cls, text) { const n = document.createElement(tag); n.className = cls; n.textContent = text; return n; }
 
 const ACTION = { place: "Open place", venue: "Open place", day: "Open day", stop: "Open day", section: "Open in guide", module: "Open in guide" };
 
@@ -76,32 +78,53 @@ export function initSearch(root) {
     flat = [];
     sel = -1;
     if (q.trim().length < MIN_CHARS) {
-      list.innerHTML = "";
+      list.replaceChildren();
       status.textContent = "";
       input.setAttribute("aria-expanded", "false");
       return;
     }
     if (!groups.length) {
-      list.innerHTML = '<p class="srch-empty">Nothing in this trip or the other guides matches that.</p>';
+      list.replaceChildren(el0("p", "srch-empty", "Nothing in this trip or the other guides matches that."));
       status.textContent = "No matches";
       input.setAttribute("aria-expanded", "true");
       return;
     }
-    let html = "";
+    // Rows are built as DOM nodes, never as an HTML string: every field here came from a
+    // JSON payload (the inline index or a fetched one), so it is text and stays text.
+    list.replaceChildren();
+    const el = (tag, cls, text) => {
+      const n = doc.createElement(tag);
+      if (cls) n.className = cls;
+      if (text != null) n.textContent = text;
+      return n;
+    };
     groups.forEach((g) => {
-      html += '<div class="srch-group" role="group" aria-label="' + esc(g.label) + '"><p class="srch-group-h">' + esc(g.label) + "</p>";
+      const group = el("div", "srch-group");
+      group.setAttribute("role", "group");
+      group.setAttribute("aria-label", g.label);
+      group.appendChild(el("p", "srch-group-h", g.label));
       g.items.forEach((r) => {
         const i = flat.push(r) - 1;
         const other = r.slug !== currentSlug;
-        html += '<button type="button" class="srch-row" role="option" aria-selected="false" data-srch-i="' + i + '" id="srch-opt-' + i + '">' +
-          '<span class="srch-row-main"><span class="srch-row-title">' + esc(r.title) + "</span>" +
-          (r.snippet ? '<span class="srch-row-snip">' + esc(r.snippet) + "</span>" : "") + "</span>" +
-          '<span class="srch-row-side"><span class="srch-row-crumb">' + esc(other ? r.crumb : r.group.toUpperCase()) + "</span>" +
-          '<span class="srch-row-act">' + (other ? "Open guide" : ACTION[r.kind] || "Open") + " →</span></span></button>";
+        const row = el("button", "srch-row");
+        row.type = "button";
+        row.setAttribute("role", "option");
+        row.setAttribute("aria-selected", "false");
+        row.setAttribute("data-srch-i", String(i));
+        row.id = "srch-opt-" + i;
+        const main = el("span", "srch-row-main");
+        main.appendChild(el("span", "srch-row-title", r.title));
+        if (r.snippet) main.appendChild(el("span", "srch-row-snip", r.snippet));
+        const side = el("span", "srch-row-side");
+        side.appendChild(el("span", "srch-row-crumb", other ? r.crumb : String(r.group || "").toUpperCase()));
+        const action = other ? "Open guide" : (Object.prototype.hasOwnProperty.call(ACTION, r.kind) ? ACTION[r.kind] : "Open");
+        side.appendChild(el("span", "srch-row-act", action + " →"));
+        row.appendChild(main);
+        row.appendChild(side);
+        group.appendChild(row);
       });
-      html += "</div>";
+      list.appendChild(group);
     });
-    list.innerHTML = html;
     status.textContent = flat.length + " result" + (flat.length === 1 ? "" : "s");
     input.setAttribute("aria-expanded", "true");
     input.removeAttribute("aria-activedescendant");
