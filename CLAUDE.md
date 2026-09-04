@@ -1,6 +1,6 @@
 # Waypoint Travel Guides — Project Instructions
 
-Stacks on the global `~/.claude/CLAUDE.md`. Load repository detail only when the task needs it.
+Load repository detail only when the task needs it.
 
 ## Core contract
 
@@ -34,7 +34,7 @@ Before a broad visual sweep, follow the two-surface canary in `docs/reference/de
 
 ## Guide/content invariants
 
-A factual edit must propagate through every affected surface; grep old values before calling it done. Sights and Food are repositories, not itinerary echoes. Every visitable item should have coordinates when verifiable. Traveler learnings and pipeline critic findings never mix.
+A factual edit must propagate through every affected surface; grep old values before calling it done. **Sights and Food are REPOSITORIES**, not itinerary echoes. Every visitable item should have coordinates when verifiable. Traveler learnings and pipeline critic findings never mix.
 
 ## Code and ownership
 

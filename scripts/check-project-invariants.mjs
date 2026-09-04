@@ -142,8 +142,25 @@ requirePath("public/sw.js", "Offline service worker");
 requireText("AGENTS.md", "Sights and Food are REPOSITORIES", "Sights/Food breadth doctrine");
 requireText("AGENTS.md", "pipeline critic findings", "Traveler/process learnings separation");
 requirePath("docs/reference/design-system.md", "Waypoint design authority");
-requirePath("docs/reference/motion.md", "Waypoint motion doctrine");
+requireText("docs/reference/design-system.md", "## 16. Motion", "Waypoint motion doctrine");
 requirePath("docs/reference/component-registry.json", "Waypoint component registry");
+
+// Design authority is intentionally singular. Historical design bodies live in Git history,
+// not as alternate live-tree references agents can accidentally consult.
+for (const rel of [
+  "docs/design-handoff",
+  "docs/mockups",
+  "docs/reference/motion.md",
+  "docs/reference/motion-anchors.md",
+  "docs/reference/search-ui-final.md",
+  "docs/reference/sos-ui-final.md",
+  "docs/reference/visual-redesign.md",
+  "docs/research/waypoint-design-reference-packet.md",
+  "docs/archive/visual-redesign-history.md",
+]) {
+  if (fs.existsSync(file(rel))) fail(`Design authority duplication: ${rel} must stay deleted; docs/reference/design-system.md is sole authority`);
+  else pass(`Design authority singularity: ${rel}`);
+}
 
 const uruguayMetaPath = "src/content/guides/uruguay/_guide.json";
 if (requirePath(uruguayMetaPath, "Uruguay Canary #4 guide")) {
