@@ -20,6 +20,7 @@
    address. */
 
 import { staleness, stalenessReading, SHELF_LIFE_DAYS } from "../lib/staleness";
+import { safeHttpUrl } from "./util.js";
 
 (function () {
   var nodes = document.querySelectorAll(".block[data-verified-on]");
@@ -55,8 +56,7 @@ import { staleness, stalenessReading, SHELF_LIFE_DAYS } from "../lib/staleness";
     // http(s) only. The schema types source_url as z.url(), and "javascript:alert(1)" IS a
     // valid URL — so the only thing standing between guide data and a clickable script link
     // is this check. Anything else renders as a plain <span>, losing the link, not the fact.
-    var src = el.getAttribute("data-source-url");
-    if (src && !/^https?:\/\//i.test(src)) src = null;
+    var src = safeHttpUrl(el.getAttribute("data-source-url"));
     // D10 (Stage A.7): the flag-chip visual language — control-size pill, 1px current-ink
     // border, tappable — same class .prov-dot's popover-openers share. Behavior unchanged: a
     // real <a> to the source when one exists (one tap to what the reader actually wants),

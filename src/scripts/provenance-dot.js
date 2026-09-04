@@ -1,5 +1,6 @@
 /** Provenance dot — tap to show/hide source + verification info. */
 import { staleness, stalenessReading, SHELF_LIFE_DAYS } from "../lib/staleness";
+import { safeHttpUrl } from "./util.js";
 
 (function () {
   let open = null;
@@ -90,11 +91,17 @@ import { staleness, stalenessReading, SHELF_LIFE_DAYS } from "../lib/staleness";
     // source_url (content.config.ts) — so unlike ProvenancePopover.astro's server-rendered
     // popover (whose sight/venue items CAN lack a source), there is no NO PUBLIC SOURCE
     // branch here; one existed and was dead code, removed in the Stage A/B review pass.
-    const src = chip.getAttribute("data-source-url");
-    const a = document.createElement("a");
-    a.href = src; a.target = "_blank"; a.rel = "noopener";
-    a.textContent = (() => { try { return new URL(src).hostname + " ↗"; } catch (e) { return src; } })();
-    pair("Source", null, a);
+    // http(s) only, re-encoded (util.js): anything else shows as text and loses the link, not the fact.
+    const raw = chip.getAttribute("data-source-url") || "";
+    const src = safeHttpUrl(raw);
+    if (src) {
+      const a = document.createElement("a");
+      a.href = src; a.target = "_blank"; a.rel = "noopener";
+      a.textContent = (() => { try { return new URL(src).hostname + " ↗"; } catch (e) { return src; } })();
+      pair("Source", null, a);
+    } else {
+      pair("Source", null, raw);
+    }
     const tier = chip.getAttribute("data-tier");
     if (tier) pair("Evidence", null, tier);
     chip.insertAdjacentElement("afterend", dl);

@@ -35,6 +35,7 @@ import {
 import { buildAnswerPayload } from "../../intake-questions/index";
 import { WAYPOINT_BACKEND } from "../../../lib/backend-config.js";
 import { readOwnerKey, storeOwnerKey, clearOwnerKey, OWNER_KEY_MIN } from "../../../scripts/owner-key.js";
+import { encodePath } from "../../../scripts/util.js";
 
 const OWNER = "Carlob2499";
 const NAME = "Trip-Guides";
@@ -100,8 +101,9 @@ export function initProgress() {
 
   const cfgEl = byId("pgConfig");
   const cfg = cfgEl ? JSON.parse(cfgEl.textContent || "{}") : {};
-  const base = cfg.base || "/";
-  const repo = cfg.repo || OWNER + "/" + NAME;
+  // Both end up inside hrefs: the credited encoding step happens once, here (util.js).
+  const base = encodePath(cfg.base || "/");
+  const repo = encodePath(cfg.repo || OWNER + "/" + NAME);
   // siteBase enables the deployed-live probe (the site's own search index) — same-origin.
   const gateway = createGithubGateway({ owner: OWNER, repo: NAME, siteBase: base });
 
@@ -667,7 +669,7 @@ export function initProgress() {
 
     if (els.done) els.done.hidden = page !== "done";
     if (page === "done" && els.doneLink) {
-      els.doneLink.href = base.replace(/\/$/, "") + "/guides/" + slug + "/";
+      els.doneLink.href = base.replace(/\/$/, "") + "/guides/" + encodeURIComponent(slug) + "/";
     }
 
     if (announceReady && page !== priorPage) {

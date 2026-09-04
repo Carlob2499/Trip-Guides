@@ -7,7 +7,7 @@ import "./atlas-map.js";
 import { solvePlacement } from "../model/solver";
 import { localClockLabel } from "../model/local-time";
 import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
-import { esc as escapeHtml, reducedMotion } from "../../../scripts/util.js";
+import { esc as escapeHtml, reducedMotion, reencodeUrl } from "../../../scripts/util.js";
 import { atWidth, srcsetFor, imgCredit } from "../../../lib/img-width";
 
 /* 260, not 220: the surveyed card's CTA is the long one ("✓ Verified — open the sheet →")
@@ -53,10 +53,9 @@ export function initAtlasWorld(root = document) {
   /* Everything read back out of the page — the guides JSON block included — is treated as
      text a stranger could have written (CodeQL js/xss-through-dom), so nothing from it reaches
      an href, src or innerHTML as a raw string. A guide's page IS base/guides/<slug>/, so the
-     link is rebuilt from the encoded slug rather than trusted; an image URL is re-encoded
-     as a whole (decode then encode, so an already-encoded Commons path is not encoded twice). */
+     link is rebuilt from the encoded slug rather than trusted; an image URL goes through
+     util.js's reencodeUrl. */
   const guideHref = (guide) => `${base}/guides/${encodeURIComponent(String(guide.slug || ""))}/`;
-  const safeImageUrl = (url) => { try { return url ? encodeURI(decodeURI(String(url))) : null; } catch { return null; } };
   const map = document.createElement("atlas-map");
   host.querySelector("[data-atlas-map-slot]")?.appendChild(map);
   map.guides = guides.map((guide) => ({
@@ -271,7 +270,7 @@ export function initAtlasWorld(root = document) {
        64px thumbnail must not fetch a 258 KB original. No cover means no frame at all: an
        honest blank beats a grey placeholder pretending to be a photo. */
     if (pingThumb) {
-      const src = safeImageUrl(atWidth(guide.coverImg, 64));
+      const src = reencodeUrl(atWidth(guide.coverImg, 64));
       pingThumb.hidden = !src;
       if (src) {
         pingThumb.src = src;

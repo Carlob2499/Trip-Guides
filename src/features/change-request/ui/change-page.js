@@ -35,6 +35,7 @@ import {
 import { createChangeGateway } from "../gateway.js";
 import { WAYPOINT_BACKEND } from "../../../lib/backend-config.js";
 import { readOwnerKey } from "../../../scripts/owner-key.js";
+import { encodePath } from "../../../scripts/util.js";
 
 /* Long enough that a fast typist is not announced mid-word, short enough that the panel still
    feels like it is answering. The VISUAL counter updates immediately; only this recompute waits. */
@@ -57,8 +58,9 @@ export function initChangePage() {
   const guides = cfg.guides || [];
   if (!guides.length) return;
 
-  const repo = cfg.repo || "";
-  const base = cfg.base || "";
+  // Config values that end up inside hrefs pass the credited encoding step once, here (util.js).
+  const repo = encodePath(cfg.repo || "");
+  const base = encodePath(cfg.base || "");
 
   const elCards = root.querySelectorAll("[data-cp-card]");
   const elFrom = root.querySelector("[data-cp-from]");
@@ -305,7 +307,7 @@ export function initChangePage() {
        anywhere on this path. An `await` here would put a window.open outside the user gesture
        and popup blockers would eat it silently (CLAUDE.md boundary check #2). Same-tab
        navigation avoids the question entirely. */
-    window.location.href = buildRequestUrl(repo, guide.slug, s);
+    window.location.href = buildRequestUrl(repo, encodeURIComponent(guide.slug), s);
   }
 
   /* ── Wiring ──────────────────────────────────────────────────────────────────────────── */
