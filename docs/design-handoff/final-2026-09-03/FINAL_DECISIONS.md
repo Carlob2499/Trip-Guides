@@ -1,6 +1,6 @@
 # WayPoint D6 — Final Late-Review Decisions
 
-Status: **BINDING DELTA — 2026-09-03**
+Status: **BINDING DELTA — 2026-09-04**
 
 This file exists because several user decisions were made after the longer D6 ledger paragraphs were written. It is intentionally small. Where one of the clauses below conflicts with an older paragraph in `docs/reference/design-system.md`, **this final user-approved clause wins**. Everywhere else, `docs/reference/design-system.md` remains authoritative.
 
@@ -87,8 +87,29 @@ Any operational map shown in the normal connected state should be the **real Goo
 
 Waypoint stores/communicates coarse researched timing such as `≈30 min · check live`; live traffic/navigation belongs to Google Maps/native provider handoff.
 
-## F8 — Mockup handling
+## F8 — Approved mockups are visual composition authority, not factual authority
 
-The original generated mockups are **not implementation artifacts** because several contain known hallucinated controls/data. The final handoff therefore includes sanitized SVG redraws containing only the approved composition signals. Claude/Fable may use those redraws as spatial/layout references only, under `MOCKUP_MANIFEST.json`.
+The earlier rule that excluded the original generated mockups from implementation authority was too broad and is superseded.
 
-If a mockup element is not supported by product authority, repository capability/content, or an explicit approved D6 decision, omit it.
+The creator-approved D6 mockups are **binding visual composition references for the surfaces they depict**. They govern the intended hierarchy, proportions, density, imagery prominence, navigation character, major spatial relationships, and overall visual tone unless a later explicit D6 decision overrides a specific element.
+
+They are **not content authority**. Mockup text, names, times, amounts, people, ratings, live states, buttons, or controls that are unsupported by canonical repository content or explicit product decisions must not be copied into production.
+
+The sanitized SVGs remain useful secondary annotations, but they do not replace the approved mockups and may not be used to justify a materially different composition.
+
+If the approved raster references are unavailable to an implementation session, visual acceptance is blocked with `VISUAL_REFERENCE_MISSING`; the model must not invent a substitute design from prose.
+
+## F9 — Visual completion requires creator fidelity acceptance
+
+Functional correctness and visual correctness are separate gates.
+
+A D7 surface may pass routing, accessibility, responsiveness, offline behavior, factual-integrity checks, and automated regression tests while still failing the redesign.
+
+Before D7 may be called visually complete:
+- use `VISUAL_FIDELITY_GATE.md`;
+- pass the two-surface visual canary first;
+- produce representative production screenshots against the approved D6 references;
+- do not regenerate final visual baselines as a substitute for design review;
+- obtain Carlo’s explicit visual acceptance, unless Carlo explicitly delegates that authority.
+
+PR #186 engineering should be preserved wherever it is already correct. The required correction is visual convergence, not architectural reinvention.
