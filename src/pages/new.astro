@@ -133,7 +133,7 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>New guide — Waypoint</title>
-    <meta name="description" content="Ask Waypoint for a new verified travel guide: six short sections, skip anything you haven't decided, and see what each answer changes." />
+    <meta name="description" content="Ask Waypoint for a new verified travel guide: one question at a time, skip anything you haven't decided, and see what each answer changes." />
     <PwaHead />
     <!-- Dark-mode init — runs before paint to avoid flash (same as the hub). -->
     <script is:inline>
@@ -158,9 +158,11 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
         <p class="itk-eyebrow">New guide · preflight</p>
         <h1>Tell us the trip. Research does the rest.</h1>
         <p class="itk-dek">
-          Six short sections. Every question says what your answer changes — and skipping one is a
-          real answer: the guide states the gap instead of inventing a value for it.
+          One question at a time. Every card says what your answer changes — and skipping one is a
+          real answer: the guide states the gap instead of inventing a value for it. Your answers
+          stay in view above the card you are on.
         </p>
+        <button class="itk-deck-again" id="itkDeckAgain" type="button" hidden>Go back through the cards</button>
       </header>
 
       {/* The sections ARE the no-JS base markup: with scripts off every field renders in an
@@ -257,8 +259,9 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
     <footer class="itk-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a></footer>
 
     <script>
-      import { initIntakeChecklist } from "../features/hub/index";
+      import { initIntakeChecklist, initIntakeDeck } from "../features/hub/index";
       initIntakeChecklist();
+      initIntakeDeck();
     </script>
     <script>
       import { initDarkToggle } from "../scripts/theme.js";

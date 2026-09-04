@@ -152,6 +152,52 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-go-note{margin:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.5;max-width:62ch}
 .itk-go-where{margin:0;font-family:var(--font-data);font-size:var(--text-label);letter-spacing:.03em;color:var(--muted)}
 
+/* ── The question deck (design-system.md §23) ─────────────────────────────────
+   One card in front, the answered ones as a quiet history stack above it. In deck mode every
+   row except the current one is out of the flow, the section heads and their feet step
+   aside, and the deck's own controls ride under the card. Reduced motion cuts the deal. */
+.itk-deck{display:flex;flex-direction:column;gap:.6rem;padding:1rem 1.4rem 0}
+.itk-deck[hidden]{display:none}
+.itk-deck-history{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.3rem}
+.itk-deck-history[hidden]{display:none}
+.itk-deck-hist-btn{display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;width:100%;min-height:44px;padding:.45rem .8rem;border:1px solid var(--rule);border-radius:var(--r-compact);background:var(--bg2);color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+.itk-deck-hist-btn:hover{border-color:var(--accent)}
+.itk-deck-hist-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.itk-deck-hist-q{flex:1 1 auto;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);min-width:0}
+.itk-deck-hist-a{font-family:var(--font-display);font-weight:640;font-size:var(--text-control);min-width:0;text-align:right;overflow-wrap:anywhere}
+.itk-deck-hist-a--open{color:var(--muted);font-weight:400;font-style:italic}
+.itk-deck-hist--moot .itk-deck-hist-btn{opacity:.6}
+.itk-deck-progress{margin:.4rem 0 0;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
+.ng-form[data-deck] .itk-sec-head,.ng-form[data-deck] .itk-sec-foot,.ng-form[data-deck] .itk-dz,.ng-form[data-deck] .itk-found,.ng-form[data-deck] .itk-minihead,.ng-form[data-deck] .itk-topics,.ng-form[data-deck] .itk-gate,.ng-form[data-deck] .itk-dispatch{display:none}
+.ng-form[data-deck] .itk-sec{border:0}
+.ng-form[data-deck] .itk-sec-body{padding:0 1.4rem;gap:0}
+.ng-form[data-deck] .itk-row{display:none}
+.ng-form[data-deck] .itk-row[data-deck-current]{display:grid;grid-template-columns:minmax(0,1fr);gap:.8rem;padding:1.2rem 1.3rem 1rem;border:1px solid var(--rule2);border-radius:var(--r-pane);background:var(--bg);box-shadow:var(--shadow-lift)}
+.ng-form[data-deck] .itk-row[data-deck-current] .itk-q{font-size:var(--text-h3);line-height:1.15;letter-spacing:-.012em}
+.ng-form[data-deck] .itk-row[data-deck-current] .itk-note{border-left-color:var(--accent)}
+/* The topic chips belong to the priorities card. */
+.ng-form[data-deck] .itk-row-match[data-deck-current]~.itk-minihead{display:block}
+.ng-form[data-deck] .itk-row-match[data-deck-current]~.itk-topics{display:flex;margin-bottom:.8rem}
+.itk-deck-controls{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding-top:.2rem}
+.itk-deck-back,.itk-deck-skip,.itk-deck-next,.itk-deck-tell,.itk-deck-review,.itk-deck-again{min-height:44px;padding:0 1rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.itk-deck-next{margin-left:auto;background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.itk-deck-next:hover{background:var(--accent);border-color:var(--accent)}
+.itk-deck-skip{color:var(--muted)}
+.itk-deck-skip[hidden]{display:none}
+.itk-deck-back:disabled{opacity:.4;cursor:default}
+.itk-deck-back:not(:disabled):hover,.itk-deck-skip:hover,.itk-deck-tell:hover,.itk-deck-review:hover,.itk-deck-again:hover{border-color:var(--ink)}
+.itk-deck-back:focus-visible,.itk-deck-skip:focus-visible,.itk-deck-next:focus-visible,.itk-deck-tell:focus-visible,.itk-deck-review:focus-visible,.itk-deck-again:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.itk-deck-aside{display:flex;flex-wrap:wrap;gap:.5rem;padding-top:.3rem;border-top:1px dashed var(--rule)}
+.itk-deck-tell,.itk-deck-review{border-style:dashed;color:var(--muted);font-weight:600}
+.itk-deck-again{margin-bottom:1.2rem}
+.itk-deck-again[hidden]{display:none}
+@media(prefers-reduced-motion:no-preference){
+  .itk-deck-deal{animation:wp-assemble-up var(--dur-object) var(--ease-standard) backwards}
+  .itk-deck-hist{animation:wp-assemble-down var(--dur-routine) var(--ease-standard) backwards}
+}
+@keyframes wp-assemble-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes wp-assemble-down{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
 /* ── Narrow container: one column ─────────────────────────────────────────────
    A component threshold, not a shared device breakpoint (src/lib/breakpoints.ts's three
    numbers are viewport and guide-body cuts, and neither is this). The form's query box is
@@ -181,6 +227,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
   .itk-meter-fill{transition:none}
   .ng-field input,.ng-field select,.ng-field textarea,.ng-submit,.itk-sec-head,.itk-mark,
   .itk-skip,.itk-next-sec,.itk-reset,.itk-dz,.itk-vs-btn,.itk-chip,.itk-go{transition:none}
+  .itk-deck-deal,.itk-deck-hist{animation:none}
 }
 
 /* Print: the checklist is an interactive surface — print the flat truth, not the chrome. */

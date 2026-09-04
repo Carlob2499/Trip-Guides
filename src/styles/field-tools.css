@@ -113,6 +113,46 @@
 .sos-advisory-level{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--dark-warn)}
 .sos-advisory-title{font-weight:700;color:var(--dark-ink);font-size:var(--text-body)}
 .sos-advisory-summary{font-size:var(--text-control);color:var(--dark-ink-3);line-height:1.4}
+/* The three layers (§28). Layer 1: one card per verified line — Police and Fire/Ambulance
+   in the critical fill, the rest on the dark ground; a details fold lists every number as a
+   direct tel: link for the traveler who already knows. Layer 2: the chosen number and the
+   context the page holds. Layer 3: the one enormous call. Layers cut; nothing slides. */
+.sos-step{margin-left:auto;font-family:var(--font-data);font-size:var(--text-caption);letter-spacing:.04em;text-transform:none;color:var(--dark-ink-3);font-weight:600}
+.sos-step+.sos-x{margin-left:.4rem}
+.sos-layer{display:flex;flex-direction:column;gap:.8rem}
+.sos-layer[hidden]{display:none}
+.sos-q{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);line-height:1.1;color:var(--dark-ink)}
+.sos-cats{display:grid;grid-template-columns:1fr;gap:.6rem}
+.sos-cat{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"label num" "hint num";column-gap:.8rem;align-items:center;min-height:76px;padding:.9rem 1.1rem;background:transparent;border:2px solid var(--dark-rule);border-radius:var(--r-card);color:var(--dark-ink);text-align:left;cursor:pointer;font:inherit}
+.sos-cat--primary{background:var(--crit-fill);border-color:var(--crit-fill);color:var(--on-crit)}
+.sos-cat:hover{border-color:var(--dark-ink)}
+.sos-cat--primary:hover{filter:brightness(1.06)}
+.sos-cat:focus-visible{outline:3px solid var(--dark-ink);outline-offset:3px}
+.sos-cat-label{grid-area:label;font-family:var(--font-data);font-weight:700;font-size:var(--text-h4);line-height:1.15;overflow-wrap:anywhere}
+.sos-cat-hint{grid-area:hint;font-family:var(--font-data);font-size:var(--text-control);opacity:.9;overflow-wrap:anywhere}
+.sos-cat-num{grid-area:num;font-family:var(--font-display);font-weight:640;font-size:clamp(1.6rem,6vw,2.2rem);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sos-all{border-top:1px solid var(--dark-rule);padding-top:.2rem}
+.sos-all-k{cursor:pointer;min-height:44px;display:flex;align-items:center;padding:0;background:transparent;border:0;border-radius:0;font-family:var(--font-data);font-size:var(--text-control);font-weight:700;color:var(--dark-ink-2)}
+.sos-all-k:focus-visible{outline:2px solid var(--dark-ink);outline-offset:2px}
+.sos-back{align-self:flex-start;min-height:44px;padding:0 .9rem 0 .6rem;background:transparent;border:1px solid var(--dark-rule);border-radius:var(--r-pill);color:var(--dark-ink-2);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.sos-back:hover{color:var(--dark-ink);border-color:var(--dark-ink)}
+.sos-back:focus-visible,.sos-next:focus-visible,.sos-copy:focus-visible{outline:3px solid var(--dark-ink);outline-offset:3px}
+.sos-pick-k{margin:0;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--dark-ink-3)}
+.sos-pick-num{margin:0;font-family:var(--font-display);font-weight:640;font-size:clamp(3rem,14vw,4.4rem);line-height:1;letter-spacing:-.02em;color:var(--dark-ink);font-variant-numeric:tabular-nums}
+.sos-pick-hint{margin:0;font-family:var(--font-data);font-size:var(--text-body);color:var(--dark-ink-2);overflow-wrap:anywhere}
+.sos-pick-hint:empty{display:none}
+.sos-ctx{padding:.8rem 1rem;border:1px solid var(--dark-rule);border-radius:var(--r-card)}
+.sos-ctx[hidden]{display:none}
+.sos-ctx-k{margin:0 0 .4rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--dark-ink-3)}
+.sos-ctx-list{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.35rem .8rem;margin:0}
+.sos-ctx-list dt{font-family:var(--font-data);font-size:var(--text-caption);color:var(--dark-ink-3)}
+.sos-ctx-list dd{margin:0;font-family:var(--font-data);font-size:var(--text-body);color:var(--dark-ink);overflow-wrap:anywhere;font-weight:600}
+.sos-next{min-height:56px;padding:0 1.4rem;background:var(--dark-ink);border:2px solid var(--dark-ink);border-radius:var(--r-pill);color:var(--dark-ground);font-family:var(--font-data);font-size:var(--text-lead);font-weight:700;cursor:pointer}
+.sos-call--confirm{min-height:170px}
+.sos-copy{align-self:flex-start;min-height:44px;padding:0 1rem;background:transparent;border:1px solid var(--dark-rule);border-radius:var(--r-pill);color:var(--dark-ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.sos-copied{margin:0;min-height:1.2em;font-family:var(--font-data);font-size:var(--text-caption);color:var(--dark-ink-3)}
+@media(min-width:600px){.sos-cats{grid-template-columns:1fr 1fr}.sos-cat--primary{grid-column:span 1}}
+
 /* Fallback sheet (EU-wide 112 only, no researched local numbers): warn-toned so
    it reads as "the universal number, not the researched sheet" at a glance. */
 .sos-sheet--fallback .sos-inner{border-top:3px solid var(--dark-warn)}

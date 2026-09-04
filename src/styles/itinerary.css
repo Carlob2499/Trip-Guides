@@ -220,10 +220,10 @@ body.chrome-yield .day-rail{transform:translateY(calc(60px + var(--safe-bottom) 
 .stops-behind::before{content:"✓";color:var(--green)}
 .stops-behind:hover{color:var(--ink);border-color:var(--ink)}
 .stops-behind:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-/* bp:DESKTOP_MIN−1 — the desktop workbench keeps the whole chronology in view (dimmed), so the
-   fold and its button exist only where one day owns a phone screen. */
-@media(max-width:1179px){.stops[data-behind="folded"] .stop-past{display:none}}
-@media(min-width:1180px){.stops-behind{display:none}}
+/* The desktop workbench keeps the whole chronology in view (dimmed), so the fold and its
+   button exist only below the desktop floor, where one day owns the screen. */
+.stops[data-behind="folded"] .stop-past{display:none}
+@media(min-width:1180px){.stops-behind{display:none}.stops[data-behind="folded"] .stop-past{display:grid}}
 
 /* --- Pin to compare (§16): desktop only, at most two, a tray above the map. ------------- */
 .stop-pin{display:none}

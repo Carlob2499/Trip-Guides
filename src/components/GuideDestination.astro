@@ -143,7 +143,7 @@ const countOf = (ch: Chapter) => ch.entries.length;
         <p class="gd-kicker">Guide · {chapters.length} chapters</p>
         <div class="gd-cards">
           {chapters.map((ch, n) => (
-            <button class={`gd-card${ch.imgs.length ? " gd-card--photo" : ""}`} type="button" data-chapter-go={ch.key}>
+            <button class={`gd-card${ch.imgs.length ? " gd-card--photo" : ""}${ch.imgs.length && chapters.findIndex((c) => c.imgs.length > 0) === n ? " gd-card--feature" : ""}`} type="button" data-chapter-go={ch.key}>
               {/* The numbered glyph is always present; a photo covers it, and a photo that fails
                   to load (offline, blocked host) hands the card back to the glyph. */}
               <span class="gd-card-glyph" aria-hidden="true">{String(n + 1).padStart(2, "0")}</span>
