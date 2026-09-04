@@ -5,6 +5,14 @@ Branch: `claude/waypoint-design-overhaul-9m1fro` (continues PR #186's engineerin
 Role: production implementation and visual convergence against the sole authority. This file is
 an execution record, **not design authority** — `docs/reference/design-system.md` is.
 
+## Superseded on 2026-09-04 (later the same day)
+
+Carlo's constitution commit (`bffb4df`, "D7: lock Waypoint grand redesign contract") replaced the
+design-system document this record converged against. The section numbers below (§13, §14, §20,
+§21) refer to that earlier document; SOS, provenance and offline are now governed by §28, §32 and
+§29 of the current constitution, and the whole-site target is `docs/work-orders/waypoint-grand-redesign.md`.
+This file stays as the execution record of the checkpoint that landed with PR #191.
+
 ## What changed on 2026-09-04
 
 The creator replaced the two-canary stop point with one continuous migration: the two canaries

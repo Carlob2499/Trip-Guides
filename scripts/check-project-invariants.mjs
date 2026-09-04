@@ -142,9 +142,12 @@ requirePath("public/sw.js", "Offline service worker");
 requireText("AGENTS.md", "Sights and Food are REPOSITORIES", "Sights/Food breadth doctrine");
 requireText("AGENTS.md", "pipeline critic findings", "Traveler/process learnings separation");
 requirePath("docs/reference/design-system.md", "Waypoint design authority");
-requireText("docs/reference/design-system.md", "## 16. Motion", "Waypoint motion doctrine");
+requireText("docs/reference/design-system.md", "## 18. Motion", "Waypoint motion doctrine");
+// 2026-09-04 constitution: motion.md is the subordinate doctrine the authority itself binds.
+requireText("docs/reference/design-system.md", "docs/reference/motion.md", "Waypoint authority binds the subordinate motion doctrine");
+requirePath("docs/reference/motion.md", "Waypoint motion doctrine (subordinate spec)");
 requirePath("docs/reference/design-system-assets/canonical-mockups.svg", "Waypoint canonical visual board");
-requireText("docs/reference/design-system.md", "design-system-assets/canonical-mockups.svg", "Waypoint authority binds canonical visual board");
+requireText("docs/reference/design-system.md", "docs/mockups/", "Waypoint authority binds visual reference evidence as subordinate");
 requireText("docs/reference/design-system-assets/canonical-mockups.svg", "SUPPORTING FIGURE ONLY", "Waypoint visual board is subordinate to sole authority");
 requirePath("docs/reference/design-system-assets/mockup-manifest.json", "Waypoint visual reference manifest");
 requireText("docs/reference/design-system-assets/mockup-manifest.json", "recovered_d6_composition", "Waypoint recovered D6 visuals retain authority class");
@@ -158,16 +161,15 @@ for (const rel of [
 requirePath("docs/reference/component-registry.json", "Waypoint component registry");
 
 // Design authority is intentionally singular. Historical design bodies live in Git history,
-// not as alternate live-tree references agents can accidentally consult.
+// not as alternate live-tree references agents can accidentally consult. docs/mockups and
+// docs/reference/motion.md are NOT in this list: the 2026-09-04 constitution binds them as
+// reference evidence and subordinate doctrine respectively (checked above).
 for (const rel of [
   "docs/design-handoff",
-  "docs/mockups",
-  ["docs", "reference", "motion.md"].join("/"),
   ["docs", "reference", "motion-anchors.md"].join("/"),
   ["docs", "reference", "search-ui-final.md"].join("/"),
   ["docs", "reference", "sos-ui-final.md"].join("/"),
   ["docs", "reference", "visual-redesign.md"].join("/"),
-  ["docs", "research", "waypoint-design-reference-packet.md"].join("/"),
   ["docs", "archive", "visual-redesign-history.md"].join("/"),
 ]) {
   if (fs.existsSync(file(rel))) fail(`Design authority duplication: ${rel} must stay deleted; docs/reference/design-system.md is sole authority`);
