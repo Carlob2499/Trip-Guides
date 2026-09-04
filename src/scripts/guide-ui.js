@@ -376,7 +376,7 @@ try {
       if (!b) return;
       showChapter(b.dataset.chapterGo, true);
       var head = gd.querySelector('[data-chapter-panel="' + b.dataset.chapterGo + '"] .gd-chapter-title');
-      if (head) head.setAttribute("tabindex", "-1"), head.focus({ preventScroll: true });
+      if (head) { head.setAttribute("tabindex", "-1"); head.focus({ preventScroll: true }); }
     });
     // Guide opens on the overview (D6-11). A remembered chapter is offered on return within
     // an active trip only — the overview stays the canonical default otherwise.
@@ -384,7 +384,6 @@ try {
     try { remembered = localStorage.getItem(CH_KEY); } catch (_) {}
     var win = tripWindow(firstDayDate, lastDayDate, new Date());
     showChapter(win.isOngoing && remembered ? remembered : "overview", false);
-    if (!location.hash) { /* nothing to open */ }
   }
 } catch (e) { fail("guide chapters", e); }
 

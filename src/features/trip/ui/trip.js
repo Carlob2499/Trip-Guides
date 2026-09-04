@@ -11,7 +11,7 @@
    Every minute it re-reads the clock; every check-off in the Itinerary re-focuses it. It
    never invents a time: a stop with no clock time is placed by the day's own order. */
 
-import { tripPhase, todayIndex, focusFor, parseStartMinutes, daysToGo } from "../model/lifecycle";
+import { tripPhase, todayIndex, focusFor, daysToGo } from "../model/lifecycle";
 import { tripWindow } from "../../../lib/trip-dates";
 import { todayInTz, esc, readStoredRecord } from "../../../scripts/util.js";
 import { universalTransitLinks, nativeTransitLinks } from "../../../lib/transit-links";

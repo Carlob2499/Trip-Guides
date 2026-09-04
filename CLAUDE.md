@@ -6,9 +6,9 @@ Stacks on the global `~/.claude/CLAUDE.md`. Load repository detail only when the
 
 ## D6 frontend implementation freeze — September 2026
 
-For any WayPoint visual/frontend implementation, **before editing** read `docs/design-handoff/final-2026-09-03/FABLE5_IMPLEMENTATION_PROMPT.md` and follow its authority order. The D6 product/design decisions are frozen for implementation.
+Before any visual/frontend edit, read `docs/design-handoff/final-2026-09-03/FABLE5_IMPLEMENTATION_PROMPT.md` and follow its authority order; D6 decisions are frozen for implementation.
 
-Mockups are never feature truth. Open visual references only through `docs/design-handoff/final-2026-09-03/MOCKUP_MANIFEST.json`; the listed SVGs are sanitized composition references with explicit allowed/forbidden signals. Historical handoffs, prototypes, screenshots, and unlisted generated mockups must not override `PRODUCT.md`, `docs/reference/design-system.md`, the executable token system, or the final D6 handoff.
+Mockups are never feature truth. Open visual references only through `docs/design-handoff/final-2026-09-03/MOCKUP_MANIFEST.json`. Historical handoffs, prototypes, screenshots and unlisted mockups never override `PRODUCT.md`, `docs/reference/design-system.md`, the token system, or the final D6 handoff.
 
 ---
 
@@ -26,24 +26,24 @@ Optimize for **minimum context-to-correct-change**:
 
 ## Route by task
 
-- **New guide / factual research / recertification:** use `waypoint-guide-author`. New-guide and headless research keep the full frozen research stack; narrow factual edits load only affected guide/state + verification/continuity context.
-- **Astro / CSS / UI / layout:** use `waypoint-design` + affected source. Facts never change. `docs/reference/design-system.md` is authority; motion/registry are subordinate; handoffs/prototypes are history except the explicitly frozen 2026-09-03 implementation package above, which is subordinate to those authorities.
-- **Pipeline V2 / validation / cutover:** SessionStart already injects the bounded `scripts/handoff-head.mjs` capsule. Use that first; open full `docs/handoff.md` only for deeper current evidence, then only the relevant `docs/pipeline v2/` authority. Do not load pipeline evidence for unrelated frontend work.
-- **Ownership/architecture ambiguity:** read `docs/reference/repo-map.md` and then the specific subsystem reference.
-- **Historical rationale:** use `CONTEXT.md` only when current code/docs do not explain the decision.
+- **New guide / factual research / recertification:** `waypoint-guide-author`. Narrow factual edits load only the affected guide/state + verification context.
+- **Astro / CSS / UI / layout:** `waypoint-design` + affected source. Facts never change. `docs/reference/design-system.md` is authority; motion/registry subordinate; handoffs/prototypes are history except the frozen 2026-09-03 package above, itself subordinate to those authorities.
+- **Pipeline V2 / validation / cutover:** start from the SessionStart `scripts/handoff-head.mjs` capsule; open `docs/handoff.md` and the relevant `docs/pipeline v2/` authority only for deeper evidence. Never load pipeline evidence for frontend work.
+- **Ownership/architecture ambiguity:** `docs/reference/repo-map.md`, then the subsystem reference.
+- **Historical rationale:** `CONTEXT.md` only when current code/docs do not explain the decision.
 
-`README.md` is orientation, `PRODUCT.md` is product doctrine, and the SessionStart capsule is the compact current-state summary. Full `docs/handoff.md` is on-demand evidence, not a mandatory read.
+`README.md` is orientation, `PRODUCT.md` is product doctrine; full `docs/handoff.md` is on-demand evidence.
 
 ## Protected current boundaries
 
 - V1 remains the production default/rollback until an explicit V2 cutover decision.
 - The pre-registered V01/V02/V03/V05 research candidate is compatibility-frozen. Do not change Guide Author research doctrine, V2 stage prompts/workflow, validation criteria, selector/publication authority, or the frozen candidate unless new defect evidence explicitly requires it.
 - Uruguay Canary #4 remains draft evidence, not production content.
-- Preserve the reciprocal Claude↔Codex reviewer trust boundary: unprivileged signal → read-only validation/agent execution → separate write-capable publish step that never executes PR-controlled code.
+- Preserve the reciprocal Claude↔Codex reviewer trust boundary: unprivileged signal → read-only validation → separate write-capable publish step that never executes PR-controlled code.
 
 ## Guide/content invariants
 
-A factual edit must propagate through every affected surface; grep for old values/phrasing before calling it done. If the edit creates a genuine product fork the creator has not decided, surface that fork; do not guess.
+A factual edit must propagate through every affected surface; grep for old values before calling it done. Surface a genuine undecided product fork; do not guess.
 
 **Sights and Food are REPOSITORIES**, not itinerary echoes. Breadth comes from research, never padding. Every visitable item should have coordinates when verifiable.
 
@@ -52,7 +52,7 @@ Traveler learnings and process evidence stay separate: raw traveler critiques ar
 ## Code and ownership rules
 
 - Shared components are global; country differences live in structured guide data.
-- Reuse an existing owner before creating another. A new self-contained feature gets `src/features/<name>/` only when it has a real independent model/gateway/UI boundary; small client behavior stays in `src/scripts/`.
+- Reuse an existing owner before creating another. `src/features/<name>/` only for a real independent model/gateway/UI boundary; small client behavior stays in `src/scripts/`.
 - Feature public surfaces go through `index.ts`; avoid cross-feature deep imports.
 - Third-party SDKs stay config-gated and lazy-loaded.
 - Internal base-path links use `import.meta.env.BASE_URL`.
@@ -62,26 +62,22 @@ Traveler learnings and process evidence stay separate: raw traveler critiques ar
 
 ## Decisions and execution
 
-Ask only for genuine user/product forks. Do not ask for facts the repository can answer, routine engineering choices with one sane default, or confirmation to continue an already-authorized plan. Headless workflows use their existing issue/gate mechanisms instead of blocking on chat.
+Ask only for genuine user/product forks, never for facts the repository can answer, routine choices with one sane default, or permission to continue an authorized plan. Headless workflows use their issue/gate mechanisms instead of chat.
 
-Research an unfamiliar failure class before changing architecture. Prefer a narrow reproducer or failing test first, then fix the owner, then simplify/delete the workaround that proof makes obsolete.
+Research an unfamiliar failure class before changing architecture: narrow reproducer or failing test first, fix the owner, then delete the workaround the proof makes obsolete.
 
 ### Release execution
 
-Current `main` contracts/tests and authority docs outrank PRs, issues, closed branches, and historical artifacts. History is evidence unless authority cites it.
+Current `main` contracts/tests and authority docs outrank PRs, issues, closed branches, and history. History is evidence unless authority cites it.
 
-For September, `docs/pipeline v2/SEPTEMBER_TRACKER.md` is the queue. Re-audit after each safe task and continue the next unblocked deterministic milestone. No open PR is not a stop; stop only at a real owner, future, provider/model, or acceptance boundary.
+For September, `docs/pipeline v2/SEPTEMBER_TRACKER.md` is the queue: re-audit after each safe task and continue the next unblocked deterministic milestone; stop only at a real owner, future, provider/model, or acceptance boundary.
 
-Before model acceptance, freeze the exact SHA; make deterministic/schema/provenance/retry-cap/build/a11y/security/exact-head CI green; audit control-plane drift; confirm no known deterministic blocker. Never use research/critic models to debug deterministic failure.
+Before model acceptance: freeze the exact SHA; make deterministic/schema/provenance/retry-cap/build/a11y/security/exact-head CI green; audit control-plane drift; confirm no deterministic blocker. Never use research/critic models to debug deterministic failure.
 
-Effort follows task: tooling first; low/medium for mechanical/docs; normal/high for implementation/debug; strongest only for irreducible architecture/security or pre-registered model/content acceptance. Failure never authorizes cap extension or green-chasing.
+Effort follows task: tooling first; low/medium for mechanical/docs; normal/high for implementation/debug; strongest only for irreducible architecture/security or pre-registered acceptance. Failure never authorizes cap extension or green-chasing.
 
 ## Verification
 
-Use the smallest useful check during iteration, then the repository gates before merge:
+Smallest useful check while iterating, then the repository gates before merge: `npm run check:fast` → focused/browser/offline checks → `npm run check` / `npm run ship:check` at that boundary. Frontend work includes the a11y/resilience gate and drift checker. CI on the exact PR head is authoritative. Never weaken a gate to make a branch green.
 
-`npm run check:fast` → relevant focused/browser/offline checks → `npm run check` or `npm run ship:check` when the change reaches that boundary.
-
-For visual/frontend work, include the existing accessibility/resilience gate and design drift checker where applicable. CI on the exact PR head is authoritative. Never weaken a gate merely to make a branch green.
-
-When a fix proves a contract, cash the proof back into simplicity: remove superseded overrides, duplicate docs/workflows, stale compatibility code, or debugging commentary when safe.
+When a fix proves a contract, cash the proof into simplicity: remove superseded overrides, duplicate docs/workflows, stale compatibility code, debugging commentary.

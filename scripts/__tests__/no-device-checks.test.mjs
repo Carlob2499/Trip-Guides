@@ -37,25 +37,11 @@ const ALLOWED = {
     "the number is only knowable at open time, from the dot's measured position.",
   "src/features/field-tools/ui/field-tools.js":
     "The same clamp for the field-tools popover. Same reason, same shape.",
-  "src/features/mobile-nav/ui/swipe-tabs.js":
-    "Two things, both allowed. Gesture geometry: how far a swipe travelled as a fraction of the " +
-    "screen, and the commit threshold that follows from it — a swipe is measured in the pixels a " +
-    "thumb actually moved. And the arming check itself (phone ceiling OR coarse pointer), which " +
-    "decides whether a GESTURE exists, never what renders: the page is identical either way, it " +
-    "just does or does not follow a finger. The ceiling is MOBILE_MAX from src/lib/breakpoints.ts.",
   "src/features/mobile-nav/index.js":
     "One width query deciding whether the chrome-yield behaviour starts. Yielding chrome is the " +
     "bottom bar and the topbar — page chrome, positioned against the viewport, which is the one " +
     "thing chrome may legitimately ask about — and it reads the same MOBILE_MAX ceiling that " +
-    "draws the bar in mobile-nav.css. The guide BODY beside it still switches on container width.",
-  "src/features/mobile-nav/ui/day-scrub.js":
-    "Arms the drag-to-scrub gesture on the day rail below the same MOBILE_MAX ceiling. Like " +
-    "swipe-tabs it adds a gesture to a rail that renders identically with or without it — the " +
-    "chips, their taps, their arrow keys and the scroll-spy are untouched by this branch.",
-  "src/scripts/onboard.js":
-    "Chooses the first-visit hint's COPY: 'Swipe ⇄ to move between sections' on a coarse pointer " +
-    "or a phone-width screen, 'Tabs up top · Ctrl+K' otherwise. Teaching a swipe to a mouse is " +
-    "worse than teaching nothing. It picks a sentence — same element, same box, same placement.",
+    "draws the bar in chrome.css. The guide BODY beside it still switches on container width.",
   "src/scripts/micro.js":
     "matchMedia('(hover:hover) and (pointer:fine)') gating the magnetic pull on .next-cta. A " +
     "6px pull that tracks a cursor is meaningless without a cursor, and on touch it would fire " +
@@ -128,8 +114,8 @@ describe("no device decides which layout a reader gets", () => {
     const guideCore = [
       "src/layouts/GuideLayout.astro",
       "src/scripts/guide-ui.js",
-      "src/features/guide-rail/ui/rail.js",
-      "src/features/guide-rail/model/stations.ts",
+      "src/components/AppChrome.astro",
+      "src/features/itinerary/ui/day-rail.js",
     ];
     for (const f of guideCore) {
       const code = readFileSync(f, "utf8")

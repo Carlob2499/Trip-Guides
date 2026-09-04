@@ -14,17 +14,10 @@ import SplitDestination from "../components/SplitDestination.astro";
 import Icon from "../components/Icon.astro";
 import PwaHead from "../components/PwaHead.astro";
 import { jsonEmbed } from "../lib/json-embed";
-import { emergencyFor, FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
-import { currencyFor, tzFor, COUNTRY_CODES } from "../lib/themes";
+import { FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
-import { buildHolidayInfo, deriveTripYear } from "../lib/holidays";
-import { computeGuideStats, latestVerifiedOn } from "../lib/guide-stats";
-import { cityLine, dateLine } from "../lib/plate-line";
-import { collectWaypoints, collectDayEvents, buildSummary, flattenSections } from "../features/exports/index";
-import { derivePins, derivePlannerData, pinSlug } from "../lib/map-pins";
-import { deriveTripDays, deriveReadiness, deriveRecap } from "../features/trip/index";
-import { buildGuideSearchIndex } from "../features/search/index";
+import { deriveGuideView } from "../lib/guide-view";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
@@ -69,9 +62,7 @@ const holidayData = import.meta.glob("../data/holidays/*.json", { eager: true, i
 const { guide } = Astro.props;
 const guideSlug = Astro.url.pathname.split("/").filter(Boolean).pop() ?? "";
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-const storeKey = (guideSlug || "guide").replace(/\W+/g, "").toLowerCase();
-const legacyStoreKey = (guide.title || "guide").replace(/\W+/g, "").toLowerCase();
-const flat = flattenSections(guide.sections || []) as any[];
+const ogImage = `${Astro.url.origin}${base}/og/${guideSlug}.png`;
 
 /* ── Accent (src/lib/palettes.ts — the SAME resolution the hub + OG use) ───────────────── */
 const extracted = paletteFor(guideSlug);
@@ -81,186 +72,11 @@ const themePrimary = guide.theme?.primary ?? extracted?.primary ?? accent;
 const themeSecondary = guide.theme?.secondary ?? extracted?.secondary ?? accent;
 const themeAccent = guide.theme?.accent ?? extracted?.accent ?? accent;
 
-const localCur = currencyFor(guide.country);
-const destTzIana = guide.tz || tzFor(guide.country);
-const ogImage = `${Astro.url.origin}${base}/og/${guideSlug}.png`;
-
-/* ── Cover ──────────────────────────────────────────────────────────────────────────────── */
-const heroSight = flat.filter((s) => s.type === "sights").flatMap((s) => s.items || []).find((it: any) => it?.img?.file || it?.img?.src);
-const cover = (guide as any).cover;
-const coverStill = (cover?.src || cover?.file)
-  ? { file: cover.file ?? null, src: cover.src ?? null, credit: cover.credit, creditUrl: cover.creditUrl }
-  : { file: heroSight?.img?.file ?? null, src: heroSight?.img?.src ?? null, credit: heroSight?.img?.credit, creditUrl: heroSight?.img?.creditUrl };
-const coverDirect = (coverStill.src as string | undefined) ?? null;
-const coverFile = (coverStill.file as string | undefined) ?? null;
-const coverAlt = cover?.alt ?? heroSight?.img?.alt ?? heroSight?.name ?? "";
-const coverFocal = cover?.focal ?? null;
-const mastSrcAt = (w: number) =>
-  coverDirect ? coverDirect.replace("{w}", String(w))
-  : coverFile ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=${w}` : null;
-const heroSrc = mastSrcAt(1600);
-const heroSrcset = (coverFile || coverDirect?.includes("{w}"))
-  ? `${mastSrcAt(480)} 480w, ${mastSrcAt(800)} 800w, ${mastSrcAt(1200)} 1200w, ${mastSrcAt(1600)} 1600w`
-  : null;
-const heroCredit = coverFile
-  ? { href: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`, label: "Photo: Wikimedia Commons" }
-  : coverDirect && coverStill.credit
-  ? { href: (coverStill.creditUrl as string | undefined) ?? null, label: `Photo: ${coverStill.credit}` }
-  : null;
-const coverVideo = cover?.video ?? null;
-const thumbSrc = (im: { file?: string; src?: string }) =>
-  im.src ? im.src.replace("{w}", "320")
-  : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(im.file!)}?width=320`;
-
-/* ── The itinerary, canonical (features/trip) ──────────────────────────────────────────── */
-const daysSec = flat.find((s) => s.type === "days" && s.items?.length) ?? null;
-const rawDays: any[] = daysSec?.items ?? [];
-const tripDays = deriveTripDays(rawDays);
-const firstDayDate = (rawDays[0]?.date as string) ?? null;
-const lastDayDate = (rawDays[rawDays.length - 1]?.date as string) ?? firstDayDate;
-const daysForBanner = rawDays.map((d: any) => ({ date: d.date, title: d.title, fit: d.fit ?? null, env: d.env ?? null }));
-
-/* ── Maps: every verified coordinate the guide carries ────────────────────────────────── */
-const mapSec = flat.find((s) => s.type === "map" && s.center?.lat) ?? null;
-const mapCenter = mapSec ? { lat: mapSec.center.lat as number, lng: mapSec.center.lng as number } : null;
-const pinMap = derivePins(guide.sections);
-const planner = derivePlannerData(guide.sections);
-const allPins = (() => {
-  const seen = new Set<string>();
-  const out: any[] = [];
-  for (const pins of pinMap.values()) for (const p of pins) { if (!seen.has(p.id)) { seen.add(p.id); out.push(p); } }
-  for (const p of planner.pins) { if (!seen.has(p.id)) { seen.add(p.id); out.push(p); } }
-  return out;
-})();
-const located = allPins.filter((p) => p.kind !== "center");
-const centroid = (pins: { lat: number; lng: number }[]) => pins.length
-  ? { lat: pins.reduce((a, p) => a + p.lat, 0) / pins.length, lng: pins.reduce((a, p) => a + p.lng, 0) / pins.length }
-  : null;
-const spanOf = (pins: { lat: number; lng: number }[]) => {
-  if (pins.length < 2) return 0.05;
-  const lats = pins.map((p) => p.lat), lngs = pins.map((p) => p.lng);
-  return Math.max(0.03, Math.max(Math.max(...lats) - Math.min(...lats), Math.max(...lngs) - Math.min(...lngs)) * 0.6);
-};
-const globalCenter = mapCenter ?? centroid(located);
-const globalSpan = mapCenter ? (mapSec?.span ?? spanOf(located)) : spanOf(located);
-const itinCenter = planner.hasCoords ? centroid(planner.pins) : globalCenter;
-const itinSpan = planner.hasCoords ? spanOf(planner.pins) : globalSpan;
-
-/* ── Guide chapters: the authored groups, in the guide's own order ────────────────────── */
-const isSources = (s: any) => /^(sources?|references?|evidence|verification)$/.test(String(s.group || "").trim().toLowerCase())
-  || /^(sources?|references?|evidence|verification)$/.test(String(s.type || ""));
-const groupOrder: string[] = [];
-for (const s of guide.sections as any[]) {
-  if (s.type === "days" || isSources(s)) continue;
-  if (!groupOrder.includes(s.group)) groupOrder.push(s.group);
-}
-const entriesOf = (g: string) => (guide.sections as any[]).map((s, i) => ({ s, i })).filter(({ s }) => s.group === g && s.type !== "days" && !isSources(s));
-const sources = (guide.sections as any[]).map((s, i) => ({ s, i })).filter(({ s }) => isSources(s));
-const daysOnlyExtras = (guide.sections as any[]).map((s, i) => ({ s, i })).filter(({ s }) => s.group === (daysSec?.group ?? "Days") && s.type !== "days");
-const panelGroups: string[] = (guide as any).panelGroups ?? [];
-const descriptors: Record<string, string> = (guide as any).descriptors ?? {};
-const collapseSubPrefixes = (parts: string[]): string[] => {
-  if (parts.length < 2) return parts;
-  const splits = parts.map((p) => p.split(/ — | – /, 2));
-  if (!splits.every((x) => x.length === 2)) return parts;
-  const prefix = splits[0][0];
-  if (!splits.every((x) => x[0] === prefix)) return parts;
-  return [prefix + " — " + splits.map((x) => x[1]).join(", ")];
-};
-const hasCoords = (o: any): o is { lat: number; lng: number } => !!o && Number.isFinite(o.lat) && Number.isFinite(o.lng);
-const referenceGroup = groupOrder.find((g) => /essential|plan|basics|before/i.test(g)) ?? groupOrder[0];
-let arrivalGroup: string | null = null;
-for (const g of groupOrder) for (const { s } of entriesOf(g)) {
-  const t = String(s.title ?? s.name ?? "");
-  if (arrivalGroup === null && /jet[\s-]?lag|arriv|when you land/i.test(t)) arrivalGroup = g;
-}
-if (arrivalGroup === null) arrivalGroup = referenceGroup;
-const chapters = groupOrder.map((g, gi) => {
-  const entries = entriesOf(g);
-  // Sections authored in the Days group that are not the itinerary itself (a "solo menu",
-  // alternatives) read as reference material and join the first chapter that follows.
-  const withExtras = gi === 0 ? [...daysOnlyExtras, ...entries] : entries;
-  const imgs = withExtras.filter((e) => e.s.type === "sights").flatMap((e) => e.s.items || [])
-    .filter((it: any) => it?.img?.file || it?.img?.src).slice(0, 3)
-    .map((it: any) => ({ src: thumbSrc(it.img), alt: it.img.alt || it.name || "" }));
-  const pins = withExtras
-    .filter((e) => e.s.type === "sights" || e.s.type === "venues")
-    .flatMap((e) => (e.s.items || []).filter((it: any) => hasCoords(it.map)).map((it: any) => ({
-      id: pinSlug(it.name), name: it.name, lat: it.map.lat, lng: it.map.lng, local: null,
-      kind: e.s.type === "sights" ? "sight" : "venue", cat: g, placeId: it.place_id || null,
-    })));
-  const mapSecs = withExtras.filter((e) => e.s.type === "map" && hasCoords(e.s.center));
-  const chapterCenter = mapSecs.length ? { lat: mapSecs[0].s.center.lat, lng: mapSecs[0].s.center.lng } : centroid(pins);
-  const chapterSpan = mapSecs.length ? (mapSecs[0].s.span ?? spanOf(pins)) : spanOf(pins);
-  const solo = withExtras.length === 1;
-  const subParts = solo || descriptors[g] ? [] : withExtras.map((e) => e.s.title || e.s.name || "").filter((t: string) => t && t !== g);
-  const sub = collapseSubPrefixes(subParts.slice(0, 4)).join(" · ") + (subParts.length > 4 ? ` · +${subParts.length - 4} more` : "");
-  return {
-    key: `${g.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "chapter"}-${gi}`,
-    name: g, descriptor: descriptors[g] ?? null, sub, entries: withExtras, imgs,
-    isPanelGroup: withExtras.every((e) => panelGroups.includes(e.s.group)),
-    pins, center: chapterCenter, span: chapterSpan,
-    reference: g === referenceGroup, arrival: g === arrivalGroup,
-  };
-});
-
-/* Knowledge modules → days (D6-53), deterministically by the module's own relations. */
-const modulesByDate: Record<string, { id: string; title: string; kind: string; critical: boolean; anchor: string }[]> = {};
-(guide.sections as any[]).forEach((s, i) => {
-  if (!s.module) return;
-  const link = { id: s.module.id, title: s.title || s.group, kind: s.module.kind, critical: !!s.module.critical, anchor: `sec-${i}` };
-  const dates = new Set<string>(s.module.relates?.days ?? []);
-  for (const place of s.module.relates?.places ?? []) {
-    for (const d of tripDays) if (d.stops.some((w) => w.name === place)) dates.add(d.date);
-  }
-  for (const d of dates) (modulesByDate[d] ??= []).push(link);
-});
-
-/* ── Trip: readiness, recap, holidays, files ──────────────────────────────────────────── */
-const readiness = deriveReadiness(flat as any);
-const recap = deriveRecap(tripDays, (guide as any).learnings ?? null);
-const cc = COUNTRY_CODES[guide.country] ?? null;
-const holSec = flat.find((s) => s.type === "holidays") as any;
-const holYear = holSec?.year || deriveTripYear(firstDayDate, new Date());
-const holRows = cc ? holidayData[`../data/holidays/${cc}-${holYear}.json`] : null;
-const holidayInfo = holSec ? buildHolidayInfo(holRows ?? null, firstDayDate, lastDayDate, holYear) : null;
-const hasWaypoints = collectWaypoints(guide).length > 0;
-const hasDayEvents = collectDayEvents(guide).length > 0;
-const hasWeatherSection = flat.some((s) => s.type === "weather");
-const tripSummary = buildSummary(guide);
-
-/* ── Plate line + colophon (counted, never typed) ─────────────────────────────────────── */
-const platelineCities = cityLine(guide.kicker as string | null);
-const platelineDates = dateLine(guide.kicker as string | null);
-const verifiedWarning = guide.verified?.trimStart().startsWith("⚠") ? guide.verified : null;
-const verifiedDate = guide.verified?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? null;
-const colophon = computeGuideStats([guide]);
-const colophonChecked = verifiedDate ?? latestVerifiedOn([guide]);
-const nextRecheck = (() => {
-  const dates: string[] = [];
-  const walk = (obj: any) => {
-    if (!obj || typeof obj !== "object") return;
-    if (obj.expected && typeof obj.expected === "string") dates.push(obj.expected);
-    if (Array.isArray(obj)) obj.forEach(walk); else Object.values(obj).forEach(walk);
-  };
-  walk(guide.sections);
-  return dates.sort()[0] ?? null;
-})();
-const eyebrow = platelineDates || (((guide.region || guide.country) !== guide.title) ? (guide.region || guide.country) : null);
-
-/* ── The current trip's own search index, embedded so search works offline ───────────── */
-const searchIndex = buildGuideSearchIndex(guideSlug, guide.title, guide.sections as any);
-
-const destinations = [
-  { key: "trip" as const, label: "Trip" },
-  { key: "itinerary" as const, label: "Itinerary" },
-  { key: "map" as const, label: "Map" },
-  { key: "guide" as const, label: "Guide" },
-  { key: "split" as const, label: "Split" },
-];
+/* ── Everything the destinations need, derived once (src/lib/guide-view.ts) ───────────── */
+const v = deriveGuideView(guide, guideSlug, base, holidayData);
 ---
 <!doctype html>
-<html lang="en" style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent })}>
+<html lang="en" data-country={guide.country} style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent })}>
   <head>
     <meta charset="utf-8" />
     {/* viewport-fit=cover is REQUIRED for env(safe-area-inset-*) to report anything but 0. */}
@@ -291,11 +107,11 @@ const destinations = [
     </script>
   </head>
 
-  <body data-storekey={storeKey} data-legacy-storekey={legacyStoreKey} data-slug={guideSlug} data-base={base}>
+  <body data-storekey={v.storeKey} data-legacy-storekey={v.legacyStoreKey} data-slug={guideSlug} data-base={base}>
     <a class="skip-link" href="#content">Skip to content</a>
     <div id="savedNote" class="toast" role="status" aria-live="polite"></div>
 
-    <AppChrome base={base} destinations={destinations} title={guide.title} />
+    <AppChrome base={base} destinations={v.destinations} title={guide.title} />
 
     {/* Share modal — hidden until btnShare is clicked; skipped by Web Share API on mobile. */}
     <div class="share-backdrop" id="shareBackdrop" aria-hidden="true"></div>
@@ -306,8 +122,8 @@ const destinations = [
         <span class="share-url-txt" id="shareUrlTxt" title="Guide URL"></span>
         <button class="share-copy-btn" id="shareCopyBtn" type="button">Copy link</button>
       </div>
-      {(hasDayEvents || hasWaypoints) && <button class="share-summary-btn" id="btnShareSummary" type="button">↗ Share trip summary</button>}
-      <div id="tripSummary" hidden>{tripSummary}</div>
+      {(v.exports.ics || v.exports.gpx) && <button class="share-summary-btn" id="btnShareSummary" type="button">↗ Share trip summary</button>}
+      <div id="tripSummary" hidden>{v.tripSummary}</div>
       <div class="share-socials">
         <a class="share-soc" id="shareWA" href="#" target="_blank" rel="noopener noreferrer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96s-.47-.15-.66.15-.76.96-.93 1.16-.34.22-.64.07a8.06 8.06 0 0 1-2.37-1.46 8.9 8.9 0 0 1-1.64-2.04c-.17-.3 0-.46.13-.6s.3-.35.44-.52a2 2 0 0 0 .3-.5.55.55 0 0 0-.03-.52c-.07-.15-.66-1.6-.91-2.19-.24-.57-.48-.49-.66-.5h-.57a1.1 1.1 0 0 0-.8.37 3.36 3.36 0 0 0-1.05 2.5 5.84 5.84 0 0 0 1.22 3.1c.15.2 2.1 3.2 5.08 4.49a17.1 17.1 0 0 0 1.7.63 4.1 4.1 0 0 0 1.87.12 3.08 3.08 0 0 0 2.02-1.43 2.5 2.5 0 0 0 .17-1.43c-.07-.13-.26-.2-.56-.35M12 2a10 10 0 0 0-8.67 14.97L2 22l5.18-1.36A10 10 0 1 0 12 2"/></svg>
@@ -326,7 +142,7 @@ const destinations = [
       <button class="cold-open-x" type="button" aria-label="Dismiss">✕</button>
     </div>
 
-    {verifiedWarning && <p class="guide-warning"><span class="gstat gstat-warning">{verifiedWarning}</span></p>}
+    {v.verifiedWarning && <p class="guide-warning"><span class="gstat gstat-warning">{v.verifiedWarning}</span></p>}
     {guide.draft && (
       <p class="draft-progress">
         <a class="draft-progress-link" href={`${base}/progress/?slug=${encodeURIComponent(guideSlug)}`}><Icon name="clock" size={14} /> Track live progress</a>
@@ -337,30 +153,27 @@ const destinations = [
       <noscript><p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds the destination switcher, saved checklists, live maps and the trip split.</p></noscript>
 
       <section class="dest" id="dest-trip" data-dest="trip" role="region" aria-label="Trip">
-        <TripDestination guide={guide} slug={guideSlug} base={base} storeKey={storeKey} days={tripDays} readiness={readiness} recap={recap}
-          holidays={holidayInfo} dates={platelineDates} cities={platelineCities} exports={{ gpx: hasWaypoints, ics: hasDayEvents }}
-          hasWeather={!!mapCenter} entry={guide.entry ?? null}
-          hero={{ src: heroSrc, srcset: heroSrcset, alt: coverAlt, focal: coverFocal, painted: !heroSrc }} />
+        <TripDestination guide={guide} slug={guideSlug} base={base} storeKey={v.storeKey} days={v.tripDays} readiness={v.readiness} recap={v.recap}
+          holidays={v.holidayInfo} dates={v.plate.dates} cities={v.plate.cities} exports={v.exports}
+          hasWeather={!!v.mapCenter} entry={guide.entry ?? null} hero={v.hero} />
       </section>
 
       <section class="dest" id="dest-itinerary" data-dest="itinerary" role="region" aria-label="Itinerary" hidden>
-        <ItineraryDestination daysSection={daysSec} learnings={guide.learnings ?? null} country={guide.country} keyPrefix="dy"
-          modulesByDate={modulesByDate} dayPins={planner.pins} center={itinCenter} span={itinSpan} />
+        <ItineraryDestination daysSection={v.daysSec} learnings={guide.learnings ?? null} country={guide.country} keyPrefix="dy"
+          modulesByDate={v.modulesByDate} dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan} />
       </section>
 
       <section class="dest" id="dest-map" data-dest="map" role="region" aria-label="Map" hidden>
-        <MapDestination center={globalCenter} span={globalSpan} pins={allPins} country={guide.country} dayDates={rawDays.map((d: any) => d.date)} />
+        <MapDestination center={v.globalCenter} span={v.globalSpan} pins={v.allPins} country={guide.country} dayDates={v.rawDays.map((d: any) => d.date)} />
       </section>
 
       <section class="dest" id="dest-guide" data-dest="guide" role="region" aria-label="Guide" hidden>
-        <GuideDestination guide={guide} slug={guideSlug} storeKey={storeKey} country={guide.country} chapters={chapters} sources={sources}
-          hero={{ src: heroSrc, srcset: heroSrcset, alt: coverAlt, focal: coverFocal, credit: heroCredit, video: coverVideo, tz: destTzIana }}
-          plate={{ dates: platelineDates, cities: platelineCities, eyebrow, checked: colophonChecked, facts: colophon.verifiedFactCount, sources: colophon.sourceCount, emergency: emergencyFor(guide.country), currency: localCur }}
-          holidays={holidayInfo} pinMap={pinMap} destTz={destTzIana} phrases={guide.phrases ?? null} entry={guide.entry ?? null} />
+        <GuideDestination guide={guide} slug={guideSlug} storeKey={v.storeKey} country={guide.country} chapters={v.chapters} sources={v.sources}
+          hero={v.hero} plate={v.plate} holidays={v.holidayInfo} pinMap={v.pinMap} destTz={v.destTzIana} phrases={guide.phrases ?? null} entry={guide.entry ?? null} />
       </section>
 
       <section class="dest" id="dest-split" data-dest="split" role="region" aria-label="Split" hidden>
-        <SplitDestination storeKey={storeKey} />
+        <SplitDestination storeKey={v.storeKey} />
       </section>
     </main>
 
@@ -372,12 +185,12 @@ const destinations = [
           {guide.footer && <p class="colo-footer-note">{guide.footer}</p>}
         </div>
       </div>
-      {(colophonChecked || colophon.verifiedFactCount > 0 || colophon.sourceCount > 0) && (
+      {(v.colophonChecked || v.colophon.verifiedFactCount > 0 || v.colophon.sourceCount > 0) && (
         <dl class="colo-stats">
-          {colophonChecked && <div class="colo-stat"><dt>Last checked</dt><dd>{colophonChecked}</dd></div>}
-          {colophon.verifiedFactCount > 0 && <div class="colo-stat"><dt>Verified facts</dt><dd>{colophon.verifiedFactCount}</dd></div>}
-          {colophon.sourceCount > 0 && <div class="colo-stat"><dt>Primary sources</dt><dd>{colophon.sourceCount}</dd></div>}
-          {nextRecheck && <div class="colo-stat"><dt>Next self-check</dt><dd>{nextRecheck}</dd></div>}
+          {v.colophonChecked && <div class="colo-stat"><dt>Last checked</dt><dd>{v.colophonChecked}</dd></div>}
+          {v.colophon.verifiedFactCount > 0 && <div class="colo-stat"><dt>Verified facts</dt><dd>{v.colophon.verifiedFactCount}</dd></div>}
+          {v.colophon.sourceCount > 0 && <div class="colo-stat"><dt>Primary sources</dt><dd>{v.colophon.sourceCount}</dd></div>}
+          {v.nextRecheck && <div class="colo-stat"><dt>Next self-check</dt><dd>{v.nextRecheck}</dd></div>}
         </dl>
       )}
       <div class="colo-foot">
@@ -390,13 +203,13 @@ const destinations = [
     </footer>
 
     <script type="application/json" is:inline id="tgConfig" set:html={jsonEmbed({
-      storeKey, legacyStoreKey, roomId: guide.roomId ?? null, mapCenter, firstDayDate, lastDayDate, hasWeatherSection,
-      destTzIana, curCode: localCur?.code ?? null, curFallbackRate: localCur?.approxRate ?? null, curFallbackAsOf: FALLBACK_RATES_AS_OF,
-      daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null,
-      emergency: emergencyFor(guide.country), advisory: (guide as any).advisory ?? null, verifiedDate, budgetLock: (guide as any).budgetLock ?? false,
+      storeKey: v.storeKey, legacyStoreKey: v.legacyStoreKey, roomId: guide.roomId ?? null, mapCenter: v.mapCenter, firstDayDate: v.firstDayDate, lastDayDate: v.lastDayDate, hasWeatherSection: v.hasWeatherSection,
+      destTzIana: v.destTzIana, curCode: v.localCur?.code ?? null, curFallbackRate: v.localCur?.approxRate ?? null, curFallbackAsOf: FALLBACK_RATES_AS_OF,
+      daysForBanner: v.daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null,
+      emergency: v.plate.emergency, advisory: (guide as any).advisory ?? null, verifiedDate: v.verifiedDate, budgetLock: (guide as any).budgetLock ?? false,
       slug: guideSlug, title: guide.title,
     })}></script>
-    <script type="application/json" is:inline id="searchIndex" set:html={jsonEmbed(searchIndex)}></script>
+    <script type="application/json" is:inline id="searchIndex" set:html={jsonEmbed(v.searchIndex)}></script>
     <script>
       import "../scripts/guide-ui.js";
       import "../features/maps/index.js";

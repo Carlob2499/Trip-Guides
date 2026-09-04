@@ -1,8 +1,10 @@
-/** maps — the map rendering + interaction layer for every guide.
-    Two concerns, both self-booting on import:
-    · fullscreen.js — always on. Wires a ⤢ button onto every default OSM iframe.
-    · gmaps-render.js — config-gated (PUBLIC_GMAPS_KEY): without a key this half is
-      inert and the OSM iframe stands as the map. When it upgrades a mount, it also
-      strips fullscreen.js's now-stale button (Google's own map ships its own). */
+/** maps — the map rendering + interaction layer for every map-bearing surface.
+    · fullscreen.js   — always on: a ⤢ button on every OSM iframe fallback.
+    · gmaps-render.js — config-gated (PUBLIC_GMAPS_KEY): upgrades every [data-itin-map] mount
+                        to Google Maps, keeping the OSM iframe until the Google map has
+                        actually initialised (D6-51/F7). Lenses: all / days / chapter.
+    · map-dest.js     — the Map destination's contextual sheet/inspector, in sync with pins. */
 import "./ui/fullscreen.js";
 import "./ui/gmaps-render.js";
+import "./ui/map-dest.js";
+export { initMapDestination } from "./ui/map-dest.js";

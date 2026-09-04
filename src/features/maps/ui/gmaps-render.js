@@ -1,195 +1,216 @@
-/* Waypoint Google Maps provider — the opt-in interactive map upgrade.
-   Self-boots ONLY when PUBLIC_GMAPS_KEY is present at build (via tgConfig);
-   with no key, the OSM iframe embed in each map section is the map and this
-   never runs. Upgrades every [data-itin-map] mount to a Google map with
-   accent-styled markers + info windows. Lazy-loaded per mount.
+/* Waypoint Google Maps provider — the connected-state map (design-system.md D6-51, F7).
+   Self-boots ONLY when PUBLIC_GMAPS_KEY is present at build (via tgConfig); with no key the
+   OpenStreetMap embed in each mount IS the map and this never runs.
 
-   Key safety: the key is a PUBLIC browser key by design — restrict it to this
-   site's HTTP referrers and to the Maps JavaScript API in Google Cloud Console. */
+   Reliability contract, in order:
+     · the OSM iframe stays exactly where it is until Google's map has actually fired its
+       first `idle` (initialised and painted). Only then is the iframe removed. A failed SDK
+       load, a bad key, a quota error or a network drop leaves the OSM map standing — never a
+       blank mount. If Google fails AFTER init, the mount is marked degraded rather than
+       emptied.
+     · every mount declares a LENS in its data: "all" (the Map destination — every pin,
+       category chips, day chips), "days" (the Itinerary workbench — the selected day's stops
+       and their route, following `tg:day`), "chapter" (a Guide chapter's own places).
+     · selection is a shared state: clicking a pin dispatches `tg:map-select`; a row in the
+       inspector focuses the pin through `focusPin`. Live routing is the map app's — every
+       pin hands off with a Directions URL built from its verified coordinates. */
 
 import { clusterPins } from "../model/cluster";
 import { esc as escapeHtml } from "../../../scripts/util.js";
 
-/* global google */ // injected on window by the Maps JS SDK once its loader script resolves
+/* global google */
 export function boot(cfg) {
   var mounts = Array.prototype.slice.call(document.querySelectorAll("[data-itin-map]"));
   if (!mounts.length) return;
 
-  /* Official async bootstrap (importLibrary pattern). */
   var loaded = null;
   function loadApi() {
     if (loaded) return loaded;
     loaded = new Promise(function (resolve, reject) {
-      /* VENDOR CODE — Google's published inline bootstrap loader, pasted verbatim and minified by
-         them. TypeScript flags three hints inside it (window.maps ×2, a no-op await); all three are
-         Google's, not ours, and they stay. Hand-editing minified upstream code to satisfy a linter
-         means owning it forever and re-doing it at every Google update. Leave as-is; replace only
-         by pasting a newer official snippet. */
+      /* VENDOR CODE — Google's published inline bootstrap loader, verbatim. */
       /* eslint-disable */
       (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({ key: cfg.gmapsKey, v: "weekly" });
       /* eslint-enable */
-      Promise.all([
-        google.maps.importLibrary("maps"),
-        google.maps.importLibrary("marker"),
-      ]).then(function (libs) { resolve({ maps: libs[0], marker: libs[1] }); }, reject);
+      Promise.all([google.maps.importLibrary("maps"), google.maps.importLibrary("marker")])
+        .then(function (libs) { resolve({ maps: libs[0], marker: libs[1] }); }, reject);
     });
     return loaded;
   }
 
-  /* Resolved colors (Google needs real hex, not CSS color-mix strings). */
-  function cssVar(name) {
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#2b5d86";
-  }
-  function hexToRgb(h) {
-    var m = /^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(h.trim());
-    return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : [43, 93, 134];
-  }
-  function mixHex(a, b, t) {
-    var A = hexToRgb(a), B = hexToRgb(b);
-    return "#" + A.map(function (v, i) {
-      return Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0");
-    }).join("");
-  }
+  function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#9c4421"; }
   var ACCENT = cssVar("--accent");
-
   function zoomFromSpan(span) {
     var s = span || 0.05;
     return Math.max(5, Math.min(16, Math.round(13 - Math.log2(s / 0.05))));
   }
 
-  var sharedInfo = null;
-
-  function makeMap(api, mount, data) {
-    var map = new api.maps.Map(mount, {
+  function makeMap(api, host, data) {
+    return new api.maps.Map(host, {
       center: { lat: data.center.lat, lng: data.center.lng },
       zoom: zoomFromSpan(data.span),
       mapId: cfg.gmapsMapId || "DEMO_MAP_ID",
-      fullscreenControl: true,
-      streetViewControl: false,
-      mapTypeControl: false,
-      gestureHandling: "cooperative", // no page-scroll hijack (ctrl/2-finger)
-      clickableIcons: false,
+      fullscreenControl: true, streetViewControl: false, mapTypeControl: false,
+      gestureHandling: "cooperative", clickableIcons: false,
     });
-    if (!sharedInfo) sharedInfo = new api.maps.InfoWindow();
-    return map;
   }
 
-  function addMarker(api, map, pin) {
-    var pinEl = new api.marker.PinElement({
-      background: ACCENT,
-      borderColor: mixHex(ACCENT, "#000000", 0.25),
-      glyphColor: "#ffffff",
-      scale: pin.kind === "center" ? 1.1 : 0.9,
-    });
-    var m = new api.marker.AdvancedMarkerElement({
-      map: map, position: { lat: pin.lat, lng: pin.lng },
-      content: pinEl.element, title: pin.name,
-    });
-    // Directions deep-link uses the pin's VERIFIED lat/lng, not a place_id: the guide's
-    // place_id is an OSM/Nominatim id (the geocode's source record), which Google Maps
-    // can't resolve — a coordinate destination is unambiguous and can't point at the
-    // wrong business. `.local` (native-script name) rides above it for the show-the-driver
-    // case; the two together are the "little translation available" answer.
-    var dirUrl = "https://www.google.com/maps/dir/?api=1&destination=" + pin.lat + "," + pin.lng;
-    var html = "<b>" + escapeHtml(pin.name) + "</b>" +
-      (pin.local ? "<div class='wpop-local'>" + escapeHtml(pin.local) + "</div>" : "") +
-      (pin.kind !== "center"
-        ? "<a class='wpop-dir' href='" + dirUrl + "' target='_blank' rel='noopener'>Directions ↗</a>"
-        : "") +
-      (pin.kind === "sight" ? "<a class='wpop-jump' href='#sight-" + pin.id + "'>Details ↓</a>" : "");
-    m.addListener("click", function () {
-      sharedInfo.setContent(html);
-      sharedInfo.open({ map: map, anchor: m });
-    });
-    return m;
-  }
-
-  /* A cluster of several pins draws as one count bubble; clicking it zooms in rather than
-     opening a popup, because at that zoom the question is "what's in there", not "which one". */
-  function addCluster(api, map, cluster) {
-    var el = document.createElement("div");
-    el.className = "map-cluster";
-    el.textContent = String(cluster.pins.length);
-    var m = new api.marker.AdvancedMarkerElement({
-      map: map, position: { lat: cluster.lat, lng: cluster.lng }, content: el,
-      title: cluster.pins.map(function (p) { return p.name; }).slice(0, 6).join("\n"),
-    });
-    m.addListener("click", function () {
-      var b = new google.maps.LatLngBounds();
-      cluster.pins.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
-      map.fitBounds(b, 60);
-    });
-    return m;
-  }
+  function dirUrl(pin) { return "https://www.google.com/maps/dir/?api=1&destination=" + pin.lat + "," + pin.lng + (pin.placeId ? "&destination_place_id=" + encodeURIComponent(pin.placeId) : ""); }
 
   function initMap(api, mount, data) {
-    var map = makeMap(api, mount, data);
-    var all = (data.pins || []).filter(function (p) {
-      return typeof p.lat === "number" && typeof p.lng === "number";
-    });
-    if (!all.length) return;
-
-    /* Which categories are switched on. Starts as everything — a map that hides content until
-       you opt in would be a map that looks empty. */
+    var host = document.createElement("div");
+    host.className = "gmap-host";
+    mount.appendChild(host);
+    var map = makeMap(api, host, data);
+    var info = new api.maps.InfoWindow();
+    var all = (data.pins || []).filter(function (p) { return typeof p.lat === "number" && typeof p.lng === "number"; });
+    var lens = mount.getAttribute("data-map-lens") || "all";
     var cats = [];
-    all.forEach(function (p) {
-      if (p.cat && p.kind !== "center" && cats.indexOf(p.cat) === -1) cats.push(p.cat);
-    });
+    all.forEach(function (p) { if (p.cat && p.kind !== "center" && p.dayIdx == null && cats.indexOf(p.cat) === -1) cats.push(p.cat); });
     var off = {};
-    var markers = [];
+    var dayFilter = null; // the selected day (lens "days"), or a chosen day chip on "all"
+    var markers = [], polyline = null, selectedId = null;
+    var ready = false;
 
     function visible() {
-      return all.filter(function (p) { return p.kind === "center" || !p.cat || !off[p.cat]; });
+      return all.filter(function (p) {
+        if (p.kind === "center") return false;
+        if (lens === "days") return p.dayIdx === dayFilter;
+        if (dayFilter != null && p.dayIdx != null) return p.dayIdx === dayFilter;
+        if (dayFilter != null && p.dayIdx == null) return false;
+        return !p.cat || !off[p.cat];
+      });
+    }
+
+    function markerFor(pin, index) {
+      var el = document.createElement("div");
+      el.className = "map-pin" + (pin.dayIdx != null ? " map-pin--stop" : pin.kind === "venue" ? " map-pin--venue" : "") + (pin.id === selectedId ? " map-pin--sel" : "");
+      el.textContent = index != null ? String(index + 1) : "";
+      var m = new api.marker.AdvancedMarkerElement({ map: map, position: { lat: pin.lat, lng: pin.lng }, content: el, title: pin.name, zIndex: pin.id === selectedId ? 10 : 1 });
+      m.addListener("click", function () { select(pin.id, "map"); });
+      return m;
+    }
+    function clusterMarker(c) {
+      var el = document.createElement("div");
+      el.className = "map-cluster";
+      el.textContent = String(c.pins.length);
+      var m = new api.marker.AdvancedMarkerElement({ map: map, position: { lat: c.lat, lng: c.lng }, content: el, title: c.pins.map(function (p) { return p.name; }).slice(0, 6).join("\n") });
+      m.addListener("click", function () {
+        var b = new google.maps.LatLngBounds();
+        c.pins.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
+        map.fitBounds(b, 60);
+      });
+      return m;
     }
 
     function draw() {
       markers.forEach(function (m) { m.map = null; });
       markers = [];
+      if (polyline) { polyline.setMap(null); polyline = null; }
       var pins = visible();
-      // The centre is chrome, not content — it never clusters and never counts.
-      var centre = pins.filter(function (p) { return p.kind === "center"; });
-      var rest = pins.filter(function (p) { return p.kind !== "center"; });
-      centre.forEach(function (p) { markers.push(addMarker(api, map, p)); });
-      clusterPins(rest, map.getZoom() || 13).forEach(function (c) {
-        markers.push(c.pins.length === 1 ? addMarker(api, map, c.pins[0]) : addCluster(api, map, c));
+      var stops = pins.filter(function (p) { return p.dayIdx != null; });
+      if (stops.length) {
+        // A day's stops keep their order and draw as a numbered route: the itinerary's own
+        // sequence, straight lines between stops — never a routed path pretending to be one.
+        stops.forEach(function (p, i) { markers.push(markerFor(p, i)); });
+        if (stops.length > 1) {
+          polyline = new google.maps.Polyline({ path: stops.map(function (p) { return { lat: p.lat, lng: p.lng }; }), geodesic: true, strokeColor: ACCENT, strokeOpacity: .75, strokeWeight: 3, map: map });
+        }
+      }
+      var places = pins.filter(function (p) { return p.dayIdx == null; });
+      clusterPins(places, map.getZoom() || 13).forEach(function (c) {
+        markers.push(c.pins.length === 1 ? markerFor(c.pins[0], null) : clusterMarker(c));
       });
     }
 
-    draw();
-    // Re-cluster on zoom: the grouping is a function of zoom, so it has to follow it.
-    map.addListener("zoom_changed", function () { draw(); });
-
-    if (cats.length > 1) buildChips(mount, cats, off, function () { draw(); });
-
-    if (all.length > 1) {
+    function fitTo(pins) {
+      if (!pins.length) return;
+      if (pins.length === 1) { map.setCenter({ lat: pins[0].lat, lng: pins[0].lng }); map.setZoom(15); return; }
       var b = new google.maps.LatLngBounds();
-      all.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
-      map.fitBounds(b, 40);
+      pins.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
+      map.fitBounds(b, 48);
     }
+
+    function select(id, source) {
+      selectedId = id;
+      var pin = all.find(function (p) { return p.id === id; }) || null;
+      draw();
+      if (pin) {
+        info.setContent("<b>" + escapeHtml(pin.name) + "</b>" + (pin.local ? "<div class='wpop-local'>" + escapeHtml(pin.local) + "</div>" : "") +
+          "<a class='wpop-dir' href='" + dirUrl(pin) + "' target='_blank' rel='noopener'>Directions ↗</a>");
+        var m = markers.find(function (x) { return x.title === pin.name; });
+        if (m) info.open({ map: map, anchor: m });
+        if (source !== "map") map.panTo({ lat: pin.lat, lng: pin.lng });
+      } else { info.close(); }
+      try { mount.dispatchEvent(new CustomEvent("tg:map-select", { bubbles: true, detail: { id: id, pin: pin, source: source } })); } catch (_) {}
+    }
+
+    map.addListener("zoom_changed", function () { if (ready) draw(); });
+    google.maps.event.addListenerOnce(map, "idle", function () {
+      ready = true;
+      // ONLY NOW is Google the map: the fallback leaves once there is something to replace it.
+      var frame = mount.querySelector(".osmmap");
+      if (frame) frame.remove();
+      var stale = mount.querySelector(".map-fs-btn");
+      if (stale) stale.remove();
+      mount.setAttribute("data-map-provider", "google");
+      draw();
+      var initial = visible();
+      if (initial.length > 1) fitTo(initial);
+    });
+
+    if (lens === "all" && (cats.length > 1 || all.some(function (p) { return p.dayIdx != null; }))) buildChips(mount, cats, off, data.dayDates || [], function (cat, on) {
+      off[cat] = !on; dayFilter = null; draw();
+    }, function (dayIdx) { dayFilter = dayIdx; draw(); fitTo(visible()); });
+
+    if (lens === "days") {
+      var selectedDay = document.querySelector("[data-planner-days] .day[data-day]:not([hidden])");
+      dayFilter = selectedDay ? parseInt(selectedDay.getAttribute("data-day"), 10) : 0;
+      document.addEventListener("tg:day", function (e) {
+        dayFilter = e.detail.index;
+        if (!ready) return;
+        draw();
+        fitTo(visible());
+      });
+      document.addEventListener("tg:bench", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); fitTo(visible()); }, 320); });
+    }
+    // The destination becoming visible is the moment a hidden map needs its size.
+    document.addEventListener("tg:dest", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); fitTo(visible()); }, 60); });
+    mount.__focusPin = function (id) { select(id, "row"); };
+    mount.__fitDay = function (dayIdx) { dayFilter = dayIdx; if (ready) { draw(); fitTo(visible()); } };
+    mount.__clear = function () { selectedId = null; info.close(); draw(); };
   }
 
-  /* Filter chips, built from the categories the guide actually has (map-pins.ts derives them
-     from section groups). Only rendered when there is more than one — a single chip is chrome
-     that filters nothing. */
-  function buildChips(mount, cats, off, onChange) {
+  function buildChips(mount, cats, off, dayDates, onCat, onDay) {
     var bar = document.createElement("div");
     bar.className = "map-chips";
     bar.setAttribute("role", "group");
-    bar.setAttribute("aria-label", "Filter map by category");
+    bar.setAttribute("aria-label", "Show on the map");
     cats.forEach(function (cat) {
       var b = document.createElement("button");
-      b.type = "button";
-      b.className = "map-chip map-chip-on";
-      b.textContent = cat;
-      b.setAttribute("aria-pressed", "true");
+      b.type = "button"; b.className = "map-chip map-chip-on"; b.textContent = cat; b.setAttribute("aria-pressed", "true");
       b.addEventListener("click", function () {
-        off[cat] = !off[cat];
-        b.classList.toggle("map-chip-on", !off[cat]);
-        b.setAttribute("aria-pressed", off[cat] ? "false" : "true");
-        onChange();
+        var on = b.getAttribute("aria-pressed") !== "true";
+        b.classList.toggle("map-chip-on", on); b.setAttribute("aria-pressed", on ? "true" : "false");
+        bar.querySelectorAll("[data-day-chip]").forEach(function (d) { d.classList.remove("map-chip-on"); d.setAttribute("aria-pressed", "false"); });
+        onCat(cat, on);
       });
       bar.appendChild(b);
     });
+    if (dayDates.length) {
+      dayDates.forEach(function (date, i) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "map-chip map-chip--day"; b.setAttribute("data-day-chip", String(i)); b.setAttribute("aria-pressed", "false");
+        var parts = String(date).split(/\s+/);
+        b.textContent = "Day " + (i + 1) + (parts.length >= 3 ? " · " + parts[1] + " " + parts[2] : "");
+        b.addEventListener("click", function () {
+          var on = b.getAttribute("aria-pressed") !== "true";
+          bar.querySelectorAll("[data-day-chip]").forEach(function (d) { d.classList.remove("map-chip-on"); d.setAttribute("aria-pressed", "false"); });
+          if (on) { b.classList.add("map-chip-on"); b.setAttribute("aria-pressed", "true"); onDay(i); }
+          else onDay(null);
+        });
+        bar.appendChild(b);
+      });
+    }
     mount.insertBefore(bar, mount.firstChild);
   }
 
@@ -199,56 +220,35 @@ export function boot(cfg) {
     var data;
     try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
     if (!data.center || typeof data.center.lat !== "number") return;
-    // Replace the default OSM iframe fallback before rendering Google.
-    var frame = mount.querySelector(".osmmap");
-    if (frame) {
-      // fullscreen.js already wired a ⤢ button onto this iframe's wrapper at page
-      // load (it runs eagerly; this upgrade is lazy and can fire minutes later, well
-      // after that button exists). Capture the wrap BEFORE removing the frame —
-      // frame.parentElement goes null the instant it's detached — and strip the now-
-      // dangling button along with it. Google's own map ships fullscreenControl: true,
-      // so nothing is lost; without this, the OSM button sits there pointing at a
-      // removed element and silently does nothing on click.
-      var wrap = frame.parentElement;
-      frame.remove();
-      if (wrap) {
-        var staleBtn = wrap.querySelector(".map-fs-btn");
-        if (staleBtn) staleBtn.remove();
-      }
-    }
     loadApi().then(function (api) { initMap(api, mount, data); })
-      .catch(function (err) { console.warn("[gmaps] failed to load:", err && err.message); });
+      .catch(function (err) {
+        // The OSM iframe is still in place — nothing to undo. Say so on the mount for CSS/tests.
+        mount.setAttribute("data-map-provider", "osm");
+        mount.setAttribute("data-map-google-failed", "");
+        console.warn("[gmaps] failed to load:", err && err.message);
+      });
   }
 
-  /* Lazy init — only when a map nears the viewport; wedge + tab-reveal fallbacks. */
   var inited = new WeakSet();
   function initOnce(m) { if (m && !inited.has(m)) { inited.add(m); init(m); } }
   if ("IntersectionObserver" in window) {
-    var ioEverFired = false;
     var io = new IntersectionObserver(function (entries) {
-      ioEverFired = true;
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { io.unobserve(e.target); initOnce(e.target); }
-      });
+      entries.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); initOnce(e.target); } });
     }, { rootMargin: "400px" });
     mounts.forEach(function (m) { io.observe(m); });
-    setTimeout(function () { if (!ioEverFired) { io.disconnect(); initOnce(mounts[0]); } }, 3000);
   } else {
     mounts.forEach(initOnce);
   }
+  // A destination or chapter revealing a map that was display:none — the observer never
+  // fired for it — initialises on the reveal.
+  document.addEventListener("tg:dest", function () {
+    setTimeout(function () { mounts.forEach(function (m) { if (!inited.has(m) && m.getBoundingClientRect().width > 0) initOnce(m); }); }, 60);
+  });
   document.addEventListener("click", function () {
-    setTimeout(function () {
-      mounts.forEach(function (m) {
-        if (inited.has(m)) return;
-        var r = m.getBoundingClientRect();
-        if (r.width > 0 && r.height > 0 && r.top < innerHeight + 400 && r.bottom > -400) initOnce(m);
-      });
-    }, 60);
+    setTimeout(function () { mounts.forEach(function (m) { if (!inited.has(m) && m.getBoundingClientRect().width > 0) initOnce(m); }); }, 120);
   }, { passive: true });
 }
 
-/* Self-boot: opt-in only. Runs when a PUBLIC_GMAPS_KEY was set at build
-   (surfaced via tgConfig); otherwise the OSM iframe embed is the map. */
 (function () {
   var el = document.getElementById("tgConfig");
   var cfg = el ? JSON.parse(el.textContent || "{}") : {};

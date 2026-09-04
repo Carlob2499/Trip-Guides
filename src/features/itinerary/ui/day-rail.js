@@ -1,108 +1,161 @@
-/* Waypoint day scrubber — the itinerary's wayfinding rail, synced to whichever
-   layout is live (planner.css):
-     · phone   → a horizontal snap DECK (the .planner-days track scrolls x);
-     · tablet  → vertical page-snap; desktop → a vertical list.
-   A tapped chip pages/scrolls to that day; scrolling the deck/page updates the
-   active chip. The chips stay the accessible, keyboard-first navigator. Uses a
-   rAF + scroll-listener (proven robust; no IntersectionObserver). */
+/* The day rail — the itinerary's ONE day switch (design-system.md D6-34/D6-49).
 
-import { reducedMotion } from "../../../scripts/util.js";
-import { lastAboveFold, nearestToCenter } from "../model/scroll-spy";
+   Every day card renders; exactly one is shown (`.day[hidden]` on the rest, so the phone
+   never scrolls a deck of nine days and the desktop timeline stays the selected day). Two
+   controls drive it, both through selectDay(): the thumb-zone rail (`#dayRail`, sticky above
+   the bottom bar on a phone) and the header date row (`.itin-daynav`, desktop). Tap jumps;
+   a horizontal drag across the rail scrubs with a bubble naming the day under the thumb;
+   ←/→ move a day; a horizontal swipe on the day card itself moves to the adjacent day
+   (contextual, D6-44 — the object in view is the day, never a top-level destination).
 
-(function () {
-  var scrub = document.getElementById("dayScrub");
-  if (!scrub) return;
-  var chips  = Array.prototype.slice.call(scrub.querySelectorAll("[data-day-jump]"));
-  var track  = document.querySelector(".planner-days");
-  var dayEls = Array.prototype.slice.call(document.querySelectorAll(".planner-days .day[data-day]"));
-  if (!chips.length || !dayEls.length || !track) return;
+   Selection is remembered per guide on this device (D6-15) and announces `tg:day` so the
+   workbench map and the Trip surface can follow. */
 
+import { reducedMotion, tapHaptic } from "../../../scripts/util.js";
+import { resolveSwipe } from "../model/gesture";
+
+export function initDayRail(root) {
+  var doc = root || document;
+  var dayEls = Array.prototype.slice.call(doc.querySelectorAll("[data-planner-days] .day[data-day]"));
+  if (!dayEls.length) return null;
+  var jumps = Array.prototype.slice.call(doc.querySelectorAll("[data-day-jump]"));
+  var rail = doc.getElementById("dayRail");
+  var track = rail ? rail.querySelector("[data-day-rail]") : null;
+  var bubble = rail ? rail.querySelector(".scrub-bubble") : null;
   var reduced = reducedMotion();
-  var chromeH = 110; // sticky chrome + scrubber allowance (vertical modes)
-  var active = -1;
+  var storeKey = doc.body.getAttribute("data-storekey") || "guide";
+  var KEY = "tg-d7-day-" + storeKey;
+  var N = dayEls.length;
+  var cur = -1;
 
-  // Horizontal deck iff the track itself scrolls sideways (phone layout).
-  function horizontal() {
-    return track.scrollWidth > track.clientWidth + 4 &&
-           getComputedStyle(track).overflowX !== "visible";
-  }
-
-  function setActive(idx) {
-    if (idx < 0 || idx >= chips.length || idx === active) return;
-    active = idx;
-    chips.forEach(function (c, i) {
-      c.classList.toggle("dchip-active", i === idx);
-      c.setAttribute("aria-current", i === idx ? "true" : "false");
+  function selectDay(idx, opts) {
+    opts = opts || {};
+    idx = Math.max(0, Math.min(N - 1, idx));
+    var dir = idx > cur ? 1 : idx < cur ? -1 : 0;
+    if (idx === cur && !opts.force) return;
+    cur = idx;
+    dayEls.forEach(function (el, i) {
+      var on = i === idx;
+      el.hidden = !on;
+      if (on && !reduced && dir !== 0 && !opts.silent) {
+        el.classList.remove("day-in-l", "day-in-r");
+        void el.offsetWidth;
+        el.classList.add(dir < 0 ? "day-in-l" : "day-in-r");
+      }
     });
-    // Keep the active chip visible inside the horizontal scrubber.
-    var chip = chips[idx];
-    if (chip && scrub.scrollWidth > scrub.clientWidth) {
-      var target = chip.offsetLeft - (scrub.clientWidth - chip.offsetWidth) / 2;
-      scrub.scrollTo({ left: Math.max(0, target), behavior: reduced ? "auto" : "smooth" });
+    jumps.forEach(function (b) {
+      var on = parseInt(b.getAttribute("data-day-jump"), 10) === idx;
+      if (on) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+    });
+    if (track) {
+      var chip = track.querySelector('[data-day-jump="' + idx + '"]');
+      if (chip && track.scrollWidth > track.clientWidth) {
+        var target = chip.offsetLeft - (track.clientWidth - chip.offsetWidth) / 2;
+        track.scrollTo({ left: Math.max(0, target), behavior: reduced || opts.silent ? "auto" : "smooth" });
+      }
+    }
+    try { localStorage.setItem(KEY, String(idx)); } catch (_) {}
+    var title = doc.querySelector("[data-itin-map-title]");
+    if (title) {
+      var d = dayEls[idx].getAttribute("data-date") || "";
+      var parts = d.split(/\s+/);
+      title.textContent = (parts.length >= 3 ? parts[1] + " " + parts[2] : d) + " on the map";
+    }
+    try { doc.dispatchEvent(new CustomEvent("tg:day", { detail: { index: idx, date: dayEls[idx].getAttribute("data-date"), reason: opts.reason || "select" } })); } catch (_) {}
+    if (opts.focus) {
+      var h = dayEls[idx].querySelector(".day-title");
+      if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
     }
   }
 
-  /* Go to a day. `instant` skips the smooth scroll — required by the mobile-nav day
-     scrubber (src/features/mobile-nav/ui/day-scrub.js), which can ask for several days
-     in one sweep: the deck delta below is measured from the CURRENT position, so a
-     second request landing mid-animation measures a moving target and the deck drifts
-     to the wrong card. Published on the rail element so the scrubber drives days
-     through this one implementation instead of standing up a second one. */
-  function goTo(idx, instant) {
-    var el = dayEls[idx];
-    if (!el) return;
-    var how = (reduced || instant) ? "auto" : "smooth";
-    if (horizontal()) {
-      // Center the card in the deck without moving the page vertically.
-      var trackRect = track.getBoundingClientRect();
-      var elRect = el.getBoundingClientRect();
-      var delta = (elRect.left - trackRect.left) - (track.clientWidth - elRect.width) / 2;
-      track.scrollBy({ left: delta, behavior: how });
-    } else {
-      var y = el.getBoundingClientRect().top + window.scrollY - chromeH;
-      window.scrollTo({ top: y, behavior: how });
-    }
-    setActive(idx);
-  }
-  scrub.__dayRail = { goTo: goTo };
+  jumps.forEach(function (b) {
+    b.addEventListener("click", function () { tapHaptic(); selectDay(parseInt(b.getAttribute("data-day-jump"), 10), { reason: "tap", focus: true }); });
+  });
 
-  // Click a chip → page/scroll to that day.
-  chips.forEach(function (chip) {
-    chip.addEventListener("click", function () {
-      goTo(parseInt(chip.getAttribute("data-day-jump"), 10), false);
+  // Keyboard: arrows anywhere in the rail or the header row.
+  [rail, doc.querySelector(".itin-daynav")].forEach(function (group) {
+    if (!group) return;
+    group.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        selectDay(cur + (e.key === "ArrowRight" ? 1 : -1), { reason: "key" });
+        var b = group.querySelector('[data-day-jump="' + cur + '"]');
+        if (b) b.focus();
+      }
     });
   });
 
-  // Scroll-spy.
-  function spyHorizontal() {
-    var trackRect = track.getBoundingClientRect();
-    var center = trackRect.left + track.clientWidth / 2;
-    var centers = dayEls.map(function (el) {
-      var r = el.getBoundingClientRect();
-      return r.left + r.width / 2;
+  /* Scrub: a horizontal drag across the rail selects the chip under the pointer. The rail's
+     own horizontal scroll stays for a plain flick; scrubbing arms only after a clear
+     horizontal intent, so a scroll is never mistaken for a scrub. */
+  if (track && bubble) {
+    var sx = 0, sy = 0, scrubbing = false, armed = false, pid = null;
+    function chipAt(x) {
+      var chips = track.querySelectorAll("[data-day-jump]");
+      for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (x >= r.left && x <= r.right) return { chip: chips[i], rect: r };
+      }
+      return null;
+    }
+    track.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "mouse") return;
+      sx = e.clientX; sy = e.clientY; armed = true; scrubbing = false; pid = e.pointerId;
+    }, { passive: true });
+    track.addEventListener("pointermove", function (e) {
+      if (!armed || e.pointerId !== pid) return;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (!scrubbing) {
+        if (Math.abs(dy) > 8 && Math.abs(dy) > Math.abs(dx)) { armed = false; return; }
+        if (Math.abs(dx) < 14) return;
+        scrubbing = true;
+        rail.classList.add("scrubbing");
+        try { track.setPointerCapture(pid); } catch (_) {}
+      }
+      var hit = chipAt(e.clientX);
+      if (!hit) return;
+      var idx = parseInt(hit.chip.getAttribute("data-day-jump"), 10);
+      bubble.textContent = hit.chip.getAttribute("aria-label") || "";
+      bubble.style.setProperty("--scrub-x", (hit.rect.left + hit.rect.width / 2 - rail.getBoundingClientRect().left) + "px");
+      if (idx !== cur) { tapHaptic(); selectDay(idx, { reason: "scrub", silent: true }); }
     });
-    setActive(nearestToCenter(centers, center));
-  }
-  function spyVertical() {
-    // Lazy accessor so lastAboveFold's early break stops measuring cards past the
-    // fold — each getBoundingClientRect forces layout, so on a long day this reads
-    // only down to the fold instead of every day, every scroll frame.
-    setActive(lastAboveFold(dayEls.length, function (i) {
-      return dayEls[i].getBoundingClientRect().top;
-    }, chromeH + 40));
+    function endScrub() { armed = false; if (scrubbing) { scrubbing = false; rail.classList.remove("scrubbing"); } }
+    track.addEventListener("pointerup", endScrub);
+    track.addEventListener("pointercancel", endScrub);
   }
 
-  var ticking = false;
-  function onScroll() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function () {
-      (horizontal() ? spyHorizontal : spyVertical)();
-      ticking = false;
-    });
+  /* Contextual swipe on the day card (adjacent days only). */
+  var deck = doc.querySelector("[data-planner-days]");
+  if (deck) {
+    var tsx = 0, tsy = 0, tst = 0, tracking = false;
+    deck.addEventListener("touchstart", function (e) {
+      if (e.touches.length !== 1) { tracking = false; return; }
+      if (e.target.closest && e.target.closest(".stops, .transit-links, a, button, input, .itin-map")) { tracking = false; return; }
+      tracking = true; tsx = e.touches[0].clientX; tsy = e.touches[0].clientY; tst = Date.now();
+    }, { passive: true });
+    deck.addEventListener("touchend", function (e) {
+      if (!tracking) return; tracking = false;
+      var t = e.changedTouches[0];
+      var next = resolveSwipe(t.clientX - tsx, t.clientY - tsy, Date.now() - tst, cur, N);
+      if (next !== null && next !== cur) { tapHaptic(); selectDay(next, { reason: "swipe" }); }
+    }, { passive: true });
   }
-  track.addEventListener("scroll", onScroll, { passive: true });  // deck (x)
-  window.addEventListener("scroll", onScroll, { passive: true });  // page (y)
-  window.addEventListener("resize", function () { active = -1; onScroll(); });
-  onScroll();
-})();
+
+  /* Initial day: today during the trip (guide-ui marks .day-today), else the remembered
+     day, else the first. A deep link into a specific day wins over all of these. */
+  var start = 0;
+  var today = dayEls.findIndex(function (el) { return el.classList.contains("day-today"); });
+  if (today >= 0) start = today;
+  else { try { var s = parseInt(localStorage.getItem(KEY), 10); if (!isNaN(s) && s >= 0 && s < N) start = s; } catch (_) {} }
+  var hashDay = location.hash && /^#day-(\d+)$/.exec(location.hash);
+  if (hashDay) start = parseInt(hashDay[1], 10);
+  selectDay(start, { force: true, silent: true, reason: "init" });
+
+  doc.addEventListener("tg:reveal", function (e) {
+    var t = e.detail && e.detail.target;
+    var day = t && t.closest && t.closest(".day[data-day]");
+    if (day) selectDay(parseInt(day.getAttribute("data-day"), 10), { reason: "hash", silent: true });
+  });
+
+  return { selectDay: selectDay, current: function () { return cur; } };
+}

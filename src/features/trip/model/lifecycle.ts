@@ -43,7 +43,7 @@ export function tripPhase(firstDayDate: string | null, lastDayDate: string | nul
 
 /** Which day is today, by the shared dayState derivation — -1 outside the trip. */
 export function todayIndex(dates: readonly string[], now: Date): number {
-  for (let i = 0; i < dates.length; i++) if (dayState(dates, i, now) === "now") return i;
+  for (let i = 0; i < dates.length; i++) if (dayState([...dates], i, now) === "now") return i;
   return -1;
 }
 

@@ -37,7 +37,6 @@ const ALLOWLIST = new Map([
      move with each guide's --accent over that fixed ground — occurrence 1's mechanism —
      and no rendered gate scans the (initially hidden) overlay. Revisit if story mode
      ever gets its own contrast gate. */
-  ["src/styles/story-mode.css", "fixed dark takeover; page-theme ink would be wrong on light"],
 ]);
 
 /* Anchored so `border-color:`/`text-decoration-color:`/`accent-color:` never match —

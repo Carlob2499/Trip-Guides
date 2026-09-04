@@ -81,10 +81,12 @@ describe("no stylesheet is orphaned from the build", () => {
     expect(unaccounted, "a sheet sharing a basename is not individually imported").toEqual([]);
   });
 
-  it("⌁ the Tools station's own stylesheet is imported by the guide layout", () => {
-    // The station lives inside the guide, so the layout is the only carrier it can have.
+  it("⌁ the destinations' own stylesheets are imported by the guide layout", () => {
+    // The five destinations live inside the guide, so the layout is the only carrier.
     const layout = strip(readFileSync("src/layouts/GuideLayout.astro", "utf8"));
-    expect(layout).toMatch(/import\s+["']\.\.\/styles\/tools\.css["']/);
+    for (const sheet of ["chrome", "trip", "itinerary", "guide-dest"]) {
+      expect(layout).toMatch(new RegExp(`import\\s+["']\\.\\./styles/${sheet}\\.css["']`));
+    }
   });
 
   it("⌁ every allowance still names a file that exists", () => {
