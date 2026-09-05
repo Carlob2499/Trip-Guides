@@ -46,7 +46,7 @@ export function initSearch(root) {
     .catch(() => []));
 
   let overlay = null, input = null, list = null, status = null, lastFocus = null, sel = -1, flat = [], remote = [];
-  let drawers = null, ctxEl = null, detail = null, drawer = "all";
+  let drawers = null, ctxEl = null, detail = null, drawer = "all", railNav = null;
 
   /* What is being searched, from the page's own state — never composed from guesses. */
   function contextLine() {
@@ -70,18 +70,25 @@ export function initSearch(root) {
     overlay.setAttribute("aria-label", "Search");
     overlay.hidden = true;
     overlay.innerHTML =
-      '<div class="srch-panel">' +
-        '<div class="srch-bar">' +
-          '<svg class="srch-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>' +
-          '<input class="srch-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search this trip, places, guides…" aria-label="Search" role="combobox" aria-expanded="false" aria-controls="srchList" aria-autocomplete="list" />' +
-          '<button class="srch-close" type="button" aria-label="Close search">Close</button>' +
+      '<div class="srch-panel spatial">' +
+        '<div class="srch-rail">' +
+          '<p class="srch-rail-title">Search</p>' +
+          '<p class="srch-rail-tag">Find places, guides, trips, and more.</p>' +
+          '<nav class="srch-rail-nav" aria-label="Result categories"></nav>' +
         '</div>' +
-        '<p class="srch-ctx"></p>' +
-        '<div class="srch-drawers" role="group" aria-label="Show"></div>' +
-        '<p class="srch-status" role="status" aria-live="polite"></p>' +
-        '<div class="srch-body">' +
-          '<div class="srch-list" id="srchList" role="listbox"></div>' +
-          '<aside class="srch-detail" aria-label="Selected result" hidden></aside>' +
+        '<div class="srch-main">' +
+          '<div class="srch-bar">' +
+            '<svg class="srch-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>' +
+            '<input class="srch-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search this trip, places, guides…" aria-label="Search" role="combobox" aria-expanded="false" aria-controls="srchList" aria-autocomplete="list" />' +
+            '<button class="srch-close" type="button" aria-label="Close search">Close</button>' +
+          '</div>' +
+          '<p class="srch-ctx"></p>' +
+          '<div class="srch-drawers" role="group" aria-label="Show"></div>' +
+          '<p class="srch-status" role="status" aria-live="polite"></p>' +
+          '<div class="srch-body">' +
+            '<div class="srch-list" id="srchList" role="listbox"></div>' +
+            '<aside class="srch-detail" aria-label="Selected result" hidden></aside>' +
+          '</div>' +
         '</div>' +
       '</div>';
     doc.body.appendChild(overlay);
@@ -91,6 +98,8 @@ export function initSearch(root) {
     ctxEl = overlay.querySelector(".srch-ctx");
     detail = overlay.querySelector(".srch-detail");
     drawers = overlay.querySelector(".srch-drawers");
+    railNav = overlay.querySelector(".srch-rail-nav");
+    const onDrawerClick = (key) => { drawer = key; render(); };
     DRAWERS.forEach(([key, label]) => {
       const b = el0("button", "srch-drawer", label);
       b.type = "button";
@@ -98,8 +107,21 @@ export function initSearch(root) {
       b.setAttribute("aria-pressed", key === drawer ? "true" : "false");
       const n = el0("span", "srch-drawer-n", "");
       b.appendChild(n);
-      b.addEventListener("click", () => { drawer = key; render(); });
+      b.addEventListener("click", () => onDrawerClick(key));
       drawers.appendChild(b);
+    });
+    // The rail (desktop only, CSS-hidden on a phone): the same drawers, "All results" first,
+    // the rest under a "Categories" kicker — the board's left column, never a different index.
+    DRAWERS.forEach(([key, label], idx) => {
+      if (idx === 1) railNav.appendChild(el0("p", "srch-rail-kicker", "Categories"));
+      const b = el0("button", "srch-navitem", idx === 0 ? "All results" : label);
+      b.type = "button";
+      b.setAttribute("data-drawer", key);
+      b.setAttribute("aria-pressed", key === drawer ? "true" : "false");
+      const n = el0("span", "srch-navitem-n", "");
+      b.appendChild(n);
+      b.addEventListener("click", () => onDrawerClick(key));
+      railNav.appendChild(b);
     });
     list.addEventListener("mouseover", (e) => {
       const row = e.target.closest && e.target.closest("[data-srch-i]");
@@ -159,10 +181,11 @@ export function initSearch(root) {
     const counts = {};
     let total = 0;
     groups.forEach((g) => { counts[g.key] = g.items.length; total += g.items.length; });
-    drawers.querySelectorAll("[data-drawer]").forEach((b) => {
+    overlay.querySelectorAll("[data-drawer]").forEach((b) => {
       const key = b.getAttribute("data-drawer");
       const n = key === "all" ? total : (counts[key] || 0);
-      b.querySelector(".srch-drawer-n").textContent = n ? String(n) : "";
+      const countEl = b.querySelector(".srch-drawer-n, .srch-navitem-n");
+      if (countEl) countEl.textContent = n ? String(n) : "";
       b.setAttribute("aria-pressed", key === drawer ? "true" : "false");
       b.disabled = key !== "all" && n === 0;
     });
