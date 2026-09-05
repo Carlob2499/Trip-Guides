@@ -917,6 +917,13 @@ expense ledger are unchanged in position and behaviour. The 3-card strip, the ta
 (check `check-perf-budget.mjs` locally before adding — Surface 6 landed at 300.9KB and needed a
 follow-up fix, PR #203).
 
+**2026-09-05 — that constraint was largely an artefact of how the gate measured.** The 300KB
+ceiling summed every stylesheet in the build and counted RAW bytes. No reader loads the build,
+and no reader downloads raw: the worst real page shipped 40KB gzipped against a gate reading
+299/300. The budget is now per-page and gzipped (`cssPerPage`, 60KB) — the same reasoning the
+JS half of that file already carried, applied to CSS. Split's deferred 3-card strip and tab row
+are no longer budget-blocked; they are queued behind the Map rebuild.
+
 ---
 
 ## 28. SOS
