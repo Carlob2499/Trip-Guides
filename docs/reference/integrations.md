@@ -12,7 +12,7 @@ only, never values.
 | **Cloud map style** | Google Cloud console → Map Styles → publish → Map ID → `PUBLIC_GMAPS_MAP_ID`. The lineage boards use a deep-forest cartography with rust route emphasis; the style lives in the console, the code only passes the id. | Same mounts. | Google's default style under `DEMO_MAP_ID`. |
 | **Firebase Realtime Database** (Trip Split live sync) | `src/features/firebase/firebase-config.js` — the public web config, committed by design; `rules.json` pasted into the console; Anonymous auth enabled. Setup steps in `src/features/firebase/README.md`. | Split: group-mates on one trip code see the same ledger. | Split runs local-only on this device. |
 | **Intake / change-request Worker** | `src/lib/backend-config.js` `WAYPOINT_BACKEND.url` (deployed by `.github/workflows/deploy-worker.yml`; owner-only routes take the owner key stored in the creator's browser via `src/scripts/owner-key.js`). | New-Guide dispatch, ✎ change requests, progress-page answers and the owner's triage queue. | Prefilled GitHub issues; progress page hides its answer controls. |
-| **Research pipeline (Claude)** | Repository secret `CLAUDE_CODE_OAUTH_TOKEN`; repository variable `WAYPOINT_RESEARCH_ENGINE` (`v2` selects Pipeline V2; unset keeps V1 as production default). Models are pinned in `.github/workflows/new-guide.yml`. | Guide research and recertification runs. | No runs; the site is static content. |
+| **Research pipeline (Claude)** | Repository secret `CLAUDE_CODE_OAUTH_TOKEN`; repository variable `WAYPOINT_RESEARCH_ENGINE`. The owner-selected current state is `v2`, which routes trusted `/new` to Pipeline V2; a non-`v2` selector remains the V1 rollback/compatibility route. Models are pinned in `.github/workflows/new-guide.yml`. | Guide research and recertification runs. | No runs; the site is static content. |
 | **Open-Meteo** (weather) and **Frankfurter** (exchange rates) | Keyless public APIs, called client-side only from `src/features/live-data`. | Trip forecast + packing list, Split conversions. | Honest blanks; the committed fallback rate carries its as-of date. |
 | **Routes, Places operational state, weather alerts** | Server-side Worker key plus `PUBLIC_WAYPOINT_RUNTIME_ENABLED=1`; details below. | Contextual route timing, current/today/selected place status, and actionable disruption. | Authored itinerary, researched places/alternatives, Haversine geometry, and routine forecast remain authoritative/useful. |
 | **GitHub Pages** | `.github/workflows/deploy.yml` on push to `main`; `SITE_BASE_URL` variable for absolute links in pipeline output. | The site itself. | — |
@@ -87,7 +87,7 @@ not presented as an all-clear.
 5. Set the repository Actions variable `PUBLIC_WAYPOINT_RUNTIME_ENABLED=1` and redeploy.
 
 Browser Maps keys remain HTTP-referrer and API restricted. The Worker key remains server-only.
-Runtime matrices are capped at eight stops, and Place Details batches at eight reviewed IDs.
+Runtime matrices are currently capped at eight stops, and Place Details batches at eight reviewed IDs. The September closure tracker owns the planned truthfulness review for days that exceed the matrix cap; until that work lands, callers must not imply that a capped matrix covers an entire larger day.
 
 ### Privacy and host policy
 
