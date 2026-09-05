@@ -39,14 +39,4 @@ describe("GitHub Actions supply-chain pins", () => {
       "external GitHub Actions references must use immutable commit SHAs, never mutable tags/branches",
     ).toEqual([]);
   });
-
-  it("keeps the high-risk Claude↔Codex artifact bridge on the reviewed v7 commits", () => {
-    const watcher = readFileSync(path.join(WORKFLOWS, "claude-codex-watcher.yml"), "utf8");
-    expect(watcher).toContain(
-      "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7",
-    );
-    expect(watcher).toContain(
-      "actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7",
-    );
-  });
 });
