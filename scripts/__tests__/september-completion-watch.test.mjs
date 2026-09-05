@@ -52,6 +52,14 @@ describe("September completion watch — bounded September operator contract", (
     expect(job).toMatch(/steps\.active\.outputs\.count == '0'/);
   });
 
+  it("checks revocation before selector validation or fetching a historical candidate", () => {
+    const job = jobBlock("kumamoto-acceptance");
+    const revoked = job.indexOf("Current handoff has revoked frozen Kumamoto r3 dispatch authority");
+    expect(revoked).toBeGreaterThanOrEqual(0);
+    expect(revoked).toBeLessThan(job.indexOf('if [[ -n "$ENGINE" ]]'));
+    expect(revoked).toBeLessThan(job.indexOf('git fetch --no-tags origin main "$CANDIDATE_REF"'));
+  });
+
   it("resumes automatically only for a durably recorded usage-limit", () => {
     const job = jobBlock("kumamoto-acceptance");
     expect(job).toContain('failure_class" != "usage-limit"');
