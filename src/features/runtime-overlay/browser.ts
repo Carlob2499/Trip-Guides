@@ -74,8 +74,20 @@ function describeFailure(status: RuntimeOverlay<unknown>["status"]): string {
   return "Live context is unavailable; the saved guide is unchanged.";
 }
 
+export function matrixSummary(advisory: ReturnType<typeof buildDayRouteAdvisory>): string {
+  const complete = advisory.transitions.every((leg) => leg.durationSeconds !== null && leg.source === "provider");
+  if (!complete) return "Some live transitions are unavailable; the authored order and offline distance guidance remain.";
+  const total = advisory.transitions.reduce((sum, leg) => sum + (leg.durationSeconds ?? 0), 0);
+  return advisory.suggestedOrder
+    ? `${Math.round(total / 60)} min in authored order · an unapplied advisory could save ${Math.round(advisory.estimatedSavingsSeconds / 60)} min · Powered by Google, ©${new Date().getFullYear()} Google`
+    : `${Math.round(total / 60)} min across the authored transitions · order unchanged · Powered by Google, ©${new Date().getFullYear()} Google`;
+}
+
+const stillSelected = (panel: HTMLElement, token: string) => panel.dataset.runtimeSelection === token;
+
 /** Minimal semantic hooks for the four approved surfaces; no request occurs until interaction. */
 function installSurfaceHooks(doc: Document, runtime: RuntimeServices): void {
+  let selectionSequence = 0;
   doc.addEventListener("click", (event) => {
     const target = event.target as Element | null;
     const focus = target?.closest<HTMLElement>("[data-map-focus]");
@@ -85,11 +97,16 @@ function installSurfaceHooks(doc: Document, runtime: RuntimeServices): void {
       const panel = doc.querySelector<HTMLElement>("[data-map-selected]");
       if (!row || !panel) return;
       const waypointId = row.dataset.mapRow || "";
+      const token = `${waypointId}:${++selectionSequence}`;
+      panel.dataset.runtimeSelection = token;
+      panel.querySelectorAll<HTMLElement>("[data-runtime-status]").forEach((line) => { line.textContent = ""; });
+      panel.querySelector("[data-runtime-route-from-me]")?.remove();
       const googlePlaceId = row.dataset.placeId || null;
       const latitude = Number(row.dataset.lat), longitude = Number(row.dataset.lng);
       if (runtime.configured && googlePlaceId) {
         const scoped = relevantPlaces([{ waypointId, googlePlaceId }], { selectedIds: [waypointId] });
         const overlay = await runtime.placeLive(scoped);
+        if (!stillSelected(panel, token)) return;
         const line = statusLine(doc, panel, "place");
         if (!overlay.value?.length) line.textContent = describeFailure(overlay.status);
         else {
@@ -102,6 +119,7 @@ function installSurfaceHooks(doc: Document, runtime: RuntimeServices): void {
       }
       if (runtime.configured && Number.isFinite(latitude) && Number.isFinite(longitude)) {
         const [environment, alerts] = await Promise.all([runtime.environment({ latitude, longitude }), runtime.weatherAlerts({ latitude, longitude })]);
+        if (!stillSelected(panel, token)) return;
         const actionable = actionableEnvironment(environment.value ?? null, alerts.value ?? []);
         if (actionable) {
           const parts = [
@@ -112,6 +130,7 @@ function installSurfaceHooks(doc: Document, runtime: RuntimeServices): void {
           statusLine(doc, panel, "environment").textContent = parts.join(" · ");
         }
       }
+      if (!stillSelected(panel, token)) return;
       const actions = panel.querySelector<HTMLElement>("[data-map-sel-actions]");
       if (runtime.configured && actions && !actions.querySelector("[data-runtime-route-from-me]")) {
         const button = doc.createElement("button");
@@ -159,6 +178,19 @@ function installSurfaceHooks(doc: Document, runtime: RuntimeServices): void {
           return;
         }
       }
+      if (context === "search") {
+        const mount = doc.querySelector<HTMLElement>("[data-itin-map]");
+        let pins: Array<{ name?: string; lat: number; lng: number }> = [];
+        try { pins = JSON.parse(mount?.querySelector("script[data-map-data]")?.textContent || "{}").pins || []; } catch { /* no map context */ }
+        const nearest = pins.filter((pin) => Number.isFinite(pin.lat) && Number.isFinite(pin.lng)).map((pin) => {
+          const dLat = (pin.lat - result.location!.latitude) * Math.PI / 180;
+          const dLng = (pin.lng - result.location!.longitude) * Math.PI / 180;
+          const a = Math.sin(dLat / 2) ** 2 + Math.cos(result.location!.latitude * Math.PI / 180) * Math.cos(pin.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+          return { ...pin, km: 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) };
+        }).sort((a, b) => a.km - b.km)[0];
+        line.textContent = nearest ? `Nearest researched place: ${nearest.name || "saved place"} · ${nearest.km.toFixed(1)} km straight-line.` : "Location is available, but this guide has no researched map points to compare.";
+        return;
+      }
       line.textContent = "Current location available for this page only.";
     });
     host.appendChild(button);
@@ -186,10 +218,7 @@ function installSurfaceHooks(doc: Document, runtime: RuntimeServices): void {
       const matrix = await runtime.routeMatrix(stops, "WALK");
       if (!matrix.value) { line.textContent = describeFailure(matrix.status); return; }
       const advisory = buildDayRouteAdvisory(stops, matrix.value, "WALK");
-      const total = advisory.transitions.reduce((sum, leg) => sum + (leg.durationSeconds || 0), 0);
-      line.textContent = advisory.suggestedOrder
-        ? `${Math.round(total / 60)} min in authored order · an unapplied advisory could save ${Math.round(advisory.estimatedSavingsSeconds / 60)} min · Powered by Google, ©${new Date().getFullYear()} Google`
-        : `${Math.round(total / 60)} min across the authored transitions · order unchanged · Powered by Google, ©${new Date().getFullYear()} Google`;
+      line.textContent = matrixSummary(advisory);
     });
     itineraryHead.insertBefore(button, itineraryHead.lastElementChild);
   }
@@ -198,7 +227,7 @@ function installSurfaceHooks(doc: Document, runtime: RuntimeServices): void {
   });
   addContextButton(".srch-drawers", "search", "Use my location");
 
-  const observer = new MutationObserver(() => {
+  const installLateHooks = () => {
     // Search can open before this idle-loaded enhancement attaches. Observing the drawer makes
     // the opt-in hook order-independent without moving the integration bundle to first paint.
     addContextButton(".srch-drawers", "search", "Use my location");
@@ -219,7 +248,9 @@ function installSurfaceHooks(doc: Document, runtime: RuntimeServices): void {
       list.append(term, value);
     });
     layer.insertBefore(button, layer.querySelector("[data-sos-next]"));
-  });
+  };
+  installLateHooks();
+  const observer = new MutationObserver(installLateHooks);
   observer.observe(doc.body, { childList: true, subtree: true });
 }
 
