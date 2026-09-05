@@ -360,6 +360,20 @@ const LAYOUT_JITTER = 3;
 const ceilingFor = (key: string, max: number) =>
   key.startsWith("color-contrast/") ? max + LAYOUT_JITTER : max;
 
+const MAPDEST_INDEX_SCROLL_WHY =
+  "Board 04 (2026-09-05) made the Map surface one full-bleed map with the place index floating " +
+  "on it as a fixed-height panel that scrolls internally. Before that the index was a static " +
+  "column with overflow:visible, so every row was laid out in the page and axe could resolve " +
+  "each one. Now all but the ~8 visible rows are clipped by the panel's scroll container, and a " +
+  "clipped node is exactly what axe reports as elmPartiallyObscured — it declines to guess a " +
+  "ratio it cannot see. Nothing about the rows themselves changed: same markup, same classes, " +
+  "same tokens. Verified by measuring the rendered colours directly rather than assuming — on " +
+  "the panel's own ground, .mapdest-row-name is 17.57:1, .mapdest-row-meta 8.99:1 and " +
+  ".mapdest-group-title 5.48:1, all clear of 4.5. The count is ~2 text nodes per row " +
+  "(name + meta) for every row scrolled out of view, so it tracks the guide's place count and " +
+  "nothing else: korea has 100 rows, denmark 55. A number that grows without the place count " +
+  "growing would be a different mechanism and should not be absorbed here.";
+
 const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
   hub: {
     "color-contrast/pseudoContent": { max: 8, why: PSEUDO_CONTENT_WHY },
@@ -502,7 +516,12 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // mechanism the why already covers: an aria-hidden decorative glyph in a span that takes
     // colour from var(--aink), a pair proven >=4.5:1 by atlas-tokens.test.ts.
     "color-contrast/nonBmp": { max: 51, why: NON_BMP_WHY },
-    "color-contrast/elmPartiallyObscured": { max: 1, why: ELM_PARTIALLY_OBSCURED_WHY },
+    // 1 -> 182 (2026-09-05): the Map surface's floating place index. Not absorbed as jitter —
+    // the mechanism is new and named in MAPDEST_INDEX_SCROLL_WHY, and 182 is korea's own place
+    // count expressed through it (100 rows x name+meta, less the handful visible in the
+    // scroller), not a shared constant. denmark's 55 rows measure 108. A rise here WITHOUT the
+    // guide gaining places is a different bug and must not be folded into this entry.
+    "color-contrast/elmPartiallyObscured": { max: 182, why: `${ELM_PARTIALLY_OBSCURED_WHY} ${MAPDEST_INDEX_SCROLL_WHY}` },
     // 1 = the masthead h1 / the masthead .dek, counted per page on both schemes (desktop; mobile
     // renders the same masthead so the same max covers it).
     "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
@@ -580,7 +599,10 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/imgNode": { max: 30, why: SIGHT_ONPHOTO_IMGNODE_WHY },
     // 4 = the timeline stops clipped at the .anch-scroll edge, mobile only (counted: 2 .jl-date +
     // .jl-word/.jl-date of the Tue stop at 375px; desktop renders 0 of this key).
-    "color-contrast/elmPartiallyObscured": { max: 4, why: JLINE_CLIPPED_WHY },
+    // 4 -> 108 (2026-09-05): the Map surface's floating place index, the same scroller korea's
+    // entry documents — 55 rows here against korea's 100, and the count tracks nothing else.
+    // The original 4 (JLINE_CLIPPED_WHY) is still part of this total, hence both reasons.
+    "color-contrast/elmPartiallyObscured": { max: 108, why: `${JLINE_CLIPPED_WHY} ${MAPDEST_INDEX_SCROLL_WHY}` },
     "frame-tested/default": { max: 1, why: FRAME_TESTED_WHY },
     // Atlas Phase 2 (own-cards-panels): day-1's date label in the phone swipe-deck, mobile only
     // (desktop reports 0). See DAY_SWIPE_CLIPPED_WHY.

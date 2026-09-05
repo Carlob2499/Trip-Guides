@@ -155,10 +155,17 @@ export function boot(cfg) {
       var pin = all.find(function (p) { return p.id === id; }) || null;
       draw();
       if (pin) {
-        info.setContent("<b>" + escapeHtml(pin.name) + "</b>" + (pin.local ? "<div class='wpop-local'>" + escapeHtml(pin.local) + "</div>" : "") +
-          "<a class='wpop-dir' href='" + dirUrl(pin) + "' target='_blank' rel='noopener'>Directions ↗</a>");
-        var m = markers.find(function (x) { return x.title === pin.name; });
-        if (m) info.open({ map: map, anchor: m });
+        /* The Map destination has a panel whose whole job is the selected place — name, local
+           name, photo and the same Get-there links. Opening an info window there says the same
+           thing twice, in a floating box that covers the pins around the one just chosen. Every
+           OTHER mount (a guide chapter map, the itinerary bench) has no such panel, so there the
+           window IS the only answer to "what did I just click" and it stays. */
+        if (!mount.closest("[data-mapdest]")) {
+          info.setContent("<b>" + escapeHtml(pin.name) + "</b>" + (pin.local ? "<div class='wpop-local'>" + escapeHtml(pin.local) + "</div>" : "") +
+            "<a class='wpop-dir' href='" + dirUrl(pin) + "' target='_blank' rel='noopener'>Directions ↗</a>");
+          var m = markers.find(function (x) { return x.title === pin.name; });
+          if (m) info.open({ map: map, anchor: m });
+        }
         if (source !== "map") map.panTo({ lat: pin.lat, lng: pin.lng });
       } else { info.close(); }
       try { mount.dispatchEvent(new CustomEvent("tg:map-select", { bubbles: true, detail: { id: id, pin: pin, source: source } })); } catch (_) {}

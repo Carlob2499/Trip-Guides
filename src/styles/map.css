@@ -167,32 +167,88 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 .mapdest-row--sel .mapdest-row-links{display:block}
 @media(prefers-reduced-motion:reduce){.mapdest-sheet{transition:none}}
 
+/* THE MAP IS THE PAGE (board 04, 2026-09-05). It used to be a two-column grid — a boxed map
+   beside a boxed list, inside a padded bench — which is why it read as a widget with dead
+   ground around it. The board draws one thing: a map filling the frame edge to edge, with
+   panels FLOATING on it.
+
+   Alignment is by construction, not by eye. Every floating panel is positioned from the same
+   --mapdest-gutter and nothing carries its own offset, so the left panel, the chip row and the
+   index share one edge and one rhythm by definition. Change the gutter and all three move
+   together; there is no second number that can drift. tests/visual/map-geometry.spec.ts
+   measures the rendered rectangles and fails on overlap, a ragged gutter, or a map that does
+   not fill its stage — the three ways this composition dies. */
 /* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
 @media(min-width:1180px){
-  .mapdest-bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,400px);gap:0;align-items:start;padding:.9rem 1.2rem 1rem}
-  /* The map holds the viewport while the inspector flows with the page. No inner scroller
-     clips a row, so every place row is a fully visible, ratable surface, and a long list never
-     hides behind a second scrollbar. The selected atom sticks under the chrome so a pin picked
-     from deep in the list still lands in view. */
-  /* Two classes on purpose: the bundler may emit .itin-map{position:relative} after this block. */
-  /* The pane fills the screen up to a point: past ~760px a taller map shows more empty ground
-     rather than more places. The cap is also what makes this height BOUNDED, and a bounded
-     viewport-relative height is what keeps a full-page capture from growing the page it is
-     capturing (tests/visual/gallery-baselines.spec.ts). */
-  .mapdest-bench .mapdest-map{position:sticky;top:calc(var(--hdr-h) + .9rem);height:min(calc(100dvh - var(--hdr-h) - 1.9rem),760px);min-height:480px;border:1px solid var(--rule2);border-right:0}
-  .mapdest-sheet{position:static;max-height:none;height:auto;min-height:min(calc(100dvh - var(--hdr-h) - 1.9rem),760px);border:1px solid var(--rule2);background:var(--card);transition:none;touch-action:auto}
+  .mapdest{
+    --mapdest-gutter:14px;
+    --mapdest-panel-w:288px;
+    --mapdest-index-w:372px;
+    /* Bounded on purpose: a viewport-relative height with no cap grows the page a full-page
+       capture is trying to photograph (tests/visual/gallery-baselines.spec.ts). */
+    --mapdest-h:min(calc(100dvh - var(--hdr-h) - 34px),920px);
+    min-height:0
+  }
+  .mapdest-bench{position:relative;display:block;padding:0;height:var(--mapdest-h);min-height:560px}
+
+  /* The map IS the surface: inset 0, no border, no radius. The frame's own clip rounds it. */
+  .mapdest-bench .mapdest-map{
+    position:absolute;inset:0;width:auto;height:auto;min-height:0;
+    margin:0;border:0;border-radius:0
+  }
+
+  /* Floating panels. Both hang off the same gutter and the same top edge. */
+  .mapdest-panel,.mapdest-sheet{
+    position:absolute;top:var(--mapdest-gutter);z-index:3;
+    /* OPAQUE, deliberately. A translucent panel over a map looks expensive and makes every
+       contrast ratio inside it unverifiable — the composite depends on whatever tiles happen to
+       be underneath, which changes as the reader pans. The board's panels are solid. */
+    background:var(--card);
+    border:1px solid var(--rule2);border-radius:var(--r-pane);
+    box-shadow:var(--shadow-float)
+  }
+  .mapdest-panel{left:var(--mapdest-gutter);width:var(--mapdest-panel-w)}
+  .mapdest-sheet{
+    right:var(--mapdest-gutter);width:var(--mapdest-index-w);
+    /* Bottom gutter matches the top one — the panel is inset equally on all four sides. */
+    max-height:calc(var(--mapdest-h) - var(--mapdest-gutter) * 2);
+    display:flex;flex-direction:column;
+    left:auto;bottom:auto;min-height:0;transition:none;touch-action:auto;
+    clip-path:none
+  }
   body:not([data-dest="map"]) .mapdest-sheet{display:flex}
   .mapdest-sheet-grip,.mapdest-peek{display:none}
-  .mapdest-sheet[data-sheet] .mapdest-list{display:block;max-height:none;overflow:visible;flex:none}
+
+  /* The index scrolls INSIDE its panel — the page behind it does not move, because there is no
+     page behind it any more, only map. */
+  .mapdest-sheet[data-sheet] .mapdest-list{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;max-height:none}
   .mapdest-sheet[data-sheet="peek"] .mapdest-peek{display:none}
-  .mapdest-selected{position:sticky;top:calc(var(--hdr-h) + .9rem);z-index:2;background:var(--card)}
-  .mapdest-group-title{position:static;background:var(--card)}
-  .mapdest-row--sel{background:var(--bg)}
+  .mapdest-selected{position:static;z-index:2;background:transparent;border-bottom:1px solid var(--rule)}
+  .mapdest-group-title{position:sticky;top:0;background:var(--card)}
+  .mapdest-row--sel{background:color-mix(in srgb,var(--brand) 10%,transparent)}
+  /* The selected row does NOT re-open its Get-there links here: the panel above it is already
+     showing the same three, so the desktop composition printed every link twice. On a phone
+     there is no panel above the list, so the row keeps them. */
+  .mapdest-row--sel .mapdest-row-links{display:none}
+
+  /* The chip row is the map's own (see .map-chips at the top of this file). On this surface it
+     starts where the left panel ends, so the two can never sit on top of each other — the
+     overlap was the single worst thing about the previous composition. */
+  .mapdest .map-chips{
+    left:calc(var(--mapdest-gutter) * 2 + var(--mapdest-panel-w));
+    top:var(--mapdest-gutter);
+    max-width:calc(100% - (var(--mapdest-gutter) * 4) - var(--mapdest-panel-w) - var(--mapdest-index-w));
+    /* ONE line. A guide with fifteen categories and eight days wrapped this to three rows and
+       walled off the top third of the map — the chips stopped being a filter and became the
+       page. Same treatment the phone already had: one row that scrolls. */
+    flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain
+  }
+  .mapdest .map-chips::-webkit-scrollbar{display:none}
+  .mapdest .map-chip{flex:none}
 }
 @media print{.mapdest-sheet,.map-degraded{display:none}}
 /* Geometry (§31): the phone sheet rounds its top edge only; the desktop inspector is a pane. */
 .mapdest-sheet{border-radius:var(--r-pane) var(--r-pane) 0 0}
-@media(min-width:1180px){.mapdest-sheet{border-radius:var(--r-pane);clip-path:inset(0 round var(--r-pane))}}
 .mapdest-sel-thumb{border-radius:var(--r-inset)}
 
 /* === THE MAP PANEL (board 04) ================================================
@@ -202,8 +258,12 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 .mapdest-panel{display:none}
 /* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
 @media(min-width:1180px){
-  .mapdest-bench{position:relative}
-  .mapdest-panel{display:block;position:absolute;z-index:2;top:1.6rem;left:1.9rem;width:16.5rem;padding:.95rem 1rem 1rem;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-card);box-shadow:var(--shadow-float)}
+  /* Geometry and skin are NOT set here. This block used to carry top:1.6rem;left:1.9rem and its
+     own card styling, which is precisely the ragged gutter the geometry gate exists to catch —
+     the panel sat 16px off the edge every other floating thing on this surface used. Position,
+     width, background, border and shadow all come from the one --mapdest-gutter block above;
+     what is left here is the panel's INTERNALS, which are its own business. */
+  .mapdest-panel{display:block;padding:.95rem 1rem 1rem}
   .mapdest-panel-title{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);line-height:1;letter-spacing:-.014em}
   .mapdest-panel-sub{margin:.3rem 0 .9rem;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.4}
   .mapdest-kicker{display:block;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
