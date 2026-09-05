@@ -43,6 +43,25 @@ async function openGallery(page: Page) {
     window.scrollTo(0, 0);
   });
   await page.waitForTimeout(250);
+  await settleHeight(page);
+}
+
+/* ⌁ The page's own height must stop moving before a full-page capture is taken.
+   The gallery is ~35 000px of fractional-height blocks, so its total lands on a rounding
+   boundary; a webfont settling a fraction of a line late makes scrollHeight tick by ONE pixel,
+   and Playwright treats a 1px canvas difference as a total mismatch — 12% of pixels "changed"
+   because everything below the seam shifted a row. It failed that way twice on real, correct
+   surface work, with the baseline captured on one side of the boundary and the gate landing on
+   the other. This waits for two identical consecutive readings instead of a fixed delay. It
+   tightens the gate rather than loosening it: nothing about WHAT is compared changes. */
+async function settleHeight(page: Page) {
+  await page.waitForFunction(() => {
+    const w = window as unknown as { __lastH?: number };
+    const h = document.documentElement.scrollHeight;
+    const stable = w.__lastH === h;
+    w.__lastH = h;
+    return stable;
+  }, undefined, { timeout: 15_000, polling: 200 });
 }
 
 for (const theme of THEMES) {
