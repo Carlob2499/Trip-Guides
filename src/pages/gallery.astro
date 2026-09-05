@@ -44,6 +44,7 @@ import UtilityBar from "../components/UtilityBar.astro";
 import TripDestination from "../components/TripDestination.astro";
 import TripBelow from "../components/TripBelow.astro";
 import MapBelow from "../components/MapBelow.astro";
+import GuideBelow from "../components/GuideBelow.astro";
 import { pinGroups } from "../lib/map-pins";
 import ItineraryDestination from "../components/ItineraryDestination.astro";
 import MapDestination from "../components/MapDestination.astro";
@@ -402,6 +403,14 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
             <GuideDestination guide={toolsGuide.data} slug={toolsGuide.id} storeKey={galleryStoreKey} country={toolsGuide.data.country}
               chapters={view.chapters} sources={view.sources} hero={view.hero} plate={view.plate} holidays={view.holidayInfo}
               pinMap={view.pinMap} destTz={view.destTzIana} phrases={toolsGuide.data.phrases ?? null} entry={toolsGuide.data.entry ?? null} />
+          </div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">GuideBelow <span class="gal-state">the cream band under the frame</span></h3>
+          <p class="gal-role">{componentRoles.GuideBelow.role} — derived from {toolsGuide.id}.</p>
+          <div class="gal-dest-host">
+            <GuideBelow currency={view.localCur} tz={view.destTzIana} emergency={view.plate.emergency} country={toolsGuide.data.country} />
           </div>
         </article>
 

@@ -9,6 +9,7 @@ import AppChrome from "../components/AppChrome.astro";
 import TripDestination from "../components/TripDestination.astro";
 import TripBelow from "../components/TripBelow.astro";
 import MapBelow from "../components/MapBelow.astro";
+import GuideBelow from "../components/GuideBelow.astro";
 import ItineraryDestination from "../components/ItineraryDestination.astro";
 import MapDestination from "../components/MapDestination.astro";
 import GuideDestination from "../components/GuideDestination.astro";
@@ -209,6 +210,9 @@ const mapBelowGroups = pinGroups(v.allPins, mapDayDates).map((g) => {
       </section>
       <section class="dest dest-below" data-dest="map" data-dest-below="map" aria-label="Explore neighbourhoods" hidden>
         <MapBelow groups={mapBelowGroups} />
+      </section>
+      <section class="dest dest-below" data-dest="guide" data-dest-below="guide" aria-label="Need to know" hidden>
+        <GuideBelow currency={v.localCur} tz={v.destTzIana} emergency={v.plate.emergency} country={guide.country} />
       </section>
     </div>
 

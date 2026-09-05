@@ -17,7 +17,6 @@ import { tripWindow } from "../../../lib/trip-dates";
 import { todayInTz, esc, readStoredRecord } from "../../../scripts/util.js";
 import { universalTransitLinks, nativeTransitLinks } from "../../../lib/transit-links";
 import { osmEmbedUrl } from "../../../lib/map-embed";
-import { getLastWx, wxIcon, wxLabel, wxDayOk } from "../../live-data/index.js";
 
 function destNowMinutes(tz) {
   try {
@@ -130,7 +129,6 @@ export function initTrip() {
   var nextEl = root.querySelector("[data-trip-nextstop]");
   var focusEl = root.querySelector("[data-trip-focus]");
   var metricsEl = root.querySelector("[data-trip-metrics]");
-  var wxEl = root.querySelector("[data-wx-active]");
   var mapAside = root.querySelector("[data-trip-map]");
   var mapMount = mapAside ? mapAside.querySelector("[data-itin-map]") : null;
   var mapDayShown = -1;
@@ -269,26 +267,6 @@ export function initTrip() {
     metricsEl.hidden = !cells.length;
   }
 
-  /* Weather today: today's row of the forecast the guide already fetches (live-data). The
-     payload is a DAILY high/low and a WMO code — there is no current temperature, no
-     precipitation chance and no wind in it, so none of those are drawn. */
-  function paintWx(daily) {
-    if (!wxEl) return;
-    if (!daily || !daily.time) { wxEl.hidden = true; return; }
-    var t = todayInTz(tz);
-    var iso = t ? [t.y, String(t.m).padStart(2, "0"), String(t.d).padStart(2, "0")].join("-") : new Date().toISOString().slice(0, 10);
-    var k = daily.time.indexOf(iso);
-    if (k < 0 || !wxDayOk(daily, k)) { wxEl.hidden = true; return; }
-    var code = daily.weathercode[k];
-    wxEl.innerHTML = '<p class="tn-card-k">Weather today</p>' +
-      '<p class="tn-wx-row"><span class="tn-wx-ico" aria-hidden="true">' + wxIcon(code) + "</span>" +
-      '<span class="tn-wx-hi">' + Math.round(daily.temperature_2m_max[k]) + "°</span>" +
-      '<span class="tn-wx-lo">low ' + Math.round(daily.temperature_2m_min[k]) + "°</span></p>" +
-      '<p class="tn-wx-word">' + esc(wxLabel(code)) + "</p>" +
-      '<p class="tn-wx-src">Forecast · <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a></p>';
-    wxEl.hidden = false;
-  }
-
   function paintNow() {
     if (!nowEl) return;
     var now = destToday();
@@ -351,10 +329,6 @@ export function initTrip() {
   var phase = paintPhase();
   if (phase === "active") paintNow();
   paintReadiness();
-  /* The forecast may land before or after this module: read what live-data already validated,
-     then keep listening. Same late-listener pattern the packing strip uses. */
-  paintWx(getLastWx());
-  document.addEventListener("tg:wx", function (e) { paintWx(e && e.detail ? e.detail.daily : null); });
   document.addEventListener("tg:readiness", paintReadiness);
   document.addEventListener("tg:stops", function () { if (root.getAttribute("data-phase") === "active") paintNow(); });
   var timer = setInterval(function () { var p = paintPhase(); if (p === "active") paintNow(); }, 60000);

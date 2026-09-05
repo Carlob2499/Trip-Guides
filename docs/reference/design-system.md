@@ -661,6 +661,32 @@ Guide should combine:
 
 Guide may be one of the most visually expressive surfaces.
 
+### The composition (decided 2026-09-05, board 05)
+
+The hero keeps the cover and its plate, and its foot gains two things: the way into **Search**,
+said where a reader arrives, and a **weather chip** that appears only when the wired forecast
+actually carries today.
+
+**Explore by topic** is ONE tile shape for every chapter — the chapter's own first photograph
+over its number, its name and one line — as many across as fit at a readable tile width. The
+mosaic of feature and plain cards it replaces is retired (§33): a chapter without a photograph
+wears its numeral at exactly the same size, so the band reads as a band and not as two kinds of
+card.
+
+Under the frame: **Need to know** — the standing country facts this product actually holds:
+currency, time zone, and the emergency numbers the SOS tool dials. The board also lists
+Language, Best time to visit and Power/outlets; nothing here carries those as structured
+verified facts (`facts.json` is a perishable-claim registry, not a country record), so they are
+not drawn rather than guessed. Then **Explore the map**, the way to the spatial surface. The
+board's "Recommended for you", "Top experiences" and "Seasons" are recommendations and seasonal
+records this product does not author, and its active-filter tray belongs to a map that filters.
+
+### Today's weather has one painter
+`features/live-data/ui/wx-today.js` paints today's row of the wired forecast into every
+`[data-wx-today]` mount — Trip's rail card, the Guide hero's chip — from one validated payload.
+The payload is a daily high/low and a WMO code; a surface may never draw a current temperature,
+a precipitation chance or a wind speed from it, whatever a board shows.
+
 ### Create Guide
 Replace long configuration forms with an **adaptive visual question deck**.
 

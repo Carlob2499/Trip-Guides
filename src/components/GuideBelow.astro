@@ -1,0 +1,62 @@
+---
+/* Guide — the ivory band UNDER the frame (board 05, work order §3 "05 · Guide").
+
+   "Need to know": the standing facts this product actually holds for a country — its currency,
+   its time zone, and the emergency numbers the SOS tool dials. The board also lists Language,
+   Best time to visit and Power/outlets; nothing in this repository carries those as structured,
+   verified facts (facts.json is a perishable-claim registry, not a country record), so they are
+   not drawn rather than guessed.
+
+   Then the way to the spatial surface. The board's "Recommended for you", "Top experiences" and
+   "Seasons in Seoul" are recommendations and seasonal records this product does not author. */
+import Icon from "./Icon.astro";
+interface Props {
+  currency: { code: string; symbol: string; name?: string } | null;
+  tz: string | null;
+  emergency: { lines: { label: string; num: string }[]; note?: string } | null;
+  country: string;
+}
+const { currency, tz, emergency, country } = Astro.props as Props;
+const lines = emergency?.lines ?? [];
+const has = Boolean(currency || tz || lines.length);
+---
+<div class="gb">
+  {has && (
+    <section class="gb-know" aria-label="Need to know">
+      <h2 class="gb-title">Need to know</h2>
+      <ul class="gb-rows">
+        {currency && (
+          <li class="gb-row">
+            <span class="gb-row-ico" aria-hidden="true"><Icon name="budget" size={17} /></span>
+            <span class="gb-row-txt"><b class="gb-row-k">Currency</b><span class="gb-row-v">{currency.code} · {currency.symbol}{currency.name ? ` — ${currency.name}` : ""}</span></span>
+          </li>
+        )}
+        {tz && (
+          <li class="gb-row">
+            <span class="gb-row-ico" aria-hidden="true"><Icon name="clock" size={17} /></span>
+            <span class="gb-row-txt"><b class="gb-row-k">Time zone</b><span class="gb-row-v">{tz}</span></span>
+          </li>
+        )}
+        {lines.length > 0 && (
+          <li class="gb-row">
+            <span class="gb-row-ico" aria-hidden="true"><Icon name="shield" size={17} /></span>
+            <span class="gb-row-txt">
+              <b class="gb-row-k">Emergency in {country}</b>
+              <span class="gb-row-v">{lines.map((l, i) => <>{i > 0 && " · "}<a href={`tel:${l.num.replace(/[^0-9+]/g, "")}`}>{l.num}</a> {l.label}</>)}</span>
+            </span>
+          </li>
+        )}
+      </ul>
+      {emergency?.note && <p class="gb-note">{emergency.note}</p>}
+    </section>
+  )}
+
+  <button class="gb-map" type="button" data-dest-go="map">
+    <span class="gb-map-txt">
+      <span class="gb-kicker">Explore the map</span>
+      <span class="gb-map-name">Every place this guide located</span>
+      <span class="gb-map-sub">Sights, food, transit and each day's stops, on one map.</span>
+    </span>
+    <span class="gb-map-arrow" aria-hidden="true">→</span>
+  </button>
+</div>

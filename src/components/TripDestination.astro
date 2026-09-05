@@ -203,10 +203,9 @@ const reservations = readiness.reminders.filter((r) => {
       {/* Next stop — the second line of the hierarchy (§24), painted from today's focus. */}
       <div class="tn-card tn-nextstop" data-trip-nextstop hidden></div>
 
-      {/* Weather now: today's row of the wired Open-Meteo forecast, nothing more. The board's
-          current temperature, precipitation chance and wind are not in the payload the guide
-          fetches, so they are not drawn. */}
-      {hasWeather && <div class="tn-card tn-wx" data-wx-active hidden></div>}
+      {/* Weather today: painted by live-data's one today-weather painter (features/live-data/
+          ui/wx-today.js) from the forecast the guide already fetches. */}
+      {hasWeather && <div class="tn-card tn-wx" data-wx-today hidden></div>}
 
       {/* Today's focus: the day's own title and one line. */}
       <div class="tn-card tn-focus" data-trip-focus hidden></div>

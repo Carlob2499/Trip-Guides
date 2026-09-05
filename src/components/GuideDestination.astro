@@ -109,6 +109,17 @@ const countOf = (ch: Chapter) => ch.entries.length;
         {plate.eyebrow && <p class="eyebrow mast-eyebrow">{plate.eyebrow}</p>}
         <h2 class="mast-title">{guide.title}</h2>
         {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
+        {/* Board 05 puts the way into Search on the hero's foot — the same global overlay the
+            strip opens, said where a reader arrives. The weather chip beside it appears only
+            when the wired forecast actually has today (live-data/ui/wx-today.js). */}
+        <div class="gd-hero-row">
+          <button class="gd-hero-search" type="button" data-search-open aria-label="Search this guide" aria-haspopup="dialog">
+            <svg class="gd-hero-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+            <span class="gd-hero-search-txt">Search places, guides, or topics</span>
+            <kbd class="gd-hero-search-kbd" aria-hidden="true">⌘K</kbd>
+          </button>
+          <p class="gd-hero-wx wxt-chip" data-wx-today data-wx-chip hidden></p>
+        </div>
       </div>
     </div>
     {(plate.cities || plate.checked || plate.facts > 0 || plate.sources > 0 || plate.currency) && (
@@ -140,12 +151,14 @@ const countOf = (ch: Chapter) => ch.entries.length;
     <div class="gd-main">
       {/* ═══ OVERVIEW ═══ */}
       <section class="gd-overview" data-chapter-panel="overview" aria-label="Guide overview">
-        <p class="gd-kicker">Guide · {chapters.length} chapters</p>
+        <p class="gd-kicker">Explore by topic · {chapters.length} chapters</p>
         <div class="gd-cards">
           {chapters.map((ch, n) => (
-            <button class={`gd-card${ch.imgs.length ? " gd-card--photo" : ""}${ch.imgs.length && chapters.findIndex((c) => c.imgs.length > 0) === n ? " gd-card--feature" : ""}`} type="button" data-chapter-go={ch.key}>
-              {/* The numbered glyph is always present; a photo covers it, and a photo that fails
-                  to load (offline, blocked host) hands the card back to the glyph. */}
+            /* One tile per chapter, all the same size (board 05): the chapter's own first
+               photograph over its number, its name and one line. The mosaic of feature and
+               plain cards it replaces is retired (§33). A photo that fails to load (offline,
+               blocked host) hands the tile back to its numbered glyph. */
+            <button class={`gd-card${ch.imgs.length ? " gd-card--photo" : ""}`} type="button" data-chapter-go={ch.key}>
               <span class="gd-card-glyph" aria-hidden="true">{String(n + 1).padStart(2, "0")}</span>
               {ch.imgs.length > 0 && (
                 <span class="gd-card-media" aria-hidden="true">
