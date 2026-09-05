@@ -1,0 +1,40 @@
+---
+/* Map — the ivory band UNDER the frame (board 04, work order §3 "04 · Map").
+
+   "Explore neighbourhoods": one card per group the map already draws — what the guide calls
+   the group, how many verified places it holds, and the way into the first of them. It is an
+   INDEX, not a second copy of the inspector's rows: the card counts and enters, the rows
+   inside the frame are where a place is read.
+
+   The board's Saved places and Transit legend are not drawn — this product saves nothing and
+   the map draws no transit lines. */
+interface Group { label: string; count: number; firstId: string; thumb: string | null; names: string[] }
+interface Props { groups: Group[] }
+const { groups } = Astro.props as Props;
+---
+{groups.length > 0 && (
+  <div class="mapb">
+    <div class="mapb-head">
+      <h2 class="mapb-title">Explore neighbourhoods</h2>
+      <p class="mapb-sub">The groups this guide sorts its places into. Choosing one focuses it on the map.</p>
+    </div>
+    <ul class="mapb-grid">
+      {groups.map((g) => (
+        <li>
+          <button class="mapb-card" type="button" data-map-focus={g.firstId} aria-label={`Focus ${g.label} on the map`}>
+            {g.thumb && (
+              <span class="mapb-card-media" aria-hidden="true">
+                <img src={g.thumb} alt="" loading="lazy" decoding="async" onerror="this.parentNode.remove()" />
+              </span>
+            )}
+            <span class="mapb-card-txt">
+              <span class="mapb-card-name">{g.label}</span>
+              <span class="mapb-card-n">{g.count} {g.count === 1 ? "place" : "places"}</span>
+              <span class="mapb-card-list">{g.names.join(" · ")}</span>
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}

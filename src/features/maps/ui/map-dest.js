@@ -62,7 +62,9 @@ export function initMapDestination(root) {
     rows.forEach(function (r) { if (r !== row) { var b = r.querySelector(".mapdest-row-btn"); if (b) b.removeAttribute("aria-current"); } });
   }
 
-  dest.addEventListener("click", function (e) {
+  /* Document-scoped, not dest-scoped: the neighbourhood index under the frame (MapBelow) is a
+     sibling of the map's own container, and choosing a group there focuses it here. */
+  doc.addEventListener("click", function (e) {
     var focus = e.target.closest && e.target.closest("[data-map-focus]");
     if (focus) {
       var id = focus.getAttribute("data-map-focus");
