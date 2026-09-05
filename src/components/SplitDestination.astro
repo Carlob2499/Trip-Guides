@@ -1,21 +1,23 @@
 ---
-/* Split — the trip's budgeting and bill-splitting tool (design-system.md §11). One ledger per
-   guide, on the guide's own storeKey; the destination is a thin frame around the calculator
+/* Split — the trip's budgeting and bill-splitting tool (design-system.md §11, §27). One ledger
+   per guide, on the guide's own storeKey; the destination is a thin frame around the calculator
    so the engine, its validation, currency handling, payments and undo stay exactly where they
    are (features/trip-split). Recent Expenses + Add Expense lead; balances follow. On desktop a
    destination-derived scene (the same Painted Atlas the covers use) stands dimmed behind the
-   opaque working surface — scenery never outranks the numbers. */
+   opaque working surface — scenery never outranks the numbers.
+
+   Surface 8 (board `08_split_expenses`, Sonnet 5): Split is now one of the frame strip's own
+   tabs (design-system.md §6 phone-bar list), not a page reached by a back-button — the old
+   "← Trip" header this destination drew for itself is retired in favour of the frame's own
+   navigation, and .split-title/.split-desc (already the calculator's own heading) become the
+   visible header. .spatial turns the whole panel forest in both themes, matching the frame
+   pattern every other surface already shares (§1). */
 import TripSplit from "./TripSplit.astro";
 import PaintedAtlas from "./PaintedAtlas.astro";
 interface Props { storeKey: string; slug?: string; tz?: string | null }
 const { storeKey, slug = storeKey, tz = null } = Astro.props;
 ---
-<div class="splitdest">
+<div class="splitdest spatial">
   <div class="splitdest-scene" aria-hidden="true"><PaintedAtlas seed={slug} tz={tz ?? undefined} mini={true} /></div>
-  {/* A contextual region names its way back (§27): Trip is where it was opened from. */}
-  <div class="splitdest-head">
-    <button class="splitdest-back" type="button" data-dest-go="trip">← Trip</button>
-    <span class="splitdest-kicker" data-dest-title>Split</span>
-  </div>
   <TripSplit storeKey={storeKey} standalone />
 </div>
