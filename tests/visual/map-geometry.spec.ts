@@ -16,13 +16,14 @@ import { test, expect, type Page } from "@playwright/test";
 
 const KOREA = "/Trip-Guides/guides/korea/";
 const DESKTOP = { width: 1440, height: 1000 };
+const PHONE = { width: 390, height: 844 };
 /* Sub-pixel layout is normal (fractional rems, borders); a pixel of slack is not a ragged edge. */
 const SLACK = 1.5;
 
 type Box = { x: number; y: number; w: number; h: number };
 
-async function openMap(page: Page) {
-  await page.setViewportSize(DESKTOP);
+async function openMap(page: Page, vp = DESKTOP) {
+  await page.setViewportSize(vp);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(KOREA, { waitUntil: "domcontentloaded" });
   const nav = page.locator('[data-dest-nav][data-dest="map"]');
@@ -115,5 +116,51 @@ test.describe("⌁ the Map surface is one map with panels floating on it", () =>
     const chips = await boxOf(page, ".mapdest .map-chips");
     const one = await boxOf(page, ".mapdest .map-chip");
     expect(chips.h, "the chip row has wrapped onto multiple lines").toBeLessThanOrEqual(one.h + SLACK);
+  });
+});
+
+/* The phone is the surface that matters most in the field, and it is the one that historically
+   got the leftover attention. Same three failure modes, measured at 390px. */
+test.describe("⌁ the Map surface holds together on a phone", () => {
+  test("the map fills the viewport it is given, with no gap under the chrome or over the bar", async ({ page }) => {
+    await openMap(page, PHONE);
+    const map = await boxOf(page, ".mapdest-map");
+    const chrome = await boxOf(page, ".chrome");
+    const bar = await boxOf(page, ".botbar");
+
+    expect(Math.abs(map.y - (chrome.y + chrome.h)), "a gap between the strip and the map").toBeLessThanOrEqual(SLACK);
+    expect(map.x, "the map does not reach the left edge").toBeLessThanOrEqual(SLACK);
+    expect(map.x + map.w, "the map does not reach the right edge").toBeGreaterThanOrEqual(PHONE.width - SLACK);
+    /* The bottom bar is fixed over the map by design; what must not happen is dead ground
+       BETWEEN them, which is what a mis-set height looks like. */
+    expect(map.y + map.h, "dead ground between the map and the bottom bar").toBeGreaterThanOrEqual(bar.y - SLACK);
+  });
+
+  test("the chip row is one line and stays clear of the edges", async ({ page }) => {
+    await openMap(page, PHONE);
+    const chips = await boxOf(page, ".mapdest .map-chips");
+    const one = await boxOf(page, ".mapdest .map-chip");
+    expect(chips.h, "the chip row has wrapped on a phone — it would eat the map").toBeLessThanOrEqual(one.h + SLACK);
+    expect(chips.x, "the chip row is flush against the left edge").toBeGreaterThanOrEqual(4);
+    expect(chips.x + chips.w, "the chip row runs off the right edge").toBeLessThanOrEqual(PHONE.width - 4);
+  });
+
+  test("an overflowing chip row says so, and stops saying so at its end", async ({ page }) => {
+    await openMap(page, PHONE);
+    const bar = page.locator(".mapdest .map-chips").first();
+    const overflows = await bar.evaluate((el) => el.scrollWidth > el.clientWidth + 1);
+    expect(overflows, "this guide's chips do not overflow at 390px — the fade has nothing to prove").toBe(true);
+    await expect(bar, "an overflowing row should carry the fade").not.toHaveAttribute("data-scroll-end", "");
+    await bar.evaluate((el) => { el.scrollLeft = el.scrollWidth; el.dispatchEvent(new Event("scroll")); });
+    await expect(bar, "scrolled to the end, the fade should come off").toHaveAttribute("data-scroll-end", "");
+  });
+
+  test("the sheet does not cover the map's whole first screen at rest", async ({ page }) => {
+    await openMap(page, PHONE);
+    const sheet = await boxOf(page, ".mapdest-sheet");
+    const map = await boxOf(page, ".mapdest-map");
+    /* At rest the sheet is a peek handle. If it is taller than a third of the map, the phone
+       has stopped being a map and become a list with a picture behind it. */
+    expect(sheet.h, "the resting sheet is eating the map").toBeLessThanOrEqual(map.h / 3);
   });
 });

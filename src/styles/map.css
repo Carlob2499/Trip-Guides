@@ -54,6 +54,19 @@
   .map-chip{flex:none}
 }
 
+/* A scrolling row that simply stops at the viewport edge reads as a bug — the last chip is
+   sliced mid-word and nothing says there is more. The mask fades the final few pixels so the
+   cut is legible as "keep going", and it is removed once the row is scrolled to its end.
+   Purely presentational: the row is still a plain scroller with real focusable chips. */
+.map-chips{
+  --chip-fade:22px;
+  /* currentColor rather than a literal: a mask reads only the ALPHA of its gradient, so the hue
+     is irrelevant here and a hex would be a colour the token gate is right to refuse. */
+  mask-image:linear-gradient(to right,currentColor calc(100% - var(--chip-fade)),transparent 100%);
+  -webkit-mask-image:linear-gradient(to right,currentColor calc(100% - var(--chip-fade)),transparent 100%)
+}
+.map-chips[data-scroll-end]{mask-image:none;-webkit-mask-image:none}
+
 /* Google-primary mounts (§15): the dormant embed is invisible and a quiet line says the map
    is on its way; the line leaves the moment either provider is the map. */
 .map-loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;padding:.4rem .9rem;border-radius:var(--r-pill);background:var(--card);border:1px solid var(--rule);font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);white-space:nowrap;pointer-events:none}
@@ -117,6 +130,15 @@ html[data-conn="offline"] .map-degraded{display:block}
    (design-system.md §31; the drift gate's ring-shadow-is-not-elevation exemption). */
 .map-pin--sel::before{transform:scale(1.25);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 35%,transparent)}
 @media(prefers-reduced-motion:no-preference){.map-pin::before{transition:transform var(--dur-immediate) var(--ease-standard)}}
+/* Phones keep the 44px TARGET and shrink the drawing. A 36px disc is a fifth of a 375px screen's
+   width per pin; a dozen of them over one district stops being a map and becomes a pile. The
+   thumb still gets its full 44px because that lives on the element, not on the disc. */
+@media(max-width:599px){
+  .map-pin::before{width:26px;height:26px}
+  .map-pin--stop::before{width:30px;height:30px}
+  .map-pin{font-size:var(--text-nano)}
+  .map-cluster{width:44px;height:44px;font-size:var(--text-control-sm)}
+}
 .map-chip--day{border-style:dashed}
 
 /* The sheet (phone): peek / half / full, dragged or tapped, never gesture-only. */

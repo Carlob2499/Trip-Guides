@@ -18,7 +18,6 @@
        pin hands off with a Directions URL built from its verified coordinates. */
 
 import { clusterPins } from "../model/cluster";
-import { openingBounds } from "../model/frame";
 import { esc as escapeHtml, safeHttpUrl } from "../../../scripts/util.js";
 
 /* global google */
@@ -41,7 +40,10 @@ export function boot(cfg) {
   }
 
   function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#9c4421"; }
-  var ACCENT = cssVar("--accent");
+  /* The day route is Waypoint's furniture, not the guide's identity — same ruling as the pins
+     (base.css --brand). It was --accent, which is the destination's own colour, so Korea drew
+     its route in olive on a green map. */
+  var ACCENT = cssVar("--brand") || cssVar("--accent");
   function zoomFromSpan(span) {
     var s = span || 0.05;
     return Math.max(5, Math.min(16, Math.round(13 - Math.log2(s / 0.05))));
@@ -134,26 +136,48 @@ export function boot(cfg) {
         // sequence, straight lines between stops — never a routed path pretending to be one.
         stops.forEach(function (p, i) { markers.push(markerFor(p, i)); });
         if (stops.length > 1) {
-          polyline = new google.maps.Polyline({ path: stops.map(function (p) { return { lat: p.lat, lng: p.lng }; }), geodesic: true, strokeColor: ACCENT, strokeOpacity: .75, strokeWeight: 3, map: map });
+          polyline = new google.maps.Polyline({ path: stops.map(function (p) { return { lat: p.lat, lng: p.lng }; }), geodesic: true, strokeColor: ACCENT, strokeOpacity: .9, strokeWeight: 4, map: map });
         }
       }
       var places = pins.filter(function (p) { return p.dayIdx == null; });
-      clusterPins(places, map.getZoom() || 13).forEach(function (c) {
+      /* The cluster radius is in screen pixels, so the SAME number covers a far bigger share of a
+         375px phone than of a 1440px desktop — which is why the phone piled a dozen overlapping
+         discs over Seoul while desktop looked fine. Widen it where the screen is narrow. */
+      clusterPins(places, map.getZoom() || 13, host.clientWidth < 600 ? 92 : 60).forEach(function (c) {
         markers.push(c.pins.length === 1 ? markerFor(c.pins[0], null) : clusterMarker(c));
       });
     }
 
+    /* WHERE THE MAP OPENS. Not fitBounds over every pin: the Korea guide carries 94 places in
+       Korea and 9 around Tokyo, 1,150 km away, so fitting everything framed two countries and
+       left Seoul unreadable on the first screen — worse on a phone, where the same box has a
+       third of the width.
+
+       The guide already answers this. `center`/`span` are authored per guide (Seoul, 0.07),
+       which is the frame someone who knows the trip would choose, and no statistic recovers
+       that from the coordinates: those 9 Tokyo pins are a real leg of the trip, not outliers to
+       be trimmed away. (An earlier pass here did try trimming the tails. It was the wrong tool
+       — at 9% the leg is bigger than any honest trim, and a trim big enough to drop it would
+       drop a genuine second city on some other guide.)
+
+       So: the authored frame is home, and a FILTER fits exactly what the reader asked for —
+       every pin in the filtered set, no trimming, because they chose those pins. */
+    function homeView() {
+      map.setCenter({ lat: data.center.lat, lng: data.center.lng });
+      map.setZoom(zoomFromSpan(data.span));
+    }
     function fitTo(pins) {
       if (!pins.length) return;
       if (pins.length === 1) { map.setCenter({ lat: pins[0].lat, lng: pins[0].lng }); map.setZoom(15); return; }
-      /* Not fitBounds over every pin: one far-flung place (Korea's single Tokyo pin, 1,150 km
-         out) would otherwise decide the opening frame and leave Seoul unreadable. openingBounds
-         drops the tails only when they are actually tails — see model/frame.ts. The outlier is
-         still a pin and still in the index; selecting it pans there. */
-      var box = openingBounds(pins);
-      if (!box) return;
-      var b = new google.maps.LatLngBounds({ lat: box.south, lng: box.west }, { lat: box.north, lng: box.east });
+      var b = new google.maps.LatLngBounds();
+      pins.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
       map.fitBounds(b, 48);
+    }
+    /* Unfiltered means "show me the guide", which is the authored frame — not the extent of its
+       furthest two pins. Filtered means "show me these", which is an exact fit. */
+    function refit() {
+      if (dayFilter == null && !Object.keys(off).some(function (k) { return off[k]; })) homeView();
+      else fitTo(visible());
     }
 
     function select(id, source) {
@@ -188,8 +212,7 @@ export function boot(cfg) {
       mount.setAttribute("data-map-provider", "google");
       try { mount.dispatchEvent(new CustomEvent("tg:map-ready")); } catch (_) {}
       draw();
-      var initial = visible();
-      if (initial.length > 1) fitTo(initial);
+      refit();
     });
 
     if (lens === "all" && (cats.length > 1 || all.some(function (p) { return p.dayIdx != null; }))) buildChips(mount, cats, off, data.dayDates || [], function (cat, on) {
@@ -217,7 +240,7 @@ export function boot(cfg) {
       document.addEventListener("tg:bench", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); fitTo(visible()); }, 320); });
     }
     // The destination becoming visible is the moment a hidden map needs its size.
-    document.addEventListener("tg:dest", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); fitTo(visible()); }, 60); });
+    document.addEventListener("tg:dest", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); refit(); }, 60); });
     mount.__focusPin = function (id) { select(id, "row"); };
     mount.__fitDay = function (dayIdx) { dayFilter = dayIdx; if (ready) { draw(); fitTo(visible()); } };
     mount.__clear = function () { selectedId = null; info.close(); draw(); };
@@ -254,7 +277,18 @@ export function boot(cfg) {
         bar.appendChild(b);
       });
     }
+    /* The fade at the row's right edge (map.css .map-chips) says "there is more"; it must come
+       off once there is not, or the last chip looks permanently clipped. Cheap to compute and
+       only on scroll/resize, so it never runs during a pan of the map itself. */
+    var markEnd = function () {
+      var end = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 1;
+      if (end) bar.setAttribute("data-scroll-end", "");
+      else bar.removeAttribute("data-scroll-end");
+    };
+    bar.addEventListener("scroll", markEnd, { passive: true });
+    if (typeof ResizeObserver === "function") new ResizeObserver(markEnd).observe(bar);
     mount.insertBefore(bar, mount.firstChild);
+    markEnd();
   }
 
   /* Google did not become the map: wake the dormant OSM embed (Google-primary mounts) and say
