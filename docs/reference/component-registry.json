@@ -49,6 +49,10 @@
       "file": "src/components/MapDestination.astro",
       "role": "Map — one real map with the canonical pin sheet/inspector; Google when configured, OSM until then (D6-36/51, F7)"
     },
+    "MapBelow": {
+      "file": "src/components/MapBelow.astro",
+      "role": "Map — the cream band under the frame: the neighbourhood index, one card per group the map draws with its verified count (board 04)"
+    },
     "PaintedAtlas": {
       "file": "src/components/PaintedAtlas.astro",
       "role": "The living painted cover"

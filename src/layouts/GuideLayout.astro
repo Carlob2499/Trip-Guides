@@ -8,6 +8,7 @@
 import AppChrome from "../components/AppChrome.astro";
 import TripDestination from "../components/TripDestination.astro";
 import TripBelow from "../components/TripBelow.astro";
+import MapBelow from "../components/MapBelow.astro";
 import ItineraryDestination from "../components/ItineraryDestination.astro";
 import MapDestination from "../components/MapDestination.astro";
 import GuideDestination from "../components/GuideDestination.astro";
@@ -20,6 +21,7 @@ import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { destinationTheme, destinationThemeStyle } from "../lib/destination-theme";
 import { deriveGuideView } from "../lib/guide-view";
+import { pinGroups } from "../lib/map-pins";
 // Self-hosted variable fonts (bundled, base-path-safe, offline-correct) — no CDN.
 import "@fontsource-variable/literata/standard.css";
 import "@fontsource-variable/literata/standard-italic.css";
@@ -78,6 +80,19 @@ const atmosphere = destinationThemeStyle(destinationTheme(guideSlug, accent));
 
 /* ── Everything the destinations need, derived once (src/lib/guide-view.ts) ───────────── */
 const v = deriveGuideView(guide, guideSlug, base, holidayData);
+/* The neighbourhood index under the Map frame reads the SAME grouping the inspector's rows do
+   (src/lib/map-pins.ts), so a count under the frame can never disagree with the list inside it. */
+const mapDayDates = v.rawDays.map((d: any) => d.date);
+const mapBelowGroups = pinGroups(v.allPins, mapDayDates).map((g) => {
+  const withPhoto = g.pins.find((p) => v.imageFor(p.name));
+  return {
+    label: g.label,
+    count: g.pins.length,
+    firstId: g.pins[0].id,
+    thumb: withPhoto ? (v.imageFor(withPhoto.name)?.thumb ?? null) : null,
+    names: g.pins.slice(0, 3).map((p) => p.name),
+  };
+});
 ---
 <!doctype html>
 <html lang="en" data-country={guide.country} style={accentStyle(tokens, { "--theme-primary": themePrimary, "--theme-secondary": themeSecondary, "--theme-accent": themeAccent, ...atmosphere })}>
@@ -191,6 +206,9 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       <section class="dest dest-below" data-dest="trip" data-dest-below="trip" aria-label="Trip essentials">
         <TripBelow base={base} slug={guideSlug} storeKey={v.storeKey} title={guide.title}
           entry={guide.entry ?? null} exports={v.exports} learnings={guide.learnings ?? null} />
+      </section>
+      <section class="dest dest-below" data-dest="map" data-dest-below="map" aria-label="Explore neighbourhoods" hidden>
+        <MapBelow groups={mapBelowGroups} />
       </section>
     </div>
 

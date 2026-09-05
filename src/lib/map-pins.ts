@@ -135,3 +135,22 @@ export function pinCategories(pins: Pin[]): string[] {
   }
   return out;
 }
+
+/** How the Map destination groups its pins: a day stop belongs to its day, everything else to
+    the guide's own category, and anything uncategorised to "Places". One owner, because the
+    frame's inspector rows and the neighbourhood index under the frame must never disagree
+    about what a group is or how many places it holds. */
+export function pinGroups<T extends { kind: string; cat: string | null; dayIdx?: number }>(
+  pins: readonly T[],
+  dayDates: readonly string[] = [],
+): { label: string; pins: T[] }[] {
+  const out: { label: string; pins: T[] }[] = [];
+  const at = new Map<string, number>();
+  for (const p of pins) {
+    if (p.kind === "center") continue;
+    const label = p.dayIdx != null ? `Day ${p.dayIdx + 1} · ${dayDates[p.dayIdx] ?? ""}` : (p.cat || "Places");
+    if (!at.has(label)) { at.set(label, out.length); out.push({ label, pins: [] }); }
+    out[at.get(label)!].pins.push(p);
+  }
+  return out;
+}

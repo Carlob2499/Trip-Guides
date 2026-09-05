@@ -152,3 +152,42 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 .mapdest-sheet{border-radius:var(--r-pane) var(--r-pane) 0 0}
 @media(min-width:1180px){.mapdest-sheet{border-radius:var(--r-pane);clip-path:inset(0 round var(--r-pane))}}
 .mapdest-sel-thumb{border-radius:var(--r-inset)}
+
+/* === THE MAP PANEL (board 04) ================================================
+   The floating card over the map's top-left corner: what this map is, and the two things a
+   traveler does from here that this product actually does. Desktop only — a phone gives the
+   whole viewport to the map and the sheet does this job there. */
+.mapdest-panel{display:none}
+/* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
+@media(min-width:1180px){
+  .mapdest-bench{position:relative}
+  .mapdest-panel{display:block;position:absolute;z-index:2;top:1.6rem;left:1.9rem;width:16.5rem;padding:.95rem 1rem 1rem;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-card);box-shadow:var(--shadow-float)}
+  .mapdest-panel-title{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);line-height:1;letter-spacing:-.014em}
+  .mapdest-panel-sub{margin:.3rem 0 .9rem;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.4}
+  .mapdest-kicker{display:block;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+  .mapdest-acts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.35rem}
+  .mapdest-act{display:flex;flex-direction:column;gap:.1rem;width:100%;min-height:48px;padding:.5rem .7rem;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-inset);color:var(--ink);text-align:left;cursor:pointer;font:inherit}
+  .mapdest-act:hover{border-color:var(--accent)}
+  .mapdest-act:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+  .mapdest-act-n{font-family:var(--font-data);font-size:var(--text-control);font-weight:700}
+  .mapdest-act-s{font-family:var(--font-data);font-size:var(--text-nano);color:var(--muted)}
+}
+
+/* === THE NEIGHBOURHOOD INDEX, under the frame (board 04) =====================
+   One card per group the map draws: what the guide calls it, how many verified places it
+   holds, and the first few by name. Choosing one focuses it on the map. */
+.mapb{display:flex;flex-direction:column;gap:.9rem}
+.mapb-title{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);line-height:1.1;letter-spacing:-.014em}
+.mapb-sub{margin:.3rem 0 0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
+.mapb-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,17rem),1fr));gap:.7rem}
+.mapb-card{display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:.8rem;width:100%;min-height:88px;padding:.6rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color var(--dur-routine),transform var(--dur-routine) var(--ease-spring)}
+.mapb-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.mapb-card:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.mapb-card:not(:has(.mapb-card-media)){grid-template-columns:minmax(0,1fr)}
+.mapb-card-media{display:block;width:72px;height:72px;overflow:hidden;border-radius:var(--r-inset);background:var(--sunken)}
+.mapb-card-media img{display:block;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
+.mapb-card-txt{display:flex;flex-direction:column;gap:.12rem;min-width:0}
+.mapb-card-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);line-height:1.15;overflow-wrap:anywhere}
+.mapb-card-n{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;color:var(--accent-ink)}
+.mapb-card-list{font-family:var(--font-data);font-size:var(--text-nano);color:var(--muted);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(prefers-reduced-motion:reduce){.mapb-card{transition:none}.mapb-card:hover{transform:none}}

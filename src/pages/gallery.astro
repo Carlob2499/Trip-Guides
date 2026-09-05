@@ -43,6 +43,8 @@ import AppChrome from "../components/AppChrome.astro";
 import UtilityBar from "../components/UtilityBar.astro";
 import TripDestination from "../components/TripDestination.astro";
 import TripBelow from "../components/TripBelow.astro";
+import MapBelow from "../components/MapBelow.astro";
+import { pinGroups } from "../lib/map-pins";
 import ItineraryDestination from "../components/ItineraryDestination.astro";
 import MapDestination from "../components/MapDestination.astro";
 import GuideDestination from "../components/GuideDestination.astro";
@@ -182,6 +184,15 @@ const contourLayers = [
 ];
 
 const componentRoles = registry.components as Record<string, { role: string }>;
+/* The neighbourhood index reads the map's own grouping (src/lib/map-pins.ts) — the same call
+   GuideLayout makes, so the specimen is the shipped derivation and not a hand-built stand-in. */
+const galleryMapDates = view.rawDays.map((d: { date: string }) => d.date);
+const galleryMapGroups = pinGroups(view.allPins, galleryMapDates).map((g) => {
+  const withPhoto = g.pins.find((p) => view.imageFor(p.name));
+  return { label: g.label, count: g.pins.length, firstId: g.pins[0].id,
+    thumb: withPhoto ? (view.imageFor(withPhoto.name)?.thumb ?? null) : null,
+    names: g.pins.slice(0, 3).map((p) => p.name) };
+});
 const patterns = registry.patterns as Record<string, { contract: string; gates: string[] }>;
 ---
 <!doctype html>
@@ -391,6 +402,14 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
             <GuideDestination guide={toolsGuide.data} slug={toolsGuide.id} storeKey={galleryStoreKey} country={toolsGuide.data.country}
               chapters={view.chapters} sources={view.sources} hero={view.hero} plate={view.plate} holidays={view.holidayInfo}
               pinMap={view.pinMap} destTz={view.destTzIana} phrases={toolsGuide.data.phrases ?? null} entry={toolsGuide.data.entry ?? null} />
+          </div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">MapBelow <span class="gal-state">the cream band under the frame</span></h3>
+          <p class="gal-role">{componentRoles.MapBelow.role} — derived from {toolsGuide.id}.</p>
+          <div class="gal-dest-host">
+            <MapBelow groups={galleryMapGroups} />
           </div>
         </article>
 

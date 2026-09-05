@@ -803,6 +803,26 @@ Use:
 
 The approved globe belongs to Atlas/arrival, not as a replacement for a functional city map.
 
+### The composition (decided 2026-09-05, board 04)
+
+Over the map's top-left corner sits the **Map panel**: what this map is, and the two quick
+actions this product actually performs from here — open Search, and go to the day plan. The
+selected place keeps the inspector it already had (desktop pane, phone sheet).
+
+Under the frame, the cream band carries the **neighbourhood index**: one card per group the map
+draws, with what the guide calls the group, how many verified places it holds, and the first few
+by name; choosing one focuses it on the map. It is an INDEX, not a second copy of the inspector
+— the card counts and enters, the rows inside the frame are where a place is read. Both read the
+same grouping owner (`src/lib/map-pins.ts` `pinGroups`), so a count under the frame can never
+disagree with the list inside it.
+
+"Map layers" is not drawn: the lens is fixed per mount, and the category filter is the live
+map's own chip bar, which exists only where Google draws the pins. Also not drawn, because
+nothing holds them: Saved places, a transit-line legend (this map draws no transit lines), a
+traffic layer, satellite and terrain toggles, ratings, entry prices, Add to itinerary, Compare,
+Measure, and Start navigation — live routing is the map app's, reached through the place's own
+Get-there links.
+
 ---
 
 ## 27. Split
