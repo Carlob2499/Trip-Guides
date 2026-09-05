@@ -80,7 +80,7 @@
 }
 /* The narrowest phones: the mark alone is the wordmark (a 44px link, still labelled), so four
    44px actions and the way home share 320px without anything escaping the row. */
-@media(max-width:399px){.topbar{gap:.3rem;padding-left:max(.6rem,var(--safe-left));padding-right:max(.6rem,var(--safe-right))}.topbar-right{gap:.2rem}.brand-word,.orient-sep,.orient-dest{display:none}}
+@media(max-width:399px){.topbar{gap:.3rem;padding-left:max(.6rem,var(--safe-left));padding-right:max(.6rem,var(--safe-right))}.topbar-right{gap:.2rem}.brand-word,.orient-sep,.orient-dest{display:none}.brand{min-width:44px;justify-content:center;padding:0}}
 
 /* ---- Phone bottom bar: five slots, Atlas first (§6 "Mobile navigation"). ------------------ */
 /* The bar's reserve, for anything else fixed at the bottom of a phone (a map FAB, a caption). */
