@@ -7,6 +7,7 @@
    and passes it down — nothing here authors content. */
 import AppChrome from "../components/AppChrome.astro";
 import TripDestination from "../components/TripDestination.astro";
+import TripBelow from "../components/TripBelow.astro";
 import ItineraryDestination from "../components/ItineraryDestination.astro";
 import MapDestination from "../components/MapDestination.astro";
 import GuideDestination from "../components/GuideDestination.astro";
@@ -114,7 +115,50 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
     <a class="skip-link" href="#content">Skip to content</a>
     <div id="savedNote" class="toast" role="status" aria-live="polite"></div>
 
-    <AppChrome base={base} destinations={v.destinations} title={guide.title} />
+    {/* THE FRAME (design-system.md §6 "The frame", board 02): one dark, rounded stage on the
+        cream page. Its first row is the shell strip; its body is the destination the router
+        is showing. `spatial` re-maps every surface token to the dark register, so anything
+        already token-driven turns forest inside it without a single call-site colour. */}
+    <div class="stage guide-stage spatial">
+      <AppChrome base={base} destinations={v.destinations} title={guide.title} />
+
+    {v.verifiedWarning && <p class="guide-warning"><span class="gstat gstat-warning">{v.verifiedWarning}</span></p>}
+    {guide.draft && (
+      <p class="draft-progress">
+        <a class="draft-progress-link" href={`${base}/progress/?slug=${encodeURIComponent(guideSlug)}`}><Icon name="clock" size={14} /> Track live progress</a>
+      </p>
+    )}
+
+    <main class="content" id="content" tabindex="-1">
+      <noscript><p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds the destination switcher, saved checklists, live maps and the trip split.</p></noscript>
+
+      <section class="dest" id="dest-trip" data-dest="trip" role="region" aria-label="Trip">
+        <TripDestination guide={guide} slug={guideSlug} storeKey={v.storeKey} days={v.tripDays} readiness={v.readiness} recap={v.recap}
+          holidays={v.holidayInfo} dates={v.plate.dates} cities={v.plate.cities}
+          hasWeather={!!v.mapCenter} hero={v.hero} placeImages={v.placeImages}
+          dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan}
+          tripStart={v.firstDayDate} tripEnd={v.lastDayDate} />
+      </section>
+
+      <section class="dest" id="dest-itinerary" data-dest="itinerary" role="region" aria-label="Itinerary" hidden>
+        <ItineraryDestination daysSection={v.daysSec} learnings={guide.learnings ?? null} country={guide.country} keyPrefix="dy"
+          modulesByDate={v.modulesByDate} dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan} imageFor={v.imageFor} />
+      </section>
+
+      <section class="dest" id="dest-map" data-dest="map" role="region" aria-label="Map" hidden>
+        <MapDestination center={v.globalCenter} span={v.globalSpan} pins={v.allPins} country={guide.country} dayDates={v.rawDays.map((d: any) => d.date)} imageFor={v.imageFor} />
+      </section>
+
+      <section class="dest" id="dest-guide" data-dest="guide" role="region" aria-label="Guide" hidden>
+        <GuideDestination guide={guide} slug={guideSlug} storeKey={v.storeKey} country={guide.country} chapters={v.chapters} sources={v.sources}
+          hero={v.hero} plate={v.plate} holidays={v.holidayInfo} pinMap={v.pinMap} destTz={v.destTzIana} phrases={guide.phrases ?? null} entry={guide.entry ?? null} />
+      </section>
+
+      <section class="dest" id="dest-split" data-dest="split" role="region" aria-label="Split" hidden>
+        <SplitDestination storeKey={v.storeKey} slug={guideSlug} tz={v.destTzIana} />
+      </section>
+    </main>
+    </div>
 
     {/* Share modal — hidden until btnShare is clicked; skipped by Web Share API on mobile. */}
     <div class="share-backdrop" id="shareBackdrop" aria-hidden="true"></div>
@@ -140,41 +184,14 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       <p class="share-install"><Icon name="phone" size={15} /> <b>Save this guide to your phone:</b> open your browser menu and choose <i>Add to Home Screen</i> — it then works offline for the whole trip (maps and photos still need a connection).</p>
     </div>
 
-    {v.verifiedWarning && <p class="guide-warning"><span class="gstat gstat-warning">{v.verifiedWarning}</span></p>}
-    {guide.draft && (
-      <p class="draft-progress">
-        <a class="draft-progress-link" href={`${base}/progress/?slug=${encodeURIComponent(guideSlug)}`}><Icon name="clock" size={14} /> Track live progress</a>
-      </p>
-    )}
-
-    <main class="content" id="content" tabindex="-1">
-      <noscript><p class="note" style="padding:1.5rem 0">This guide reads fine without JavaScript; enabling it adds the destination switcher, saved checklists, live maps and the trip split.</p></noscript>
-
-      <section class="dest" id="dest-trip" data-dest="trip" role="region" aria-label="Trip">
-        <TripDestination guide={guide} slug={guideSlug} base={base} storeKey={v.storeKey} days={v.tripDays} readiness={v.readiness} recap={v.recap}
-          holidays={v.holidayInfo} dates={v.plate.dates} cities={v.plate.cities} exports={v.exports}
-          hasWeather={!!v.mapCenter} entry={guide.entry ?? null} hero={v.hero} placeImages={v.placeImages}
-          dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan} />
+    {/* Under the frame: the cream band. Each destination may own one region here — the router
+        shows it with the frame body it belongs to (guide-ui.js). */}
+    <div class="below">
+      <section class="dest dest-below" data-dest="trip" data-dest-below="trip" aria-label="Trip essentials">
+        <TripBelow base={base} slug={guideSlug} storeKey={v.storeKey} title={guide.title}
+          entry={guide.entry ?? null} exports={v.exports} learnings={guide.learnings ?? null} />
       </section>
-
-      <section class="dest" id="dest-itinerary" data-dest="itinerary" role="region" aria-label="Itinerary" hidden>
-        <ItineraryDestination daysSection={v.daysSec} learnings={guide.learnings ?? null} country={guide.country} keyPrefix="dy"
-          modulesByDate={v.modulesByDate} dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan} imageFor={v.imageFor} />
-      </section>
-
-      <section class="dest" id="dest-map" data-dest="map" role="region" aria-label="Map" hidden>
-        <MapDestination center={v.globalCenter} span={v.globalSpan} pins={v.allPins} country={guide.country} dayDates={v.rawDays.map((d: any) => d.date)} imageFor={v.imageFor} />
-      </section>
-
-      <section class="dest" id="dest-guide" data-dest="guide" role="region" aria-label="Guide" hidden>
-        <GuideDestination guide={guide} slug={guideSlug} storeKey={v.storeKey} country={guide.country} chapters={v.chapters} sources={v.sources}
-          hero={v.hero} plate={v.plate} holidays={v.holidayInfo} pinMap={v.pinMap} destTz={v.destTzIana} phrases={guide.phrases ?? null} entry={guide.entry ?? null} />
-      </section>
-
-      <section class="dest" id="dest-split" data-dest="split" role="region" aria-label="Split" hidden>
-        <SplitDestination storeKey={v.storeKey} slug={guideSlug} tz={v.destTzIana} />
-      </section>
-    </main>
+    </div>
 
     <footer class="colophon">
       <div class="colo-sig">

@@ -1,7 +1,7 @@
 // @protects-file Forecasts are read correctly and say plainly when there is no data.
 
 import { describe, it, expect } from "vitest";
-import { wxIcon, wxDayOk, wxValidate, weatherWindow, currentWxOf, type Daily } from "./weather";
+import { wxIcon, wxLabel, wxDayOk, wxValidate, weatherWindow, currentWxOf, type Daily } from "./weather";
 import { tripWindow } from "../../../lib/trip-dates";
 import SAMPLE from "../mocks/open-meteo.sample.json";
 
@@ -11,6 +11,21 @@ const daily = (n: number, over: Partial<Daily> = {}): Daily => ({
   temperature_2m_min: Array.from({ length: n }, () => 22),
   weathercode: Array.from({ length: n }, () => 1),
   ...over,
+});
+
+describe("wxLabel", () => {
+  it("names the same seven buckets the symbol draws", () => {
+    expect(wxLabel(0)).toBe("Clear");
+    expect(wxLabel(2)).toBe("Partly cloudy");
+    expect(wxLabel(45)).toBe("Cloudy");
+    expect(wxLabel(61)).toBe("Rain");
+    expect(wxLabel(71)).toBe("Snow");
+    expect(wxLabel(81)).toBe("Showers");
+    expect(wxLabel(95)).toBe("Thunderstorm");
+  });
+  it("never returns an empty name, so the symbol always has a reading", () => {
+    for (let code = 0; code <= 99; code++) expect(wxLabel(code).length).toBeGreaterThan(0);
+  });
 });
 
 describe("wxIcon", () => {

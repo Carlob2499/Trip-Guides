@@ -8,28 +8,28 @@
      PRE     a strong, restrained destination hero · countdown · only the UNRESOLVED readiness
              items (bookings with a closing door lead; the rest fold away) · entry rules ·
              holidays/closures in the window · the live forecast · offline files.
-     ACTIVE  mission control: a compact identity band, then today's dominant Now object,
-             painted by trip.js from the canonical days in the deterministic order
-             Now → Next → Get there → material problem → fallback → remainder of the day.
-             The arrival day gets the same renderer in autopilot mode. Nothing here is a
-             second itinerary.
+     ACTIVE  mission control inside the frame (board 02): a left rail of standing answers
+             (identity + progress, next stop, weather, today's focus, dated reservations), the
+             day's stops as photo rows in the centre, today's route and its measured strip on
+             the right. The rows are painted by trip.js from the canonical days in the
+             deterministic order Now → Next → Get there → material problem → fallback →
+             remainder of the day. Nothing here is a second itinerary.
      POST    an editorial recap from the curated post-mortem, a few large outcome atoms, the
              major Plan-vs-Actual changes, then the Learnings notebook.
 
-   Trip Learnings lives here at every phase: the notebook is always present and deep-linkable
-   (#learnings); the feedback survey stays its three approved steps. */
+   The standing references — Essentials, the Split card and the Learnings notebook
+   (#learnings) — are the cream band under the frame: TripBelow.astro. */
 import Icon from "./Icon.astro";
-import Learnings from "./Learnings.astro";
 import ReminderRow from "./ReminderRow.astro";
 import PaintedAtlas from "./PaintedAtlas.astro";
 import { jsonEmbed } from "../lib/json-embed";
+import { resolveTripDateInYear } from "../lib/trip-dates";
 import type { TripDay, ReadinessStack, RecapAtoms } from "../features/trip/index";
 import type { HolidayInfo } from "../lib/holidays";
 
 interface Props {
   guide: any;
   slug: string;
-  base: string;
   storeKey: string;
   days: TripDay[];
   readiness: ReadinessStack;
@@ -40,15 +40,16 @@ interface Props {
   placeImages: Record<string, { src: string; srcset: string; alt: string }>;
   dates: string | null;
   cities: string | null;
-  exports: { gpx: boolean; ics: boolean };
   hasWeather: boolean;
-  entry: any[] | null;
   /** The itinerary's located stops, day-indexed — today's route draws from these (maps lens "today"). */
   dayPins?: { id: string; name: string; lat: number; lng: number; dayIdx: number; time: string | null; local: string | null; kind: string; cat: string | null; placeId: string | null }[];
   center?: { lat: number; lng: number } | null;
   span?: number | null;
+  /** The guide's own first/last day labels ("Wed Jul 8") — the reservation window. */
+  tripStart: string | null;
+  tripEnd: string | null;
 }
-const { guide, slug, base, storeKey, days, readiness, recap, holidays, hero, placeImages, dates, cities, exports, hasWeather, entry, dayPins = [], center = null, span = null } = Astro.props;
+const { guide, slug, storeKey, days, readiness, recap, holidays, hero, placeImages, dates, cities, hasWeather, dayPins = [], center = null, span = null, tripStart = null, tripEnd = null } = Astro.props;
 /* Google Maps Platform is the live map when built with PUBLIC_GMAPS_KEY (§15); the OSM embed
    stays dormant on data-fallback-src and gmaps-render.js wakes it only if Google fails. */
 const googlePrimary = Boolean(import.meta.env.PUBLIC_GMAPS_KEY);
@@ -64,6 +65,23 @@ const learnings = guide.learnings ?? null;
 const tripData = jsonEmbed(days);
 const imageData = jsonEmbed(placeImages);
 const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
+/* The dated commitments (work order §3 "02 · Trip" — its "Reservations" card). The operative
+   fact is the DATE: a readiness item the guide gave a due date that falls inside the trip. The
+   `book` wording flag is a heuristic over the item's own words and would drop a dated item it
+   simply did not phrase as a booking, so the date decides and the flag only styles the row.
+   The window is resolved in the due date's own year, so the card is a function of the guide
+   alone — never of the day the site happened to be built. Nothing dated, no card: the board's
+   three confirmed reservations with entry types and statuses are not a wired concept. */
+const reservations = readiness.reminders.filter((r) => {
+  if (!r.due) return false;
+  const year = Number(String(r.due).slice(0, 4));
+  if (!Number.isFinite(year)) return false;
+  const from = resolveTripDateInYear(tripStart, year);
+  const to = resolveTripDateInYear(tripEnd ?? tripStart, year);
+  if (!from || !to) return false;
+  const due = new Date(`${r.due}T12:00:00`);
+  return due >= from && due.getTime() <= to.getTime() + 86400000;
+});
 ---
 <div class="trip" data-trip data-phase="pre">
   <script type="application/json" is:inline id="tripData" set:html={tripData}></script>
@@ -95,7 +113,8 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
   </header>
 
   {/* ═══ PRE-TRIP ═══ readiness leads as the one feature object (§24 "may emphasize readiness");
-      entry, closures, forecast and files support it as compact tiles — never equal cards. */}
+      closures and the forecast support it as compact tiles — never equal cards. The entry
+      rules and the offline files are standing references and live under the frame now. */}
   <section class="trip-phase trip-pre" data-trip-phase="pre" aria-label="Before you go">
     {readiness.bookAhead.length > 0 && (
       <div class="trip-block trip-priorities trip-pre-lead" data-readiness={storeKey}>
@@ -129,14 +148,6 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
       </div>
     )}
     <div class="trip-pre-side">
-    {entry && entry.length > 0 && (
-      <div class="trip-block trip-block--tile trip-entry">
-        <h3 class="trip-h"><Icon name="shield" size={16} /> Entry</h3>
-        {entry.map((e: any) => (
-          <p class="trip-entry-row"><b>{e.homeCountry}</b> — {e.visa}{e.passportValidity ? ` · passport ${e.passportValidity}` : ""} <span class="trip-src">checked {e.verified_on}</span></p>
-        ))}
-      </div>
-    )}
     {(during.length > 0 || closures.length > 0) && (
       <div class="trip-block trip-block--tile trip-closures">
         <h3 class="trip-h"><Icon name="calendar" size={16} /> Closed during your dates</h3>
@@ -163,16 +174,6 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
         </div>
       </div>
     )}
-    {(exports.gpx || exports.ics) && (
-      <div class="trip-block trip-block--tile trip-files">
-        <h3 class="trip-h">Take it with you</h3>
-        <div class="trip-dl-row">
-          {exports.gpx && <a class="trip-dl" href={`${base}/guides/${slug}.gpx`} download={`${slug}.gpx`}><Icon name="map" size={15} /> Map points <span class="trip-dl-ext">.gpx</span></a>}
-          {exports.ics && <a class="trip-dl" href={`${base}/guides/${slug}.ics`} download={`${slug}.ics`}><Icon name="calendar" size={15} /> Trip calendar <span class="trip-dl-ext">.ics</span></a>}
-        </div>
-        <p class="trip-dim">Files, not links — they keep working with no signal.</p>
-      </div>
-    )}
     </div>
     {days.length > 0 && (
       <button class="trip-goto" type="button" data-dest-go="itinerary">
@@ -184,25 +185,75 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
   </section>
 
 
-  {/* ═══ ACTIVE ═══ trip.js paints the cockpit here from #tripData against the destination clock. */}
+  {/* ═══ ACTIVE ═══ the cockpit, inside the frame (board 02): a left rail of standing
+      answers, the day's stops as photo rows in the centre, today's route and its measured
+      strip on the right. trip.js paints everything that depends on the destination clock. */}
   <section class="trip-phase trip-active" data-trip-phase="active" aria-label="Right now" hidden>
-    <div class="trip-now" data-trip-now aria-live="polite"></div>
-    {/* Today's route, spatially (§24 "Get there", lineage 02): the same located stops the Itinerary
-        draws, filtered to today by trip.js. Nothing here is a second itinerary — it is the map of
-        the day whose Now object stands beside it. */}
-    {todayMapPayload && (
-      <aside class="tn-map spatial" data-trip-map aria-label="Today on the map">
-        <div class="tn-map-head"><span class="tn-map-k" data-trip-map-title>Today on the map</span><button class="tn-map-open" type="button" data-open-map-day="0" data-trip-map-open>Open the Map →</button></div>
-        <div class="itin-map tn-map-mount" data-itin-map data-map-lens="today" data-map-day="0" data-map-primary={googlePrimary ? "google" : "osm"}>
-          <script type="application/json" is:inline data-map-data set:html={todayMapPayload} />
-          <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of today's stops"
-            {...{ [frameSrcAttr]: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}` }}></iframe>
-          <p class="map-loading" data-map-loading aria-live="polite">Loading the map…</p>
-          <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the stops and their Get-there links still work.</p>
+    <div class="tn-rail">
+      {/* Identity: the trip's name, its dates, and how far into it today is. */}
+      <div class="tn-card tn-ident">
+        <h2 class="tn-ident-title">{guide.title}</h2>
+        {dates && <p class="tn-ident-dates">{dates}</p>}
+        <div class="tn-prog" data-trip-prog hidden>
+          <p class="tn-prog-k" data-trip-prog-label></p>
+          <div class="tn-prog-track"><span class="tn-prog-fill" data-trip-prog-fill></span></div>
         </div>
-      </aside>
-    )}
-    {hasWeather && <div class="trip-block trip-weather trip-weather--active" data-wx-active></div>}
+      </div>
+
+      {/* Next stop — the second line of the hierarchy (§24), painted from today's focus. */}
+      <div class="tn-card tn-nextstop" data-trip-nextstop hidden></div>
+
+      {/* Weather now: today's row of the wired Open-Meteo forecast, nothing more. The board's
+          current temperature, precipitation chance and wind are not in the payload the guide
+          fetches, so they are not drawn. */}
+      {hasWeather && <div class="tn-card tn-wx" data-wx-active hidden></div>}
+
+      {/* Today's focus: the day's own title and one line. */}
+      <div class="tn-card tn-focus" data-trip-focus hidden></div>
+
+      {reservations.length > 0 && (
+        <div class="tn-card tn-resv">
+          <p class="tn-card-k">Booked &amp; dated</p>
+          <ul class="tn-resv-list">
+            {reservations.map((r) => (
+              <li class="tn-resv-row">
+                <span class="tn-resv-txt">{r.book && <span class="tools-flag">BOOK AHEAD</span>}<Fragment set:html={r.text} /></span>
+                <span class="tn-resv-meta">by {r.due}{r.sourceUrl && <> · <a href={r.sourceUrl} target="_blank" rel="noopener">source</a></>}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+
+    <div class="tn-main">
+      <div class="trip-now" data-trip-now aria-live="polite"></div>
+      {days.length > 0 && (
+        <button class="tn-full" type="button" data-dest-go="itinerary">
+          <Icon name="calendar" size={16} /> View full itinerary
+        </button>
+      )}
+    </div>
+
+    <div class="tn-aside">
+      {/* Today's route, spatially (§24 "Get there", board 02): the same located stops the
+          Itinerary draws, filtered to today by trip.js. Nothing here is a second itinerary. */}
+      {todayMapPayload && (
+        <aside class="tn-map spatial" data-trip-map aria-label="Today on the map">
+          <div class="tn-map-head"><span class="tn-map-k" data-trip-map-title>Today on the map</span><button class="tn-map-open" type="button" data-open-map-day="0" data-trip-map-open>Open the Map →</button></div>
+          <div class="itin-map tn-map-mount" data-itin-map data-map-lens="today" data-map-day="0" data-map-primary={googlePrimary ? "google" : "osm"}>
+            <script type="application/json" is:inline data-map-data set:html={todayMapPayload} />
+            <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of today's stops"
+              {...{ [frameSrcAttr]: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}` }}></iframe>
+            <p class="map-loading" data-map-loading aria-live="polite">Loading the map…</p>
+            <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the stops and their Get-there links still work.</p>
+          </div>
+        </aside>
+      )}
+      {/* Three measured cells — counted, summed and quoted from the day itself. The board's
+          step count and estimated active time are not wired, so the strip does not show them. */}
+      <dl class="tn-metrics" data-trip-metrics hidden></dl>
+    </div>
   </section>
 
   {/* ═══ POST-TRIP ═══ */}
@@ -235,16 +286,4 @@ const stopCount = days.reduce((n, d) => n + d.stops.length, 0);
     )}
   </section>
 
-  {/* Split is a contextual utility (design-system.md §27): reached from here at every phase,
-      never a permanent slot. The count is the ledger's own, painted by trip-split.js. */}
-  <button class="trip-goto trip-goto--split" type="button" data-dest-go="split">
-    <span class="trip-goto-label">Split</span>
-    <span class="trip-goto-title">Expenses, balances and settling up<span data-split-summary></span></span>
-    <span class="trip-goto-arrow" aria-hidden="true">→</span>
-  </button>
-
-  {/* ═══ LEARNINGS — every phase ═══ */}
-  <section class="trip-learnings" id="learnings" aria-label="Trip learnings">
-    <Learnings storeKey={storeKey} learnings={learnings} slug={slug} title={guide.title} />
-  </section>
 </div>

@@ -7,3 +7,4 @@ sheets are review evidence for creator visual acceptance (design-system.md §35)
 | Sheet | Board | PR |
 | --- | --- | --- |
 | `01-atlas.webp` | `01_atlas_experience` | frame strip + Atlas stage |
+| `02-trip.webp` | `02_trip_page` | Trip cockpit in the frame, the guide phone bar, the cream band |

@@ -1,0 +1,81 @@
+---
+/* Trip — the ivory band UNDER the frame (board 02, work order §3 "02 · Trip").
+
+   The frame holds what matters now; the cream page under it holds the trip's standing
+   references — the things that are true on every day of the trip and at every phase, so they
+   never compete with today's Now object for the fold:
+
+     Essentials   the guide's entry rules and the offline files it can hand you.
+     Split        the contextual expense region (§27), with the ledger's own live summary.
+     Learnings    the notebook, always present and deep-linkable (#learnings).
+
+   The board's Trip companions, Message group, Notes & documents, T-money and eSIM balances
+   are not wired anywhere in this product, so they are not drawn here (work order §0). */
+import Icon from "./Icon.astro";
+import Learnings from "./Learnings.astro";
+
+/** One home country's entry rule, as the guide's `entry` block carries it. */
+interface EntryRule {
+  homeCountry: string;
+  visa: string;
+  passportValidity?: string | null;
+  verified_on?: string | null;
+}
+interface Props {
+  base: string;
+  slug: string;
+  storeKey: string;
+  title: string;
+  entry: EntryRule[] | null;
+  exports: { gpx: boolean; ics: boolean };
+  /** The guide's post-trip record; Learnings.astro owns its shape. */
+  learnings: unknown;
+}
+const { base, slug, storeKey, title, entry, exports, learnings } = Astro.props;
+const hasEssentials = Boolean((entry && entry.length) || exports.gpx || exports.ics);
+---
+<div class="trip-below">
+  <div class="trip-below-row">
+    {hasEssentials && (
+      <section class="tb-card tb-essentials" aria-label="Essentials">
+        <p class="tb-kicker">Essentials</p>
+        {entry && entry.length > 0 && (
+          <ul class="tb-list">
+            {entry.map((e) => (
+              <li class="tb-row">
+                <span class="tb-row-ico" aria-hidden="true"><Icon name="shield" size={17} /></span>
+                <span class="tb-row-txt">
+                  <b class="tb-row-name">{e.homeCountry}</b>
+                  <span class="tb-row-sub">{e.visa}{e.passportValidity ? ` · passport ${e.passportValidity}` : ""}</span>
+                </span>
+                {e.verified_on && <span class="tb-row-meta">checked {e.verified_on}</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+        {(exports.gpx || exports.ics) && (
+          <div class="tb-files">
+            <p class="tb-sub">Files, not links — they keep working with no signal.</p>
+            <div class="trip-dl-row">
+              {exports.gpx && <a class="trip-dl" href={`${base}/guides/${slug}.gpx`} download={`${slug}.gpx`}><Icon name="map" size={15} /> Map points <span class="trip-dl-ext">.gpx</span></a>}
+              {exports.ics && <a class="trip-dl" href={`${base}/guides/${slug}.ics`} download={`${slug}.ics`}><Icon name="calendar" size={15} /> Trip calendar <span class="trip-dl-ext">.ics</span></a>}
+            </div>
+          </div>
+        )}
+      </section>
+    )}
+
+    {/* Split is a contextual utility (§27): a card here at every phase, never a permanent slot
+        on a phone bar — the count is the ledger's own, painted by trip-split.js. */}
+    <button class="tb-card tb-goto" type="button" data-dest-go="split">
+      <span class="tb-kicker">Split</span>
+      <span class="tb-goto-title">Expenses, balances and settling up</span>
+      <span class="tb-goto-sub"><span data-split-summary></span></span>
+      <span class="tb-goto-arrow" aria-hidden="true">→</span>
+    </button>
+  </div>
+
+  <section class="trip-learnings" id="learnings" aria-label="Trip learnings">
+    <Learnings storeKey={storeKey} learnings={learnings} slug={slug} title={title} />
+  </section>
+</div>

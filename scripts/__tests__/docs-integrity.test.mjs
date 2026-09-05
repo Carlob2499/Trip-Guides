@@ -17,7 +17,11 @@ function walk(dir, exts, out = []) {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     if (statSync(full).isDirectory()) {
-      if (entry === "node_modules" || entry === "dist" || entry === ".git") continue;
+      /* `.claude` holds nested WORKTREES — whole extra checkouts of this same repository. A
+         copy of this very file lives in each one, so walking them makes the repo fail its own
+         docs gate for the sole reason that a second checkout exists on the machine. They are
+         gitignored and never present on CI; nothing the gate is about lives in them. */
+      if (entry === "node_modules" || entry === "dist" || entry === ".git" || entry === ".claude") continue;
       walk(full, exts, out);
     } else if (exts.some((ext) => entry.endsWith(ext))) {
       out.push(full);

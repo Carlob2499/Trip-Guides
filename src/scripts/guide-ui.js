@@ -54,7 +54,13 @@ function _unlockScroll() { if (--_lockCount <= 0) { _lockCount = 0; document.bod
    The destination model never changes (D6-01): keys and order are the layout's. */
 var DEST_KEYS = ["trip", "itinerary", "map", "guide", "split"];
 var destPanels = {};
-DEST_KEYS.forEach(function (k) { var el = document.getElementById("dest-" + k); if (el) destPanels[k] = el; });
+/* A destination may own a second region on the cream page UNDER the frame (design-system.md
+   §6 "The frame"): the same switch shows it with the frame body it belongs to. */
+var destBelow = {};
+DEST_KEYS.forEach(function (k) {
+  var el = document.getElementById("dest-" + k); if (el) destPanels[k] = el;
+  var b = document.querySelector('[data-dest-below="' + k + '"]'); if (b) destBelow[k] = b;
+});
 var STORE_KEY = "tripguide-" + storeKey;
 var ROUTE_KEY = "tg-d7-dest-" + storeKey;
 var currentDest = null;
@@ -65,6 +71,7 @@ function showDest(key, opts) {
   var changed = currentDest !== key;
   currentDest = key;
   Object.keys(destPanels).forEach(function (k) { destPanels[k].hidden = k !== key; });
+  Object.keys(destBelow).forEach(function (k) { destBelow[k].hidden = k !== key; });
   // Map embeds load when their destination is first shown, never for a region the reader
   // has not opened (offline and data honesty: no hidden frames failing behind the page).
   destPanels[key].querySelectorAll("iframe[data-src]").forEach(function (f) { f.src = f.getAttribute("data-src"); f.removeAttribute("data-src"); });

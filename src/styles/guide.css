@@ -47,6 +47,13 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color var(--dur-i
 
 /* === CONTENT ================================================================= */
 .content{min-width:0;padding:0 0 3rem}
+/* Inside the frame (design-system.md §6 "The frame"): the workspace fills the stage — the
+   page's own reading measure belongs to the cream band under it, not to the frame's body. */
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media(min-width:900px){
+  .guide-stage>.content{padding:0 0 clamp(1rem,3vw,1.5rem)}
+  .guide-stage .trip{max-width:none}
+}
 /* M3: was its own bespoke clamp(1.5rem,4vw,2.2rem) — --text-h1 is that exact missing step,
    named in base.css so the type scale's "no undeclared roles" claim is true again. */
 /* R5 cartographic DNA: the group title's rule becomes a map NEATLINE — the classic

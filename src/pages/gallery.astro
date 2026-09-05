@@ -42,6 +42,7 @@ import TripSplit from "../components/TripSplit.astro";
 import AppChrome from "../components/AppChrome.astro";
 import UtilityBar from "../components/UtilityBar.astro";
 import TripDestination from "../components/TripDestination.astro";
+import TripBelow from "../components/TripBelow.astro";
 import ItineraryDestination from "../components/ItineraryDestination.astro";
 import MapDestination from "../components/MapDestination.astro";
 import GuideDestination from "../components/GuideDestination.astro";
@@ -345,9 +346,19 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
           <h3 class="gal-name">TripDestination <span class="gal-state">phases: pre · active · post (one shown by trip.js)</span></h3>
           <p class="gal-role">{componentRoles.TripDestination.role} — derived from {toolsGuide.id}.</p>
           <div class="gal-dest-host">
-            <TripDestination guide={toolsGuide.data} slug={toolsGuide.id} base={base} storeKey={galleryStoreKey} days={view.tripDays}
+            <TripDestination guide={toolsGuide.data} slug={toolsGuide.id} storeKey={galleryStoreKey} days={view.tripDays}
               readiness={view.readiness} recap={view.recap} holidays={view.holidayInfo} dates={view.plate.dates} cities={view.plate.cities}
-              exports={view.exports} hasWeather={false} entry={toolsGuide.data.entry ?? null} hero={view.hero} placeImages={view.placeImages} />
+              hasWeather={false} hero={view.hero} placeImages={view.placeImages}
+              tripStart={view.firstDayDate} tripEnd={view.lastDayDate} />
+          </div>
+        </article>
+
+        <article class="gal-card">
+          <h3 class="gal-name">TripBelow <span class="gal-state">the cream band under the frame</span></h3>
+          <p class="gal-role">{componentRoles.TripBelow.role} — derived from {toolsGuide.id}.</p>
+          <div class="gal-dest-host">
+            <TripBelow base={base} slug={toolsGuide.id} storeKey={galleryStoreKey} title={toolsGuide.data.title}
+              entry={toolsGuide.data.entry ?? null} exports={view.exports} learnings={toolsGuide.data.learnings ?? null} />
           </div>
         </article>
 

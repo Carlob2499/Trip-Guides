@@ -20,6 +20,15 @@
   .stage>.chrome{position:static;border-bottom:0}
 }
 
+/* ---- Under the frame: the cream band a destination may own (design-system.md §6). --------
+   The router shows one destination's band with its frame body (guide-ui.js). It is the PAGE
+   register, never `.spatial` — that is the whole point of being outside the frame. */
+.below{padding:1.4rem max(1.1rem,var(--safe-right)) 3rem max(1.1rem,var(--safe-left))}
+.below:not(:has(> .dest-below:not([hidden]))){display:none}
+.dest-below[hidden]{display:none}
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media(min-width:900px){.below{padding:1.6rem calc(22px + clamp(1rem,3vw,1.5rem)) 3.5rem}}
+
 /* ---- Top strip: opaque, sticky on its own, no glass. ------------------------------------- */
 .chrome{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:var(--rw) solid var(--rule)}
 .topbar{display:flex;align-items:center;gap:.6rem;min-height:56px;padding:calc(.3rem + var(--safe-top)) max(.9rem,var(--safe-right)) .3rem max(.9rem,var(--safe-left))}
