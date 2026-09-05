@@ -12,6 +12,11 @@ overrides; they do not overlap those files. Recheck before integration.
 
 ## Confirmed defects and repairs
 
+- A runtime limiter exception escaped the request handler before its provider
+  error boundary. The guard now returns a sanitized 503 response with CORS headers
+  and no provider call. A throwing-limiter regression failed before the repair;
+  all 73 Worker tests and focused ESLint pass afterward.
+
 - Runtime Google response parsing returned an unawaited `response.json()` inside
   a try/finally, clearing the abort timer as soon as headers arrived. Awaiting the
   body keeps the 12-second deadline in force for slow/stalled body downloads.

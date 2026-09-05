@@ -18,6 +18,19 @@ const request = () => new Request("https://worker.test/runtime", { headers: { "C
 const cors = { "Access-Control-Allow-Origin": "https://example.test" };
 
 describe("runtime worker boundary", () => {
+  it("returns a sanitized unavailable response when the cost guard throws", async () => {
+    const fetchPort = vi.fn();
+    const response = await handleRuntimeRequest("/runtime/routes", request(), {
+      ...env(), RUNTIME_LIMITER: { limit: vi.fn(async () => { throw new Error("internal limiter detail"); }) },
+    }, {
+      origin: { latitude: 40, longitude: -73 }, destination: { latitude: 40.01, longitude: -73.01 }, travelMode: "WALK",
+    }, cors, fetchPort);
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({ error: "runtime cost guard unavailable" });
+    expect(response.headers.get("Access-Control-Allow-Origin")).toBe(cors["Access-Control-Allow-Origin"]);
+    expect(fetchPort).not.toHaveBeenCalled();
+  });
+
   it("keeps the provider timeout active while reading the response body", async () => {
     vi.useFakeTimers();
     let signal;

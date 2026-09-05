@@ -42,7 +42,12 @@ async function rateGate(request, env) {
   const limiter = env.RUNTIME_LIMITER;
   if (!limiter || typeof limiter.limit !== "function") return { ok: false, status: 503, error: "runtime cost guard is not configured" };
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-  const result = await limiter.limit({ key: `runtime:${ip}` });
+  let result;
+  try {
+    result = await limiter.limit({ key: `runtime:${ip}` });
+  } catch {
+    return { ok: false, status: 503, error: "runtime cost guard unavailable" };
+  }
   if (!result?.success) return { ok: false, status: 429, error: "live-data request limit reached" };
   return { ok: true };
 }
