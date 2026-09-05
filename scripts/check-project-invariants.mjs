@@ -83,16 +83,18 @@ for (const rel of [
 if (!Array.isArray(tsconfig.exclude) || !tsconfig.exclude.includes("dist/**")) fail("Typecheck boundary: tsconfig.json must exclude generated dist/** artifacts");
 else pass("Typecheck boundary excludes generated dist artifacts");
 
-requirePath(".github/workflows/research-pass.yml", "Pipeline V1 workflow");
-requirePath(".github/workflows/research-pass-v2.yml", "Pipeline V2 workflow");
-requirePath("scripts/pipeline.mjs", "Pipeline V1 orchestrator");
-requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 orchestrator");
+requirePath(".github/workflows/research-pass.yml", "Pipeline V1 rollback workflow");
+requirePath(".github/workflows/research-pass-v2.yml", "Pipeline V2 selected workflow");
+requirePath("scripts/pipeline.mjs", "Pipeline V1 rollback orchestrator");
+requirePath("scripts/pipeline-v2.mjs", "Pipeline V2 selected orchestrator");
 requireText(".github/workflows/new-guide.yml", "if: vars.WAYPOINT_RESEARCH_ENGINE == 'v2'", "Explicit V2 selector gate");
-requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 fallback remains available");
+requireText(".github/workflows/new-guide.yml", "gh workflow run research-pass.yml", "V1 rollback remains available");
 requireText(".github/workflows/new-guide.yml", "model: claude-sonnet-5", "V2 product evidence model is pinned");
 requireText(".github/workflows/new-guide.yml", "effort: medium", "V2 product research effort is pinned");
 requireText(".github/workflows/new-guide.yml", "critic_model: claude-opus-5", "V2 product judgment model is pinned");
 requireText(".github/workflows/new-guide.yml", "critic_effort: medium", "V2 product judgment effort is pinned");
+requireText("AGENTS.md", "V2 is the selected product research engine", "Current V2-selected operating state");
+requireText("AGENTS.md", "V1 remains the rollback path", "Current V1 rollback boundary");
 
 // Release governance: mutation testing is diagnostic-only and `/new` must remain compatible with
 // protected main. Neither path may regain a direct-main push as an invisible convenience.
@@ -117,19 +119,30 @@ for (const required of ["required-gate", "freeze-policy", "Analyze (actions)", "
 requireText(".github/workflows/required-gate.yml", "git merge --no-commit --no-ff", "Required gate prospective-merge proof");
 requireText(".github/workflows/september-freeze.yml", "pr_number:", "Freeze policy automated-PR dispatch");
 
+// The reciprocal Claude↔Codex reviewer and the hourly September completion watcher were temporary
+// transition scaffolding. They are deliberately retired as of 2026-09-05: they must not silently
+// return and consume model quota or reintroduce stale Kumamoto/selector assumptions.
 for (const rel of [
   ".github/workflows/claude-codex-watcher.yml",
   ".github/workflows/claude-codex-signal.yml",
+  ".github/workflows/september-completion-watch.yml",
   "scripts/codex-watcher.mjs",
   "scripts/__tests__/codex-watcher.test.mjs",
   "scripts/__tests__/codex-watcher-workflow.test.mjs",
   "prompts/codex-work-order.md",
-]) requirePath(rel, `Reciprocal review control plane: ${rel}`);
-requireText(".github/workflows/claude-codex-signal.yml", "pull_request:", "Reciprocal review unprivileged signal");
-requireText(".github/workflows/claude-codex-watcher.yml", "validate:", "Reciprocal review read-only validate job");
-requireText(".github/workflows/claude-codex-watcher.yml", "contents: read", "Reciprocal review read-only permissions");
-requireText(".github/workflows/claude-codex-watcher.yml", "publish:", "Reciprocal review separate publish job");
-requireText(".github/workflows/claude-codex-watcher.yml", "contents: write", "Reciprocal review publish permissions");
+]) {
+  if (fs.existsSync(file(rel))) fail(`Retired transition scaffolding resurfaced: ${rel}`);
+  else pass(`Retired transition scaffolding stays absent: ${rel}`);
+}
+
+// LEARN synthesis remains a useful product utility, but it may invoke Claude and therefore must
+// be owner-triggered while the release-readiness program conserves Claude Pro usage for Kumamoto.
+requirePath(".github/workflows/feedback-export.yml", "Manual LEARN feedback workflow");
+const feedbackWorkflow = normalizeText(read(".github/workflows/feedback-export.yml"));
+if (!feedbackWorkflow.includes("workflow_dispatch:")) fail("Claude quota boundary: feedback export must remain manually dispatchable");
+else pass("Claude quota boundary: feedback export is manually dispatchable");
+if (/^\s*schedule:\s*$/m.test(feedbackWorkflow)) fail("Claude quota boundary: feedback export must not regain a schedule before explicit owner approval");
+else pass("Claude quota boundary: feedback export has no automatic schedule");
 
 requirePath("src/features/trip-split/index.ts", "Trip Split feature");
 requireText("src/features/trip-split/index.ts", "computeSplits", "Trip Split deterministic split engine");
