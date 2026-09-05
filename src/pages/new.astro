@@ -151,19 +151,29 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
   <body data-base={base}>
     <a class="skip-link" href="#intakeMain">Skip to the form</a>
     <Contours layers={contours} />
-    <UtilityBar base={base} page="New guide" />
 
-    <main class="intake" id="intakeMain">
+    {/* Surface 7 (board 07): the builder inside the frame every other surface wears — the strip
+        first, then the three columns the board draws. The rail and the preview are JS-rendered
+        projections of the checklist's own state (features/hub/ui/intake-deck.js), so there is no
+        second copy of "is this section done" and nothing in the preview is predicted. */}
+    <div class="stage spatial">
+      <UtilityBar base={base} page="New guide" />
+
+      <main class="intake" id="intakeMain">
       <header class="itk-hero">
         <p class="itk-eyebrow">New guide · preflight</p>
         <h1>Tell us the trip. Research does the rest.</h1>
         <p class="itk-dek">
           One question at a time. Every card says what your answer changes — and skipping one is a
-          real answer: the guide states the gap instead of inventing a value for it. Your answers
-          stay in view above the card you are on.
+          real answer: the guide states the gap instead of inventing a value for it.
         </p>
         <button class="itk-deck-again" id="itkDeckAgain" type="button" hidden>Go back through the cards</button>
       </header>
+
+      <div class="itk-build">
+        {/* Desktop only (CSS): the six sections as steps, marked with the checklist's own marks. */}
+        <nav class="itk-rail" id="itkRail" aria-label="Builder steps"></nav>
+        <div class="itk-build-main">
 
       {/* The sections ARE the no-JS base markup: with scripts off every field renders in an
           open section with its real label, and the plain submit button below still files the
@@ -254,7 +264,34 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
         <p class="ng-err" id="ngErr" hidden></p>
         <button type="submit" class="ng-submit" data-plain-submit>Send it to research →</button>
       </form>
-    </main>
+        </div>
+        {/* Your guide preview — only what has been ANSWERED, never a prediction of the guide. */}
+        <aside class="itk-prev itk-panel" id="itkPreview" aria-label="Your guide preview"></aside>
+      </div>
+      </main>
+    </div>
+
+    {/* The cream band under the frame: the running answer list the deck already keeps, and the
+        promises this product can actually make (board 07's "Build with confidence"). The board's
+        "Guide recommendations" cards are not drawn — nothing here can recommend a guide. */}
+    <div class="below">
+      <section class="dest-below itk-below-row" aria-label="Your answers, and what Waypoint promises">
+        <div class="itk-panel">
+          <p class="itk-eyebrow">Your answers</p>
+          <p class="itk-prev-empty" id="itkAnswersEmpty">Nothing yet. Each answer joins this list, and you can go back and change any of them.</p>
+          <div id="itkAnswers"></div>
+        </div>
+        <div class="itk-panel">
+          <p class="itk-eyebrow">Build with confidence</p>
+          <ul class="itk-promises">
+            <li><b>Every perishable fact is checked</b> against a primary source, and dated.</li>
+            <li><b>A blank stays blank.</b> Skipped questions become stated gaps, never invented values.</li>
+            <li><b>You can watch it run.</b> The progress page shows each stage as it happens.</li>
+            <li><b>Nothing is promised for time or cost</b> — neither is knowable before the research runs.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
 
     <footer class="itk-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a></footer>
 

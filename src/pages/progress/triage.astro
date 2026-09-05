@@ -92,9 +92,11 @@ const contours = [
 
     <Contours layers={contours} />
 
-    <UtilityBar base={base} toggleId="cpDark" page="Triage" />
+    {/* Surface 7 (board 07): triage is the run's other half, so it wears the same frame. */}
+    <div class="stage spatial">
+      <UtilityBar base={base} toggleId="cpDark" page="Triage" />
 
-    <main class="cp" id="cpTriageRoot">
+      <main class="cp" id="cpTriageRoot">
       {/* Both halves render here. Hiding the tab the reader is standing on would be a control
           arguing with the page it is on — /change/ hides it because a traveller has no business
           being offered it, and a traveller cannot be here. */}
@@ -135,7 +137,8 @@ const contours = [
           works without them, and nothing here is worth faking without them.
         </p>
       </noscript>
-    </main>
+      </main>
+    </div>
 
     <footer class="cp-foot">
       Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a>

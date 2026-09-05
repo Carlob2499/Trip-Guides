@@ -711,6 +711,25 @@ Rules:
 
 This interaction language may be reused for other multi-step decisions where appropriate.
 
+**Surface 7 (board `07_guide_builder`, Opus 5):** `/new/`, `/progress/` and `/progress/triage/`
+wear the frame — `.stage.spatial` with `UtilityBar` as its strip, the same shell every other
+surface uses. Inside the frame at ≥900px the builder is the board's three columns: the six
+intake sections as a **step rail** on the left, the question card in the centre, **Your guide
+preview** on the right. Under the frame, on cream: **Your answers** (the deck's own history
+stack, re-homed there) and **Build with confidence**. A phone gets the card alone — one question
+already fills that screen, and a rail beside it would be a second thing to read.
+
+Both new panels are **projections, not second sources**: the rail copies the very mark
+`intake-checklist.js` paints on each section (`.itk-mark`), and the preview reads the same
+controls the pipeline will, showing only what has been answered, in the traveler's own words.
+So neither can disagree with the checklist about what is done, and neither predicts anything.
+Not drawn: the board's "Guide recommendations" cards (nothing here can recommend a guide), the
+BETA tag, the avatar, the notification bells, the preview's photo and "What's included" list
+(the guide does not exist yet), and any duration or cost promise — U02: neither is knowable
+before the research runs, which is why "Build with confidence" promises verification, stated
+gaps and a watchable run instead. `/progress/` keeps its route-map skeleton, its stage stations
+and its honest-empty states exactly as they were; only the register changed.
+
 ---
 
 ## 24. Trip

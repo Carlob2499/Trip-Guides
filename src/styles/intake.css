@@ -9,7 +9,7 @@
 body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-width:100%}
 /* The survey ground is the shared <Contours/> component; these siblings sit above its
    fixed layer (the terrain holds still while the sheet scrolls over it). */
-.intake,.itk-foot{position:relative;z-index:1}
+.intake,.itk-foot,.below{position:relative;z-index:1}
 
 .intake{max-width:52rem;margin:0 auto;width:100%;padding:1.8rem 1.2rem 3rem;flex:1}
 .itk-eyebrow{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
@@ -151,6 +151,31 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-go:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .itk-go-note{margin:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.5;max-width:62ch}
 .itk-go-where{margin:0;font-family:var(--font-data);font-size:var(--text-label);letter-spacing:.03em;color:var(--muted)}
+
+/* ── The builder frame (board 07) ─────────────────────────────────────────────
+   Inside `.stage.spatial` the whole page is the frame's dark register, so nothing below sets a
+   colour of its own beyond the tokens. A phone gets the deck alone — one question is already
+   the whole screen there, and a step rail beside it would be a second thing to read. The rail's
+   numbers reuse `.itk-mark`, so a step's done/skipped state IS the checklist's own mark. */
+.itk-panel{border:1px solid var(--rule);border-radius:var(--r-card);background:var(--card);padding:1rem 1.1rem}
+.itk-panel dt{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-top:.6rem}
+.itk-panel dd{margin:.1rem 0 0;font-weight:600;overflow-wrap:anywhere}
+.itk-prev-empty{margin:.5rem 0 0;color:var(--muted);font-size:var(--text-small);line-height:1.5}
+.itk-promises{margin:.5rem 0 0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.45rem;font-size:var(--text-small);line-height:1.5;color:var(--muted)}
+.itk-promises b{color:var(--ink)}
+.itk-rail,.itk-prev{display:none}
+.itk-rail-step{display:flex;align-items:center;gap:.6rem;width:100%;min-height:44px;padding:.3rem .5rem;border:0;border-radius:var(--r-inset);background:transparent;color:var(--ink);font:inherit;font-size:var(--text-control);text-align:left;cursor:pointer}
+.itk-rail-step:hover{background:var(--bg2)}
+.itk-rail-step[aria-current]{background:var(--card);font-weight:700}
+.itk-rail-step:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
+.itk-below-row{display:grid;gap:1rem}
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media(min-width:900px){
+  .stage .intake{max-width:none;padding-bottom:1.6rem}
+  .itk-build{display:grid;grid-template-columns:13rem minmax(0,1fr) 15rem;gap:1.2rem;align-items:start}
+  .itk-rail,.itk-prev{display:block;position:sticky;top:1.2rem}
+  .itk-below-row{grid-template-columns:1fr 1fr}
+}
 
 /* ── The question deck (design-system.md §23) ─────────────────────────────────
    One card in front, the answered ones as a quiet history stack above it. In deck mode every
