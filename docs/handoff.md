@@ -1,50 +1,67 @@
 # HANDOFF — current operational state
 
-> Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. Keep this file to current truth and the immediate next action.
+> Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. Historical evidence stays historical; this file records only current truth and the immediate next path.
 
 <!-- WARM_START_BEGIN -->
 WAYPOINT / Trip-Guides — CURRENT STATE (2026-09-05)
-Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams are proven. The four research-test drafts (luxembourg, malta, portugal, uruguay) and their guides-intake state left main on 2026-09-05 at the owner's direction; their evidence stays in docs/pipeline v2 and Git history. Curated guides: korea, denmark. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
-Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve it.
-Kumamoto r1/r2/r3 are stale historical preflight evidence; no model run started and none has dispatch authority. Rebuild/replay from settled current main after the routing + prose revision lands.
-Fresh V2: Pass A/B = Sonnet 5 Medium; Reconcile/Critic = Opus 5 Medium. Reconcile owns fact-locked traveler-facing synthesis; Critic audits/repairs it. No fifth editorial model stage.
-#130 PARTIAL: main has PR + no-FF protection/no bypass; required checks, fresh integration, deletion block and live proof remain.
-NEXT: exact-head preflight + fresh drift audit on rebuilt Kumamoto, then one bounded model-backed acceptance. No cap/artifact/selector/publication/V1-retirement changes. V1 remains default; `WAYPOINT_RESEARCH_ENGINE` unset.
+V2 is the selected product research engine through `WAYPOINT_RESEARCH_ENGINE=v2`; V1 remains the rollback/compatibility path. Final V2 release-readiness ratification is still pending.
+Uruguay Canary #4 is GREEN draft-product/reliability proof; R03 escalation and cancellation failure-only seams are closed/proven. R03 is fully accepted. Fukuoka `fukuoka-20260829-7cb4fa` remains terminal FAIL evidence and must not be continued.
+Kumamoto r1/r2/r3 are stale historical preflight evidence only. The next Kumamoto must be rebuilt/replayed from settled current `main`, exact-head proven, freshly drift-audited, then explicitly owner-authorized before any Claude/model burn. It ratifies the already-selected V2 path; it does not first enable V2.
+D7's ten-surface transplant and product frame are on `main`; creator-directed fidelity corrections are currently being handled separately and creator visual acceptance remains pending. Do not start D8 or overwrite active design work.
+PR #210 provider-neutral runtime integrations are on `main` (runtime routes/matrix, reviewed Places state, severe weather, AQI/UV, geolocation hooks, freshness/offline semantics). Deterministic product-completeness/runtime hardening remains part of September closure.
+#130 PARTIAL: `main` has PR + no-fast-forward protection/no broad bypass; final required checks, fresh-integration enforcement, deletion protection, and protected-landing proof under the final ruleset remain.
+The reciprocal Claude↔Codex reviewer is retired. The September completion watcher is retired. LEARN feedback synthesis is manual-only so Claude Pro usage is conserved for Kumamoto.
+NEXT: finish continuity + creator-directed D7 fidelity/acceptance + deterministic closure + #130; settle `main`; then one fresh Kumamoto release-readiness ratification. Preserve Sep 20 feature freeze, Sep 27 code freeze, Sep 30 engineering-complete target.
 <!-- WARM_START_END -->
+
+## Current product/release boundaries
+
+- `/new` selects V2 when the repository selector is `v2`; the owner has selected that state.
+- Manual V2 dispatch remains PR/draft authority and cannot become product publication authority by itself.
+- V1 remains available as rollback; retirement is a separate bounded decision after fresh V2 ratification, not part of continuity cleanup.
+- Never use research/critic models to debug deterministic code, probe availability, or compensate for a failing gate.
+- No stale acceptance candidate may be dispatched after acceptance-sensitive `main` changes.
+- Attempt caps, evidence integrity, publication authority, and exact-head landing semantics are not negotiable to obtain a green result.
+
+## September closure path
+
+1. **Continuity/current-state reconciliation** — retire obsolete transition automation and make docs/tests/workflows agree with current V2-selected reality.
+2. **D7 fidelity + creator acceptance** — active creator-directed visual corrections are separate; after they land, rebase concurrent work and run exact-head visual/resilience gates. Final accepted baselines only after creator approval.
+3. **Deterministic product hardening** — current P0 review includes the Guide Completeness contract, runtime travel-mode fidelity, honest >8-stop matrix behavior, and moving performance-budget enforcement into the premerge authority where appropriate.
+4. **Release governance #130** — require the concrete checks, fresh integration/up-to-date proof, deletion protection, no broad bypass, and re-prove protected landing under the final rules.
+5. **Fresh Kumamoto** — rebuild from settled current `main`; deterministic preflight + fresh drift audit; one bounded model-backed release-readiness ratification only after explicit owner authorization.
+6. **Field/adversarial closeout** — phone/intermediate/desktop, light/dark, long/CJK text, 200% text, reduced motion, image/map/provider failures, offline/poor network, geolocation denial, runtime staleness, group/mobility constraints, Split/SOS/Learnings.
+
+Feature freeze: **2026-09-20**. Code freeze: **2026-09-27**. Engineering-complete target: **2026-09-30**.
+
+## Stabilization evidence preserved
+
+- S01 adversarial invalid-state testing: DONE from fail-closed regression coverage + PR #111.
+- S05 blocked/bad-source behavior: DONE; search previews cannot masquerade as reads, blocked origins remain honestly typed, and evidence requirements stay strict.
+- S06 historical regression suite: DONE on PR #111, including Tottori/Portugal/Luxembourg/Yamagata scars.
+- S02 mobile critical path: DONE by PR #114 browser proof across `/new`, `/progress`, and a finished guide.
+- S03 offline/poor-network traveler path: DONE by PR #114 plus durable sync/replay coverage.
+- S04 automated accessibility: PASS; physical-device interaction remains a final traveler/UI check.
+- R03 escalation/cancellation seams: DONE / accepted through targeted live proof.
+- Uruguay Canary #4: accepted GREEN draft/reliability evidence, not final release-readiness proof.
+- Fukuoka: terminal failed release-readiness evidence; frozen.
+- Historical Kumamoto r1/r2/r3: preflight evidence only; stale for dispatch.
 
 ## Shared-add contract
 
-- `collection.add` (used by Trip Split and reminder additions) and `addAsync` (Learnings feedback) use the local durable outbox.
+- `collection.add` (Trip Split/reminder additions) and `addAsync` (Learnings feedback) use the local durable outbox.
 - Server acknowledgment removes the active outbox entry and resolves `addAsync`.
-- Offline or transient failures remain in the active durable retry outbox; `addAsync` may remain pending.
-- Confirmed permanent rejection normally preserves the full payload in a separate durable rejected/dead-letter bucket, removes it from active capacity and replay, and rejects `addAsync` with the original or classified error.
-- If rejected-bucket storage fails while active storage remains writable, the ordinary stable-path payload stays inside `tg-outbox` and reserved system metadata in the same atomic write marks it terminal, excluded from replay and the active 50-entry capacity.
-- If neither terminal representation can be persisted, the full original active payload remains and the caller receives an explicit `WaypointSyncDurabilityError`; retry suppression is then physically unprovable.
+- Offline/transient failures remain in the durable retry outbox.
+- Confirmed permanent rejection preserves the payload in a rejected/dead-letter representation when possible, removes it from active replay/capacity, and rejects `addAsync` with the classified error.
+- If terminal-state persistence cannot be proven, the full original active payload remains and the caller receives explicit durability failure; retry suppression must never be fabricated.
 - Rejected records do not retry on every room join. No traveler-facing dead-letter management UI is included.
 - This contract applies only to collection additions, not `set`, `update`, or `remove`.
 
-## Stabilization status
+## Model/resource policy
 
-- S01 adversarial invalid-state testing: DONE from existing fail-closed regression coverage + PR #111 full Tests/coverage pass.
-- S05 blocked/bad-source behavior: DONE; search previews cannot masquerade as reads, mirrors/proxies are refused, blocked origins stay honestly typed, and R3+ transport requires fetched evidence.
-- S06 historical regression suite: DONE on PR #111 exact code head, including Tottori/Portugal/Luxembourg/Yamagata scars.
-- S02 mobile critical path: DONE by PR #114 browser proof across /new, /progress, and a finished guide.
-- S03 offline/poor-network traveler path: DONE by PR #114's fresh-page offline service-worker read plus the existing durable sync/replay suite.
-- S04 accessibility: automated portion PASS after PR #114 exposed and repaired progress status contrast and undersized controls; one physical-device interaction spot check remains as a traveler/UI check, not as retroactive authority for the already-run Fukuoka acceptance canary.
-- R03 is fully accepted: targeted escalation and cancellation failure-only seams are closed/proven; Uruguay Canary #4 remains GREEN draft-only evidence, not production-cutover authority.
-- Release-governance repository prerequisites are complete through #150. `main` now has active partial protection through `Main Protection`: PRs are required, non-fast-forward updates are blocked, and there are no bypass actors. Issue #130 remains open because the four required checks, up-to-date/merge-queue-equivalent integration enforcement, deletion protection, and zero-model protected-main live proof are not yet proven. PR #171 remains temporary observation/dispatch glue only and cannot configure the missing rules.
-- The failed Fukuoka evidence remains frozen. Post-Fukuoka remediation is merged. Kumamoto r2 remains stale historical evidence after PR #149. Rebuilt r3 `acceptance/v2-kumamoto-20260902-r3` at `56e513000792bc71bf4e18c0a0909724fe5cebac` is also stale for dispatch: current `main` is 20 commits beyond its accepted base and includes acceptance-sensitive V2 workflow/state/retry/landing/required-gate changes. A fresh rebuilt/replayed exact candidate is required before any new model-backed acceptance.
-- September engineering completion now includes frontend: U01/U02 target Sep 19, U03 Sep 26, and final engineering handoff Sep 30. PR #115 remains historical/deferred implementation evidence, not a branch to merge wholesale onto current main.
-- U01/U02 are DONE through PR #160. U03 deterministic engineering is DONE / YELLOW: PR #162 aligned the phone bottom-nav DOM/focus order with its visual order and exact-head Required Gate `33352620168` passed invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience. PR #164 closed the deterministic frontend authority; the physical-device spot check remains honestly pending and may reopen U03 only if it reproduces a real defect.
+Fresh V2 role routing remains:
+- Pass A/B: Claude Sonnet 5, Medium.
+- Reconcile/Critic: Claude Opus 5, Medium.
+- Reconcile owns fact-locked traveler-facing synthesis; Critic audits/repairs it; no fifth editorial model stage.
 
-## Pipeline status preserved
-
-- Uruguay Canary #4 remains a GREEN draft product-path proof; it does not authorize production cutover.
-- PRs #106, #107, #109, and #111 are merged. The bounded deterministic repair program is closed.
-- Yamagata Run-B remains durable evidence at 11/11 attempts and is frozen; do not grant another retry or repeat the historical validation campaign.
-- Attempt 6 corrected the prior five critic enum findings but cannot serve as repair-to-green proof because the run resumed with stale control-plane code; PR #111 deterministically repairs that version-skew seam.
-- V1 remains the production default/rollback while `WAYPOINT_RESEARCH_ENGINE` is unset.
-- Final Fukuoka acceptance `fukuoka-20260829-7cb4fa` FAILED at reconcile on an unfetched official-source claim. Durable state is 5/5 quality attempts, 1/1 auto-retries, critic queued/0 attempts, publication false, landing pending.
-- V2 production cutover remains pending and unauthorized. The failed Fukuoka branch is evidence, not content to repair-and-merge.
-- Kumamoto r2 and r3 remain preserved historical preflight evidence only. r3's accepted base is `57e320535d1cb6e861a5001f8c26cc718dcfd93d`; current `main` has acceptance-sensitive drift, so neither stale candidate may be dispatched. Build/replay a fresh exact candidate from settled current main, prove that exact head, then re-audit drift before dispatch.
-- The reciprocal Claude↔Codex reviewer automation remains active with the revision-4 trust boundary.
+Those models are reserved for the authorized V2 research lifecycle. The retired reciprocal reviewer and retired September watcher must not return. Scheduled LEARN synthesis is disabled; manual LEARN export remains available when the owner intentionally chooses to spend that model usage.
