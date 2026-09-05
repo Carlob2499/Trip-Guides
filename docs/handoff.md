@@ -3,8 +3,8 @@
 > Compact warm start for the next engineering session. Durable architecture belongs in `docs/reference/`; Pipeline V2 decisions/evidence belong in `docs/pipeline v2/`. Keep this file to current truth and the immediate next action.
 
 <!-- WARM_START_BEGIN -->
-WAYPOINT / Trip-Guides — CURRENT STATE (2026-09-01)
-Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams are proven. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
+WAYPOINT / Trip-Guides — CURRENT STATE (2026-09-05)
+Uruguay Canary #4 is GREEN draft-only proof; R03 escalation/cancellation seams are proven. The four research-test drafts (luxembourg, malta, portugal, uruguay) and their guides-intake state left main on 2026-09-05 at the owner's direction; their evidence stays in docs/pipeline v2 and Git history. Curated guides: korea, denmark. Reciprocal Claude↔Codex reviewer automation remains active under the revision-4 trust boundary. See `CONTEXT.md` for history.
 Fukuoka `fukuoka-20260829-7cb4fa` is terminal FAIL (5/5, 1/1 auto-retry); preserve it.
 Kumamoto r1/r2/r3 are stale historical preflight evidence; no model run started and none has dispatch authority. Rebuild/replay from settled current main after the routing + prose revision lands.
 Fresh V2: Pass A/B = Sonnet 5 Medium; Reconcile/Critic = Opus 5 Medium. Reconcile owns fact-locked traveler-facing synthesis; Critic audits/repairs it. No fifth editorial model stage.

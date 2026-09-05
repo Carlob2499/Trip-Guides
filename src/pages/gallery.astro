@@ -127,15 +127,26 @@ const TYPE_TO_BLOCK: Record<string, string> = {
   venues: "VenueBlock", divergences: "DivergencesBlock",
 };
 type Specimen = { type: string; block: string; slug: string; sec: Sec; guide: GuideData; secTitle: string };
+/* The CLOSED list of block types no curated guide carries yet (pinned by src/gallery.test.ts).
+   Both are Pipeline V2 outputs — a weather section and a divergences record — that the four
+   research drafts used to supply until they left main on 2026-09-05. The gallery says so in the
+   open rather than inventing a specimen; any other type without a real section still fails the
+   build. The first V2 guide to land removes its type from this list. */
+const AWAITING_SPECIMEN = ["weather", "divergences"] as const;
 const blockSpecimens: Specimen[] = [];
+const awaiting: { type: string; block: string }[] = [];
 for (const [type, block] of Object.entries(TYPE_TO_BLOCK)) {
   let found: Specimen | null = null;
   for (const g of guides) {
     const sec = flatSections((g.data.sections ?? []) as Sec[]).find((s) => s.type === type);
     if (sec) { found = { type, block, slug: g.id, sec, guide: g.data, secTitle: sec.title ?? sec.name ?? type }; break; }
   }
-  if (!found) throw new Error(`gallery: no guide has a real "${type}" section for ${block} — add a specimen source`);
-  blockSpecimens.push(found);
+  if (found) { blockSpecimens.push(found); continue; }
+  if ((AWAITING_SPECIMEN as readonly string[]).includes(type)) { awaiting.push({ type, block }); continue; }
+  throw new Error(`gallery: no guide has a real "${type}" section for ${block} — add a specimen source`);
+}
+for (const type of AWAITING_SPECIMEN) {
+  if (blockSpecimens.some((sp) => sp.type === type)) throw new Error(`gallery: "${type}" now has a real specimen — remove it from AWAITING_SPECIMEN`);
 }
 const registryBlocks = Object.keys(registry.blocks);
 const mappedBlocks = Object.values(TYPE_TO_BLOCK);
@@ -397,6 +408,12 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
                 country={sp.guide.country}
               />
             </div>
+          </article>
+        ))}
+        {awaiting.map((a) => (
+          <article class="gal-card gal-card-block">
+            <h3 class="gal-name">{a.block} <span class="gal-state">awaiting a curated specimen</span></h3>
+            <p class="gal-role">No curated guide carries a “{a.type}” section yet. The block renders the first Pipeline V2 guide that does; nothing is invented here to stand in for it.</p>
           </article>
         ))}
       </section>
