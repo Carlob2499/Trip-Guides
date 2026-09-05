@@ -95,7 +95,6 @@
 .sos-call-hint{font-family:var(--font-data);font-size:var(--text-control);color:var(--on-crit);opacity:.9;overflow-wrap:anywhere}
 /* Second layer: verified help, quieter and clearly beneath. */
 .sos-more{display:flex;flex-direction:column;border-top:1px solid var(--dark-rule)}
-.sos-more-k{margin:.8rem 0 .1rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--dark-ink-3)}
 .sos-row{display:flex;align-items:center;gap:1rem;min-height:64px;padding:.6rem .2rem;border-top:1px solid var(--dark-rule);text-decoration:none;color:var(--dark-ink)}
 .sos-row:first-of-type{border-top:0}
 .sos-row:focus-visible{outline:2px solid var(--dark-ink);outline-offset:2px}
@@ -176,22 +175,10 @@
 .addr-card-copy{padding:.65rem 1.2rem;background:var(--ink);color:var(--bg);border:none;border-radius:999px;font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
 .addr-card-x{padding:.65rem 1.2rem;background:transparent;color:var(--muted);border:1px solid var(--rule);border-radius:999px;font-size:var(--text-control);cursor:pointer}
 
-/* ── Focus Today overlay ──────────────────────────────────────────────────── */
-.focus-today{position:fixed;inset:0;z-index:310;display:none;flex-direction:column;background:var(--bg);padding:max(1rem,var(--safe-top)) 1.1rem max(1.2rem,var(--safe-bottom));overflow-y:auto}
-.focus-today.focus-on{display:flex}
-.focus-head{position:relative;padding:0 3rem .8rem 0;border-bottom:2px solid var(--accent)}
-.focus-date{margin:0;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
-.focus-title{margin:.2rem 0 0;font-family:var(--font-display);font-weight:640;font-size:clamp(1.5rem,6vw,2.2rem);line-height:1.08;letter-spacing:-.012em}
-.focus-x{position:absolute;right:0;top:0;width:42px;height:42px;background:var(--card);border:1px solid var(--rule);border-radius:999px;color:var(--ink);cursor:pointer}
-.focus-stops{list-style:none;margin:1rem 0;padding:0;display:flex;flex-direction:column;gap:.55rem;flex:1}
-.focus-stop{display:grid;grid-template-columns:5.2rem 1fr;gap:.15rem .8rem;padding:.85rem .9rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);cursor:pointer}
-.focus-time{grid-row:span 2;align-self:center;font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums}
-.focus-name{font-family:var(--font-display);font-weight:680;font-size:var(--text-lead);line-height:1.25}
-.focus-note{font-size:var(--text-small);color:var(--muted);line-height:1.45}
-.focus-done{opacity:.45}
-.focus-done .focus-name{text-decoration:line-through}
-.focus-stop:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
-.focus-full{margin-top:.4rem;padding:.8rem 1.1rem;background:transparent;color:var(--ink);border:1px dashed var(--rule2);border-radius:var(--r-pane);font-family:var(--font-display);font-weight:640;font-size:var(--text-body);cursor:pointer}
+/* The Focus Today overlay (and its TL;DR/Plan-B/sun lines) retired with the D7 destinations:
+   the Trip cockpit's Now/Next atoms answer "what am I doing right now" on the page itself, so
+   a separate full-screen today view had nothing left to show. Its rules are deleted rather
+   than parked (§33 — no hidden legacy variants). */
 
 /* ── Share-modal install note ─────────────────────────────────────────────── */
 .share-install{margin:.9rem 0 0;padding:.6rem .8rem;background:color-mix(in srgb,var(--accent) 8%,var(--card));border:1px solid var(--rule);border-radius:var(--r-pane);font-size:var(--text-control);line-height:1.55;color:var(--ink)}
@@ -199,22 +186,6 @@
 /* ── Driver card English subtitle ─────────────────────────────────────────── */
 .addr-card-en{margin:.55rem 0 0;font-size:var(--text-body);color:var(--muted);line-height:1.45}
 .addr-card-en:empty{display:none}
-
-/* ── Focus Today TL;DR ────────────────────────────────────────────────────── */
-.focus-tldr{margin:.45rem 0 0;font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);line-height:1.4;color:var(--accent-ink)}
-/* Plan B clone (guide.css .day-planb carries the base look) — bump the body type for the
-   held-at-arm's-length street reading this whole view is designed around. */
-.focus-planb{margin-top:.7rem;font-size:var(--text-body)}
-.focus-sun{margin:.5rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
-
-
-/* ── Section position ("3/13") ───────────────────────────────────────────── */
-/* No visual styling left to give: since the bottom bar became a five-slot tab bar
-   (2026-07-30) this element carries `.mn-sr` and lives inside the Groups button purely
-   as part of its accessible name — the visible copy is `#sheetPos` in the sheet head
-   (mobile-nav.css). The old contrast fix here (blending --accent toward --bg against
-   the inverted .botSections button) died with that button; a rule styling clipped text
-   would only be a trap for the next reader. */
 
 @media(prefers-reduced-motion:reduce){.day-kitcount.done{animation:none}}
 /* Geometry (§31): the phone SOS sheet is edge to edge; the desktop dialog is a pane. */
