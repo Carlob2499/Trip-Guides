@@ -16,7 +16,10 @@ overrides; they do not overlap those files. Recheck before integration.
   V2 selector before reading the revocation of its historical r3 candidate.
   Revocation now exits with `eligible=false` before selector validation or fetching
   the candidate. Authorized candidates still encounter all existing safeguards.
-  Nine focused watcher tests pass, including an ordering regression test.
+  Eleven focused watcher tests pass, including execution of the workflow's actual
+  Bash firewall with revoked and authorized authority. With ENGINE=v2, revoked
+  authority exits successfully with eligible=false; authorized authority fails
+  selector validation. Both cases prove no Git/GitHub invocation is reached.
 - npm audit reported six affected packages through two development dependencies.
   Existing overrides pinned vulnerable `fast-uri` 3.1.5 and allowed `qs` 6.15.3.
   Updating them to 3.1.6 and ^6.16.0 changes only those two lockfile entries.
@@ -24,6 +27,20 @@ overrides; they do not overlap those files. Recheck before integration.
   evidence, not a claim that the application has no security defects.
 
 ## Verification and outstanding work
+
+Review: https://github.com/Carlob2499/Trip-Guides/pull/211 (draft).
+Required gate run `33995727347` is pending; it includes coverage, accessibility,
+resilience, offline sync, and gallery comparisons for this branch.
+
+Live ruleset `21993991` was inspected: active on main, no bypass actors, with
+only `non_fast_forward` and `pull_request` rules. Required status checks,
+up-to-date integration enforcement, and deletion protection are absent. This
+confirms the remaining governance gap in issue #130; passing CI does not mean
+GitHub requires it before merge.
+
+Claude's preview occupies port 4322. Do not reuse it as evidence for this branch.
+Additional uncommitted Claude files observed: `src/styles/map.css` and
+`tests/visual/map-geometry.spec.ts`.
 
 The 102 protected invariant checks pass. `check:fast` passes: typecheck reports no
 errors, and 208 test files pass (3,165 tests passed; one TODO). The initial lint run

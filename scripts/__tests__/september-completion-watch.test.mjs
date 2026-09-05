@@ -1,6 +1,9 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 
 const WORKFLOW = fileURLToPath(new URL("../../.github/workflows/september-completion-watch.yml", import.meta.url));
 const yml = readFileSync(WORKFLOW, "utf8").replace(/\r\n?/g, "\n");
@@ -58,6 +61,39 @@ describe("September completion watch — bounded September operator contract", (
     expect(revoked).toBeGreaterThanOrEqual(0);
     expect(revoked).toBeLessThan(job.indexOf('if [[ -n "$ENGINE" ]]'));
     expect(revoked).toBeLessThan(job.indexOf('git fetch --no-tags origin main "$CANDIDATE_REF"'));
+  });
+
+  it.each([false, true])("executes the selector firewall with authorized=%s", (authorized) => {
+    const job = jobBlock("kumamoto-acceptance");
+    const start = job.indexOf("          set -euo pipefail");
+    const end = job.indexOf("      - name: Do not overlap", start);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    const script = job.slice(start, end).replace(/^ {10}/gm, "");
+    // Stub authority reads and external side effects, but execute the real workflow block.
+    const setup = `grep() { return ${authorized ? 0 : 1}; }
+git() { echo UNEXPECTED_GIT; return 77; }
+gh() { echo UNEXPECTED_GH; return 77; }
+`;
+    const fixture = mkdtempSync(join(tmpdir(), "wp-watch-"));
+    const output = join(fixture, "output");
+    const bash = process.platform === "win32" ? "C:/Program Files/Git/bin/bash.exe" : "bash";
+    try {
+    const result = spawnSync(bash, ["--noprofile", "--norc"], {
+      input: setup + script,
+      encoding: "utf8",
+      timeout: 5000,
+      env: { ...process.env, GITHUB_OUTPUT: output.replace(/\\/g, "/"), ENGINE: "v2", NOT_BEFORE: "2000-01-01",
+        CANDIDATE_REF: "historical-test", CANDIDATE_SHA: "historical-test" },
+    });
+    expect(result.error).toBeUndefined();
+    expect(result.stdout).not.toMatch(/UNEXPECTED_GIT|UNEXPECTED_GH/);
+    expect(result.status, result.stderr).toBe(authorized ? 1 : 0);
+    if (authorized) expect(result.stdout).toContain("frozen acceptance requires it to remain unset");
+    else expect(readFileSync(output, "utf8")).toContain("eligible=false");
+    } finally {
+      rmSync(fixture, { recursive: true, force: true });
+    }
   });
 
   it("resumes automatically only for a durably recorded usage-limit", () => {
