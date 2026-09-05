@@ -85,6 +85,13 @@ for (const theme of THEMES) {
       await page.selectOption("#galTheme", theme);
       if (mode === "dark") await page.click("#galDark");
       await page.waitForTimeout(250);
+      /* Capture from a viewport TALLER than every viewport-relative pane's cap. Above ~2000px
+         this design system's heights are all at their px maxima, so the page measures the same
+         whatever the capture does to the viewport — the layout the shot is taken of is the
+         layout that was measured. (Below that, growing the viewport grows the page, which is
+         how a full-page capture ends up disagreeing with itself.) */
+      await page.setViewportSize({ width: 1280, height: 2000 });
+      await page.waitForTimeout(250);
       await settleHeight(page);
       await squarePage(page);
       await expect(page).toHaveScreenshot(`gallery-${theme}-${mode}.png`, {

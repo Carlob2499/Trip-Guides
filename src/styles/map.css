@@ -66,10 +66,13 @@
 /* === THE MAP DESTINATION ====================================================
    design-system.md §9. The map owns nearly the viewport on a phone with a contextual bottom
    sheet; a large map with an inspector column beside it on desktop. Same DOM. */
-.mapdest{position:relative;background:var(--bg);min-height:calc(100dvh - var(--hdr-h))}
+/* At least a screenful, up to a screenful — an unbounded viewport-relative height makes
+   the surface stretch into empty pane on a very tall display, and makes a full-page capture
+   grow the page it is capturing (tests/visual/gallery-baselines.spec.ts). */
+.mapdest{position:relative;background:var(--bg);min-height:min(calc(100dvh - var(--hdr-h)),900px)}
 .mapdest-none{display:flex;gap:.5rem;align-items:flex-start;padding:1.2rem max(1.1rem,var(--safe-right));color:var(--muted)}
 .mapdest-bench{position:relative}
-.mapdest-map{height:calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom));min-height:360px;margin:0;border:0;border-bottom:1px solid var(--rule2)}
+.mapdest-map{height:min(calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom)),820px);min-height:360px;margin:0;border:0;border-bottom:1px solid var(--rule2)}
 .gmap-host{position:absolute;inset:0}
 /* Degraded state (§14): a written line on the map, never a blank rectangle pretending. */
 .map-degraded{position:absolute;left:.5rem;right:.5rem;bottom:.5rem;margin:0;padding:.5rem .8rem;background:var(--card);border:1px solid var(--rule2);font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
@@ -137,8 +140,12 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
      hides behind a second scrollbar. The selected atom sticks under the chrome so a pin picked
      from deep in the list still lands in view. */
   /* Two classes on purpose: the bundler may emit .itin-map{position:relative} after this block. */
-  .mapdest-bench .mapdest-map{position:sticky;top:calc(var(--hdr-h) + .9rem);height:calc(100dvh - var(--hdr-h) - 1.9rem);min-height:480px;border:1px solid var(--rule2);border-right:0}
-  .mapdest-sheet{position:static;max-height:none;height:auto;min-height:calc(100dvh - var(--hdr-h) - 1.9rem);border:1px solid var(--rule2);background:var(--card);transition:none;touch-action:auto}
+  /* The pane fills the screen up to a point: past ~760px a taller map shows more empty ground
+     rather than more places. The cap is also what makes this height BOUNDED, and a bounded
+     viewport-relative height is what keeps a full-page capture from growing the page it is
+     capturing (tests/visual/gallery-baselines.spec.ts). */
+  .mapdest-bench .mapdest-map{position:sticky;top:calc(var(--hdr-h) + .9rem);height:min(calc(100dvh - var(--hdr-h) - 1.9rem),760px);min-height:480px;border:1px solid var(--rule2);border-right:0}
+  .mapdest-sheet{position:static;max-height:none;height:auto;min-height:min(calc(100dvh - var(--hdr-h) - 1.9rem),760px);border:1px solid var(--rule2);background:var(--card);transition:none;touch-action:auto}
   body:not([data-dest="map"]) .mapdest-sheet{display:flex}
   .mapdest-sheet-grip,.mapdest-peek{display:none}
   .mapdest-sheet[data-sheet] .mapdest-list{display:block;max-height:none;overflow:visible;flex:none}
