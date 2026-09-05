@@ -30,8 +30,11 @@ interface Props {
   exports: { gpx: boolean; ics: boolean };
   /** The guide's post-trip record; Learnings.astro owns its shape. */
   learnings: unknown;
+  /** Recap atoms (features/trip/model/recap.ts) — Learnings' counts strip reads the same
+      numbers the Trip destination's own POST-phase recap card already shows (board 10). */
+  recap: import("../features/trip/index").RecapAtoms | null;
 }
-const { base, slug, storeKey, title, entry, exports, learnings } = Astro.props;
+const { base, slug, storeKey, title, entry, exports, learnings, recap } = Astro.props;
 const hasEssentials = Boolean((entry && entry.length) || exports.gpx || exports.ics);
 ---
 <div class="trip-below">
@@ -76,6 +79,6 @@ const hasEssentials = Boolean((entry && entry.length) || exports.gpx || exports.
   </div>
 
   <section class="trip-learnings" id="learnings" aria-label="Trip learnings">
-    <Learnings storeKey={storeKey} learnings={learnings} slug={slug} title={title} />
+    <Learnings storeKey={storeKey} learnings={learnings} slug={slug} title={title} recap={recap} />
   </section>
 </div>

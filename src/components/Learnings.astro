@@ -8,8 +8,8 @@
 import Icon from "./Icon.astro";
 import "../features/learnings/styles.css";
 import { tallySkipsByGroup } from "../features/learnings/index.js";
-interface Props { storeKey: string; learnings?: any; slug: string; title?: string }
-const { storeKey, learnings = null, slug, title = "" } = Astro.props;
+interface Props { storeKey: string; learnings?: any; slug: string; title?: string; recap?: import("../features/trip/index").RecapAtoms | null }
+const { storeKey, learnings = null, slug, title = "", recap = null } = Astro.props;
 // Which parts of the guide didn't survive contact, by declared group. Empty unless the
 // post-mortem tagged its skipped stops — no data, no heading (the honest-blank rule).
 const skipTally = tallySkipsByGroup(learnings?.days);
@@ -39,6 +39,15 @@ const recapUrl = `${base}/recap/${slug}.png`;
     </div>
     <button class="learn-x" type="button" data-learn-dismiss aria-label="Hide learnings for now">×</button>
   </div>
+  {/* The board's counts strip (board 10), from the exact atoms the Trip destination's own
+      POST-phase recap card already computes and shows — never a second, re-derived count. */}
+  {recap && (
+    <dl class="trip-atoms">
+      {recap.hitStops !== null && <div class="trip-atom"><dt>Stops made</dt><dd>{recap.hitStops}<span class="trip-atom-of"> of {recap.plannedStops}</span></dd></div>}
+      <div class="trip-atom"><dt>Days</dt><dd>{recap.dayCount}</dd></div>
+      {recap.skippedStops > 0 && <div class="trip-atom"><dt>Skipped</dt><dd>{recap.skippedStops}</dd></div>}
+    </dl>
+  )}
   <div class="learn-agg" id="learnAgg"></div>
   {/* Curated post-mortem — server-rendered guide data (never travelers' verbatim
       critiques). Empty unless the guide carries `learnings`; tab.js treats a

@@ -14,3 +14,4 @@ sheets are review evidence for creator visual acceptance (design-system.md §35)
 | `06-search.webp` | `06_search_experience` | the left rail (Search + drawers), the chip row, grouped thumbnailed results, the detail pane |
 | `08-split.webp` | `08_split_expenses` | frame register + the real header (title/tagline); the board's 3-card summary strip and tab row are deferred — see design-system.md §27 |
 | `09-sos.webp` | `09_sos_safety` | no code change — the existing 3-layer sheet (locked 2026-09-04) already meets the board and the wired-only scope; see design-system.md §28 |
+| `10-learnings.webp` | `10_trip_learnings` | the counts strip (Stops made/Days/Skipped, real `recap` atoms) added above the existing Plan-vs-Actual notebook; see design-system.md §Learnings |
