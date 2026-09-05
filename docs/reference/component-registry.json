@@ -25,6 +25,10 @@
       "file": "src/components/GuideDestination.astro",
       "role": "Guide — cover, chapter overview, one visible chapter level, spatial chapters map-forward, reference objects, knowledge modules (D6-10–13/40/53/54, F6)"
     },
+    "GuideBelow": {
+      "file": "src/components/GuideBelow.astro",
+      "role": "Guide — the cream band under the frame: the country facts this product holds (currency, time zone, emergency numbers) and the way to the map (board 05)"
+    },
     "Hint": {
       "file": "src/components/Hint.astro",
       "role": "'?' affordance holding an explanation until asked"

@@ -43,6 +43,38 @@ async function openGallery(page: Page) {
     window.scrollTo(0, 0);
   });
   await page.waitForTimeout(250);
+  await settleHeight(page);
+}
+
+/* ⊛ Two things have to hold still before a full-page capture: the page's height, and the
+   number Chromium reports for it. This is the first — wait for two identical consecutive
+   readings, rather than trusting a fixed delay, so a late-settling webfont cannot move the
+   layout between the measurement and the shot. */
+async function settleHeight(page: Page) {
+  await page.evaluate(() => { delete (window as unknown as { __lastH?: number }).__lastH; });
+  await page.waitForFunction(() => {
+    const w = window as unknown as { __lastH?: number };
+    const h = document.documentElement.scrollHeight;
+    const stable = w.__lastH === h;
+    w.__lastH = h;
+    return stable;
+  }, undefined, { timeout: 15_000, polling: 200 });
+}
+
+/* ⊛ ...and the height Chromium reports for the capture is FRACTIONAL.
+   `fullPage` asks for the document's content size; on ~35 000px of rem- and line-height-derived
+   blocks that lands mid-pixel, and which way it rounds is not stable between two runs of the
+   same page. A one-pixel canvas difference is a total mismatch to Playwright — 12% of pixels
+   "changed" because everything below the seam shifted a row — and it failed exactly that way
+   twice on real, correct surface work. Adding the missing fraction to the page's own foot makes
+   the number whole, so both runs round to the same integer by construction. The compared
+   PIXELS are untouched: this adds sub-pixel padding below the last card, nothing else. */
+async function squarePage(page: Page) {
+  await page.evaluate(() => {
+    document.body.style.paddingBottom = "0px";
+    const frac = document.documentElement.getBoundingClientRect().height % 1;
+    if (frac > 0.001) document.body.style.paddingBottom = `${(1 - frac).toFixed(4)}px`;
+  });
 }
 
 for (const theme of THEMES) {
@@ -53,6 +85,15 @@ for (const theme of THEMES) {
       await page.selectOption("#galTheme", theme);
       if (mode === "dark") await page.click("#galDark");
       await page.waitForTimeout(250);
+      /* Capture from a viewport TALLER than every viewport-relative pane's cap. Above ~2000px
+         this design system's heights are all at their px maxima, so the page measures the same
+         whatever the capture does to the viewport — the layout the shot is taken of is the
+         layout that was measured. (Below that, growing the viewport grows the page, which is
+         how a full-page capture ends up disagreeing with itself.) */
+      await page.setViewportSize({ width: 1280, height: 2000 });
+      await page.waitForTimeout(250);
+      await settleHeight(page);
+      await squarePage(page);
       await expect(page).toHaveScreenshot(`gallery-${theme}-${mode}.png`, {
         fullPage: true,
         animations: "disabled",

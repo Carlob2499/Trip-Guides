@@ -10,3 +10,4 @@ sheets are review evidence for creator visual acceptance (design-system.md §35)
 | `02-trip.webp` | `02_trip_page` | Trip cockpit in the frame, the guide phone bar, the cream band |
 | `03-itinerary.webp` | `03_itinerary_page` | Itinerary header row, day tabs, the stop inspector, the foot strip |
 | `04-map.webp` | `04_map_experience` | the Map panel over the map, the neighbourhood index under the frame |
+| `05-guide.webp` | `05_guide_experience` | hero foot with Search, one tile shape per chapter, Need to know |

@@ -5,7 +5,7 @@
 import { todayInTz, trapFocus, migrateStorageKey, tapHaptic, readStoredRecord } from "./util.js";
 import { initDarkToggle } from "./theme.js";
 import { tripWindow, dayState } from "../lib/trip-dates";
-import { initRate, initWeather, initDaySwap, initSun } from "../features/live-data/index.js";
+import { initRate, initWeather, initDaySwap, initSun, initWxToday } from "../features/live-data/index.js";
 import { initJetLag } from "./jetlag-ui.js";
 import { initSharePanel } from "../features/share/index.js";
 import { initChangeLink } from "../features/change-request/index.js";
@@ -299,6 +299,9 @@ document.querySelectorAll(".tabs, .botbar").forEach(function (group) {
     initRate({ curCode: curCode, curFallbackRate: curFallbackRate });
     initDaySwap({ daysForBanner: daysForBanner });
     initWeather({ mapCenter: mapCenter, hasWeatherSection: hasWeatherSection, firstDayDate: firstDayDate, lastDayDate: lastDayDate });
+    // One painter for "today's weather", wherever a surface mounts it (Trip's rail card, the
+    // Guide hero's chip) — the same validated forecast, never a second fetch or a second shape.
+    initWxToday({ destTzIana: destTzIana });
     initSun({ mapCenter: mapCenter, destTzIana: destTzIana });
     initBudgetPact({ firstDayDate: firstDayDate, lastDayDate: lastDayDate });
     initPacking({ mapCenter: mapCenter, firstDayDate: firstDayDate, lastDayDate: lastDayDate });

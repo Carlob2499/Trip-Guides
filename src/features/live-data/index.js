@@ -12,6 +12,7 @@
 
 export { initRate, getLastRate } from "./ui/rate.js";
 export { initWeather, getLastWx } from "./ui/weather.js";
+export { initWxToday } from "./ui/wx-today.js";
 export { initHomeWeather } from "./ui/home-weather.js";
 export { initDaySwap } from "./ui/day-swap.js";
 export { initSun } from "./ui/sun.js";
