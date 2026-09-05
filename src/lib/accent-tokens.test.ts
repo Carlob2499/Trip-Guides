@@ -2,7 +2,7 @@
 
 import { readFileSync, readdirSync } from "node:fs";
 import { describe, it, expect } from "vitest";
-import { accentTokens, accentStyle, TINT_MAX, DARK_SURFACES as BASE_DARK_SURFACES, DARK_QUIET_INK } from "./accent-tokens";
+import { accentTokens, accentStyle, TINT_MAX, DARK_SURFACES as BASE_DARK_SURFACES, DARK_QUIET_INK, DARK_INK, DARK_RULE } from "./accent-tokens";
 import { contrastRatio, mix } from "./contrast";
 
 /* Every accent that actually ships, from src/data/palettes/*.json and the country defaults. */
@@ -116,6 +116,9 @@ describe("accentTokens", () => {
     expect(darkBlocks).toContain(`--bg:${BASE_DARK_SURFACES[2]};`);
     expect(darkBlocks).toContain(`--card:${BASE_DARK_SURFACES[0]};`);
     expect(darkBlocks).toContain(`--muted:${DARK_QUIET_INK};`);
+    // The rest of the forest register the share cards paint themselves with.
+    expect(darkBlocks).toContain(`--ink:${DARK_INK};`);
+    expect(darkBlocks).toContain(`--rule:${DARK_RULE};`);
   });
 
   it("keeps the identity colour untouched — only the text shade is adjusted", () => {

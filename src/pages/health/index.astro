@@ -127,8 +127,10 @@ const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not pro
     <!-- Was a bare <div>. Every other page on the site puts its content in a landmark; this one
          did not, so a screen-reader user had no way to skip the chrome and the a11y gate's own
          vacuity guard (which samples `main a, main h2, …`) found nothing here to audit at all. -->
-    <UtilityBar base={base} page="Pipeline health" />
-    <main class="hl-wrap">
+    {/* The utility pages wear the frame too (work order §4): one shell, every surface. */}
+    <div class="stage spatial">
+      <UtilityBar base={base} page="Pipeline health" />
+      <main class="hl-wrap">
       <p class="hl-kicker">Behind the scenes</p>
       <h1 class="hl-head">Pipeline health</h1>
       <p class="hl-intro">
@@ -197,7 +199,8 @@ const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not pro
       <p class="hl-asof">Status badges are live from GitHub · role &amp; verdict notes last reviewed 2026-07-20</p>
       <br />
       <a class="hl-home-link" href={`${base}/`}>← Back to all guides</a>
-    </main>
+      </main>
+    </div>
     <script>
       import { initDarkToggle } from "../../scripts/theme.js";
       initDarkToggle("btnDark");

@@ -28,8 +28,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     <PwaHead />
   </head>
   <body data-base={base}>
-    <UtilityBar base={base} page="Not found" />
-    <main class="nf" id="content">
+    {/* The utility pages wear the frame too (work order §4): one shell, every surface. */}
+    <div class="stage spatial">
+      <UtilityBar base={base} page="Not found" />
+      <main class="nf" id="content">
       <p class="nf-kicker">Nothing at this address</p>
       <h1 class="nf-title">This page isn’t in the atlas.</h1>
       <p class="nf-dek">The link may be old, or the guide it pointed at was never published. Nothing here is guessed, so there is nothing to show.</p>
@@ -37,7 +39,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
         <a class="nf-cta" href={`${base}/`}>Open the Atlas</a>
         <a class="nf-link" href={`${base}/about/`}>How Waypoint works</a>
       </p>
-    </main>
+      </main>
+    </div>
     <script>
       import { initDarkToggle } from "../scripts/theme.js";
       initDarkToggle("btnDark");

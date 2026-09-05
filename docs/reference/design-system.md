@@ -940,6 +940,19 @@ SOS is visually conservative:
 - no hidden critical action;
 - semantic color + icon + text.
 
+**After the ten surfaces (work order §4, Opus 5):** the frame is now every page's shell, not just
+the destinations' — `/about`, `/health`, `/404` and `/change` wrap their `UtilityBar` + main in
+`.stage.spatial` exactly as `/new` and `/progress` do. And the two share cards
+(`src/pages/og/[slug].png.ts`, `src/pages/recap/[slug].png.ts`) moved into the forest register
+too: the link preview should look like the site it opens. Neither card holds a palette any more
+— ground, ink and quiet ink come from `lib/accent-tokens.ts`'s `DARK_SURFACES`/`DARK_INK`/
+`DARK_QUIET_INK` (base.css's own dark block, pinned by `accent-tokens.test.ts`), and accent TEXT
+takes `accentTokens(accent).inkDark` rather than the raw identity colour, which measures ~2.6:1
+on the forest ground. The two font stacks live in `og/_card.ts` as `CARD_SERIF`/`CARD_SANS`:
+librsvg rasterises these at build time and loads no webfonts, so Literata and Atkinson are
+unavailable at the only moment that matters and the metric-compatible Liberation faces stand in
+— one recorded decision instead of six drifting literals. Real drift: 29 → 17.
+
 **Surface 9 (board `09_sos_safety`, Sonnet 5):** verified against the board, no code change. The
 existing three-layer sheet (`src/features/sos/ui/sos.js`, `src/styles/field-tools.css`, locked
 2026-09-04) already carries the board's grammar — category cards with Police/Fire in the
