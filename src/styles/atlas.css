@@ -1,61 +1,59 @@
-/* Atlas hub — table view (README §3, SPEC-COMPONENTS.md §5-6). "The daylight, in-transit
-   surface" — no entrance animation anywhere on this path (Gate 5, ANTIPATTERNS.md), content
-   legible the instant it paints. World-view/globe chrome lives in atlas-world.css (Stage C
-   items 2/4/5); this file is the server-rendered, works-with-zero-JS surface (D4). */
+/* Atlas hub — THE LIST (the table view; design-system.md §12, §8, §31). "The daylight,
+   in-transit surface": server-rendered, works with zero JS (D4), legible the instant it paints.
+   In world mode it is the ivory card under the frame (board 01's "Upcoming trips"); in table
+   mode it has the page. The stage above it is atlas-world.css; the phone's composition is
+   atlas-mobile.css. */
 
-/* Page-level survey ground (design-handoff screenshots) — position:fixed under everything;
-   see atlas.astro's `contourLayers` comment for why this doesn't import the old hub's copy. */
-/* The survey-contour ground is the shared <Contours/> component (src/components/Contours.astro)
-   since D3 — its rules live in the component's own scoped style, not here. */
-
-/* A `position:fixed` ground paints ABOVE static content regardless of z-index:0 (positioned
-   always beats static at paint time) — .atlas-header already carries its own position:relative
-   (atlas-cover.css) so it's unaffected, but table/globe need the same treatment, matching the
-   old hub's own .stats-beat fix for this exact issue. */
-.atlas-table-wrap, .atlas-globe-wrap { position: relative; z-index: 1; }
+/* A `position:fixed` contour ground paints ABOVE static content regardless of z-index:0
+   (positioned always beats static at paint time), so the list wrapper is positioned too. */
+.atlas-table-wrap { position: relative; z-index: 1; }
 
 .atlas-table { max-width: 1000px; margin: 0 auto; padding: 0 16px 64px; }
 
-/* ── Sticky header: search + sheet chips ─────────────────────────────────────────────── */
+/* ── The list head: its label, the way back to the world, the one Search. ────────────── */
 .atlas-tablehead {
   position: sticky; top: max(0px, var(--hdr-h, 0px));
   z-index: 20; background: var(--bg);
   padding: 12px 0; border-bottom: 1px solid var(--rule);
 }
-.atlas-search-row { display: flex; align-items: center; gap: 8px; position: relative; }
+.atlas-listhead-row { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
+.atlas-listhead { font-family: var(--font-data); font-weight: 700; font-size: var(--text-panel-kicker); letter-spacing: var(--tracking-panel-kicker); text-transform: uppercase; color: var(--muted); }
+/* The one control back to the world view: present in table mode, gone in world mode. */
+.atlas-world-btn {
+  display: none; align-items: center; gap: .4rem; min-height: 44px; padding: 0 1rem;
+  background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-pill); cursor: pointer;
+  font-family: var(--font-data); font-weight: 600; font-size: var(--text-control-sm); color: var(--ink);
+}
+.atlas-world-btn:hover { border-color: var(--ink); }
+.atlas-world-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+:root[data-atlas-mode="table"] .atlas-world-btn { display: inline-flex; }
+.atlas-search-row { display: flex; align-items: center; gap: 8px; position: relative; margin-top: 10px; }
 .atlas-search {
   flex: 1; min-height: 44px; padding: 0 14px;
-  background: var(--card); border: 1px solid var(--rule); border-radius: 999px;
+  background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-pill);
   color: var(--ink); font-family: var(--font-body); font-size: var(--text-body);
 }
 .atlas-search::placeholder { color: var(--muted); }
-/* Out of the sticky header (2026-08-08) — these scroll away with the page now. */
 .atlas-chips {
   display: flex; gap: 8px; margin-top: 14px; overflow-x: auto; padding-bottom: 2px;
   scrollbar-width: thin;
 }
 .atlas-chip {
   flex: 0 0 auto; display: inline-flex; align-items: center; gap: .4em;
-  /* 32px → 44px. The jump rail is a row of real links and every one of them measured 32px tall
-     at all seven widths under 760px (the row is hidden above it, where world view owns the
-     screen). Vertical growth is free here in a way it is not for .scrub-fit .dchip: the row is
-     `overflow-x:auto` with `flex:0 0 auto` children, so it scrolls sideways rather than
-     compressing, and no fixed number of chips has to fit one 375px line. The row gets 12px
-     taller and scrolls exactly as it did. */
   min-height: 44px; padding: .3rem .8rem;
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
   letter-spacing: .08em; text-transform: uppercase;
-  border: 1px solid var(--rule2); border-radius: 999px; color: var(--muted);
+  border: 1px solid var(--rule2); border-radius: var(--r-pill); color: var(--muted);
   text-decoration: none; white-space: nowrap; scroll-snap-align: start;
 }
 .atlas-chip:hover, .atlas-chip:focus-visible { border-color: var(--accent); color: var(--aink); }
 .atlas-chip--current { background: var(--accent); border-color: var(--accent); color: var(--on-aink); }
 .atlas-chip--current:hover, .atlas-chip--current:focus-visible { color: var(--on-aink); }
 
-/* ── Quick card ───────────────────────────────────────────────────────────────────────── */
+/* ── Quick card (the featured trip, in the list) ─────────────────────────────────────── */
 .atlas-quick {
   display: block; margin-top: 20px; padding: 16px 20px 18px;
-  background: var(--card); border: 2px solid var(--accent); border-radius:var(--r-card);
+  background: var(--card); border: 2px solid var(--accent); border-radius: var(--r-card);
   text-decoration: none; color: var(--ink);
 }
 .atlas-quick-kicker {
@@ -64,47 +62,18 @@
 }
 .atlas-quick-title { font-family: var(--font-display); font-size: var(--text-h2); margin: 4px 0 10px; }
 .atlas-quick-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-/* The emergency number, and the floor it is the reason for. CONTEXT.md (2026-08-11) names an
-   "emergency number" in the list of things §6.4's 44px applies to, so this control is the least
-   exemptable one on the page: it measured 187x32 at every width under 760px and is now 44px.
-   No exemption was considered — the ruling names it. */
-.atlas-quick-tel {
-  display: inline-flex; align-items: center; gap: .35em; min-height: 44px; padding: .25rem .7rem;
-  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
-  letter-spacing: .04em; color: var(--ochre); border: 1px solid currentColor; border-radius: 999px;
-  text-decoration: none;
-}
 .atlas-quick-meta {
   display: inline-flex; align-items: center; gap: .35em; min-height: 32px; padding: .25rem .7rem;
   font-family: var(--font-data); font-weight: 600; font-size: var(--text-control-sm);
-  letter-spacing: .04em; color: var(--muted); border: 1px solid var(--rule2); border-radius: 999px;
+  letter-spacing: .04em; color: var(--muted); border: 1px solid var(--rule2); border-radius: var(--r-pill);
 }
-/* …and the chips beside it come with it, because the prototype draws them as ONE BAND.
-   03-table-view.png / 21-table-view-light.png put the emergency chip, the currency chip and the
-   hazard chip on one line at one height, and SPEC-COMPONENTS §5 lists them as one series ("
-   emergency numbers as tappable tel: chips, currency, hazards, a ticking local clock"). Raising
-   only the tel would have left a 44px pill centred against 32px neighbours in the same row — the
-   band broken by an accessibility fix, which the prototype outranks. These are <span>s, not
-   controls, so the floor does not reach them on its own; they are raised for the row, and only
-   their min-height moves (type, colour and padding are untouched).
-   Scoped to .atlas-quick-chips deliberately: .atlas-quick-meta is reused as the country-code
-   chip inside .atlas-sheet rows (index.astro), where atlas-mobile.css strips it to bare text and
-   where a 44px pill would break a DIFFERENT row — the up-next card's meta line, whose
-   .atlas-stamp sibling is not moving. */
+/* One band at one height — the chips are raised for the row (the a11y gate holds 44px). */
 .atlas-quick-chips .atlas-quick-meta { min-height: 44px; }
 .atlas-quick-clock[data-tick] { color: var(--ink); font-variant-numeric: tabular-nums; }
-/* A filled pill, not a bare text line — "clickability must be obvious; no bare-text tap
-   targets" (CLAUDE.md, Design Doctrine). It is the SAME control as the globe dock's
-   `.atlas-dock-cta` and the ping sheet's `.atlas-pingsheet-open` (atlas-mobile.css) — one
-   datum, three surfaces — so it reuses their pattern exactly: the primary-button
-   --cta/--cta-ink pair (contrast-pinned in both themes by atlas-tokens.test.ts) on a 999px
-   radius, no new colour and no new radius. inline-flex so the pill hugs its label; the
-   flex-container chip row above it already forces the line break a `display:block` was
-   providing. 44px min-height clears the touch-target floor the a11y gate holds. */
 .atlas-quick-cta {
   display: inline-flex; align-items: center; justify-content: center;
   margin-top: 14px; min-height: 44px; padding: 0 20px;
-  background: var(--cta); color: var(--cta-ink); border: 0; border-radius: 999px;
+  background: var(--cta); color: var(--cta-ink); border: 0; border-radius: var(--r-pill);
   font-family: var(--font-data); font-weight: 640;
   font-size: var(--text-control); letter-spacing: .04em; text-decoration: none;
 }
@@ -112,25 +81,20 @@
 .atlas-quick-cta:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 .atlas-quick-advisory { color: var(--ochre); }
 
-/* ── Sheet list ───────────────────────────────────────────────────────────────────────── */
+/* ── Sheet list ──────────────────────────────────────────────────────────────────────── */
 .atlas-sheets { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
 .atlas-sheet {
   display: flex; align-items: center; gap: 14px; padding: 14px 4px;
   border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink);
 }
 .atlas-sheet:hover, .atlas-sheet:focus-visible { background: var(--sunken); }
-/* The plate — cover photo + survey number. Square corners like every other container in
-   this system; the number sits ON the photo rather than beside it, so the row keeps the
-   same left edge it had before the photos arrived. */
 .atlas-sheet-plate {
   flex: 0 0 auto; position: relative; width: 56px; height: 56px; overflow: hidden;
-  background: var(--sunken); border: 1px solid var(--rule);
+  background: var(--sunken); border: 1px solid var(--rule); border-radius: var(--r-inset);
   display: flex; align-items: center; justify-content: center;
 }
 .atlas-sheet-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-/* The survey number, now at the END of the row rather than stamped on the plate. It is the
-   archive's index, so it keeps the data face and tabular figures — but it is the least urgent
-   thing in the row, so it sits last and quiet instead of occluding the one image there. */
+/* The survey number: the archive's index, last and quiet. */
 .atlas-sheet-num {
   flex: 0 0 auto; font-family: var(--font-data); font-weight: 640;
   font-size: var(--text-control); color: var(--muted); font-variant-numeric: tabular-nums;
@@ -145,25 +109,46 @@
 .atlas-sheet-dates { font-size: var(--text-caption); color: var(--muted); margin-left: .5em; }
 .atlas-stamp {
   flex: 0 0 auto; font-family: var(--font-data); font-weight: 640; font-size: var(--text-control);
-  letter-spacing: .08em; text-transform: uppercase; padding: .3em .7em; border-radius:var(--r-inset);
+  letter-spacing: .08em; text-transform: uppercase; padding: .3em .7em; border-radius: var(--r-inset);
   border: 1px solid currentColor; white-space: nowrap;
 }
 .atlas-stamp--complete { color: var(--green); }
 .atlas-stamp--progress { background: var(--accent); border-color: var(--accent); color: var(--on-aink); }
 .atlas-stamp--upcoming { color: var(--aink); }
-/* A FOURTH stamp, and a different question from the other three. Those are SPEC-COMPONENTS.md
-   §6's trip-status series — where the TRIP stands against today. This one says the GUIDE is not
-   finished being researched (features/atlas/model/building.ts), which is true of trips that have
-   not been planned, taken or dated. It borrows nothing from the series' pigments precisely so it
-   cannot be read as a fourth trip status: muted ink, plain outline, quiet on purpose — an
-   unfinished thing announcing itself is not news, and the row already links to the run.
-   No pulse, no dot: §6's "never a coloured dot without the word; the word is the accessible
-   carrier", and a pulse would claim a liveness a static page cannot verify. */
+/* A FOURTH stamp, a different question: the GUIDE is not finished being researched
+   (features/atlas/model/building.ts). Muted ink, plain outline, no pulse, no dot. */
 .atlas-stamp--building { color: var(--muted); }
-
 
 .atlas-empty { padding: 40px 4px; color: var(--muted); text-align: center; }
 
+.atlas-foot {
+  max-width: 1000px; margin: 0 auto; padding: 30px clamp(18px, 4vw, 54px) 60px;
+  font-family: var(--font-data); font-size: var(--text-control-sm); color: var(--muted);
+}
+.atlas-foot a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.atlas-foot a:hover { color: var(--ink); }
+
 @media (min-width: 620px) {
   .atlas-quick { padding: 20px 26px 22px; }
+}
+
+/* ── Desktop: the ivory card under the frame (world mode) / the page (table mode). ─────── */
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media (min-width: 900px) {
+  :root[data-atlas-mode="world"] .atlas-table-wrap { display: block; }
+  :root[data-atlas-mode="world"] .atlas-table {
+    max-width: none; margin: 18px 22px 0; padding: 4px 22px 22px;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card);
+  }
+  :root[data-atlas-mode="world"] .atlas-tablehead { position: static; background: transparent; border-bottom: 0; }
+  /* Under the frame the card is the trips themselves: no second Search, no jump chips, no
+     quick card — the stage's panels already carry the featured trip, and the strip carries
+     Search. All three come back with the list in table mode. */
+  :root[data-atlas-mode="world"] .atlas-search-row,
+  :root[data-atlas-mode="world"] .atlas-chips,
+  :root[data-atlas-mode="world"] .atlas-quick { display: none; }
+  :root[data-atlas-mode="world"] .atlas-sheets { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0 32px; margin-top: 8px; }
+  :root[data-atlas-mode="world"] .atlas-sheet { border-radius: var(--r-inset); padding: 12px 8px; }
+  :root[data-atlas-mode="world"] .atlas-foot { max-width: none; padding: 22px 44px 56px; }
+  :root[data-atlas-mode="table"] .atlas-table { max-width: 1040px; padding-top: 12px; }
 }

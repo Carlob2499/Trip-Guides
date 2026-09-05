@@ -1,51 +1,86 @@
 /* === THE GLOBAL SHELL =========================================================
    AppChrome.astro is the markup; this is the one owner of its appearance at every width
-   (design-system.md 2026-09-04 §6, §19, §31; motion.md §1, §5).
+   (design-system.md 2026-09-05 §6, §19, §31; motion.md §1, §5; boards 01/02 of the final
+   mockup package).
 
    One model, two presentations, switched on the viewport (the shell is the one thing that
    may ask about the viewport — src/lib/breakpoints.ts):
-     ≤ 899px   sticky top strip (orientation · Search · SOS · share · theme) + five-slot bar
-     ≥ 900px   the same strip, plus the floating vertical rail beside the workspace. Never a
-               flat sidebar: it floats on the page, holds its place, and yields nothing the
-               traveler needs. */
+     ≤ 899px   sticky strip (wordmark · Search · SOS · share · theme) + five-slot bottom bar
+     ≥ 900px   the FRAME STRIP: wordmark left, destination tabs centred, actions right — the
+               top row of the dark frame every surface sits inside. No rail, no sidebar.
 
-/* ---- Top strip: opaque, sticky, no glass (dense chrome never sits on low-contrast glass). */
-.chrome{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:var(--rw) solid var(--line)}
-.topbar{display:flex;align-items:center;gap:.5rem;min-height:56px;padding:calc(.3rem + var(--safe-top)) max(.9rem,var(--safe-right)) .3rem max(.9rem,var(--safe-left))}
+   The strip is always in the dark register (`.spatial` on the element): on the cream page it
+   is the frame's top edge; in dark mode it is one with the ground. */
 
-/* The quiet orientation anchor (§6): trip · current destination. Text, a dot, no chevrons. */
-.orient{display:flex;align-items:center;gap:.45rem;min-width:0;flex:1 1 auto;margin:0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);white-space:nowrap}
-.orient-dot{width:9px;height:9px;flex:none;border-radius:var(--r-round);background:var(--selected)}
-.orient-title{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:700;color:var(--ink)}
+/* ---- The frame. A page wraps its stage in `.stage`; the strip is its first child. -------- */
+.stage{position:relative;background:var(--bg);color:var(--ink)}
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media(min-width:900px){
+  .stage{margin:18px 22px 0;border:1px solid var(--rule);border-radius:var(--r-pane);overflow:clip}
+  .stage>.chrome{position:static;border-bottom:0}
+}
+
+/* ---- Top strip: opaque, sticky on its own, no glass. ------------------------------------- */
+.chrome{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:var(--rw) solid var(--rule)}
+.topbar{display:flex;align-items:center;gap:.6rem;min-height:56px;padding:calc(.3rem + var(--safe-top)) max(.9rem,var(--safe-right)) .3rem max(.9rem,var(--safe-left))}
+
+/* The wordmark: compass mark + WayPoint. On a guide it is the way back to the Atlas. */
+.brand{display:inline-flex;align-items:center;gap:.5rem;flex:none;margin:0;min-height:44px;padding:0 .2rem;color:var(--ink);text-decoration:none;border-radius:var(--r-pill)}
+.brand-h1{font:inherit}
+.brand-mark{width:26px;height:26px;flex:none;color:var(--accent-ink)}
+.brand-word{font-family:var(--font-display);font-size:var(--text-lead);font-weight:500;letter-spacing:-.01em;line-height:1;white-space:nowrap}
+.brand:hover .brand-word{color:var(--accent-ink)}
+.brand:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+/* Centre of the strip: the tabs on a guide, the trip status chips on the Atlas. Hidden on a
+   phone, where the bottom bar carries the destinations. */
+.topbar-center{display:none;flex:1 1 auto;min-width:0;justify-content:center}
+.tabs{display:flex;align-items:center;gap:.25rem}
+.tab{position:relative;display:inline-flex;align-items:center;min-height:44px;padding:0 .95rem;background:none;border:0;border-radius:var(--r-pill);color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);font-weight:600;letter-spacing:.01em;cursor:pointer;transition:color var(--dur-immediate) var(--ease-standard)}
+.tab:hover{color:var(--ink)}
+.tab[aria-current="true"]{color:var(--accent-ink)}
+/* The current tab is marked by ink AND a mark — never colour alone (§30). */
+.tab[aria-current="true"]::after{content:"";position:absolute;left:.95rem;right:.95rem;bottom:6px;height:2px;border-radius:var(--r-pill);background:var(--accent-ink)}
+.tab:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-4px}
+
+/* The quiet orientation label (§6 "Orientation"): the trip's name, text only. */
+.orient{display:none;align-items:center;min-width:0;margin:0 .4rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);white-space:nowrap}
+.orient-title{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:var(--ink)}
 .orient-h1{margin:0;font:inherit;font-weight:700}
-.orient-sep{flex:none}
-.orient-dest{flex:none}
+.orient-dot{width:9px;height:9px;flex:none;border-radius:var(--r-round);background:var(--selected)}
+.orient-sep,.orient-dest{flex:none}
 
-.topbar-right{display:flex;align-items:center;gap:.3rem;margin-left:auto;flex:none}
+.topbar-right{display:flex;align-items:center;gap:.4rem;margin-left:auto;flex:none}
 .topbar-sos-mount{display:contents}
-.topbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34rem;background:none;border:var(--rw) solid transparent;border-radius:var(--r-pill);padding:.34rem .72rem;min-height:44px;min-width:44px;cursor:pointer;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.02em;transition:color var(--dur-immediate) var(--ease-standard),background var(--dur-immediate) var(--ease-standard),border-color var(--dur-immediate) var(--ease-standard)}
-.topbar-btn:hover{color:var(--ink);border-color:var(--line-strong);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.topbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:color-mix(in srgb,var(--ink) 6%,transparent);border:var(--rw) solid var(--rule2);border-radius:var(--r-pill);padding:0 .8rem;min-height:44px;min-width:44px;cursor:pointer;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.01em;transition:color var(--dur-immediate) var(--ease-standard),background var(--dur-immediate) var(--ease-standard),border-color var(--dur-immediate) var(--ease-standard)}
+.topbar-btn:hover{color:var(--ink);border-color:var(--muted);background:color-mix(in srgb,var(--ink) 10%,transparent)}
 .topbar-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.topbar-btn:active{transform:scale(.94)}
+.topbar-btn:active{transform:scale(.96)}
 .tb-ico{width:18px;height:18px;flex:none;display:block}
-/* Search is a framed pill so the way in never reads as decoration (§21). */
-.topbar-search-btn{border-color:var(--line-strong)}
+.topbar-icon-btn{width:44px;padding:0}
+/* Search is the framed pill so the way in never reads as decoration (§21). */
+.topbar-search-btn{justify-content:flex-start;text-align:left}
+.tb-search-label{font-weight:500;white-space:nowrap}
+.tb-kbd{margin-left:auto;padding:.05rem .4rem;border:var(--rw) solid var(--rule2);border-radius:var(--r-inset);font-family:var(--font-data);font-size:var(--text-nano);font-weight:600;letter-spacing:.04em;color:var(--muted)}
 /* SOS: quiet at rest, the critical colour, filled on hover/press (§28). */
-.topbar-sos{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 55%,var(--line-strong));font-weight:700}
+.topbar-sos{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 55%,var(--rule2));font-weight:700}
 .topbar-sos:hover{color:var(--on-critical);background:var(--critical-fill);border-color:var(--critical-fill)}
-/* theme.js writes icon + word into the theme control; phones keep the icon alone. */
+/* theme.js writes icon + word into the theme control; the strip keeps the icon alone. */
 .topbar-btn .theme-btn-label{display:none}
-@media(min-width:900px){.topbar-btn .theme-btn-label{display:inline}}
-/* The anchor is a link on the utility pages (the way back to the Atlas), text on a guide. */
-.orient-link{text-decoration:none;color:var(--muted);border-radius:var(--r-pill);min-height:44px}
+/* The plain strip (UtilityBar): the anchor is a link on the utility pages — the way back. */
+.chrome--plain .orient{display:flex;flex:1 1 auto;margin:0}
+.orient-link{text-decoration:none;color:var(--muted);border-radius:var(--r-pill);min-height:44px;gap:.45rem}
 .orient-link:hover .orient-title{color:var(--accent-ink)}
 .orient-link:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-/* Utility pages carry no rail: the strip keeps the plain inset at every width. */
-.chrome--plain .topbar{padding-left:max(.9rem,var(--safe-left))}
-@media(min-width:900px){.chrome--plain .topbar{padding-left:max(1.4rem,var(--safe-left))}}
-/* Phones: icon-only controls; the anchor keeps the row's width. */
-@media(max-width:899px){.topbar-btn .tb-label{display:none}.topbar-btn{width:44px;height:44px;padding:0;border-radius:var(--r-round)}.tb-ico{width:19px;height:19px}}
-@media(max-width:399px){.topbar{gap:.3rem;padding-left:max(.6rem,var(--safe-left));padding-right:max(.6rem,var(--safe-right))}.topbar-right{gap:.15rem}.orient-sep,.orient-dest{display:none}}
+/* Phones: icon-only controls. */
+@media(max-width:899px){
+  .topbar-btn .tb-label,.tb-kbd{display:none}
+  .topbar-btn{width:44px;height:44px;min-height:44px;padding:0;border-radius:var(--r-round);justify-content:center}
+  .tb-ico{width:19px;height:19px}
+}
+/* The narrowest phones: the mark alone is the wordmark (a 44px link, still labelled), so four
+   44px actions and the way home share 320px without anything escaping the row. */
+@media(max-width:399px){.topbar{gap:.3rem;padding-left:max(.6rem,var(--safe-left));padding-right:max(.6rem,var(--safe-right))}.topbar-right{gap:.2rem}.brand-word,.orient-sep,.orient-dest{display:none}}
 
 /* ---- Phone bottom bar: five slots, Atlas first (§6 "Mobile navigation"). ------------------ */
 /* The bar's reserve, for anything else fixed at the bottom of a phone (a map FAB, a caption). */
@@ -63,33 +98,23 @@
 /* Yielding chrome (§6): reading down slides the bar away; any upward intent, or stopping,
    brings it straight back. Transform only. Focus into the bar restores it (yield-chrome.js). */
 body.chrome-yield .botbar{transform:translateY(130%)}
-@media(prefers-reduced-motion:reduce){.botbar,.bslot-ico{transition:none}.botslot:active .bslot-ico{transform:none}}
+@media(prefers-reduced-motion:reduce){.botbar,.bslot-ico,.tab,.topbar-btn{transition:none}.botslot:active .bslot-ico{transform:none}}
 @media(max-height:460px) and (orientation:landscape){.botslot{min-height:44px}}
 
-/* ---- Desktop rail: hidden on phones, floating from the phone ceiling up. ------------------ */
-.rail{display:none}
+/* ---- Desktop: the frame strip. ----------------------------------------------------------- */
 /* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
 @media(min-width:900px){
-  :root{--rail-w:92px;--botbar-h:0px}
+  :root{--botbar-h:0px}
   .botbar{display:none}
-  .rail{position:fixed;left:max(14px,var(--safe-left));top:calc(70px + var(--safe-top));z-index:45;display:flex;flex-direction:column;align-items:stretch;gap:2px;width:72px;padding:8px 6px;background:var(--glass-bg);-webkit-backdrop-filter:blur(var(--glass-blur));backdrop-filter:blur(var(--glass-blur));border:var(--rw) solid var(--line);border-radius:var(--r-pane);box-shadow:var(--shadow-float)}
-  .rail-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;padding:.35rem 0;background:transparent;border:0;border-radius:var(--r-compact);color:var(--muted);font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:color var(--dur-immediate) var(--ease-standard),background var(--dur-immediate) var(--ease-standard)}
-  .rail-item .wp-ico{width:20px;height:20px}
-  .rail-item:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
-  .rail-item[aria-current="true"],.rail-item[aria-current="page"]{color:var(--cta-ink);background:var(--cta)}
-  .rail-item:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-  .rail-rule{display:block;height:var(--rw);margin:4px 10px;background:var(--line)}
-  /* The workspace starts to the right of the rail, at every destination. */
-  .chrome .topbar{padding-left:calc(var(--rail-w) + max(1rem,var(--safe-left)));padding-right:max(1.4rem,var(--safe-right))}
-  .content,.rail-offset{padding-left:var(--rail-w)}
-  /* Deep work compacts the strip a little (§6 "may yield"): quieter, same order. */
-  body.chrome-scrolled .topbar{min-height:48px}
-  .topbar-btn{border-color:var(--line-strong)}
+  .topbar{min-height:64px;gap:1rem;padding:calc(.4rem + var(--safe-top)) max(1.4rem,var(--safe-right)) .4rem max(1.4rem,var(--safe-left))}
+  .topbar-center{display:flex}
+  .orient{display:flex;max-width:16rem}
+  .topbar-search-btn{width:15rem}
+  .topbar-btn .theme-btn-label{display:none}
 }
-@media(min-width:900px) and (prefers-reduced-motion:reduce){.rail-item{transition:none}}
 
 /* Offline state (§29): a quiet pill under the strip, present only while offline. */
 .offline-pill{position:fixed;top:calc(var(--hdr-h) + .5rem);left:50%;transform:translateX(-50%);z-index:var(--z-toast);padding:.35rem .8rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;border-radius:var(--r-pill);white-space:nowrap;pointer-events:none}
 .offline-pill[hidden]{display:none}
 
-@media print{.chrome,.botbar,.rail,.offline-pill{display:none}}
+@media print{.chrome,.botbar,.offline-pill{display:none}}

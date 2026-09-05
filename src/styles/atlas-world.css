@@ -1,54 +1,91 @@
-/* Atlas hub — world view (the globe) + the WORLD|TABLE toggle (README §2, SPEC-COMPONENTS
-   §8-9). D4: the globe is progressive enhancement over the table view's server-rendered
-   baseline — this screen only becomes the active face once JS has mounted <atlas-map>. */
+/* Atlas hub — THE STAGE (board 01 of docs/mockups/final-package; design-system.md §6, §7, §12,
+   §31). The dark frame on the cream page: the shell strip on top (chrome.css), and under it the
+   world view — the Atlas panel and its quick actions, the globe, the destinations panel, the
+   how-it-works strip. Everything inside is in the dark register through `.spatial` (base.css),
+   in both themes. The list under the frame is atlas.css; the phone's own surfaces (FAB menu,
+   ping sheet, horizon strip, chips) are atlas-mobile.css.
 
-/* The switch's shared base rules, at every width. Under 760px atlas-mobile.css does NOT widen
-   it back into a full-bleed row — it keeps the same two compact buttons and pushes them to the
-   right of the header's single row (`flex:0 0 auto; margin-left:auto`, 44px targets, 12px
-   padding), because the stacked full-width version cost ~130px of sticky chrome on a 375px
-   phone. Only the LABELS change at that width: `.atlas-toggle-word` below drops the " view"
-   suffix, so the buttons read "WORLD | TABLE" — one label per button, never two that could
-   disagree. The @media block further down centres the pair in the header at >=760px.
+   D4: the globe is progressive enhancement over the list's server-rendered baseline — with no
+   JS the root carries no `data-atlas-mode`, the stage body stays collapsed and the list is up. */
 
-   Two separately bordered buttons rather than one hairline-divided pair, matching the design
-   screenshots: the pressed one takes the accent fill, the other stays an outline. */
-.atlas-toggle { display: inline-flex; gap: 8px; }
-.atlas-toggle-btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: .28em;
-  /* 44px, not the kit's 40px. atlas-mobile.css already made exactly this trade for the phone
-     ("a gate outranks a screenshot") and the base rule was left at 40 — so the switch cleared
-     the floor under 760px and failed it at 834px and 1024px, which is the half of the range
-     nobody had measured. One number, both models: the mobile block now only re-paddings. */
-  min-height: 44px; padding: 0 20px; background: none; cursor: pointer;
-  border: 1px solid var(--rule2);
-  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
-  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
-  white-space: nowrap;   /* "WORLD VIEW" is one label, not two lines */
-  transition: color var(--dur-immediate), border-color var(--dur-immediate);
+/* ── Mode: WORLD shows the stage body; TABLE collapses it to the strip alone. ─────────── */
+.atlas-stage-body { display: none; }
+:root[data-atlas-mode="world"] .atlas-stage-body { display: block; }
+/* The stage keeps its place in the stacking order above the page's fixed contour ground. */
+.atlas-stage { z-index: 1; }
+
+/* ── The strip's centre: one chip per trip (status word · name), a link into the guide. ── */
+.atlas-status { display: flex; align-items: center; gap: .35rem; min-width: 0; }
+.atlas-status-chip {
+  display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: 0 .85rem 0 .6rem;
+  border: 1px solid transparent; border-radius: var(--r-pill); text-decoration: none; color: var(--ink);
+  transition: border-color var(--dur-immediate) var(--ease-standard), background var(--dur-immediate) var(--ease-standard);
 }
-.atlas-toggle-btn:hover { color: var(--ink); border-color: var(--ink); }
-.atlas-toggle-btn[aria-pressed="true"] {
-  background: var(--accent); border-color: var(--accent); color: var(--on-aink);
+.atlas-status-chip:hover { border-color: var(--rule2); background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.atlas-status-chip:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.atlas-status-dot { width: 12px; height: 12px; flex: none; border-radius: var(--r-round); background: var(--bg); border: 2px solid var(--rule2); box-sizing: border-box; }
+/* Filled = it happened or is happening; ringed = it has not yet. The word beside it says the
+   same thing, so neither carries the state alone (§30). */
+.atlas-status-chip[data-tone="past"] .atlas-status-dot { background: var(--green); border-color: var(--green); }
+.atlas-status-chip[data-tone="ongoing"] .atlas-status-dot { background: var(--accent); border-color: var(--accent); }
+.atlas-status-chip[data-tone="next"] .atlas-status-dot,
+.atlas-status-chip[data-tone="upcoming"] .atlas-status-dot { border-color: var(--accent-ink); }
+.atlas-status-txt { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.atlas-status-k { font-family: var(--font-data); font-size: var(--text-nano); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.atlas-status-n { font-family: var(--font-data); font-size: var(--text-control-sm); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Shared small type inside the frame. ─────────────────────────────────────────────── */
+.atlas-kicker {
+  display: block; font-family: var(--font-data); font-weight: 700; font-size: var(--text-panel-kicker);
+  letter-spacing: var(--tracking-panel-kicker); text-transform: uppercase; color: var(--muted);
 }
-.atlas-toggle-btn[aria-pressed="true"]:hover { color: var(--on-aink); border-color: var(--accent); }
+.atlas-act-chev { margin-left: auto; flex: none; color: var(--muted); font-family: var(--font-data); font-size: var(--text-lead); line-height: 1; }
 
-/* Centred on the VIEWPORT, not between its neighbours: the brand and the action buttons are
-   different widths, so `margin: auto` would settle it off-centre by half their difference.
-   Absolute inside the header's own positioning context puts it where the design has it, and
-   the flanks keep the flow row to themselves. */
-@media (min-width: 760px) {
-  /* The theme button is labelled up here, where there is room for the word. */
+/* ── The Atlas panel (title, one line, the quick actions). ───────────────────────────── */
+.atlas-panel { display: flex; flex-direction: column; gap: .55rem; padding: 1.1rem 1rem 1rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); }
+.atlas-panel-head { margin-bottom: .35rem; }
+.atlas-panel-title { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: var(--text-h3); line-height: 1.1; letter-spacing: -.01em; color: var(--ink); }
+.atlas-panel-sub { margin: .35rem 0 0; font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted); }
+.atlas-acts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.atlas-act {
+  display: flex; align-items: center; gap: .7rem; width: 100%; min-height: 48px; padding: .4rem .6rem;
+  background: var(--bg2); border: 1px solid transparent; border-radius: var(--r-compact);
+  color: var(--ink); text-decoration: none; text-align: left; cursor: pointer; font: inherit;
+  transition: border-color var(--dur-immediate) var(--ease-standard), background var(--dur-immediate) var(--ease-standard);
 }
-/* Everywhere else the button is its icon — guides included, which is why this default lives
-   with the button and not in the hub's own media query. */
-.theme-btn-label { display: none; }
-.atlas-toggle-word { display: none; }
-@media (min-width: 760px) { .atlas-toggle-word { display: inline; } }
+.atlas-act:hover { border-color: var(--rule2); background: color-mix(in srgb, var(--card) 40%, var(--bg2)); }
+.atlas-act:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.atlas-act-ico { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; flex: none; border-radius: var(--r-inset); background: var(--card); border: 1px solid var(--rule); color: var(--muted); }
+.atlas-act-ico svg { width: 16px; height: 16px; }
+.atlas-act-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
+.atlas-act-l { font-family: var(--font-data); font-size: var(--text-control); font-weight: 600; }
+.atlas-act-s { font-family: var(--font-data); font-size: var(--text-nano); color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The pressed state of "Explore guides" is the list being up — the button reads the same. */
+.atlas-act[aria-pressed="true"] .atlas-act-ico { color: var(--accent-ink); }
 
-.atlas-globe-wrap { display: none; }
-:root[data-atlas-mode="world"] .atlas-globe-wrap { display: block; background: var(--bg); }
-:root[data-atlas-mode="world"] .atlas-table-wrap { display: none; }
+/* ── The featured trip card. ─────────────────────────────────────────────────────────── */
+.atlas-tripcard { display: none; flex-direction: column; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); overflow: hidden; }
+.atlas-tripcard-img { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; object-fit: cover; background: var(--bg2); }
+.atlas-tripcard-body { display: flex; flex-direction: column; padding: .9rem 1rem 1rem; }
+.atlas-tripcard-k[data-tone="ongoing"], .atlas-tripcard-k[data-tone="next"], .atlas-tripcard-k[data-tone="upcoming"] { color: var(--accent-ink); }
+.atlas-tripcard-k[data-tone="past"] { color: var(--green); }
+.atlas-tripcard-title { display: block; margin-top: .3rem; font-family: var(--font-display); font-weight: 500; font-size: var(--text-h4); line-height: 1.15; letter-spacing: -.01em; }
+.atlas-tripcard-dates { display: block; margin-top: .35rem; font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted); font-variant-numeric: tabular-nums; }
+.atlas-tripcard-cities { display: block; margin-top: .15rem; font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted); }
+/* The two CTAs: filled primary, outlined secondary — the one press shape (§31). */
+.atlas-cta {
+  display: flex; align-items: center; justify-content: center; min-height: 44px; margin-top: .5rem; padding: 0 1rem;
+  border: 1px solid var(--rule2); border-radius: var(--r-inset); background: transparent; color: var(--ink);
+  font-family: var(--font-data); font-size: var(--text-control); font-weight: 600; text-decoration: none;
+  transition: border-color var(--dur-immediate) var(--ease-standard), background var(--dur-immediate) var(--ease-standard);
+}
+.atlas-cta:hover { border-color: var(--muted); background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.atlas-cta:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.atlas-cta--fill { margin-top: .9rem; background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.atlas-cta--fill:hover { background: color-mix(in srgb, var(--accent) 88%, var(--ink)); border-color: transparent; }
 
+/* ── The globe. ──────────────────────────────────────────────────────────────────────── */
+.atlas-globe-cell { position: relative; min-height: 0; }
 #atlasGlobe {
   position: relative; overflow: hidden;
   height: calc(100dvh - var(--hdr-h, 0px));
@@ -56,241 +93,134 @@
   background: var(--bg);
 }
 #atlasGlobe atlas-map { position: absolute; inset: 0; }
-
 .atlas-pins { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
-/* The card is an <a> (world-view.js builds it), so it needs its own colour and decoration —
-   see the note on .atlas-pincard-title below, which is where this was FIRST attempted and
-   could not work. `text-decoration` set on an ancestor is propagated to its descendants and a
-   descendant cannot switch it off; only the anchor itself can. So the title rule turned the
-   title's own colour to ink and left the underline the anchor was drawing straight through it,
-   and every other line in the card — kicker, clock, CTA — stayed underlined and, where it had
-   no colour of its own, browser link-blue. Measured 2026-08-10: `color: rgb(0, 0, 238)`,
-   `text-decoration-line: underline` on the card itself. */
-.atlas-pincard {
-  position: absolute; top: 0; left: 0; width: 220px;
-  background: var(--card); border: 1px solid var(--rule2);
-  color: var(--ink); text-decoration: none;
-  /* Elevated, because it is a card lying ON the globe and not a panel printed into the page.
-     Flat, it read as part of the map. Same elevation idiom the mobile ping/menu sheets
-     already use (atlas-mobile.css) — the one place this system does spend a shadow. */
-  box-shadow: var(--shadow-float);
-  pointer-events: auto; will-change: transform; opacity: 0;
-  /* The card GLIDES to its new seat. The solver only re-seats on 90px of globe drift, so
-     without this the cards teleport in 90px steps while the globe turns smoothly under them —
-     the jaggedness is the sampling rate, not the frame rate, and animating the gap is what
-     hides it. Transform and opacity only, which is the one pair that never costs layout. */
-  transition: opacity var(--dur-routine) ease, transform var(--dur-scene) cubic-bezier(.22, .61, .36, 1);
-}
-@media (prefers-reduced-motion: reduce) {
-  /* Reduced motion takes the jump over the glide: a card sliding across the globe is exactly
-     the large-area movement the preference is asking us not to make. */
-  .atlas-pincard { transition: opacity var(--dur-routine) ease; }
-}
-/* The sheet being read takes an accent rule and the surveyor's corner ticks — the prototype's
-   way of saying "this one" without moving or resizing anything.
 
-   The ticks hang off their own empty <span>, not off the card's ::before/::after, and that is
-   an accessibility constraint rather than a style choice: axe cannot measure pseudo-element
-   geometry, so every text node inside an element that has one comes back as "contrast could
-   not be resolved". Drawn on the card, two decorative corners made the CTA underneath them
-   unverifiable on every surveyed card. On a text-free child they cover only the photo. */
-.atlas-pincard[data-status="past"] { border-color: var(--accent); }
-.atlas-pincard-ticks { display: none; }
-.atlas-pincard[data-status="past"] .atlas-pincard-ticks { display: block; }
-.atlas-pincard-ticks::before,
-.atlas-pincard-ticks::after {
-  content: ""; position: absolute; top: 4px; width: 11px; height: 11px;
-  border-top: 2px solid var(--accent); pointer-events: none;
+/* The hint pill under the globe — what the globe does, nothing it does not. */
+.atlas-globe-hint {
+  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; margin: 0;
+  padding: .45rem .9rem; background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-pill);
+  font-family: var(--font-data); font-size: var(--text-control-sm); font-weight: 600; color: var(--muted); white-space: nowrap;
 }
-.atlas-pincard-ticks::before { left: 4px; border-left: 2px solid var(--accent); }
-.atlas-pincard-ticks::after { right: 4px; border-right: 2px solid var(--accent); }
-
-/* The photo's credit, on the photo. Only ever rendered when the URL itself settles who to
-   credit (imgCredit) — a card whose cover came from somewhere else carries no chip rather
-   than a guessed one. Fixed dark chip in both themes because it sits on a photograph, whose
-   brightness neither theme controls. */
-.atlas-pincard-credit {
-  position: absolute; left: 8px; top: calc(var(--plate-h, 0px) - 26px);
-  padding: 3px 7px; background: rgba(var(--shadow-rgb),.74); color: #f4f6f1;
-  font-family: var(--font-data); font-size: var(--text-nano); letter-spacing: .06em;
-  pointer-events: none;
+/* The four globe controls, the board's rounded tiles: icon over a small word. */
+.atlas-globe-ctl { position: absolute; right: 0; bottom: 0; z-index: 6; display: flex; gap: 8px; }
+.atlas-ctl {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  width: 58px; height: 58px; padding: 0; background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-compact);
+  color: var(--ink); cursor: pointer; font-family: var(--font-data);
+  transition: border-color var(--dur-immediate) var(--ease-standard), color var(--dur-immediate) var(--ease-standard);
 }
-.atlas-pincard[data-compact] .atlas-pincard-credit { display: none; }
-.atlas-pincard[data-status="past"] .atlas-pincard-tail {
-  border-right-color: var(--accent); border-bottom-color: var(--accent);
-}
-.atlas-pincard[data-ready] { opacity: 1; }
-.atlas-pincard-plate { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; background: var(--sunken); }
-/* display:block is load-bearing, not tidiness. world-view.js builds the card's innards as
-   <span>s inside an <a>, so this one defaulted to inline: its 158px of content laid out
-   fine, contributed nothing to the anchor's height, and the solver then wrote that measured
-   height (140px — the photo alone) back as an inline style. The fill and the 1px rule
-   stopped at the bottom of the photo and every line below it — kicker, title, clock, CTA —
-   sat outside the card on bare globe. Measured 2026-08-11: card 220x140, body 158px tall
-   starting at the card's own bottom edge. */
-/* The bottom padding clears the TAIL, which is 12px square, rotated 45° and hung at
-   `bottom: -7px` — so it reaches ~6px up into the card. A surveyed card's CTA is the long
-   one ("✓ Verified — open the sheet →"), it wraps to a second line, and at 12px of padding
-   that line landed on the tail. Cards with the short CTA never reached it, which is why only
-   the surveyed ones failed the contrast check. */
-.atlas-pincard-body { display: block; padding: 10px 12px 18px; }
-.atlas-pincard-cc {
-  display: block; font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
-  letter-spacing: .12em; text-transform: uppercase; color: var(--aink);
-}
-/* .atlas-pincard is an <a> (world-view.js) — without its own color/text-decoration this
-   inherited the browser's default link-blue + underline instead of the page's ink, found
-   2026-08-08 comparing the live globe against the design screenshots directly. */
-/* --text-h4, not --text-lead: in the prototype the country name is the loudest thing on the
-   globe and everything else in the card is a caption around it. At lead size it sat at the
-   same weight as the clock beneath it and the card had no focal point. */
-.atlas-pincard-title {
-  display: block; font-family: var(--font-display); font-weight: 420; font-size: var(--text-h4);
-  line-height: 1.15; letter-spacing: -.01em; margin: 3px 0 1px; color: var(--ink); text-decoration: none;
-}
-.atlas-pincard-clock { display: block; font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted); font-variant-numeric: tabular-nums; }
-/* The next trip's dates, boxed — the one card on the globe whose window is still ahead. */
-.atlas-pincard-next {
-  display: inline-block; margin-top: 6px; padding: 3px 7px;
-  border: 1px solid var(--accent); color: var(--accent-ink);
-  font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm);
-  letter-spacing: .08em; text-transform: uppercase;
-}
-.atlas-pincard-cta {
-  display: block; margin-top: 6px; font-family: var(--font-data); font-weight: 640;
-  font-size: var(--text-control-sm); letter-spacing: .08em; text-transform: uppercase;
-  color: var(--aink); text-decoration: none;
-}
-/* A surveyed trip's CTA is a verified claim, so it takes the verified colour. */
-.atlas-pincard[data-status="past"] .atlas-pincard-cta { color: var(--green); }
-.atlas-pincard-tail {
-  display: none; position: absolute; bottom: -7px; width: 12px; height: 12px;
-  background: var(--card); border-right: 1px solid var(--rule2); border-bottom: 1px solid var(--rule2);
-  transform: translateX(-50%) rotate(45deg);
-}
-.atlas-pincard[data-tail] .atlas-pincard-tail { display: block; }
-
-/* Fade-zoom law (SPEC-COMPONENTS §8): every overlay scales/fades together as the globe
-   zooms in, going pointer-events:none below 0.15 opacity. */
-[data-ref-fadezoom] { transform-origin: top left; transition: opacity var(--dur-immediate) linear; }
-[data-ref-fadezoom][data-faded] { pointer-events: none; }
-
-.atlas-ov {
-  position: absolute; z-index: 10; background: var(--card); border: 1px solid var(--rule);
-  padding: 10px 12px; font-family: var(--font-data); font-size: var(--text-control);
-  max-width: 240px;
-}
-.atlas-ov-kicker {
-  display: block; font-weight: 640; font-size: var(--text-panel-kicker); letter-spacing: .2em;
-  text-transform: uppercase; color: var(--aink); margin-bottom: 6px;
-}
-.atlas-ov-index { top: 12px; left: 12px; }
-.atlas-ov-coord { font-variant-numeric: tabular-nums; color: var(--muted); margin-bottom: 6px; display: block; }
-.atlas-ov-index ul { list-style: none; margin: 0; padding: 0; }
-/* A ruled sheet index, per the prototype: each row is ordinal · name · when, divided by a
-   hairline. The rule is on the row rather than a flex `gap` so the panel reads as a register
-   of sheets — which is the metaphor the whole overlay is built on — instead of a list. */
-.atlas-ov-index li + li { border-top: 1px solid var(--rule); }
-.atlas-ov-index button {
-  display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 0 8px;
-  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
-  min-height: 34px; padding: 4px 0; color: var(--ink);
-  font-family: var(--font-data); font-size: var(--text-control); letter-spacing: .08em;
-  text-transform: uppercase;
-}
-.atlas-ov-index .ix-n { color: var(--muted); font-variant-numeric: tabular-nums; }
-.atlas-ov-index .ix-name { font-weight: 640; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.atlas-ov-index .ix-stamp { color: var(--muted); font-variant-numeric: tabular-nums; }
-/* The red-ink rule: one accent per panel. Here it marks the top of the register. */
-.atlas-ov-index button[data-lead] .ix-name,
-.atlas-ov-index button[data-lead] .ix-stamp { color: var(--accent-ink); }
-.atlas-ov-index button:hover, .atlas-ov-index button:focus-visible { color: var(--aink); }
-.atlas-ov-index button:hover .ix-stamp, .atlas-ov-index button:focus-visible .ix-stamp { color: var(--aink); }
-
-.atlas-ov-key { left: 12px; top: 50%; transform: translateY(-50%); }
-.atlas-ov-key ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; font-size: var(--text-control-sm); color: var(--muted); }
-.atlas-ov-key li { display: flex; align-items: center; gap: 6px; }
-.atlas-ov-key .swatch { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
-.atlas-ov-key .swatch--surveyed { background: var(--accent); }
-.atlas-ov-key .swatch--filed { background: var(--muted); }
-.atlas-ov-key .swatch--route { width: 12px; height: 0; border-top: 1px dashed var(--accent); border-radius:var(--r-inset); }
-.atlas-ov-key .swatch--night { width: 9px; height: 9px; border-radius:var(--r-inset); background: var(--rule2); }
-
-/* Top-anchored under the compass, not centred on the viewport. Centred, it grew both ways
-   from the middle and on a 900px-tall screen its last row sat 29px inside the north-star card
-   below it — two overlays occupying the same pixels, which axe caught as an unresolvable
-   background before any eye did. Anchored at the top it grows downward into space it owns. */
-.atlas-ov-record { right: 12px; top: 20%; }
-.atlas-ov-record ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-/* Two lines and a status dot, not one row: WHEN in the display face on top — the thing that
-   actually differs between entries — and the country and its state beneath it in the data
-   face. The old single-line version set both halves at one size and weight, which is how a
-   record of four trips read as four identical rows. */
-.atlas-ov-record button {
-  display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 0 8px;
-  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
-  min-height: 34px; padding: 2px 0; color: var(--ink);
-}
-/* A hairline runs down the rail behind the dots so the four entries read as one timeline
-   rather than four unrelated rows. Drawn on the <ul>, inset to the dots' own centre line. */
-.atlas-ov-record ul { position: relative; }
-.atlas-ov-record ul::before {
-  content: ""; position: absolute; left: 4px; top: 10px; bottom: 10px;
-  width: 1px; background: var(--rule); pointer-events: none;
-}
-.atlas-ov-record li { position: relative; }
-.atlas-ov-record .rec-dot {
-  width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex: 0 0 auto;
-  background: var(--bg); border: 1.5px solid var(--rule2); box-sizing: border-box;
-}
-/* Filled = it happened or is happening. Ringed = it hasn't yet. Colour carries the state and
-   the label beside it says the same thing in words, so neither is doing the job alone. */
-.atlas-ov-record [data-tone="past"] .rec-dot { background: var(--green); border-color: var(--green); }
-.atlas-ov-record [data-tone="ongoing"] .rec-dot { background: var(--accent); border-color: var(--accent); }
-.atlas-ov-record [data-tone="next"] .rec-dot { border-color: var(--accent); }
-.atlas-ov-record .rec-lines { display: block; min-width: 0; }
-.atlas-ov-record .rec-when {
-  display: block; font-family: var(--font-data); font-weight: 640;
-  font-size: var(--text-control); letter-spacing: .06em; text-transform: uppercase;
-  line-height: 1.3; color: var(--ink); font-variant-numeric: tabular-nums;
-}
-.atlas-ov-record .rec-what {
-  display: block; font-family: var(--font-data); font-size: var(--text-control-sm);
-  letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 2px;
-}
-.atlas-ov-record [data-tone="past"] .rec-what { color: var(--green); }
-.atlas-ov-record [data-tone="ongoing"] .rec-what,
-.atlas-ov-record [data-tone="next"] .rec-what { color: var(--accent-ink); }
-.atlas-ov-record button:hover .rec-when, .atlas-ov-record button:focus-visible .rec-when { color: var(--aink); }
-
-.atlas-ov-controls { left: 12px; bottom: 12px; display: flex; gap: 6px; padding: 6px; }
-.atlas-ov-controls button {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 44px; min-height: 44px; padding: 0 10px; background: var(--card); border: 1px solid var(--rule2);
-  color: var(--ink); cursor: pointer; font-family: var(--font-data); font-weight: 640;
-  font-size: var(--text-control-sm); letter-spacing: .04em; text-transform: uppercase;
-}
-.atlas-ov-controls button:hover, .atlas-ov-controls button:focus-visible { border-color: var(--accent); color: var(--aink); }
-
-/* The one place on this page that carries a display-face line at size. It is the product's
-   claim, so it is set as a statement rather than as another caption. */
-/* `verified` is underlined in the accent rather than coloured in it: the word has to stay at
-   full body contrast (it is the claim), and the rule beneath carries the emphasis instead. */
+.atlas-ctl svg { width: 18px; height: 18px; color: var(--accent-ink); }
+.atlas-ctl-l { font-size: var(--text-nano); font-weight: 600; letter-spacing: .02em; color: var(--muted); white-space: nowrap; }
+.atlas-ctl:hover { border-color: var(--muted); color: var(--ink); }
+.atlas-ctl:hover .atlas-ctl-l { color: var(--ink); }
+.atlas-ctl:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 
 .atlas-toast {
-  position: absolute; left: 50%; bottom: 70px; transform: translateX(-50%);
-  background: var(--ink); color: var(--bg); padding: 10px 16px; z-index: 20;
+  position: absolute; left: 50%; bottom: 64px; transform: translateX(-50%);
+  background: var(--ink); color: var(--bg); padding: 10px 16px; z-index: 20; border-radius: var(--r-compact);
   opacity: 0; pointer-events: none; transition: opacity var(--dur-routine) ease;
   display: flex; align-items: center; gap: 10px; font-family: var(--font-data); font-size: var(--text-control);
 }
 .atlas-toast[data-open] { opacity: 1; pointer-events: auto; }
-.atlas-toast a { color: var(--aink); background: var(--card); padding: .1em .5em; font-weight: 640; text-decoration: none; }
+.atlas-toast a { color: var(--aink); background: var(--card); padding: .1em .5em; font-weight: 640; text-decoration: none; border-radius: var(--r-inset); }
 
-@media (max-width: 619px) {
-  .atlas-ov-key, .atlas-ov-record, .atlas-ov-index { display: none; }
-  .atlas-pincard { display: none; }
+/* ── The pin chips: a status dot and the trip's name, over the pin, at every width. Positioned
+   by world-view.js on every atlas-pos frame with a translate3d. ─────────────────────────── */
+.atlas-pinchip {
+  position: absolute; top: 0; left: 0; z-index: 6;
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: -12px 0 0 0; padding: 3px 10px; min-height: 44px;
+  /* Opaque: it sits over a canvas whose colour changes as the globe turns. */
+  background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-pill);
+  color: var(--ink); font-family: var(--font-data); font-size: var(--text-micro); font-weight: 600;
+  letter-spacing: .04em; white-space: nowrap; cursor: pointer; opacity: 0; pointer-events: none;
 }
-/* Geometry (§31). */
-.atlas-toggle-btn{border-radius:var(--r-pill)}
-.atlas-pincard{border-radius:var(--r-card);overflow:hidden}
-.atlas-ov{border-radius:var(--r-compact)}
+.atlas-pinchip[data-on] { pointer-events: auto; }
+.atlas-pinchip:not([data-on]) { visibility: hidden; }
+.atlas-pinchip:hover { border-color: var(--muted); }
+.atlas-pinchip:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.atlas-pinchip-dot { width: 7px; height: 7px; border-radius: var(--r-round); background: var(--rule2); flex: 0 0 auto; }
+.atlas-pinchip[data-status="ongoing"] .atlas-pinchip-dot { background: var(--accent); }
+.atlas-pinchip[data-status="upcoming"] .atlas-pinchip-dot { background: var(--aink); }
+.atlas-pinchip[data-status="past"] .atlas-pinchip-dot { background: var(--green); }
+.atlas-pinchip[data-status="ongoing"] { border-color: var(--accent); }
+.atlas-pinchip-name { max-width: 42vw; overflow: hidden; text-overflow: ellipsis; }
+@media (prefers-reduced-motion: no-preference) {
+  /* Opacity only — the transform is the live position and must never be transitioned. */
+  .atlas-pinchip { transition: opacity var(--dur-routine) linear; }
+  .atlas-pinchip[data-status="ongoing"] .atlas-pinchip-dot { animation: atlas-chip-pulse 2.4s ease-in-out infinite; }
+  @keyframes atlas-chip-pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
+}
+
+/* ── Your destinations. ──────────────────────────────────────────────────────────────── */
+.atlas-dests { display: none; flex-direction: column; gap: .6rem; padding: 1rem 1rem .9rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); }
+.atlas-dest-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.atlas-dest-list li + li { border-top: 1px solid var(--rule); }
+.atlas-dest { display: flex; align-items: center; gap: .7rem; min-height: 56px; padding: .45rem 0; color: var(--ink); text-decoration: none; }
+.atlas-dest:hover .atlas-dest-n, .atlas-dest:focus-visible .atlas-dest-n { color: var(--accent-ink); }
+.atlas-dest:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; border-radius: var(--r-inset); }
+.atlas-dest-plate { flex: none; width: 44px; height: 44px; overflow: hidden; border-radius: var(--r-inset); background: var(--bg2); border: 1px solid var(--rule); }
+.atlas-dest-plate img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.atlas-dest-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
+.atlas-dest-n { font-family: var(--font-data); font-size: var(--text-control); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.atlas-dest-s { font-family: var(--font-data); font-size: var(--text-nano); color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.atlas-dest[data-tone="ongoing"] .atlas-dest-s, .atlas-dest[data-tone="next"] .atlas-dest-s { color: var(--accent-ink); }
+.atlas-dest[data-tone="past"] .atlas-dest-s { color: var(--green); }
+.atlas-dests-all {
+  display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-top: .2rem; padding: 0 .1rem;
+  border-top: 1px solid var(--rule); color: var(--ink); text-decoration: none;
+  font-family: var(--font-data); font-size: var(--text-control); font-weight: 600;
+}
+.atlas-dests-all:hover { color: var(--accent-ink); }
+.atlas-dests-all:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; border-radius: var(--r-inset); }
+
+/* ── How it works / the marks / looking at. ──────────────────────────────────────────── */
+.atlas-howto { display: none; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) auto; gap: 1.2rem; padding: .9rem 1.1rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); }
+.atlas-howto-col { display: flex; flex-direction: column; gap: .5rem; min-width: 0; }
+.atlas-howto-col + .atlas-howto-col { border-left: 1px solid var(--rule); padding-left: 1.2rem; }
+.atlas-howto-list, .atlas-howto-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted); }
+.atlas-howto-list li { display: flex; align-items: center; gap: .55rem; line-height: 1.25; }
+.atlas-howto-list b { color: var(--ink); font-weight: 600; }
+.atlas-howto-list svg { width: 22px; height: 22px; flex: none; color: var(--accent-ink); }
+.atlas-howto-key { flex-direction: column; gap: 5px; font-size: var(--text-control-sm); }
+.atlas-howto-key li { display: flex; align-items: center; gap: 7px; }
+.swatch { width: 9px; height: 9px; border-radius: var(--r-round); flex: 0 0 auto; }
+.swatch--surveyed { background: var(--accent); }
+.swatch--filed { background: var(--muted); }
+.swatch--route { width: 12px; height: 0; border-top: 1px dashed var(--accent); border-radius: 0; }
+.swatch--night { border-radius: var(--r-inset); background: var(--rule2); }
+.atlas-coord { font-family: var(--font-data); font-size: var(--text-control); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ── Desktop composition (board 01): panel · globe · destinations, the strip under all three.
+   The stage fills the viewport; the globe takes whatever the panels leave. ───────────────── */
+/* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
+@media (min-width: 900px) {
+  .atlas-stage { display: flex; flex-direction: column; min-height: calc(100dvh - 18px); }
+  :root[data-atlas-mode="world"] .atlas-stage-body {
+    display: grid; flex: 1 1 auto; min-height: 0;
+    grid-template-columns: 250px minmax(0, 1fr) 236px;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "panel globe dests" "trip globe dests" "howto howto howto";
+    gap: 14px 16px; padding: 2px 20px 20px;
+  }
+  /* Table mode: the frame is the strip alone; the list has the page. */
+  :root[data-atlas-mode="table"] .atlas-stage { min-height: 0; }
+  .atlas-panel { grid-area: panel; }
+  .atlas-tripcard { grid-area: trip; display: flex; align-self: start; }
+  .atlas-globe-cell { grid-area: globe; }
+  #atlasGlobe { position: absolute; inset: 0; height: auto; min-height: 0; }
+  .atlas-dests { grid-area: dests; display: flex; align-self: start; }
+  .atlas-howto { grid-area: howto; display: grid; }
+  .atlas-globe-caption { display: none; }
+}
+@media (min-width: 900px) and (max-width: 1179px) {
+  :root[data-atlas-mode="world"] .atlas-stage-body { grid-template-columns: 224px minmax(0, 1fr); grid-template-areas: "panel globe" "trip globe" "dests globe" "howto howto"; }
+  .atlas-dests { grid-area: dests; }
+  .atlas-howto { grid-template-columns: 1fr 1fr; }
+  .atlas-howto-coord { display: none; }
+  .topbar-center .atlas-status-k { display: none; }
+}
+/* Under 900px the phone owns the composition (atlas-mobile.css). */
+@media (max-width: 899px) {
+  .atlas-globe-hint, .atlas-globe-ctl, .atlas-tripcard, .atlas-dests, .atlas-howto, .atlas-panel-head { display: none; }
+}

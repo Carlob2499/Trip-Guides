@@ -30,7 +30,6 @@ import "../styles/base.css";
 import "../styles/chrome.css";
 import "../styles/atlas.css";
 import "../styles/atlas-world.css";
-import "../styles/atlas-cover.css";
 import "../styles/atlas-mobile.css";
 import "../styles/transitions.css";
 import "../features/search/styles.css";
@@ -150,7 +149,8 @@ const rows = curated.map((g) => {
   const emergency = emergencyFor(g.data.country);
   const currency = countryData(g.data.country)?.currency ?? null;
   const advisory = g.data.advisory && g.data.advisory.level >= 2 ? g.data.advisory : null;
-  return { g, record, dayCount, cc, cities, dates, emergency, currency, advisory };
+  const rangeLabel = tripRangeLabel(record.start, record.end);
+  return { g, record, dayCount, cc, cities, dates, rangeLabel, emergency, currency, advisory };
 });
 
 // Relevance sort (README §3) — distinct from the D6 plate ordinal above: this one moves with
@@ -173,6 +173,14 @@ const STAMP: Record<string, { label: string; cls: string } | null> = {
    be the next one. relevanceOrder already sorts upcoming soonest-first, so the first
    `upcoming` it returns IS that guide — derived, not a second ranking to keep in step. */
 const nextTripSlug = relevant.find((r) => r.record.status === "upcoming")?.record.slug ?? null;
+
+/* One word for where a trip stands, on every surface that names it here (the strip's status
+   chips, the destinations panel): the trip's own status, and NEXT TRIP for the one upcoming
+   trip you leave for first. The stamp series below is the list's older vocabulary for the same
+   fact; both come from `record.status`, so they cannot disagree. */
+const STATUS_WORD: Record<string, string> = { ongoing: "Active trip", upcoming: "Planned trip", past: "Past trip", undated: "Guide" };
+const statusWord = (slug: string, status: string) => (slug === nextTripSlug ? "Next trip" : STATUS_WORD[status] ?? "Guide");
+const toneOf = (slug: string, status: string) => (slug === nextTripSlug ? "next" : status);
 
 const guidesJson = rows.map(({ g, record, cc }) => ({
   slug: g.id,
@@ -250,176 +258,274 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
 
     <a class="skip-link" href="#atlasTable">Skip to guides</a>
 
-    {/* Header (item 6 built the shell — brand mark + wordmark, the cover's FLIP target; item 9
-        added the actions cluster). It carries ＋ New guide and the theme toggle. There is no
-        TOOLS button and there is not meant to be: the tools are a station of each guide's own
-        rail, so a hub-level door could only point at one trip's while reading as a door to
-        tools in general (creator, 2026-08-11: "it's per-guide").
-        The WORLD VIEW | TABLE VIEW toggle lives here too, centred at >=760px to match the
-        design screenshots, instead of the full-width bar it started as below — that bar read as
-        oversized/mobile-only-styled at desktop widths. Under 760px it stays in this same header
-        row, compact and right-aligned (atlas-mobile.css's `max-width:759px` block), with only
-        the " view" suffix dropped; it is NOT re-widened to a full-bleed bar there either. */}
-    {/* The one shell (AppChrome, §6): Atlas is current; the four trip entries link into the
-        current trip's page when there is one. The wordmark is the page's level-one heading. */}
-    <AppChrome mode="atlas" base={base} title="Waypoint"
-               guideHref={quick ? `${base}/guides/${quick.g.id}/` : null}
-               destinations={[{ key: "trip", label: "Trip" }, { key: "itinerary", label: "Itinerary" }, { key: "map", label: "Map" }, { key: "guide", label: "Guide" }]} />
-    <header class="atlas-header rail-offset">
-      <div class="atlas-toggle" role="group" aria-label="Switch view">
-        {/* "World view" on desktop, "World" on a phone — one button, and the suffix is a span
-            CSS drops under 760px rather than two labels that could disagree. */}
-        <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="world" aria-pressed="false">World<span class="atlas-toggle-word"> view</span></button>
-        <button type="button" class="atlas-toggle-btn" data-atlas-mode-btn="table" aria-pressed="true">Table<span class="atlas-toggle-word"> view</span></button>
-      </div>
-      {/* aria-pressed has to match the view that is actually on screen, and the two doors
-          disagree about which that is: with no JS nothing sets `data-atlas-mode`, so CSS
-          leaves the TABLE up (D4) — which is what the markup above ships pressed. With JS the
-          head script has ALREADY flipped the root to `world` (or the visitor's remembered
-          choice) before first paint, so that same markup announced "Table view, pressed" over
-          a rendered globe. This re-syncs the pair to the mode the head script settled on.
+    {/* THE STAGE (board 01): the dark frame on the cream page. Its first row is the shared
+        shell strip (AppChrome) — wordmark, the trips' status chips, Search, theme. Its body is
+        the world view: the Atlas panel with the quick actions, the globe, the destinations
+        panel, the how-it-works strip. `spatial` puts everything inside in the dark register in
+        both themes (design-system.md §7/§13). Table mode collapses the body and leaves the
+        strip, so the frame is still the frame while the list has the page. */}
+    <div class="stage atlas-stage spatial">
+      <AppChrome mode="atlas" base={base} title="WayPoint"
+                 guideHref={quick ? `${base}/guides/${quick.g.id}/` : null}
+                 destinations={[{ key: "trip", label: "Trip" }, { key: "itinerary", label: "Itinerary" }, { key: "map", label: "Map" }, { key: "guide", label: "Guide" }]}>
+        {/* The strip's centre on the Atlas: one chip per trip, its status word and its name —
+            the board's "ACTIVE TRIP · South Korea / PLANNED · Denmark" row. Each is a link into
+            that guide; the dot's colour repeats the word, never replaces it (§30). */}
+        {relevant.length > 0 && (
+          <nav slot="center" class="atlas-status" aria-label="Your trips">
+            {relevant.map(({ g, record }) => (
+              <a class="atlas-status-chip" href={`${base}/guides/${g.id}/`} data-tone={toneOf(g.id, record.status)}>
+                <span class="atlas-status-dot" aria-hidden="true"></span>
+                <span class="atlas-status-txt">
+                  <span class="atlas-status-k">{statusWord(g.id, record.status)}</span>
+                  <span class="atlas-status-n">{g.data.title}</span>
+                </span>
+              </a>
+            ))}
+          </nav>
+        )}
+      </AppChrome>
 
-          It lives HERE, immediately after the buttons, and not in <head> beside its partner:
-          the head script runs before these elements are parsed and could not reach them. Still
-          parser-blocking and still pre-paint, so no wrong state is ever announced or painted.
-          The module script at the foot owns every LATER change, through the same setMode(). */}
-      <script is:inline>
-        (function () {
-          const mode = document.documentElement.getAttribute("data-atlas-mode") || "table";
-          document.querySelectorAll("[data-atlas-mode-btn]").forEach(function (b) {
-            b.setAttribute("aria-pressed", String(b.dataset.atlasModeBtn === mode));
-          });
-        })();
-      </script>
-    </header>
-
-    {/* A named region: the globe is a second top-level view alongside <main>'s table, so its
-        canvas/overlays need a landmark of their own. The globe IS the front door (§6) — no
-        splash cover stands between the visitor and geography. */}
-    {/* One main landmark holds BOTH views: the globe is the page's main content in World view
-        and the table in Table view, and whichever is hidden must not take the landmark with it. */}
-    <main class="atlas-main" id="content">
-    <section class="atlas-globe-wrap rail-offset spatial" aria-label="World view — the guide map">
-      <div id="atlasGlobe" data-atlas-globe>
-        <div data-atlas-map-slot></div>
-        <div class="atlas-pins" data-atlas-pins></div>
-
-        <div class="atlas-ov atlas-ov-index" data-ref-fadezoom>
-          <span class="atlas-ov-kicker">Index of sheets</span>
-          <span class="atlas-ov-coord" data-atlas-coord>—</span>
-          <ul data-atlas-index-list></ul>
-        </div>
-
-        <div class="atlas-ov atlas-ov-key" data-ref-fadezoom>
-          <span class="atlas-ov-kicker">Key to the marks</span>
-          <ul>
-            <li><span class="swatch swatch--surveyed"></span> Surveyed (trip complete)</li>
-            <li><span class="swatch swatch--filed"></span> Filed (upcoming)</li>
-            <li><span class="swatch swatch--route"></span> Route from origin</li>
-            <li><span class="swatch swatch--night"></span> Night now</li>
+      <section class="atlas-stage-body" aria-label="World view — the guide map">
+        {/* ── The Atlas panel: title, one line, the quick actions. Left column on desktop; the
+            card under the globe hero on a phone (the title row is the strip's job there). ── */}
+        <div class="atlas-panel">
+          <div class="atlas-panel-head">
+            <h2 class="atlas-panel-title">Atlas</h2>
+            <p class="atlas-panel-sub">Your world of trips and guides.</p>
+          </div>
+          <span class="atlas-kicker">Quick actions</span>
+          <ul class="atlas-acts">
+            <li>
+              <a class="atlas-act" href={`${base}/new/`}>
+                <span class="atlas-act-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+                <span class="atlas-act-txt"><span class="atlas-act-l">Plan a new trip</span><span class="atlas-act-s">Choose a destination</span></span>
+                <span class="atlas-act-chev" aria-hidden="true">›</span>
+              </a>
+            </li>
+            <li>
+              {/* The ONE table-view control. Table mode is the same page with the list up front
+                  (and on a phone the globe cropped to its horizon); the list head carries the one
+                  way back. aria-pressed is synced by the script under the strip. */}
+              <button class="atlas-act" type="button" data-atlas-mode-btn="table" aria-pressed="true">
+                <span class="atlas-act-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
+                <span class="atlas-act-txt"><span class="atlas-act-l">Explore guides</span><span class="atlas-act-s">Every trip, as a list</span></span>
+                <span class="atlas-act-chev" aria-hidden="true">›</span>
+              </button>
+            </li>
+            {quick && (
+              <li>
+                <a class="atlas-act" href={`${base}/guides/${quick.g.id}/#dest-map`}>
+                  <span class="atlas-act-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5 9 4l6 2.5 6-2.5v13L15 19.5 9 17l-6 2.5z"/><path d="M9 4v13M15 6.5v13"/></svg></span>
+                  <span class="atlas-act-txt"><span class="atlas-act-l">View map</span><span class="atlas-act-s">{quick.g.data.title}, place by place</span></span>
+                  <span class="atlas-act-chev" aria-hidden="true">›</span>
+                </a>
+              </li>
+            )}
+            {quick && (
+              <li>
+                <a class="atlas-act" href={`${base}/guides/${quick.g.id}/#dest-split`}>
+                  <span class="atlas-act-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+                  <span class="atlas-act-txt"><span class="atlas-act-l">Split expenses</span><span class="atlas-act-s">Group costs on {quick.g.data.title}</span></span>
+                  <span class="atlas-act-chev" aria-hidden="true">›</span>
+                </a>
+              </li>
+            )}
           </ul>
         </div>
+        <script is:inline>
+          (function () {
+            /* aria-pressed has to match the view actually on screen, and the two doors disagree:
+               with no JS nothing sets `data-atlas-mode`, so CSS leaves the TABLE up (D4). With
+               JS the head script has already flipped the root before first paint. Re-sync here,
+               after the buttons exist and before paint; atlas-hub.js owns every later change. */
+            const mode = document.documentElement.getAttribute("data-atlas-mode") || "table";
+            document.querySelectorAll("[data-atlas-mode-btn]").forEach(function (b) {
+              b.setAttribute("aria-pressed", String(b.dataset.atlasModeBtn === mode));
+            });
+          })();
+        </script>
 
-        <div class="atlas-ov atlas-ov-record" data-ref-fadezoom>
-          <span class="atlas-ov-kicker">The record</span>
-          <ul data-atlas-record-list></ul>
-        </div>
+        {/* ── The featured trip (board 01's active-trip card): photo, status, name, dates, the
+            cities, Explore guide / View itinerary. It is `quick` — the same trip the list leads
+            with — so the two can never disagree about which trip is up. Desktop only: the phone
+            list's up-next card is this card, at that width. ── */}
+        {quick && quickKicker && (
+          <div class="atlas-tripcard">
+            {quick.record.coverImg && (
+              <img class="atlas-tripcard-img" src={atWidth(quick.record.coverImg, 480)!}
+                   srcset={srcsetWidths(quick.record.coverImg, [320, 480, 640, 960]) ?? undefined}
+                   sizes="250px" alt="" loading="eager" decoding="async" width="480" height="270" />
+            )}
+            <div class="atlas-tripcard-body">
+              <span class="atlas-kicker atlas-tripcard-k" data-tone={toneOf(quick.g.id, quick.record.status)}>{statusWord(quick.g.id, quick.record.status)}</span>
+              <span class="atlas-tripcard-title">{quick.g.data.title}</span>
+              {quick.rangeLabel && <span class="atlas-tripcard-dates">{quick.rangeLabel}</span>}
+              <span class="atlas-tripcard-cities">{quick.cities}{quick.dayCount > 0 ? ` · ${quick.dayCount} days` : ""}</span>
+              <a class="atlas-cta atlas-cta--fill" href={`${base}/guides/${quick.g.id}/`}>Explore guide</a>
+              <a class="atlas-cta" href={`${base}/guides/${quick.g.id}/#dest-itinerary`}>View itinerary</a>
+            </div>
+          </div>
+        )}
 
-        <div class="atlas-ov atlas-ov-controls" data-ref-fadezoom>
-          <button type="button" data-atlas-zoom-out aria-label="Zoom out">−</button>
-          <button type="button" data-atlas-fit>Fit world</button>
-          <button type="button" data-atlas-zoom-in aria-label="Zoom in">+</button>
-          <button type="button" data-atlas-spin>Pause</button>
-        </div>
+        {/* ── The globe. ── */}
+        <div class="atlas-globe-cell">
+          <div id="atlasGlobe" data-atlas-globe>
+            <div data-atlas-map-slot></div>
+            <div class="atlas-pins" data-atlas-pins></div>
 
-        <div class="atlas-toast" data-atlas-toast></div>
+            {/* What the globe does — drag and the pins (atlas-map.js: d3-drag; a pin tap opens
+                the guide on desktop, the ping sheet on a phone). Nothing here that is not wired. */}
+            <p class="atlas-globe-hint">Drag to rotate · Tap a pin to open its guide</p>
 
-        {/* Globe caption (bundle §1 "Globe hero"). Mobile-only, and it describes what this
-            globe ACTUALLY does today: tapping a pin raises the ping sheet, tapping anywhere
-            else raises the "No guide here yet — start one" toast (world-view.js's
-            atlas-select handler). The bundle's own wording promises a country-polygon hit
-            test that is not built; a caption is a claim like any other. */}
-        <p class="atlas-globe-caption">Tap a pin for its sheet — anywhere else to start one.</p>
+            <div class="atlas-globe-ctl" role="group" aria-label="Globe controls">
+              <button type="button" class="atlas-ctl" data-atlas-zoom-out aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5M7.5 10.5h6"/></svg><span class="atlas-ctl-l">Out</span></button>
+              <button type="button" class="atlas-ctl" data-atlas-fit><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span class="atlas-ctl-l">Fit world</span></button>
+              <button type="button" class="atlas-ctl" data-atlas-zoom-in aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5M7.5 10.5h6M10.5 7.5v6"/></svg><span class="atlas-ctl-l">In</span></button>
+              <button type="button" class="atlas-ctl" data-atlas-spin><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg><span class="atlas-ctl-l" data-atlas-spin-label>Pause</span></button>
+            </div>
 
-        {/* The horizon strip's fade and its tap target (bundle §1b). Both are inert until
-            `data-atlas-mode="table"` at phone width; the globe underneath is the same
-            instance either way — the strip crops it, it never unmounts. */}
-        <div class="atlas-horizon" aria-hidden="true"></div>
-        <button type="button" class="atlas-horizon-btn" data-atlas-horizon
-                aria-label="Back to the world view"></button>
+            <div class="atlas-toast" data-atlas-toast></div>
 
-        {/* Mobile-only (<760px, D5): the desktop rails/pincards/motto have no spatial budget
-            on a phone (README "Mobile"), so a bare-ping globe gets its own FAB menu (fly to
-            each sheet, fit world, pause spin, ＋ new guide — the same actions the
-            desktop rail already exposes, just relocated) and a bottom sheet on pin tap instead
-            of the desktop pincard. Hidden by CSS above 759px; inert without JS either way
-            (world.js gates its own mobile branch, so a no-JS phone visitor still gets the
-            table view, D4's door). */}
-        <button type="button" class="atlas-menufab" data-atlas-menufab aria-label="Map menu" aria-expanded="false">☰</button>
-        <div class="atlas-menuscrim" data-atlas-menuscrim hidden></div>
-        <div class="atlas-menusheet" data-atlas-menusheet hidden>
-          <span class="atlas-menusheet-kicker">Fly to a sheet</span>
-          <div data-atlas-menusheet-fly></div>
-          <span class="atlas-menusheet-kicker">The map</span>
-          <button type="button" data-atlas-menu-fit>Fit world</button>
-          <button type="button" data-atlas-menu-spin>Pause</button>
-          {/* No tools link. The README warned that on a phone the ☰ is the only route in,
-              and that was true of a cross-trip screen; it stopped being true when R5 made
-              the tools a station of each guide's own rail. From here the honest route is
-              "fly to a sheet" above and then that guide's rail — one door, in the one place
-              the tools actually belong. */}
-          <a class="atlas-menusheet-new" href={`${base}/new/`}>＋ New guide</a>
-        </div>
+            {/* Globe caption (phone). It describes what this globe ACTUALLY does today: tapping a
+                pin raises the ping sheet, tapping anywhere else raises the "No guide here yet —
+                start one" toast (world-view.js's atlas-select handler). */}
+            <p class="atlas-globe-caption">Tap a pin for its guide — anywhere else to start one.</p>
 
-        <div class="atlas-pingsheet" data-atlas-pingsheet hidden>
-          <span class="atlas-pingsheet-grip" aria-hidden="true"></span>
-          {/* The sheet carried a country code, a title and a clock — true, and completely
-              anonymous (creator, 2026-08-09: "the globe boxes are quite sterile", "the globe
-              doesn't have enough information. Where is the picture cover?"). The photo is the
-              trip's OWN `record.coverImg`, already in the payload this sheet reads and already
-              rendered on the table rows, so this adds a surface rather than a second source of
-              truth — and no new image sourcing, which would need Commons provenance.
-              `hidden` until world-view.js has a URL: a guide with no cover gets no empty
-              frame. */}
-          <img class="atlas-pingsheet-thumb" data-atlas-pingsheet-thumb alt="" hidden
-               loading="lazy" decoding="async" width="64" height="64" />
-          <span class="atlas-pingsheet-kicker" data-atlas-pingsheet-kicker></span>
-          <span class="atlas-pingsheet-title" data-atlas-pingsheet-title></span>
-          <span class="atlas-pingsheet-meta" data-atlas-pingsheet-meta></span>
-          <div class="atlas-pingsheet-actions">
-            <a class="atlas-pingsheet-open" data-atlas-pingsheet-open href="#">Open the sheet →</a>
-            <button type="button" data-atlas-pingsheet-zoom>Zoom</button>
-            <button type="button" data-atlas-pingsheet-close aria-label="Dismiss">✕</button>
+            {/* The horizon strip's fade and its tap target (phone, table mode). Both are inert
+                until `data-atlas-mode="table"` at phone width; the globe underneath is the same
+                instance either way — the strip crops it, it never unmounts. */}
+            <div class="atlas-horizon" aria-hidden="true"></div>
+            <button type="button" class="atlas-horizon-btn" data-atlas-horizon
+                    aria-label="Back to the world view"></button>
+
+            {/* Phone only (<760px): the FAB map menu (fly to a guide, fit world, pause spin, new
+                guide) and the bottom sheet a pin tap raises. Hidden by CSS above 759px; inert
+                without JS either way (world-view.js gates its own mobile branch). */}
+            <button type="button" class="atlas-menufab" data-atlas-menufab aria-label="Map menu" aria-expanded="false">☰</button>
+            <div class="atlas-menuscrim" data-atlas-menuscrim hidden></div>
+            <div class="atlas-menusheet" data-atlas-menusheet hidden>
+              <span class="atlas-menusheet-kicker">Fly to a guide</span>
+              <div data-atlas-menusheet-fly></div>
+              <span class="atlas-menusheet-kicker">The map</span>
+              <button type="button" data-atlas-menu-fit>Fit world</button>
+              <button type="button" data-atlas-menu-spin>Pause</button>
+              <a class="atlas-menusheet-new" href={`${base}/new/`}>＋ New guide</a>
+            </div>
+
+            <div class="atlas-pingsheet" data-atlas-pingsheet hidden>
+              <span class="atlas-pingsheet-grip" aria-hidden="true"></span>
+              {/* The trip's OWN cover (record.coverImg — the same URL the rows use). `hidden`
+                  until world-view.js has a URL: a guide with no cover gets no empty frame. */}
+              <img class="atlas-pingsheet-thumb" data-atlas-pingsheet-thumb alt="" hidden
+                   loading="lazy" decoding="async" width="64" height="64" />
+              <span class="atlas-pingsheet-kicker" data-atlas-pingsheet-kicker></span>
+              <span class="atlas-pingsheet-title" data-atlas-pingsheet-title></span>
+              <span class="atlas-pingsheet-meta" data-atlas-pingsheet-meta></span>
+              <div class="atlas-pingsheet-actions">
+                <a class="atlas-pingsheet-open" data-atlas-pingsheet-open href="#">Open the guide →</a>
+                <button type="button" data-atlas-pingsheet-zoom>Zoom</button>
+                <button type="button" data-atlas-pingsheet-close aria-label="Dismiss">✕</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+
+        {/* ── Your destinations (board 01's right panel): one row per trip, its cover, its
+            status, a chevron into the guide; a guide still being researched is a row here too,
+            into its progress page. Desktop only — the phone list below carries the same rows. ── */}
+        {(relevant.length > 0 || building.length > 0) && (
+          <div class="atlas-dests">
+            <span class="atlas-kicker">Your destinations</span>
+            <ul class="atlas-dest-list">
+              {relevant.map(({ g, record, cities }) => (
+                <li>
+                  <a class="atlas-dest" href={`${base}/guides/${g.id}/`} data-tone={toneOf(g.id, record.status)}>
+                    <span class="atlas-dest-plate">
+                      {record.coverImg && <img src={atWidth(record.coverImg, 44)!} srcset={srcsetFor(record.coverImg, 44) ?? undefined} alt="" loading="lazy" decoding="async" width="44" height="44" />}
+                    </span>
+                    <span class="atlas-dest-txt">
+                      <span class="atlas-dest-n">{g.data.title}</span>
+                      <span class="atlas-dest-s">{statusWord(g.id, record.status)}{cities ? ` · ${cities}` : ""}</span>
+                    </span>
+                    <span class="atlas-act-chev" aria-hidden="true">›</span>
+                  </a>
+                </li>
+              ))}
+              {building.map((b) => (
+                <li>
+                  <a class="atlas-dest" href={`${base}/progress/?slug=${b.slug}`} data-tone="building"
+                     aria-label={`${b.title} — still being built. Follow its research run.`}>
+                    <span class="atlas-dest-plate"></span>
+                    <span class="atlas-dest-txt">
+                      <span class="atlas-dest-n">{b.title}</span>
+                      <span class="atlas-dest-s">Building{b.country ? ` · ${b.country}` : ""}</span>
+                    </span>
+                    <span class="atlas-act-chev" aria-hidden="true">›</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a class="atlas-dests-all" href="#atlasTable" data-atlas-show-table>View all destinations →</a>
+          </div>
+        )}
+
+        {/* ── How it works / the marks / where the globe is looking (board 01's bottom strip).
+            The key names what atlas-map.js actually draws: oxide = surveyed (past or on it now),
+            muted = filed, the dashed route from the origin airport, the night shade. ── */}
+        <div class="atlas-howto">
+          <div class="atlas-howto-col">
+            <span class="atlas-kicker">How it works</span>
+            <ul class="atlas-howto-list">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11V4.5a1.5 1.5 0 0 1 3 0V12M14 11.5V6.5a1.5 1.5 0 0 1 3 0V13"/><path d="M17 13v-1.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-2.5a5 5 0 0 1-4-2L4 14.5a1.6 1.6 0 0 1 2.6-1.9L8 14"/></svg><span><b>Drag to rotate</b><br/>explore your world</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg><span><b>Pins show your trips</b><br/>tap one to open its guide</span></li>
+            </ul>
+          </div>
+          <div class="atlas-howto-col">
+            <span class="atlas-kicker">The marks</span>
+            <ul class="atlas-howto-key">
+              <li><span class="swatch swatch--surveyed"></span> Surveyed — travelled or on it now</li>
+              <li><span class="swatch swatch--filed"></span> Filed — not travelled yet</li>
+              <li><span class="swatch swatch--route"></span> Route from origin</li>
+              <li><span class="swatch swatch--night"></span> Night now</li>
+            </ul>
+          </div>
+          <div class="atlas-howto-col atlas-howto-coord">
+            <span class="atlas-kicker">Looking at</span>
+            <span class="atlas-coord" data-atlas-coord>—</span>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <script type="application/json" is:inline data-atlas-guides-json set:html={JSON.stringify(guidesJson)} />
 
-    <div class="atlas-table-wrap rail-offset">
+    {/* THE LIST (the table view, D4's zero-JS door): under the stage on the cream page in world
+        mode — board 01's ivory "Upcoming trips" card — and the whole page in table mode. */}
+    <main class="atlas-table-wrap" id="content">
     <div class="atlas-table" id="atlasTable" tabindex="-1">
-      {/* The one Search (design-system.md D6-24, search-ui-final): this field hands over to
-          the global overlay (features/search) on focus, exactly as a guide's own field does.
-          Every guide's records are in the build-time index it fetches, so a place, a price
-          or "119" is found from here. No second results list, no second ranking. */}
       <div class="atlas-tablehead" data-atlas-searchhead>
+        <div class="atlas-listhead-row">
+          <span class="atlas-kicker atlas-listhead">Your trips — up next first</span>
+          {/* The one way back to the world view from the list (table mode). */}
+          <button type="button" class="atlas-world-btn" data-atlas-mode-btn="world" aria-pressed="false">World view</button>
+        </div>
+        {/* The one Search (§21): this field hands over to the global overlay (features/search)
+            on focus, exactly as a guide's own field does. */}
         <div class="atlas-search-row" role="search">
           <input
             class="atlas-search"
             data-search-field
             type="search"
-            placeholder="Search every sheet — a place, a price, 119…"
+            placeholder="Search every guide — a place, a price, 119…"
             aria-label="Search every guide"
             autocomplete="off"
           />
         </div>
       </div>
 
-      {/* Chips read in the same order as the list below them — `relevant`, not `rows`. A jump
-          rail whose sequence disagrees with the list it jumps into is a second ranking to keep
-          in step, which is what this page already avoids for the globe's record rail. */}
-      <div class="atlas-chips" data-atlas-chips role="group" aria-label="Jump to a sheet">
+      {/* Chips read in the same order as the list below them — `relevant`, not `rows`. */}
+      <div class="atlas-chips" data-atlas-chips role="group" aria-label="Jump to a guide">
         {relevant.map(({ g }) => (
           <a class={`atlas-chip${g.id === quick?.g.id ? " atlas-chip--current" : ""}`} href={`#sheet-${g.id}`}>
             {g.data.title}
@@ -428,11 +534,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
       </div>
 
       {quick && quickKicker && (
-        // A <div>, not an <a> — the tel: chips inside are real functional links (Gate 5:
-        // "Emergency numbers are live tel: links"), and nesting an <a> inside another <a> is
-        // invalid HTML that breaks click handling on whichever element the browser closes
-        // first. "Open this sheet →" is its own anchor instead, matching the spec's own
-        // wording (a CTA line, not "the whole card is a link").
+        // A <div>, not an <a> — the chips inside may be real links; nesting <a> in <a> is invalid.
         <div class="atlas-quick">
           <span class="atlas-quick-kicker">{quickKicker}</span>
           <span class="atlas-quick-title">{quick.g.data.title}</span>
@@ -444,68 +546,24 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
               <span class="atlas-quick-meta atlas-quick-advisory">⚠ Level {quick.advisory.level} advisory</span>
             )}
           </span>
-          <a class="atlas-quick-cta" href={`${base}/guides/${quick.g.id}/`}>Open this sheet →</a>
+          <a class="atlas-quick-cta" href={`${base}/guides/${quick.g.id}/`}>Open this guide →</a>
         </div>
       )}
 
-      {/* The list's own section header (atlas-mobile-home bundle §1 "List section header").
-          Mobile-only: on a phone the globe hero scrolls away above this list, so without a
-          label the rows arrive with nothing saying what they are or why they are in this
-          order. Desktop has the whole page in view at once and does not need it — and adding
-          a second sticky bar under the search bar there would be the crowding the design
-          doctrine forbids. `aria-hidden` because <ul> already carries the semantics; this is
-          a visual label for a sighted reader mid-scroll, not a second announcement. */}
-      {rows.length > 0 && (
-        <div class="atlas-listhead" aria-hidden="true">Your sheets — up next first</div>
-      )}
-
-      {/* ORDER of the list below: `relevant`, not `rows` — current trip first, at every width
-          (CONTEXT.md 2026-08-12, "Hub trip list orders current-trip-first, not alphabetical").
-          `rows` is the content collection's own order, i.e. alphabetical by slug, which put the
-          upcoming trip LAST under a header that promises "up next first".
-
-          The rule is `relevanceOrder()` (features/atlas/model/relevance.ts) — deliberately
-          REUSED rather than re-derived here, so this list, the quick card above it and the
-          globe's record `rank` can never disagree about which trip is the current one. In full:
-          the trip whose date range contains today first (`ongoing`), then upcoming ones
-          soonest-start first, then finished ones most-recently-ended first, then undated ones
-          last; ties inside a rank keep collection order. The dates come from the guide's own day
-          sections via firstDayDateOf/lastDayDateOf — no separate meta field to keep in step.
-
-          The `.atlas-sheets-next` marker below still exists and atlas-mobile.css still gives it
-          `order:-1`; that is now a no-op agreeing with the DOM rather than the only thing
-          floating the card, and the `#sheet-<id>` anchors are unaffected — they are ids, not
-          positions. */}
+      {/* ORDER: `relevant` (features/atlas/model/relevance.ts) — current trip first, at every
+          width; the quick card above, the strip's chips and the globe's `rank` all reuse it. */}
       {rows.length === 0 && building.length === 0 ? (
         <p class="atlas-empty">No guides yet.</p>
       ) : (
         <ul class="atlas-sheets">
-          {/* A guide still being RESEARCHED, one row per run (features/atlas/model/building.ts).
-              It is a row and not a new surface because design-handoff/README.md's entry-point
-              table puts progress on "the Atlas table row itself", linking to /progress/ instead
-              of the guide — zero new header items, zero new components.
-
-              It gets its OWN stamp word. `.atlas-stamp--progress` is taken: SPEC-COMPONENTS.md
-              §6 spends it on "IN PROGRESS", meaning the TRIP is happening right now, and both
-              stamps can appear in this same list at the same time. One word for two claims
-              would draw a guide nobody has travelled as a trip already underway.
-
-              What the row does NOT carry is any figure off the run — no stage, no elapsed
-              clock, no percentage. Those move minute by minute and this page is static, so a
-              server-rendered one would already be stale when it was read; same reason the
-              weather slot below ships empty. The live truth is one tap away, which is the
-              whole point of the link.
-
-              No `data-sheet-slug` and no `#sheet-` id, both deliberate: the first wires a row
-              into the globe's selection (world-view.js) and the second into the jump chips,
-              and this guide has neither a verified pin nor a sheet to jump to yet. */}
+          {/* A guide still being RESEARCHED, one row per run (features/atlas/model/building.ts):
+              the row links to /progress/ instead of the guide. No figure off the run — those move
+              minute by minute and this page is static. No `data-sheet-slug` and no `#sheet-` id:
+              this guide has neither a verified pin nor a sheet to jump to yet. */}
           {building.map((b) => (
             <li class="atlas-sheets-building">
               <a class="atlas-sheet atlas-sheet--building" href={`${base}/progress/?slug=${b.slug}`}
                  aria-label={`${b.title} — still being built. Follow its research run.`}>
-                {/* Empty on purpose — the same unfilled plate a guide with no cover gets. An
-                    honest blank reads as a slot nothing has landed in yet; a grey placeholder
-                    reads as a photo that failed. */}
                 <span class="atlas-sheet-plate"></span>
                 <span class="atlas-sheet-body">
                   <span class="atlas-sheet-title">{b.title}</span>
@@ -518,32 +576,16 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
           ))}
           {relevant.map(({ g, record, cc, cities, dates, dayCount }) => {
             const stamp = STAMP[record.status];
-            // The up-next sheet is the mobile list's big card (bundle §1 "Up-next card").
+            // The up-next sheet is the phone list's big card.
             const isNext = quick != null && g.id === quick.g.id;
             return (
               <li class={isNext ? "atlas-sheets-next" : undefined}>
                 <a class={`atlas-sheet${isNext ? " atlas-sheet--next" : ""}`} id={`sheet-${g.id}`}
                    href={`${base}/guides/${g.id}/`} data-sheet-slug={g.id}>
-                  {/* The plate: the trip's own cover photo with its survey number stamped on
-                      it (creator, 2026-08-08 — the list read "clean but bland"). The image is
-                      the SAME `record.coverImg` the globe's pincards use, so this adds a
-                      surface, not a second source of truth. A guide with no cover keeps the
-                      number alone on a plain plate — an honest blank, not a grey placeholder
-                      pretending to be a photo. */}
-                  {/* The plate is the PHOTO now, nothing else (creator, 2026-08-09: "the guide
-                      table view has the cover hero but it's covered by the guide number — is
-                      there really a need?"). It is 56px square; a stamped badge with its own
-                      opaque ground was taking a corner out of an already tiny image, and the
-                      survey number does not need to sit on the plate to be a survey number.
-                      A guide with no cover still gets an empty plate rather than a grey
-                      placeholder — the honest blank the original note asked for, which reads
-                      as an unfilled slot in an archive rather than a photo that failed. */}
-                  {/* The up-next plate is the same <img> at two very different sizes: a 56px
-                      square on desktop, a full-bleed 96px-tall cover at the top of the phone
-                      list. Width descriptors + `sizes` are the only srcset form that can say
-                      that; every other row keeps the 1x/2x pair, which is all a fixed 56px
-                      plate can use. Eager, because on a phone it is the first thing under the
-                      globe rather than something below the fold. */}
+                  {/* The plate is the trip's own cover, nothing else; a guide with no cover keeps an
+                      honest empty plate rather than a grey placeholder. The up-next plate is the
+                      same <img> at two sizes — a 56px square here, a full-bleed 96px cover at the
+                      top of the phone list — so it carries width descriptors + `sizes`. */}
                   <span class="atlas-sheet-plate">
                     {record.coverImg && (
                       <img class="atlas-sheet-thumb" src={atWidth(record.coverImg, 56)!}
@@ -562,44 +604,21 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
                   </span>
                   {stamp && <span class={`atlas-stamp ${stamp.cls}`}>{stamp.label}</span>}
                   {cc && <span class="atlas-quick-meta" aria-hidden="true">{cc}</span>}
-                  {/* Current conditions at the trip's own anchor (bundle §1 "…33° clear").
-                      Ships EMPTY and hidden: the value is live, so a server-rendered number
-                      would be a stale fact with no verification date — exactly what this
-                      product refuses. home-weather.js fills it or it never appears. Only
-                      guides with an anchor get a slot; there is nowhere to ask about a guide
-                      with no coordinates. */}
+                  {/* Current conditions at the trip's own anchor. Ships EMPTY and hidden: the value
+                      is live, so a server-rendered number would be a stale fact. home-weather.js
+                      fills it or it never appears. */}
                   {record.anchor && (
                     <span class="atlas-sheet-wx" data-atlas-wx={g.id} hidden></span>
                   )}
-                  {/* Moved off the plate to here, beside the other row data. Same position on
-                      every row whether or not that guide has a cover, which the on-plate
-                      version could not manage. */}
                   <span class="atlas-sheet-num">{record.ordinal != null ? String(record.ordinal).padStart(2, "0") : "—"}</span>
                 </a>
               </li>
             );
           })}
-          {/* The create card closes the list (bundle §1 "Create card"). On a phone the header's
-              ＋ CTA is hidden (atlas-mobile.css explains why), so before this the only route to
-              /new/ from the list was the FAB menu — and the moment a reader reaches the end of
-              four sheets is exactly when "start one" is the next thing they want. */}
-          <li class="atlas-sheets-new">
-            <a class="atlas-newcard" href={`${base}/new/`}>
-              <span class="atlas-newcard-plus" aria-hidden="true">＋</span>
-              <span class="atlas-newcard-label">Start a sheet</span>
-            </a>
-          </li>
         </ul>
       )}
-
-      {/* README §5's "TRIP TOOLS row" is gone, and its absence is the point (creator,
-          2026-08-11: "it's per-guide"). R5 made the tools a station of a guide's own rail,
-          so a row here could only ever mean ONE trip's tools — the featured one — while
-          reading like a door to tools in general. The way to a trip's tools is the way to
-          everything else about that trip: open its guide. */}
     </div>
     <footer class="atlas-foot">Waypoint — every fact checked, every route tested. <a href={`${base}/about/`}>How it's made →</a></footer>
-    </div>
     </main>
 
     <script src="../scripts/atlas-hub.js"></script>

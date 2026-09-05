@@ -1,7 +1,7 @@
 /* <atlas-map> — the Atlas hub's spinning globe. Ported from
    docs/design-handoff/prototype/atlas-map.js (README: "usable almost as-is"). SPEC-COMPONENTS
    §8 and ANTIPATTERNS.md's "SVG for the globe" entry mark the performance model below as
-   NOT to be re-tuned: canvas, two motion layers + one furniture layer, DPR capped, geometry
+   NOT to be re-tuned: canvas, two motion layers, DPR capped, geometry
    decimated while moving, terminator rebuilt once a minute, atlas-pos throttled per frame
    (not per DOM measurement).
 
@@ -64,12 +64,6 @@ function subsolar(date) {
   const ra = Math.atan2(Math.cos(eps) * Math.sin(lambda), Math.cos(lambda)) / rad;
   const gmst = (18.697374558 + 24.06570982441908 * n) % 24;
   return [((ra - gmst * 15 + 540) % 360) - 180, dec];
-}
-function bearing(a, b) {
-  const r = Math.PI / 180, p1 = a[1] * r, p2 = b[1] * r, dl = (b[0] - a[0]) * r;
-  const y = Math.sin(dl) * Math.cos(p2);
-  const x = Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(dl);
-  return (Math.atan2(y, x) / r + 360) % 360;
 }
 
 // Drop intermediate vertices from big rings — invisible at globe scale, ~3x cheaper to clip.
@@ -141,7 +135,7 @@ class AtlasMap extends BaseElement {
       .catch((err) => console.warn("atlas-map: failed to load", err));
     this._ro = new ResizeObserver(() => { if (this._world) this._build(); });
     this._ro.observe(this);
-    this._mo = new MutationObserver(() => { this._readTheme(); this._dirty = true; this._furnDirty = true; });
+    this._mo = new MutationObserver(() => { this._readTheme(); this._dirty = true; });
     this._mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     this._io = new IntersectionObserver((es) => { this._visible = es[0].isIntersecting; }, { threshold: 0 });
     this._io.observe(this);
@@ -293,9 +287,6 @@ class AtlasMap extends BaseElement {
     this._limb = null;
     const globe = this._layer(w, h, dpr, "cursor:grab;touch-action:none");
     this._canvas = globe.cv; this._ctx = globe.cx;
-    const furn = this._layer(w, h, dpr, "pointer-events:none");
-    this._furnCtx = furn.cx;
-    this._furnDirty = true;
 
     const proj = this._proj = d3.geoOrthographic().translate([w / 2, h / 2]).scale(this._k).clipAngle(90).rotate(this._rot);
     proj.precision(0.7);
@@ -323,7 +314,7 @@ class AtlasMap extends BaseElement {
         .on("click", (ev) => {
           if (this._dragged) return;
           ev.stopPropagation();
-          this._target = code; this._furnDirty = true;
+          this._target = code;
           this.focus(code);
           this.dispatchEvent(new CustomEvent("atlas-select", { bubbles: true, detail: { slug: code, name: this._nameOf[code] } }));
         });
@@ -370,7 +361,7 @@ class AtlasMap extends BaseElement {
       let hit = null;
       for (const feat of this._geom.feats) { if (d3.geoContains(feat, pt)) { hit = feat; break; } }
       const slug = hit ? (this._idToSlug[+hit.id] || null) : null;
-      if (slug) { this._target = slug; this._furnDirty = true; }
+      if (slug) { this._target = slug; }
       // A tap on open ocean or an unsurveyed country clears the focus rather than leaving a
       // halo on a pin nobody is looking at any more.
       this.focus(slug);
@@ -546,7 +537,6 @@ class AtlasMap extends BaseElement {
       ctx.beginPath(); ctx.arc(cx, cy, k, 0, 6.2832);
       ctx.fillStyle = this._limb; ctx.fill();
     }
-    this._furniture();
   }
 
   _emit() {
@@ -567,93 +557,10 @@ class AtlasMap extends BaseElement {
     this.dispatchEvent(new CustomEvent("atlas-pos", { bubbles: true, detail: D }));
   }
 
-  _furniture() {
-    const { w, h } = this._dims, colors = this._c, R = this._R;
-    const centre = [-this._rot[0], -this._rot[1]];
-    const d3 = this._d3;
-    const anchors = this._guides.filter((guide) => guide.anchor);
-    if (!anchors.length) return;
-    let target = this._target;
-    if (!target || !this._anchorOf[target]) {
-      let best = Infinity;
-      for (const guide of anchors) {
-        const dd = d3.geoDistance(centre, guide.anchor) * 6371;
-        if (dd < best) { best = dd; target = guide.slug; }
-      }
-    }
-    const targetAnchor = this._anchorOf[target];
-    if (!targetAnchor) return;
-    const brg = bearing(centre, targetAnchor);
-    if (this._needle == null) this._needle = brg;
-    else {
-      const diff = ((brg - this._needle + 540) % 360) - 180;
-      if (Math.abs(diff) > 0.3) { this._needle = (this._needle + diff * 0.18 + 360) % 360; this._dirty = true; }
-    }
-    const km = Math.round(d3.geoDistance(centre, targetAnchor) * 6371);
-    const kmPerPx = 6371 / R * (R / this._k);
-    let stepKm = 2000, px = stepKm / kmPerPx;
-    while (px > 130) { stepKm /= 2; px = stepKm / kmPerPx; }
-    while (px < 55) { stepKm *= 2; px = stepKm / kmPerPx; }
-    const sig = (w < 620 ? "n" : "w") + "|" + target + "|" + Math.round(this._needle) + "|" + Math.round(brg) + "|" + km + "|" + stepKm + "|" + (this._dark ? 1 : 0) + "|" + w + "x" + h;
-    if (sig === this._furnSig && !this._furnDirty) return;
-    this._furnSig = sig; this._furnDirty = false;
-
-    const ctx = this._furnCtx;
-    ctx.clearRect(0, 0, w, h);
-    ctx.strokeStyle = colors.rule2; ctx.lineWidth = 1;
-    const P = 14, T = 16;
-    [[P, P, 1, 1], [w - P, P, -1, 1], [P, h - P, 1, -1], [w - P, h - P, -1, -1]].forEach(([x, y, sx, sy]) => {
-      ctx.beginPath(); ctx.moveTo(x + sx * T, y); ctx.lineTo(x, y); ctx.lineTo(x, y + sy * T); ctx.stroke();
-    });
-    const narrow = w < 620;
-    const rx = narrow ? w / 2 : w - 58, ry = narrow ? 52 : 66, rr = narrow ? 20 : 24;
-    ctx.beginPath(); ctx.arc(rx, ry, rr, 0, 6.2832); ctx.stroke();
-    for (let a = 0; a < 360; a += 15) {
-      const t = (a - 90) * Math.PI / 180;
-      const inner = a % 90 === 0 ? rr - 8 : a % 45 === 0 ? rr - 5 : rr - 3;
-      ctx.beginPath();
-      ctx.moveTo(rx + Math.cos(t) * inner, ry + Math.sin(t) * inner);
-      ctx.lineTo(rx + Math.cos(t) * rr, ry + Math.sin(t) * rr);
-      ctx.stroke();
-    }
-    ctx.font = "700 8.5px 'Source Sans 3', system-ui, sans-serif";
-    ctx.fillStyle = colors.muted; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    [["N", 0], ["E", 90], ["S", 180], ["W", 270]].forEach(([lbl, a]) => {
-      const t = (a - 90) * Math.PI / 180;
-      ctx.fillText(lbl, rx + Math.cos(t) * (rr + 8), ry + Math.sin(t) * (rr + 8));
-    });
-    const nt = (this._needle - 90) * Math.PI / 180, nx = Math.cos(nt), ny = Math.sin(nt);
-    ctx.beginPath();
-    ctx.moveTo(rx + nx * (rr - 5), ry + ny * (rr - 5));
-    ctx.lineTo(rx - ny * 4.5 - nx * 5, ry + nx * 4.5 - ny * 5);
-    ctx.lineTo(rx + ny * 4.5 - nx * 5, ry - nx * 4.5 - ny * 5);
-    ctx.closePath(); ctx.fillStyle = "#9c4421"; ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(rx - nx * (rr - 7), ry - ny * (rr - 7)); ctx.lineTo(rx - nx * 5, ry - ny * 5);
-    ctx.lineWidth = 1.4; ctx.strokeStyle = colors.muted; ctx.stroke();
-    ctx.beginPath(); ctx.arc(rx, ry, 2.4, 0, 6.2832);
-    ctx.fillStyle = colors.bg; ctx.fill(); ctx.lineWidth = 1.2; ctx.strokeStyle = colors.muted; ctx.stroke();
-    ctx.font = "640 9.5px 'Source Sans 3', system-ui, sans-serif";
-    ctx.fillStyle = "#9c4421";
-    ctx.fillText(String(target).toUpperCase().slice(0, 3) + "  " + String(Math.round(brg)).padStart(3, "0") + "°", rx, ry + rr + 16);
-    ctx.font = "600 8.5px 'Source Sans 3', system-ui, sans-serif";
-    ctx.fillStyle = colors.muted;
-    ctx.fillText(km.toLocaleString() + " km", rx, ry + rr + 28);
-    ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
-    const bx2 = 22, by2 = h - 30;
-    ctx.strokeStyle = colors.muted; ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.moveTo(bx2, by2 - 4); ctx.lineTo(bx2, by2); ctx.lineTo(bx2 + px, by2); ctx.lineTo(bx2 + px, by2 - 4);
-    ctx.stroke();
-    ctx.font = "600 9.5px 'Source Sans 3', system-ui, sans-serif";
-    ctx.fillStyle = colors.muted;
-    ctx.fillText(Math.round(stepKm).toLocaleString() + " km", bx2, by2 - 8);
-  }
-
   flyTo(slug, dur) {
     const anchor = this._anchorOf?.[slug];
     if (!this._d3 || !this._proj || !anchor) return false;
-    this._target = slug; this._furnDirty = true;
+    this._target = slug;
     const [lon, lat] = anchor;
     const startRot = this._rot.slice(), startK = this._k, endK = this._R * 2.1;
     const endLon = startRot[0] + (((-lon - startRot[0] + 540) % 360) - 180);
@@ -727,7 +634,7 @@ class AtlasMap extends BaseElement {
     this._flying = false;
     clearTimeout(this._flyEnd);
     clearTimeout(this._resume);
-    this._targetK = this._R; this._hold = false; this._target = null; this._furnDirty = true; this._dirty = true;
+    this._targetK = this._R; this._hold = false; this._target = null; this._dirty = true;
     // "Back to the world" means nothing is selected any more — the halo goes with the zoom.
     this.focus(null);
   }

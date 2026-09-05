@@ -20,8 +20,6 @@ export type {
   SectionLike,
   FactLike,
 } from "./model/guide-record";
-export { solvePlacement } from "./model/solver";
-export type { SolverCard, SeatPlacement, SolveResult, Obstacle } from "./model/solver";
 export { relevanceOrder, quickCardKicker } from "./model/relevance";
 export type { RelevanceInput } from "./model/relevance";
 export { isGuideBuilding, deriveBuildingGuides } from "./model/building";

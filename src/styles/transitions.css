@@ -53,7 +53,6 @@ body[data-arrival="first"] .dest:not([hidden]) .trip-hero-text,
 body[data-arrival="first"] .dest:not([hidden]) .mast-inner,
 body[data-arrival="first"] .dest:not([hidden]) .itin-head,
 body[data-arrival="first"] .dest:not([hidden]) .mapdest-selected{animation:wp-arrive-rise var(--dur-scene) var(--ease-standard) 200ms both}
-body[data-arrival="first"] .rail{animation:wp-assemble-left var(--dur-object) var(--ease-standard) 480ms both}
 body[data-arrival="first"] .chrome{animation:wp-assemble-down var(--dur-object) var(--ease-standard) 520ms both}
 body[data-arrival="first"] .botbar{animation:wp-assemble-up var(--dur-object) var(--ease-standard) 560ms both}
 body[data-arrival="first"] .dest:not([hidden]) > :not(.trip-hero):not(.gd-hero):not(.itin-head){animation:wp-arrive-rise var(--dur-object) var(--ease-standard) 640ms both}

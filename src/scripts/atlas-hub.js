@@ -6,16 +6,15 @@ import { initSearch } from "../features/search/index";
 import { initDarkToggle } from "./theme.js";
 import { initHomeWeather } from "../features/live-data/index.js";
 
-// The header measures its own height into --hdr-h (docs/design-handoff/DESIGN.md: "sticky offsets are
-// never literals") — the globe wrap and the table's sticky search header both
-// already consume it. Item 9 (Chrome) will grow this same header with more rows
-// (theme toggle, ＋ New guide, TOOLS); this observer keeps working unchanged either way.
-const header = document.querySelector(".atlas-header");
+// The strip measures its own height into --hdr-h ("sticky offsets are never literals") —
+// the list's sticky head consumes it. On desktop the strip is static inside the frame, so the
+// number is only load-bearing on a phone, where the strip is sticky.
 const chrome = document.getElementById("chrome");
-if (header) {
-  const setHdrH = () => document.documentElement.style.setProperty("--hdr-h", `${header.offsetHeight + (chrome ? chrome.offsetHeight : 0)}px`);
+if (chrome) {
+  const setHdrH = () => document.documentElement.style.setProperty("--hdr-h", `${getComputedStyle(chrome).position === "sticky" ? chrome.offsetHeight : 0}px`);
   setHdrH();
-  if ("ResizeObserver" in window) { const ro = new ResizeObserver(setHdrH); ro.observe(header); if (chrome) ro.observe(chrome); }
+  if ("ResizeObserver" in window) new ResizeObserver(setHdrH).observe(chrome);
+  window.addEventListener("resize", setHdrH);
 }
 
 initSearch(document);
@@ -56,4 +55,4 @@ if (wxJson) {
 // table first makes the promise true: the link always lands on the list of guides.
 // Found by axe's own skip-link rule ("target should become visible on activation")
 // when this page became the hub and entered the a11y gate's page list.
-document.querySelector(".skip-link")?.addEventListener("click", () => setMode("table"));
+document.querySelectorAll('.skip-link, [data-atlas-show-table]').forEach((a) => a.addEventListener("click", () => setMode("table")));

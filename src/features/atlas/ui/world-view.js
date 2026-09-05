@@ -1,39 +1,15 @@
-// World view controller (README §2, SPEC-COMPONENTS §8-9) — mounts <atlas-map>, wires its
-// overlays (index rail, key, THE RECORD, zoom/fit/spin controls, motto, toast), and runs the
-// pin-card collision solver against its atlas-pos stream. Progressive enhancement over the
-// table view (D4): nothing here runs until this module is imported and a guide feed exists.
+// World view controller (board 01; design-system.md §12) — mounts <atlas-map>, wires the globe
+// controls, the pin chips, the coordinate readout, the phone's FAB menu and ping sheet, and the
+// toast. Progressive enhancement over the list (D4): nothing here runs until this module is
+// imported and a guide feed exists. The desktop floating pin CARDS and their collision solver
+// were retired with the frame (§33): the chip over each pin names the trip at every width, and
+// the destinations panel beside the globe carries cover, status and the way in.
 
 import "./atlas-map.js";
-import { solvePlacement } from "../model/solver";
 import { localClockLabel } from "../model/local-time";
 import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
 import { esc as escapeHtml, reducedMotion, reencodeUrl } from "../../../scripts/util.js";
-import { atWidth, srcsetFor, imgCredit } from "../../../lib/img-width";
-
-/* 260, not 220: the surveyed card's CTA is the long one ("✓ Verified — open the sheet →")
-   and at 220 it wrapped to a second line, which is both narrower than the prototype draws the
-   card and the reason axe could not resolve that line's contrast on exactly the two surveyed
-   cards. The width is the fix; padding and margins were not the problem. */
-const CARD_W = 260;
-/* The plate is 3:2 inside a 220px card — 220x146 — and `object-fit: cover` fills the SHORT
-   axis. A cover wider than 3:2 (Nyhavn is 2.21:1) asked for at 220px comes back 220x100 and
-   gets scaled UP to cover 146px of height, which is how a correctly-thumbnailed image still
-   lands on screen soft. Asking at twice the card width clears the height for any cover this
-   product is likely to carry, and is still an order of magnitude off the 258 KB original. */
-const PLATE_W = CARD_W * 2;
-/* The plate's own laid-out height, from the 3:2 above — the card is 220 wide, so 147. */
-const PLATE_H = Math.round((CARD_W * 2) / 3);
-/* SEED estimates for the solver's collision boxes, replaced by a real measurement on the
-   first card that exists (measureCardH). They were plain constants — 140 and 60, written
-   when the card was text only — and when the plate was added underneath them nothing
-   updated: the solver kept seating a 280px card in a 140px box and stamping that height
-   back on the element, so the fill and rule stopped at the bottom of the photo and the
-   kicker, title, clock and CTA sat outside the card on bare globe. A number describing a
-   rendered element cannot be a literal nobody re-checks; these are a first guess now, and
-   the DOM is the authority. */
-let cardBodyH = 60;
-let cardFullH = 140;
-const DRIFT_THRESHOLD = 90;
+import { atWidth, srcsetFor } from "../../../lib/img-width";
 
 // Live-checked, not cached (D5): a phone rotated to landscape, or a resized preview window,
 // must not get stuck on whichever branch was true at page load.
@@ -139,76 +115,15 @@ export function initAtlasWorld(root = document) {
     row.addEventListener("click", () => saveHomeState(row.dataset.sheetSlug));
   });
 
-  // ── Index rail + THE RECORD (README §2) ─────────────────────────────────────────────
-  /* PLANNED and NEXT TRIP are both `upcoming`; the prototype separates them because only one
-     guide is the one you leave for next, and a rail that calls four trips "planned" says
-     nothing about which. `isNext` is computed once on the server (index.astro). */
-  const STATUS_LABEL = { past: "COMPLETE", ongoing: "IN PROGRESS", upcoming: "PLANNED", undated: "" };
-  const recordLabel = (guide) => (guide.isNext ? "NEXT TRIP" : STATUS_LABEL[guide.status] || "");
-  /* Both rails are two-column rows in the prototype, not one run-on line: the sheet's
-     identity on the left and WHEN on the right, so the eye reads down either column alone.
-     Rendering them as one string was what flattened the whole panel to a single weight. */
-  /* The two rails answer different questions and so carry different orders. The INDEX is a
-     register of sheets — it runs 01, 02, 03, 04, because an index out of its own numbering is
-     not an index. The RECORD is a timeline and keeps the payload's relevance order (ongoing,
-     then soonest ahead, then most recent behind), which is what makes NEXT TRIP land in the
-     middle of it rather than at the top. */
-  const byOrdinal = guides
-    .slice()
-    .sort((a, b) => (a.ordinal ?? Infinity) - (b.ordinal ?? Infinity));
-  const byRelevance = guides
-    .slice()
-    .sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
-
-  const indexList = root.querySelector("[data-atlas-index-list]");
-  if (indexList) {
-    indexList.innerHTML = byOrdinal
-      .map((guide) => {
-        const num = guide.ordinal != null ? String(guide.ordinal).padStart(2, "0") : "—";
-        const stamp = guide.stamp ? escapeHtml(guide.stamp) + (guide.status === "past" ? " ✓" : "") : "—";
-        // Sheet 01 leads the register and takes the accent — the prototype marks the top of
-        // the index, not the trip's status; status is the RECORD rail's job on the right.
-        return `<li><button type="button" data-fly="${escapeHtml(guide.slug)}"${guide.ordinal === 1 ? " data-lead" : ""}>` +
-          `<span class="ix-n">${escapeHtml(num)}</span><span class="ix-name">${escapeHtml(guide.name)}</span>` +
-          `<span class="ix-stamp">${stamp}</span></button></li>`;
-      })
-      .join("");
-    // "INDEX OF SHEETS · 04" — the count belongs in the kicker, where the prototype puts it.
-    const kicker = indexList.parentElement?.querySelector(".atlas-ov-kicker");
-    if (kicker) kicker.textContent = `Index of sheets · ${String(guides.length).padStart(2, "0")}`;
-  }
-  const recordList = root.querySelector("[data-atlas-record-list]");
-  if (recordList) {
-    /* The RECORD leads with the trip's dates, in the display face, because that is what
-       distinguishes one entry from the next — the country repeats from the index above it. */
-    recordList.innerHTML = byRelevance
-      .map((guide) => {
-        const label = recordLabel(guide);
-        const tone = guide.isNext ? "next" : guide.status;
-        return `<li><button type="button" data-fly="${escapeHtml(guide.slug)}" data-open="${escapeHtml(guideHref(guide))}" data-tone="${escapeHtml(tone)}">` +
-          `<span class="rec-dot"></span>` +
-          `<span class="rec-lines"><span class="rec-when">${guide.dates ? escapeHtml(guide.dates) : "Dates not set"}</span>` +
-          `<span class="rec-what">${escapeHtml(guide.name)}${label ? ` · ${escapeHtml(label)}` : ""}</span></span>` +
-          `</button></li>`;
-      })
-      .join("");
-  }
-  root.querySelectorAll("[data-fly]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      map.flyTo(btn.dataset.fly, reduced ? 0 : 1100);
-      const openHref = btn.dataset.open;
-      if (openHref) setTimeout(() => { window.location.href = openHref; }, reduced ? 0 : 900);
-    });
-  });
-
   // ── Zoom / fit / spin controls ───────────────────────────────────────────────────────
   root.querySelector("[data-atlas-zoom-in]")?.addEventListener("click", () => map.zoomBy?.(1.35));
   root.querySelector("[data-atlas-zoom-out]")?.addEventListener("click", () => map.zoomBy?.(1 / 1.35));
   root.querySelector("[data-atlas-fit]")?.addEventListener("click", () => map.resetView?.());
   const spinBtn = root.querySelector("[data-atlas-spin]");
+  const spinLabel = root.querySelector("[data-atlas-spin-label]");
   spinBtn?.addEventListener("click", () => {
     const spinning = map.toggleSpin?.();
-    spinBtn.textContent = spinning ? "PAUSE" : "SPIN ON";
+    if (spinLabel) spinLabel.textContent = spinning ? "Pause" : "Spin on";
   });
 
   // ── Mobile FAB map menu (README "Mobile", D5) — the same actions the desktop rail
@@ -314,17 +229,17 @@ export function initAtlasWorld(root = document) {
   // pin: desktop opens that guide directly; mobile raises a bottom sheet first" — or toast for
   // a no-guide country/ocean click. ────────────────────────────────────────────────────────
   let toastTimer = null;
+  /* A pin, or its chip: the phone raises the ping sheet first; the desktop opens the guide
+     directly, recording the selection so Back restores it. */
+  function selectGuide(guide) {
+    if (isMobile()) { pickGuide(guide); return; }
+    markSelected(guide.slug);
+    window.location.href = guideHref(guide);
+  }
   map.addEventListener("atlas-select", (ev) => {
     const { slug } = ev.detail || {};
     const guide = guides.find((entry) => entry.slug === slug);
-    if (guide) {
-      if (isMobile()) { pickGuide(guide); return; }
-      // Desktop opens the guide directly (README "Clicking a pin"), so the selection it
-      // records is the one Back will restore.
-      markSelected(slug);
-      window.location.href = guideHref(guide);
-      return;
-    }
+    if (guide) { selectGuide(guide); return; }
     markSelected(null);
     if (!toast) return;
     toast.innerHTML = `No guide here yet. <a href="${base}/new/">Start one →</a>`;
@@ -333,80 +248,14 @@ export function initAtlasWorld(root = document) {
     toastTimer = setTimeout(() => toast.removeAttribute("data-open"), 4000);
   });
 
-  // ── atlas-pos: coordinate readout, fade-zoom law, pin-card solve scheduling ──────────
+  // ── atlas-pos: coordinate readout + the pin chips ────────────────────────────────────
   const byIndex = new Map(guides.map((guide) => [guide.slug, guide]));
-  const cardEls = new Map();
-  let lastVisible = "";
-  let lastSolveAt = { x: 0, y: 0 };
-  let solveQueued = false;
 
-  function fadeZoomFor(zoom) {
-    const scale = Math.max(0.5, 1 - (zoom - 1) * 0.5);
-    const opacity = Math.max(0, 1 - (zoom - 1) * 0.85);
-    return { scale, opacity };
-  }
-
-  function applyFadeZoom(zoom) {
-    const { scale, opacity } = fadeZoomFor(zoom);
-    root.querySelectorAll("[data-ref-fadezoom]").forEach((el) => {
-      el.style.transform = `scale(${scale})`;
-      el.style.opacity = String(opacity);
-      el.toggleAttribute("data-faded", opacity < 0.15);
-    });
-  }
-
-  function ensureCard(slug) {
-    if (cardEls.has(slug)) return cardEls.get(slug);
-    const guide = byIndex.get(slug);
-    if (!guide) return null;
-    /* The plate is 220px wide and was being handed the ORIGINAL — Nyhavn is 1600x724 and 258 KB
-       for a 218x145 box, measured 2026-08-10. The table rows and the ping sheet both already
-       ask Commons for a thumbnail at the size they draw; this is the third surface using the
-       same cover and the only one that never did. */
-    const el = document.createElement("a");
-    el.className = "atlas-pincard";
-    el.href = guideHref(guide);
-    el.style.width = `${CARD_W}px`;
-    // The credit chip sits on the bottom edge of the photo, so it needs the photo's height —
-    // published from here, where the width it derives from actually lives. Hard-coding the
-    // matching number in CSS is how CARD_FULL_H went stale in the first place.
-    el.style.setProperty("--plate-h", `${PLATE_H}px`);
-    el.innerHTML = `
-      <span class="atlas-pincard-tail"></span>
-      <span class="atlas-pincard-ticks" aria-hidden="true"></span>
-      ${guide.coverImg && imgCredit(guide.coverImg) ? `<span class="atlas-pincard-credit">${escapeHtml(imgCredit(guide.coverImg))}</span>` : ""}
-      ${guide.coverImg ? `<img class="atlas-pincard-plate" src="${escapeHtml(atWidth(guide.coverImg, PLATE_W))}"${srcsetFor(guide.coverImg, PLATE_W) ? ` srcset="${escapeHtml(srcsetFor(guide.coverImg, PLATE_W))}"` : ""} alt="" loading="lazy" style="view-transition-name:cover-${escapeHtml(guide.slug)}" />` : ""}
-      <span class="atlas-pincard-body">
-        <span class="atlas-pincard-cc">${escapeHtml(guide.cc || "")}${guide.anchorLabel ? ` · ${escapeHtml(guide.anchorLabel)}` : ""}</span>
-        <span class="atlas-pincard-title">${escapeHtml(guide.name)}</span>
-        ${guide.tz ? `<span class="atlas-pincard-clock" data-tick data-tz="${escapeHtml(guide.tz)}">${escapeHtml(localClockLabel(guide.tz, new Date()) || "—")}</span>` : ""}
-        ${guide.isNext && guide.dates ? `<span class="atlas-pincard-next">Next trip · ${escapeHtml(guide.dates)}</span>` : ""}
-        <span class="atlas-pincard-cta">${guide.status === "past" ? "✓ Verified — open the sheet →" : "Open the sheet →"}</span>
-      </span>`;
-    /* Status drives the card's colour, not just its words: a surveyed trip's CTA goes green
-       because it is a statement of fact (this one was walked), and the next trip takes the
-       accent because it is the only card on the globe with a date still ahead of it. */
-    el.dataset.status = guide.status;
-    if (guide.isNext) el.dataset.next = "";
-    pinsLayer.appendChild(el);
-    cardEls.set(slug, el);
-    return el;
-  }
-
-  /* ── Mobile pin chips (creator, 2026-08-08) ─────────────────────────────────────────
-     The README's "no floating cards, no side rails" on mobile was read as "no labels at
-     all", and the result was a globe of anonymous dots: nothing said a country HAD a guide
-     until you tapped it. These are the desktop pincard scaled to a phone's budget — a
-     status dot and the trip's name, no photo, no clock, no CTA — so which countries are
-     surveyed is apparent at a glance, which is what the pins were for.
-
-     They are positioned in the atlas-pos handler on every frame rather than in the solver,
-     which is throttled by a drift threshold: a label that updates only every 90px would
-     visibly swim behind its own pin while the globe spins. Positioning is one transform
-     write per guide, which is cheap enough to do per frame.
-
-     No collision solving. Four guides on a phone-sized globe rarely collide, and a solver
-     that reflowed labels mid-spin would be more distracting than the overlap it prevents. */
+  /* ── Pin chips: a status dot and the trip's name over its pin, at every width. Positioned
+     in the atlas-pos handler on every frame — one transform write per guide — so a label
+     never swims behind its own pin while the globe spins. Two chips that want the same patch
+     of sky: the one nearer the middle of the globe keeps it, the other hides (an overlap is
+     unreadable and its contrast unverifiable). */
   const CHIP_FADE_FROM = 0.68; // fraction of the globe's radius where a chip starts fading
   const CHIP_LIFT = 12;        // px the chip sits above its pin — matches the CSS margin
   const chipEls = new Map();
@@ -416,8 +265,8 @@ export function initAtlasWorld(root = document) {
     if (chipEls.has(slug)) return chipEls.get(slug);
     const guide = byIndex.get(slug);
     if (!guide) return null;
-    // A button, not a link: on mobile a pin raises the ping sheet first (README "Clicking a
-    // pin"), so the chip must do exactly what tapping its own pin does, not jump the queue.
+    // A button, not a link: the chip does exactly what tapping its own pin does — the ping
+    // sheet on a phone, the guide on a desktop (selectGuide).
     const el = document.createElement("button");
     el.type = "button";
     el.className = "atlas-pinchip";
@@ -428,22 +277,13 @@ export function initAtlasWorld(root = document) {
     // SURVEYED — two surfaces describing one fact differently.
     el.setAttribute("aria-label", `${guide.name} — ${CHIP_STATUS[guide.status] || CHIP_STATUS.undated}. Open details.`);
     el.setAttribute("data-slug", slug);
-    // Through the same function the pin itself uses, not straight to the sheet: the comment
-    // above says the chip must do exactly what tapping its pin does, and once a pick also
-    // haloes the pin, marks the row and holds the spin, "exactly" has four parts to it.
-    el.addEventListener("click", () => pickGuide(guide));
+    el.addEventListener("click", () => selectGuide(guide));
     pinsLayer.appendChild(el);
     chipEls.set(slug, el);
     return el;
   }
 
-  function clearChips() {
-    for (const [, el] of chipEls) el.remove();
-    chipEls.clear();
-  }
-
   function placeChips(pos) {
-    if (!isMobile()) { if (chipEls.size) clearChips(); return; }
     const R = Math.min(pos.w, pos.h) / 2 || 1;
 
     // Frontmost first, so when two labels want the same patch of sky the one nearer the
@@ -481,105 +321,12 @@ export function initAtlasWorld(root = document) {
     }
   }
 
-  /* Read the card's real height off a card that exists, once the first one does. Both halves
-     come from one element: the body is what a compacted (plate-hidden) card is, and the body
-     plus the plate is what a full one is. Cheap enough to re-check while the seed is still in
-     place, and it stops as soon as it has a real number. */
-  function measureCardH() {
-    if (cardBodyH !== 60) return false;
-    const el = cardEls.values().next().value;
-    const body = el && el.querySelector(".atlas-pincard-body");
-    const h = body && body.offsetHeight;
-    if (!h) return false;
-    cardBodyH = h;
-    cardFullH = h + (el.querySelector(".atlas-pincard-plate") ? PLATE_H : 0);
-    return true;
-  }
-
-  function runSolve(pos) {
-    // No floating CARDS on mobile (README "Mobile": no spatial budget for them) — the chips
-    // above carry the name instead, and a tap still opens the bottom sheet.
-    if (isMobile()) {
-      for (const [, el] of cardEls) el.remove();
-      cardEls.clear();
-      lastVisible = guides.filter((guide) => pos[guide.slug]?.v).map((guide) => guide.slug).sort().join(",");
-      lastSolveAt = { x: pos.center[0], y: pos.center[1] };
-      solveQueued = false;
-      return;
-    }
-    const visibleGuides = guides.filter((guide) => pos[guide.slug]?.v);
-    const cards = visibleGuides.map((guide) => ({
-      code: guide.slug, x: pos[guide.slug].x, y: pos[guide.slug].y, w: CARD_W, fullH: cardFullH, compactH: cardBodyH,
-    }));
-    const obstacles = Array.from(root.querySelectorAll("[data-ref-fadezoom]:not([data-faded])")).map((el) => {
-      const hostRect = host.getBoundingClientRect();
-      const rect = el.getBoundingClientRect();
-      return { l: rect.left - hostRect.left, t: rect.top - hostRect.top, r: rect.right - hostRect.left, b: rect.bottom - hostRect.top };
-    });
-    const result = solvePlacement(cards, obstacles, { w: pos.w, h: pos.h });
-
-    // Drop cards for guides no longer visible.
-    for (const [slug, el] of cardEls) {
-      if (!visibleGuides.some((guide) => guide.slug === slug)) { el.remove(); cardEls.delete(slug); }
-    }
-    for (const seat of result.seats) {
-      const el = ensureCard(seat.code);
-      if (!el) continue;
-      el.style.transform = `translate3d(${seat.l}px, ${seat.t}px, 0)`;
-      // No height is written back. The seat height is the solver's estimate for collision
-      // geometry; the CARD is sized by its own content, so a title that wraps to two lines
-      // grows the box instead of spilling out of it.
-      const plate = el.querySelector(".atlas-pincard-plate");
-      if (plate) plate.style.display = seat.compact ? "none" : "block";
-      // The credit belongs to the photo, so it leaves with it when the card compacts.
-      el.toggleAttribute("data-compact", seat.compact);
-      el.toggleAttribute("data-tail", seat.tail);
-      el.toggleAttribute("data-ready", true);
-    }
-    lastVisible = visibleGuides.map((guide) => guide.slug).sort().join(",");
-    lastSolveAt = { x: pos.center[0], y: pos.center[1] };
-    solveQueued = false;
-
-    /* The first pass has no card to measure, so it seats everything on the seed estimate and
-       cards overlap. Now that one exists, take the real height and solve exactly once more.
-       Waiting for the next pos event is not enough: maybeSolve() ignores a globe that has not
-       drifted, so a paused or reduced-motion globe would keep the overlapping first pass —
-       which is how axe found two cards sitting on each other's text. measureCardH() latches,
-       so this recurses once and never again. */
-    if (measureCardH()) requestAnimationFrame(() => runSolve(pos));
-  }
-
-  function maybeSolve(pos) {
-    const visibleNow = guides.filter((guide) => pos[guide.slug]?.v).map((guide) => guide.slug).sort().join(",");
-    const drift = Math.hypot(pos.center[0] - lastSolveAt.x, pos.center[1] - lastSolveAt.y) * 60; // rough px-equivalent
-    const setChanged = visibleNow !== lastVisible;
-    if (!setChanged && drift < DRIFT_THRESHOLD) return;
-    if (solveQueued) return;
-    solveQueued = true;
-    const run = () => runSolve(pos);
-    if (window.requestIdleCallback) window.requestIdleCallback(run, { timeout: 220 });
-    else setTimeout(run, 0);
-  }
-
   map.addEventListener("atlas-pos", (ev) => {
     const pos = ev.detail;
     if (coordEl) {
       const lat = pos.center[1], lng = pos.center[0];
       coordEl.textContent = `${Math.abs(lat).toFixed(2)}° ${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(2)}° ${lng >= 0 ? "E" : "W"}`;
     }
-    applyFadeZoom(pos.zoom);
     placeChips(pos);
-    maybeSolve(pos);
   });
-
-  // Local clocks on pin cards tick via the shared helper, re-scanned after each solve.
-  const tick = () => {
-    const now = new Date();
-    pinsLayer.querySelectorAll("[data-tick][data-tz]").forEach((el) => {
-      const label = localClockLabel(el.dataset.tz, now);
-      if (label) el.textContent = label;
-    });
-  };
-  tick();
-  setInterval(tick, 30_000);
 }

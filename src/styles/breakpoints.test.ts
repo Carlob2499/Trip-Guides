@@ -34,7 +34,14 @@ const EXPECTED: Record<string, string[]> = {
   // D7 (2026-09): the R5 rail, mobile-nav and story sheets are gone; the five-destination
   // shell's sheets each carry the one breakpoint they recompose on.
   "features/search/styles.css": ["MOBILE_MAX+1"],
-  "styles/chrome.css": ["MOBILE_MAX+1"],
+  // 2026-09-05, the frame strip (design-system.md §6): the frame's own margins/radius, and the
+  // strip's desktop row, each recompose on the phone ceiling.
+  "styles/chrome.css": ["MOBILE_MAX+1", "MOBILE_MAX+1"],
+  // The Atlas (board 01): the stage's desktop grid, the list's ivory card under the frame, and
+  // the phone's one-scroll composition.
+  "styles/atlas-world.css": ["MOBILE_MAX+1"],
+  "styles/atlas.css": ["MOBILE_MAX+1"],
+  "styles/atlas-mobile.css": ["MOBILE_MAX"],
   // D7 convergence (2026-09-04): SOS becomes a centred modal above the phone ceiling.
   "styles/field-tools.css": ["MOBILE_MAX+1"],
   "styles/guide-dest.css": ["TABLET_MIN", "DESKTOP_MIN"],
