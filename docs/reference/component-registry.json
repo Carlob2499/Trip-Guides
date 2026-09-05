@@ -193,6 +193,10 @@
       "dir": "src/features/firebase",
       "role": "Config-gated sync backend"
     },
+    "geolocation": {
+      "dir": "src/features/geolocation",
+      "role": "Contextual opt-in, memory-only current-position seam for Trip, Map, Search, and SOS"
+    },
     "hub": {
       "dir": "src/features/hub",
       "role": "Hub sections model"
@@ -225,6 +229,10 @@
       "dir": "src/features/panel",
       "role": "Panel collapse/reorder behaviour"
     },
+    "places": {
+      "dir": "src/features/places",
+      "role": "Provider-neutral current business-status and opening-hours overlays for reviewed place identities"
+    },
     "pipeline-progress": {
       "dir": "src/features/pipeline-progress",
       "role": "Research pipeline progress surface"
@@ -233,6 +241,14 @@
       "dir": "src/features/route-opt",
       "role": "Day route optimizer sheet"
     },
+    "routing": {
+      "dir": "src/features/routing",
+      "role": "Provider-neutral live route and route-matrix advisories with deterministic offline fallback"
+    },
+    "runtime-overlay": {
+      "dir": "src/features/runtime-overlay",
+      "role": "Provider-neutral freshness, caching, deduplication, failure semantics, and contextual surface hooks"
+    },
     "search": {
       "dir": "src/features/search",
       "role": "The one global search: index builder, deterministic ranking, overlay UI"
@@ -240,6 +256,10 @@
     "share": {
       "dir": "src/features/share",
       "role": "Share sheet"
+    },
+    "push": {
+      "dir": "src/features/push",
+      "role": "Actionable-notification policy and dormant subscription seam"
     },
     "sos": {
       "dir": "src/features/sos",

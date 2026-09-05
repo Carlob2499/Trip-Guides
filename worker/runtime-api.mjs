@@ -17,15 +17,14 @@ function durationSeconds(value) {
   return match ? Math.round(Number(match[1])) : null;
 }
 
-function cacheKey(path, raw) {
-  const input = `${path}:${JSON.stringify(raw)}`;
-  let hash = 2166136261;
-  for (let i = 0; i < input.length; i++) hash = Math.imul(hash ^ input.charCodeAt(i), 16777619);
-  return `live:${path}:${(hash >>> 0).toString(16)}`;
+async function cacheKey(path, raw) {
+  const input = new TextEncoder().encode(`${path}:${JSON.stringify(raw)}`);
+  const digest = await crypto.subtle.digest("SHA-256", input);
+  return `live:${path}:${Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")}`;
 }
 
 async function cached(env, path, raw, ttlSeconds, load) {
-  const key = cacheKey(path, raw);
+  const key = await cacheKey(path, raw);
   if (env.LIVE_CACHE) {
     const hit = await env.LIVE_CACHE.get(key, "json").catch(() => null);
     if (hit) return hit;
@@ -39,16 +38,12 @@ async function cached(env, path, raw, ttlSeconds, load) {
   return promise;
 }
 
-async function rateGate(request, env, cost = 1) {
-  const rate = env.RUNTIME_RATE || env.RATE;
-  if (!rate) return { ok: false, status: 503, error: "runtime cost guard is not configured" };
+async function rateGate(request, env) {
+  const limiter = env.RUNTIME_LIMITER;
+  if (!limiter || typeof limiter.limit !== "function") return { ok: false, status: 503, error: "runtime cost guard is not configured" };
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-  const minute = Math.floor(Date.now() / 60_000);
-  const key = `runtime:${ip}:${minute}`;
-  const cap = Math.min(120, Math.max(1, Number(env.RUNTIME_CAP) || 30));
-  const count = Number(await rate.get(key)) || 0;
-  if (count + cost > cap) return { ok: false, status: 429, error: "live-data request limit reached" };
-  await rate.put(key, String(count + cost), { expirationTtl: 120 });
+  const result = await limiter.limit({ key: `runtime:${ip}` });
+  if (!result?.success) return { ok: false, status: 429, error: "live-data request limit reached" };
   return { ok: true };
 }
 
@@ -169,11 +164,13 @@ async function weatherAlerts(raw, env, fetchImpl) {
 }
 
 const HANDLERS = {
-  "/runtime/routes": { ttl: 300, cost: () => 1, validate: validateRoute, fn: routes },
-  "/runtime/route-matrix": { ttl: 600, cost: (raw) => Math.max(1, Math.min(64, (raw?.stops?.length || 1) ** 2)), validate: validateMatrix, fn: matrix },
+  // A route may start at an ephemeral current position, so it is deduplicated in-flight but
+  // never written to shared KV. Authored-stop matrices remain cacheable.
+  "/runtime/routes": { ttl: 0, validate: validateRoute, fn: routes },
+  "/runtime/route-matrix": { ttl: 600, validate: validateMatrix, fn: matrix },
   // Google Places content must not be retained; Place IDs are the sole caching exception.
-  "/runtime/places": { ttl: 0, cost: (raw) => Math.max(1, Math.min(8, raw?.places?.length || 1)), validate: validatePlaces, fn: places },
-  "/runtime/weather-alerts": { ttl: 300, cost: () => 1, validate: validateAlerts, fn: weatherAlerts },
+  "/runtime/places": { ttl: 0, validate: validatePlaces, fn: places },
+  "/runtime/weather-alerts": { ttl: 300, validate: validateAlerts, fn: weatherAlerts },
 };
 
 export async function handleRuntimeRequest(path, request, env, raw, cors, fetchImpl = fetch) {
@@ -181,7 +178,7 @@ export async function handleRuntimeRequest(path, request, env, raw, cors, fetchI
   if (!env.GOOGLE_SERVER_KEY) return json({ error: "live provider is not configured" }, 503, cors);
   const handler = HANDLERS[path];
   if (!handler.validate(raw)) return json({ error: "invalid live-data request" }, 400, cors);
-  const gate = await rateGate(request, env, handler.cost(raw));
+  const gate = await rateGate(request, env);
   if (!gate.ok) return json({ error: gate.error }, gate.status, cors);
   try {
     const value = handler.ttl > 0

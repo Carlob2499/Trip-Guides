@@ -31,7 +31,7 @@ export function parseOpenMeteoEnvironment(value: unknown): EnvironmentValue | nu
 }
 
 /** Normal conditions are intentionally absent from the projection. */
-export function actionableEnvironment(environment: EnvironmentValue | null, alerts: WeatherAlert[]): ActionableEnvironment | null {
+export function actionableEnvironment(environment: EnvironmentValue | null, alerts: readonly WeatherAlert[]): ActionableEnvironment | null {
   const actionableAlerts = alerts.filter((alert) =>
     ["MODERATE", "SEVERE", "EXTREME"].includes(alert.severity) || ["IMMEDIATE", "EXPECTED"].includes(alert.urgency));
   const aqi = environment?.usAqi != null && environment.usAqi >= 101 ? environment : null;

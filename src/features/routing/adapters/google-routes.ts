@@ -1,5 +1,5 @@
 import type { ItineraryStop, RouteMatrixValue, RouteProvider, RouteRequest, RouteValue, TravelMode } from "../model/routing";
-import type { JsonTransport } from "../../runtime-overlay/model/transport";
+import type { JsonTransport } from "../../runtime-overlay";
 
 export class GoogleRoutesAdapter implements RouteProvider {
   readonly #post: JsonTransport;

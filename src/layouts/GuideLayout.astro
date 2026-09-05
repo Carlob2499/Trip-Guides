@@ -265,7 +265,11 @@ const mapBelowGroups = pinGroups(v.allPins, mapDayDates).map((g) => {
       import "../features/field-tools/index.js";
       import "../features/sos/index.js";
       import "../features/search/index";
-      import "../features/runtime-overlay/browser";
+      // Runtime overlays are enhancement-only. Keep the provider adapters and contextual hooks
+      // out of the first-paint graph; they attach after the authored/offline guide is interactive.
+      const loadRuntimeOverlay = () => import("../features/runtime-overlay/index");
+      if ("requestIdleCallback" in window) window.requestIdleCallback(loadRuntimeOverlay, { timeout: 2_000 });
+      else setTimeout(loadRuntimeOverlay, 0);
       import "../scripts/lightbox.js";
       import "../scripts/arrival.js";
       import "../scripts/living-cover.js";

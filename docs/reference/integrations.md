@@ -78,8 +78,10 @@ not presented as an all-clear.
 1. Enable Google Routes API, Places API (New), and Weather API.
 2. Create a server key restricted to only those APIs and store it from `worker/` with
    `npx wrangler secret put GOOGLE_SERVER_KEY`. Never place it in `.env` or a browser bundle.
-3. Configure the Worker's atomic runtime rate-limiter binding and Google Cloud per-API quotas and
-   budgets. Runtime endpoints fail closed when the limiter or key is missing.
+3. Configure the Worker's `RUNTIME_LIMITER` Rate Limiting binding and Google Cloud per-API quotas
+   and budgets. Runtime endpoints fail closed when the binding or key is missing. Cloudflare's
+   limiter is deliberately permissive/eventually consistent, so provider quotas—not the Worker
+   counter—are the hard paid-usage ceiling.
 4. Optionally bind `LIVE_CACHE` for authored-stop matrices and alert responses. Place operational
    content and current-position route geometry are not retained there.
 5. Set the repository Actions variable `PUBLIC_WAYPOINT_RUNTIME_ENABLED=1` and redeploy.

@@ -12,15 +12,27 @@ function kv() {
   };
 }
 
-const env = () => ({ GOOGLE_SERVER_KEY: "server-secret", RUNTIME_RATE: kv(), LIVE_CACHE: kv(), RUNTIME_CAP: "10" });
+const limiter = () => ({ limit: vi.fn(async () => ({ success: true })) });
+const env = () => ({ GOOGLE_SERVER_KEY: "server-secret", RUNTIME_LIMITER: limiter(), LIVE_CACHE: kv() });
 const request = () => new Request("https://worker.test/runtime", { headers: { "CF-Connecting-IP": "203.0.113.1" } });
 const cors = { "Access-Control-Allow-Origin": "https://example.test" };
 
 describe("runtime worker boundary", () => {
   it("fails closed when the server key or runtime cost guard is absent", async () => {
     const raw = { origin: { latitude: 40, longitude: -73 }, destination: { latitude: 40.01, longitude: -73.01 }, travelMode: "WALK" };
-    expect((await handleRuntimeRequest("/runtime/routes", request(), { RUNTIME_RATE: kv() }, raw, cors)).status).toBe(503);
+    expect((await handleRuntimeRequest("/runtime/routes", request(), { RUNTIME_LIMITER: limiter() }, raw, cors)).status).toBe(503);
     expect((await handleRuntimeRequest("/runtime/routes", request(), { GOOGLE_SERVER_KEY: "x" }, raw, cors)).status).toBe(503);
+  });
+
+  it("fails closed when the atomic limiter rejects a burst", async () => {
+    const fetchPort = vi.fn();
+    const raw = { origin: { latitude: 40, longitude: -73 }, destination: { latitude: 40.01, longitude: -73.01 }, travelMode: "WALK" };
+    const response = await handleRuntimeRequest("/runtime/routes", request(), {
+      GOOGLE_SERVER_KEY: "server-secret",
+      RUNTIME_LIMITER: { limit: vi.fn(async () => ({ success: false })) },
+    }, raw, cors, fetchPort);
+    expect(response.status).toBe(429);
+    expect(fetchPort).not.toHaveBeenCalled();
   });
 
   it("sends a minimal field mask for a bounded route request", async () => {

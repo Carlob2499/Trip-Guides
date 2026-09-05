@@ -127,12 +127,27 @@ only those APIs, set cloud budgets/quotas, then store it without printing or com
 npx wrangler secret put GOOGLE_SERVER_KEY
 ```
 
-Runtime traffic uses the existing `RATE` binding (or a dedicated `RUNTIME_RATE` binding when one is
-provided) and fails closed if neither exists. `RUNTIME_CAP` is a weighted per-IP/minute ceiling;
-matrix elements and Places detail calls each consume a unit. `LIVE_CACHE` is optional for route,
-matrix, and alert responses. Place Details is explicitly excluded from KV caching; reviewed Place
-IDs remain in canonical guide data. Finally set the repository Actions variable
+Runtime traffic requires a Cloudflare Rate Limiting binding named `RUNTIME_LIMITER` and fails
+closed if it is absent. Google Cloud per-API quotas and budgets remain the hard paid-usage ceiling;
+the Worker additionally caps matrices and Place batches at eight items. `LIVE_CACHE` is optional
+for authored-stop matrices and alert responses. Current-position routes and Place Details are
+explicitly excluded from KV caching; reviewed Place IDs remain in canonical guide data. Finally set the repository Actions variable
 `PUBLIC_WAYPOINT_RUNTIME_ENABLED=1` so the static build exposes the capability.
+
+Add a unique positive-integer namespace for the binding (do not reuse this example identifier):
+
+```toml
+[[ratelimits]]
+name = "RUNTIME_LIMITER"
+namespace_id = "<YOUR_UNIQUE_INTEGER>"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
+```
+
+Cloudflare documents this limiter as permissive and eventually consistent. Treat it as abuse
+reduction; Google Cloud API quotas and billing budgets are the hard cost boundary.
 
 ### Rotating the key (and why the browser copy expires)
 

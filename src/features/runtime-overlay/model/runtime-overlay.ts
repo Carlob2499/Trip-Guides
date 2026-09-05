@@ -48,12 +48,12 @@ function readonlyValue<T>(input: T): Readonly<T> {
   const value = input && typeof input === "object"
     ? (typeof structuredClone === "function" ? structuredClone(input) : JSON.parse(JSON.stringify(input))) as T
     : input;
-  if (value && typeof value === "object") {
-    Object.freeze(value);
-    for (const child of Object.values(value as Record<string, unknown>)) {
-      if (child && typeof child === "object" && !Object.isFrozen(child)) readonlyValue(child);
-    }
-  }
+  const freeze = (candidate: unknown): void => {
+    if (!candidate || typeof candidate !== "object" || Object.isFrozen(candidate)) return;
+    for (const child of Object.values(candidate as Record<string, unknown>)) freeze(child);
+    Object.freeze(candidate);
+  };
+  freeze(value);
   return value as Readonly<T>;
 }
 

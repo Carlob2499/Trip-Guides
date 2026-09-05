@@ -297,7 +297,7 @@ export default {
         // "OFF" · "WEAK" · "configured" — a length verdict, never the key or its length.
         ownerEndpoints: ownerKeyHealth(env.OWNER_KEY),
         runtimeProviders: env.GOOGLE_SERVER_KEY ? "configured" : "OFF",
-        runtimeCostGuard: (env.RUNTIME_RATE || env.RATE) ? "configured" : "OFF",
+        runtimeCostGuard: env.RUNTIME_LIMITER ? "configured" : "OFF",
       }, 200, cors);
     }
 

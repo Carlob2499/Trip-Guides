@@ -34,10 +34,12 @@ describe("RuntimeOverlayClient", () => {
   });
 
   it("does not freeze or mutate provider-owned data while making the projection readonly", async () => {
-    const providerValue = { minutes: 8 };
+    const providerValue = { minutes: 8, nested: { legs: [{ label: "walk" }] } };
     const result = await new RuntimeOverlayClient({ source: "routes", enabled: true, ttlMs: 100 }).load({ cacheKey: "owned", load: async () => providerValue, validate: valid });
     expect(Object.isFrozen(providerValue)).toBe(false);
     expect(result.value).not.toBe(providerValue);
+    expect(Object.isFrozen((result.value as typeof providerValue).nested)).toBe(true);
+    expect(Object.isFrozen((result.value as typeof providerValue).nested.legs[0])).toBe(true);
   });
 
   it("uses stale data after provider failure without rewriting it", async () => {
