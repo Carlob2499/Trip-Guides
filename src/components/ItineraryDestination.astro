@@ -1,14 +1,23 @@
 ---
-/* Itinerary — day-first on mobile, a temporal-spatial workbench on desktop (D6-20/21/34/35/49).
+/* Itinerary — day-first on mobile, a temporal-spatial workbench on desktop (design-system.md
+   §25, board 03).
+
+   Inside the frame: a header row (the trip's itinerary, its day count and range, the map/list
+   control, the exports, share), then the day tabs across the frame, then the workbench —
+   timeline LEFT, real map RIGHT, a draggable/keyboard divider between them, either pane
+   collapsible — and a measured foot strip. Selecting a stop opens the inspector, a floating
+   card over the map (board 03), painted by workbench.js from the row itself.
 
    Mobile: the selected day owns the screen; a thumb-zone day rail above the global bar
-   scrubs/taps between days (no top arrows as the primary switch). Desktop: timeline LEFT,
-   real map RIGHT, a draggable/keyboard divider between them, either pane collapsible.
+   scrubs/taps between days (no top arrows as the primary switch).
+
    The map is the maps feature's mount (Google when configured, OSM fallback otherwise) fed
    only this guide's own day stops — the same canonical days the Trip destination reads. */
 import DaysBlock from "./blocks/DaysBlock.astro";
 import { jsonEmbed } from "../lib/json-embed";
 interface Props {
+  /** The trip's own name — the header row says whose itinerary this is. */
+  title: string;
   daysSection: any;
   learnings: any;
   country: string;
@@ -20,8 +29,12 @@ interface Props {
   span: number | null;
   /** Repository photo lookup by place name (guide-view.ts) — stops show their own picture. */
   imageFor?: ((name: string) => { src: string; srcset: string; alt: string } | null) | null;
+  /** Offline files the guide can hand over, when it has them. */
+  exports?: { gpx: boolean; ics: boolean };
+  base?: string;
+  slug?: string;
 }
-const { daysSection, learnings, country, keyPrefix, modulesByDate, dayPins, center, span, imageFor = null } = Astro.props;
+const { title, daysSection, learnings, country, keyPrefix, modulesByDate, dayPins, center, span, imageFor = null, exports = { gpx: false, ics: false }, base = "", slug = "" } = Astro.props as Props;
 const days: any[] = daysSection?.items ?? [];
 const short = (date: string) => {
   const parts = String(date).split(/\s+/);
@@ -30,6 +43,25 @@ const short = (date: string) => {
 const dow = (date: string) => String(date).split(/\s+/)[0] || "";
 const mapPayload = center ? jsonEmbed({ center, span, pins: dayPins, lens: "days" }) : null;
 const pinsByDay = days.map((_: any, dayIdx: number) => dayPins.filter((pin) => pin.dayIdx === dayIdx));
+/* The range the guide itself states, from its own first and last day labels. */
+const range = days.length ? `${short(days[0].date)} – ${short(days[days.length - 1].date)}` : null;
+/* Straight-line kilometres along a day's located stops, in the itinerary's own order. The
+   product routes nothing, so the cell says "straight-line" and never "distance". */
+const KM = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
+  const R = 6371, rad = (d: number) => (d * Math.PI) / 180;
+  const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
+};
+const dayMetrics = days.map((d: any, dayIdx: number) => {
+  const stops = (d.waypoints ?? []).length + (d.branches ?? []).reduce((n: number, b: any) => n + (b.waypoints ?? []).length, 0);
+  const pins = pinsByDay[dayIdx];
+  let km: number | null = null;
+  if (pins.length >= 2) { km = 0; for (let i = 1; i < pins.length; i++) km += KM(pins[i - 1], pins[i]); }
+  const paceSrc: string | null = d.pace ?? d.fit ?? null;
+  const pace = paceSrc ? String(paceSrc).split("·")[0].trim() : null;
+  return { stops, km, pace };
+});
 const directionsUrl = (pin: Props["dayPins"][number]) => `https://www.google.com/maps/dir/?api=1&destination=${pin.lat},${pin.lng}${pin.placeId ? `&destination_place_id=${encodeURIComponent(pin.placeId)}` : ""}`;
 /* Google Maps Platform is the live map when the site is built with PUBLIC_GMAPS_KEY
    (design-system.md §15); the OpenStreetMap embed then stays dormant on data-fallback-src and
@@ -45,22 +77,44 @@ const bbox = (c: { lat: number; lng: number }, s: number | null) => {
   {days.length === 0 ? (
     <p class="itin-empty">This guide has no day-by-day itinerary yet — nothing here is guessed.</p>
   ) : (
+    <>
+    {/* The frame's own header row (board 03): whose itinerary, how long, and the controls that
+        act on the whole thing. Nothing here is a second navigation — the strip above is. */}
+    <header class="itin-bar">
+      <div class="itin-bar-id">
+        <h2 class="itin-bar-title">{title} <span class="itin-bar-title-k">Itinerary</span></h2>
+        <p class="itin-bar-sub">{days.length} days{range && <> · {range}</>}</p>
+      </div>
+      <div class="itin-bar-acts">
+        {/* Map view / List view: the workbench's own map pane, open or folded away. */}
+        <div class="itin-seg" role="group" aria-label="Map or list">
+          <button class="itin-seg-btn" type="button" data-bench-view="map" aria-pressed="true">Map view</button>
+          <button class="itin-seg-btn" type="button" data-bench-view="list" aria-pressed="false">List view</button>
+        </div>
+        {(exports.gpx || exports.ics) && (
+          <div class="itin-bar-files">
+            {exports.ics && <a class="itin-bar-btn" href={`${base}/guides/${slug}.ics`} download={`${slug}.ics`}>Export .ics</a>}
+            {exports.gpx && <a class="itin-bar-btn" href={`${base}/guides/${slug}.gpx`} download={`${slug}.gpx`}>Export .gpx</a>}
+          </div>
+        )}
+        <button class="itin-bar-btn" type="button" data-itin-share>Share</button>
+      </div>
+    </header>
+
+    {/* The day tabs, across the frame. On a phone the thumb rail below is the primary switch
+        and this row scrolls; on desktop it is the day control (D6-49). */}
+    <nav class="itin-daynav" aria-label="Days">
+      {days.map((d: any, di: number) => (
+        <button class="itin-daybtn" type="button" data-day-jump={di} aria-current={di === 0 ? "true" : undefined}
+                aria-label={`Day ${di + 1}, ${d.date}`}>
+          <span class="itin-daybtn-n">Day {di + 1}</span>
+          <span class="itin-daybtn-d">{dow(d.date)} · {short(d.date)}</span>
+        </button>
+      ))}
+    </nav>
+
     <div class="itin-bench" data-workbench>
       <section class="itin-pane itin-timeline" data-pane="timeline" aria-label="Timeline">
-        <header class="itin-head">
-          <p class="itin-kicker">Itinerary · {days.length} days</p>
-          {/* Desktop keeps explicit date controls near the header; on a phone the rail below is
-              the primary switch and this row is status only (D6-49). */}
-          <nav class="itin-daynav" aria-label="Days">
-            {days.map((d: any, di: number) => (
-              <button class="itin-daybtn" type="button" data-day-jump={di} aria-current={di === 0 ? "true" : undefined}
-                      aria-label={`Day ${di + 1}, ${d.date}`}>
-                <span class="itin-daybtn-n">{dow(d.date)} · {String(di + 1).padStart(2, "0")}</span>
-                <span class="itin-daybtn-d">{short(d.date)}</span>
-              </button>
-            ))}
-          </nav>
-        </header>
         <DaysBlock sec={daysSection} keyPrefix={keyPrefix} learnings={learnings} country={country} modulesByDate={modulesByDate} imageFor={imageFor} />
       </section>
       <div class="itin-divider" role="separator" aria-orientation="vertical" aria-label="Resize timeline and map" tabindex="0" data-pane-divider aria-valuemin="30" aria-valuemax="70" aria-valuenow="50"></div>
@@ -93,12 +147,29 @@ const bbox = (c: { lat: number; lng: number }, s: number | null) => {
               ))}
             </div>
             <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the written stops and their Get-there links still work.</p>
+            {/* The stop inspector (board 03): the selected stop, lifted out of the chronology
+                as a card over its own pin. Painted by workbench.js from the row itself, so it
+                can never say more than the timeline already does. */}
+            <aside class="itin-peek" data-stop-inspector hidden aria-label="Selected stop"></aside>
           </div>
         ) : (
           <p class="itin-map-none">No stop in this itinerary carries verified coordinates yet, so there is no map to draw — the written stops are the route.</p>
         )}
       </section>
     </div>
+
+    {/* The measured foot strip: counted, summed and quoted from the selected day. The board's
+        "Add stop" and "Optimize day" edit an itinerary this product does not edit. */}
+    <div class="itin-foot" data-itin-foot>
+      {dayMetrics.map((m, di) => (
+        <dl class="itin-foot-row" data-foot-day={di} hidden={di !== 0}>
+          <div class="itin-foot-cell"><dt>Stops</dt><dd>{m.stops}</dd></div>
+          {m.km !== null && <div class="itin-foot-cell"><dt>Straight-line</dt><dd>{m.km < 10 ? m.km.toFixed(1) : Math.round(m.km)} km</dd></div>}
+          {m.pace && <div class="itin-foot-cell"><dt>Pace</dt><dd>{m.pace}</dd></div>}
+        </dl>
+      ))}
+    </div>
+    </>
   )}
   {days.length > 0 && (
     /* The thumb-zone day rail (D6-49): sticky above the bottom bar on a phone, hidden on

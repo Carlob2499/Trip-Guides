@@ -7,17 +7,62 @@
 .itin{position:relative;padding-bottom:5.2rem}
 .itin-empty,.itin-map-none{padding:1.2rem max(1.1rem,var(--safe-right));color:var(--muted)}
 
-/* --- Header: kicker + the header date row (status on a phone, controls on desktop) ------ */
-.itin-head{padding:.9rem max(1.1rem,var(--safe-right)) .3rem max(1.1rem,var(--safe-left))}
-.itin-kicker{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0 0 .4rem}
-.itin-daynav{display:none;flex-wrap:wrap;gap:.3rem}
-.itin-daybtn{display:inline-flex;flex-direction:column;align-items:flex-start;gap:.1rem;min-height:48px;padding:.4rem .7rem;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;font-family:var(--font-data);transition:color var(--dur-routine),border-color var(--dur-routine),background var(--dur-routine)}
+/* --- The frame's header row (board 03): whose itinerary, how long, what acts on it ------- */
+.itin-bar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:.7rem 1.2rem;padding:1rem max(1.1rem,var(--safe-right)) .8rem max(1.1rem,var(--safe-left))}
+.itin-bar-id{min-width:0}
+.itin-bar-title{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h2);line-height:1.05;letter-spacing:-.014em;overflow-wrap:anywhere}
+.itin-bar-title-k{color:var(--muted);font-weight:500}
+.itin-bar-sub{margin:.25rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
+.itin-bar-acts{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem}
+.itin-bar-files{display:flex;gap:.4rem}
+.itin-bar-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 .9rem;border:1px solid var(--rule2);border-radius:var(--r-pill);background:transparent;color:var(--ink);text-decoration:none;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;cursor:pointer;white-space:nowrap}
+.itin-bar-btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.itin-bar-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+/* Map view / List view — the workbench's map pane, open or folded away. There is no pane to
+   fold below the workbench threshold, so the control is not drawn there. */
+.itin-seg{display:none;border:1px solid var(--rule2);border-radius:var(--r-pill);overflow:hidden}
+.itin-seg-btn{min-height:44px;padding:0 .9rem;background:transparent;border:0;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;cursor:pointer;white-space:nowrap}
+.itin-seg-btn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.itin-seg-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-3px}
+
+/* --- The day tabs, across the frame ------------------------------------------------------
+   Desktop only. On a phone the thumb rail above the bottom bar is the day switch (§25: a
+   scrubber in the thumb zone, not a tab row at the top of a tall screen), so a second picker
+   here would be the same control twice. */
+.itin-daynav{display:none;gap:.3rem;overflow-x:auto;scrollbar-width:none;padding:0 max(1.1rem,var(--safe-right)) .7rem max(1.1rem,var(--safe-left))}
+.itin-daynav::-webkit-scrollbar{display:none}
+.itin-daybtn{flex:none;display:inline-flex;flex-direction:column;align-items:flex-start;gap:.1rem;min-height:52px;padding:.4rem .8rem;background:transparent;border:1px solid transparent;border-radius:var(--r-inset);color:var(--muted);cursor:pointer;font-family:var(--font-data);transition:color var(--dur-routine),border-color var(--dur-routine),background var(--dur-routine)}
 .itin-daybtn-n{font-size:var(--text-nano);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.itin-daybtn-d{font-family:var(--font-display);font-weight:640;font-size:var(--text-body)}
+.itin-daybtn-d{font-family:var(--font-display);font-weight:640;font-size:var(--text-control);white-space:nowrap}
 .itin-daybtn:hover{color:var(--ink);border-color:var(--rule2)}
 .itin-daybtn[aria-current="true"]{color:var(--accent-ink);background:var(--card);border-color:var(--accent)}
 .itin-daybtn[data-state="now"] .itin-daybtn-n::after{content:" · now";color:var(--accent-ink)}
 .itin-daybtn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+/* --- The measured foot strip: counted, summed and quoted from the selected day. ---------- */
+.itin-foot{padding:.2rem max(1.1rem,var(--safe-right)) 1rem max(1.1rem,var(--safe-left))}
+.itin-foot-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));margin:0;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);overflow:hidden}
+.itin-foot-row[hidden]{display:none}
+.itin-foot-cell{min-width:0;padding:.7rem .9rem;border-left:1px solid var(--rule)}
+.itin-foot-cell:first-child{border-left:0}
+.itin-foot-cell dd{overflow-wrap:anywhere}
+.itin-foot-cell dt{font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted)}
+.itin-foot-cell dd{margin:.25rem 0 0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);line-height:1.15;overflow-wrap:anywhere}
+
+/* --- The stop inspector: the selected stop as a card over its own pin (board 03). -------- */
+.itin-peek{position:absolute;z-index:3;top:.6rem;right:.6rem;width:min(19rem,calc(100% - 1.2rem));max-height:calc(100% - 1.2rem);overflow:auto;padding:0 0 .9rem;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-card);box-shadow:var(--shadow-float)}
+.itin-peek[hidden]{display:none}
+.itin-peek-media{display:block;position:relative;height:130px;background:var(--sunken);border-radius:var(--r-card) var(--r-card) 0 0;overflow:hidden}
+.itin-peek-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
+.itin-peek-close{position:absolute;top:.5rem;right:.5rem;z-index:1;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--rule2);border-radius:var(--r-round);background:var(--card);color:var(--ink);font-size:var(--text-lead);line-height:1;cursor:pointer}
+.itin-peek-close:hover{border-color:var(--ink)}
+.itin-peek-close:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.itin-peek-body{padding:.85rem 1rem 0}
+.itin-peek-k{margin:0 0 .25rem;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted)}
+.itin-peek-name{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);line-height:1.15;overflow-wrap:anywhere}
+.itin-peek-note{margin:.4rem 0 0;font-size:var(--text-small);line-height:1.45;color:var(--muted);text-wrap:pretty}
+.itin-peek-acts{margin:.75rem 0 0}
+.itin-peek-acts .transit-links{margin:0;gap:.35rem}
 
 /* --- The day card — one large operational object ---------------------------------------- */
 .planner{min-width:0}
@@ -93,6 +138,14 @@
 .stop-map-focus:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
 .stop-note{font-size:var(--text-small);color:var(--muted);line-height:1.45}
 .stop-main .transit-links{margin-top:.4rem}
+/* The leg between two consecutive located stops: the gap, straight-line, on the same rail. */
+/* The named areas matter: .stop-rail carries grid-area:rail from the stop grammar, so this
+   row has to name the same track or the rail claims an implicit column and squeezes the text
+   to one character wide. */
+.stop-leg{position:relative;display:grid;grid-template-columns:1rem minmax(0,1fr);grid-template-areas:"rail txt";column-gap:.55rem;align-items:center;min-height:26px}
+.stop-leg .stop-rail::after{display:none}
+.stop-leg .stop-rail::before{top:-.3rem;bottom:-.3rem}
+.stop-leg-txt{grid-area:txt;font-family:var(--font-data);font-size:var(--text-nano);color:var(--muted);letter-spacing:.02em;white-space:nowrap}
 /* Selection: the stop and its pin are one object (§8); the rail dot and the row say so together. */
 .stop-map-selected{background:color-mix(in srgb,var(--accent) 9%,transparent);margin-inline:-.6rem;padding-inline:.6rem}
 .stop-map-selected .stop-rail::after{background:var(--accent);border-color:var(--accent)}
@@ -175,11 +228,15 @@ body.chrome-yield .day-rail{transform:translateY(calc(60px + var(--safe-bottom) 
   .itin{padding-bottom:0}
   .day-rail{display:none}
   .itin-daynav{display:flex}
-  .itin-bench{--bench-timeline:52%;display:grid;grid-template-columns:var(--bench-timeline) 10px minmax(0,1fr);align-items:start;height:calc(100dvh - var(--hdr-h));min-height:520px;padding:0 1rem 0 0}
+  .itin-bench{--bench-timeline:52%;display:grid;grid-template-columns:var(--bench-timeline) 10px minmax(0,1fr);align-items:start;height:min(64dvh,660px);min-height:460px;padding:0 clamp(1rem,2vw,1.6rem) 0 0}
   .itin-pane{min-width:0;height:100%;overflow-y:auto;overscroll-behavior:contain}
   .itin-timeline{padding-right:.4rem}
   .planner-days{padding-inline:clamp(1rem,2vw,1.6rem)}
-  .itin-head{padding-inline:clamp(1rem,2vw,1.6rem);padding-top:1rem}
+  .itin-bar,.itin-daynav,.itin-foot{padding-inline:clamp(1rem,2vw,1.6rem)}
+  .itin-daynav{display:flex;flex-wrap:wrap;overflow:visible}
+  .itin-seg{display:inline-flex}
+  .itin-foot-row{grid-template-columns:minmax(0,7rem) minmax(0,11rem) minmax(0,1fr)}
+  .day-head{border-bottom-width:1px}
   .day-head{padding-top:.6rem}
   .day-num{font-size:var(--text-h1)}
   .day-tldr{font-size:var(--text-lead)}
@@ -189,17 +246,22 @@ body.chrome-yield .day-rail{transform:translateY(calc(60px + var(--safe-bottom) 
   .stop--photo{grid-template-columns:1.1rem minmax(3.6rem,5rem) 88px minmax(0,1fr)}
   .stop-media{width:88px;height:88px}
   .stop-time{font-size:var(--text-control)}
+  /* On the workbench the Get-there links live in the inspector (board 03): the timeline is the
+     chronology, the card over the pin is where a stop hands off. A phone has no inspector, so
+     there the links stay on the row. */
+  .itin-timeline .stop-main .transit-links{display:none}
   .stop-name{font-size:var(--text-lead)}
   .itin-divider{display:block;height:100%;cursor:col-resize;background:linear-gradient(to right,transparent 4px,var(--rule2) 4px,var(--rule2) 6px,transparent 6px);touch-action:none}
   .itin-divider:hover,.itin-divider:focus-visible{background:linear-gradient(to right,transparent 3px,var(--accent) 3px,var(--accent) 7px,transparent 7px);outline:none}
   .itin-bench--dragging{user-select:none;cursor:col-resize}
   /* The map pane is a framed working surface: it floats beside the timeline rather than
      butting a bare iframe against a bare column. */
-  .itin-mappane{position:sticky;top:0;display:flex;flex-direction:column;overflow:hidden;height:100%;margin:0;padding:.9rem 1rem 1rem}
+  .itin-mappane{position:relative;display:flex;flex-direction:column;overflow:hidden;height:100%;margin:0;padding:.9rem 1rem 1rem}
   .itin-mappane-head{padding:0 .2rem .5rem .6rem}
   .itin-pane-toggle{display:inline-flex}
   .itin-map--bench{flex:1;height:auto;min-height:0;margin:0}
   .itin-bench--map-collapsed{grid-template-columns:minmax(0,1fr) 0 3.2rem}
+  .itin-bench--map-collapsed .itin-peek{display:none}
   .itin-bench--map-collapsed .itin-divider{display:none}
   .itin-bench--map-collapsed .itin-mappane{cursor:pointer;border-left:1px solid var(--rule)}
   .itin-bench--map-collapsed .itin-mappane-head{flex-direction:column;padding:.6rem .3rem}

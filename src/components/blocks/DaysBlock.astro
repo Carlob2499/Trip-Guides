@@ -36,6 +36,16 @@ const linksFor = (date: string) => {
   const rest = all.filter((m) => !m.critical).slice(0, Math.max(0, 2 - critical.length));
   return [...critical, ...rest];
 };
+/* The gap between two consecutive located stops, straight-line, in the day's own order. It is
+   the only leg measure this product can honestly draw: nothing here routes, so no mode and no
+   duration is stated — the board's "30 min walk" would be an invention. */
+const legKm = (a: any, b: any): number | null => {
+  if (!Number.isFinite(a?.lat) || !Number.isFinite(a?.lng) || !Number.isFinite(b?.lat) || !Number.isFinite(b?.lng)) return null;
+  const R = 6371, rad = (d: number) => (d * Math.PI) / 180;
+  const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
+};
 const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit", etiquette: "Etiquette", arrival: "Arrival", culture: "Culture", food: "Food", practical: "Practical" };
 ---
 <div class="planner">
@@ -117,7 +127,15 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
               {shared.map((w: any, wi: number) => {
                 const mapPinId = Number.isFinite(w.lat) && Number.isFinite(w.lng) ? `d${di}-${pinSlug(w.name)}-${wi}` : null;
                 const im = imageOf(w.name);
+                const gap = wi > 0 ? legKm(shared[wi - 1], w) : null;
                 return (
+                <>
+                {gap !== null && (
+                  <li class="stop-leg" aria-hidden="true">
+                    <span class="stop-rail"></span>
+                    <span class="stop-leg-txt">≈{gap < 10 ? gap.toFixed(1) : Math.round(gap)} km straight-line</span>
+                  </li>
+                )}
                 <li class={`stop${im ? " stop--photo" : ""}`} data-map-stop={mapPinId ?? undefined} data-lat={Number.isFinite(w.lat) ? w.lat : undefined} data-lng={Number.isFinite(w.lng) ? w.lng : undefined}>
                   <span class="stop-rail" aria-hidden="true"></span>
                   <span class="stop-when">
@@ -146,6 +164,7 @@ const KIND_LABEL: Record<string, string> = { howto: "How to", transit: "Transit"
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5M8 3h8l-1 7 3 3H6l3-3z"/></svg>
                   </button>
                 </li>
+                </>
                 );
               })}
             </ol>

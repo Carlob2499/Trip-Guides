@@ -141,8 +141,9 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       </section>
 
       <section class="dest" id="dest-itinerary" data-dest="itinerary" role="region" aria-label="Itinerary" hidden>
-        <ItineraryDestination daysSection={v.daysSec} learnings={guide.learnings ?? null} country={guide.country} keyPrefix="dy"
-          modulesByDate={v.modulesByDate} dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan} imageFor={v.imageFor} />
+        <ItineraryDestination title={guide.title} daysSection={v.daysSec} learnings={guide.learnings ?? null} country={guide.country} keyPrefix="dy"
+          modulesByDate={v.modulesByDate} dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan} imageFor={v.imageFor}
+          exports={v.exports} base={base} slug={guideSlug} />
       </section>
 
       <section class="dest" id="dest-map" data-dest="map" role="region" aria-label="Map" hidden>
