@@ -61,7 +61,8 @@ async function googleJson(url, init, fetchImpl) {
   try {
     const response = await fetchImpl(url, { ...init, signal: controller.signal });
     if (!response.ok) throw new Error(`provider ${response.status}`);
-    return response.json();
+    // Keep the abort deadline active until the body has finished downloading.
+    return await response.json();
   } finally {
     clearTimeout(timer);
   }

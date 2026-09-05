@@ -18,6 +18,30 @@ const request = () => new Request("https://worker.test/runtime", { headers: { "C
 const cors = { "Access-Control-Allow-Origin": "https://example.test" };
 
 describe("runtime worker boundary", () => {
+  it("keeps the provider timeout active while reading the response body", async () => {
+    vi.useFakeTimers();
+    let signal;
+    try {
+      const fetchPort = vi.fn(async (_url, init) => {
+        signal = init.signal;
+        return { ok: true, json: () => new Promise((_resolve, reject) => {
+          signal.addEventListener("abort", () => reject(new Error("body aborted")), { once: true });
+        }) };
+      });
+      const pending = handleRuntimeRequest("/runtime/routes", request(), env(), {
+        origin: { latitude: 40, longitude: -73 }, destination: { latitude: 40.01, longitude: -73.01 }, travelMode: "WALK",
+      }, cors, fetchPort);
+      await vi.advanceTimersByTimeAsync(12_000);
+      expect(signal?.aborted).toBe(true);
+      const response = await pending;
+      expect(response.status).toBe(502);
+      expect(await response.json()).toEqual({ error: "live provider unavailable" });
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("fails closed when the server key or runtime cost guard is absent", async () => {
     const raw = { origin: { latitude: 40, longitude: -73 }, destination: { latitude: 40.01, longitude: -73.01 }, travelMode: "WALK" };
     expect((await handleRuntimeRequest("/runtime/routes", request(), { RUNTIME_LIMITER: limiter() }, raw, cors)).status).toBe(503);

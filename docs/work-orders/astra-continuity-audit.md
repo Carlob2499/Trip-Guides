@@ -12,6 +12,14 @@ overrides; they do not overlap those files. Recheck before integration.
 
 ## Confirmed defects and repairs
 
+- Runtime Google response parsing returned an unawaited `response.json()` inside
+  a try/finally, clearing the abort timer as soon as headers arrived. Awaiting the
+  body keeps the 12-second deadline in force for slow/stalled body downloads.
+  A fake-timer regression failed before the fix and passes afterward, asserting
+  abort, a sanitized 502 response, and timer cleanup. All 72 tests across the four
+  Worker test files pass, as does focused ESLint. The Worker uses the root
+  dependency manifest/lockfile; there is no independent Worker package tree.
+
 - Actions run `33992832247` failed because the Kumamoto watcher tested the live
   V2 selector before reading the revocation of its historical r3 candidate.
   Revocation now exits with `eligible=false` before selector validation or fetching
