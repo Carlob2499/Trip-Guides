@@ -80,20 +80,12 @@ async function appendStress(page: Page, selector: string) {
   }, { selector, stress: [...STRESS] });
 }
 
-/* The five primary destinations (design-system.md 2026-09-04 §6): the bottom bar's slots on a
-   phone — Atlas is a link to the front door, the other four are regions of this page. */
+/* The five primary destinations (design-system.md 2026-09-05 §6, board 02): on a GUIDE the
+   bottom bar's slots are the trip's own regions and Split takes the fifth — the Atlas is the
+   wordmark in the strip there. (The hub's own bar still leads with Atlas; only guides are
+   asserted here.) */
 const DEST_NAV = ".botbar [data-dest]";
 async function openDestination(page: Page, key: string) {
-  if (key === "split") {
-    // Split is contextual (§27): no slot, opened from the card on Trip.
-    await openDestination(page, "trip");
-    const card = page.locator('[data-dest-go="split"]').first();
-    await card.scrollIntoViewIfNeeded();
-    await card.click();
-    await expect(page.locator("body")).toHaveAttribute("data-dest", "split");
-    await settle(page);
-    return;
-  }
   const tab = page.locator(`.botbar [data-dest-nav][data-dest="${key}"]`).first();
   await tab.click();
   await expect(tab).toHaveAttribute("aria-current", "true");
@@ -112,9 +104,8 @@ for (const [name, path] of GUIDES) {
     await prep(page, path, 320);
     const ids = await page.locator(DEST_NAV).evaluateAll((els) =>
       els.map((el) => (el as HTMLElement).dataset.dest).filter((id): id is string => Boolean(id)));
-    expect(ids, `${name}: the five destinations`).toEqual(["atlas", "trip", "itinerary", "map", "guide"]);
-    // Atlas is a link to the hub (its own reflow test above); Split is the contextual region.
-    for (const id of [...ids.filter((id) => id !== "atlas"), "split"]) {
+    expect(ids, `${name}: the five destinations`).toEqual(["trip", "itinerary", "map", "guide", "split"]);
+    for (const id of ids) {
       await openDestination(page, id);
       await expectFits(page, `${name}/${id} @ 320px`);
       // The Guide destination's chapters are one more level: every chapter must fit too.

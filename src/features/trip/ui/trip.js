@@ -3,9 +3,10 @@
    paints the parts that cannot be known at build time:
 
      · the lifecycle stamp, countdown and destination clock in the hero;
-     · the ACTIVE composition: today's Now → Next → Get there → warning → fallback → rest of
-       day, as large structured atoms, from the canonical #tripData days (the arrival day
-       renders as autopilot: current step dominant, the next two compressed);
+     · the ACTIVE cockpit (board 02): the left rail's standing answers — how far into the
+       trip today is, the next stop with its first Get-there link, today's row of the wired
+       forecast, the day's focus — the day's stops as photo ROWS in the centre in the order
+       Now → Next → rest of day, and the measured strip beside today's map;
      · the "N of M still open" summary over the readiness stack.
 
    Every minute it re-reads the clock; every check-off in the Itinerary re-focuses it. It
@@ -16,6 +17,7 @@ import { tripWindow } from "../../../lib/trip-dates";
 import { todayInTz, esc, readStoredRecord } from "../../../scripts/util.js";
 import { universalTransitLinks, nativeTransitLinks } from "../../../lib/transit-links";
 import { osmEmbedUrl } from "../../../lib/map-embed";
+import { getLastWx, wxIcon, wxLabel, wxDayOk } from "../../live-data/index.js";
 
 function destNowMinutes(tz) {
   try {
@@ -57,20 +59,52 @@ function leaveHtml(stop, next, nowMinutes) {
   return '<p class="tn-leave"><span class="tn-leave-k">Next at</span><span class="tn-leave-t">' + esc(next.time) + '</span><span class="tn-leave-in">' + esc(untilLabel(until)) + "</span></p>";
 }
 
-function stopAtom(stop, role, country, origin, index, images, leave) {
+/* One stop, as the board draws it: a 96×72 photo, a time kicker, the name, the guide's own
+   note, and a chevron into the day's plan. Now and Next carry the Get-there links; the rest of
+   the day is the same row without them. Nothing is estimated — a stop with no clock time keeps
+   its authored label ("morning") and no time is invented for it. */
+function stopRow(stop, role, country, origin, images, anchor, leave) {
   var branch = stop.branch ? '<span class="tn-branch">' + esc(stop.branch) + "</span>" : "";
-  var time = stop.time ? '<span class="tn-time">' + esc(stop.time) + "</span>" : "";
-  var note = stop.note ? '<p class="tn-note">' + esc(stop.note) + "</p>" : "";
-  var links = linksHtml(stop, country, origin);
-  var num = index != null ? '<span class="tn-num">Stop ' + String(index + 1).padStart(2, "0") + "</span>" : "";
-  var media = imageHtml(images, stop, role === "now" ? "(min-width:900px) 40vw, 100vw" : "96px");
-  return '<article class="tn-atom tn-atom--' + role + (media ? " tn-atom--photo" : "") + '" data-tn-role="' + role + '">' +
+  var kick = role === "now" ? "Now" : role === "next" ? "Up next" : "";
+  var time = stop.time ? '<span class="tn-row-time">' + esc(stop.time) + "</span>" : "";
+  var note = stop.note ? '<p class="tn-row-note">' + esc(stop.note) + "</p>" : "";
+  var media = imageHtml(images, stop, "96px");
+  var links = role === "rest" ? "" : linksHtml(stop, country, origin);
+  var go = anchor
+    ? '<a class="tn-row-go" href="#' + esc(anchor) + '" data-dest-go="itinerary" aria-label="' + esc(stop.name) + ' in the itinerary"><span aria-hidden="true">›</span></a>'
+    : "";
+  return '<article class="tn-row tn-row--' + role + (media ? " tn-row--photo" : "") + '" data-tn-role="' + role + '">' +
     media +
-    '<div class="tn-body">' +
-      '<p class="tn-role"><span class="tn-role-k">' + (role === "now" ? "Now" : "Next") + "</span>" + time + branch + num + "</p>" +
-      '<h3 class="tn-name">' + esc(stop.name) + "</h3>" + note + (leave || "") +
+    '<div class="tn-row-body">' +
+      '<p class="tn-row-k">' + (kick ? '<span class="tn-row-role">' + kick + "</span>" : "") + time + branch + "</p>" +
+      '<h3 class="tn-row-name">' + esc(stop.name) + "</h3>" + note + (leave || "") +
       (links ? '<div class="tn-go"><span class="tn-go-label">Get there</span>' + links + "</div>" : "") +
-    "</div></article>";
+    "</div>" + go + "</article>";
+}
+
+/* Haversine, in km — the STRAIGHT-LINE separation of today's located stops in the order the
+   itinerary puts them. It is labelled as such: the product routes nothing, so it must never
+   read as a travelled or walked distance. */
+function straightLineKm(pins) {
+  if (!pins || pins.length < 2) return null;
+  var R = 6371, total = 0;
+  for (var i = 1; i < pins.length; i++) {
+    var a = pins[i - 1], b = pins[i];
+    var dLat = (b.lat - a.lat) * Math.PI / 180, dLng = (b.lng - a.lng) * Math.PI / 180;
+    var la = a.lat * Math.PI / 180, lb = b.lat * Math.PI / 180;
+    var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLng / 2) * Math.sin(dLng / 2) * Math.cos(la) * Math.cos(lb);
+    total += 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
+  }
+  return total;
+}
+
+/* The day's pace, as the guide wrote it: the lead segment before the first "·" is the value,
+   the remainder is its sub-line. A guide that authored no pace gets no cell. */
+function paceCell(day) {
+  var src = day.pace || day.fit;
+  if (!src) return null;
+  var parts = String(src).split("·");
+  return { value: parts[0].trim(), sub: parts.slice(1).join("·").trim() };
 }
 
 export function initTrip() {
@@ -92,6 +126,11 @@ export function initTrip() {
   var stats = root.querySelector("[data-trip-stats]");
   var nowEl = root.querySelector("[data-trip-now]");
   var phases = root.querySelectorAll("[data-trip-phase]");
+  var progEl = root.querySelector("[data-trip-prog]");
+  var nextEl = root.querySelector("[data-trip-nextstop]");
+  var focusEl = root.querySelector("[data-trip-focus]");
+  var metricsEl = root.querySelector("[data-trip-metrics]");
+  var wxEl = root.querySelector("[data-wx-active]");
   var mapAside = root.querySelector("[data-trip-map]");
   var mapMount = mapAside ? mapAside.querySelector("[data-itin-map]") : null;
   var mapDayShown = -1;
@@ -171,6 +210,85 @@ export function initTrip() {
     return set;
   }
 
+  function todayPins(idx) {
+    if (!mapMount) return [];
+    try {
+      var el = mapMount.querySelector("script[data-map-data]");
+      return (JSON.parse(el.textContent || "{}").pins || []).filter(function (p) { return p.dayIdx === idx; });
+    } catch (e) { return []; }
+  }
+
+  /* The left rail: the standing answers for today. Every card hides itself when the guide has
+     nothing to put in it — an empty shell would imply a certainty the data does not have. */
+  function paintRail(idx, day, f) {
+    if (progEl) {
+      var label = progEl.querySelector("[data-trip-prog-label]");
+      var fill = progEl.querySelector("[data-trip-prog-fill]");
+      if (label) label.textContent = "Day " + (idx + 1) + " of " + days.length;
+      if (fill) fill.style.width = Math.round(((idx + 1) / days.length) * 100) + "%";
+      progEl.hidden = false;
+    }
+    if (nextEl) {
+      var s = f.next || f.now;
+      if (!s) { nextEl.hidden = true; nextEl.innerHTML = ""; }
+      else {
+        var im = images && images[placeKey(s.name)];
+        var thumb = im ? '<span class="tn-ns-media"><img src="' + esc(im.thumb || im.src) + '" alt="" loading="lazy" decoding="async" onerror="this.parentNode.remove()"></span>' : "";
+        var go = "";
+        if (s.lat != null && s.lng != null) {
+          var first = universalTransitLinks(s.lat, s.lng, null).concat(nativeTransitLinks(country, s.lat, s.lng, s.name, origin))[0];
+          if (first) go = '<a class="tn-ns-go" href="' + esc(first.href) + '" target="_blank" rel="noopener">View directions on ' + esc(first.label) + " ↗</a>";
+        }
+        nextEl.innerHTML = '<p class="tn-card-k">' + (f.next ? "Next stop" : "Now") + "</p>" +
+          '<div class="tn-ns-row">' + thumb + '<span class="tn-ns-txt"><b class="tn-ns-name">' + esc(s.name) + "</b>" +
+          (s.time ? '<span class="tn-ns-sub">' + esc(s.time) + "</span>" : "") + "</span></div>" + go;
+        nextEl.hidden = false;
+      }
+    }
+    if (focusEl) {
+      if (day.tldr) {
+        focusEl.innerHTML = '<p class="tn-card-k">Today’s focus</p><p class="tn-focus-txt">' + esc(day.tldr) + "</p>";
+        focusEl.hidden = false;
+      } else { focusEl.hidden = true; focusEl.innerHTML = ""; }
+    }
+  }
+
+  /* The measured strip beside the map: three cells, each COUNTED, SUMMED or QUOTED from the
+     day. The board's step count and estimated active time have no source in this product. */
+  function paintMetrics(idx, day) {
+    if (!metricsEl) return;
+    var cells = [];
+    if (day.stops.length) cells.push({ k: "Stops today", v: String(day.stops.length), s: day.stops.length === 1 ? "one stop" : "in the day’s order" });
+    var km = straightLineKm(todayPins(idx));
+    if (km !== null) cells.push({ k: "Straight-line", v: (km < 10 ? km.toFixed(1) : String(Math.round(km))) + " km", s: "between today’s stops, not a route" });
+    var pace = paceCell(day);
+    if (pace) cells.push({ k: "Pace", v: pace.value, s: pace.sub });
+    metricsEl.innerHTML = cells.map(function (c) {
+      return '<div class="tn-metric"><dt>' + esc(c.k) + "</dt><dd>" + esc(c.v) + "</dd>" + (c.s ? '<p class="tn-metric-s">' + esc(c.s) + "</p>" : "") + "</div>";
+    }).join("");
+    metricsEl.hidden = !cells.length;
+  }
+
+  /* Weather today: today's row of the forecast the guide already fetches (live-data). The
+     payload is a DAILY high/low and a WMO code — there is no current temperature, no
+     precipitation chance and no wind in it, so none of those are drawn. */
+  function paintWx(daily) {
+    if (!wxEl) return;
+    if (!daily || !daily.time) { wxEl.hidden = true; return; }
+    var t = todayInTz(tz);
+    var iso = t ? [t.y, String(t.m).padStart(2, "0"), String(t.d).padStart(2, "0")].join("-") : new Date().toISOString().slice(0, 10);
+    var k = daily.time.indexOf(iso);
+    if (k < 0 || !wxDayOk(daily, k)) { wxEl.hidden = true; return; }
+    var code = daily.weathercode[k];
+    wxEl.innerHTML = '<p class="tn-card-k">Weather today</p>' +
+      '<p class="tn-wx-row"><span class="tn-wx-ico" aria-hidden="true">' + wxIcon(code) + "</span>" +
+      '<span class="tn-wx-hi">' + Math.round(daily.temperature_2m_max[k]) + "°</span>" +
+      '<span class="tn-wx-lo">low ' + Math.round(daily.temperature_2m_min[k]) + "°</span></p>" +
+      '<p class="tn-wx-word">' + esc(wxLabel(code)) + "</p>" +
+      '<p class="tn-wx-src">Forecast · <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a></p>';
+    wxEl.hidden = false;
+  }
+
   function paintNow() {
     if (!nowEl) return;
     var now = destToday();
@@ -181,41 +299,33 @@ export function initTrip() {
     var arrival = idx === 0;
     var nowMin = destNowMinutes(tz);
     var f = focusFor(day.stops, nowMin, doneSet(idx));
+    paintRail(idx, day, f);
+    paintMetrics(idx, day);
     // 1 — where today sits: the day's own name and the way to its full plan.
     var h = '<div class="tn-day">' +
       '<p class="tn-kicker"><span>' + (arrival ? "Arrival" : "Today") + " · " + esc(day.date) + '</span><a href="#' + esc(day.anchor) + '" data-dest-go="itinerary" class="tn-daylink">Day ' + (idx + 1) + " of " + days.length + " in the itinerary →</a></p>" +
       '<h2 class="tn-title">' + esc(day.title) + "</h2>" +
-      (day.tldr ? '<p class="tn-tldr">' + esc(day.tldr) + "</p>" : "") +
       "</div>";
-    // 2 — Now, then Next: one dominant object, one compressed one. Get there rides inside each.
+    // 2 — the day as rows, in the itinerary's own order: Now, then Next, then the remainder.
     if (!day.stops.length) {
       h += '<p class="tn-none">No timed stops today — the day\'s plan is in the itinerary.</p>';
     } else {
-      h += '<div class="tn-stack">';
-      if (f.now) h += stopAtom(f.now, "now", country, origin, day.stops.indexOf(f.now), images, leaveHtml(f.now, f.next, nowMin));
-      if (f.next) h += stopAtom(f.next, "next", country, origin, day.stops.indexOf(f.next), images);
+      var rest = arrival ? f.later.slice(0, 1) : f.later;
+      h += '<div class="tn-rows">';
+      if (f.now) h += stopRow(f.now, "now", country, origin, images, day.anchor, leaveHtml(f.now, f.next, nowMin));
+      if (f.next) h += stopRow(f.next, "next", country, origin, images, day.anchor);
       if (!f.now && !f.next) h += '<p class="tn-none">Every stop today is checked off.</p>';
+      rest.forEach(function (st) { h += stopRow(st, "rest", country, origin, images, day.anchor); });
       h += "</div>";
+      if (f.done.length) h += '<p class="tn-done">' + f.done.length + " stop" + (f.done.length === 1 ? "" : "s") + " behind you</p>";
     }
     // 3 — material problem: the official advisory when elevated. 4 — the fallback the guide
-    // already carries. 5 — the day's fit note, quiet. Nothing here is invented.
+    // already carries. 5 — the day's fit note when the pace cell is not already carrying it.
     var side = "";
     var adv = cfg.advisory && cfg.advisory.level >= 2 ? cfg.advisory : null;
     if (adv) side += '<a class="tn-warn" href="' + esc(adv.source_url) + '" target="_blank" rel="noopener"><span class="tn-warn-k">Advisory · Level ' + adv.level + "</span><span>" + esc(adv.title) + "</span></a>";
     if (day.planB) side += '<div class="tn-planb planb-' + day.planB.trigger + '"><span class="tn-warn-k">' + (day.planB.trigger === "rain" ? "Rain plan" : "If it's closed") + "</span><span>" + day.planB.body + "</span></div>";
-    if (day.fit) side += '<p class="tn-fit"><span class="tn-warn-k">Fit</span><span>' + esc(day.fit) + "</span></p>";
-    // 6 — the remainder of the day, in the itinerary's own order, with its own times.
-    var rest = arrival ? f.later.slice(0, 1) : f.later;
-    if (rest.length) {
-      side += '<div class="tn-rest"><p class="tn-rest-k">' + (arrival ? "Then" : "Rest of the day") + "</p><ol class=\"tn-rest-list\">" +
-        rest.map(function (s) {
-          var im = images && images[placeKey(s.name)];
-          var thumb = im ? '<span class="tn-rest-thumb" aria-hidden="true"><img src="' + esc(im.thumb || im.src) + '" alt="" loading="lazy" decoding="async" onerror="this.parentNode.remove()"></span>' : "";
-          return "<li" + (thumb ? ' class="tn-rest--photo"' : "") + ">" + (s.time ? '<span class="tn-rest-time">' + esc(s.time) + "</span>" : '<span class="tn-rest-time tn-rest-time--none" aria-hidden="true">—</span>') + thumb + '<span class="tn-rest-name">' + esc(s.name) + (s.branch ? ' <span class="tn-branch">' + esc(s.branch) + "</span>" : "") + "</span></li>";
-        }).join("") +
-        "</ol></div>";
-    }
-    if (f.done.length) side += '<p class="tn-done">' + f.done.length + " stop" + (f.done.length === 1 ? "" : "s") + " behind you</p>";
+    if (day.fit && !day.pace) side += '<p class="tn-fit"><span class="tn-warn-k">Fit</span><span>' + esc(day.fit) + "</span></p>";
     if (side) h += '<div class="tn-side">' + side + "</div>";
     // The minute tick repaints only when something changed: a polite live region is not
     // re-announced, and the objects keep their identity (§8 reflow) between ticks.
@@ -241,6 +351,10 @@ export function initTrip() {
   var phase = paintPhase();
   if (phase === "active") paintNow();
   paintReadiness();
+  /* The forecast may land before or after this module: read what live-data already validated,
+     then keep listening. Same late-listener pattern the packing strip uses. */
+  paintWx(getLastWx());
+  document.addEventListener("tg:wx", function (e) { paintWx(e && e.detail ? e.detail.daily : null); });
   document.addEventListener("tg:readiness", paintReadiness);
   document.addEventListener("tg:stops", function () { if (root.getAttribute("data-phase") === "active") paintNow(); });
   var timer = setInterval(function () { var p = paintPhase(); if (p === "active") paintNow(); }, 60000);

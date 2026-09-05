@@ -18,6 +18,21 @@ export function wxIcon(code: number): string {
   return "⛅︎";
 }
 
+/** WMO weather code → the same grouping in words. The symbol above carries the reading at a
+    glance; this carries it for a screen reader and for anyone the glyph fails (§30 — never a
+    shape alone). Deliberately the SAME seven buckets, so the two can never disagree. */
+export function wxLabel(code: number): string {
+  if (code === 0) return "Clear";
+  if (code <= 3) return "Partly cloudy";
+  if (code <= 48) return "Cloudy";
+  if (code <= 67) return "Rain";
+  if (code <= 77) return "Snow";
+  if (code <= 82) return "Showers";
+  if (code <= 86) return "Snow showers";
+  if (code >= 95) return "Thunderstorm";
+  return "Partly cloudy";
+}
+
 export interface CurrentWx {
   tempC: number;
   code: number;

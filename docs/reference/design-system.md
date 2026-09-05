@@ -208,23 +208,26 @@ Primary destinations:
 - Itinerary
 - Map
 - Guide
-- Split — a tab **on desktop only**, where the strip has the room; it stays a contextual trip
-  utility everywhere else (Trip, group/expense contexts, Search).
+- Split — a tab on the desktop strip, and the fifth phone slot **on a guide**, where the four
+  other slots are that trip's own regions; elsewhere it stays a contextual trip utility
+  (Trip, group/expense contexts, Search).
 
 Search is not a destination tab. It is a globally available contextual action.
 
 SOS is not a destination tab. It is a globally available emergency tool.
 
-### Mobile navigation
-Keep the persistent bar compact and prudent with phone space:
-- Atlas
-- Trip
-- Itinerary
-- Map
-- Guide
+### Mobile navigation (revised 2026-09-05 with board 02)
+Keep the persistent bar compact and prudent with phone space. It carries five slots, and which
+five depends on where the reader is:
 
-Atlas keeps its slot on a phone because the wordmark is too small a target to be the only way
-home. Split is contextual.
+- **On a guide** — Trip · Itinerary · Map · Guide · Split. All five are that trip's own regions,
+  so the bar is the trip and nothing else. The Atlas is the wordmark in the strip above.
+- **On the Atlas** — Atlas · Trip · Itinerary · Map · Guide. The wordmark is the page the reader
+  is already on, so the first slot carries the Atlas and the rest link into the current trip.
+
+This replaces the earlier rule that gave Atlas a phone slot everywhere: on a guide that slot was
+a second way to a page the strip already links, and it cost Split its home on the surface where
+expenses are actually settled.
 Search is globally available without occupying a permanent destination slot.
 SOS remains one-action accessible and visually distinct.
 
@@ -692,6 +695,41 @@ Trip should not revert into a generic dashboard of equal cards.
 
 Before travel it may emphasize readiness.
 After travel it becomes an editorial recap + Trip Learnings entry point.
+
+### The ACTIVE composition (decided 2026-09-05, board 02)
+
+Inside the frame, ACTIVE is three columns on desktop and one on a phone:
+
+- **Rail** (≈290px) — the standing answers, each card hiding itself when the guide has nothing
+  to put in it: identity + a "Day N of M" progress bar; **Next stop** (photo, name, its authored
+  time, and the first Get-there link); **Weather today**; **Today's focus** (the day's own line);
+  **Booked & dated**.
+- **Centre** — the day's head, then every stop of the day in ONE row grammar (photo, time
+  kicker, name, the guide's note, a chevron into the day's plan). Now leads with the accent
+  edge and carries Get-there; Next is the same row, marked; the remainder of the day is the same
+  row again. The single foot control is "View full itinerary".
+- **Right** — today's route on the map, then a three-cell measured strip: stops counted,
+  straight-line km summed from today's located pins, and the day's pace as the guide wrote it.
+
+On a phone the identity band stays a photograph with the title on a scrim over its foot, so the
+rail's first card there is the progress bar alone and the trip is named once.
+
+**Booked & dated** is the board's "Reservations" card, named for what the product actually
+holds: the readiness items the guide gave a due DATE inside the trip. The date decides — the
+booking-wording flag is a heuristic over an item's own words and would drop a dated commitment
+that simply did not phrase itself as a booking, so the flag only styles the row. Nothing dated,
+no card.
+
+Not drawn, because nothing in this product holds them: trip companions, a message group, notes
+and documents, a step count, an estimated active time, T-money/eSIM balances, and reservation
+statuses. Weather is the wired daily high/low and condition — there is no current temperature,
+precipitation chance or wind in the payload the guide fetches, so none appear.
+
+### Under the frame
+Trip's standing references are the cream band under the frame, not competition for today's fold:
+**Essentials** (the guide's entry rules and its offline files), the **Split** card, and the
+**Learnings** notebook. A destination may own one such band; the router shows it with the frame
+body it belongs to.
 
 ---
 

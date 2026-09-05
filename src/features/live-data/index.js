@@ -19,6 +19,6 @@ export { initSun } from "./ui/sun.js";
 // Re-exported for tests and for anything that needs to judge rate/forecast data without
 // touching the DOM.
 export { inBand, fmtRate, isCacheFresh, parseRateResponse, SANITY } from "./model/rate";
-export { wxIcon, wxDayOk, wxValidate, weatherWindow, currentWxOf } from "./model/weather";
+export { wxIcon, wxLabel, wxDayOk, wxValidate, weatherWindow, currentWxOf } from "./model/weather";
 export { solarTimesFor, daylightLeftLabel, fmtClock } from "./model/sun";
 export { derivePackingList } from "./model/packing";

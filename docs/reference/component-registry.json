@@ -79,7 +79,11 @@
     },
     "TripDestination": {
       "file": "src/components/TripDestination.astro",
-      "role": "Trip — pre/active/post lifecycle compositions of what matters now, readiness, recap and the Learnings notebook (D6-02/19/30–35/48)"
+      "role": "Trip — pre/active/post lifecycle compositions of what matters now inside the frame: readiness, the ACTIVE cockpit (rail · day rows · today’s map) and the recap (D6-02/19/30–35/48; board 02)"
+    },
+    "TripBelow": {
+      "file": "src/components/TripBelow.astro",
+      "role": "Trip — the cream band under the frame: the guide’s entry rules and offline files, the Split card, and the Learnings notebook (board 02)"
     },
     "TripSplit": {
       "file": "src/components/TripSplit.astro",

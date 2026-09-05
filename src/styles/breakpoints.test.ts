@@ -36,7 +36,8 @@ const EXPECTED: Record<string, string[]> = {
   "features/search/styles.css": ["MOBILE_MAX+1"],
   // 2026-09-05, the frame strip (design-system.md §6): the frame's own margins/radius, and the
   // strip's desktop row, each recompose on the phone ceiling.
-  "styles/chrome.css": ["MOBILE_MAX+1", "MOBILE_MAX+1"],
+  // 2026-09-05, board 02: the cream band a destination owns under the frame recomposes with it.
+  "styles/chrome.css": ["MOBILE_MAX+1", "MOBILE_MAX+1", "MOBILE_MAX+1"],
   // The Atlas (board 01): the stage's desktop grid, the list's ivory card under the frame, and
   // the phone's one-scroll composition.
   "styles/atlas-world.css": ["MOBILE_MAX+1"],
@@ -45,15 +46,17 @@ const EXPECTED: Record<string, string[]> = {
   // D7 convergence (2026-09-04): SOS becomes a centred modal above the phone ceiling.
   "styles/field-tools.css": ["MOBILE_MAX+1"],
   "styles/guide-dest.css": ["TABLET_MIN", "DESKTOP_MIN"],
-  // guide.css keeps one marker: the phone retune of --chrome-h.
-  "styles/guide.css": ["MOBILE_MAX"],
+  // guide.css: the destination workspace filling the frame (board 02), then the phone retune
+  // of --chrome-h.
+  "styles/guide.css": ["MOBILE_MAX+1", "MOBILE_MAX"],
   "styles/itinerary.css": ["DESKTOP_MIN"],
   "styles/map.css": ["DESKTOP_MIN"],
   // D7 convergence: the provenance popover is a bottom sheet on phones (design-system.md §14).
   "styles/provenance-dot.css": ["MOBILE_MAX"],
   // D7 convergence: the ledger gains its desktop scene above the phone ceiling.
   "styles/trip-split.css": ["MOBILE_MAX", "MOBILE_MAX+1"],
-  "styles/trip.css": ["MOBILE_MAX+1"],
+  // trip.css: the ACTIVE cockpit's three columns, then the cream band's two under the frame.
+  "styles/trip.css": ["MOBILE_MAX+1", "MOBILE_MAX+1"],
 };
 
 const MARKER = /\/\*\s*bp:([A-Z_]+)(\+1)?\b[\s\S]*?\*\//g;
