@@ -53,6 +53,7 @@ import {
   ownerFailKey, ownerThrottled, ownerKeyHealth, OWNER_FAIL_WINDOW_MS,
 } from "../scripts/worker-api.mjs";
 import { MODIFY_LABEL, modifyIssueTitle, renderModifyIssueBody } from "../src/lib/modify-schema.mjs";
+import { handleRuntimeRequest } from "./runtime-api.mjs";
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 const DEFAULT_DISPATCH_REF = "main";
@@ -295,6 +296,8 @@ export default {
         rateLimit: env.RATE ? "configured" : "OFF",
         // "OFF" · "WEAK" · "configured" — a length verdict, never the key or its length.
         ownerEndpoints: ownerKeyHealth(env.OWNER_KEY),
+        runtimeProviders: env.GOOGLE_SERVER_KEY ? "configured" : "OFF",
+        runtimeCostGuard: (env.RUNTIME_RATE || env.RATE) ? "configured" : "OFF",
       }, 200, cors);
     }
 
@@ -318,6 +321,9 @@ export default {
     } catch {
       return json({ error: "invalid JSON" }, 400, cors);
     }
+
+    const runtimeResponse = await handleRuntimeRequest(path, request, env, raw, cors);
+    if (runtimeResponse) return runtimeResponse;
 
     const ownerRoute = OWNER_ROUTES[path];
     if (ownerRoute) {

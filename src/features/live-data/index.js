@@ -23,3 +23,5 @@ export { inBand, fmtRate, isCacheFresh, parseRateResponse, SANITY } from "./mode
 export { wxIcon, wxLabel, wxDayOk, wxValidate, weatherWindow, currentWxOf } from "./model/weather";
 export { solarTimesFor, daylightLeftLabel, fmtClock } from "./model/sun";
 export { derivePackingList } from "./model/packing";
+export { actionableEnvironment, parseOpenMeteoEnvironment, validAlerts } from "./model/environment";
+export { OpenMeteoEnvironmentAdapter, GoogleWeatherAlertsAdapter } from "./adapters/environment";

@@ -36,6 +36,10 @@ All POST, JSON in and JSON out, except `/health`.
 | `POST /change` | `X-Owner-Key` | `{slug, section, change}` → files a `modify-request` issue. Returns `{ok, id}`. |
 | `POST /answer` | `X-Owner-Key` | `{slug, answers:[{id, answer}]}` → dispatches the change workflow with `source: "answers"`. |
 | `POST /approve` | `X-Owner-Key` | `{slug, issue}` → dispatches the change workflow with `source: "feedback"`. |
+| `POST /runtime/routes` | allowed origin + per-IP cost budget | Bounded Google Routes request; minimal duration/distance/polyline response. |
+| `POST /runtime/route-matrix` | allowed origin + per-IP cost budget | Up to eight authored stops; live matrix for unapplied advisories. |
+| `POST /runtime/places` | allowed origin + per-IP cost budget | Up to eight reviewed Place IDs; status/current hours only; never cached. |
+| `POST /runtime/weather-alerts` | allowed origin + per-IP cost budget | Public alerts from authoritative weather publishers. |
 
 `POST /answer` builds its `plan_json` input as
 `{"source":"answers","slug":"<slug>","answers":[{"id":"…","answer":"…"}]}` — one string, exactly
@@ -112,6 +116,23 @@ deployed URL (e.g. `https://waypoint-intake.<you>.workers.dev`) into
 
 Check it with `curl https://<your-worker>/health` — the response says whether the repo, token,
 rate limit and owner endpoints are each configured, without revealing any of them.
+
+### Runtime provider setup
+
+The paid runtime routes are disabled unless both a server key and the existing KV cost guard are
+configured. Enable Google Routes API, Places API (New), and Weather API, restrict one server key to
+only those APIs, set cloud budgets/quotas, then store it without printing or committing it:
+
+```sh
+npx wrangler secret put GOOGLE_SERVER_KEY
+```
+
+Runtime traffic uses the existing `RATE` binding (or a dedicated `RUNTIME_RATE` binding when one is
+provided) and fails closed if neither exists. `RUNTIME_CAP` is a weighted per-IP/minute ceiling;
+matrix elements and Places detail calls each consume a unit. `LIVE_CACHE` is optional for route,
+matrix, and alert responses. Place Details is explicitly excluded from KV caching; reviewed Place
+IDs remain in canonical guide data. Finally set the repository Actions variable
+`PUBLIC_WAYPOINT_RUNTIME_ENABLED=1` so the static build exposes the capability.
 
 ### Rotating the key (and why the browser copy expires)
 
