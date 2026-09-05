@@ -9,13 +9,13 @@ describe("destinationTheme", () => {
     const b = destinationTheme("korea", "#2b5d86");
     expect(a).toEqual(b);
     expect(a.darkGround).not.toBeNull();
-    expect(a.darkGround).not.toBe("#17120e");
+    expect(a.darkGround).not.toBe("#0d1512");
     expect(a.textureSeed).toBe("korea");
   });
   it("keeps the quiet ink readable on the tinted ground", () => {
     for (const accent of ["#2b5d86", "#a4332a", "#b23a48", "#8a6a1f", "#2f6f4f", "#ffffff"]) {
       const t = destinationTheme("x", accent);
-      if (t.darkGround) expect(contrastRatio("#a89f93", t.darkGround)).toBeGreaterThanOrEqual(4.5);
+      if (t.darkGround) expect(contrastRatio("#91a59b", t.darkGround)).toBeGreaterThanOrEqual(4.5);
     }
   });
   it("emits only the properties the manifest allows", () => {

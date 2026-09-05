@@ -2,7 +2,7 @@
 
 Status: **CURRENT DESIGN AUTHORITY — D6 COMPLETE / D7 GRAND REDESIGN AUTHORIZED**  
 Owner: Carlo.  
-Last reconciled: 2026-09-04.
+Last reconciled: 2026-09-05.
 
 This document is the **single human-readable authority for Waypoint visual and interaction design**.
 It supersedes every previous visual direction, R4/R5 handoff, shipped visual convention, prototype,
@@ -191,23 +191,25 @@ No design is accepted merely because 375px and 1440px look good.
 - **Active trip:** Trip is the default home.
 - Atlas remains one action away at all times.
 
-### Desktop navigation
-Use an **adaptive hybrid floating navigation system**:
-- compact and quiet by default;
-- expands contextually on interaction;
-- may yield visually when the workspace needs focus;
-- remains predictable and keyboard reachable;
-- never becomes the old permanent flat sidebar.
+### Desktop navigation (decided 2026-09-05 — the frame strip)
+Desktop navigation is the **top row of the dark frame** every surface sits inside (final mockup
+package, boards 01 and 02):
+- wordmark left (compass mark + WayPoint) — the way back to the Atlas;
+- the destination tabs centred: **Trip · Itinerary · Map · Guide · Split**;
+- the global actions right: Search pill, SOS, share, theme.
+
+The strip is always in the dark register, on the cream page and in dark mode alike. There is no
+floating rail and no flat sidebar; both are retired (§33). On the Atlas the strip's centre carries
+the trips' status chips instead of tabs, since the destinations belong to a trip.
 
 Primary destinations:
-- Atlas
+- Atlas (the wordmark, and its own page)
 - Trip
 - Itinerary
 - Map
 - Guide
-
-**Split is a contextual trip utility**, not a permanent primary destination. It may be surfaced
-prominently from Trip, group/expense contexts, Search, or expanded navigation when relevant.
+- Split — a tab **on desktop only**, where the strip has the room; it stays a contextual trip
+  utility everywhere else (Trip, group/expense contexts, Search).
 
 Search is not a destination tab. It is a globally available contextual action.
 
@@ -221,9 +223,16 @@ Keep the persistent bar compact and prudent with phone space:
 - Map
 - Guide
 
-Split is contextual.
+Atlas keeps its slot on a phone because the wordmark is too small a target to be the only way
+home. Split is contextual.
 Search is globally available without occupying a permanent destination slot.
 SOS remains one-action accessible and visually distinct.
+
+### The frame
+On desktop every page is composed inside one dark, rounded frame on the cream ground (`.stage`):
+the strip is its first row and the surface's own workspace fills the rest; ivory cards may follow
+under the frame. On a phone the frame runs edge to edge. In dark mode the frame and the ground share
+the register and the frame keeps a hairline so it still reads as the frame.
 
 ### Orientation
 Use a **quiet contextual north star**, not loud breadcrumbs:
@@ -854,7 +863,7 @@ Provenance affordances must not become a field of tiny unexplained dots.
 The D7 redesign is not additive.
 
 The implementation program must identify and retire:
-- old flat sidebar navigation;
+- old flat sidebar navigation, and the 2026-09-04 floating desktop rail it was replaced with;
 - superseded mobile nav variants;
 - purple-era palette and one-off call-site colors;
 - zero-radius card law;

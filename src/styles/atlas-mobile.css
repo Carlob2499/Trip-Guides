@@ -1,9 +1,8 @@
-/* Atlas hub — mobile surfaces (<760px, D5, README "Mobile"). The globe has no spatial budget
-   for the desktop rails/pincards/motto on a phone screen, so mobile gets bare pings, a FAB
-   (☰) map menu carrying the same actions the desktop rail exposes (fly to a sheet, fit world,
-   pause spin, tools, ＋ new guide), and a bottom sheet on pin tap instead of the desktop
-   floating pincard. `world-view.js` gates the mobile branch itself (matchMedia, live-checked,
-   not cached) — this file only ever hides/shows; it never decides behaviour. */
+/* Atlas hub — the phone (<900px, the shell's phone model; board 01's phone frames). One scroll:
+   the strip, the globe hero in the dark frame, the Atlas quick actions under it, then the list
+   as the workhorse. The globe carries its pin chips, a FAB (☰) map menu (fly to a guide, fit
+   world, pause spin, ＋ new guide) and a bottom sheet on pin tap. `world-view.js` gates the
+   mobile branch itself (matchMedia, live-checked) — this file only ever hides/shows. */
 
 .atlas-menufab { display: none; }
 .atlas-menuscrim, .atlas-menusheet, .atlas-pingsheet { display: none; }
@@ -13,140 +12,23 @@
 .atlas-menusheet:not([hidden]) { display: grid; }
 .atlas-pingsheet:not([hidden]) { display: grid; }
 
-@media (max-width: 759px) {
-  /* Header collapses to brand + theme (README "Mobile") — TOOLS moves into the FAB menu, the
-     same relocation the desktop record rail's own actions get.
-
-     ＋ New guide now makes that same move, and it should have from the start (creator,
-     2026-08-09: "is there a need for the + New Guide?"). It was reaching /new/ THREE ways on a
-     phone: this header button, the FAB menu's own `＋ New guide` row, and the toast you get for
-     tapping a country with no guide. The toast is the good one — it appears exactly when you
-     have just expressed the intent. The other two are the same ambient link twice, and this was
-     the worse of the pair: `.atlas-header-btn-label` is hidden at this width, so what shipped
-     was a bare ＋ glyph beside a moon icon with nothing saying what it did.
-
-     The FAB menu keeps the labelled version, so nothing is lost and the header gets the room
-     back — which is the same complaint the WORLD|TABLE rule below is answering.
-     Desktop is untouched: there the label renders and the CTA can say what it is. */
-  /* --tools is gone entirely now (R5 retired the standalone screen); the selector went with it
-     rather than lingering as a rule for an element that cannot exist. */
-
-  /* D5 asked for "a permanent WORLD | TABLE segmented switch" and this took that as full-bleed:
-     `width:100%` pushed it onto a row of its own, so the phone header spent THREE rows before
-     the globe got a pixel — brand, then a full-width bar, then nothing else on that line
-     (creator, 2026-08-09: "the World/Table view is too big and should fill up the space ...
-     give more space to the globe").
-
-     Permanent is about presence, not size. The brand takes the full width it was already
-     using, and the switch shares the second row with the two buttons that were sitting on it
-     alone — one row recovered, straight into the globe, and the header reads as one block
-     across the screen instead of a stack of three unequal ones. Each button keeps its 44px
-     touch height; only the wasted horizontal run is given back.
-
-     THE GLOBE FRONT DOOR MADE THIS A THIRD PROBLEM (2026-08-10). Giving the brand its own
-     full-width row still cost three stacked lines — 130px measured at 375px — and that header
-     is now STICKY, because the globe scrolls out from under it. 130px of permanent chrome on
-     an 812px phone is a sixth of the screen following you down a list of four sheets, which is
-     the same complaint as before with a worse consequence. One row now: mark, wordmark, the
-     switch, the theme button. The strapline goes — "VERIFIED FIELD GUIDES" is the cover's
-     line and the cover has just said it. */
-  /* Only the horizontal run narrows here — the 44px height moved to the base rule in
-     atlas-world.css once the sweep showed the desktop half of the range was still at 40px.
-     (The reasoning it carried is unchanged and now applies at every width: 44px, not the kit's
-     4px-padded segments, because this repo's a11y gate holds every hit target to 44px and a
-     gate outranks a screenshot.) */
-  .atlas-toggle-btn { padding: 0 12px; }
-
-  /* No spatial budget for the desktop rails, floating pincards, or motto. */
-  .atlas-ov-index, .atlas-ov-key, .atlas-ov-record, .atlas-ov-controls,
-  .atlas-pincard {
-    display: none !important;
-  }
-
-  .atlas-menufab { display: flex; }
-
-  /* ── Pin chips: the pincard at phone scale (creator, 2026-08-08) ──────────────────────
-     The globe used to be anonymous dots on mobile — nothing said a country had a guide
-     until you tapped it. A chip is a status dot plus the trip's name, nothing else: no
-     photo, no clock, no CTA, because the ping sheet a tap raises already carries those.
-
-     Positioned by world-view.js on every atlas-pos frame with a translate3d, so it moves
-     with its pin rather than being re-laid-out. */
-  .atlas-pinchip {
-    position: absolute; top: 0; left: 0; z-index: 6;
-    display: inline-flex; align-items: center; gap: 5px;
-    /* The lift clear of the pin's dot. Centring is applied by world-view.js inside the
-       same `transform` it rewrites each frame — see the note there. */
-    margin: -12px 0 0 0; padding: 3px 8px;
-    /* A chip is a BUTTON here (world-view.js builds it as one, and tapping it does what tapping
-       its pin does), so it takes the 44px floor rather than sizing to its 12px label — it
-       measured 25px tall at every width under 760px. Nothing shares its row to squeeze it: each
-       chip is absolutely positioned at its own pin's screen point, so this is the .transit-link
-       case ("free to grow because nothing else shares its row"), not the .scrub-fit .dchip one
-       (8-10 chips competing for one fixed 375px row). The one real consequence is that placeChips'
-       overlap solver now reserves a taller box — it measures offsetHeight live each frame, so
-       the box follows this number rather than a hardcoded one, and a chip it hides for clashing
-       was already the designed behaviour at 25px. Verified after the raise: the same chips are
-       still drawn at 375px. */
-    min-height: 44px;
-    /* Opaque, not translucent: this sits over a canvas whose colour changes as the globe
-       turns, so a see-through ground meant the label's contrast depended on which ocean
-       was behind it — unverifiable to the a11y gate and genuinely harder to read. */
-    background: var(--card);
-    border: 1px solid var(--rule2); border-radius: 999px;
-    color: var(--ink); font-family: var(--font-data); font-size: var(--text-micro);
-    letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
-    cursor: pointer; opacity: 0; pointer-events: none;
-    /* The layer is pointer-events:none so the globe stays draggable through it; each chip
-       opts itself back in only once it is actually shown. */
-  }
-  .atlas-pinchip[data-on] { pointer-events: auto; }
-  .atlas-pinchip:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
-  .atlas-pinchip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rule2); flex: 0 0 auto; }
-  .atlas-pinchip[data-status="ongoing"] .atlas-pinchip-dot { background: var(--accent); }
-  .atlas-pinchip[data-status="upcoming"] .atlas-pinchip-dot { background: var(--aink); }
-  .atlas-pinchip[data-status="past"] .atlas-pinchip-dot { background: var(--green); }
-  .atlas-pinchip[data-status="ongoing"] { border-color: var(--accent); }
-  /* The name is the point; keep it from ever growing wider than a phone's half-width. */
-  .atlas-pinchip-name { max-width: 42vw; overflow: hidden; text-overflow: ellipsis; }
-
-  /* A chip for a guide on the far side of the globe is faded out, and opacity alone leaves it
-     focusable and announced — Tab on a Bluetooth keyboard landed on a button with no visible
-     focus ring anywhere on screen, and a screen reader read out guides that were not drawn.
-     visibility takes it out of both trees; `data-on` is set per frame in placeChips. */
-  .atlas-pinchip:not([data-on]) { visibility: hidden; }
-
-  @media (prefers-reduced-motion: no-preference) {
-    /* Opacity only — the transform is the live position and must never be transitioned,
-       or every chip would lag its own pin by the transition's duration. */
-    .atlas-pinchip { transition: opacity var(--dur-routine) linear; }
-    .atlas-pinchip[data-status="ongoing"] .atlas-pinchip-dot { animation: atlas-chip-pulse 2.4s ease-in-out infinite; }
-    @keyframes atlas-chip-pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
-  }
-}
-
-/* Desktop keeps its full pincards; the chips are a mobile-only surface. */
-@media (min-width: 760px) { .atlas-pinchip { display: none; } }
-
 .atlas-menufab {
   position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(12px + var(--safe-bottom) + var(--botbar-h, 0px));
   z-index: 5; width: 52px; height: 52px; border-radius: var(--r-round);
   align-items: center; justify-content: center;
   background: var(--cta); color: var(--cta-ink); border: 0; cursor: pointer;
   font-family: var(--font-data); font-weight: 700; font-size: var(--text-body);
-  box-shadow: var(--shadow-float);
+  box-shadow:var(--shadow-float);
 }
-
 .atlas-menuscrim {
   position: absolute; inset: 0; z-index: 4;
   background: color-mix(in srgb, var(--ink) 32%, transparent);
 }
-
 .atlas-menusheet {
   position: absolute; right: calc(12px + var(--safe-right)); bottom: calc(74px + var(--safe-bottom));
   z-index: 5; width: min(240px, 72vw);
-  background: var(--card); border: 1px solid var(--rule2);
-  box-shadow: var(--shadow-float);
+  background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-card); overflow: hidden;
+  box-shadow:var(--shadow-float);
 }
 .atlas-menusheet-kicker {
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-nano); letter-spacing: .18em;
@@ -163,30 +45,22 @@
 
 .atlas-pingsheet {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 6;
-  background: var(--card); border-top: 2px solid var(--accent);
+  background: var(--card); border-top: 2px solid var(--accent); border-radius: var(--r-pane) var(--r-pane) 0 0;
   padding: 14px max(16px, var(--safe-right)) calc(14px + var(--safe-bottom)) max(16px, var(--safe-left));
   gap: 9px;
-  box-shadow: var(--shadow-float);
+  box-shadow:var(--shadow-float);
 }
-/* The sheet was a country code, a title and a clock on a plain ground — accurate and
-   completely anonymous (creator, 2026-08-09: "the globe boxes are quite sterile ... where is
-   the picture cover?"). The trip's cover now sits beside its name, so tapping a pin shows you
-   somewhere rather than telling you a code.
-
-   Two columns, and the photo column collapses to nothing when there is no photo — `1fr` alone
-   would leave a 64px hole on a coverless guide. The text column is `minmax(0,1fr)` for the
-   usual reason: without it a long trip name sizes the track and pushes the sheet wider than
-   the phone. */
+/* Two columns, and the photo column collapses to nothing when there is no photo. */
 .atlas-pingsheet:has(.atlas-pingsheet-thumb:not([hidden])) { grid-template-columns: 64px minmax(0, 1fr); }
 .atlas-pingsheet-grip,
 .atlas-pingsheet-actions { grid-column: 1 / -1; }
 .atlas-pingsheet-thumb {
   grid-column: 1; grid-row: span 3; align-self: start;
-  width: 64px; height: 64px; object-fit: cover;
+  width: 64px; height: 64px; object-fit: cover; border-radius: var(--r-inset);
   border: 1px solid var(--rule2);
 }
 .atlas-pingsheet-thumb[hidden] { display: none; }
-.atlas-pingsheet-grip { justify-self: center; width: 38px; height: 4px; border-radius: 99px; background: var(--rule2); }
+.atlas-pingsheet-grip { justify-self: center; width: 38px; height: 4px; border-radius: var(--r-pill); background: var(--rule2); }
 .atlas-pingsheet-kicker {
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-panel-kicker); letter-spacing: .14em;
   color: var(--aink);
@@ -199,162 +73,97 @@
 .atlas-pingsheet-actions { display: flex; gap: 8px; margin-top: 2px; }
 .atlas-pingsheet-open {
   flex: 1; min-height: 46px; display: flex; align-items: center; justify-content: center;
-  background: var(--cta); color: var(--cta-ink); border: 0; border-radius: 999px;
+  background: var(--cta); color: var(--cta-ink); border: 0; border-radius: var(--r-pill);
   font-family: var(--font-data); font-weight: 600; font-size: var(--text-small); letter-spacing: .03em;
   text-decoration: none; cursor: pointer;
 }
 .atlas-pingsheet-actions button {
   flex: none; display: inline-flex; align-items: center; justify-content: center;
-  min-height: 46px; padding: 0 15px;
+  min-height: 46px; padding: 0 15px; border-radius: var(--r-pill);
   background: none; border: 1px solid var(--rule2); color: var(--muted);
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm); letter-spacing: .1em;
   cursor: pointer;
 }
 .atlas-pingsheet-actions button[data-atlas-pingsheet-close] { width: 46px; padding: 0; font-size: var(--text-small); }
 
-
-/* ══ The globe front door (docs/design-handoff/prototype/atlas-mobile-home, option 4a) ═════
-   Desktop treats WORLD and TABLE as two faces of the hub and shows exactly one. A phone
-   cannot afford that: a full-screen globe with the list one tap away meant the four sheets —
-   the thing a traveller actually came for — were never on screen at arrival.
-
-   Under 760px the two stop being alternatives and become one scroll: a 400px globe hero that
-   scrolls away freely (no snap, no collapse animation — the bundle rejects both), and the
-   sheet list underneath as the workhorse. TABLE is no longer a different page but the same
-   page with the globe cropped to a horizon strip; §1b of the bundle is explicit that it is a
-   state, not a route, and the globe instance is never unmounted between the two.
-
-   Desktop keeps its exclusive-faces behaviour untouched. Every value below resolves through
-   base.css tokens; the bundle's hex literals are its own export of those same tokens. */
-@media (max-width: 759px) {
-  /* WORLD keeps the list. This single line is the structural change — everything after it
-     is presentation of a list that was already being rendered and simply hidden. */
+/* ══ The phone composition ══════════════════════════════════════════════════════════════
+   WORLD and TABLE stop being alternatives and become one scroll: a 400px globe hero that
+   scrolls away freely, the quick actions, and the list underneath. TABLE is the same page with
+   the globe cropped to a horizon strip — a state, not a route; the globe is never unmounted. */
+/* bp:MOBILE_MAX — src/lib/breakpoints.ts */
+@media (max-width: 899px) {
+  /* WORLD keeps the list… */
   :root[data-atlas-mode="world"] .atlas-table-wrap { display: block; }
   /* …and TABLE keeps the globe, as the horizon strip further down. */
-  :root[data-atlas-mode="table"] .atlas-globe-wrap { display: block; }
 
-  /* The hero. `min-height` has to be reset too — atlas-world.css sets 320px against a
-     viewport-height globe, and left in place it would fight the 88px strip below. */
+  /* One column: the globe hero first (moved by `order`, so the DOM keeps the panel first
+     for a keyboard reader), then the quick actions. */
+  :root[data-atlas-mode="world"] .atlas-stage-body,
+  :root[data-atlas-mode="table"] .atlas-stage-body { display: flex; flex-direction: column; gap: 12px; padding: 0 0 14px; }
+  .atlas-globe-cell { order: -1; }
+  .atlas-menufab { display: flex; }
+  /* The hero. `min-height` reset too — atlas-world.css sets 320px against a viewport-height globe. */
   #atlasGlobe { height: 400px; min-height: 0; }
 
-  /* The top bar follows the reader down, because the globe now scrolls out from under it and
-     without this the wordmark, the WORLD|TABLE switch and the theme toggle all leave with it.
-     Above --z-sticky's tier but well above .atlas-tablehead's 20, which would otherwise paint
-     the search bar over the header it is supposed to sit below. */
-  .atlas-header {
-    position: sticky; top: 0;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(10px);
-  }
+  /* The quick actions card under the hero (board 01's phone). */
+  .atlas-panel { margin: 0 max(14px, var(--safe-left)) 0 max(14px, var(--safe-right)); padding: .7rem .7rem .7rem; }
+  .atlas-kicker { padding-left: .2rem; }
 
-  /* The globe's floating chrome was positioned against #atlasGlobe, which used to BE the
-     screen. At 400px that pins the FAB — the only route to Tools on a phone — to a box that
-     scrolls away. Fixed to the viewport instead, so the same controls stay in thumb reach for
-     the whole scroll. The sheets are fixed for the same reason: a bottom sheet anchored to
-     the bottom of a scrolled-away hero opens off-screen. */
-  .atlas-menufab, .atlas-menusheet, .atlas-menuscrim, .atlas-pingsheet {
-    position: fixed;
-  }
-  /* …and z-index alone is NOT enough to lift them, which cost four e2e failures before the
-     gate caught it: .atlas-globe-wrap carries `z-index: 1` (atlas.css), so it OPENS A STACKING
-     CONTEXT and every value below is ranked only inside it. Against a sibling
-     .atlas-table-wrap that also has `z-index: 1` and comes later in the document, the whole
-     globe section loses — so the list painted over a FAB that is the only route to Tools on a
-     phone, and Playwright reported it exactly that way ("<div class=atlas-quick> intercepts
-     pointer events"). The WRAPPER has to win the sibling comparison; the values below then
-     order the chrome within it. */
-  .atlas-globe-wrap { z-index: var(--z-raised); }
-  /* The header outranks the globe section, because the hero scrolls under it. */
-  .atlas-header { z-index: var(--z-sticky); }
+  /* The globe's floating chrome: fixed to the viewport so it stays in thumb reach for the
+     whole scroll; the sheets too, so a bottom sheet never opens off-screen. */
+  .atlas-menufab, .atlas-menusheet, .atlas-menuscrim, .atlas-pingsheet { position: fixed; }
+  /* The wrapper has to win the sibling comparison (the list wrapper carries z-index:1 too). */
+  .atlas-stage { z-index: var(--z-raised); }
   .atlas-menufab, .atlas-menusheet, .atlas-pingsheet { z-index: 8; }
   .atlas-menuscrim { z-index: 7; }
 
-  /* The caption says what the globe does; it belongs to the hero, not the viewport. */
+  /* The caption says what the globe does; it belongs to the hero. */
   .atlas-globe-caption {
-    position: absolute; left: max(16px, var(--safe-left)); bottom: calc(56px + var(--botbar-h, 0px)); z-index: 6;
+    position: absolute; left: max(16px, var(--safe-left)); bottom: 14px; z-index: 6;
     margin: 0; max-width: 70%;
     font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted);
   }
 
-  /* ── The list ──────────────────────────────────────────────────────────────────────── */
+  /* ── The list ─────────────────────────────────────────────────────────────────────── */
   .atlas-table { padding-left: max(16px, var(--safe-left)); padding-right: max(16px, var(--safe-right)); }
-
-  .atlas-listhead {
-    position: sticky; top: var(--hdr-h, 0px); z-index: 19;
-    margin: 0 calc(-1 * max(16px, var(--safe-left))) 0 calc(-1 * max(16px, var(--safe-right)));
-    padding: 9px max(16px, var(--safe-left));
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(10px);
-    font-family: var(--font-data); font-weight: 640; font-size: var(--text-nano);
-    letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
-  }
-
+  .atlas-tablehead { top: var(--hdr-h, 0px); z-index: 19; }
   .atlas-sheets {
     gap: 10px; margin-top: 14px;
     /* Clearance for the fixed FAB and the home-indicator gesture bar beneath it. */
     padding-bottom: calc(120px + var(--safe-bottom));
   }
 
-  /* Cards, not hairline rows — the phone list is the primary surface here and needs its own
-     ground to read against a globe that scrolls past behind it. */
+  /* Cards, not hairline rows — the phone list is the primary surface here. The row wraps:
+     plate and name on the first line, stamp/country/conditions/number on the second. */
   .atlas-sheet {
-    /* Six children on one 343px line put the title into a 49px column and grew a 56px row
-       into a 273px tower of wrapped words — measured, not guessed. The row wraps instead: the
-       plate and the name hold the first line, the stamp/country/conditions/number ride the
-       second. Nothing is dropped to make it fit; the phone gets a second line, which it has.
-       The 55% basis is what forces that break — a flex line wraps on base sizes and only
-       shrinks afterwards, so `min-width: 0` alone would keep squeezing the title forever. */
     flex-wrap: wrap; gap: 6px 12px; min-height: 56px; padding: 10px 14px;
-    background: var(--sunken); border: 1px solid var(--rule2); border-bottom: 1px solid var(--rule2);
+    background: var(--card); border: 1px solid var(--rule); border-bottom: 1px solid var(--rule); border-radius: var(--r-compact);
   }
   .atlas-sheet-body { flex: 1 1 55%; }
   .atlas-sheet-plate { width: 34px; height: 34px; }
   .atlas-sheet-title { font-size: var(--text-body); }
-  /* The archive's index closes the line, same reasoning as atlas.css's own note about it. */
   .atlas-sheet-num { margin-left: auto; }
-  /* On the second line the stamp and the country code are already grouped, spaced and read as
-     a set — the pill borders around each were desktop's way of separating them from a row
-     that had no second line to put them on, and they cost 12px of height per row for nothing
-     here. Text, not chips. (The up-next card keeps its pills: it is the one card meant to
-     look like a card.) */
   .atlas-sheet:not(.atlas-sheet--next) .atlas-stamp,
   .atlas-sheet:not(.atlas-sheet--next) .atlas-quick-meta {
-    border: 0; padding: 0; min-height: 0; border-radius:var(--r-inset);
+    border: 0; padding: 0; min-height: 0; border-radius: var(--r-inset);
   }
-  /* One line for the sub-title, ellipsis past it. "Copenhagen · Malmö · 12 days" wrapping to
-     a second line was most of what made these rows tall. */
   .atlas-sheet:not(.atlas-sheet--next) .atlas-sheet-body {
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .atlas-sheet-title { display: block; }
 
-  /* The up-next sheet, floated to the top of the list without moving in the DOM (see the
-     index.astro note). `order` works because .atlas-sheets is already a flex column. */
+  /* The up-next sheet floats to the top without moving in the DOM; a run in flight ahead of it. */
   .atlas-sheets-next { order: -1; }
-  .atlas-sheets-new { order: 1; }
-  /* Ahead of the up-next card, which is the one thing on this list that outranks "your next
-     trip": a run in flight is the only row here that changes while you look at it, and it is
-     the row you came back to the tab for. -2 rather than DOM order alone because the up-next
-     card is already floated with `order`, and a list where the DOM sequence and the painted
-     sequence disagree by viewport is a bug waiting to be reported as one. */
   .atlas-sheets-building { order: -2; }
 
-  /* The big card is the same six children as every other row, re-flowed: the cover and the
-     title each take a full line, and the stamp/country/weather/number stay on ONE line
-     together underneath. Stacking them — which is what a plain column does — turned a 56px
-     row into a 339px tower of four single-item lines.
-
-     The card carries the gutter and the cover escapes it, rather than the cover being
-     full-bleed and every meta item carrying its own margin: there is no way to select "the
-     first meta child" here that survives a guide with no stamp (an undated trip renders
-     none), and a rule that quietly stops applying is worse than a negative margin. */
+  /* The big card: cover full-bleed on top, title, the meta line under it. */
   .atlas-sheet--next {
     flex-flow: row wrap; align-items: center; gap: 8px; padding: 0 14px 12px;
-    background: var(--card); border-color: var(--accent);
+    background: var(--card); border-color: var(--accent); border-radius: var(--r-card); overflow: hidden;
   }
   .atlas-sheet--next .atlas-sheet-plate {
-    flex: 0 0 auto; width: calc(100% + 28px); margin: 0 -14px; height: 96px;
-    border: 0; border-bottom: 1px solid var(--rule2);
+    flex: 0 0 auto; width: calc(100% + 28px); margin: 0 -14px; height: 120px;
+    border: 0; border-radius: 0; border-bottom: 1px solid var(--rule2);
   }
   .atlas-sheet--next .atlas-sheet-body { flex: 0 0 100%; padding: 12px 0 0; }
   .atlas-sheet--next .atlas-sheet-title { font-size: var(--text-h3); }
@@ -362,46 +171,21 @@
   .atlas-sheet--next .atlas-quick-meta,
   .atlas-sheet--next .atlas-sheet-wx,
   .atlas-sheet--next .atlas-sheet-num { margin: 0; }
-  /* The survey number is the least urgent thing on the card (atlas.css says so), so it goes
-     to the far end of the meta line instead of sitting mid-sentence. */
   .atlas-sheet--next .atlas-sheet-num { margin-left: auto; }
 
-  .atlas-newcard {
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    min-height: 64px; padding: 12px 14px;
-    border: 1.5px dashed var(--rule2); text-decoration: none;
-  }
-  .atlas-newcard-plus {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px; border-radius: 999px;
-    border: 1px solid var(--aink); color: var(--aink); font-size: var(--text-body);
-  }
-  .atlas-newcard-label {
-    font-family: var(--font-data); font-weight: 600; font-size: var(--text-control);
-    letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
-  }
-  .atlas-newcard:hover, .atlas-newcard:focus-visible { border-color: var(--accent); }
-  .atlas-newcard:hover .atlas-newcard-label, .atlas-newcard:focus-visible .atlas-newcard-label { color: var(--aink); }
-
-  /* ── TABLE: the same page with the globe cropped (bundle §1b) ──────────────────────── */
-  /* The canvas keeps its 400px so <atlas-map>'s own ResizeObserver never rebuilds and the
-     sphere never squashes; the CONTAINER crops to the top 88px of it. `bottom: auto` is what
-     releases the element from atlas-world.css's `inset: 0`. */
+  /* ── TABLE: the same page with the globe cropped ───────────────────────────────────── */
   :root[data-atlas-mode="table"] #atlasGlobe { height: 88px; }
   :root[data-atlas-mode="table"] #atlasGlobe atlas-map { height: 400px; bottom: auto; }
-  /* Everything that assumed a 400px hero has nowhere to go in 88px. */
   :root[data-atlas-mode="table"] .atlas-globe-caption,
   :root[data-atlas-mode="table"] .atlas-menufab,
-  :root[data-atlas-mode="table"] .atlas-pinchip { display: none; }
-  /* The strip fades into the page rather than ending on a hard crop line. */
+  :root[data-atlas-mode="table"] .atlas-pinchip,
+  :root[data-atlas-mode="table"] .atlas-panel { display: none; }
+  :root[data-atlas-mode="table"] .atlas-stage-body { padding-bottom: 0; }
   .atlas-horizon {
     position: absolute; inset: 0; z-index: 7; display: none; pointer-events: none;
     background: linear-gradient(to bottom, transparent 30%, var(--bg) 96%);
   }
   :root[data-atlas-mode="table"] .atlas-horizon { display: block; }
-  /* Tapping the strip is the way back to WORLD, so it takes taps even though its own ground
-     is a gradient. The pins on the rim stay tappable — this sits above the canvas but the
-     button below is what receives the tap. */
   .atlas-horizon-btn {
     position: absolute; inset: 0; z-index: 8; display: none;
     width: 100%; background: none; border: 0; cursor: pointer;
@@ -409,19 +193,18 @@
   :root[data-atlas-mode="table"] .atlas-horizon-btn { display: block; }
   .atlas-horizon-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -3px; }
 
-  /* Dense rows: the whole point of TABLE is more sheets per screen, so the cards give their
-     ground and their gaps back and become a ruled list again. */
+  /* Dense rows: the point of TABLE is more trips per screen. */
   :root[data-atlas-mode="table"] .atlas-sheets { gap: 0; }
   :root[data-atlas-mode="table"] .atlas-sheet {
     min-height: 60px; padding: 11px 4px;
-    background: none; border: 0; border-bottom: 1px solid var(--rule);
+    background: none; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0;
   }
   :root[data-atlas-mode="table"] .atlas-sheet--next {
     flex-direction: row; align-items: center; gap: 12px; padding: 11px 4px 11px 11px;
     background: var(--sunken); border-left: 3px solid var(--accent);
   }
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-sheet-plate {
-    width: 34px; height: 34px; border: 1px solid var(--rule);
+    width: 34px; height: 34px; border: 1px solid var(--rule); border-radius: var(--r-inset);
   }
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-sheet-body { padding: 0; }
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-sheet-title { font-size: var(--text-body); }
@@ -429,57 +212,35 @@
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-quick-meta,
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-sheet-wx,
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-sheet-num { margin: 0; align-self: center; }
-  :root[data-atlas-mode="table"] .atlas-newcard { min-height: 56px; }
-  /* Dense rows gave their borders away, so the selection needs its own mark here — and it has
-     to differ from the up-next row's 3px left bar, or "the one you just tapped" and "your next
-     trip" would look like the same claim. */
   :root[data-atlas-mode="table"] .atlas-sheet[data-selected] {
     outline: 1px solid var(--accent); outline-offset: -1px;
   }
 }
 
-/* All four are mobile-home surfaces. The create card in particular would be a THIRD route to
-   /new/ on desktop, where the header's own ＋ CTA renders with its label — the same "same
-   ambient link twice" the header rule above removed from the phone. */
-@media (min-width: 760px) {
-  /* All five are mobile-home surfaces. The list header in particular is a scroll aid: desktop
-     has the whole list in view under a heading it does not need repeating. */
-  .atlas-globe-caption, .atlas-horizon, .atlas-horizon-btn,
-  .atlas-sheets-new, .atlas-listhead { display: none; }
+/* Phone-only surfaces are gone from the desktop. */
+@media (min-width: 900px) {
+  .atlas-globe-caption, .atlas-horizon, .atlas-horizon-btn, .atlas-menufab, .atlas-menusheet, .atlas-menuscrim, .atlas-pingsheet { display: none; }
 }
 
-/* The picked sheet's row (bundle §1 "Selected row border"). Not mobile-only for the same
-   reason the weather is not: a pin pick marks its row wherever that row is drawn. It is a
-   border colour and nothing else — a background would compete with the up-next card, which is
-   a different claim ("this is your next trip", not "this is the one you just tapped"). */
+/* The picked sheet's row: a border colour and nothing else, at every width. */
 .atlas-sheet[data-selected] { border-color: var(--accent); }
 
-/* Not mobile-only: the same datum on every surface that shows a sheet. A row is a row at any
-   width, and a temperature that appears on a phone and vanishes on a laptop reads as a bug in
-   one of them. Lives outside both media blocks for exactly that reason. */
+/* The same datum on every surface that shows a sheet: current conditions at the anchor. */
 .atlas-sheet-wx {
   flex: 0 0 auto; font-family: var(--font-data); font-size: var(--text-control-sm);
   color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 
-/* ── Sheet motion (creator, 2026-08-08: "cleaner, fluid, motioned") ───────────────────
-   Both sheets toggled the `hidden` attribute, so they appeared and vanished in one frame.
-   `hidden` still governs presence — it is what a screen reader and a no-JS visitor read —
-   and @starting-style + allow-discrete give the display change something to animate
-   through, with no extra JS and no state to keep in sync. A browser without those rules
-   simply gets today's instant toggle back, which is a fair floor.
-
-   Transform and opacity only, per ANTIPATTERNS.md. */
-@media (max-width: 759px) and (prefers-reduced-motion: no-preference) {
+/* ── Sheet motion: `hidden` governs presence; @starting-style + allow-discrete give the display
+   change something to animate through. Transform and opacity only. ─────────────────────── */
+@media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
   .atlas-menusheet, .atlas-pingsheet, .atlas-menuscrim {
     transition: opacity var(--dur-routine) ease, transform var(--dur-routine) cubic-bezier(.22,.61,.36,1), overlay var(--dur-routine) allow-discrete, display var(--dur-routine) allow-discrete;
     opacity: 1;
   }
   .atlas-menusheet { transform: translateY(0) scale(1); transform-origin: 100% 100%; }
   .atlas-pingsheet { transform: translateY(0); }
-  /* sheet-drag.js writes transform on every pointermove, so the sheet has to stop
-     transitioning while a thumb owns it — otherwise each move starts a fresh 240ms tween and
-     the sheet trails the finger. Same rule .sos-inner and .sheet already carry. */
+  /* sheet-drag.js writes transform on every pointermove; no tween while a thumb owns it. */
   .atlas-pingsheet.sheet-dragging { transition: none; will-change: transform; }
 
   @starting-style {
@@ -491,5 +252,3 @@
   .atlas-pingsheet[hidden] { opacity: 0; transform: translateY(100%); }
   .atlas-menuscrim[hidden] { opacity: 0; }
 }
-/* Geometry (§31). */
-.atlas-newcard{border-radius:var(--r-card)}

@@ -20,7 +20,10 @@
 import { test, expect, type Page } from "@playwright/test";
 
 const FIXED_TIME = new Date("2026-09-01T10:00:00+09:00");
-const THEMES = ["denmark", "korea", "luxembourg", "malta", "portugal", "uruguay"] as const;
+/* The curated guides only. The four pipeline research drafts (luxembourg, malta, portugal,
+   uruguay) were removed from main on 2026-09-05 at the owner's direction; their run evidence
+   stays in docs/pipeline v2 and in Git history. */
+const THEMES = ["denmark", "korea"] as const;
 const MODES = ["light", "dark"] as const;
 
 async function openGallery(page: Page) {

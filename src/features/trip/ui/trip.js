@@ -15,6 +15,7 @@ import { tripPhase, todayIndex, focusFor, daysToGo, minutesUntil, untilLabel } f
 import { tripWindow } from "../../../lib/trip-dates";
 import { todayInTz, esc, readStoredRecord } from "../../../scripts/util.js";
 import { universalTransitLinks, nativeTransitLinks } from "../../../lib/transit-links";
+import { osmEmbedUrl } from "../../../lib/map-embed";
 
 function destNowMinutes(tz) {
   try {
@@ -91,6 +92,34 @@ export function initTrip() {
   var stats = root.querySelector("[data-trip-stats]");
   var nowEl = root.querySelector("[data-trip-now]");
   var phases = root.querySelectorAll("[data-trip-phase]");
+  var mapAside = root.querySelector("[data-trip-map]");
+  var mapMount = mapAside ? mapAside.querySelector("[data-itin-map]") : null;
+  var mapDayShown = -1;
+
+  /* Today's route on the map: tell the live map which day (gmaps-render lens "today") and, for the
+     fallback embed, frame today's located stops — from the pins the page already carries. */
+  function paintMap(idx) {
+    if (!mapAside || idx === mapDayShown) return;
+    mapDayShown = idx;
+    var day = days[idx];
+    var title = mapAside.querySelector("[data-trip-map-title]");
+    if (title) title.textContent = (day && day.date ? day.date : "Today") + " on the map";
+    var open = mapAside.querySelector("[data-trip-map-open]");
+    if (open) open.setAttribute("data-open-map-day", String(idx));
+    if (!mapMount) return;
+    mapMount.setAttribute("data-map-day", String(idx));
+    var pins;
+    try { var dataEl = mapMount.querySelector("script[data-map-data]"); pins = (JSON.parse(dataEl.textContent || "{}").pins || []).filter(function (p) { return p.dayIdx === idx; }); } catch (e) { pins = []; }
+    mapAside.hidden = !pins.length;
+    var frame = mapMount.querySelector(".osmmap");
+    var url = osmEmbedUrl(pins);
+    if (frame && url) {
+      if (frame.hasAttribute("src")) frame.setAttribute("src", url);
+      else if (frame.hasAttribute("data-fallback-src")) frame.setAttribute("data-fallback-src", url);
+      else frame.setAttribute("data-src", url);
+    }
+    try { document.dispatchEvent(new CustomEvent("tg:trip-day", { detail: { index: idx } })); } catch (e) { /* no listeners */ }
+  }
 
   function destToday() {
     var t = todayInTz(tz);
@@ -146,7 +175,8 @@ export function initTrip() {
     if (!nowEl) return;
     var now = destToday();
     var idx = todayIndex(days.map(function (d) { return d.date; }), now);
-    if (idx < 0) { nowEl.innerHTML = ""; return; }
+    if (idx < 0) { nowEl.innerHTML = ""; if (mapAside) mapAside.hidden = true; return; }
+    paintMap(idx);
     var day = days[idx];
     var arrival = idx === 0;
     var nowMin = destNowMinutes(tz);
@@ -178,7 +208,11 @@ export function initTrip() {
     var rest = arrival ? f.later.slice(0, 1) : f.later;
     if (rest.length) {
       side += '<div class="tn-rest"><p class="tn-rest-k">' + (arrival ? "Then" : "Rest of the day") + "</p><ol class=\"tn-rest-list\">" +
-        rest.map(function (s) { return "<li>" + (s.time ? '<span class="tn-rest-time">' + esc(s.time) + "</span>" : '<span class="tn-rest-time tn-rest-time--none" aria-hidden="true">—</span>') + '<span class="tn-rest-name">' + esc(s.name) + (s.branch ? ' <span class="tn-branch">' + esc(s.branch) + "</span>" : "") + "</span></li>"; }).join("") +
+        rest.map(function (s) {
+          var im = images && images[placeKey(s.name)];
+          var thumb = im ? '<span class="tn-rest-thumb" aria-hidden="true"><img src="' + esc(im.thumb || im.src) + '" alt="" loading="lazy" decoding="async" onerror="this.parentNode.remove()"></span>' : "";
+          return "<li" + (thumb ? ' class="tn-rest--photo"' : "") + ">" + (s.time ? '<span class="tn-rest-time">' + esc(s.time) + "</span>" : '<span class="tn-rest-time tn-rest-time--none" aria-hidden="true">—</span>') + thumb + '<span class="tn-rest-name">' + esc(s.name) + (s.branch ? ' <span class="tn-branch">' + esc(s.branch) + "</span>" : "") + "</span></li>";
+        }).join("") +
         "</ol></div>";
     }
     if (f.done.length) side += '<p class="tn-done">' + f.done.length + " stop" + (f.done.length === 1 ? "" : "s") + " behind you</p>";

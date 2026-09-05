@@ -20,8 +20,11 @@ interface Props {
   pins: Pin[];
   country: string;
   dayDates: string[];
+  /** Repository photo lookup by place name (guide-view.ts) — rows show the place's own picture. */
+  imageFor?: ((name: string) => { thumb: string; src: string; alt: string } | null) | null;
 }
-const { center, span, pins, country, dayDates } = Astro.props;
+const { center, span, pins, country, dayDates, imageFor = null } = Astro.props;
+const thumbOf = (name: string) => (typeof imageFor === "function" ? imageFor(name)?.thumb ?? null : null);
 /* Google Maps Platform is the live map when the site is built with PUBLIC_GMAPS_KEY
    (design-system.md §15); the OpenStreetMap embed then stays dormant on data-fallback-src and
    is activated by gmaps-render.js only if Google fails. Without a key it is the map. */
@@ -41,7 +44,7 @@ for (const p of pins) {
 const payload = center ? jsonEmbed({ center, span, pins, lens: "all", dayDates }) : null;
 const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shopping", point: "Place" };
 ---
-<div class="mapdest" data-mapdest>
+<div class="mapdest spatial" data-mapdest>
   {center ? (
     <div class="mapdest-bench">
       <div class="mapdest-map itin-map" data-itin-map data-map-lens="all" data-map-primary={googlePrimary ? "google" : "osm"}>
@@ -74,10 +77,17 @@ const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shop
               <h3 class="mapdest-group-title">{label} <span class="mapdest-group-n">{rows.length}</span></h3>
               <ul class="mapdest-rows">
                 {rows.map((p) => (
-                  <li class="mapdest-row" data-map-row={p.id} data-lat={p.lat} data-lng={p.lng}>
+                  <li class={`mapdest-row${thumbOf(p.name) ? " mapdest-row--photo" : ""}`} data-map-row={p.id} data-lat={p.lat} data-lng={p.lng}>
                     <button class="mapdest-row-btn" type="button" data-map-focus={p.id}>
-                      <span class="mapdest-row-name">{p.name}</span>
-                      <span class="mapdest-row-meta">{p.time ? `${p.time} · ` : ""}{KIND_LABEL[p.kind] ?? p.kind}{p.local ? ` · ${p.local}` : ""}</span>
+                      {thumbOf(p.name) && (
+                        <span class="mapdest-row-thumb" aria-hidden="true">
+                          <img src={thumbOf(p.name)!} alt="" loading="lazy" decoding="async" onerror="this.closest('.mapdest-row').classList.remove('mapdest-row--photo');this.closest('.mapdest-row-thumb').remove()" />
+                        </span>
+                      )}
+                      <span class="mapdest-row-text">
+                        <span class="mapdest-row-name">{p.name}</span>
+                        <span class="mapdest-row-meta">{p.time ? `${p.time} · ` : ""}{KIND_LABEL[p.kind] ?? p.kind}{p.local ? ` · ${p.local}` : ""}</span>
+                      </span>
                     </button>
                     <span class="mapdest-row-links"><TransitLinks lat={p.lat} lng={p.lng} name={p.name} country={country} placeId={p.placeId} /></span>
                   </li>

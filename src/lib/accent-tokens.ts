@@ -15,10 +15,10 @@ import { mix, readableOn, readableOnAll } from "./contrast";
 
 /* The real surfaces accent text lands on, read from base.css: --card, --bg2, --bg per mode. */
 export const LIGHT_SURFACES = ["#fbfcf6", "#ced5c4", "#e3e7dc"] as const;
-export const DARK_SURFACES = ["#322921", "#261f19", "#17120e"] as const;
+export const DARK_SURFACES = ["#1e2e28", "#16231e", "#0d1512"] as const;
 /* The dark register's quiet ink (base.css --muted in the dark block) — the pair the destination
    atmosphere (destination-theme.ts) is measured against. Asserted against base.css by the test. */
-export const DARK_QUIET_INK = "#a89f93";
+export const DARK_QUIET_INK = "#91a59b";
 
 /* Those flat surfaces are not the whole story: chips and pills sit on ACCENT-TINTED grounds
    (`color-mix(in srgb, var(--accent) N%, var(--card))`), and a tint moves the ground TOWARD the

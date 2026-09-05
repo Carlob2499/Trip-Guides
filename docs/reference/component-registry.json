@@ -3,7 +3,7 @@
   "components": {
     "AppChrome": {
       "file": "src/components/AppChrome.astro",
-      "role": "The global shell: five stable destinations (Trip · Itinerary · Map · Guide · Split), Atlas link, Search field, SOS mount — one DOM at every width (D6-03/05/43)"
+      "role": "The global shell (§6, boards 01/02): the frame strip — wordmark (the way back to the Atlas), the desktop tabs Trip · Itinerary · Map · Guide · Split centred (or the page's own centre slot on the Atlas), Search pill, SOS mount, share, theme — plus the phone's five-slot bottom bar Atlas · Trip · Itinerary · Map · Guide. Always in the dark register; no rail, no sidebar"
     },
     "Block": {
       "file": "src/components/Block.astro",
@@ -87,7 +87,7 @@
     },
     "UtilityBar": {
       "file": "src/components/UtilityBar.astro",
-      "role": "The shell strip (chrome.css .chrome/.topbar) on every non-guide page (intake, progress, triage, change, about, health, 404): the orientation anchor is the way back to the Atlas, same theme control, no rail (§6)"
+      "role": "The shell strip (chrome.css .chrome/.topbar) on every non-guide page (intake, progress, triage, change, about, health, 404): the orientation anchor is the way back to the Atlas, same theme control, no tabs or bottom bar (§6)"
     }
   },
   "blocks": {

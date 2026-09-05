@@ -1,91 +1,91 @@
 ---
-/* The global shell (design-system.md 2026-09-04 §6, §19; motion.md §5).
+/* The global shell (design-system.md 2026-09-05 §6, §19; motion.md §5; board 01/02 of
+   docs/mockups/final-package).
 
-   ONE navigation model at every width: the primary destinations
-   `Atlas · Trip · Itinerary · Map · Guide`, in that order. Presentation recomposes —
-   a floating vertical rail beside the workspace on desktop, a compact five-slot bottom bar
-   on a phone — but the model is the same five entries. Atlas is a link to the front door;
-   the other four are regions of this page switched by the router (guide-ui.js).
+   ONE navigation model at every width, TWO presentations:
+     ≥ 900px  the FRAME STRIP — the top row of the dark forest frame the mockups draw every
+              surface inside: wordmark left (the way back to the Atlas), the destination tabs
+              `Trip · Itinerary · Map · Guide · Split` centred, the global actions right. The
+              floating rail is retired (§33).
+     ≤ 899px  the same strip compacted (wordmark + actions), plus the five-slot bottom bar
+              `Atlas · Trip · Itinerary · Map · Guide` — Atlas keeps its slot on a phone
+              because the wordmark is too small a target there to be the only way home.
 
-   Split is a CONTEXTUAL trip utility (§27): a routable region reached from Trip, expense
-   actions and Search, never a permanent slot. Search and SOS are global actions, never
-   tabs (§21, §28). The quiet orientation anchor in the top strip names the trip and the
-   current destination — no breadcrumb furniture (§6 "Orientation"). */
+   Atlas is a link to the front door; the four (five on desktop) are regions of this page
+   switched by the router (guide-ui.js). Split is a routable region reached from the desktop
+   tab, from Trip, expense actions and Search — never a phone slot (§27). Search and SOS are
+   global actions, never tabs (§21, §28). The strip is ALWAYS in the dark register (`.spatial`),
+   so on the cream page it is the top edge of the frame and in dark mode it is one with it. */
 import Icon from "./Icon.astro";
 interface Dest { key: "trip" | "itinerary" | "map" | "guide"; label: string }
 interface Props {
   base: string;
   destinations: Dest[];
-  /** The trip's title — the orientation anchor's first word (the wordmark on Atlas). */
+  /** The trip's title — the quiet orientation label on a guide; unused on the Atlas. */
   title: string;
-  /** "guide": the four regions are on this page. "atlas": Atlas is current and the four
-      entries link into the current trip's page (guideHref), or are absent with no trip. */
+  /** "guide": the regions are on this page. "atlas": Atlas is current; the strip's centre is
+      whatever the page passes in the `center` slot (the Atlas passes its trip status chips). */
   mode?: "guide" | "atlas";
   guideHref?: string | null;
 }
 const { base, destinations, title, mode = "guide", guideHref = null } = Astro.props;
 const atlas = mode === "atlas";
 const linked = atlas ? (guideHref ? destinations : []) : destinations;
-const ICON: Record<Dest["key"] | "atlas" | "search" | "create", string> = {
+const ICON: Record<Dest["key"] | "atlas" | "search", string> = {
   atlas: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
   trip: '<path d="M3 11.5 12 4l9 7.5"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/>',
   itinerary: '<rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/><path d="M8 14h3M13 14h3M8 18h3"/>',
   map: '<path d="M3 6.5 9 4l6 2.5 6-2.5v13L15 19.5 9 17l-6 2.5z"/><path d="M9 4v13M15 6.5v13"/>',
   guide: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 7h7M9 11h5"/>',
   search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/>',
-  create: '<path d="M12 5v14M5 12h14"/>',
 };
+/* The compass mark: a ring, a centre, four ticks — the wordmark on every board. */
+const MARK = '<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><path d="M12 1.5v3.5M12 19v3.5M1.5 12H5M19 12h3.5"/>';
 ---
-{/* Top strip: orientation left, global actions right. Sticky, opaque, never glass (§4). */}
-<div class="chrome" id="chrome">
-  <nav class="topbar" aria-label="Trip">
-    <div class="orient">
-      <span class="orient-dot" aria-hidden="true"></span>
-      {atlas ? <h1 class="orient-title orient-h1">{title}</h1> : <span class="orient-title">{title}</span>}
-      <span class="orient-sep" aria-hidden="true">·</span>
-      <span class="orient-dest" data-orient-dest>{atlas ? "Atlas" : destinations[0]?.label}</span>
+{/* The frame strip. Opaque, dark register, never glass (§4). */}
+<header class="chrome spatial" id="chrome">
+  <nav class="topbar" aria-label="Waypoint">
+    {atlas ? (
+      <h1 class="brand brand-h1">
+        <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true" set:html={MARK} />
+        <span class="brand-word">WayPoint</span>
+      </h1>
+    ) : (
+      <a class="brand" href={`${base}/`} aria-label="WayPoint — back to the Atlas" data-dest="atlas" data-dest-link>
+        <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true" set:html={MARK} />
+        <span class="brand-word">WayPoint</span>
+      </a>
+    )}
+
+    {/* Centre: the destination tabs on a guide (desktop only — the phone's five slots are
+        below); on the Atlas, whatever the page puts here. */}
+    <div class="topbar-center">
+      <slot name="center">
+        {!atlas && (
+          <div class="tabs" role="group" aria-label="Destinations">
+            {destinations.map((d, i) => (
+              <button class="tab" type="button" data-dest={d.key} data-dest-nav
+                      aria-controls={`dest-${d.key}`} aria-current={i === 0 ? "true" : undefined}>{d.label}</button>
+            ))}
+            <button class="tab" type="button" data-dest="split" data-dest-nav aria-controls="dest-split">Split</button>
+          </div>
+        )}
+      </slot>
     </div>
+
     <div class="topbar-right">
+      {!atlas && <span class="orient" aria-hidden="true"><span class="orient-title">{title}</span></span>}
       <button class="topbar-btn topbar-search-btn" type="button" data-search-open aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="Meta+K Control+K">
         <svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" set:html={ICON.search} />
-        <span class="tb-label">Search</span>
+        <span class="tb-label tb-search-label">Search places, guides, trips</span>
+        <kbd class="tb-kbd" aria-hidden="true">⌘K</kbd>
       </button>
       {!atlas && <span class="topbar-sos-mount" data-sos-mount></span>}
-      {!atlas && <button id="btnShare" class="topbar-btn" aria-label="Share this guide" title="Share this guide"><svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>}
-      <button id="btnDark" class="topbar-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
+      {!atlas && <button id="btnShare" class="topbar-btn topbar-icon-btn" aria-label="Share this guide" title="Share this guide"><svg class="tb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>}
+      <button id="btnDark" class="topbar-btn topbar-icon-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><Icon name="moon" class="tb-ico" /></button>
     </div>
   </nav>
-</div>
-
-{/* Desktop: the adaptive floating rail. Compact and quiet, every entry named, keyboard
-    reachable; it holds its place while panes reorganise (motion.md §5). Never a flat sidebar. */}
-<nav class="rail" aria-label="Destinations">
-  <a class="rail-item rail-atlas" href={`${base}/`} data-dest="atlas" data-dest-link aria-current={atlas ? "page" : undefined}>
-    <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON.atlas} />
-    <span class="rail-txt">Atlas</span>
-  </a>
-  {linked.map((d, i) => atlas ? (
-    <a class="rail-item" href={`${guideHref}#dest-${d.key}`} data-dest={d.key} data-dest-link>
-      <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON[d.key]} />
-      <span class="rail-txt">{d.label}</span>
-    </a>
-  ) : (
-    <button class="rail-item" type="button" data-dest={d.key} data-dest-nav
-            aria-controls={`dest-${d.key}`} aria-current={i === 0 ? "true" : undefined}>
-      <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICON[d.key]} />
-      <span class="rail-txt">{d.label}</span>
-    </button>
-  ))}
-  <span class="rail-rule" aria-hidden="true"></span>
-  <button class="rail-item rail-action" type="button" data-search-open aria-label="Search" aria-haspopup="dialog">
-    <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" set:html={ICON.search} />
-    <span class="rail-txt">Search</span>
-  </button>
-  <a class="rail-item rail-action" href={`${base}/new/`}>
-    <svg class="wp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" set:html={ICON.create} />
-    <span class="rail-txt">Create</span>
-  </a>
-</nav>
+</header>
 
 {/* Phone: five fixed slots. Yields while reading (features/mobile-nav), never gesture-only. */}
 <nav class="botbar" aria-label="Destinations">

@@ -37,6 +37,17 @@ describe("component gallery coverage", () => {
     ).toEqual([]);
   });
 
+  test("the blocks awaiting a curated specimen are a closed, named list", () => {
+    /* The four Pipeline V2 research drafts left main on 2026-09-05; two block types only ever
+       had specimens there. The gallery says so in the open instead of inventing data — but the
+       list is closed on purpose: a new type without a real section is a build failure, not a
+       fourth entry nobody decided on. The first V2 guide to land shrinks this list. */
+    const m = gallery.match(/const AWAITING_SPECIMEN = \[([^\]]*)\] as const;/);
+    expect(m, "gallery.astro lost its AWAITING_SPECIMEN list").not.toBeNull();
+    const listed = [...m![1].matchAll(/"([a-z-]+)"/g)].map((x) => x[1]).sort();
+    expect(listed).toEqual(["divergences", "weather"]);
+  });
+
   test("every registered pattern is presented", () => {
     // Patterns render from the registry object itself; assert the section exists so a
     // refactor can't silently drop the pattern contracts from the page.

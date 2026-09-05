@@ -176,15 +176,17 @@ for (const rel of [
   else pass(`Design authority singularity: ${rel}`);
 }
 
-const uruguayMetaPath = "src/content/guides/uruguay/_guide.json";
-if (requirePath(uruguayMetaPath, "Uruguay Canary #4 guide")) {
-  try {
-    const meta = JSON.parse(read(uruguayMetaPath));
-    if (meta.draft !== true) fail("Uruguay Canary #4: draft must remain true");
-    else pass("Uruguay Canary #4 remains draft");
-  } catch (error) {
-    fail(`Uruguay Canary #4 metadata: invalid JSON (${error.message})`);
-  }
+/* Uruguay Canary #4 is EVIDENCE, not content: the draft guide and its intake state left main on
+   2026-09-05 at the owner's direction (the four pipeline research drafts were tests), and the
+   accepted proof lives in the evidence record. That record must stay. */
+for (const rel of [
+  ["docs", "pipeline v2", "IMPLEMENTATION_STATE.md"].join("/"),
+  ["docs", "pipeline v2", "R03_LIVE_FAILURE_SEAMS_EVIDENCE.md"].join("/"),
+  ["docs", "pipeline v2", "FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md"].join("/"),
+]) requirePath(rel, "Pipeline V2 evidence record");
+for (const rel of ["luxembourg", "malta", "portugal", "uruguay"]) {
+  if (fs.existsSync(file(`src/content/guides/${rel}`))) fail(`Retired research draft resurfaced: src/content/guides/${rel} (removed 2026-09-05; evidence lives in docs/pipeline v2)`);
+  else pass(`Retired research draft stays out of main: ${rel}`);
 }
 
 if (failures.length) {

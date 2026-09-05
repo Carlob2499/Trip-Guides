@@ -95,6 +95,13 @@ Do **not** substitute:
 
 ---
 
+## Where the references live in this repository
+
+`docs/mockups/final-package/` holds the uploaded package (2026-09-04): the ten final feature-page
+boards (`mockups/01…10`, WebP), the contact sheet, the handoff and addendum notes, and the original
+81-board library with its manifest under `source-lineage/library/`. The `0NN__…webp` names below
+resolve there.
+
 ## Primary lineage references from `Waypoint_Mockup_Library_for_Codex(1).zip`
 
 The library contains 81 boards and a manifest/contact sheet. Use the full library when available,

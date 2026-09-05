@@ -135,7 +135,7 @@ document.addEventListener("click", function (e) {
 window.addEventListener("hashchange", function () { goToHash(location.hash); });
 
 // Keyboard: arrow keys move along the destination row/bar without leaving the group.
-document.querySelectorAll(".rail, .botbar").forEach(function (group) {
+document.querySelectorAll(".tabs, .botbar").forEach(function (group) {
   group.addEventListener("keydown", function (e) {
     var btns = Array.prototype.slice.call(group.querySelectorAll("[data-dest-nav], [data-dest-link]"));
     var idx = btns.indexOf(document.activeElement);

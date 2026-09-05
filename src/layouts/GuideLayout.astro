@@ -105,7 +105,7 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
         if (s === "dark" || (s === null && preferDark)) document.documentElement.setAttribute("data-theme", "dark");
         else if (s === "light") document.documentElement.setAttribute("data-theme", "light");
         const tc = document.querySelector('meta[name="theme-color"]');
-        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#17120e" : "#e3e7dc");
+        if (tc) tc.setAttribute("content", document.documentElement.getAttribute("data-theme") === "dark" ? "#0d1512" : "#e3e7dc");
       })();
     </script>
   </head>
@@ -153,7 +153,8 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       <section class="dest" id="dest-trip" data-dest="trip" role="region" aria-label="Trip">
         <TripDestination guide={guide} slug={guideSlug} base={base} storeKey={v.storeKey} days={v.tripDays} readiness={v.readiness} recap={v.recap}
           holidays={v.holidayInfo} dates={v.plate.dates} cities={v.plate.cities} exports={v.exports}
-          hasWeather={!!v.mapCenter} entry={guide.entry ?? null} hero={v.hero} placeImages={v.placeImages} />
+          hasWeather={!!v.mapCenter} entry={guide.entry ?? null} hero={v.hero} placeImages={v.placeImages}
+          dayPins={v.planner.pins} center={v.itinCenter} span={v.itinSpan} />
       </section>
 
       <section class="dest" id="dest-itinerary" data-dest="itinerary" role="region" aria-label="Itinerary" hidden>
@@ -162,7 +163,7 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       </section>
 
       <section class="dest" id="dest-map" data-dest="map" role="region" aria-label="Map" hidden>
-        <MapDestination center={v.globalCenter} span={v.globalSpan} pins={v.allPins} country={guide.country} dayDates={v.rawDays.map((d: any) => d.date)} />
+        <MapDestination center={v.globalCenter} span={v.globalSpan} pins={v.allPins} country={guide.country} dayDates={v.rawDays.map((d: any) => d.date)} imageFor={v.imageFor} />
       </section>
 
       <section class="dest" id="dest-guide" data-dest="guide" role="region" aria-label="Guide" hidden>

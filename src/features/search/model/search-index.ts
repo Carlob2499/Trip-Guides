@@ -44,6 +44,8 @@ export interface SearchRecord {
   index: number;
   /** In-page anchor of the canonical object (without the `#`). */
   anchor: string;
+  /** The place's own repository photograph (a small rendition), when its card carries one. */
+  img?: string;
 }
 
 /** Strip HTML tags and collapse whitespace — plain search text only, never rendered as HTML. */
@@ -68,17 +70,22 @@ function snippetOf(text: string): string {
   return text.length > SNIPPET_LEN ? `${text.slice(0, SNIPPET_LEN)}…` : text;
 }
 
-function record(slug: string, guideTitle: string, section: SearchableSection, index: number, kind: SearchKind, title: string, text: string, anchor: string): SearchRecord | null {
+function record(slug: string, guideTitle: string, section: SearchableSection, index: number, kind: SearchKind, title: string, text: string, anchor: string, img?: string | null): SearchRecord | null {
   const group = section.group ?? "";
   if (!title && !text) return null;
-  return {
+  const r: SearchRecord = {
     slug, kind, group,
     crumb: `${guideTitle.toUpperCase()} · ${group.toUpperCase()}`,
     title, snippet: snippetOf(text),
     hay: `${title} ${group} ${text}`.toLowerCase(),
     index, anchor,
   };
+  if (img) r.img = img;
+  return r;
 }
+
+/** Resolves a place name to its repository photograph; null when the guide has none. */
+export type ImageLookup = (name: string) => { src: string } | null;
 
 /** One section's own record, or null when it carries no searchable text at all (an empty
     scaffold section) — never an empty row a search can still "match" against nothing. */
@@ -98,7 +105,8 @@ export function buildSectionRecord(slug: string, guideTitle: string, section: Se
     venues, itinerary days and their stops. Each links to the object's own anchor when the
     page renders one (a sight/venue card gets an id only when it carries coordinates — the
     same rule SightsBlock/VenueBlock apply), else to its section. */
-export function buildItemRecords(slug: string, guideTitle: string, section: SearchableSection, index = 0): SearchRecord[] {
+export function buildItemRecords(slug: string, guideTitle: string, section: SearchableSection, index = 0, imageFor: ImageLookup | null = null): SearchRecord[] {
+  const photo = (name: string) => (imageFor ? imageFor(name)?.src ?? null : null);
   const out: SearchRecord[] = [];
   const items = (section.items || []) as Record<string, unknown>[];
   if (section.type === "sights" || section.type === "venues") {
@@ -109,7 +117,7 @@ export function buildItemRecords(slug: string, guideTitle: string, section: Sear
       if (!name) continue;
       const text = stripHtml([it.kicker, it.area, it.body, it.why, it.hours, it.price, it.address].filter(Boolean).join(" · "));
       const anchor = it.map ? `${prefix}-${pinSlug(name)}` : `sec-${index}`;
-      const r = record(slug, guideTitle, section, index, kind, name, text, anchor);
+      const r = record(slug, guideTitle, section, index, kind, name, text, anchor, photo(name));
       if (r) out.push(r);
     }
   }
@@ -128,7 +136,7 @@ export function buildItemRecords(slug: string, guideTitle: string, section: Sear
         const name = String(w.name ?? "");
         if (!name) continue;
         const text = stripHtml([date, w.time, w.note].filter(Boolean).join(" · "));
-        const r = record(slug, guideTitle, section, index, "stop", name, text, `day-${di}`);
+        const r = record(slug, guideTitle, section, index, "stop", name, text, `day-${di}`, photo(name));
         if (r) out.push(r);
       }
     });
@@ -143,12 +151,13 @@ export function buildGuideSearchIndex(
   slug: string,
   guideTitle: string,
   sections: readonly SearchableSection[],
+  imageFor: ImageLookup | null = null,
 ): SearchRecord[] {
   const out: SearchRecord[] = [];
   sections.forEach((s, i) => {
     const rec = buildSectionRecord(slug, guideTitle, s, i);
     if (rec) out.push(rec);
-    out.push(...buildItemRecords(slug, guideTitle, s, i));
+    out.push(...buildItemRecords(slug, guideTitle, s, i, imageFor));
   });
   return out;
 }
