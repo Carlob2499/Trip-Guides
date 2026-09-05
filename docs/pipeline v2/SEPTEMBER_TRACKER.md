@@ -2,167 +2,91 @@
 
 Status: **LIVING TRACKER**  
 Owner: Carlo  
-Window: **August 18–September 30, 2026 engineering completion; October is content/reverification + genuine field-bug follow-up only**  
+Window: **through September 30, 2026 engineering completion; October is content/reverification + genuine field-bug follow-up only**  
 Hard engineering deadline: **September 30, 2026**
 
-Use this with `DECISIONS.md`, `CODEX_HANDOFF.md`, `docs/handoff.md`, and the active branch's `IMPLEMENTATION_STATE.md`.
+Use this with `DECISIONS.md`, `IMPLEMENTATION_STATE.md`, `docs/handoff.md`, and issue #187. This file tracks delivery; it does not redefine Pipeline V2.
 
-This file tracks delivery. It does not redefine Pipeline V2.
+## Dashboard — September 5, 2026
 
-## Dashboard — September 1, 2026
-
-- **Current phase:** Fukuoka remains the failed historical final-acceptance attempt and post-failure remediation remains merged. Kumamoto r2/r3 are now preserved stale preflight evidence only: current `main` moved beyond r3's accepted base through acceptance-sensitive V2/control-plane changes, and the role-based model/effort routing + final Guide-Author prose contract must land before the next candidate is frozen. No model-backed Kumamoto workflow has been dispatched.
-- **Acceptance authority:** Fukuoka accepted base `6fdae06af63e3890d7e147e13e08af056bb150b6`; dispatch branch SHA `0a52ea1eb423f2d942b690942c3e9b62265b3c43`; Actions #59–#65. There were five manual resumes after the initial dispatch and one system auto-retry. Two proven usage-limit interruptions were refunded availability failures, so seven workflow dispatches still terminate at 5/5 quality attempts. **No current Kumamoto candidate has dispatch authority.** Rebuild/replay from settled current `main`, prove the exact new head, then run the fresh drift firewall before any model burn.
-- **Deterministic closeout:** independent review found and repaired two bounded repository defects without touching the failed Fukuoka research evidence: the Claude↔Codex watcher no-artifact YAML command and `routeToEvidenceOwner()`'s unauthorized autonomous +1 attempt-cap extension. Regression tests pin both, plus repeated usage-limit refund semantics.
-- **Post-Fukuoka remediation:** PR #117 is merged. The new hash-pinned model-input candidate makes retained validator findings repair-first, forbids search-preview relabeling as verification, preserves unaffected work, removes Reconcile's impossible shell/offline-gate instruction, and pins a narrow no-guess map-placeholder repair path. No Claude/Fable run was used to create this remediation.
-- **Kumamoto preflight:** r2 `621dd43238d18b2b918827a9dca2268cd6f28c56` and r3 `56e513000792bc71bf4e18c0a0909724fe5cebac` remain historical preflight evidence. PR #167 proved r3 exact-head GREEN on repaired main `57e320535d1cb6e861a5001f8c26cc718dcfd93d`, but later acceptance-sensitive changes invalidate that head for dispatch. The next Kumamoto candidate must be rebuilt only after current V2 revisions settle.
-- **Core engine:** P01–P13 DONE.
-- **Integration:** I01–I05 have deterministic/live evidence; I06 remains open until explicit production cutover/V1 retirement approval.
-- **Reliability acceptance:** Uruguay Canary #4 remains accepted historical proof that the **draft product path GREEN** contract can complete, and the targeted escalation/cancellation failure-only seams remain proven. They do not override the later Fukuoka production-readiness failure.
-- **Production cutover:** NOT DONE / BLOCKED. `WAYPOINT_RESEARCH_ENGINE` remains unset/off; V1 remains the production default/rollback path. Fukuoka grants no publication, merge, or cutover authority.
-- **Release governance:** repository-side protected-main prerequisites are implemented and zero-Claude automation-PR semantics are proven through PRs #137–#150; issue #130 is reduced to the final owner/tooling repository-settings mutation and verification. PR #171 adds a temporary hourly completion watch that detects protection and dispatches the already-merged zero-model live proof once; it cannot mutate protection and grants no Actions bypass. No broad GitHub Actions bypass is required or authorized.
-- **Preservation rule:** do not repair-and-merge `research-v2/fukuoka` or continue it past its cap. Preserve Kumamoto r1/r2/r3 acceptance branches as historical evidence; **none may be dispatched now**. PR #171's temporary watcher must no-op while current authority revokes its pinned stale r3 candidate. After V2 revisions settle, register a fresh exact candidate and update the watcher atomically with that authority; only a durably recorded `usage-limit` interruption may be automatically redispatched. No automation may alter runId/state, quality caps, auto-retry caps, selector, publication, or canary-merge authority.
-- **UI/design schedule:** U01/U02 are DONE through merged PR #160. U03 deterministic engineering is DONE / YELLOW through PR #162 exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f`, Required Gate `33352620168` PASS including Accessibility/resilience; PR #164 closed the deterministic frontend authority. The physical-device interaction spot check remains an explicit manual evidence gap and may reopen U03 only if it reproduces a real defect. The old Oct 1–7 U01–U04 placement remains retired schedule debt; October is reserved for content/reverification and genuine field bugs.
-- **Days until September 20 feature freeze:** 19
-- **Days until September 27 code freeze:** 26
-- **Days until September 30 engineering complete:** 29
-- **Highest-risk unfinished items:** one clean fresh post-remediation release-readiness run must still prove Reconcile → Critic → landing from a newly rebuilt exact Kumamoto candidate; final protected-main repository settings still require owner/tooling capability; the remaining U03 physical-device interaction spot check is a manual evidence gap, not planned ordinary engineering.
+- **Selected engine:** V2 is the selected product research path through `WAYPOINT_RESEARCH_ENGINE=v2`. V1 is retained as rollback/compatibility, not the current default.
+- **Release-readiness:** **ratification pending.** Uruguay Canary #4 remains GREEN draft/reliability evidence; Fukuoka remains terminal failed release-readiness evidence. A fresh exact-head Kumamoto release-readiness ratification is still required.
+- **Kumamoto authority:** historical r1/r2/r3 are stale evidence only. Rebuild/replay from settled current `main`, prove the exact candidate head deterministically, run a fresh drift audit, then await explicit owner authorization before any Claude/model burn.
+- **Design/frontend:** the D7 ten-surface transplant and product frame are on `main`. Creator-directed fidelity corrections are being handled separately; creator visual acceptance remains pending. This is convergence, not D8.
+- **Runtime:** PR #210 provider-neutral runtime integrations are on `main`. September deterministic hardening must cover any proven product-completeness/runtime issues without creating new feature families.
+- **Release governance:** #130 remains PARTIAL until the concrete required checks, fresh-integration enforcement, main-deletion protection, and protected-landing proof under the final ruleset are mechanically proven.
+- **Resource policy:** reciprocal Claude↔Codex review automation is retired. The hourly September completion watcher is retired. LEARN feedback synthesis is manual-only. Claude Pro usage is reserved for the eventual authorized Kumamoto research run.
+- **Freeze dates:** feature freeze **Sep 20**; code freeze **Sep 27**; engineering complete **Sep 30**. Use absolute dates; do not maintain drifting countdown prose.
+- **Current P0 closure sequence:** continuity/current-state reconciliation → creator-directed D7 fidelity + visual acceptance → deterministic product-completeness/runtime/performance hardening → #130 → settled-main fresh Kumamoto → adversarial field/device closeout.
 
 ### Current evidence already recorded
 
-- M0–M8 complete; P13 core proof DONE.
-- Integration wiring is in place; V1 remains intact behind the selector architecture.
-- Malta, Luxembourg, and Portugal remain preserved RED canary evidence.
-- Uruguay Canary #4: Pass A/B first try; Reconcile attempt 4 after three real deterministic gate failures, with findings converging 5→2→0 blocking; bounded auto-retry consumed once then correctly refused; Critic first try; landing gate passed; `publication: false`; `landMode: pr`.
-- Final Fukuoka acceptance: `fukuoka-20260829-7cb4fa` FAILED at Reconcile after 5/5 quality attempts; Actions #59–#65 include five manual resumes and one system auto-retry, with two usage-limit interruptions refunded. Critic/landing were not reached; publication stayed false. Full record: `FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md`.
-- Progress consumes real V2 durable run events; unavailable fetch-level/nugget/unmeasured counters remain honestly absent.
-- The reciprocal Claude↔Codex reviewer from PRs #78/#79 remains active with the revision-4 separation restored by #79: unprivileged signal, read-only validation of PR-controlled content, and a separate write-capable publish job that never executes PR content.
-- V01–V05 have pre-registered trial cards, evidence packets, immediate-fail conditions, and a resource-efficient execution grouping in `docs/pipeline v2/VALIDATION_RUNBOOK.md`.
-- V04 deterministic validation is PASS: future-year event facts cannot inherit historical dates as confirmed, and recommendation-changing disagreements now require links to at least two distinct real evidence records (PRs #84/#85).
-- V06 telemetry evidence is recorded in `docs/pipeline v2/V06_TELEMETRY_EVIDENCE.md`: real Uruguay stage/retry/model/count metrics recorded; tool/search/fetch/native-search/token/cost remain honest nulls where unavailable.
-- R03 failure-only seams are PASS in `docs/pipeline v2/R03_LIVE_FAILURE_SEAMS_EVIDENCE.md`: issue #90 received the real authenticated/deduped Actions escalation witness from disposable PR #91, and Tests run `32680115285` proved a cancelled simulated agent can be followed by successful `always()` control-plane work and a successful `cancelled()` escalation witness; disposable PR #92 was closed unmerged.
-- V07's resource-efficiency rubric is frozen in `docs/pipeline v2/V07_EVALUATION_METHOD.md`; it uses only truthful V06-style telemetry and does not classify required corroboration/verification as waste merely because it costs time.
-- PR #160 completed the traveler-first runtime migration and Progress UX congruency on exact verified head `1955c632ded249c400241e9dbc41bc55f0d2b4ed`, merged as main `248babc0701bdb7102b92c7bc679ac6aba507b49`; post-merge Accessibility `33343557016` passed.
-- PR #162 closed the reproduced U03 phone-navigation focus-order defect on exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f`; Required Gate `33352620168` passed project invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience. PR #164 closed deterministic U03 authority with the physical-device gap preserved.
-- PR #149 changed shared protected-main landing/control-plane semantics after Kumamoto r2's base, invalidating r2 for future model dispatch without deleting its evidence. Rebuilt r3 `56e513000792bc71bf4e18c0a0909724fe5cebac` is based on repaired main `57e320535d1cb6e861a5001f8c26cc718dcfd93d`; closed-unmerged PR #167 exact-head preflight passed Required Gate `33368339507`, freeze-policy, CodeQL and both concrete analyses.
+- Core V2 P01–P13: implemented/proven at deterministic/draft-product level.
+- Uruguay Canary #4: GREEN draft product/reliability proof; Pass A/B, bounded Reconcile repair, Critic and landing gate were exercised with publication false in draft authority.
+- R03 failure-only escalation/cancellation seams: PASS / fully accepted through targeted live proofs.
+- Fukuoka `fukuoka-20260829-7cb4fa`: terminal release-readiness FAIL; preserve as evidence, do not continue past its cap.
+- Kumamoto r1/r2/r3: historical preflight evidence only; none has current dispatch authority.
+- D7 surface transplant: merged through the surface series and closeout; creator acceptance is separate from implementation green.
+- PR #210: provider-neutral runtime integration foundation merged.
+- Main protection: partial; issue #130 owns final governance truth.
 
-**Do not equate “green draft canary” with “production cutover complete.”** The former is accepted evidence; the latter remains a deliberate product/operations decision with its own proof.
+**Do not equate “V2 selected” with “fresh release-readiness evidence passed.”** The owner has selected V2 operationally; Kumamoto remains the final ratification test of that selected system.
 
 ---
 
 # Master tracker
 
-Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `DONE` · `DEFERRED` · `DONE / YELLOW`
+Statuses: `NOT STARTED` · `IN PROGRESS` · `BLOCKED` · `READY FOR REVIEW` · `DONE` · `DEFERRED` · `DONE / YELLOW` · `RATIFICATION PENDING`
 
 | ID | Work item | Phase | Owner | Deadline | Status | Dependency | Evidence required | Blocker | Decision needed |
 |---|---|---|---|---|---|---|---|---|---|
-| P01 | Preserve locked creator decisions and V2 authority docs | Foundation | Carlo / Codex | Aug 18 | DONE | None | `DECISIONS.md`, `CODEX_HANDOFF.md`, execution prompt present | None | No |
-| P02 | Complete repo dependency audit and choose V2 build-beside-V1 | Foundation | Codex | Aug 18 | DONE | P01 | Audit complete; V2 intentionally built beside V1 | None | No |
-| P03 | Implement V2 contracts, state, evidence, coverage, telemetry | Core | Claude/Fable | Sep 6 | DONE | P02 | M2 contract/state tests | None | No |
-| P04 | Implement V2 doctrine and Guide Author changes | Core | Claude/Fable | Sep 6 | DONE | P03 | M3 parity tests | None | No |
-| P05 | Implement manual V2 orchestration and Pass B / Critic isolation | Core | Claude/Fable | Sep 6 | DONE | P03 | M4 orchestration tests | None | No |
-| P06 | Replace fixed candidate/Pass-B quotas with adaptive saturation protections | Core | Claude/Fable | Sep 6 | DONE | P04 | M5 adaptive protections; old floors removed | None | No |
-| P07 | Preserve connected lifecycle safeguards: attempts, same-slug exclusion, answers/recert/pretrip | Core | Claude/Fable | Sep 6 | DONE | P03 | M6 lifecycle tests | None | No |
-| P08 | Connect V2 state to honest Progress UI compatibility | Core | Claude/Fable | Sep 6 | DONE | P03 | M7 Progress adapter/gateway evidence | None | No |
-| P09 | Run full deterministic branch verification | Core proof | Automated CI/test | Sep 6 | DONE | P03–P08 | M8 build/lint/typecheck/test/offline verify | None | No |
-| P10 | Run one-shot manual draft-only V2 canary | Core proof | Claude/Fable | Sep 6 | DONE | P09 | Initial GREEN draft proof recorded in IMPLEMENTATION_STATE | None | No |
-| P11 | Independently review Fable's one-shot proof and every surgical fix | Core proof | Codex | Sep 6 | DONE / YELLOW | P10 | Architecture accepted; bounded correction list produced | None | No |
-| P12 | Apply only blocker/high-priority fixes from the canary | Core proof | Codex + Claude/Fable | Sep 6 | DONE (+P12.1) | P11 | Merge conflict + CodeQL + tool-layer /proc + R3+ fixture corrections accepted | None | No |
-| P13 | Declare core engine proven in isolation | Core proof | Codex / Carlo | Sep 6 | DONE | P10–P12 | Corrected proof accepted; source-faithful transport scar preserved | None | No |
-| I01 | Connect `/new` dispatch to the proven V2 path behind a safe switch/cutover plan | Integration | Codex + Claude/Fable | Sep 13 | DONE | P13 | `new-guide.yml` selector-gated V2 `workflow_call`; V1 remains default while selector is off | None | No |
-| I02 | Prove full `/new → intake → research → verify → compose → landing` product path | Integration | Codex + Automated CI/test | Sep 13 | DONE / YELLOW — DRAFT PRODUCT PATH GREEN; PRODUCTION CUTOVER PENDING | I01 | Uruguay Canary #4 completed every research/verification/composition/landing stage and passed landing gate in `landMode=pr`; production auto-publication remains intentionally unproven while selector is off | Production cutover/publication parity not yet exercised | Carlo approves cutover later |
-| I03 | Prove incomplete/failed V2 run cannot publish | Integration | Automated CI/test | Sep 13 | DONE | I01 | Malta/Luxembourg/Portugal failed without publication + deterministic publication-state tests | None | No |
-| I04 | Prove resume/recovery without repeating completed expensive work | Integration | Automated CI/test + targeted live run | Sep 13 | DONE | P13 | Andorra proved manual resume; Uruguay exercised real bounded gate-failure retry authority; R03 targeted Actions cancellation proof closed the remaining cancellation timing seam | None | No |
-| I05 | Reconcile V2 telemetry with Progress cockpit / issue #56 instead of building a second system | Integration | Codex | Sep 13 | DONE | P13 | Progress reads durable emitted V2 events with generation/main fallback; honest-empty preserved | None | No |
-| I06 | Keep V1 available until V2 proves publication and resume parity | Integration | Codex | Sep 13 | IN PROGRESS — HOLD UNTIL CUTOVER | I02–I04 | V1 remains intact/default; no silent retirement | Final production cutover not approved | Carlo approves final V1 retirement |
-| R01 | Repair the V2 runtime reliability defect class Portugal exposed | Reliability | Codex + Claude | Aug 22 | DONE | I01–I05 | PR #75: exit integrity, partial-output rejection, plane-correct failures, durable retry authority, visible escalation path | None | No |
-| R02 | Close out the post-merge documentation/authority truth | Reliability | Claude | Aug 22 | DONE | R01 | PR #76 merged; retry/authority/handoff congruence tests landed | None | No |
-| R03 | **Live reliability acceptance — fresh Canary #4 + targeted failure seams** | Reliability | Carlo + Codex | Sep 6 | DONE | R02 | Uruguay fresh canary GREEN; `R03_LIVE_FAILURE_SEAMS_EVIDENCE.md` closes real issue escalation and cancellation grace-window behavior with targeted GitHub proofs | None | No |
-| C01 | Repository-wide cleanup/autonomy pass (PR #80) | Cleanup | Codex + Automated CI/test | Sep 6 | DONE | R03 | PR #80 merged at `ca9d1b8e`; invariants, truthful authority surfaces, repo ownership map, canonical checks, Progress run-note completion, offline/security cleanup, and repeated review/debug passes; final exact-head invariants/tests/a11y/Vercel green | None | No |
-| V01 | Mega-city food / reservation research trial | Validation | Claude/Fable + Codex | Sep 20 | YELLOW | I02 | Run A executed 2026-08-26 (`tokyo-20260826-41ae82`); all 7 pre-registered conditions PASS, no immediate-FAIL under the frozen candidate; evidence + bounded gap in `V01_RUNA_EVIDENCE.md` | Critic checkpoint/landing unfinished (attempt cap; 2 of 5 dispatches lost to usage limits) — owner may grant one completion dispatch | No |
-| V02 | Native-language + thin-English research trial | Validation | Claude/Fable + Codex | Sep 20 | FAIL — REPAIR CLASS ADDRESSED; LIVE ACCEPTANCE PENDING | I02 | Historical Tottori FAIL preserved; deterministic repair stack merged through #111; Yamagata repaired-class evidence in `RUNB2_YAMAGATA_EVIDENCE.md` | Do not repeat Run-B; separate release-readiness acceptance proof required before cutover | No |
-| V03 | Fragile transport / physical-transfer trial | Validation | Claude/Fable + Codex | Sep 20 | FAIL — REPAIR CLASS ADDRESSED; LIVE ACCEPTANCE PENDING | I02 | Historical Tottori FAIL preserved; repaired-class Yamagata exercised transport/transfer gates and the deterministic repair stack is merged through #111 | Do not repeat Run-B; separate release-readiness acceptance proof required before cutover | No |
-| V04 | Conflicting-evidence / future-event trial | Validation | Claude/Fable + Codex | Sep 20 | DONE | I02 | PRs #84/#85: deterministic future-event safety + evidence-linked disagreement accountability PASS | None | No |
-| V05 | Large-group / mobility trial | Validation | Claude/Fable + Codex | Sep 20 | FAIL — REPAIR CLASS ADDRESSED; LIVE ACCEPTANCE PENDING | I02 | Historical Tottori FAIL preserved; Yamagata repaired-class run exercised large-group/mobility decision surfaces; deterministic repair stack merged through #111 | Do not repeat Run-B; separate release-readiness acceptance proof required before cutover | No |
-| V06 | Measure model/tool/token/time telemetry where truly available | Validation | Codex + Automated CI/test | Sep 20 | DONE | I02 | `docs/pipeline v2/V06_TELEMETRY_EVIDENCE.md`: real Uruguay stage/retry/model/count metrics recorded; tool/search/fetch/native-search/token/cost remain honest nulls | None | No |
-| V07 | Compare research quality against resource use and identify observed waste | Validation | Claude/Fable + Codex | Sep 20 | FAIL / ACTION | V01–V06 | Executed 2026-08-26 on Run A/B durable telemetry per the frozen method; two W1 deterministic-waste findings (candidate-id contract mismatch repeated across both runs; reconcile/critic gate-parity defect) with bounded control-plane fixes — see `V07_EFFICIENCY_EVIDENCE.md` | Control-plane repairs only; no research-behavior change | No |
-| A01 | **Final V2 release-readiness acceptance — Fukuoka** | Acceptance | Claude/Fable + Codex | Aug 29 | **FAIL — MODEL / CONTENT; CUTOVER BLOCKED** | S01–S06 automated readiness + repaired V2 stack | `FINAL_V2_ACCEPTANCE_FUKUOKA_EVIDENCE.md`; Actions #59–#65; durable `research-v2/fukuoka` state | Final Reconcile provenance failure; 5/5 quality cap exhausted; critic/landing unproven | No new run from this closeout |
-| A02 | **Post-Fukuoka model-input remediation candidate** | Acceptance repair | Codex + Automated CI/test | Aug 29 | **DONE / YELLOW — DETERMINISTIC REMEDIATION; LIVE ACCEPTANCE PENDING** | A01 | PR #117 merged; repair-first prompt/feedback regressions; historical Fukuoka and new candidate blob hashes pinned separately | Fresh Reconcile → Critic → landing proof still absent | No |
-| A03 | **Fresh post-remediation release-readiness acceptance — Kumamoto** | Acceptance | Claude V2 + Codex | Sep 2+ | **REBUILD REQUIRED — R3 STALE; MODEL DISPATCH PENDING** | A02 + settled V2 routing/prose revision | r3 `56e513000792bc71bf4e18c0a0909724fe5cebac` remains preserved exact-head historical preflight evidence from PR #167, but later acceptance-sensitive control-plane/model-routing/prose-contract changes revoke dispatch authority | Fresh rebuilt exact candidate + model-backed Reconcile → Critic → landing proof not yet executed | Land the settled revision; rebuild/replay the same Kumamoto scenario from current main; exact-head preflight + fresh drift firewall; then one bounded model-backed dispatch. Never dispatch r1/r2/r3 or change selector/publication authority from the canary |
-| U01 | UI hierarchy and visual polish | UI finalization | Carlo + design/coding agent | Sep 19 | DONE | I05 + S02 | PR #160: traveler-first GuideLayout/router/mobile-navigation runtime, named primary/secondary routes, stable deep links/share/session routing, primary-only rail geometry; exact-head deterministic CI green and post-merge Accessibility `33343557016` PASS | None | No |
-| U02 | Progress UI clarity and backend/UI congruency | UI finalization | Carlo + Codex | Sep 19 | DONE | I05 | PRs #151/#160: numeric duration promise removed unless backend-backed; Progress hierarchy/status presentation aligned with truthful durable state; exact-head deterministic CI green | None | No |
-| F01 | **FEATURE FREEZE** — no ordinary new engineering features | Freeze | Carlo | Sep 20 | NOT STARTED | V01–V07 + U01–U02 | Tracker status explicitly DONE; unfinished ordinary feature ideas deferred | Validation acceptance remains pending; U01/U02 complete | Yes — Carlo alone can waive |
-| S01 | Adversarial invalid-state testing | Stabilization | Automated CI/test | Sep 27 | DONE | F01 | Existing fail-closed suites cover malformed run/evidence/coverage/feedback artifacts, stale objective + experiential evidence, high-risk transport requirements, landing-state/publication invariants, and unsafe publish rejection; full Tests workflow passed on PR #111 exact code head | None | No |
-| S02 | Mobile traveler-path check | Stabilization | Carlo + Codex | Sep 27 | DONE | F01 | PR #114 browser proof: `/new`, `/progress`, and a finished guide expose their primary traveler surfaces at 375×812 and stay inside the viewport; 320px reflow matrix includes all three | None | No |
-| S03 | Offline / poor-network traveler-path check | Stabilization | Carlo + Codex | Sep 27 | DONE | F01 | PR #114 primes a real finished guide online, forces the browser context offline, opens a fresh page, and proves the service worker serves readable guide content/tabs with no horizontal escape; existing offline-sync suite covers durable write/replay semantics | None | No |
-| S04 | Accessibility regression pass | Stabilization | Automated CI/test + manual check | Sep 27 | DONE / YELLOW — AUTOMATED PASS; PHYSICAL SPOT CHECK PENDING | F01 | PR #114 adds `/progress` to light/dark desktop/mobile axe, iOS zoom-trap, and nine-device 44px target sweeps; it found and fixed real status-contrast + 32/38/18px target defects. Full Accessibility workflow green after repair; post-#160 main Accessibility `33343557016` also PASS | One brief physical-device interaction spot check remains; not a code/model blocker unless it finds a defect | No |
-| S05 | Bad-network / bot-blocked source behavior | Stabilization | Codex | Sep 27 | DONE | F01 | Source-access regressions reject search-preview-as-read, proxy/mirror origins, and R3+ transport without fetched evidence; honest `blocked` access remains valid data rather than a fabricated fetch. Full Tests workflow passed on PR #111 exact code head | None | No |
-| S06 | Run final regression suite including historical Japan scars | Stabilization | Automated CI/test | Sep 27 | DONE | F01 | PR #111 exact code head passed Tests/coverage, invariants and Accessibility. The suite includes the Tottori scar fixture + repair-roundtrip/post-#105 regressions, Portugal reliability scars, Luxembourg gate-feedback scar, and Yamagata resume-version regression | None | No |
-| U03 | Final accessibility and interaction polish | UI finalization / stabilization | Automated CI/test + Carlo | Sep 26 | DONE / YELLOW — DETERMINISTIC ENGINEERING COMPLETE; PHYSICAL SPOT CHECK PENDING | U01–U02 + S04 automated proof | PR #162 reproduced and repaired the phone bottom-nav visual/DOM focus-order defect; exact head `1251d57083e735cccd21ecc35b8521a44cd66f1f` passed Required Gate `33352620168` including invariants, lint, typecheck, unit/coverage, production build, and Accessibility/resilience; PR #164 closed deterministic U03 authority | One physical-device interaction spot check remains; reopen engineering only for a reproduced defect | No |
-| F02 | **ENGINEERING CODE FREEZE** except release blockers | Freeze | Carlo | Sep 27 | NOT STARTED | S01–S06 + U03 | No unresolved release blocker; freeze discipline active | Stabilization incomplete | Yes — Carlo alone can waive |
-| F03 | Release-blocker-only window | Freeze | Codex + Claude/Fable | Sep 28–30 | NOT STARTED | F02 | Only correctness/creation/verification/publication/offline/data-integrity/security/major-usability blockers change | F02 | Carlo approves each scope exception |
-| F04 | **BACKEND COMPLETE** | Freeze | Carlo / Codex | Sep 30 | NOT STARTED | F03 | Integration/cutover green; validation rubric green/yellow with no blocker; production path documented | Prior milestones | Yes — final backend acceptance |
-| U04 | **ENGINEERING COMPLETE — shift project to trip use** | Handoff | Carlo | Sep 30 | NOT STARTED | U01–U03 + F04 | Remaining planned work is content/reverification or genuine field bugs, not architecture/backend/UI completion | Backend acceptance/cutover and frontend finalization incomplete | Yes — final engineering handoff |
+| P01 | Preserve creator decisions and V2 authority | Foundation | Carlo / agents | Aug 18 | DONE | None | authority docs | None | No |
+| P02 | Dependency audit and build V2 beside V1 | Foundation | Engineering | Aug 18 | DONE | P01 | implementation evidence | None | No |
+| P03 | V2 contracts/state/evidence/coverage/telemetry | Core | Engineering | Sep 6 | DONE | P02 | deterministic tests | None | No |
+| P04 | V2 doctrine + Guide Author integration | Core | Engineering | Sep 6 | DONE | P03 | contract tests | None | No |
+| P05 | V2 orchestration + isolation | Core | Engineering | Sep 6 | DONE | P03 | orchestration tests | None | No |
+| P06 | Adaptive saturation protections | Core | Engineering | Sep 6 | DONE | P04 | regression tests | None | No |
+| P07 | Lifecycle safeguards/recovery | Core | Engineering | Sep 6 | DONE | P03 | lifecycle tests | None | No |
+| P08 | Honest Progress compatibility | Core | Engineering | Sep 6 | DONE | P03 | UI/state adapter evidence | None | No |
+| P09 | Deterministic branch verification | Core proof | CI | Sep 6 | DONE | P03–P08 | gates green | None | No |
+| P10 | Draft-only V2 canary | Core proof | Research pipeline | Sep 6 | DONE | P09 | Uruguay evidence | None | No |
+| P11 | Independent canary review | Core proof | Engineering | Sep 6 | DONE / YELLOW | P10 | bounded correction list | None | No |
+| P12 | Repair demonstrated blocker classes | Core proof | Engineering | Sep 6 | DONE | P11 | regression evidence | None | No |
+| P13 | Core engine proven in isolation | Core proof | Carlo / Engineering | Sep 6 | DONE | P10–P12 | accepted deterministic/draft proof | None | No |
+| I01 | Connect `/new` to V2 selector architecture | Integration | Engineering | Sep 13 | DONE | P13 | trusted V2 `workflow_call` + V1 rollback path | None | No |
+| I02 | Prove full `/new → research → landing` path | Integration | CI / research | Sep 13 | DONE / YELLOW — DRAFT PRODUCT PATH GREEN; RELEASE-READINESS PENDING | I01 | Uruguay GREEN; Fukuoka historical fail | Fresh Kumamoto still required | No |
+| I03 | Failed/incomplete V2 cannot publish | Integration | CI | Sep 13 | DONE | I01 | failed-canary + deterministic publication tests | None | No |
+| I04 | Resume/recovery preserves completed expensive work | Integration | CI / targeted live | Sep 13 | DONE | P13 | durable retry/resume evidence | None | No |
+| I05 | V2 telemetry feeds existing Progress owner | Integration | Engineering | Sep 13 | DONE | P13 | durable events / honest-empty behavior | None | No |
+| I06 | V2 selected; preserve V1 rollback until ratification/retirement decision | Integration | Carlo / Engineering | Sep 30 | RATIFICATION PENDING | I02–I05 | fresh Kumamoto + rollback proof | Settled-main acceptance not yet run | Carlo decides V1 retirement later |
+| R01 | Repair Portugal-exposed reliability class | Reliability | Engineering | Aug 22 | DONE | I01–I05 | merged deterministic fixes | None | No |
+| R02 | Close post-merge authority truth | Reliability | Engineering | Aug 22 | DONE | R01 | congruence tests | None | No |
+| R03 | Live reliability acceptance + failure seams | Reliability | Carlo / Engineering | Sep 6 | DONE | R02 | Uruguay + escalation/cancellation evidence | None | No |
 
----
+## September closure work
 
-# Weekly operating cadence
+| ID | Work item | Owner | Target | Status | Gate |
+|---|---|---|---|---|---|
+| S20-01 | Continuity/current-state reconciliation; retire stale watcher scaffolding | Engineering | Sep 6 | IN PROGRESS | current docs/tests/workflows agree; zero surprise Claude schedules |
+| S20-02 | Creator-directed D7 fidelity corrections | Carlo + design agent | Sep 9 | IN PROGRESS | creator review, no D8 |
+| S20-03 | Creator visual acceptance + accepted baseline lock | Carlo | Sep 10 | NOT STARTED | representative phone/intermediate/desktop + degraded states |
+| S20-04 | Deterministic Guide Completeness/product-surface contract | Engineering | Sep 11 | NOT STARTED | intake → structured truth → relevant surfaces fail closed |
+| S20-05 | Runtime hardening: travel-mode fidelity, >8-stop truthfulness, degraded/live semantics | Engineering | Sep 11 | NOT STARTED | focused runtime/browser tests |
+| S20-06 | Put performance budget in premerge authority | Engineering | Sep 11 | NOT STARTED | over-budget branch fails before merge |
+| S20-07 | Final protected-main governance (#130) | Carlo / tooling | Sep 11 | BLOCKED | final ruleset + protected landing proof |
+| S20-08 | Freeze settled `main`; rebuild exact Kumamoto candidate | Engineering | Sep 12 | BLOCKED | S20-01..07 stable enough not to invalidate candidate |
+| S20-09 | Fresh Kumamoto release-readiness ratification | Carlo / V2 pipeline | Sep 16 | BLOCKED | explicit owner model-burn authorization after exact-head/drift proof |
+| S20-10 | V2 rollback/cutover truth + V1 retirement decision | Carlo | Sep 19 | BLOCKED | Kumamoto result; V1 may remain if retirement is not worth risk |
+| S20-11 | Adversarial field/device closeout | Carlo + Engineering | Sep 27 | NOT STARTED | offline/poor network/geolocation/provider failures/200%/CJK/group constraints |
+| S20-12 | Final production verification + handoff | Engineering | Sep 30 | NOT STARTED | only content/reverification/real field bugs remain |
 
-Claude Max 5x window resets **Wednesday at 3:00 AM**.
+## Hard rules
 
-Use the allowance deliberately:
-
-- **Monday–Tuesday:** Codex analysis, deterministic tests, targeted fixes, prepare the next research question.
-- **Wednesday after reset:** expensive full-pipeline or high-value research validation run.
-- **Thursday–Friday:** analyze failures; fix mechanically; avoid broad reruns.
-- **Weekend:** targeted stage reruns and integration testing.
-- **Monday–Tuesday:** stabilize before the next expensive run.
-
-Default cycle:
-
-**test → learn → fix → targeted retest → stabilize → full test**
-
-Do not use repeated full Claude runs to debug deterministic state/schema problems.
-
----
-
-# If schedule slips, cut these first
-
-Cut/defer in this order before moving a hard deadline:
-
-1. Estimated API-equivalent dollar-cost display if exact model/token data is unavailable.
-2. Fancy owner-facing telemetry visualizations beyond truthful raw/summary metrics.
-3. Additional research-memory automation beyond preserving inspectable leads.
-4. New permanent external APIs/MCP integrations.
-5. Extra `Worth the Detour` presentation polish beyond preserving the underlying data/label.
-6. Automated post-trip learning beyond simple inspectable feedback capture.
-7. Additional full research validation runs once the distinct risk classes are already covered.
-8. Noncritical Progress UI animation/polish.
-9. Broad documentation cleanup unrelated to the active V2 contract.
-
-Do **not** cut:
-
-- research correctness
-- evidence / anti-hallucination protections
-- frozen intake
-- Pass A/B independence
-- reconciliation accountability
-- verification
-- resumability
-- publication safety
-- offline-critical traveler information
-- Trip Split reliability
-- required reservation/transport information
-
----
-
-# Update rule
-
-When a milestone changes:
-
-1. change its status;
-2. add the concrete evidence that earned the change;
-3. record a blocker instead of guessing progress;
-4. move nonessential work to `DEFERRED` rather than extending the deadline silently.
-
-No fake completion percentages.
+- Do not dispatch historical Kumamoto candidates.
+- Do not use model runs to debug deterministic code.
+- Do not weaken attempt caps, evidence requirements, publication gates, branch protection or exact-head rules to obtain green.
+- Do not revert `WAYPOINT_RESEARCH_ENGINE` merely to make stale pre-cutover tooling pass; repair the tooling/authority to current reality.
+- Do not retire V1 inside an unrelated cleanup pass.
+- Do not regenerate visual baselines as a substitute for creator acceptance.
+- Do not revive retired reciprocal-review or hourly completion watchers.
+- No new broad design/research/feature round before Sep 30 unless a reproduced release blocker proves it necessary.
