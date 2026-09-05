@@ -36,6 +36,10 @@ All POST, JSON in and JSON out, except `/health`.
 | `POST /change` | `X-Owner-Key` | `{slug, section, change}` → files a `modify-request` issue. Returns `{ok, id}`. |
 | `POST /answer` | `X-Owner-Key` | `{slug, answers:[{id, answer}]}` → dispatches the change workflow with `source: "answers"`. |
 | `POST /approve` | `X-Owner-Key` | `{slug, issue}` → dispatches the change workflow with `source: "feedback"`. |
+| `POST /runtime/routes` | allowed origin + per-IP cost budget | Bounded Google Routes request; minimal duration/distance/polyline response. |
+| `POST /runtime/route-matrix` | allowed origin + per-IP cost budget | Up to eight authored stops; live matrix for unapplied advisories. |
+| `POST /runtime/places` | allowed origin + per-IP cost budget | Up to eight reviewed Place IDs; status/current hours only; never cached. |
+| `POST /runtime/weather-alerts` | allowed origin + per-IP cost budget | Public alerts from authoritative weather publishers. |
 
 `POST /answer` builds its `plan_json` input as
 `{"source":"answers","slug":"<slug>","answers":[{"id":"…","answer":"…"}]}` — one string, exactly
@@ -112,6 +116,38 @@ deployed URL (e.g. `https://waypoint-intake.<you>.workers.dev`) into
 
 Check it with `curl https://<your-worker>/health` — the response says whether the repo, token,
 rate limit and owner endpoints are each configured, without revealing any of them.
+
+### Runtime provider setup
+
+The paid runtime routes are disabled unless both a server key and the existing KV cost guard are
+configured. Enable Google Routes API, Places API (New), and Weather API, restrict one server key to
+only those APIs, set cloud budgets/quotas, then store it without printing or committing it:
+
+```sh
+npx wrangler secret put GOOGLE_SERVER_KEY
+```
+
+Runtime traffic requires a Cloudflare Rate Limiting binding named `RUNTIME_LIMITER` and fails
+closed if it is absent. Google Cloud per-API quotas and budgets remain the hard paid-usage ceiling;
+the Worker additionally caps matrices and Place batches at eight items. `LIVE_CACHE` is optional
+for authored-stop matrices and alert responses. Current-position routes and Place Details are
+explicitly excluded from KV caching; reviewed Place IDs remain in canonical guide data. Finally set the repository Actions variable
+`PUBLIC_WAYPOINT_RUNTIME_ENABLED=1` so the static build exposes the capability.
+
+Add a unique positive-integer namespace for the binding (do not reuse this example identifier):
+
+```toml
+[[ratelimits]]
+name = "RUNTIME_LIMITER"
+namespace_id = "<YOUR_UNIQUE_INTEGER>"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
+```
+
+Cloudflare documents this limiter as permissive and eventually consistent. Treat it as abuse
+reduction; Google Cloud API quotas and billing budgets are the hard cost boundary.
 
 ### Rotating the key (and why the browser copy expires)
 

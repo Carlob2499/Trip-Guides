@@ -22,3 +22,17 @@ CHANGE_WORKFLOW = "change.yml"
 [[kv_namespaces]]
 binding = "RATE"
 id = "0377d2a631634212a7afd188c1e6c0de"
+
+# Short-lived shared cache for authored Route Matrix responses and severe-weather alerts.
+# Exact-location routes and Places operational fields are deliberately never stored here.
+[[kv_namespaces]]
+binding = "LIVE_CACHE"
+id = "440cd73a4c474d11a1593753b5e34fc5"
+
+# Cost guard for paid runtime providers. Google Cloud per-API quotas/budgets remain the hard cap.
+[[ratelimits]]
+name = "RUNTIME_LIMITER"
+namespace_id = "21001"
+  [ratelimits.simple]
+  limit = 30
+  period = 60

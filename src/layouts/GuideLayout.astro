@@ -18,6 +18,7 @@ import Icon from "../components/Icon.astro";
 import PwaHead from "../components/PwaHead.astro";
 import { jsonEmbed } from "../lib/json-embed";
 import { FALLBACK_RATES_AS_OF } from "../data/countries.mjs";
+import { WAYPOINT_BACKEND } from "../lib/backend-config.js";
 import { paletteFor, accentForGuide } from "../lib/palettes";
 import { accentTokens, accentStyle } from "../lib/accent-tokens";
 import { destinationTheme, destinationThemeStyle } from "../lib/destination-theme";
@@ -245,6 +246,7 @@ const mapBelowGroups = pinGroups(v.allPins, mapDayDates).map((g) => {
       storeKey: v.storeKey, legacyStoreKey: v.legacyStoreKey, roomId: guide.roomId ?? null, mapCenter: v.mapCenter, firstDayDate: v.firstDayDate, lastDayDate: v.lastDayDate, hasWeatherSection: v.hasWeatherSection,
       destTzIana: v.destTzIana, curCode: v.localCur?.code ?? null, curFallbackRate: v.localCur?.approxRate ?? null, curFallbackAsOf: FALLBACK_RATES_AS_OF,
       daysForBanner: v.daysForBanner, gmapsKey: import.meta.env.PUBLIC_GMAPS_KEY ?? null, gmapsMapId: import.meta.env.PUBLIC_GMAPS_MAP_ID ?? null,
+      runtimeEnabled: import.meta.env.PUBLIC_WAYPOINT_RUNTIME_ENABLED === "1", runtimeBackendUrl: import.meta.env.PUBLIC_WAYPOINT_RUNTIME_ENABLED === "1" ? WAYPOINT_BACKEND.url : null,
       emergency: v.plate.emergency, advisory: (guide as any).advisory ?? null, verifiedDate: v.verifiedDate, budgetLock: (guide as any).budgetLock ?? false,
       slug: guideSlug, title: guide.title,
     })}></script>
@@ -263,6 +265,11 @@ const mapBelowGroups = pinGroups(v.allPins, mapDayDates).map((g) => {
       import "../features/field-tools/index.js";
       import "../features/sos/index.js";
       import "../features/search/index";
+      // Runtime overlays are enhancement-only. Keep the provider adapters and contextual hooks
+      // out of the first-paint graph; they attach after the authored/offline guide is interactive.
+      const loadRuntimeOverlay = () => import("../features/runtime-overlay/index");
+      if ("requestIdleCallback" in window) window.requestIdleCallback(loadRuntimeOverlay, { timeout: 2_000 });
+      else setTimeout(loadRuntimeOverlay, 0);
       import "../scripts/lightbox.js";
       import "../scripts/arrival.js";
       import "../scripts/living-cover.js";

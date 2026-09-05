@@ -108,3 +108,39 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
+// Delivery is dormant until the explicit PushSubscriptionPort has a reviewed VAPID-backed
+// server implementation. These handlers are safe to ship first: they accept only Waypoint's
+// three actionable event classes and same-app targets. Engagement notifications are ignored.
+const ACTIONABLE_PUSH_KINDS = new Set(["leave-soon", "route-disruption", "severe-weather"]);
+function validPushPayload(value) {
+  return value && ACTIONABLE_PUSH_KINDS.has(value.kind) &&
+    typeof value.title === "string" && value.title.trim() && value.title.length <= 100 &&
+    typeof value.body === "string" && value.body.trim() && value.body.length <= 300 &&
+    typeof value.eventId === "string" && value.eventId.length > 0 && value.eventId.length <= 160 &&
+    typeof value.url === "string" && value.url.startsWith(BASE + "/") && !value.url.startsWith("//");
+}
+
+self.addEventListener("push", (event) => {
+  let payload;
+  try { payload = event.data ? event.data.json() : null; } catch { return; }
+  if (!validPushPayload(payload)) return;
+  event.waitUntil(self.registration.showNotification(payload.title, {
+    body: payload.body,
+    tag: `waypoint:${payload.kind}:${payload.eventId}`,
+    renotify: false,
+    data: { url: payload.url },
+  }));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = event.notification.data && event.notification.data.url;
+  if (typeof target !== "string" || !target.startsWith(BASE + "/") || target.startsWith("//")) return;
+  const absoluteTarget = new URL(target, self.location.origin).href;
+  event.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+    const existing = clients.find((client) => new URL(client.url).pathname.startsWith(BASE + "/"));
+    if (existing) return existing.focus().then(() => existing.navigate(absoluteTarget));
+    return self.clients.openWindow(absoluteTarget);
+  }));
+});
