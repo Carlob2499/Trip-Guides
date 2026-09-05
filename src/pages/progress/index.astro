@@ -78,11 +78,16 @@ const contours = [
 
     <Contours layers={contours} />
 
-    <UtilityBar base={base} toggleId="pgDark" page="Progress">
-      <span class="pg-pill" id="pgStatusPill" data-tone="muted" role="status" aria-live="polite">No run yet</span>
-    </UtilityBar>
+    {/* Surface 7 (board 07): the run's cockpit wears the same frame as every other surface —
+        the strip first, the route map and the stage stations inside it. Nothing about the run
+        itself changes: the states still come only from the durable V2 run events, and an
+        unattached page still says so plainly. */}
+    <div class="stage spatial">
+      <UtilityBar base={base} toggleId="pgDark" page="Progress">
+        <span class="pg-pill" id="pgStatusPill" data-tone="muted" role="status" aria-live="polite">No run yet</span>
+      </UtilityBar>
 
-    <main class="pg" id="pgMain" data-state="empty">
+      <main class="pg" id="pgMain" data-state="empty">
       <div id="pgRoot">
         <header class="pg-hero">
           <p class="pg-eyebrow">New guide</p>
@@ -290,7 +295,8 @@ const contours = [
           </div>
         </section>
       </div>
-    </main>
+      </main>
+    </div>
 
     <footer class="pg-foot">
       <a href={`${base}/`}>← Back to all guides</a>

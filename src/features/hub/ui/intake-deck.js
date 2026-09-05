@@ -14,8 +14,20 @@
    compiled checklist: every answer visible in its section, the fork gate, then send. */
 
 import { reducedMotion } from "../../../scripts/util.js";
+import { SECTIONS } from "../index";
 
 var STORE = "wp-intake-deck-v1";
+
+/* Board 07's "Your guide preview": the answers already given, in the traveler's own words.
+   Never a prediction — no day count, no itinerary shape, no "what's included" list, because
+   none of that exists until the research runs. */
+var PREVIEW = [
+  ["Destination", ["ngCountry", "ngCities"]],
+  ["Dates", ["ngStart", "ngEnd"]],
+  ["Travellers", ["ngTravelers"]],
+  ["Pace", ["ngPace"]],
+  ["Budget", ["ngBudget"]],
+];
 
 /* A card is moot when an earlier answer settles it. Each rule reads the live controls. */
 var SKIP = {
@@ -52,7 +64,11 @@ export function initIntakeDeck() {
   controls.appendChild(back); controls.appendChild(skip); controls.appendChild(next);
   var aside = el("div", "itk-deck-aside");
   aside.appendChild(tell); aside.appendChild(review);
-  deck.appendChild(history);
+  /* The answered stack lives under the frame when the page gives it a home (board 07's "Your
+     answers"); on any other host — the gallery specimen, a no-frame page — it stays in the deck
+     where it has always been. The progress line stays beside the card either way. */
+  var answersHost = byId("itkAnswers");
+  (answersHost || deck).appendChild(history);
   deck.appendChild(progress);
   form.insertBefore(deck, form.firstChild.nextSibling && form.firstChild.classList && form.firstChild.classList.contains("itk-meter") ? form.firstChild.nextSibling : form.firstChild);
   // The controls ride under whichever row is current (moved on every step).
@@ -94,6 +110,65 @@ export function initIntakeDeck() {
       seen++;
     });
     history.hidden = seen === 0;
+    // The below-frame card says so plainly rather than sitting there as an empty titled box.
+    var empty = byId("itkAnswersEmpty");
+    if (empty) empty.hidden = seen > 0;
+  }
+
+  /* ── The rail and the preview (board 07) ─────────────────────────────────────────────
+     Both are PROJECTIONS: the rail copies the mark intake-checklist.js already paints on each
+     section, and the preview reads the same controls the pipeline will. Neither decides
+     anything, so neither can disagree with the checklist about what is done. */
+  var rail = byId("itkRail");
+  var preview = byId("itkPreview");
+  var railSteps = null;
+  function sectionOf(row) { var s = row.closest(".itk-sec"); return s ? s.getAttribute("data-sec") : ""; }
+  function buildRail() {
+    if (!rail || railSteps) return;
+    railSteps = [];
+    SECTIONS.forEach(function (sec, i) {
+      var b = el("button", "itk-rail-step"); b.type = "button";
+      var mark = el("span", "itk-mark itk-mark-todo", String(i + 1));
+      mark.setAttribute("aria-hidden", "true");
+      b.appendChild(mark);
+      b.appendChild(el("span", null, sec.title));
+      b.addEventListener("click", function () {
+        var at = rows.findIndex(function (r) { return sectionOf(r) === sec.id && !skipped(r); });
+        if (at >= 0) go(at, { focus: true });
+      });
+      rail.appendChild(b);
+      railSteps.push({ id: sec.id, btn: b, mark: mark });
+    });
+  }
+  function paintRail(current) {
+    if (!railSteps) return;
+    var here = sectionOf(rows[current]);
+    railSteps.forEach(function (s) {
+      var src = form.querySelector('[data-sec="' + s.id + '"] [data-mark]');
+      if (src) s.mark.className = src.className;
+      if (s.id === here) s.btn.setAttribute("aria-current", "step");
+      else s.btn.removeAttribute("aria-current");
+    });
+  }
+  function paintPreview() {
+    if (!preview) return;
+    preview.replaceChildren();
+    preview.appendChild(el("p", "itk-eyebrow", "Your guide preview"));
+    var dl = el("dl", null);
+    PREVIEW.forEach(function (pair) {
+      var parts = [];
+      pair[1].forEach(function (id) {
+        var n = byId(id);
+        if (!n) return;
+        if (n.tagName === "SELECT") { var o = n.options[n.selectedIndex]; if (o && o.value) parts.push(o.text); }
+        else if (String(n.value || "").trim()) parts.push(String(n.value).trim());
+      });
+      if (!parts.length) return;
+      dl.appendChild(el("dt", null, pair[0]));
+      dl.appendChild(el("dd", null, parts.join(" · ")));
+    });
+    if (dl.children.length) preview.appendChild(dl);
+    else preview.appendChild(el("p", "itk-prev-empty", "Nothing yet. What you answer appears here, in your own words."));
   }
 
   function go(i, opts) {
@@ -120,6 +195,8 @@ export function initIntakeDeck() {
     next.textContent = last ? "Review & send →" : "Next →";
     skip.hidden = last;
     paintHistory(idx);
+    paintRail(idx);
+    paintPreview();
     if (!reduced) { row.classList.remove("itk-deck-deal"); void row.offsetWidth; row.classList.add("itk-deck-deal"); }
     var first = row.querySelector("input, select, textarea, button.itk-vs-btn");
     if (opts.focus !== false && first) first.focus({ preventScroll: true });
@@ -158,8 +235,9 @@ export function initIntakeDeck() {
     if (t.tagName === "INPUT" || t.tagName === "SELECT") { e.preventDefault(); go(idx + 1, { focus: true }); }
   });
   // An answer that changes a branch re-evaluates the history stack in place.
-  form.addEventListener("input", function () { if (form.hasAttribute("data-deck")) paintHistory(idx); });
-  form.addEventListener("change", function () { if (form.hasAttribute("data-deck")) paintHistory(idx); });
+  function repaint() { if (!form.hasAttribute("data-deck")) return; paintHistory(idx); paintRail(idx); paintPreview(); }
+  form.addEventListener("input", repaint);
+  form.addEventListener("change", repaint);
 
   // "Start the deck again" lives in the hero, for a traveler who reviewed and wants the cards back.
   var again = byId("itkDeckAgain");
@@ -176,5 +254,6 @@ export function initIntakeDeck() {
   if (done) { if (again) again.hidden = false; return; }
   form.setAttribute("data-deck", "");
   form.querySelectorAll("details.itk-sec").forEach(function (d) { d.open = true; });
+  buildRail();
   go(Math.min(idx, rows.length - 1), { focus: false });
 }

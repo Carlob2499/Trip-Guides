@@ -55,7 +55,6 @@
 /* The quiet orientation label (§6 "Orientation"): the trip's name, text only. */
 .orient{display:none;align-items:center;min-width:0;margin:0 .4rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);white-space:nowrap}
 .orient-title{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:var(--ink)}
-.orient-h1{margin:0;font:inherit;font-weight:700}
 .orient-dot{width:9px;height:9px;flex:none;border-radius:var(--r-round);background:var(--selected)}
 .orient-sep,.orient-dest{flex:none}
 

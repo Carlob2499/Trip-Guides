@@ -45,6 +45,8 @@ const EXPECTED: Record<string, string[]> = {
   "styles/atlas-mobile.css": ["MOBILE_MAX"],
   // D7 convergence (2026-09-04): SOS becomes a centred modal above the phone ceiling.
   "styles/field-tools.css": ["MOBILE_MAX+1"],
+  // board 07: the builder's rail and preview flank the card only where there is room for them.
+  "styles/intake.css": ["MOBILE_MAX+1"],
   // board 05: the cream band under the Guide recomposes on the phone ceiling.
   "styles/guide-dest.css": ["TABLET_MIN", "DESKTOP_MIN", "MOBILE_MAX+1"],
   // guide.css: the destination workspace filling the frame (board 02), then the phone retune
