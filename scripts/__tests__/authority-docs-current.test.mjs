@@ -1,9 +1,10 @@
 // AUTHORITY DOCS — the surfaces a future session TRUSTS must not silently regress to a
-// pre-integration status. These tests pin current architectural truth, not one day's wording.
+// superseded operating state. These tests pin current architectural truth, not one day's wording.
 // A status test must evolve when evidence evolves; forcing a living tracker back to yesterday's
 // state merely to keep CI green would make the test the source of misinformation.
 
-// @protects-file Current authority docs cannot regress to a pre-integration or contradicted claim.
+// @protects-file Current authority docs cannot regress to contradicted V1-default, stale-watcher,
+// or pre-D7 claims after the September 2026 continuity pass.
 
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
@@ -27,13 +28,14 @@ function trackerStatus(id) {
 }
 
 describe("the tracker states the CURRENT delivery phase", () => {
-  it("records accepted draft reliability evidence without claiming production cutover", () => {
+  it("records V2 as the selected product path while keeping final release-readiness truthful", () => {
     const dash = TRACKER.split("# Master tracker")[0];
-    expect(dash).toMatch(/Canary #4/);
-    expect(dash).toMatch(/draft product path GREEN/i);
-    expect(dash).toMatch(/production cutover.*NOT DONE/i);
-    expect(dash).not.toMatch(/Carlo's next action:.*Fable proof/i);
-    expect(dash).not.toMatch(/2,566/);
+    expect(dash).toMatch(/V2.*selected|selected.*V2/i);
+    expect(dash).toMatch(/Kumamoto/i);
+    expect(dash).toMatch(/release-readiness.*pending|ratification.*pending/i);
+    expect(dash).toMatch(/V1.*rollback/i);
+    expect(dash).not.toMatch(/V1 remains (the )?production default/i);
+    expect(dash).not.toMatch(/WAYPOINT_RESEARCH_ENGINE.*unset/i);
   });
 
   it("integration work that shipped is no longer NOT STARTED", () => {
@@ -42,21 +44,23 @@ describe("the tracker states the CURRENT delivery phase", () => {
     }
   });
 
-  it("keeps production cutover open while recording accepted reliability", () => {
+  it("keeps final release-readiness open while recording accepted reliability", () => {
     expect(trackerStatus("I02")).toMatch(/DONE \/ YELLOW|DRAFT PRODUCT PATH GREEN/i);
     expect(trackerStatus("I02")).not.toMatch(/^DONE$/);
-    expect(trackerStatus("I06")).toMatch(/HOLD|IN PROGRESS/i);
+    expect(trackerStatus("I06")).toMatch(/RATIFICATION PENDING|IN PROGRESS|HOLD/i);
     expect(trackerStatus("R03")).toMatch(/^DONE$/i);
-    expect(TRACKER).toMatch(/production cutover.*pending|production cutover.*not done/i);
+    expect(TRACKER).toMatch(/Kumamoto.*pending|release-readiness.*pending|ratification.*pending/i);
   });
 });
 
-describe("the pipeline POLICY doc knows both research implementations", () => {
-  it("names V1 and V2 during the cutover, with V1 as the rollback/default", () => {
+describe("the pipeline POLICY doc knows the selected engine and rollback boundary", () => {
+  it("names V1 and V2, with V2 selected and V1 retained as rollback", () => {
     expect(PIPELINE).toMatch(/research-pass-v2\.yml/);
     expect(PIPELINE).toMatch(/WAYPOINT_RESEARCH_ENGINE/);
-    expect(PIPELINE).toMatch(/rollback/i);
+    expect(PIPELINE).toMatch(/V2.*selected|selected.*V2/i);
+    expect(PIPELINE).toMatch(/V1.*rollback|rollback.*V1/i);
     expect(PIPELINE).toMatch(/landMode=pr/);
+    expect(PIPELINE).not.toMatch(/V1 remains (the )?default research path/i);
   });
 
   it("still asserts exactly two product lifecycles", () => {
@@ -64,7 +68,7 @@ describe("the pipeline POLICY doc knows both research implementations", () => {
     expect(PIPELINE).toMatch(/two \*\*product\*\* lifecycles|exactly \*\*two\*\* product lifecycles|two PRODUCT lifecycles|exactly \*\*two\*\* product/i);
   });
 
-  it("states V2's failure semantics as PR #75 left them", () => {
+  it("states V2's durable failure semantics", () => {
     const v2 = PIPELINE.slice(PIPELINE.indexOf("Two GENERATION implementations"));
     expect(v2).toMatch(/workflow-owned/i);
     expect(v2).toMatch(/never `agent-failure`|never .agent-failure./);
@@ -90,11 +94,12 @@ describe("retry policy prose agrees with executable policy", () => {
   });
 });
 
-describe("the handoff states exactly what the accepted reliability evidence proves", () => {
-  it("records the accepted Uruguay draft canary", () => {
+describe("the handoff states exactly what the accepted evidence and current controls prove", () => {
+  it("records the accepted Uruguay draft canary without confusing it with final release-readiness", () => {
     expect(HANDOFF).toMatch(/Uruguay/i);
     expect(HANDOFF).toMatch(/Canary #4/);
     expect(HANDOFF).toMatch(/GREEN/i);
+    expect(HANDOFF).toMatch(/Kumamoto/i);
     expect(HANDOFF).not.toMatch(/NEVER executed in a live Actions job/i);
     expect(HANDOFF).not.toMatch(/Nothing about it has run in GitHub Actions/i);
   });
@@ -106,9 +111,10 @@ describe("the handoff states exactly what the accepted reliability evidence prov
     expect(HANDOFF).toMatch(/R03 is fully accepted/i);
   });
 
-  it("keeps temporary cleanup status out while recording the durable reciprocal reviewer boundary", () => {
-    expect(HANDOFF).not.toMatch(/draft cleanup PR|cleanup\/grand-pass/i);
-    expect(HANDOFF).toMatch(/reciprocal Claude↔Codex reviewer automation.*remains active/i);
-    expect(HANDOFF).toMatch(/revision-4.*trust boundary/i);
+  it("records transition watchers as retired rather than active authority", () => {
+    expect(HANDOFF).toMatch(/reciprocal Claude↔Codex reviewer.*retired|retired.*Claude↔Codex/i);
+    expect(HANDOFF).toMatch(/September completion watcher.*retired|retired.*September completion watcher/i);
+    expect(HANDOFF).not.toMatch(/reciprocal Claude↔Codex reviewer automation.*remains active/i);
+    expect(HANDOFF).not.toMatch(/WAYPOINT_RESEARCH_ENGINE.*unset/i);
   });
 });
