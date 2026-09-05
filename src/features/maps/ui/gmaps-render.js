@@ -63,6 +63,24 @@ export function boot(cfg) {
     host.className = "gmap-host";
     mount.appendChild(host);
     var map = makeMap(api, host, data);
+    /* Google's own container carries role="region" aria-label="Map", and a guide renders SEVERAL
+       maps — so every one announced itself as "Map" and axe reported landmark-unique. Every mount
+       already sits inside a NAMED landmark of ours ("Map of today's stops", "Map of the selected
+       day"), so the injected one is a redundant landmark nested inside a real one: drop its role
+       rather than give it a name, which would only move the collision up a level (copying the
+       parent's label is exactly what the first attempt did, and it collided with the parent).
+       Nothing is lost — the map keeps its own focus and keyboard handling; it simply stops
+       claiming to be a second region. The node appears after init, hence the frame wait. */
+    (function unlandmark() {
+      var region = host.querySelector('[role="region"]');
+      if (!region) { requestAnimationFrame(unlandmark); return; }
+      /* All three go together: aria-label on a role-less div is a prohibited attribute
+         (axe aria-prohibited-attr), so dropping the role alone trades one violation for
+         another. The element becomes plain markup inside our named landmark. */
+      region.removeAttribute("role");
+      region.removeAttribute("aria-roledescription");
+      region.removeAttribute("aria-label");
+    })();
     var info = new api.maps.InfoWindow();
     var all = (data.pins || []).filter(function (p) { return typeof p.lat === "number" && typeof p.lng === "number"; });
     var lens = mount.getAttribute("data-map-lens") || "all";

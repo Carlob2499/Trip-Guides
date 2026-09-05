@@ -25,7 +25,7 @@
   max-width:calc(100% - 3.4rem)
 }
 .map-chip{
-  padding:.3rem .7rem;min-height:32px;
+  padding:.3rem .8rem;min-height:44px;
   font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;
   color:var(--muted);background:var(--card);
   border:1px solid var(--rule2);border-radius:999px;cursor:pointer;
@@ -33,14 +33,17 @@
   transition:color var(--dur-immediate),border-color var(--dur-immediate),background var(--dur-immediate)
 }
 .map-chip:hover{color:var(--ink);border-color:var(--ink)}
-.map-chip-on{color:var(--on-accent);background:var(--accent);border-color:var(--accent)}
-.map-chip:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+/* Pressed takes the BRAND, not the guide's accent (base.css --brand): a map control is
+   Waypoint's furniture on every destination, and routing it through --accent is what made
+   Korea's map read sage. */
+.map-chip-on{color:var(--on-brand);background:var(--brand);border-color:var(--brand)}
+.map-chip:focus-visible{outline:2px solid var(--brand-ink);outline-offset:2px}
 
 .map-cluster{
   display:flex;align-items:center;justify-content:center;
-  width:34px;height:34px;border-radius:50%;
-  background:var(--accent);color:var(--on-accent);
-  border:2px solid var(--card);
+  width:44px;height:44px;border-radius:50%;
+  background:var(--brand);color:var(--on-brand);
+  border:2px solid var(--brand-ring);
   font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;
   box-shadow:var(--shadow-lift);cursor:pointer
 }
@@ -78,10 +81,42 @@
 .map-degraded{position:absolute;left:.5rem;right:.5rem;bottom:.5rem;margin:0;padding:.5rem .8rem;background:var(--card);border:1px solid var(--rule2);font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
 html[data-conn="offline"] .map-degraded{display:block}
 /* Pins: numbered day stops, plain dots for places. Semantic, not decorative. */
-.map-pin{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:var(--accent);color:var(--on-accent);border:2px solid var(--card);font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;cursor:pointer}
-.map-pin--venue{background:var(--ink);color:var(--bg)}
-.map-pin--stop{width:30px;height:30px}
-.map-pin--sel{transform:scale(1.25);z-index:2}
+/* THE PINS (2026-09-05). Two things were wrong at once and they compounded: the disc was
+   painted in var(--accent), so on Korea it was the cover photo's olive sitting on a green
+   map — no figure, no ground, nothing to aim at — and the whole marker was 26-30px, under
+   the 44px floor every other control on this site holds.
+
+   Both are fixed here, and the second one without inflating the drawing: the ELEMENT is a
+   transparent 44px target, and ::before paints a 32px disc inside it. A thumb gets its 44px,
+   the map keeps a pin the size a map should have. Google's AdvancedMarkerElement anchors
+   content by its centre, so growing the box does not move the pin off its coordinate.
+
+   The disc is --brand: pins are Waypoint's furniture, identical on every destination. The
+   white ring and the shadow are what make it read on satellite, terrain and a dense street
+   grid alike — a flat fill disappears into two of those three. */
+.map-pin{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:44px;height:44px;background:none;border:0;cursor:pointer;
+  font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;
+  color:var(--on-brand);
+  /* The number sits above the disc ::before paints. */
+  isolation:isolate
+}
+.map-pin::before{
+  content:"";position:absolute;z-index:-1;width:32px;height:32px;border-radius:999px;
+  background:var(--brand);border:2px solid var(--brand-ring);
+  box-shadow:var(--shadow-lift)
+}
+/* A venue is a place the guide describes rather than a stop on today's route — same furniture,
+   quieter register, so the numbered stops stay the thing the eye lands on first. */
+.map-pin--venue{color:var(--brand-ring)}
+.map-pin--venue::before{background:var(--ink);border-color:var(--brand-ring)}
+.map-pin--stop::before{width:36px;height:36px}
+.map-pin--sel{z-index:2}
+/* A pure RING, not elevation — the selected pin gains a halo, not a taller shadow
+   (design-system.md §31; the drift gate's ring-shadow-is-not-elevation exemption). */
+.map-pin--sel::before{transform:scale(1.25);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 35%,transparent)}
+@media(prefers-reduced-motion:no-preference){.map-pin::before{transition:transform var(--dur-immediate) var(--ease-standard)}}
 .map-chip--day{border-style:dashed}
 
 /* The sheet (phone): peek / half / full, dragged or tapped, never gesture-only. */

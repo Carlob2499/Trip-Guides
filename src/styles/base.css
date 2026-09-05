@@ -74,6 +74,31 @@
      Measured: ink 7.21/5.53/6.34 on the light surfaces, inkDark 5.40/6.23/6.87 on the navy. */
   --accent-ink-light:#8f3d0d;--accent-ink-dark:#e58e5b;--accent-ink:var(--accent-ink-light);
   --on-accent:#2c0f00;
+  /* THE BRAND ACCENT (2026-09-05, owner ruling "option 3"). --accent is the GUIDE's colour,
+     resolved per destination from its cover photo (src/lib/palettes.ts), so Korea is olive and
+     Denmark is gold. That is right for a guide's own identity marks and wrong for shared
+     furniture: the boards paint the map pins, the NOW marker and the primary controls in ONE
+     Waypoint orange on every destination, and routing those through --accent is what made the
+     Korea map read as sage-green mush.
+
+     So the two meanings get two names. --brand is Waypoint's, fixed on every page and every
+     guide; --accent stays the destination's. Anything a reader would call "the app's colour"
+     takes --brand; anything that says "this is Korea" keeps --accent.
+
+     Fixed in both themes, exactly like --crit-fill and --dark-ground above: a brand fill is an
+     OBJECT, not ink on a page. --brand-ink IS theme-swapped, because that one is text on the
+     page's own ground and has two correct answers. All four are accentTokens("#d35c16") output,
+     pinned by accent-tokens.test.ts — never hand-edit them. */
+  --brand:#d35c16;
+  --on-brand:#2c0f00;                 /* text on a brand FILL — 4.52:1, same in both themes */
+  --brand-ink-light:#8f3d0d;--brand-ink-dark:#e58e5b;
+  --brand-ink:var(--brand-ink-light); /* brand as TEXT on the page ground — the dark blocks swap */
+  /* The ring a map pin wears. Fixed white in both themes and deliberately not --card: a pin does
+     not stand on the page, it stands on a MAP TILE, and the tile is satellite, terrain or a dense
+     street grid depending on where the reader has panned. White is the one separator that holds
+     against all three; --card would vanish into pale terrain in light mode. Same object-not-ink
+     reasoning as --on-crit above. */
+  --brand-ring:#ffffff;
   /* ATLAS TOKEN CONTRACT (Phase 1.1, 2026-08-06) — docs/design-handoff/DESIGN.md R4 names
      several values this palette ALREADY ships. Declared here so any later Atlas ticket can
      reference the names without defining them first. Nothing consumes them yet, and no call
@@ -432,14 +457,14 @@
      decisions that currently agree, not one value written twice. */
   --rw:1px;--photo:1;
   --cta:#f1eae0;--cta-ink:#0f1b2e;
-  --accent-ink:var(--accent-ink-dark)}
+  --accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark)}
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
 [data-theme="dark"]{--bg:#0f1b2e;--bg2:#152438;--ink:#f1eae0;--card:#1c2f47;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1b2e;
   --rw:1px;--photo:1;   /* theme knobs — see the media-query block above for why both scopes declare them */
   --cta:#f1eae0;--cta-ink:#0f1b2e;
-  --accent-ink:var(--accent-ink-dark)}
+  --accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark)}
 [data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 
 
@@ -559,7 +584,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
    an OBJECT, not ink on a page, so it does not re-map. Values track the dark block's navy.
    A visual test asserts a framed page renders differently in light and dark, so the two jobs
    cannot silently merge again. */
-.spatial{--bg:#0f1b2e;--bg2:#152438;--card:#1c2f47;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--ink:#f1eae0;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1b2e;--cta:#f1eae0;--cta-ink:#0f1b2e;--accent-ink:var(--accent-ink-dark);
+.spatial{--bg:#0f1b2e;--bg2:#152438;--card:#1c2f47;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--ink:#f1eae0;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1b2e;--cta:#f1eae0;--cta-ink:#0f1b2e;--accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark);
   /* A custom property resolves where it is DECLARED, so :root's aliases would keep pointing at the
      light values from up the tree. Every alias that names a remapped token is re-declared here. */
   --aink:var(--accent-ink);--selected-ink:var(--accent-ink);--sunken:var(--bg2);--line:var(--rule);--line-strong:var(--rule2);--info:var(--muted);--ochre:var(--warn);--caution:var(--warn);--critical:var(--crit);--ok:var(--green);--ok-fill:var(--green);--on-ok:var(--on-green);
