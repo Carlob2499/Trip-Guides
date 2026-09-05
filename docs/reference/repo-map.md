@@ -39,7 +39,7 @@ The product has exactly two lifecycles:
 | `src/components/` | Shared rendered components | Feature model ownership |
 | `src/scripts/` | Browser bootstraps and page glue | Pipeline/build automation |
 | `scripts/` | Build, audit, verification, research, pipeline, and repo tooling | Browser runtime |
-| `scripts/design/` | Surface screenshots + board-vs-build sheets for the surface PRs (`docs/work-orders/surface-transplant-playbook.md`) | Design authority or baselines |
+| `scripts/design/` | Surface screenshots + board-vs-build sheets for the surface PRs (`docs/work-orders/surface-transplant-playbook.md`, closed out in `surface-transplant-closeout.md`) | Design authority or baselines |
 | `worker/` | Owner/live endpoints that need a backend | Static Pages runtime |
 | `.github/workflows/` | CI, deploy, guide creation, research, change, recertification, and scheduled checks | Product business logic |
 | `docs/reference/` | Current technical/operational truth | Completed plans or review history |

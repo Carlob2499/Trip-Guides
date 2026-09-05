@@ -1,6 +1,11 @@
 # Surface Transplant Playbook — boards 02–10, one PR each
 
-Status: **EXECUTION PLAYBOOK — HAND-OFF READY**  
+Status: **COMPLETE (2026-09-05) — all ten surfaces and the §4 after-list are on main.**
+The closeout, the owner task list and the model-routed next steps are in
+`surface-transplant-closeout.md`. What follows is the work order as it was executed; it stays
+as the record of how each surface was decided, not as work still to do.
+
+Status (original): **EXECUTION PLAYBOOK — HAND-OFF READY**  
 Owner: Carlo  
 Written: 2026-09-05 (after Surface 1 · Atlas, PR #195)  
 Authority: `PRODUCT.md` → `docs/reference/design-system.md` → `docs/mockups/VISUAL_LINEAGE.md` + the boards in
@@ -173,11 +178,14 @@ PRE and POST phases keep their compositions but inside the frame: PRE = readines
 
 ---
 
-## 4. After the ten surfaces
+## 4. After the ten surfaces — DONE (#208, Opus 5)
 
-- Regenerate the OG and recap images (`src/pages/og/[slug].png.ts`, `src/pages/recap/[slug].png.ts`) in the forest register; they are the last hex literals `drift-real` reports.
-- Colophon and utility pages (`/about`, `/health`, `/404`) onto the frame strip via `UtilityBar`.
-- Owner's closing report (commentary, owner task list, model-routed next steps) — Fable or Opus.
+- ~~Regenerate the OG and recap images in the forest register; they are the last hex literals
+  `drift-real` reports.~~ Done: both cards read the register from `lib/accent-tokens.ts` and hold
+  no palette of their own; accent text takes `inkDark`. Real drift 29 → 17.
+- ~~Colophon and utility pages (`/about`, `/health`, `/404`) onto the frame strip via
+  `UtilityBar`.~~ Done, plus `/change`: all four wrap in `.stage.spatial`.
+- ~~Owner's closing report.~~ `surface-transplant-closeout.md`.
 
 ## 5. Owner-side prerequisites (not engineering)
 
