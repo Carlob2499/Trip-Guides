@@ -72,8 +72,7 @@ export function initSearch(root) {
     overlay.innerHTML =
       '<div class="srch-panel spatial">' +
         '<div class="srch-rail">' +
-          '<p class="srch-rail-title">Search</p>' +
-          '<p class="srch-rail-tag">Find places, guides, trips, and more.</p>' +
+          '<p class="srch-detail-title srch-rail-title">Search</p>' +
           '<nav class="srch-rail-nav" aria-label="Result categories"></nav>' +
         '</div>' +
         '<div class="srch-main">' +
@@ -113,12 +112,12 @@ export function initSearch(root) {
     // The rail (desktop only, CSS-hidden on a phone): the same drawers, "All results" first,
     // the rest under a "Categories" kicker — the board's left column, never a different index.
     DRAWERS.forEach(([key, label], idx) => {
-      if (idx === 1) railNav.appendChild(el0("p", "srch-rail-kicker", "Categories"));
-      const b = el0("button", "srch-navitem", idx === 0 ? "All results" : label);
+      if (idx === 1) railNav.appendChild(el0("p", "srch-group-h", "Categories"));
+      const b = el0("button", "srch-drawer srch-navitem", idx === 0 ? "All results" : label);
       b.type = "button";
       b.setAttribute("data-drawer", key);
       b.setAttribute("aria-pressed", key === drawer ? "true" : "false");
-      const n = el0("span", "srch-navitem-n", "");
+      const n = el0("span", "srch-drawer-n", "");
       b.appendChild(n);
       b.addEventListener("click", () => onDrawerClick(key));
       railNav.appendChild(b);
@@ -184,7 +183,7 @@ export function initSearch(root) {
     overlay.querySelectorAll("[data-drawer]").forEach((b) => {
       const key = b.getAttribute("data-drawer");
       const n = key === "all" ? total : (counts[key] || 0);
-      const countEl = b.querySelector(".srch-drawer-n, .srch-navitem-n");
+      const countEl = b.querySelector(".srch-drawer-n");
       if (countEl) countEl.textContent = n ? String(n) : "";
       b.setAttribute("aria-pressed", key === drawer ? "true" : "false");
       b.disabled = key !== "all" && n === 0;
