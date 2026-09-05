@@ -761,6 +761,18 @@ and documents, a step count, an estimated active time, T-money/eSIM balances, an
 statuses. Weather is the wired daily high/low and condition — there is no current temperature,
 precipitation chance or wind in the payload the guide fetches, so none appear.
 
+**Surface 10 · Trip Learnings (board `10_trip_learnings`, Sonnet 5):** a counts strip — Stops
+made (`hitStops` of `plannedStops`), Days (`dayCount`), Skipped (`skippedStops`) — now sits
+above the `#learnings` notebook, reusing the exact `.trip-atoms`/`.trip-atom` markup and CSS the
+Trip destination's own POST-phase recap card already renders (`features/trip/model/recap.ts`'s
+`RecapAtoms`, threaded through `TripBelow` → `Learnings.astro`) — one number, one owner, never a
+second count computed a different way. Everything else in `#learnings` (the curated Plan vs
+Actual notebook, the live feedback aggregate, "What we learned") is unchanged. Not drawn,
+because nothing holds them: the board's Trip Snapshot map, Top destinations, Places worth
+repeating, Food highlights, Transit tips, Useful knowledge captured, a photo count, "Export
+Learnings", and the board's own left-nav (Overview/Itinerary/Map/Guide/Trip Learnings/Expenses/
+Documents/Split) — Learnings is a section inside Trip, not a destination with its own nav.
+
 ### Under the frame
 Trip's standing references are the cream band under the frame, not competition for today's fold:
 **Essentials** (the guide's entry rules and its offline files), the **Split** card, and the

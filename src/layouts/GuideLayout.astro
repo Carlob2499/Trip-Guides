@@ -206,7 +206,7 @@ const mapBelowGroups = pinGroups(v.allPins, mapDayDates).map((g) => {
     <div class="below">
       <section class="dest dest-below" data-dest="trip" data-dest-below="trip" aria-label="Trip essentials">
         <TripBelow base={base} slug={guideSlug} storeKey={v.storeKey} title={guide.title}
-          entry={guide.entry ?? null} exports={v.exports} learnings={guide.learnings ?? null} />
+          entry={guide.entry ?? null} exports={v.exports} learnings={guide.learnings ?? null} recap={v.recap} />
       </section>
       <section class="dest dest-below" data-dest="map" data-dest-below="map" aria-label="Explore neighbourhoods" hidden>
         <MapBelow groups={mapBelowGroups} />
