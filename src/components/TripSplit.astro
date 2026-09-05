@@ -22,8 +22,8 @@ const { storeKey, standalone = false } = Astro.props;
      aria-labelledby={standalone ? undefined : "gtab-split"} hidden={!standalone} data-sk={storeKey}>
 
   <div class="split-toolbar">
-    <h2 class="split-title">Split</h2>
-    <p class="split-desc">Who paid what, and who owes who — with the fewest transfers.</p>
+    <h2 class="split-title">Split expenses</h2>
+    <p class="split-desc">Track and split all trip expenses in one place.</p>
     <!-- Revealed by trip-split.js only once there is spending to summarise — an empty
          budget has no summary, and a button that prints a blank sheet is a broken promise. -->
     <div class="split-save-actions">

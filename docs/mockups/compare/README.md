@@ -12,3 +12,4 @@ sheets are review evidence for creator visual acceptance (design-system.md §35)
 | `04-map.webp` | `04_map_experience` | the Map panel over the map, the neighbourhood index under the frame |
 | `05-guide.webp` | `05_guide_experience` | hero foot with Search, one tile shape per chapter, Need to know |
 | `06-search.webp` | `06_search_experience` | the left rail (Search + drawers), the chip row, grouped thumbnailed results, the detail pane |
+| `08-split.webp` | `08_split_expenses` | frame register + the real header (title/tagline); the board's 3-card summary strip and tab row are deferred — see design-system.md §27 |

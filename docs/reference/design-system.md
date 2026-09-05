@@ -871,6 +871,21 @@ group decisions remain stable, scan-first, and semantically clear.
 Split is contextual, not a primary navigation destination.
 It is reachable from Trip, relevant group/expense actions, Search, and expanded navigation.
 
+**Surface 8 (board `08_split_expenses`, Sonnet 5):** landed as a scoped first pass, not the
+board's full grammar — the site-wide CSS budget (`scripts/check-perf-budget.mjs`, 300KB) left
+too little margin after Surface 6's rail to also add the board's 3-card summary strip and
+`Overview/Expenses/Balances/Settle Up` tab row (none of those tabs are separate wired views
+today regardless — everything renders as one scrolling page). What shipped: `.splitdest` picks
+up `.spatial` (forest in both themes, the same frame pattern every other surface shares, §1);
+the old "← Trip" back-button-plus-kicker header is retired — Split is one of the frame strip's
+own tabs now (§6), not a page reached by a back button — in favour of the calculator's own
+`.split-title`/`.split-desc`, retitled to the board's copy ("Split expenses" / "Track and split
+all trip expenses in one place."). Total spend, balances, settlements, categories and the
+expense ledger are unchanged in position and behaviour. The 3-card strip, the tab row, and a
+"View itinerary" trip-identity card remain open work for whoever has CSS budget headroom next
+(check `check-perf-budget.mjs` locally before adding — Surface 6 landed at 300.9KB and needed a
+follow-up fix, PR #203).
+
 ---
 
 ## 28. SOS
