@@ -862,7 +862,21 @@ for (const guide of ["denmark", "korea"] as const) {
         const lum = (v: string) =>
           srgb(v).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
             .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
-        const ground = lum(getComputedStyle(banner).backgroundColor);
+        /* 2026-09-05: this used to read the banner's OWN background-color, and .tn-atom does not
+           declare one — so it measured `rgba(0,0,0,0)`, whose parsed luminance is 0, i.e. it
+           compared the text against BLACK rather than against the surface a reader actually sees.
+           That was survivable only while `.spatial` forced the guide frame dark in both themes:
+           pale ink against a black stand-in scores well, so the gate read green. The moment light
+           mode became real, dark ink against the same black stand-in scored 1.14:1 and the gate
+           fired — on its own arithmetic, not on a regression in the CSS. Composite the way the
+           browser does instead: walk up to the first ancestor that actually paints something. */
+        const opaque = (v: string) => {
+          const n = (v.match(/[\d.]+/g) || []).map(Number);
+          return v.startsWith("color(") ? true : !(n.length > 3 && n[3] === 0);
+        };
+        let groundEl: Element | null = banner;
+        while (groundEl && !opaque(getComputedStyle(groundEl).backgroundColor)) groundEl = groundEl.parentElement;
+        const ground = lum(getComputedStyle(groundEl ?? document.body).backgroundColor);
         const ratio = (el: Element) => {
           const l = lum(getComputedStyle(el).color);
           return (Math.max(l, ground) + 0.05) / (Math.min(l, ground) + 0.05);

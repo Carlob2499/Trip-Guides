@@ -122,13 +122,29 @@ const stampLabel: Record<State, string> = { proven: "Proven", unproven: "Not pro
     <meta name="description" content="Live status of Waypoint's automated guide pipeline." />
     <meta name="robots" content="noindex,nofollow" />
     <PwaHead />
+    <!-- Dark-mode init — runs before paint to avoid flash (same as the hub and /about/).
+         2026-09-05: this page never had it. While the frame was force-dark via `.spatial`
+         nothing noticed, because the page looked the same either way; the moment the frame
+         started following the theme, /health/ was the one surface that ignored a dark
+         preference. Found by tests/visual/theme-registers.spec.ts on its first run. -->
+    <script is:inline>
+      (function () {
+        const s = localStorage.getItem("tg-theme");
+        const preferDark = window.matchMedia && window.matchMedia("(prefers-color-scheme:dark)").matches;
+        if (s === "dark" || (s === null && preferDark)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else if (s === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
   </head>
   <body>
     <!-- Was a bare <div>. Every other page on the site puts its content in a landmark; this one
          did not, so a screen-reader user had no way to skip the chrome and the a11y gate's own
          vacuity guard (which samples `main a, main h2, …`) found nothing here to audit at all. -->
     {/* The utility pages wear the frame too (work order §4): one shell, every surface. */}
-    <div class="stage spatial">
+    <div class="stage">
       <UtilityBar base={base} page="Pipeline health" />
       <main class="hl-wrap">
       <p class="hl-kicker">Behind the scenes</p>

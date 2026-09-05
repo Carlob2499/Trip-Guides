@@ -7,8 +7,8 @@ import { contrastRatio, mix } from "./contrast";
 
 /* Every accent that actually ships, from src/data/palettes/*.json and the country defaults. */
 const SHIPPED = ["#a77e3e", "#646b2e", "#9b592b", "#9c4421", "#c7a269", "#73572b", "#63391b"];
-const LIGHT_SURFACES = ["#fbfcf6", "#ced5c4", "#e3e7dc"];
-const DARK_SURFACES = ["#1e2e28", "#16231e", "#0d1512"];
+const LIGHT_SURFACES = ["#fefcf8", "#e5ded2", "#f2ede5"];
+const DARK_SURFACES = ["#1c2f47", "#152438", "#0f1b2e"];
 
 /* Accent text is rarely painted on a FLAT surface — chips and pills tint their ground toward the
    accent, which is the one direction that eats contrast. Every surface below therefore appears
@@ -103,9 +103,9 @@ describe("accentTokens", () => {
 
   it("matches the defaults baked into base.css for the no-guide accent", () => {
     // base.css cannot call a function, so the hub/health/progress defaults are hand-copied out of
-    // accentTokens("#9c4421"). Hand-copied values drift; this is the thing that notices.
+    // accentTokens("#d35c16"). Hand-copied values drift; this is the thing that notices.
     const css = readFileSync("src/styles/base.css", "utf8");
-    const t = accentTokens("#9c4421");
+    const t = accentTokens("#d35c16");
     expect(css).toContain(`--accent-ink-light:${t.ink};`);
     expect(css).toContain(`--accent-ink-dark:${t.inkDark};`);
     expect(css).toContain(`--on-accent:${t.onAccent};`);

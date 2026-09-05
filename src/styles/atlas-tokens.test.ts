@@ -237,13 +237,13 @@ describe("Atlas token contract — declared-but-unconsumed tokens", () => {
    values because these were chosen against a scene CI cannot re-measure. */
 describe("R5 — the lifted Day palette", () => {
   it.each([
-    ["--bg", "#e3e7dc"],
-    ["--card", "#fbfcf6"],
-    ["--bg2", "#ced5c4"], // the token --sunken points at
-    ["--ink", "#0f141a"],
-    ["--muted", "#3c4534"],
-    ["--rule", "#a9b39b"],
-    ["--rule2", "#8a9480"],
+    ["--bg", "#f2ede5"],
+    ["--card", "#fefcf8"],
+    ["--bg2", "#e5ded2"], // the token --sunken points at
+    ["--ink", "#171310"],
+    ["--muted", "#5b5348"],
+    ["--rule", "#cdc3b4"],
+    ["--rule2", "#b3a795"],
   ])("Day %s holds its lifted value %s", (token, value) => {
     expect(hex(LIGHT, token)).toBe(value);
   });
@@ -277,7 +277,7 @@ describe("R5 — the lifted Day palette", () => {
 
   it("leaves --accent untouched — a guide's colour is a fact about the guide", () => {
     // Identity, not ink: every other pigment here follows the ground, and this one may not.
-    expect(hex(LIGHT, "--accent")).toBe("#9c4421");
+    expect(hex(LIGHT, "--accent")).toBe("#d35c16");
     expect(DARK).not.toContain("--accent:");
   });
 });
