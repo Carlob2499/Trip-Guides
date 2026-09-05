@@ -909,6 +909,18 @@ SOS is visually conservative:
 - no hidden critical action;
 - semantic color + icon + text.
 
+**Surface 9 (board `09_sos_safety`, Sonnet 5):** verified against the board, no code change. The
+existing three-layer sheet (`src/features/sos/ui/sos.js`, `src/styles/field-tools.css`, locked
+2026-09-04) already carries the board's grammar — category cards with Police/Fire in the
+critical fill, "Every verified number" fold, the chosen number's context (base address, trip),
+and the one enormous confirm-call — in its own fixed `--dark-*` register (deliberately separate
+from `.spatial`: SOS wants one non-negotiable near-black surface regardless of a guide's accent,
+not the frame's per-surface tokens). The board's top segmented tabs (Emergency/Health/Travel/
+Local), Share Live Location, I'm Safe, and Embassy are correctly absent — nothing in the guide
+model backs them (no embassy fact, no health-and-safety chapter, no live-location feature); the
+board's per-category icons are correctly absent too, since §28 itself rules out "ambiguous
+icons" and a category glyph invented for the board would be exactly that.
+
 ---
 
 ## 29. Empty, loading, error, offline
