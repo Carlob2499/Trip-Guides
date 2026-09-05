@@ -144,9 +144,11 @@ const first = cards[0] ?? null;
 
     <Contours layers={contours} />
 
-    <UtilityBar base={base} toggleId="cpDark" page="Request a change" />
+    {/* The utility pages wear the frame too (work order §4): one shell, every surface. */}
+    <div class="stage spatial">
+      <UtilityBar base={base} toggleId="cpDark" page="Request a change" />
 
-    <main class="cp" id="cpMain">
+      <main class="cp" id="cpMain">
       <div id="cpRoot">
         {/* Two halves, and the second is the OWNER's. It stays hidden until a key is stored in
             this browser — "Pending requests", never "Requests to me", because the queue is a
@@ -275,7 +277,8 @@ const first = cards[0] ?? null;
           <p class="cp-dek">There are no published guides to change yet.</p>
         )}
       </div>
-    </main>
+      </main>
+    </div>
 
     <footer class="cp-foot">
       Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a>

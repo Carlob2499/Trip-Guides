@@ -19,6 +19,12 @@ export const DARK_SURFACES = ["#1e2e28", "#16231e", "#0d1512"] as const;
 /* The dark register's quiet ink (base.css --muted in the dark block) — the pair the destination
    atmosphere (destination-theme.ts) is measured against. Asserted against base.css by the test. */
 export const DARK_QUIET_INK = "#91a59b";
+/* The rest of the forest register a surface needs to paint itself where CSS cannot reach: the
+   share cards are SVG rasterised at build time (src/pages/og, src/pages/recap), so they read the
+   register from here rather than carrying their own copy of it. Same contract as the surfaces
+   above — asserted against base.css's dark block by accent-tokens.test.ts. */
+export const DARK_INK = "#f1eae0";
+export const DARK_RULE = "#2d443c";
 
 /* Those flat surfaces are not the whole story: chips and pills sit on ACCENT-TINTED grounds
    (`color-mix(in srgb, var(--accent) N%, var(--card))`), and a tint moves the ground TOWARD the

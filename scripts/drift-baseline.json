@@ -2,8 +2,6 @@
   "src/styles/budget-sheet.css::COLOUR": 6,
   "src/styles/guide.css::MOTION": 1,
   "src/styles/guide.css::TYPE": 1,
-  "src/pages/og/[slug].png.ts::COLOUR": 4,
   "src/pages/og/[slug].png.ts::TYPE": 4,
-  "src/pages/recap/[slug].png.ts::COLOUR": 6,
-  "src/pages/recap/[slug].png.ts::TYPE": 7
+  "src/pages/recap/[slug].png.ts::TYPE": 5
 }

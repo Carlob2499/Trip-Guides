@@ -2,7 +2,17 @@
    truncation, accent/label derivation and rasterisation they had each copy-pasted
    (audit dedup, 2026-08-14). Underscore-prefixed: not a route. */
 import { accentForGuide } from "../../lib/palettes";
+import { accentTokens } from "../../lib/accent-tokens";
 import sharp from "sharp";
+
+/* The two font stacks both cards paint with, in ONE place. These are not the site's faces and
+   cannot be: the cards are rasterised by librsvg on the CI image, which loads no webfonts, so
+   Literata and Atkinson Hyperlegible Next are unavailable at the only moment that matters.
+   Liberation Serif/Sans are the metric-compatible Linux stand-ins (Georgia/Arial behind them for
+   a browser preview). Naming them here means the substitution is one decision recorded once,
+   rather than six string literals that could each drift into a different fallback. */
+export const CARD_SERIF = "'Liberation Serif',Georgia,serif";
+export const CARD_SANS = "'Liberation Sans',Arial,sans-serif";
 
 export function xmlEscape(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -20,9 +30,16 @@ type CardData = { title?: string; country?: string; region?: string; theme?: { p
 export function cardIdentity(slug: string, data: CardData) {
   const title = data.title || "Guide";
   const country = data.country || "";
+  const accent = accentForGuide(slug, data.theme, country);
   return {
     title,
-    accent: accentForGuide(slug, data.theme, country),
+    /** The identity colour itself — for FILLS (the edge stripe, the foot band). Never text. */
+    accent,
+    /* Both cards now sit on the forest ground, and a raw accent is an identity colour, not a
+       legible one: Korea's moss measures ~2.6:1 on #0d1512. Accent TEXT takes the same
+       dark-ground derivation every dark surface in the product takes (accent-tokens.ts's
+       inkDark, >= 4.5:1 on every dark surface) rather than a shade picked by eye per card. */
+    accentInk: accentTokens(accent).inkDark,
     titleSafe: (n: number) => xmlEscape(truncate(title, n)),
     countrySafe: xmlEscape((data.region || country).toUpperCase()),
   };
