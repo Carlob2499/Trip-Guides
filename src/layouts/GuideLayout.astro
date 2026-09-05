@@ -239,7 +239,6 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       import "../scripts/readiness-ticks.js";
       import "../scripts/offline-pill.js";
       import "../features/field-tools/index.js";
-      import "../features/route-opt/index.js";
       import "../features/sos/index.js";
       import "../features/search/index";
       import "../scripts/lightbox.js";
@@ -251,6 +250,13 @@ const v = deriveGuideView(guide, guideSlug, base, holidayData);
       import "../scripts/staleness-ui.js";
       import { initDeclaredPanelGrids } from "../features/panel/index.js";
       initDeclaredPanelGrids();
+      /* The day-route optimizer is ADVISORY: it paints a "reorder could save ≈Nkm" chip on a
+         qualifying day and never reorders anything on its own. Nothing waits on it, so it is
+         not first-paint work — it loads once the page is idle, which keeps it out of the
+         always-loaded entry graph (scripts/check-perf-budget.mjs). SOS and Search stay eager
+         on purpose: an emergency tool and the global way in must never wait on a fetch. */
+      const whenIdle = window.requestIdleCallback || ((fn) => setTimeout(fn, 200));
+      whenIdle(() => { import("../features/route-opt/index.js"); });
     </script>
   </body>
 </html>
