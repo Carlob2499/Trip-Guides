@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable no-undef, @typescript-eslint/no-unused-expressions -- vendored reference
-   tool (docs/design-handoff), not app source; process/console are real Node globals here. */
+/* eslint-disable @typescript-eslint/no-unused-expressions -- compact rule predicates use short-circuit expressions. */
 // Waypoint drift check. Run: node check-drift.mjs [srcDir]
 // Exit 1 on any violation. Wire into CI / pre-commit so drift cannot merge.
 import { readFileSync, readdirSync, statSync } from 'node:fs';
