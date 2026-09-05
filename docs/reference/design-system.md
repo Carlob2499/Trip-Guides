@@ -749,6 +749,29 @@ Use:
 
 Do not shrink a desktop timeline into a phone.
 
+### The composition (decided 2026-09-05, board 03)
+
+Inside the frame, in order: a **header row** (whose itinerary, its day count and the range the
+guide itself states, then the controls that act on the whole thing — Map view / List view, the
+offline files the guide has, Share), the **day tabs** across the frame, the **workbench**, and a
+**measured foot strip** (stops counted, straight-line km summed along the day's located stops,
+the day's pace as the guide wrote it).
+
+Selecting a stop opens the **inspector**: a card over its own pin carrying that stop's photo,
+number, authored time, name, the guide's note and its Get-there links. It is read from the
+timeline row, so it can never claim more than the row does. On the workbench the Get-there links
+live there and not on the row; a phone has no inspector, so there they stay on the row.
+
+Between two consecutive located stops the timeline draws the **gap, straight-line**. That is the
+only leg measure this product can honestly draw — nothing here routes, so no mode and no
+duration is stated, and the board's "30 min walk" is not reproduced.
+
+The day tabs and the Map/List control are desktop only. On a phone the thumb rail above the
+bottom bar is the day switch (§25 asks for a scrubber in the thumb zone, not a tab row at the
+top of a tall screen), and there is no map pane to fold, so a second day picker and a dead
+control are not drawn. Not drawn at all, because nothing holds them: Optimize day, Add stop, Add
+note, Re-center, and a weather number in the day head.
+
 ### Desktop
 Desktop Itinerary is a resizable **temporal-spatial workbench**:
 - timeline/day chronology;

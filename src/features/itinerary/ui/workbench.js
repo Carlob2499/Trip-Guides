@@ -6,7 +6,9 @@
    threshold the panes stack (itinerary.css) and the divider is inert. Minimums are held
    (30–70%) so neither pane can be dragged into uselessness; a double-tap on the divider
    resets to the default. The workbench also owns the small shared selection contract between
-   timeline rows and the map, plus the selected-day OSM fallback when Google is unavailable. */
+   timeline rows and the map, the STOP INSPECTOR that contract opens (board 03 — a card over
+   the selected pin, read from the timeline row so it can never claim more than the row does),
+   the header row's Map/List control, and the selected-day OSM fallback. */
 
 import { osmEmbedUrl } from "../../../lib/map-embed";
 
@@ -27,6 +29,10 @@ export function initWorkbench(root) {
   var collapsed = false;
   try { collapsed = localStorage.getItem(KEY + "-map") === "0"; } catch (_) {}
   var selectedPinId = null;
+  var inspector = bench.querySelector("[data-stop-inspector]");
+  var foot = doc.querySelector("[data-itin-foot]");
+  var viewBtns = doc.querySelectorAll("[data-bench-view]");
+  var shareBtn = doc.querySelector("[data-itin-share]");
 
   /* Pin-to-compare (design-system.md §16 "Multi-panel policy"): single focus is the default;
      the traveler may deliberately pin up to two stops, which sit as compact tiles above the
@@ -105,6 +111,30 @@ export function initWorkbench(root) {
     }
   });
 
+  /* The inspector reads the selected ROW: its photo, its number, its authored time, its name,
+     the guide's own note and the Get-there links already on it. Nothing is added here — a card
+     that knew more than the timeline would be a second source of truth. */
+  function paintInspector(row) {
+    if (!inspector) return;
+    if (!row) { inspector.hidden = true; inspector.innerHTML = ""; return; }
+    var q = function (sel) { var el = row.querySelector(sel); return el ? el.textContent.trim() : ""; };
+    var img = row.querySelector(".stop-img");
+    var links = row.querySelector(".transit-links");
+    var name = q(".stop-name"), time = q(".stop-time"), num = q(".stop-num"), note = q(".stop-note");
+    var h = "";
+    if (img && !img.closest(".stop-media").hidden) {
+      h += '<span class="itin-peek-media"><img src="' + esc(img.getAttribute("src")) + '" alt="" loading="lazy" decoding="async" onerror="this.parentNode.hidden=true"></span>';
+    }
+    h += '<button class="itin-peek-close" type="button" data-peek-close aria-label="Close the stop">×</button>' +
+      '<div class="itin-peek-body"><p class="itin-peek-k">' + (num ? "Stop " + esc(num) : "Stop") + (time ? " · " + esc(time) : "") + "</p>" +
+      '<h4 class="itin-peek-name">' + esc(name) + "</h4>" +
+      (note ? '<p class="itin-peek-note">' + esc(note) + "</p>" : "") +
+      (links ? '<div class="itin-peek-acts">' + links.outerHTML + "</div>" : "") +
+      "</div>";
+    inspector.innerHTML = h;
+    inspector.hidden = false;
+  }
+
   function selectStop(id, opts) {
     opts = opts || {};
     selectedPinId = id;
@@ -120,6 +150,7 @@ export function initWorkbench(root) {
       }
       if (on) selected = row;
     });
+    paintInspector(selected);
     if (selected && opts.reveal) {
       selected.scrollIntoView({ block: "nearest", behavior: "auto" });
       var button = selected.querySelector("[data-map-pin-id]");
@@ -187,14 +218,23 @@ export function initWorkbench(root) {
       }).observe(mapMount, { attributes: true, attributeFilter: ["data-map-provider"] });
     }
   }
+  function showFootDay(index) {
+    if (!foot) return;
+    foot.querySelectorAll("[data-foot-day]").forEach(function (row) {
+      row.hidden = parseInt(row.getAttribute("data-foot-day"), 10) !== index;
+    });
+  }
   doc.addEventListener("tg:day", function (e) {
     var index = e.detail && Number.isFinite(e.detail.index) ? e.detail.index : 0;
+    showFootDay(index);
     selectStop(null);
     if (mapMount && typeof mapMount.__clear === "function") mapMount.__clear();
     showFallbackDay(index);
   });
   var initialDay = bench.querySelector("[data-planner-days] .day[data-day]:not([hidden])");
-  showFallbackDay(initialDay ? parseInt(initialDay.getAttribute("data-day"), 10) : 0);
+  var initialIdx = initialDay ? parseInt(initialDay.getAttribute("data-day"), 10) : 0;
+  showFallbackDay(initialIdx);
+  showFootDay(initialIdx);
 
   function apply() {
     bench.style.setProperty("--bench-timeline", ratio + "%");
@@ -205,6 +245,7 @@ export function initWorkbench(root) {
       collapseBtn.setAttribute("aria-label", collapsed ? "Expand the map" : "Collapse the map");
     }
     try { localStorage.setItem(KEY, String(ratio)); localStorage.setItem(KEY + "-map", collapsed ? "0" : "1"); } catch (_) {}
+    paintView();
     try { doc.dispatchEvent(new CustomEvent("tg:bench", { detail: { ratio: ratio, mapCollapsed: collapsed } })); } catch (_) {}
   }
 
@@ -240,6 +281,23 @@ export function initWorkbench(root) {
       apply();
     });
   }
+  if (inspector) inspector.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("[data-peek-close]")) selectStop(null);
+  });
+  /* Map view / List view: the same collapsed state the pane's own toggle owns, said in the
+     header row's words. There is no third view — a list is the workbench without its map. */
+  function paintView() {
+    viewBtns.forEach(function (b) {
+      b.setAttribute("aria-pressed", (b.getAttribute("data-bench-view") === "list") === collapsed ? "true" : "false");
+    });
+  }
+  viewBtns.forEach(function (b) {
+    b.addEventListener("click", function () { collapsed = b.getAttribute("data-bench-view") === "list"; apply(); });
+  });
+  if (shareBtn) shareBtn.addEventListener("click", function () {
+    var global = doc.getElementById("btnShare");
+    if (global) global.click();
+  });
   if (collapseBtn) collapseBtn.addEventListener("click", function () { collapsed = !collapsed; apply(); });
   if (mapPane) mapPane.addEventListener("click", function (e) {
     // A collapsed strip re-opens on tap anywhere on it.

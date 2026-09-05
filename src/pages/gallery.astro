@@ -369,8 +369,9 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
           <h3 class="gal-name">ItineraryDestination</h3>
           <p class="gal-role">{componentRoles.ItineraryDestination.role}</p>
           <div class="gal-dest-host">
-            <ItineraryDestination daysSection={view.daysSec} learnings={toolsGuide.data.learnings ?? null} country={toolsGuide.data.country}
-              keyPrefix="galdy" modulesByDate={view.modulesByDate} dayPins={view.planner.pins} center={view.itinCenter} span={view.itinSpan} imageFor={view.imageFor} />
+            <ItineraryDestination title={toolsGuide.data.title} daysSection={view.daysSec} learnings={toolsGuide.data.learnings ?? null} country={toolsGuide.data.country}
+              keyPrefix="galdy" modulesByDate={view.modulesByDate} dayPins={view.planner.pins} center={view.itinCenter} span={view.itinSpan} imageFor={view.imageFor}
+              exports={view.exports} base={base} slug={toolsGuide.id} />
           </div>
         </article>
 
