@@ -10,7 +10,7 @@ This file owns durable pipeline policy. Current delivery status belongs in `docs
 | --- | --- | --- |
 | Purpose | Build or re-research a guide | Modify an existing guide |
 | Entry | `/new` / research dispatch | request, answers, date-lock, staleness, approved feedback |
-| Workflow | V1 or V2 research implementation | `change.yml` |
+| Workflow | V2 selected product implementation; V1 rollback implementation | `change.yml` |
 | Expensive work | staged and resumable | scoped edit; failed run can restart |
 | Publication | evidence-gated | evidence-gated; unsolicited changes remain PR-only |
 
@@ -24,14 +24,14 @@ A helper workflow, CI job, Worker endpoint, progress page, or review tool is not
 | --- | --- | --- |
 | Workflow | `research-pass.yml` | `research-pass-v2.yml` |
 | Orchestrator | `scripts/pipeline.mjs` | `scripts/pipeline-v2.mjs` + `scripts/pipeline/v2/` |
-| Role | **default and rollback path** until cutover | next-generation staged research path |
-| Selected by | default while selector is unset | trusted `/new` only when `WAYPOINT_RESEARCH_ENGINE == 'v2'` |
-| Manual V2 dispatch | n/a | always `landMode=pr`; cannot become production authority |
+| Current role | **rollback / compatibility path** | **selected product research path** |
+| Selected by | trusted `/new` only when selector is not `v2` | trusted `/new` when `WAYPOINT_RESEARCH_ENGINE == 'v2'`; owner-selected current state |
+| Manual V2 dispatch | n/a | always `landMode=pr`; cannot become product publication authority |
 | State ownership | V1 checkpoints/state | workflow-owned `run.v2.json` |
 | Pass A/B independence | separate research invocations | mechanically isolated at the recorded baseline |
 | Critic | fresh context | mechanically stripped of forbidden prior-run artifacts |
 
-V1 retirement is not a cleanup decision. It happens only after explicit cutover acceptance and proven rollback/parity conditions.
+V1 retirement is not a cleanup decision. It is a separate bounded product/operations decision after fresh V2 release-readiness ratification and rollback/parity review. Selecting V2 does not itself retire V1.
 
 ### Frozen intake
 
@@ -43,15 +43,9 @@ Pass A and Pass B are independent research passes, not two turns of one conversa
 
 ### V2 model execution and final writing
 
-The executable production runtime is Claude Code. The trusted `/new` caller pins the normal role
-map explicitly: Pass A uses Claude Sonnet 5 Medium, Pass B is hard-locked to Claude Sonnet 5
-Medium, and Reconcile + Critic use Claude Opus 5 Medium. The Terra/Sol names in
-`research-efficiency.md` are Chat/OpenAI testing analogues only and are never workflow model ids.
+The executable production runtime is Claude Code. The trusted `/new` caller pins the normal role map explicitly: Pass A uses Claude Sonnet 5 Medium, Pass B is hard-locked to Claude Sonnet 5 Medium, and Reconcile + Critic use Claude Opus 5 Medium. Terra/Sol names in research-efficiency documentation are Chat/OpenAI testing analogues only and are never workflow model ids.
 
-There is no fifth editorial model stage. The Guide-Author skill owns the traveler-facing voice:
-Reconcile finishes the fact-locked traveler-facing synthesis after it settles evidence decisions,
-then the fresh-context Critic audits and repairs that product. Deterministic composition organizes
-the resulting content; it does not generate prose.
+There is no fifth editorial model stage. The Guide-Author skill owns traveler-facing voice: Reconcile finishes fact-locked traveler-facing synthesis after settling evidence decisions, then the fresh-context Critic audits and repairs that product. Deterministic composition organizes resulting content; it does not generate prose.
 
 ### V2 state and resume
 
@@ -77,15 +71,19 @@ Current caps remain bounded: five quality attempts and one automatic quality-rep
 
 ### Publication authority
 
-Research truth and publication truth are separate facts.
+Research truth, routing selection, release-readiness evidence, and publication truth are separate facts.
 
-A gate may pass before a merge occurs. V2 publication is a two-phase transaction: the evidence/landing gate must pass first; publication is finalized only after GitHub proves the intended PR/merge identity. A failed/conflicted auto landing leaves the guide quarantined as draft content.
+- `WAYPOINT_RESEARCH_ENGINE=v2` selects V2 for the trusted product research path.
+- That selector does **not** by itself prove fresh release-readiness acceptance.
+- Manual V2 dispatches remain `landMode=pr` regardless of selector state.
+- A gate may pass before a merge occurs. V2 publication is a two-phase transaction: evidence/landing gate first; publication finalizes only after GitHub proves intended PR/merge identity.
+- Failed/conflicted auto landing leaves the guide quarantined as draft content.
 
-Manual V2 dispatches remain `landMode=pr` regardless of selector state.
+The next fresh Kumamoto run is therefore release-readiness **ratification of the already-selected V2 system**, not authorization to first switch the selector.
 
 ## Change lifecycle
 
-`change.yml` handles updates to an existing guide. The plan is built deterministically from the trigger and bounded to the affected guide areas rather than allowing an agent to invent unlimited scope.
+`change.yml` handles updates to an existing guide. The plan is built deterministically from the trigger and bounded to affected guide areas rather than allowing an agent to invent unlimited scope.
 
 Typical sources:
 
@@ -103,7 +101,7 @@ The Change lifecycle preserves continuity: update the requested fact/section, th
 
 Publishing requires the repository's real deterministic evidence gate, not an agent's assertion that research is done.
 
-At minimum, the product must satisfy the relevant schema/build and guide verification contracts. Networked verification is used where publication requires current external evidence. A missing or malformed mandatory artifact fails closed.
+At minimum, the product must satisfy relevant schema/build and guide-verification contracts. Networked verification is used where publication requires current external evidence. A missing or malformed mandatory artifact fails closed.
 
 Human-judgment rows remain human judgment; deterministic checks must never manufacture a machine verdict for something the repository cannot actually prove.
 
@@ -111,11 +109,11 @@ Human-judgment rows remain human judgment; deterministic checks must never manuf
 
 `new-guide.yml` owns the trusted product entry.
 
-- selector unset / not `v2` → V1 remains the default research path;
-- `WAYPOINT_RESEARCH_ENGINE == 'v2'` → trusted `/new` may route to V2;
+- `WAYPOINT_RESEARCH_ENGINE == 'v2'` → trusted `/new` routes to V2; **this is the owner-selected current state**.
+- selector not `v2` → V1 remains available as the rollback/compatibility research path.
 - manual V2 dispatch → draft/PR authority only.
 
-The selector changes routing. It does not, by itself, delete V1, authorize publication, or prove production cutover.
+The selector changes routing. It does not erase historical evidence, retire V1, grant a manual run publication authority, or substitute for fresh release-readiness ratification.
 
 ## Worker boundary
 
@@ -142,6 +140,12 @@ A stalled run must not animate as if work is progressing. A passed research gate
 
 **Learn:** traveler feedback may improve future guides, but traveler learnings and pipeline/process critic findings are separate domains. Process failures do not become traveler preferences.
 
+The Claude-backed LEARN synthesis workflow is **manual-only** during September closure so limited Claude Pro usage is not consumed automatically; this scheduling policy does not change the Learn lifecycle itself.
+
+## Retired transition automation
+
+The reciprocal Claude↔Codex reviewer and the hourly September completion watcher were temporary migration/release scaffolding. They are retired and are not part of the durable product lifecycle or current control plane. Historical evidence may reference them; live policy must not require or silently revive them.
+
 ## Operating rules
 
 - Use deterministic tests/state inspection before spending another full research run.
@@ -149,14 +153,17 @@ A stalled run must not animate as if work is progressing. A passed research gate
 - Never invent telemetry or publication state.
 - Never infer one execution plane's failure from another.
 - Never bypass a failing evidence gate to make a deadline or dashboard green.
-- Keep V1 available until cutover is explicitly accepted.
+- Preserve V1 as rollback until a separate post-ratification retirement decision.
+- Do not revert the V2 selector merely to satisfy stale pre-cutover tooling; update the tooling/authority to current state.
 - Keep V2 decisions aligned with `docs/pipeline v2/DECISIONS.md`.
 
 ## Current proof and next validation
 
-Current accepted proof and remaining live-only seams are summarized in:
+Current accepted proof and remaining live work are summarized in:
 
 - `docs/handoff.md`
 - `docs/pipeline v2/IMPLEMENTATION_STATE.md`
 - `docs/pipeline v2/PIPELINE_VALIDATION_PACK.md`
 - `docs/pipeline v2/SEPTEMBER_TRACKER.md`
+
+Fresh Kumamoto must be rebuilt from settled current `main`, exact-head proven, freshly drift-audited, and explicitly owner-authorized before any model-backed dispatch.
