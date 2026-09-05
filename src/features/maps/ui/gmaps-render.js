@@ -18,6 +18,7 @@
        pin hands off with a Directions URL built from its verified coordinates. */
 
 import { clusterPins } from "../model/cluster";
+import { openingBounds } from "../model/frame";
 import { esc as escapeHtml, safeHttpUrl } from "../../../scripts/util.js";
 
 /* global google */
@@ -145,8 +146,13 @@ export function boot(cfg) {
     function fitTo(pins) {
       if (!pins.length) return;
       if (pins.length === 1) { map.setCenter({ lat: pins[0].lat, lng: pins[0].lng }); map.setZoom(15); return; }
-      var b = new google.maps.LatLngBounds();
-      pins.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
+      /* Not fitBounds over every pin: one far-flung place (Korea's single Tokyo pin, 1,150 km
+         out) would otherwise decide the opening frame and leave Seoul unreadable. openingBounds
+         drops the tails only when they are actually tails — see model/frame.ts. The outlier is
+         still a pin and still in the index; selecting it pans there. */
+      var box = openingBounds(pins);
+      if (!box) return;
+      var b = new google.maps.LatLngBounds({ lat: box.south, lng: box.west }, { lat: box.north, lng: box.east });
       map.fitBounds(b, 48);
     }
 
