@@ -625,6 +625,16 @@ Mobile uses a compact overlay/sheet with category drawers and clear escape.
 
 Natural-language interpretation may exist invisibly, but the interface remains structured.
 
+**Surface 6 (board `06_search_experience`, Sonnet 5):** the desktop overlay (`.spatial`, forest in
+both themes, ≥900px) adds a left rail — "Search", its one-line tagline, "All results", then the
+same drawers under a "Categories" kicker — beside the existing chip row, list and detail pane; a
+phone keeps the chip row only, no rail. The rail and the chips share one `[data-drawer]` click
+handler and one `paintDrawers` pass, so their counts and pressed state never drift apart. Only the
+wired drawers ship — `places · itinerary · guide · other trips` (`DRAWERS` in `search.js`) — never
+the board's Transit/Notes/People, which nothing in the index carries. Result thumbnails are 96×72
+(`.srch-thumb`) to match the board; the pressed chip and the detail pane's action button use
+`--accent`/`--on-accent` (the frame's primary-press rule, §1), not `--cta`.
+
 ---
 
 ## 22. AI presence
