@@ -5,6 +5,15 @@ Branch: `codex/astra-continuity`.
 
 ## Coordination
 
+Remote `cleanup/continuity-september-20260905` was found at `b5d327da` during a
+fresh fetch. It deletes the September watcher and retires reciprocal review
+automation, reconciles V2 authority docs, and adds premerge performance checks.
+Its watcher deletion supersedes this PR's ordering repair when integrated. Keep
+the deletion when resolving that overlap; do not resurrect retired automation.
+The runtime fixes and dependency updates remain independent. This branch is not
+yet on main and had no open PR at inspection time. Avoid duplicating its authority
+documentation and performance-gate work.
+
 Claude's local `claude/navy-cream-tokens` branch was observed at `4945063b`.
 Its changes cover theme tokens, shared page furniture, map pins, and performance
 budgets. This audit's first changes concern the September watcher and dependency
@@ -40,6 +49,14 @@ overrides; they do not overlap those files. Recheck before integration.
   evidence, not a claim that the application has no security defects.
 
 ## Verification and outstanding work
+
+Additional runtime tests confirm successful matrix responses despite failed cache
+reads/writes and no shared-cache access for exact-position routes, whose responses
+carry `Cache-Control: no-store`. All nine runtime-boundary tests pass. These tests
+verify existing behavior and required no production change.
+
+Required gate `33995965059` on `221845a9` passed unit/coverage and build and reached
+accessibility/resilience. Do not treat that intermediate state as a completed gate.
 
 Review: https://github.com/Carlob2499/Trip-Guides/pull/211 (draft).
 Required gate run `33995727347` is pending; it includes coverage, accessibility,

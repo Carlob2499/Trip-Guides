@@ -18,6 +18,36 @@ const request = () => new Request("https://worker.test/runtime", { headers: { "C
 const cors = { "Access-Control-Allow-Origin": "https://example.test" };
 
 describe("runtime worker boundary", () => {
+  it("serves a matrix when shared cache reads and writes fail", async () => {
+    const environment = env();
+    environment.LIVE_CACHE.get.mockRejectedValue(new Error("cache offline"));
+    environment.LIVE_CACHE.put.mockRejectedValue(new Error("cache offline"));
+    const fetchPort = vi.fn(async () => new Response(JSON.stringify([
+      { originIndex: 0, destinationIndex: 1, duration: "60s", distanceMeters: 80, condition: "ROUTE_EXISTS" },
+    ])));
+    const response = await handleRuntimeRequest("/runtime/route-matrix", request(), environment, {
+      stops: [{ id: "a", latitude: 40, longitude: -73 }, { id: "b", latitude: 40.01, longitude: -73 }], travelMode: "WALK",
+    }, cors, fetchPort);
+    expect(response.status).toBe(200);
+    expect((await response.json()).cells).toEqual([
+      { originIndex: 0, destinationIndex: 1, durationSeconds: 60, distanceMeters: 80 },
+    ]);
+    expect(fetchPort).toHaveBeenCalledTimes(1);
+    expect(environment.LIVE_CACHE.put).toHaveBeenCalledTimes(1);
+  });
+
+  it("never persists a route from an exact current position", async () => {
+    const environment = env();
+    const fetchPort = vi.fn(async () => new Response(JSON.stringify({ routes: [{ duration: "60s", distanceMeters: 80 }] })));
+    const response = await handleRuntimeRequest("/runtime/routes", request(), environment, {
+      origin: { latitude: 40.123456, longitude: -73.123456 }, destination: { latitude: 40, longitude: -73 }, travelMode: "WALK",
+    }, cors, fetchPort);
+    expect(response.status).toBe(200);
+    expect(environment.LIVE_CACHE.get).not.toHaveBeenCalled();
+    expect(environment.LIVE_CACHE.put).not.toHaveBeenCalled();
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+  });
+
   it("returns a sanitized unavailable response when the cost guard throws", async () => {
     const fetchPort = vi.fn();
     const response = await handleRuntimeRequest("/runtime/routes", request(), {
