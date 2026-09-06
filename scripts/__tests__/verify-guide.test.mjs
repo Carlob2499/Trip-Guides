@@ -37,6 +37,8 @@ describe("checkVoice (P6 traveler-facing voice)", () => {
     "In conclusion, Kurokawa is worth visiting.",
     "Let's delve into the neighborhood.",
     "This restaurant is a game changer.",
+    "It's a genuinely local spot, away from the tourist crowds.",
+    "The noodles are truly excellent and worth the wait.",
   ])("blocks unmistakable formulaic travel copy: %s", (body) => {
     const result = checkVoice(guideWith(body));
     expect(result.status).toBe("fail");

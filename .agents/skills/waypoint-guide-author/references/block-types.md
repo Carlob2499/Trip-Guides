@@ -325,9 +325,23 @@ smuggle a new research rule into a prose rewrite.
 the fact cleanly. The following formulaic phrases are hard failures in traveler-facing fields:
 `rich tapestry`, `nestled in the heart of`, `serves as a testament`,
 `hustle and bustle`, `it is important to note`, `in conclusion`, `let's delve`,
-and ordinary travel-copy use of `game changer`. Context-sensitive words such as `landscape`,
+`genuinely`, `truly`, and ordinary travel-copy use of `game changer`. `genuinely`/`truly` are
+banned outright, not narrowed to a phrase, because an audit of 1,148 shipped prose strings
+(2026-09-06) found every instance was a deletable crutch — "genuinely local", "genuinely
+worth a visit" — never a case where the word carried information the sentence lacked without
+it. If a place is worth flagging as authentic or excellent, say what makes it so instead of
+asserting the adjective harder. Context-sensitive words such as `landscape`,
 `vibrant`, `bustling`, `showcase`, `pivotal` or `crucial` are **not** globally banned;
 use them only when they are the plainest accurate word, not as low-information decoration.
+
+**Contractions are a register choice, not a rule.** The same audit found roughly half of
+shipped prose used an em-dash to weld a name to a descriptor ("Name — what it is"), and many
+sentences used a contraction wherever one fit naturally. Neither is banned: a repeated em-dash
+in a dense reference lookup (transit steps, a time-of-day restaurant table) is the right shape
+for scanning one-handed in the field, and a contraction is often the more natural sentence.
+Judge each on whether it serves the reader here, not by a global count — this differs from the
+descriptor slot's specific em-dash-quip ban below, which targets a rhythm, not the punctuation
+mark itself.
 
 **Do not import a second presentation architecture from style research.** Waypoint does not owe
 every entry a generic "Reality Check" section, a Wi-Fi/walkability/safety metrics grid, a
