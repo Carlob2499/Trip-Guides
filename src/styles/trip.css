@@ -37,7 +37,11 @@
    band goes entirely: the rail's identity card is the board's left column. */
 .trip[data-phase="active"] .trip-hero{margin-bottom:.9rem}
 .trip[data-phase="active"] .trip-hero-media{min-height:clamp(140px,36vw,200px)}
-.trip[data-phase="active"] .trip-hero-scrim{display:block;position:absolute;inset:auto 0 0 0;height:70%;background:linear-gradient(to top,rgba(var(--shadow-rgb),.82),rgba(var(--shadow-rgb),.35) 55%,transparent)}
+/* The scrim reaches the TOP of the text block, not 70% of the photo. The kicker row (stamp and
+   dates) sits at the top of that block and was landing on .35 alpha over the brightest part of
+   the picture — a sky or a pale roof — where the dates stopped being readable. Text over
+   photography is only honest if the scrim is measured against the text, not against the frame. */
+.trip[data-phase="active"] .trip-hero-scrim{display:block;position:absolute;inset:auto 0 0 0;height:82%;background:linear-gradient(to top,rgba(var(--shadow-rgb),.88),rgba(var(--shadow-rgb),.62) 45%,rgba(var(--shadow-rgb),.2) 80%,transparent)}
 .trip[data-phase="active"] .trip-hero-text{position:absolute;left:0;right:0;bottom:0;padding:0 max(1.1rem,var(--safe-right)) .8rem max(1.1rem,var(--safe-left));color:var(--dark-ink)}
 .trip[data-phase="active"] .trip-kicker{margin-bottom:.25rem}
 .trip[data-phase="active"] .trip-stamp{color:var(--dark-ink);border-color:var(--dark-ink-2);background:rgba(var(--shadow-rgb),.35)}
@@ -99,7 +103,10 @@
 /* --- ACTIVE: the cockpit inside the frame (board 02) --------------------------------------
    Phone: one column, rail cards then the day's rows then the map. Desktop: three columns —
    a 290px rail of standing answers, the day's rows, today's route and its measured strip. */
-.trip-active{display:flex;flex-direction:column;gap:.9rem}
+/* 2026-09-06: the finished trip wears the same composition as the live one — see
+   TripDestination.astro. Selector groups rather than a second set of rules, so the two
+   phases cannot drift apart. */
+.trip-active,.trip-post{display:flex;flex-direction:column;gap:.9rem}
 
 /* The rail's cards. Panels inside the frame: --card on --rule, wells on --bg2. */
 .tn-card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:.95rem 1.05rem}
@@ -113,7 +120,7 @@
 .tn-prog{margin-top:.85rem}
 .tn-prog-k{margin:0 0 .35rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
 .tn-prog-track{height:6px;border-radius:var(--r-pill);background:var(--bg2);overflow:hidden}
-.tn-prog-fill{display:block;height:100%;width:0;border-radius:var(--r-pill);background:var(--accent)}
+.tn-prog-fill{display:block;height:100%;width:0;border-radius:var(--r-pill);background:var(--brand)}
 
 /* Next stop: the photo, the name, its authored time, and the FIRST Get-there link. */
 .tn-ns-row{display:flex;align-items:center;gap:.7rem;min-width:0}
@@ -245,10 +252,10 @@
   .trip[data-phase="active"] .trip-hero{display:none}
   .trip[data-phase="active"] .tn-ident-title,.trip[data-phase="active"] .tn-ident-dates{display:block}
   .trip[data-phase="active"] .tn-prog{margin-top:.85rem}
-  .trip-active{display:grid;grid-template-columns:290px minmax(0,1.25fr) minmax(0,1fr);gap:1rem 1.3rem;align-items:start}
-  .trip-active>.tn-rail{grid-column:1}
-  .trip-active>.tn-main{grid-column:2}
-  .trip-active>.tn-aside{grid-column:3;position:sticky;top:1rem}
+  .trip-active,.trip-post{display:grid;grid-template-columns:290px minmax(0,1.25fr) minmax(0,1fr);gap:1rem 1.3rem;align-items:start}
+  .trip-active>.tn-rail,.trip-post>.tn-rail{grid-column:1}
+  .trip-active>.tn-main,.trip-post>.tn-main{grid-column:2}
+  .trip-active>.tn-aside,.trip-post>.tn-aside{grid-column:3;position:sticky;top:1rem}
   .tn-map-mount{height:min(460px,calc(100dvh - 16rem))}
   .tn-title{font-size:clamp(2rem,2.4vw,2.5rem)}
   .tn-row{padding:.8rem;gap:.9rem}
