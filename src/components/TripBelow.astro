@@ -33,8 +33,13 @@ interface Props {
   /** Recap atoms (features/trip/model/recap.ts) — Learnings' counts strip reads the same
       numbers the Trip destination's own POST-phase recap card already shows (board 10). */
   recap: import("../features/trip/index").RecapAtoms | null;
+  /** guide-view.ts's own name→photo lookup. Passed as the FUNCTION, not the map behind it: the
+      map is keyed by a normalised form of the name, and re-deriving that key here would be a
+      second copy of a rule that already has an owner (and the first attempt got it wrong — a
+      raw-name lookup matched 0 of 48 rows). */
+  imageFor?: ((name: string) => { thumb: string; src: string; srcset: string; alt: string } | null) | null;
 }
-const { base, slug, storeKey, title, entry, exports, learnings, recap } = Astro.props;
+const { base, slug, storeKey, title, entry, exports, learnings, recap, imageFor = null } = Astro.props;
 const hasEssentials = Boolean((entry && entry.length) || exports.gpx || exports.ics);
 ---
 <div class="trip-below">
@@ -79,6 +84,6 @@ const hasEssentials = Boolean((entry && entry.length) || exports.gpx || exports.
   </div>
 
   <section class="trip-learnings" id="learnings" aria-label="Trip learnings">
-    <Learnings storeKey={storeKey} learnings={learnings} slug={slug} title={title} recap={recap} />
+    <Learnings storeKey={storeKey} learnings={learnings} slug={slug} title={title} recap={recap} imageFor={imageFor} />
   </section>
 </div>
