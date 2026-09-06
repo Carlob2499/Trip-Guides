@@ -1,4 +1,4 @@
-import { readFileSync, mkdtempSync, rmSync } from "node:fs";
+import { readFileSync, mkdtempSync, rmSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -77,8 +77,13 @@ gh() { echo UNEXPECTED_GH; return 77; }
 `;
     const fixture = mkdtempSync(join(tmpdir(), "wp-watch-"));
     const output = join(fixture, "output");
-    const bash = process.platform === "win32" ? "C:/Program Files/Git/bin/bash.exe" : "bash";
+    const bash = process.platform === "win32" ? [
+      process.env.GIT_BASH,
+      join(process.env.ProgramFiles || "C:/Program Files", "Git", "bin", "bash.exe"),
+      process.env.LOCALAPPDATA && join(process.env.LOCALAPPDATA, "Programs", "Git", "bin", "bash.exe"),
+    ].filter(Boolean).find((candidate) => existsSync(candidate)) : "bash";
     try {
+    if (!bash) throw new Error("Watcher tests require Git Bash on Windows");
     const result = spawnSync(bash, ["--noprofile", "--norc"], {
       input: setup + script,
       encoding: "utf8",

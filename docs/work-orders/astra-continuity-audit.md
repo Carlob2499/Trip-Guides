@@ -5,6 +5,13 @@ Branch: `codex/astra-continuity`.
 
 ## Coordination
 
+Claude advanced to `96f2be63` (map opening hours and location). Review finding:
+`src/features/maps/ui/map-live.js` clock() only assigns opts.timeZone when TZ is
+truthy. Missing destTzIana therefore falls back to the reader's zone, despite the
+stated destination-time contract. `dest-clock.test.ts` checks the catch branch but
+does not execute the missing-zone case. Reconcile in Claude's map work by returning
+null for absent TZ and testing that behavior. No concurrent file was edited here.
+
 Remote `cleanup/continuity-september-20260905` was found at `b5d327da` during a
 fresh fetch. It deletes the September watcher and retires reciprocal review
 automation, reconciles V2 authority docs, and adds premerge performance checks.
@@ -49,6 +56,18 @@ overrides; they do not overlap those files. Recheck before integration.
   evidence, not a claim that the application has no security defects.
 
 ## Verification and outstanding work
+
+Independent code review found no runtime correctness/security findings and one
+Windows shell-test portability issue. The fixed Git Bash path is replaced by the
+existing repository discovery pattern (GIT_BASH, ProgramFiles, per-user install).
+All eleven watcher tests pass after that correction. Full gate `34013394312` on
+`ad8b40b6` completed successfully; the portability follow-up needs fresh CI.
+
+Required gate `33995965059` completed successfully on `221845a9`, including
+coverage, build, accessibility/resilience/offline sync, and gallery baselines.
+Follow-up test commit `ad8b40b6` is pushed; its gate is `34013394312` and is pending.
+The deployed Worker /health reports all configured guards, including runtime cost
+guard and providers. Health is configuration evidence, not a provider success test.
 
 Additional runtime tests confirm successful matrix responses despite failed cache
 reads/writes and no shared-cache access for exact-position routes, whose responses
