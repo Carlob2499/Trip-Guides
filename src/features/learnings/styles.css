@@ -344,7 +344,10 @@
   border: 1px solid var(--warn);
   border-radius: 999px;
   color: var(--warn);
-  font-size: var(--text-nano);
+  /* --text-micro (12px), not --text-nano (9.6px, flagged by the /impeccable critique's
+     detector): this badge is what decides whether a reader opens the day. That is a
+     functional label, not fine print, whatever its visual weight. */
+  font-size: var(--text-micro);
   font-weight: 700;
   letter-spacing: 0.02em;
   white-space: nowrap;

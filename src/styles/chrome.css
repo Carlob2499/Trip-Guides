@@ -96,7 +96,12 @@
 .botbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;align-items:stretch;gap:.15rem;padding:.3rem max(.4rem,var(--safe-right)) max(.3rem,var(--safe-bottom)) max(.4rem,var(--safe-left));background:var(--card);border-top:var(--rw) solid var(--line);transition:transform var(--dur-routine) var(--ease-standard)}
 .botslot{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;padding:.3rem .1rem;background:transparent;border:0;border-radius:var(--r-inset);color:var(--muted);font-family:var(--font-data);cursor:pointer;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .bslot-ico{width:22px;height:22px;flex:none;transition:transform var(--dur-immediate) var(--ease-standard)}
-.bslot-txt{max-width:100%;font-size:var(--text-nano);font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 2026-09-06 — the /impeccable critique's detector flagged these five words specifically:
+   Trip, Itinerary, Map, Guide, Split, at 9.6px. --text-nano's own contract (base.css) is "fine
+   print BELOW the label scale: photo credits, tiny badges, bare numerals" — primary navigation
+   for the entire product is none of those. Same fix R3 already made for --text-micro's 44
+   consumers, applied to the one place that regressed back under the floor. */
+.bslot-txt{max-width:100%;font-size:var(--text-micro);font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .botslot[aria-current="true"],.botslot[aria-current="page"]{color:var(--selected-ink)}
 /* The current destination is marked by ink AND a mark — never colour alone (§30). */
 .botslot[aria-current="true"]::before,.botslot[aria-current="page"]::before{content:"";position:absolute;top:0;left:50%;width:22px;height:2px;transform:translateX(-50%);background:var(--selected)}
