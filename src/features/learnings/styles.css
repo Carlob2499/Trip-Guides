@@ -257,43 +257,101 @@
   text-transform: uppercase;
   font-weight: 700;
 }
+/* 2026-09-06 — every row is name-then-reason, stacked, not a paragraph the eye has to parse
+   for where the fact ends and the explanation starts. Same shape whether or not the stop has
+   a photo; the photo variant only adds the thumbnail beside it. */
 .learn-skips { margin: 0; padding: 0; list-style: none; }
 .learn-skips li {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  padding: 7px 0;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
   border-top: 1px solid var(--rule);
 }
-.learn-skip-stop { font-weight: 600; }
-.learn-skip-why { color: var(--muted); }
-/* A skipped stop with a photograph (Learnings.astro). The row keeps its shape; the picture is
-   what turns a column of names into a list of places you did not get to. A stop without one
-   stays a plain row rather than reserving a grey rectangle for a photo that does not exist. */
-.learn-skips li.learn-skip--photo { flex-wrap: nowrap; align-items: center; gap: 12px; }
+/* Solid fill, not a tint: --on-critical is the ONLY ink measured against a --critical FILL
+   (6.54:1 in either theme, base.css) — a color-mix tint measured 3.21:1 and axe was right to
+   flag it, even though the glyph itself is aria-hidden. */
+.learn-skip-x {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border-radius: 999px;
+  background: var(--critical);
+  color: var(--on-critical);
+  font-size: var(--text-nano);
+  font-weight: 700;
+}
+.learn-skip-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.learn-skip-stop { font-weight: 600; overflow-wrap: anywhere; }
+.learn-skip-why { color: var(--muted); font-size: var(--text-small); }
+/* A skipped stop with a photograph (Learnings.astro): the picture is what turns a column of
+   names into a list of places you did not get to. A stop without one keeps the plain ✗ badge
+   rather than reserving a grey rectangle for a photo that does not exist. */
 .learn-skip-thumb { flex: none; width: 72px; height: 54px; overflow: hidden; border-radius: var(--r-inset); background: var(--sunken); }
 .learn-skip-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: var(--photo); }
-.learn-skip--photo .learn-skip-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.learn-skip--photo .learn-skip-x { display: none; }
 
 /* Curated post-mortem (P3) — hidden until the guide data carries `learnings`. */
 .learn-curated:empty { display: none; }
 .learn-curated { margin-top: 18px; }
+/* 2026-09-06 — a <details>, not a paragraph in an unbroken scroll of eight days. The summary
+   is the only thing every day shows before the reader chooses to open it, so it carries the
+   one number worth judging a day by (how many stops didn't happen) rather than a bare date. */
 .learn-day {
-  padding: 14px 16px;
   margin-top: 12px;
   border: 1px solid var(--rule);
-  border-radius:var(--r-card);
+  border-radius: var(--r-card);
   background: var(--card);
+  overflow: clip;
 }
+.learn-day-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.learn-day-summary::-webkit-details-marker { display: none; }
+.learn-day-summary::before {
+  content: "▶";
+  flex: none;
+  font-size: var(--text-nano);
+  color: var(--muted);
+  transition: transform var(--dur-routine);
+}
+.learn-day[open] > .learn-day-summary::before { transform: rotate(90deg); }
+.learn-day-summary:hover { background: var(--bg2); }
+.learn-day-summary:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
 .learn-day-date {
-  margin: 0 0 4px;
   color: var(--accent-ink);
   font-size:var(--text-caption);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-weight: 700;
 }
+/* Border + ink only, no tinted fill — --warn is only guaranteed >=4.5:1 as TEXT on the flat
+   page surfaces (design-system.md's pigment contract), and a color-mix background broke that:
+   measured 2.88:1. Same shape .tools-flag already uses for the same reason. */
+.learn-day-badge {
+  margin-left: auto;
+  padding: 1px 9px;
+  border: 1px solid var(--warn);
+  border-radius: 999px;
+  color: var(--warn);
+  font-size: var(--text-nano);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.learn-day-body { padding: 0 16px 14px; }
 .learn-actually { margin: 0 0 8px; }
+@media (prefers-reduced-motion: reduce) { .learn-day-summary::before { transition: none; } }
 .learn-changed, .learn-key { margin: 14px 0 0; padding-left: 18px; }
 .learn-changed li, .learn-key li { margin: 3px 0; }
 .learn-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 20px; }

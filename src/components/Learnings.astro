@@ -62,31 +62,46 @@ const recapUrl = `${base}/recap/${slug}.png`;
       non-empty #learnCurated as its own unlock. */}
   <div class="learn-curated" id="learnCurated">
     {learnings?.summary && <p class="learn-actually"><Fragment set:html={learnings.summary} /></p>}
-    {(learnings?.days ?? []).map((d: any) => (
-      <div class="learn-day">
-        <p class="learn-day-date">{d.date}</p>
-        {d.actually && <p class="learn-actually"><Fragment set:html={d.actually} /></p>}
-        {(d.skipped ?? []).length > 0 && (
-          <ul class="learn-skips">
-            {d.skipped.map((s: any) => (
-              <li class={photoOf(s.stop) ? "learn-skip--photo" : undefined}>
-                {photoOf(s.stop) && (
-                  <span class="learn-skip-thumb" aria-hidden="true">
-                    <img src={photoOf(s.stop)!.src} srcset={photoOf(s.stop)!.srcset} sizes="72px" alt=""
-                         loading="lazy" decoding="async"
-                         onerror="this.closest('li').classList.remove('learn-skip--photo');this.closest('.learn-skip-thumb').remove()" />
-                  </span>
-                )}
-                <span class="learn-skip-text">
-                  <span class="learn-skip-stop">✗ {s.stop}</span>
-                  {s.reason && <span class="learn-skip-why">{s.reason}</span>}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    ))}
+    {/* 2026-09-06 — each day is a <details>, not a paragraph in an unbroken scroll. Eight days
+        of prose-plus-skip-list stacked flat is what the review called "blobs of text": nothing
+        told a reader which day was worth opening. The summary line now carries the one number
+        that matters (how many stops didn't happen) so a day can be judged closed. The first
+        day starts open — an entirely collapsed panel looks empty, not simple — the rest don't;
+        native <details>, no JS, keyboard and screen-reader behaviour for free. */}
+    {(learnings?.days ?? []).map((d: any, di: number) => {
+      const skipped = d.skipped ?? [];
+      return (
+        <details class="learn-day" open={di === 0 || undefined}>
+          <summary class="learn-day-summary">
+            <span class="learn-day-date">{d.date}</span>
+            {skipped.length > 0 && <span class="learn-day-badge">{skipped.length} skipped</span>}
+          </summary>
+          <div class="learn-day-body">
+            {d.actually && <p class="learn-actually"><Fragment set:html={d.actually} /></p>}
+            {skipped.length > 0 && (
+              <ul class="learn-skips">
+                {skipped.map((s: any) => (
+                  <li class={photoOf(s.stop) ? "learn-skip--photo" : undefined}>
+                    {photoOf(s.stop) && (
+                      <span class="learn-skip-thumb" aria-hidden="true">
+                        <img src={photoOf(s.stop)!.src} srcset={photoOf(s.stop)!.srcset} sizes="72px" alt=""
+                             loading="lazy" decoding="async"
+                             onerror="this.closest('li').classList.remove('learn-skip--photo');this.closest('.learn-skip-thumb').remove()" />
+                      </span>
+                    )}
+                    <span class="learn-skip-x" aria-hidden="true">✗</span>
+                    <span class="learn-skip-text">
+                      <span class="learn-skip-stop">{s.stop}</span>
+                      {s.reason && <span class="learn-skip-why">{s.reason}</span>}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </details>
+      );
+    })}
     {skipTally.length > 0 && (
       <>
         <p class="learn-sub">What didn't survive contact</p>
