@@ -130,7 +130,13 @@
 .cp-starters { display: flex; flex-wrap: wrap; gap: var(--sp-gap-40); margin-bottom: .7rem; }
 .cp-starter {
   font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
-  min-height: 36px; padding: .4rem .8rem; border-radius: 999px;
+  /* 2026-09-06 — was 36px, the only control in this sheet under the floor its own siblings
+     hold at (lines 48, 215, 345 are all 44). It slipped because tests/visual/a11y.spec.ts only
+     sweeps the korea guide, the hub and progress, and this page is in none of them; the sweep's
+     own rule puts a starter squarely on the control side of the line ("a control the reader is
+     meant to AIM at clears 44px"). Height only — padding-block carries it, so the chips keep
+     their width and the row wraps exactly as before. */
+  min-height: 44px; padding: .65rem .8rem; border-radius: 999px;
   background: var(--card); color: var(--ink); border: 1px solid var(--rule2); cursor: pointer;
   transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease, color var(--dur-tap) ease;
 }

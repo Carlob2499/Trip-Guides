@@ -1106,6 +1106,10 @@ const TARGET_PAGES = [
      in this list closes it again; add the rebuilt japan here when it ships. */
   ["hub", "/Trip-Guides/"],
   ["progress", "/Trip-Guides/progress/"],
+  /* 2026-09-06: added after `.cp-starter` shipped at 36px and this sweep had nothing to say
+     about it. The change-request page is the one surface a reader reaches when something is
+     already wrong, it is dense with chips and pills, and it was measured by nothing. */
+  ["change request", "/Trip-Guides/change/"],
 ] as const;
 
 for (const [pageName, path] of TARGET_PAGES) {
