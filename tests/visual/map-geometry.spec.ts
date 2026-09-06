@@ -164,3 +164,30 @@ test.describe("⌁ the Map surface holds together on a phone", () => {
     expect(sheet.h, "the resting sheet is eating the map").toBeLessThanOrEqual(map.h / 3);
   });
 });
+
+/* The Itinerary's workbench map is the same promise on a different surface: one map filling its
+   column, not a small one framed in dead ground. It shipped with .9rem of padding and its own
+   border for months, which is exactly the kind of thing a screenshot review looks straight past. */
+test.describe("⌁ the Itinerary's map fills its pane", () => {
+  test("no dead ground around the workbench map", async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(KOREA, { waitUntil: "domcontentloaded" });
+    const nav = page.locator('[data-dest-nav][data-dest="itinerary"]');
+    const n = await nav.count();
+    for (let i = 0; i < n; i += 1) if (await nav.nth(i).isVisible()) { await nav.nth(i).click(); break; }
+    await expect(page.locator("#dest-itinerary")).toBeVisible();
+    await page.waitForTimeout(600);
+
+    const pane = await boxOf(page, ".itin-mappane");
+    const map = await boxOf(page, ".itin-map--bench");
+    for (const [edge, delta] of [
+      ["left", map.x - pane.x],
+      ["top", map.y - pane.y],
+      ["right", (pane.x + pane.w) - (map.x + map.w)],
+      ["bottom", (pane.y + pane.h) - (map.y + map.h)],
+    ] as [string, number][]) {
+      expect(Math.abs(delta), `${delta.toFixed(1)}px of dead ground on the ${edge}`).toBeLessThanOrEqual(SLACK);
+    }
+  });
+});

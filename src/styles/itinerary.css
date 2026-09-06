@@ -256,10 +256,25 @@ body.chrome-yield .day-rail{transform:translateY(calc(60px + var(--safe-bottom) 
   .itin-bench--dragging{user-select:none;cursor:col-resize}
   /* The map pane is a framed working surface: it floats beside the timeline rather than
      butting a bare iframe against a bare column. */
-  .itin-mappane{position:relative;display:flex;flex-direction:column;overflow:hidden;height:100%;margin:0;padding:.9rem 1rem 1rem}
-  .itin-mappane-head{padding:0 .2rem .5rem .6rem}
+  /* 2026-09-06 — the workbench map fills its pane. It used to sit inside .9rem/1rem of padding
+     with its own border and radius, so the right half of the Itinerary was a small map framed
+     in a band of dead navy on all four sides. Board 03 draws one map filling the column, with
+     the day's label over it. Same rule as the Map surface, and locked the same way:
+     tests/visual/map-geometry.spec.ts measures it. */
+  .itin-mappane{position:relative;display:flex;flex-direction:column;overflow:hidden;height:100%;margin:0;padding:0}
+  /* The head floats ON the map rather than taking a strip above it — there is no strip any
+     more. Same gutter idea the Map surface uses, so the two read as the same product. */
+  .itin-mappane-head{position:absolute;inset:auto auto auto 0;top:0;right:0;z-index:2;padding:.7rem .9rem 1.6rem;
+    background:linear-gradient(to bottom,rgba(var(--shadow-rgb),.86) 0%,rgba(var(--shadow-rgb),.7) 55%,transparent 100%);
+    pointer-events:none}
+  .itin-mappane-head>*{pointer-events:auto}
+  /* The head now stands on the MAP, not on the page, so its ink is the fixed dark register —
+     the page's own --accent-ink and --muted are dark-on-light and vanished into the tiles the
+     moment the strip above the map became an overlay on it. */
+  .itin-mappane-head .itin-mappane-title{color:var(--dark-ink)}
+  .itin-mappane-head .itin-mappane-note{color:var(--dark-ink-3)}
   .itin-pane-toggle{display:inline-flex}
-  .itin-map--bench{flex:1;height:auto;min-height:0;margin:0}
+  .itin-map--bench{flex:1;height:auto;min-height:0;margin:0;border:0;border-radius:0}
   .itin-bench--map-collapsed{grid-template-columns:minmax(0,1fr) 0 3.2rem}
   .itin-bench--map-collapsed .itin-peek{display:none}
   .itin-bench--map-collapsed .itin-divider{display:none}
