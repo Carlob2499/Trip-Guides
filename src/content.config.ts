@@ -234,6 +234,31 @@ const moreDetail = { moreLabel: z.string().optional(), fold: z.literal(false).op
 //           what lets a top-2 theme with real weight earn its own anchor tab.
 // Weight is deliberately NOT a field — it is DERIVED (item counts + prose length) so it
 // can never drift from the content it describes.
+// The one photo schema, shared by sights[].img, venues[].img (schema-loose but consumer-real —
+// see guide-view.ts's placeImages, which already keys off ANY sights/venues item's img) and
+// the section-level `image` facet below. A Commons `file` is machine-verifiable
+// (scripts/audit/check-photos.mjs queries the MediaWiki API for it); a direct royalty-free CDN
+// `src` is not, so `credit` + `license` become REQUIRED alongside it — same trade `cover.src`
+// makes. One definition, so a rule tightened here cannot drift between the three call sites.
+const photoImage = z.object({
+  file: z.string().optional(),
+  src: z.string().regex(/^https:\/\//, "img.src must be an https URL").optional(),
+  alt: z.string().optional(),
+  credit: z.string().optional(),
+  creditUrl: z.string().regex(/^https:\/\//, "img.creditUrl must be an https URL").optional(),
+  license: z.string().optional(),
+}).superRefine((im, ctx) => {
+  if (!im.file && !im.src) {
+    ctx.addIssue({ code: "custom", message: "img needs `file` (Commons) or `src` (royalty-free CDN) — an img object with neither renders nothing." });
+  }
+  if (im.file && im.src) {
+    ctx.addIssue({ code: "custom", path: ["src"], message: "img.file and img.src are two sources for one slot — pick one (Commons `file` wins ties in consumers, so a stray `src` would silently do nothing)." });
+  }
+  if (im.src && (!im.credit || !im.license)) {
+    ctx.addIssue({ code: "custom", path: ["src"], message: "a non-Commons img.src has no machine-verifiable licensing — `credit` and `license` are required alongside it (e.g. credit: \"Jane Doe · Pexels\", license: \"Pexels License\")." });
+  }
+});
+
 const facets = {
   theme: z.string().optional(),
   phase: z.enum(["before", "arrival", "daily", "leaving"]).optional(),
@@ -259,6 +284,16 @@ const facets = {
       events: z.array(z.string()).optional(),  // event names as authored (an MSI final, GO Fest)
     }).optional(),
   }).optional(),
+  /* 2026-09-06 — a section-level COVER photo, for chapters made of panel/list/budget/prose
+     sections that structurally have no per-item image slot (Plan, Essentials, Transit,
+     Pokémon GO — a `list` item is a bare string, a `panel`/`budget` body is prose). The
+     Guide's chapter tile (GuideDestination.astro's `imgs` derivation, guide-view.ts) already
+     drew ONE photo per chapter from its first `sights`/`venues` item that carried one; a
+     chapter with neither now falls back to the FIRST section in it that sets `image`. Same
+     schema, same provenance discipline as sights[].img — a chapter cover is not exempt from
+     "guessed filenames are forbidden" just because it illustrates a topic rather than a place.
+     Optional and additive: a section that omits it renders exactly as before. */
+  image: photoImage.optional(),
 };
 
 /* One stop on a day — shared by a day's own stops and by each branch's (D6-46). Coords must
@@ -348,28 +383,9 @@ const section = z.discriminatedUnion("type", [
   })) }),
   z.strictObject({ type: z.literal("sights"), group: z.string(), ...facets, title: z.string().optional(), items: z.array(z.object({
     name: z.string(), kicker: z.string().optional(), body: z.string().optional(),
-    // A sight photo is either a Commons `file` (existence is machine-verifiable via the
-    // MediaWiki API — scripts/audit/check-photos.mjs) or a direct royalty-free CDN `src`
-    // carrying an optional `{w}` width token. Non-Commons licensing is NOT machine-verifiable,
-    // so `credit` + `license` become REQUIRED with `src` — the same trade `cover.src` makes.
-    img: z.object({
-      file: z.string().optional(),
-      src: z.string().regex(/^https:\/\//, "img.src must be an https URL").optional(),
-      alt: z.string().optional(),
-      credit: z.string().optional(),
-      creditUrl: z.string().regex(/^https:\/\//, "img.creditUrl must be an https URL").optional(),
-      license: z.string().optional(),
-    }).superRefine((im, ctx) => {
-      if (!im.file && !im.src) {
-        ctx.addIssue({ code: "custom", message: "img needs `file` (Commons) or `src` (royalty-free CDN) — an img object with neither renders nothing." });
-      }
-      if (im.file && im.src) {
-        ctx.addIssue({ code: "custom", path: ["src"], message: "img.file and img.src are two sources for one slot — pick one (Commons `file` wins ties in consumers, so a stray `src` would silently do nothing)." });
-      }
-      if (im.src && (!im.credit || !im.license)) {
-        ctx.addIssue({ code: "custom", path: ["src"], message: "a non-Commons img.src has no machine-verifiable licensing — `credit` and `license` are required alongside it (e.g. credit: \"Jane Doe · Pexels\", license: \"Pexels License\")." });
-      }
-    }).optional(),
+    // See `photoImage` above — the one photo schema shared with venues[].img and the
+    // section-level `image` facet.
+    img: photoImage.optional(),
     map: coord.optional(),
     ...visitable,
     ...provenance,
@@ -388,6 +404,12 @@ const section = z.discriminatedUnion("type", [
     price: z.string().optional(),
     crowd_tip: z.string().optional(),
     why: z.string().optional(),
+    // 2026-09-06: made EXPLICIT and validated, not new. guide-view.ts's placeImages lookup
+    // (the picture behind a Trip/Itinerary/Map stop) already read `it.img` off a venue item —
+    // the field only had no zod declaration, so `z.object` (not strict) let it through
+    // unvalidated and the audit gate (extractPhotos/extractPhotoUrls) never checked whether the
+    // file actually existed. Same schema as sights[].img.
+    img: photoImage.optional(),
     map: coord.optional(),
     ...visitable,
     ...provenance,

@@ -95,7 +95,11 @@
           "lat": 37.571224,
           "lng": 126.98151670000001
         },
-        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I"
+        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I",
+        "img": {
+          "file": "LOL Park Entrance.jpg",
+          "alt": "LoL Park entrance, Jongno, Seoul"
+        }
       }
     ]
   }

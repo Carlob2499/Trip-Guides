@@ -98,7 +98,11 @@
         "verified_on": "2026-08-03",
         "shelf_life": "venue",
         "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=82392",
-        "place_id": "ChIJ7SzjdmBJZTURYxAh0sZRiU8"
+        "place_id": "ChIJ7SzjdmBJZTURYxAh0sZRiU8",
+        "img": {
+          "file": "Daejeon Expo Science Park.jpg",
+          "alt": "Daejeon Expo district, near Ppuri Park"
+        }
       },
       {
         "name": "Daejeon O-World",

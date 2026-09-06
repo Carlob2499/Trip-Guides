@@ -56,7 +56,11 @@
           "lat": 55.6837848,
           "lng": 12.568928
         },
-        "place_id": "ChIJGzGFEgVTUkYRO2LpXOPtdHM"
+        "place_id": "ChIJGzGFEgVTUkYRO2LpXOPtdHM",
+        "img": {
+          "file": "Torvehallerne 2011-09-09.jpg",
+          "alt": "Torvehallerne food market, Copenhagen"
+        }
       },
       {
         "name": "Selma",

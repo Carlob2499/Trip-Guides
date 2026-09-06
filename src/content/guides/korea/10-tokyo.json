@@ -91,7 +91,11 @@
           "lat": 35.7147651,
           "lng": 139.7966553
         },
-        "place_id": "ChIJ8T1GpMGOGGARDYGSgpooDWw"
+        "place_id": "ChIJ8T1GpMGOGGARDYGSgpooDWw",
+        "img": {
+          "file": "Senso-ji, Asakusa, Tokyo.jpg",
+          "alt": "Senso-ji temple, Asakusa, Tokyo"
+        }
       },
       {
         "name": "Meiji Jingu",

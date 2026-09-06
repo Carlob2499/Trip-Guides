@@ -494,7 +494,11 @@
         "label": "Also running",
         "body": "Shadow Palkia in Shadow Raids Jul 1–Aug 4 (not urgent). Ultra Unlock starts Jul 13 — check pokemongo.com after."
       }
-    ]
+    ],
+    "image": {
+      "file": "Yeouido Han River Park.jpg",
+      "alt": "Yeouido Han River Park, a GO Fest Global venue"
+    }
   },
   {
     "type": "panel",
