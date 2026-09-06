@@ -161,8 +161,6 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-panel dt{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-top:.6rem}
 .itk-panel dd{margin:.1rem 0 0;font-weight:600;overflow-wrap:anywhere}
 .itk-prev-empty{margin:.5rem 0 0;color:var(--muted);font-size:var(--text-small);line-height:1.5}
-.itk-promises{margin:.5rem 0 0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.45rem;font-size:var(--text-small);line-height:1.5;color:var(--muted)}
-.itk-promises b{color:var(--ink)}
 .itk-rail,.itk-prev{display:none}
 .itk-rail-step{display:flex;align-items:center;gap:.6rem;width:100%;min-height:44px;padding:.3rem .5rem;border:0;border-radius:var(--r-inset);background:transparent;color:var(--ink);font:inherit;font-size:var(--text-control);text-align:left;cursor:pointer}
 .itk-rail-step:hover{background:var(--bg2)}
@@ -174,7 +172,8 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
   .stage .intake{max-width:none;padding-bottom:1.6rem}
   .itk-build{display:grid;grid-template-columns:13rem minmax(0,1fr) 15rem;gap:1.2rem;align-items:start}
   .itk-rail,.itk-prev{display:block;position:sticky;top:1.2rem}
-  .itk-below-row{grid-template-columns:1fr 1fr}
+  /* One column now — the promises panel that shared this row is deleted (new.astro). */
+  .itk-below-row{grid-template-columns:minmax(0,1fr);max-width:var(--read)}
 }
 
 /* ── The question deck (design-system.md §23) ─────────────────────────────────

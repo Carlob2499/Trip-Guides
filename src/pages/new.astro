@@ -271,24 +271,22 @@ const PRIORITY_FIELDS = FIELDS.filter((f: { special?: string }) => f.special ===
       </main>
     </div>
 
-    {/* The cream band under the frame: the running answer list the deck already keeps, and the
-        promises this product can actually make (board 07's "Build with confidence"). The board's
-        "Guide recommendations" cards are not drawn — nothing here can recommend a guide. */}
+    {/* The cream band under the frame: the running answer list the deck already keeps.
+
+        2026-09-06 — the "Build with confidence" panel that stood beside it is deleted. Four
+        bullets with bolded lead-ins, in parallel construction, telling the reader how rigorous
+        the product is while they are trying to fill in a form: marketing on a working surface,
+        and the exact register the reviewer called slop. Everything it claimed is true and none
+        of it was actionable here — the fact-checking is visible in the finished guide, the
+        blanks are visible as blanks, and "you can watch it run" is what the progress page is
+        for. The board draws that panel; the board is a poster. Omission recorded in
+        design-system.md. */}
     <div class="below">
-      <section class="dest-below itk-below-row" aria-label="Your answers, and what Waypoint promises">
+      <section class="dest-below itk-below-row" aria-label="Your answers so far">
         <div class="itk-panel">
           <p class="itk-eyebrow">Your answers</p>
-          <p class="itk-prev-empty" id="itkAnswersEmpty">Nothing yet. Each answer joins this list, and you can go back and change any of them.</p>
+          <p class="itk-prev-empty" id="itkAnswersEmpty">Nothing answered yet.</p>
           <div id="itkAnswers"></div>
-        </div>
-        <div class="itk-panel">
-          <p class="itk-eyebrow">Build with confidence</p>
-          <ul class="itk-promises">
-            <li><b>Every perishable fact is checked</b> against a primary source, and dated.</li>
-            <li><b>A blank stays blank.</b> Skipped questions become stated gaps, never invented values.</li>
-            <li><b>You can watch it run.</b> The progress page shows each stage as it happens.</li>
-            <li><b>Nothing is promised for time or cost</b> — neither is knowable before the research runs.</li>
-          </ul>
         </div>
       </section>
     </div>

@@ -716,8 +716,16 @@ wear the frame — `.stage.spatial` with `UtilityBar` as its strip, the same she
 surface uses. Inside the frame at ≥900px the builder is the board's three columns: the six
 intake sections as a **step rail** on the left, the question card in the centre, **Your guide
 preview** on the right. Under the frame, on cream: **Your answers** (the deck's own history
-stack, re-homed there) and **Build with confidence**. A phone gets the card alone — one question
-already fills that screen, and a rail beside it would be a second thing to read.
+stack, re-homed there). A phone gets the card alone — one question already fills that screen,
+and a rail beside it would be a second thing to read.
+
+**2026-09-06 — "Build with confidence" is deleted, not deferred.** It was four bullets with
+bolded lead-ins, in parallel construction, telling a reader how rigorous the product is while
+they were trying to fill in a form. Every claim in it was true and none of it was actionable on
+that surface: the fact-checking is visible in the finished guide, a blank is visible as a blank,
+and "you can watch it run" is what `/progress/` is for. The board draws that panel because a
+board is a poster and a poster sells. This is a working surface. If the promises need saying
+anywhere they belong on a marketing page, not between a question and its answer.
 
 Both new panels are **projections, not second sources**: the rail copies the very mark
 `intake-checklist.js` paints on each section (`.itk-mark`), and the preview reads the same
@@ -726,8 +734,7 @@ So neither can disagree with the checklist about what is done, and neither predi
 Not drawn: the board's "Guide recommendations" cards (nothing here can recommend a guide), the
 BETA tag, the avatar, the notification bells, the preview's photo and "What's included" list
 (the guide does not exist yet), and any duration or cost promise — U02: neither is knowable
-before the research runs, which is why "Build with confidence" promises verification, stated
-gaps and a watchable run instead. `/progress/` keeps its route-map skeleton, its stage stations
+before the research runs. `/progress/` keeps its route-map skeleton, its stage stations
 and its honest-empty states exactly as they were; only the register changed.
 
 ---
