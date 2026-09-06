@@ -39,8 +39,8 @@
 .bsheet{display:none}
 .bsp-scroll .bsheet,body[data-bsheet-open] .bsheet{
   display:block;
-  --bs-ink:#0f141a;--bs-mute:#5c6357;--bs-rule:#a9b39b;--bs-rule2:#8a9480;
-  --bs-tint:#f2f4ec;--bs-accent:#9c4421;--bs-green:#2f5c3c;
+  --bs-ink:#171310;--bs-mute:#5b5348;--bs-rule:#cdc3b4;--bs-rule2:#b3a795;
+  --bs-tint:#e5ded2;--bs-accent:var(--brand-ink-light);--bs-green:#2f5c3c;
   color:var(--bs-ink);font-family:var(--font-data);font-size:9.5pt;line-height:1.5;
   background:#fff
 }
