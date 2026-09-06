@@ -19,7 +19,18 @@
 .gd-card:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .gd-card-media{display:block;width:96px;height:72px;overflow:hidden;background:var(--sunken)}
 .gd-card-media img{width:100%;height:100%;object-fit:cover;display:block;opacity:var(--photo)}
-.gd-card-glyph{display:flex;align-items:center;justify-content:center;width:96px;height:72px;background:var(--sunken);font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);color:var(--accent-ink)}
+/* The numbered plate a chapter wears when it has no photograph of its own — Plan, Essentials,
+   Transit and the other topics the guide writes about rather than photographs. It is NOT a
+   placeholder waiting for an image: sourcing a picture per abstract topic is content work with
+   its own provenance rules, and a decorative stock photo would imply the guide had one. So the
+   plate is drawn as a deliberate typographic tile — the numeral at display size on the sunken
+   ground with a brand hairline — and sits at exactly the photo tiles' size, so a mixed band
+   reads as one band rather than as cards with holes in them. */
+.gd-card-glyph{display:flex;align-items:center;justify-content:center;width:96px;height:72px;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--brand) 9%,var(--sunken)),var(--sunken) 68%);
+  border-bottom:2px solid color-mix(in srgb,var(--brand) 55%,transparent);
+  font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);color:var(--brand-ink);
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .gd-card--quiet .gd-card-glyph{color:var(--muted)}
 .gd-card--photo .gd-card-glyph{display:none}
 .gd-card:not(.gd-card--photo) .gd-card-media{display:none}
@@ -37,6 +48,8 @@
   .gd-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
   .gd-card{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:start;gap:0;padding:0 0 .85rem;min-height:0}
   .gd-card-media,.gd-card-glyph{grid-column:1/-1;width:100%;height:150px}
+  /* At tile size the numeral is the picture, so it is set at picture scale. */
+  .gd-card-glyph{font-size:clamp(2.6rem,5vw,3.6rem)}
   .gd-card--photo .gd-card-glyph{display:none}
   .gd-card-text{padding:.75rem 0 0 .95rem}
   .gd-card-arrow{padding:.75rem .95rem 0 0;align-self:start}

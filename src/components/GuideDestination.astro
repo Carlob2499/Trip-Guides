@@ -103,7 +103,11 @@ const countOf = (ch: Chapter) => ch.entries.length;
           </svg>
         </button>
       )}
-    </div>
+      {/* Board 05 puts the identity ON the photograph, not on a card pulled up over its foot.
+          The plate therefore lives INSIDE the frame — the card treatment left a white box
+          overlapping one corner of the picture with dead ground beside it, which is the first
+          thing anyone notices about this screen. .mast-frame::after is the scrim that makes it
+          legible over any image; every pair inside is measured against it, not against paper. */}
     <div class="mast-plate-row">
       <div class="mast-inner">
         {plate.eyebrow && <p class="eyebrow mast-eyebrow">{plate.eyebrow}</p>}
@@ -121,6 +125,7 @@ const countOf = (ch: Chapter) => ch.entries.length;
           <p class="gd-hero-wx wxt-chip" data-wx-today data-wx-chip hidden></p>
         </div>
       </div>
+    </div>
     </div>
     {(plate.cities || plate.checked || plate.facts > 0 || plate.sources > 0 || plate.currency) && (
       <div class="mast-plateline">

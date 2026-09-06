@@ -15,7 +15,19 @@
 .mast-hero{padding:0;border-bottom:0;text-align:left;position:relative}
 
 /* The cover — full content width, tall. min-height carries the proportion (§10). */
-.mast-frame{position:relative;min-height:clamp(300px,42vh,460px);background:var(--sunken);overflow:hidden;isolation:isolate}
+.mast-frame{position:relative;min-height:clamp(300px,42vh,460px);background:var(--sunken);overflow:hidden;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end}
+/* The scrim the identity stands on. Reaches the top of the plate rather than a fixed share of
+   the picture, and holds --dark-ink over any photograph — a bright sky behind a title is the
+   case that breaks every naive gradient. Same reasoning as the Trip hero's own scrim. */
+/* Two layers, and the split is the whole point. The frame's gradient only SOFTENS the join
+   into the picture; it is not what makes the text readable, because where a line of type lands
+   inside a fixed-height gradient depends on how long the dek is. Measured before this split:
+   the eyebrow sat at 51% of the frame height, in the weak end of a single gradient, and worst
+   case over a bright sky it was 1.15:1 — illegible. The plate carries its OWN ground instead,
+   so the scrim is tied to the text rather than to the frame, and the worst case is the same
+   however long the copy runs. */
+.mast-frame::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(to top,rgba(var(--shadow-rgb),.55) 0%,rgba(var(--shadow-rgb),.28) 42%,transparent 72%)}
 .mast-mat{position:absolute;inset:0;overflow:hidden}
 
 /* Photo layer */
@@ -51,11 +63,19 @@
 .mast-credit:hover{color:#fff;background:rgba(var(--shadow-rgb),.62)}
 
 /* The plate — the identity block on its own working surface. Below the cover on a phone. */
-.mast-plate-row{position:relative;z-index:1;margin:0;padding:0 max(1.1rem,var(--safe-right)) 0 max(1.1rem,var(--safe-left))}
+/* The plate now sits INSIDE the frame, on the scrim (GuideDestination.astro). It is no longer
+   a card: the card was a white box overlapping one corner of the picture, with dead ground
+   beside it and the photo's bottom edge cut in half. */
+.mast-plate-row{position:relative;z-index:1;margin:0;padding:2.4rem max(1.1rem,var(--safe-right)) 1.1rem max(1.1rem,var(--safe-left));
+  /* Worst case is this ground composited over a WHITE photograph: at .82 the eyebrow — the
+     palest ink here — measures 5.6:1, and the title 8:1. Every pair holds without knowing
+     anything about the picture underneath. */
+  background:linear-gradient(to top,rgba(var(--shadow-rgb),.92) 0%,rgba(var(--shadow-rgb),.88) 60%,rgba(var(--shadow-rgb),.82) 100%)}
 .mast-inner{display:grid;gap:.35rem;padding:1rem 0 .2rem}
 .mast-eyebrow{margin:0}
-.mast-title{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,9vw,4.6rem);line-height:.98;letter-spacing:-.014em;margin:.1rem 0 0;color:var(--ink)}
-.mast-dek{margin:.5rem 0 0;max-width:58ch}
+.mast-title{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,9vw,4.6rem);line-height:.98;letter-spacing:-.014em;margin:.1rem 0 0;color:var(--dark-ink)}
+.mast-dek{margin:.5rem 0 0;max-width:58ch;color:var(--dark-ink-2)}
+.mast-eyebrow{color:var(--dark-ink-3)}
 /* Guide-controlled text must not raise a flex item's min-content width. */
 .mast-eyebrow,.mast-title,.mast-dek{overflow-wrap:anywhere}
 
@@ -75,8 +95,8 @@
 @media(min-width:900px){
   .mast-hero{max-width:1400px;margin:0 auto;padding:1rem clamp(1rem,3vw,1.5rem) 0}
   .mast-frame{min-height:clamp(440px,58vh,640px);border:1px solid var(--rule2)}
-  .mast-plate-row{margin:-4.6rem 0 0;padding:0 clamp(1.2rem,3vw,2.4rem)}
-  .mast-inner{max-width:46rem;padding:1.4rem 1.8rem 1.5rem;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-card);box-shadow:var(--shadow-lift)}
+  .mast-plate-row{margin:0;padding:0 clamp(1.6rem,3.2vw,2.8rem) clamp(1.4rem,2.6vw,2.2rem)}
+  .mast-inner{max-width:46rem;padding:0}
   .mast-title{font-size:clamp(3rem,5.2vw,4.8rem)}
   .mast-plateline{margin-top:1rem;padding-inline:0}
 }
@@ -86,6 +106,7 @@
   .mast-mat{border:0}
   .mast-img,.mast-credit,.mast-video,.mast-pause{display:none}
   .mast-title,.mast-dek,.mast-eyebrow{color:#111;text-shadow:none}
+  .mast-frame::after{display:none}
   .mast-cities,.mast-nextleg{color:#111}
   .mast-print{display:none}
   .mast-plate-row{margin:0}

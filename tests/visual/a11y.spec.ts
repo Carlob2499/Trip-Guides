@@ -236,7 +236,15 @@ const MAST_BG_GRADIENT_WHY =
   "(pixel-sampled the h1's box with its ink hidden; worst pixel vs the text colour): the worst " +
   "case in the whole surface family is the Painted Atlas's LIGHTEST sky, daytime — 4.64:1 " +
   "(denmark, identical in both schemes) against the 3:1 required at 76.8px/620; korea's variants " +
-  "measure >=15:1. The scrim pins the h1's zone dark by design on every variant, photo or painted.";
+  "measure >=15:1. The scrim pins the h1's zone dark by design on every variant, photo or painted. " +
+  "2026-09-06: board 05 moved the whole identity plate ONTO the cover — eyebrow, title, dek and " +
+  "the search pill, where before only the h1 touched a gradient — so this count went 1 -> 7. The " +
+  "plate carries its own ground rather than relying on the frame's gradient, precisely so the " +
+  "answer does not depend on how long a guide's dek happens to be: the first attempt used one " +
+  "frame-height gradient and the eyebrow landed at 51% of it, worst case 1.15:1 over a bright " +
+  "sky. Re-measured after the split, worst case being the plate's own alpha composited over a " +
+  "WHITE photograph: eyebrow 6.58:1, title 10.27:1, dek 10.09:1. The search pill is not in this " +
+  "family at all — it paints var(--card) as a solid ground and axe resolves it normally.";
 const MAST_DEK_OBSCURING_WHY =
   "The masthead .dek sits above R4's stacked media layers (photo/video/Painted Atlas), and axe's " +
   "elmPartiallyObscuring is its conservative 'an overlapping sibling might change the background' " +
@@ -524,7 +532,7 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/elmPartiallyObscured": { max: 182, why: `${ELM_PARTIALLY_OBSCURED_WHY} ${MAPDEST_INDEX_SCROLL_WHY}` },
     // 1 = the masthead h1 / the masthead .dek, counted per page on both schemes (desktop; mobile
     // renders the same masthead so the same max covers it).
-    "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
+    "color-contrast/bgGradient": { max: 7, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
     // 42 = 3 on-media nodes × korea's 14 photo cards. See SIGHT_ONPHOTO_IMGNODE_WHY and the
     // block comment above it for the scrim bug this replaced.
@@ -591,7 +599,7 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/nonBmp": { max: 37, why: NON_BMP_WHY },
     // Same two masthead nodes as korea's entries above — denmark is the measured worst case
     // (Painted Atlas daytime sky: h1 4.64:1 vs 3:1 needed; .dek 5.91:1 vs 4.5:1 needed).
-    "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
+    "color-contrast/bgGradient": { max: 7, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
     // 30 = the same 3 on-media nodes as korea at DENMARK's 10 photo cards. The measured ratios in
     // SIGHT_ONPHOTO_IMGNODE_WHY are identical on both guides — the tell that this is sights.css,
