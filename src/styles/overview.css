@@ -11,7 +11,7 @@
    only ever scroll, never grow taller, cannot contribute to CLS. */
 /* `safe center` — plain `center` clips the FIRST pill unreachably once the row
    overflows (centered overflow hangs off both edges; you can only scroll to one). */
-.guide-stats{display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:safe center;gap:.4rem;margin:.9rem auto .2rem;padding-inline:.75rem;scrollbar-width:none;
+.guide-stats{display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:safe center;gap:var(--sp-gap-40);margin:.9rem auto .2rem;padding-inline:.75rem;scrollbar-width:none;
   -webkit-mask-image:linear-gradient(to right,transparent 0,#000 12px,#000 calc(100% - 12px),transparent);
   mask-image:linear-gradient(to right,transparent 0,#000 12px,#000 calc(100% - 12px),transparent)}
 .guide-stats::-webkit-scrollbar{display:none}
@@ -30,7 +30,7 @@
    already painted it — a second layout shift. At 44px on all tiles the row is its final
    height the moment the first pill lands, exactly as it is today. Three tiles at 44px is
    still one thin line; the failure this comment records was six blocks at 58px. */
-.guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:.1rem;min-height:44px;padding:.35rem .7rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-inset);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;color:var(--ink)}
+.guide-stats .gstat{display:flex;flex-direction:column;justify-content:center;gap:var(--sp-gap-10);min-height:44px;padding:.35rem .7rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-inset);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;color:var(--ink)}
 .guide-stats .gstat-countdown,.guide-stats .gstat-active{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
 .guide-stats .gstat-warning{border-color:var(--accent);color:var(--accent-ink)}
 .guide-stats .gstat-past{color:var(--muted)}
@@ -47,7 +47,7 @@
    tint it used to carry pushed the label to 2.70:1 on denmark's lighter accent, which no test
    could have predicted from the token contract. The accent still marks the banner, in the
    border, where its contrast requirement is 3:1 against the page rather than 4.5:1 behind text. */
-.whats-next{display:flex;align-items:baseline;justify-content:center;gap:.6rem;background:var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-card);padding:.65rem .95rem;margin:.6rem auto 0;max-width:52rem}
+.whats-next{display:flex;align-items:baseline;justify-content:center;gap:var(--sp-gap-60);background:var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));border-radius:var(--r-card);padding:.65rem .95rem;margin:.6rem auto 0;max-width:52rem}
 .whats-next .wn-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink)}
 .whats-next .wn-text{font-size:var(--text-small);font-weight:600;color:var(--ink);overflow-wrap:anywhere}
 

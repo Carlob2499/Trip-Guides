@@ -11,16 +11,16 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px 14px;
-  margin: 28px 0 8px;
-  padding-top: 20px;
+  gap: var(--sp-sm-h) var(--sp-md-h);
+  margin: var(--sp-xl) 0 var(--sp-xs);
+  padding-top: var(--sp-lg);
   border-top: 1px solid var(--rule);
 }
 .lnw-open {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 11px 18px;
+  gap: var(--sp-xs);
+  padding: 11px var(--sp-lg-h);
   border: 0;
   border-radius: 999px;
   background: var(--accent);
@@ -65,7 +65,7 @@
   color: var(--ink);
   border: 1px solid var(--rule);
   border-radius: var(--r-pane);
-  padding: 22px 20px 20px;
+  padding: var(--sp-xl-h) var(--sp-lg) var(--sp-lg);
 }
 .lnw-dialog:focus { outline: none; }
 .lnw-x {
@@ -84,15 +84,15 @@
 }
 .lnw-x:hover { background: var(--bg2); color: var(--ink); }
 .lnw-eyebrow {
-  margin: 0 0 4px;
+  margin: 0 0 var(--sp-2xs);
   color: var(--accent-ink);
   font-size:var(--text-control-sm);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
 }
-.lnw-title { margin: 0 0 14px; font-size:var(--text-h4); line-height: 1.2; }
-.lnw-lede { margin: 0 0 14px; color: var(--muted); font-size:var(--text-body); }
+.lnw-title { margin: 0 0 var(--sp-md-h); font-size:var(--text-h4); line-height: 1.2; }
+.lnw-lede { margin: 0 0 var(--sp-md-h); color: var(--muted); font-size:var(--text-body); }
 .lnw-lede.lnw-warn { color: var(--warn); font-weight: 600; }
 
 /* ── Ratings step ─────────────────────────────────────────────────────────── */
@@ -100,12 +100,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--sp-sm);
   padding: 9px 0;
   border-bottom: 1px solid var(--rule);
 }
 .lnw-rate-lbl { font-weight: 600; }
-.lnw-pills { display: inline-flex; gap: 6px; }
+.lnw-pills { display: inline-flex; gap: var(--sp-xs-h); }
 .lnw-pill {
   width: 40px;
   height: 40px;
@@ -121,7 +121,7 @@
 
 /* ── Stops step ───────────────────────────────────────────────────────────── */
 .lnw-day {
-  margin: 16px 0 6px;
+  margin: var(--sp-md) 0 var(--sp-xs-h);
   color: var(--accent-ink);
   font-size:var(--text-caption);
   letter-spacing: 0.05em;
@@ -132,14 +132,14 @@
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 8px 10px;
-  padding: 8px 0;
+  gap: var(--sp-xs) var(--sp-sm-h);
+  padding: var(--sp-xs) 0;
   border-bottom: 1px solid var(--rule);
 }
 .lnw-stop-name { font-size:var(--text-body); }
 .lnw-toggle { display: inline-flex; border: 1px solid var(--rule2); border-radius: 999px; overflow: hidden; }
 .lnw-tg {
-  padding: 6px 13px;
+  padding: var(--sp-xs-h) 13px;
   border: 0;
   background: var(--bg);
   color: var(--muted);
@@ -152,7 +152,7 @@
 .lnw-reason {
   grid-column: 1 / -1;
   width: 100%;
-  padding: 8px 10px;
+  padding: var(--sp-xs) var(--sp-sm-h);
   border: 1px solid var(--rule2);
   border-radius: var(--r-inset);
   background: var(--bg);
@@ -164,7 +164,7 @@
 /* ── Freeform step ────────────────────────────────────────────────────────── */
 .lnw-ta {
   width: 100%;
-  padding: 12px;
+  padding: var(--sp-sm);
   border: 1px solid var(--rule2);
   border-radius: var(--r-inset);
   background: var(--bg);
@@ -180,16 +180,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: 20px;
-  padding-top: 14px;
+  gap: var(--sp-sm);
+  margin-top: var(--sp-lg);
+  padding-top: var(--sp-md-h);
   border-top: 1px solid var(--rule);
 }
 .lnw-dots { display: inline-flex; gap: 7px; }
 .lnw-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule2); }
 .lnw-dot-on { background: var(--accent); }
 .lnw-btn {
-  padding: 10px 16px;
+  padding: var(--sp-sm-h) var(--sp-md);
   border: 1px solid var(--rule2);
   border-radius: 999px;
   background: var(--bg);
@@ -207,8 +207,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: var(--sp-sm);
+  margin-bottom: var(--sp-lg-h);
 }
 .learn-eyebrow {
   margin: 0 0 2px;
@@ -241,16 +241,16 @@
    holds itself to for optional data elsewhere (.learn-curated:empty, below). */
 .learn-agg:empty { display: none; }
 .learn-agg {
-  padding: 16px 18px;
+  padding: var(--sp-md) var(--sp-lg-h);
   border: 1px solid var(--rule);
   border-radius:var(--r-card);
   background: var(--card);
 }
 .learn-empty { margin: 0; color: var(--muted); }
-.learn-stat { margin: 0 0 6px; font-size:var(--text-body); }
+.learn-stat { margin: 0 0 var(--sp-xs-h); font-size:var(--text-body); }
 .learn-pct {
-  margin-left: 8px;
-  padding: 2px 8px;
+  margin-left: var(--sp-xs);
+  padding: 2px var(--sp-xs);
   border-radius: 999px;
   background: var(--green);
   color: var(--on-green);
@@ -258,7 +258,7 @@
   font-weight: 700;
 }
 .learn-sub {
-  margin: 14px 0 6px;
+  margin: var(--sp-md-h) 0 var(--sp-xs-h);
   color: var(--accent-ink);
   font-size:var(--text-caption);
   letter-spacing: 0.05em;
@@ -272,7 +272,7 @@
 .learn-skips li {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: var(--sp-sm-h);
   padding: 9px 0;
   border-top: 1px solid var(--rule);
 }
@@ -305,12 +305,12 @@
 
 /* Curated post-mortem (P3) — hidden until the guide data carries `learnings`. */
 .learn-curated:empty { display: none; }
-.learn-curated { margin-top: 18px; }
+.learn-curated { margin-top: var(--sp-lg-h); }
 /* 2026-09-06 — a <details>, not a paragraph in an unbroken scroll of eight days. The summary
    is the only thing every day shows before the reader chooses to open it, so it carries the
    one number worth judging a day by (how many stops didn't happen) rather than a bare date. */
 .learn-day {
-  margin-top: 12px;
+  margin-top: var(--sp-sm);
   border: 1px solid var(--rule);
   border-radius: var(--r-card);
   background: var(--card);
@@ -319,8 +319,8 @@
 .learn-day-summary {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
+  gap: var(--sp-sm-h);
+  padding: var(--sp-md-h) var(--sp-md);
   cursor: pointer;
   list-style: none;
   -webkit-tap-highlight-color: transparent;
@@ -360,12 +360,12 @@
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
-.learn-day-body { padding: 0 16px 14px; }
-.learn-actually { margin: 0 0 8px; }
+.learn-day-body { padding: 0 var(--sp-md) var(--sp-md-h); }
+.learn-actually { margin: 0 0 var(--sp-xs); }
 @media (prefers-reduced-motion: reduce) { .learn-day-summary::before { transition: none; } }
-.learn-changed, .learn-key { margin: 14px 0 0; padding-left: 18px; }
+.learn-changed, .learn-key { margin: var(--sp-md-h) 0 0; padding-left: var(--sp-lg-h); }
 .learn-changed li, .learn-key li { margin: 3px 0; }
-.learn-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 20px; }
+.learn-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-sm-h) var(--sp-md-h); margin-top: var(--sp-lg); }
 .learn-recap-btn { text-decoration: none; }
 .lnw-open-inline { background: var(--bg); color: var(--accent-ink); border: 1px solid var(--accent); }
 .lnw-open-inline:hover { background: var(--card); filter: none; }
@@ -373,13 +373,13 @@
 /* ── Per-day Plan ⇄ Actual toggle (P3) ────────────────────────────────────── */
 .day-flip {
   display: inline-flex;
-  margin: 6px 0 2px;
+  margin: var(--sp-xs-h) 0 2px;
   border: 1px solid var(--rule2);
   border-radius: 999px;
   overflow: hidden;
 }
 .day-flip-btn {
-  padding: 4px 12px;
+  padding: var(--sp-2xs) var(--sp-sm);
   border: 0;
   background: var(--bg);
   color: var(--muted);
@@ -388,25 +388,25 @@
   cursor: pointer;
 }
 .day-flip-btn.on { background: var(--accent); color: var(--on-accent); }
-.day-actual { margin-top: 8px; }
+.day-actual { margin-top: var(--sp-xs); }
 .day-actual .learn-skip-stop { display: inline-block; }
 
 /* "What didn't survive contact" — skipped stops tallied by declared group. A bar per
    group, width proportional to the largest count via --w set inline at render. Reads as
    a ranking, not a chart: the numbers are small and the point is the order. */
 .learn-tally-note {
-  margin: 2px 0 8px;
+  margin: 2px 0 var(--sp-xs);
   color: var(--muted);
   font-size:var(--text-caption);
   line-height: 1.4;
 }
-.learn-tally { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.learn-tally { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2xs); }
 .learn-tally-row {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
+  gap: var(--sp-sm-h);
+  padding: var(--sp-xs-h) var(--sp-sm-h);
   /* Was var(--line), which is not a token this product has ever defined — so the declaration
      was invalid at computed-value time and the border fell back to currentColor, drawing each
      row's frame in its own text colour. --rule is the hairline every other row here uses. */
@@ -422,7 +422,7 @@
   color: var(--warn);
   border: 1px solid var(--warn);
   border-radius: 999px;
-  padding: 0 8px;
+  padding: 0 var(--sp-xs);
   min-width: 26px;
   text-align: center;
 }

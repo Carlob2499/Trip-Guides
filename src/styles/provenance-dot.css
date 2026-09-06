@@ -97,7 +97,7 @@
      collapsible space that used to separate them (staleness-ui.js splits the ⚠ so screen
      readers don't announce it). ~6px, matching FlagChip.jsx's own `gap: 6`. Chips whose
      label is one unsplit text run form a single anonymous item, so this costs them nothing. */
-  gap: .35rem;
+  gap: var(--sp-gap-35);
   border: 1px solid currentColor; border-radius: 999px;
   cursor: pointer; text-decoration: none; vertical-align: middle;
   transition: background var(--dur-routine) ease;

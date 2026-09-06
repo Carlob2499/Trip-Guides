@@ -30,24 +30,24 @@
 .split-toolbar{margin-bottom:1.2rem}
 .split-title{font-family:var(--font-display);font-weight:640;letter-spacing:-.012em;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.05;margin-bottom:.3rem}
 .split-desc{color:var(--muted);font-size:var(--text-small);line-height:1.6}
-.split-save-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
+.split-save-actions{display:flex;flex-wrap:wrap;gap:var(--sp-gap-50);margin-top:.9rem}
 
 /* ── cards ─────────────────────────────────────────────────────────────────── */
 .split-card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1.15rem 1.25rem;margin-bottom:.9rem}
-.sc-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.85rem}
+.sc-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-gap-60);margin-bottom:.85rem}
 .sc-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);color:var(--muted);text-transform:uppercase}
-.sc-body{display:flex;flex-direction:column;gap:.5rem}
+.sc-body{display:flex;flex-direction:column;gap:var(--sp-gap-50)}
 
 /* ── actions ───────────────────────────────────────────────────────────────
    Pills with a visible fill. These were bare 26px outlines in micro-caps: legible
    as labels, not as things you press (the site's own clickability doctrine). */
-.sc-add-btn,.sc-add-expense-btn{display:inline-flex;align-items:center;gap:.3rem;min-height:34px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;letter-spacing:.01em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;cursor:pointer;white-space:nowrap;flex:none;transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
+.sc-add-btn,.sc-add-expense-btn{display:inline-flex;align-items:center;gap:var(--sp-gap-30);min-height:34px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;letter-spacing:.01em;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:999px;cursor:pointer;white-space:nowrap;flex:none;transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
 .sc-add-btn:hover,.sc-add-expense-btn:hover{background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
 .sc-add-btn:focus-visible,.sc-add-expense-btn:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .sc-add-expense-btn{align-self:flex-start}
 
 /* ── member rows ───────────────────────────────────────────────────────────── */
-.sm-row{display:grid;grid-template-columns:1.5rem 1fr 1.6fr 2.2rem;gap:.45rem;align-items:center}
+.sm-row{display:grid;grid-template-columns:1.5rem 1fr 1.6fr 2.2rem;gap:var(--sp-gap-45);align-items:center}
 .sm-idx{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;color:var(--muted);text-align:center;line-height:1}
 
 /* ── shared input ──────────────────────────────────────────────────────────
@@ -76,13 +76,13 @@ select.split-in{cursor:pointer}
    default: with the chips row always open, a 40-expense trip measured 8,426px —
    10.4 phone screens — and the supporting controls are wanted on a minority of rows.
    The summary line carries whatever is non-default so nothing hides silently. */
-.se-sub{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
+.se-sub{display:flex;align-items:center;gap:var(--sp-gap-50);flex-wrap:wrap;margin-top:.3rem}
 .se-toggle{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.03em;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.18rem .6rem;min-height:28px;cursor:pointer;transition:color var(--dur-immediate),border-color var(--dur-immediate),background var(--dur-immediate)}
 .se-toggle:hover{color:var(--ink);border-color:var(--ink)}
 .se-toggle:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .se-meta{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);overflow-wrap:anywhere}
 .se-more{margin-top:.5rem;padding-top:.6rem;border-top:1px dashed var(--rule)}
-.se-more-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.2rem}
+.se-more-row{display:flex;flex-wrap:wrap;gap:var(--sp-gap-50);margin-bottom:.2rem}
 .se-field{display:flex;flex-direction:column;gap:.22rem;flex:1 1 9rem;min-width:0}
 .se-field-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 
@@ -97,7 +97,7 @@ select.split-in{cursor:pointer}
    Revealed only past a handful of expenses (trip-split.js's FILTER_FROM): below that,
    scanning beats searching and this is just chrome. The controls are --text-body like
    every other text-entry field here, because anything under 16px zoom-traps iOS. */
-.se-filter{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin-bottom:.8rem}
+.se-filter{display:flex;flex-wrap:wrap;gap:var(--sp-gap-45);align-items:center;margin-bottom:.8rem}
 .se-filter-q{flex:2 1 11rem;min-width:0}
 .se-filter-sel{flex:1 1 7.5rem;min-width:0}
 .se-filter-clear{flex:none;min-height:40px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;cursor:pointer;transition:color var(--dur-immediate),border-color var(--dur-immediate)}
@@ -114,7 +114,7 @@ select.split-in{cursor:pointer}
    starved. Header and rows share one template so the labels sit over their
    columns; the trailing 2.2rem keeps the entry row's amount aligned with the
    committed rows' amount even though only they carry a delete button. */
-.se-header{display:grid;grid-template-columns:1fr 6.5rem 8rem 2.2rem;gap:.45rem;padding:.1rem 0 .45rem;border-bottom:1px solid var(--rule);margin-bottom:.4rem}
+.se-header{display:grid;grid-template-columns:1fr 6.5rem 8rem 2.2rem;gap:var(--sp-gap-45);padding:.1rem 0 .45rem;border-bottom:1px solid var(--rule);margin-bottom:.4rem}
 .se-h-desc,.se-h-payer,.se-h-amt{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .se-h-amt{text-align:right}
 
@@ -135,17 +135,17 @@ select.split-in{cursor:pointer}
    hunted for below the inputs when tallying many expenses in a row. */
 /* The four questions (F3): each field carries its own label, so the composer reads as
    who · what · how much · who shares — not a bare grid the reader has to decode. */
-.se-q{display:flex;flex-direction:column;gap:.25rem;min-width:0}
+.se-q{display:flex;flex-direction:column;gap:var(--sp-gap-25);min-width:0}
 .se-q-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
-.se-new-row{display:grid;grid-template-columns:7rem minmax(0,1fr) 9rem;gap:.45rem;align-items:end}
+.se-new-row{display:grid;grid-template-columns:7rem minmax(0,1fr) 9rem;gap:var(--sp-gap-45);align-items:end}
 .se-parts--new{margin-top:.6rem}
 .se-parts--new[hidden]{display:none}
-.se-new-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.6rem}
+.se-new-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-gap-50);margin-bottom:.6rem}
 
 .se-row{padding:.15rem 0 .3rem}
 .se-row+.se-row{border-top:1px solid var(--rule)}
-.se-main{display:grid;grid-template-columns:1fr 6.5rem 8rem 2.2rem;gap:.45rem;align-items:center}
-.se-amt-wrap{display:flex;align-items:center;gap:.25rem;min-width:0}
+.se-main{display:grid;grid-template-columns:1fr 6.5rem 8rem 2.2rem;gap:var(--sp-gap-45);align-items:center}
+.se-amt-wrap{display:flex;align-items:center;gap:var(--sp-gap-25);min-width:0}
 .se-cur{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);flex:none}
 .se-amt{text-align:right}
 /* Strip the native number-input spinners (Chrome/Safari show them, Firefox varies)
@@ -156,7 +156,7 @@ select.split-in{cursor:pointer}
 /* ── who shared it / custom amounts ────────────────────────────────────────
    Chips, not checkboxes — tap targets have to look tappable, and an excluded
    person must read as clearly OFF rather than merely unstyled. */
-.se-parts{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .4rem;margin-top:.45rem;padding:.45rem .65rem;background:var(--bg2);border-radius:var(--r-card);border-left:3px solid var(--rule2)}
+.se-parts{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-gap-35) var(--sp-gap-40);margin-top:.45rem;padding:.45rem .65rem;background:var(--bg2);border-radius:var(--r-card);border-left:3px solid var(--rule2)}
 .se-parts-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin-right:.15rem}
 .se-part{min-height:30px;padding:.25rem .7rem;border:1px solid var(--rule2);border-radius:999px;background:var(--bg);color:var(--muted);font-size:var(--text-caption);font-weight:600;cursor:pointer;text-decoration:line-through;text-decoration-color:var(--rule2);transition:background var(--dur-immediate),border-color var(--dur-immediate),color var(--dur-immediate)}
 .se-part:hover{border-color:var(--muted);color:var(--ink)}
@@ -168,9 +168,9 @@ select.split-in{cursor:pointer}
 .se-part-on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);text-decoration:none}
 .se-part-on:hover{color:var(--on-accent)}
 .se-part:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.se-custom{display:flex;flex-wrap:wrap;gap:.45rem .6rem;margin-top:.45rem;padding:.6rem .65rem;background:var(--bg2);border-radius:var(--r-card);border-left:3px solid var(--rule2)}
+.se-custom{display:flex;flex-wrap:wrap;gap:var(--sp-gap-45) var(--sp-gap-60);margin-top:.45rem;padding:.6rem .65rem;background:var(--bg2);border-radius:var(--r-card);border-left:3px solid var(--rule2)}
 .se-custom--warn{border-left-color:var(--accent)}
-.se-cl{display:flex;flex-direction:column;gap:.2rem;min-width:5.5rem;flex:1 1 5.5rem}
+.se-cl{display:flex;flex-direction:column;gap:var(--sp-gap-20);min-width:5.5rem;flex:1 1 5.5rem}
 .se-cl-name{font-family:var(--font-data);font-size:var(--text-nano);font-weight:600;letter-spacing:.04em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .se-ca{text-align:right;font-size:var(--text-small)}
 .se-warn{width:100%;font-family:var(--font-data);font-size:var(--text-micro);color:var(--accent-ink);letter-spacing:.02em}
@@ -178,19 +178,19 @@ select.split-in{cursor:pointer}
 /* ── results ───────────────────────────────────────────────────────────────
    The total was a lone bar floating between two cards — a fifth sibling that
    belonged to neither. It is the headline of the results card. */
-.sr-total{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;flex-wrap:wrap;padding-bottom:.9rem;margin-bottom:1rem;border-bottom:1px solid var(--rule)}
+.sr-total{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-gap-80);flex-wrap:wrap;padding-bottom:.9rem;margin-bottom:1rem;border-bottom:1px solid var(--rule)}
 .sr-total-lbl{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .sr-total-val{font-family:var(--font-display);font-weight:640;font-size:clamp(1.75rem,6vw,2.3rem);line-height:1;letter-spacing:-.02em}
 .sr-sec+.sr-sec{margin-top:1.2rem}
 .sr-sec>.sc-label{display:block;margin-bottom:.5rem}
-.split-settle-head{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:0 0 .55rem}
+.split-settle-head{display:flex;align-items:center;gap:var(--sp-gap-60);flex-wrap:wrap;margin:0 0 .55rem}
 .split-settle-head .sc-label{margin-bottom:0}
 .split-settle-head #sCopySettle{margin-left:auto}
 .split-settle-count{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:.04em;color:var(--muted);background:var(--bg2);border:1px solid var(--rule2);border-radius:999px;padding:.15rem .6rem}
 
 /* balance rows — three columns, which is how many things a row says. The fourth
    `auto` track had nothing to put in it. */
-.sb-row{display:grid;grid-template-columns:1fr auto auto;gap:.3rem .7rem;align-items:baseline;padding:.45rem 0;border-bottom:1px solid var(--rule)}
+.sb-row{display:grid;grid-template-columns:1fr auto auto;gap:var(--sp-gap-30) var(--sp-gap-70);align-items:baseline;padding:.45rem 0;border-bottom:1px solid var(--rule)}
 .sb-row:last-child{border-bottom:none}
 .sb-name{font-weight:600;font-size:var(--text-small)}
 .sb-verb{font-size:var(--text-control);color:var(--muted)}
@@ -202,8 +202,8 @@ select.split-in{cursor:pointer}
 /* settlement rows — one line, not three. "Sam → Carlo $18.63" is a sentence; it
    was costing 109px of vertical space per payment, so three payments filled a
    phone screen. The payment handle keeps its own line only when there is one. */
-.st-row{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:.15rem .8rem;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-card);padding:.6rem .85rem;margin-bottom:.4rem}
-.st-parties{display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;min-width:0}
+.st-row{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:var(--sp-gap-15) var(--sp-gap-80);background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-card);padding:.6rem .85rem;margin-bottom:.4rem}
+.st-parties{display:flex;align-items:baseline;gap:var(--sp-gap-40);flex-wrap:wrap;min-width:0}
 .st-from,.st-to{font-weight:600;font-size:var(--text-small)}
 .st-arrow{color:var(--accent-ink);line-height:1}
 .st-amt-row{display:flex;align-items:baseline;justify-content:flex-end}
@@ -218,7 +218,7 @@ select.split-in{cursor:pointer}
 
 /* Settled payments — a log with an undo, because this is the one easily-mistapped action
    whose whole value is being an accurate record. */
-.sp-row{display:grid;grid-template-columns:1fr auto auto;gap:.3rem .7rem;align-items:baseline;padding:.4rem 0;border-bottom:1px solid var(--rule)}
+.sp-row{display:grid;grid-template-columns:1fr auto auto;gap:var(--sp-gap-30) var(--sp-gap-70);align-items:baseline;padding:.4rem 0;border-bottom:1px solid var(--rule)}
 .sp-row:last-child{border-bottom:none}
 .sp-who{font-size:var(--text-small);font-weight:600}
 .sp-amt{font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--green);white-space:nowrap}
@@ -229,7 +229,7 @@ select.split-in{cursor:pointer}
 
 /* Where it went — proportional bars, biggest first. Bars are a reading aid beside the real
    figures, never a substitute for them. */
-.sc-cat{display:grid;grid-template-columns:minmax(4.5rem,1fr) 2.2fr auto 2.6rem;gap:.5rem;align-items:center;padding:.32rem 0}
+.sc-cat{display:grid;grid-template-columns:minmax(4.5rem,1fr) 2.2fr auto 2.6rem;gap:var(--sp-gap-50);align-items:center;padding:.32rem 0}
 .sc-cat-name{font-size:var(--text-small);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sc-cat-bar{display:block;height:8px;background:var(--bg2);border-radius:999px;overflow:hidden}
 .sc-cat-fill{display:block;height:100%;background:var(--accent);border-radius:999px}
@@ -253,7 +253,7 @@ select.split-in{cursor:pointer}
   .split-in{min-height:44px}
   .sc-add-btn,.sc-add-expense-btn{min-height:38px}
 
-  .sm-row{grid-template-columns:1.5rem 1fr 2.2rem;grid-template-rows:auto auto;column-gap:.45rem;row-gap:.35rem}
+  .sm-row{grid-template-columns:1.5rem 1fr 2.2rem;grid-template-rows:auto auto;column-gap:var(--sp-gap-45);row-gap:var(--sp-gap-35)}
   .sm-pay{grid-column:2}
 
   /* Column labels describe a grid that no longer exists once rows restack. */
@@ -266,7 +266,7 @@ select.split-in{cursor:pointer}
        local currency, and that picker must stay at 16px or iOS zoom-traps on focus. */
     grid-template-columns:1fr 9rem 2.2rem;
     grid-template-areas:"desc desc del" "payer amt amt";
-    row-gap:.4rem
+    row-gap:var(--sp-gap-40)
   }
   .se-desc{grid-area:desc}
   .se-payer{grid-area:payer}
@@ -297,7 +297,7 @@ select.split-in{cursor:pointer}
    as .toast, which already clears contrast in both themes. */
 .split-undo{
   position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%);z-index:var(--z-toast);
-  display:flex;align-items:center;gap:.5rem;
+  display:flex;align-items:center;gap:var(--sp-gap-50);
   max-width:calc(100vw - 1.6rem);
   padding:.4rem .4rem .4rem 1rem;
   background:var(--ink);color:var(--bg);
@@ -344,7 +344,7 @@ select.split-in{cursor:pointer}
    has gone wrong here, there is simply data the panel cannot reach on its own.
    A compact card because it holds content; the button inside is a pill because it is pressed. */
 .s-rescue{
-  display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .9rem;
+  display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-gap-60) var(--sp-gap-90);
   margin:.6rem 0 0;padding:.7rem .85rem;
   background:var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--rule));
   border-radius:var(--r-compact);
@@ -387,7 +387,7 @@ select.split-in{cursor:pointer}
 .se-main .se-payer{font-family:var(--font-data);font-size:var(--text-small);color:var(--muted)}
 .se-main .se-amt{font-family:var(--font-data);font-weight:700;font-size:var(--text-body);font-variant-numeric:tabular-nums}
 @media(min-width:600px){.se-main{grid-template-columns:1fr 6.5rem 10.5rem 2.2rem}}
-.se-sub{gap:.45rem .6rem;margin-top:.15rem;padding-left:.3rem}
+.se-sub{gap:var(--sp-gap-45) var(--sp-gap-60);margin-top:.15rem;padding-left:.3rem}
 .se-ico{width:18px;height:18px;flex:none;color:var(--accent-ink)}
 .se-meta{font-size:var(--text-control);color:var(--muted);flex:1 1 auto;min-width:0}
 .se-meta-payer{color:var(--ink);font-weight:600}

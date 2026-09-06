@@ -20,7 +20,7 @@
    guide itself calls its content, clustering keeps overlapping pins legible. */
 .map-chips{
   position:absolute;top:.42rem;left:.42rem;z-index:2;
-  display:flex;flex-wrap:wrap;gap:.3rem;
+  display:flex;flex-wrap:wrap;gap:var(--sp-gap-30);
   /* Leaves the top-right corner clear for Google's own fullscreen control. */
   max-width:calc(100% - 3.4rem)
 }
@@ -110,7 +110,7 @@
    the surface stretch into empty pane on a very tall display, and makes a full-page capture
    grow the page it is capturing (tests/visual/gallery-baselines.spec.ts). */
 .mapdest{position:relative;background:var(--bg);min-height:min(calc(100dvh - var(--hdr-h)),900px)}
-.mapdest-none{display:flex;gap:.5rem;align-items:flex-start;padding:1.2rem max(1.1rem,var(--safe-right));color:var(--muted)}
+.mapdest-none{display:flex;gap:var(--sp-gap-50);align-items:flex-start;padding:1.2rem max(1.1rem,var(--safe-right));color:var(--muted)}
 .mapdest-bench{position:relative}
 .mapdest-map{height:min(calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom)),820px);min-height:360px;margin:0;border:0;border-bottom:1px solid var(--rule2)}
 .gmap-host{position:absolute;inset:0}
@@ -169,7 +169,7 @@ html[data-conn="offline"] .map-degraded{display:block}
 .mapdest-sheet{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;display:flex;flex-direction:column;max-height:calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom) - 1rem);background:var(--bg);border-top:1px solid var(--rule2);transition:transform var(--dur-object) var(--ease-out-expo);touch-action:none}
 body:not([data-dest="map"]) .mapdest-sheet{display:none}
 /* Peek: the grip and a one-line index summary; the selected place, when there is one. */
-.mapdest-peek{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin:0;padding:0 max(1.1rem,var(--safe-right)) .6rem max(1.1rem,var(--safe-left));font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
+.mapdest-peek{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-gap-80);margin:0;padding:0 max(1.1rem,var(--safe-right)) .6rem max(1.1rem,var(--safe-left));font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
 .mapdest-peek-n{font-weight:700;color:var(--ink)}
 .mapdest-sheet:not([data-sheet="peek"]) .mapdest-peek{display:none}
 .mapdest-sheet[data-sheet="peek"] .mapdest-list{display:none}
@@ -182,7 +182,7 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 .mapdest-sheet.sheet-dragging{transition:none}
 
 /* The selected place — one large readable atom (§9): identity, facts, handoff. */
-.mapdest-selected{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:.2rem .9rem;padding:.4rem max(1.1rem,var(--safe-right)) .9rem max(1.1rem,var(--safe-left));border-bottom:1px solid var(--rule)}
+.mapdest-selected{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:var(--sp-gap-20) var(--sp-gap-90);padding:.4rem max(1.1rem,var(--safe-right)) .9rem max(1.1rem,var(--safe-left));border-bottom:1px solid var(--rule)}
 .mapdest-selected:has(.mapdest-sel-thumb:not([hidden])){grid-template-columns:88px minmax(0,1fr)}
 .mapdest-sel-thumb{grid-row:1/span 4;width:88px;height:88px;object-fit:cover;background:var(--sunken);border:1px solid var(--rule2);opacity:var(--photo)}
 .mapdest-sel-kind{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--accent-ink);margin:0}
@@ -199,13 +199,13 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 .mapdest-rows{list-style:none;margin:0;padding:0}
 .mapdest-row{display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--rule)}
 .mapdest-row--sel{background:var(--card)}
-.mapdest-row-btn{display:flex;flex-direction:column;gap:.1rem;width:100%;min-height:56px;padding:.6rem max(1.1rem,var(--safe-right)) .5rem max(1.1rem,var(--safe-left));background:transparent;border:0;color:var(--ink);text-align:left;cursor:pointer;font:inherit}
+.mapdest-row-btn{display:flex;flex-direction:column;gap:var(--sp-gap-10);width:100%;min-height:56px;padding:.6rem max(1.1rem,var(--safe-right)) .5rem max(1.1rem,var(--safe-left));background:transparent;border:0;color:var(--ink);text-align:left;cursor:pointer;font:inherit}
 .mapdest-row-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
 /* The place's own photograph leads its row (lineage). */
-.mapdest-row--photo .mapdest-row-btn{flex-direction:row;align-items:center;gap:.8rem}
+.mapdest-row--photo .mapdest-row-btn{flex-direction:row;align-items:center;gap:var(--sp-gap-80)}
 .mapdest-row-thumb{flex:none;width:64px;height:48px;overflow:hidden;border-radius:var(--r-inset);background:var(--sunken)}
 .mapdest-row-thumb img{display:block;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
-.mapdest-row-text{display:flex;flex-direction:column;gap:.1rem;min-width:0}
+.mapdest-row-text{display:flex;flex-direction:column;gap:var(--sp-gap-10);min-width:0}
 .mapdest-row-btn[aria-current="true"] .mapdest-row-name{color:var(--accent-ink)}
 .mapdest-row-name{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);line-height:1.2;overflow-wrap:anywhere}
 .mapdest-row-meta{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
@@ -301,7 +301,7 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
    something can actually answer them, so neither leaves an empty affordance behind. */
 .mapdest-locate{
   position:absolute;left:.7rem;bottom:.7rem;z-index:3;
-  display:inline-flex;align-items:center;gap:.45rem;
+  display:inline-flex;align-items:center;gap:var(--sp-gap-45);
   min-height:44px;padding:0 .85rem;
   background:var(--card);color:var(--ink);
   border:1px solid var(--rule2);border-radius:999px;box-shadow:var(--shadow-float);
@@ -343,8 +343,8 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
   .mapdest-panel-title{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);line-height:1;letter-spacing:-.014em}
   .mapdest-panel-sub{margin:.3rem 0 .9rem;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.4}
   .mapdest-kicker{display:block;font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
-  .mapdest-acts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.35rem}
-  .mapdest-act{display:flex;flex-direction:column;gap:.1rem;width:100%;min-height:48px;padding:.5rem .7rem;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-inset);color:var(--ink);text-align:left;cursor:pointer;font:inherit}
+  .mapdest-acts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-gap-35)}
+  .mapdest-act{display:flex;flex-direction:column;gap:var(--sp-gap-10);width:100%;min-height:48px;padding:.5rem .7rem;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-inset);color:var(--ink);text-align:left;cursor:pointer;font:inherit}
   .mapdest-act:hover{border-color:var(--accent)}
   .mapdest-act:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
   .mapdest-act-n{font-family:var(--font-data);font-size:var(--text-control);font-weight:700}
@@ -354,11 +354,11 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 /* === THE NEIGHBOURHOOD INDEX, under the frame (board 04) =====================
    One card per group the map draws: what the guide calls it, how many verified places it
    holds, and the first few by name. Choosing one focuses it on the map. */
-.mapb{display:flex;flex-direction:column;gap:.9rem}
+.mapb{display:flex;flex-direction:column;gap:var(--sp-gap-90)}
 .mapb-title{margin:0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h3);line-height:1.1;letter-spacing:-.014em}
 .mapb-sub{margin:.3rem 0 0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
-.mapb-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,17rem),1fr));gap:.7rem}
-.mapb-card{display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:.8rem;width:100%;min-height:88px;padding:.6rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color var(--dur-routine),transform var(--dur-routine) var(--ease-spring)}
+.mapb-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,17rem),1fr));gap:var(--sp-gap-70)}
+.mapb-card{display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:var(--sp-gap-80);width:100%;min-height:88px;padding:.6rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);color:var(--ink);text-align:left;cursor:pointer;font:inherit;transition:border-color var(--dur-routine),transform var(--dur-routine) var(--ease-spring)}
 .mapb-card:hover{border-color:var(--accent);transform:translateY(-1px)}
 .mapb-card:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .mapb-card:not(:has(.mapb-card-media)){grid-template-columns:minmax(0,1fr)}

@@ -14,7 +14,7 @@
    palette instead of the live theme tokens. */
 
 /* ── The trigger, on screen ─────────────────────────────────────────────────── */
-.split-pdf-btn{display:inline-flex;align-items:center;gap:.4rem;min-height:38px;padding:.45rem 1rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--bg);background:var(--ink);border:1px solid var(--ink);border-radius:999px;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
+.split-pdf-btn{display:inline-flex;align-items:center;gap:var(--sp-gap-40);min-height:38px;padding:.45rem 1rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);color:var(--bg);background:var(--ink);border:1px solid var(--ink);border-radius:999px;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
 .split-pdf-btn:hover{background:var(--accent);border-color:var(--accent)}
 .split-pdf-btn:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 .split-pdf-ico{font-size:1.05em;line-height:1}
@@ -25,9 +25,9 @@
    inventing a second modal language. ──────────────────────────────────────── */
 .bsp-backdrop{position:fixed;inset:0;z-index:900;background:rgba(var(--shadow-rgb),.5)}
 .bsp-modal{position:fixed;inset:2.5vh 2.5vw;z-index:910;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--rule2);border-radius:var(--r-pane);overflow:hidden}
-.bsp-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1.1rem;background:var(--card);border-bottom:1px solid var(--rule)}
+.bsp-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-gap-100);padding:.85rem 1.1rem;background:var(--card);border-bottom:1px solid var(--rule)}
 .bsp-bar-label{font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:640;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.bsp-bar-actions{display:flex;gap:.6rem}
+.bsp-bar-actions{display:flex;gap:var(--sp-gap-60)}
 .bsp-cancel{font-family:var(--font-data);font-size:var(--text-control-sm);background:none;border:1px solid var(--rule2);border-radius:999px;padding:.4rem .9rem;min-height:36px;cursor:pointer;color:var(--muted);transition:color var(--dur-routine),border-color var(--dur-routine)}
 .bsp-cancel:hover{color:var(--ink);border-color:var(--ink)}
 .bsp-cancel:focus-visible,.bsp-print:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
@@ -120,7 +120,7 @@
 .budget{margin:.2rem 0}
 .budget-intro{color:var(--muted);margin-bottom:.7rem}
 .budget-grid{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:var(--r-card);overflow:hidden}
-.brow{display:grid;grid-template-columns:1fr 6.4rem 5rem;gap:.5rem;align-items:center;padding:.55rem .7rem;border-top:1px solid var(--rule);min-width:0}
+.brow{display:grid;grid-template-columns:1fr 6.4rem 5rem;gap:var(--sp-gap-50);align-items:center;padding:.55rem .7rem;border-top:1px solid var(--rule);min-width:0}
 .brow:first-child{border-top:0}
 .bhead{background:var(--bg2);font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .bcol{text-align:right}
@@ -148,7 +148,7 @@
 .budget-verdict.over{background:color-mix(in srgb,var(--warn) 8%,var(--card));color:var(--warn)}
 .budget-foot{margin-top:.55rem;font-size:var(--text-caption);color:var(--muted);line-height:1.4}
 @media(max-width:520px){
-  .brow{grid-template-columns:1fr 4.8rem 4.2rem;gap:.4rem;padding:.5rem .55rem}
+  .brow{grid-template-columns:1fr 4.8rem 4.2rem;gap:var(--sp-gap-40);padding:.5rem .55rem}
   .bhead{font-size:var(--text-nano)}
   /* .bactual deliberately does NOT shrink here. It used to drop to --text-control (13.12px)
      to fit the tighter grid, but this block only applies at <=520px — the exact widths where
@@ -158,7 +158,7 @@
 }
 
 /* Budget: category headers, ranges, per-person toggle, group pill */
-.budget-toggle{display:flex;gap:.35rem;margin-bottom:.6rem}
+.budget-toggle{display:flex;gap:var(--sp-gap-35);margin-bottom:.6rem}
 .btog-btn{font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;background:none;border:1px solid var(--rule2);border-radius:999px;padding:.32rem .7rem;cursor:pointer;color:var(--muted);transition:background var(--dur-immediate),color var(--dur-immediate),border-color var(--dur-immediate);line-height:1.4}
 .btog-btn:hover{color:var(--ink);border-color:var(--ink)}
 .btog-active{background:var(--ink) !important;color:var(--bg) !important;border-color:var(--ink) !important}

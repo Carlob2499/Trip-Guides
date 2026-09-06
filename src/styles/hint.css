@@ -19,7 +19,7 @@
 .hint-bubble {
   position: absolute; z-index: 60; bottom: calc(100% + 8px); left: 0;
   width: max-content; max-width: min(30ch, 78vw);
-  padding: 8px 10px;
+  padding: var(--sp-xs) var(--sp-sm-h);
   background: var(--ink); color: var(--bg);
   font-family: var(--font-body); font-size: var(--text-caption); line-height: 1.45;
   letter-spacing: 0; text-transform: none; text-align: left; white-space: normal;

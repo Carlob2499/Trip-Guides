@@ -386,6 +386,42 @@
   --r-card:20px;     /* standard operational / editorial card                            18–24 */
   --r-pane:28px;     /* large hero, pane, sheet, floating rail                            24–32 */
   --r-pill:999px;--r-round:50%;
+  /* SPACING (§31 companion to the radius family above). NAMED AT THE VALUES ALREADY IN USE — this
+     register is an architecture fix, not a spacing change: every token below was measured off the
+     shipped stylesheets, and the conversion that introduced it was value-for-value. Nothing moved.
+     The site's real rhythm is a 4px grid with half-steps, not a pure 4px grid: --sp-md-h (14px) is
+     the single most-used spacing value on the site, and 6/10/18/22 each earn their place with
+     nine or more uses. Naming a tidier scale would have meant moving real edges to fit it, which
+     is a visual decision, not a token cleanup. The half-steps exist because the site does.
+     Above 22px the site is sparse and bespoke (26, 30, 40, 54, 56, 60, 64, 120 appear once each);
+     only the two large values with a reason are named. Add a step here before typing a new px. */
+  --sp-2xs:4px;    /* hairline separation: icon-to-label, chip innards                      */
+  --sp-xs:8px;     /* tight pair: stacked lines, dense list rows                            */
+  --sp-xs-h:6px;
+  --sp-sm:12px;    /* control padding, compact card inset                                   */
+  --sp-sm-h:10px;
+  --sp-md:16px;    /* standard card inset, comfortable row gap                              */
+  --sp-md-h:14px;  /* the site's most-used value — do not "round" it to 16                  */
+  --sp-lg:20px;    /* section inset, pane padding                                           */
+  --sp-lg-h:18px;
+  --sp-xl:28px;    /* between sections                                                      */
+  --sp-xl-h:22px;
+  --sp-touch:44px; /* minimum touch target (iOS HIG / WCAG 2.5.5) — a rule, not a rhythm    */
+  /* GAP RHYTHM — a second, independent scale from --sp-* above, on purpose. Auditing every real
+     `gap` value on the site (330+ declarations) found a coherent 0.05rem-step decimal grid from
+     0.10rem to 1.00rem, NOT the site's px scale in disguise: only 5 of 24 distinct values coincide
+     with a --sp-* px step, and the rest (0.40rem/37 uses, 0.60rem/31, 0.80rem/26, 0.35rem/25 among
+     them) sit off that grid with real, repeated usage of their own. Two scales that don't share a
+     step size are not an oversight here — gap sits directly beside text (chip contents, list rows,
+     icon+label pairs), and rem is the correct unit for that: it grows with a reader's own browser
+     text-size setting, where the px scale (control insets, section padding) intentionally does not.
+     NAMED AT THE VALUES ALREADY IN USE, same rule as --sp-*: this is a token pass, not a value
+     pass. Suffix is the rem value *100, so --sp-gap-40 reads as 0.40rem at a glance. Only steps
+     with 5+ real uses are named; the rest (0.05, 0.12, 0.22, 0.28, 0.32, 0.75, 1.1–2.4rem, each
+     3 uses or fewer) are left as literal one-offs rather than forced onto this grid. */
+  --sp-gap-10:.1rem;--sp-gap-15:.15rem;--sp-gap-20:.2rem;--sp-gap-25:.25rem;--sp-gap-30:.3rem;
+  --sp-gap-35:.35rem;--sp-gap-40:.4rem;--sp-gap-45:.45rem;--sp-gap-50:.5rem;--sp-gap-55:.55rem;
+  --sp-gap-60:.6rem;--sp-gap-70:.7rem;--sp-gap-80:.8rem;--sp-gap-90:.9rem;--sp-gap-100:1rem;
   /* Surface roles (§4, §31). Hairline structure by default; ONE low broad shadow only for actual
      depth or focus (a floating rail, an open sheet, the picked-up card). Solid by default; glass
      only for floating navigation, transient overlays and map controls (--glass-*). */

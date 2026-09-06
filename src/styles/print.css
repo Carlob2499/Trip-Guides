@@ -86,7 +86,7 @@
   .masthead-rule { display: none; }
   .masthead h1 { font-size: 22pt; font-style: italic; }
   .dek { max-width: 100%; }
-  .guide-stats { justify-content: flex-start; gap: .4rem; }
+  .guide-stats { justify-content: flex-start; gap: var(--sp-gap-40); }
   .gstat { font-size: 8pt; padding: .1rem .5rem; }
   /* Suppress card hover transitions and decoration for print */
   .card { transform: none !important; transition: none !important; }

@@ -12,7 +12,7 @@
 .venue-name{margin:0;font-size:var(--text-h4);line-height:1.15}
 .venue-area{display:block;font-family:var(--font-data);font-size:var(--text-small);color:var(--muted);margin-top:.1rem}
 
-.venue-meta{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.55rem}
+.venue-meta{display:flex;flex-wrap:wrap;gap:var(--sp-gap-35);margin-bottom:.55rem}
 /* `white-space:nowrap` was right for what a pill is FOR — "≈₩3,000" must not break after the
    ≈ — and wrong about what the data actually holds. 26 `price` fields across the shipped guides
    carry a whole sentence ("≈249 DKK food-only / ≈399 DKK food+drinks per person — confirm at
@@ -35,7 +35,7 @@
 .venue-why{font-style:italic;color:var(--muted)}
 .venue-crowd{font-size:var(--text-small);color:var(--muted)}
 
-.venue-details{display:grid;grid-template-columns:auto 1fr;gap:.15rem .6rem;margin:.45rem 0 0;font-size:var(--text-small)}
+.venue-details{display:grid;grid-template-columns:auto 1fr;gap:var(--sp-gap-15) var(--sp-gap-60);margin:.45rem 0 0;font-size:var(--text-small)}
 .venue-details dt{font-family:var(--font-data);color:var(--muted);white-space:nowrap}
 .venue-details dd{margin:0}
 

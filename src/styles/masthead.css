@@ -71,7 +71,7 @@
      palest ink here — measures 5.6:1, and the title 8:1. Every pair holds without knowing
      anything about the picture underneath. */
   background:linear-gradient(to top,rgba(var(--shadow-rgb),.92) 0%,rgba(var(--shadow-rgb),.88) 60%,rgba(var(--shadow-rgb),.82) 100%)}
-.mast-inner{display:grid;gap:.35rem;padding:1rem 0 .2rem}
+.mast-inner{display:grid;gap:var(--sp-gap-35);padding:1rem 0 .2rem}
 .mast-eyebrow{margin:0}
 .mast-title{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,9vw,4.6rem);line-height:.98;letter-spacing:-.014em;margin:.1rem 0 0;color:var(--dark-ink)}
 .mast-dek{margin:.5rem 0 0;max-width:58ch;color:var(--dark-ink-2)}
@@ -80,7 +80,7 @@
 .mast-eyebrow,.mast-title,.mast-dek{overflow-wrap:anywhere}
 
 /* The plate line — cities, the CHECKED stamp, fact/source counts, currency, print. */
-.mast-plateline{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.1rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem max(1.1rem,var(--safe-right)) .8rem max(1.1rem,var(--safe-left));border-top:2px solid var(--accent);border-bottom:1px solid var(--rule2)}
+.mast-plateline{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-gap-40) 1.1rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem max(1.1rem,var(--safe-right)) .8rem max(1.1rem,var(--safe-left));border-top:2px solid var(--accent);border-bottom:1px solid var(--rule2)}
 .mast-cities{font-family:var(--font-data);font-weight:640;font-size:var(--text-lead);color:var(--accent-ink)}
 .mast-nextleg{font-family:var(--font-data);font-weight:700;font-size:var(--text-control-sm);letter-spacing:.14em;text-transform:uppercase;color:var(--aink)}
 .mast-stamp{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid currentColor;border-radius:var(--r-inset);padding:.15rem .5rem}

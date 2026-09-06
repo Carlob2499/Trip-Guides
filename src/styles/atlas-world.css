@@ -15,9 +15,9 @@
 .atlas-stage { z-index: 1; }
 
 /* ── The strip's centre: one chip per trip (status word · name), a link into the guide. ── */
-.atlas-status { display: flex; align-items: center; gap: .35rem; min-width: 0; }
+.atlas-status { display: flex; align-items: center; gap: var(--sp-gap-35); min-width: 0; }
 .atlas-status-chip {
-  display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: 0 .85rem 0 .6rem;
+  display: inline-flex; align-items: center; gap: var(--sp-gap-55); min-height: 44px; padding: 0 .85rem 0 .6rem;
   border: 1px solid transparent; border-radius: var(--r-pill); text-decoration: none; color: var(--ink);
   transition: border-color var(--dur-immediate) var(--ease-standard), background var(--dur-immediate) var(--ease-standard);
 }
@@ -42,13 +42,13 @@
 .atlas-act-chev { margin-left: auto; flex: none; color: var(--muted); font-family: var(--font-data); font-size: var(--text-lead); line-height: 1; }
 
 /* ── The Atlas panel (title, one line, the quick actions). ───────────────────────────── */
-.atlas-panel { display: flex; flex-direction: column; gap: .55rem; padding: 1.1rem 1rem 1rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); }
+.atlas-panel { display: flex; flex-direction: column; gap: var(--sp-gap-55); padding: 1.1rem 1rem 1rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); }
 .atlas-panel-head { margin-bottom: .35rem; }
 .atlas-panel-title { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: var(--text-h3); line-height: 1.1; letter-spacing: -.01em; color: var(--ink); }
 .atlas-panel-sub { margin: .35rem 0 0; font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted); }
-.atlas-acts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.atlas-acts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2xs); }
 .atlas-act {
-  display: flex; align-items: center; gap: .7rem; width: 100%; min-height: 48px; padding: .4rem .6rem;
+  display: flex; align-items: center; gap: var(--sp-gap-70); width: 100%; min-height: 48px; padding: .4rem .6rem;
   background: var(--bg2); border: 1px solid transparent; border-radius: var(--r-compact);
   color: var(--ink); text-decoration: none; text-align: left; cursor: pointer; font: inherit;
   transition: border-color var(--dur-immediate) var(--ease-standard), background var(--dur-immediate) var(--ease-standard);
@@ -117,9 +117,9 @@
   font-family: var(--font-data); font-size: var(--text-control-sm); font-weight: 600; color: var(--muted); white-space: nowrap;
 }
 /* The four globe controls, the board's rounded tiles: icon over a small word. */
-.atlas-globe-ctl { position: absolute; right: 0; bottom: 0; z-index: 6; display: flex; gap: 8px; }
+.atlas-globe-ctl { position: absolute; right: 0; bottom: 0; z-index: 6; display: flex; gap: var(--sp-xs); }
 .atlas-ctl {
-  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-2xs);
   width: 58px; height: 58px; padding: 0; background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-compact);
   color: var(--ink); cursor: pointer; font-family: var(--font-data);
   transition: border-color var(--dur-immediate) var(--ease-standard), color var(--dur-immediate) var(--ease-standard);
@@ -132,9 +132,9 @@
 
 .atlas-toast {
   position: absolute; left: 50%; bottom: 64px; transform: translateX(-50%);
-  background: var(--ink); color: var(--bg); padding: 10px 16px; z-index: 20; border-radius: var(--r-compact);
+  background: var(--ink); color: var(--bg); padding: var(--sp-sm-h) var(--sp-md); z-index: 20; border-radius: var(--r-compact);
   opacity: 0; pointer-events: none; transition: opacity var(--dur-routine) ease;
-  display: flex; align-items: center; gap: 10px; font-family: var(--font-data); font-size: var(--text-control);
+  display: flex; align-items: center; gap: var(--sp-sm-h); font-family: var(--font-data); font-size: var(--text-control);
 }
 .atlas-toast[data-open] { opacity: 1; pointer-events: auto; }
 .atlas-toast a { color: var(--aink); background: var(--card); padding: .1em .5em; font-weight: 640; text-decoration: none; border-radius: var(--r-inset); }
@@ -143,8 +143,8 @@
    by world-view.js on every atlas-pos frame with a translate3d. ─────────────────────────── */
 .atlas-pinchip {
   position: absolute; top: 0; left: 0; z-index: 6;
-  display: inline-flex; align-items: center; gap: 6px;
-  margin: -12px 0 0 0; padding: 3px 10px; min-height: 44px;
+  display: inline-flex; align-items: center; gap: var(--sp-xs-h);
+  margin: -12px 0 0 0; padding: 3px var(--sp-sm-h); min-height: 44px;
   /* Opaque: it sits over a canvas whose colour changes as the globe turns. */
   background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-pill);
   color: var(--ink); font-family: var(--font-data); font-size: var(--text-micro); font-weight: 600;
@@ -168,10 +168,10 @@
 }
 
 /* ── Your destinations. ──────────────────────────────────────────────────────────────── */
-.atlas-dests { display: none; flex-direction: column; gap: .6rem; padding: 1rem 1rem .9rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); }
+.atlas-dests { display: none; flex-direction: column; gap: var(--sp-gap-60); padding: 1rem 1rem .9rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); }
 .atlas-dest-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .atlas-dest-list li + li { border-top: 1px solid var(--rule); }
-.atlas-dest { display: flex; align-items: center; gap: .7rem; min-height: 56px; padding: .45rem 0; color: var(--ink); text-decoration: none; }
+.atlas-dest { display: flex; align-items: center; gap: var(--sp-gap-70); min-height: 56px; padding: .45rem 0; color: var(--ink); text-decoration: none; }
 .atlas-dest:hover .atlas-dest-n, .atlas-dest:focus-visible .atlas-dest-n { color: var(--accent-ink); }
 .atlas-dest:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; border-radius: var(--r-inset); }
 .atlas-dest-plate { flex: none; width: 44px; height: 44px; overflow: hidden; border-radius: var(--r-inset); background: var(--bg2); border: 1px solid var(--rule); }
@@ -191,9 +191,9 @@
 
 /* ── How it works / the marks / looking at. ──────────────────────────────────────────── */
 .atlas-howto { display: none; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) auto; gap: 1.2rem; padding: .9rem 1.1rem; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-card); }
-.atlas-howto-col { display: flex; flex-direction: column; gap: .5rem; min-width: 0; }
+.atlas-howto-col { display: flex; flex-direction: column; gap: var(--sp-gap-50); min-width: 0; }
 .atlas-howto-col + .atlas-howto-col { border-left: 1px solid var(--rule); padding-left: 1.2rem; }
-.atlas-howto-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted); }
+.atlas-howto-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-gap-50) 1.4rem; font-family: var(--font-data); font-size: var(--text-caption); color: var(--muted); }
 .atlas-howto-key { flex-direction: column; gap: 5px; font-size: var(--text-control-sm); }
 .atlas-howto-key li { display: flex; align-items: center; gap: 7px; }
 .swatch { width: 9px; height: 9px; border-radius: var(--r-round); flex: 0 0 auto; }
@@ -212,7 +212,7 @@
     grid-template-columns: 250px minmax(0, 1fr) 236px;
     grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas: "panel globe dests" "trip globe dests" "howto howto howto";
-    gap: 14px 16px; padding: 2px 20px 20px;
+    gap: var(--sp-md-h) var(--sp-md); padding: 2px var(--sp-lg) var(--sp-lg);
   }
   /* Table mode: the frame is the strip alone; the list has the page. */
   :root[data-atlas-mode="table"] .atlas-stage { min-height: 0; }

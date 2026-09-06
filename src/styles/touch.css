@@ -35,7 +35,7 @@
    guide, and the chip removes itself once it's used or scrolled past. Full-width and
    pill-shaped so it reads as a control, not a notice (clickability must be obvious). */
 .resume-chip{
-  display:flex;flex-direction:column;align-items:flex-start;gap:.1rem;
+  display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-gap-10);
   width:calc(100% - 2rem);max-width:44rem;margin:.9rem auto -.2rem;
   min-height:48px;padding:.55rem .95rem;text-align:left;
   background:color-mix(in srgb,var(--accent) 12%,var(--card));
