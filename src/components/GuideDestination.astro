@@ -157,7 +157,7 @@ const countOf = (ch: Chapter) => ch.entries.length;
       {/* ═══ OVERVIEW ═══ */}
       <section class="gd-overview" data-chapter-panel="overview" aria-label="Guide overview">
         <p class="gd-kicker">Explore by topic · {chapters.length} chapters</p>
-        <div class="gd-cards">
+        <div class="gd-cards" data-reveal>
           {chapters.map((ch, n) => (
             /* One tile per chapter, all the same size (board 05): the chapter's own first
                photograph over its number, its name and one line. The mosaic of feature and

@@ -176,6 +176,9 @@ document.querySelectorAll(".tabs, .botbar").forEach(function (group) {
 
     /* ── DARK MODE TOGGLE ─────────────────────────────────────────────── */
     initDarkToggle("btnDark");
+    /* Lazy: entrance motion is the last thing that should compete for the first paint,
+       and the module bails on its own under reduced motion. */
+    import("./reveal.js").then((m) => m.initReveal(document)).catch(() => {});
 
     /* ── SECTION DEEP LINKS (the # copy button on cards) ──────────────── */
     document.querySelectorAll(".anchor-btn").forEach(function (btn) {
