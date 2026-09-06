@@ -3,15 +3,15 @@
     "type": "panel",
     "group": "Tokyo",
     "title": "Tokyo weekend — the quick brief",
-    "body": "<p>While the other two are at GO Fest + MSI in Daejeon, you've got a <b>solo Tokyo weekend — Sat Jul 11 → Mon Jul 13</b>, flying <b>Jeju Air, Incheon (ICN) ↔ Tokyo–Narita (NRT)</b>. <b>No time change</b> — Korea and Japan are both UTC+9. Carry-on only: pack light, keep your <b>passport</b> on you. This is a crash-course — hit a few icons, eat well, grab snacks, and be back in Seoul to meet the guys <b>Monday night ≈20:30</b>. Checked Jul 2026; ⚠ re-verify flight times, ticket prices and hours before you fly.</p>",
+    "body": "<p>While the other two are at GO Fest and MSI in Daejeon, you have a <b>solo Tokyo weekend, Sat Jul 11 to Mon Jul 13</b>, flying <b>Jeju Air, Incheon (ICN) to Tokyo–Narita (NRT)</b> and back. There is <b>no time change</b>, since Korea and Japan are both UTC+9. Pack light and go carry-on only, and keep your <b>passport</b> on you. Treat this as a crash-course: hit a few icons, eat well, grab snacks, and be back in Seoul to meet the guys <b>Monday night around 20:30</b>. Checked Jul 2026; ⚠ re-verify flight times, ticket prices and hours before you fly.</p>",
     "checklist": [
-      "<b>The one hard deadline:</b> back in central Seoul by <b>≈20:30 Mon Jul 13</b>. Book a Narita→Incheon flight landing ICN by <b>≈18:00–18:30</b>, then AREX/limo (~1 hr) into the city. ⚠ Don't cut it closer — Monday traffic + immigration eat time.",
+      "<b>The one hard deadline:</b> back in central Seoul by <b>≈20:30 Mon Jul 13</b>. Book a Narita→Incheon flight landing ICN by <b>≈18:00–18:30</b>, then AREX/limo (~1 hr) into the city. ⚠ Do not cut it closer — Monday traffic + immigration eat time.",
       "<b>Top 3 if you do nothing else:</b> <b>Shibuya Crossing</b> + <b>Shibuya Sky</b> at sunset · <b>Senso-ji</b> temple in Asakusa · a night out in <b>Shinjuku</b> (Omoide Yokocho / Golden Gai).",
       "<b>Book online now:</b> <b>Shibuya Sky</b> (timed entry — sunset slots sell out) and <b>teamLab Planets</b> (15-min slots, weekend = busy). Grab both before you fly.",
       "<b>Pay with your phone:</b> add <b>Suica to Apple Pay</b> (or buy a <b>Welcome Suica</b>, ≈¥1,500, at the airport) — tap for every train and most konbini.",
       "<b>Cash:</b> cards work widely now, but carry ≈¥10,000 for small ramen shops, shrines and markets. <b>No tipping in Japan.</b>",
       "<b>Speed through arrival:</b> pre-register <b>Visit Japan Web</b> (immigration + customs QR) before you land — <a href='https://services.digital.go.jp/en/visit-japan-web/' target='_blank' rel='noopener noreferrer'>official site</a>; show the QR live from your phone, not a screenshot.",
-      "<b>Korea re-entry Monday is a NEW entry:</b> the same rules from <b>Entry &amp; documents</b> (Plan tab) apply — US citizens have the K-ETA waived through Dec 31 2026, and you'll clear Korean immigration again. Have your docs ready both directions."
+      "<b>Korea re-entry Monday is a NEW entry:</b> the same rules from <b>Entry &amp; documents</b> (Plan tab) apply — US citizens have the K-ETA waived through Dec 31 2026, and you will clear Korean immigration again. Have your docs ready both directions."
     ],
     "verified_on": "2026-07-10",
     "shelf_life": "hours",
@@ -26,9 +26,9 @@
       "<b>Narita → Tokyo, two easy trains.</b> <b>Narita Express (N'EX)</b> runs straight to <b>Shibuya / Shinjuku</b>, ~65 min, ≈¥3,070–4,370 — best if you base in Shibuya. <b>Keisei Skyliner</b> hits <b>Ueno / Nippori</b> in ~41 min, ≈¥2,580 (≈¥2,310 booked online) — faster and cheaper but east-side. <a href='https://www.keisei.co.jp/keisei/tetudou/skyliner/us/index.php' target='_blank' rel='noopener noreferrer'>Skyliner official</a>.",
       "<b>IC card:</b> add <b>Suica to Apple Pay</b> before you land (easiest, carry-on-friendly), or buy a <b>Welcome Suica</b> (≈¥1,500, 28-day) at the <b>JR East Travel Service Center</b> at Narita. Tap for trains, konbini and vending machines.",
       "<b>Base yourself in Shibuya or Shinjuku</b> — both sit on the JR Yamanote loop, within walking distance of nightlife and one train from most sights. A capsule or business hotel is plenty for two nights.",
-      "<b>Coin lockers</b> are everywhere (stations, ≈¥400–700) — stash your carry-on Saturday so you're not dragging it around before check-in.",
-      "<b>Last trains run ~00:00–01:00.</b> Miss it and it's a pricey taxi — check the last-train time on Google Maps (which <i>does</i> work in Japan, unlike Korea).",
-      "<b>Etiquette:</b> stand <b>left</b> on Tokyo escalators, keep phone calls off trains, and carry your trash until you find a bin — they're scarce.",
+      "<b>Coin lockers</b> are everywhere (stations, ≈¥400–700) — stash your carry-on Saturday so you are not dragging it around before check-in.",
+      "<b>Last trains run ~00:00–01:00.</b> Miss it and it is a pricey taxi — check the last-train time on Google Maps (which <i>does</i> work in Japan, unlike Korea).",
+      "<b>Etiquette:</b> stand <b>left</b> on Tokyo escalators, keep phone calls off trains, and carry your trash until you find a bin — they are scarce.",
       "<b>Rough all-in budget:</b> ~$450–650 for the weekend — Jeju Air round trip + 2 nights + Suica/trains + food + a couple of paid views (Shibuya Sky, teamLab). ⚠ Flights swing it most; this is your own line, separate from the Korea budget tab."
     ],
     "verified_on": "2026-07-10",
@@ -39,7 +39,7 @@
     "type": "prose",
     "group": "Tokyo",
     "title": "Your 3 days, roughly",
-    "body": "<p><b>Sat Jul 11 — land & Shibuya night.</b> Fly ICN→NRT (aim for a morning departure), train into <b>Shibuya</b>, lock the bag in a coin locker. Do the <b>Shibuya Crossing</b> at street level, then <b>Shibuya Sky</b> for sunset (pre-booked). Dinner in Shibuya, then wander <b>Shinjuku</b> — Omoide Yokocho yakitori + Golden Gai. Early-ish night; Sunday's the big one.</p><p><b>Sun Jul 12 — the full day.</b> Morning at <b>Senso-ji</b> in Asakusa (go early, before the crowds; Nakamise street for snacks). Midday <b>Meiji Jingu</b> + <b>Harajuku / Omotesando</b>. Afternoon or evening <b>teamLab Planets</b> in Toyosu (booked slot). Into gaming? Swap in <b>Akihabara</b> for arcades and anime/game shops — right up your crew's alley.</p><p><b>Mon Jul 13 — light morning, then fly back.</b> Keep it loose — it's a travel day. One easy thing near your route, a fast <b>souvenir run</b> (Donki or a station depachika), then head to <b>Narita by early afternoon</b>. Fly NRT→ICN, ride into Seoul, and meet the guys <b>≈20:30</b>. ⚠ Give yourself buffer — don't schedule anything you can't drop.</p>",
+    "body": "<p><b>Sat Jul 11 — land & Shibuya night.</b> Fly ICN→NRT (aim for a morning departure), train into <b>Shibuya</b>, lock the bag in a coin locker. Do the <b>Shibuya Crossing</b> at street level, then <b>Shibuya Sky</b> for sunset (pre-booked). Dinner in Shibuya, then wander <b>Shinjuku</b> — Omoide Yokocho yakitori + Golden Gai. Early-ish night; Sunday's the big one.</p><p><b>Sun Jul 12 — the full day.</b> Morning at <b>Senso-ji</b> in Asakusa (go early, before the crowds; Nakamise street for snacks). Midday <b>Meiji Jingu</b> + <b>Harajuku / Omotesando</b>. Afternoon or evening <b>teamLab Planets</b> in Toyosu (booked slot). Into gaming? Swap in <b>Akihabara</b> for arcades and anime/game shops — right up your crew's alley.</p><p><b>Mon Jul 13 — light morning, then fly back.</b> Keep it loose — it is a travel day. One easy thing near your route, a fast <b>souvenir run</b> (Donki or a station depachika), then head to <b>Narita by early afternoon</b>. Fly NRT→ICN, ride into Seoul, and meet the guys <b>≈20:30</b>. ⚠ Give yourself buffer — do not schedule anything you cannot drop.</p>",
     "verified_on": "2026-07-10",
     "shelf_life": "transit",
     "source_url": "https://www.gotokyo.org/en/"
@@ -204,7 +204,7 @@
         "area": "Anywhere",
         "hours": "Open 24/7",
         "book": "walk-in",
-        "why": "Genuinely good onigiri, sandos, fried chicken and coffee for a few hundred yen. Don't sleep on it."
+        "why": "Good onigiri, sandos, fried chicken and coffee for a few hundred yen. Do not sleep on it."
       },
       {
         "name": "Omoide Yokocho",
@@ -227,7 +227,7 @@
     "group": "Tokyo",
     "title": "Carry-on souvenirs & snacks to take home",
     "items": [
-      "<b>Tokyo Banana</b> — the city's signature banana-custard sponge cake; a solid cake, so it's carry-on-safe. Stations, department-store depachika, and the airport.",
+      "<b>Tokyo Banana</b> — the city's signature banana-custard sponge cake; a solid cake, so it is carry-on-safe. Stations, department-store depachika, and the airport.",
       "<b>Japanese KitKats</b> — matcha, sake, regional flavors; the widest selection is at <b>Don Quijote</b>.",
       "<b>Senbei</b> rice crackers — flat, sturdy, easy to pack; a great cheap gift.",
       "<b>Royce' / matcha chocolate</b> and other depachika sweets — pick a couple; they travel well in a carry-on.",
