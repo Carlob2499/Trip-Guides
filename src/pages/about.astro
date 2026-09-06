@@ -187,7 +187,10 @@ const contours = [
       </main>
     </div>
 
-    <footer class="ab-foot">Waypoint — every fact checked, every route tested.</footer>
+    {/* 2026-09-06: the slogan is gone. "Waypoint — every fact checked, every route tested."
+        stood at the foot of three pages telling the reader what the product thinks of itself;
+        the only part anyone used was the link. A footer that is only a tagline is furniture. */}
+    <footer class="ab-foot"><a href={`${base}/`}>Back to the guides →</a></footer>
     <script>
       import { initDarkToggle } from "../scripts/theme.js";
       initDarkToggle("btnDark");

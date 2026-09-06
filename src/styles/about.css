@@ -85,6 +85,10 @@
 .ab-cta-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
 
 .ab-foot{border-top:1px solid var(--rule2);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:var(--text-control);max-width:1080px;margin:3rem auto 0;font-family:var(--font-data);letter-spacing:.04em}
+/* This footer had no link until the slogan came out of it, so it had no link rule either and
+   the anchor fell through to the browser's default blue — 2.23:1 on the dark ground. Same
+   treatment as .itk-foot a and .cp-foot a. */
+.ab-foot a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
 
 /* --- Motion: rise-on-scroll, same native pattern as scroll-motion.css.
    Progressive enhancement only; reduced-motion never opts in. ---------------- */
