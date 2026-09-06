@@ -19,7 +19,8 @@
 import { test, expect, type Page } from "@playwright/test";
 
 const LIGHT_BG = "rgb(242, 237, 229)"; // base.css :root --bg  #f2ede5
-const DARK_BG = "rgb(15, 27, 46)";     // base.css dark  --bg  #0f1b2e
+const DARK_BG = "rgb(8, 13, 20)";      // base.css dark  --bg  #080d14
+const FRAME_DARK = "rgb(24, 43, 68)";  // base.css dark  --frame-bg  #182b44
 
 /* Every page that wraps its content in `.stage`. If a new framed surface is added without a row
    here, it is unprotected — which is precisely how ten of them shipped unthemed. */
@@ -76,7 +77,12 @@ test.describe("⌁ an always-dark inset stays dark in both themes", () => {
     await open(page, "/Trip-Guides/guides/korea/", "dark");
     const onNavy = await bgOf(page, ".chrome");
 
-    expect(onCream, "the chrome strip should stay dark on the light page").toBe(DARK_BG);
-    expect(onNavy, "the chrome strip should stay dark on the dark page").toBe(DARK_BG);
+    /* 2026-09-06: the strip is the FRAME register, not the page ground, and the two are no
+       longer the same colour. In light it is the dark object on cream; in dark it LIFTS off a
+       near-black page (frame/page 1.28:1) instead of matching it, which is what makes the frame
+       still read as a frame at night. Both values, not one, is the assertion now. */
+    expect(onCream, "the chrome strip should wear the light-theme frame on the cream page").toBe("rgb(15, 27, 46)");
+    expect(onNavy, "the chrome strip should wear the lifted dark-theme frame").toBe(FRAME_DARK);
+    expect(onCream, "the frame must differ between themes — a fixed frame is what collapsed before").not.toBe(onNavy);
   });
 });

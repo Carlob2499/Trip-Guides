@@ -15,7 +15,11 @@ import { mix, readableOn, readableOnAll } from "./contrast";
 
 /* The real surfaces accent text lands on, read from base.css: --card, --bg2, --bg per mode. */
 export const LIGHT_SURFACES = ["#fefcf8", "#e5ded2", "#f2ede5"] as const;
-export const DARK_SURFACES = ["#1c2f47", "#152438", "#0f1b2e"] as const;
+/* 2026-09-06: the dark page dropped and the frame lifted (base.css, "THE FRAME REGISTER"),
+   so accent text on a dark ground is now derived against the PAGE ladder — card #22334d,
+   sunken #101d2f, page #080d14. The frame's own surfaces sit between these two, so ink
+   derived to clear the page ladder clears the frame as well. */
+export const DARK_SURFACES = ["#22334d", "#101d2f", "#080d14"] as const;
 /* The dark register's quiet ink (base.css --muted in the dark block) — the pair the destination
    atmosphere (destination-theme.ts) is measured against. Asserted against base.css by the test. */
 export const DARK_QUIET_INK = "#9aabc4";

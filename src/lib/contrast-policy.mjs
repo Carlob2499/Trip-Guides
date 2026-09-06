@@ -21,7 +21,7 @@ export const LIGHT_BG = "#f2ede5";
 // in WayPoint-V2; gate both, always.
 // D5 warm-charcoal remap: #0f1317 → #0d1512 at EQUAL relative luminance (0.0063 vs 0.0065), so
 // every previously blessed palette measures the same ratio to two decimals against this ground.
-export const DARK_BG = "#0f1b2e";
+export const DARK_BG = "#080d14";
 
 // 3.0:1 is WCAG's minimum for large-text / UI-component contrast, and is the empirically-
 // calibrated floor of the project's own country accent palette (the tightest, #a6721b, sits at

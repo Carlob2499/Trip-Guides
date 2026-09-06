@@ -132,7 +132,7 @@ describe("contrast grounds — the extractor measures what the product actually 
 
   it("the shared policy module names the current page grounds, not a retired palette", () => {
     expect(LIGHT_BG).toBe("#f2ede5");
-    expect(DARK_BG).toBe("#0f1b2e");
+    expect(DARK_BG).toBe("#080d14");
     expect(MIN_ACCENT_CONTRAST).toBe(3.0);
   });
 
@@ -171,7 +171,10 @@ describe("contrast grounds — the extractor measures what the product actually 
     // it is unchanged: #9c2f2a is illegible on the dark page in every register the product has
     // shipped. A rise above MIN_ACCENT_CONTRAST here would mean the dark ground had drifted light
     // enough to start blessing accents the schema gate once rejected.
-    expect(contrastRatio("#9c2f2a", DARK_BG)).toBeCloseTo(2.35, 2);
+    // 2026-09-06: the dark PAGE dropped to #080d14 when the frame lifted off it (base.css,
+    // "THE FRAME REGISTER"), so the same accent now reads 2.65:1. Third ground, third number,
+    // same verdict — still far under the floor.
+    expect(contrastRatio("#9c2f2a", DARK_BG)).toBeCloseTo(2.65, 2);
     expect(contrastRatio("#9c2f2a", DARK_BG)).toBeLessThan(MIN_ACCENT_CONTRAST);
   });
 });

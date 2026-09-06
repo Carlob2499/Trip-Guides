@@ -72,7 +72,7 @@
      #c78f78 sat at 38% saturation against the boards' 81%: a contrast derivation against the
      near-black forest ground had been allowed to wash the colour out until it read as dust.
      Measured: ink 7.21/5.53/6.34 on the light surfaces, inkDark 5.40/6.23/6.87 on the navy. */
-  --accent-ink-light:#8f3d0d;--accent-ink-dark:#e58e5b;--accent-ink:var(--accent-ink-light);
+  --accent-ink-light:#8f3d0d;--accent-ink-dark:#e89666;--accent-ink:var(--accent-ink-light);
   --on-accent:#2c0f00;
   /* THE BRAND ACCENT (2026-09-05, owner ruling "option 3"). --accent is the GUIDE's colour,
      resolved per destination from its cover photo (src/lib/palettes.ts), so Korea is olive and
@@ -91,7 +91,7 @@
      pinned by accent-tokens.test.ts — never hand-edit them. */
   --brand:#d35c16;
   --on-brand:#2c0f00;                 /* text on a brand FILL — 4.52:1, same in both themes */
-  --brand-ink-light:#8f3d0d;--brand-ink-dark:#e58e5b;
+  --brand-ink-light:#8f3d0d;--brand-ink-dark:#e89666;
   --brand-ink:var(--brand-ink-light); /* brand as TEXT on the page ground — the dark blocks swap */
   /* The ring a map pin wears. Fixed white in both themes and deliberately not --card: a pin does
      not stand on the page, it stands on a MAP TILE, and the tile is satellite, terrain or a dense
@@ -99,6 +99,25 @@
      against all three; --card would vanish into pale terrain in light mode. Same object-not-ink
      reasoning as --on-crit above. */
   --brand-ring:#ffffff;
+
+  /* THE FRAME REGISTER (2026-09-06). `.spatial` used to hardcode its own surfaces, so the frame
+     was one fixed navy in both themes — and in dark mode the PAGE ground was that same navy.
+     Measured: frame vs page 1.000:1, chrome strip vs stage 1.000:1. The product's one
+     structural idea, "the instrument is the dark thing on the paper", had nothing to be
+     distinct against at night; only a 1px border survived it.
+
+     The metaphor answers it. Daylight is bright paper and a dark screen. Night does not darken
+     the screen — it darkens the PAPER. So at night the instrument is the lit thing and the
+     figure/ground relationship inverts exactly as it does in the world. These are the frame's
+     own surfaces; the dark blocks lift them while the page drops beneath.
+     Light: frame #0f1b2e on cream, a dark object. Dark: frame #182b44 on #080d14, a lit one.
+     Measured after: frame/page 1.36 on the plain page and 1.30 against the DESTINATION-TINTED
+     dark body (destination-theme.ts lightens it per guide — the tinted case is the real one a
+     reader meets, so the frame is set to clear 1.25 there, not only on the token). Ink on the
+     frame 11.98:1, muted 6.13:1,
+     brand 3.62:1 as identity. */
+  --frame-bg:#0f1b2e;--frame-bg2:#152438;--frame-card:#1c2f47;
+  --frame-rule:#2b4160;--frame-rule2:#3f5a7d;--frame-muted:#9aabc4;
   /* ATLAS TOKEN CONTRACT (Phase 1.1, 2026-08-06) — docs/design-handoff/DESIGN.md R4 names
      several values this palette ALREADY ships. Declared here so any later Atlas ticket can
      reference the names without defining them first. Nothing consumes them yet, and no call
@@ -177,7 +196,7 @@
      decision, 2026-08-06). Both hexes are existing palette members, not new colours.
      Pinned by src/styles/atlas-tokens.test.ts: >=4.5:1 ink-on-ground AND >=3:1 ground-on-page
      (WCAG 1.4.11 — a button's own edge has to be findable), in both themes. */
-  --cta:#0f1b2e;--cta-ink:#f8faf3;
+  --cta:#080d14;--cta-ink:#f8faf3;
   /* Display-cutout insets, spelled once at the root so no component has to remember env() or
      its fallback. NOTHING consumes them in this phase — each fixed/sticky component wires
      max(<its own reserve>,var(--safe-*)) as it migrates. The 0px fallback is load-bearing, not
@@ -448,7 +467,9 @@
    reading — stays valid to two decimal places. Change a value here and its luminance changes
    with it; re-run the contrast gates. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#0f1b2e;--bg2:#152438;--ink:#f1eae0;--card:#1c2f47;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1b2e;
+  --bg:#080d14;--bg2:#101d2f;--ink:#f1eae0;--card:#22334d;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#080d14;
+  /* The frame lifts while the page drops — see the frame register in :root. */
+  --frame-bg:#182b44;--frame-bg2:#101d2f;--frame-card:#26385a;
   /* --rw/--photo are re-declared here at the SAME values on purpose (R5 TOKENS.md §1 lists both
      in both theme tables). Unlike the aliases above, these are theme KNOBS: the whole reason
      they are tokens is that a theme could thicken every hairline or suppress photography in one
@@ -456,14 +477,16 @@
      carry their own declaration. If one moves, move the other deliberately — they are two
      decisions that currently agree, not one value written twice. */
   --rw:1px;--photo:1;
-  --cta:#f1eae0;--cta-ink:#0f1b2e;
+  --cta:#f1eae0;--cta-ink:#080d14;
   --accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark)}
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
-[data-theme="dark"]{--bg:#0f1b2e;--bg2:#152438;--ink:#f1eae0;--card:#1c2f47;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1b2e;
+[data-theme="dark"]{--bg:#080d14;--bg2:#101d2f;--ink:#f1eae0;--card:#22334d;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#080d14;
+  /* The frame lifts while the page drops — see the frame register in :root. */
+  --frame-bg:#182b44;--frame-bg2:#101d2f;--frame-card:#26385a;
   --rw:1px;--photo:1;   /* theme knobs — see the media-query block above for why both scopes declare them */
-  --cta:#f1eae0;--cta-ink:#0f1b2e;
+  --cta:#f1eae0;--cta-ink:#080d14;
   --accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark)}
 [data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 
@@ -584,7 +607,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
    an OBJECT, not ink on a page, so it does not re-map. Values track the dark block's navy.
    A visual test asserts a framed page renders differently in light and dark, so the two jobs
    cannot silently merge again. */
-.spatial{--bg:#0f1b2e;--bg2:#152438;--card:#1c2f47;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--ink:#f1eae0;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#0f1b2e;--cta:#f1eae0;--cta-ink:#0f1b2e;--accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark);
+.spatial{--bg:var(--frame-bg);--bg2:var(--frame-bg2);--card:var(--frame-card);--rule:var(--frame-rule);--rule2:var(--frame-rule2);--muted:var(--frame-muted);--ink:#f1eae0;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:var(--frame-bg);--cta:#f1eae0;--cta-ink:var(--frame-bg);--accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark);
   /* A custom property resolves where it is DECLARED, so :root's aliases would keep pointing at the
      light values from up the tree. Every alias that names a remapped token is re-declared here. */
   --aink:var(--accent-ink);--selected-ink:var(--accent-ink);--sunken:var(--bg2);--line:var(--rule);--line-strong:var(--rule2);--info:var(--muted);--ochre:var(--warn);--caution:var(--warn);--critical:var(--crit);--ok:var(--green);--ok-fill:var(--green);--on-ok:var(--on-green);
