@@ -98,14 +98,14 @@ class AtlasMap extends BaseElement {
     const style = document.createElement("style");
     style.textContent = [
       "@keyframes am-pulse{0%{r:10;opacity:.55}70%{r:24;opacity:0}100%{r:24;opacity:0}}",
-      ".am-pulse{fill:none;stroke:#9c4421;stroke-width:2;animation:am-pulse 2.4s ease-out infinite}",
+      ".am-pulse{fill:none;stroke:var(--brand);stroke-width:2;animation:am-pulse 2.4s ease-out infinite}",
       "@media (prefers-reduced-motion: reduce){.am-pulse{animation:none;opacity:0}}",
       /* The focus halo (atlas-mobile-home bundle §1): two rings on the picked pin, so a tap
          has a visible result on the globe itself and not only in the list beneath it. Drawn
          for every pin and revealed by [data-focus] on the group — toggling an attribute costs
          nothing per frame, where appending and removing SVG nodes on each pick would run
          inside the same loop that has a dirty-flag specifically to avoid work. */
-      ".am-halo{fill:none;stroke:#9c4421;stroke-width:2;opacity:0}",
+      ".am-halo{fill:none;stroke:var(--brand);stroke-width:2;opacity:0}",
       "g[data-focus] .am-halo{opacity:1}",
       "g[data-focus] .am-halo--faint{opacity:.42}",
       /* The pulse is an idle attractor — "there is something here". Once a pin is picked it has
@@ -166,7 +166,21 @@ class AtlasMap extends BaseElement {
     this._c = {
       card: cssVar(this, "--card", "#fbfcf6"), sunken: cssVar(this, "--sunken", "#ced5c4"),
       rule: cssVar(this, "--rule", "#a9b39b"), rule2: cssVar(this, "--rule2", "#8a9480"),
-      muted: cssVar(this, "--muted", "#3c4534"), bg: cssVar(this, "--bg", "#e3e7dc"),
+      muted: cssVar(this, "--muted", "#5b5348"), bg: cssVar(this, "--bg", "#f2ede5"),
+      /* 2026-09-06 — the globe used --card for the sphere and --sunken for land, and on the
+         board-faithful cream palette those two sit within 1.1:1 of each other AND of the page.
+         The result was a pale disc on pale paper with land you had to hunt for: "atrocious",
+         and fairly. A globe is a MAP, so it gets a map's separation — an ocean distinctly
+         darker than the paper it lies on and land distinctly lighter than the ocean, which is
+         the ordinary cartographic relationship and reads at a glance from across a room.
+         Derived from the palette, never hand-picked, so a theme change carries it. */
+      ocean: cssVar(this, "--bg2", "#152438"),
+      /* Land is --rule2, not --card. On the dark register --card and --bg2 sit ~1.15:1 apart,
+         which is the right relationship for a card lifting off a page and the wrong one for a
+         continent against an ocean — the first pass drew a navy globe with land you could not
+         find. --rule2 is the palette's next step up and gives the coastline a real edge. */
+      land: cssVar(this, "--rule2", "#3f5a7d"),
+      brand: cssVar(this, "--brand", "#d35c16"),
     };
   }
 
@@ -327,7 +341,7 @@ class AtlasMap extends BaseElement {
       // upcoming/undated). Distinct from card "plating" (all four pin cards carry a photo —
       // Stage C.5's "all four cards get plates", unlike the prototype's Korea-only plate).
       el.append("circle").attr("r", 8)
-        .style("fill", guide.surveyed ? "#9c4421" : "var(--muted)").style("stroke", "var(--bg)").attr("stroke-width", 2.5);
+        .style("fill", guide.surveyed ? "var(--brand)" : "var(--muted)").style("stroke", "var(--bg)").attr("stroke-width", 2.5);
       this._pins[code] = el.node();
       // A focus set before the world loaded (state restored after a Back) lands here.
       if (this._focus === code) this._pins[code].toggleAttribute("data-focus", true);
@@ -420,7 +434,7 @@ class AtlasMap extends BaseElement {
     ctx.clearRect(0, 0, w, h);
 
     ctx.beginPath(); ctx.arc(w / 2, h / 2, this._k, 0, 6.2832);
-    ctx.fillStyle = colors.card; ctx.fill();
+    ctx.fillStyle = colors.ocean; ctx.fill();
     ctx.lineWidth = 1.2; ctx.strokeStyle = colors.rule2; ctx.stroke();
 
     if (!(lo && this._degraded > 1)) {
@@ -447,16 +461,19 @@ class AtlasMap extends BaseElement {
       }
     };
     ctx.beginPath(); drawSet(tier.plain);
-    ctx.fillStyle = colors.sunken; ctx.fill();
+    ctx.fillStyle = colors.land; ctx.fill();
     if (!lo) { ctx.lineWidth = 0.6; ctx.strokeStyle = colors.rule2; ctx.stroke(); }
     ctx.beginPath(); drawSet(tier.guides);
-    ctx.fillStyle = "rgba(156,68,33,.32)"; ctx.fill();
-    ctx.lineWidth = 1; ctx.strokeStyle = "#9c4421"; ctx.stroke();
+    /* A country this reader has a guide for. --brand, like the map pins and the day route:
+       Waypoint's own mark on the world, not a destination's colour — and #9c4421 was the
+       RETIRED house accent, left behind as a literal when the palette moved. */
+    ctx.save(); ctx.globalAlpha = 0.34; ctx.fillStyle = colors.brand; ctx.fill(); ctx.restore();
+    ctx.lineWidth = 1; ctx.strokeStyle = colors.brand; ctx.stroke();
 
     const centre = [-this._rot[0], -this._rot[1]];
     if (this._arcT > 0.001 && this._arcs.length) {
       ctx.save();
-      ctx.setLineDash([5, 5]); ctx.lineWidth = 1.3; ctx.strokeStyle = "rgba(156,68,33,.72)";
+      ctx.setLineDash([5, 5]); ctx.lineWidth = 1.3; ctx.globalAlpha = 0.72; ctx.strokeStyle = colors.brand;
       ctx.beginPath();
       for (const arc of this._arcs) {
         const count = arc.line.coordinates.length;
@@ -473,7 +490,7 @@ class AtlasMap extends BaseElement {
         const hp = this._proj(op);
         ctx.beginPath(); ctx.arc(hp[0], hp[1], 4.5, 0, 6.2832);
         ctx.fillStyle = colors.bg; ctx.fill();
-        ctx.lineWidth = 2; ctx.strokeStyle = "#9c4421"; ctx.stroke();
+        ctx.lineWidth = 2; ctx.strokeStyle = colors.brand; ctx.stroke();
         if (!lo) {
           ctx.font = "600 9px 'Source Sans 3', system-ui, sans-serif";
           ctx.fillStyle = colors.muted;

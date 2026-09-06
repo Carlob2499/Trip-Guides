@@ -41,7 +41,6 @@ export function initAtlasWorld(root = document) {
 
   const pinsLayer = host.querySelector("[data-atlas-pins]");
   const toast = root.querySelector("[data-atlas-toast]");
-  const coordEl = root.querySelector("[data-atlas-coord]");
   const reduced = reducedMotion();
 
   /* ── Selection, and coming back to it ────────────────────────────────────────────────
@@ -322,11 +321,9 @@ export function initAtlasWorld(root = document) {
   }
 
   map.addEventListener("atlas-pos", (ev) => {
-    const pos = ev.detail;
-    if (coordEl) {
-      const lat = pos.center[1], lng = pos.center[0];
-      coordEl.textContent = `${Math.abs(lat).toFixed(2)}° ${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(2)}° ${lng >= 0 ? "E" : "W"}`;
-    }
-    placeChips(pos);
+    /* The lat/lng readout that used to be painted here went with its "Looking at" column
+       (index.astro, 2026-09-06): a camera position no reader acts on. Nothing else consumed it,
+       so the listener now does the one job it still has. */
+    placeChips(ev.detail);
   });
 }

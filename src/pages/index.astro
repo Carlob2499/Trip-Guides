@@ -369,7 +369,13 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         )}
 
         {/* ── The globe. ── */}
-        <div class="atlas-globe-cell">
+        {/* The globe is a SPATIAL object, not page furniture: board 01 draws it on the dark
+            register and it is the one thing on this page that must read as a physical body in
+            space. On the cream page the sphere, its land and the paper all sat within ~1.1:1 of
+            each other and it went flat. `.spatial` is the same fixed-dark inset the chrome strip
+            and the map panes use, and atlas-map.js reads its palette off this element, so the
+            canvas follows without a second set of colours anywhere. */}
+        <div class="atlas-globe-cell spatial">
           <div id="atlasGlobe" data-atlas-globe>
             <div data-atlas-map-slot></div>
             <div class="atlas-pins" data-atlas-pins></div>
@@ -473,14 +479,15 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         {/* ── How it works / the marks / where the globe is looking (board 01's bottom strip).
             The key names what atlas-map.js actually draws: oxide = surveyed (past or on it now),
             muted = filed, the dashed route from the origin airport, the night shade. ── */}
+        {/* 2026-09-06 — the strip lost two of its three columns.
+            "How it works" said "Drag to rotate / Pins show your trips", which is word for word
+            what the hint pill under the globe already says; a legend that repeats the caption
+            beside it is not instruction, it is noise, and it was the largest thing on the page
+            after the globe. "Looking at" printed the camera's latitude and longitude, which no
+            reader does anything with — an instrument readout mistaken for information.
+            What is left is the only part that explains something the reader cannot otherwise
+            work out: what the colours of the marks mean. */}
         <div class="atlas-howto">
-          <div class="atlas-howto-col">
-            <span class="atlas-kicker">How it works</span>
-            <ul class="atlas-howto-list">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11V4.5a1.5 1.5 0 0 1 3 0V12M14 11.5V6.5a1.5 1.5 0 0 1 3 0V13"/><path d="M17 13v-1.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-2.5a5 5 0 0 1-4-2L4 14.5a1.6 1.6 0 0 1 2.6-1.9L8 14"/></svg><span><b>Drag to rotate</b><br/>explore your world</span></li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg><span><b>Pins show your trips</b><br/>tap one to open its guide</span></li>
-            </ul>
-          </div>
           <div class="atlas-howto-col">
             <span class="atlas-kicker">The marks</span>
             <ul class="atlas-howto-key">
@@ -489,10 +496,6 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
               <li><span class="swatch swatch--route"></span> Route from origin</li>
               <li><span class="swatch swatch--night"></span> Night now</li>
             </ul>
-          </div>
-          <div class="atlas-howto-col atlas-howto-coord">
-            <span class="atlas-kicker">Looking at</span>
-            <span class="atlas-coord" data-atlas-coord>—</span>
           </div>
         </div>
       </section>
