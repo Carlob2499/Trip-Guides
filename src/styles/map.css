@@ -35,8 +35,23 @@
 .map-chip:hover{color:var(--ink);border-color:var(--ink)}
 /* Pressed takes the BRAND, not the guide's accent (base.css --brand): a map control is
    Waypoint's furniture on every destination, and routing it through --accent is what made
-   Korea's map read sage. */
-.map-chip-on{color:var(--on-brand);background:var(--brand);border-color:var(--brand)}
+   Korea's map read sage.
+
+   TINTED, NOT FILLED. Every chip starts pressed (nothing filtered out), so a solid --brand fill
+   put five maximum-emphasis pills across the top of the map in exactly the colour the PINS use —
+   a secondary control shouting as loudly as the data it filters, and two different things
+   claiming the same colour. The tint keeps the brand association and the pressed reading while
+   giving the emphasis back to the map.
+
+   The label stays --ink rather than --brand-ink: brand ink ON the brand tint measured 4.43:1 in
+   the dark map pane, under AA for a 600-weight control label, and axe caught it. Pressed is still
+   unmistakable — brand border plus brand tint — without asking the text to carry the signal at a
+   contrast the tint cannot support. */
+.map-chip-on{
+  color:var(--ink);
+  background:color-mix(in srgb,var(--brand) 16%,var(--card));
+  border-color:var(--brand)
+}
 .map-chip:focus-visible{outline:2px solid var(--brand-ink);outline-offset:2px}
 
 .map-cluster{
@@ -52,6 +67,15 @@
   .map-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:calc(100% - 3.2rem)}
   .map-chips::-webkit-scrollbar{display:none}
   .map-chip{flex:none}
+  /* The row scrolls, so its last chip is cut off mid-word at the edge. A hard cut reads as a
+     broken layout; fading the final few pixels reads as "there is more this way", which is the
+     truth. Masked rather than covered with a gradient element, so it works over the live map. */
+  /* `black` is a keyword, not a colour choice: a mask samples ALPHA only, so the opaque stop's
+     hue is never rendered and a palette token there would be meaningless indirection. */
+  .map-chips{
+    -webkit-mask-image:linear-gradient(to right,black calc(100% - 22px),transparent);
+    mask-image:linear-gradient(to right,black calc(100% - 22px),transparent)
+  }
 }
 
 /* A scrolling row that simply stops at the viewport edge reads as a bug — the last chip is

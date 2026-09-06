@@ -85,4 +85,40 @@ describe("clusterPins", () => {
   it("returns an empty list for no pins", () => {
     expect(clusterPins([], 12)).toEqual([]);
   });
+
+  /* Two finished clusters closer together than the radius render as two discs stacked on the same
+     spot. The greedy pass compares each pin against a cluster's RUNNING centre, and that centre
+     drifts as pins join — so it is not OBVIOUS that the separation survives to the end, and this
+     pins it down.
+
+     It is a guard, not a bug report: a merge pass was written for the drift this describes, and
+     then deleted, because it could not be made to fail — neither this chain nor 20,000 randomised
+     layouts produced a single overlapping pair. Unreproduced, the extra pass was complexity
+     without a defect. If a future change to the grouping breaks the separation, this fails. */
+  it("leaves no two finished clusters closer together than the radius", () => {
+    const zoom = 14;
+    const radius = 60;
+    const chain = [
+      pin("a1", 37.5796, 126.9770),
+      pin("a2", 37.5796, 126.9764),
+      pin("a3", 37.5796, 126.9758),
+      pin("a4", 37.5796, 126.9752),
+      pin("b1", 37.5796, 126.9740),
+      pin("b2", 37.5796, 126.9734),
+    ];
+    const out = clusterPins(chain, zoom, radius);
+
+    /* Assert the PROPERTY, not a cluster count: the point is that nothing overlaps, however the
+       algorithm chooses to group them. */
+    for (let i = 0; i < out.length; i++) {
+      for (let j = i + 1; j < out.length; j++) {
+        const a = worldPixel(out[i].lat, out[i].lng, zoom);
+        const b = worldPixel(out[j].lat, out[j].lng, zoom);
+        const gap = Math.hypot(a.x - b.x, a.y - b.y);
+        expect(gap, `clusters ${i} and ${j} are ${gap.toFixed(1)}px apart`).toBeGreaterThan(radius);
+      }
+    }
+    // and nothing was lost on the way
+    expect(out.reduce((n, c) => n + c.pins.length, 0)).toBe(chain.length);
+  });
 });

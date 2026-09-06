@@ -136,7 +136,11 @@ export function boot(cfg) {
         // sequence, straight lines between stops — never a routed path pretending to be one.
         stops.forEach(function (p, i) { markers.push(markerFor(p, i)); });
         if (stops.length > 1) {
-          polyline = new google.maps.Polyline({ path: stops.map(function (p) { return { lat: p.lat, lng: p.lng }; }), geodesic: true, strokeColor: ACCENT, strokeOpacity: .9, strokeWeight: 4, map: map });
+          /* Thin and semi-transparent on purpose. At weight 4 and .9 opacity this line stopped being a
+          route and became the loudest object on the map: zoomed into Seoul, the legs out to Daejeon
+          and Busan cross the whole viewport as solid bars, burying street names and half the pins
+          under the connector between them. The route is context for the stops, not the subject. */
+          polyline = new google.maps.Polyline({ path: stops.map(function (p) { return { lat: p.lat, lng: p.lng }; }), geodesic: true, strokeColor: ACCENT, strokeOpacity: .55, strokeWeight: 2.5, map: map });
         }
       }
       var places = pins.filter(function (p) { return p.dayIdx == null; });
