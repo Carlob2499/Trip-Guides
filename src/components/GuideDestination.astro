@@ -178,10 +178,18 @@ const countOf = (ch: Chapter) => ch.entries.length;
               <span class="gd-card-arrow" aria-hidden="true">→</span>
             </button>
           ))}
+          {/* 2026-09-06 — was a shield icon on a muted-glyph tile, the one card in the band
+              still wearing the icon-plus-accent-rule treatment §33 says was retired for the
+              numbered plate. Sources gets the same numeral as every chapter before it
+              (chapters.length + 1) so the band reads as ten tiles, not nine and an outlier. */}
           {sources.length > 0 && (
             <button class="gd-card gd-card--quiet" type="button" data-chapter-go="sources">
-              <span class="gd-card-glyph" aria-hidden="true"><Icon name="shield" size={18} /></span>
-              <span class="gd-card-text"><span class="gd-card-name">Sources & verification</span><span class="gd-card-sub">Where every fact came from</span></span>
+              <span class="gd-card-glyph" aria-hidden="true">{String(chapters.length + 1).padStart(2, "0")}</span>
+              <span class="gd-card-text">
+                <span class="gd-card-n">{String(chapters.length + 1).padStart(2, "0")}</span>
+                <span class="gd-card-name">Sources & verification</span>
+                <span class="gd-card-sub">Where every fact came from</span>
+              </span>
               <span class="gd-card-arrow" aria-hidden="true">→</span>
             </button>
           )}

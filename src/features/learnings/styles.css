@@ -232,6 +232,14 @@
   cursor: pointer;
 }
 .learn-x:hover { color: var(--ink); }
+/* 2026-09-06 — tab.js only writes into #learnAgg from inside its Firebase subscription
+   (renderAgg), which never fires for a guide with no live config or zero feedback records —
+   Korea and Denmark both. The div sat in the DOM as a padded, bordered, empty card: the
+   "empty white bar" the /impeccable critique caught. Once renderAgg DOES run it always writes
+   either real content or the "Feedback logged…" placeholder — never nothing — so :empty
+   correctly means "never touched" and collapsing it is safe. Same rule this codebase already
+   holds itself to for optional data elsewhere (.learn-curated:empty, below). */
+.learn-agg:empty { display: none; }
 .learn-agg {
   padding: 16px 18px;
   border: 1px solid var(--rule);

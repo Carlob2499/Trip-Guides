@@ -265,7 +265,7 @@ const guidesJson = rows.map(({ g, record, cc }) => ({
         both themes (design-system.md §7/§13). Table mode collapses the body and leaves the
         strip, so the frame is still the frame while the list has the page. */}
     <div class="stage atlas-stage">
-      <AppChrome mode="atlas" base={base} title="WayPoint"
+      <AppChrome mode="atlas" base={base} title="Waypoint"
                  guideHref={quick ? `${base}/guides/${quick.g.id}/` : null}
                  destinations={[{ key: "trip", label: "Trip" }, { key: "itinerary", label: "Itinerary" }, { key: "map", label: "Map" }, { key: "guide", label: "Guide" }]}>
         {/* The strip's centre on the Atlas: one chip per trip, its status word and its name —

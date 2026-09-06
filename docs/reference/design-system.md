@@ -712,8 +712,16 @@ Rules:
 This interaction language may be reused for other multi-step decisions where appropriate.
 
 **Surface 7 (board `07_guide_builder`, Opus 5):** `/new/`, `/progress/` and `/progress/triage/`
-wear the frame — `.stage.spatial` with `UtilityBar` as its strip, the same shell every other
-surface uses. Inside the frame at ≥900px the builder is the board's three columns: the six
+wear the frame — `.stage` with `UtilityBar` as its strip, the same shell every other surface
+uses. **2026-09-06 — `.spatial` is no longer part of that shell.** The frame-theming pass
+(§ palette) split `.spatial`'s two jobs apart: it used to hardcode the dark register onto
+whatever it was applied to, which is why every page here carried it. `.stage` alone is themed
+now — light on light, dark on dark — and `.spatial` remains only the always-dark INSET (the
+chrome strip, a map pane, the Atlas globe): a fixed dark object on a page that can be either
+colour, never the page itself. No surface's `.stage` carries `.spatial` any more; the two
+classes coexist on the same element only where a page's frame sits directly on an inset with
+no page in between, which does not happen here. Inside the frame at ≥900px the builder is the
+board's three columns: the six
 intake sections as a **step rail** on the left, the question card in the centre, **Your guide
 preview** on the right. Under the frame, on cream: **Your answers** (the deck's own history
 stack, re-homed there). A phone gets the card alone — one question already fills that screen,
@@ -913,9 +921,11 @@ It is reachable from Trip, relevant group/expense actions, Search, and expanded 
 board's full grammar — the site-wide CSS budget (`scripts/check-perf-budget.mjs`, 300KB) left
 too little margin after Surface 6's rail to also add the board's 3-card summary strip and
 `Overview/Expenses/Balances/Settle Up` tab row (none of those tabs are separate wired views
-today regardless — everything renders as one scrolling page). What shipped: `.splitdest` picks
-up `.spatial` (forest in both themes, the same frame pattern every other surface shares, §1);
-the old "← Trip" back-button-plus-kicker header is retired — Split is one of the frame strip's
+today regardless — everything renders as one scrolling page). What shipped: `.splitdest` sits
+directly in the themed `.stage` (**2026-09-06:** it carried `.spatial` here at first, then lost
+it in the frame-theming pass along with every other page-level surface — see Surface 7's note;
+Split's frame is now the same light-on-light/dark-on-dark register the page itself carries, not
+a fixed forest inset); the old "← Trip" back-button-plus-kicker header is retired — Split is one of the frame strip's
 own tabs now (§6), not a page reached by a back button — in favour of the calculator's own
 `.split-title`/`.split-desc`, retitled to the board's copy ("Split expenses" / "Track and split
 all trip expenses in one place."). Total spend, balances, settlements, categories and the
@@ -956,7 +966,9 @@ SOS is visually conservative:
 
 **After the ten surfaces (work order §4, Opus 5):** the frame is now every page's shell, not just
 the destinations' — `/about`, `/health`, `/404` and `/change` wrap their `UtilityBar` + main in
-`.stage.spatial` exactly as `/new` and `/progress` do. And the two share cards
+`.stage` exactly as `/new` and `/progress` do (**2026-09-06:** `.spatial` came back off the page
+shell in the frame-theming pass above — see Surface 7's own note; `.stage` alone carries the
+theme now). And the two share cards
 (`src/pages/og/[slug].png.ts`, `src/pages/recap/[slug].png.ts`) moved into the forest register
 too: the link preview should look like the site it opens. Neither card holds a palette any more
 — ground, ink and quiet ink come from `lib/accent-tokens.ts`'s `DARK_SURFACES`/`DARK_INK`/
