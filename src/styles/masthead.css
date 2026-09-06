@@ -114,3 +114,70 @@
 }
 /* Geometry (§31): the cover is full-bleed on a phone, a framed pane on desktop. */
 @media(min-width:900px){.mast-hero{padding:.9rem clamp(1rem,3vw,1.5rem) 0}.mast-frame{border-radius:var(--r-pane);border:1px solid var(--rule2)}}
+
+
+/* ============================================================================
+   2026-09-06 — the cover stops being half a photograph. Creator-directed.
+
+   What was wrong: `.mast-plate-row` carried its own ground at rgba(.82-.92) across the frame's
+   FULL width, and `.mast-frame::after` laid a second gradient over everything. On a 1440
+   desktop that put a near-opaque band over the bottom ~45% of every cover, so the subject read
+   as occupying half the space it actually had. The reason was sound — type has to clear
+   contrast over a picture nobody has seen — but it solved the worst case by paying its cost on
+   every case, including the covers with an obviously empty corner.
+
+   What replaces it: the guide names the empty corner (`cover.textZone`, content.config.ts) and
+   the scrim becomes a LOCAL radial pool anchored there instead of a full-width blackout. The
+   picture keeps its whole frame; about a quarter of it carries a soft tint where the words are.
+
+   The plate is a SIBLING of the frame (GuideDestination.astro), so one node serves both
+   layouts: overlaid in a corner when a zone is named, flowing underneath on cream when not.
+
+   `band` is not a degraded mode — it is the safe one. The photo runs completely undimmed and
+   the title sits below it at a known 15:1. A cover with no empty corner should use it, and
+   nothing infers a zone, because a wrong guess stands type on a bright sky.
+   ============================================================================ */
+.mast-hero{position:relative}
+
+/* ---- Zone mode: the plate overlays the corner the guide named. --------------------------- */
+/* Radial rather than linear because the words occupy a CORNER, not a stripe — a linear
+   gradient dark enough for one corner is just as dark at the other end of that edge. */
+.mast-frame[data-zone]:not([data-zone="band"])::after{
+  background:radial-gradient(115% 90% at var(--zx) var(--zy),
+    rgba(var(--shadow-rgb),.86) 0%,
+    rgba(var(--shadow-rgb),.68) 34%,
+    rgba(var(--shadow-rgb),.30) 62%,
+    transparent 80%)}
+/* Why the pool is this strong and not lighter: measured against the real Korea cover with the
+   plate hidden, the title's worst ground came back 3.33:1 at .74/.56/.20 — over the 3:1 large-
+   text line but with 0.33 to spare, and this particular cover is a VIDEO, so the ground moves
+   frame to frame. The stops above buy the title ~4.7:1 on the same frame, which is headroom a
+   moving picture actually needs. Re-measure with scripts/measure-hero.mjs after touching a
+   cover; the repo's own a11y sweep cannot see this, because its env aborts off-origin images
+   and renders .mast-media-fail instead of a photograph. */
+.mast-frame[data-zone="bottom-left"] {--zx:0%;  --zy:100%}
+.mast-frame[data-zone="bottom-right"]{--zx:100%;--zy:100%}
+.mast-frame[data-zone="top-left"]    {--zx:0%;  --zy:0%}
+.mast-frame[data-zone="top-right"]   {--zx:100%;--zy:0%}
+
+.mast-hero:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row{
+  position:absolute;z-index:2;left:0;right:0;background:none;pointer-events:none}
+.mast-hero:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row a,
+.mast-hero:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row button{pointer-events:auto}
+.mast-hero:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-inner{max-width:34rem}
+
+.mast-hero:has([data-zone="bottom-left"]) .mast-plate-row,
+.mast-hero:has([data-zone="bottom-right"]) .mast-plate-row{bottom:0}
+.mast-hero:has([data-zone="top-left"]) .mast-plate-row,
+.mast-hero:has([data-zone="top-right"]) .mast-plate-row{top:0}
+.mast-hero:has([data-zone="bottom-right"]) .mast-inner,
+.mast-hero:has([data-zone="top-right"]) .mast-inner{margin-left:auto;text-align:right;justify-items:end}
+
+/* ---- Band mode: no scrim at all, words on cream underneath. ------------------------------ */
+.mast-frame[data-zone="band"]::after{display:none}
+.mast-hero:has([data-zone="band"]) .mast-plate-row{background:none;padding-top:1.1rem}
+.mast-hero:has([data-zone="band"]) .mast-title,
+.mast-hero:has([data-zone="band"]) .mast-dek,
+.mast-hero:has([data-zone="band"]) .mast-eyebrow{color:var(--ink)}
+.mast-hero:has([data-zone="band"]) .mast-dek{color:var(--muted)}
+.mast-hero:has([data-zone="band"]) .mast-eyebrow{color:var(--muted)}

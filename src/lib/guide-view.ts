@@ -70,6 +70,9 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
       : null,
     alt: (cover?.alt ?? heroSight?.img?.alt ?? heroSight?.name ?? "") as string,
     focal: (cover?.focal ?? null) as string | null,
+    /* Which corner of THIS picture is empty enough to stand type in. Null is a real answer —
+       the masthead falls back to an undimmed photo with the title in the band beneath it. */
+    textZone: (cover?.textZone ?? null) as string | null,
     credit: coverFile
       ? { href: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`, label: "Photo: Wikimedia Commons" }
       : coverDirect && coverStill.credit

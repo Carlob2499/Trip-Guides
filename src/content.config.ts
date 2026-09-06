@@ -660,6 +660,19 @@ const guides = defineCollection({
       creditUrl: z.string().regex(/^https:\/\//, "cover.creditUrl must be an https URL").optional(),
       license: z.string().optional(),
       focal: z.string().optional(),
+      /* 2026-09-06, creator-directed. The masthead used to stand its title on a near-opaque
+         band (rgba .82-.92) spanning the frame's full width, which is what made a cover read as
+         half a photograph: the subject sat in the top half and the bottom half was crushed to
+         near-black so type could clear contrast over an unknown picture.
+         `textZone` names the corner of THIS cover that is actually empty, so the type goes
+         where the photograph has nothing to say and the scrim shrinks to a local pool at ~.35
+         instead of a full-width blackout. It is per-guide because it is a property of the
+         PICTURE, not of the layout — no global value can be right for both a palace centred in
+         frame and a skyline sitting low.
+         Unset is a real answer, not a gap: a cover with no empty corner falls back to the
+         undimmed photo with the title in the band beneath it, which always clears contrast.
+         Guessing a zone would be worse than the fallback, so nothing infers one. */
+      textZone: z.enum(["top-left", "top-right", "bottom-left", "bottom-right"]).optional(),
       video: z.object({
         src: z.string().regex(/^https:\/\//, "cover.video.src must be an https URL"),
         poster: z.string().regex(/^https:\/\//, "cover.video.poster must be an https URL").optional(),
