@@ -273,6 +273,36 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 .mapdest-sheet{border-radius:var(--r-pane) var(--r-pane) 0 0}
 .mapdest-sel-thumb{border-radius:var(--r-inset)}
 
+/* "My location" and the selected place's live opening state (board 04). Both only appear when
+   something can actually answer them, so neither leaves an empty affordance behind. */
+.mapdest-locate{
+  position:absolute;left:.7rem;bottom:.7rem;z-index:3;
+  display:inline-flex;align-items:center;gap:.45rem;
+  min-height:44px;padding:0 .85rem;
+  background:var(--card);color:var(--ink);
+  border:1px solid var(--rule2);border-radius:999px;box-shadow:var(--shadow-float);
+  font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;cursor:pointer
+}
+.mapdest-locate[hidden]{display:none}
+.mapdest-locate:hover{border-color:var(--brand)}
+.mapdest-locate:focus-visible{outline:2px solid var(--brand-ink);outline-offset:2px}
+.mapdest-locate[data-busy]{color:var(--muted)}
+/* A refusal or a timeout says so on the control. A button that silently does nothing when you
+   press it is indistinguishable from a broken one. */
+.mapdest-locate[data-failed]{border-color:var(--critical);color:var(--critical)}
+.mapdest-locate[data-failed] .mapdest-locate-t::after{content:" unavailable"}
+@media(max-width:599px){
+  /* The phone's bottom bar owns the bottom edge; sit above it, and drop to the icon alone. */
+  .mapdest-locate{bottom:calc(.7rem + var(--botbar-h));padding:0;width:44px;justify-content:center}
+  .mapdest-locate .mapdest-locate-t{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+.mapdest-sel-live{
+  margin:.15rem 0 0;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--muted)
+}
+.mapdest-sel-live[data-open="yes"]{color:var(--ok)}
+.mapdest-sel-live[data-open="no"]{color:var(--ochre)}
+.mapdest-sel-live[hidden]{display:none}
+
 /* === THE MAP PANEL (board 04) ================================================
    The floating card over the map's top-left corner: what this map is, and the two things a
    traveler does from here that this product actually does. Desktop only — a phone gives the

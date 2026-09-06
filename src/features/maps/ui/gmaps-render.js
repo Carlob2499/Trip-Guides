@@ -243,6 +243,14 @@ export function boot(cfg) {
     document.addEventListener("tg:dest", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); refit(); }, 60); });
     mount.__focusPin = function (id) { select(id, "row"); };
     mount.__fitDay = function (dayIdx) { dayFilter = dayIdx; if (ready) { draw(); fitTo(visible()); } };
+    /* "My location" (map-dest.js): centre on a reading the reader asked for. Deliberately a pan
+       and a zoom-in rather than a marker — the browser's own blue dot is the reading, and a
+       second pin of ours claiming to be "you" would be a fact we did not measure. */
+    mount.__panTo = function (lat, lng) {
+      if (!ready) return;
+      map.panTo({ lat: lat, lng: lng });
+      if ((map.getZoom() || 0) < 14) map.setZoom(14);
+    };
     mount.__clear = function () { selectedId = null; info.close(); draw(); };
   }
 

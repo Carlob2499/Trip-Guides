@@ -45,6 +45,10 @@ const PATHS = {
   // Destinations
   map: '<path d="M3 6.5 9 4l6 2.5 6-2.5v13L15 19.5 9 17l-6 2.5z"/><path d="M9 4v13M15 6.5v13"/>',
   search: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.3-4.3"/>',
+  /* "My location" on the Map (board 04). A crosshair rather than a filled dot or an arrow: the
+     dot is what the MAP draws where you are, and this is the control that asks — the same
+     distinction the wordmark's compass mark already makes between an instrument and a reading. */
+  locate: '<circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="1.6"/><path d="M12 2v3.2M12 18.8V22M2 12h3.2M18.8 12H22"/>',
 } as const;
 const { name, size = 16, class: cls = "" } = Astro.props;
 const d = PATHS[name];
