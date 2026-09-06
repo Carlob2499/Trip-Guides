@@ -88,7 +88,19 @@
 .atlas-globe-cell { position: relative; min-height: 0; }
 /* The globe's own ground. Rounded and inset like every other framed object here, so the dark
    body sits ON the cream page rather than cutting a hole in it. */
-.atlas-globe-cell.spatial { background: var(--bg); border-radius: var(--r-pane); overflow: clip; }
+.atlas-globe-cell.spatial {
+  background: var(--bg);
+  border-radius: var(--r-pane);
+  overflow: clip;
+
+  /* The WebGL globe's three lighting colours (globe-gl.js reads these off this element at mount).
+     They live here, as tokens, rather than as literals in the shader module for the same reason
+     every other colour does: one place to change them, and the drift gate can see them. All three
+     are frame-register tones — the globe sits inside .spatial and is ALWAYS dark, in both themes. */
+  --globe-night: var(--frame-bg2);
+  --globe-rim: var(--frame-rule2);
+  --globe-atmo: var(--frame-glow);
+}
 #atlasGlobe {
   position: relative; overflow: hidden;
   height: calc(100dvh - var(--hdr-h, 0px));

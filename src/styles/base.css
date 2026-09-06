@@ -118,6 +118,10 @@
      brand 3.62:1 as identity. */
   --frame-bg:#0f1b2e;--frame-bg2:#152438;--frame-card:#1c2f47;
   --frame-rule:#2b4160;--frame-rule2:#3f5a7d;--frame-muted:#9aabc4;
+  /* The Atlas globe's atmosphere. The only frame tone that is not also a surface: it is lit air
+     at the planet's limb, so it sits brighter and more saturated than --frame-rule2 could. Read
+     by globe-gl.js through --globe-atmo in atlas-world.css. */
+  --frame-glow:#4b83c4;
   /* ATLAS TOKEN CONTRACT (Phase 1.1, 2026-08-06) — docs/design-handoff/DESIGN.md R4 names
      several values this palette ALREADY ships. Declared here so any later Atlas ticket can
      reference the names without defining them first. Nothing consumes them yet, and no call

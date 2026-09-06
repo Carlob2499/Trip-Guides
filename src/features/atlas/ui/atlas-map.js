@@ -147,6 +147,7 @@ class AtlasMap extends BaseElement {
     [this._ro, this._mo, this._io].forEach((obs) => obs && obs.disconnect());
     document.removeEventListener("visibilitychange", this._onVis);
     this._reducedMQ?.removeEventListener("change", this._onReducedChange);
+    this._skin?.dispose(); this._skin = null;
     if (this._loop) cancelAnimationFrame(this._loop);
     this._loop = null; this._flying = false;
     clearTimeout(this._resume); clearTimeout(this._flyEnd);
@@ -182,6 +183,28 @@ class AtlasMap extends BaseElement {
       land: cssVar(this, "--rule2", "#3f5a7d"),
       brand: cssVar(this, "--brand", "#d35c16"),
     };
+  }
+
+  /* Lazy, one-shot, and deliberately fire-and-forget: nothing above waits on WebGL, so a slow
+     or failed skin never delays the globe the reader can already see and drag. */
+  _mountSkin(w, h) {
+    if (this._skin) { this._skin.resize(w, h); return; }
+    if (this._skinPending || this._skinOff) return;
+    this._skinPending = true;
+    import("./globe-gl.js")
+      .then(({ mountGlobeSkin }) => mountGlobeSkin(this._mount, { base: (document.body?.dataset?.base || "").replace(/\/$/, "") }))
+      .then((skin) => {
+        this._skinPending = false;
+        if (!skin) { this._skinOff = true; return; }
+        if (!this.isConnected) { skin.dispose(); return; }
+        /* A lost context is not a crash: drop the skin, mark it off so it is not retried into a
+           loop, and let the canvas globe underneath carry on painting land as it always could. */
+        skin.onContextLost(() => { this._skinOff = true; this._skin = null; skin.dispose(); this._dirty = true; });
+        this._skin = skin;
+        skin.resize(this._dims?.w || w, this._dims?.h || h);
+        this._dirty = true;
+      })
+      .catch(() => { this._skinPending = false; this._skinOff = true; });
   }
 
   _layer(w, h, dpr, extraCss) {
@@ -301,6 +324,14 @@ class AtlasMap extends BaseElement {
     this._limb = null;
     const globe = this._layer(w, h, dpr, "cursor:grab;touch-action:none");
     this._canvas = globe.cv; this._ctx = globe.cx;
+
+    /* The WebGL skin (globe-gl.js) paints the sphere's BODY — ocean, land, terminator,
+       atmosphere — underneath this canvas, which keeps drawing everything that carries meaning:
+       the brand tint on countries with a guide, the route arcs, and the pin layer above. d3 stays
+       the only source of orientation, so the art cannot drift out of register with the pins.
+       Mounted once and re-sized on later builds; a null result (no WebGL, or textures missing)
+       leaves the canvas globe drawing its own ocean and land exactly as before. */
+    this._mountSkin(w, h);
 
     const proj = this._proj = d3.geoOrthographic().translate([w / 2, h / 2]).scale(this._k).clipAngle(90).rotate(this._rot);
     proj.precision(0.7);
@@ -433,11 +464,20 @@ class AtlasMap extends BaseElement {
     if (wantPrec !== this._prec) { this._proj.precision(wantPrec); this._prec = wantPrec; }
     ctx.clearRect(0, 0, w, h);
 
-    ctx.beginPath(); ctx.arc(w / 2, h / 2, this._k, 0, 6.2832);
-    ctx.fillStyle = colors.ocean; ctx.fill();
-    ctx.lineWidth = 1.2; ctx.strokeStyle = colors.rule2; ctx.stroke();
+    /* When the WebGL skin is live it paints the ocean disc, the land and the lit sphere; drawing
+       them again in 2D on top would only flatten it back out. Everything BELOW this branch —
+       guide-country tint, arcs, pins — still draws either way, because that is the information
+       layer and it must not depend on whether WebGL happened to be available. */
+    const skin = this._skin;
+    if (skin) skin.render(this._rot, this._k);
 
-    if (!(lo && this._degraded > 1)) {
+    if (!skin) {
+      ctx.beginPath(); ctx.arc(w / 2, h / 2, this._k, 0, 6.2832);
+      ctx.fillStyle = colors.ocean; ctx.fill();
+      ctx.lineWidth = 1.2; ctx.strokeStyle = colors.rule2; ctx.stroke();
+    }
+
+    if (!skin && !(lo && this._degraded > 1)) {
       ctx.beginPath(); path(lo ? this._gratCoarse : this._grat);
       ctx.globalAlpha = 0.42; ctx.lineWidth = 0.5; ctx.strokeStyle = colors.rule2; ctx.stroke();
       if (!lo) {
@@ -460,9 +500,11 @@ class AtlasMap extends BaseElement {
         path(feat);
       }
     };
-    ctx.beginPath(); drawSet(tier.plain);
-    ctx.fillStyle = colors.land; ctx.fill();
-    if (!lo) { ctx.lineWidth = 0.6; ctx.strokeStyle = colors.rule2; ctx.stroke(); }
+    if (!skin) {
+      ctx.beginPath(); drawSet(tier.plain);
+      ctx.fillStyle = colors.land; ctx.fill();
+      if (!lo) { ctx.lineWidth = 0.6; ctx.strokeStyle = colors.rule2; ctx.stroke(); }
+    }
     ctx.beginPath(); drawSet(tier.guides);
     /* A country this reader has a guide for. --brand, like the map pins and the day route:
        Waypoint's own mark on the world, not a destination's colour — and #9c4421 was the
