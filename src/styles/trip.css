@@ -228,7 +228,16 @@
 
 /* --- POST: editorial recap ---------------------------------------------------------------- */
 .trip-recap{display:flex;flex-direction:column;gap:1rem}
-.trip-recap-lead{font-family:var(--font-display);font-size:var(--text-lead);line-height:1.5;margin:0;max-width:60ch}
+/* 2026-09-06 — was --text-lead (1.15rem), the same size as ordinary lead paragraphs site-wide.
+   This paragraph is the trip's emotional resolution ("Heat and rain, not fatigue, did the
+   damage") and it was losing the hierarchy to the atom strip beside it, at display size, that
+   said nothing but a skip count. This is four sentences of real prose, not a headline, so
+   --text-h4 is the step that reads as emphasis rather than as shouting the fixed, larger
+   --text-h3 would; guide.css's h2,h3,h4{font-weight:400} already keeps headings from bolding. */
+.trip-recap-lead{font-family:var(--font-display);font-size:var(--text-h4);line-height:1.45;margin:0 0 1.1rem;max-width:60ch}
+/* The demoted counts (was the full .trip-atoms display grid, now only in #tripLearn) — one
+   quiet confirming line under the progress bar, not a second headline. */
+.tn-recap-tally{margin:.5rem 0 0;font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);font-variant-numeric:tabular-nums}
 .trip-recap-none{color:var(--muted)}
 .trip-atoms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:.6rem;margin:0}
 .trip-atom{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-compact);padding:.9rem 1rem}
