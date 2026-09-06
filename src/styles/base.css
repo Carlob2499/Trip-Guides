@@ -526,6 +526,15 @@ a,button,[role="button"],input,select,summary{-webkit-tap-highlight-color:transp
    so it can never outrank a class-based rule — a compound selector here once broke a
    border-radius and a font-family by accidentally outranking their class rules. */
 button{appearance:none;-webkit-appearance:none}
+/* Form controls do NOT inherit font-family — the UA sheet gives them the system default, which is
+   why a page whose only two families are Literata and Atkinson was still rendering Arial in a
+   hundred of its own controls: the SOS FAB's "SOS", the close glyphs on the Learnings and share
+   panels, the itinerary's stop pins, every panel toggle. Icon buttons hide it well (an "x" is an
+   "x") and labelled ones do not, which is exactly why it survived so long.
+   Bare selectors again, for the reason the note above gives: at specificity 0,0,1 this cannot
+   outrank a class rule that sets its own family — including the ones Google Maps injects for its
+   controls, which set Roboto through .gm-* classes and go on winning. */
+button,input,select,textarea{font-family:inherit}
 /* The press cue the note above promises — it was never actually shipped, so controls killed
    the native tap-flash and replaced it with NOTHING (the single biggest "buttons feel dead"
    tell, found 2026-08-02). One unified rule: the independent `scale` property composes with

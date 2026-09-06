@@ -45,7 +45,9 @@ for (const f of files) {
     if (/[^(]env\(safe-area/.test(ln) && !/max\([^)]*env\(/.test(ln) && !isTokens)
       V(f, n, 'SAFE-AREA — wrap env() in max(reserved, …)', ln);
     // 4. third font family
-    if (/font-family/.test(ln) && !/var\(--font-(display|data|body)\)|var\(--f[ds]\)|Literata|Atkinson/.test(ln))
+    // `inherit` is the one value that cannot introduce a third family — it is how a form control
+    // is made to STOP being Arial, which is the opposite of the drift this rule exists to catch.
+    if (/font-family/.test(ln) && !/var\(--font-(display|data|body)\)|var\(--f[ds]\)|Literata|Atkinson|font-family:\s*inherit/.test(ln))
       V(f, n, 'TYPE — only Literata and Atkinson Hyperlegible Next exist (design-system.md §2)', ln);
     if (/\b(monospace|Menlo|Consolas|Courier|Inter|Roboto)\b/.test(ln) && /font/.test(ln))
       V(f, n, 'TYPE — forbidden family', ln);
