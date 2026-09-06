@@ -411,7 +411,12 @@ details.card.is-collapsible>.block-body{padding:1.1rem 1.4rem 1.25rem}
 
 /* U11: a real, obviously-tappable pill (banned bare-text tap targets) — was an underlined
    text link mid-masthead; now lives in the footer instead. */
-.foot-modify-pill{display:inline-flex;align-items:center;gap:var(--sp-gap-30);margin-top:.7rem;padding:.4rem .85rem;min-height:34px;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.02em;color:var(--muted);background:var(--card);border:1px solid var(--rule2);border-radius:999px;text-decoration:none;transition:color var(--dur-routine),border-color var(--dur-routine)}
+/* 2026-09-06 — this rule used to carry min-height:34px, which silently beat base.css's
+   `.foot-modify-pill{min-height:44px}` touch-target rule (same specificity, this sheet loads
+   later) and shipped the pill at 34px on phones. The 34 is dropped rather than restated at 44:
+   base.css owns the touch floor for every pill in that selector list and this sheet has no
+   reason to have an opinion about it. */
+.foot-modify-pill{display:inline-flex;align-items:center;gap:var(--sp-gap-30);margin-top:.7rem;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.02em;color:var(--muted);background:var(--card);border:1px solid var(--rule2);border-radius:999px;text-decoration:none;transition:color var(--dur-routine),border-color var(--dur-routine)}
 .foot-modify-pill:hover{color:var(--ink);border-color:var(--ink)}
 .foot-modify-pill:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 

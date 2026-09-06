@@ -118,6 +118,19 @@
 body.chrome-yield .botbar{transform:translateY(130%)}
 @media(prefers-reduced-motion:reduce){.botbar,.bslot-ico,.tab,.topbar-btn{transition:none}.botslot:active .bslot-ico{transform:none}}
 @media(max-height:460px) and (orientation:landscape){.botslot{min-height:44px}}
+/* 2026-09-06 — "Itinerary" truncated to "Itinera..." on every phone: the label needs 69px and
+   five equal slots give it 67 at 375px, 60 at 320px. The 2026-09-06 raise off --text-nano (above)
+   is the right call and stays, so the width comes from the layout instead of the type. Three
+   changes, one query, reusing the narrow-phone boundary the topbar already retunes on:
+   the slot's .1rem inline padding does nothing for a centred, ellipsis-clipped label; uppercase
+   tracking on the widest label is negotiable where the alternative is losing three letters; and
+   equal-width slots are the nicer rhythm but the wrong trade when four short labels are sitting
+   on slack the long one needs. Verified fitting at 320/360/375/399. Tap targets stay well over
+   44px: the five labels are 195px of text across a 320px bar. */
+@media(max-width:399px){
+  .botslot{flex:1 1 auto;padding-inline:0}
+  .bslot-txt{letter-spacing:.01em}
+}
 
 /* ---- Desktop: the frame strip. ----------------------------------------------------------- */
 /* bp:MOBILE_MAX+1 — src/lib/breakpoints.ts */
