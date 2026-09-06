@@ -109,7 +109,14 @@ async function prep(page: Page, path: string, scheme: "light" | "dark", vp: View
      had never been audited once — and was sitting at 2.16:1 in dark mode, under even the
      3:1 large-text floor, behind a hardcoded #b3261e. A surface that only exists after a
      gesture still has to pass; the gate has to make the gesture. */
-  const sos = page.locator(".topbar-sos, .sos-btn");
+  /* Either control, because which one exists is a function of width: the chrome's icon button
+     above 900px, the labelled FAB below it (chrome.css / field-tools.css). Matching only the
+     chrome one would have quietly stopped auditing this dialog on every mobile viewport in the
+     matrix — the exact "a surface that only exists after a gesture" hole this block was written
+     to close, reopened by a breakpoint. `.sos-btn` is gone: that fallback branch was deleted.
+     :visible is load-bearing — both nodes are always in the DOM, so an unfiltered .first() picks
+     the one CSS has hidden at this width and the gesture never happens. */
+  const sos = page.locator(".topbar-sos:visible, .sos-fab:visible");
   if (await sos.count()) {
     await sos.first().click();
     await expect(page.locator(".sos-sheet")).toBeVisible();

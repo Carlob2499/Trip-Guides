@@ -222,7 +222,7 @@ for (const { label, viewport } of V2) for (const theme of THEMES) {
     await capture(page, testInfo, `v2-search-${label}-${theme}.png`);
     await page.keyboard.press("Escape");
     await page.keyboard.press("Escape");
-    const sos = page.locator(".topbar-sos").first();
+    const sos = page.locator(".topbar-sos:visible,.sos-fab:visible").first();
     await expect(sos).toBeVisible();
     await sos.click();
     await expect(page.locator(".sos-sheet")).toBeVisible();

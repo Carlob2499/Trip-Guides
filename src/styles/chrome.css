@@ -72,6 +72,11 @@
 .tb-kbd{margin-left:auto;padding:.05rem .4rem;border:var(--rw) solid var(--rule2);border-radius:var(--r-inset);font-family:var(--font-data);font-size:var(--text-nano);font-weight:600;letter-spacing:.04em;color:var(--muted)}
 /* SOS: quiet at rest, the critical colour, filled on hover/press (§28). */
 .topbar-sos{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 55%,var(--rule2));font-weight:700}
+/* Below 900px the labelled SOS FAB takes over (field-tools.css). Two controls with the same
+   aria-label, opening the same dialog, on one phone screen is a duplicate for everyone and an
+   ambiguity for a screen reader — so the small icon-only one stands down where the big reachable
+   one appears, and the breakpoint is the FAB's own. */
+@media(max-width:899px){.topbar-sos{display:none}}
 .topbar-sos:hover{color:var(--on-critical);background:var(--critical-fill);border-color:var(--critical-fill)}
 /* theme.js writes icon + word into the theme control; the strip keeps the icon alone. */
 .topbar-btn .theme-btn-label{display:none}

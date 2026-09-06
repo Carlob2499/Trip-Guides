@@ -171,7 +171,7 @@ for (const [name, path] of GUIDES) {
       exercised++;
     }
 
-    const sos = page.locator(".topbar-sos,.sos-btn").first();
+    const sos = page.locator(".topbar-sos:visible,.sos-fab:visible").first();
     if (await sos.isVisible()) {
       await sos.click();
       await expect(page.locator(".sos-sheet")).toBeVisible();
