@@ -154,19 +154,47 @@
 /* Why the pool is this strong, in measurements rather than taste. scripts/measure-hero.mjs
    loads the real cover, hides the plate and reads the pixels the type actually sits on:
 
-     .74/.56/.20   title 3.33:1   dek 6.04:1   (first attempt, text low in the frame)
-     .86/.68/.30   title 5.16:1   dek 8.19:1
-     .86/.68/.30   title 2.93:1   dek 4.23:1   (AFTER the overlay was re-anchored)
-     current       title 6.08:1   dek 8.27:1
+     .74/.56/.20   title 3.33:1   dek 6.04:1   1440, first attempt, text low in the frame
+     .86/.68/.30   title 5.16:1   dek 8.19:1   1440
+     .86/.68/.30   title 2.93:1   dek 4.23:1   1440, AFTER the overlay was re-anchored
+     corner pool   title 1.71:1   dek 1.94:1   375, the SAME css a corner pool cannot serve
+     current        title 6.10:1   dek 7.93:1   375
+     current        title 8.97:1   dek 12.04:1  768
+     current        title 6.08:1   dek 8.21:1   1440
+
+   Floors: 3:1 for the title (large text) and 4.5:1 for the dek.
 
    The third row is the one worth keeping. Re-anchoring the plate to the picture moved the type
    ~90px UP, off the dark water and onto the sunlit courtyard, and contrast fell straight
    through both lines — 2.93 against a 3:1 floor for the title, 4.23 against 4.5 for the dek.
    Nothing about the change looked wrong; only measuring it said so. Any edit that moves this
-   type, however small, re-measures. The repo's own a11y sweep cannot stand in for that: its
+   type, however small, re-measures — including a width, since row four is a phone failing on
+   css that passes comfortably on a desktop. The repo's own a11y sweep cannot stand in for that: its
    env aborts off-origin images and renders .mast-media-fail, so it has never seen a
    photograph. And this cover is a VIDEO, whose ground shifts frame to frame, which is why the
    target is comfortable headroom rather than a pass by hundredths. */
+/* A corner pool is the right shape only while the text OCCUPIES a corner. Below the phone
+   ceiling the dek reflows to five full-width lines and climbs most of the frame, so a radial
+   anchored in one corner leaves the top of the block sitting on open photograph: measured on
+   the Korea cover at 375, the title came back 1.71:1 and the dek 1.94:1 — far under the 3:1
+   and 4.5:1 lines, and much worse than the same cover on desktop, which is the wrong way round
+   for a product used on a phone in the field.
+   So the scrim takes the shape of the text. Full-width type gets a full-width gradient rising
+   from the foot; the corner pool stays where it belongs, on the wide layout where the plate is
+   capped at 34rem and really is in a corner. The swap happens at the phone ceiling (899, the
+   MOBILE_MAX literal this sheet's two existing 900px queries already use unmarked) because
+   that is the width at which .mast-inner stops being corner-shaped. Left unmarked to match
+   them: marking only the new one would imply the other two had been checked against
+   src/lib/breakpoints.ts when they have not. */
+@media(max-width:899px){
+  .mast-frame[data-zone]:not([data-zone="band"])::after{
+    background:linear-gradient(to top,
+      rgba(var(--shadow-rgb),.94) 0%,
+      rgba(var(--shadow-rgb),.88) 34%,
+      rgba(var(--shadow-rgb),.66) 58%,
+      rgba(var(--shadow-rgb),.30) 78%,
+      transparent 96%)}
+}
 .mast-frame[data-zone="bottom-left"] {--zx:0%;  --zy:100%}
 .mast-frame[data-zone="bottom-right"]{--zx:100%;--zy:100%}
 .mast-frame[data-zone="top-left"]    {--zx:0%;  --zy:0%}

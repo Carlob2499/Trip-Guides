@@ -19,8 +19,14 @@ const ratio = (a, b) => { const [x, y] = [rel(a), rel(b)].sort((p, q) => q - p);
 
 const URL_ = process.argv[2];
 const OUT = process.argv[3];
+/* Width matters more than it looks: the phone reflows the dek to five lines and pushes it up
+   into a different part of the photograph, so a cover that measures fine on desktop can fail
+   at 375. Default stays desktop; pass a width to check the device this product is actually
+   used on. */
+const W = Number(process.argv[4] || 1440);
+const H = Number(process.argv[5] || (W < 700 ? 812 : 900));
 const b = await chromium.launch();
-const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const p = await b.newPage({ viewport: { width: W, height: H } });
 await p.goto(URL_, { waitUntil: "networkidle" }).catch(() => {});
 // enter the Guide destination
 await p.evaluate(() => {
