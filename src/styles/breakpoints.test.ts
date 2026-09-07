@@ -54,7 +54,9 @@ const EXPECTED: Record<string, string[]> = {
   "styles/guide.css": ["MOBILE_MAX+1", "MOBILE_MAX"],
   "styles/itinerary.css": ["DESKTOP_MIN"],
   // board 04: the floating Map panel is the desktop composition; a phone has the sheet.
-  "styles/map.css": ["DESKTOP_MIN", "DESKTOP_MIN"],
+  /* 2026-09-06: the Map surface leaves the frame at the phone ceiling — it is the one page
+     composed edge to edge on desktop, because a map has no edges to frame (map.css). */
+  "styles/map.css": ["DESKTOP_MIN", "DESKTOP_MIN", "MOBILE_MAX+1"],
   // D7 convergence: the provenance popover is a bottom sheet on phones (design-system.md §14).
   "styles/provenance-dot.css": ["MOBILE_MAX"],
   // D7 convergence: the ledger gains its desktop scene above the phone ceiling.

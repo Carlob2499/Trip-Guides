@@ -237,6 +237,16 @@ the strip is its first row and the surface's own workspace fills the rest; ivory
 under the frame. On a phone the frame runs edge to edge. In dark mode the frame and the ground share
 the register and the frame keeps a hairline so it still reads as the frame.
 
+**One surface is exempt: Map (decided 2026-09-06).** On desktop the Map destination is composed
+edge to edge with no gutter and no radius; the strip stays as its first row and keeps its bottom
+hairline, so the map reads as running under the strip rather than starting below it. The reason is
+what the surface is rather than a preference about it: every other surface holds a document, and a
+document has edges a frame can honour. A map does not — it continues past the screen in every
+direction, so a radius and a cream gutter draw a boundary the territory has not got, and the
+surface reads as a picture of a map instead of a map. This is the only exemption; a new surface
+does not get one by arguing it feels immersive. Phones are unaffected, the frame already running
+edge to edge there.
+
 ### Orientation
 Use a **quiet contextual north star**, not loud breadcrumbs:
 - current trip;
