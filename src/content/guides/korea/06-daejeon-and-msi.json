@@ -72,7 +72,11 @@
         "verified_on": "2026-08-03",
         "shelf_life": "venue",
         "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=82059",
-        "place_id": "ChIJGeYDXX9JZTURsFJQxqnBPws"
+        "place_id": "ChIJGeYDXX9JZTURsFJQxqnBPws",
+        "img": {
+          "file": "White pine at West Garden of Hanbat Arboretum 1.jpg",
+          "alt": "White pine in the West Garden of Hanbat Arboretum, Daejeon"
+        }
       },
       {
         "name": "Yuseong Hot Springs Public Foot Bath (유성 온천 족욕체험장)",

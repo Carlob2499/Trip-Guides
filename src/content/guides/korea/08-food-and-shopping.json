@@ -277,7 +277,11 @@
           "lat": 37.570039799999996,
           "lng": 126.99960360000001
         },
-        "place_id": "ChIJm3V0fu2ifDURRJ8IMUijVtY"
+        "place_id": "ChIJm3V0fu2ifDURRJ8IMUijVtY",
+        "img": {
+          "file": "Gwangjang Market, Seoul 02.jpg",
+          "alt": "Food stalls and diners in Gwangjang Market, Seoul"
+        }
       },
       {
         "name": "Sulbing (설빙)",
@@ -640,7 +644,11 @@
           "lat": 37.571224,
           "lng": 126.98151670000001
         },
-        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I"
+        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I",
+        "img": {
+          "file": "LOL Park Riot store.jpg",
+          "alt": "The Riot store at LoL Park, Jongno"
+        }
       },
       {
         "name": "T1 Base Camp",
@@ -651,7 +659,11 @@
           "lat": 37.5560392,
           "lng": 126.92229819999999
         },
-        "place_id": "ChIJkbWl1GmZfDURkq7K2OatXSU"
+        "place_id": "ChIJkbWl1GmZfDURkq7K2OatXSU",
+        "img": {
+          "file": "T1 Base Camp PC bang interior - 2023-07-21.jpg",
+          "alt": "Interior of the T1 Base Camp PC bang"
+        }
       },
       {
         "name": "Line Friends Square",

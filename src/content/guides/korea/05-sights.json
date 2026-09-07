@@ -123,7 +123,11 @@
         "verified_on": "2026-08-03",
         "shelf_life": "venue",
         "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=72894",
-        "place_id": "ChIJUToRo7fpaDURo_ZMItcBfpc"
+        "place_id": "ChIJUToRo7fpaDURo_ZMItcBfpc",
+        "img": {
+          "file": "Colorful houses in Gamcheon Culture Village at sunset in Busan South Korea.jpg",
+          "alt": "Colourful hillside houses of Gamcheon Culture Village at sunset"
+        }
       },
       {
         "name": "Jagalchi Market",
@@ -136,7 +140,11 @@
         "verified_on": "2026-08-03",
         "shelf_life": "venue",
         "source_url": "https://creatrip.com/en/blog/10912",
-        "place_id": "ChIJudkrFArpaDURbbCzajeQs0c"
+        "place_id": "ChIJudkrFArpaDURbbCzajeQs0c",
+        "img": {
+          "file": "Jagalchi Market 02.jpg",
+          "alt": "Seafood stalls inside Jagalchi Market, Busan"
+        }
       },
       {
         "name": "BIFF Square",
@@ -149,7 +157,11 @@
         "verified_on": "2026-08-03",
         "shelf_life": "hours",
         "source_url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=95411",
-        "place_id": "ChIJL1scg6DpaDURxXQZg1kWGZ4"
+        "place_id": "ChIJL1scg6DpaDURxXQZg1kWGZ4",
+        "img": {
+          "file": "Biff Square Busan Claude Lelouch.jpg",
+          "alt": "Handprint plaque and crowds at BIFF Square, Busan"
+        }
       },
       {
         "name": "Gwangalli Beach",
@@ -162,7 +174,11 @@
         "verified_on": "2026-08-03",
         "shelf_life": "venue",
         "source_url": "https://en.wikipedia.org/wiki/Gwangalli_Beach",
-        "place_id": "ChIJxw7HJy_taDUR-xaSTeHwbf8"
+        "place_id": "ChIJxw7HJy_taDUR-xaSTeHwbf8",
+        "img": {
+          "file": "Gwangalli Beach.jpg",
+          "alt": "Gwangalli Beach with the Gwangan Bridge behind it"
+        }
       },
       {
         "name": "Taejongdae",
@@ -175,7 +191,11 @@
         "verified_on": "2026-08-03",
         "shelf_life": "venue",
         "source_url": "https://www.busan.go.kr/eng/bsnews01/835148",
-        "place_id": "ChIJOfX1e0zpaDURWq5Hp5x4-SM"
+        "place_id": "ChIJOfX1e0zpaDURWq5Hp5x4-SM",
+        "img": {
+          "file": "Korea-Busan-Taejongdae-03.jpg",
+          "alt": "Cliffs and sea at Taejongdae, Busan"
+        }
       }
     ]
   },
