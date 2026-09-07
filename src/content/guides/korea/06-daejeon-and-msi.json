@@ -142,7 +142,11 @@
         "place_id": "ChIJwSPdFdxIZTUR2mKqLneQ8cg",
         "source_url": "https://www.google.com/maps/place/?q=place_id:ChIJwSPdFdxIZTUR2mKqLneQ8cg",
         "verified_on": "2026-08-03",
-        "shelf_life": "venue"
+        "shelf_life": "venue",
+        "img": {
+          "file": "Daejeon Jungang Market, Dong-gu 06.jpg",
+          "alt": "Stalls and shoppers in Daejeon Jungang Market"
+        }
       },
       {
         "name": "Poongnyeon Samgyetang (풍년삼계탕)",

@@ -171,9 +171,29 @@ So the deficit is index COVERAGE, not a missing feature:
 places a reader looks at most, and the ones that fill the stop rows on food and shopping days.
 Closing this makes the build photo-led everywhere the board is, with no layout change at all.
 
-It is deliberately NOT done here. `content.config.ts` requires every image to carry real
-provenance — a Wikimedia Commons `file`, or a CDN `src` with `credit` and `license` — so filling
-101 slots means sourcing and verifying 101 licences. Inventing plausible `File:` names would
-satisfy the schema, render correctly, and be fabricated attribution on a product whose stated
-contract is Verified · Personal · Actionable · Honest. That is a research pass through
-`waypoint-guide-author`, not a styling change.
+**Feasibility, measured against the Commons API rather than assumed (2026-09-07).** Searching for
+seven real venue names split them into three groups, and the middle one is why this cannot be a
+bulk pass:
+
+| Venue | Result |
+|---|---|
+| Gwangjang Market, Daejeon Jungang Market | exact file, correctly named |
+| Poongnyeon Samgyetang, Sutgol Won Naengmyeon, Saemaul Sikdang | **0 hits** |
+| Animate Seoul | returns *Seoul Station* photos |
+| Yongsan iPark Mall | returns K-pop idols photographed at the mall |
+
+Markets and landmarks are sourceable. Small restaurants are not sourceable at all — Commons does
+not photograph individual neighbourhood eateries, which is the actual reason coverage sits at 3%.
+And the third group is the trap: a search-and-attach script gets confident, plausible, wrong
+images, because the search always returns *something*. Attaching a Seoul Station photo to Animate
+Seoul, or a generic samgyetang to a named restaurant, is a false claim about a place — the exact
+failure a guide whose contract is Verified · Personal · Actionable · Honest cannot make.
+
+So this proceeds one venue at a time with the filename verified against the venue, or not at all.
+First one done as proof of the path: Daejeon Jungang Market carries
+`Daejeon Jungang Market, Dong-gu 06.jpg` — checked live for existence, licence (KOGL Type 1) and
+attribution (National Museum of Korean Contemporary History archive), with the filename naming
+both the market and its district. It now ships self-hosted through the media pipeline.
+
+The realistic ceiling is therefore well under 101. A pass should target markets, malls, stations
+and landmarks, and leave restaurants without pictures rather than give them the wrong ones.
