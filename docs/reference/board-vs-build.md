@@ -197,3 +197,25 @@ both the market and its district. It now ships self-hosted through the media pip
 
 The realistic ceiling is therefore well under 101. A pass should target markets, malls, stations
 and landmarks, and leave restaurants without pictures rather than give them the wrong ones.
+
+**Progress (2026-09-07).** korea sights 15/23 -> 21/23 (91%); korea venues 2/64 -> 6/64; denmark
+day-trip sights +2. Every file checked live for existence, licence and a filename naming the venue.
+
+**The matcher's hit rate is the finding.** Proposals are only made when the filename carries every
+distinctive word of the venue name — harsh on purpose. It still produced confident wrong answers
+at roughly the rate it produced right ones, and each was caught only by a human reading it:
+
+| Proposed | Actually |
+|---|---|
+| Isaac Toast | an 18th-century Yale art print, "Isaac Cruikshank — A Whig Toast" |
+| Convenience store (GS25 / CU) | a photo taken in Tokyo |
+| Slottsträdgården (Malmö) | Slottsträdgården **Ulriksdal**, in Stockholm |
+| MUNCH (Munch Museum) | a Munch *painting*, not the museum |
+| Ekebergparken | the tram stop outside it |
+| Animate Seoul | Seoul Station |
+| Yongsan iPark Mall | K-pop idols photographed there |
+
+Seven wrong against eleven right. A Commons search never returns nothing, so an unattended pass
+does not fail — it fills the guide with confident, plausible, false claims about places. Every
+proposal must be read by someone who knows the venue. That is the constraint, and it is not a
+tooling problem to be solved.

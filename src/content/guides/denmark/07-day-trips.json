@@ -86,7 +86,11 @@
         "place_id": "ChIJXZ4I8VChU0YRZQFeRRWZlmA",
         "verified_on": "2026-08-03",
         "shelf_life": "venue",
-        "source_url": "https://malmokonsthall.se/en/opening-hours/"
+        "source_url": "https://malmokonsthall.se/en/opening-hours/",
+        "img": {
+          "file": "Malmö Konsthall.jpg",
+          "alt": "The exterior of Malmö Konsthall"
+        }
       }
     ]
   },
@@ -262,7 +266,11 @@
         "place_id": "ChIJMcBwszpsQUYReqPeWg4Oe4A",
         "verified_on": "2026-08-03",
         "shelf_life": "venue",
-        "source_url": "https://frammuseum.no/the-museum/the_museum-opening_hours___prices/"
+        "source_url": "https://frammuseum.no/the-museum/the_museum-opening_hours___prices/",
+        "img": {
+          "file": "Fram Museum in Oslo.JPG",
+          "alt": "The Fram Museum on Bygdøy, Oslo"
+        }
       }
     ]
   },
