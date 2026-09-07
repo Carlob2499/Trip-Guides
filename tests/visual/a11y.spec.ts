@@ -749,6 +749,28 @@ for (const [name, path] of [
   // and isn't working, and neither had been audited once.
   ["about", "/Trip-Guides/about/"],
   ["health", "/Trip-Guides/health/"],
+  /* ⌁ 2026-09-06 — Itinerary, Map and Split are NOT scanned here, and that is a decision with
+     a measurement behind it rather than an oversight. They have the same destination blind
+     spot the touch sweep had, and they are reachable the same way (`#dest-<key>`, which
+     guide-ui.js's goToHash resolves) — TARGET_PAGES below now covers all three for touch, and
+     doing so found a real 38px defect.
+
+     Axe is different. Adding them produced ZERO violations and 245 INCOMPLETE nodes on Split
+     alone, nearly all `color-contrast/bgOverlap` and `color-contrast/pseudoContent` on Google
+     Map markers: axe cannot compute a contrast ratio for a marker drawn over a live map, or
+     for pseudo-element content, so it declines to answer rather than answering wrongly. Those
+     are unresolvable by construction, not findings.
+
+     INCOMPLETE_BASELINE exists for a handful of documented "couldn't resolve" cases, each
+     carrying the reason someone verified it by hand. Pouring 245 machine-generated entries
+     into it would not add coverage; it would drain the meaning from every entry already
+     there, which is the one thing that file's own rule forbids ("never widen the baseline to
+     make a new one pass"). Scanning a surface whose findings must all be excused is not
+     scanning it.
+
+     What would actually close this: audit the map destinations by hand, or teach the scan to
+     exclude the map subtree and audit the chrome around it. Either is real work and neither is
+     a page-list entry. */
 ] as const) {
   for (const { scheme, vp } of COMBOS) {
     test(`every page passes an automated accessibility scan — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {
