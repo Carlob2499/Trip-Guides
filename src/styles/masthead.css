@@ -138,46 +138,58 @@
    nothing infers a zone, because a wrong guess stands type on a bright sky.
    ============================================================================ */
 .mast-hero{position:relative}
+/* The overlay anchors to the picture, never to the hero — see GuideDestination.astro. */
+.mast-cover{position:relative}
 
 /* ---- Zone mode: the plate overlays the corner the guide named. --------------------------- */
 /* Radial rather than linear because the words occupy a CORNER, not a stripe — a linear
    gradient dark enough for one corner is just as dark at the other end of that edge. */
 .mast-frame[data-zone]:not([data-zone="band"])::after{
   background:radial-gradient(115% 90% at var(--zx) var(--zy),
-    rgba(var(--shadow-rgb),.86) 0%,
-    rgba(var(--shadow-rgb),.68) 34%,
-    rgba(var(--shadow-rgb),.30) 62%,
-    transparent 80%)}
-/* Why the pool is this strong and not lighter: measured against the real Korea cover with the
-   plate hidden, the title's worst ground came back 3.33:1 at .74/.56/.20 — over the 3:1 large-
-   text line but with 0.33 to spare, and this particular cover is a VIDEO, so the ground moves
-   frame to frame. The stops above buy the title ~4.7:1 on the same frame, which is headroom a
-   moving picture actually needs. Re-measure with scripts/measure-hero.mjs after touching a
-   cover; the repo's own a11y sweep cannot see this, because its env aborts off-origin images
-   and renders .mast-media-fail instead of a photograph. */
+    rgba(var(--shadow-rgb),.92) 0%,
+    rgba(var(--shadow-rgb),.82) 38%,
+    rgba(var(--shadow-rgb),.52) 66%,
+    rgba(var(--shadow-rgb),.16) 84%,
+    transparent 94%)}
+/* Why the pool is this strong, in measurements rather than taste. scripts/measure-hero.mjs
+   loads the real cover, hides the plate and reads the pixels the type actually sits on:
+
+     .74/.56/.20   title 3.33:1   dek 6.04:1   (first attempt, text low in the frame)
+     .86/.68/.30   title 5.16:1   dek 8.19:1
+     .86/.68/.30   title 2.93:1   dek 4.23:1   (AFTER the overlay was re-anchored)
+     current       title 6.08:1   dek 8.27:1
+
+   The third row is the one worth keeping. Re-anchoring the plate to the picture moved the type
+   ~90px UP, off the dark water and onto the sunlit courtyard, and contrast fell straight
+   through both lines — 2.93 against a 3:1 floor for the title, 4.23 against 4.5 for the dek.
+   Nothing about the change looked wrong; only measuring it said so. Any edit that moves this
+   type, however small, re-measures. The repo's own a11y sweep cannot stand in for that: its
+   env aborts off-origin images and renders .mast-media-fail, so it has never seen a
+   photograph. And this cover is a VIDEO, whose ground shifts frame to frame, which is why the
+   target is comfortable headroom rather than a pass by hundredths. */
 .mast-frame[data-zone="bottom-left"] {--zx:0%;  --zy:100%}
 .mast-frame[data-zone="bottom-right"]{--zx:100%;--zy:100%}
 .mast-frame[data-zone="top-left"]    {--zx:0%;  --zy:0%}
 .mast-frame[data-zone="top-right"]   {--zx:100%;--zy:0%}
 
-.mast-hero:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row{
+.mast-cover:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row{
   position:absolute;z-index:2;left:0;right:0;background:none;pointer-events:none}
-.mast-hero:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row a,
-.mast-hero:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row button{pointer-events:auto}
-.mast-hero:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-inner{max-width:34rem}
+.mast-cover:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row a,
+.mast-cover:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row button{pointer-events:auto}
+.mast-cover:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-inner{max-width:34rem}
 
-.mast-hero:has([data-zone="bottom-left"]) .mast-plate-row,
-.mast-hero:has([data-zone="bottom-right"]) .mast-plate-row{bottom:0}
-.mast-hero:has([data-zone="top-left"]) .mast-plate-row,
-.mast-hero:has([data-zone="top-right"]) .mast-plate-row{top:0}
-.mast-hero:has([data-zone="bottom-right"]) .mast-inner,
-.mast-hero:has([data-zone="top-right"]) .mast-inner{margin-left:auto;text-align:right;justify-items:end}
+.mast-cover:has([data-zone="bottom-left"]) .mast-plate-row,
+.mast-cover:has([data-zone="bottom-right"]) .mast-plate-row{bottom:0}
+.mast-cover:has([data-zone="top-left"]) .mast-plate-row,
+.mast-cover:has([data-zone="top-right"]) .mast-plate-row{top:0}
+.mast-cover:has([data-zone="bottom-right"]) .mast-inner,
+.mast-cover:has([data-zone="top-right"]) .mast-inner{margin-left:auto;text-align:right;justify-items:end}
 
 /* ---- Band mode: no scrim at all, words on cream underneath. ------------------------------ */
 .mast-frame[data-zone="band"]::after{display:none}
-.mast-hero:has([data-zone="band"]) .mast-plate-row{background:none;padding-top:1.1rem}
-.mast-hero:has([data-zone="band"]) .mast-title,
-.mast-hero:has([data-zone="band"]) .mast-dek,
-.mast-hero:has([data-zone="band"]) .mast-eyebrow{color:var(--ink)}
-.mast-hero:has([data-zone="band"]) .mast-dek{color:var(--muted)}
-.mast-hero:has([data-zone="band"]) .mast-eyebrow{color:var(--muted)}
+.mast-cover:has([data-zone="band"]) .mast-plate-row{background:none;padding-top:1.1rem}
+.mast-cover:has([data-zone="band"]) .mast-title,
+.mast-cover:has([data-zone="band"]) .mast-dek,
+.mast-cover:has([data-zone="band"]) .mast-eyebrow{color:var(--ink)}
+.mast-cover:has([data-zone="band"]) .mast-dek{color:var(--muted)}
+.mast-cover:has([data-zone="band"]) .mast-eyebrow{color:var(--muted)}

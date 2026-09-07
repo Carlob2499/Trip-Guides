@@ -72,6 +72,14 @@ const countOf = (ch: Chapter) => ch.entries.length;
       Guide, roughly 55–60% of the main content region on desktop and 40–45% of a phone
       viewport. Identity sits on its own readable plate; the photograph is never a text ground. */}
   <header class={`mast-hero gd-hero ${hero.src ? "mast-photo" : "mast-painted"}`} id="top" data-hero>
+    {/* 2026-09-06 — frame and plate share a wrapper so the overlay can anchor to the PICTURE.
+        Positioning the plate against .mast-hero looked right and was not: the hero also holds
+        the plateline under the frame, so `bottom:0` resolved to the hero's foot and the title
+        hung 86px past the photograph's bottom edge, with the dek's last line sitting on cream.
+        An absolutely-positioned plate contributes no height, so this wrapper hugs the frame
+        exactly and `bottom:0` now means the bottom of the image. In band mode the plate is
+        static and simply flows beneath it, inside the same wrapper. */}
+    <div class="mast-cover">
     <div class="mast-frame gd-cover" data-zone={hero.textZone ?? "band"}>
       <div class="mast-mat">
         <PaintedAtlas seed={slug} tz={hero.tz ?? undefined} />
@@ -123,6 +131,7 @@ const countOf = (ch: Chapter) => ch.entries.length;
           <p class="gd-hero-wx wxt-chip" data-wx-today data-wx-chip hidden></p>
         </div>
       </div>
+    </div>
     </div>
     {(plate.cities || plate.checked || plate.facts > 0 || plate.sources > 0 || plate.currency) && (
       <div class="mast-plateline">
