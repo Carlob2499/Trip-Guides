@@ -1165,10 +1165,21 @@ for (const d of DEVICES) {
              at 143.6x24.2. Padding it to 44px would put a chunky lozenge on the hero AND render
              the same datum at two different sizes on two surfaces — the exact split the
              uniform-surfaces guardrail forbids. It is notation on both. */
-          return !el.closest(".prov-dot, .flag-chip, .stale-pill, .imgcredit, .mast-credit") && !el.matches("input");
+          return !el.closest(".prov-dot, .flag-chip, .stale-pill, .imgcredit, .mast-credit");
         })
         .map((el) => {
-          const r = el.getBoundingClientRect();
+          /* An input wrapped in a label is aimed at THROUGH the label: clicking anywhere in
+             `<label class="check">…</label>` toggles the box, so the target the thumb has is
+             the label's box, not the 17px square drawn inside it. The itinerary's tick-offs
+             are exactly this — a 17x17 checkbox inside a 314x123 row.
+
+             2026-09-06: this replaces a blanket `!el.matches("input")` exclusion. That got the
+             right answer here for the wrong reason, and it got it by not looking: it also
+             excused every OTHER input, including ones with no label to be aimed at through.
+             Measuring the label is the rule the exclusion was approximating, so a bare small
+             input is now a finding again, which is what this gate is for. */
+          const labelled = el.matches("input") ? el.closest("label") : null;
+          const r = (labelled ?? el).getBoundingClientRect();
           return { sel: (el.className || el.tagName).toString().trim().slice(0, 44), w: Math.round(r.width), h: Math.round(r.height) };
         })
         .filter((r) => Math.min(r.w, r.h) < 44)
