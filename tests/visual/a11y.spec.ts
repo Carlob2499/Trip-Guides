@@ -464,6 +464,26 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
       why: "The flagged progress stat label paints on opaque .pg-card; the contour SVG is behind the card, not its text backdrop.",
     },
   },
+  "progress triage": {
+    /* 2026-09-07, this page's FIRST accessibility audit — it had shipped with theme-registers
+       as its only gate, which checks colour registers and not accessibility. Found by
+       scripts/check-surface-coverage.mjs.
+
+       Zero violations. The incompletes are the same fixed decorative contour SVG behind
+       z-index:1 content already documented for /progress and /new, on the same cockpit.
+       Measured rather than inherited, because "same page family" is an assumption and this
+       session has been repeatedly wrong about those: .cp-dek and .cp-tri-gate both come back
+       5.19:1 in light and 7.45:1 in dark, and the footer link 6.81:1 / 6.72:1 — every pair
+       clear of 4.5:1. Counts are this first audit's exact maxima and may only fall. */
+    "color-contrast/elmPartiallyObscuring": {
+      max: 3,
+      why: "Fixed contour SVG sits behind z-index:1 content; axe's stacking reconstruction reads it as obscuring. Measured composite is 5.19:1 light / 7.45:1 dark.",
+    },
+    "color-contrast/imgNode": {
+      max: 2,
+      why: "The footer wordmark link has an image node in its background chain, so axe declines to rate it. Measured 6.81:1 light / 6.72:1 dark.",
+    },
+  },
   "new intake": {
     // R4: /new sits on the fixed survey-contour ground (.itk-contours, an inline SVG behind
     // z-index:1 content). Axe declines to rate any text with an image node in its background
@@ -749,6 +769,11 @@ for (const [name, path] of [
   // and isn't working, and neither had been audited once.
   ["about", "/Trip-Guides/about/"],
   ["health", "/Trip-Guides/health/"],
+  /* 2026-09-07: triage shipped with theme-registers.spec.ts as its ONLY gate — a colour-register
+     check — so it had never been through axe or the touch sweep. Found by
+     scripts/check-surface-coverage.mjs on its first run. /progress/ is already here as "a
+     first-class traveler surface"; triage is the same cockpit one level in. */
+  ["progress triage", "/Trip-Guides/progress/triage/"],
   /* ⌁ 2026-09-06 — Itinerary, Map and Split are NOT scanned here, and that is a decision with
      a measurement behind it rather than an oversight. They have the same destination blind
      spot the touch sweep had, and they are reachable the same way (`#dest-<key>`, which
