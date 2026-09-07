@@ -25,6 +25,19 @@ jobs:
         with:
           node-version: 22
           cache: npm
+
+      # scripts/fetch-media.mjs downloads the guides' photographs into the build so no reader
+      # ever hotlinks Wikimedia. Without a cache every CI run re-downloads all of them, which
+      # is slow here and rude to Commons — the exact rate-limit concern that made the old code
+      # hotlink at read time in the first place. Keyed on the guide content, so the fetch runs
+      # again only when a guide actually changes a photograph.
+      - name: Cache guide photographs
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: .media-cache
+          key: media-${{ hashFiles('src/content/guides/**/*.json') }}
+          restore-keys: |
+            media-
       - run: npm ci
       - run: npm run build
       - name: Cache Playwright browsers
