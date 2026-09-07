@@ -30,7 +30,11 @@ describe("deriveGuideView", () => {
     expect(v.globalCenter).not.toBeNull();
     expect(v.globalSpan).toBeGreaterThan(0);
     expect(v.searchIndex.length).toBeGreaterThan(20);
-    expect(v.hero.src).toMatch(/^https?:/);
+    /* Either an absolute URL or a root-relative path into this build: since 2026-09-06 the
+       cover is normally served from dist/media (scripts/fetch-media.mjs), and falls back to the
+       original host only when that photo could not be downloaded. Both are correct; asserting
+       only the http form would fail precisely when the pipeline is working. */
+    expect(v.hero.src).toMatch(/^(https?:|\/)/);
     expect(v.hero.painted).toBe(false);
   });
 

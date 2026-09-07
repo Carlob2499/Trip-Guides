@@ -13,17 +13,23 @@
    with its own srcset needs. This module is the version the hub uses; folding those two
    into it is a worthwhile cleanup but not one to bundle into a visual change. */
 
+import { local } from "./media";
+
 const COMMONS_FILEPATH = "commons.wikimedia.org/wiki/Special:FilePath/";
 
 /** The URL at `w` CSS pixels, or the original when it cannot be resized. */
 export function atWidth(url: string | null | undefined, w: number): string | null {
   if (!url) return null;
-  if (url.includes("{w}")) return url.replace(/\{w\}/g, String(Math.round(w)));
+  /* local() runs LAST, on the finished URL, and that ordering is the whole point. The build's
+     photograph manifest is keyed by the exact rendition URL — width and all — so resolving a
+     bare `Special:FilePath/Foo.jpg` before the `?width=` is appended misses every time and
+     silently hands the reader a hotlink. That is precisely the bug this call site had. */
+  if (url.includes("{w}")) return local(url.replace(/\{w\}/g, String(Math.round(w))));
   if (url.includes(COMMONS_FILEPATH)) {
     // Respect a width the caller already put there rather than appending a second one.
-    return /[?&]width=/.test(url) ? url : `${url}${url.includes("?") ? "&" : "?"}width=${Math.round(w)}`;
+    return local(/[?&]width=/.test(url) ? url : `${url}${url.includes("?") ? "&" : "?"}width=${Math.round(w)}`);
   }
-  return url;
+  return local(url);
 }
 
 /**

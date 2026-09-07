@@ -5,20 +5,25 @@ import { formatClosedDays } from "../../lib/closed-days.mjs";
 import TransitLinks from "../TransitLinks.astro";
 import ProvenancePopover from "../ProvenancePopover.astro";
 import GapBlock from "../GapBlock.astro";
+import { local } from "../../lib/media";
 const { sec, country } = Astro.props;
 
-// Wikimedia's Special:FilePath already supports ?width= thumbnailing —
-// use that directly instead of pulling the image through Astro's optimizer.
-// This avoids build-time HTTP fetches (and Wikimedia 429 rate-limits) while
-// still giving the browser a proper responsive srcset.
+// Wikimedia's Special:FilePath supports ?width= thumbnailing, so these URLs carry the
+// rendition size and give the browser a real responsive srcset.
+// 2026-09-06: this used to hotlink Commons at READ time, on purpose, to dodge build-time
+// 429s. That dodge cost the reader instead — measured 8 of 12 image requests returning
+// nothing on a shipped guide, and every CI screenshot taken of an imageless page. The URLs
+// are built the same way and then passed through local() (lib/media.ts), which serves the
+// copy scripts/fetch-media.mjs pulled into the build and falls back to this exact URL when
+// there is none. The 429 concern is answered by a persistent cache in that script.
 const commonsSrc  = (f: string, w = 800) =>
-  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=${w}`;
+  local(`https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=${w}`);
 const commonsPage = (f: string) =>
   `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(f)}`;
 // One width-parameterized source fn for both photo paths — mirrors the masthead's
 // mastSrcAt and the hub's stillSrcAt (uniform application across surfaces).
 const imgSrcAt = (img: any, w: number) =>
-  img.src ? img.src.replace("{w}", String(w)) : commonsSrc(img.file, w);
+  img.src ? local(img.src.replace("{w}", String(w))) : commonsSrc(img.file, w);
 // A direct URL without a `{w}` token is single-size — offering a srcset of three
 // identical URLs would just lie to the browser's selection algorithm.
 const imgSrcset = (img: any) =>
