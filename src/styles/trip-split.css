@@ -54,7 +54,10 @@
    40px desktop / 44px touch, square. The height is the point — the old 36px field was the
    single strongest "this is from an older site" signal here. The radius is no longer a
    judgement call at all: Stage G deleted the --r-* ladder, so a container is 0. */
-.split-in{font:inherit;font-size:var(--text-body);min-height:40px;border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.4rem .6rem;background:var(--bg);color:var(--ink);width:100%;min-width:0;transition:border-color var(--dur-routine),background var(--dur-routine)}
+/* 2026-09-07 — was 40px here and 44px only under the 599px phone query, in a sheet whose header
+   claims "44px touch targets" without qualifying it by width. Raised at the base so the claim is
+   true everywhere; the phone override below is now redundant and says so. */
+.split-in{font:inherit;font-size:var(--text-body);min-height:44px;border:1px solid var(--rule2);border-radius:var(--r-inset);padding:.4rem .6rem;background:var(--bg);color:var(--ink);width:100%;min-width:0;transition:border-color var(--dur-routine),background var(--dur-routine)}
 .split-in:hover{border-color:var(--muted)}
 /* Was a 3px box-shadow standing in for a focus ring. An outline IS the focus ring, it follows
    the element's own shape, and it is not elevation. */
@@ -100,7 +103,12 @@ select.split-in{cursor:pointer}
 .se-filter{display:flex;flex-wrap:wrap;gap:var(--sp-gap-45);align-items:center;margin-bottom:.8rem}
 .se-filter-q{flex:2 1 11rem;min-width:0}
 .se-filter-sel{flex:1 1 7.5rem;min-width:0}
-.se-filter-clear{flex:none;min-height:40px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;cursor:pointer;transition:color var(--dur-immediate),border-color var(--dur-immediate)}
+/* 2026-09-07 — was 40px, in a sheet whose own header says the modernisation pass delivered
+   "44px touch targets". It is a real <button>Clear</button> (TripSplit.astro), and it ships
+   `hidden`, appearing only once a filter is active — which is precisely why the touch sweep
+   never caught it: that gate skips anything rendering at 0x0. Found by
+   scripts/check-stated-intent.mjs, which reads the claim rather than the screen. */
+.se-filter-clear{flex:none;min-height:44px;padding:.4rem .85rem;font-family:var(--font-data);font-size:var(--text-control);font-weight:600;color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:999px;cursor:pointer;transition:color var(--dur-immediate),border-color var(--dur-immediate)}
 .se-filter-clear:hover{color:var(--ink);border-color:var(--ink)}
 .se-filter-clear:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 /* The honesty line: a filtered list sits beside an UNfiltered total, and that has exactly
@@ -250,6 +258,8 @@ select.split-in{cursor:pointer}
 @media(max-width:599px){
   .split-card{padding:1rem 1rem;border-radius:var(--r-card)}
   .split-card > .se-new-card{margin:0 -1rem 1rem;padding:.85rem 1rem}
+  /* Redundant since 2026-09-07 — the base rule is 44px. Kept as documentation of the phone
+     decision rather than deleted silently; harmless, and removing it is a separate call. */
   .split-in{min-height:44px}
   .sc-add-btn,.sc-add-expense-btn{min-height:38px}
 
