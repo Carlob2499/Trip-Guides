@@ -84,7 +84,8 @@
 /* ── Sheet list ──────────────────────────────────────────────────────────────────────── */
 .atlas-sheets { list-style: none; margin: var(--sp-xl-h) 0 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
 .atlas-sheet {
-  display: flex; align-items: center; gap: var(--sp-md-h); padding: var(--sp-md-h) var(--sp-2xs);
+  /* Wraps so the chips drop under the name rather than strangling it when the card is narrow. */
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-md-h); padding: var(--sp-md-h) var(--sp-2xs);
   border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink);
 }
 .atlas-sheet:hover, .atlas-sheet:focus-visible { background: var(--sunken); }
@@ -103,7 +104,12 @@
   .atlas-sheet-thumb { transition: transform var(--dur-object) var(--ease, ease); }
   .atlas-sheet:hover .atlas-sheet-thumb { transform: scale(1.06); }
 }
-.atlas-sheet-body { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+/* 2026-09-06 — `flex: 1 1 auto` let the trailing chips (stamp, country, weather) take their
+   content width first and leave the name whatever remained: measured 98px inside a 424px card,
+   which wrapped "South Korea" onto three lines while most of the row sat empty. min-width:0 was
+   already here and does not help — it permits shrinking, it does not reserve anything.
+   A basis reserves it. The name is the reason this row exists; the chips annotate it. */
+.atlas-sheet-body { flex: 1 1 12rem; min-width: 0; overflow-wrap: anywhere; }
 .atlas-sheet-title { font-family: var(--font-display); font-size: var(--text-lead); display: block; }
 .atlas-sheet-cities { font-size: var(--text-small); color: var(--muted); }
 .atlas-sheet-dates { font-size: var(--text-caption); color: var(--muted); margin-left: .5em; }
