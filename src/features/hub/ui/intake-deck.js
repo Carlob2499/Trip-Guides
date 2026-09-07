@@ -200,7 +200,13 @@ export function initIntakeDeck() {
     if (!reduced) { row.classList.remove("itk-deck-deal"); void row.offsetWidth; row.classList.add("itk-deck-deal"); }
     var first = row.querySelector("input, select, textarea, button.itk-vs-btn");
     if (opts.focus !== false && first) first.focus({ preventScroll: true });
-    row.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+    /* Scrolling belongs to ADVANCING, not to arriving. The initial render passes
+       `{ focus: false }` (below) precisely to say "do not take over the page on arrival", and
+       focus() already honours that with preventScroll — but this line ran unconditionally and
+       undid it, scrolling a first-time visitor 151px past the strip and the page's own heading
+       before they had read either. Gated on the same flag the caller already sets, so the two
+       lines can no longer disagree about whose page it is. */
+    if (opts.focus !== false) row.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
   }
 
   function finish() {

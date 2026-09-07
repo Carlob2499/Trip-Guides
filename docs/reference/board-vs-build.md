@@ -108,9 +108,38 @@ cream below. Reads as unresolved rather than composed.
 
 ---
 
-## Not yet diffed
+## 06 · Search
 
-06 · Search, 07 · Builder, 09 · SOS, 10 · Learnings.
+No defects found. The overlay looked unscrimmed in a screenshot and is not: `.srch` is fixed at
+`rgba(15,20,26,.45)`, z-960, with `body.srch-lock`. Recorded because the eye said otherwise and
+the measurement settled it.
+
+---
+
+## 07 · Builder
+
+**Measured — FIXED.** Arriving on `/new/` scrolled the page to y=151, past the strip and the
+page's own heading, before the reader had seen either. The initial render already passes
+`{ focus: false }` to say "do not take over on arrival", and `focus()` honoured it with
+`preventScroll` — but the `scrollIntoView` on the next line ran unconditionally and undid it.
+Gated on the same flag. Arrival is now y=0; advancing still scrolls, which is where that
+behaviour belongs.
+
+**Fidelity — open.** "Which country?" renders "Brazil" as both the sub-label and the input
+placeholder, which reads as a stray value rather than an example.
+
+---
+
+## 09 · SOS
+
+Not separately diffed: `prep()` in the a11y sweep opens this sheet on every page it scans, so it
+is already measured for contrast and touch targets across ten devices on four pages.
+
+---
+
+## 10 · Learnings
+
+Not yet diffed.
 
 ---
 
