@@ -755,11 +755,19 @@ for (const [name, path] of [
      guide-ui.js's goToHash resolves) — TARGET_PAGES below now covers all three for touch, and
      doing so found a real 38px defect.
 
-     Axe is different. Adding them produced ZERO violations and 245 INCOMPLETE nodes on Split
-     alone, nearly all `color-contrast/bgOverlap` and `color-contrast/pseudoContent` on Google
-     Map markers: axe cannot compute a contrast ratio for a marker drawn over a live map, or
-     for pseudo-element content, so it declines to answer rather than answering wrongly. Those
-     are unresolvable by construction, not findings.
+     Axe is different. Adding them produced ZERO violations and hundreds of INCOMPLETE nodes.
+     The reason is not the map, which was my first guess and was wrong: excluding .gm-style,
+     gmp-advanced-marker and .map-pin only took Split from 245 to 208. Counting the actual
+     reasons puts 364 of them on `color-contrast/elmPartiallyObscured` against 14 on
+     bgOverlap — the cause is that prep() opens the SOS sheet, a modal over the whole page,
+     and these two destinations render far more content beneath it than the surfaces already
+     scanned. Axe cannot resolve a contrast ratio for text it can see is covered, so it
+     declines to answer rather than answering wrongly.
+
+     That makes this a property of how the gate prepares the page, not of these destinations.
+     Scanning them honestly means resolving that first — closing the sheet before the scan, or
+     scanning the sheet and the page as two passes — which is a change to every page this gate
+     already covers and wants its own measurement, not a page-list entry smuggled in here.
 
      INCOMPLETE_BASELINE exists for a handful of documented "couldn't resolve" cases, each
      carrying the reason someone verified it by hand. Pouring 245 machine-generated entries
@@ -768,9 +776,9 @@ for (const [name, path] of [
      make a new one pass"). Scanning a surface whose findings must all be excused is not
      scanning it.
 
-     What would actually close this: audit the map destinations by hand, or teach the scan to
-     exclude the map subtree and audit the chrome around it. Either is real work and neither is
-     a page-list entry. */
+     What would actually close this: decide what the scan should see while a modal is open, and
+     apply that decision to every page here at once. Excluding the map subtree is NOT the fix —
+     that was measured above and moved 37 nodes out of 245. */
 ] as const) {
   for (const { scheme, vp } of COMBOS) {
     test(`every page passes an automated accessibility scan — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {
