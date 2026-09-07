@@ -1,6 +1,6 @@
 # Board vs build — fidelity diff
 
-Status: **OPEN — awaiting creator acceptance per surface**
+Status: **OPEN — all 10 surfaces diffed, awaiting creator acceptance per surface**
 Boards: `docs/mockups/compare/*.webp` · Contract: `docs/mockups/VISUAL_LINEAGE.md`
 Opened: 2026-09-07
 
@@ -100,14 +100,6 @@ composition divergence on this surface.
 
 ---
 
-## 08 · Split
-
-**Fidelity — open.** The build centres a cream slab on the painted-atlas landscape, leaving large
-empty painted areas either side, and the frame terminates mid-page with content continuing on
-cream below. Reads as unresolved rather than composed.
-
----
-
 ## 06 · Search
 
 No defects found. The overlay looked unscrimmed in a screenshot and is not: `.srch` is fixed at
@@ -130,6 +122,14 @@ placeholder, which reads as a stray value rather than an example.
 
 ---
 
+## 08 · Split
+
+**Fidelity — open.** The build centres a cream slab on the painted-atlas landscape, leaving large
+empty painted areas either side, and the frame terminates mid-page with content continuing on
+cream below. Reads as unresolved rather than composed.
+
+---
+
 ## 09 · SOS
 
 Not separately diffed: `prep()` in the a11y sweep opens this sheet on every page it scans, so it
@@ -139,7 +139,12 @@ is already measured for contrast and touch targets across ten devices on four pa
 
 ## 10 · Learnings
 
-Not yet diffed.
+No measured defects. The recap's stat tiles (STOPS MADE 21 of 37, DAYS 8, SKIPPED 16) are wide
+and short with correct rhythm — the same component that is cramped in the Trip rail, which
+confirms the board-02 finding as container width rather than content.
+
+**Fidelity — open.** The ESSENTIALS and SPLIT cards share a two-column row and have very unequal
+heights, leaving a large void under SPLIT.
 
 ---
 
