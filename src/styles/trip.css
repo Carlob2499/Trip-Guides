@@ -218,12 +218,31 @@
 .tn-map-open:hover{border-color:var(--ink)}
 .tn-map-open:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .tn-map-mount{height:260px;margin:0;border-radius:var(--r-card);overflow:hidden}
+/* 2026-09-06 — was `repeat(3, minmax(0,1fr))`, which in the ~450px rail gave each tile 150px
+   and, more importantly, made every tile as tall as the WORST one. Measured on Korea day 4: the
+   row stood 192px because PACE carries a sentence, while STOPS TODAY ("5") and STRAIGHT-LINE
+   ("151 km") each sat in ~120px of dead space. Board 02 puts three short figures here; the row
+   only reads as a stat strip when its cells are the same KIND of thing.
+   The fix is the CLAMP below, not the column count: auto-fit was tried first and made it worse,
+   reflowing to two columns and leaving a third tile orphaned on its own row at 234px total —
+   taller than the problem it replaced. Three columns is also the shape board 02 draws. */
 .tn-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);overflow:hidden}
 .tn-metrics[hidden]{display:none}
 .tn-metric{min-width:0;padding:.85rem .9rem;border-left:1px solid var(--rule)}
 .tn-metric:first-child{border-left:0}
 .tn-metric dt{font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted)}
 .tn-metric dd{margin:.3rem 0 0;font-family:var(--font-display);font-weight:640;font-size:var(--text-h4);line-height:1.1;letter-spacing:-.01em;overflow-wrap:anywhere}
+/* ⌁ NOT clamped, deliberately, and the reasoning is worth keeping because the tidy fix is
+   tempting. This row stands 192px at 1440 because PACE carries a sentence while STOPS TODAY
+   ("5") and STRAIGHT-LINE ("151 km") sit in ~120px of dead space each — a real imbalance, and
+   `-webkit-line-clamp:3` closes it to 142px in one line of CSS. It was tried and reverted.
+   What the clamp hides on Korea day 4 is "LBF 17:00 KST (both inside the arena)" and "your
+   third is in Tokyo this weekend — see the Tokyo tab": times and a whereabouts that appear
+   nowhere else in full. Trimming a traveller's information so a stat strip looks even is the
+   wrong trade for a guide meant to be read in the field.
+   The actual defect is upstream: a paragraph is sitting in a tile built for a figure. That is a
+   content-shape decision (move the sentence to where prose lives, or give PACE a short value),
+   not something CSS should paper over. Recorded in the board-02 diff. */
 .tn-metric-s{line-height:1.35;text-wrap:pretty}
 
 /* --- POST: editorial recap ---------------------------------------------------------------- */
