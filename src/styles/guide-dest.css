@@ -144,22 +144,19 @@
 @media(max-width:599px){.gd-card-media,.gd-card-glyph{border-radius:var(--r-inset)}}
 
 /* === THE HERO'S FOOT (board 05) ==============================================
-   The way into Search, said where a reader arrives, and today's weather — the chip appears
-   only when the wired forecast actually has today (features/live-data/ui/wx-today.js). */
+   Today's weather — the chip appears only when the wired forecast actually has today
+   (features/live-data/ui/wx-today.js).
+   2026-09-06: the hero's Search button and its six rules are gone with it. The strip above
+   opens the SAME overlay, so the cover was spending its best space on a duplicate of a control
+   present on every screen. Deleted rather than left behind a removed element, since dead CSS
+   outlives the reason it existed and the next person cannot tell it from live rules. */
 .gd-hero-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-gap-60);margin-top:1rem}
-.gd-hero-search{display:inline-flex;align-items:center;gap:var(--sp-gap-55);min-height:48px;max-width:100%;padding:0 .9rem;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-pill);color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);font-weight:500;cursor:pointer;text-align:left}
-.gd-hero-search:hover{border-color:var(--accent);color:var(--ink)}
-.gd-hero-search:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.gd-hero-search-ico{width:17px;height:17px;flex:none}
-.gd-hero-search-txt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.gd-hero-search-kbd{flex:none;padding:.05rem .4rem;border:1px solid var(--rule2);border-radius:var(--r-inset);font-family:var(--font-data);font-size:var(--text-nano);font-weight:600;letter-spacing:.04em}
 .wxt-chip{display:inline-flex;align-items:baseline;gap:var(--sp-gap-45);margin:0;min-height:48px;padding:0 .9rem;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-pill);font-family:var(--font-data);font-size:var(--text-control);color:var(--muted);white-space:nowrap}
 .wxt-chip[hidden]{display:none}
 .wxt-ico{font-size:var(--text-lead);color:var(--accent-ink)}
 .wxt-hi{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);color:var(--ink);font-variant-numeric:tabular-nums}
 .wxt-word{color:var(--ink)}
 .wxt-lo{font-variant-numeric:tabular-nums}
-@media(max-width:599px){.gd-hero-search-kbd{display:none}}
 
 /* === UNDER THE FRAME (board 05) ==============================================
    The standing country facts this product actually holds, then the way to the map. */
