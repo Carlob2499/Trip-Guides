@@ -1110,12 +1110,34 @@ const TARGET_PAGES = [
      about it. The change-request page is the one surface a reader reaches when something is
      already wrong, it is dense with chips and pills, and it was measured by nothing. */
   ["change request", "/Trip-Guides/change/"],
+  /* 2026-09-06 — the two destinations this sweep had never seen. TARGET_PAGES took paths and
+     the guide's five destinations are client-side, so only the one that happens to open first
+     was ever measured; Itinerary and Split rendered controls nothing had ever looked at. The
+     router resolves a `#dest-<key>` hash to the destination containing it (guide-ui.js
+     goToHash), so they are reachable by URL after all and need no new harness.
+     Itinerary is where the checklist rows live — the control a reader touches most often in a
+     guide, and the one that turned out to be 38px. Split is the densest form on the site. */
+  ["korea itinerary", "/Trip-Guides/guides/korea/#dest-itinerary"],
+  ["korea split", "/Trip-Guides/guides/korea/#dest-split"],
 ] as const;
 
 for (const [pageName, path] of TARGET_PAGES) {
 for (const d of DEVICES) {
   test(`every visible target clears 44px — ${pageName}, ${d.label}`, async ({ page }) => {
     await prep(page, path, "light", d);
+    /* Guard the guard, same reason as the rate pill below. A `#dest-*` path that failed to
+       route would land on whichever destination opens by default and this test would measure
+       the Trip cockpit twice under two names, passing while covering nothing — the precise
+       shape of blind spot this file keeps finding. Asserted rather than assumed, because a
+       silent duplicate is indistinguishable from real coverage in a green run. */
+    const wantDest = path.match(/#dest-([a-z]+)$/)?.[1];
+    if (wantDest) {
+      await expect(
+        page.locator("body"),
+        `${pageName}: the #dest-${wantDest} hash did not route — this sweep is about to measure ` +
+          `the default destination under this page's name and report it as covered.`,
+      ).toHaveAttribute("data-dest", wantDest);
+    }
     /* The measurement below silently skips anything rendering at 0x0, which is exactly how
        #liveRatePill hid from this gate for its whole life. Now that prep() serves the rate,
        assert the pill actually came up — otherwise a future change to rate.js's ladder could
