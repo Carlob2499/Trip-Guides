@@ -40,8 +40,8 @@
      ground across all ten boards. Measured after the move: ink/card 17.42:1, ink/bg 15.85:1,
      ink/bg2 13.82:1, muted/card 7.14:1, card/bg 1.10, and every status pigment >=4.89:1 on
      the tightest surface. LIGHT_BG in src/lib/contrast-policy.mjs moves with --bg. */
-  --bg:#f2ede5;--bg2:#e5ded2;--ink:#171310;--card:#fefcf8;--rule:#cdc3b4;--rule2:#b3a795;
-  --muted:#5b5348;--accent:#d35c16;--green:#396345;--warn:#7f4a07;--chrome-h:94px;
+  --bg:#f5f1ea;--bg2:#ebe6de;--ink:#1c1a17;--card:#ffffff;--rule:#ded7cb;--rule2:#bdb3a4;
+  --muted:#6b6459;--accent:#c2410c;--green:#396345;--warn:#7f4a07;--chrome-h:94px;
   /* R5 TOKENS.md §1 — the two "a theme could change this" knobs, declared in BOTH themes so
      neither is a bare fallback. --rw is the hairline width every 1px border reads, so a theme
      could thicken every rule in one line; --photo is photography opacity, so a theme could
@@ -72,8 +72,8 @@
      #c78f78 sat at 38% saturation against the boards' 81%: a contrast derivation against the
      near-black forest ground had been allowed to wash the colour out until it read as dust.
      Measured: ink 7.21/5.53/6.34 on the light surfaces, inkDark 5.40/6.23/6.87 on the navy. */
-  --accent-ink-light:#8f3d0d;--accent-ink-dark:#e89666;--accent-ink:var(--accent-ink-light);
-  --on-accent:#2c0f00;
+  --accent-ink-light:#963108;--accent-ink-dark:#dd835f;--accent-ink:var(--accent-ink-light);
+  --on-accent:#ffede2;
   /* THE BRAND ACCENT (2026-09-05, owner ruling "option 3"). --accent is the GUIDE's colour,
      resolved per destination from its cover photo (src/lib/palettes.ts), so Korea is olive and
      Denmark is gold. That is right for a guide's own identity marks and wrong for shared
@@ -89,7 +89,7 @@
      OBJECT, not ink on a page. --brand-ink IS theme-swapped, because that one is text on the
      page's own ground and has two correct answers. All four are accentTokens("#d35c16") output,
      pinned by accent-tokens.test.ts — never hand-edit them. */
-  --brand:#d35c16;
+  --brand:#c2410c;
   --on-brand:#2c0f00;                 /* text on a brand FILL — 4.52:1, same in both themes */
   --brand-ink-light:#8f3d0d;--brand-ink-dark:#e89666;
   --brand-ink:var(--brand-ink-light); /* brand as TEXT on the page ground — the dark blocks swap */
@@ -116,8 +116,8 @@
      reader meets, so the frame is set to clear 1.25 there, not only on the token). Ink on the
      frame 11.98:1, muted 6.13:1,
      brand 3.62:1 as identity. */
-  --frame-bg:#0f1b2e;--frame-bg2:#152438;--frame-card:#1c2f47;
-  --frame-rule:#2b4160;--frame-rule2:#3f5a7d;--frame-muted:#9aabc4;
+  --frame-bg:#1b1917;--frame-bg2:#232120;--frame-card:#2b2825;
+  --frame-rule:#3a3632;--frame-rule2:#4d4842;--frame-muted:#a8a29a;
   /* The Atlas globe's atmosphere. The only frame tone that is not also a surface: it is lit air
      at the planet's limb, so it sits brighter and more saturated than --frame-rule2 could. Read
      by globe-gl.js through --globe-atmo in atlas-world.css. */
@@ -200,7 +200,7 @@
      decision, 2026-08-06). Both hexes are existing palette members, not new colours.
      Pinned by src/styles/atlas-tokens.test.ts: >=4.5:1 ink-on-ground AND >=3:1 ground-on-page
      (WCAG 1.4.11 — a button's own edge has to be findable), in both themes. */
-  --cta:#080d14;--cta-ink:#f8faf3;
+  --cta:#121110;--cta-ink:#ffffff;
   /* Display-cutout insets, spelled once at the root so no component has to remember env() or
      its fallback. NOTHING consumes them in this phase — each fixed/sticky component wires
      max(<its own reserve>,var(--safe-*)) as it migrates. The 0px fallback is load-bearing, not
@@ -507,9 +507,13 @@
    reading — stays valid to two decimal places. Change a value here and its luminance changes
    with it; re-run the contrast gates. */
 @media(prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#080d14;--bg2:#101d2f;--ink:#f1eae0;--card:#22334d;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#080d14;
+  --bg:#121110;--bg2:#1b1917;--ink:#f0ece6;--card:#232120;--rule:#302d2a;--rule2:#453f3a;--muted:#a8a29a;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#121110;
   /* The frame lifts while the page drops — see the frame register in :root. */
-  --frame-bg:#182b44;--frame-bg2:#101d2f;--frame-card:#26385a;
+  /* 2026-09-07 Warm Stone: frame-card is #2f2a27 rather than a lighter tone because the guide
+     accent inks are painted ON it (.mapdest-group-title and friends). At #37322e denmark's
+     #b89562 measured 4.53:1 against a 4.5 floor — passing by 0.03, which the next extracted
+     palette would spend. #2f2a27 gives 5.07 and still lifts 1.33:1 off the page. */
+  --frame-bg:#221f1d;--frame-bg2:#282421;--frame-card:#2f2a27;
   /* --rw/--photo are re-declared here at the SAME values on purpose (R5 TOKENS.md §1 lists both
      in both theme tables). Unlike the aliases above, these are theme KNOBS: the whole reason
      they are tokens is that a theme could thicken every hairline or suppress photography in one
@@ -517,16 +521,20 @@
      carry their own declaration. If one moves, move the other deliberately — they are two
      decisions that currently agree, not one value written twice. */
   --rw:1px;--photo:1;
-  --cta:#f1eae0;--cta-ink:#080d14;
+  --cta:#f0ece6;--cta-ink:#121110;
   --accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark)}
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
-[data-theme="dark"]{--bg:#080d14;--bg2:#101d2f;--ink:#f1eae0;--card:#22334d;--rule:#2b4160;--rule2:#3f5a7d;--muted:#9aabc4;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#080d14;
+[data-theme="dark"]{--bg:#121110;--bg2:#1b1917;--ink:#f0ece6;--card:#232120;--rule:#302d2a;--rule2:#453f3a;--muted:#a8a29a;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#121110;
   /* The frame lifts while the page drops — see the frame register in :root. */
-  --frame-bg:#182b44;--frame-bg2:#101d2f;--frame-card:#26385a;
+  /* 2026-09-07 Warm Stone: frame-card is #2f2a27 rather than a lighter tone because the guide
+     accent inks are painted ON it (.mapdest-group-title and friends). At #37322e denmark's
+     #b89562 measured 4.53:1 against a 4.5 floor — passing by 0.03, which the next extracted
+     palette would spend. #2f2a27 gives 5.07 and still lifts 1.33:1 off the page. */
+  --frame-bg:#221f1d;--frame-bg2:#282421;--frame-card:#2f2a27;
   --rw:1px;--photo:1;   /* theme knobs — see the media-query block above for why both scopes declare them */
-  --cta:#f1eae0;--cta-ink:#080d14;
+  --cta:#f0ece6;--cta-ink:#121110;
   --accent-ink:var(--accent-ink-dark);--brand-ink:var(--brand-ink-dark)}
 [data-theme="dark"] [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 

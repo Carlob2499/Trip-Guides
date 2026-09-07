@@ -234,16 +234,19 @@ describe("Atlas token contract — declared-but-unconsumed tokens", () => {
 });
 
 /* R5 lifted Day palette — the reasoning lives in base.css's own R5 block. Pinned as EXACT
-   values because these were chosen against a scene CI cannot re-measure. */
+   values because these were chosen against a scene CI cannot re-measure.
+   2026-09-07: repinned for the Warm Stone palette (creator-selected from four screenshot
+   trials). The pins move WITH a deliberate palette change and hold against an accidental one —
+   that is the whole point of pinning them, so updating them here is the review, not a bypass. */
 describe("R5 — the lifted Day palette", () => {
   it.each([
-    ["--bg", "#f2ede5"],
-    ["--card", "#fefcf8"],
-    ["--bg2", "#e5ded2"], // the token --sunken points at
-    ["--ink", "#171310"],
-    ["--muted", "#5b5348"],
-    ["--rule", "#cdc3b4"],
-    ["--rule2", "#b3a795"],
+    ["--bg", "#f5f1ea"],
+    ["--card", "#ffffff"],
+    ["--bg2", "#ebe6de"], // the token --sunken points at
+    ["--ink", "#1c1a17"],
+    ["--muted", "#6b6459"],
+    ["--rule", "#ded7cb"],
+    ["--rule2", "#bdb3a4"],
   ])("Day %s holds its lifted value %s", (token, value) => {
     expect(hex(LIGHT, token)).toBe(value);
   });
@@ -277,7 +280,7 @@ describe("R5 — the lifted Day palette", () => {
 
   it("leaves --accent untouched — a guide's colour is a fact about the guide", () => {
     // Identity, not ink: every other pigment here follows the ground, and this one may not.
-    expect(hex(LIGHT, "--accent")).toBe("#d35c16");
+    expect(hex(LIGHT, "--accent")).toBe("#c2410c");
     expect(DARK).not.toContain("--accent:");
   });
 });
