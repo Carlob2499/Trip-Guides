@@ -154,7 +154,26 @@ heights, leaving a large void under SPLIT.
 outside the token system; the drift checker lists 360 colour findings. Any palette change has to
 convert these or they will not follow it.
 
-**Photography.** The single most consistent difference between board and build is that the boards
-are photo-led — globe, stop cards, topic cards, trip cards all carry real imagery — and the build
-renders the same slots as text or small thumbnails. It shows up independently on 01, 02 and 05,
-which suggests one decision rather than three.
+**Photography — creator ruled 2026-09-07: "more photo better".** Measured before acting, and the
+gap is not where it looked. The rendering is already there: trip.js's `stopRow` draws a 96x72
+photo per stop and its comment says "as the board draws it". Days whose stops are photographed
+sights render four of them (Jul 10: Gyeongbokgung, Bukchon, Insadong). Days whose stops are a
+station, a bakery or a jimjilbang render none, because those places carry no image.
+
+So the deficit is index COVERAGE, not a missing feature:
+
+| | sights with a photo | venues with a photo |
+|---|---|---|
+| korea | 15/23 (65%) | 2/64 (3%) |
+| denmark | 10/18 (56%) | 1/40 (2%) |
+
+101 venues across both guides; three have a picture. Venues are the restaurants and shops — the
+places a reader looks at most, and the ones that fill the stop rows on food and shopping days.
+Closing this makes the build photo-led everywhere the board is, with no layout change at all.
+
+It is deliberately NOT done here. `content.config.ts` requires every image to carry real
+provenance — a Wikimedia Commons `file`, or a CDN `src` with `credit` and `license` — so filling
+101 slots means sourcing and verifying 101 licences. Inventing plausible `File:` names would
+satisfy the schema, render correctly, and be fabricated attribution on a product whose stated
+contract is Verified · Personal · Actionable · Honest. That is a research pass through
+`waypoint-guide-author`, not a styling change.
