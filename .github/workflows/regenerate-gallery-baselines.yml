@@ -48,6 +48,17 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      # This workflow runs `npm run build`, which now downloads the guides' photographs
+      # (scripts/fetch-media.mjs). Without the cache every regeneration re-fetches all of them
+      # from Commons — slow here, and rude to a service that throttles exactly this. Same cache
+      # the other five building workflows carry.
+      - name: Cache guide photographs
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: .media-cache
+          key: media-${{ hashFiles('src/content/guides/**/*.json') }}
+          restore-keys: |
+            media-
       - run: npm ci
       - run: npm run build
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
