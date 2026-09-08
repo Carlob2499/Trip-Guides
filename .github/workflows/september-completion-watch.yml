@@ -102,6 +102,16 @@ jobs:
             exit 0
           fi
 
+          # Revocation makes this historical candidate inert, regardless of the live selector.
+          # Evaluate it before candidate fetches or dispatch-only preconditions.
+          if ! grep -F "Current dispatch authority is rebuilt r3" docs/handoff.md >/dev/null ||
+             ! grep -F "$CANDIDATE_REF" docs/handoff.md >/dev/null ||
+             ! grep -F "$CANDIDATE_SHA" docs/handoff.md >/dev/null; then
+            echo "Current handoff has revoked frozen Kumamoto r3 dispatch authority; stale candidate is inert until a new exact candidate is registered."
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           if [[ -n "$ENGINE" ]]; then
             echo "::error::WAYPOINT_RESEARCH_ENGINE is set to '$ENGINE'; frozen acceptance requires it to remain unset."
             exit 1
@@ -118,16 +128,6 @@ jobs:
           main_actual="$(git rev-parse origin/main)"
           echo "Current main: $main_actual"
           echo "Frozen candidate: $candidate_actual"
-
-          # Current authority must still explicitly name r3 as dispatch authority. A later
-          # handoff change can revoke this without mutating the frozen candidate branch.
-          if ! grep -F "Current dispatch authority is rebuilt r3" docs/handoff.md >/dev/null ||
-             ! grep -F "$CANDIDATE_REF" docs/handoff.md >/dev/null ||
-             ! grep -F "$CANDIDATE_SHA" docs/handoff.md >/dev/null; then
-            echo "Current handoff has revoked frozen Kumamoto r3 dispatch authority; stale candidate is inert until a new exact candidate is registered."
-            echo "eligible=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
 
           # Conservative model-burn firewall. These paths can alter the research contract,
           # model input, durable state, retry accounting, evidence gate, or protected landing.
