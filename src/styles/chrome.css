@@ -137,12 +137,34 @@ body.chrome-yield .botbar{transform:translateY(130%)}
 @media(min-width:900px){
   :root{--botbar-h:0px}
   .botbar{display:none}
-  .topbar{min-height:64px;gap:var(--sp-gap-100);padding:calc(.4rem + var(--safe-top)) max(1.4rem,var(--safe-right)) .4rem max(1.4rem,var(--safe-left))}
+  .topbar{min-height:64px;gap:var(--sp-gap-60);padding:calc(.4rem + var(--safe-top)) max(1.4rem,var(--safe-right)) .4rem max(1.4rem,var(--safe-left))}
   .topbar-center{display:flex}
-  .orient{display:flex;max-width:16rem}
-  .topbar-search-btn{width:15rem}
+  .topbar-search-btn{width:44px;padding:0;justify-content:center}
+  .topbar-search-btn .tb-label,.topbar-search-btn .tb-kbd{display:none}
   .topbar-btn .theme-btn-label{display:none}
 }
+
+/* The strip at its full desktop size wants about 975px of row and the frame gives 855 at 900px,
+   so from the desktop breakpoint to STRIP_FULL_MIN the wordmark sat ON the tabs and the tabs sat
+   ON the search pill — measured overlapping at 900, 960, 1024 and 1060, clean from 1100. A
+   centred group cannot guard itself: `.topbar-center` shrinks and `.tabs` inside it does not, so
+   the row overflows in BOTH directions out of the middle rather than clipping at one end.
+
+   So the compact strip above is the ≥900 default and this block is what the extra width BUYS,
+   in the order §6 ranks these things: the search pill's label and shortcut, then the quiet
+   orientation label — the tabs already say which destination is open and the surface underneath
+   is titled with the trip's own name, so it is the first thing that can go and the last thing
+   that comes back. Nothing is ever removed: tabs, Search, SOS, share and theme are all present
+   and all 44px at every desktop width. */
+/* bp:STRIP_FULL_MIN */
+@media(min-width:1100px){
+  .topbar{gap:var(--sp-gap-100)}
+  .orient{display:flex;max-width:16rem}
+  .topbar-search-btn{width:15rem;padding:0 .8rem;justify-content:flex-start}
+  .topbar-search-btn .tb-label{display:inline}
+  .topbar-search-btn .tb-kbd{display:block}
+}
+
 
 /* Offline state (§29): a quiet pill under the strip, present only while offline. */
 .offline-pill{position:fixed;top:calc(var(--hdr-h) + .5rem);left:50%;transform:translateX(-50%);z-index:var(--z-toast);padding:.35rem .8rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;border-radius:var(--r-pill);white-space:nowrap;pointer-events:none}

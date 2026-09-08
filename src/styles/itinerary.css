@@ -181,7 +181,11 @@
 .day-actual{margin:0 0 .8rem}
 
 /* --- The thumb rail ------------------------------------------------------------------- */
-.day-rail{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;padding:.35rem max(.5rem,var(--safe-right)) .35rem max(.5rem,var(--safe-left));background:var(--bg);border-top:1px solid var(--rule)}
+/* The rail's right padding clears the SOS FAB (--sos-fab-reserve, field-tools.css): the two
+   both live in the thumb zone and the FAB is fixed, so without the reserve the last two or
+   three day chips sat underneath it at every phone width and could not be tapped. The track
+   scrolls, so the days are not lost — the rail is just narrower than the screen. */
+.day-rail{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;padding:.35rem calc(max(.5rem,var(--safe-right)) + var(--sos-fab-reserve)) .35rem max(.5rem,var(--safe-left));background:var(--bg);border-top:1px solid var(--rule)}
 body:not([data-dest="itinerary"]) .day-rail{display:none}
 body.chrome-yield .day-rail{transform:translateY(calc(60px + var(--safe-bottom) + 130%))}
 .day-rail{transition:transform var(--dur-object) var(--ease-out-expo)}

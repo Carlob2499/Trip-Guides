@@ -169,7 +169,9 @@ html[data-conn="offline"] .map-degraded{display:block}
 .mapdest-sheet{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;display:flex;flex-direction:column;max-height:calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom) - 1rem);background:var(--bg);border-top:1px solid var(--rule2);transition:transform var(--dur-object) var(--ease-out-expo);touch-action:none}
 body:not([data-dest="map"]) .mapdest-sheet{display:none}
 /* Peek: the grip and a one-line index summary; the selected place, when there is one. */
-.mapdest-peek{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-gap-80);margin:0;padding:0 max(1.1rem,var(--safe-right)) .6rem max(1.1rem,var(--safe-left));font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
+/* Right padding clears the SOS FAB for the same reason the day rail does (field-tools.css):
+   the sheet is fixed in the thumb zone, so "Pull up for the list" was sitting under it. */
+.mapdest-peek{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-gap-80);margin:0;padding:0 calc(max(1.1rem,var(--safe-right)) + var(--sos-fab-reserve)) .6rem max(1.1rem,var(--safe-left));font-family:var(--font-data);font-size:var(--text-control);color:var(--muted)}
 .mapdest-peek-n{font-weight:700;color:var(--ink)}
 .mapdest-sheet:not([data-sheet="peek"]) .mapdest-peek{display:none}
 .mapdest-sheet[data-sheet="peek"] .mapdest-list{display:none}
@@ -199,10 +201,9 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
 .mapdest-rows{list-style:none;margin:0;padding:0}
 .mapdest-row{display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--rule)}
 .mapdest-row--sel{background:var(--card)}
-.mapdest-row-btn{display:flex;flex-direction:column;gap:var(--sp-gap-10);width:100%;min-height:56px;padding:.6rem max(1.1rem,var(--safe-right)) .5rem max(1.1rem,var(--safe-left));background:transparent;border:0;color:var(--ink);text-align:left;cursor:pointer;font:inherit}
+.mapdest-row-btn{display:flex;flex-direction:row;align-items:center;gap:var(--sp-gap-80);width:100%;min-height:56px;padding:.6rem max(1.1rem,var(--safe-right)) .5rem max(1.1rem,var(--safe-left));background:transparent;border:0;color:var(--ink);text-align:left;cursor:pointer;font:inherit}
 .mapdest-row-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
 /* The place's own photograph leads its row (lineage). */
-.mapdest-row--photo .mapdest-row-btn{flex-direction:row;align-items:center;gap:var(--sp-gap-80)}
 .mapdest-row-thumb{flex:none;width:64px;height:48px;overflow:hidden;border-radius:var(--r-inset);background:var(--sunken)}
 .mapdest-row-thumb img{display:block;width:100%;height:100%;object-fit:cover;opacity:var(--photo)}
 .mapdest-row-text{display:flex;flex-direction:column;gap:var(--sp-gap-10);min-width:0}
@@ -291,6 +292,15 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
   }
   .mapdest .map-chips::-webkit-scrollbar{display:none}
   .mapdest .map-chip{flex:none}
+
+  /* The map's own fullscreen control (features/maps/ui/fullscreen.js, .map-fs-btn in guide.css)
+     hangs off the TOP-RIGHT of whatever map it is attached to. On every other surface that is a
+     framed map pane and the corner is empty; here the map IS the surface, so the corner is
+     where the neighbourhood index lives — and the index is z-index 3 against the button's 2, so
+     a 44px control was completely covered and could not be pointed at. Move it, do not restack:
+     the index is the thing a reader came to this corner for. Offset by the index's own width and
+     both gutters, so the two stay measured off the same variables. */
+  .mapdest .map-fs-btn{right:calc(var(--mapdest-gutter) * 2 + var(--mapdest-index-w))}
 }
 @media print{.mapdest-sheet,.map-degraded{display:none}}
 /* Geometry (§31): the phone sheet rounds its top edge only; the desktop inspector is a pane. */

@@ -151,7 +151,11 @@ import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
     var dayTitle = text("[data-trip-now] .tn-title");
     var dayWhen = text("[data-trip-now] .tn-kicker > span");
     if (dayTitle) out.push(["Today", (dayWhen ? dayWhen + " — " : "") + dayTitle]);
-    var now = text("[data-trip-now] .tn-atom--now .tn-name");
+    /* The current stop's own row, named as Trip renders it today. This read was still spelled
+       `.tn-atom--now .tn-name` from a retired markup generation, so layer 2 has been shipping
+       without "Current stop" — the one line in the emergency context a caller is most likely
+       to be asked for — while the code looked like it was there. */
+    var now = text("[data-trip-now] .tn-row--now .tn-row-name");
     if (now) out.push(["Current stop", now]);
     var addr = document.querySelector("[data-addr-kr]");
     if (addr) out.push(["Base address", addr.getAttribute("data-addr-kr") + ((addr.textContent || "").trim() && (addr.textContent || "").trim() !== addr.getAttribute("data-addr-kr") ? " · " + (addr.textContent || "").trim() : "")]);

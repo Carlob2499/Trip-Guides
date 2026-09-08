@@ -417,5 +417,8 @@ select.split-in{cursor:pointer}
   .splitdest{padding:1.6rem clamp(1rem,3vw,1.5rem) 2.5rem}
   .splitdest-scene{display:block;position:absolute;inset:0;overflow:hidden;opacity:.28;pointer-events:none}
   .splitdest-scene .paint-atlas{position:absolute;inset:0;z-index:0}
-  .splitdest .split-wrap{position:relative;z-index:1;max-width:840px;padding:1.6rem 1.8rem 2rem;background:var(--bg);border:1px solid var(--rule2)}
+  /* The ledger is a PANE on the destination scene (§31's 24-32px role), not a bare rectangle:
+     it shipped with no radius at all, which is the retired zero-radius law (§33) surviving on
+     the largest object on the surface while every card inside it is already on --r-card. */
+  .splitdest .split-wrap{position:relative;z-index:1;max-width:840px;padding:1.6rem 1.8rem 2rem;background:var(--bg);border:1px solid var(--rule2);border-radius:var(--r-pane)}
 }

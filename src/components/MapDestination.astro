@@ -110,14 +110,20 @@ const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shop
             <section class="mapdest-group">
               <h3 class="mapdest-group-title">{label} <span class="mapdest-group-n">{rows.length}</span></h3>
               <ul class="mapdest-rows">
+                {/* The thumbnail BOX is drawn for every row, photographed or not (§8, §29). The
+                    index is a scan-first list, and only some of these places carry a photograph:
+                    the ones that do were pushing every name that does not 64px to the left, so
+                    no two rows in the list shared a left edge. An empty box is the sunken ground
+                    and claims nothing — the same reserve a loading image gets. A photo that then
+                    fails to arrive removes only the <img>, leaving the box reserved for it. */}
                 {rows.map((p) => (
-                  <li class={`mapdest-row${thumbOf(p.name) ? " mapdest-row--photo" : ""}`} data-map-row={p.id} data-lat={p.lat} data-lng={p.lng} data-place-id={p.placeId || undefined}>
+                  <li class="mapdest-row" data-map-row={p.id} data-lat={p.lat} data-lng={p.lng} data-place-id={p.placeId || undefined}>
                     <button class="mapdest-row-btn" type="button" data-map-focus={p.id}>
-                      {thumbOf(p.name) && (
-                        <span class="mapdest-row-thumb" aria-hidden="true">
-                          <img src={thumbOf(p.name)!} alt="" loading="lazy" decoding="async" onerror="this.closest('.mapdest-row').classList.remove('mapdest-row--photo');this.closest('.mapdest-row-thumb').remove()" />
-                        </span>
-                      )}
+                      <span class="mapdest-row-thumb" aria-hidden="true">
+                        {thumbOf(p.name) && (
+                          <img src={thumbOf(p.name)!} alt="" loading="lazy" decoding="async" onerror="this.remove()" />
+                        )}
+                      </span>
                       <span class="mapdest-row-text">
                         <span class="mapdest-row-name">{p.name}</span>
                         <span class="mapdest-row-meta">{p.time ? `${p.time} · ` : ""}{KIND_LABEL[p.kind] ?? p.kind}{p.local ? ` · ${p.local}` : ""}</span>

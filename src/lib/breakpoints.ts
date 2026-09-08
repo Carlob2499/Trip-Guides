@@ -37,3 +37,15 @@ export const TABLET_MIN = 720;
 
 /** Desktop model floor — the same container, where the spine turns horizontal again. */
 export const DESKTOP_MIN = 1180;
+
+/** The width the frame STRIP needs to draw itself at full size — a VIEWPORT number, like
+    MOBILE_MAX and for the same reason: the strip is chrome, positioned against the viewport.
+
+    Added 2026-09-08 because the number already existed, unwritten. Between MOBILE_MAX+1 and
+    here the strip's three groups (wordmark · destination tabs · Search/SOS/share/theme) want
+    more row than the frame has, and a centred middle group overflows out of both its sides
+    instead of clipping, so the wordmark drew over the tabs and the tabs over the search pill at
+    900, 960, 1024 and 1060. chrome.css compacts the strip below this width; above it the search
+    label, its shortcut and the quiet orientation label come back. Not DESKTOP_MIN: that one is
+    the guide body's CONTAINER floor and answers a different question about a different box. */
+export const STRIP_FULL_MIN = 1100;

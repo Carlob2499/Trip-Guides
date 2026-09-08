@@ -82,8 +82,16 @@
    fixed in the thumb zone above the bottom bar's safe area.
    56px, not the ambient 44px floor — "extremely high contrast, large targets" per §28 means
    larger than everything else this hand will touch today, not merely compliant with it. */
+/* The FAB's own footprint, published so the two FIXED thumb-zone rails can stay out from under
+   it. A floating button over SCROLLING content is the bargain a FAB makes and the reader can
+   scroll past it; a button parked permanently on top of the Itinerary's day scrubber (§25 puts
+   the day switch in exactly this corner) or the Map sheet's header is not that bargain — those
+   never move, so days 06-08 at 320-430px and "Pull up for the list" were simply unreachable.
+   Reserve, do not restack: raising the rails above the FAB would only move the collision. */
+:root{--sos-fab-reserve:0px}
 .sos-fab{display:none}
 @media(max-width:899px){
+  :root{--sos-fab-reserve:7.5rem}
   .sos-fab{
     display:flex;align-items:center;justify-content:center;gap:var(--sp-gap-30);
     position:fixed;right:max(1rem,var(--safe-right));bottom:calc(1rem + var(--safe-bottom) + var(--botbar-h,0px));

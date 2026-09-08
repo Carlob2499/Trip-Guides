@@ -942,7 +942,13 @@ for (const guide of ["denmark", "korea"] as const) {
         const host = document.querySelector("[data-trip-now]");
         if (!host) return null;
         host.closest("[data-trip-phase]")?.removeAttribute("hidden");
-        host.innerHTML = '<div class="tn-atom tn-atom--now" id="whatsNext"><p class="tn-role wn-label">Now</p><h3 class="tn-name" id="wnText"></h3></div>';
+        /* 2026-09-08: the fixture named `.tn-atom/.tn-role/.tn-name`, and NO stylesheet in this
+           repository declares any of the three — trip.js has painted `.tn-row--now` with
+           `.tn-row-role` and `.tn-row-name` since the D7 row grammar landed. So this gate has
+           been measuring inherited body ink on whatever ground it happened to find, and would
+           have stayed green through any contrast regression in the classes that actually ship.
+           Build the row the way trip.js builds it. */
+        host.innerHTML = '<article class="tn-row tn-row--now" id="whatsNext"><p class="tn-row-k"><span class="tn-row-role wn-label">Now</span></p><h3 class="tn-row-name" id="wnText"></h3></article>';
         const banner = document.getElementById("whatsNext")!;
         const text = document.getElementById("wnText")!;
         text.textContent = "Gyeongbokgung Palace, 14:00";

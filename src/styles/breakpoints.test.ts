@@ -9,10 +9,10 @@ import { describe, expect, it } from "vitest";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { MOBILE_MAX, TABLET_MIN, DESKTOP_MIN } from "../lib/breakpoints";
+import { MOBILE_MAX, TABLET_MIN, DESKTOP_MIN, STRIP_FULL_MIN } from "../lib/breakpoints";
 
 const SRC = fileURLToPath(new URL("..", import.meta.url));
-const VALUE: Record<string, number> = { MOBILE_MAX, TABLET_MIN, DESKTOP_MIN };
+const VALUE: Record<string, number> = { MOBILE_MAX, TABLET_MIN, DESKTOP_MIN, STRIP_FULL_MIN };
 
 function sources(dir: string, match: RegExp, out: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
@@ -37,7 +37,9 @@ const EXPECTED: Record<string, string[]> = {
   // 2026-09-05, the frame strip (design-system.md §6): the frame's own margins/radius, and the
   // strip's desktop row, each recompose on the phone ceiling.
   // 2026-09-05, board 02: the cream band a destination owns under the frame recomposes with it.
-  "styles/chrome.css": ["MOBILE_MAX+1", "MOBILE_MAX+1", "MOBILE_MAX+1"],
+  // 2026-09-08: the strip draws itself compact from MOBILE_MAX+1 and at full size from
+  // STRIP_FULL_MIN, because between the two its three groups overlapped each other.
+  "styles/chrome.css": ["MOBILE_MAX+1", "MOBILE_MAX+1", "MOBILE_MAX+1", "STRIP_FULL_MIN"],
   // The Atlas (board 01): the stage's desktop grid, the list's ivory card under the frame, and
   // the phone's one-scroll composition.
   "styles/atlas-world.css": ["MOBILE_MAX+1"],
@@ -62,7 +64,9 @@ const EXPECTED: Record<string, string[]> = {
   // D7 convergence: the ledger gains its desktop scene above the phone ceiling.
   "styles/trip-split.css": ["MOBILE_MAX", "MOBILE_MAX+1"],
   // trip.css: the ACTIVE cockpit's three columns, then the cream band's two under the frame.
-  "styles/trip.css": ["MOBILE_MAX+1", "MOBILE_MAX+1"],
+  // 2026-09-08: ACTIVE/POST are two columns from the phone ceiling and three from
+  // STRIP_FULL_MIN — three of them do not fit the frame below it.
+  "styles/trip.css": ["MOBILE_MAX+1", "STRIP_FULL_MIN", "MOBILE_MAX+1"],
 };
 
 const MARKER = /\/\*\s*bp:([A-Z_]+)(\+1)?\b[\s\S]*?\*\//g;

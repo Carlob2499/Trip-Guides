@@ -43,8 +43,14 @@ function placeKey(name) {
 function imageHtml(images, stop, sizes) {
   var im = images && images[placeKey(stop.name)];
   if (!im) return "";
+  /* The failure handler names the CURRENT row (`.tn-row` / `tn-row--photo`). It used to name
+     `.tn-atom` / `tn-atom--photo`, which this markup stopped emitting a generation ago, so the
+     media box was hidden while the row kept its three-column photo template: the hidden box is
+     not a grid item, everything auto-placed one track left, and the day's stop names wrapped
+     one WORD per line inside a 120px track with 340px of the card empty beside them. Both the
+     hide and the class removal have to happen together or neither should. */
   return '<span class="tn-media"><img class="tn-img" src="' + esc(im.src) + '"' + (im.srcset ? ' srcset="' + esc(im.srcset) + '"' : "") +
-    ' sizes="' + sizes + '" alt="" loading="eager" decoding="async" onerror="var a=this.closest(\'.tn-atom\');this.closest(\'.tn-media\').hidden=true;if(a)a.classList.remove(\'tn-atom--photo\')"></span>';
+    ' sizes="' + sizes + '" alt="" loading="eager" decoding="async" onerror="var r=this.closest(\'.tn-row\');this.closest(\'.tn-media\').hidden=true;if(r)r.classList.remove(\'tn-row--photo\')"></span>';
 }
 
 /* "Leave by" (design-system.md §24, third in the hierarchy) is shown only from data the guide

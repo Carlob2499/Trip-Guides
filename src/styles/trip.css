@@ -184,7 +184,13 @@
 .tn-go{display:flex;flex-direction:column;gap:var(--sp-gap-30);margin:.7rem 0 0}
 .tn-go-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .tn-go .transit-links{margin:0;gap:var(--sp-gap-40)}
-.tn-row--now .tn-go .transit-link:first-child{background:var(--cta);border-color:var(--cta);color:var(--cta-ink)}
+/* The day's one primary hand-off is FILLED (--cta, base.css). `.transit-link`'s own shape is an
+   underlined link — `border-radius:0` and .1rem of inline padding, which is right for a rule
+   under a word and wrong the moment a fill is painted behind it: the label touched both edges of
+   a hard-cornered black rectangle, and the leftover bottom rule ran along the fill. Give the
+   filled state the press shape and the padding a filled control needs (§31, --r-pill is the
+   control-inset role since 2026-09-08); the two links beside it keep their rules. */
+.tn-row--now .tn-go .transit-link:first-child{background:var(--cta);border-color:transparent;border-radius:var(--r-pill);padding-inline:.85rem;color:var(--cta-ink)}
 
 /* Leave by / Next at: the third line of the hierarchy (§24), only from data the guide holds. */
 .tn-leave{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--sp-gap-25) var(--sp-gap-55);margin:.55rem 0 0;padding:.45rem .7rem;border-radius:var(--r-inset);background:color-mix(in srgb,var(--accent) 12%,transparent);font-family:var(--font-data);font-size:var(--text-control)}
@@ -301,16 +307,31 @@
   .trip[data-phase="active"] .trip-hero{display:none}
   .trip[data-phase="active"] .tn-ident-title,.trip[data-phase="active"] .tn-ident-dates{display:block}
   .trip[data-phase="active"] .tn-prog{margin-top:.85rem}
-  .trip-active,.trip-post{display:grid;grid-template-columns:290px minmax(0,1.25fr) minmax(0,1fr);gap:var(--sp-gap-100) 1.3rem;align-items:start}
+  /* TWO columns here, three from STRIP_FULL_MIN below. Three of them need about 1100px: at
+     1024 the rail keeps its 290 and the remaining 700 splits 1.25/1 between the day and the
+     route, which left the day's rows ~330px wide — "Gyeongbokgung" broke across two lines
+     mid-word, each Get-there link took a line of its own, and the route pane's own header
+     wrapped to three. Intermediate widths are a sibling composition, not the desktop one
+     squeezed (§5): the day gets the width, and today's route and the measured strip follow
+     under it in the same column rather than competing for the same row. */
+  .trip-active,.trip-post{display:grid;grid-template-columns:290px minmax(0,1fr);gap:var(--sp-gap-100) 1.3rem;align-items:start}
   .trip-active>.tn-rail,.trip-post>.tn-rail{grid-column:1}
   .trip-active>.tn-main,.trip-post>.tn-main{grid-column:2}
-  .trip-active>.tn-aside,.trip-post>.tn-aside{grid-column:3;position:sticky;top:1rem}
+  .trip-active>.tn-aside,.trip-post>.tn-aside{grid-column:2;position:static}
   .tn-map-mount{height:min(460px,calc(100dvh - 16rem))}
   .tn-title{font-size:clamp(2rem,2.4vw,2.5rem)}
   .tn-row{padding:.8rem;gap:var(--sp-gap-90)}
   .tn-row--photo{grid-template-columns:120px minmax(0,1fr) 44px}
   .tn-row .tn-media{height:90px}
   .tn-row--now .tn-media{height:112px}
+}
+/* The third column, at the width that can hold it (src/lib/breakpoints.ts). Same number the
+   strip above compacts on, and for the same reason — this is where the frame stops being short
+   of room. */
+/* bp:STRIP_FULL_MIN */
+@media(min-width:1100px){
+  .trip-active,.trip-post{grid-template-columns:290px minmax(0,1.25fr) minmax(0,1fr)}
+  .trip-active>.tn-aside,.trip-post>.tn-aside{grid-column:3;position:sticky;top:1rem}
 }
 @media print{.trip-goto,.trip-dl-row{display:none}}
 
