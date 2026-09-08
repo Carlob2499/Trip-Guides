@@ -93,7 +93,7 @@ const contours = [
     <Contours layers={contours} />
 
     {/* Surface 7 (board 07): triage is the run's other half, so it wears the same frame. */}
-    <div class="stage spatial">
+    <div class="stage">
       <UtilityBar base={base} toggleId="cpDark" page="Triage" />
 
       <main class="cp" id="cpTriageRoot">
@@ -141,7 +141,7 @@ const contours = [
     </div>
 
     <footer class="cp-foot">
-      Waypoint — every fact checked, every route tested. <a href={`${base}/`}>Back to the guides →</a>
+      <a href={`${base}/`}>Back to the guides →</a>
     </footer>
 
     <script

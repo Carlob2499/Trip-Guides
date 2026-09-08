@@ -100,7 +100,7 @@
       {
         "name": "Bingsu · 빙수",
         "kicker": "Mountain of shaved ice",
-        "body": "Fluffy shaved milk-ice piled with sweet red bean (pat, 팥), fruit and condensed milk — the café heat-beater. Patbingsu (팥빙수) is the classic; share one, they're big.",
+        "body": "Fluffy shaved milk-ice piled with sweet red bean (pat, 팥), fruit and condensed milk — the café heat-beater. Patbingsu (팥빙수) is the classic; share one, they are big.",
         "img": {
           "file": "Bingsu 2.jpg",
           "alt": "Bowls of Korean bingsu shaved ice with red bean and fruit"
@@ -118,19 +118,19 @@
     "group": "Food & shopping",
     "title": "What to eat",
     "moreLabel": "Your Jongno base & the market runs",
-    "body": "<p>Hit the obvious greats: <b>Korean BBQ</b>, <b>chimaek</b> (fried chicken and beer), <b>tteokbokki</b>, and market street food at <b>Gwangjang</b> — bindaetteok (mung-bean pancake), mayak gimbap, and live octopus if you're brave.</p><p>You're based in <b>Jongno</b> — old-Seoul heart, with Insadong, Ikseon-dong and Gwangjang Market a short walk away plus walk-in BBQ and café culture. Central for eating well without tourist-strip prices. For markets: <b>Gwangjang Market</b> (~5 min, Line 1 east 2 stops) and <b>Namdaemun</b> (Line 1 → Seoul Station, ~10 min). <b>Myeongdong</b> (K-beauty, street stalls) is a ~12-min walk — worth a half-day. <b>Yongsan</b> for beef and electronics (Line 1 south, ~10 min). In July heat, <b>naengmyeon</b> (cold buckwheat noodles) and <b>bingsu</b> (shaved-ice dessert) are exactly what you want. Café culture is everywhere when you need air-conditioning.</p>"
+    "body": "<p>Hit the obvious greats: <b>Korean BBQ</b>, <b>chimaek</b> (fried chicken and beer), <b>tteokbokki</b>, and market street food at <b>Gwangjang</b>, including bindaetteok (mung-bean pancake), mayak gimbap, and live octopus if you are brave.</p><p>You are based in <b>Jongno</b>, the old-Seoul heart, with Insadong, Ikseon-dong and Gwangjang Market a short walk away, plus walk-in BBQ and café culture close by. It is a central spot for eating well without tourist-strip prices. For markets, try <b>Gwangjang Market</b> (~5 min, Line 1 east 2 stops) and <b>Namdaemun</b> (Line 1 to Seoul Station, ~10 min). <b>Myeongdong</b> (K-beauty, street stalls) is a ~12-minute walk and worth a half-day. Head to <b>Yongsan</b> for beef and electronics (Line 1 south, ~10 min). In July heat, <b>naengmyeon</b> (cold buckwheat noodles) and <b>bingsu</b> (shaved-ice dessert) are exactly what you want, and café culture is everywhere when you need air-conditioning.</p>"
   },
   {
     "type": "prose",
     "group": "Food & shopping",
     "title": "Where locals review restaurants — apps and platforms",
-    "body": "<p>Google Maps ratings are thin in Korea — locals use different platforms entirely. These are what Koreans actually open before eating out:</p><ul><li><b>Naver Map (네이버 지도)</b> — the dominant platform. Search a restaurant, tap the listing and you'll see star ratings, visitor photos, and linked blog reviews (<i>블로그 후기</i>). The blog posts are often detailed and photo-heavy — even without Korean, the photos show whether the food looks right and whether the space is clean. In English mode, star ratings and photos are readable; use Papago for any text. This is the first check for anything in central Seoul or Hongdae. Download the app before the trip.</li><li><b>Kakao Map (카카오맵)</b> — integrated with the Kakao T taxi app, so a restaurant search can go directly to navigation or hailing a cab. Ratings are Korean-first but photos are universal.</li><li><b>Daytripkorea</b> — English-friendly café and eatery finder with editorial curation; good for vetted shortlists rather than raw listings.</li></ul><p><b>The practical flow:</b> Search the place name on <b>Naver Map</b> first — below 4.0 on 1,000+ reviews, skip it; good photos and recent blog posts, trust it. If the listing looks thin, search the same name on <b>Kakao Map</b> before writing the place off — the two don't always carry the same listings or the same reviews. ⚠ No single app is authoritative here: check any place that matters against a second source, and treat a place with no app presence as unknown rather than bad.</p>"
+    "body": "<p>Google Maps ratings are thin in Korea — locals use different platforms entirely. These are what Koreans actually open before eating out:</p><ul><li><b>Naver Map (네이버 지도)</b> — the dominant platform. Search a restaurant, tap the listing and you will see star ratings, visitor photos, and linked blog reviews (<i>블로그 후기</i>). The blog posts are often detailed and photo-heavy — even without Korean, the photos show whether the food looks right and whether the space is clean. In English mode, star ratings and photos are readable; use Papago for any text. This is the first check for anything in central Seoul or Hongdae. Download the app before the trip.</li><li><b>Kakao Map (카카오맵)</b> — integrated with the Kakao T taxi app, so a restaurant search can go directly to navigation or hailing a cab. Ratings are Korean-first but photos are universal.</li><li><b>Daytripkorea</b> — English-friendly café and eatery finder with editorial curation; good for vetted shortlists rather than raw listings.</li></ul><p><b>The practical flow:</b> Search the place name on <b>Naver Map</b> first — below 4.0 on 1,000+ reviews, skip it; good photos and recent blog posts, trust it. If the listing looks thin, search the same name on <b>Kakao Map</b> before writing the place off — the two do not always carry the same listings or the same reviews. ⚠ No single app is authoritative here: check any place that matters against a second source, and treat a place with no app presence as unknown rather than bad.</p>"
   },
   {
     "type": "prose",
     "group": "Food & shopping",
     "title": "Ordering in Korean restaurants — the mechanics",
-    "body": "<p>More accessible than it looks from the street. The mechanics that make it easy:</p><ul><li><b>Kiosks</b> — most chain restaurants and many AYCE BBQ spots have self-ordering touchscreens. Tap the flag icon for English, then browse photo menus and add items. No conversation. At AYCE BBQ kiosks also handle your meat refill orders during the meal.</li><li><b>Picture menus</b> — most mid-range sit-down restaurants have laminated picture menus or a QR code that opens photos. Point at what you want, hold up fingers for quantity.</li><li><b>Papago camera</b> — for text-only menus, open Papago, tap the camera icon, and point at the page. It overlays live Korean-to-English translation without you typing anything.</li><li><b>Walk in and sit</b> — if a table is open, take it. A server will come. Most casual Korean restaurants don't seat you formally. Hold up fingers to show group size if asked.</li><li><b>Banchan is automatic and free</b> — you'll receive a set of small side dishes (kimchi, egg rolls, salads) without ordering them. Always free, always refillable, always included. Don't order them or pay for them separately.</li><li><b>Call button</b> — most Korean restaurants have a button on the table to summon a server. Press it to order more or ask for the bill. If there isn't one, <i>yeogi-yo!</i> (여기요) gets attention — completely normal, not rude.</li><li><b>Paying</b> — walk up to the register when you're done. Bills are rarely brought to the table. Card is accepted almost everywhere; some market stalls are cash-only.</li><li><b>The phrase that handles most orders:</b> point at the menu and say <i>igeo juseyo</i> (이거 주세요 — this one, please).</li></ul><p><b>What to order beyond BBQ — the overlooked ones:</b></p><ul><li><b>Jjigae</b> (stew) — doenjang jjigae (fermented soybean), kimchi jjigae, or sundubu jjigae (silken tofu). Served boiling in a stone pot, {{fact:beyond-bbq-8-000-sundubu}}–12,000 (⚠ varies by venue), usually comes with rice and banchan. Available everywhere; good breakfast or recovery food after a long day.</li><li><b>Dolsot bibimbap</b> — rice and vegetables in a hot stone bowl with a raw egg that cooks on contact; crispy rice forms at the bottom. Mix everything together before eating. Safe, filling, {{fact:ordering-in-korean-12-000}}–15,000 (⚠ varies by venue).</li><li><b>Somaek</b> — the default way to drink in Korea: pour a shot of soju into a glass of beer and drink together. Every table at every chicken or pork spot does it. No special ordering needed — just ask for soju and beer.</li></ul>",
+    "body": "<p>More accessible than it looks from the street. The mechanics that make it easy:</p><ul><li><b>Kiosks</b> — most chain restaurants and many AYCE BBQ spots have self-ordering touchscreens. Tap the flag icon for English, then browse photo menus and add items. No conversation. At AYCE BBQ kiosks also handle your meat refill orders during the meal.</li><li><b>Picture menus</b> — most mid-range sit-down restaurants have laminated picture menus or a QR code that opens photos. Point at what you want, hold up fingers for quantity.</li><li><b>Papago camera</b> — for text-only menus, open Papago, tap the camera icon, and point at the page. It overlays live Korean-to-English translation without you typing anything.</li><li><b>Walk in and sit</b> — if a table is open, take it. A server will come. Most casual Korean restaurants do not seat you formally. Hold up fingers to show group size if asked.</li><li><b>Banchan is automatic and free</b> — you will receive a set of small side dishes (kimchi, egg rolls, salads) without ordering them. Always free, always refillable, always included. Do not order them or pay for them separately.</li><li><b>Call button</b> — most Korean restaurants have a button on the table to summon a server. Press it to order more or ask for the bill. If there is not one, <i>yeogi-yo!</i> (여기요) gets attention — completely normal, not rude.</li><li><b>Paying</b> — walk up to the register when you are done. Bills are rarely brought to the table. Card is accepted almost everywhere; some market stalls are cash-only.</li><li><b>The phrase that handles most orders:</b> point at the menu and say <i>igeo juseyo</i> (이거 주세요 — this one, please).</li></ul><p><b>What to order beyond BBQ — the overlooked ones:</b></p><ul><li><b>Jjigae</b> (stew) — doenjang jjigae (fermented soybean), kimchi jjigae, or sundubu jjigae (silken tofu). Served boiling in a stone pot, {{fact:beyond-bbq-8-000-sundubu}}–12,000 (⚠ varies by venue), usually comes with rice and banchan. Available everywhere; good breakfast or recovery food after a long day.</li><li><b>Dolsot bibimbap</b> — rice and vegetables in a hot stone bowl with a raw egg that cooks on contact; crispy rice forms at the bottom. Mix everything together before eating. Safe, filling, {{fact:ordering-in-korean-12-000}}–15,000 (⚠ varies by venue).</li><li><b>Somaek</b> — the default way to drink in Korea: pour a shot of soju into a glass of beer and drink together. Every table at every chicken or pork spot does it. No special ordering needed — just ask for soju and beer.</li></ul>",
     "verified_on": "2026-06-28",
     "shelf_life": "default",
     "source_url": "https://map.naver.com",
@@ -149,7 +149,7 @@
     "group": "Food & shopping",
     "title": "How to book restaurants in Korea",
     "moreLabel": "Catch Table, Naver Map & the walk-in reality",
-    "body": "<p>Korea's restaurant booking landscape is divided: popular spots require reservations; most neighbourhood BBQ joints and street food stalls are walk-in only. Here's how to book, in order of convenience for foreign visitors.</p><p><b>Catch Table Global — the primary tool for foreigners</b><br/>Korea's dominant reservation platform now has an international version at <a href='https://www.catchtable.net' target='_blank' rel='noopener noreferrer'>catchtable.net</a> (search 'Catchtable' on the App Store). No Korean phone number required, accepts Visa/Mastercard/Amex, available in English, 8,000+ restaurants listed. Deposits are standard (typically {{fact:how-to-book-10-000}}–30,000 per person, deducted from the bill or refunded after your visit). In-demand KBBQ restaurants, omakase spots, and Michelin-listed venues use Catch Table almost exclusively. <b>Download before you leave.</b></p><p><b>Naver Map reservations — directly from the map</b><br/>When you search a restaurant on Naver Map and see a blue 예약 (reservation) button on the listing, you can book directly in the app. As of June 2026, Naver now accepts passport-based identity verification for foreign visitors — no Korean phone number needed. Most popular mid-range spots use it; confirmation can be instant or take up to a day.</p><p><b>Phone — for smaller neighbourhood places</b><br/>Some local restaurants take calls only. Most won't answer in English — ask your Airbnb host to call, or message through the restaurant's Naver/Kakao Map listing (many respond faster to a chat message than a call).</p><p><b>Walk-in reality check for this trip:</b> Neighbourhood BBQ joints, ramen counters, and market stalls are walk-in only. For the specific restaurants in this guide: <b>Ungteori Meats</b> now recommends booking via Catch Table — weekday lunch is the most reliable walk-in window; weekend evenings queue. <b>MUSSO</b> and <b>Chicken Baengi</b> are reliably walk-in. <b>Gobang Sikdang</b> in Daejeon should be called on weekends (042-863-2104). If you're set on a specific spot for a meaningful night, book it before you land.</p>",
+    "body": "<p>Korea's restaurant booking landscape is divided: popular spots require reservations; most neighbourhood BBQ joints and street food stalls are walk-in only. Here is how to book, in order of convenience for foreign visitors.</p><p><b>Catch Table Global — the primary tool for foreigners</b><br/>Korea's dominant reservation platform now has an international version at <a href='https://www.catchtable.net' target='_blank' rel='noopener noreferrer'>catchtable.net</a> (search 'Catchtable' on the App Store). No Korean phone number required, accepts Visa/Mastercard/Amex, available in English, 8,000+ restaurants listed. Deposits are standard (typically {{fact:how-to-book-10-000}}–30,000 per person, deducted from the bill or refunded after your visit). In-demand KBBQ restaurants, omakase spots, and Michelin-listed venues use Catch Table almost exclusively. <b>Download before you leave.</b></p><p><b>Naver Map reservations — directly from the map</b><br/>When you search a restaurant on Naver Map and see a blue 예약 (reservation) button on the listing, you can book directly in the app. As of June 2026, Naver now accepts passport-based identity verification for foreign visitors — no Korean phone number needed. Most popular mid-range spots use it; confirmation can be instant or take up to a day.</p><p><b>Phone — for smaller neighbourhood places</b><br/>Some local restaurants take calls only. Most will not answer in English — ask your Airbnb host to call, or message through the restaurant's Naver/Kakao Map listing (many respond faster to a chat message than a call).</p><p><b>Walk-in reality check for this trip:</b> Neighbourhood BBQ joints, ramen counters, and market stalls are walk-in only. For the specific restaurants in this guide: <b>Ungteori Meats</b> now recommends booking via Catch Table — weekday lunch is the most reliable walk-in window; weekend evenings queue. <b>MUSSO</b> and <b>Chicken Baengi</b> are reliably walk-in. <b>Gobang Sikdang</b> in Daejeon should be called on weekends (042-863-2104). If you are set on a specific spot for a meaningful night, book it before you land.</p>",
     "verified_on": "2026-07-07",
     "shelf_life": "default",
     "source_url": "https://www.catchtable.net",
@@ -167,7 +167,7 @@
     "type": "venues",
     "group": "Food & shopping",
     "title": "Where to eat — picks near your route",
-    "intro": "<p>Two clusters: <b>near-base picks</b> in Jongno for everyday meals, and <b>Hongdae picks</b> (near <b>Hongik University Station, Line 2</b>) for your nights out there. All prices ≈ — verify before you go.</p><p><b>Near the Jongno base:</b> walk-in Korean BBQ, kalguksu and bunsik line Jongno and Insadong 5–10 min away, and the <b>Gwangjang Market</b> food alleys are two Line-1 stops east. For the arrival-night dinner, any Jongno samgyeopsal joint does the job.</p><p><b>Hongdae street food</b> — the pedestrian zone and Wausan-ro strip. Any evening you're over there. No booking. Tteokbokki, hotteok, skewers, grilled corn — {{fact:where-to-eat-2-000}}–5,000 per item.</p><p><b>Post-match dinner in Daejeon — pick by how late it runs.</b> The Grand Final (Sun, 15:00 start) likely ends 18:00–20:30; the Lower Bracket Final (Sat, 17:00 start) can run to ~22:00. For beef: <b>Yakiniku Doryong</b> (Mon–Sat, closed Sun) is the Saturday pick; for Sunday beef try <b>Hanmaeum Jeongyuk Sikdang</b> (한마음정육식당 도룡점 — butcher-shop beef near DCC; ⚠ confirm Sun hours) or <b>Saebyeok-so</b> (새벽소, Dunsan — latest-open hanwoo, ~15–20 min taxi). For pork / wrapped by ~21:00: <b>Gobang Sikdang</b> (aged pork; book ahead), <b>Cham-i-mat</b> (gamjatang, last order 21:30), or <b>Ossi Kalguksu</b> if you arrive before 21:00. 21:00–23:00: <b>Gobang Sikdang</b> is the safest sit-down (kitchen to 24:00 Mon–Fri / 23:00 Sat–Sun); Cham-i-mat only if you make the 21:30 last order. After ~23:00, or for a night out: <b>Dunsan-dong</b> (Seo-gu, ~15–20 min taxi) is Daejeon's nightlife strip — 24-hour budae-jjigae, chimaek and makgeolli bars (search '둔산동' on Naver Map for what's open now). For chimaek closer to the hotel, the BBQ / Kyochon / BHC chains have Yuseong branches open to ≈01:00 — check Naver Map day-of. Always-open fallback: the GS25 / CU and pojangmacha tents around the I-Hotel.</p><p><b>Convenience store</b> — the underrated late-night move: GS25 and CU everywhere, open 24 h: triangle gimbap ~{{fact:where-to-eat-1-500}}, instant ramen ~{{fact:where-to-eat-1-500}}, egg salad sandwich ~{{fact:where-to-eat-2-500}}, tteokbokki cups. After a full GO Fest / MSI day, often the right call.</p>",
+    "intro": "<p>Two clusters: <b>near-base picks</b> in Jongno for everyday meals, and <b>Hongdae picks</b> (near <b>Hongik University Station, Line 2</b>) for your nights out there. All prices ≈ — verify before you go.</p><p><b>Near the Jongno base:</b> walk-in Korean BBQ, kalguksu and bunsik line Jongno and Insadong 5–10 min away, and the <b>Gwangjang Market</b> food alleys are two Line-1 stops east. For the arrival-night dinner, any Jongno samgyeopsal joint does the job.</p><p><b>Hongdae street food</b> — the pedestrian zone and Wausan-ro strip. Any evening you are over there. No booking. Tteokbokki, hotteok, skewers, grilled corn — {{fact:where-to-eat-2-000}}–5,000 per item.</p><p><b>Post-match dinner in Daejeon — pick by how late it runs.</b> The Grand Final (Sun, 15:00 start) likely ends 18:00–20:30; the Lower Bracket Final (Sat, 17:00 start) can run to ~22:00. For beef: <b>Yakiniku Doryong</b> (Mon–Sat, closed Sun) is the Saturday pick; for Sunday beef try <b>Hanmaeum Jeongyuk Sikdang</b> (한마음정육식당 도룡점 — butcher-shop beef near DCC; ⚠ confirm Sun hours) or <b>Saebyeok-so</b> (새벽소, Dunsan — latest-open hanwoo, ~15–20 min taxi). For pork / wrapped by ~21:00: <b>Gobang Sikdang</b> (aged pork; book ahead), <b>Cham-i-mat</b> (gamjatang, last order 21:30), or <b>Ossi Kalguksu</b> if you arrive before 21:00. 21:00–23:00: <b>Gobang Sikdang</b> is the safest sit-down (kitchen to 24:00 Mon–Fri / 23:00 Sat–Sun); Cham-i-mat only if you make the 21:30 last order. After ~23:00, or for a night out: <b>Dunsan-dong</b> (Seo-gu, ~15–20 min taxi) is Daejeon's nightlife strip — 24-hour budae-jjigae, chimaek and makgeolli bars (search '둔산동' on Naver Map for what is open now). For chimaek closer to the hotel, the BBQ / Kyochon / BHC chains have Yuseong branches open to ≈01:00 — check Naver Map day-of. Always-open fallback: the GS25 / CU and pojangmacha tents around the I-Hotel.</p><p><b>Convenience store</b> — the underrated late-night move: GS25 and CU everywhere, open 24 h: triangle gimbap ~{{fact:where-to-eat-1-500}}, instant ramen ~{{fact:where-to-eat-1-500}}, egg salad sandwich ~{{fact:where-to-eat-2-500}}, tteokbokki cups. After a full GO Fest / MSI day, often the right call.</p>",
     "items": [
       {
         "name": "Ungteori Meats (엉터리생고기)",
@@ -277,7 +277,11 @@
           "lat": 37.570039799999996,
           "lng": 126.99960360000001
         },
-        "place_id": "ChIJm3V0fu2ifDURRJ8IMUijVtY"
+        "place_id": "ChIJm3V0fu2ifDURRJ8IMUijVtY",
+        "img": {
+          "file": "Gwangjang Market, Seoul 02.jpg",
+          "alt": "Food stalls and diners in Gwangjang Market, Seoul"
+        }
       },
       {
         "name": "Sulbing (설빙)",
@@ -390,7 +394,7 @@
     "type": "venues",
     "group": "Food & shopping",
     "title": "Where to eat — Busan day trip",
-    "intro": "<p>The Jul 13 day trip itinerary already covers lunch on Gunam-ro in Haeundae (Choryang Milmyeon / Obok Dwaeji Gukbap). These are further options on the Nampo-dong/Yeongdo side of the city — genuinely more of Busan, for a longer future visit or if you swap out part of the Haeundae plan.</p>",
+    "intro": "<p>The Jul 13 day trip itinerary already covers lunch on Gunam-ro in Haeundae (Choryang Milmyeon / Obok Dwaeji Gukbap). These are further options on the Nampo-dong/Yeongdo side of the city — more of Busan, for a longer future visit or if you swap out part of the Haeundae plan.</p>",
     "items": [
       {
         "name": "Gukje Market food alley (국제시장 먹자골목)",
@@ -419,7 +423,7 @@
         "book": "walk-in",
         "how": "Right where the day trip changes subway lines at Seomyeon — a detour of a stop or two, not a special trip.",
         "why": "Well-reviewed Busan-style dwaeji-gukbap (pork soup) made with 1+-grade domestic pork and a clean bone broth, no MSG.",
-        "crowd_tip": "A Seomyeon-transfer lunch or dinner alternative to the Gunam-ro spots if you're routing through anyway.",
+        "crowd_tip": "A Seomyeon-transfer lunch or dinner alternative to the Gunam-ro spots if you are routing through anyway.",
         "map": {
           "lat": 35.1515526,
           "lng": 129.0580477
@@ -476,7 +480,7 @@
     "type": "venues",
     "group": "Food & shopping",
     "title": "Breakfast near the base",
-    "intro": "<p>Korea doesn't do big hotel-style breakfasts, but Jongno has good options from 07:00–07:30.</p>",
+    "intro": "<p>Korea does not do big hotel-style breakfasts, but Jongno has good options from 07:00–07:30.</p>",
     "items": [
       {
         "name": "Isaac Toast",
@@ -500,7 +504,7 @@
         "book": "walk-in",
         "how": "Both chains have branches within a few minutes of the base.",
         "why": "Coffee, croissants, egg sandwiches, sweet pastries — reliable, air-conditioned, and fast.",
-        "crowd_tip": "Good on days when you're heading somewhere early."
+        "crowd_tip": "Good on days when you are heading somewhere early."
       },
       {
         "name": "Cafés in Ikseon-dong / Insadong",
@@ -526,7 +530,7 @@
     "type": "venues",
     "group": "Food & shopping",
     "title": "Late-night food after midnight",
-    "intro": "<p>Seoul's late-night food scene runs well past midnight. In Hongdae — where you'll be for the raid and send-off nights — it's right outside the door.</p>",
+    "intro": "<p>Seoul's late-night food scene runs well past midnight. In Hongdae — where you will be for the raid and send-off nights — it is right outside the door.</p>",
     "items": [
       {
         "name": "Hongdae restaurant strip",
@@ -640,7 +644,11 @@
           "lat": 37.571224,
           "lng": 126.98151670000001
         },
-        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I"
+        "place_id": "ChIJny4XAzCjfDURddP-mnc3F5I",
+        "img": {
+          "file": "LOL Park Riot store.jpg",
+          "alt": "The Riot store at LoL Park, Jongno"
+        }
       },
       {
         "name": "T1 Base Camp",
@@ -651,7 +659,11 @@
           "lat": 37.5560392,
           "lng": 126.92229819999999
         },
-        "place_id": "ChIJkbWl1GmZfDURkq7K2OatXSU"
+        "place_id": "ChIJkbWl1GmZfDURkq7K2OatXSU",
+        "img": {
+          "file": "T1 Base Camp PC bang interior - 2023-07-21.jpg",
+          "alt": "Interior of the T1 Base Camp PC bang"
+        }
       },
       {
         "name": "Line Friends Square",
@@ -680,7 +692,7 @@
     "type": "venues",
     "group": "Food & shopping",
     "title": "Shopping in Seoul",
-    "intro": "<p>You're based in <b>Jongno</b> — Insadong crafts, Gwangjang Market and LoL Park on your doorstep. By district from <b>Jonggak (Line 1)</b>: <b>Insadong</b> — 5–10 min walk (crafts, souvenirs); <b>Myeongdong</b> — ~12 min walk or Line 1 to Euljiro for K-beauty (Olive Young flagship, Innisfree); <b>Dongdaemun</b> — Line 1 east ~8 min (late-night shopping to 04:00); <b>Gangnam / COEX</b> — ~30 min (Line 1 to City Hall → Line 2) for malls (SM's KWANGYA store is in Seongsu — see the shopping plan). Tax-free shops offer a <b>VAT refund</b> on purchases over {{fact:shopping-in-seoul-15-000}} — instant in-store or at the airport kiosk on departure.</p><p><b>Streetwear in Hongdae</b> (a Line-2 hop from central Seoul): the alley cluster around <b>Wausan-ro</b> (Mahagrid, SOUR, indie labels) rewards a slow browse — 10–15 min walk from Hongik Univ. Station.</p>",
+    "intro": "<p>You are based in <b>Jongno</b> — Insadong crafts, Gwangjang Market and LoL Park on your doorstep. By district from <b>Jonggak (Line 1)</b>: <b>Insadong</b> — 5–10 min walk (crafts, souvenirs); <b>Myeongdong</b> — ~12 min walk or Line 1 to Euljiro for K-beauty (Olive Young flagship, Innisfree); <b>Dongdaemun</b> — Line 1 east ~8 min (late-night shopping to 04:00); <b>Gangnam / COEX</b> — ~30 min (Line 1 to City Hall → Line 2) for malls (SM's KWANGYA store is in Seongsu — see the shopping plan). Tax-free shops offer a <b>VAT refund</b> on purchases over {{fact:shopping-in-seoul-15-000}} — instant in-store or at the airport kiosk on departure.</p><p><b>Streetwear in Hongdae</b> (a Line-2 hop from central Seoul): the alley cluster around <b>Wausan-ro</b> (Mahagrid, SOUR, indie labels) rewards a slow browse — 10–15 min walk from Hongik Univ. Station.</p>",
     "items": [
       {
         "name": "Musinsa Standard",
@@ -714,7 +726,7 @@
         "area": "Seongsu (Seongdong-gu)",
         "how": "Line 2, ~30 min from central Seoul.",
         "book": "walk-in",
-        "why": "Design-forward Korean fashion — worth the trip if that's your thing.",
+        "why": "Design-forward Korean fashion — worth the trip if that is your thing.",
         "crowd_tip": "Has moved to Seongsu.",
         "map": {
           "lat": 37.5422211,
@@ -784,13 +796,13 @@
     "type": "prose",
     "group": "Food & shopping",
     "title": "Collectibles & chain merch",
-    "body": "<p>For collectors: a Starbucks <b>'Been There' Seoul</b> mug, and the <b>Kakao Friends</b> and <b>Line Friends</b> flagship stores (Hongdae and Gangnam) for character-brand exclusives you won't find at home.</p>"
+    "body": "<p>For collectors: a Starbucks <b>'Been There' Seoul</b> mug, and the <b>Kakao Friends</b> and <b>Line Friends</b> flagship stores (Hongdae and Gangnam) for character-brand exclusives you will not find at home.</p>"
   },
   {
     "type": "prose",
     "group": "Food & shopping",
-    "title": "Quick reference — when you're unsure what to do",
-    "body": "<p>Open this when no one can agree on a plan.</p><ul><li><b>Hungry, near the base:</b> any Jongno/Insadong BBQ walk-in, or the Gwangjang Market alleys (2 stops east). In Hongdae for the night? Yookssam Naengmyeon or Chicken Baengi.</li><li><b>Want KBBQ tonight:</b> Walk the side streets off Wausan-ro after 17:00 — a dozen AYCE spots, no reservations needed mid-week. Budget {{fact:norebang-han-river-15-000}}–25,000 pp.</li><li><b>Fastest possible meal:</b> GS25 or CU — triangle gimbap ({{fact:quick-reference-when-1-500}}), corn dog, instant ramen at the counter. Genuinely good and a Seoul experience.</li><li><b>Hot and need AC:</b> any café, the Jonggak/Jongno underground arcades, or COEX Mall (Samseong, Line 2). Free to enter, browse as long as you want.</li><li><b>Nothing to do in the afternoon:</b> Han River — Line 5 to Yeouido Station, buy fried chicken from the strip at Exit 3–4, sit on the grass by the water. Free, always worth it.</li><li><b>Want to raid but don't want to sightsee:</b> Jongno, Insadong and Cheonggyecheon are gym-dense near the base; Hongdae and Sinchon for a bigger cluster. Drop a Lure at a café table and grind.</li><li><b>Evening with no plan:</b> the Ikseon-dong and Insadong lanes on your doorstep, or ride to Hongdae's pedestrian zone — buskers, street food, energy toward midnight.</li><li><b>After midnight:</b> MUSSO (AYCE Korean BBQ, open until ≈01:00) or any GS25 with ramen — after ~01:00 it's the convenience stores and pojangmacha tents. Mike's Cabin if someone wants a bar.</li><li><b>Daejeon: gap between events:</b> Hanbat Arboretum (free, walkable from EXPO, great PokéStop density) or the EXPO Science Park grounds. Both have shade.</li></ul>",
+    "title": "Quick reference — when you are unsure what to do",
+    "body": "<p>Open this when no one can agree on a plan.</p><ul><li><b>Hungry, near the base:</b> any Jongno/Insadong BBQ walk-in, or the Gwangjang Market alleys (2 stops east). In Hongdae for the night? Yookssam Naengmyeon or Chicken Baengi.</li><li><b>Want KBBQ tonight:</b> Walk the side streets off Wausan-ro after 17:00 — a dozen AYCE spots, no reservations needed mid-week. Budget {{fact:norebang-han-river-15-000}}–25,000 pp.</li><li><b>Fastest possible meal:</b> GS25 or CU — triangle gimbap ({{fact:quick-reference-when-1-500}}), corn dog, instant ramen at the counter. Good, and a real Seoul experience.</li><li><b>Hot and need AC:</b> any café, the Jonggak/Jongno underground arcades, or COEX Mall (Samseong, Line 2). Free to enter, browse as long as you want.</li><li><b>Nothing to do in the afternoon:</b> Han River — Line 5 to Yeouido Station, buy fried chicken from the strip at Exit 3–4, sit on the grass by the water. Free, always worth it.</li><li><b>Want to raid but do not want to sightsee:</b> Jongno, Insadong and Cheonggyecheon are gym-dense near the base; Hongdae and Sinchon for a bigger cluster. Drop a Lure at a café table and grind.</li><li><b>Evening with no plan:</b> the Ikseon-dong and Insadong lanes on your doorstep, or ride to Hongdae's pedestrian zone — buskers, street food, energy toward midnight.</li><li><b>After midnight:</b> MUSSO (AYCE Korean BBQ, open until ≈01:00) or any GS25 with ramen — after ~01:00 it is the convenience stores and pojangmacha tents. Mike's Cabin if someone wants a bar.</li><li><b>Daejeon: gap between events:</b> Hanbat Arboretum (free, walkable from EXPO, great PokéStop density) or the EXPO Science Park grounds. Both have shade.</li></ul>",
     "verified_on": "2026-07-07",
     "shelf_life": "venue",
     "source_url": "https://map.naver.com"

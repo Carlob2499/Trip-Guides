@@ -1,6 +1,15 @@
 // @protects-file Photos are requested at the size they are shown, not full size.
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+
+/* This file protects the WIDTH math: that a photo is requested at the size it is shown. Since
+   2026-09-06 atWidth() also resolves its finished URL through lib/media, which swaps in the
+   copy the build downloaded — real behaviour, and covered by media.test.ts, but noise here: it
+   would turn every expectation below into a content-hash nobody can read and make this file
+   fail whenever a guide changes a photograph. Stubbed to identity so these assertions keep
+   saying the one thing they exist to say. */
+vi.mock("./media", () => ({ local: (u: string | null | undefined) => u, localSrcset: (u: string) => u, localCount: () => 0 }));
+
 import { atWidth, srcsetFor, imgCredit } from "./img-width";
 
 const COMMONS = "https://commons.wikimedia.org/wiki/Special:FilePath/Nyhavn-Copenhagen.JPG";

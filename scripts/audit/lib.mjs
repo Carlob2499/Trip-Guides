@@ -109,11 +109,17 @@ export function extractLinks(raw) {
   return [...found];
 }
 
-// Extract every sights[].img.file across a guide's sections.
+// Extract every img.file across a guide's sections: sights[]/venues[] items, and each
+// section's own `image` cover facet (2026-09-06 — a chapter made of panel/list/prose sections
+// has no per-item photo slot, so it carries the picture on the section itself; see
+// content.config.ts's `facets.image`). venues[] joined sights[] here because guide-view.ts's
+// placeImages lookup already reads a photo off either — an audit that only watched sights was
+// checking half of what the site actually renders.
 export function extractPhotos(guide) {
   const files = new Set();
   for (const s of flatten(guide.sections)) {
-    if (s.type !== "sights") continue;
+    if (s.image?.file) files.add(s.image.file);
+    if (s.type !== "sights" && s.type !== "venues") continue;
     for (const item of s.items || []) {
       if (item.img?.file) files.add(item.img.file);
     }
@@ -121,14 +127,15 @@ export function extractPhotos(guide) {
   return [...files];
 }
 
-// Extract every direct (non-Commons) sights[].img.src. These get no MediaWiki
-// "missing" flag, so they are reachability-checked instead — otherwise a dead CC0
-// URL ships silently and the card renders its .media-fail plate to real readers.
-// The `{w}` width token is resolved to a real width so the probe hits a real URL.
+// Extract every direct (non-Commons) img.src — sights[]/venues[] items and a section's own
+// `image`. These get no MediaWiki "missing" flag, so they are reachability-checked instead —
+// otherwise a dead CC0 URL ships silently and the card renders its .media-fail plate to real
+// readers. The `{w}` width token is resolved to a real width so the probe hits a real URL.
 export function extractPhotoUrls(guide, width = 800) {
   const urls = new Set();
   for (const s of flatten(guide.sections)) {
-    if (s.type !== "sights") continue;
+    if (s.image?.src) urls.add(s.image.src.replace("{w}", String(width)));
+    if (s.type !== "sights" && s.type !== "venues") continue;
     for (const item of s.items || []) {
       if (item.img?.src) urls.add(item.img.src.replace("{w}", String(width)));
     }

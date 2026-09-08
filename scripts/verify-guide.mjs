@@ -185,6 +185,13 @@ const VOICE_BANNED = [
   /\bin\s+conclusion\b/i,
   /\blet['’]?s\s+delve\b/i,
   /\bgame[-\s]+changer\b/i,
+  // Crutch intensifiers, added 2026-09-06 after auditing 1,148 shipped prose strings for the
+  // korea/denmark voice pass: 17 uses of "genuinely" and each one was reachable by deleting the
+  // word — never a case where it carried information the sentence lacked without it. Unlike
+  // "landscape"/"vibrant" above, no legitimate counter-example turned up across the corpus, so
+  // this is a lexical ban, not a Critic judgment call. "truly" is the same crutch, banned
+  // pre-emptively (0 uses found, but it is the same failure mode).
+  /\bgenuinely\b/i, /\btruly\b/i,
 ];
 
 const VOICE_TEXT_KEYS = new Set([

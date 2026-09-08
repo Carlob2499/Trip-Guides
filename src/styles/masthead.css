@@ -15,7 +15,19 @@
 .mast-hero{padding:0;border-bottom:0;text-align:left;position:relative}
 
 /* The cover — full content width, tall. min-height carries the proportion (§10). */
-.mast-frame{position:relative;min-height:clamp(300px,42vh,460px);background:var(--sunken);overflow:hidden;isolation:isolate}
+.mast-frame{position:relative;min-height:clamp(300px,42vh,460px);background:var(--sunken);overflow:hidden;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end}
+/* The scrim the identity stands on. Reaches the top of the plate rather than a fixed share of
+   the picture, and holds --dark-ink over any photograph — a bright sky behind a title is the
+   case that breaks every naive gradient. Same reasoning as the Trip hero's own scrim. */
+/* Two layers, and the split is the whole point. The frame's gradient only SOFTENS the join
+   into the picture; it is not what makes the text readable, because where a line of type lands
+   inside a fixed-height gradient depends on how long the dek is. Measured before this split:
+   the eyebrow sat at 51% of the frame height, in the weak end of a single gradient, and worst
+   case over a bright sky it was 1.15:1 — illegible. The plate carries its OWN ground instead,
+   so the scrim is tied to the text rather than to the frame, and the worst case is the same
+   however long the copy runs. */
+.mast-frame::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(to top,rgba(var(--shadow-rgb),.55) 0%,rgba(var(--shadow-rgb),.28) 42%,transparent 72%)}
 .mast-mat{position:absolute;inset:0;overflow:hidden}
 
 /* Photo layer */
@@ -47,25 +59,33 @@
 .mast-frame .pa-shade{display:none}
 
 /* Credit chip on the photo: fixed dark scrim + near-white type hold contrast over any image. */
-.mast-credit{position:absolute;right:1rem;top:1rem;z-index:2;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(248,250,243,.82);background:rgba(var(--shadow-rgb),.68);padding:.24rem .5rem;border-radius:999px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
+.mast-credit{position:absolute;right:1rem;top:1rem;z-index:2;font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:.02em;color:rgba(248,250,243,.82);background:rgba(var(--shadow-rgb),.68);padding:.24rem .5rem;border-radius:var(--r-pill);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-decoration:none}
 .mast-credit:hover{color:#fff;background:rgba(var(--shadow-rgb),.62)}
 
 /* The plate — the identity block on its own working surface. Below the cover on a phone. */
-.mast-plate-row{position:relative;z-index:1;margin:0;padding:0 max(1.1rem,var(--safe-right)) 0 max(1.1rem,var(--safe-left))}
-.mast-inner{display:grid;gap:.35rem;padding:1rem 0 .2rem}
+/* The plate now sits INSIDE the frame, on the scrim (GuideDestination.astro). It is no longer
+   a card: the card was a white box overlapping one corner of the picture, with dead ground
+   beside it and the photo's bottom edge cut in half. */
+.mast-plate-row{position:relative;z-index:1;margin:0;padding:2.4rem max(1.1rem,var(--safe-right)) 1.1rem max(1.1rem,var(--safe-left));
+  /* Worst case is this ground composited over a WHITE photograph: at .82 the eyebrow — the
+     palest ink here — measures 5.6:1, and the title 8:1. Every pair holds without knowing
+     anything about the picture underneath. */
+  background:linear-gradient(to top,rgba(var(--shadow-rgb),.92) 0%,rgba(var(--shadow-rgb),.88) 60%,rgba(var(--shadow-rgb),.82) 100%)}
+.mast-inner{display:grid;gap:var(--sp-gap-35);padding:1rem 0 .2rem}
 .mast-eyebrow{margin:0}
-.mast-title{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,9vw,4.6rem);line-height:.98;letter-spacing:-.014em;margin:.1rem 0 0;color:var(--ink)}
-.mast-dek{margin:.5rem 0 0;max-width:58ch}
+.mast-title{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,9vw,4.6rem);line-height:.98;letter-spacing:-.014em;margin:.1rem 0 0;color:var(--dark-ink)}
+.mast-dek{margin:.5rem 0 0;max-width:58ch;color:var(--dark-ink-2)}
+.mast-eyebrow{color:var(--dark-ink-3)}
 /* Guide-controlled text must not raise a flex item's min-content width. */
 .mast-eyebrow,.mast-title,.mast-dek{overflow-wrap:anywhere}
 
 /* The plate line — cities, the CHECKED stamp, fact/source counts, currency, print. */
-.mast-plateline{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.1rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem max(1.1rem,var(--safe-right)) .8rem max(1.1rem,var(--safe-left));border-top:2px solid var(--accent);border-bottom:1px solid var(--rule2)}
+.mast-plateline{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-gap-40) 1.1rem;max-width:1400px;margin:.9rem auto 0;padding:.7rem max(1.1rem,var(--safe-right)) .8rem max(1.1rem,var(--safe-left));border-top:2px solid var(--accent);border-bottom:1px solid var(--rule2)}
 .mast-cities{font-family:var(--font-data);font-weight:640;font-size:var(--text-lead);color:var(--accent-ink)}
 .mast-nextleg{font-family:var(--font-data);font-weight:700;font-size:var(--text-control-sm);letter-spacing:.14em;text-transform:uppercase;color:var(--aink)}
 .mast-stamp{font-family:var(--font-data);font-size:var(--text-control);font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid currentColor;border-radius:var(--r-inset);padding:.15rem .5rem}
 .mast-plcount{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
-.mast-print{margin-left:auto;min-height:44px;padding:.3rem .9rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:var(--card);border:1px solid var(--rule2);border-radius:999px;cursor:pointer}
+.mast-print{margin-left:auto;min-height:44px;padding:.3rem .9rem;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-pill);cursor:pointer}
 .mast-print:hover{border-color:var(--accent);color:var(--accent-ink)}
 
 .mast-hero .jl-wrap,.mast-hero .draft-progress{max-width:52rem;margin-left:auto;margin-right:auto;padding-left:clamp(1rem,3vw,1.5rem);padding-right:clamp(1rem,3vw,1.5rem)}
@@ -75,8 +95,8 @@
 @media(min-width:900px){
   .mast-hero{max-width:1400px;margin:0 auto;padding:1rem clamp(1rem,3vw,1.5rem) 0}
   .mast-frame{min-height:clamp(440px,58vh,640px);border:1px solid var(--rule2)}
-  .mast-plate-row{margin:-4.6rem 0 0;padding:0 clamp(1.2rem,3vw,2.4rem)}
-  .mast-inner{max-width:46rem;padding:1.4rem 1.8rem 1.5rem;background:var(--card);border:1px solid var(--rule2);border-radius:var(--r-card);box-shadow:var(--shadow-lift)}
+  .mast-plate-row{margin:0;padding:0 clamp(1.6rem,3.2vw,2.8rem) clamp(1.4rem,2.6vw,2.2rem)}
+  .mast-inner{max-width:46rem;padding:0}
   .mast-title{font-size:clamp(3rem,5.2vw,4.8rem)}
   .mast-plateline{margin-top:1rem;padding-inline:0}
 }
@@ -86,6 +106,7 @@
   .mast-mat{border:0}
   .mast-img,.mast-credit,.mast-video,.mast-pause{display:none}
   .mast-title,.mast-dek,.mast-eyebrow{color:#111;text-shadow:none}
+  .mast-frame::after{display:none}
   .mast-cities,.mast-nextleg{color:#111}
   .mast-print{display:none}
   .mast-plate-row{margin:0}
@@ -93,3 +114,110 @@
 }
 /* Geometry (§31): the cover is full-bleed on a phone, a framed pane on desktop. */
 @media(min-width:900px){.mast-hero{padding:.9rem clamp(1rem,3vw,1.5rem) 0}.mast-frame{border-radius:var(--r-pane);border:1px solid var(--rule2)}}
+
+
+/* ============================================================================
+   2026-09-06 — the cover stops being half a photograph. Creator-directed.
+
+   What was wrong: `.mast-plate-row` carried its own ground at rgba(.82-.92) across the frame's
+   FULL width, and `.mast-frame::after` laid a second gradient over everything. On a 1440
+   desktop that put a near-opaque band over the bottom ~45% of every cover, so the subject read
+   as occupying half the space it actually had. The reason was sound — type has to clear
+   contrast over a picture nobody has seen — but it solved the worst case by paying its cost on
+   every case, including the covers with an obviously empty corner.
+
+   What replaces it: the guide names the empty corner (`cover.textZone`, content.config.ts) and
+   the scrim becomes a LOCAL radial pool anchored there instead of a full-width blackout. The
+   picture keeps its whole frame; about a quarter of it carries a soft tint where the words are.
+
+   The plate is a SIBLING of the frame (GuideDestination.astro), so one node serves both
+   layouts: overlaid in a corner when a zone is named, flowing underneath on cream when not.
+
+   `band` is not a degraded mode — it is the safe one. The photo runs completely undimmed and
+   the title sits below it at a known 15:1. A cover with no empty corner should use it, and
+   nothing infers a zone, because a wrong guess stands type on a bright sky.
+   ============================================================================ */
+.mast-hero{position:relative}
+/* The overlay anchors to the picture, never to the hero — see GuideDestination.astro. */
+.mast-cover{position:relative}
+
+/* ---- Zone mode: the plate overlays the corner the guide named. --------------------------- */
+/* Radial rather than linear because the words occupy a CORNER, not a stripe — a linear
+   gradient dark enough for one corner is just as dark at the other end of that edge. */
+.mast-frame[data-zone]:not([data-zone="band"])::after{
+  background:radial-gradient(115% 90% at var(--zx) var(--zy),
+    rgba(var(--shadow-rgb),.92) 0%,
+    rgba(var(--shadow-rgb),.82) 38%,
+    rgba(var(--shadow-rgb),.52) 66%,
+    rgba(var(--shadow-rgb),.16) 84%,
+    transparent 94%)}
+/* Why the pool is this strong, in measurements rather than taste. scripts/measure-hero.mjs
+   loads the real cover, hides the plate and reads the pixels the type actually sits on:
+
+     .74/.56/.20   title 3.33:1   dek 6.04:1   1440, first attempt, text low in the frame
+     .86/.68/.30   title 5.16:1   dek 8.19:1   1440
+     .86/.68/.30   title 2.93:1   dek 4.23:1   1440, AFTER the overlay was re-anchored
+     corner pool   title 1.71:1   dek 1.94:1   375, the SAME css a corner pool cannot serve
+     current        title 6.10:1   dek 7.93:1   375
+     current        title 8.97:1   dek 12.04:1  768
+     current        title 6.08:1   dek 8.21:1   1440
+
+   Floors: 3:1 for the title (large text) and 4.5:1 for the dek.
+
+   The third row is the one worth keeping. Re-anchoring the plate to the picture moved the type
+   ~90px UP, off the dark water and onto the sunlit courtyard, and contrast fell straight
+   through both lines — 2.93 against a 3:1 floor for the title, 4.23 against 4.5 for the dek.
+   Nothing about the change looked wrong; only measuring it said so. Any edit that moves this
+   type, however small, re-measures — including a width, since row four is a phone failing on
+   css that passes comfortably on a desktop. The repo's own a11y sweep cannot stand in for that: its
+   env aborts off-origin images and renders .mast-media-fail, so it has never seen a
+   photograph. And this cover is a VIDEO, whose ground shifts frame to frame, which is why the
+   target is comfortable headroom rather than a pass by hundredths. */
+/* A corner pool is the right shape only while the text OCCUPIES a corner. Below the phone
+   ceiling the dek reflows to five full-width lines and climbs most of the frame, so a radial
+   anchored in one corner leaves the top of the block sitting on open photograph: measured on
+   the Korea cover at 375, the title came back 1.71:1 and the dek 1.94:1 — far under the 3:1
+   and 4.5:1 lines, and much worse than the same cover on desktop, which is the wrong way round
+   for a product used on a phone in the field.
+   So the scrim takes the shape of the text. Full-width type gets a full-width gradient rising
+   from the foot; the corner pool stays where it belongs, on the wide layout where the plate is
+   capped at 34rem and really is in a corner. The swap happens at the phone ceiling (899, the
+   MOBILE_MAX literal this sheet's two existing 900px queries already use unmarked) because
+   that is the width at which .mast-inner stops being corner-shaped. Left unmarked to match
+   them: marking only the new one would imply the other two had been checked against
+   src/lib/breakpoints.ts when they have not. */
+@media(max-width:899px){
+  .mast-frame[data-zone]:not([data-zone="band"])::after{
+    background:linear-gradient(to top,
+      rgba(var(--shadow-rgb),.94) 0%,
+      rgba(var(--shadow-rgb),.88) 34%,
+      rgba(var(--shadow-rgb),.66) 58%,
+      rgba(var(--shadow-rgb),.30) 78%,
+      transparent 96%)}
+}
+.mast-frame[data-zone="bottom-left"] {--zx:0%;  --zy:100%}
+.mast-frame[data-zone="bottom-right"]{--zx:100%;--zy:100%}
+.mast-frame[data-zone="top-left"]    {--zx:0%;  --zy:0%}
+.mast-frame[data-zone="top-right"]   {--zx:100%;--zy:0%}
+
+.mast-cover:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row{
+  position:absolute;z-index:2;left:0;right:0;background:none;pointer-events:none}
+.mast-cover:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row a,
+.mast-cover:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-plate-row button{pointer-events:auto}
+.mast-cover:has(.mast-frame[data-zone]:not([data-zone="band"])) .mast-inner{max-width:34rem}
+
+.mast-cover:has([data-zone="bottom-left"]) .mast-plate-row,
+.mast-cover:has([data-zone="bottom-right"]) .mast-plate-row{bottom:0}
+.mast-cover:has([data-zone="top-left"]) .mast-plate-row,
+.mast-cover:has([data-zone="top-right"]) .mast-plate-row{top:0}
+.mast-cover:has([data-zone="bottom-right"]) .mast-inner,
+.mast-cover:has([data-zone="top-right"]) .mast-inner{margin-left:auto;text-align:right;justify-items:end}
+
+/* ---- Band mode: no scrim at all, words on cream underneath. ------------------------------ */
+.mast-frame[data-zone="band"]::after{display:none}
+.mast-cover:has([data-zone="band"]) .mast-plate-row{background:none;padding-top:1.1rem}
+.mast-cover:has([data-zone="band"]) .mast-title,
+.mast-cover:has([data-zone="band"]) .mast-dek,
+.mast-cover:has([data-zone="band"]) .mast-eyebrow{color:var(--ink)}
+.mast-cover:has([data-zone="band"]) .mast-dek{color:var(--muted)}
+.mast-cover:has([data-zone="band"]) .mast-eyebrow{color:var(--muted)}

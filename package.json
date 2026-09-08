@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/check-integrations.mjs && astro build && node scripts/check-closed-days.mjs && node scripts/validate-palettes.mjs && tsx scripts/build-search-index.ts && node scripts/gen-sw-precache.mjs",
+    "build": "node scripts/check-integrations.mjs && node scripts/fetch-media.mjs && astro build && node scripts/check-closed-days.mjs && node scripts/validate-palettes.mjs && tsx scripts/build-search-index.ts && node scripts/gen-sw-precache.mjs && node scripts/prune-media.mjs && node scripts/check-media-local.mjs && node scripts/check-surface-coverage.mjs && node scripts/check-stated-intent.mjs",
     "preview": "astro preview",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
@@ -52,6 +52,7 @@
     "pdfjs-dist": "^6.2.108",
     "qrcode": "^1.5.4",
     "sharp": "^0.35.3",
+    "three": "^0.180.0",
     "topojson-client": "^3.1.0",
     "zod": "^4.4.3"
   },

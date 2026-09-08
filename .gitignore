@@ -35,3 +35,11 @@ reports/
 # pr-workspace/ at run time — defense in depth on top of the workflow's own explicit rsync
 # --exclude (Codex finding P1, PR #78) so this scratch file can never reach a real commit.
 .codex-work-order.md
+
+# Build-time photograph cache and output (scripts/fetch-media.mjs). The guides' images are
+# downloaded into the build rather than hotlinked from Wikimedia at read time; neither the
+# cache nor the copies belong in the repo, on the same "nothing heavy enters the repo"
+# principle content.config.ts states for cover video. src/lib/media-manifest.json IS committed
+# — it is small, and a checkout with no manifest would silently fall back to hotlinking.
+.media-cache/
+public/media/

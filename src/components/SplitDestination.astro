@@ -17,7 +17,7 @@ import PaintedAtlas from "./PaintedAtlas.astro";
 interface Props { storeKey: string; slug?: string; tz?: string | null }
 const { storeKey, slug = storeKey, tz = null } = Astro.props;
 ---
-<div class="splitdest spatial">
+<div class="splitdest">
   <div class="splitdest-scene" aria-hidden="true"><PaintedAtlas seed={slug} tz={tz ?? undefined} mini={true} /></div>
   <TripSplit storeKey={storeKey} standalone />
 </div>

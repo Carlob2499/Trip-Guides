@@ -55,6 +55,13 @@ const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shop
           {...{ [frameSrcAttr]: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center, span)}&layer=mapnik&marker=${center.lat}%2C${center.lng}` }}></iframe>
         <p class="map-loading" data-map-loading aria-live="polite">Loading the map…</p>
         <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the written places below still work.</p>
+        {/* Board 04's "My Location". Real, and opt-in by construction: the geolocation feature
+            asks the browser for permission only from this click, never on load
+            (features/geolocation). Hidden until the runtime confirms it can serve it. */}
+        <button class="mapdest-locate" type="button" data-map-locate hidden>
+          <Icon name="locate" size={18} />
+          <span class="mapdest-locate-t">My location</span>
+        </button>
       </div>
       {/* The Map panel: the board's floating card over the map's corner. Desktop only — a phone
           gives the whole viewport to the map and the sheet does this job there. */}
@@ -89,6 +96,10 @@ const KIND_LABEL: Record<string, string> = { sight: "Sight", venue: "Food & shop
           <h3 class="mapdest-sel-name" data-map-sel-name></h3>
           <p class="mapdest-sel-local" data-map-sel-local hidden lang={country === "South Korea" ? "ko" : undefined}></p>
           <p class="mapdest-sel-meta" data-map-sel-meta hidden></p>
+          {/* Live opening state, when the runtime is configured AND this place carries a
+              reviewed Google Place ID. Absent otherwise — a place whose hours we cannot check
+              says nothing rather than implying it is open (features/places, PR #210). */}
+          <p class="mapdest-sel-live" data-map-sel-live hidden></p>
           <div class="mapdest-sel-actions" data-map-sel-actions></div>
           <a class="mapdest-sel-details" data-map-sel-details href="#" hidden>Details in the guide</a>
           <button class="mapdest-sel-close" type="button" data-map-sel-close aria-label="Clear selection">✕</button>

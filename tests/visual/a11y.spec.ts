@@ -109,7 +109,14 @@ async function prep(page: Page, path: string, scheme: "light" | "dark", vp: View
      had never been audited once — and was sitting at 2.16:1 in dark mode, under even the
      3:1 large-text floor, behind a hardcoded #b3261e. A surface that only exists after a
      gesture still has to pass; the gate has to make the gesture. */
-  const sos = page.locator(".topbar-sos, .sos-btn");
+  /* Either control, because which one exists is a function of width: the chrome's icon button
+     above 900px, the labelled FAB below it (chrome.css / field-tools.css). Matching only the
+     chrome one would have quietly stopped auditing this dialog on every mobile viewport in the
+     matrix — the exact "a surface that only exists after a gesture" hole this block was written
+     to close, reopened by a breakpoint. `.sos-btn` is gone: that fallback branch was deleted.
+     :visible is load-bearing — both nodes are always in the DOM, so an unfiltered .first() picks
+     the one CSS has hidden at this width and the gesture never happens. */
+  const sos = page.locator(".topbar-sos:visible, .sos-fab:visible");
   if (await sos.count()) {
     await sos.first().click();
     await expect(page.locator(".sos-sheet")).toBeVisible();
@@ -236,7 +243,15 @@ const MAST_BG_GRADIENT_WHY =
   "(pixel-sampled the h1's box with its ink hidden; worst pixel vs the text colour): the worst " +
   "case in the whole surface family is the Painted Atlas's LIGHTEST sky, daytime — 4.64:1 " +
   "(denmark, identical in both schemes) against the 3:1 required at 76.8px/620; korea's variants " +
-  "measure >=15:1. The scrim pins the h1's zone dark by design on every variant, photo or painted.";
+  "measure >=15:1. The scrim pins the h1's zone dark by design on every variant, photo or painted. " +
+  "2026-09-06: board 05 moved the whole identity plate ONTO the cover — eyebrow, title, dek and " +
+  "the search pill, where before only the h1 touched a gradient — so this count went 1 -> 7. The " +
+  "plate carries its own ground rather than relying on the frame's gradient, precisely so the " +
+  "answer does not depend on how long a guide's dek happens to be: the first attempt used one " +
+  "frame-height gradient and the eyebrow landed at 51% of it, worst case 1.15:1 over a bright " +
+  "sky. Re-measured after the split, worst case being the plate's own alpha composited over a " +
+  "WHITE photograph: eyebrow 6.58:1, title 10.27:1, dek 10.09:1. The search pill is not in this " +
+  "family at all — it paints var(--card) as a solid ground and axe resolves it normally.";
 const MAST_DEK_OBSCURING_WHY =
   "The masthead .dek sits above R4's stacked media layers (photo/video/Painted Atlas), and axe's " +
   "elmPartiallyObscuring is its conservative 'an overlapping sibling might change the background' " +
@@ -360,6 +375,20 @@ const LAYOUT_JITTER = 3;
 const ceilingFor = (key: string, max: number) =>
   key.startsWith("color-contrast/") ? max + LAYOUT_JITTER : max;
 
+const MAPDEST_INDEX_SCROLL_WHY =
+  "Board 04 (2026-09-05) made the Map surface one full-bleed map with the place index floating " +
+  "on it as a fixed-height panel that scrolls internally. Before that the index was a static " +
+  "column with overflow:visible, so every row was laid out in the page and axe could resolve " +
+  "each one. Now all but the ~8 visible rows are clipped by the panel's scroll container, and a " +
+  "clipped node is exactly what axe reports as elmPartiallyObscured — it declines to guess a " +
+  "ratio it cannot see. Nothing about the rows themselves changed: same markup, same classes, " +
+  "same tokens. Verified by measuring the rendered colours directly rather than assuming — on " +
+  "the panel's own ground, .mapdest-row-name is 17.57:1, .mapdest-row-meta 8.99:1 and " +
+  ".mapdest-group-title 5.48:1, all clear of 4.5. The count is ~2 text nodes per row " +
+  "(name + meta) for every row scrolled out of view, so it tracks the guide's place count and " +
+  "nothing else: korea has 100 rows, denmark 55. A number that grows without the place count " +
+  "growing would be a different mechanism and should not be absorbed here.";
+
 const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
   hub: {
     "color-contrast/pseudoContent": { max: 8, why: PSEUDO_CONTENT_WHY },
@@ -435,6 +464,26 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
       why: "The flagged progress stat label paints on opaque .pg-card; the contour SVG is behind the card, not its text backdrop.",
     },
   },
+  "progress triage": {
+    /* 2026-09-07, this page's FIRST accessibility audit — it had shipped with theme-registers
+       as its only gate, which checks colour registers and not accessibility. Found by
+       scripts/check-surface-coverage.mjs.
+
+       Zero violations. The incompletes are the same fixed decorative contour SVG behind
+       z-index:1 content already documented for /progress and /new, on the same cockpit.
+       Measured rather than inherited, because "same page family" is an assumption and this
+       session has been repeatedly wrong about those: .cp-dek and .cp-tri-gate both come back
+       5.19:1 in light and 7.45:1 in dark, and the footer link 6.81:1 / 6.72:1 — every pair
+       clear of 4.5:1. Counts are this first audit's exact maxima and may only fall. */
+    "color-contrast/elmPartiallyObscuring": {
+      max: 3,
+      why: "Fixed contour SVG sits behind z-index:1 content; axe's stacking reconstruction reads it as obscuring. Measured composite is 5.19:1 light / 7.45:1 dark.",
+    },
+    "color-contrast/imgNode": {
+      max: 2,
+      why: "The footer wordmark link has an image node in its background chain, so axe declines to rate it. Measured 6.81:1 light / 6.72:1 dark.",
+    },
+  },
   "new intake": {
     // R4: /new sits on the fixed survey-contour ground (.itk-contours, an inline SVG behind
     // z-index:1 content). Axe declines to rate any text with an image node in its background
@@ -502,10 +551,15 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     // mechanism the why already covers: an aria-hidden decorative glyph in a span that takes
     // colour from var(--aink), a pair proven >=4.5:1 by atlas-tokens.test.ts.
     "color-contrast/nonBmp": { max: 51, why: NON_BMP_WHY },
-    "color-contrast/elmPartiallyObscured": { max: 1, why: ELM_PARTIALLY_OBSCURED_WHY },
+    // 1 -> 182 (2026-09-05): the Map surface's floating place index. Not absorbed as jitter —
+    // the mechanism is new and named in MAPDEST_INDEX_SCROLL_WHY, and 182 is korea's own place
+    // count expressed through it (100 rows x name+meta, less the handful visible in the
+    // scroller), not a shared constant. denmark's 55 rows measure 108. A rise here WITHOUT the
+    // guide gaining places is a different bug and must not be folded into this entry.
+    "color-contrast/elmPartiallyObscured": { max: 182, why: `${ELM_PARTIALLY_OBSCURED_WHY} ${MAPDEST_INDEX_SCROLL_WHY}` },
     // 1 = the masthead h1 / the masthead .dek, counted per page on both schemes (desktop; mobile
     // renders the same masthead so the same max covers it).
-    "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
+    "color-contrast/bgGradient": { max: 7, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
     // 42 = 3 on-media nodes × korea's 14 photo cards. See SIGHT_ONPHOTO_IMGNODE_WHY and the
     // block comment above it for the scrim bug this replaced.
@@ -572,7 +626,7 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/nonBmp": { max: 37, why: NON_BMP_WHY },
     // Same two masthead nodes as korea's entries above — denmark is the measured worst case
     // (Painted Atlas daytime sky: h1 4.64:1 vs 3:1 needed; .dek 5.91:1 vs 4.5:1 needed).
-    "color-contrast/bgGradient": { max: 1, why: MAST_BG_GRADIENT_WHY },
+    "color-contrast/bgGradient": { max: 7, why: MAST_BG_GRADIENT_WHY },
     "color-contrast/elmPartiallyObscuring": { max: 1, why: MAST_DEK_OBSCURING_WHY },
     // 30 = the same 3 on-media nodes as korea at DENMARK's 10 photo cards. The measured ratios in
     // SIGHT_ONPHOTO_IMGNODE_WHY are identical on both guides — the tell that this is sights.css,
@@ -580,7 +634,10 @@ const INCOMPLETE_BASELINE: Record<string, Record<string, Baseline>> = {
     "color-contrast/imgNode": { max: 30, why: SIGHT_ONPHOTO_IMGNODE_WHY },
     // 4 = the timeline stops clipped at the .anch-scroll edge, mobile only (counted: 2 .jl-date +
     // .jl-word/.jl-date of the Tue stop at 375px; desktop renders 0 of this key).
-    "color-contrast/elmPartiallyObscured": { max: 4, why: JLINE_CLIPPED_WHY },
+    // 4 -> 108 (2026-09-05): the Map surface's floating place index, the same scroller korea's
+    // entry documents — 55 rows here against korea's 100, and the count tracks nothing else.
+    // The original 4 (JLINE_CLIPPED_WHY) is still part of this total, hence both reasons.
+    "color-contrast/elmPartiallyObscured": { max: 108, why: `${JLINE_CLIPPED_WHY} ${MAPDEST_INDEX_SCROLL_WHY}` },
     "frame-tested/default": { max: 1, why: FRAME_TESTED_WHY },
     // Atlas Phase 2 (own-cards-panels): day-1's date label in the phone swipe-deck, mobile only
     // (desktop reports 0). See DAY_SWIPE_CLIPPED_WHY.
@@ -712,6 +769,41 @@ for (const [name, path] of [
   // and isn't working, and neither had been audited once.
   ["about", "/Trip-Guides/about/"],
   ["health", "/Trip-Guides/health/"],
+  /* 2026-09-07: triage shipped with theme-registers.spec.ts as its ONLY gate — a colour-register
+     check — so it had never been through axe or the touch sweep. Found by
+     scripts/check-surface-coverage.mjs on its first run. /progress/ is already here as "a
+     first-class traveler surface"; triage is the same cockpit one level in. */
+  ["progress triage", "/Trip-Guides/progress/triage/"],
+  /* ⌁ 2026-09-06 — Itinerary, Map and Split are NOT scanned here, and that is a decision with
+     a measurement behind it rather than an oversight. They have the same destination blind
+     spot the touch sweep had, and they are reachable the same way (`#dest-<key>`, which
+     guide-ui.js's goToHash resolves) — TARGET_PAGES below now covers all three for touch, and
+     doing so found a real 38px defect.
+
+     Axe is different. Adding them produced ZERO violations and hundreds of INCOMPLETE nodes.
+     The reason is not the map, which was my first guess and was wrong: excluding .gm-style,
+     gmp-advanced-marker and .map-pin only took Split from 245 to 208. Counting the actual
+     reasons puts 364 of them on `color-contrast/elmPartiallyObscured` against 14 on
+     bgOverlap — the cause is that prep() opens the SOS sheet, a modal over the whole page,
+     and these two destinations render far more content beneath it than the surfaces already
+     scanned. Axe cannot resolve a contrast ratio for text it can see is covered, so it
+     declines to answer rather than answering wrongly.
+
+     That makes this a property of how the gate prepares the page, not of these destinations.
+     Scanning them honestly means resolving that first — closing the sheet before the scan, or
+     scanning the sheet and the page as two passes — which is a change to every page this gate
+     already covers and wants its own measurement, not a page-list entry smuggled in here.
+
+     INCOMPLETE_BASELINE exists for a handful of documented "couldn't resolve" cases, each
+     carrying the reason someone verified it by hand. Pouring 245 machine-generated entries
+     into it would not add coverage; it would drain the meaning from every entry already
+     there, which is the one thing that file's own rule forbids ("never widen the baseline to
+     make a new one pass"). Scanning a surface whose findings must all be excused is not
+     scanning it.
+
+     What would actually close this: decide what the scan should see while a modal is open, and
+     apply that decision to every page here at once. Excluding the map subtree is NOT the fix —
+     that was measured above and moved 37 nodes out of 245. */
 ] as const) {
   for (const { scheme, vp } of COMBOS) {
     test(`every page passes an automated accessibility scan — ${name} (${scheme}, ${vp.label})`, async ({ page }) => {
@@ -862,7 +954,21 @@ for (const guide of ["denmark", "korea"] as const) {
         const lum = (v: string) =>
           srgb(v).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
             .reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
-        const ground = lum(getComputedStyle(banner).backgroundColor);
+        /* 2026-09-05: this used to read the banner's OWN background-color, and .tn-atom does not
+           declare one — so it measured `rgba(0,0,0,0)`, whose parsed luminance is 0, i.e. it
+           compared the text against BLACK rather than against the surface a reader actually sees.
+           That was survivable only while `.spatial` forced the guide frame dark in both themes:
+           pale ink against a black stand-in scores well, so the gate read green. The moment light
+           mode became real, dark ink against the same black stand-in scored 1.14:1 and the gate
+           fired — on its own arithmetic, not on a regression in the CSS. Composite the way the
+           browser does instead: walk up to the first ancestor that actually paints something. */
+        const opaque = (v: string) => {
+          const n = (v.match(/[\d.]+/g) || []).map(Number);
+          return v.startsWith("color(") ? true : !(n.length > 3 && n[3] === 0);
+        };
+        let groundEl: Element | null = banner;
+        while (groundEl && !opaque(getComputedStyle(groundEl).backgroundColor)) groundEl = groundEl.parentElement;
+        const ground = lum(getComputedStyle(groundEl ?? document.body).backgroundColor);
         const ratio = (el: Element) => {
           const l = lum(getComputedStyle(el).color);
           return (Math.max(l, ground) + 0.05) / (Math.min(l, ground) + 0.05);
@@ -1055,12 +1161,38 @@ const TARGET_PAGES = [
      in this list closes it again; add the rebuilt japan here when it ships. */
   ["hub", "/Trip-Guides/"],
   ["progress", "/Trip-Guides/progress/"],
+  /* 2026-09-06: added after `.cp-starter` shipped at 36px and this sweep had nothing to say
+     about it. The change-request page is the one surface a reader reaches when something is
+     already wrong, it is dense with chips and pills, and it was measured by nothing. */
+  ["change request", "/Trip-Guides/change/"],
+  /* 2026-09-06 — the two destinations this sweep had never seen. TARGET_PAGES took paths and
+     the guide's five destinations are client-side, so only the one that happens to open first
+     was ever measured; Itinerary and Split rendered controls nothing had ever looked at. The
+     router resolves a `#dest-<key>` hash to the destination containing it (guide-ui.js
+     goToHash), so they are reachable by URL after all and need no new harness.
+     Itinerary is where the checklist rows live — the control a reader touches most often in a
+     guide, and the one that turned out to be 38px. Split is the densest form on the site. */
+  ["korea itinerary", "/Trip-Guides/guides/korea/#dest-itinerary"],
+  ["korea split", "/Trip-Guides/guides/korea/#dest-split"],
 ] as const;
 
 for (const [pageName, path] of TARGET_PAGES) {
 for (const d of DEVICES) {
   test(`every visible target clears 44px — ${pageName}, ${d.label}`, async ({ page }) => {
     await prep(page, path, "light", d);
+    /* Guard the guard, same reason as the rate pill below. A `#dest-*` path that failed to
+       route would land on whichever destination opens by default and this test would measure
+       the Trip cockpit twice under two names, passing while covering nothing — the precise
+       shape of blind spot this file keeps finding. Asserted rather than assumed, because a
+       silent duplicate is indistinguishable from real coverage in a green run. */
+    const wantDest = path.match(/#dest-([a-z]+)$/)?.[1];
+    if (wantDest) {
+      await expect(
+        page.locator("body"),
+        `${pageName}: the #dest-${wantDest} hash did not route — this sweep is about to measure ` +
+          `the default destination under this page's name and report it as covered.`,
+      ).toHaveAttribute("data-dest", wantDest);
+    }
     /* The measurement below silently skips anything rendering at 0x0, which is exactly how
        #liveRatePill hid from this gate for its whole life. Now that prep() serves the rate,
        assert the pill actually came up — otherwise a future change to rate.js's ladder could
@@ -1110,10 +1242,21 @@ for (const d of DEVICES) {
              at 143.6x24.2. Padding it to 44px would put a chunky lozenge on the hero AND render
              the same datum at two different sizes on two surfaces — the exact split the
              uniform-surfaces guardrail forbids. It is notation on both. */
-          return !el.closest(".prov-dot, .flag-chip, .stale-pill, .imgcredit, .mast-credit") && !el.matches("input");
+          return !el.closest(".prov-dot, .flag-chip, .stale-pill, .imgcredit, .mast-credit");
         })
         .map((el) => {
-          const r = el.getBoundingClientRect();
+          /* An input wrapped in a label is aimed at THROUGH the label: clicking anywhere in
+             `<label class="check">…</label>` toggles the box, so the target the thumb has is
+             the label's box, not the 17px square drawn inside it. The itinerary's tick-offs
+             are exactly this — a 17x17 checkbox inside a 314x123 row.
+
+             2026-09-06: this replaces a blanket `!el.matches("input")` exclusion. That got the
+             right answer here for the wrong reason, and it got it by not looking: it also
+             excused every OTHER input, including ones with no label to be aimed at through.
+             Measuring the label is the rule the exclusion was approximating, so a bare small
+             input is now a finding again, which is what this gate is for. */
+          const labelled = el.matches("input") ? el.closest("label") : null;
+          const r = (labelled ?? el).getBoundingClientRect();
           return { sel: (el.className || el.tagName).toString().trim().slice(0, 44), w: Math.round(r.width), h: Math.round(r.height) };
         })
         .filter((r) => Math.min(r.w, r.h) < 44)

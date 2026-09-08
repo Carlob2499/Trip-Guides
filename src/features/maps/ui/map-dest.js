@@ -56,6 +56,7 @@ export function initMapDestination(root) {
       if (src) { thumbEl.src = src; thumbEl.hidden = false; }
       else { thumbEl.removeAttribute("src"); thumbEl.hidden = true; }
     }
+    if (dest.__paintLive) dest.__paintLive(row);
     selected.hidden = false;
     sheet.setAttribute("data-sheet", "half");
     if (btn) btn.setAttribute("aria-current", "true");
@@ -114,6 +115,26 @@ export function initMapDestination(root) {
     });
     attachSheetDrag(sheet, function () { stepSheet(-1); });
   }
+
+  /* ---- LIVE FIELD DATA, LOADED ON DEMAND ---------------------------------------------------
+     The live opening state and "My location" live in their own module and are fetched the first
+     time the Map destination is actually shown. They were inline here until the first-paint JS
+     budget said no: features/maps/index.js is imported eagerly by GuideLayout, so anything in
+     this file is downloaded before a guide's first paint — by every reader, including the ones
+     who never open the Map. That is the exact boundary check-perf-budget.mjs draws between
+     "blocks first paint" and "loads on demand", and it was right to draw it. */
+  var liveLoaded = false;
+  function loadLive() {
+    if (liveLoaded) return;
+    liveLoaded = true;
+    import("./map-live.js")
+      .then(function (m) { m.initMapLive({ doc: doc, dest: dest, mount: mount, selected: selected, rowFor: rowFor }); })
+      .catch(function () { /* offline or blocked: the map and its index still work */ });
+  }
+  if (doc.body && doc.body.getAttribute("data-dest") === "map") loadLive();
+  doc.addEventListener("tg:dest", function (e) {
+    if (!e.detail || e.detail.dest === "map" || doc.body.getAttribute("data-dest") === "map") loadLive();
+  });
 
   // "This day on the map" from the Itinerary: switch destination and focus the day lens.
   doc.addEventListener("click", function (e) {

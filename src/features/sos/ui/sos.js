@@ -33,9 +33,31 @@ import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
   btn.innerHTML = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='3.4'/><path d='m9.6 9.6-4-4M18.4 18.4l-4-4M14.4 9.6l4-4M9.6 14.4l-4 4'/></svg><span class='tb-label'>SOS</span>";
   var mountPoint = document.querySelector("[data-sos-mount]");
   var topRight = document.querySelector(".topbar-right");
+  /* AppChrome always renders .topbar-right, so mountPoint/topRight cover every guide page this
+     module loads on (see GuideLayout.astro, the only importer) — there is no third case. A
+     dead `.sos-btn` fallback used to sit here for one that could not happen; removed rather
+     than kept "just in case", per the retirement rule the rest of this codebase already holds
+     itself to. */
   if (mountPoint) { btn.className = "topbar-btn topbar-sos"; mountPoint.appendChild(btn); }
-  else if (topRight) { btn.className = "topbar-btn topbar-sos"; topRight.insertBefore(btn, topRight.firstChild); }
-  else { btn.className = "sos-btn"; document.body.appendChild(btn); }
+  else { btn.className = "topbar-btn topbar-sos"; topRight.insertBefore(btn, topRight.firstChild); }
+
+  /* 2026-09-06 — the impeccable critique's field-usability finding: below 900px the topbar
+     control loses its text label (chrome.css hides .tb-label on phones, matching search/share/
+     theme) and sits top-right — the corner furthest from a right thumb, and an icon-only red
+     circle is exactly the "ambiguous icon" §28 forbids for the one control that has to survive
+     a tired traveler at night. The topbar button stays — it is still one action away on every
+     surface, and it is the only SOS on desktop — but phones get a SECOND, always-labelled
+     trigger fixed in the thumb zone, above the bottom bar's safe area. Same dialog, same
+     `open()`; this is a second door, not a second feature. Hidden via CSS above 900px rather
+     than never created, so a mid-session resize (a tablet rotated, a window dragged) doesn't
+     leave the desktop with a stray fixed button nor the phone without one. */
+  var fab = document.createElement("button");
+  fab.type = "button";
+  fab.className = "sos-fab";
+  fab.setAttribute("aria-label", "Emergency help");
+  fab.setAttribute("aria-haspopup", "dialog");
+  fab.innerHTML = "<svg class='sos-fab-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='3.4'/><path d='m9.6 9.6-4-4M18.4 18.4l-4-4M14.4 9.6l4-4M9.6 14.4l-4 4'/></svg><span class='sos-fab-t'>SOS</span>";
+  document.body.appendChild(fab);
 
   var country = document.documentElement.getAttribute("data-country") || "";
   var PRIMARY = /police|fire|ambulance|all emergencies/i;
@@ -196,6 +218,7 @@ import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   btn.addEventListener("click", open);
+  fab.addEventListener("click", open);
   sheet.querySelector(".sos-x").addEventListener("click", close);
   attachSheetDrag(inner, close);
   sheet.addEventListener("click", function (e) { if (e.target === sheet) close(); });

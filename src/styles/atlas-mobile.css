@@ -32,11 +32,11 @@
 }
 .atlas-menusheet-kicker {
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-nano); letter-spacing: .18em;
-  color: var(--muted); padding: 11px 14px 7px;
+  color: var(--muted); padding: 11px var(--sp-md-h) 7px;
 }
 .atlas-menusheet-kicker:not(:first-child) { border-top: 1px solid var(--rule2); padding-top: 13px; }
 .atlas-menusheet button, .atlas-menusheet a {
-  display: flex; align-items: center; text-align: left; padding: 11px 14px; min-height: 44px;
+  display: flex; align-items: center; text-align: left; padding: 11px var(--sp-md-h); min-height: 44px;
   background: none; border: 0; border-top: 1px solid var(--rule);
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-micro); letter-spacing: .06em;
   color: var(--ink); cursor: pointer; text-decoration: none;
@@ -60,7 +60,7 @@
   border: 1px solid var(--rule2);
 }
 .atlas-pingsheet-thumb[hidden] { display: none; }
-.atlas-pingsheet-grip { justify-self: center; width: 38px; height: 4px; border-radius: var(--r-pill); background: var(--rule2); }
+.atlas-pingsheet-grip { justify-self: center; width: 38px; height: 4px; border-radius: var(--r-track); background: var(--rule2); }
 .atlas-pingsheet-kicker {
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-panel-kicker); letter-spacing: .14em;
   color: var(--aink);
@@ -70,7 +70,7 @@
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-control-sm); letter-spacing: .06em;
   color: var(--muted); line-height: 1.4;
 }
-.atlas-pingsheet-actions { display: flex; gap: 8px; margin-top: 2px; }
+.atlas-pingsheet-actions { display: flex; gap: var(--sp-xs); margin-top: 2px; }
 .atlas-pingsheet-open {
   flex: 1; min-height: 46px; display: flex; align-items: center; justify-content: center;
   background: var(--cta); color: var(--cta-ink); border: 0; border-radius: var(--r-pill);
@@ -99,7 +99,7 @@
   /* One column: the globe hero first (moved by `order`, so the DOM keeps the panel first
      for a keyboard reader), then the quick actions. */
   :root[data-atlas-mode="world"] .atlas-stage-body,
-  :root[data-atlas-mode="table"] .atlas-stage-body { display: flex; flex-direction: column; gap: 12px; padding: 0 0 14px; }
+  :root[data-atlas-mode="table"] .atlas-stage-body { display: flex; flex-direction: column; gap: var(--sp-sm); padding: 0 0 var(--sp-md-h); }
   .atlas-globe-cell { order: -1; }
   .atlas-menufab { display: flex; }
   /* The hero. `min-height` reset too — atlas-world.css sets 320px against a viewport-height globe. */
@@ -128,7 +128,7 @@
   .atlas-table { padding-left: max(16px, var(--safe-left)); padding-right: max(16px, var(--safe-right)); }
   .atlas-tablehead { top: var(--hdr-h, 0px); z-index: 19; }
   .atlas-sheets {
-    gap: 10px; margin-top: 14px;
+    gap: var(--sp-sm-h); margin-top: var(--sp-md-h);
     /* Clearance for the fixed FAB and the home-indicator gesture bar beneath it. */
     padding-bottom: calc(120px + var(--safe-bottom));
   }
@@ -136,7 +136,7 @@
   /* Cards, not hairline rows — the phone list is the primary surface here. The row wraps:
      plate and name on the first line, stamp/country/conditions/number on the second. */
   .atlas-sheet {
-    flex-wrap: wrap; gap: 6px 12px; min-height: 56px; padding: 10px 14px;
+    flex-wrap: wrap; gap: var(--sp-xs-h) var(--sp-sm); min-height: 56px; padding: var(--sp-sm-h) var(--sp-md-h);
     background: var(--card); border: 1px solid var(--rule); border-bottom: 1px solid var(--rule); border-radius: var(--r-compact);
   }
   .atlas-sheet-body { flex: 1 1 55%; }
@@ -158,14 +158,14 @@
 
   /* The big card: cover full-bleed on top, title, the meta line under it. */
   .atlas-sheet--next {
-    flex-flow: row wrap; align-items: center; gap: 8px; padding: 0 14px 12px;
+    flex-flow: row wrap; align-items: center; gap: var(--sp-xs); padding: 0 var(--sp-md-h) var(--sp-sm);
     background: var(--card); border-color: var(--accent); border-radius: var(--r-card); overflow: hidden;
   }
   .atlas-sheet--next .atlas-sheet-plate {
     flex: 0 0 auto; width: calc(100% + 28px); margin: 0 -14px; height: 120px;
     border: 0; border-radius: 0; border-bottom: 1px solid var(--rule2);
   }
-  .atlas-sheet--next .atlas-sheet-body { flex: 0 0 100%; padding: 12px 0 0; }
+  .atlas-sheet--next .atlas-sheet-body { flex: 0 0 100%; padding: var(--sp-sm) 0 0; }
   .atlas-sheet--next .atlas-sheet-title { font-size: var(--text-h3); }
   .atlas-sheet--next .atlas-stamp,
   .atlas-sheet--next .atlas-quick-meta,
@@ -196,11 +196,11 @@
   /* Dense rows: the point of TABLE is more trips per screen. */
   :root[data-atlas-mode="table"] .atlas-sheets { gap: 0; }
   :root[data-atlas-mode="table"] .atlas-sheet {
-    min-height: 60px; padding: 11px 4px;
+    min-height: 60px; padding: 11px var(--sp-2xs);
     background: none; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0;
   }
   :root[data-atlas-mode="table"] .atlas-sheet--next {
-    flex-direction: row; align-items: center; gap: 12px; padding: 11px 4px 11px 11px;
+    flex-direction: row; align-items: center; gap: var(--sp-sm); padding: 11px var(--sp-2xs) 11px 11px;
     background: var(--sunken); border-left: 3px solid var(--accent);
   }
   :root[data-atlas-mode="table"] .atlas-sheet--next .atlas-sheet-plate {

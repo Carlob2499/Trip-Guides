@@ -9,7 +9,7 @@
 
 /* The control IS the lead — the whole two-line block is the target, not a chevron beside it. */
 .fold-btn{
-  display:grid;grid-template-columns:1fr auto;align-items:start;gap:.5rem;
+  display:grid;grid-template-columns:1fr auto;align-items:start;gap:var(--sp-gap-50);
   width:100%;min-height:44px;padding:0;
   background:none;border:0;border-radius:0;
   color:inherit;font:inherit;text-align:start;cursor:pointer;

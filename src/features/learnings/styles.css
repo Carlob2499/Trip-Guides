@@ -11,18 +11,18 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px 14px;
-  margin: 28px 0 8px;
-  padding-top: 20px;
+  gap: var(--sp-sm-h) var(--sp-md-h);
+  margin: var(--sp-xl) 0 var(--sp-xs);
+  padding-top: var(--sp-lg);
   border-top: 1px solid var(--rule);
 }
 .lnw-open {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 11px 18px;
+  gap: var(--sp-xs);
+  padding: 11px var(--sp-lg-h);
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--accent);
   color: var(--on-accent);
   font: 600 0.95rem/1 var(--font-body, inherit);
@@ -65,7 +65,7 @@
   color: var(--ink);
   border: 1px solid var(--rule);
   border-radius: var(--r-pane);
-  padding: 22px 20px 20px;
+  padding: var(--sp-xl-h) var(--sp-lg) var(--sp-lg);
 }
 .lnw-dialog:focus { outline: none; }
 .lnw-x {
@@ -75,7 +75,7 @@
   width: 34px;
   height: 34px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--r-round);
   background: transparent;
   color: var(--muted);
   font-size:var(--text-h4);
@@ -84,15 +84,15 @@
 }
 .lnw-x:hover { background: var(--bg2); color: var(--ink); }
 .lnw-eyebrow {
-  margin: 0 0 4px;
+  margin: 0 0 var(--sp-2xs);
   color: var(--accent-ink);
   font-size:var(--text-control-sm);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
 }
-.lnw-title { margin: 0 0 14px; font-size:var(--text-h4); line-height: 1.2; }
-.lnw-lede { margin: 0 0 14px; color: var(--muted); font-size:var(--text-body); }
+.lnw-title { margin: 0 0 var(--sp-md-h); font-size:var(--text-h4); line-height: 1.2; }
+.lnw-lede { margin: 0 0 var(--sp-md-h); color: var(--muted); font-size:var(--text-body); }
 .lnw-lede.lnw-warn { color: var(--warn); font-weight: 600; }
 
 /* ── Ratings step ─────────────────────────────────────────────────────────── */
@@ -100,17 +100,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--sp-sm);
   padding: 9px 0;
   border-bottom: 1px solid var(--rule);
 }
 .lnw-rate-lbl { font-weight: 600; }
-.lnw-pills { display: inline-flex; gap: 6px; }
+.lnw-pills { display: inline-flex; gap: var(--sp-xs-h); }
 .lnw-pill {
   width: 40px;
   height: 40px;
   border: 1px solid var(--rule2);
-  border-radius: 999px;
+  border-radius: var(--r-round);
   background: var(--bg);
   color: var(--ink);
   font-weight: 600;
@@ -121,7 +121,7 @@
 
 /* ── Stops step ───────────────────────────────────────────────────────────── */
 .lnw-day {
-  margin: 16px 0 6px;
+  margin: var(--sp-md) 0 var(--sp-xs-h);
   color: var(--accent-ink);
   font-size:var(--text-caption);
   letter-spacing: 0.05em;
@@ -132,14 +132,14 @@
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 8px 10px;
-  padding: 8px 0;
+  gap: var(--sp-xs) var(--sp-sm-h);
+  padding: var(--sp-xs) 0;
   border-bottom: 1px solid var(--rule);
 }
 .lnw-stop-name { font-size:var(--text-body); }
-.lnw-toggle { display: inline-flex; border: 1px solid var(--rule2); border-radius: 999px; overflow: hidden; }
+.lnw-toggle { display: inline-flex; border: 1px solid var(--rule2); border-radius: var(--r-pill); overflow: hidden; }
 .lnw-tg {
-  padding: 6px 13px;
+  padding: var(--sp-xs-h) 13px;
   border: 0;
   background: var(--bg);
   color: var(--muted);
@@ -152,7 +152,7 @@
 .lnw-reason {
   grid-column: 1 / -1;
   width: 100%;
-  padding: 8px 10px;
+  padding: var(--sp-xs) var(--sp-sm-h);
   border: 1px solid var(--rule2);
   border-radius: var(--r-inset);
   background: var(--bg);
@@ -164,7 +164,7 @@
 /* ── Freeform step ────────────────────────────────────────────────────────── */
 .lnw-ta {
   width: 100%;
-  padding: 12px;
+  padding: var(--sp-sm);
   border: 1px solid var(--rule2);
   border-radius: var(--r-inset);
   background: var(--bg);
@@ -180,18 +180,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: 20px;
-  padding-top: 14px;
+  gap: var(--sp-sm);
+  margin-top: var(--sp-lg);
+  padding-top: var(--sp-md-h);
   border-top: 1px solid var(--rule);
 }
 .lnw-dots { display: inline-flex; gap: 7px; }
 .lnw-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule2); }
 .lnw-dot-on { background: var(--accent); }
 .lnw-btn {
-  padding: 10px 16px;
+  padding: var(--sp-sm-h) var(--sp-md);
   border: 1px solid var(--rule2);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--bg);
   color: var(--ink);
   font-weight: 600;
@@ -207,8 +207,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: var(--sp-sm);
+  margin-bottom: var(--sp-lg-h);
 }
 .learn-eyebrow {
   margin: 0 0 2px;
@@ -224,7 +224,7 @@
   width: 34px;
   height: 34px;
   border: 1px solid var(--rule2);
-  border-radius: 999px;
+  border-radius: var(--r-round);
   background: var(--bg);
   color: var(--muted);
   font-size:var(--text-h4);
@@ -232,64 +232,140 @@
   cursor: pointer;
 }
 .learn-x:hover { color: var(--ink); }
+/* 2026-09-06 — tab.js only writes into #learnAgg from inside its Firebase subscription
+   (renderAgg), which never fires for a guide with no live config or zero feedback records —
+   Korea and Denmark both. The div sat in the DOM as a padded, bordered, empty card: the
+   "empty white bar" the /impeccable critique caught. Once renderAgg DOES run it always writes
+   either real content or the "Feedback logged…" placeholder — never nothing — so :empty
+   correctly means "never touched" and collapsing it is safe. Same rule this codebase already
+   holds itself to for optional data elsewhere (.learn-curated:empty, below). */
+.learn-agg:empty { display: none; }
 .learn-agg {
-  padding: 16px 18px;
+  padding: var(--sp-md) var(--sp-lg-h);
   border: 1px solid var(--rule);
   border-radius:var(--r-card);
   background: var(--card);
 }
 .learn-empty { margin: 0; color: var(--muted); }
-.learn-stat { margin: 0 0 6px; font-size:var(--text-body); }
+.learn-stat { margin: 0 0 var(--sp-xs-h); font-size:var(--text-body); }
 .learn-pct {
-  margin-left: 8px;
-  padding: 2px 8px;
-  border-radius: 999px;
+  margin-left: var(--sp-xs);
+  padding: 2px var(--sp-xs);
+  border-radius: var(--r-pill);
   background: var(--green);
   color: var(--on-green);
   font-size:var(--text-control);
   font-weight: 700;
 }
 .learn-sub {
-  margin: 14px 0 6px;
+  margin: var(--sp-md-h) 0 var(--sp-xs-h);
   color: var(--accent-ink);
   font-size:var(--text-caption);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 700;
 }
+/* 2026-09-06 — every row is name-then-reason, stacked, not a paragraph the eye has to parse
+   for where the fact ends and the explanation starts. Same shape whether or not the stop has
+   a photo; the photo variant only adds the thumbnail beside it. */
 .learn-skips { margin: 0; padding: 0; list-style: none; }
 .learn-skips li {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  padding: 7px 0;
+  align-items: flex-start;
+  gap: var(--sp-sm-h);
+  padding: 9px 0;
   border-top: 1px solid var(--rule);
 }
-.learn-skip-stop { font-weight: 600; }
-.learn-skip-why { color: var(--muted); }
+/* Solid fill, not a tint: --on-critical is the ONLY ink measured against a --critical FILL
+   (6.54:1 in either theme, base.css) — a color-mix tint measured 3.21:1 and axe was right to
+   flag it, even though the glyph itself is aria-hidden. */
+.learn-skip-x {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border-radius: var(--r-round);
+  background: var(--critical);
+  color: var(--on-critical);
+  font-size: var(--text-nano);
+  font-weight: 700;
+}
+.learn-skip-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.learn-skip-stop { font-weight: 600; overflow-wrap: anywhere; }
+.learn-skip-why { color: var(--muted); font-size: var(--text-small); }
+/* A skipped stop with a photograph (Learnings.astro): the picture is what turns a column of
+   names into a list of places you did not get to. A stop without one keeps the plain ✗ badge
+   rather than reserving a grey rectangle for a photo that does not exist. */
+.learn-skip-thumb { flex: none; width: 72px; height: 54px; overflow: hidden; border-radius: var(--r-inset); background: var(--sunken); }
+.learn-skip-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: var(--photo); }
+.learn-skip--photo .learn-skip-x { display: none; }
 
 /* Curated post-mortem (P3) — hidden until the guide data carries `learnings`. */
 .learn-curated:empty { display: none; }
-.learn-curated { margin-top: 18px; }
+.learn-curated { margin-top: var(--sp-lg-h); }
+/* 2026-09-06 — a <details>, not a paragraph in an unbroken scroll of eight days. The summary
+   is the only thing every day shows before the reader chooses to open it, so it carries the
+   one number worth judging a day by (how many stops didn't happen) rather than a bare date. */
 .learn-day {
-  padding: 14px 16px;
-  margin-top: 12px;
+  margin-top: var(--sp-sm);
   border: 1px solid var(--rule);
-  border-radius:var(--r-card);
+  border-radius: var(--r-card);
   background: var(--card);
+  overflow: clip;
 }
+.learn-day-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm-h);
+  padding: var(--sp-md-h) var(--sp-md);
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.learn-day-summary::-webkit-details-marker { display: none; }
+.learn-day-summary::before {
+  content: "▶";
+  flex: none;
+  font-size: var(--text-nano);
+  color: var(--muted);
+  transition: transform var(--dur-routine);
+}
+.learn-day[open] > .learn-day-summary::before { transform: rotate(90deg); }
+.learn-day-summary:hover { background: var(--bg2); }
+.learn-day-summary:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
 .learn-day-date {
-  margin: 0 0 4px;
   color: var(--accent-ink);
   font-size:var(--text-caption);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-weight: 700;
 }
-.learn-actually { margin: 0 0 8px; }
-.learn-changed, .learn-key { margin: 14px 0 0; padding-left: 18px; }
+/* Border + ink only, no tinted fill — --warn is only guaranteed >=4.5:1 as TEXT on the flat
+   page surfaces (design-system.md's pigment contract), and a color-mix background broke that:
+   measured 2.88:1. Same shape .tools-flag already uses for the same reason. */
+.learn-day-badge {
+  margin-left: auto;
+  padding: 1px 9px;
+  border: 1px solid var(--warn);
+  border-radius: var(--r-pill);
+  color: var(--warn);
+  /* --text-micro (12px), not --text-nano (9.6px, flagged by the /impeccable critique's
+     detector): this badge is what decides whether a reader opens the day. That is a
+     functional label, not fine print, whatever its visual weight. */
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.learn-day-body { padding: 0 var(--sp-md) var(--sp-md-h); }
+.learn-actually { margin: 0 0 var(--sp-xs); }
+@media (prefers-reduced-motion: reduce) { .learn-day-summary::before { transition: none; } }
+.learn-changed, .learn-key { margin: var(--sp-md-h) 0 0; padding-left: var(--sp-lg-h); }
 .learn-changed li, .learn-key li { margin: 3px 0; }
-.learn-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 20px; }
+.learn-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-sm-h) var(--sp-md-h); margin-top: var(--sp-lg); }
 .learn-recap-btn { text-decoration: none; }
 .lnw-open-inline { background: var(--bg); color: var(--accent-ink); border: 1px solid var(--accent); }
 .lnw-open-inline:hover { background: var(--card); filter: none; }
@@ -297,13 +373,13 @@
 /* ── Per-day Plan ⇄ Actual toggle (P3) ────────────────────────────────────── */
 .day-flip {
   display: inline-flex;
-  margin: 6px 0 2px;
+  margin: var(--sp-xs-h) 0 2px;
   border: 1px solid var(--rule2);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   overflow: hidden;
 }
 .day-flip-btn {
-  padding: 4px 12px;
+  padding: var(--sp-2xs) var(--sp-sm);
   border: 0;
   background: var(--bg);
   color: var(--muted);
@@ -312,25 +388,25 @@
   cursor: pointer;
 }
 .day-flip-btn.on { background: var(--accent); color: var(--on-accent); }
-.day-actual { margin-top: 8px; }
+.day-actual { margin-top: var(--sp-xs); }
 .day-actual .learn-skip-stop { display: inline-block; }
 
 /* "What didn't survive contact" — skipped stops tallied by declared group. A bar per
    group, width proportional to the largest count via --w set inline at render. Reads as
    a ranking, not a chart: the numbers are small and the point is the order. */
 .learn-tally-note {
-  margin: 2px 0 8px;
+  margin: 2px 0 var(--sp-xs);
   color: var(--muted);
   font-size:var(--text-caption);
   line-height: 1.4;
 }
-.learn-tally { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.learn-tally { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2xs); }
 .learn-tally-row {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
+  gap: var(--sp-sm-h);
+  padding: var(--sp-xs-h) var(--sp-sm-h);
   /* Was var(--line), which is not a token this product has ever defined — so the declaration
      was invalid at computed-value time and the border fell back to currentColor, drawing each
      row's frame in its own text colour. --rule is the hairline every other row here uses. */
@@ -345,8 +421,8 @@
   font-variant-numeric: tabular-nums;
   color: var(--warn);
   border: 1px solid var(--warn);
-  border-radius: 999px;
-  padding: 0 8px;
+  border-radius: var(--r-pill);
+  padding: 0 var(--sp-xs);
   min-width: 26px;
   text-align: center;
 }

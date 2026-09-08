@@ -25,7 +25,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 [data-tone="green"]{--pg-tone:var(--green)}
 [data-tone="crit"]{--pg-tone:var(--crit)}
 
-.pg-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.32rem .8rem;border-radius:999px;border:1px solid var(--pg-tone,var(--rule));background:color-mix(in srgb,var(--pg-tone,var(--rule)) 12%,var(--card));color:var(--pg-tone,var(--muted));font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.pg-pill{display:inline-flex;align-items:center;gap:var(--sp-gap-40);padding:.32rem .8rem;border-radius:var(--r-pill);border:1px solid var(--pg-tone,var(--rule));background:color-mix(in srgb,var(--pg-tone,var(--rule)) 12%,var(--card));color:var(--pg-tone,var(--muted));font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;white-space:nowrap}
 .pg-pill[data-tone="muted"]{color:var(--ink)}
 
 .tb-ico{width:17px;height:17px;flex:none;display:block}
@@ -41,14 +41,14 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-h2);letter-spacing:-.012em;line-height:1.1;margin:.35rem 0 .5rem}
 .pg-slug{font-family:var(--font-data);color:var(--accent-ink)}
 .pg-line{color:var(--muted);font-size:var(--text-lead);line-height:1.55;max-width:58ch;margin:0}
-.pg-elapsed{display:flex;align-items:baseline;gap:.5rem;margin:.7rem 0 0}
+.pg-elapsed{display:flex;align-items:baseline;gap:var(--sp-gap-50);margin:.7rem 0 0}
 /* No run, no clock. The timer counts from page load until a real createdAt corrects it, which is
    right once a run exists and a fabricated duration before one does. */
 .pg[data-state="empty"] .pg-elapsed{display:none}
 .pg-title-empty{display:none}
 .pg[data-state="empty"] .pg-title-empty{display:inline}
 .pg[data-state="empty"] .pg-title-run{display:none}
-.pg-empty-actions{display:none;flex-wrap:wrap;gap:.7rem;margin:1rem 0 0}
+.pg-empty-actions{display:none;flex-wrap:wrap;gap:var(--sp-gap-70);margin:1rem 0 0}
 .pg[data-state="empty"] .pg-empty-actions{display:flex}
 .pg-elapsed-label{font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .pg-elapsed-val{font-family:var(--font-data);font-size:var(--text-h4);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
@@ -59,7 +59,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1.1rem 1.2rem;min-width:0}
 .pg-diagnostics{border:1px solid var(--rule);border-radius:var(--r-card);background:var(--card)}
 .pg-diagnostics>summary{
-  min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:.8rem;
+  min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-gap-80);
   padding:.8rem 1.2rem;cursor:pointer;list-style:none;font-family:var(--font-data);
   font-size:var(--text-control);font-weight:700;color:var(--ink)
 }
@@ -72,7 +72,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-diagnostics-body>.pg-card{border:0;background:var(--card)}
 
 .pg-card[hidden]{display:none}
-.pg-card-head{display:flex;align-items:center;gap:.5rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .8rem}
+.pg-card-head{display:flex;align-items:center;gap:var(--sp-gap-50);font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:0 0 .8rem}
 .pg-card-intro{font-size:var(--text-small);color:var(--muted);line-height:1.45;margin:0 0 .8rem}
 
 /* The map's text equivalent — read by screen readers, never shown. */
@@ -115,48 +115,48 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg[data-state="empty"] .pg-plane{opacity:.35}
 
 /* ── Phases ────────────────────────────────────────────────────────────────── */
-.pg-phases{display:flex;flex-direction:column;gap:.9rem}
+.pg-phases{display:flex;flex-direction:column;gap:var(--sp-gap-90)}
 .pg-phase{min-width:0}
-.pg-phase-top{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;margin-bottom:.35rem}
+.pg-phase-top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-gap-60);margin-bottom:.35rem}
 .pg-phase-label{font-family:var(--font-display);font-weight:640;font-size:var(--text-small);color:var(--ink)}
 .pg-phase-status{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--pg-tone,var(--muted));letter-spacing:.02em}
-.pg-phase-track{height:6px;border-radius:999px;background:var(--sunken);overflow:hidden}
+.pg-phase-track{height:6px;border-radius:var(--r-track);background:var(--sunken);overflow:hidden}
 /* scaleX from a custom property, never width — a poll tick costs a composite, not a layout. */
-.pg-phase-fill{height:100%;width:100%;transform-origin:left;transform:scaleX(var(--pg-fill,0));border-radius:999px;background:var(--pg-tone,var(--accent));transition:transform var(--dur-reveal) var(--ease-out-expo)}
+.pg-phase-fill{height:100%;width:100%;transform-origin:left;transform:scaleX(var(--pg-fill,0));border-radius:var(--r-pill);background:var(--pg-tone,var(--accent));transition:transform var(--dur-reveal) var(--ease-out-expo)}
 .pg-phase-blurb{font-size:var(--text-caption);color:var(--muted);line-height:1.4;margin:.35rem 0 0}
 
 /* ── Live logs ─────────────────────────────────────────────────────────────── */
-.pg-dot{width:7px;height:7px;border-radius:999px;background:var(--green);flex:none;animation:pg-breathe 2.2s ease-in-out infinite}
+.pg-dot{width:7px;height:7px;border-radius:var(--r-round);background:var(--green);flex:none;animation:pg-breathe 2.2s ease-in-out infinite}
 .pg-dot[hidden]{display:none}
 @keyframes pg-breathe{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
 
-.pg-log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.4rem;min-width:0}
+.pg-log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-gap-40);min-width:0}
 .pg-log:empty{display:none}
 .pg-log--fetch{max-height:132px;overflow-y:auto;font-family:var(--font-data);font-size:var(--text-caption)}
-.pg-log-row{display:flex;align-items:baseline;gap:.6rem;min-width:0}
+.pg-log-row{display:flex;align-items:baseline;gap:var(--sp-gap-60);min-width:0}
 .pg-log-host{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
 .pg-log-status{font-variant-numeric:tabular-nums;font-weight:700;color:var(--pg-tone,var(--muted));flex:none}
-.pg-log-row--judge{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.55rem;align-items:baseline}
+.pg-log-row--judge{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--sp-gap-55);align-items:baseline}
 .pg-log-kind{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--pg-tone,var(--muted))}
 .pg-log-text{font-size:var(--text-caption);color:var(--ink);line-height:1.45;overflow-wrap:anywhere}
 .pg-log-empty{font-size:var(--text-caption);color:var(--muted);line-height:1.5;margin:0;max-width:52ch}
 .pg-log-empty[hidden]{display:none}
 
 /* ── Worth knowing ─────────────────────────────────────────────────────────── */
-.pg-nuggets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.8rem}
+.pg-nuggets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-gap-80)}
 .pg-nuggets:empty{display:none}
 .pg-nug{border-left:2px solid var(--accent);padding-left:.7rem;min-width:0}
 .pg-nug-text{font-size:var(--text-small);color:var(--ink);line-height:1.5;margin:0;overflow-wrap:anywhere}
 .pg-nug-src{font-family:var(--font-data);font-size:var(--text-nano);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);margin:.3rem 0 0}
 
-.pg-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin:1rem 0 0;padding-top:.9rem;border-top:1px solid var(--rule)}
+.pg-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-gap-70);margin:1rem 0 0;padding-top:.9rem;border-top:1px solid var(--rule)}
 .pg-stat dt{font-family:var(--font-data);font-size:var(--text-nano);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .pg-stat dd{font-family:var(--font-data);font-size:var(--text-h4);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;margin:.1rem 0 0}
 .pg-stats-note{font-size:var(--text-nano);color:var(--muted);margin:.6rem 0 0;line-height:1.4}
 .pg-stats-note[hidden]{display:none}
 
 /* ── Buttons ───────────────────────────────────────────────────────────────── */
-.pg-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.6rem 1.2rem;border-radius:999px;border:1px solid var(--ink);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);text-decoration:none;cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
+.pg-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.6rem 1.2rem;border-radius:var(--r-pill);border:1px solid var(--ink);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);text-decoration:none;cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
 .pg-btn:hover:not(:disabled){background:var(--ink);color:var(--bg)}
 .pg-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .pg-btn:disabled{opacity:.45;cursor:default}
@@ -175,7 +175,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
    change-request feature's .cp-tri-* vocabulary, not this one's. */
 
 /* ── Correction ────────────────────────────────────────────────────────────── */
-.pg-correction-form{display:flex;gap:.5rem;flex-wrap:wrap}
+.pg-correction-form{display:flex;gap:var(--sp-gap-50);flex-wrap:wrap}
 .pg-correction-form input{flex:1;min-width:10rem;min-height:44px;padding:.6rem .8rem;border-radius:var(--r-inset);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
 .pg-correction-form code{font-family:var(--font-data);background:var(--sunken);padding:0 .25rem}
 
@@ -184,11 +184,11 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-key[hidden]{display:none}
 .pg-key-toggle{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:none;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control);text-decoration:underline;cursor:pointer}
 .pg-key-toggle:hover{color:var(--accent-ink)}
-.pg-key-form{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.7rem}
+.pg-key-form{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-gap-50);margin-top:.7rem}
 .pg-key-form[hidden]{display:none}
 .pg-key-label{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
 .pg-key-form input{flex:1;min-width:12rem;min-height:44px;padding:.55rem .75rem;border-radius:var(--r-inset);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
-.pg-key-form button{min-height:44px;padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
+.pg-key-form button{min-height:44px;padding:.5rem 1.1rem;border-radius:var(--r-pill);border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
 .pg-key-form button:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .pg-key-form button[hidden]{display:none}
 .pg-key-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.6rem 0 0;line-height:1.45}
@@ -201,7 +201,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-note-issue{display:inline-block;margin-top:.7rem;font-family:var(--font-data);font-size:var(--text-control);color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
 .pg-note-issue[hidden]{display:none}
 .pg-note-live[hidden]{display:none}
-.pg-note-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;margin-top:.6rem}
+.pg-note-actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-gap-80);margin-top:.6rem}
 /* The one border weight change on the page: an answer that has STOPPED a run gets a heavier
    edge than a panel that is merely watching. */
 .pg-note[data-tone="warn"]{border-width:2px}
@@ -216,8 +216,8 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-q-context{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:0}
 .pg-q-answer{margin-top:.6rem}
 .pg-q-input{width:100%;min-height:44px;padding:.55rem .75rem;border-radius:var(--r-inset);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
-.pg-q-options{display:flex;flex-wrap:wrap;gap:.4rem}
-.pg-q-opt{min-height:44px;padding:.45rem .95rem;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-display);font-weight:560;font-size:var(--text-small);cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
+.pg-q-options{display:flex;flex-wrap:wrap;gap:var(--sp-gap-40)}
+.pg-q-opt{min-height:44px;padding:.45rem .95rem;border-radius:var(--r-pill);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-display);font-weight:560;font-size:var(--text-small);cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
 .pg-q-opt:hover{border-color:var(--ink)}
 .pg-q-opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 /* "Accept the assumption" is an escape from the question, not the recommended path — it reads

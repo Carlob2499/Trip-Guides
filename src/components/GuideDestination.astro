@@ -44,7 +44,7 @@ interface Props {
   chapters: Chapter[];
   sources: { s: any; i: number }[];
   hero: {
-    src: string | null; srcset: string | null; alt: string; focal: string | null;
+    src: string | null; srcset: string | null; alt: string; focal: string | null; textZone?: string | null;
     credit: { href: string | null; label: string } | null;
     video: any | null; tz: string | null;
   };
@@ -72,7 +72,15 @@ const countOf = (ch: Chapter) => ch.entries.length;
       Guide, roughly 55–60% of the main content region on desktop and 40–45% of a phone
       viewport. Identity sits on its own readable plate; the photograph is never a text ground. */}
   <header class={`mast-hero gd-hero ${hero.src ? "mast-photo" : "mast-painted"}`} id="top" data-hero>
-    <div class="mast-frame gd-cover">
+    {/* 2026-09-06 — frame and plate share a wrapper so the overlay can anchor to the PICTURE.
+        Positioning the plate against .mast-hero looked right and was not: the hero also holds
+        the plateline under the frame, so `bottom:0` resolved to the hero's foot and the title
+        hung 86px past the photograph's bottom edge, with the dek's last line sitting on cream.
+        An absolutely-positioned plate contributes no height, so this wrapper hugs the frame
+        exactly and `bottom:0` now means the bottom of the image. In band mode the plate is
+        static and simply flows beneath it, inside the same wrapper. */}
+    <div class="mast-cover">
+    <div class="mast-frame gd-cover" data-zone={hero.textZone ?? "band"}>
       <div class="mast-mat">
         <PaintedAtlas seed={slug} tz={hero.tz ?? undefined} />
         {hero.src && (
@@ -104,23 +112,26 @@ const countOf = (ch: Chapter) => ch.entries.length;
         </button>
       )}
     </div>
+    {/* 2026-09-06 — the plate is a SIBLING of the frame now, not a child of it, and that is the
+        whole mechanism. One plate node serves both layouts: when the guide names an empty
+        corner it is absolutely positioned over the photograph in that corner; when it names
+        none it simply flows underneath, on cream, where contrast cannot fail. Keeping it in the
+        DOM once means no duplicated <h2> and no hidden copy for a screen reader to find. */}
     <div class="mast-plate-row">
       <div class="mast-inner">
         {plate.eyebrow && <p class="eyebrow mast-eyebrow">{plate.eyebrow}</p>}
         <h2 class="mast-title">{guide.title}</h2>
         {guide.dek && <p class="dek mast-dek">{guide.dek}</p>}
-        {/* Board 05 puts the way into Search on the hero's foot — the same global overlay the
-            strip opens, said where a reader arrives. The weather chip beside it appears only
-            when the wired forecast actually has today (live-data/ui/wx-today.js). */}
+        {/* 2026-09-06, creator-directed: the hero's own Search button is gone. The strip above
+            already carries one that opens the SAME overlay, so the cover was spending its most
+            valuable space repeating a control the reader can reach from every screen — and
+            search is not what a cover is for. The weather chip stays: it says something about
+            THIS destination today that nothing else on the screen says. */}
         <div class="gd-hero-row">
-          <button class="gd-hero-search" type="button" data-search-open aria-label="Search this guide" aria-haspopup="dialog">
-            <svg class="gd-hero-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
-            <span class="gd-hero-search-txt">Search places, guides, or topics</span>
-            <kbd class="gd-hero-search-kbd" aria-hidden="true">⌘K</kbd>
-          </button>
           <p class="gd-hero-wx wxt-chip" data-wx-today data-wx-chip hidden></p>
         </div>
       </div>
+    </div>
     </div>
     {(plate.cities || plate.checked || plate.facts > 0 || plate.sources > 0 || plate.currency) && (
       <div class="mast-plateline">
@@ -152,7 +163,7 @@ const countOf = (ch: Chapter) => ch.entries.length;
       {/* ═══ OVERVIEW ═══ */}
       <section class="gd-overview" data-chapter-panel="overview" aria-label="Guide overview">
         <p class="gd-kicker">Explore by topic · {chapters.length} chapters</p>
-        <div class="gd-cards">
+        <div class="gd-cards" data-reveal>
           {chapters.map((ch, n) => (
             /* One tile per chapter, all the same size (board 05): the chapter's own first
                photograph over its number, its name and one line. The mosaic of feature and
@@ -173,10 +184,18 @@ const countOf = (ch: Chapter) => ch.entries.length;
               <span class="gd-card-arrow" aria-hidden="true">→</span>
             </button>
           ))}
+          {/* 2026-09-06 — was a shield icon on a muted-glyph tile, the one card in the band
+              still wearing the icon-plus-accent-rule treatment §33 says was retired for the
+              numbered plate. Sources gets the same numeral as every chapter before it
+              (chapters.length + 1) so the band reads as ten tiles, not nine and an outlier. */}
           {sources.length > 0 && (
             <button class="gd-card gd-card--quiet" type="button" data-chapter-go="sources">
-              <span class="gd-card-glyph" aria-hidden="true"><Icon name="shield" size={18} /></span>
-              <span class="gd-card-text"><span class="gd-card-name">Sources & verification</span><span class="gd-card-sub">Where every fact came from</span></span>
+              <span class="gd-card-glyph" aria-hidden="true">{String(chapters.length + 1).padStart(2, "0")}</span>
+              <span class="gd-card-text">
+                <span class="gd-card-n">{String(chapters.length + 1).padStart(2, "0")}</span>
+                <span class="gd-card-name">Sources & verification</span>
+                <span class="gd-card-sub">Where every fact came from</span>
+              </span>
               <span class="gd-card-arrow" aria-hidden="true">→</span>
             </button>
           )}

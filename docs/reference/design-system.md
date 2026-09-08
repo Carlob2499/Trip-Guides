@@ -237,6 +237,16 @@ the strip is its first row and the surface's own workspace fills the rest; ivory
 under the frame. On a phone the frame runs edge to edge. In dark mode the frame and the ground share
 the register and the frame keeps a hairline so it still reads as the frame.
 
+**One surface is exempt: Map (decided 2026-09-06).** On desktop the Map destination is composed
+edge to edge with no gutter and no radius; the strip stays as its first row and keeps its bottom
+hairline, so the map reads as running under the strip rather than starting below it. The reason is
+what the surface is rather than a preference about it: every other surface holds a document, and a
+document has edges a frame can honour. A map does not — it continues past the screen in every
+direction, so a radius and a cream gutter draw a boundary the territory has not got, and the
+surface reads as a picture of a map instead of a map. This is the only exemption; a new surface
+does not get one by arguing it feels immersive. Phones are unaffected, the frame already running
+edge to edge there.
+
 ### Orientation
 Use a **quiet contextual north star**, not loud breadcrumbs:
 - current trip;
@@ -712,12 +722,28 @@ Rules:
 This interaction language may be reused for other multi-step decisions where appropriate.
 
 **Surface 7 (board `07_guide_builder`, Opus 5):** `/new/`, `/progress/` and `/progress/triage/`
-wear the frame — `.stage.spatial` with `UtilityBar` as its strip, the same shell every other
-surface uses. Inside the frame at ≥900px the builder is the board's three columns: the six
+wear the frame — `.stage` with `UtilityBar` as its strip, the same shell every other surface
+uses. **2026-09-06 — `.spatial` is no longer part of that shell.** The frame-theming pass
+(§ palette) split `.spatial`'s two jobs apart: it used to hardcode the dark register onto
+whatever it was applied to, which is why every page here carried it. `.stage` alone is themed
+now — light on light, dark on dark — and `.spatial` remains only the always-dark INSET (the
+chrome strip, a map pane, the Atlas globe): a fixed dark object on a page that can be either
+colour, never the page itself. No surface's `.stage` carries `.spatial` any more; the two
+classes coexist on the same element only where a page's frame sits directly on an inset with
+no page in between, which does not happen here. Inside the frame at ≥900px the builder is the
+board's three columns: the six
 intake sections as a **step rail** on the left, the question card in the centre, **Your guide
 preview** on the right. Under the frame, on cream: **Your answers** (the deck's own history
-stack, re-homed there) and **Build with confidence**. A phone gets the card alone — one question
-already fills that screen, and a rail beside it would be a second thing to read.
+stack, re-homed there). A phone gets the card alone — one question already fills that screen,
+and a rail beside it would be a second thing to read.
+
+**2026-09-06 — "Build with confidence" is deleted, not deferred.** It was four bullets with
+bolded lead-ins, in parallel construction, telling a reader how rigorous the product is while
+they were trying to fill in a form. Every claim in it was true and none of it was actionable on
+that surface: the fact-checking is visible in the finished guide, a blank is visible as a blank,
+and "you can watch it run" is what `/progress/` is for. The board draws that panel because a
+board is a poster and a poster sells. This is a working surface. If the promises need saying
+anywhere they belong on a marketing page, not between a question and its answer.
 
 Both new panels are **projections, not second sources**: the rail copies the very mark
 `intake-checklist.js` paints on each section (`.itk-mark`), and the preview reads the same
@@ -726,8 +752,7 @@ So neither can disagree with the checklist about what is done, and neither predi
 Not drawn: the board's "Guide recommendations" cards (nothing here can recommend a guide), the
 BETA tag, the avatar, the notification bells, the preview's photo and "What's included" list
 (the guide does not exist yet), and any duration or cost promise — U02: neither is knowable
-before the research runs, which is why "Build with confidence" promises verification, stated
-gaps and a watchable run instead. `/progress/` keeps its route-map skeleton, its stage stations
+before the research runs. `/progress/` keeps its route-map skeleton, its stage stations
 and its honest-empty states exactly as they were; only the register changed.
 
 ---
@@ -906,9 +931,11 @@ It is reachable from Trip, relevant group/expense actions, Search, and expanded 
 board's full grammar — the site-wide CSS budget (`scripts/check-perf-budget.mjs`, 300KB) left
 too little margin after Surface 6's rail to also add the board's 3-card summary strip and
 `Overview/Expenses/Balances/Settle Up` tab row (none of those tabs are separate wired views
-today regardless — everything renders as one scrolling page). What shipped: `.splitdest` picks
-up `.spatial` (forest in both themes, the same frame pattern every other surface shares, §1);
-the old "← Trip" back-button-plus-kicker header is retired — Split is one of the frame strip's
+today regardless — everything renders as one scrolling page). What shipped: `.splitdest` sits
+directly in the themed `.stage` (**2026-09-06:** it carried `.spatial` here at first, then lost
+it in the frame-theming pass along with every other page-level surface — see Surface 7's note;
+Split's frame is now the same light-on-light/dark-on-dark register the page itself carries, not
+a fixed forest inset); the old "← Trip" back-button-plus-kicker header is retired — Split is one of the frame strip's
 own tabs now (§6), not a page reached by a back button — in favour of the calculator's own
 `.split-title`/`.split-desc`, retitled to the board's copy ("Split expenses" / "Track and split
 all trip expenses in one place."). Total spend, balances, settlements, categories and the
@@ -916,6 +943,13 @@ expense ledger are unchanged in position and behaviour. The 3-card strip, the ta
 "View itinerary" trip-identity card remain open work for whoever has CSS budget headroom next
 (check `check-perf-budget.mjs` locally before adding — Surface 6 landed at 300.9KB and needed a
 follow-up fix, PR #203).
+
+**2026-09-05 — that constraint was largely an artefact of how the gate measured.** The 300KB
+ceiling summed every stylesheet in the build and counted RAW bytes. No reader loads the build,
+and no reader downloads raw: the worst real page shipped 40KB gzipped against a gate reading
+299/300. The budget is now per-page and gzipped (`cssPerPage`, 60KB) — the same reasoning the
+JS half of that file already carried, applied to CSS. Split's deferred 3-card strip and tab row
+are no longer budget-blocked; they are queued behind the Map rebuild.
 
 ---
 
@@ -942,7 +976,9 @@ SOS is visually conservative:
 
 **After the ten surfaces (work order §4, Opus 5):** the frame is now every page's shell, not just
 the destinations' — `/about`, `/health`, `/404` and `/change` wrap their `UtilityBar` + main in
-`.stage.spatial` exactly as `/new` and `/progress` do. And the two share cards
+`.stage` exactly as `/new` and `/progress` do (**2026-09-06:** `.spatial` came back off the page
+shell in the frame-theming pass above — see Surface 7's own note; `.stage` alone carries the
+theme now). And the two share cards
 (`src/pages/og/[slug].png.ts`, `src/pages/recap/[slug].png.ts`) moved into the forest register
 too: the link preview should look like the site it opens. Neither card holds a palette any more
 — ground, ink and quiet ink come from `lib/accent-tokens.ts`'s `DARK_SURFACES`/`DARK_INK`/

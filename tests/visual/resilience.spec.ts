@@ -171,7 +171,7 @@ for (const [name, path] of GUIDES) {
       exercised++;
     }
 
-    const sos = page.locator(".topbar-sos,.sos-btn").first();
+    const sos = page.locator(".topbar-sos:visible,.sos-fab:visible").first();
     if (await sos.isVisible()) {
       await sos.click();
       await expect(page.locator(".sos-sheet")).toBeVisible();
@@ -279,3 +279,79 @@ test("⌁ a primed finished guide remains readable after the browser goes offlin
 
   await context.close();
 });
+
+/* ═══ CONTAINMENT: an overlay may not escape the box it is drawn on ═══════════════════════
+   This file opens by saying "content may not escape its owner", and until 2026-09-06 it only
+   ever checked one owner: the viewport, horizontally. That is a real check and it stays. But it
+   cannot see the failure that actually reaches a reader most often — an element that sits well
+   inside the viewport and hangs out of the BOX it is supposed to belong to.
+
+   The case that prompted this: the guide cover's title plate is absolutely positioned over the
+   photograph. It was anchored to .mast-hero, which also contains the plateline UNDER the frame,
+   so `bottom:0` resolved to the hero's foot and the title hung 86px past the bottom of the
+   picture with the dek's last line sitting on cream. Every existing gate passed. It was found by
+   the creator looking at it, which is the most expensive way to find a 6-line CSS bug and the
+   one that erodes trust fastest.
+
+   Each entry below is a promise the design makes about where something lives. They are listed
+   explicitly rather than inferred, because "no child may exceed its parent" is false in general
+   — half of good layout is deliberate overhang — so a blanket rule would drown in exceptions and
+   get muted. A named pair is a claim someone can argue with. */
+const CONTAINED: ReadonlyArray<{ child: string; box: string; why: string }> = [
+  {
+    child: ".mast-cover .mast-plate-row",
+    box: ".mast-cover .mast-frame",
+    why:
+      "The cover's identity is drawn ON the photograph. Its scrim is a gradient inside the frame, " +
+      "so any part of the plate outside the frame is unscrimmed type on whatever happens to be " +
+      "below — cream, in the case that shipped. In band mode the plate is static and sits under " +
+      "the frame by design, so that layout is skipped rather than exempted: the pair only applies " +
+      "when the plate is positioned.",
+  },
+];
+
+for (const [name, path] of GUIDES) {
+  for (const width of [320, 375, 768, 1440]) {
+    test(`⌁ ${name} overlays stay inside their box at ${width}px`, async ({ page }) => {
+      await prep(page, path, width, width < 700 ? 812 : 900);
+      await page.evaluate(() => {
+        const g = Array.from(document.querySelectorAll<HTMLElement>(".tab, .botslot, a, button"))
+          .find((e) => e.textContent?.trim() === "Guide");
+        g?.click();
+      });
+      await page.waitForTimeout(1200);
+      await settle(page);
+
+      const offenders = await page.evaluate((pairs) => {
+        const out: string[] = [];
+        for (const { child, box, why } of pairs) {
+          const c = document.querySelector(child);
+          const b = document.querySelector(box);
+          if (!c || !b) continue;
+          /* Only an ABSOLUTE child is claiming to sit on the box; anything still in flow is a
+             different layout and legitimately sits after it. Written as `!== "absolute"` rather
+             than `=== "static"`, which is the version I first wrote and which was wrong: the
+             plate's base rule is position:relative, so band mode — where it flows under the
+             frame on purpose — was read as an overlay and failed all four widths on Denmark.
+             The gate caught that about itself before it ever ran in CI. */
+          if (getComputedStyle(c).position !== "absolute") continue;
+          const cr = c.getBoundingClientRect(), br = b.getBoundingClientRect();
+          if (!cr.width || !br.width) continue;
+          const over = {
+            top: Math.round(br.top - cr.top),
+            bottom: Math.round(cr.bottom - br.bottom),
+            left: Math.round(br.left - cr.left),
+            right: Math.round(cr.right - br.right),
+          };
+          const bad = Object.entries(over).filter(([, px]) => px > 1);
+          if (bad.length) {
+            out.push(`${child} escapes ${box} by ${bad.map(([k, v]) => `${v}px ${k}`).join(", ")} — ${why}`);
+          }
+        }
+        return out;
+      }, CONTAINED as unknown as { child: string; box: string; why: string }[]);
+
+      expect(offenders, `${name} @${width}px: an overlay left the box it is drawn on`).toEqual([]);
+    });
+  }
+}

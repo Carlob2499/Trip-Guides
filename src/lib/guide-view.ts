@@ -9,6 +9,9 @@ import { cityLine, dateLine } from "./plate-line";
 import { emergencyFor } from "../data/countries.mjs";
 import { collectWaypoints, collectDayEvents, buildSummary, flattenSections } from "../features/exports/index";
 import { derivePins, derivePlannerData, pinSlug } from "./map-pins";
+/* Every photograph URL this module emits goes through `local()`: served from our own build
+   when fetch-media.mjs pulled it in, and from the original host when it did not. */
+import { local } from "./media";
 import { deriveTripDays, deriveReadiness, deriveRecap } from "../features/trip/index";
 import { buildGuideSearchIndex } from "../features/search/index";
 
@@ -60,8 +63,10 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
   const coverDirect = (coverStill.src as string | undefined) ?? null;
   const coverFile = (coverStill.file as string | undefined) ?? null;
   const mastSrcAt = (w: number) =>
-    coverDirect ? coverDirect.replace("{w}", String(w))
-    : coverFile ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=${w}` : null;
+    local(
+      coverDirect ? coverDirect.replace("{w}", String(w))
+      : coverFile ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(coverFile)}?width=${w}` : null,
+    );
   const heroSrc = mastSrcAt(1600);
   const hero = {
     src: heroSrc,
@@ -70,6 +75,9 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
       : null,
     alt: (cover?.alt ?? heroSight?.img?.alt ?? heroSight?.name ?? "") as string,
     focal: (cover?.focal ?? null) as string | null,
+    /* Which corner of THIS picture is empty enough to stand type in. Null is a real answer —
+       the masthead falls back to an undimmed photo with the title in the band beneath it. */
+    textZone: (cover?.textZone ?? null) as string | null,
     credit: coverFile
       ? { href: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(coverFile)}`, label: "Photo: Wikimedia Commons" }
       : coverDirect && coverStill.credit
@@ -80,8 +88,10 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
     painted: !heroSrc,
   };
   const imgAt = (im: { file?: string; src?: string }, w: number) =>
-    im.src ? im.src.replace("{w}", String(w))
-    : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(im.file!)}?width=${w}`;
+    local(
+      im.src ? im.src.replace("{w}", String(w))
+      : `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(im.file!)}?width=${w}`,
+    );
   const thumbSrc = (im: { file?: string; src?: string }) => imgAt(im, 320);
 
   /* ── Place imagery, canonical (§4 Imagery): the repository photo a sight/venue already owns,
@@ -157,9 +167,21 @@ export function deriveGuideView(guide: any, slug: string, base: string, holidayD
     // Sections authored in the Days group that are not the itinerary itself (a "solo menu",
     // alternatives) read as reference material and join the first chapter that follows.
     const withExtras = gi === 0 ? [...daysOnlyExtras, ...entries] : entries;
-    const imgs = withExtras.filter((e) => e.s.type === "sights").flatMap((e) => e.s.items || [])
+    // The chapter tile's photo (board 05, one shape per chapter). Sights first — a place's
+    // own photo is the strongest signal a chapter is "about somewhere" — then venues, joined
+    // 2026-09-06 alongside placeImages below: a Gaming & anime chapter with a real LoL Park
+    // photo on its venue item was drawing an empty numbered plate because this loop only ever
+    // looked at `type === "sights"`. A chapter built entirely from panel/list/prose sections
+    // (Plan, Essentials, Transit, Pokémon GO) has neither, so it falls back to the first
+    // section-level `image` cover it carries (facets.image) — same photo schema, same
+    // provenance rules, just attached to the TOPIC instead of to a place inside it.
+    const itemImgs = withExtras.filter((e) => e.s.type === "sights" || e.s.type === "venues").flatMap((e) => e.s.items || [])
       .filter((it: any) => it?.img?.file || it?.img?.src).slice(0, 3)
       .map((it: any) => ({ src: thumbSrc(it.img), alt: it.img.alt || it.name || "" }));
+    const coverSec = withExtras.find((e) => e.s.image?.file || e.s.image?.src)?.s;
+    const imgs = itemImgs.length ? itemImgs
+      : coverSec ? [{ src: thumbSrc(coverSec.image), alt: coverSec.image.alt || g }]
+      : [];
     const pins: ChapterPin[] = withExtras
       .filter((e) => e.s.type === "sights" || e.s.type === "venues")
       .flatMap((e) => (e.s.items || []).filter((it: any) => hasCoords(it.map)).map((it: any) => ({

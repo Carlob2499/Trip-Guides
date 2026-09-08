@@ -55,6 +55,9 @@ const { guide, slug, storeKey, days, readiness, recap, holidays, hero, placeImag
 const googlePrimary = Boolean(import.meta.env.PUBLIC_GMAPS_KEY);
 const frameSrcAttr = googlePrimary ? "data-fallback-src" : "data-src";
 const todayMapPayload = center && dayPins.length ? jsonEmbed({ center, span, pins: dayPins, lens: "today" }) : null;
+/* The whole trip's route, for the post phase. Same pins, no day filter — "days" draws each day's
+   numbered sequence and the chip row lets a reader walk back through them. */
+const tripMapPayload = center && dayPins.length ? jsonEmbed({ center, span, pins: dayPins, lens: "all" }) : null;
 const bbox = (c: { lat: number; lng: number }, s: number | null) => {
   const sp = s || 0.05;
   return [c.lng - sp, c.lat - sp * 0.6, c.lng + sp, c.lat + sp * 0.6].join("%2C");
@@ -257,14 +260,52 @@ const reservations = readiness.reminders.filter((r) => {
 
   {/* ═══ POST-TRIP ═══ */}
   <section class="trip-phase trip-post" data-trip-phase="post" aria-label="How it went" hidden>
+    {/* 2026-09-06 — the post phase now wears the SAME rail/main/aside grammar the active phase
+        does, and for the same reason the board gives active that shape: a trip is a set of
+        facts, and facts belong in cards you can scan. It used to be a paragraph, a three-cell
+        strip and a prose list of days — which is what both shipped guides actually show today,
+        because Korea and Denmark are over. The finished trip was the composition nobody
+        designed, and it was the one every visitor landed on.
+        No new layout: every class here is one the active phase already declares. */}
     {recap ? (
-      <div class="trip-recap">
+      <>
+      <div class="tn-rail">
+        {/* No identity card here, unlike the active phase. The masthead directly above already
+            carries the title, the dates and "Trip complete"; on a phone the two stack and the
+            trip's name appears twice in a row, which reads as a bug rather than as emphasis.
+            The progress bar has no such twin, so it moves into the card that owns the counts. */}
+        {/* 2026-09-06 — the /impeccable critique's P1: this card used to repeat #tripLearn's
+            own `.trip-atoms` (STOPS MADE / DAYS / SKIPPED at display size, clamp(1.9rem,6vw,
+            2.6rem)) — the biggest type anywhere in the post phase, above the recap sentence
+            that actually explains the trip, and printed a second time further down the SAME
+            page in Learnings. Two identical atom strips read as two measurements that happen
+            to agree, and a bare "SKIPPED 16" as the first thing the product says about a trip
+            styles the guide's own most valuable finding as a failure.
+            The full-size atoms now live in #tripLearn ONLY. Here they are one quiet line a
+            reader can confirm at a glance without it competing with the recap for the eye. */}
+        <div class="tn-card">
+          <p class="tn-card-k">How it went</p>
+          {recap.hitStops !== null && recap.plannedStops > 0 && (
+            <div class="tn-prog">
+              <p class="tn-prog-k">{recap.hitStops} of {recap.plannedStops} stops made</p>
+              <div class="tn-prog-track"><span class="tn-prog-fill" style={`width:${Math.round((recap.hitStops / recap.plannedStops) * 100)}%`}></span></div>
+            </div>
+          )}
+          <p class="tn-recap-tally">
+            {recap.dayCount} day{recap.dayCount === 1 ? "" : "s"}
+            {recap.skippedStops > 0 && <> · {recap.skippedStops} skipped</>}
+          </p>
+        </div>
+
+        {days.length > 0 && (
+          <button class="tn-full" type="button" data-dest-go="itinerary">
+            <Icon name="calendar" size={16} /> View the itinerary
+          </button>
+        )}
+      </div>
+
+      <div class="tn-main">
         {learnings?.summary && <p class="trip-recap-lead"><Fragment set:html={learnings.summary} /></p>}
-        <dl class="trip-atoms">
-          {recap.hitStops !== null && <div class="trip-atom"><dt>Stops made</dt><dd>{recap.hitStops}<span class="trip-atom-of"> of {recap.plannedStops}</span></dd></div>}
-          <div class="trip-atom"><dt>Days</dt><dd>{recap.dayCount}</dd></div>
-          {recap.skippedStops > 0 && <div class="trip-atom"><dt>Skipped</dt><dd>{recap.skippedStops}</dd></div>}
-        </dl>
         {recap.changedDays.length > 0 && (
           <div class="trip-block trip-pva">
             <h3 class="trip-h">Plan vs. actual</h3>
@@ -280,6 +321,24 @@ const reservations = readiness.reminders.filter((r) => {
           </div>
         )}
       </div>
+
+      <div class="tn-aside">
+        {/* Where the trip actually went. The same located stops the Itinerary draws — one map of
+            the whole route rather than a day's slice, because there is no "today" any more. */}
+        {tripMapPayload && (
+          <aside class="tn-map spatial" aria-label="Everywhere this trip went">
+            <div class="tn-map-head"><span class="tn-map-k">Where it went</span><button class="tn-map-open" type="button" data-dest-go="map">Open the Map →</button></div>
+            <div class="itin-map tn-map-mount" data-itin-map data-map-lens="all" data-map-primary={googlePrimary ? "google" : "osm"}>
+              <script type="application/json" is:inline data-map-data set:html={tripMapPayload} />
+              <iframe class="osmmap" loading="lazy" data-lazy-frame title="Map of everywhere this trip went"
+                {...{ [frameSrcAttr]: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox(center!, span)}&layer=mapnik&marker=${center!.lat}%2C${center!.lng}` }}></iframe>
+              <p class="map-loading" data-map-loading aria-live="polite">Loading the map…</p>
+              <p class="map-degraded" data-map-degraded hidden>Map tiles need a connection — the stops and their Get-there links still work.</p>
+            </div>
+          </aside>
+        )}
+      </div>
+      </>
     ) : (
       <p class="trip-recap-none">The trip is over. What worked and what didn't goes in the notebook below.</p>
     )}

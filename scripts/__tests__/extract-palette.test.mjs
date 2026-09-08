@@ -131,8 +131,8 @@ describe("contrast grounds — the extractor measures what the product actually 
   const schema = readSource("src/content.config.ts");
 
   it("the shared policy module names the current page grounds, not a retired palette", () => {
-    expect(LIGHT_BG).toBe("#e3e7dc");
-    expect(DARK_BG).toBe("#0d1512");
+    expect(LIGHT_BG).toBe("#f5f1ea");
+    expect(DARK_BG).toBe("#121110");
     expect(MIN_ACCENT_CONTRAST).toBe(3.0);
   });
 
@@ -164,9 +164,17 @@ describe("contrast grounds — the extractor measures what the product actually 
   });
 
   it("rejects the canary's #9c2f2a on the dark ground, at the ratio the schema gate reported", () => {
-    // The live verdict was 2.53:1 against the old #0f1317 ground; the forest ground (#0d1512,
-    // equal luminance) reads 2.52:1 — the same failure, on the ground the product paints.
-    expect(contrastRatio("#9c2f2a", DARK_BG)).toBeCloseTo(2.52, 2);
+    // The live verdict was 2.53:1 against the old #0f1317 ground, and 2.52:1 against the forest
+    // #0d1512 that replaced it at equal luminance. The 2026-09-05 navy ground (#0f1b2e) is NOT
+    // equal-luminance — it is a lighter ground in a different hue family — so the same accent now
+    // reads 2.35:1. The number moved because the ground moved; the VERDICT is what this pins, and
+    // it is unchanged: #9c2f2a is illegible on the dark page in every register the product has
+    // shipped. A rise above MIN_ACCENT_CONTRAST here would mean the dark ground had drifted light
+    // enough to start blessing accents the schema gate once rejected.
+    // 2026-09-06: the dark PAGE dropped to #121110 when the frame lifted off it (base.css,
+    // "THE FRAME REGISTER"), so the same accent now reads 2.56:1. Third ground, third number,
+    // same verdict — still far under the floor.
+    expect(contrastRatio("#9c2f2a", DARK_BG)).toBeCloseTo(2.56, 2);
     expect(contrastRatio("#9c2f2a", DARK_BG)).toBeLessThan(MIN_ACCENT_CONTRAST);
   });
 });

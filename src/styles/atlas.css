@@ -8,34 +8,34 @@
    (positioned always beats static at paint time), so the list wrapper is positioned too. */
 .atlas-table-wrap { position: relative; z-index: 1; }
 
-.atlas-table { max-width: 1000px; margin: 0 auto; padding: 0 16px 64px; }
+.atlas-table { max-width: 1000px; margin: 0 auto; padding: 0 var(--sp-md) 64px; }
 
 /* ── The list head: its label, the way back to the world, the one Search. ────────────── */
 .atlas-tablehead {
   position: sticky; top: max(0px, var(--hdr-h, 0px));
   z-index: 20; background: var(--bg);
-  padding: 12px 0; border-bottom: 1px solid var(--rule);
+  padding: var(--sp-sm) 0; border-bottom: 1px solid var(--rule);
 }
-.atlas-listhead-row { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
+.atlas-listhead-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-gap-80); }
 .atlas-listhead { font-family: var(--font-data); font-weight: 700; font-size: var(--text-panel-kicker); letter-spacing: var(--tracking-panel-kicker); text-transform: uppercase; color: var(--muted); }
 /* The one control back to the world view: present in table mode, gone in world mode. */
 .atlas-world-btn {
-  display: none; align-items: center; gap: .4rem; min-height: 44px; padding: 0 1rem;
+  display: none; align-items: center; gap: var(--sp-gap-40); min-height: 44px; padding: 0 1rem;
   background: var(--card); border: 1px solid var(--rule2); border-radius: var(--r-pill); cursor: pointer;
   font-family: var(--font-data); font-weight: 600; font-size: var(--text-control-sm); color: var(--ink);
 }
 .atlas-world-btn:hover { border-color: var(--ink); }
 .atlas-world-btn:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 :root[data-atlas-mode="table"] .atlas-world-btn { display: inline-flex; }
-.atlas-search-row { display: flex; align-items: center; gap: 8px; position: relative; margin-top: 10px; }
+.atlas-search-row { display: flex; align-items: center; gap: var(--sp-xs); position: relative; margin-top: var(--sp-sm-h); }
 .atlas-search {
-  flex: 1; min-height: 44px; padding: 0 14px;
+  flex: 1; min-height: 44px; padding: 0 var(--sp-md-h);
   background: var(--card); border: 1px solid var(--rule); border-radius: var(--r-pill);
   color: var(--ink); font-family: var(--font-body); font-size: var(--text-body);
 }
 .atlas-search::placeholder { color: var(--muted); }
 .atlas-chips {
-  display: flex; gap: 8px; margin-top: 14px; overflow-x: auto; padding-bottom: 2px;
+  display: flex; gap: var(--sp-xs); margin-top: var(--sp-md-h); overflow-x: auto; padding-bottom: 2px;
   scrollbar-width: thin;
 }
 .atlas-chip {
@@ -52,7 +52,7 @@
 
 /* ── Quick card (the featured trip, in the list) ─────────────────────────────────────── */
 .atlas-quick {
-  display: block; margin-top: 20px; padding: 16px 20px 18px;
+  display: block; margin-top: var(--sp-lg); padding: var(--sp-md) var(--sp-lg) var(--sp-lg-h);
   background: var(--card); border: 2px solid var(--accent); border-radius: var(--r-card);
   text-decoration: none; color: var(--ink);
 }
@@ -60,8 +60,8 @@
   display: block; font-family: var(--font-data); font-weight: 640; font-size: var(--text-panel-kicker);
   letter-spacing: .22em; text-transform: uppercase; color: var(--aink);
 }
-.atlas-quick-title { font-family: var(--font-display); font-size: var(--text-h2); margin: 4px 0 10px; }
-.atlas-quick-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.atlas-quick-title { font-family: var(--font-display); font-size: var(--text-h2); margin: var(--sp-2xs) 0 var(--sp-sm-h); }
+.atlas-quick-chips { display: flex; flex-wrap: wrap; gap: var(--sp-xs); align-items: center; }
 .atlas-quick-meta {
   display: inline-flex; align-items: center; gap: .35em; min-height: 32px; padding: .25rem .7rem;
   font-family: var(--font-data); font-weight: 600; font-size: var(--text-control-sm);
@@ -72,7 +72,7 @@
 .atlas-quick-clock[data-tick] { color: var(--ink); font-variant-numeric: tabular-nums; }
 .atlas-quick-cta {
   display: inline-flex; align-items: center; justify-content: center;
-  margin-top: 14px; min-height: 44px; padding: 0 20px;
+  margin-top: var(--sp-md-h); min-height: 44px; padding: 0 var(--sp-lg);
   background: var(--cta); color: var(--cta-ink); border: 0; border-radius: var(--r-pill);
   font-family: var(--font-data); font-weight: 640;
   font-size: var(--text-control); letter-spacing: .04em; text-decoration: none;
@@ -82,9 +82,10 @@
 .atlas-quick-advisory { color: var(--ochre); }
 
 /* ── Sheet list ──────────────────────────────────────────────────────────────────────── */
-.atlas-sheets { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+.atlas-sheets { list-style: none; margin: var(--sp-xl-h) 0 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
 .atlas-sheet {
-  display: flex; align-items: center; gap: 14px; padding: 14px 4px;
+  /* Wraps so the chips drop under the name rather than strangling it when the card is narrow. */
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-md-h); padding: var(--sp-md-h) var(--sp-2xs);
   border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink);
 }
 .atlas-sheet:hover, .atlas-sheet:focus-visible { background: var(--sunken); }
@@ -103,7 +104,12 @@
   .atlas-sheet-thumb { transition: transform var(--dur-object) var(--ease, ease); }
   .atlas-sheet:hover .atlas-sheet-thumb { transform: scale(1.06); }
 }
-.atlas-sheet-body { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+/* 2026-09-06 — `flex: 1 1 auto` let the trailing chips (stamp, country, weather) take their
+   content width first and leave the name whatever remained: measured 98px inside a 424px card,
+   which wrapped "South Korea" onto three lines while most of the row sat empty. min-width:0 was
+   already here and does not help — it permits shrinking, it does not reserve anything.
+   A basis reserves it. The name is the reason this row exists; the chips annotate it. */
+.atlas-sheet-body { flex: 1 1 12rem; min-width: 0; overflow-wrap: anywhere; }
 .atlas-sheet-title { font-family: var(--font-display); font-size: var(--text-lead); display: block; }
 .atlas-sheet-cities { font-size: var(--text-small); color: var(--muted); }
 .atlas-sheet-dates { font-size: var(--text-caption); color: var(--muted); margin-left: .5em; }
@@ -119,7 +125,7 @@
    (features/atlas/model/building.ts). Muted ink, plain outline, no pulse, no dot. */
 .atlas-stamp--building { color: var(--muted); }
 
-.atlas-empty { padding: 40px 4px; color: var(--muted); text-align: center; }
+.atlas-empty { padding: 40px var(--sp-2xs); color: var(--muted); text-align: center; }
 
 .atlas-foot {
   max-width: 1000px; margin: 0 auto; padding: 30px clamp(18px, 4vw, 54px) 60px;
@@ -129,7 +135,7 @@
 .atlas-foot a:hover { color: var(--ink); }
 
 @media (min-width: 620px) {
-  .atlas-quick { padding: 20px 26px 22px; }
+  .atlas-quick { padding: var(--sp-lg) 26px var(--sp-xl-h); }
 }
 
 /* ── Desktop: the ivory card under the frame (world mode) / the page (table mode). ─────── */
@@ -137,7 +143,7 @@
 @media (min-width: 900px) {
   :root[data-atlas-mode="world"] .atlas-table-wrap { display: block; }
   :root[data-atlas-mode="world"] .atlas-table {
-    max-width: none; margin: 18px 22px 0; padding: 4px 22px 22px;
+    max-width: none; margin: var(--sp-lg-h) var(--sp-xl-h) 0; padding: var(--sp-2xs) var(--sp-xl-h) var(--sp-xl-h);
     background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card);
   }
   :root[data-atlas-mode="world"] .atlas-tablehead { position: static; background: transparent; border-bottom: 0; }
@@ -147,8 +153,8 @@
   :root[data-atlas-mode="world"] .atlas-search-row,
   :root[data-atlas-mode="world"] .atlas-chips,
   :root[data-atlas-mode="world"] .atlas-quick { display: none; }
-  :root[data-atlas-mode="world"] .atlas-sheets { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0 32px; margin-top: 8px; }
-  :root[data-atlas-mode="world"] .atlas-sheet { border-radius: var(--r-inset); padding: 12px 8px; }
-  :root[data-atlas-mode="world"] .atlas-foot { max-width: none; padding: 22px 44px 56px; }
-  :root[data-atlas-mode="table"] .atlas-table { max-width: 1040px; padding-top: 12px; }
+  :root[data-atlas-mode="world"] .atlas-sheets { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0 32px; margin-top: var(--sp-xs); }
+  :root[data-atlas-mode="world"] .atlas-sheet { border-radius: var(--r-inset); padding: var(--sp-sm) var(--sp-xs); }
+  :root[data-atlas-mode="world"] .atlas-foot { max-width: none; padding: var(--sp-xl-h) var(--sp-touch) 56px; }
+  :root[data-atlas-mode="table"] .atlas-table { max-width: 1040px; padding-top: var(--sp-sm); }
 }

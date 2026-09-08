@@ -23,7 +23,7 @@
    lead-in with them: the stamp says "PROVEN" once, and a sentence repeating it underneath is
    the same datum rendered twice as if it were two things. */
 .hl-hero{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1.2rem 1.3rem;margin:0 0 2rem}
-.hl-hero-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem}
+.hl-hero-row{display:flex;align-items:center;gap:var(--sp-gap-70);flex-wrap:wrap;margin-bottom:.5rem}
 .hl-hero-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-lead);margin:0}
 .hl-hero p{margin:.2rem 0 0;color:var(--muted);font-size:var(--text-small);line-height:1.55}
 .hl-hero p b{color:var(--ink)}
@@ -35,7 +35,7 @@
 .hl-group-sub{font-size:var(--text-control);color:var(--muted);margin:0 0 1rem;line-height:1.5}
 
 /* Each automation row */
-.hl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
+.hl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-gap-70)}
 .hl-item{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);padding:1rem 1.1rem}
 
 /* The stamp (SPEC-COMPONENTS §6 typography: the data face (--font-data), .82rem, .08em, 640, 1px of its
@@ -48,7 +48,7 @@
 .hl-stamp.s-unproven{color:var(--warn)}
 .hl-stamp.s-support{color:var(--muted)}
 
-.hl-item-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+.hl-item-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-gap-80);flex-wrap:wrap}
 .hl-item-name{font-family:var(--font-data);font-size:var(--text-small);font-weight:700;color:var(--ink)}
 .hl-item-name a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--rule2)}
 .hl-item-name a:hover{color:var(--accent-ink);border-bottom-color:var(--accent)}

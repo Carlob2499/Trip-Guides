@@ -10,7 +10,8 @@
       "credit": "Mixkit",
       "creditUrl": "https://mixkit.co/free-stock-video/traditional-palace-in-korea-20095/",
       "license": "Mixkit Stock Video Free License"
-    }
+    },
+    "textZone": "bottom-left"
   },
   "footer": "Location photos via Wikimedia Commons — tap any credit for its source, author and license.",
   "country": "South Korea",
@@ -201,7 +202,7 @@
         "verified_on": "2026-07-23"
       },
       {
-        "situation": "I'm vegetarian",
+        "situation": "I am vegetarian",
         "native": "저는 채식주의자예요",
         "romanization": "jeoneun chaesikjuuijayeyo",
         "note": "point + show this screen ordering food",
@@ -211,7 +212,19 @@
     ]
   },
   "tabBudget": 11,
-  "panelGroups": ["Plan", "Essentials", "Transit", "Pokémon GO", "Sources", "Days", "Sights", "Daejeon & MSI", "Gaming & anime", "Food & shopping", "Tokyo"],
+  "panelGroups": [
+    "Plan",
+    "Essentials",
+    "Transit",
+    "Pokémon GO",
+    "Sources",
+    "Days",
+    "Sights",
+    "Daejeon & MSI",
+    "Gaming & anime",
+    "Food & shopping",
+    "Tokyo"
+  ],
   "descriptors": {
     "Daejeon & MSI": "The MSI weekend in Daejeon",
     "Pokémon GO": "GO Fest Global runs during the trip",

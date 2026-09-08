@@ -14,17 +14,21 @@
 import { mix, readableOn, readableOnAll } from "./contrast";
 
 /* The real surfaces accent text lands on, read from base.css: --card, --bg2, --bg per mode. */
-export const LIGHT_SURFACES = ["#fbfcf6", "#ced5c4", "#e3e7dc"] as const;
-export const DARK_SURFACES = ["#1e2e28", "#16231e", "#0d1512"] as const;
+export const LIGHT_SURFACES = ["#ffffff", "#ebe6de", "#f5f1ea"] as const;
+/* 2026-09-06: the dark page dropped and the frame lifted (base.css, "THE FRAME REGISTER"),
+   so accent text on a dark ground is now derived against the PAGE ladder — card #22334d,
+   sunken #101d2f, page #080d14. The frame's own surfaces sit between these two, so ink
+   derived to clear the page ladder clears the frame as well. */
+export const DARK_SURFACES = ["#232120", "#1b1917", "#121110"] as const;
 /* The dark register's quiet ink (base.css --muted in the dark block) — the pair the destination
    atmosphere (destination-theme.ts) is measured against. Asserted against base.css by the test. */
-export const DARK_QUIET_INK = "#91a59b";
+export const DARK_QUIET_INK = "#a8a29a";
 /* The rest of the forest register a surface needs to paint itself where CSS cannot reach: the
    share cards are SVG rasterised at build time (src/pages/og, src/pages/recap), so they read the
    register from here rather than carrying their own copy of it. Same contract as the surfaces
    above — asserted against base.css's dark block by accent-tokens.test.ts. */
-export const DARK_INK = "#f1eae0";
-export const DARK_RULE = "#2d443c";
+export const DARK_INK = "#f0ece6";
+export const DARK_RULE = "#302d2a";
 
 /* Those flat surfaces are not the whole story: chips and pills sit on ACCENT-TINTED grounds
    (`color-mix(in srgb, var(--accent) N%, var(--card))`), and a tint moves the ground TOWARD the

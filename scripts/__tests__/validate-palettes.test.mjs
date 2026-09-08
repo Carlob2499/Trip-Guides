@@ -35,8 +35,16 @@ afterEach(async () => {
 });
 
 describe("Denmark's old vs regenerated primary (TASK 1 regression)", () => {
-  it("the OLD #a77e3e fails the floor against the current light ground", () => {
-    expect(contrast("#a77e3e", LIGHT_BG)).toBeLessThan(MIN_ACCENT_CONTRAST);
+  /* 2026-09-05: this used to assert that Denmark's OLD #a77e3e fails the light floor, and it no
+     longer does — the board-faithful cream ground (#f2ede5) is LIGHTER than the sage it replaced,
+     so that gold now reads 3.16:1 and clears 3.0. Asserting a failure that has stopped being true
+     would be a lie in the shape of a regression test, so the pin moves to a value that genuinely
+     fails on the ground the product paints today. #c7a269 is not invented for the purpose: it is
+     one of the shipped country accents (see accent-tokens.test.ts's SHIPPED list), and on cream it
+     is 2.05:1 — the same defect class the Denmark regression was about, a gold too light to be read
+     as text on paper. The regenerated-primary test below still pins the real fix. */
+  it("a too-light gold fails the floor against the current light ground", () => {
+    expect(contrast("#c7a269", LIGHT_BG)).toBeLessThan(MIN_ACCENT_CONTRAST);
   });
 
   it("the regenerated committed primary passes BOTH current grounds", async () => {
@@ -62,14 +70,14 @@ describe("Denmark's old vs regenerated primary (TASK 1 regression)", () => {
 
 describe("validatePalettes — diagnostics", () => {
   it("a known-invalid palette file fails with an actionable diagnostic", async () => {
-    const dir = await fixtureDir({ "bad-guide.json": { primary: "#a77e3e", secondary: "#000000", accent: "#ffffff" } });
+    const dir = await fixtureDir({ "bad-guide.json": { primary: "#c7a269", secondary: "#000000", accent: "#ffffff" } });
     const { violations } = await validatePalettes(dir);
     expect(violations).toHaveLength(1);
     const v = violations[0];
     expect(v.file).toMatch(/bad-guide\.json$/);
-    expect(v.primary).toBe("#a77e3e");
-    expect(v.lightContrast).toBeCloseTo(contrast("#a77e3e", LIGHT_BG), 5);
-    expect(v.darkContrast).toBeCloseTo(contrast("#a77e3e", DARK_BG), 5);
+    expect(v.primary).toBe("#c7a269");
+    expect(v.lightContrast).toBeCloseTo(contrast("#c7a269", LIGHT_BG), 5);
+    expect(v.darkContrast).toBeCloseTo(contrast("#c7a269", DARK_BG), 5);
     expect(v.threshold).toBe(MIN_ACCENT_CONTRAST);
     expect(v.reason).toMatch(/light/);
   });
@@ -103,7 +111,7 @@ describe("validatePalettes — diagnostics", () => {
   it("checks ALL committed palette files, not a sample", async () => {
     const dir = await fixtureDir({
       "a.json": { primary: "#8a6a4d" }, // passes both grounds
-      "b.json": { primary: "#a77e3e" }, // fails — the Denmark-shaped defect
+      "b.json": { primary: "#c7a269" }, // fails — the Denmark-shaped defect (too light for cream)
       "c.json": { primary: "#4d7a6a" }, // passes both grounds
     });
     const { checked, violations } = await validatePalettes(dir);
@@ -114,10 +122,10 @@ describe("validatePalettes — diagnostics", () => {
   });
 
   it("never repairs a failing file — the fixture on disk is untouched after validation", async () => {
-    const dir = await fixtureDir({ "bad-guide.json": { primary: "#a77e3e", secondary: "#000000", accent: "#ffffff" } });
+    const dir = await fixtureDir({ "bad-guide.json": { primary: "#c7a269", secondary: "#000000", accent: "#ffffff" } });
     await validatePalettes(dir);
     const stillOnDisk = JSON.parse(await readFile(path.join(dir, "bad-guide.json"), "utf8"));
-    expect(stillOnDisk.primary).toBe("#a77e3e"); // unchanged — validation never silently rewrites
+    expect(stillOnDisk.primary).toBe("#c7a269"); // unchanged — validation never silently rewrites
   });
 
   it("an empty/missing directory checks cleanly rather than erroring", async () => {

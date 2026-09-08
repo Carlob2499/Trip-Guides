@@ -155,6 +155,9 @@ export function originFor(facts: Record<string, FactLike> | null | undefined): G
     deliberately does NOT chase. */
 export function coverImgFor(cover: CoverLike | null | undefined): string | null {
   if (!cover) return null;
+  /* Deliberately NOT resolved to a local copy here. This returns the BASE url; every consumer
+     runs it through img-width.ts to ask for a rendition, and that is where local() belongs —
+     the manifest is keyed by the sized URL, so resolving here would always miss. */
   if (cover.file) return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(cover.file)}`;
   if (cover.src) return cover.src;
   if (cover.video?.poster) return cover.video.poster;

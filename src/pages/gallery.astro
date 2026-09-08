@@ -473,6 +473,16 @@ const patterns = registry.patterns as Record<string, { contract: string; gates: 
       </section>
     </main>
 
+    {/* 2026-09-06 — the gallery renders <Hint> and imports hint.css, but hint.js was loaded
+        only by GuideLayout. Hint.astro's own contract says the touch path and the off-screen
+        clamp both live in that script, so the specimen here had a dead tap target and a bubble
+        running 70px past a 375px viewport. The gallery is where this component gets judged, so
+        it loads the same script the real surface does. Bundled, not is:inline, because it is a
+        module import. */}
+    <script>
+      import "../scripts/hint.js";
+    </script>
+
     <script is:inline define:vars={{ themeStyles }}>
       // Theme picker: apply the chosen guide's serialized accentStyle() to <html> — the same
       // inline-style carrier GuideLayout emits, so base.css's --accent-ink-light hook and the

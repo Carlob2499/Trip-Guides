@@ -21,6 +21,9 @@ initSearch(document);
 startLocalClocks(document);
 initAtlasWorld(document);
 initDarkToggle("btnDark");
+/* Lazy: entrance motion is the last thing that should compete for the first paint,
+   and the module bails on its own under reduced motion. */
+import("./reveal.js").then((m) => m.initReveal(document)).catch(() => {});
 
 // WORLD|TABLE toggle (README §"State" mode atlas/ledger) — table is the markup
 // default (D4); switch to world once JS is confirmed running, remembering the

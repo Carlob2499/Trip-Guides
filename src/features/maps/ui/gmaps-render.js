@@ -40,7 +40,10 @@ export function boot(cfg) {
   }
 
   function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#9c4421"; }
-  var ACCENT = cssVar("--accent");
+  /* The day route is Waypoint's furniture, not the guide's identity — same ruling as the pins
+     (base.css --brand). It was --accent, which is the destination's own colour, so Korea drew
+     its route in olive on a green map. */
+  var ACCENT = cssVar("--brand") || cssVar("--accent");
   function zoomFromSpan(span) {
     var s = span || 0.05;
     return Math.max(5, Math.min(16, Math.round(13 - Math.log2(s / 0.05))));
@@ -63,6 +66,24 @@ export function boot(cfg) {
     host.className = "gmap-host";
     mount.appendChild(host);
     var map = makeMap(api, host, data);
+    /* Google's own container carries role="region" aria-label="Map", and a guide renders SEVERAL
+       maps — so every one announced itself as "Map" and axe reported landmark-unique. Every mount
+       already sits inside a NAMED landmark of ours ("Map of today's stops", "Map of the selected
+       day"), so the injected one is a redundant landmark nested inside a real one: drop its role
+       rather than give it a name, which would only move the collision up a level (copying the
+       parent's label is exactly what the first attempt did, and it collided with the parent).
+       Nothing is lost — the map keeps its own focus and keyboard handling; it simply stops
+       claiming to be a second region. The node appears after init, hence the frame wait. */
+    (function unlandmark() {
+      var region = host.querySelector('[role="region"]');
+      if (!region) { requestAnimationFrame(unlandmark); return; }
+      /* All three go together: aria-label on a role-less div is a prohibited attribute
+         (axe aria-prohibited-attr), so dropping the role alone trades one violation for
+         another. The element becomes plain markup inside our named landmark. */
+      region.removeAttribute("role");
+      region.removeAttribute("aria-roledescription");
+      region.removeAttribute("aria-label");
+    })();
     var info = new api.maps.InfoWindow();
     var all = (data.pins || []).filter(function (p) { return typeof p.lat === "number" && typeof p.lng === "number"; });
     var lens = mount.getAttribute("data-map-lens") || "all";
@@ -115,15 +136,40 @@ export function boot(cfg) {
         // sequence, straight lines between stops — never a routed path pretending to be one.
         stops.forEach(function (p, i) { markers.push(markerFor(p, i)); });
         if (stops.length > 1) {
-          polyline = new google.maps.Polyline({ path: stops.map(function (p) { return { lat: p.lat, lng: p.lng }; }), geodesic: true, strokeColor: ACCENT, strokeOpacity: .75, strokeWeight: 3, map: map });
+          /* Thin and semi-transparent on purpose. At weight 4 and .9 opacity this line stopped being a
+          route and became the loudest object on the map: zoomed into Seoul, the legs out to Daejeon
+          and Busan cross the whole viewport as solid bars, burying street names and half the pins
+          under the connector between them. The route is context for the stops, not the subject. */
+          polyline = new google.maps.Polyline({ path: stops.map(function (p) { return { lat: p.lat, lng: p.lng }; }), geodesic: true, strokeColor: ACCENT, strokeOpacity: .55, strokeWeight: 2.5, map: map });
         }
       }
       var places = pins.filter(function (p) { return p.dayIdx == null; });
-      clusterPins(places, map.getZoom() || 13).forEach(function (c) {
+      /* The cluster radius is in screen pixels, so the SAME number covers a far bigger share of a
+         375px phone than of a 1440px desktop — which is why the phone piled a dozen overlapping
+         discs over Seoul while desktop looked fine. Widen it where the screen is narrow. */
+      clusterPins(places, map.getZoom() || 13, host.clientWidth < 600 ? 92 : 60).forEach(function (c) {
         markers.push(c.pins.length === 1 ? markerFor(c.pins[0], null) : clusterMarker(c));
       });
     }
 
+    /* WHERE THE MAP OPENS. Not fitBounds over every pin: the Korea guide carries 94 places in
+       Korea and 9 around Tokyo, 1,150 km away, so fitting everything framed two countries and
+       left Seoul unreadable on the first screen — worse on a phone, where the same box has a
+       third of the width.
+
+       The guide already answers this. `center`/`span` are authored per guide (Seoul, 0.07),
+       which is the frame someone who knows the trip would choose, and no statistic recovers
+       that from the coordinates: those 9 Tokyo pins are a real leg of the trip, not outliers to
+       be trimmed away. (An earlier pass here did try trimming the tails. It was the wrong tool
+       — at 9% the leg is bigger than any honest trim, and a trim big enough to drop it would
+       drop a genuine second city on some other guide.)
+
+       So: the authored frame is home, and a FILTER fits exactly what the reader asked for —
+       every pin in the filtered set, no trimming, because they chose those pins. */
+    function homeView() {
+      map.setCenter({ lat: data.center.lat, lng: data.center.lng });
+      map.setZoom(zoomFromSpan(data.span));
+    }
     function fitTo(pins) {
       if (!pins.length) return;
       if (pins.length === 1) { map.setCenter({ lat: pins[0].lat, lng: pins[0].lng }); map.setZoom(15); return; }
@@ -131,16 +177,29 @@ export function boot(cfg) {
       pins.forEach(function (p) { b.extend({ lat: p.lat, lng: p.lng }); });
       map.fitBounds(b, 48);
     }
+    /* Unfiltered means "show me the guide", which is the authored frame — not the extent of its
+       furthest two pins. Filtered means "show me these", which is an exact fit. */
+    function refit() {
+      if (dayFilter == null && !Object.keys(off).some(function (k) { return off[k]; })) homeView();
+      else fitTo(visible());
+    }
 
     function select(id, source) {
       selectedId = id;
       var pin = all.find(function (p) { return p.id === id; }) || null;
       draw();
       if (pin) {
-        info.setContent("<b>" + escapeHtml(pin.name) + "</b>" + (pin.local ? "<div class='wpop-local'>" + escapeHtml(pin.local) + "</div>" : "") +
-          "<a class='wpop-dir' href='" + dirUrl(pin) + "' target='_blank' rel='noopener'>Directions ↗</a>");
-        var m = markers.find(function (x) { return x.title === pin.name; });
-        if (m) info.open({ map: map, anchor: m });
+        /* The Map destination has a panel whose whole job is the selected place — name, local
+           name, photo and the same Get-there links. Opening an info window there says the same
+           thing twice, in a floating box that covers the pins around the one just chosen. Every
+           OTHER mount (a guide chapter map, the itinerary bench) has no such panel, so there the
+           window IS the only answer to "what did I just click" and it stays. */
+        if (!mount.closest("[data-mapdest]")) {
+          info.setContent("<b>" + escapeHtml(pin.name) + "</b>" + (pin.local ? "<div class='wpop-local'>" + escapeHtml(pin.local) + "</div>" : "") +
+            "<a class='wpop-dir' href='" + dirUrl(pin) + "' target='_blank' rel='noopener'>Directions ↗</a>");
+          var m = markers.find(function (x) { return x.title === pin.name; });
+          if (m) info.open({ map: map, anchor: m });
+        }
         if (source !== "map") map.panTo({ lat: pin.lat, lng: pin.lng });
       } else { info.close(); }
       try { mount.dispatchEvent(new CustomEvent("tg:map-select", { bubbles: true, detail: { id: id, pin: pin, source: source } })); } catch (_) {}
@@ -157,8 +216,7 @@ export function boot(cfg) {
       mount.setAttribute("data-map-provider", "google");
       try { mount.dispatchEvent(new CustomEvent("tg:map-ready")); } catch (_) {}
       draw();
-      var initial = visible();
-      if (initial.length > 1) fitTo(initial);
+      refit();
     });
 
     if (lens === "all" && (cats.length > 1 || all.some(function (p) { return p.dayIdx != null; }))) buildChips(mount, cats, off, data.dayDates || [], function (cat, on) {
@@ -186,9 +244,17 @@ export function boot(cfg) {
       document.addEventListener("tg:bench", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); fitTo(visible()); }, 320); });
     }
     // The destination becoming visible is the moment a hidden map needs its size.
-    document.addEventListener("tg:dest", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); fitTo(visible()); }, 60); });
+    document.addEventListener("tg:dest", function () { if (ready) setTimeout(function () { google.maps.event.trigger(map, "resize"); refit(); }, 60); });
     mount.__focusPin = function (id) { select(id, "row"); };
     mount.__fitDay = function (dayIdx) { dayFilter = dayIdx; if (ready) { draw(); fitTo(visible()); } };
+    /* "My location" (map-dest.js): centre on a reading the reader asked for. Deliberately a pan
+       and a zoom-in rather than a marker — the browser's own blue dot is the reading, and a
+       second pin of ours claiming to be "you" would be a fact we did not measure. */
+    mount.__panTo = function (lat, lng) {
+      if (!ready) return;
+      map.panTo({ lat: lat, lng: lng });
+      if ((map.getZoom() || 0) < 14) map.setZoom(14);
+    };
     mount.__clear = function () { selectedId = null; info.close(); draw(); };
   }
 
@@ -223,7 +289,18 @@ export function boot(cfg) {
         bar.appendChild(b);
       });
     }
+    /* The fade at the row's right edge (map.css .map-chips) says "there is more"; it must come
+       off once there is not, or the last chip looks permanently clipped. Cheap to compute and
+       only on scroll/resize, so it never runs during a pan of the map itself. */
+    var markEnd = function () {
+      var end = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 1;
+      if (end) bar.setAttribute("data-scroll-end", "");
+      else bar.removeAttribute("data-scroll-end");
+    };
+    bar.addEventListener("scroll", markEnd, { passive: true });
+    if (typeof ResizeObserver === "function") new ResizeObserver(markEnd).observe(bar);
     mount.insertBefore(bar, mount.firstChild);
+    markEnd();
   }
 
   /* Google did not become the map: wake the dormant OSM embed (Google-primary mounts) and say

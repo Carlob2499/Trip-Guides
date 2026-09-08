@@ -39,7 +39,7 @@
           "✨ Crowned Sword Zacian",
           "✨ Crowned Shield Zamazenta"
         ],
-        "tip": "Weak to <b>Fire and Ground only</b> — the same team handles both. You just flew 14 hours: use 2–3 passes if you're feeling fresh, save most for tomorrow.",
+        "tip": "Weak to <b>Fire and Ground only</b> — the same team handles both. You just flew 14 hours: use 2–3 passes if you are feeling fresh, save most for tomorrow.",
         "mega": "Mega Gengar Mega Raid Hour 19:00–20:00."
       },
       {
@@ -141,7 +141,7 @@
         "shiny_odds": "1/20",
         "trainers": "2–4 trainers",
         "note": "Thursday Jul 9 all day + Raid Hour 18:00–19:00 KST. Fighting/Steel is an unusual type combination — Psychic and Fairy (usually great vs Fighting) are fully neutralised by the Steel typing. Identical weakness profile to Crowned Sword Zacian: Fire and Ground only.",
-        "strategy": "<b>Weak to: Fire and Ground only.</b> Steel neutralises the Fighting weakness to Psychic, Flying, and Fairy. Reuse the exact same team you built for Crowned Zacian — there's no need to swap anything.",
+        "strategy": "<b>Weak to: Fire and Ground only.</b> Steel neutralises the Fighting weakness to Psychic, Flying, and Fairy. Reuse the exact same team you built for Crowned Zacian — there is no need to swap anything.",
         "counters": [
           {
             "pokemon": "Primal Groudon",
@@ -450,7 +450,7 @@
     "type": "infogrid",
     "group": "Pokémon GO",
     "title": "GO Fest Global 2026 — what to know",
-    "note": "⚠ Niantic finalises exact habitat boss lists, Super Mega mechanics, and shiny rates only days before the event — re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> and in-game news the week of Jul 6. Remote passes: save for the Seoul days (Jul 9–10, Jul 14) when you're not at EXPO.",
+    "note": "⚠ Niantic finalises exact habitat boss lists, Super Mega mechanics, and shiny rates only days before the event — re-check <a href='https://leekduck.com/events/pokemon-go-fest-2026-global/'>LeekDuck</a> and in-game news the week of Jul 6. Remote passes: save for the Seoul days (Jul 9–10, Jul 14) when you are not at EXPO.",
     "collapsible": true,
     "defaultOpen": true,
     "cards": [
@@ -462,12 +462,12 @@
       {
         "icon": "🔮",
         "label": "Special Research",
-        "body": "Leads to <b>Zeraora</b> (Mythical Electric, GO debut) — doesn't expire. Branching path: choose Mega Mewtwo X or Y."
+        "body": "Leads to <b>Zeraora</b> (Mythical Electric, GO debut) — does not expire. Branching path: choose Mega Mewtwo X or Y."
       },
       {
         "icon": "🎟️",
         "label": "Raid passes",
-        "body": "<b>9 free/day</b> from spinning Gym photo discs — doesn't auto-grant, you must spin."
+        "body": "<b>9 free/day</b> from spinning Gym photo discs — does not auto-grant, you must spin."
       },
       {
         "icon": "✨",
@@ -494,7 +494,11 @@
         "label": "Also running",
         "body": "Shadow Palkia in Shadow Raids Jul 1–Aug 4 (not urgent). Ultra Unlock starts Jul 13 — check pokemongo.com after."
       }
-    ]
+    ],
+    "image": {
+      "file": "Yeouido Han River Park.jpg",
+      "alt": "Yeouido Han River Park, a GO Fest Global venue"
+    }
   },
   {
     "type": "panel",
@@ -589,7 +593,7 @@
         "hot": [
           "✨ Xurkitree"
         ],
-        "body": "<b>Xurkitree</b> (Sun Verdant 13–16, Daejeon) is the single most valuable target — an Asia-Pacific regional Ultra Beast Copenhagen never had. Everything else here is a legendary or collection mon Copenhagen's smaller 5★ pool (Moltres/Mewtwo/Entei only) simply didn't include."
+        "body": "<b>Xurkitree</b> (Sun Verdant 13–16, Daejeon) is the single most valuable target — an Asia-Pacific regional Ultra Beast Copenhagen never had. Everything else here is a legendary or collection mon Copenhagen's smaller 5★ pool (Moltres/Mewtwo/Entei only) simply did not include."
       }
     ]
   },
@@ -817,7 +821,7 @@
         "chips": [
           "Shadow Palkia"
         ],
-        "body": "Runs in Shadow Raids all weekend, separate from the habitat rotation. Grab one if a gym is handy, but it's available through Aug 4 — not urgent."
+        "body": "Runs in Shadow Raids all weekend, separate from the habitat rotation. Grab one if a gym is handy, but it is available through Aug 4 — not urgent."
       }
     ]
   },
@@ -900,7 +904,7 @@
       {
         "icon": "🔬",
         "label": "Special Research → Zeraora",
-        "body": "Free for everyone who logs in — but it's the same line you completed at Copenhagen. Likely nothing new for you."
+        "body": "Free for everyone who logs in — but it is the same line you completed at Copenhagen. Likely nothing new for you."
       },
       {
         "icon": "🕯️",
@@ -915,7 +919,7 @@
       {
         "icon": "🥚",
         "label": "Eggs — skip them",
-        "body": "Unlike Copenhagen (½ Hatch Distance + 1.5× Hatch Candy), Global has <b>no egg-distance discount</b>. Don't burn incubators — spend the time raiding instead."
+        "body": "Unlike Copenhagen (½ Hatch Distance + 1.5× Hatch Candy), Global has <b>no egg-distance discount</b>. Do not burn incubators — spend the time raiding instead."
       },
       {
         "icon": "🔄",
@@ -1328,9 +1332,9 @@
           "Electric"
         ],
         "shiny_odds": "1/20",
-        "shiny_note": "Korea is in the Asia-Pacific region where Xurkitree appears — region-locked Ultra Beast, you can't get it at home",
+        "shiny_note": "Korea is in the Asia-Pacific region where Xurkitree appears — region-locked Ultra Beast, you cannot get it at home",
         "trainers": "2–4 trainers",
-        "note": "Sunday Verdant Anomaly (1–4 PM), Daejeon — the Asia-Pacific regional Ultra Beast and a top non-shadow Electric attacker. Raid it before the 3 PM Grand Final; it's the single most location-exclusive thing on the weekend.",
+        "note": "Sunday Verdant Anomaly (1–4 PM), Daejeon — the Asia-Pacific regional Ultra Beast and a top non-shadow Electric attacker. Raid it before the 3 PM Grand Final; it is the single most location-exclusive thing on the weekend.",
         "strategy": "<b>Weak to:</b> Ground only (pure Electric) — and Ground is immune to its Electric attacks, so a full Ground team takes almost no damage. Lead Mega Garchomp or Excadrill; Groudon (from Saturday) and Therian Landorus are premium.",
         "counters": [
           {

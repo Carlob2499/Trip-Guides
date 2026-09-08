@@ -23,8 +23,8 @@ vi.mock("astro:content", async () => {
 const { collections } = await import("./content.config");
 const schema = (collections.guides as any).schema;
 
-const LIGHT_BG = "#e3e7dc"; // R5 lifted Day ground — mirrors content.config.ts, which mirrors base.css --bg
-const DARK_BG = "#0d1512";
+const LIGHT_BG = "#f5f1ea"; // R5 lifted Day ground — mirrors content.config.ts, which mirrors base.css --bg
+const DARK_BG = "#121110";
 
 function validGuide(overrides: Record<string, unknown> = {}) {
   return {
