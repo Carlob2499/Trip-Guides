@@ -48,10 +48,15 @@ Two fixes were tried and reverted, and the reasoning is in `trip.css`:
 `-webkit-line-clamp: 3` closes it to 142px, but hides "LBF 17:00 KST (both inside the arena)"
 and "your third is in Tokyo this weekend", which appear nowhere else in full.
 
-The same strip renders correctly full-width on Itinerary, with PACE on one line. So this is a
-**container-width** problem, not a content one: three tiles do not fit a 450px rail. The fix is
-to stack the strip in the narrow rail. Listed here rather than done, because it changes the
-composition board 02 draws.
+**FIXED 2026-09-08 — and an earlier claim here was wrong.** This entry previously said the same
+strip renders correctly full-width on Itinerary. It does not. There is exactly one `.tn-metrics`
+in the product, it lives in `.tn-aside` in the Trip rail, and on every other destination it is
+hidden at 0x0; the full-width strip that observation came from was a different component,
+misidentified. Three tiles therefore never fit anywhere — the 451px rail is its only context.
+
+Fixed by changing the shape rather than the content: the two figures share a row and the sentence
+gets its own full-width one beneath. Measured 224x91, 224x91, 449x105 — 199px total, seven pixels
+taller than before and with no cell holding 120px of nothing.
 
 **Fidelity — open.** The board's stop cards each carry a photo thumbnail. The build's are
 text-only. The board is photo-led throughout and the build is text-led; this is the same gap as

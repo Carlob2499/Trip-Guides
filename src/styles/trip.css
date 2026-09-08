@@ -228,6 +228,27 @@
    taller than the problem it replaced. Three columns is also the shape board 02 draws. */
 .tn-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card);overflow:hidden}
 .tn-metrics[hidden]{display:none}
+/* 2026-09-08 — three tiles never fit here. The strip renders in exactly one place: the Trip
+   rail, at ~451px. An earlier note in this file claimed the same component also rendered
+   full-width on Itinerary and was correct there, and that was wrong — there is one .tn-metrics
+   in the product, it lives in .tn-aside, and on every other destination it is hidden at 0x0. The
+   full-width strip that observation came from was a different component, misidentified.
+
+   The measured problem: at 451px three columns give each tile 150px, and the row stands 192px
+   tall because PACE carries a sentence while STOPS TODAY ("5") and STRAIGHT-LINE ("151 km") sit
+   in ~120px of dead space each. Grid rows are as tall as their tallest cell, so the two figures
+   were paying for the prose.
+
+   Two earlier attempts, both reverted and both worse: auto-fit orphaned the third tile on its own
+   row at 234px; line-clamp closed it to 142px by hiding "LBF 17:00 KST (both inside the arena)"
+   and "your third is in Tokyo this weekend" — times and a whereabouts appearing nowhere else in
+   full. Trimming a traveller's information to even up a row is the wrong trade in a field guide.
+
+   So the shape changes rather than the content: the two figures share a row and the sentence gets
+   its own beneath them. Measured after — 224x91, 224x91, 449x105, total 199px. Seven pixels
+   taller than the version it replaces, and no cell holds 120px of nothing. */
+.tn-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tn-metrics .tn-metric:nth-child(3){grid-column:1 / -1;border-left:0;border-top:1px solid var(--rule)}
 .tn-metric{min-width:0;padding:.85rem .9rem;border-left:1px solid var(--rule)}
 .tn-metric:first-child{border-left:0}
 .tn-metric dt{font-family:var(--font-data);font-size:var(--text-panel-kicker);font-weight:700;letter-spacing:var(--tracking-panel-kicker);text-transform:uppercase;color:var(--muted)}
