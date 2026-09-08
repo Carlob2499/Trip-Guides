@@ -17,12 +17,12 @@
 .addr-copy:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:2px solid var(--accent-ink);outline-offset:2px}
 
 /* ── Mini toast ───────────────────────────────────────────────────────────── */
-.ft-toast{position:fixed;left:50%;bottom:calc(5.4rem + var(--safe-bottom));transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:999px;opacity:0;pointer-events:none;transition:opacity var(--dur-routine),transform var(--dur-routine)}
+.ft-toast{position:fixed;left:50%;bottom:calc(5.4rem + var(--safe-bottom));transform:translate(-50%,8px);z-index:940;padding:.5rem .95rem;background:var(--ink);color:var(--bg);font-family:var(--font-data);font-size:var(--text-control-sm);border-radius:var(--r-pill);opacity:0;pointer-events:none;transition:opacity var(--dur-routine),transform var(--dur-routine)}
 .ft-toast-on{opacity:1;transform:translate(-50%,0)}
 @media(min-width:900px){.ft-toast{bottom:1.6rem}}
 
 /* ── Stop check-off ───────────────────────────────────────────────────────── */
-.stop-num{cursor:pointer;border-radius:999px;padding:.1rem .3rem;margin:-.1rem -.3rem}
+.stop-num{cursor:pointer;border-radius:var(--r-pill);padding:.1rem .3rem;margin:-.1rem -.3rem}
 /* Same split, same reason as .addr-copy above — role="checkbox" + tabindex="0" here, so the
    keyboard user checking off stops had no focus ring either. */
 .stop-num:hover{background:color-mix(in srgb,var(--accent) 16%,transparent)}
@@ -49,7 +49,7 @@
    --dark-* contract story mode does rather than carrying its own two hex literals. */
 .lb-cap{margin-top:.6rem;color:var(--dark-ink-2);font-size:var(--text-small);display:flex;gap:var(--sp-gap-80);align-items:baseline;flex-wrap:wrap}
 .lb-credit{color:var(--dark-ink-4);font-family:var(--font-data);font-size:var(--text-control-sm)}
-.lb-x{position:absolute;top:-.4rem;right:-.4rem;z-index:2;width:40px;height:40px;background:var(--ink);color:var(--bg);border:1px solid var(--dark-rule);border-radius:999px;cursor:pointer;font-size:var(--text-small)}
+.lb-x{position:absolute;top:-.4rem;right:-.4rem;z-index:2;width:40px;height:40px;background:var(--ink);color:var(--bg);border:1px solid var(--dark-rule);border-radius:var(--r-round);cursor:pointer;font-size:var(--text-small)}
 .lb-x:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
 
 /* The swipe edge glow (`html[data-swipe-hint]`) retired 2026-07-30 with the rewrite to a
@@ -89,7 +89,7 @@
     position:fixed;right:max(1rem,var(--safe-right));bottom:calc(1rem + var(--safe-bottom) + var(--botbar-h,0px));
     z-index:70;min-width:56px;height:56px;padding:0 1.1rem;
     background:var(--crit-fill);color:var(--on-crit);border:2px solid color-mix(in srgb,var(--on-crit) 35%,transparent);
-    border-radius:999px;box-shadow:var(--shadow-float);
+    border-radius:var(--r-round);box-shadow:var(--shadow-float);
     font-family:var(--font-data);font-size:var(--text-control);font-weight:800;letter-spacing:.04em;
     cursor:pointer
   }
@@ -108,7 +108,7 @@
 .sos-inner.sheet-dragging{transition:none;will-change:transform}
 .sos-head{display:flex;align-items:center;gap:var(--sp-gap-60);margin:0;font-family:var(--font-data);font-weight:700;font-size:var(--text-control);letter-spacing:.16em;text-transform:uppercase;color:var(--dark-ink)}
 .sos-head-where{color:var(--dark-ink-3);letter-spacing:.06em;text-transform:none;font-weight:600;font-size:var(--text-control)}
-.sos-x{margin-left:auto;width:44px;height:44px;flex:none;background:transparent;border:1px solid var(--dark-rule);border-radius:999px;color:var(--dark-ink);cursor:pointer}
+.sos-x{margin-left:auto;width:44px;height:44px;flex:none;background:transparent;border:1px solid var(--dark-rule);border-radius:var(--r-round);color:var(--dark-ink);cursor:pointer}
 .sos-x:focus-visible{outline:3px solid var(--dark-ink);outline-offset:2px}
 /* The confirm call (layer 3). */
 .sos-call{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--sp-gap-10);min-height:120px;padding:1rem 1.2rem;background:var(--crit-fill);color:var(--on-crit);border:2px solid var(--crit-fill);border-radius:var(--r-card);text-decoration:none}
@@ -196,8 +196,8 @@
 .addr-card-hint{margin:0 0 .8rem;font-family:var(--font-data);font-size:var(--text-control-sm);letter-spacing:.06em;color:var(--muted)}
 .addr-card-big{margin:0;font-family:var(--font-display);font-weight:640;font-size:clamp(1.7rem,7vw,2.6rem);line-height:1.35;color:var(--ink);word-break:keep-all}
 .addr-card-row{display:flex;gap:var(--sp-gap-60);justify-content:center;margin-top:1.2rem;flex-wrap:wrap}
-.addr-card-copy{padding:.65rem 1.2rem;background:var(--ink);color:var(--bg);border:none;border-radius:999px;font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
-.addr-card-x{padding:.65rem 1.2rem;background:transparent;color:var(--muted);border:1px solid var(--rule);border-radius:999px;font-size:var(--text-control);cursor:pointer}
+.addr-card-copy{padding:.65rem 1.2rem;background:var(--ink);color:var(--bg);border:none;border-radius:var(--r-pill);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.addr-card-x{padding:.65rem 1.2rem;background:transparent;color:var(--muted);border:1px solid var(--rule);border-radius:var(--r-pill);font-size:var(--text-control);cursor:pointer}
 
 /* The Focus Today overlay (and its TL;DR/Plan-B/sun lines) retired with the D7 destinations:
    the Trip cockpit's Now/Next atoms answer "what am I doing right now" on the page itself, so

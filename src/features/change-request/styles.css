@@ -40,7 +40,7 @@
 
 .cp-seg {
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
-  border: 1px solid var(--rule2); border-radius: 999px; overflow: hidden;
+  border: 1px solid var(--rule2); border-radius: var(--r-pill); overflow: hidden;
   background: var(--card); margin-bottom: 1.6rem;
 }
 .cp-seg-btn {
@@ -136,7 +136,7 @@
      own rule puts a starter squarely on the control side of the line ("a control the reader is
      meant to AIM at clears 44px"). Height only — padding-block carries it, so the chips keep
      their width and the row wraps exactly as before. */
-  min-height: 44px; padding: .65rem .8rem; border-radius: 999px;
+  min-height: 44px; padding: .65rem .8rem; border-radius: var(--r-pill);
   background: var(--card); color: var(--ink); border: 1px solid var(--rule2); cursor: pointer;
   transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease, color var(--dur-tap) ease;
 }
@@ -169,7 +169,7 @@
 .cp-cats { display: flex; flex-wrap: wrap; gap: var(--sp-gap-35); margin-bottom: .7rem; }
 .cp-cat {
   font-family: var(--font-data); font-size: var(--text-micro); letter-spacing: var(--tracking-micro);
-  text-transform: uppercase; padding: .25rem .6rem; border-radius: 999px;
+  text-transform: uppercase; padding: .25rem .6rem; border-radius: var(--r-pill);
   color: var(--ink); border: 1px solid color-mix(in srgb, var(--cp-tone, var(--muted)) 55%, transparent);
   background: color-mix(in srgb, var(--cp-tone, var(--muted)) 12%, transparent);
 }
@@ -184,13 +184,13 @@
 .cp-aff {
   display: inline-flex; align-items: center; gap: var(--sp-gap-30);
   font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
-  padding: .25rem .3rem .25rem .65rem; border-radius: 999px;
+  padding: .25rem .3rem .25rem .65rem; border-radius: var(--r-pill);
   background: var(--card); color: var(--ink); border: 1px solid var(--rule2);
 }
 .cp-aff-kind { color: var(--muted); font-size: var(--text-micro); letter-spacing: var(--tracking-micro); text-transform: uppercase; }
 .cp-aff-x {
   display: inline-flex; align-items: center; justify-content: center;
-  min-width: 24px; min-height: 24px; border-radius: 999px; cursor: pointer;
+  min-width: 24px; min-height: 24px; border-radius: var(--r-round); cursor: pointer;
   background: none; border: none; color: var(--muted); font-size: var(--text-body); line-height: 1;
   transition: color var(--dur-tap) ease, background var(--dur-tap) ease;
 }
@@ -202,7 +202,7 @@
 .cp-ghost-row { display: flex; flex-wrap: wrap; gap: var(--sp-gap-35); margin-bottom: .5rem; }
 .cp-ghost-chip {
   font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .02em;
-  padding: .25rem .65rem; border-radius: 999px;
+  padding: .25rem .65rem; border-radius: var(--r-pill);
   color: color-mix(in srgb, var(--muted) 70%, transparent);
   border: 1px dashed color-mix(in srgb, var(--rule2) 90%, transparent);
 }
@@ -218,7 +218,7 @@
 .cp-note { font-size: var(--text-micro); color: var(--muted); line-height: 1.5; margin: 0 0 .9rem; }
 
 .cp-send {
-  width: 100%; min-height: 44px; padding: .5rem 1rem; border-radius: 999px; cursor: pointer;
+  width: 100%; min-height: 44px; padding: .5rem 1rem; border-radius: var(--r-pill); cursor: pointer;
   font-family: var(--font-data); font-size: var(--text-control-sm); letter-spacing: .04em;
   background: var(--ink); color: var(--bg); border: 1px solid var(--ink);
   transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease, color var(--dur-tap) ease;
@@ -348,7 +348,7 @@
   line-height: 1.45; flex: 1; min-width: 8rem;
 }
 .cp-tri-btn {
-  min-height: 44px; padding: .5rem 1rem; border-radius: 999px; cursor: pointer;
+  min-height: 44px; padding: .5rem 1rem; border-radius: var(--r-pill); cursor: pointer;
   font-family: var(--font-data); font-size: var(--text-control-sm); font-weight: 640; letter-spacing: .04em;
   background: none; color: var(--muted); border: 1px solid var(--rule2);
   transition: background var(--dur-tap) ease, border-color var(--dur-tap) ease, color var(--dur-tap) ease;

@@ -12,7 +12,7 @@
   /* 999px is the current shipped circle treatment. D6 has reopened the final geometry system;
      keep this explicit until that decision is implemented rather than treating R5's binary-radius
      rule as permanent authority. */
-  width: 1em; height: 1em; border-radius: 999px; cursor: pointer; padding: 0;
+  width: 1em; height: 1em; border-radius: var(--r-round); cursor: pointer; padding: 0;
   background: transparent; color: var(--muted); border: 1px solid var(--rule2);
   font-size: var(--text-micro); vertical-align: middle; margin-inline-start: 0.25em;
   transition: color var(--dur-routine) ease, border-color var(--dur-routine) ease;
@@ -98,7 +98,7 @@
      readers don't announce it). ~6px, matching FlagChip.jsx's own `gap: 6`. Chips whose
      label is one unsplit text run form a single anonymous item, so this costs them nothing. */
   gap: var(--sp-gap-35);
-  border: 1px solid currentColor; border-radius: 999px;
+  border: 1px solid currentColor; border-radius: var(--r-pill);
   cursor: pointer; text-decoration: none; vertical-align: middle;
   transition: background var(--dur-routine) ease;
 }

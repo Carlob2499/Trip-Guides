@@ -385,7 +385,26 @@
   --r-compact:16px;  /* compact tile: saved place, result row, utility object            14–18 */
   --r-card:20px;     /* standard operational / editorial card                            18–24 */
   --r-pane:28px;     /* large hero, pane, sheet, floating rail                            24–32 */
-  --r-pill:999px;--r-round:50%;
+  /* 2026-09-08, creator-directed: "I hate the pills — they make the site look way too sloppy and
+     boring. There's way better ways to do this."
+     --r-pill was the one member of this family that was not a role, it was a shape: 999px turned
+     every pressable thing into a lozenge, and because the site presses a lot of things, the
+     lozenge became the site's dominant visual motif. Three Get-there capsules under every stop,
+     repeated down a whole day, is what made a guidebook read like a settings screen.
+     It now takes --r-inset, so the press shape IS the control-inset role rather than an outlier
+     beside it — 12px, inside that role's documented 10-14 range. Nothing else in the family moved.
+     This does not contradict the "radius is binary, 0 or 999px" line still quoted in a few older
+     comments (guide.css, progress.css, change-request): that is the zero-radius law this very
+     block calls RETIRED, and those comments predate the family they now sit inside.
+     The migration that made it possible is the real change: 109 hardcoded `border-radius:999px`
+     literals across 27 sheets now read var(--r-pill), so the press shape has one owner and can be
+     reconsidered again in one line instead of 109. */
+  --r-pill:var(--r-inset);--r-round:50%;
+  /* --r-track is the shape a GRIP or a progress bar needs: a 4px-tall bar whose ends must be
+     semicircular. It was riding on --r-pill's 999px, so retiring the lozenge squared off every
+     sheet grip and scrub track. Those were never pills — a pill is a control you press, a track
+     is a rail. Separated so the press shape can change again without flattening the rails. */
+  --r-track:999px;
   /* SPACING (§31 companion to the radius family above). NAMED AT THE VALUES ALREADY IN USE — this
      register is an architecture fix, not a spacing change: every token below was measured off the
      shipped stylesheets, and the conversion that introduced it was value-for-value. Nothing moved.

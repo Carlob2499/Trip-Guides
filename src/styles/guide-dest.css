@@ -59,7 +59,7 @@
 .gd-chapter{padding-top:1rem}
 .gd-chapter[hidden]{display:none}
 .gd-chapter-head{position:relative;margin:0 0 1.2rem;padding-bottom:.8rem;border-bottom:2px solid var(--ink)}
-.gd-back{display:inline-flex;align-items:center;gap:var(--sp-gap-40);min-height:44px;padding:0 .8rem 0 .4rem;margin:0 0 .5rem -.4rem;background:transparent;border:0;border-radius:999px;color:var(--accent-ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.gd-back{display:inline-flex;align-items:center;gap:var(--sp-gap-40);min-height:44px;padding:0 .8rem 0 .4rem;margin:0 0 .5rem -.4rem;background:transparent;border:0;border-radius:var(--r-pill);color:var(--accent-ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
 .gd-back:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .gd-back:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .gd-chapter-title{font-family:var(--font-display);font-weight:640;font-size:var(--text-h1);line-height:1.05;letter-spacing:-.014em;margin:0;overflow-wrap:normal;word-break:normal;hyphens:none}
@@ -83,7 +83,7 @@
 .gd-chapter-map .block{margin-bottom:.6rem}
 .gd-chapter-map .itin-map{height:240px}
 .gd-pinlist{list-style:none;margin:.4rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:var(--sp-gap-35)}
-.gd-pin{display:inline-flex;align-items:center;min-height:40px;padding:.3rem .8rem;border:1px solid var(--rule2);border-radius:999px;color:var(--ink);text-decoration:none;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600}
+.gd-pin{display:inline-flex;align-items:center;min-height:40px;padding:.3rem .8rem;border:1px solid var(--rule2);border-radius:var(--r-pill);color:var(--ink);text-decoration:none;font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600}
 .gd-pin:hover{border-color:var(--accent);color:var(--accent-ink)}
 .gd-pin-more{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);align-self:center}
 
@@ -103,7 +103,7 @@
 .gd-phrase-native{font-size:clamp(1.5rem,5vw,2rem);line-height:1.25;font-weight:640;margin:0}
 .gd-phrase-roman{font-family:var(--font-data);color:var(--muted);margin:.3rem 0 0}
 .gd-phrase-note{font-size:var(--text-small);color:var(--muted);margin:.4rem 0 0}
-.gd-speak{display:inline-flex;align-items:center;gap:var(--sp-gap-40);min-height:44px;margin-top:.6rem;padding:.3rem .9rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:600;cursor:pointer}
+.gd-speak{display:inline-flex;align-items:center;gap:var(--sp-gap-40);min-height:44px;margin-top:.6rem;padding:.3rem .9rem;border:1px solid var(--rule2);border-radius:var(--r-pill);background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:600;cursor:pointer}
 .gd-speak:hover{border-color:var(--accent);color:var(--accent-ink)}
 .gd-speak:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 

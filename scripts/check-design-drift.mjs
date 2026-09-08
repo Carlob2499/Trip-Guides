@@ -33,7 +33,11 @@ for (const f of files) {
     const rad = ln.match(/border-radius:\s*([^;"'}]+)/g);
     if (rad) for (const r of rad) {
       const v = r.split(':')[1].trim();
-      if (!v.split(/\s+/).every((t) => /^(0|999px|50%|inherit|var\(--r-(inset|compact|card|pane|pill|round)\))$/.test(t))) V(f, n, 'RADIUS — use the --r-* role family (design-system.md §31)', ln);
+      /* --r-track joined the family 2026-09-08. A grip or a scrub rail is a 4px-tall bar whose
+         ends must stay semicircular; it had been riding on --r-pill's 999px, so retiring the
+         lozenge squared off every sheet grip on the site. A rail is not a pill — you do not press
+         it — so it gets its own role rather than being an exception inside someone else's. */
+      if (!v.split(/\s+/).every((t) => /^(0|999px|50%|inherit|var\(--r-(inset|compact|card|pane|pill|round|track)\))$/.test(t))) V(f, n, 'RADIUS — use the --r-* role family (design-system.md §31)', ln);
     }
     // 2. no hex outside the approved set, and none at all outside tokens.css
     for (const m of ln.matchAll(/#[0-9a-fA-F]{6}\b/g)) {

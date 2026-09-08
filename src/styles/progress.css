@@ -25,7 +25,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 [data-tone="green"]{--pg-tone:var(--green)}
 [data-tone="crit"]{--pg-tone:var(--crit)}
 
-.pg-pill{display:inline-flex;align-items:center;gap:var(--sp-gap-40);padding:.32rem .8rem;border-radius:999px;border:1px solid var(--pg-tone,var(--rule));background:color-mix(in srgb,var(--pg-tone,var(--rule)) 12%,var(--card));color:var(--pg-tone,var(--muted));font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.pg-pill{display:inline-flex;align-items:center;gap:var(--sp-gap-40);padding:.32rem .8rem;border-radius:var(--r-pill);border:1px solid var(--pg-tone,var(--rule));background:color-mix(in srgb,var(--pg-tone,var(--rule)) 12%,var(--card));color:var(--pg-tone,var(--muted));font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.02em;white-space:nowrap}
 .pg-pill[data-tone="muted"]{color:var(--ink)}
 
 .tb-ico{width:17px;height:17px;flex:none;display:block}
@@ -120,13 +120,13 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-phase-top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-gap-60);margin-bottom:.35rem}
 .pg-phase-label{font-family:var(--font-display);font-weight:640;font-size:var(--text-small);color:var(--ink)}
 .pg-phase-status{font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--pg-tone,var(--muted));letter-spacing:.02em}
-.pg-phase-track{height:6px;border-radius:999px;background:var(--sunken);overflow:hidden}
+.pg-phase-track{height:6px;border-radius:var(--r-track);background:var(--sunken);overflow:hidden}
 /* scaleX from a custom property, never width — a poll tick costs a composite, not a layout. */
-.pg-phase-fill{height:100%;width:100%;transform-origin:left;transform:scaleX(var(--pg-fill,0));border-radius:999px;background:var(--pg-tone,var(--accent));transition:transform var(--dur-reveal) var(--ease-out-expo)}
+.pg-phase-fill{height:100%;width:100%;transform-origin:left;transform:scaleX(var(--pg-fill,0));border-radius:var(--r-pill);background:var(--pg-tone,var(--accent));transition:transform var(--dur-reveal) var(--ease-out-expo)}
 .pg-phase-blurb{font-size:var(--text-caption);color:var(--muted);line-height:1.4;margin:.35rem 0 0}
 
 /* ── Live logs ─────────────────────────────────────────────────────────────── */
-.pg-dot{width:7px;height:7px;border-radius:999px;background:var(--green);flex:none;animation:pg-breathe 2.2s ease-in-out infinite}
+.pg-dot{width:7px;height:7px;border-radius:var(--r-round);background:var(--green);flex:none;animation:pg-breathe 2.2s ease-in-out infinite}
 .pg-dot[hidden]{display:none}
 @keyframes pg-breathe{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
 
@@ -156,7 +156,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-stats-note[hidden]{display:none}
 
 /* ── Buttons ───────────────────────────────────────────────────────────────── */
-.pg-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.6rem 1.2rem;border-radius:999px;border:1px solid var(--ink);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);text-decoration:none;cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
+.pg-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.6rem 1.2rem;border-radius:var(--r-pill);border:1px solid var(--ink);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);text-decoration:none;cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
 .pg-btn:hover:not(:disabled){background:var(--ink);color:var(--bg)}
 .pg-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .pg-btn:disabled{opacity:.45;cursor:default}
@@ -188,7 +188,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-key-form[hidden]{display:none}
 .pg-key-label{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted)}
 .pg-key-form input{flex:1;min-width:12rem;min-height:44px;padding:.55rem .75rem;border-radius:var(--r-inset);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
-.pg-key-form button{min-height:44px;padding:.5rem 1.1rem;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
+.pg-key-form button{min-height:44px;padding:.5rem 1.1rem;border-radius:var(--r-pill);border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-family:var(--font-display);font-weight:640;font-size:var(--text-small);cursor:pointer}
 .pg-key-form button:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .pg-key-form button[hidden]{display:none}
 .pg-key-status{font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);margin:.6rem 0 0;line-height:1.45}
@@ -217,7 +217,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .pg-q-answer{margin-top:.6rem}
 .pg-q-input{width:100%;min-height:44px;padding:.55rem .75rem;border-radius:var(--r-inset);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-data);font-size:var(--text-body)}
 .pg-q-options{display:flex;flex-wrap:wrap;gap:var(--sp-gap-40)}
-.pg-q-opt{min-height:44px;padding:.45rem .95rem;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-display);font-weight:560;font-size:var(--text-small);cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
+.pg-q-opt{min-height:44px;padding:.45rem .95rem;border-radius:var(--r-pill);border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-family:var(--font-display);font-weight:560;font-size:var(--text-small);cursor:pointer;transition:background var(--dur-tap) ease,color var(--dur-tap) ease,border-color var(--dur-tap) ease}
 .pg-q-opt:hover{border-color:var(--ink)}
 .pg-q-opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 /* "Accept the assumption" is an escape from the question, not the recommended path — it reads

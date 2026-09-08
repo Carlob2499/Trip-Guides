@@ -34,7 +34,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .ng-field input:hover,.ng-field select:hover,.ng-field textarea:hover{border-color:var(--muted)}
 .ng-field input:focus,.ng-field select:focus,.ng-field textarea:focus{outline:2px solid var(--accent-ink);outline-offset:0;border-color:transparent}
 .ng-err{color:var(--accent-ink);font-size:var(--text-control);font-weight:600;margin:0 1.4rem}
-.ng-submit{margin:0 1.4rem;min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:999px;padding:.6rem 1.3rem;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine)}
+.ng-submit{margin:0 1.4rem;min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--ink);color:var(--bg);border:1px solid var(--ink);border-radius:var(--r-pill);padding:.6rem 1.3rem;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine)}
 .ng-submit:hover{background:var(--accent);border-color:var(--accent)}
 .ng-submit:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
@@ -85,7 +85,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 
 .itk-sec-body{padding:.2rem 1.4rem 1.2rem;display:flex;flex-direction:column;gap:1.1rem}
 .itk-sec-foot{display:flex;flex-wrap:wrap;gap:var(--sp-gap-60);align-items:center;padding-top:.2rem}
-.itk-skip,.itk-next-sec,.itk-reset{min-height:44px;border-radius:999px;padding:.55rem 1.1rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);cursor:pointer;border:1px solid var(--rule2);background:var(--card);color:var(--ink);transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
+.itk-skip,.itk-next-sec,.itk-reset{min-height:44px;border-radius:var(--r-pill);padding:.55rem 1.1rem;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);cursor:pointer;border:1px solid var(--rule2);background:var(--card);color:var(--ink);transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
 .itk-skip{border-color:var(--warn);color:var(--warn)}
 .itk-skip:hover{background:color-mix(in srgb,var(--warn) 10%,transparent)}
 .itk-next-sec{margin-left:auto;background:var(--ink);border-color:var(--ink);color:var(--bg)}
@@ -126,7 +126,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .itk-podium-lab{min-width:0}
 .itk-minihead{margin:.9rem 0 .1rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 .itk-topics{display:flex;flex-wrap:wrap;gap:var(--sp-gap-45)}
-.itk-chip{min-height:44px;padding:.5rem .9rem;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:600;font-size:var(--text-control);cursor:pointer;display:inline-flex;align-items:center;gap:var(--sp-gap-40);transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
+.itk-chip{min-height:44px;padding:.5rem .9rem;border-radius:var(--r-pill);border:1px solid var(--rule);background:var(--card);color:var(--ink);font-family:var(--font-display);font-weight:600;font-size:var(--text-control);cursor:pointer;display:inline-flex;align-items:center;gap:var(--sp-gap-40);transition:background var(--dur-routine),border-color var(--dur-routine),color var(--dur-routine)}
 .itk-chip:hover{border-color:var(--accent)}
 .itk-chip-on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .itk-chip:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
@@ -146,7 +146,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 
 /* ── Dispatch ─────────────────────────────────────────────────────────────── */
 .itk-dispatch{margin:0 1.4rem;display:flex;flex-direction:column;gap:var(--sp-gap-40);align-items:flex-start}
-.itk-go{min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--green);color:var(--on-green);border:1px solid var(--green);border-radius:999px;padding:.65rem 1.4rem;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine)}
+.itk-go{min-height:44px;font-family:var(--font-display);font-weight:640;font-size:var(--text-control);background:var(--green);color:var(--on-green);border:1px solid var(--green);border-radius:var(--r-pill);padding:.65rem 1.4rem;cursor:pointer;transition:background var(--dur-routine),border-color var(--dur-routine)}
 .itk-go:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .itk-go:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .itk-go-note{margin:0;font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);line-height:1.5;max-width:62ch}
@@ -203,7 +203,7 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow-x:clip;max-wid
 .ng-form[data-deck] .itk-row-match[data-deck-current]~.itk-minihead{display:block}
 .ng-form[data-deck] .itk-row-match[data-deck-current]~.itk-topics{display:flex;margin-bottom:.8rem}
 .itk-deck-controls{display:flex;flex-wrap:wrap;gap:var(--sp-gap-50);align-items:center;padding-top:.2rem}
-.itk-deck-back,.itk-deck-skip,.itk-deck-next,.itk-deck-tell,.itk-deck-review,.itk-deck-again{min-height:44px;padding:0 1rem;border:1px solid var(--rule2);border-radius:999px;background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
+.itk-deck-back,.itk-deck-skip,.itk-deck-next,.itk-deck-tell,.itk-deck-review,.itk-deck-again{min-height:44px;padding:0 1rem;border:1px solid var(--rule2);border-radius:var(--r-pill);background:var(--card);color:var(--ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
 .itk-deck-next{margin-left:auto;background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .itk-deck-next:hover{background:var(--accent);border-color:var(--accent)}
 .itk-deck-skip{color:var(--muted)}

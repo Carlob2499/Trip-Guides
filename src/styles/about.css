@@ -53,7 +53,7 @@
 /* --- Read the marks (provenance legend) ----------------------------------- */
 .ab-legend{display:grid;gap:var(--sp-gap-80);margin-top:1.8rem;max-width:46rem}
 .ab-legend-row{display:flex;align-items:baseline;gap:var(--sp-gap-100);padding:.85rem 1rem;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-card)}
-.ab-legend-chip{flex:0 0 auto;font-family:var(--font-data);font-size:var(--text-control-sm);padding:.3rem .7rem;border-radius:999px;border:1px solid var(--rule2);background:var(--bg);color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ab-legend-chip{flex:0 0 auto;font-family:var(--font-data);font-size:var(--text-control-sm);padding:.3rem .7rem;border-radius:var(--r-pill);border:1px solid var(--rule2);background:var(--bg);color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
 .ab-legend-chip.is-warn{color:var(--warn);border-color:currentColor}
 .ab-legend-chip.is-ok{color:var(--green);border-color:currentColor}
 .ab-legend-row p{font-size:var(--text-small);color:var(--muted);line-height:1.6;text-wrap:pretty}
@@ -79,7 +79,7 @@
 /* --- CTA ------------------------------------------------------------------ */
 .ab-cta{margin-top:4rem;padding:2.2rem 1.6rem;text-align:center;border:1px solid var(--rule);border-radius:var(--r-card);background:var(--card)}
 .ab-cta p{color:var(--muted);max-width:34rem;margin:0 auto;text-wrap:pretty}
-.ab-cta-btn{display:inline-flex;align-items:center;gap:var(--sp-gap-50);margin-top:1.2rem;padding:.8rem 1.5rem;min-height:44px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.04em;text-decoration:none;transition:transform var(--dur-tap) var(--ease-spring)}
+.ab-cta-btn{display:inline-flex;align-items:center;gap:var(--sp-gap-50);margin-top:1.2rem;padding:.8rem 1.5rem;min-height:44px;border-radius:var(--r-pill);background:var(--accent);color:var(--on-accent);font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.04em;text-decoration:none;transition:transform var(--dur-tap) var(--ease-spring)}
 .ab-cta-btn:hover{transform:translateY(-1px)}
 .ab-cta-btn:active{transform:scale(.97)}
 .ab-cta-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}

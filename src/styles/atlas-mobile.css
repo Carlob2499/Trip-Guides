@@ -60,7 +60,7 @@
   border: 1px solid var(--rule2);
 }
 .atlas-pingsheet-thumb[hidden] { display: none; }
-.atlas-pingsheet-grip { justify-self: center; width: 38px; height: 4px; border-radius: var(--r-pill); background: var(--rule2); }
+.atlas-pingsheet-grip { justify-self: center; width: 38px; height: 4px; border-radius: var(--r-track); background: var(--rule2); }
 .atlas-pingsheet-kicker {
   font-family: var(--font-data); font-weight: 640; font-size: var(--text-panel-kicker); letter-spacing: .14em;
   color: var(--aink);

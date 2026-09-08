@@ -10,7 +10,7 @@
 .divergence-head { display: flex; gap: var(--sp-gap-40); align-items: center; }
 .divergence-cat {
   font-size: var(--text-caption); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
-  padding: 0.15em 0.5em; border-radius: 999px;
+  padding: 0.15em 0.5em; border-radius: var(--r-pill);
   background: var(--accent); color: var(--on-accent);
 }
 .divergence-label {

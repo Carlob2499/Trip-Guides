@@ -31,7 +31,7 @@ body.srch-lock{overflow:hidden}
 .srch-input{flex:1;min-width:0;min-height:44px;border:0;background:transparent;color:var(--ink);font:inherit;font-family:var(--font-data);font-size:var(--text-lead);outline:none}
 .srch-input::placeholder{color:var(--muted)}
 .srch-input::-webkit-search-decoration,.srch-input::-webkit-search-cancel-button{-webkit-appearance:none}
-.srch-close{flex:none;min-height:44px;padding:0 .9rem;border:1px solid var(--rule2);border-radius:999px;background:transparent;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;cursor:pointer}
+.srch-close{flex:none;min-height:44px;padding:0 .9rem;border:1px solid var(--rule2);border-radius:var(--r-pill);background:transparent;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;cursor:pointer}
 .srch-close:hover{color:var(--ink);border-color:var(--ink)}
 .srch-status{margin:0;padding:.35rem max(.9rem,var(--safe-right)) 0 max(.9rem,var(--safe-left));font-family:var(--font-data);font-size:var(--text-caption);color:var(--muted);min-height:1.2em}
 .srch-list{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:.2rem 0 max(1rem,var(--safe-bottom))}

@@ -17,7 +17,7 @@
    identity stays, but as a small index chip ABOVE the title — the same numbered-marker
    language as the day cards' stop numbers, out of the text plane entirely. */
 .cat-opener{position:relative;max-width:var(--read);margin:0 auto .4rem;padding:1.6rem 0 .2rem;overflow:hidden}
-.cat-num{display:inline-block;margin-bottom:.5rem;padding:.18rem .6rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:.14em;line-height:1.4;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:999px;user-select:none;pointer-events:none}
+.cat-num{display:inline-block;margin-bottom:.5rem;padding:.18rem .6rem;font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;letter-spacing:.14em;line-height:1.4;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:var(--r-pill);user-select:none;pointer-events:none}
 .cat-opener .cat-title{position:relative;z-index:1;margin:0}
 .cat-sub{position:relative;z-index:1;margin:.3rem 0 0;font-family:var(--font-data);font-size:var(--text-micro);letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted)}
 /* R5 descriptor — rare, informational-only (voice standard rev. 2026-07-28): a flat
@@ -30,7 +30,7 @@
    panel grid's collapse toggle, so a reader recognises it as the same KIND of
    control. Hidden until src/features/panel/ui/collapse.js confirms the group's grid has
    at least one wired Panel (no-JS-safe, matching the Panel toggle's own contract). */
-.cat-collapse-all{position:relative;z-index:1;display:inline-block;margin-top:.6rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:.4rem .85rem;cursor:pointer;transition:color var(--dur-routine),border-color var(--dur-routine)}
+.cat-collapse-all{position:relative;z-index:1;display:inline-block;margin-top:.6rem;font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--muted);background:var(--card);border:1px solid var(--rule);border-radius:var(--r-pill);padding:.4rem .85rem;cursor:pointer;transition:color var(--dur-routine),border-color var(--dur-routine)}
 .cat-collapse-all:hover{color:var(--accent-ink);border-color:var(--rule2)}
 .cat-collapse-all:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 
