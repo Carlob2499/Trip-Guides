@@ -47,6 +47,8 @@ What survived the correction is narrower and real: the gate ran, but its ratchet
 violations of slack and it was blind in one direction. Both are now closed and both fixes were
 proved by making them fail on purpose.
 
+| D16 | **The gate that catches touch-floor breaks ran only inside `npm run build`** | Implementation | `check-stated-intent` is a source-only check that takes 0.3s and needs no `dist`, but it lived in the build chain — so `check:fast`, which is what anyone actually runs while iterating, could not see it. That is exactly how a 36px control merged and broke the deploy on 2026-09-09: `check:fast` was green, and the failure only appeared on CI | Added to `check:fast` as `check:stated-intent`, ahead of lint and typecheck so it fails in under a second. Proved by restoring the exact 36px value that broke the deploy: exits 1 naming `.map-legend-row,.map-legend-day`. Still runs in `build` too |
+
 ---
 
 ## Open — ranked
@@ -73,6 +75,20 @@ files, but the registry is scoped to composable components, blocks, features and
 and `src/component-registry.test.ts` already enforces existence in both directions.
 
 ---
+
+## What the 2026-09-09 deploy break taught
+
+The deploy failed on the commit that shipped the map legend, and the register should say why
+rather than just that it happened: **`check:fast` is not a subset of what CI runs.** Two gates
+sit outside it — `check-stated-intent` inside `npm run build`, and `check-perf-budget` inside
+`ship:check` — and both caught real defects that `check:fast` reported as green. One is now
+fixed (D16). The other is inherent: a perf budget needs a build.
+
+The practical rule that follows: **a change to a stylesheet or to always-loaded JS is not
+verified by `check:fast`.** It needs `npm run build` and `npm run check:perf` before it is
+called done. The perf breach in particular was a design smell rather than a size problem — the
+legend had shipped alongside the capsule row it replaced, so the surface carried two filter
+builders, and deleting the dead one put the budget back under on its own.
 
 ## Creator decisions, 2026-09-08
 
