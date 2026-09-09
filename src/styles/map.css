@@ -18,21 +18,6 @@
 
 /* CATEGORY CHIPS + CLUSTERS — the map is the repository's index: chips narrow by what the
    guide itself calls its content, clustering keeps overlapping pins legible. */
-.map-chips{
-  position:absolute;top:.42rem;left:.42rem;z-index:2;
-  display:flex;flex-wrap:wrap;gap:var(--sp-gap-30);
-  /* Leaves the top-right corner clear for Google's own fullscreen control. */
-  max-width:calc(100% - 3.4rem)
-}
-.map-chip{
-  padding:.3rem .8rem;min-height:44px;
-  font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;
-  color:var(--muted);background:var(--card);
-  border:1px solid var(--rule2);border-radius:var(--r-pill);cursor:pointer;
-  box-shadow:var(--shadow-lift);
-  transition:color var(--dur-immediate),border-color var(--dur-immediate),background var(--dur-immediate)
-}
-.map-chip:hover{color:var(--ink);border-color:var(--ink)}
 /* Pressed takes the BRAND, not the guide's accent (base.css --brand): a map control is
    Waypoint's furniture on every destination, and routing it through --accent is what made
    Korea's map read sage.
@@ -47,12 +32,6 @@
    the dark map pane, under AA for a 600-weight control label, and axe caught it. Pressed is still
    unmistakable — brand border plus brand tint — without asking the text to carry the signal at a
    contrast the tint cannot support. */
-.map-chip-on{
-  color:var(--ink);
-  background:color-mix(in srgb,var(--brand) 16%,var(--card));
-  border-color:var(--brand)
-}
-.map-chip:focus-visible{outline:2px solid var(--brand-ink);outline-offset:2px}
 
 .map-cluster{
   display:flex;align-items:center;justify-content:center;
@@ -64,32 +43,17 @@
 }
 @media(max-width:599px){
   /* Phones: the chips must not eat the map. One scrolling row instead of a wrapping block. */
-  .map-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:calc(100% - 3.2rem)}
-  .map-chips::-webkit-scrollbar{display:none}
-  .map-chip{flex:none}
   /* The row scrolls, so its last chip is cut off mid-word at the edge. A hard cut reads as a
      broken layout; fading the final few pixels reads as "there is more this way", which is the
      truth. Masked rather than covered with a gradient element, so it works over the live map. */
   /* `black` is a keyword, not a colour choice: a mask samples ALPHA only, so the opaque stop's
      hue is never rendered and a palette token there would be meaningless indirection. */
-  .map-chips{
-    -webkit-mask-image:linear-gradient(to right,black calc(100% - 22px),transparent);
-    mask-image:linear-gradient(to right,black calc(100% - 22px),transparent)
-  }
 }
 
 /* A scrolling row that simply stops at the viewport edge reads as a bug — the last chip is
    sliced mid-word and nothing says there is more. The mask fades the final few pixels so the
    cut is legible as "keep going", and it is removed once the row is scrolled to its end.
    Purely presentational: the row is still a plain scroller with real focusable chips. */
-.map-chips{
-  --chip-fade:22px;
-  /* currentColor rather than a literal: a mask reads only the ALPHA of its gradient, so the hue
-     is irrelevant here and a hex would be a colour the token gate is right to refuse. */
-  mask-image:linear-gradient(to right,currentColor calc(100% - var(--chip-fade)),transparent 100%);
-  -webkit-mask-image:linear-gradient(to right,currentColor calc(100% - var(--chip-fade)),transparent 100%)
-}
-.map-chips[data-scroll-end]{mask-image:none;-webkit-mask-image:none}
 
 /* Google-primary mounts (§15): the dormant embed is invisible and a quiet line says the map
    is on its way; the line leaves the moment either provider is the map. */
@@ -171,11 +135,60 @@ html[data-conn="offline"] .map-degraded{display:block}
    No colour swatch per category on purpose: pins are styled by KIND (.map-pin--stop vs
    .map-pin--venue), never by category, so a coloured chip per category would claim a
    distinction the map does not draw. The dot is on/off state, which is true. */
-.map-legend{display:none}
+/* Phone: the same rows, laid out as ONE horizontal strip across the top of the map — the place
+   the capsule row used to occupy, doing the same job with the same DOM. It scrolls rather than
+   wraps, because a filter that wraps to three rows walls off the top third of the map and stops
+   being a filter. The fade at its right edge says there is more; gmaps-render's markEnd takes it
+   off at the end so the last cell never looks clipped. */
+.map-legend{
+  display:flex;align-items:center;gap:var(--sp-gap-40);
+  flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;
+  --legend-fade:22px;
+  /* currentColor rather than a literal: a mask reads only the ALPHA of its gradient, so the hue
+     is irrelevant and a hex would be a colour the token gate is right to refuse. */
+  mask-image:linear-gradient(to right,currentColor calc(100% - var(--legend-fade)),transparent 100%);
+  -webkit-mask-image:linear-gradient(to right,currentColor calc(100% - var(--legend-fade)),transparent 100%)
+}
+.map-legend::-webkit-scrollbar{width:0;height:0;display:none}
+.map-legend[data-scroll-end]{-webkit-mask-image:none;mask-image:none}
+.map-legend .map-legend-head{display:none}
+.map-legend .map-legend-days{display:contents}
+/* The count and the key are a desk affordance — on a strip they are noise competing with the
+   map for the same 390px. The name and its on/off state carry it. */
+.map-legend .map-legend-n,.map-legend .map-legend-key{display:none}
+.map-legend-row,.map-legend-day{
+  flex:none;min-height:44px;padding:0 .7rem;
+  display:inline-flex;align-items:center;gap:var(--sp-gap-45);
+  background:none;border:0;border-radius:var(--r-pill);cursor:pointer;
+  font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;color:var(--muted);
+  white-space:nowrap;
+  transition:color var(--dur-immediate) var(--ease-standard),background var(--dur-immediate) var(--ease-standard)
+}
+.map-legend-row[aria-pressed="true"],.map-legend-day[aria-pressed="true"]{
+  color:var(--ink);background:color-mix(in srgb,var(--brand) 16%,transparent)
+}
+.map-legend-day{min-width:44px;justify-content:center;font-variant-numeric:tabular-nums}
+.map-legend-row:focus-visible,.map-legend-day:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-2px}
+.map-legend-dot{flex:none;width:9px;height:9px;border-radius:var(--r-round);background:var(--brand);border:1px solid var(--brand)}
+.map-legend-row[aria-pressed="false"] .map-legend-dot{background:transparent;border-color:var(--muted)}
 @media(min-width:1024px){
-  .map-legend{display:block;margin-top:var(--sp-gap-70);border-top:1px solid var(--rule);padding-top:var(--sp-gap-60)}
+  /* The foot of the Map panel: a rule, then the key. Not a panel of its own. */
+  .mapdest-panel-title,.mapdest-panel-sub,.mapdest-kicker,.mapdest-acts{display:revert}
+  .map-legend{
+    display:block;overflow:visible;
+    margin-top:var(--sp-gap-70);padding-top:var(--sp-gap-60);border-top:1px solid var(--rule);
+    -webkit-mask-image:none;mask-image:none
+  }
+  .map-legend .map-legend-head{display:block}
+  .map-legend .map-legend-days{display:flex}
+  .map-legend .map-legend-n,.map-legend .map-legend-key{display:flex}
+  .map-legend .map-legend-n{display:inline}
+  .map-legend-row{width:100%;padding:.2rem .1rem;border-radius:0;background:none}
+  .map-legend-row[aria-pressed="true"]{background:none;color:var(--ink)}
+  .map-legend-row:hover{color:var(--accent-ink)}
+  .map-legend-day{border:1px solid var(--rule2);background:var(--sunken);border-radius:var(--r-inset)}
   .map-legend-row{
-    display:flex;align-items:center;gap:var(--sp-gap-50);width:100%;min-height:36px;
+    display:flex;align-items:center;gap:var(--sp-gap-50);width:100%;min-height:44px;
     padding:.2rem .1rem;background:none;border:0;cursor:pointer;text-align:left;
     font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--ink);
     transition:color var(--dur-immediate) var(--ease-standard)
@@ -201,7 +214,7 @@ html[data-conn="offline"] .map-degraded{display:block}
   }
   .map-legend-days{display:flex;flex-wrap:wrap;gap:var(--sp-gap-40)}
   .map-legend-day{
-    flex:none;min-width:32px;min-height:32px;padding:0 .3rem;
+    flex:none;min-width:44px;min-height:44px;padding:0 .3rem;
     background:var(--sunken);border:1px solid var(--rule2);border-radius:var(--r-inset);
     font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;
     font-variant-numeric:tabular-nums;color:var(--muted);cursor:pointer;
@@ -224,19 +237,10 @@ html[data-conn="offline"] .map-degraded{display:block}
   /* The row the legend replaces. Kept in the DOM and wired to the same callbacks so the phone
      still has a filter; hidden here because the legend now does this job with the map's top
      edge given back. */
-  .mapdest .map-chips{display:none}
 }
 
 /* The two chip families, told apart by a label rather than by a border style. The dashed border
    went with it: a dashed control reads as provisional or disabled, which a day filter is not. */
-.map-chips-sep{
-  display:inline-flex;align-items:center;flex:none;align-self:center;gap:var(--sp-gap-45);
-  padding-left:var(--sp-gap-60);margin-left:var(--sp-gap-20);
-  border-left:1px solid var(--rule2);
-  font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;
-  letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);
-  white-space:nowrap;pointer-events:none
-}
 
 /* The sheet (phone): peek / half / full, dragged or tapped, never gesture-only. */
 .mapdest-sheet{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;display:flex;flex-direction:column;max-height:calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom) - 1rem);background:var(--bg);border-top:1px solid var(--rule2);transition:transform var(--dur-object) var(--ease-out-expo);touch-action:none}
@@ -317,18 +321,11 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
   }
 
   /* Floating panels. Both hang off the same gutter and the same top edge. */
-  /* The dim the panels sit on. Anchored to the two edges the panels hang off and fading to
-     nothing well before the middle, so the map keeps a clear centre to actually be read in —
-     a flat scrim over the whole surface would dim the subject to frame the furniture. This is
-     what makes each panel read as an island above the ground rather than a card lying on it:
-     the eye needs the ground to darken UNDER the object, not everywhere. */
-  .mapdest-bench::before,.mapdest-bench::after{
-    content:"";position:absolute;top:0;bottom:0;width:calc(var(--mapdest-panel-w) + var(--mapdest-gutter) * 4);
-    z-index:2;pointer-events:none
-  }
-  .mapdest-bench::before{left:0;background:linear-gradient(to right,rgba(var(--shadow-rgb),.34),rgba(var(--shadow-rgb),0))}
-  .mapdest-bench::after{right:0;width:calc(var(--mapdest-index-w) + var(--mapdest-gutter) * 4);background:linear-gradient(to left,rgba(var(--shadow-rgb),.34),rgba(var(--shadow-rgb),0))}
-  @media(prefers-reduced-transparency:reduce){.mapdest-bench::before,.mapdest-bench::after{display:none}}
+  /* The dim that used to sit under these panels is gone. It read well, but a semi-transparent
+     pseudo-element over the panel column is something axe cannot resolve contrast THROUGH: the
+     documented color-contrast/pseudoContent incomplete count went from 45 to 237 the moment the
+     legend put real text beneath it. The island is carried by its own shadow, its full radius and
+     the fact that the map runs edge to edge behind it — none of which cost a scan. */
 
   .mapdest-panel,.mapdest-sheet{
     position:absolute;top:var(--mapdest-gutter);z-index:3;
@@ -339,7 +336,13 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
     border:1px solid var(--rule2);border-radius:var(--r-pane);
     box-shadow:var(--shadow-float)
   }
-  .mapdest-panel{left:var(--mapdest-gutter);width:var(--mapdest-panel-w)}
+  .mapdest-panel{
+    left:var(--mapdest-gutter);width:var(--mapdest-panel-w);
+    /* Bounded like the index opposite it. The legend put real content in this panel for the
+       first time — eight 44px day cells and a row per category — and an unbounded absolutely
+       positioned panel simply grows past the stage it floats on. Same gutter top and bottom. */
+    max-height:calc(var(--mapdest-h) - var(--mapdest-gutter) * 2);overflow-y:auto
+  }
   .mapdest-sheet{
     right:var(--mapdest-gutter);width:var(--mapdest-index-w);
     /* Bottom gutter matches the top one — the panel is inset equally on all four sides. */
@@ -366,17 +369,6 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
   /* The chip row is the map's own (see .map-chips at the top of this file). On this surface it
      starts where the left panel ends, so the two can never sit on top of each other — the
      overlap was the single worst thing about the previous composition. */
-  .mapdest .map-chips{
-    left:calc(var(--mapdest-gutter) * 2 + var(--mapdest-panel-w));
-    top:var(--mapdest-gutter);
-    max-width:calc(100% - (var(--mapdest-gutter) * 4) - var(--mapdest-panel-w) - var(--mapdest-index-w));
-    /* ONE line. A guide with fifteen categories and eight days wrapped this to three rows and
-       walled off the top third of the map — the chips stopped being a filter and became the
-       page. Same treatment the phone already had: one row that scrolls. */
-    flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain
-  }
-  .mapdest .map-chips::-webkit-scrollbar{display:none}
-  .mapdest .map-chip{flex:none}
 }
 @media print{.mapdest-sheet,.map-degraded{display:none}}
 /* Geometry (§31): the phone sheet rounds its top edge only — it is anchored to the bottom of
@@ -421,7 +413,32 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
    The floating card over the map's top-left corner: what this map is, and the two things a
    traveler does from here that this product actually does. Desktop only — a phone gives the
    whole viewport to the map and the sheet does this job there. */
-.mapdest-panel{display:none}
+/* The panel is the filter on a phone. It used to be desktop-only and the capsule row did this
+   job over the map; now the legend lives inside the panel, so the panel comes to the phone
+   stripped to exactly that — title, blurb and quick actions stay hidden, because the sheet below
+   already carries the list and the actions.
+
+   Scoped to a MAX-width query rather than written as the base rule. Written as a base it sits
+   later in this file than the >=1024px block above, so it silently won round-trip and dragged the
+   phone's pill radius, padding and origin onto the desktop panel — the desktop legend then
+   overflowed the panel it lives in by ~190px. Same specificity, later wins; the query is what
+   keeps the two compositions apart. */
+@media (max-width:1023.98px){
+  .mapdest-panel{
+    display:block;position:absolute;z-index:3;top:var(--sp-gap-60);left:var(--sp-gap-60);
+    max-width:calc(100% - var(--sp-gap-60) * 2);
+    padding:0;background:var(--card);
+    /* A ring rather than a border: a 1px border on each edge makes the strip 2px taller than the
+       44px row inside it, and this strip must measure exactly one row so "has it wrapped?" stays
+       an answerable question. A shadow costs no layout. */
+    border:0;border-radius:var(--r-pill);box-shadow:var(--shadow-lift);
+    /* outline, not border: a 1px border on each edge makes the strip 2px taller than the 44px row
+       inside it, and this strip must measure exactly one row so "has it wrapped?" stays an
+       answerable question. An outline follows the radius and costs no layout. */
+    outline:1px solid var(--rule2);outline-offset:-1px
+  }
+  .mapdest-panel-title,.mapdest-panel-sub,.mapdest-kicker,.mapdest-acts{display:none}
+}
 /* bp:DESKTOP_MIN — src/lib/breakpoints.ts */
 @media(min-width:1180px){
   /* Geometry and skin are NOT set here. This block used to carry top:1.6rem;left:1.9rem and its

@@ -229,12 +229,12 @@ export function boot(cfg) {
       var onDay = function (dayIdx) { dayFilter = dayIdx; draw(); fitTo(visible()); };
       /* Two presentations of ONE filter, chosen by CSS rather than by measuring the viewport —
          a JS breakpoint here would have to survive a rotation and a window drag, and this does
-         not. Desktop gets the legend in the Map panel, which hands the whole top of the map back;
-         the phone keeps the scrolling row, because it has no panel to put a legend in and the
-         sheet below already does the list's job. Both are wired to the same two callbacks, so
-         neither can drift into being a different filter from the other. */
+         not. It lives INSIDE the Map panel, so on desktop it is simply the foot of that panel and
+         there is no third floating object to collide with anything; on the phone the panel itself
+         is reduced to the legend and laid out as one scrolling strip across the top. ONE builder, one DOM, one set of handlers — the first
+         cut of this shipped a second builder for the phone and immediately cost 3 KB of
+         always-loaded entry JS, which is 1 KB more than the first-paint budget had left. */
       buildLegend(mount, all, cats, off, data.dayDates || [], onCat, onDay);
-      buildChips(mount, cats, off, data.dayDates || [], onCat, onDay);
     }
 
     if (lens === "today") {
@@ -282,9 +282,9 @@ export function boot(cfg) {
      draw. The dot here reads as on/off state, which is true, and the one real difference the map
      does make gets its own two-line key at the foot. */
   function buildLegend(mount, all, cats, off, dayDates, onCat, onDay) {
-    var panel = mount.closest(".mapdest-bench");
-    panel = panel && panel.querySelector(".mapdest-panel");
-    if (!panel) return;
+    var bench = mount.closest(".mapdest-bench");
+    var host = bench && bench.querySelector(".mapdest-panel");
+    if (!host) return;
 
     var counts = {};
     all.forEach(function (p) {
@@ -356,64 +356,22 @@ export function boot(cfg) {
       '<span class="map-legend-key-place" aria-hidden="true"></span> a place in the guide';
     wrap.appendChild(key);
 
-    panel.appendChild(wrap);
-  }
-
-  function buildChips(mount, cats, off, dayDates, onCat, onDay) {
-    var bar = document.createElement("div");
-    bar.className = "map-chips";
-    bar.setAttribute("role", "group");
-    bar.setAttribute("aria-label", "Show on the map");
-    cats.forEach(function (cat) {
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "map-chip map-chip-on"; b.textContent = cat; b.setAttribute("aria-pressed", "true");
-      b.addEventListener("click", function () {
-        var on = b.getAttribute("aria-pressed") !== "true";
-        b.classList.toggle("map-chip-on", on); b.setAttribute("aria-pressed", on ? "true" : "false");
-        bar.querySelectorAll("[data-day-chip]").forEach(function (d) { d.classList.remove("map-chip-on"); d.setAttribute("aria-pressed", "false"); });
-        onCat(cat, on);
-      });
-      bar.appendChild(b);
-    });
-    if (dayDates.length) {
-      /* Days and categories are two different questions asked of the same map — "what kind of
-         place is this" and "when was I going to be there" — and they were running together in one
-         undifferentiated row, which is what made a dashed border the only thing telling them
-         apart. A labelled divider says which is which once, so the chips themselves do not have
-         to carry that job in their border style. aria-hidden: the group is already named for
-         assistive tech by each day chip's own label. */
-      var sep = document.createElement("span");
-      sep.className = "map-chips-sep";
-      sep.setAttribute("aria-hidden", "true");
-      sep.textContent = "Days";
-      bar.appendChild(sep);
-      dayDates.forEach(function (date, i) {
-        var b = document.createElement("button");
-        b.type = "button"; b.className = "map-chip map-chip--day"; b.setAttribute("data-day-chip", String(i)); b.setAttribute("aria-pressed", "false");
-        var parts = String(date).split(/\s+/);
-        b.textContent = "Day " + (i + 1) + (parts.length >= 3 ? " · " + parts[1] + " " + parts[2] : "");
-        b.addEventListener("click", function () {
-          var on = b.getAttribute("aria-pressed") !== "true";
-          bar.querySelectorAll("[data-day-chip]").forEach(function (d) { d.classList.remove("map-chip-on"); d.setAttribute("aria-pressed", "false"); });
-          if (on) { b.classList.add("map-chip-on"); b.setAttribute("aria-pressed", "true"); onDay(i); }
-          else onDay(null);
-        });
-        bar.appendChild(b);
-      });
-    }
-    /* The fade at the row's right edge (map.css .map-chips) says "there is more"; it must come
-       off once there is not, or the last chip looks permanently clipped. Cheap to compute and
-       only on scroll/resize, so it never runs during a pan of the map itself. */
+    /* The overflow fade, carried over from the row this replaces. On a phone the legend lays out
+       as one horizontal strip, so it can run past the right edge — the fade says "there is more",
+       and it must come off at the end or the last cell looks permanently clipped. Only on
+       scroll and resize, so it never runs during a pan of the map itself. */
     var markEnd = function () {
-      var end = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 1;
-      if (end) bar.setAttribute("data-scroll-end", "");
-      else bar.removeAttribute("data-scroll-end");
+      var end = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 1;
+      if (end) wrap.setAttribute("data-scroll-end", "");
+      else wrap.removeAttribute("data-scroll-end");
     };
-    bar.addEventListener("scroll", markEnd, { passive: true });
-    if (typeof ResizeObserver === "function") new ResizeObserver(markEnd).observe(bar);
-    mount.insertBefore(bar, mount.firstChild);
+    wrap.addEventListener("scroll", markEnd, { passive: true });
+    if (typeof ResizeObserver === "function") new ResizeObserver(markEnd).observe(wrap);
+    host.appendChild(wrap);
     markEnd();
   }
+
+
 
   /* Google did not become the map: wake the dormant OSM embed (Google-primary mounts) and say
      so on the mount for CSS and the canary. Idempotent — the watchdog and a load error can

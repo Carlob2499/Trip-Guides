@@ -65,21 +65,20 @@ test.describe("⌁ the Map surface is one map with panels floating on it", () =>
     const bench = await boxOf(page, ".mapdest-bench");
     const panel = await boxOf(page, ".mapdest-panel");
     const index = await boxOf(page, ".mapdest-sheet");
-    const chips = await boxOf(page, ".mapdest .map-chips");
 
     expect(Math.abs(panel.x - (bench.x + gutter)), "left panel is off the gutter").toBeLessThanOrEqual(SLACK);
     expect(Math.abs((bench.x + bench.w) - (index.x + index.w) - gutter), "index panel is off the gutter").toBeLessThanOrEqual(SLACK);
-    /* One top edge for all three — this is the line a reader actually sees. */
+    /* One top edge for both — this is the line a reader actually sees. The filter used to be a
+       third floating object on this line; it is now the foot of the left panel, so there is
+       nothing else here to align. */
     expect(Math.abs(panel.y - (bench.y + gutter)), "left panel top is off the gutter").toBeLessThanOrEqual(SLACK);
     expect(Math.abs(index.y - (bench.y + gutter)), "index panel top is off the gutter").toBeLessThanOrEqual(SLACK);
-    expect(Math.abs(chips.y - (bench.y + gutter)), "chip row top is off the gutter").toBeLessThanOrEqual(SLACK);
   });
 
   test("no floating panel sits on top of another", async ({ page }) => {
     await openMap(page);
     const named: [string, Box][] = [
       ["left panel", await boxOf(page, ".mapdest-panel")],
-      ["chip row", await boxOf(page, ".mapdest .map-chips")],
       ["index panel", await boxOf(page, ".mapdest-sheet")],
     ];
     const clashes: string[] = [];
@@ -96,7 +95,7 @@ test.describe("⌁ the Map surface is one map with panels floating on it", () =>
     const gutter = await page.locator(".mapdest").first().evaluate((el) =>
       parseFloat(getComputedStyle(el).getPropertyValue("--mapdest-gutter")));
     const bench = await boxOf(page, ".mapdest-bench");
-    for (const sel of [".mapdest-panel", ".mapdest-sheet", ".mapdest .map-chips"]) {
+    for (const sel of [".mapdest-panel", ".mapdest-sheet", ".mapdest .map-legend"]) {
       const b = await boxOf(page, sel);
       expect(b.x, `${sel} escapes the stage on the left`).toBeGreaterThanOrEqual(bench.x - SLACK);
       expect(b.x + b.w, `${sel} escapes the stage on the right`).toBeLessThanOrEqual(bench.x + bench.w + SLACK);
@@ -109,13 +108,17 @@ test.describe("⌁ the Map surface is one map with panels floating on it", () =>
     expect(bottomGap, `index bottom gutter is ${bottomGap.toFixed(1)}px, top is ${gutter}px`).toBeGreaterThanOrEqual(gutter - SLACK);
   });
 
-  test("the chip row stays on one line", async ({ page }) => {
+  test("the legend sits inside the left panel, not beside it", async ({ page }) => {
     await openMap(page);
-    /* Wrapping is what turns the chip bar into a wall that eats a third of the map. The board
-       keeps one row and hides the rest behind "More". */
-    const chips = await boxOf(page, ".mapdest .map-chips");
-    const one = await boxOf(page, ".mapdest .map-chip");
-    expect(chips.h, "the chip row has wrapped onto multiple lines").toBeLessThanOrEqual(one.h + SLACK);
+    /* The filter used to be a capsule row floating over the top of the map. It is now the foot of
+       the Map panel, which is the whole point of the change — so the assertion that used to say
+       "one line, never wrapped" becomes "contained by its panel". A legend that escaped its panel
+       would be back to being a thing lying on the map. */
+    const panel = await boxOf(page, ".mapdest-panel");
+    const legend = await boxOf(page, ".mapdest .map-legend");
+    expect(legend.x, "legend escapes its panel on the left").toBeGreaterThanOrEqual(panel.x - SLACK);
+    expect(legend.x + legend.w, "legend escapes its panel on the right").toBeLessThanOrEqual(panel.x + panel.w + SLACK);
+    expect(legend.y + legend.h, "legend escapes its panel at the foot").toBeLessThanOrEqual(panel.y + panel.h + SLACK);
   });
 });
 
@@ -136,20 +139,20 @@ test.describe("⌁ the Map surface holds together on a phone", () => {
     expect(map.y + map.h, "dead ground between the map and the bottom bar").toBeGreaterThanOrEqual(bar.y - SLACK);
   });
 
-  test("the chip row is one line and stays clear of the edges", async ({ page }) => {
+  test("the filter strip is one line and stays clear of the edges", async ({ page }) => {
     await openMap(page, PHONE);
-    const chips = await boxOf(page, ".mapdest .map-chips");
-    const one = await boxOf(page, ".mapdest .map-chip");
-    expect(chips.h, "the chip row has wrapped on a phone — it would eat the map").toBeLessThanOrEqual(one.h + SLACK);
-    expect(chips.x, "the chip row is flush against the left edge").toBeGreaterThanOrEqual(4);
-    expect(chips.x + chips.w, "the chip row runs off the right edge").toBeLessThanOrEqual(PHONE.width - 4);
+    const chips = await boxOf(page, ".mapdest .map-legend");
+    const one = await boxOf(page, ".mapdest .map-legend-row");
+    expect(chips.h, "the filter strip has wrapped on a phone — it would eat the map").toBeLessThanOrEqual(one.h + SLACK);
+    expect(chips.x, "the filter strip is flush against the left edge").toBeGreaterThanOrEqual(4);
+    expect(chips.x + chips.w, "the filter strip runs off the right edge").toBeLessThanOrEqual(PHONE.width - 4);
   });
 
-  test("an overflowing chip row says so, and stops saying so at its end", async ({ page }) => {
+  test("an overflowing filter strip says so, and stops saying so at its end", async ({ page }) => {
     await openMap(page, PHONE);
-    const bar = page.locator(".mapdest .map-chips").first();
+    const bar = page.locator(".mapdest .map-legend").first();
     const overflows = await bar.evaluate((el) => el.scrollWidth > el.clientWidth + 1);
-    expect(overflows, "this guide's chips do not overflow at 390px — the fade has nothing to prove").toBe(true);
+    expect(overflows, "this guide's filters do not overflow at 390px — the fade has nothing to prove").toBe(true);
     await expect(bar, "an overflowing row should carry the fade").not.toHaveAttribute("data-scroll-end", "");
     await bar.evaluate((el) => { el.scrollLeft = el.scrollWidth; el.dispatchEvent(new Event("scroll")); });
     await expect(bar, "scrolled to the end, the fade should come off").toHaveAttribute("data-scroll-end", "");
