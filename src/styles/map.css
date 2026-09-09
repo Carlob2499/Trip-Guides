@@ -163,6 +163,70 @@ html[data-conn="offline"] .map-degraded{display:block}
   .map-pin{font-size:var(--text-nano)}
   .map-cluster{width:44px;height:44px;font-size:var(--text-control-sm)}
 }
+/* ── The legend that filters (desktop) ─────────────────────────────────────────
+   Replaces the floating capsule row with the thing a map should have: a key that says what is
+   on it and how much, where each line is also that layer's switch. Lives in the Map panel, so
+   the top of the map — which the chip row used to occupy — is simply map again.
+
+   No colour swatch per category on purpose: pins are styled by KIND (.map-pin--stop vs
+   .map-pin--venue), never by category, so a coloured chip per category would claim a
+   distinction the map does not draw. The dot is on/off state, which is true. */
+.map-legend{display:none}
+@media(min-width:1024px){
+  .map-legend{display:block;margin-top:var(--sp-gap-70);border-top:1px solid var(--rule);padding-top:var(--sp-gap-60)}
+  .map-legend-row{
+    display:flex;align-items:center;gap:var(--sp-gap-50);width:100%;min-height:36px;
+    padding:.2rem .1rem;background:none;border:0;cursor:pointer;text-align:left;
+    font-family:var(--font-data);font-size:var(--text-control-sm);color:var(--ink);
+    transition:color var(--dur-immediate) var(--ease-standard)
+  }
+  .map-legend-row[aria-pressed="false"]{color:var(--muted)}
+  .map-legend-row:hover{color:var(--accent-ink)}
+  .map-legend-row:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+  .map-legend-dot{
+    flex:none;width:10px;height:10px;border-radius:var(--r-round);
+    background:var(--brand);border:1px solid var(--brand);
+    transition:background var(--dur-immediate) var(--ease-standard)
+  }
+  /* Off is a hollow ring, not a paler fill — the difference has to survive being read at 10px
+     next to a map, and a hollow/solid switch reads at a glance where a tint does not. */
+  .map-legend-row[aria-pressed="false"] .map-legend-dot{background:transparent;border-color:var(--muted)}
+  .map-legend-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .map-legend-n{flex:none;font-variant-numeric:tabular-nums;color:var(--muted);font-size:var(--text-micro)}
+
+  .map-legend-head{
+    margin:var(--sp-gap-60) 0 var(--sp-gap-40);font-family:var(--font-data);
+    font-size:var(--text-micro);font-weight:700;letter-spacing:var(--tracking-micro);
+    text-transform:uppercase;color:var(--muted)
+  }
+  .map-legend-days{display:flex;flex-wrap:wrap;gap:var(--sp-gap-40)}
+  .map-legend-day{
+    flex:none;min-width:32px;min-height:32px;padding:0 .3rem;
+    background:var(--sunken);border:1px solid var(--rule2);border-radius:var(--r-inset);
+    font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:700;
+    font-variant-numeric:tabular-nums;color:var(--muted);cursor:pointer;
+    transition:color var(--dur-immediate) var(--ease-standard),background var(--dur-immediate) var(--ease-standard),border-color var(--dur-immediate) var(--ease-standard)
+  }
+  .map-legend-day:hover{color:var(--ink);border-color:var(--muted)}
+  .map-legend-day[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-accent)}
+  .map-legend-day:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+  .map-legend-key{
+    display:flex;align-items:center;flex-wrap:wrap;gap:var(--sp-gap-40);
+    margin-top:var(--sp-gap-60);padding-top:var(--sp-gap-50);border-top:1px solid var(--rule);
+    font-size:var(--text-micro);color:var(--muted)
+  }
+  .map-legend-key-stop,.map-legend-key-place{flex:none;width:9px;height:9px;border-radius:var(--r-round)}
+  .map-legend-key-stop{background:var(--brand)}
+  .map-legend-key-place{background:var(--ink);border:1px solid var(--brand-ring)}
+  .map-legend-key-sep{flex:none;width:1px;height:11px;background:var(--rule2)}
+
+  /* The row the legend replaces. Kept in the DOM and wired to the same callbacks so the phone
+     still has a filter; hidden here because the legend now does this job with the map's top
+     edge given back. */
+  .mapdest .map-chips{display:none}
+}
+
 /* The two chip families, told apart by a label rather than by a border style. The dashed border
    went with it: a dashed control reads as provisional or disabled, which a day filter is not. */
 .map-chips-sep{

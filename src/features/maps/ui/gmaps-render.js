@@ -224,9 +224,18 @@ export function boot(cfg) {
       refit();
     });
 
-    if (lens === "all" && (cats.length > 1 || all.some(function (p) { return p.dayIdx != null; }))) buildChips(mount, cats, off, data.dayDates || [], function (cat, on) {
-      off[cat] = !on; dayFilter = null; draw();
-    }, function (dayIdx) { dayFilter = dayIdx; draw(); fitTo(visible()); });
+    if (lens === "all" && (cats.length > 1 || all.some(function (p) { return p.dayIdx != null; }))) {
+      var onCat = function (cat, on) { off[cat] = !on; dayFilter = null; draw(); };
+      var onDay = function (dayIdx) { dayFilter = dayIdx; draw(); fitTo(visible()); };
+      /* Two presentations of ONE filter, chosen by CSS rather than by measuring the viewport —
+         a JS breakpoint here would have to survive a rotation and a window drag, and this does
+         not. Desktop gets the legend in the Map panel, which hands the whole top of the map back;
+         the phone keeps the scrolling row, because it has no panel to put a legend in and the
+         sheet below already does the list's job. Both are wired to the same two callbacks, so
+         neither can drift into being a different filter from the other. */
+      buildLegend(mount, all, cats, off, data.dayDates || [], onCat, onDay);
+      buildChips(mount, cats, off, data.dayDates || [], onCat, onDay);
+    }
 
     if (lens === "today") {
       dayFilter = parseInt(mount.getAttribute("data-map-day") || "0", 10) || 0;
@@ -261,6 +270,93 @@ export function boot(cfg) {
       if ((map.getZoom() || 0) < 14) map.setZoom(14);
     };
     mount.__clear = function () { selectedId = null; info.close(); draw(); };
+  }
+
+  /* The legend IS the filter. It replaces a row of capsules floating over the map with the thing
+     a map is supposed to have: a key, saying what is on it and how much of it there is, where
+     each line is also the switch for that layer.
+
+     What it deliberately does NOT do is put a colour swatch next to each category. The pins are
+     styled by KIND — .map-pin--stop for a day's stop, .map-pin--venue for a place — and not by
+     category, so a per-category colour chip would be inventing a distinction the map does not
+     draw. The dot here reads as on/off state, which is true, and the one real difference the map
+     does make gets its own two-line key at the foot. */
+  function buildLegend(mount, all, cats, off, dayDates, onCat, onDay) {
+    var panel = mount.closest(".mapdest-bench");
+    panel = panel && panel.querySelector(".mapdest-panel");
+    if (!panel) return;
+
+    var counts = {};
+    all.forEach(function (p) {
+      if (p.kind === "center" || p.dayIdx != null || !p.cat) return;
+      counts[p.cat] = (counts[p.cat] || 0) + 1;
+    });
+
+    var wrap = document.createElement("div");
+    wrap.className = "map-legend";
+    wrap.setAttribute("role", "group");
+    wrap.setAttribute("aria-label", "Show on the map");
+
+    cats.forEach(function (cat) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "map-legend-row";
+      b.setAttribute("aria-pressed", "true");
+      b.innerHTML =
+        '<span class="map-legend-dot" aria-hidden="true"></span>' +
+        '<span class="map-legend-name"></span>' +
+        '<span class="map-legend-n"></span>';
+      b.querySelector(".map-legend-name").textContent = cat;
+      b.querySelector(".map-legend-n").textContent = String(counts[cat] || 0);
+      b.addEventListener("click", function () {
+        var on = b.getAttribute("aria-pressed") !== "true";
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+        wrap.querySelectorAll("[data-day-cell]").forEach(function (d) { d.setAttribute("aria-pressed", "false"); });
+        onCat(cat, on);
+      });
+      wrap.appendChild(b);
+    });
+
+    if (dayDates.length) {
+      var head = document.createElement("p");
+      head.className = "map-legend-head";
+      head.textContent = "Days";
+      wrap.appendChild(head);
+      /* A numeric strip, not eight more capsules. Eight days of "Day 3 · Jul 12" is a paragraph
+         where a row of numerals is a control — the date belongs on the day itself, which the
+         itinerary already carries, so here the number is the whole label. */
+      var strip = document.createElement("div");
+      strip.className = "map-legend-days";
+      dayDates.forEach(function (date, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "map-legend-day";
+        b.setAttribute("data-day-cell", String(i));
+        b.setAttribute("aria-pressed", "false");
+        b.textContent = String(i + 1);
+        var parts = String(date).split(/\s+/);
+        b.setAttribute("aria-label", "Day " + (i + 1) + (parts.length >= 3 ? ", " + parts[1] + " " + parts[2] : ""));
+        b.title = b.getAttribute("aria-label");
+        b.addEventListener("click", function () {
+          var on = b.getAttribute("aria-pressed") !== "true";
+          strip.querySelectorAll("[data-day-cell]").forEach(function (d) { d.setAttribute("aria-pressed", "false"); });
+          if (on) { b.setAttribute("aria-pressed", "true"); onDay(i); }
+          else onDay(null);
+        });
+        strip.appendChild(b);
+      });
+      wrap.appendChild(strip);
+    }
+
+    /* The one distinction the map actually paints, stated once. */
+    var key = document.createElement("p");
+    key.className = "map-legend-key";
+    key.innerHTML = '<span class="map-legend-key-stop" aria-hidden="true"></span> a stop on a day' +
+      '<span class="map-legend-key-sep" aria-hidden="true"></span>' +
+      '<span class="map-legend-key-place" aria-hidden="true"></span> a place in the guide';
+    wrap.appendChild(key);
+
+    panel.appendChild(wrap);
   }
 
   function buildChips(mount, cats, off, dayDates, onCat, onDay) {
