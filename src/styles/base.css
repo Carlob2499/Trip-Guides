@@ -445,6 +445,13 @@
      depth or focus (a floating rail, an open sheet, the picked-up card). Solid by default; glass
      only for floating navigation, transient overlays and map controls (--glass-*). */
   --line:var(--rule);--line-strong:var(--rule2);
+  /* The edge a photograph meets its surface on. Pure black at 10% in light, pure WHITE at 10%
+     in dark — never a tinted neutral and never the --rule token, because a tinted line picks up
+     whatever surface is beneath the picture and reads as dirt along its edge rather than as a
+     defined edge. oklch, not hex, so it stays outside the palette's drift surface: this is a
+     property of photographs, not a member of the colour scheme, and it must not change when the
+     palette does. */
+  --photo-edge:oklch(0 0 0 / .1);
   --shadow-float:0 12px 36px rgba(var(--shadow-rgb),.12);
   --shadow-lift:0 6px 20px rgba(var(--shadow-rgb),.10);
   --glass-bg:color-mix(in srgb,var(--card) 88%,transparent);
@@ -545,7 +552,7 @@
   /* Carrier partner (#38): same swap, on the elements that carry their own candidates. */
   html:not([data-theme="light"]) [style*="--accent-ink-light"]{--accent-ink:var(--accent-ink-dark)}
 }
-[data-theme="dark"]{--bg:#121110;--bg2:#1b1917;--ink:#f0ece6;--card:#232120;--rule:#302d2a;--rule2:#453f3a;--muted:#a8a29a;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#121110;
+[data-theme="dark"]{--photo-edge:oklch(1 0 0 / .1);--bg:#121110;--bg2:#1b1917;--ink:#f0ece6;--card:#232120;--rule:#302d2a;--rule2:#453f3a;--muted:#a8a29a;--green:#6aab76;--warn:#d9923f;--crit:#ef8a83;--on-green:#121110;
   /* The frame lifts while the page drops — see the frame register in :root. */
   /* 2026-09-07 Warm Stone: frame-card is #2f2a27 rather than a lighter tone because the guide
      accent inks are painted ON it (.mapdest-group-title and friends). At #37322e denmark's
@@ -607,11 +614,30 @@ button,input,select,textarea{font-family:inherit}
    are NOT covered as a class — inline text links shouldn't shrink — only the named pill
    anchors below join the buttons. */
 button:not(:disabled):active,[role="button"]:active,summary:active,
-a.foot-modify-pill:active,a.pg-done-link:active,a.ab-cta-btn:active{scale:.98}
+a.foot-modify-pill:active,a.pg-done-link:active,a.ab-cta-btn:active,a.botslot:active{scale:.96}
 @media(prefers-reduced-motion:reduce){
   button:not(:disabled):active,[role="button"]:active,summary:active,
-  a.foot-modify-pill:active,a.pg-done-link:active,a.ab-cta-btn:active{scale:none}
+  a.foot-modify-pill:active,a.pg-done-link:active,a.ab-cta-btn:active,a.botslot:active{scale:none}
 }
+/* .96 is the whole product's press depth, and this is the only rule that states it. Nine
+   per-class `transform:scale()` press rules used to sit beside this one at .92/.94/.96/.97/
+   .985 — they predate it, and each one broke the promise the comment above makes. Two ways:
+   they COMPOSED with this rule instead of replacing it (.topbar-btn pressed to .94 x .98 =
+   .921 through guide.css, past the point a press stops reading as a press), and because
+   `transform` is one channel, an :active transform REPLACED whatever hover had put there —
+   .next-cta and .ab-cta-btn dropped their 2px and 1px hover lift at the instant of the press,
+   and the current bottom-nav slot lost the translateY(-1px) that marks it. The independent
+   `scale` property has neither failure mode, which is why this rule uses it. Do not add a
+   press rule elsewhere; change this number. */
+/* Every photograph carries a hairline edge. Without it a picture whose own border region is
+   near the page colour — an overcast sky on cream, a night street on the dark ground — dissolves
+   into the surface and the card loses its shape. `outline` rather than `border` because it does
+   not participate in layout, so adding it cannot move a single pixel of composition, and it
+   follows border-radius; the -1px offset draws it just inside the picture so a rounded photo
+   keeps its corner. Google's map tiles are <img> too and must not be edged — a grid of outlined
+   tiles is exactly the seam a map spends its effort hiding — so the map mount is excluded. */
+img:not([data-itin-map] img){outline:1px solid var(--photo-edge);outline-offset:-1px}
+
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:var(--text-body);line-height:1.72;-webkit-font-smoothing:antialiased}
 /* Fine paper-grain noise overlay — fixed, non-interactive, behind everything. */
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}

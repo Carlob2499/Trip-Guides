@@ -51,7 +51,6 @@
 .next-cta:hover{background:var(--ink);color:var(--bg);border-color:var(--ink);transform:translateY(-2px)}
 .next-cta:hover .next-cta-label{color:color-mix(in srgb,var(--bg) 72%,transparent)}
 .next-cta:hover .next-cta-arrow{transform:translateX(8px)}
-.next-cta:active{transform:scale(.985)}
 .next-cta:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
-@media(prefers-reduced-motion:reduce){.next-cta,.next-cta-arrow{transition:none}.next-cta:hover,.next-cta:active{transform:none}}
+@media(prefers-reduced-motion:reduce){.next-cta,.next-cta-arrow{transition:none}.next-cta:hover{transform:none}}
 @media print{.next-cta{display:none}}

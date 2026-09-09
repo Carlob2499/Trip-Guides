@@ -19,7 +19,12 @@
    matched cover group and the root cross-fade alike. */
 ::view-transition-group(*) {
   animation-duration: 420ms;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  /* motion.md §2 names --ease-standard as THE curve for acquisition-then-settle, and the
+     largest motion in the product was the one place not using it: this rule carried Material's
+     cubic-bezier(.4,0,.2,1) as a literal, so the cover morph decelerated on a different curve
+     from every control it lands next to. View-transition pseudo-elements inherit custom
+     properties from the document root, so the token resolves here like anywhere else. */
+  animation-timing-function: var(--ease-standard);
 }
 
 /* Respect reduced-motion: keep the navigation working, drop the animation so it's

@@ -97,8 +97,6 @@
   .sos-fab-t{text-transform:uppercase}
 }
 .sos-fab:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px}
-.sos-fab:active{transform:scale(.96)}
-@media(prefers-reduced-motion:reduce){.sos-fab:active{transform:none}}
 
 .sos-sheet{position:fixed;inset:0;z-index:320;display:flex;align-items:stretch;justify-content:center;background:rgba(var(--shadow-rgb),.72)}
 .sos-sheet[hidden]{display:none}

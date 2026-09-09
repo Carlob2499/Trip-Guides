@@ -36,14 +36,10 @@ a{color:var(--accent-ink);text-underline-offset:2px;transition:color var(--dur-i
 /* Jet-lag calculator styles moved to src/styles/jetlag.css (Stage E) — the Tools
    screen renders the same component, so the rules had to be importable by both. */
 
-/* Tactile press feedback — guide action buttons compress on :active and spring
-   back on release (var(--ease-spring) overshoot on the transform channel) for a
-   physical, app-like "pressed" feel. Interactive controls only — not cards or
-   inputs, and suppressed for users who ask to reduce motion. */
-.sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:scale(.94)}
-@media(prefers-reduced-motion:reduce){
-  .sc-add-btn:active,.sc-add-expense-btn:active,.split-del:active,.jl-toggle:active,.anchor-btn:active,.topbar-btn:active{transform:none}
-}
+/* Tactile press feedback for these buttons is base.css's `scale:.96` rule — they are all
+   <button>, so it already reaches them. This file used to press them again at .94 on the
+   transform channel, which composed with base's rule rather than replacing it and pressed
+   .topbar-btn (declared here AND in chrome.css, at two different depths) to .921. */
 
 /* === CONTENT ================================================================= */
 .content{min-width:0;padding:0 0 3rem}
