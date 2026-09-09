@@ -42,7 +42,6 @@
   border:1px solid var(--accent);border-radius:var(--r-pill);cursor:pointer;
   transition:transform var(--dur-routine) var(--ease-out-expo),background var(--dur-routine) ease;
 }
-.resume-chip:active{transform:scale(.98)}
 .resume-chip:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .resume-chip-lead{
   font-family:var(--font-data);font-size:var(--text-micro);text-transform:uppercase;
@@ -53,7 +52,11 @@
   color:var(--accent-ink);max-width:100%;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-@media (prefers-reduced-motion: reduce){.resume-chip{transition:none}.resume-chip:active{transform:none}}
+/* The press cue is base.css's `scale:.96` — .resume-chip is a <button>, so it is already
+   covered. This file used to press it again at .98 on the transform channel, which composed with
+   that rule rather than replacing it (.96 x .98 = .941) and would have quietly reintroduced the
+   split press depths the moment this component ships. */
+@media (prefers-reduced-motion: reduce){.resume-chip{transition:none}}
 @media print{.resume-chip{display:none}}
 
 /* The colophon's offline confirmation — written only when this page is genuinely in

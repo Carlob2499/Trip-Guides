@@ -1,6 +1,7 @@
 # Board vs build — fidelity diff
 
-Status: **OPEN — all 10 surfaces diffed, awaiting creator acceptance per surface**
+Status: **ACCEPTED (provisional) 2026-09-08 — all 10 surfaces diffed, every open fidelity item
+accepted as built, to be revisited with the next design change**
 Boards: `docs/mockups/compare/*.webp` · Contract: `docs/mockups/VISUAL_LINEAGE.md`
 Opened: 2026-09-07
 
@@ -16,6 +17,28 @@ The active-trip surfaces were captured with the clock set to `2026-07-11` (Korea
 exact state board 02 composes. Both shipped guides have trips in the past, so the active cockpit
 is unreachable at real time — worth knowing, because it means every screenshot gate in the repo
 has only ever photographed the finished state of these surfaces.
+
+---
+
+## Creator acceptance, 2026-09-08
+
+Every item below marked **Fidelity — open** is **accepted as built**, provisionally. The build
+wins over the board on each of them for now: Atlas's flat globe and sparser card set, Trip's
+text-led stop cards, its missing WEATHER NOW card and four-panel row, Guide's numbered
+"Explore by topic" grid, Builder's "Brazil" placeholder, Split's centred slab, and Learnings'
+unequal ESSENTIALS/SPLIT row.
+
+This is a governance act, not a shrug, and it is worth being explicit about what it costs:
+`VISUAL_LINEAGE.md` makes the board mandatory ancestry, so accepting a divergence means the
+build's composition — not the board's — is now the thing to preserve on those surfaces until
+someone deliberately decides otherwise.
+
+**Provisional** is the operative word. These are accepted so that work is not blocked, not
+because the divergences were judged better than the board. Re-open this list at the next design
+change; a fidelity item accepted for scheduling reasons is exactly the kind of decision that
+should be re-read when the surface is next touched anyway.
+
+The **Measured** findings are unaffected — those were objective defects and were fixed.
 
 ---
 
