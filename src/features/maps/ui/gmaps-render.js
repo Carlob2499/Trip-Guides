@@ -135,7 +135,12 @@ export function boot(cfg) {
         // A day's stops keep their order and draw as a numbered route: the itinerary's own
         // sequence, straight lines between stops — never a routed path pretending to be one.
         stops.forEach(function (p, i) { markers.push(markerFor(p, i)); });
-        if (stops.length > 1) {
+        /* Only where the line MEANS something. On lens "all" the map carries every place in the
+           guide at once — a day's stops sit beside sights, restaurants and shops that were never
+           part of that day — so joining them drew legs across the whole country between points no
+           one ever travelled between, and read as clutter over the pins it was crossing. The
+           itinerary and chapter lenses show one day, where the line IS the sequence. */
+        if (stops.length > 1 && lens !== "all") {
           /* Thin and semi-transparent on purpose. At weight 4 and .9 opacity this line stopped being a
           route and became the loudest object on the map: zoomed into Seoul, the legs out to Daejeon
           and Busan cross the whole viewport as solid bars, burying street names and half the pins
@@ -275,6 +280,17 @@ export function boot(cfg) {
       bar.appendChild(b);
     });
     if (dayDates.length) {
+      /* Days and categories are two different questions asked of the same map — "what kind of
+         place is this" and "when was I going to be there" — and they were running together in one
+         undifferentiated row, which is what made a dashed border the only thing telling them
+         apart. A labelled divider says which is which once, so the chips themselves do not have
+         to carry that job in their border style. aria-hidden: the group is already named for
+         assistive tech by each day chip's own label. */
+      var sep = document.createElement("span");
+      sep.className = "map-chips-sep";
+      sep.setAttribute("aria-hidden", "true");
+      sep.textContent = "Days";
+      bar.appendChild(sep);
       dayDates.forEach(function (date, i) {
         var b = document.createElement("button");
         b.type = "button"; b.className = "map-chip map-chip--day"; b.setAttribute("data-day-chip", String(i)); b.setAttribute("aria-pressed", "false");

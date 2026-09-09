@@ -163,7 +163,16 @@ html[data-conn="offline"] .map-degraded{display:block}
   .map-pin{font-size:var(--text-nano)}
   .map-cluster{width:44px;height:44px;font-size:var(--text-control-sm)}
 }
-.map-chip--day{border-style:dashed}
+/* The two chip families, told apart by a label rather than by a border style. The dashed border
+   went with it: a dashed control reads as provisional or disabled, which a day filter is not. */
+.map-chips-sep{
+  display:inline-flex;align-items:center;flex:none;align-self:center;gap:var(--sp-gap-45);
+  padding-left:var(--sp-gap-60);margin-left:var(--sp-gap-20);
+  border-left:1px solid var(--rule2);
+  font-family:var(--font-data);font-size:var(--text-micro);font-weight:700;
+  letter-spacing:var(--tracking-micro);text-transform:uppercase;color:var(--muted);
+  white-space:nowrap;pointer-events:none
+}
 
 /* The sheet (phone): peek / half / full, dragged or tapped, never gesture-only. */
 .mapdest-sheet{position:fixed;left:0;right:0;bottom:calc(60px + var(--safe-bottom));z-index:39;display:flex;flex-direction:column;max-height:calc(100dvh - var(--hdr-h) - 60px - var(--safe-bottom) - 1rem);background:var(--bg);border-top:1px solid var(--rule2);transition:transform var(--dur-object) var(--ease-out-expo);touch-action:none}
@@ -244,6 +253,19 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
   }
 
   /* Floating panels. Both hang off the same gutter and the same top edge. */
+  /* The dim the panels sit on. Anchored to the two edges the panels hang off and fading to
+     nothing well before the middle, so the map keeps a clear centre to actually be read in —
+     a flat scrim over the whole surface would dim the subject to frame the furniture. This is
+     what makes each panel read as an island above the ground rather than a card lying on it:
+     the eye needs the ground to darken UNDER the object, not everywhere. */
+  .mapdest-bench::before,.mapdest-bench::after{
+    content:"";position:absolute;top:0;bottom:0;width:calc(var(--mapdest-panel-w) + var(--mapdest-gutter) * 4);
+    z-index:2;pointer-events:none
+  }
+  .mapdest-bench::before{left:0;background:linear-gradient(to right,rgba(var(--shadow-rgb),.34),rgba(var(--shadow-rgb),0))}
+  .mapdest-bench::after{right:0;width:calc(var(--mapdest-index-w) + var(--mapdest-gutter) * 4);background:linear-gradient(to left,rgba(var(--shadow-rgb),.34),rgba(var(--shadow-rgb),0))}
+  @media(prefers-reduced-transparency:reduce){.mapdest-bench::before,.mapdest-bench::after{display:none}}
+
   .mapdest-panel,.mapdest-sheet{
     position:absolute;top:var(--mapdest-gutter);z-index:3;
     /* OPAQUE, deliberately. A translucent panel over a map looks expensive and makes every
@@ -293,8 +315,12 @@ body:not([data-dest="map"]) .mapdest-sheet{display:none}
   .mapdest .map-chip{flex:none}
 }
 @media print{.mapdest-sheet,.map-degraded{display:none}}
-/* Geometry (§31): the phone sheet rounds its top edge only; the desktop inspector is a pane. */
+/* Geometry (§31): the phone sheet rounds its top edge only — it is anchored to the bottom of
+   the viewport, so its lower corners do not exist. The desktop island is inset on all four sides
+   and rounds all four; it had been inheriting the phone's top-only radius, which is most of why
+   it read as unfinished — a floating object with two square corners looks cropped, not placed. */
 .mapdest-sheet{border-radius:var(--r-pane) var(--r-pane) 0 0}
+@media(min-width:1024px){.mapdest-sheet{border-radius:var(--r-pane)}}
 .mapdest-sel-thumb{border-radius:var(--r-inset)}
 
 /* "My location" and the selected place's live opening state (board 04). Both only appear when

@@ -399,7 +399,13 @@
      The migration that made it possible is the real change: 109 hardcoded `border-radius:999px`
      literals across 27 sheets now read var(--r-pill), so the press shape has one owner and can be
      reconsidered again in one line instead of 109. */
-  --r-pill:var(--r-inset);--r-round:50%;
+  /* 999px again, creator-reversed 2026-09-08. The lozenge was retired in #212 on the argument
+     that a press shape should be a role in the radius family rather than a shape; shipped, it
+     turned every chip and filter into a rounded box and read as unfinished. The retirement's own
+     work is what makes this a one-line reversal: it converted 999px literals across 27 sheets to
+     this token precisely so the press shape would have one owner. --r-track stays split out —
+     that separation was right, a rail is not a pill. */
+  --r-pill:999px;--r-round:50%;
   /* --r-track is the shape a GRIP or a progress bar needs: a 4px-tall bar whose ends must be
      semicircular. It was riding on --r-pill's 999px, so retiring the lozenge squared off every
      sheet grip and scrub track. Those were never pills — a pill is a control you press, a track
