@@ -26,6 +26,25 @@ the order, not the number.
 | D7 | Theme toggle icon hard-cut | Visual | `btn.innerHTML` was rebuilt on every toggle, destroying the outgoing glyph in the same frame the incoming one appeared. It could only ever cut | Both glyphs mounted and stacked; CSS cross-fades from `data-theme` (scale .25 to 1, blur 4px to 0, on `--dur-routine` / `--ease-standard`). Verified: the hidden glyph sits at opacity 0, scale .25, `blur(4px)` |
 | D8 | Photographs had no defined edge | Visual | No `img` outline rule existed anywhere, while the product moves photo-led (korea sights 15/23 to 21/23 in #212) | `--photo-edge` — pure black / pure white at 10%, in oklch, deliberately outside the palette's drift surface — applied as an `outline` so it cannot move a pixel of layout. **Awaiting your acceptance, see below** |
 | D9 | The gallery shipped a second theme toggle | Documentation | `gallery.astro` flipped `data-theme` in its own inline handler, bypassing the shared module that `theme.js` was extracted to be — the exact duplication that extraction ended | Routed through `setTheme`. The handler moved out of the `define:vars` block, which Astro forces to `is:inline` and which therefore cannot see an import |
+| D10 | **The drift ratchet had 137 violations of slack** | Implementation | `drift-real.test.mjs` capped recorded debt at 153 while the real figure was 16. The one test whose stated job is to catch "the baseline being padded to silence a failure" would have passed while 137 violations were baselined one at a time. A ceiling far above the floor is not a ratchet, it is a number | Ceilings tightened to 16 and 4, to be lowered with the baseline each time the debt actually falls. Proved by padding one entry to 20: fails at "expected 30 to be less than or equal to 16" |
+| D12 | **A fixed violation left its allowance behind** | Documentation | `regressions()` compares in one direction only — it reports what is NEW or WORSE and says nothing about a baseline key whose violations are gone. `src/styles/guide.css::TYPE` had been fixed at some earlier point and its allowance stayed, so recorded debt read 17 against a real 16, and that exact violation could have returned to that exact file unnoticed | New test: the baseline may hold no entry the checker has stopped reporting. Baseline tightened to 16 across 4 keys. Proved by planting a stale key: fails naming it |
+
+### Correction to D10, 2026-09-08
+
+D10 was first filed as "neither drift checker runs anywhere" — that the classifier kept a baseline,
+stated it "fails on anything new", and was invoked by nothing in `build`, `check`, `ship:check` or
+any of the 22 workflows. **That was wrong, and it was wrong because the check that produced it was
+a grep.** The gate is real: `scripts/__tests__/drift-real.test.mjs` calls `regressions()` and runs
+under vitest, so it is already enforced in `check:fast`, `check`, `coverage`, `test.yml` and
+`required-gate.yml`. Grepping the workflows for the word "drift" could never have found it.
+
+Confirmed the way it should have been confirmed the first time — by planting a violation
+(`.drift-probe{color:#ab12cd;border-radius:7px}` in `touch.css`) and watching the suite fail with
+`NEW src/styles/touch.css::RADIUS` and `::COLOUR`, then pass again on revert.
+
+What survived the correction is narrower and real: the gate ran, but its ratchet had 137
+violations of slack and it was blind in one direction. Both are now closed and both fixes were
+proved by making them fail on purpose.
 
 ---
 
@@ -33,9 +52,7 @@ the order, not the number.
 
 | # | Debt | Category | Severity | Frequency | Effort | Why it ranks here |
 |---|---|---|---|---|---|---|
-| D10 | **Neither drift checker runs anywhere.** `check-design-drift.mjs` and its classifier `drift-real.mjs` both exist; the classifier keeps a baseline and states that it "fails on anything new" — and nothing invokes it. Not in `build`, `check`, `ship:check`, or any of the 22 workflows. `npm run drift` is manual only | Implementation | Critical | one gate, all design debt | Low | The colour, elevation, radius and type system is currently unguarded. Every other design contract here is gate-enforced; this is the one documented as enforced that is not. Cheapest high-value fix in the register |
 | D11 | **Four visual baselines cannot be verified outside CI.** All four gallery captures fail locally at a 182px height delta and 35,632,691 differing pixels — and fail **identically on unmodified `main`** | Implementation | Moderate | 4 gates | Medium | Verified by stashing every change and re-running: same delta, same pixel count. Deliberate (`b7f1c949` regenerated them on CI's Chromium because local font metrics drift over a 29,000px capture), but the cost is that no visual change can be checked before pushing |
-| D12 | **`drift-baseline.json` over-counts by one.** It records `src/styles/guide.css::TYPE: 1`, which the classifier no longer reports: the run finds 16, the baseline permits 17 | Documentation | Minor | 1 | Low | A baseline that allows a violation which no longer exists will silently absorb a real one reappearing in the same file and category |
 | D13 | **`.resume-chip` is dead CSS.** `touch.css:37-56` styles a component whose only markup lives in an uncommitted worktree, not on `main` | Documentation | Minor | ~20 lines | Low | It still carries the old `.98` press value, so it would reintroduce D2 the day the feature lands. Left in place deliberately — deleting a styled surface belongs to whoever owns the feature, not to a polish pass |
 | D14 | **The map's image-outline exclusion is unverified.** `img:not([data-itin-map] img)` is written and correct by inspection, but the Maps API returns 403 without a key in dev, so no map `<img>` has ever rendered against it | Implementation | Moderate | 1 surface | Low | Needs one check on a surface with a live key before D8 is called done. A grid of outlined tiles is exactly the seam a map spends its effort hiding |
 | D15 | **The raw checker's noise is load-bearing.** `check-design-drift.mjs` reports 405 violations, of which 325 are exempt across 18 named classes — 109 hex-in-test, 83 in-a-comment, 74 hex-is-the-source-of-truth. `drift-real.mjs` records that two genuine MOTION violations sat in that noise through an entire closeout stage | Implementation | Moderate | 1 tool | High | Not a defect; the classifier is the right answer to it. Recorded so the 405 is never quoted as the debt figure again — `board-vs-build.md`'s "360 colour findings" is that mistake already made once |
