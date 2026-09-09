@@ -196,7 +196,6 @@
 .tn-full{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-gap-50);width:100%;min-height:48px;padding:.5rem 1rem;background:transparent;border:1px solid var(--rule2);border-radius:var(--r-inset);color:var(--accent-ink);font-family:var(--font-data);font-size:var(--text-control);font-weight:700;cursor:pointer}
 .tn-full:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .tn-full:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.tn-full:active{transform:scale(.985)}
 
 /* Material problem, fallback, fit — structured lines in the order the day needs them. */
 .tn-side{display:flex;flex-direction:column;gap:var(--sp-gap-60)}

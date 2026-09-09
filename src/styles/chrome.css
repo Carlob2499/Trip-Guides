@@ -63,8 +63,18 @@
 .topbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-gap-45);background:color-mix(in srgb,var(--ink) 6%,transparent);border:var(--rw) solid var(--rule2);border-radius:var(--r-round);padding:0 .8rem;min-height:44px;min-width:44px;cursor:pointer;color:var(--muted);font-family:var(--font-data);font-size:var(--text-control-sm);font-weight:600;letter-spacing:.01em;transition:color var(--dur-immediate) var(--ease-standard),background var(--dur-immediate) var(--ease-standard),border-color var(--dur-immediate) var(--ease-standard)}
 .topbar-btn:hover{color:var(--ink);border-color:var(--muted);background:color-mix(in srgb,var(--ink) 10%,transparent)}
 .topbar-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-.topbar-btn:active{transform:scale(.96)}
 .tb-ico{width:18px;height:18px;flex:none;display:block}
+/* Theme toggle: the moon and the sun are both mounted, stacked in one 18px box, and the one
+   that is not the current affordance is scaled down, blurred and faded rather than removed.
+   A toggle whose icon CUTS reads as a page reload; one that dissolves reads as the same
+   control changing its mind. Values are the product's own motion tokens (motion.md §2), not
+   a bespoke curve — this is a routine acknowledgement, so --dur-routine and --ease-standard.
+   `scale` and `filter` are compositor properties; nothing here reflows. */
+.theme-ico-swap{position:relative;display:block;width:18px;height:18px;flex:none}
+.theme-ico{position:absolute;inset:0;transition:opacity var(--dur-routine) var(--ease-standard),scale var(--dur-routine) var(--ease-standard),filter var(--dur-routine) var(--ease-standard)}
+:root:not([data-theme="dark"]) .theme-ico--sun,
+:root[data-theme="dark"] .theme-ico--moon{opacity:0;scale:.25;filter:blur(4px)}
+@media(prefers-reduced-motion:reduce){.theme-ico{transition:none}}
 .topbar-icon-btn{width:44px;padding:0}
 /* Search is the framed pill so the way in never reads as decoration (§21). */
 .topbar-search-btn{justify-content:flex-start;text-align:left}
@@ -111,12 +121,11 @@
 /* The current destination is marked by ink AND a mark — never colour alone (§30). */
 .botslot[aria-current="true"]::before,.botslot[aria-current="page"]::before{content:"";position:absolute;top:0;left:50%;width:22px;height:2px;transform:translateX(-50%);background:var(--selected)}
 .botslot[aria-current="true"] .bslot-ico{transform:translateY(-1px)}
-.botslot:active .bslot-ico{transform:scale(.92)}
 .botslot:focus-visible{outline:2px solid var(--accent-ink);outline-offset:-3px}
 /* Yielding chrome (§6): reading down slides the bar away; any upward intent, or stopping,
    brings it straight back. Transform only. Focus into the bar restores it (yield-chrome.js). */
 body.chrome-yield .botbar{transform:translateY(130%)}
-@media(prefers-reduced-motion:reduce){.botbar,.bslot-ico,.tab,.topbar-btn{transition:none}.botslot:active .bslot-ico{transform:none}}
+@media(prefers-reduced-motion:reduce){.botbar,.bslot-ico,.tab,.topbar-btn{transition:none}}
 @media(max-height:460px) and (orientation:landscape){.botslot{min-height:44px}}
 /* 2026-09-06 — "Itinerary" truncated to "Itinera..." on every phone: the label needs 69px and
    five equal slots give it 67 at 375px, 60 at 320px. The 2026-09-06 raise off --text-nano (above)

@@ -81,7 +81,6 @@
 .ab-cta p{color:var(--muted);max-width:34rem;margin:0 auto;text-wrap:pretty}
 .ab-cta-btn{display:inline-flex;align-items:center;gap:var(--sp-gap-50);margin-top:1.2rem;padding:.8rem 1.5rem;min-height:44px;border-radius:var(--r-pill);background:var(--accent);color:var(--on-accent);font-family:var(--font-data);font-size:var(--text-control);letter-spacing:.04em;text-decoration:none;transition:transform var(--dur-tap) var(--ease-spring)}
 .ab-cta-btn:hover{transform:translateY(-1px)}
-.ab-cta-btn:active{transform:scale(.97)}
 .ab-cta-btn:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px}
 
 .ab-foot{border-top:1px solid var(--rule2);text-align:center;padding:1.6rem 1.2rem;color:var(--muted);font-size:var(--text-control);max-width:1080px;margin:3rem auto 0;font-family:var(--font-data);letter-spacing:.04em}

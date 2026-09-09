@@ -40,9 +40,28 @@ describe("design drift", () => {
   it("the recorded drift debt only ever shrinks", () => {
     // Same guard as the prose-shape and comment-density baselines: catches the baseline being
     // padded to silence a failure, which is the one way a gate like this stops meaning anything.
+    // Ceilings tightened 153 -> 16 and 41 -> 4 on 2026-09-08. They had been left at the high-water
+    // mark of an earlier era while the real figure fell to 16, which meant 137 violations could
+    // have been baselined one at a time and this test — the one whose whole job is to notice
+    // that — would have passed every time. A ceiling far above the floor is not a ratchet, it is
+    // a number. Lower these WITH the baseline every time the debt actually shrinks.
     const total = Object.values(baseline).reduce((n, c) => n + c, 0);
-    expect(total, "recorded design drift is meant to shrink, never grow").toBeLessThanOrEqual(153);
-    expect(Object.keys(baseline).length).toBeLessThanOrEqual(41);
+    expect(total, "recorded design drift is meant to shrink, never grow").toBeLessThanOrEqual(16);
+    expect(Object.keys(baseline).length).toBeLessThanOrEqual(4);
+  });
+
+  it("the baseline holds no entry the checker has stopped reporting", () => {
+    // regressions() only compares in one direction — it reports what is NEW or WORSE and says
+    // nothing about a key whose violations are gone. So a fixed violation silently left its
+    // allowance behind, and the same violation could return to the same file and category and
+    // pass. Found 2026-09-08: the baseline still allowed src/styles/guide.css::TYPE, fixed at
+    // some earlier point, so the recorded debt read 17 against a real 16.
+    const stale = Object.keys(baseline).filter((k) => !(k in current));
+    expect(
+      stale,
+      "These baseline entries no longer occur, so they are pure headroom for the same drift to " +
+        "come back unnoticed. Run: node scripts/drift-real.mjs --update",
+    ).toEqual([]);
   });
 
   it("every exemption is a named class carrying its own justification", () => {

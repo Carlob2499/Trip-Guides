@@ -77,7 +77,7 @@ export function initSearch(root) {
         '</div>' +
         '<div class="srch-main">' +
           '<div class="srch-bar">' +
-            '<svg class="srch-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>' +
+            '<svg class="srch-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>' +
             '<input class="srch-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search this trip, places, guides…" aria-label="Search" role="combobox" aria-expanded="false" aria-controls="srchList" aria-autocomplete="list" />' +
             '<button class="srch-close" type="button" aria-label="Close search">Close</button>' +
           '</div>' +

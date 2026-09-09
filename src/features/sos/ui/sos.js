@@ -30,7 +30,7 @@ import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
   btn.type = "button";
   btn.setAttribute("aria-label", "Emergency help");
   btn.setAttribute("aria-haspopup", "dialog");
-  btn.innerHTML = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='3.4'/><path d='m9.6 9.6-4-4M18.4 18.4l-4-4M14.4 9.6l4-4M9.6 14.4l-4 4'/></svg><span class='tb-label'>SOS</span>";
+  btn.innerHTML = "<svg class='tb-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='3.4'/><path d='m9.6 9.6-4-4M18.4 18.4l-4-4M14.4 9.6l4-4M9.6 14.4l-4 4'/></svg><span class='tb-label'>SOS</span>";
   var mountPoint = document.querySelector("[data-sos-mount]");
   var topRight = document.querySelector(".topbar-right");
   /* AppChrome always renders .topbar-right, so mountPoint/topRight cover every guide page this
@@ -56,7 +56,7 @@ import { attachSheetDrag } from "../../../scripts/sheet-drag.js";
   fab.className = "sos-fab";
   fab.setAttribute("aria-label", "Emergency help");
   fab.setAttribute("aria-haspopup", "dialog");
-  fab.innerHTML = "<svg class='sos-fab-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='3.4'/><path d='m9.6 9.6-4-4M18.4 18.4l-4-4M14.4 9.6l4-4M9.6 14.4l-4 4'/></svg><span class='sos-fab-t'>SOS</span>";
+  fab.innerHTML = "<svg class='sos-fab-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='3.4'/><path d='m9.6 9.6-4-4M18.4 18.4l-4-4M14.4 9.6l4-4M9.6 14.4l-4 4'/></svg><span class='sos-fab-t'>SOS</span>";
   document.body.appendChild(fab);
 
   var country = document.documentElement.getAttribute("data-country") || "";
